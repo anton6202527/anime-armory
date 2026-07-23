@@ -96,12 +96,12 @@
     {
       "png": "EP02_CLIP08_end.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 27.7,
-      "warmth": 0.023,
+      "luma": 33.1,
+      "warmth": 0.022,
       "daypart": "night",
-      "light_cx": 0.573,
+      "light_cx": 0.514,
       "light_az": "center",
-      "light_cy": 0.372,
+      "light_cy": 0.277,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -171,12 +171,12 @@
     {
       "png": "EP02_CLIP02_preimpact.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 95.9,
-      "warmth": -0.034,
+      "luma": 96.4,
+      "warmth": -0.031,
       "daypart": "day",
-      "light_cx": 0.401,
+      "light_cx": 0.381,
       "light_az": "center",
-      "light_cy": 0.236,
+      "light_cy": 0.29,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"尸骸荒野\": {\"主光方向\": \"画左后侧\", \"色温\": \"4300K冷中性，夕照边缘约3200K\", \"动机光源\": \"被乌云压暗的落日与百妖谱旧金反光\"}}",
       "weather": "fog",
@@ -231,12 +231,12 @@
     {
       "png": "EP02_CLIP03_recovery.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 81.8,
-      "warmth": -0.024,
+      "luma": 77.3,
+      "warmth": -0.022,
       "daypart": "day",
-      "light_cx": 0.56,
+      "light_cx": 0.545,
       "light_az": "center",
-      "light_cy": 0.177,
+      "light_cy": 0.173,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -366,12 +366,12 @@
     {
       "png": "EP02_CLIP08_start.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 47.9,
-      "warmth": 0.013,
+      "luma": 41.1,
+      "warmth": 0.014,
       "daypart": "night",
-      "light_cx": 0.682,
-      "light_az": "right",
-      "light_cy": 0.277,
+      "light_cx": 0.56,
+      "light_az": "center",
+      "light_cy": 0.281,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"尸骸荒野\": {\"主光方向\": \"画左后侧\", \"色温\": \"4300K冷中性，夕照边缘约3200K\", \"动机光源\": \"被乌云压暗的落日与百妖谱旧金反光\"}}",
       "weather": "fog",
@@ -381,13 +381,13 @@
     {
       "png": "EP02_CLIP08_start_a1.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 33.9,
-      "warmth": 0.055,
+      "luma": 39.6,
+      "warmth": 0.015,
       "daypart": "night",
-      "light_cx": 0.587,
+      "light_cx": 0.555,
       "light_az": "center",
-      "light_cy": 0.407,
-      "light_elev": "center",
+      "light_cy": 0.283,
+      "light_elev": "top",
       "declared_light": "",
       "weather": null,
       "season": null,
@@ -430,12 +430,12 @@
       },
       "light_azimuths": {
         "left": 10,
-        "center": 13,
-        "right": 3
+        "center": 14,
+        "right": 2
       },
       "light_elevations": {
-        "top": 24,
-        "center": 2
+        "top": 25,
+        "center": 1
       },
       "weathers": {
         "fog": 8
@@ -483,27 +483,15 @@
           "png": "EP02_CLIP04_end_a2.png",
           "verdict": "warn",
           "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_dir",
-          "png": "EP02_CLIP08_start.png",
-          "verdict": "warn",
-          "message": "主光方位 left→right 硬翻转（疑光位跳·人比对相邻镜）"
-        },
-        {
-          "metric": "light_anchor",
-          "png": "EP02_CLIP08_start.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。"
         }
       ]
     }
   },
   "summary": {
     "scene_count": 1,
-    "finding_count": 9,
+    "finding_count": 7,
     "block_count": 5,
-    "warn_count": 4
+    "warn_count": 2
   },
   "source": "n2d-review/world_continuity"
 }

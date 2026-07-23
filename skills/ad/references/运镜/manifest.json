@@ -1563,6 +1563,641 @@
       "prompt_template": "镜头运动：载具跟拍；速度={匀速/快速}；方向={车侧/车前倒退/车后追随}；载具={车/马车/飞舟/坐骑}；屏幕方向保持一致。",
       "media": null,
       "status": "added_without_visual_reference"
+    },
+    {
+      "id": "arc_180",
+      "name_zh": "半环绕",
+      "name_en": "180-degree arc shot",
+      "lexicon_key": "弧线运镜",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "arc_yaw"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "start_subject",
+        "end_subject"
+      ],
+      "aliases_zh": [
+        "弧线运镜",
+        "弧形运镜",
+        "半环绕",
+        "180度弧线",
+        "弧摇"
+      ],
+      "aliases_en": [
+        "180-degree arc",
+        "arc shot",
+        "semi orbit",
+        "arc move"
+      ],
+      "narrative_functions": [
+        "揭示关系",
+        "从一方带到另一方",
+        "对峙张力",
+        "保留轴线的环绕"
+      ],
+      "use_when": "需要环绕感但又要守住 180° 轴线：两人对峙、从背影弧线带到正脸、揭示新主体。",
+      "avoid_when": "单人近景大表情或身份不稳时不要走大弧，容易越轴与漂脸。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：半环绕/弧线运镜；速度={缓慢/匀速}；方向={顺时针/逆时针}；起止={起始主体到落幅主体}；保持 180° 轴线不越轴。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "through_object",
+      "name_zh": "穿越运镜",
+      "name_en": "through-object continuous shot",
+      "lexicon_key": "穿越运镜",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "z_in",
+        "through_gap"
+      ],
+      "slots": [
+        "speed",
+        "aperture",
+        "start_space",
+        "end_space"
+      ],
+      "aliases_zh": [
+        "穿越镜头",
+        "穿越运镜",
+        "穿门",
+        "穿窗",
+        "穿孔",
+        "一镜到底穿越",
+        "无缝穿越"
+      ],
+      "aliases_en": [
+        "through shot",
+        "fly-through",
+        "走廊 oner",
+        "seamless through",
+        "portal move"
+      ],
+      "narrative_functions": [
+        "空间转场",
+        "一镜到底",
+        "进入新空间",
+        "戏剧性揭示",
+        "连接前后场景"
+      ],
+      "use_when": "要用一个连续镜头从一个空间穿过门/窗/缝隙/孔洞进入另一个空间，做无缝转场或揭示。",
+      "avoid_when": "穿越口两侧透视/光照不连续，或穿越途中主体身份需要稳定时。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：穿越运镜；速度={匀速/加速};穿越口={门/窗/缝隙/孔洞};起止={前一空间到后一空间};穿越瞬间允许短促运动模糊，两侧透视与光照连续。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "fpv_dive",
+      "name_zh": "FPV俯冲",
+      "name_en": "FPV drone dive",
+      "lexicon_key": "穿越机俯冲",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "fast_z_in",
+        "pitch_down",
+        "roll"
+      ],
+      "slots": [
+        "speed",
+        "dive_angle",
+        "start_height",
+        "end_target"
+      ],
+      "aliases_zh": [
+        "穿越机俯冲",
+        "FPV俯冲",
+        "第一视角俯冲",
+        "竞速无人机",
+        "穿越机",
+        "急速俯冲穿越"
+      ],
+      "aliases_en": [
+        "FPV dive",
+        "FPV drone",
+        "racing drone",
+        "fpv swoop",
+        "dive through"
+      ],
+      "narrative_functions": [
+        "高速奇观",
+        "俯冲抵近",
+        "追逐代入",
+        "大场面穿梭",
+        "肾上腺素段落"
+      ],
+      "use_when": "需要极强速度感与临场：从高处急速俯冲穿过障碍/人群/峡谷抵达目标，或高速追逐。",
+      "avoid_when": "对白、近景表演、身份高风险镜；速度过快会牺牲脸与结构稳定。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：FPV俯冲/穿越机；速度=急速；俯冲角={陡/中};起止={起始高度到落点目标};允许强运动模糊与滚转,轨迹连贯不穿模。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "ground_skim",
+      "name_zh": "贴地飞掠",
+      "name_en": "low ground-skimming aerial",
+      "lexicon_key": "贴地飞掠",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "fast_z_in",
+        "low_height"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "height",
+        "subject"
+      ],
+      "aliases_zh": [
+        "贴地飞掠",
+        "低空飞掠",
+        "贴地追拍",
+        "擦地飞行",
+        "贴地快移"
+      ],
+      "aliases_en": [
+        "ground skim",
+        "low aerial skim",
+        "hover skim",
+        "grass-level fly"
+      ],
+      "narrative_functions": [
+        "速度感",
+        "地形展示",
+        "追逐前导",
+        "气势铺陈",
+        "低机位奇观"
+      ],
+      "use_when": "贴近地面/水面/草面高速平移或追随，强调速度与地表质感（奔跑、驰骋、载具前导）。",
+      "avoid_when": "需要稳定脸部或对白时；贴地高速会让近处地表频闪。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：贴地飞掠；速度={快速/急速}；方向={前进/侧随}；离地={极低};主体={奔跑者/载具/坐骑};地表质感清晰,轨迹平滑。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "reflection_reveal",
+      "name_zh": "反射揭示",
+      "name_en": "reflection reveal",
+      "lexicon_key": "反射揭示",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "lateral",
+        "z_out"
+      ],
+      "slots": [
+        "speed",
+        "surface",
+        "reveal_target"
+      ],
+      "aliases_zh": [
+        "反射揭示",
+        "镜面揭示",
+        "倒影揭示",
+        "水面揭示",
+        "镜中现身",
+        "反射转场"
+      ],
+      "aliases_en": [
+        "reflection reveal",
+        "mirror reveal",
+        "reflection pull",
+        "surface reveal"
+      ],
+      "narrative_functions": [
+        "揭示身份",
+        "双重意象",
+        "心理暗示",
+        "优雅转场",
+        "从倒影带到本体"
+      ],
+      "use_when": "借镜面/水面/玻璃/金属的反射先给到倒影,再移动揭示本体或从本体拉到倒影,做身份/心理揭示。",
+      "avoid_when": "反射面材质/透视不稳,或倒影与本体一致性无法保证时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：反射揭示；速度=缓慢；反射面={镜/水/玻璃/金属};起止={先倒影后本体 或 先本体后倒影};倒影与本体同一人同一服装,透视一致。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "dutch_tilt",
+      "name_zh": "荷兰角",
+      "name_en": "dutch angle / canted tilt",
+      "lexicon_key": "荷兰角",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "roll"
+      ],
+      "slots": [
+        "roll_angle",
+        "direction",
+        "speed"
+      ],
+      "aliases_zh": [
+        "荷兰角",
+        "倾斜镜头",
+        "斜角构图",
+        "歪斜机位",
+        "倾斜入画",
+        "失衡构图"
+      ],
+      "aliases_en": [
+        "dutch angle",
+        "dutch tilt",
+        "canted angle",
+        "oblique angle"
+      ],
+      "narrative_functions": [
+        "失衡",
+        "不安",
+        "癫狂",
+        "反派压迫",
+        "心理扭曲"
+      ],
+      "use_when": "表达失衡、不安、疯狂、危险或反派视角；可静态倾斜,也可从正到斜逐渐入画。",
+      "avoid_when": "正常对白、温情、稳定叙事;荷兰角滥用会廉价化。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：荷兰角；倾斜角={15/25/35 度};方向={左倾/右倾};速度={静态保持/缓慢加倾};构图失衡但主体主视觉清晰。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "overhead_spin",
+      "name_zh": "顶部旋转俯拍",
+      "name_en": "overhead rotating top shot",
+      "lexicon_key": "顶部旋转俯拍",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "yaw_top",
+        "top_down"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "顶部旋转俯拍",
+        "俯拍旋转",
+        "天顶旋转",
+        "上帝视角旋转",
+        "顶视盘旋"
+      ],
+      "aliases_en": [
+        "overhead spin",
+        "top-down rotate",
+        "god's-eye spin",
+        "overhead rotating shot"
+      ],
+      "narrative_functions": [
+        "奇观",
+        "眩晕",
+        "仪式感",
+        "对称构图",
+        "从顶部收拢或释放"
+      ],
+      "use_when": "垂直俯拍并绕垂直轴旋转:仪式、群像对称、倒地视角旋转、催眠/眩晕氛围。",
+      "avoid_when": "需要读脸或空间轴线时;纯顶视会丢失人物身份与朝向。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：顶部旋转俯拍；速度={缓慢/匀速};方向={顺时针/逆时针};机位=正上方垂直俯拍;起止={高度收拢/释放};对称构图,主体居中。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "probe_macro",
+      "name_zh": "探针穿越微距",
+      "name_en": "probe lens macro through-shot",
+      "lexicon_key": "探针镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "z_in",
+        "through_gap"
+      ],
+      "slots": [
+        "speed",
+        "subject",
+        "through_target"
+      ],
+      "aliases_zh": [
+        "探针镜头",
+        "微距探针",
+        "探针穿越",
+        "穿越微距",
+        "probe镜头"
+      ],
+      "aliases_en": [
+        "probe lens",
+        "macro probe",
+        "probe through-shot",
+        "snorkel lens"
+      ],
+      "narrative_functions": [
+        "极小尺度奇观",
+        "穿越进入",
+        "质感揭示",
+        "美食/自然/道具沉浸"
+      ],
+      "use_when": "用探针镜头在极小尺度做连续穿越：钻进花丛/餐盘/机械缝隙/水滴，做沉浸质感或尺度反差。",
+      "avoid_when": "需要人物面部表演或对白时；探针高速穿越易牺牲主体身份。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：探针穿越微距；速度={缓慢/匀速}；主体={穿越对象};起止={入口特写到穿出目标};极浅景深、连续无切、质感锐利。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "snorricam",
+      "name_zh": "机身固定",
+      "name_en": "snorricam / body-mounted rig",
+      "lexicon_key": "机身固定",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "subject_locked"
+      ],
+      "slots": [
+        "speed",
+        "subject",
+        "world_motion"
+      ],
+      "aliases_zh": [
+        "机身固定",
+        "贴身固定机位",
+        "人物随镜",
+        "身体绑定机位",
+        "snorricam"
+      ],
+      "aliases_en": [
+        "snorricam",
+        "body-mounted rig",
+        "body cam",
+        "subject-locked rig"
+      ],
+      "narrative_functions": [
+        "眩晕",
+        "失控",
+        "主观迷乱",
+        "醉酒/惊惧/精神失衡"
+      ],
+      "use_when": "把机身绑定主体：人物在画面中相对静止而整个世界随其运动天旋地转，表现眩晕/失控/精神失衡。",
+      "avoid_when": "正常叙事、对白、需要稳定环境读图时；效果强烈易过载。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：机身固定(snorricam)；速度={匀速/加速};主体=锁定于画面中央相对静止;世界运动={背景随主体旋转/摇晃};表现眩晕失控,主体面部保持一致。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "ots_push",
+      "name_zh": "越肩推镜",
+      "name_en": "over-the-shoulder push-in",
+      "lexicon_key": "越肩推镜",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "z_in"
+      ],
+      "slots": [
+        "speed",
+        "foreground_subject",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "越肩推镜",
+        "过肩推近",
+        "OTS推镜",
+        "肩上推进"
+      ],
+      "aliases_en": [
+        "over-the-shoulder push",
+        "OTS push-in",
+        "shoulder push"
+      ],
+      "narrative_functions": [
+        "对峙压迫",
+        "权力关系",
+        "逼近揭示",
+        "保留前景关系的推进"
+      ],
+      "use_when": "保留前景人物肩背作锚，越过其肩向对面主体推进，做对峙、逼供、压迫或揭示。",
+      "avoid_when": "前景人物身份不稳或遮挡过重时；越肩推不宜大幅甩动。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：越肩推镜；速度={缓慢/匀速};前景={肩背人物};起止={过肩中景到对面主体近景};前景虚化作框,轴线不越轴。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "speed_ramp",
+      "name_zh": "变速坡道",
+      "name_en": "speed ramp (overcrank/undercrank)",
+      "lexicon_key": "变速升格",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "temporal"
+      ],
+      "slots": [
+        "ramp_point",
+        "from_speed",
+        "to_speed"
+      ],
+      "aliases_zh": [
+        "变速升格",
+        "速度坡道",
+        "变速",
+        "升格降格",
+        "speed ramp",
+        "子弹时间前奏"
+      ],
+      "aliases_en": [
+        "speed ramp",
+        "speed change",
+        "overcrank",
+        "undercrank",
+        "ramp"
+      ],
+      "narrative_functions": [
+        "强调节拍",
+        "冲击瞬间",
+        "高光定格前奏",
+        "动作韵律"
+      ],
+      "use_when": "在关键动作/命中/亮相点做速率突变(实时→升格慢放或降格加速),强调该瞬间。常与运镜叠加。",
+      "avoid_when": "平稳对白与信息镜；滥用变速会显廉价。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：变速坡道；速度=起始{实时}→坡道点{升格慢放/降格加速}→回正;坡道点={命中/亮相/腾空瞬间};在关键帧做平滑速率过渡。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "whip_to_freeze",
+      "name_zh": "甩入定格",
+      "name_en": "whip pan into freeze",
+      "lexicon_key": "甩入定格",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "fast_yaw",
+        "temporal"
+      ],
+      "slots": [
+        "direction",
+        "freeze_point"
+      ],
+      "aliases_zh": [
+        "甩入定格",
+        "甩镜定格",
+        "急甩冻结",
+        "甩镜卡帧"
+      ],
+      "aliases_en": [
+        "whip to freeze",
+        "whip pan freeze",
+        "snap freeze"
+      ],
+      "narrative_functions": [
+        "登场亮相",
+        "名字卡点",
+        "高光冻结",
+        "转场收束"
+      ],
+      "use_when": "快速甩镜带到主体后骤停定格,做登场亮相/姓名卡/高光冻结,常配卡点音效。",
+      "avoid_when": "需要连续表演或对白时;定格打断动作流。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：甩入定格；速度=急速甩镜后骤停;方向={向左/向右};定格点={主体亮相姿态};甩动段允许运动模糊,定格瞬间锐利卡住。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "oner_long_take",
+      "name_zh": "一镜到底",
+      "name_en": "oner / continuous long take",
+      "lexicon_key": "一镜到底",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "continuous"
+      ],
+      "slots": [
+        "speed",
+        "path",
+        "beats"
+      ],
+      "aliases_zh": [
+        "一镜到底",
+        "长镜头",
+        "连续长镜",
+        "oner",
+        "单镜调度"
+      ],
+      "aliases_en": [
+        "oner",
+        "long take",
+        "continuous take",
+        "one-shot"
+      ],
+      "narrative_functions": [
+        "沉浸",
+        "空间连续",
+        "调度炫技",
+        "真实时间感"
+      ],
+      "use_when": "一个连续不切的镜头串联多个动作/空间/人物,做沉浸调度或真实时间感(走廊、宴席、战场穿行)。",
+      "avoid_when": "需要快切节奏或身份高风险的贴脸镜;长镜头对连贯性与身份保真要求极高。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：一镜到底；速度={匀速/随节拍变};路径={穿行调度路线};节拍={途经的动作/人物节点};全程连续不切,空间与光照连贯。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "birds_eye_descend",
+      "name_zh": "鸟瞰俯降",
+      "name_en": "bird's-eye descending top shot",
+      "lexicon_key": "鸟瞰俯降",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "top_down",
+        "z_down"
+      ],
+      "slots": [
+        "speed",
+        "end_height",
+        "subject"
+      ],
+      "aliases_zh": [
+        "鸟瞰俯降",
+        "天顶下降",
+        "俯视下压",
+        "顶视俯降",
+        "上帝视角下降"
+      ],
+      "aliases_en": [
+        "bird's-eye descend",
+        "top-down descent",
+        "overhead drop"
+      ],
+      "narrative_functions": [
+        "从全局压到个体",
+        "降临感",
+        "孤立主体",
+        "仪式/命运俯视"
+      ],
+      "use_when": "正上方鸟瞰并垂直下降,从大全局逐渐压到单一主体,做降临、孤立或命运俯视。",
+      "avoid_when": "需要读脸或空间朝向时;纯顶视会丢失人物身份与视线。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：鸟瞰俯降；速度={缓慢/匀速};机位=正上方垂直俯视向下降;起止={高空全局到贴近主体};对称构图,主体逐渐充满画面。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "low_hero_push",
+      "name_zh": "仰角英雄推",
+      "name_en": "low-angle hero push-in",
+      "lexicon_key": "仰角英雄推",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "z_in",
+        "low_angle"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "仰角英雄推",
+        "低角度英雄镜",
+        "仰拍推近",
+        "英雄登场推"
+      ],
+      "aliases_en": [
+        "low-angle hero push",
+        "hero low push-in",
+        "upshot push"
+      ],
+      "narrative_functions": [
+        "气场",
+        "威压",
+        "登场高光",
+        "力量确立"
+      ],
+      "use_when": "低机位仰拍并推近主体,确立气场/威压/英雄登场,让主体高大压场。",
+      "avoid_when": "温情、对话平视、需弱化主体地位时;仰角会强化支配感。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：仰角英雄推；速度={缓慢/匀速};机位=低角度仰拍;起止={仰视全身到仰视胸像};主体高大压场,天空/高处作背景。",
+      "media": null,
+      "status": "added_without_visual_reference"
     }
   ],
   "synced_from": "camera manifest snapshot 2026-07-10; copied into this line, no runtime dependency",

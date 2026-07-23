@@ -93,13 +93,15 @@ def cosine(a: Sequence[float], b: Sequence[float]) -> float:
 def calibrate_floor(intra_scores: Sequence[float], fallback: float = 0.50) -> float:
     """从定妆组内部互相余弦标定"同一人下限"。
 
-    取最小值（最严格的一对就是同人能掉到的最低线）；定妆组只有单张（无内部对）时
-    回退到 fallback（经验同人下限 ~0.50，偏保守，宁可多报 🟡 让人判）。
+    定妆组内部最小值只能把门槛抬高，不能把保守 fallback 往下拖。历史上把侧/背/低清
+    变体的异常低分直接当 floor，会把整组门槛压到接近 0，使明显换脸也被判 ok。
+    因此 floor=max(组内最小值, fallback)；无内部对时仍回退 fallback。边界样本交人判，
+    不允许一张坏锚替整组降低身份标准。
     """
     vals = [s for s in intra_scores if s is not None]
     if not vals:
         return fallback
-    return min(vals)
+    return max(min(vals), fallback)
 
 
 def best_anchor_score(emb: Sequence[float], variant_embs: Sequence[Sequence[float]]) -> Optional[float]:
@@ -1331,12 +1333,15 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
             for v, e in embs.items():
                 if v != "主" and e is not None:
                     intra.append(cosine(main, e))
+        raw_floor = min(intra) if intra else None
         floor = calibrate_floor(intra)
         char_floor[char] = floor
         char_calibrated[char] = floor_calibrated(intra)
         result["characters"][char] = {"floor": round(floor, 4), "intra_pairs": len(intra),
                                       "has_main": main is not None,
-                                      "floor_calibrated": char_calibrated[char]}
+                                      "floor_calibrated": char_calibrated[char],
+                                      "raw_intra_floor": round(raw_floor, 4) if raw_floor is not None else None,
+                                      "floor_guard_applied": raw_floor is not None and raw_floor < floor}
         if dreamsim_model is not None:  # pragma: no cover - 需模型
             paths = [p for p in variants.values() if p and os.path.exists(p)]
             ref_paths[char] = paths

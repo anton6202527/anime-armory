@@ -441,6 +441,16 @@
       "to": "image:出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png"
     },
     {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP08_penetration_end.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP08_precontact.png"
+    },
+    {
       "from": "clip:Clip_01",
       "relation": "renders_video",
       "to": "video:出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4"
@@ -1066,6 +1076,16 @@
       "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4"
     },
     {
+      "from": "image:出图/第1集/图片/EP01_CLIP08_penetration_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/EP01_CLIP08_precontact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4"
+    },
+    {
       "from": "clip:Clip_08",
       "relation": "renders_video",
       "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4"
@@ -1106,6 +1126,16 @@
       "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4"
     },
     {
+      "from": "image:出图/第1集/图片/EP01_CLIP08_penetration_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/EP01_CLIP08_precontact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4"
+    },
+    {
       "from": "clip:Clip_08",
       "relation": "renders_video",
       "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4"
@@ -1142,6 +1172,16 @@
     },
     {
       "from": "image:出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/EP01_CLIP08_penetration_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/EP01_CLIP08_precontact.png",
       "relation": "image_to_video",
       "to": "video:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4"
     },
@@ -1272,21 +1312,9 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:PROP_断刀",
-      "kind": "prop",
-      "label": "断刀",
-      "source": "asset_registry"
-    },
-    {
-      "id": "entity:PROP_横刀",
-      "kind": "prop",
-      "label": "横刀",
-      "source": "asset_registry"
-    },
-    {
-      "id": "entity:PROP_翻覆囚车",
-      "kind": "prop",
-      "label": "翻覆囚车",
+      "id": "entity:VFX_墨虎谱影",
+      "kind": "vfx",
+      "label": "墨虎谱影",
       "source": "asset_registry"
     },
     {
@@ -1303,6 +1331,12 @@
     },
     {
       "id": "entity:WEAPON_01",
+      "kind": "weapon",
+      "label": "横刀",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:WEAPON_横刀",
       "kind": "weapon",
       "label": "横刀",
       "source": "asset_registry"
@@ -1534,6 +1568,18 @@
       "kind": "image",
       "label": "EP01_CLIP08_anchor_cut_0360.png",
       "path": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP08_penetration_end.png",
+      "kind": "image",
+      "label": "EP01_CLIP08_penetration_end.png",
+      "path": "出图/第1集/图片/EP01_CLIP08_penetration_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP08_precontact.png",
+      "kind": "image",
+      "label": "EP01_CLIP08_precontact.png",
+      "path": "出图/第1集/图片/EP01_CLIP08_precontact.png"
     },
     {
       "id": "route:Clip_01",
@@ -1771,9 +1817,9 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 8,
-    "edges": 234,
-    "images": 32,
-    "nodes": 94,
+    "edges": 242,
+    "images": 34,
+    "nodes": 95,
     "videos": 28
   },
   "version": 1

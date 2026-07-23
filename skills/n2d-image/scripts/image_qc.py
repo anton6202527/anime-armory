@@ -3111,6 +3111,14 @@ def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optio
         m = re.fullmatch(r"Clip_(\d{2})", str(shot))
         if m:
             patterns.append(f"Clip{m.group(1)}*.png")
+            # Current n2d jobs commonly prefix the episode, e.g.
+            # EP02_CLIP08_start_a1.png.  Without this pattern the hard
+            # per-image prop/VFX review queue silently covered only the first
+            # fallback PNG and skipped mid/end anchors in the same Clip.
+            patterns.extend([
+                f"*CLIP{m.group(1)}*.png",
+                f"*Clip{m.group(1)}*.png",
+            ])
         for pattern in patterns:
             for p in sorted(img_dir.glob(pattern)):
                 out.append((Path("图片") / p.name).as_posix())

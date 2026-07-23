@@ -411,6 +411,511 @@
       "to": "image:出图/第2集/图片/EP02_CLIP08_start_a1.png"
     },
     {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "route:Clip_01",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip01_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a3.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "route:Clip_01",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip01_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a3.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "route:Clip_01",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip01_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP01_start_a3.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "from": "route:Clip_04",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP04_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP04_end_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP04_end_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP04_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP02_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_impact.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP03_recovery.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
+    },
+    {
       "from": "episode:第2集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第2集.json"
@@ -757,6 +1262,18 @@
       "path": "出图/第2集/图片/EP02_CLIP08_start_a1.png"
     },
     {
+      "id": "image:出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "kind": "image",
+      "label": "EP02_CLIP02_preimpact_gap_too_small_v1.png",
+      "path": "出图/第2集/图片/_rejected/EP02_CLIP02_preimpact_gap_too_small_v1.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png",
+      "kind": "image",
+      "label": "EP02_CLIP03_recovery_head_attached_v1.png",
+      "path": "出图/第2集/图片/_rejected/EP02_CLIP03_recovery_head_attached_v1.png"
+    },
+    {
       "id": "route:Clip_01",
       "kind": "route",
       "label": "Clip_01",
@@ -819,15 +1336,111 @@
       "path": "出视频/第2集/prompt/video_model_routes.json",
       "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4",
+      "kind": "video",
+      "label": "Clip_01_杀人余震与二十年到账_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4",
+      "kind": "video",
+      "label": "Clip_01_杀人余震与二十年到账_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4",
+      "kind": "video",
+      "label": "Clip_01_杀人余震与二十年到账_part3.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4",
+      "kind": "video",
+      "label": "Clip_02_二十年尽付一刀_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4",
+      "kind": "video",
+      "label": "Clip_02_二十年尽付一刀_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part3.mp4",
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+      "kind": "video",
+      "label": "Clip_04_百年道行与收录选择.mp4",
+      "path": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4",
+      "kind": "video",
+      "label": "Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4",
+      "kind": "video",
+      "label": "Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4",
+      "kind": "video",
+      "label": "Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part1_slow_timing_v1.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_late_unclear_separation_v2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4",
+      "kind": "video",
+      "label": "Clip_03_一刀断虎首_part3_body_lingers_v1.mp4",
+      "path": "出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part3_body_lingers_v1.mp4"
     }
   ],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 8,
-    "edges": 87,
-    "images": 26,
-    "nodes": 59,
-    "videos": 0
+    "edges": 188,
+    "images": 28,
+    "nodes": 77,
+    "videos": 16
   },
   "version": 1
 }

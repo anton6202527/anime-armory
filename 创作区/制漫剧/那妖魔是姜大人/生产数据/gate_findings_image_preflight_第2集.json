@@ -95,6 +95,90 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "生图AI一致性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生图AI一致性",
+          "dim_key": "生图AI一致性",
+          "dimension": "生图AI一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "同项目/同集混用多个生图模型/渠道（codex、openai）；混用会让同角色脸型/服装/画风跨镜漂移。请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
+          "msg": "同项目/同集混用多个生图模型/渠道（codex、openai）；混用会让同角色脸型/服装/画风跨镜漂移。请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生图后端基线"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端基线",
+          "dim_key": "生图后端基线",
+          "dimension": "生图后端基线",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
+          "message": "production_events 显示本集实际出图后端（openai）与项目锁定基线（codex）不一致——基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
+          "msg": "production_events 显示本集实际出图后端（openai）与项目锁定基线（codex）不一致——基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "关键镜候选"
       ],
       "findings": [
@@ -128,6 +212,7 @@
     },
     {
       "affected_artifacts": [
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json",
         "合规/compliance_manifest.json",
         "脚本/第2集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -140,6 +225,25 @@
         "生图后端适配"
       ],
       "findings": [
+        {
+          "affected_artifacts": [
+            "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端适配",
+          "dim_key": "生图后端适配",
+          "dimension": "生图后端适配",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "msg": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
         {
           "affected_artifacts": [
             "合规/compliance_manifest.json",
@@ -190,7 +294,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json、合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
     },
     {
       "affected_artifacts": [
@@ -335,6 +439,48 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "跨集记忆锚落实"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "跨集记忆锚落实",
+          "dim_key": "跨集记忆锚落实",
+          "dimension": "跨集记忆锚落实",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/memory_anchor_plan_第2集.json",
+          "message": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+          "msg": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "character_consistency"
       ],
       "findings": [
@@ -364,6 +510,48 @@
         }
       ],
       "return_to_stage": "review",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "物料新鲜度",
+          "dim_key": "物料新鲜度",
+          "dimension": "物料新鲜度",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "第2集",
+          "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 固化新基线。",
+          "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 固化新基线。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "update_plan",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "update_plan",
       "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
     },
     {
@@ -461,6 +649,48 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "Prompt消费收据"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "Prompt消费收据",
+          "dim_key": "Prompt消费收据",
+          "dimension": "Prompt消费收据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/consumed_contracts_image_prompt_第2集.json",
+          "message": "prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成：storyboard 已变更但 prompt 未重签：脚本/第2集/storyboard.json；continuity_chain 已变更但 prompt 未重签：脚本/第2集/continuity_chain.json",
+          "msg": "prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成：storyboard 已变更但 prompt 未重签：脚本/第2集/storyboard.json；continuity_chain 已变更但 prompt 未重签：脚本/第2集/continuity_chain.json",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "image prompt compiler"
       ],
       "findings": [
@@ -480,8 +710,8 @@
           "episode": "第2集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
-          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
-          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1625>1500",
+          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1625>1500",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -504,8 +734,8 @@
           "episode": "第2集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
-          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
-          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:53>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:53>16",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -528,8 +758,8 @@
           "episode": "第2集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
-          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
-          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1520>1500",
+          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1520>1500",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -576,8 +806,8 @@
           "episode": "第2集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
-          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
-          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1525>1500",
+          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1525>1500",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -600,8 +830,8 @@
           "episode": "第2集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
-          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
-          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -672,6 +902,30 @@
           "episode": "第2集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:47>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:47>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
           "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
           "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
@@ -695,33 +949,9 @@
           "dimension": "image prompt compiler",
           "episode": "第2集",
           "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
-          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
-          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "image prompt compiler",
-          "dim_key": "image prompt compiler",
-          "dimension": "image prompt compiler",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
-          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
-          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -972,7 +1202,9 @@
         "出视频/第2集/prompt",
         "脚本/第2集/storyboard.json"
       ],
-      "affected_shots": [],
+      "affected_shots": [
+        "Clip_08"
+      ],
       "dimensions": [
         "semantic_continuity"
       ],
@@ -983,15 +1215,17 @@
             "出视频/第2集/prompt",
             "脚本/第2集/storyboard.json"
           ],
-          "affected_shots": [],
+          "affected_shots": [
+            "Clip_08"
+          ],
           "dim": "语义谱系(P0)",
           "dim_key": "semantic_continuity",
           "dimension": "语义谱系(P0)",
           "episode": "第2集",
           "gate_stage": "image_preflight",
-          "loc": "storyboard.json",
-          "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "loc": "video Clip 8",
+          "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、面板位于角色视线前方、角色反应与空光幕底框分层、camera_rule、面板正对屏幕、不随镜头透视畸变、只画空底框、面板跨镜锁色锁形",
+          "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、面板位于角色视线前方、角色反应与空光幕底框分层、camera_rule、面板正对屏幕、不随镜头透视畸变、只画空底框、面板跨镜锁色锁形",
           "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
           "return_to_stage": "script_stage2",
           "sev": "warn",
@@ -1000,7 +1234,7 @@
         }
       ],
       "return_to_stage": "script_stage2",
-      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位产物：出图/第2集/prompt、出视频/第2集/prompt、脚本/第2集/storyboard.json"
+      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位镜头：Clip_08；定位产物：出图/第2集/prompt、出视频/第2集/prompt、脚本/第2集/storyboard.json"
     },
     {
       "affected_artifacts": [
@@ -1161,6 +1395,426 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "固定 Seed"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "固定 Seed",
+          "dim_key": "固定 Seed",
+          "dimension": "固定 Seed",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 824",
+          "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "固定 Seed",
+          "dim_key": "固定 Seed",
+          "dimension": "固定 Seed",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 825",
+          "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "固定 Seed",
+          "dim_key": "固定 Seed",
+          "dimension": "固定 Seed",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 830",
+          "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "固定 Seed",
+          "dim_key": "固定 Seed",
+          "dimension": "固定 Seed",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 834",
+          "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "production_ops_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 787",
+          "message": "出图/第2集/图片/Clip03_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/Clip03_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 788",
+          "message": "出图/第2集/图片/Clip05_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/Clip05_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 789",
+          "message": "出图/第2集/图片/Clip07_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/Clip07_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 790",
+          "message": "出图/第2集/图片/EP02_CLIP01_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP01_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 812",
+          "message": "出图/第2集/图片/EP02_CLIP01_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP01_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 813",
+          "message": "出图/第2集/图片/EP02_CLIP01_start_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP01_start_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 814",
+          "message": "出图/第2集/图片/EP02_CLIP01_start_a3.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP01_start_a3.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 795",
+          "message": "出图/第2集/图片/EP02_CLIP02_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP02_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 815",
+          "message": "出图/第2集/图片/EP02_CLIP02_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP02_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 816",
+          "message": "出图/第2集/图片/EP02_CLIP03_impact.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP03_impact.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 799",
+          "message": "出图/第2集/图片/EP02_CLIP04_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP04_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 818",
+          "message": "出图/第2集/图片/EP02_CLIP04_end_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "msg": "出图/第2集/图片/EP02_CLIP04_end_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "景别阶梯"
       ],
       "findings": [
@@ -1253,6 +1907,54 @@
         "出图/第2集/prompt"
       ],
       "affected_shots": [],
+      "dim": "生图AI一致性",
+      "dim_key": "生图AI一致性",
+      "dimension": "生图AI一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "message": "同项目/同集混用多个生图模型/渠道（codex、openai）；混用会让同角色脸型/服装/画风跨镜漂移。请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
+      "msg": "同项目/同集混用多个生图模型/渠道（codex、openai）；混用会让同角色脸型/服装/画风跨镜漂移。请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端基线",
+      "dim_key": "生图后端基线",
+      "dimension": "生图后端基线",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
+      "message": "production_events 显示本集实际出图后端（openai）与项目锁定基线（codex）不一致——基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
+      "msg": "production_events 显示本集实际出图后端（openai）与项目锁定基线（codex）不一致——基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "关键镜候选",
       "dim_key": "关键镜候选",
       "dimension": "关键镜候选",
@@ -1265,6 +1967,25 @@
       "return_to_stage": "image",
       "sev": "warn",
       "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端适配",
+      "dim_key": "生图后端适配",
+      "dimension": "生图后端适配",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "message": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "msg": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1426,6 +2147,30 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_preflight",
+      "loc": "尸骸荒野（LOC_01）",
+      "message": "本集物料漂移风险 medium（分48）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+      "msg": "本集物料漂移风险 medium（分48）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
       "loc": "百妖谱（VFX_百妖谱）",
       "message": "本集物料漂移风险 medium（分46）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "msg": "本集物料漂移风险 medium（分46）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
@@ -1493,18 +2238,18 @@
         "出图/第2集/prompt"
       ],
       "affected_shots": [],
-      "dim": "物料漂移预案",
-      "dim_key": "物料漂移预案",
-      "dimension": "物料漂移预案",
+      "dim": "跨集记忆锚落实",
+      "dim_key": "跨集记忆锚落实",
+      "dimension": "跨集记忆锚落实",
       "episode": "第2集",
       "gate_stage": "image_preflight",
-      "loc": "LOC 尸骸荒野（LOC_尸骸荒野）",
-      "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/memory_anchor_plan_第2集.json",
+      "message": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+      "msg": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "info",
-      "severity": "info",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1527,6 +2272,30 @@
       "msg": "director_camera_plan_第2集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第2集.json·SHA 绑定 plan+prompt）。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md",
+      "message": "director_camera_plan_第2集.json（8 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第2集.json（结构化签收）。",
+      "msg": "director_camera_plan_第2集.json（8 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第2集.json（结构化签收）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "video",
       "sev": "info",
       "severity": "info",
       "source": "n2d-dashboard/gate"
@@ -1571,12 +2340,12 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "第2集",
-      "message": "skill 有改动但仅限横切/QC/gate 层（n2d, n2d-image），不影响本阶段输入物料；如需可跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 复核。",
-      "msg": "skill 有改动但仅限横切/QC/gate 层（n2d, n2d-image），不影响本阶段输入物料；如需可跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 复核。",
+      "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 固化新基线。",
+      "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 固化新基线。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "info",
-      "severity": "info",
+      "return_to_stage": "update_plan",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1661,14 +2430,38 @@
         "出图/第2集/prompt"
       ],
       "affected_shots": [],
+      "dim": "Prompt消费收据",
+      "dim_key": "Prompt消费收据",
+      "dimension": "Prompt消费收据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/consumed_contracts_image_prompt_第2集.json",
+      "message": "prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成：storyboard 已变更但 prompt 未重签：脚本/第2集/storyboard.json；continuity_chain 已变更但 prompt 未重签：脚本/第2集/continuity_chain.json",
+      "msg": "prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成：storyboard 已变更但 prompt 未重签：脚本/第2集/storyboard.json；continuity_chain 已变更但 prompt 未重签：脚本/第2集/continuity_chain.json",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "image prompt compiler",
       "dim_key": "image prompt compiler",
       "dimension": "image prompt compiler",
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
-      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
-      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1625>1500",
+      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1625>1500",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -1691,8 +2484,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
-      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
-      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:53>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:53>16",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -1739,8 +2532,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
-      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
-      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1520>1500",
+      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1520>1500",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -1811,8 +2604,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
-      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
-      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1525>1500",
+      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1525>1500",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -1835,8 +2628,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
-      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
-      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -1979,8 +2772,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
-      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
-      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:47>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:47>16",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -2027,8 +2820,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
-      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
-      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -2075,8 +2868,8 @@
       "episode": "第2集",
       "gate_stage": "image_preflight",
       "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
-      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
-      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -2137,15 +2930,17 @@
         "出视频/第2集/prompt",
         "脚本/第2集/storyboard.json"
       ],
-      "affected_shots": [],
+      "affected_shots": [
+        "Clip_08"
+      ],
       "dim": "语义谱系(P0)",
       "dim_key": "semantic_continuity",
       "dimension": "语义谱系(P0)",
       "episode": "第2集",
       "gate_stage": "image_preflight",
-      "loc": "storyboard.json",
-      "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-      "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+      "loc": "video Clip 8",
+      "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、面板位于角色视线前方、角色反应与空光幕底框分层、camera_rule、面板正对屏幕、不随镜头透视畸变、只画空底框、面板跨镜锁色锁形",
+      "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、面板位于角色视线前方、角色反应与空光幕底框分层、camera_rule、面板正对屏幕、不随镜头透视畸变、只画空底框、面板跨镜锁色锁形",
       "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
       "return_to_stage": "script_stage2",
       "sev": "warn",
@@ -2287,6 +3082,558 @@
         "出图/第2集/prompt"
       ],
       "affected_shots": [],
+      "dim": "固定 Seed",
+      "dim_key": "固定 Seed",
+      "dimension": "固定 Seed",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 824",
+      "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "固定 Seed",
+      "dim_key": "固定 Seed",
+      "dimension": "固定 Seed",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 825",
+      "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "固定 Seed",
+      "dim_key": "固定 Seed",
+      "dimension": "固定 Seed",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 830",
+      "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "固定 Seed",
+      "dim_key": "固定 Seed",
+      "dimension": "固定 Seed",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 834",
+      "message": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "msg": "image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 787",
+      "message": "出图/第2集/图片/Clip03_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/Clip03_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 788",
+      "message": "出图/第2集/图片/Clip05_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/Clip05_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 789",
+      "message": "出图/第2集/图片/Clip07_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/Clip07_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 790",
+      "message": "出图/第2集/图片/EP02_CLIP01_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP01_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 812",
+      "message": "出图/第2集/图片/EP02_CLIP01_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP01_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 813",
+      "message": "出图/第2集/图片/EP02_CLIP01_start_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP01_start_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 814",
+      "message": "出图/第2集/图片/EP02_CLIP01_start_a3.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP01_start_a3.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 795",
+      "message": "出图/第2集/图片/EP02_CLIP02_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP02_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 815",
+      "message": "出图/第2集/图片/EP02_CLIP02_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP02_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 816",
+      "message": "出图/第2集/图片/EP02_CLIP03_impact.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP03_impact.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 799",
+      "message": "出图/第2集/图片/EP02_CLIP04_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP04_end.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 818",
+      "message": "出图/第2集/图片/EP02_CLIP04_end_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP04_end_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 819",
+      "message": "出图/第2集/图片/EP02_CLIP04_end_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP04_end_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 802",
+      "message": "出图/第2集/图片/EP02_CLIP04_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP04_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 803",
+      "message": "出图/第2集/图片/EP02_CLIP06_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP06_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 820",
+      "message": "出图/第2集/图片/EP02_CLIP06_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP06_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 805",
+      "message": "出图/第2集/图片/EP02_CLIP07_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP07_start.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 821",
+      "message": "出图/第2集/图片/EP02_CLIP07_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP07_start_a1.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 822",
+      "message": "出图/第2集/图片/EP02_CLIP07_start_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "msg": "出图/第2集/图片/EP02_CLIP07_start_a2.png 的 actual_image_inputs 只是不可审计占位（builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt），没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "image prompt compiler",
       "dim_key": "image prompt compiler",
       "dimension": "image prompt compiler",
@@ -2364,9 +3711,9 @@
       "dimension": "image prompt compiler",
       "episode": "第2集",
       "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/场景定妆.md ## LOC 尸骸荒野（`LOC_尸骸荒野`）",
-      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
-      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/场景定妆.md ## 尸骸荒野（`LOC_01`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -2519,14 +3866,15 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-22T07:52:07+00:00",
+  "generated_at": "2026-07-23T03:24:43+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "9ad1cd026c374bda3bdc39f53c94c1ba619eeb8ef822a2e83e1936a9298f0e43",
+      "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_backend_capabilities/codex.json": "62e57dd70eb9103cef934c0e2445e1bae4095661f9e484331fe09e8b3b593bc2",
+      "出图/共享/asset_registry.json": "8472d5cf0e6929c062f6af3cb6f2788075b053ab63a5a7e7466ec542036f8e40",
       "出图/共享/identity_registry.json": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8",
       "出图/共享/prompt": null,
-      "出图/共享/prompt/00_索引.md": "9b4b75a12657b58fdf5d6ae5f78d6534e1630de86b2dcdb0a09e05a9c54cdd5e",
-      "出图/共享/prompt/场景定妆.md": "0081a9c4af9294720644787a5f81be6861d73a2b672182161c51879eb8181485",
+      "出图/共享/prompt/00_索引.md": "80aca3ac8fdd93fa872920a207466d1f739e93b041f19b74b9ed9a21642de8e8",
+      "出图/共享/prompt/场景定妆.md": "14f6b03c7056eaf556d94cd39934a0ed4ff1fb538df7a0f680cb3d6713463382",
       "出图/共享/prompt/特效定妆.md": "d56c4392ac85ad936467086586122e2743df8fcc6ce9a6489a86f52d718d833d",
       "出图/共享/prompt/角色定妆.md": "8301127089638f27b7c744bf50aa7cf75f0dbef060dc136c4674e197349a7ed0",
       "出图/共享/prompt/道具定妆.md": "d499dfc9b4dbccd5f03ee3caff37f09124243a0ac9ca58cf44e947a436cb185c",
@@ -2557,9 +3905,6 @@
       "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png": "8dfba88209e0d8a37b707c5f952008c8b5cc93953c487f9e0da114f3b9368abf",
       "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
       "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
-      "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
-      "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png": "684e345c9db2d41a07b78bdbf5134d053c1b9cbc17977a469c8c0337cbb41280",
-      "出图/共享/图片/定妆_场景_LOC_尸骸荒野_平面图.png": "9dd195f171758074ff50e70cf083240de9c3c25fd77b14afda2499c0d0957db0",
       "出图/共享/图片/定妆_场景_尸骸荒野.png": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
       "出图/共享/图片/定妆_场景_尸骸荒野_反打.png": "684e345c9db2d41a07b78bdbf5134d053c1b9cbc17977a469c8c0337cbb41280",
       "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png": "9dd195f171758074ff50e70cf083240de9c3c25fd77b14afda2499c0d0957db0",
@@ -2577,16 +3922,42 @@
       "出图/共享/图片/定妆_道具_翻覆囚车_比例.png": "7114a7750be84e7b624edeefc95980c6dbadbb220a358c97e4c68f3170b19798",
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
       "出图/第2集/prompt": null,
-      "出图/第2集/prompt/00_总览.md": "63e59ac53382eb343f400b94f64820fee396401584233e13ba4d0f0be64cb0b8",
-      "出图/第2集/prompt/01_分镜出图.md": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a",
+      "出图/第2集/prompt/00_总览.md": "d47f1f60ad3f30f833a209971e5b06bb6ba0918a9f258c954925b55fbfc7f81b",
+      "出图/第2集/prompt/01_分镜出图.md": "18136a0741ff3f886207878e66193210ca44f35691f253570ef3b4d368b527a4",
+      "出图/第2集/图片/Clip01_end.png": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
+      "出图/第2集/图片/Clip03_end.png": "9f0b6948e287d30c94bd9d62661f2a20c452d68a734870f542e9c113546fac44",
+      "出图/第2集/图片/Clip05_end.png": "e86454b7591504c24331973f28e0a666f80fd216a1d70872f1cc1a331645f7f2",
+      "出图/第2集/图片/Clip07_end.png": "97eaf83578bd49cbfd06ef22dc6919e5d7b8ff20a0ce9b7c06dd7d98ddcb7d8b",
+      "出图/第2集/图片/EP02_CLIP01_start.png": "7fd76ce98b905bf35333dcff4aea99cc46ec7e594483a2253a67383bde597033",
+      "出图/第2集/图片/EP02_CLIP01_start_a1.png": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
+      "出图/第2集/图片/EP02_CLIP01_start_a2.png": "af89a8a6ba3bbd53abf8f1e7e5822f4b2a14ed0e6ef097160ace6f7f5e094813",
+      "出图/第2集/图片/EP02_CLIP01_start_a3.png": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
+      "出图/第2集/图片/EP02_CLIP02_preimpact.png": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+      "出图/第2集/图片/EP02_CLIP02_start.png": "e70555f12748daa6cab1e739f80497b17ad4c67368940239f3e97a43d74d8050",
+      "出图/第2集/图片/EP02_CLIP02_start_a1.png": "c64035c133cc1fa9770dcdc758794ac0ca272e40bb3aa9e31eb74789fc3c2bc7",
+      "出图/第2集/图片/EP02_CLIP03_impact.png": "2537373ec7e419038dbdb2646bf921f6d1ed28d1909e220846e6b5f3ee11caea",
+      "出图/第2集/图片/EP02_CLIP03_recovery.png": "9b3f558b4616b40fa9b2aeb16245e48ab4fdefc1f760c739101bf80feb098cec",
+      "出图/第2集/图片/EP02_CLIP04_end.png": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+      "出图/第2集/图片/EP02_CLIP04_end_a1.png": "1cbf2396fa5187c459ece513f9dc29f555886dc73b379abe0d90e7beec7ebfb2",
+      "出图/第2集/图片/EP02_CLIP04_end_a2.png": "1216d0498923aca2ca2e8f4a374ac86273f679243eb89097a3423d6a720fa690",
+      "出图/第2集/图片/EP02_CLIP04_start.png": "526fece0bc675ffb34c5ebcd30c87b2fe5ece74437d19c09e997a4e76373f5e8",
+      "出图/第2集/图片/EP02_CLIP06_end.png": "06e1af70018bb661854f6748a523366085b2b2ce67396706169f9a83eacd7e84",
+      "出图/第2集/图片/EP02_CLIP06_start.png": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644",
+      "出图/第2集/图片/EP02_CLIP06_start_a1.png": "0ef22b871e84c7ddfcb4e3fece43c37add0db5ffba3745e314e9170647ea1faa",
+      "出图/第2集/图片/EP02_CLIP07_start.png": "2c3b3baf3ae01af94c8318d35ee6fff8f92419ec6adc8b21163fc629978a901d",
+      "出图/第2集/图片/EP02_CLIP07_start_a1.png": "bf53a7d5959b94242f5c8b3d79b4971c35adbb4ecd4e0a5337c43fc50470f9e2",
+      "出图/第2集/图片/EP02_CLIP07_start_a2.png": "98c73f4c9407d47148a23b5ffdf8f02aa1d063f4690392a546cc55dd3f805a15",
+      "出图/第2集/图片/EP02_CLIP08_end.png": "ccc0962d8afd8f33e86c0a31172efaca74c6b643eead83f75b0259406822940d",
+      "出图/第2集/图片/EP02_CLIP08_start.png": "58b5a048800a8b764b042330064d41869949c522bf7bdc1c386d583f7c22f9bc",
+      "出图/第2集/图片/EP02_CLIP08_start_a1.png": "311608d6f12edbbe69787cd9a163a275b74731f6e51c8da017f7fc63e8c5f9b9",
       "出视频/第2集/prompt": null,
       "合规/compliance_manifest.json": "674a9cc9322462ee4e11dc503fdb129fe819244f65e2495ac0917258de878452",
-      "脚本/第2集/storyboard.json": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957",
+      "脚本/第2集/storyboard.json": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f",
       "设定库/characters/姜月初.md": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e",
       "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
       "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
     },
-    "sha": "fbab0bbe0c0d313457e85ce307c9f1f7efe62a55e697eb445212f9e588e5d3a9"
+    "sha": "6f7ca83c189640dad0725029a65d8aaf462358758c6350b32375fd2cee0de51d"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
@@ -2596,6 +3967,11 @@
   },
   "summary": {
     "by_dim": {
+      "Prompt消费收据": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "image prompt compiler": {
         "block": 0,
         "info": 0,
@@ -2631,9 +4007,14 @@
         "info": 0,
         "warn": 1
       },
+      "固定 Seed": {
+        "block": 0,
+        "info": 0,
+        "warn": 4
+      },
       "导演运镜落实": {
         "block": 0,
-        "info": 1,
+        "info": 2,
         "warn": 0
       },
       "时间基准": {
@@ -2647,8 +4028,8 @@
         "warn": 1
       },
       "物料新鲜度": {
-        "block": 0,
-        "info": 1,
+        "block": 1,
+        "info": 0,
         "warn": 0
       },
       "物料漂移预案": {
@@ -2661,10 +4042,25 @@
         "info": 0,
         "warn": 5
       },
+      "生图AI一致性": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
+      "生图后端基线": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "生图后端适配": {
-        "block": 0,
+        "block": 1,
         "info": 0,
         "warn": 2
+      },
+      "生成配方证据": {
+        "block": 19,
+        "info": 0,
+        "warn": 0
       },
       "脸漂预案": {
         "block": 0,
@@ -2681,6 +4077,11 @@
         "info": 0,
         "warn": 1
       },
+      "跨集记忆锚落实": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "风格化脸机检": {
         "block": 0,
         "info": 0,
@@ -2688,11 +4089,11 @@
       }
     },
     "severity": {
-      "block": 0,
+      "block": 25,
       "info": 8,
-      "warn": 47
+      "warn": 51
     },
-    "total": 55
+    "total": 84
   },
   "version": 1
 }

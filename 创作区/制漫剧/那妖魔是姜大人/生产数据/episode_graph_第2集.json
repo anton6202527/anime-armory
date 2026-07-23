@@ -80,11 +80,286 @@
       "relation": "contains",
       "source": "episode:第2集",
       "target": "clip:Clip_08"
+    },
+    {
+      "relation": "has_rough_cut",
+      "source": "episode:第2集",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_01_08:Clip_01_part1",
+      "target": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_01_08:Clip_01_part2",
+      "target": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_01_08:Clip_01_part3",
+      "target": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_01_08:Clip_04",
+      "target": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_02_02:Clip_02_part1",
+      "target": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_02_02:Clip_02_part2",
+      "target": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_02_08:Clip_02_part1",
+      "target": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_02_08:Clip_02_part2",
+      "target": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_02_08:Clip_04",
+      "target": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_03_part1",
+      "target": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_03_part2",
+      "target": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_03_part3",
+      "target": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_04",
+      "target": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_01",
+      "target": "job:video_batch_第2集_01_08:Clip_01_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_01",
+      "target": "job:video_batch_第2集_01_08:Clip_01_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_01",
+      "target": "job:video_batch_第2集_01_08:Clip_01_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第2集_01_08:Clip_02"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第2集_02_02:Clip_02_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第2集_02_02:Clip_02_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第2集_02_08:Clip_02_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第2集_02_08:Clip_02_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第2集_01_08:Clip_03"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第2集_02_08:Clip_03"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第2集_03_08:Clip_03_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第2集_03_08:Clip_03_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第2集_03_08:Clip_03_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_04",
+      "target": "job:video_batch_第2集_01_08:Clip_04"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_04",
+      "target": "job:video_batch_第2集_02_08:Clip_04"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_04",
+      "target": "job:video_batch_第2集_03_08:Clip_04"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第2集_01_08:Clip_05"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第2集_02_08:Clip_05"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第2集_03_08:Clip_05_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第2集_03_08:Clip_05_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第2集_01_08:Clip_06"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第2集_02_08:Clip_06"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第2集_03_08:Clip_06_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第2集_03_08:Clip_06_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第2集_01_08:Clip_07"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第2集_02_08:Clip_07"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第2集_03_08:Clip_07_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第2集_03_08:Clip_07_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第2集_01_08:Clip_08"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第2集_02_08:Clip_08"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第2集_03_08:Clip_08_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第2集_03_08:Clip_08_part2"
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-22T20:57:28+0800",
-  "graph_hash": "c81f74af5c8b0b65a91ab4607743d7b72db011533fa5ff28795d7a78df8027fd",
+  "generated_at": "2026-07-23T11:18:08+0800",
+  "graph_hash": "10d3bf3e7918d194b5faf51df8237d48725eec82fa07670fae83f9bb4911350c",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -148,6 +423,455 @@
       "episode": "第2集",
       "id": "episode:第2集",
       "type": "episode"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_01",
+      "id": "job:video_batch_第2集_01_08:Clip_01_part1",
+      "physical_clip": "Clip_01_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "accepted",
+      "submit_id": "b4a7a8e2-1d83-40c9-9ace-cf2d84a2d051",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_01",
+      "id": "job:video_batch_第2集_01_08:Clip_01_part2",
+      "physical_clip": "Clip_01_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "accepted",
+      "submit_id": "44e06d3c-6ff7-46b3-b1a7-e04afaaaa1be",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_01",
+      "id": "job:video_batch_第2集_01_08:Clip_01_part3",
+      "physical_clip": "Clip_01_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "accepted",
+      "submit_id": "84360da8-0d71-4fdb-b3c7-30c31b03a1f4",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第2集_01_08:Clip_02",
+      "physical_clip": "Clip_02",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第2集_01_08:Clip_03",
+      "physical_clip": "Clip_03",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_04",
+      "id": "job:video_batch_第2集_01_08:Clip_04",
+      "physical_clip": "Clip_04",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第2集_01_08:Clip_05",
+      "physical_clip": "Clip_05",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第2集_01_08:Clip_06",
+      "physical_clip": "Clip_06",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第2集_01_08:Clip_07",
+      "physical_clip": "Clip_07",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第2集_01_08:Clip_08",
+      "physical_clip": "Clip_08",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_01_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第2集_02_02:Clip_02_part1",
+      "physical_clip": "Clip_02_part1",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_02.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第2集_02_02:Clip_02_part2",
+      "physical_clip": "Clip_02_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_02_02.json",
+      "status": "accepted",
+      "submit_id": "dc8cc5ef-73f0-4f43-946b-2a1e65073647",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第2集_02_08:Clip_02_part1",
+      "physical_clip": "Clip_02_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "accepted",
+      "submit_id": "f7ed657e-f634-4774-8061-34cf8df9af98",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第2集_02_08:Clip_02_part2",
+      "physical_clip": "Clip_02_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "rejected",
+      "submit_id": "a16a6480-470c-43d6-a940-3c036a5111c6",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第2集_02_08:Clip_03",
+      "physical_clip": "Clip_03",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_04",
+      "id": "job:video_batch_第2集_02_08:Clip_04",
+      "physical_clip": "Clip_04",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第2集_02_08:Clip_05",
+      "physical_clip": "Clip_05",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第2集_02_08:Clip_06",
+      "physical_clip": "Clip_06",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第2集_02_08:Clip_07",
+      "physical_clip": "Clip_07",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第2集_02_08:Clip_08",
+      "physical_clip": "Clip_08",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_02_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第2集_03_08:Clip_03_part1",
+      "physical_clip": "Clip_03_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "accepted",
+      "submit_id": "a42d3e95-137f-4ef4-9c0a-924dabc0b32f",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第2集_03_08:Clip_03_part2",
+      "physical_clip": "Clip_03_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "accepted",
+      "submit_id": "9313fb6f-ba93-4775-ad1d-d602a20be2c4",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第2集_03_08:Clip_03_part3",
+      "physical_clip": "Clip_03_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "accepted",
+      "submit_id": "55cfa50f-9e2b-4cdc-b176-37c20a8bc878",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_04",
+      "id": "job:video_batch_第2集_03_08:Clip_04",
+      "physical_clip": "Clip_04",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "accepted",
+      "submit_id": "0f256acd-1f86-4cab-96fb-38ad7166bd97",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第2集_03_08:Clip_05_part1",
+      "physical_clip": "Clip_05_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "queried",
+      "submit_id": "dbce0f8e-567c-4876-9b65-fc6430980744",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第2集_03_08:Clip_05_part2",
+      "physical_clip": "Clip_05_part2",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第2集_03_08:Clip_06_part1",
+      "physical_clip": "Clip_06_part1",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第2集_03_08:Clip_06_part2",
+      "physical_clip": "Clip_06_part2",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第2集_03_08:Clip_07_part1",
+      "physical_clip": "Clip_07_part1",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第2集_03_08:Clip_07_part2",
+      "physical_clip": "Clip_07_part2",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第2集_03_08:Clip_08_part1",
+      "physical_clip": "Clip_08_part1",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第2集_03_08:Clip_08_part2",
+      "physical_clip": "Clip_08_part2",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_03_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "bytes": 11063477,
+      "clip": "Clip_01",
+      "id": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4",
+      "physical_clip": "Clip_01_part1",
+      "sha256": "69de593e3db285593aab1aedd6fae2876746696ee7f0ed1f22bc660887a05da8",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 13933091,
+      "clip": "Clip_01",
+      "id": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4",
+      "physical_clip": "Clip_01_part2",
+      "sha256": "4521a5fb1634789912336860d9ea082ecd1e6a61a560182ed7a9cb1f1566c787",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 20213824,
+      "clip": "Clip_01",
+      "id": "media:出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4",
+      "physical_clip": "Clip_01_part3",
+      "sha256": "43806703882ccfe15707d2149d094e63a654a0c23e240ccdafb6cfbc3da5d8b7",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 31461803,
+      "clip": "Clip_02",
+      "id": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4",
+      "physical_clip": "Clip_02_part1",
+      "sha256": "e6ebedaeea03edd60246a67f2c02968b6397828b6d9d7cf2fe8111c7610b3e92",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 4679602,
+      "clip": "Clip_02",
+      "id": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4",
+      "physical_clip": "Clip_02_part2",
+      "sha256": "85c6c6aaf69622a69c0b10ee61b33bc259ff573b2023e64d7ac02e900d2888b2",
+      "status": "rejected",
+      "type": "video_media"
+    },
+    {
+      "bytes": 3340908,
+      "clip": "Clip_03",
+      "id": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+      "physical_clip": "Clip_03_part1",
+      "sha256": "6ac686393cb75a1fe546f29f3abc3dbe30b481e445842bbc32dc351d0bc6a581",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 2415877,
+      "clip": "Clip_03",
+      "id": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4",
+      "physical_clip": "Clip_03_part2",
+      "sha256": "8a0e8fc8c0340081dc98cdb4aaa8f17f335a9f2e6e728cab4fa89a55992fe485",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 4816545,
+      "clip": "Clip_03",
+      "id": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+      "physical_clip": "Clip_03_part3",
+      "sha256": "2710ecc67ca5d31a5f6b234e709b71c0fba385f58718d6311f5e8a30d3129588",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 14256588,
+      "clip": "Clip_04",
+      "id": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+      "path": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+      "physical_clip": "Clip_04",
+      "sha256": "e08b17471b48eed8635aac9012bea4a5e0af764998512fd2b416eceb7ba91263",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "id": "rough_cut:第2集",
+      "path": "合成/第2集/_proxy/actual_rough_cut.mp4",
+      "sha256": "",
+      "status": "incomplete",
+      "type": "rough_cut"
     },
     {
       "backend": "seedance",
@@ -225,27 +949,57 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "source_files": [
     {
-      "bytes": 130690,
+      "bytes": 133138,
       "path": "出视频/第2集/prompt/video_model_routes.json",
       "role": "video_routes",
-      "sha256": "7a71c07864b00ac12cf24843378548cd73bd7e07ac928573e8e91b4ff9e4110f"
+      "sha256": "617e8d82420876c0cde58a5ecbaa16d68f3b3cab17039551b9030ed26db6c42f"
     },
     {
-      "bytes": 56929,
+      "bytes": 8653,
+      "path": "生产数据/post_video_proxy_第2集.json",
+      "role": "rough_cut_manifest",
+      "sha256": "d4a133f8793c88ad037b66f7e506262cfc12a93043c007e8bb86317b356a78dd"
+    },
+    {
+      "bytes": 88083,
+      "path": "生产数据/video_batch_第2集_01_08.json",
+      "role": "video_batch",
+      "sha256": "b0c8f0ee8c14602f2cb294445999fefae642ca78cdac71168c0b781cdd944d4c"
+    },
+    {
+      "bytes": 27772,
+      "path": "生产数据/video_batch_第2集_02_02.json",
+      "role": "video_batch",
+      "sha256": "26c1da94d7daf0387f441951be6fcb5afdaf7c1676bcd077119d5a979f905739"
+    },
+    {
+      "bytes": 60391,
+      "path": "生产数据/video_batch_第2集_02_08.json",
+      "role": "video_batch",
+      "sha256": "4837df9c954b811aaa40a2843c70afe4b910abd6064ada4738e4468b8d6ae39d"
+    },
+    {
+      "bytes": 141494,
+      "path": "生产数据/video_batch_第2集_03_08.json",
+      "role": "video_batch",
+      "sha256": "ba133edcc79af78f7666ec058bc507c5dd370b590ab9f903c9379714bf604c7f"
+    },
+    {
+      "bytes": 58073,
       "path": "脚本/第2集/storyboard.json",
       "role": "storyboard",
-      "sha256": "58e5d05b4adbf2d81b198c52862e6ed3abd57fc2bcdf59c46fffcb86372efc75"
+      "sha256": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f"
     }
   ],
   "status": "pass",
   "summary": {
-    "edges": 16,
+    "edges": 71,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 17,
+    "nodes": 59,
     "routes": 8,
     "story_clips": 8,
-    "video_media": 0
+    "video_media": 9
   },
   "version": 1
 }

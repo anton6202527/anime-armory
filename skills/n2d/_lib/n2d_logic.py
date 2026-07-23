@@ -119,6 +119,40 @@ def normalize_camera_move(text: str) -> Dict[str, Any]:
         "recognized": bool(moves) or is_static,
     }
 
+
+def normalize_signature_effect(text: str) -> Dict[str, Any]:
+    """把自由文本里的命名『特效镜头』归一到 SIGNATURE_EFFECT_LEXICON（让特效索引成为活引用）。
+
+    返回 {effects:[{id,zh,name_en,category,camera_move,identity_risk,core_prompt_zh,
+    core_prompt_en,negatives}], recognized:bool, has_high_identity_risk:bool}。
+    与 normalize_camera_move 同法按子串命中中英名与别名；供 n2d-video prompt_pack 注入特效核心
+    prompt，并对 identity_risk=high 的特效默认拼身份锁负向词。"""
+    t = str(text or "")
+    low = t.lower()
+    effects: List[Dict[str, Any]] = []
+    for zh, spec in SIGNATURE_EFFECT_LEXICON.items():
+        triggers = tuple(spec.get("triggers") or ()) or (zh,)
+        if any((trg in t) or (trg.lower() in low) for trg in triggers):
+            effects.append({
+                "id": str(spec.get("id") or ""),
+                "zh": zh,
+                "name_en": str(spec.get("name_en") or ""),
+                "category": str(spec.get("category") or ""),
+                "camera_move": str(spec.get("camera_move") or ""),
+                "identity_risk": str(spec.get("identity_risk") or ""),
+                "core_prompt_zh": str(spec.get("core_prompt_zh") or ""),
+                "core_prompt_en": str(spec.get("core_prompt_en") or ""),
+                "negatives": list(spec.get("negatives") or ()),
+            })
+    # 长名优先，避免别名子串误压更具体的命中。
+    effects.sort(key=lambda item: len(str(item.get("zh") or "")), reverse=True)
+    return {
+        "effects": effects,
+        "recognized": bool(effects),
+        "has_high_identity_risk": any(e.get("identity_risk") == "high" for e in effects),
+    }
+
+
 _KELVIN_RE = re.compile(r"(\d{3,6})\s*[kK]\b")
 _WARM_TONE_WORDS = ("暖", "warm", "暖色", "暖调", "钨丝", "烛", "夕阳", "金色", "橙")
 _COOL_TONE_WORDS = ("冷", "cool", "冷色", "冷调", "冷月", "月光", "日光", "阴天", "荧光", "青")

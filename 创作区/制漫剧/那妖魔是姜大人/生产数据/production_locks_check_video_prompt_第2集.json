@@ -7,14 +7,24 @@
     "voice_timing_lock"
   ],
   "episode": "第2集",
-  "findings": [],
-  "generated_at": "2026-07-23T01:38:45+00:00",
+  "findings": [
+    {
+      "artifacts": [
+        "_设置.md"
+      ],
+      "code": "lock_artifact_stale",
+      "lock_id": "style_identity_lock",
+      "message": "style_identity_lock 锁定后文件已变化：_设置.md",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-23T03:17:44+00:00",
   "kind": "n2d_production_locks_check",
   "lock_path": "生产数据/production_locks_第2集.json",
   "stage": "video_prompt",
-  "status": "pass",
+  "status": "block",
   "summary": {
-    "block": 0,
+    "block": 1,
     "locks": 5,
     "required_locks": 5
   },

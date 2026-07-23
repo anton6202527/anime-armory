@@ -144,17 +144,55 @@ def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
         )
 
 
-def _warn_missing_recipe_reference_inputs(root: str, path: str, idx: int, rel: str, event) -> None:
-    """收据字段齐 ≠ 参考图仍在：actual_image_inputs 指向的文件被移动/删除时复现链断裂。
+_UNVERIFIABLE_REFERENCE_INPUT_MARKERS = (
+    "session_reference_bundle",
+    "exact path list unavailable",
+    "exact paths unavailable",
+    "path list unavailable",
+    "paths unavailable",
+    "unknown reference bundle",
+)
 
-    gate 对「参考图是否真传」原本只有 prompt 文本代理校验；这条把收据里登记的实际输入
-    与当前磁盘对账。WARN 不 BLOCK：归档清理是允许的，但漂移必须可见、不可静默。
+
+def _recipe_reference_input_paths(value) -> Tuple[list, bool]:
+    """Normalize auditable paths and flag placeholder-only receipts.
+
+    Older built-in image generation receipts sometimes stored prose such as
+    ``builtin_imagegen_session_reference_bundle; exact path list unavailable``.
+    That proves neither which pixels were submitted nor their hashes and must
+    never satisfy a load-bearing identity/reference gate.
     """
+    if isinstance(value, (list, tuple)):
+        rows = list(value)
+        return rows, False
+    raw = str(value or "").strip()
+    if not raw:
+        return [], False
+    lowered = raw.lower()
+    if any(marker in lowered for marker in _UNVERIFIABLE_REFERENCE_INPUT_MARKERS):
+        return [], True
+    if lowered in {"none", "[]", "0", "no_reference_inputs"}:
+        return [], False
+    return [item.strip() for item in raw.split("|") if item.strip()], False
+
+
+def _warn_missing_recipe_reference_inputs(root: str, path: str, idx: int, rel: str, event) -> None:
+    """Audit actual reference paths; unverifiable placeholders are a hard block."""
     inputs = _event_value_any(event, "actual_image_inputs")
-    if not isinstance(inputs, (list, tuple)):
+    rows, unverifiable = _recipe_reference_input_paths(inputs)
+    if unverifiable:
+        add(
+            BLOCK,
+            "生成配方证据",
+            f"{path}:line {idx}",
+            f"{rel} 的 actual_image_inputs 只是不可审计占位（{str(inputs)[:160]}），"
+            "没有逐项真实路径与当前像素证据；不能证明参考图实际提交给后端。"
+            "回 image，按路径/用途/SHA-256 重记本张配方并重抽，旧会话引用不得补写成通过。",
+            return_to_stage=_recipe_return_stage_for_asset(rel),
+        )
         return
     gone = []
-    for item in inputs:
+    for item in rows:
         raw = str(item.get("path") if isinstance(item, Mapping) else item or "").strip()
         if not raw or raw.startswith(("http://", "https://")):
             continue

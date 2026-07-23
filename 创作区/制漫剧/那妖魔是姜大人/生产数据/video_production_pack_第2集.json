@@ -24,7 +24,7 @@
       "clip": "Clip_01",
       "end_anchor_required": true,
       "first_frame": "出图/第2集/图片/EP02_CLIP01_start.png",
-      "last_frame": "出图/第2集/图片/Clip_01_end.png",
+      "last_frame": "出图/第2集/图片/Clip01_end.png",
       "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
       "seam_mode": "match_on_action",
       "status": "ready"
@@ -64,7 +64,7 @@
       "clip": "Clip_03",
       "end_anchor_required": true,
       "first_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-      "last_frame": "出图/第2集/图片/Clip_03_end.png",
+      "last_frame": "出图/第2集/图片/Clip03_end.png",
       "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
       "seam_mode": "insert_cutaway",
       "status": "ready"
@@ -97,7 +97,7 @@
       "clip": "Clip_05",
       "end_anchor_required": true,
       "first_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
-      "last_frame": "出图/第2集/图片/Clip_05_end.png",
+      "last_frame": "出图/第2集/图片/Clip05_end.png",
       "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
       "seam_mode": "graphic_match",
       "status": "ready"
@@ -112,9 +112,9 @@
         }
       ],
       "clip": "Clip_06",
-      "end_anchor_required": false,
+      "end_anchor_required": true,
       "first_frame": "出图/第2集/图片/EP02_CLIP06_start.png",
-      "last_frame": "",
+      "last_frame": "出图/第2集/图片/EP02_CLIP06_end.png",
       "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
       "seam_mode": "eyeline_cut",
       "status": "ready"
@@ -137,7 +137,7 @@
       "clip": "Clip_07",
       "end_anchor_required": true,
       "first_frame": "出图/第2集/图片/EP02_CLIP07_start.png",
-      "last_frame": "出图/第2集/图片/Clip_07_end.png",
+      "last_frame": "出图/第2集/图片/Clip07_end.png",
       "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
       "seam_mode": "eyeline_cut",
       "status": "ready"
@@ -152,9 +152,9 @@
         }
       ],
       "clip": "Clip_08",
-      "end_anchor_required": false,
+      "end_anchor_required": true,
       "first_frame": "出图/第2集/图片/EP02_CLIP08_start.png",
-      "last_frame": "",
+      "last_frame": "出图/第2集/图片/EP02_CLIP08_end.png",
       "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
       "seam_mode": "hard_cut",
       "status": "ready"

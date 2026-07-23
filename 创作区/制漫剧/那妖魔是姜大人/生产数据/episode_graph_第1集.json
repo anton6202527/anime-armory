@@ -2,6 +2,46 @@
   "authority": "derived index only; _进度.md and existing gates remain authoritative",
   "edges": [
     {
+      "relation": "routed_by",
+      "source": "clip:Clip_01",
+      "target": "route:Clip_01"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_02",
+      "target": "route:Clip_02"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_03",
+      "target": "route:Clip_03"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_04",
+      "target": "route:Clip_04"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_05",
+      "target": "route:Clip_05"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_06",
+      "target": "route:Clip_06"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_07",
+      "target": "route:Clip_07"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_08",
+      "target": "route:Clip_08"
+    },
+    {
       "relation": "contains",
       "source": "episode:第1集",
       "target": "clip:Clip_01"
@@ -40,66 +80,416 @@
       "relation": "contains",
       "source": "episode:第1集",
       "target": "clip:Clip_08"
+    },
+    {
+      "relation": "has_rough_cut",
+      "source": "episode:第1集",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_01_part1",
+      "target": "media:出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_01_part2",
+      "target": "media:出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_02_part1",
+      "target": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_02_part2",
+      "target": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_02_part3",
+      "target": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_03_part1",
+      "target": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_03_part2",
+      "target": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_03_part3",
+      "target": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_04_part1",
+      "target": "media:出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_04_part2",
+      "target": "media:出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_05_part1",
+      "target": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_05_part2",
+      "target": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_05_part3",
+      "target": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_06_part1",
+      "target": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_06_part2",
+      "target": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_06_part3",
+      "target": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_06_part4",
+      "target": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_07_part1",
+      "target": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_07_part2",
+      "target": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_07_part3",
+      "target": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_08_part1",
+      "target": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_08_part2",
+      "target": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第1集_01_08:Clip_08_part3",
+      "target": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+      "target": "rough_cut:第1集"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_01",
+      "target": "job:video_batch_第1集_01_08:Clip_01_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_01",
+      "target": "job:video_batch_第1集_01_08:Clip_01_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第1集_01_08:Clip_02_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第1集_01_08:Clip_02_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_02",
+      "target": "job:video_batch_第1集_01_08:Clip_02_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第1集_01_08:Clip_03_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第1集_01_08:Clip_03_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_03",
+      "target": "job:video_batch_第1集_01_08:Clip_03_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_04",
+      "target": "job:video_batch_第1集_01_08:Clip_04_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_04",
+      "target": "job:video_batch_第1集_01_08:Clip_04_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第1集_01_08:Clip_05_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第1集_01_08:Clip_05_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第1集_01_08:Clip_05_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第1集_01_08:Clip_06_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第1集_01_08:Clip_06_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第1集_01_08:Clip_06_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第1集_01_08:Clip_06_part4"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第1集_01_08:Clip_07_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第1集_01_08:Clip_07_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第1集_01_08:Clip_07_part3"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第1集_01_08:Clip_08_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第1集_01_08:Clip_08_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第1集_01_08:Clip_08_part3"
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-22T03:59:31+0800",
-  "graph_hash": "48b3dafbcc314d4541b605859eece9acdb800efeeaf39e01d268eadd3f3e2d9e",
+  "generated_at": "2026-07-23T11:14:17+0800",
+  "graph_hash": "36dd4b4d53f5b492a9f901aa128e0713b180fdf540389e0bbe5cb95bc8a64847",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
     {
       "clip": "Clip_01",
-      "duration_sec": 3.884,
+      "duration_sec": 5.6,
       "id": "clip:Clip_01",
       "scene": "LOC_01/未来片段",
       "type": "story_clip"
     },
     {
       "clip": "Clip_02",
-      "duration_sec": 11.52,
+      "duration_sec": 14.92,
       "id": "clip:Clip_02",
       "scene": "LOC_01/一炷香前",
       "type": "story_clip"
     },
     {
       "clip": "Clip_03",
-      "duration_sec": 11.989,
+      "duration_sec": 10.96,
       "id": "clip:Clip_03",
       "scene": "LOC_01",
       "type": "story_clip"
     },
     {
       "clip": "Clip_04",
-      "duration_sec": 7.419,
+      "duration_sec": 9.4,
       "id": "clip:Clip_04",
       "scene": "LOC_01",
       "type": "story_clip"
     },
     {
       "clip": "Clip_05",
-      "duration_sec": 11.608,
+      "duration_sec": 7.88,
       "id": "clip:Clip_05",
       "scene": "LOC_01",
       "type": "story_clip"
     },
     {
       "clip": "Clip_06",
-      "duration_sec": 8.251,
+      "duration_sec": 8.8,
       "id": "clip:Clip_06",
       "scene": "LOC_01",
       "type": "story_clip"
     },
     {
       "clip": "Clip_07",
-      "duration_sec": 10.811,
+      "duration_sec": 7.06,
       "id": "clip:Clip_07",
       "scene": "LOC_01/主观系统层",
       "type": "story_clip"
     },
     {
       "clip": "Clip_08",
-      "duration_sec": 9.316,
+      "duration_sec": 12.88,
       "id": "clip:Clip_08",
       "scene": "LOC_01",
       "type": "story_clip"
@@ -108,26 +498,606 @@
       "episode": "第1集",
       "id": "episode:第1集",
       "type": "episode"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_01",
+      "id": "job:video_batch_第1集_01_08:Clip_01_part1",
+      "physical_clip": "Clip_01_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "56c3c1a9-6440-4977-b49e-0e6216b34c55",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_01",
+      "id": "job:video_batch_第1集_01_08:Clip_01_part2",
+      "physical_clip": "Clip_01_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "da37bee2-e369-4742-8e68-8647bd31866a",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第1集_01_08:Clip_02_part1",
+      "physical_clip": "Clip_02_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "da9f56b9-352b-40d5-86e8-141b797ffc3d",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第1集_01_08:Clip_02_part2",
+      "physical_clip": "Clip_02_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "e57b85d5-8f04-4e0d-95ae-e675c43d04d0",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_02",
+      "id": "job:video_batch_第1集_01_08:Clip_02_part3",
+      "physical_clip": "Clip_02_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "bd507d51-ee40-4bbe-9067-02f770a967c6",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第1集_01_08:Clip_03_part1",
+      "physical_clip": "Clip_03_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "5d108ddd-1a0e-4f6a-9218-c4235ec8f3c8",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第1集_01_08:Clip_03_part2",
+      "physical_clip": "Clip_03_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "ded801cd-4a5e-4199-aef3-eca2faba5100",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_03",
+      "id": "job:video_batch_第1集_01_08:Clip_03_part3",
+      "physical_clip": "Clip_03_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "f769bb08-335c-42e1-a1cd-1ca92c325a5f",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_04",
+      "id": "job:video_batch_第1集_01_08:Clip_04_part1",
+      "physical_clip": "Clip_04_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "83e43bb6-f635-4ae3-91cb-24db9415bbab",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_04",
+      "id": "job:video_batch_第1集_01_08:Clip_04_part2",
+      "physical_clip": "Clip_04_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "9a9e9862-4765-48be-a79f-d20a12c0388f",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第1集_01_08:Clip_05_part1",
+      "physical_clip": "Clip_05_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "33273678-21bf-41a6-845e-3a275a84ffe7",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第1集_01_08:Clip_05_part2",
+      "physical_clip": "Clip_05_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "284e8bee-1690-491c-ade8-351935b75787",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第1集_01_08:Clip_05_part3",
+      "physical_clip": "Clip_05_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "0c0ae049-4416-452a-a2e4-772ecbafda36",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第1集_01_08:Clip_06_part1",
+      "physical_clip": "Clip_06_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "f37a6270-c021-415a-8dc5-d59e841e98be",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第1集_01_08:Clip_06_part2",
+      "physical_clip": "Clip_06_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "0f0cf4b4-702e-4b79-b368-5e4a8034be23",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第1集_01_08:Clip_06_part3",
+      "physical_clip": "Clip_06_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "812ddf1d-8c7c-495e-96f2-3d4fd5382d10",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第1集_01_08:Clip_06_part4",
+      "physical_clip": "Clip_06_part4",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "d881826c-5d15-4de7-a9d3-d4e7af03876a",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第1集_01_08:Clip_07_part1",
+      "physical_clip": "Clip_07_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "5bbef05e-db2a-4608-959c-7c67478b483d",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第1集_01_08:Clip_07_part2",
+      "physical_clip": "Clip_07_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "5764c2e2-9367-4e7e-8d4a-e5e84916b44f",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第1集_01_08:Clip_07_part3",
+      "physical_clip": "Clip_07_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "bdf41c1e-6723-4d5c-9440-ca55d7b73a8d",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第1集_01_08:Clip_08_part1",
+      "physical_clip": "Clip_08_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "437a7c74-fc09-48ee-b242-96f231f9e105",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第1集_01_08:Clip_08_part2",
+      "physical_clip": "Clip_08_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "da4bd86c-7529-4816-b6d5-87cbf5496437",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第1集_01_08:Clip_08_part3",
+      "physical_clip": "Clip_08_part3",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第1集_01_08.json",
+      "status": "accepted",
+      "submit_id": "44b72c7c-5550-4cf1-9599-4c0494f38d15",
+      "type": "video_job"
+    },
+    {
+      "bytes": 10084192,
+      "clip": "Clip_01",
+      "id": "media:出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+      "physical_clip": "Clip_01_part1",
+      "sha256": "4959812de6f36a1713c03dbc915ad15cbd07c07f76160d7c3ed55fb15ba71ad9",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 7412944,
+      "clip": "Clip_01",
+      "id": "media:出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4",
+      "physical_clip": "Clip_01_part2",
+      "sha256": "c2f9b69cfbddb32ea73c03436427378a143b2bccc41685898da618e92769bb88",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 3403339,
+      "clip": "Clip_02",
+      "id": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
+      "physical_clip": "Clip_02_part1",
+      "sha256": "c4255ac85dfd90a5e75b2ba5d31dc2de005c0f367f4e3f2840bd0341b7086b14",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 16711008,
+      "clip": "Clip_02",
+      "id": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4",
+      "physical_clip": "Clip_02_part2",
+      "sha256": "d123cc3e5a7af5cc74ebaa4708f2450f73a9574e7bb97cc0393d010dbbb71ff5",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 6519789,
+      "clip": "Clip_02",
+      "id": "media:出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+      "physical_clip": "Clip_02_part3",
+      "sha256": "4d5c2a1f5d7b1b4f63eca26fcd8fea257dbf5905307f80bd2f57e2886bc12481",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 14258814,
+      "clip": "Clip_03",
+      "id": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4",
+      "physical_clip": "Clip_03_part1",
+      "sha256": "051c88c0111d81cdf80155adf31d77ff1328ec4088c563174d421c6c7b07e125",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 10481887,
+      "clip": "Clip_03",
+      "id": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4",
+      "physical_clip": "Clip_03_part2",
+      "sha256": "a759f3d004c2edc8e9b95551ab7a902c797ae7120cd4353ab679287ec2c9b1a6",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 6684172,
+      "clip": "Clip_03",
+      "id": "media:出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+      "physical_clip": "Clip_03_part3",
+      "sha256": "21f1f3c6a5e9e26e28777696cac51f2c4f7b5d121f655dd7b9e0aa57dcdf9091",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 10143777,
+      "clip": "Clip_04",
+      "id": "media:出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4",
+      "physical_clip": "Clip_04_part1",
+      "sha256": "495ce3f384eb555cd1e79cf5e98a4f77a25b34c9ad16ccb66e9b3a90b5cd51fa",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 9795414,
+      "clip": "Clip_04",
+      "id": "media:出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4",
+      "physical_clip": "Clip_04_part2",
+      "sha256": "fda221ee75f73b5317525f8b252f5cf9559650f89e6df074fbcf86290e0ace05",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 8966043,
+      "clip": "Clip_05",
+      "id": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4",
+      "physical_clip": "Clip_05_part1",
+      "sha256": "b6d21f92e9d9902afac767de537784ec22fdc8be0a913c8088140d242def6d1e",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 7003458,
+      "clip": "Clip_05",
+      "id": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4",
+      "physical_clip": "Clip_05_part2",
+      "sha256": "47f84dcb2bde8d1d44fec71faf5a842d304406e4817ea9ef4501e9b06de7a044",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 11300152,
+      "clip": "Clip_05",
+      "id": "media:出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4",
+      "physical_clip": "Clip_05_part3",
+      "sha256": "0f74f71644e808b0d95f0a070e240794d4ec2b7ab74f4d38cf2445f0ad5319d1",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 9478686,
+      "clip": "Clip_06",
+      "id": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4",
+      "physical_clip": "Clip_06_part1",
+      "sha256": "390eb6c3a59d08aecc7bf31861350762f86026cd38d86c81d982459930b03da6",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 9168962,
+      "clip": "Clip_06",
+      "id": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4",
+      "physical_clip": "Clip_06_part2",
+      "sha256": "3cf27fd09bf9c56eb199e7a55a29b38dbf4900136a67967f7463b1492d859b3a",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 8536558,
+      "clip": "Clip_06",
+      "id": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4",
+      "physical_clip": "Clip_06_part3",
+      "sha256": "a7b749c9f56ad71fe7d2dcdd082cf45199edde295a6587830d6107129fa753a2",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 10176338,
+      "clip": "Clip_06",
+      "id": "media:出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4",
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4",
+      "physical_clip": "Clip_06_part4",
+      "sha256": "6bf80054dad1e364ed2ae8c0239e3d011c465bad500f8b0d54577b401623d1d8",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 10467310,
+      "clip": "Clip_07",
+      "id": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4",
+      "physical_clip": "Clip_07_part1",
+      "sha256": "57f8d08e923778e300c6ab872b4f02770d5f534dce9c7cb494ea329844bd55c7",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 12274423,
+      "clip": "Clip_07",
+      "id": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4",
+      "physical_clip": "Clip_07_part2",
+      "sha256": "c74a5eb35e0404e60d63953f27d071c475477ebacfad5800f33597b5220dcfcb",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 12852715,
+      "clip": "Clip_07",
+      "id": "media:出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4",
+      "physical_clip": "Clip_07_part3",
+      "sha256": "fd6b1982b7a14ab005228ab590ccbf618619279837bb0b4e1a66773a8a7b0fc3",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 7169419,
+      "clip": "Clip_08",
+      "id": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4",
+      "physical_clip": "Clip_08_part1",
+      "sha256": "3f5db709f5e5df1a258b520c34f4c818c83fdd752b778b93936000d7e63a931a",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 8442242,
+      "clip": "Clip_08",
+      "id": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4",
+      "physical_clip": "Clip_08_part2",
+      "sha256": "a28aaed5a7bef194772209657bc4ff48e2bf452f7e05e46c0e34be8b616790de",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 2973823,
+      "clip": "Clip_08",
+      "id": "media:出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+      "physical_clip": "Clip_08_part3",
+      "sha256": "9206fa165b3429adf9125836e1f40a14f310b7090649a85768a4285b0da538e5",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "id": "rough_cut:第1集",
+      "path": "合成/第1集/_proxy/actual_rough_cut.mp4",
+      "sha256": "b531c7ae272ba13cde1a2ab9529ac66c57812480cc0ce60a6bddd45dcfc9b447",
+      "status": "ready",
+      "type": "rough_cut"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_01",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_01",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_02",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_02",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_03",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_03",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_04",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_04",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_05",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_05",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_06",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_06",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_07",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_07",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_08",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_08",
+      "type": "video_route"
     }
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "source_files": [
     {
-      "bytes": 66327,
+      "bytes": 136331,
+      "path": "出视频/第1集/prompt/video_model_routes.json",
+      "role": "video_routes",
+      "sha256": "72f584601da805474b51fe3824c43e1a3b52b2fda152ace70adb798ceca7d2be"
+    },
+    {
+      "bytes": 20831,
+      "path": "生产数据/post_video_proxy_第1集.json",
+      "role": "rough_cut_manifest",
+      "sha256": "037aa5b8173589ec09acc9e0138125f34973c39c6fe2e38888d19122aa0f6b34"
+    },
+    {
+      "bytes": 627326,
+      "path": "生产数据/video_batch_第1集_01_08.json",
+      "role": "video_batch",
+      "sha256": "0521c1a3924918cebb932a538005a314e5850dd861e0dc982048cbb790c0d932"
+    },
+    {
+      "bytes": 70259,
       "path": "脚本/第1集/storyboard.json",
       "role": "storyboard",
-      "sha256": "3c651df469f8c608f5ccf7e71037094367eb0e1f9610e0e6901a2af620ae335c"
+      "sha256": "847a3fafcb89aa31cccba232e8aa7f5f5f0edac7914e72d61ce2a909b5f73295"
     }
   ],
   "status": "pass",
   "summary": {
-    "edges": 8,
+    "edges": 86,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 9,
-    "routes": 0,
+    "nodes": 64,
+    "routes": 8,
     "story_clips": 8,
-    "video_media": 0
+    "video_media": 23
   },
   "version": 1
 }

@@ -482,6 +482,36 @@
       "weather": null,
       "season": null,
       "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP08_penetration_end.png",
+      "scene": "",
+      "luma": 53.9,
+      "warmth": -0.001,
+      "daypart": "night",
+      "light_cx": 0.462,
+      "light_az": "center",
+      "light_cy": 0.111,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP08_precontact.png",
+      "scene": "",
+      "luma": 55.4,
+      "warmth": 0.005,
+      "daypart": "night",
+      "light_cx": 0.455,
+      "light_az": "center",
+      "light_cy": 0.117,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
     }
   ],
   "scenes": {
@@ -579,10 +609,28 @@
           "message": ""
         }
       ]
+    },
+    "(全集)": {
+      "shots": [
+        "EP01_CLIP08_penetration_end.png",
+        "EP01_CLIP08_precontact.png"
+      ],
+      "dayparts": {
+        "night": 2
+      },
+      "light_azimuths": {
+        "center": 2
+      },
+      "light_elevations": {
+        "top": 2
+      },
+      "weathers": {},
+      "seasons": {},
+      "findings": []
     }
   },
   "summary": {
-    "scene_count": 1,
+    "scene_count": 2,
     "finding_count": 7,
     "block_count": 2,
     "warn_count": 5

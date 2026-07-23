@@ -1,0 +1,71 @@
+{
+  "kind": "n2d_single_image_consistency_preflight",
+  "schema_version": 1,
+  "created_at": "2026-07-23T10:02:51+08:00",
+  "episode": "第2集",
+  "clip": "Clip_08",
+  "target": "出图/第2集/图片/EP02_CLIP08_start.png",
+  "mode": "identity_preserving_regeneration",
+  "status": "passed_for_single_target_repair",
+  "review_contract": "B14_pre_generation_consistency",
+  "backend": {
+    "model": "GPT Image 2",
+    "channel": "Codex built-in imagegen",
+    "max_reference_images": 5
+  },
+  "repair_reason": "用户明确拒绝当前像素：姜月初面部身份与共享定妆脸锚不一致；旧生成收据未记录精确参考路径。",
+  "identity_lock": {
+    "character": "CHAR_01/囚途残损态",
+    "face_anchor_required": true,
+    "face_anchor_count": 1,
+    "same_clip_source_required": false,
+    "reason": "本张是重建链条的首帧，不继承已被拒绝的旧错脸。"
+  },
+  "reference_inputs": [
+    {
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+      "sha256": "7486b5c1050b361a664fb96da22a7544ddf4bacaabb07ba1a6f7c0cb46659f93",
+      "owner": "CHAR_01/囚途残损态",
+      "role": "sole_face_identity_authority"
+    },
+    {
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+      "sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+      "owner": "CHAR_01/囚途残损态",
+      "role": "three_quarter_head_hair_costume"
+    },
+    {
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+      "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+      "owner": "CHAR_01/囚途残损态",
+      "role": "body_costume_state"
+    },
+    {
+      "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+      "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+      "owner": "LOC_尸骸荒野",
+      "role": "environment_palette_only_no_identity"
+    },
+    {
+      "path": "出图/共享/图片/定妆_特效_墨虎谱影.png",
+      "sha256": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31",
+      "owner": "VFX_墨虎谱影",
+      "role": "scroll_tiger_vfx_only_no_identity"
+    }
+  ],
+  "preflight_checks": {
+    "all_inputs_inside_project": true,
+    "all_inputs_exist_and_decode": true,
+    "all_inputs_sha_bound": true,
+    "identity_bearing_target_has_face_anchor": true,
+    "reference_count_within_backend_limit": true,
+    "old_rejected_pixels_excluded_from_identity_inputs": true,
+    "previous_different_image_current_sha_accepted": true
+  },
+  "post_generation_required": [
+    "full_machine_qc",
+    "canonical_face_side_by_side_original_pixel_review",
+    "hair_costume_state_scene_vfx_continuity_review",
+    "current_output_sha_bound_qa_receipt"
+  ]
+}

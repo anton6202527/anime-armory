@@ -1,9 +1,9 @@
 # Episode Graph · 第1集
 
 - 状态：pass
-- graph hash：`48b3dafbcc314d45`
-- nodes / edges：9 / 8
-- story / routes / media / masters：8 / 0 / 0 / 0
+- graph hash：`36dd4b4d53f5b492`
+- nodes / edges：64 / 86
+- story / routes / media / masters：8 / 8 / 23 / 0
 
 ## Lineage gaps
 

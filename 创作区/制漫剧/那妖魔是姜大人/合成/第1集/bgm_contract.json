@@ -1,0 +1,98 @@
+{
+  "kind": "n2d_bgm_contract",
+  "version": 1,
+  "episode": "第1集",
+  "status": "draft",
+  "strategy": "placeholder",
+  "source": {
+    "file": "",
+    "model": "",
+    "channel": "",
+    "license_or_rights_ref": ""
+  },
+  "cues": [
+    {
+      "id": "BGM_01",
+      "intent": "整体情绪：道德惊雷冷开场 → 荒野死寂与陌生感 → 短暂交易中的压迫 → 虎妖复生后持续窒息 → 系统出现的一线诡异希望 → 杀人求生的冰冷悬断。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_02",
+      "intent": "BGM风格：冷灰暗黑国风；低音大提琴持续音、埙的破碎气声、极轻金属摩擦与稀疏战鼓。禁用热血英雄旋律、喜剧唢呐、现代电子舞曲。系统出现时加入古卷摩擦质感与反向金属泛音，不做廉价游戏提示音。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_03",
+      "intent": "关键音效点：",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_04",
+      "intent": "- 镜头1：心跳一下；刀锋擦过布料的极近声；台词“不是妖”后瞬时抽真空，硬切。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_05",
+      "intent": "- 镜头2：呼啸荒风、远处乌鸦、衣料与枯草摩擦；BGM仅保留低频持续音。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_06",
+      "intent": "- 镜头6：断刀破风后“锵”一声入土，低频重音。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_07",
+      "intent": "- 镜头10：虎妖第一声从画外后方出现；骨骼连续脆响由远及近。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_08",
+      "intent": "- 镜头13–15：裴长青暴起时战鼓加速；命中虎妖前骤停；踢飞落地用沉闷肉身撞击，拒绝夸张爆炸声。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_09",
+      "intent": "- 镜头17：古卷展开、细碎金粉游动声；低频压力转为悬空泛音。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_10",
+      "intent": "- 镜头19：心跳由慢到快，环境声逐步抽走。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_11",
+      "intent": "- 镜头22：刀柄被攥紧的皮革声；“对不住了”后刀入肉声极短、克制、不写实；立刻全黑全静，不提前播放道行到账音。",
+      "start_sec": null,
+      "end_sec": null
+    },
+    {
+      "id": "BGM_12",
+      "intent": "卡点原则：虎妖复生、百妖谱展开、姜月初视线从虎妖移向裴长青、刀刺落四个节点各有一次声音信息增量；最后一刀不配英雄式 drop，以静默制造道德余震。",
+      "start_sec": null,
+      "end_sec": null
+    }
+  ],
+  "mix": {
+    "ducking": true,
+    "tension_envelope": true,
+    "target_gain_db": -12.0
+  },
+  "placeholder_approval": {
+    "approved": false,
+    "approved_by": "",
+    "scope": "internal_rough_only"
+  },
+  "note": "status=confirmed 后才可进正式 compose；placeholder 必须显式批准且只用于 internal rough。"
+}

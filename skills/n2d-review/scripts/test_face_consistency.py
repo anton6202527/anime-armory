@@ -23,8 +23,12 @@ def test_cosine_dim_mismatch():
         pass
 
 
-def test_calibrate_floor_takes_min():
+def test_calibrate_floor_takes_min_above_conservative_guard():
     assert fc.calibrate_floor([0.9, 0.7, 0.82]) == 0.7
+
+
+def test_calibrate_floor_bad_variant_cannot_collapse_identity_gate():
+    assert fc.calibrate_floor([0.91, 0.84, 0.032]) == 0.50
 
 
 def test_best_anchor_score_takes_max_over_views():

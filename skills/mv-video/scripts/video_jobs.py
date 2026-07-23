@@ -34,6 +34,9 @@ if MV_LIB not in sys.path:
     sys.path.insert(0, MV_LIB)
 import motion_axes
 from mv_video_prompt_compiler import compile_prompt, render_markdown
+from signature_effects import signature_effect_directive
+
+EFFECT_MANIFEST_REL = "skills/mv/references/特效镜头/manifest.json"
 
 def load_contract():
     spec = importlib.util.spec_from_file_location("mv_contract", CONTRACT_PATH)
@@ -110,6 +113,17 @@ def prompt_bundle_for_take(clip, backend, spec_profile, take_id, video_model="",
     )
     negative_raw = str(c.get("negative") or "换脸、换衣、新增人物、文字或水印、原生人声")
     negative_elements = [v.strip() for v in re.split(r"[、,，;；]", negative_raw) if v.strip()]
+    # 特效镜头主动接入：本镜运镜/动作/母题里点名命名特效（子弹时间/升格KO/巨星名场面/城市夜驾…）时，
+    # 暴露可粘贴核心 prompt，并对高身份风险特效把该特效 negatives + 身份锁词并入提交负向 prompt。
+    signature_probe = " ".join(part for part in [
+        camera_motion, str(c.get("action") or ""), str(shot.get("shot_size") or ""),
+        environment_motion, str(clip.get("transition_motif") or ""),
+        str(clip.get("signature_effect") or ""),
+    ] if part)
+    signature_line, signature_negatives, _signature_high_risk = signature_effect_directive(signature_probe)
+    for term in signature_negatives:
+        if term not in negative_elements:
+            negative_elements.append(term)
     wants_end_frame = bool(clip.get("need_end_frame"))
     supports_end_frame = bool(model_profile.get("start_end_frames"))
     mode = "frames2video" if wants_end_frame and supports_end_frame else "image2video"
@@ -160,7 +174,10 @@ def prompt_bundle_for_take(clip, backend, spec_profile, take_id, video_model="",
         f"- 转场母题：{clip.get('transition_motif', '')}",
         f"- 景别：{shot.get('shot_size', '')}",
         f"- 运镜参考：{CAMERA_MANIFEST_REL}",
+        f"- 特效镜头参考：{EFFECT_MANIFEST_REL}",
         f"- 运镜：{shot.get('camera_movement', '')}",
+        (f"- {signature_line}" if signature_line
+         else "- 特效镜头/Signature Effect：本镜未点名命名特效；如需招牌镜头（子弹时间/升格KO/巨星名场面/城市夜驾/逆转引力…）见特效镜头库。"),
         f"- 光影：{shot.get('lighting', '')}",
         f"- 参考输入：{', '.join(str(x.get('path') or x.get('asset_id')) for x in reference_inputs)}",
         "",

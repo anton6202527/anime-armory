@@ -75,12 +75,12 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_尸骸荒野.png",
       "bytes": 2731547,
-      "owner": "LOC_尸骸荒野",
-      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第2集/定妆_场景_LOC_尸骸荒野__c6841d7b5a66_941x1672_to_1024x1819.png",
+      "owner": "LOC_01",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第2集/定妆_场景_尸骸荒野__c6841d7b5a66_941x1672_to_1024x1819.png",
       "prepared_bytes": 3550889,
-      "prepared_rel_path": "生产数据/reference_enhanced/第2集/定妆_场景_LOC_尸骸荒野__c6841d7b5a66_941x1672_to_1024x1819.png",
+      "prepared_rel_path": "生产数据/reference_enhanced/第2集/定妆_场景_尸骸荒野__c6841d7b5a66_941x1672_to_1024x1819.png",
       "prepared_sha256": "537f26d38ac266ff45c6ed1afa56f956b23c4dce8142f32cab9a47000e04b2d4",
       "priority": 100,
       "reference_quality": {
@@ -100,12 +100,12 @@
         "target_height": 1819,
         "target_width": 1024
       },
-      "rel_path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
+      "rel_path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
       "role": "asset",
       "sequence": 26,
       "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
       "source": "reference_bundle",
-      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_LOC_尸骸荒野.png"
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_尸骸荒野.png"
     },
     {
       "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
@@ -198,12 +198,12 @@
       ]
     },
     {
-      "id": "LOC_尸骸荒野",
+      "id": "LOC_01",
       "kind": "asset",
       "paths": [
-        "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
-        "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png",
-        "出图/共享/图片/定妆_场景_LOC_尸骸荒野_平面图.png"
+        "出图/共享/图片/定妆_场景_尸骸荒野.png",
+        "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+        "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png"
       ],
       "type": "scene"
     },

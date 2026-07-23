@@ -27,8 +27,10 @@ AD_LIB = Path(__file__).resolve().parents[2] / "ad" / "_lib"
 if str(AD_LIB) not in sys.path:
     sys.path.insert(0, str(AD_LIB))
 from ad_video_prompt_compiler import compile_prompt, render_markdown  # noqa: E402
+from signature_effects import signature_effect_directive  # noqa: E402
 
 CAMERA_MANIFEST_REL = "skills/ad/references/运镜/manifest.json"
+EFFECT_MANIFEST_REL = "skills/ad/references/特效镜头/manifest.json"
 
 
 def now_iso() -> str:
@@ -182,6 +184,16 @@ def build_prompt(
             "快速运镜造成产品、UI 或文字抖花",
         ],
     }
+    # 特效镜头主动接入：本镜运镜/动作/描述里点名命名特效（产品扫光/液体飞溅/悬浮缓入…）时，
+    # 暴露可粘贴核心 prompt，并对高身份风险特效把该特效 negatives + 身份锁词并入提交负向 prompt。
+    signature_probe = " ".join(part for part in [
+        camera_motion_value(shot, route_item), action, shot_text, environment_motion,
+        str(shot.get("signature_effect") or ""),
+    ] if part)
+    signature_line, signature_negatives, _signature_high_risk = signature_effect_directive(signature_probe)
+    for term in signature_negatives:
+        if term not in compiler_source["negative_elements"]:
+            compiler_source["negative_elements"].append(term)
     compiled = compile_prompt(compiler_source)
     if compiled["lint"]["errors"]:
         raise ValueError(f"{label} prompt compiler blocked: {compiled['lint']['errors']}")
@@ -217,7 +229,9 @@ def build_prompt(
 
 ## 运镜与动作
 运镜参考：{CAMERA_MANIFEST_REL}
+特效镜头参考：{EFFECT_MANIFEST_REL}
 {motion_instruction(shot, route_item)}
+{signature_line if signature_line else "特效镜头/Signature Effect：本镜未点名命名特效；如需招牌镜头（产品扫光/液体飞溅/悬浮缓入/微距推镜/玻璃破碎定格…）见特效镜头库。"}
 动作只服务 VO 节奏：起幅稳，1/3 处进入主动作，结尾留 8-12 帧稳定画面用于剪辑接缝。
 
 ## 产品/品牌身份锁定

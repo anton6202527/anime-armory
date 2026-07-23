@@ -668,6 +668,62 @@ CAMERA_MOVE_MANIFEST = _load_camera_move_manifest()
 STATIC_CAMERA_WORDS = _extend_static_camera_words_from_manifest(STATIC_CAMERA_WORDS)
 _apply_camera_move_manifest()
 
+# ── 特效镜头词典（命名 signature shot：运镜+主体动作+特效+时基 的可粘贴核心 prompt）──────────────
+# 与 CAMERA_MOVE_LEXICON 平行：运镜是相机轨迹原语，特效镜头是命名的复合镜头模板（穿云而入/子弹时间/
+# 产品扫光/普拉达换装…）。每条带中英核心 prompt、negatives、身份风险级与回链的 camera_move(lexicon_key)。
+# 真值源：skills/n2d/references/特效镜头/manifest.json（纯离线 prompt 索引，无视觉媒体）。
+# 消费方：n2d_logic.normalize_signature_effect() → n2d-video prompt_pack 特效核心 prompt 注入 +
+# 高身份风险特效自动拼身份锁负向词。查询脚本：skills/n2d/scripts/effect_reference.py。
+SIGNATURE_EFFECT_MANIFEST_PATH = (
+    Path(__file__).resolve().parents[1] / "references" / "特效镜头" / "manifest.json"
+)
+
+
+def _load_signature_effect_manifest():
+    try:
+        return json.loads(SIGNATURE_EFFECT_MANIFEST_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {"schema_version": 0, "effects": []}
+
+
+def _build_signature_effect_lexicon():
+    lexicon = {}
+    for entry in SIGNATURE_EFFECT_MANIFEST.get("effects") or []:
+        if not isinstance(entry, dict):
+            continue
+        effect_id = str(entry.get("id") or "").strip()
+        name_zh = str(entry.get("name_zh") or "").strip()
+        if not effect_id or not name_zh:
+            continue
+        trigger_values = [
+            name_zh,
+            entry.get("name_en"),
+            effect_id,
+            *(entry.get("aliases_zh") or ()),
+            *(entry.get("aliases_en") or ()),
+        ]
+        lexicon[name_zh] = {
+            "id": effect_id,
+            "name_en": str(entry.get("name_en") or ""),
+            "category": str(entry.get("category") or ""),
+            "camera_move": str(entry.get("camera_move") or ""),
+            "identity_risk": str(entry.get("identity_risk") or ""),
+            "triggers": _unique_str_tuple(trigger_values),
+            "core_prompt_zh": str(entry.get("core_prompt_zh") or ""),
+            "core_prompt_en": str(entry.get("core_prompt_en") or ""),
+            "negatives": _unique_str_tuple(entry.get("negatives") or ()),
+        }
+    return lexicon
+
+
+SIGNATURE_EFFECT_MANIFEST = _load_signature_effect_manifest()
+SIGNATURE_EFFECT_LEXICON = _build_signature_effect_lexicon()
+# 高身份风险特效（换装/换脸/近脸升格/对打/名场面等）：prompt_pack 命中即默认拼身份锁负向词。
+HIGH_IDENTITY_RISK_EFFECTS = tuple(
+    name for name, spec in SIGNATURE_EFFECT_LEXICON.items()
+    if str(spec.get("identity_risk") or "") == "high"
+)
+
 # ── 运动强度连续档（替代 HIGH_MOTION_TEMPLATES 二分的细粒度补充）──────────────────────────────
 # HIGH_MOTION_TEMPLATES 是「是否高风险」的二分闸；这里给 0–3 连续档，供 prompt 调 motion strength/
 # cfg 与下游采样密度参考（强动作降 cfg/motion strength 换脸稳是 2026 公认做法）。1=轻微局部动，

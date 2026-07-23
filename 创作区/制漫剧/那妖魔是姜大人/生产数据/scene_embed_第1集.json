@@ -1,0 +1,199 @@
+{
+  "kind": "n2d_scene_embed",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第1集",
+  "probes": [
+    {
+      "shot": "图片/Clip01_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip01_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip01_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip01_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip02_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip02_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip02_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip02_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip03_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip03_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip03_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip03_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip04_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip04_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip04_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip04_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip05_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip05_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip05_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip05_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip06_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip06_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip06_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip06_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip07_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip07_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip07_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip07_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip08_end.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip08_end.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/Clip08_first.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/Clip08_first.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP01_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP01_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP02_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP02_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP02_face_reveal.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP02_face_reveal.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP03_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP03_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP04_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP04_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP05_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP05_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP05_a2.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP05_a2.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP06_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP06_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP06_a2.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP06_a2.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP06_a3.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP06_a3.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP07_a1.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP07_a1.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP07_a2.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP07_a2.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP08_a2.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP08_a2.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP08_anchor01.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP08_anchor02.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
+      "embedding": null
+    },
+    {
+      "shot": "图片/EP01_CLIP08_anchor_cut_0360.png",
+      "scene": "尸骸荒野",
+      "image": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+      "embedding": null
+    }
+  ]
+}

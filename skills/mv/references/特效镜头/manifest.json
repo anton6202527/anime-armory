@@ -1,0 +1,2293 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-07-22",
+  "name": "mv signature-effect (特效镜头) manifest",
+  "purpose": "为 mv-video 的视频 prompt 提供命名『特效镜头』(signature shot) 索引：每条把运镜+主体动作+特效+时基打包为可直接粘贴的核心 prompt(中英各一)，并带 negatives 与身份风险等级。这是纯离线 prompt 索引，无视觉参考媒体；camera_move 字段回链到 运镜/manifest.json 的 lexicon_key。",
+  "source_summary": "48 条特效基于对 2025-2026 主流 AI 视频平台(可灵/即梦Dreamina/Runway/Pika/Vidu/海螺/Higgsfield/PixVerse/Sora/Veo)命名模板与提示实践的实时检索整理；含仙侠武侠、科幻变身、商业产品、环境时间与规模奇观等多类；部分为社区俗称、无官方同名卡时以电影摄影通行做法为准。",
+  "selection_policy": {
+    "identity_risk_high_effects": [
+      "earth_zoom_in",
+      "prada_outfit_change",
+      "face_morph",
+      "overcranked_ko",
+      "two_person_fight",
+      "bird_dispersal",
+      "superstar_walkout",
+      "void_shatter",
+      "aura_burst",
+      "phoenix_rebirth",
+      "liquid_metal_morph",
+      "cosmetic_application"
+    ],
+    "identity_lock_rule": "identity_risk=high 的特效默认拼接身份锁负向词(见 mv IDENTITY_LOCK_NEGATIVE_TERMS)；换装/换脸类本质即身份形变，须显式确认为有意为之，且不得用于假冒真实人物。",
+    "prompt_rule": "特效核心 prompt 已含速度/方向/起止/时基；落地到具体镜时补主体身份锚与场景锚，勿丢结构化字段。",
+    "camera_move_link": "每条 camera_move 指向 运镜/manifest.json 的 lexicon_key，便于与运镜结构化字段联动。"
+  },
+  "categories": {
+    "flight_aerial": "飞行/空中穿越：破云、越地平线、俯冲",
+    "cosmic_scale": "宇宙尺度缩放：地球推进/拉远",
+    "gravity_surreal": "超现实引力：失重漂浮",
+    "product_commercial": "商业产品：扫光、试装、悬浮",
+    "transformation": "身份/服装形变：换装、换脸（高身份风险）",
+    "macro_intimate": "微距亲密：微距推、瞳孔穿越",
+    "action_impact": "动作冲击：升格KO/爆炸、对打、hype cam",
+    "time_manip": "时间操纵：子弹时间",
+    "creature_reveal": "巨物/生物揭示：巨兽、化鸟消散",
+    "vehicle_scene": "载具场景：山路/雪地/城市夜驾",
+    "hero_glamour": "英雄光彩：巨星名场面",
+    "aquatic": "水下：水下慢镜",
+    "wuxia_xianxia": "仙侠/武侠/玄幻：御剑、剑气、破境（部分高身份风险）",
+    "scifi_transform": "科幻变换：破碎虚空、气场爆发、纳米装甲、超空间",
+    "environment_time": "环境/时间：昼夜四季、生长、星空延时",
+    "scale_world": "尺度/世界：移轴微缩、末日毁城",
+    "crowd_scale": "人群规模：千军万马"
+  },
+  "effects": [
+    {
+      "id": "cloud_break_reveal",
+      "name_zh": "穿云而入",
+      "name_en": "cloud-break reveal (fly-through-clouds push-in)",
+      "aliases_zh": [
+        "穿云破雾",
+        "破云揭示",
+        "穿越云层",
+        "云端揭示"
+      ],
+      "aliases_en": [
+        "cloud break",
+        "fly through clouds",
+        "cloud punch-through"
+      ],
+      "category": "flight_aerial",
+      "camera_move": "穿越运镜",
+      "identity_risk": "medium",
+      "subject_action": "世界静止；云层在镜头周围撕裂让路，破云瞬间揭示英雄主体于晴空之上，逆光带轮廓光。",
+      "fx_environment": "体积积云、丁达尔光束、飘散云雾、破云后阳光普照、轻微运动模糊。",
+      "timing": "4-6秒一镜到底：前段高速推进、末段急减速(ease-out)在破云点定格。",
+      "core_prompt_zh": "镜头运动：第一人称快速推进穿越云层；速度=前段高速+末段急减速(ease-out)；方向=由厚云内向上向前突破至晴空；起止=起幅埋于翻涌积云中/落幅豁然揭示主体于云海之上；主体=英雄主体在破云瞬间被揭示，逆光带轮廓光；环境=体积积云、丁达尔光束、飘散云雾、破云后阳光普照；特效=云层撕裂让路、镜头前雾气在出云时消散、体积光与轻微运动模糊；时基=4-6秒一镜到底，破云点做速度斜坡定格。",
+      "core_prompt_en": "A continuous first-person camera rockets forward and upward through a dense deck of volumetric cumulus clouds, vapor streaking past the lens with motion blur and god-rays cutting through the gaps; the camera bursts out above the cloud sea and hard-decelerates (ease-out speed ramp) to reveal the hero subject bathed in warm rim-lit sunlight, drifting mist clearing from frame, cinematic, one continuous take, no cut.",
+      "negatives": [
+        "hard cut",
+        "scene change",
+        "subject face morphing on reveal",
+        "extra limbs",
+        "flickering clouds",
+        "strobing",
+        "warped geometry",
+        "duplicated subject",
+        "text artifacts",
+        "watermark",
+        "jitter",
+        "sudden exposure jump"
+      ],
+      "use_when": "开场钩子/片头 sting、英雄或品牌揭示、MV drop、进入天空/幻境世界的转场。",
+      "avoid_when": "亲密对白、地面写实、需要整段读脸、低动态情绪镜。",
+      "platform_refs": [
+        "Higgsfield Motion「Flying Cam Transition」/「Flying」",
+        "PixVerse「Fly Through」",
+        "即梦 图生视频 运镜:穿越 + 云层首尾帧",
+        "可灵 大师运镜:推进+环绕"
+      ],
+      "sources": [
+        "https://higgsfield.ai/collection/effects",
+        "https://www.atlascloud.ai/blog/guides/pixverse-earth-zoom",
+        "https://videoai.me/blog/kling-ai-camera-movement-prompts"
+      ]
+    },
+    {
+      "id": "horizon_soar",
+      "name_zh": "飞跃地平线",
+      "name_en": "horizon soar (leap over the horizon)",
+      "aliases_zh": [
+        "越过地平线",
+        "翱翔地平线",
+        "腾越地平线"
+      ],
+      "aliases_en": [
+        "horizon soar",
+        "leap over horizon",
+        "hero flight"
+      ],
+      "category": "flight_aerial",
+      "camera_move": "无人机航拍",
+      "identity_risk": "low",
+      "subject_action": "主体(奔跑者/骑手/英雄/载具)跃升翱翔越过地平线，地面在下方远去，顶点可轻微慢动作。",
+      "fx_environment": "黄金时刻天空渐变、地平线太阳耀斑、大气透视雾、风中飞扬颗粒、地球弧线感。",
+      "timing": "5-8秒一镜：起飞加速→巡航匀速→顶点慢门定格。",
+      "core_prompt_zh": "镜头运动：低角度升降镜头上扬并向地平线推进，越顶后仰拍；速度=起飞加速→巡航匀速→顶点轻微慢动作；方向=由地面向上越过地平线向远方；起止=起幅贴地仰视主体/落幅主体腾越地平线剪影于霞光中；主体=主体跃升翱翔，地面在下方远去；环境=黄金时刻天空渐变、地平线太阳耀斑、大气透视雾、风中飞扬颗粒；特效=逆光剪影、镜头光晕、地球弧线感、轻运动模糊；时基=5-8秒一镜，顶点做慢门定格。",
+      "core_prompt_en": "A low-angle drone camera cranes upward and accelerates toward the horizon as the hero subject launches and soars, cresting the horizon line as a backlit silhouette against a golden-hour sky; the ground falls away below with atmospheric haze and a hint of earth curvature, sun flare on the horizon, wind-blown particles, a brief slow-motion apex, smooth continuous flight, cinematic wide lens.",
+      "negatives": [
+        "hard cut",
+        "subject deformation",
+        "wobbling horizon",
+        "warped limbs",
+        "duplicated subject",
+        "flicker",
+        "jitter",
+        "seams in sky gradient",
+        "watermark",
+        "over-cranked strobing"
+      ],
+      "use_when": "胜利/自由感、MV副歌抬升、体育或励志广告高潮、旅程启程转场。",
+      "avoid_when": "幽闭室内、近距离紧张戏、需精确面部表演、夜间低能见度。",
+      "platform_refs": [
+        "Higgsfield Motion「Hero Flight」/「I Can Fly」/「Flying」",
+        "PixVerse「Fly」",
+        "即梦 运镜:上升+推远",
+        "可灵 大师运镜:跟随+拉远"
+      ],
+      "sources": [
+        "https://higgsfield.ai/collection/effects",
+        "https://aetherwavestudio.com/static/ai-video-prompts/aerial-prompts-for-kling.html"
+      ]
+    },
+    {
+      "id": "orbital_dive",
+      "name_zh": "俯冲地球",
+      "name_en": "orbital dive (atmospheric re-entry plunge)",
+      "aliases_zh": [
+        "高空俯冲",
+        "轨道俯冲",
+        "扑向地表",
+        "再入俯冲"
+      ],
+      "aliases_en": [
+        "orbital dive",
+        "re-entry plunge",
+        "nose dive"
+      ],
+      "category": "flight_aerial",
+      "camera_move": "穿越运镜",
+      "identity_risk": "low",
+      "subject_action": "第一人称或俯冲人物(翼装/英雄)双臂后掠向地面坠落；世界向上扑面而来。",
+      "fx_environment": "地球弧线与蓝色大气辉光、再入热浪微光、云层飞掠、迎面风粒子、太阳耀斑、速度线。",
+      "timing": "4-7秒一镜：全程高速，近地做减速拉起(ease-out)。",
+      "core_prompt_zh": "镜头运动：第一人称从高空/轨道向地面高速俯冲，镜头下压俯角穿越大气与云层；速度=全程高速+近地轻微减速拉起(ease-out)；方向=自轨道由上向下扑向地表；起止=起幅地球弧线与蓝色大气辉光/落幅逼近地表拉起；主体=POV或俯冲人物双臂后掠向地面坠落；环境=地球弧线、再入热浪微光、云层飞掠、迎面风粒子、太阳耀斑、速度线；特效=强运动模糊、轻微机身滚转与抖动、大气摩擦辉光、连续不切；时基=4-7秒一镜到底，近地做减速拉起。",
+      "core_prompt_en": "A high-speed first-person camera nose-dives from orbit toward Earth, pitched steeply downward and tearing through the atmospheric glow and layered clouds with heavy motion blur, slight roll and shake, wind particles rushing the lens and the curved earth horizon overhead; ground detail rushes up with speed lines and re-entry shimmer, then a brief ease-out pull-up near the surface, adrenaline-charged, one continuous plunge, cinematic.",
+      "negatives": [
+        "hard cut",
+        "warped horizon curvature",
+        "flat texture ground",
+        "subject face morph",
+        "duplicated clouds",
+        "strobing",
+        "disorienting random cuts",
+        "watermark",
+        "geometry tearing"
+      ],
+      "use_when": "高肾上腺素片头、动作/游戏预告能量、抵达地球、MV drop、追逐/冲击铺陈。",
+      "avoid_when": "平静/情感戏、对白、需保持稳定面部、易晕动语境、精细产品美学镜。",
+      "platform_refs": [
+        "Higgsfield Motion「Flying Cam Transition」/「Flying」",
+        "即梦 运镜:俯冲/急推",
+        "可灵 高空俯冲/螺旋下降大师运镜"
+      ],
+      "sources": [
+        "https://higgsfield.ai/motion/e43378b9-b20b-4158-a626-745bbbcacdbd",
+        "https://www.geekmetaverse.com/kling-ai-prompt-guide-for-cinematic-drone-shots-no-drone-needed/"
+      ]
+    },
+    {
+      "id": "earth_zoom_in",
+      "name_zh": "地球缩放",
+      "name_en": "earth zoom in (god's-eye descent)",
+      "aliases_zh": [
+        "地球俯冲缩放",
+        "上帝视角下降",
+        "从太空推到地面",
+        "星空推进"
+      ],
+      "aliases_en": [
+        "earth zoom in",
+        "god's-eye descent",
+        "space-to-street push"
+      ],
+      "category": "cosmic_scale",
+      "camera_move": "推镜头",
+      "identity_risk": "high",
+      "subject_action": "世界被动；末端主体在街面被解析并锁定，最终定格于面部或身形。",
+      "fx_environment": "星空、地球蓝边大气、云层、城市灯火与地貌逐级浮现、大气散射、无缝比例细节递进。",
+      "timing": "6-10秒一镜到底：行星段缓慢→大气段加速→落地急减速(ease-out)锁定主体。",
+      "core_prompt_zh": "镜头运动：从太空垂直俯视持续推进俯冲，穿过大气与云层直抵地面单一主体；速度=行星段缓慢→大气段加速→落地急减速(ease-out)；方向=自上而下由星空压缩至街面主体；起止=起幅地球悬于星海之中/落幅锁定主体面部或身形；主体=末端主体在地面被解析并定格；环境=星空、地球蓝边大气、云层、城市灯火与地貌逐级浮现、大气散射；特效=无缝比例细节递进、云层穿透、体积光、连续不切；时基=6-10秒一镜到底，落点速度斜坡定格。",
+      "core_prompt_en": "A single continuous top-down camera pushes from orbit straight down toward Earth — starting on the blue planet against a star field, accelerating through the atmospheric limb and a thin cloud layer, resolving continent, then city lights, then a street, and hard-decelerating (ease-out) to lock onto one subject at ground level; seamless scale build-up, volumetric atmosphere and light scatter, God's-eye Hitchcock descent, smooth uninterrupted motion, no cut, cinematic.",
+      "negatives": [
+        "hard cut",
+        "scene jump",
+        "subject face morphing/degrading at resolve",
+        "warped terrain",
+        "flat fake-earth texture",
+        "cloud strobing",
+        "seams between scale steps",
+        "duplicated subject",
+        "watermark",
+        "jitter"
+      ],
+      "use_when": "故事在地球上找到一个人的开场、宏大定场、聚焦单一英雄/产品的广告、纪录片冷开场。",
+      "avoid_when": "快节奏动作剪辑、末端脸必须严格贴定妆、低成本平背景会露假纹理。",
+      "platform_refs": [
+        "PixVerse「Earth Zoom」(In)",
+        "Higgsfield「Earth Zoom」(In)",
+        "即梦 运镜:推进/俯冲+星空首帧",
+        "可灵 大师运镜:推进(长焦压缩)"
+      ],
+      "sources": [
+        "https://www.atlascloud.ai/blog/guides/pixverse-earth-zoom",
+        "https://higgsfield.ai/collection/effects",
+        "https://www.flexclip.com/learn/earth-zoom-out-ai.html"
+      ]
+    },
+    {
+      "id": "earth_zoom_out",
+      "name_zh": "环球缩放",
+      "name_en": "earth zoom out (planetary pull-back)",
+      "aliases_zh": [
+        "地球拉远",
+        "退向太空",
+        "从主体拉到地球",
+        "行星拉远"
+      ],
+      "aliases_en": [
+        "earth zoom out",
+        "planetary pull-back",
+        "street-to-space pull"
+      ],
+      "category": "cosmic_scale",
+      "camera_move": "拉镜头",
+      "identity_risk": "medium",
+      "subject_action": "主体保持姿态；镜头抛弃它，主体在拉远中缩为一点，世界与行星逐级展开。",
+      "fx_environment": "地面细节→城市灯网→地貌→体积云→地球蓝边大气→星空；电影光影、大气辉光。",
+      "timing": "6-10秒一镜到底：贴身缓起(ease-in)→逐级加速→行星段收束定格(可反转拼接成循环)。",
+      "core_prompt_zh": "镜头运动：由主体持续后拉拉远，逐级退出街道、城市、大陆、云层、大气直至整颗地球悬于星空；速度=贴身缓起(ease-in)→逐级加速→行星段收束定格；方向=自下而上由主体压缩退向太空；起止=起幅紧贴主体/落幅整个地球悬于星海；主体=主体在拉远中缩为一点仍保持姿态；环境=地面细节→城市灯网→地貌→体积云→地球蓝边大气→星空；特效=无缝比例递退、云层与大气穿越、电影光影、连续不切；时基=6-10秒一镜到底，行星处收尾定格。",
+      "core_prompt_en": "A single continuous camera pulls back from the subject and retreats upward — the street, then the city grid, then the continent, then a volumetric cloud layer and the blue atmospheric limb fall away — until the whole Earth hangs against a star field in space; the subject shrinks to a vanishing point while holding its pose, seamless scale steps, cinematic lighting and atmospheric glow, smooth uninterrupted zoom-out, no cut.",
+      "negatives": [
+        "hard cut",
+        "subject warping while still visible",
+        "flat fake-earth texture",
+        "seams between scale steps",
+        "cloud strobing",
+        "duplicated cities",
+        "jitter",
+        "watermark",
+        "sudden exposure shift"
+      ],
+      "use_when": "我们很渺小的情感收尾、片尾/尾声、产品到行星的宏大广告、MV终章、冲击规模揭示。",
+      "avoid_when": "需持续读脸、紧凑卡点剪辑、需要亲密或地面写实。",
+      "platform_refs": [
+        "Higgsfield「Earth Zoom Out」(Top Choice)",
+        "PixVerse「Earth Zoom Out」",
+        "即梦 运镜:拉远+尾帧星空",
+        "可灵 大师运镜:拉远"
+      ],
+      "sources": [
+        "https://higgsfield.ai/collection/effects",
+        "https://blog.segmind.com/earth-zoom-out-higgsfield-ai-effect/",
+        "https://www.flexclip.com/learn/earth-zoom-out-ai.html"
+      ]
+    },
+    {
+      "id": "reverse_gravity",
+      "name_zh": "逆转引力",
+      "name_en": "reverse gravity (anti-gravity float)",
+      "aliases_zh": [
+        "反重力",
+        "失重漂浮",
+        "引力反转",
+        "漂浮上升"
+      ],
+      "aliases_en": [
+        "reverse gravity",
+        "anti-gravity float",
+        "levitation"
+      ],
+      "category": "gravity_surreal",
+      "camera_move": "升降",
+      "identity_risk": "medium",
+      "subject_action": "主体连同发丝衣物碎屑水珠一同离地上浮、缓慢翻转、衣发向上飘散。",
+      "fx_environment": "空气中悬停的尘粒与漂浮物、柔和方向光、超现实梦境氛围、布料与头发上飘模拟。",
+      "timing": "5-8秒一镜慢动作：全程慢速匀速漂浮、持续缓慢上浮、保持面部一致。",
+      "core_prompt_zh": "镜头运动：镜头基本固定或缓慢上升跟随，低角度强调上浮；速度=全程慢动作匀速漂浮；方向=主体与周围物体向上升起漂浮(引力反转)；起止=起幅主体立于地面/落幅主体悬浮空中缓缓旋转；主体=主体连同发丝衣物碎屑水珠一同离地上浮、缓慢翻转、衣发向上飘散；环境=空气中悬停的尘粒与漂浮物、柔和方向光、超现实梦境氛围；特效=布料与头发上飘模拟、物体悬浮、轻微旋转、连续不切保持面部一致；时基=5-8秒一镜慢动作，持续缓慢上浮。",
+      "core_prompt_en": "A mostly static (or slowly rising) camera holds on the subject as gravity reverses — the subject, along with hair, clothing, dust, droplets and loose objects, lifts off the ground and drifts upward in slow motion, garments and hair floating outward, a gentle tumble/rotation, suspended particles hanging in the air, soft directional light and a dreamy surreal atmosphere, one continuous take, the face kept fully consistent, cinematic.",
+      "negatives": [
+        "hard cut",
+        "face morphing",
+        "extra or bent limbs",
+        "garment/hair clipping through body",
+        "jitter",
+        "warped anatomy",
+        "objects snapping/teleporting",
+        "duplicated subject",
+        "watermark",
+        "physics popping"
+      ],
+      "use_when": "梦境/幻想段落、超现实转场、情感失重、时尚/美妆英雄镜、科幻零重力、MV bridge。",
+      "avoid_when": "地面写实、快动作、需锐利切换的喜剧节奏、需可信重量与冲击。",
+      "platform_refs": [
+        "Higgsfield Motion「Levitation」/「I Can Fly」",
+        "可灵 创意特效 反重力/漂浮玩法",
+        "即梦 运镜:上升+漂浮首尾帧",
+        "PixVerse levitation"
+      ],
+      "sources": [
+        "https://higgsfield.ai/motion/52aa7be6-854f-45cb-930c-b98d64eb593c",
+        "https://reelmind.ai/blog/top-ai-video-tools-for-floating-anti-gravity-scene-4ae1b9"
+      ]
+    },
+    {
+      "id": "product_light_sweep",
+      "name_zh": "产品扫光",
+      "name_en": "product specular light-sweep",
+      "aliases_zh": [
+        "扫光",
+        "光扫",
+        "镜面扫光",
+        "高光扫过"
+      ],
+      "aliases_en": [
+        "light sweep",
+        "specular sweep",
+        "hero light rake"
+      ],
+      "category": "product_commercial",
+      "camera_move": "推镜头",
+      "identity_risk": "low",
+      "subject_action": "高光泽产品静止微旋<15°；一道硬质高光条斜扫过表面，边缘吃轮廓光。",
+      "fx_environment": "纯黑到深灰渐变棚拍背景、单一硬质条光作主光+轮廓逆光、空气中微尘光斑、辉光bloom。",
+      "timing": "5秒可循环：扫光1.5-2秒缓入(ease-in)横过表面。",
+      "core_prompt_zh": "镜头运动：微推+缓慢环绕；速度=慢速匀速，扫光过程轻微加速；方向=光带自左上向右下斜扫，镜头正对产品；起止=中景特写起→贴近产品表面止；主体=高光泽产品静止微旋<15°，金属/玻璃质感边缘吃光；环境=纯黑到深灰渐变棚拍背景，单一硬质条光作主光+轮廓逆光，空气中微尘光斑；特效=表面镜面高光条状扫过、边缘轮廓光、辉光bloom、细节微反射；时基=扫光1.5-2s缓入，全片5s可循环。",
+      "core_prompt_en": "Studio product hero shot, glossy [product] on a black-to-charcoal gradient seamless. A hard strip key light rakes a bright specular highlight diagonally across the surface while the camera does a slow subtle push-in with a faint 5-10 degree orbit, 100mm macro feel, shallow depth of field, anamorphic bokeh. Rim/backlight defines the silhouette, gentle bloom, tiny dust motes drifting in the beam. The light sweep travels across the surface in about 1.5 seconds with a soft speed-ramp, ultra-detailed material microtexture, premium commercial lighting, 4K.",
+      "negatives": [
+        "warped product geometry",
+        "wobbling/melting edges",
+        "flickering logos or text",
+        "banding",
+        "reflections that break material",
+        "background objects",
+        "hands",
+        "motion blur on the product body",
+        "identity/shape drift"
+      ],
+      "use_when": "玻璃/金属/高光产品(瓶身/腕表/手机/美妆)的高端电商英雄镜、主视觉揭示、可循环广告 sting。",
+      "avoid_when": "哑光/纺织无镜面响应的产品、繁杂生活场景、需保持人物身份一致的镜。",
+      "platform_refs": [
+        "可灵 电商与广告/商品广告 + AI打光预设",
+        "即梦 光效·扫光玩法",
+        "Runway Gen-4 Still Life 光移近似"
+      ],
+      "sources": [
+        "https://www.klingai.com/document-api/api/effects/templates",
+        "https://www.cliprise.app/learn/guides/model-guides/runway-gen4-turbo-prompts"
+      ]
+    },
+    {
+      "id": "prada_outfit_change",
+      "name_zh": "普拉达换装",
+      "name_en": "walk-and-outfit-change morph (Prada walk)",
+      "aliases_zh": [
+        "走秀换装",
+        "一键换装",
+        "走路换装",
+        "连续换装"
+      ],
+      "aliases_en": [
+        "outfit change walk",
+        "runway transformation",
+        "fashion swap"
+      ],
+      "category": "transformation",
+      "camera_move": "跟拍",
+      "identity_risk": "high",
+      "subject_action": "模特向镜头走来，每一步/每次闪光整套服装切换为新款高级时装，步态与姿势连续。",
+      "fx_environment": "T台走廊、编辑大片布光；换装瞬间硬光闪白/运动模糊擦除转场、新服装自然布料物理、头发随动。",
+      "timing": "5-10秒：每0.8-1.2秒一次换装卡拍点，慢-快速度渐变(慢镜下探再回正)。",
+      "core_prompt_zh": "镜头运动：跟随后拉/正面跟拍；速度=匀速跟随，换装瞬间速度骤降再回正；方向=模特向镜头走来，镜头随步伐微退；起止=全身中景起→半身近景止；主体=模特走秀，每一步/每次闪光整套服装切换为新款高级时装，步态与姿势连续；环境=T台走廊、编辑大片布光、可加风与碎片；特效=换装瞬间硬光闪白/运动模糊擦除转场，新服装自然布料物理，头发随动；时基=每0.8-1.2s一次换装卡拍点，慢-快速度渐变。",
+      "core_prompt_en": "A fashion model struts directly toward the camera down a runway corridor, editorial lighting, camera tracks back with her steps. On each footfall a bright light-flash / motion-blur wipe swaps her entire outfit to a new high-fashion designer look, preserving her stride, pose and identity while fabric responds with natural physics. Slight slow-motion dip then snap at each change, cinematic, high detail, 9:16.",
+      "negatives": [
+        "face identity break",
+        "warping/melting features",
+        "extra or missing limbs",
+        "garment glued to body with no physics",
+        "flickering between frames",
+        "jarring cuts",
+        "distorted hands",
+        "background morphing"
+      ],
+      "use_when": "服装/时尚推广、竖屏爆款、一镜连续展示多SKU穿搭。",
+      "avoid_when": "必须严格锁定同一张脸(换装本身即身份形变)、需精确无风格化展示产品、非服装品类。",
+      "platform_refs": [
+        "可灵 换装/AI换装/一键换装 + 变身类目",
+        "即梦 变装·换装玩法",
+        "海螺 变身写真",
+        "Runway/Pika 首尾帧+Fashion Spin"
+      ],
+      "sources": [
+        "https://www.klingai.com/document-api/api/effects/templates",
+        "https://www.flexclip.com/cn/tools/ai-outfit-transition/",
+        "https://www.flexclip.com/cn/models/hailuo-ai/"
+      ]
+    },
+    {
+      "id": "face_morph",
+      "name_zh": "面部换拍",
+      "name_en": "face morph / match-cut face-swap transition",
+      "aliases_zh": [
+        "换脸转场",
+        "变脸",
+        "面部过渡",
+        "换脸"
+      ],
+      "aliases_en": [
+        "face morph",
+        "face swap",
+        "match-cut face"
+      ],
+      "category": "transformation",
+      "camera_move": "固定机位",
+      "identity_risk": "high",
+      "subject_action": "A面部保持后在同一头位与表情连续过渡为B面部，仅在转场点发生变化，五官对齐过渡。",
+      "fx_environment": "前后一致的主光与肤色、干净背景；转场处液态融变/溶解/闪光擦除、可选运动模糊。",
+      "timing": "5秒单次转场：保持约1s→0.4-0.6s换脸→保持。",
+      "core_prompt_zh": "镜头运动：锁定或极缓前推，正面平视特写；速度=静止/极慢；方向=正对面部；起止=A脸中近景起→B脸同角度止；主体=A面部保持后在同一头位与表情连续过渡为B面部，仅在转场点发生变化；环境=前后一致的主光与肤色、干净背景；特效=转场处液态融变/溶解/闪光擦除、可选运动模糊，五官对齐过渡；时基=保持约1s→0.4-0.6s换脸→保持，单次转场。",
+      "core_prompt_en": "Tight frontal closeup of a face, locked-off camera with an optional very slow push-in. Person A's face holds, then at a single controlled beat it liquid-morphs / dissolves through a light-flash into Person B's face at the same head angle and expression, features aligning cleanly through the transition. Consistent key lighting and skin tone across both, clean background, the change occurs only at the transition point, 5 seconds.",
+      "negatives": [
+        "face-break outside the transition beat",
+        "warping eyes/teeth/ears",
+        "extra faces",
+        "ghosting/double-exposure artifacts",
+        "flickering identity",
+        "distorted jaw",
+        "melting hair",
+        "asymmetric eyes"
+      ],
+      "use_when": "有意的身份/角色过渡、before-after 揭示、多面孔蒙太奇节拍、角色变身。",
+      "avoid_when": "需端到端保持同一张脸、写实/纪实中形变会误导、任何可能假冒真实人物的用途。",
+      "platform_refs": [
+        "可灵 换脸/AI换脸 + 变身类目",
+        "即梦 换脸·变脸玩法",
+        "海螺 变身写真",
+        "Runway/Pika 首尾帧 morph + match cut"
+      ],
+      "sources": [
+        "https://www.klingai.com/document-api/api/effects/templates",
+        "https://www.flexclip.com/cn/models/hailuo-ai/"
+      ]
+    },
+    {
+      "id": "outfit_tryon_closeup",
+      "name_zh": "试装特写",
+      "name_en": "outfit try-on / fitting detail closeup",
+      "aliases_zh": [
+        "试穿特写",
+        "服装展示特写",
+        "上身细节",
+        "试衣特写"
+      ],
+      "aliases_en": [
+        "try-on closeup",
+        "fitting detail",
+        "garment closeup"
+      ],
+      "category": "product_commercial",
+      "camera_move": "移镜头",
+      "identity_risk": "medium",
+      "subject_action": "模特整理服装、抚平布料、转腕展示袖口，动作细腻，布料自然垂坠。",
+      "fx_environment": "柔光大面积散射主光、肩部轮廓光、中性/精品店背景、暖调高级、布料光泽与织纹微观质感。",
+      "timing": "5秒单镜连续：缓慢匀速横移+微推，一次布料与脸之间的拉焦节奏。",
+      "core_prompt_zh": "镜头运动：横移+微推，焦点在布料与脸之间拉焦；速度=缓慢匀速；方向=沿衣领/袖口/垂坠细节横向滑过；起止=服装局部特写起→带脸半身近景止；主体=模特整理服装、抚平布料、转腕展示袖口，动作细腻；环境=柔光大面积散射主光、肩部轮廓光、中性/精品店背景、暖调高级；特效=布料光泽与织纹微观质感、浅景深虚化、真实布料垂坠物理；时基=5s单镜连续，一次拉焦节奏。",
+      "core_prompt_en": "Intimate fashion fitting closeup: a model smooths and adjusts a garment, fingers tracing the collar and cuff, small confident glance. Camera glides in a slow lateral pan with a gentle push-in and one focus-pull between the fabric weave and her face, 85mm shallow depth of field. Soft diffused key, shoulder rim light, sheen on the textile microtexture, neutral premium backdrop, warm cinematic grade, 5 seconds, no cuts.",
+      "negatives": [
+        "face identity drift",
+        "warping fingers/hands",
+        "fabric clipping through the body",
+        "flicker",
+        "texture crawl",
+        "distorted stitching/patterns",
+        "background morphing",
+        "over-smoothed plastic skin"
+      ],
+      "use_when": "服装/配饰细节镜、面料质感叙事、精品/电商试衣段落。",
+      "avoid_when": "需全身走秀运动、快速换装剪辑、非服装品类、微距下需严格锁脸。",
+      "platform_refs": [
+        "可灵 AI试穿/AI模特试衣",
+        "即梦 试装·服装展示玩法",
+        "海螺 主体参考(S2V)服装",
+        "Runway Gen-4 极近特写"
+      ],
+      "sources": [
+        "https://www.klingai.com/document-api/api/effects/templates",
+        "https://www.cliprise.app/learn/guides/model-guides/runway-gen4-turbo-prompts"
+      ]
+    },
+    {
+      "id": "levitation_push_in",
+      "name_zh": "悬浮缓入",
+      "name_en": "levitation slow push-in",
+      "aliases_zh": [
+        "悬浮推入",
+        "失重缓推",
+        "漂浮推近"
+      ],
+      "aliases_en": [
+        "floating push-in",
+        "weightless dolly-in",
+        "hover reveal"
+      ],
+      "category": "product_commercial",
+      "camera_move": "推镜头",
+      "identity_risk": "low",
+      "subject_action": "产品/主体脱离台面失重悬浮、缓慢自转<20°、几乎无漂移；灯光保持真实落地。",
+      "fx_environment": "渐变/无缝棚拍背景、顶光+轮廓光真实布光、空气中漂浮微粒或花瓣、柔和辉光、接触阴影随上升淡出。",
+      "timing": "5-10秒连续缓推：起始缓入(ease-in)后悬停，可循环。",
+      "core_prompt_zh": "镜头运动：稳定缓慢前推，带轻微视差；速度=极慢匀速缓入；方向=正面推向悬浮主体；起止=中景起→贴近悬浮主体止；主体=产品脱离台面失重悬浮、缓慢自转<20°、几乎无漂移；环境=渐变/无缝棚拍背景、顶光+轮廓光真实布光、空气中漂浮微粒或花瓣、柔和辉光；特效=失重上升、接触阴影随上升淡出、微反射、粒子缓浮；时基=5-10s连续缓推，起始缓入后悬停可循环。",
+      "core_prompt_en": "A [product] slowly lifts off its surface and hovers weightlessly, rotating gently under 20 degrees, while the camera does a very slow steady push-in with slight parallax, 50mm, shallow depth of field. Grounded realistic lighting: soft top key and rim light, drifting dust particles, gradient seamless backdrop, gentle bloom, the contact shadow fading as it rises. Smooth ease-in, premium commercial mood, 10 seconds, loopable, 4K.",
+      "negatives": [
+        "jittery hover",
+        "product warping or morphing",
+        "wobbling geometry",
+        "fast erratic drift",
+        "flicker",
+        "extra objects",
+        "harsh cuts",
+        "unrealistic floating background",
+        "identity/shape change"
+      ],
+      "use_when": "高端产品揭示、失重英雄美学镜、主视觉片头、可循环 sting。",
+      "avoid_when": "物理写实广告(漂浮破坏可信)、人物对白、快节奏蒙太奇。",
+      "platform_refs": [
+        "Runway Gen-4「Levitation」/「Dramatic Entrance」",
+        "可灵 悬浮/漂浮镜头语言+商品广告",
+        "即梦 悬浮·漂浮玩法",
+        "Pika slow push-in/floating"
+      ],
+      "sources": [
+        "https://www.cliprise.app/learn/guides/model-guides/runway-gen4-turbo-prompts",
+        "https://crepal.ai/blog/aivideo/pika-2-5-tutorial-master-dynamic-camera-prompts-2025/"
+      ]
+    },
+    {
+      "id": "macro_push_in",
+      "name_zh": "微距推镜",
+      "name_en": "macro push-in",
+      "aliases_zh": [
+        "微距推进",
+        "微距特写推",
+        "极近推镜"
+      ],
+      "aliases_en": [
+        "macro push-in",
+        "macro dolly",
+        "extreme closeup push"
+      ],
+      "category": "macro_intimate",
+      "camera_move": "推镜头",
+      "identity_risk": "low",
+      "subject_action": "近乎静止的材质细节(水珠成形滑落/膏体铺展/织纹粉末)，极小动态。",
+      "fx_environment": "侧向掠光揭示纹理、焦散与微高光、奶油般虚化、微尘或凝结水汽、高微反差。",
+      "timing": "5秒缓推单次拉焦：极慢匀速、几乎无视差，ASMR节奏。",
+      "core_prompt_zh": "镜头运动：微距极近距离缓慢推入+拉焦；速度=极慢匀速，几乎无视差；方向=正对纹理表面直推；起止=浅焦纹理起→贴至细节峰值止；主体=近乎静止的材质细节(水珠成形滑落/膏体铺展/织纹粉末)，极小动态；环境=侧向掠光揭示纹理、焦散与微高光、奶油般虚化、微尘或凝结水汽；特效=表面微观质感、水珠折射、颗粒缓动、高微反差；时基=5s缓推单次拉焦，ASMR节奏。",
+      "core_prompt_en": "Extreme macro push-in on [texture/detail — e.g. a dewdrop on skin, cream spreading, fabric weave], 100mm macro, razor-shallow depth of field, minimal parallax. The camera dollies in slowly and deliberately with a single focus-rack revealing microtexture; raking side light picks out caustics and micro-highlights, creamy bokeh, tiny particles or condensation, ultra-detailed, satisfying ASMR pacing, 5 seconds.",
+      "negatives": [
+        "focus hunting/breathing artifacts",
+        "texture crawl or boiling",
+        "warping of the surface",
+        "jitter",
+        "oversharpening halos",
+        "extra objects entering frame",
+        "identity change (if skin/eye)",
+        "banding"
+      ],
+      "use_when": "美妆/食品/材质的质感与成分叙事、感官满足镜、转场进入细节。",
+      "avoid_when": "主体需动作或横移、需要广context、快切蒙太奇。",
+      "platform_refs": [
+        "Pika「Macro shot … slow push-in」",
+        "Runway Gen-4 极近特写(macro)",
+        "可灵 微距镜头语言",
+        "即梦 微距玩法"
+      ],
+      "sources": [
+        "https://pikaais.com/best-prompts-for-pika-ai/",
+        "https://www.cliprise.app/learn/guides/model-guides/runway-gen4-turbo-prompts"
+      ]
+    },
+    {
+      "id": "pupil_push_through",
+      "name_zh": "瞳孔推镜",
+      "name_en": "pupil dolly / iris push-through transition",
+      "aliases_zh": [
+        "瞳孔穿越",
+        "眼睛转场",
+        "入瞳转场",
+        "穿瞳"
+      ],
+      "aliases_en": [
+        "pupil push",
+        "iris push-through",
+        "into-the-eye transition"
+      ],
+      "category": "macro_intimate",
+      "camera_move": "推镜头",
+      "identity_risk": "medium",
+      "subject_action": "眼睛保持、轻微眨眼/瞳孔缩放，角膜可见目标场景倒影；镜头穿入瞳孔进入新场景。",
+      "fx_environment": "高细节虹膜纤维与眼神光、瞳孔处暗角隧道、穿出时新环境辉光、角膜反射。",
+      "timing": "5秒单次无缝转场：1.5s缓推→0.5s加速穿瞳(speed-ramp)→穿出。",
+      "core_prompt_zh": "镜头运动：微距眼部极近推入，缓入后加速穿越瞳孔进入新场景；速度=先极慢后骤快(speed-ramp)；方向=正对虹膜直推入瞳孔黑区再穿出；起止=虹膜纹理特写起→穿过瞳孔进入新场景止；主体=眼睛保持、轻微眨眼/瞳孔缩放，角膜可见目标场景倒影；环境=高细节虹膜纤维与眼神光、瞳孔处暗角隧道、穿出时新环境辉光；特效=角膜反射、瞳孔黑区隧道转场、无缝穿越；时基=1.5s缓推→0.5s加速穿瞳→穿出，单次无缝转场。",
+      "core_prompt_en": "Extreme macro on a human iris, 100mm macro, high-detail iris fibers and catchlight, a scene faintly reflected on the cornea. The camera pushes in slowly then speed-ramps to accelerate straight into the black of the pupil, a dark tunnel vignette, and punches through to emerge into a new environment with a bloom on exit. Subtle blink/dilation, seamless single transition, cinematic, 5 seconds.",
+      "negatives": [
+        "warping/boiling iris texture",
+        "wobbling pupil shape",
+        "double pupils",
+        "flicker",
+        "focus breathing",
+        "unnatural eye anatomy",
+        "jarring cut at the punch-through",
+        "identity change of the eye owner"
+      ],
+      "use_when": "开场钩子、场景到场景的门户转场、通往另一世界的揭示、梦境叙事。",
+      "avoid_when": "没有明确的第二场景可穿出、写实/临床眼部语境、快蒙太奇、眼周需严格锁脸。",
+      "platform_refs": [
+        "可灵 镜头语言(极近眼部)+变身/穿越转场",
+        "即梦 瞳孔穿越·眼睛转场玩法",
+        "Runway/Pika 极近特写+连续推入 match-cut"
+      ],
+      "sources": [
+        "https://www.sohu.com/a/1036042907_121123989",
+        "https://www.klingai.com/document-api/api/effects/templates"
+      ]
+    },
+    {
+      "id": "overcranked_ko",
+      "name_zh": "升格KO",
+      "name_en": "overcranked slow-motion knockout",
+      "aliases_zh": [
+        "升格击倒",
+        "慢镜KO",
+        "慢动作终结一击",
+        "升格终结技"
+      ],
+      "aliases_en": [
+        "slow-mo knockout",
+        "overcranked KO",
+        "finishing blow slow-mo"
+      ],
+      "category": "action_impact",
+      "camera_move": "推镜头",
+      "identity_risk": "high",
+      "subject_action": "拳手一记干净直拳命中下巴，对手头部剧烈甩动、汗水唾沫飞溅、双膝瘫软后倒。",
+      "fx_environment": "拳台雾气、硬逆光轮廓光、地面尘土、汗珠喷溅、脸颊肌肉涟漪形变、拳套接触微爆点。",
+      "timing": "3-5秒：命中前实时→命中即升格慢放(120-240fps感)并保持至倒地。",
+      "core_prompt_zh": "镜头运动：低角度英雄机位快速推进后减速定格；速度=接触瞬间由实时急降为极慢升格(120-240fps感)；方向=推入+接触后20°侧弧掠过；起止=起于出拳挥动、止于对手头部后仰倒地；主体=拳手一记干净右直拳命中下巴，对手头部剧烈甩动、汗水唾沫飞溅、双膝瘫软后倒；环境=拳台雾气、硬逆光轮廓光、地面尘土；特效=汗珠喷溅、脸颊肌肉涟漪形变、拳套接触微爆点；时基=命中前实时、命中即升格慢放并保持至倒地。",
+      "core_prompt_en": "Overcranked slow-motion knockout: low hero angle, camera rushes in then decelerates to near-freeze at the instant a clean cross lands flush on the jaw. Ramp from real-time into extreme 120-240fps slow motion on contact; the opponent's head whips sideways, sweat and spit spray outward, cheek flesh ripples, knees buckle and the body falls backward. Hard backlit rim light, arena haze, dust puff, shallow depth of field, heavy motion blur on the striking arm, cinematic color grade. Hold slow motion through the head-snap and collapse, 3-5 seconds.",
+      "negatives": [
+        "extra limbs",
+        "extra fingers",
+        "morphing faces",
+        "identity swap on either fighter",
+        "rubber-arm bending",
+        "teleporting punches",
+        "floaty weightless fall",
+        "double heads",
+        "warped gloves",
+        "jittering frame skips"
+      ],
+      "use_when": "单记决定性终结一击，需强烈可读的冲击与高光。",
+      "avoid_when": "连续多拳对拆(用双人对打)、对白、两张脸都需全程可辨。",
+      "platform_refs": [
+        "可灵 2.1/2.6/3.0 电影级动作提示(慢镜+镜头抖动+强色调)",
+        "即梦4.0 运镜(机位/焦段/速度)",
+        "GoEnhance/Media.io AI Fight/KO 生成器"
+      ],
+      "sources": [
+        "https://kling.ai/blog/kling-ai-prompt-guide",
+        "https://www.goenhance.ai/zh/video-effects/ai-fight-generator"
+      ]
+    },
+    {
+      "id": "overcranked_explosion",
+      "name_zh": "升格爆炸",
+      "name_en": "overcranked slow-motion explosion",
+      "aliases_zh": [
+        "慢镜爆炸",
+        "升格爆破",
+        "慢动作爆炸",
+        "高速摄影爆炸"
+      ],
+      "aliases_en": [
+        "slow-mo explosion",
+        "overcranked blast",
+        "high-speed explosion"
+      ],
+      "category": "action_impact",
+      "camera_move": "移镜头",
+      "identity_risk": "low",
+      "subject_action": "车辆/物体被掀起撕裂，人物背对爆炸剪影前行不回头；碎片朝镜头飞来。",
+      "fx_environment": "火球膨胀、冲击波环、火星与尘屑雨、热浪扭曲、体积逆光、地面震波涟漪、烟柱翻滚。",
+      "timing": "3-6秒：引爆实时闪光后转升格慢放(高速摄影感)并保持碎片悬滞。",
+      "core_prompt_zh": "镜头运动：广角低机位缓慢横移/微推，冲击波到达时轻微手持震颤；速度=点燃瞬间实时、随即切入极慢升格(高速摄影感)；方向=以爆心为中心向外扩散、碎片朝镜头飞来；起止=起于引爆火光、止于烟尘与碎片在空中缓慢漂浮；主体=车辆/物体被掀起撕裂，人物背对爆炸剪影前行不回头；环境=火球膨胀、冲击波环、火星与尘屑雨、热浪扭曲、体积逆光；特效=飞溅碎片、余烬拖尾、地面震波涟漪、烟柱翻滚；时基=引爆实时闪光后转升格慢放并保持碎片悬滞。",
+      "core_prompt_en": "Overcranked slow-motion explosion: wide low-angle shot, a detonation blooms from center, fireball expanding with a visible shockwave ring, a vehicle or object hurled and torn apart, debris and sparks arcing toward camera. Real-time ignition flash ramps immediately into extreme high-speed-photography slow motion (120-1000fps feel) so shrapnel, embers and dust hang and drift through the air. Subtle handheld shake as the shockwave hits, heat-haze distortion, volumetric backlight, rolling smoke plume, intense cinematic color grade. Optional silhouetted figure walking away from the blast without looking back. 3-6 seconds.",
+      "negatives": [
+        "cartoonish flat fire",
+        "looping/repeating debris",
+        "debris passing through solid objects",
+        "morphing shapes",
+        "fragments appearing/disappearing",
+        "low-res smoke banding",
+        "physics glitches",
+        "frame stutter"
+      ],
+      "use_when": "环境破坏、规模/奇观、幕高潮、英雄背对爆炸走出。",
+      "avoid_when": "亲密人物时刻、贴脸近景、需锐利面部身份、对白。",
+      "platform_refs": [
+        "可灵 2.1/3.0 电影级慢镜爆炸提示包",
+        "即梦 3.0/4.0 快节奏动作类目",
+        "通用高速摄影慢镜碎裂提示"
+      ],
+      "sources": [
+        "https://www.freejobalert.com/article/kling-21-ai-cinematic-video-editing-prompts-1080p-mad-max-cinematic-23868",
+        "https://www.vofy.art/blog/best-kling-3-0-prompts"
+      ]
+    },
+    {
+      "id": "bullet_time",
+      "name_zh": "子弹时间",
+      "name_en": "bullet time (frozen-moment camera orbit)",
+      "aliases_zh": [
+        "子弹时间",
+        "时间冻结环绕",
+        "定格环绕",
+        "黑客帝国镜头"
+      ],
+      "aliases_en": [
+        "bullet time",
+        "frozen orbit",
+        "time-freeze orbit"
+      ],
+      "category": "time_manip",
+      "camera_move": "环绕",
+      "identity_risk": "medium",
+      "subject_action": "人物定格于闪身后仰/腾空踢击的瞬间，身体纹丝不动；仅镜头运动。",
+      "fx_environment": "悬浮的水珠尘屑与子弹拖尾凝滞空中、背景运动模糊、强轮廓光、地面薄雾、视差分层。",
+      "timing": "2-5秒：时间冻结(主体0x)、镜头匀速绕行(180-360°)并保持。",
+      "core_prompt_zh": "镜头运动：以主体为圆心平滑环绕(180-360°)，半径恒定、匀速；速度=主体完全静止(时间冻结)、仅镜头运动；方向=顺时针环绕，可由正面转到背面；起止=起于正面、止于绕行半圈或整圈；主体=人物定格于闪身后仰/腾空踢击的瞬间，身体纹丝不动；环境=悬浮的水珠尘屑与子弹拖尾凝滞空中、背景运动模糊、强轮廓光、地面薄雾；特效=视差分层(前后景不同速率)、悬滞粒子、子弹轨迹光带；时基=时间冻结、镜头匀速绕行并保持。",
+      "core_prompt_en": "Matrix-style bullet time: time is frozen and the subject is completely still, held mid-action (leaning back to dodge, or mid-kick). Only the camera moves, orbiting smoothly 360 degrees around the subject at a constant radius and steady speed, from front to back. Suspended droplets, dust and bullet trails hang frozen in the air, strong parallax between foreground and background layers, motion-blur streaks on the background, dramatic rim lighting, shallow ground fog, hyper-detailed cinematic look. Subject does not move; camera rotation only. 2-5 seconds.",
+      "negatives": [
+        "subject moving or breathing",
+        "subject rotating instead of camera",
+        "morphing limbs",
+        "identity break",
+        "warping face during orbit",
+        "particles re-animating",
+        "background sliding unnaturally",
+        "wobbling radius",
+        "physics glitches"
+      ],
+      "use_when": "标志性英雄定格于动作峰值瞬间、展示姿势/冲击、风格化时停。",
+      "avoid_when": "需连续运动、对白、主体需持续表演、身份保真预算紧(绕脸压力大)。",
+      "platform_refs": [
+        "可灵 2.6 Bullet Time 提示公式(时间冻结+360环绕+主体静止+视差)",
+        "Higgsfield AI「Bullet Time」预设",
+        "Media.io/Revid AI Bullet Time 生成器"
+      ],
+      "sources": [
+        "https://www.piclumen.com/hub/article/master-the-matrix-the-ultimate-guide-to-crafting-bullet-time-prompts-for-kling-26-69bd145f481e247e3ce9481b/",
+        "https://www.hedra.com/blog/bullet-time-effect-ai-video"
+      ]
+    },
+    {
+      "id": "two_person_fight",
+      "name_zh": "双人对打",
+      "name_en": "two-person fight exchange",
+      "aliases_zh": [
+        "对打",
+        "武打对拆",
+        "二人交手",
+        "近身格斗"
+      ],
+      "aliases_en": [
+        "fight exchange",
+        "duel choreography",
+        "martial-arts exchange"
+      ],
+      "category": "action_impact",
+      "camera_move": "跟拍",
+      "identity_risk": "high",
+      "subject_action": "两名武者连贯招式对拆——进攻、格挡、闪身、反击，步法与重心清晰、接触有反应。",
+      "fx_environment": "汗水飞溅、脚下扬尘、衣袂发丝飘动、兵器相击火星、空气雾感、命中冲击波纹。",
+      "timing": "4-8秒/回合：整体实时保证可读性、关键命中瞬间短暂升格再恢复。",
+      "core_prompt_zh": "镜头运动：中景环绕跟拍两人、保持对打距离，随出招甩镜、命中时短促手持震动；速度=以实时为主、最重一击处短暂升格点缀；方向=绕圈跟随二人重心移动；起止=起于甲方进攻、经格挡反击、止于一方被逼退或击中；主体=两名武者连贯招式对拆——进攻、格挡、闪身、反击，步法与重心清晰、接触有反应；环境=汗水飞溅、脚下扬尘、衣袂发丝飘动、兵器相击火星、空气雾感；特效=命中冲击波纹、运动模糊拖尾、火星迸溅；时基=整体实时保证可读性、关键命中瞬间速率骤降再恢复。",
+      "core_prompt_en": "Two-person martial-arts duel: a tracking medium shot circles the pair at fighting distance as two fighters trade a clean choreographed exchange — strike, block, evade, counter — with clear cause and effect, grounded footwork and weight shifts, and visible contact reactions. Camera whip-pans to follow each strike with punchy handheld shake on impacts, mostly real-time 24fps for readability with a brief speed-ramp on the hardest hit. Sweat spray, kicked-up dust, flowing cloth and hair, sparks on any weapon clash, atmospheric haze, directional key light, cinematic grade. 4-8 seconds.",
+      "negatives": [
+        "extra limbs",
+        "extra fingers",
+        "weapons passing through bodies",
+        "morphing between the two fighters",
+        "identity swap",
+        "teleporting/no-contact hits",
+        "rubber-limb bending",
+        "floaty weightless motion",
+        "hands merging",
+        "jitter"
+      ],
+      "use_when": "持续可读的近身格斗、招式编排展示、你来我往的对决段落。",
+      "avoid_when": "单记终结一击(用升格KO)、纯破坏奇观、只有一人动作、两脸同时需极高保真。",
+      "platform_refs": [
+        "可灵 V1.6/2.1/3.0 Pro 动作提示(招式/流转/冲击+参考图锁定)",
+        "即梦 快节奏动作类目",
+        "ReelMind Immortal Martial Arts",
+        "FlexClip/GoEnhance AI Fight"
+      ],
+      "sources": [
+        "https://reelmind.ai/blog/immortal-martial-arts-ai-generated-combat-scenes",
+        "https://www.flexclip.com/learn/ai-fight-generator.html"
+      ]
+    },
+    {
+      "id": "bee_cam",
+      "name_zh": "小蜜蜂运镜",
+      "name_en": "bee cam (erratic tight buzzing orbit / hype cam)",
+      "aliases_zh": [
+        "蜜蜂运镜",
+        "蜂群运镜",
+        "嗡嗡运镜",
+        "高能环绕"
+      ],
+      "aliases_en": [
+        "bee cam",
+        "hype cam",
+        "buzzing orbit"
+      ],
+      "category": "action_impact",
+      "camera_move": "环绕",
+      "identity_risk": "medium",
+      "subject_action": "单人展示/舞动/摆姿，人物基本原地，由镜头制造能量；镜头贴近主体高速蜂群式盘旋。",
+      "fx_environment": "运动模糊拖尾、光斑光带、扬尘或碎彩、耀斑闪跳、微震颤手持抖动。",
+      "timing": "3-6秒：实时且随音乐节拍骤快骤慢卡点(卡点)，全程无定格。",
+      "core_prompt_zh": "镜头运动：手持稳定器贴近主体做快速、抖动、超360°蜂群式环绕，突然变向与变速、猛甩重新构图；速度=实时为主、随音乐节拍骤快骤慢卡点；方向=绕主体高速螺旋盘旋、时近时远像蜜蜂盘桓；起止=起于贴脸特写、经高速绕圈、止于甩向另一角度定住；主体=单人展示/舞动/摆姿，人物基本原地、由镜头制造能量；环境=运动模糊拖尾、光斑光带、扬尘或碎彩、耀斑闪跳；特效=微震颤手持抖动、拖影、节拍同步的曝光脉冲；时基=实时且随节拍脉冲加速减速、全程无定格。",
+      "core_prompt_en": "Bee cam / hype cam: a handheld gimbal buzzes fast and tight around a single subject in erratic, jittery super-360° orbits, swarming in and out like a bee, with sudden direction and speed changes and snappy whip re-frames. Real-time with abrupt beat-synced speed pulses, relentless energetic motion and no freeze. Motion-blur streaks, light trails, flare pops, kicked-up dust or confetti, micro-shake handheld feel. The subject mostly stays in place performing or posing while the camera generates all the energy. Wide-ish 24-35mm, cinematic hype grade. 3-6 seconds.",
+      "negatives": [
+        "subject deforming from fast motion",
+        "morphing face",
+        "identity break",
+        "extra limbs",
+        "background tearing/warping",
+        "nauseating incoherent geometry",
+        "subject teleporting",
+        "limbs smearing into blur",
+        "physics glitches"
+      ],
+      "use_when": "高能量 hype/音乐/产品/舞蹈揭示、预告 punch-in、短视频卡点 drop。",
+      "avoid_when": "平静/情感、对白、广角定场、主体身份/细节需保持锐利(快速贴近环绕会降保真)。",
+      "platform_refs": [
+        "Higgsfield AI hype 预设(Crash Zoom/360 Orbit/Bullet Time)",
+        "即梦 肾上腺素震颤/微震动手持/螺旋环绕表述",
+        "(社区俗称，无官方同名模板)"
+      ],
+      "sources": [
+        "https://zhuanlan.zhihu.com/p/1895827230862582805",
+        "https://www.media.io/ai/explore/zone/ai-video-camera-movement-prompts"
+      ]
+    },
+    {
+      "id": "deep_sea_leviathan",
+      "name_zh": "深海巨兽",
+      "name_en": "deep-sea leviathan reveal",
+      "aliases_zh": [
+        "海中巨兽",
+        "深海怪物浮现",
+        "巨兽出海",
+        "利维坦"
+      ],
+      "aliases_en": [
+        "leviathan reveal",
+        "sea monster emerge",
+        "deep-sea giant"
+      ],
+      "category": "creature_reveal",
+      "camera_move": "升降",
+      "identity_risk": "low",
+      "subject_action": "庞然巨兽自黑暗深海升起，先见轮廓再破水，海水如瀑倾泻，动作缓慢威严，令附近船只人物显得渺小。",
+      "fx_environment": "倾泻海水与飞沫、翻涌尾迹、生物荧光脉动、水下上帝之光与焦散、暴雨涌浪、深蓝转墨黑、海雪微粒。",
+      "timing": "5-8秒：缓慢渐显、逐步揭示以积累压迫感(略慢于实时强调质量)。",
+      "core_prompt_zh": "镜头运动：由水面缓慢上摇/升起，广角先立环境规模、随巨兽浮现微微后拉以显其庞大，可加水下上推穿过丁达尔光；速度=缓慢沉重、略慢于实时以强调质量；方向=自深渊向上、破水面而出；起止=起于漆黑深处的巨大暗影、止于头部或巨颚破水而出俯视镜头；主体=庞然巨兽自黑暗深海升起，先见轮廓再破水，海水如瀑自躯体倾泻，动作缓慢威严、令附近船只人物显得渺小；环境=倾泻海水与飞沫、翻涌尾迹、生物荧光脉动、水下上帝之光与焦散、暴雨涌浪、深蓝转墨黑、海雪微粒；特效=瀑布状挂水、泡沫喷溅、荧光呼吸光纹、体积光；时基=缓慢渐显、逐步揭示以积累压迫感。",
+      "core_prompt_en": "Deep-sea leviathan reveal: camera cranes slowly up from the stormy waterline, a wide shot establishing scale as an enormous shadow rises from the black abyss. First only a silhouette, then the creature breaks the surface — vast head, eyes and jaws emerging as sheets of water cascade off its bioluminescent hide, glow pulsing in cyan patterns. Slow, heavy, deliberate movement that dwarfs nearby boats and people; the camera eases back to reveal true scale. Churning wake, foam and spray, underwater god rays and caustics, driving rain and swell, deep-blue-to-black gradient, marine-snow particulate, volumetric light, hyper-detailed cinematic dread. Slightly slowed to sell the mass. 5-8 seconds.",
+      "negatives": [
+        "floating weightless creature",
+        "water not shedding off the body",
+        "morphing anatomy",
+        "extra/duplicated heads or eyes",
+        "jelly/rubber texture",
+        "scale drift",
+        "clipping through water surface",
+        "flickering bioluminescence",
+        "physics glitches"
+      ],
+      "use_when": "怪兽揭示/转折压迫、规模与敬畏定场、预告 money shot。",
+      "avoid_when": "与巨兽的快动作战斗(需另配镜)、紧凑人物对白、人脸需在画面中保持可辨。",
+      "platform_refs": [
+        "Sora 2 / Kling 1.6/2.6 巨兽提示类目",
+        "Veo 3.1 / Seedance",
+        "Morphic「leviathan」预设"
+      ],
+      "sources": [
+        "https://morphic.com/resources/videos/leviathan-videos",
+        "https://help.artlist.io/hc/en-us/articles/31558164653213-Prompting-tips-tailored-to-different-AI-Video-models-Kling-Veo-Sora-and-Seedance"
+      ]
+    },
+    {
+      "id": "bird_dispersal",
+      "name_zh": "飞鸟解体",
+      "name_en": "flock/particle dissolve reveal",
+      "aliases_zh": [
+        "化鸟消散",
+        "鸟群聚形",
+        "飞鸟消散",
+        "粒子化鸟"
+      ],
+      "aliases_en": [
+        "bird dispersal",
+        "flock dissolve",
+        "particle scatter reveal"
+      ],
+      "category": "creature_reveal",
+      "camera_move": "推镜头",
+      "identity_risk": "high",
+      "subject_action": "轮廓保持片刻后逐层剥离为飞鸟四散腾空(或反向由鸟群聚合成形)；用首帧(实体)→尾帧(散开)驱动。",
+      "fx_environment": "逆光轮廓光保证剪影可读、气流卷动、羽尘微粒、柔和体积光、负空间气流。",
+      "timing": "连续3-5秒解体：平稳中速、末段单位散开时缓出(ease-out)、单镜到底。",
+      "core_prompt_zh": "镜头运动：缓慢环绕或稳定推近，主体居中不抖以显现颗粒运动；速度=平稳中速；方向=从实体轮廓自后缘向前逐层解体；起止=完整人形/物体(首帧)→化为四散飞鸟群(尾帧)；主体=轮廓保持片刻后逐层剥离为飞鸟四散腾空(或反向由鸟群聚合成形)；环境=逆光轮廓光保证剪影可读、气流卷动、羽尘微粒、柔和体积光；特效=飞鸟/粒子逐层升腾扩散、负空间气流、羽毛尘埃；时基=连续3-5秒解体，末段单位散开时缓出，单镜到底。建议以首帧(实体)→尾帧(散开)在首尾帧模型上驱动。",
+      "core_prompt_en": "A figure holds its silhouette for a beat then disperses trailing-edge-first into a flock of birds that scatter into the sky (or reverse: birds converge and cohere into the figure), camera pushing in slowly and steadily on a rim-lit backlit silhouette so the shape stays readable as it peels apart layer by layer, feather motes and soft volumetric light, negative-space wind currents, cinematic grade; a continuous 3-5 second dissolve easing out as the last birds scatter, single take. Best driven as a first-frame (solid) to last-frame (dispersed) transition on first-last-frame models.",
+      "negatives": [
+        "melting/warping face mid-dissolve",
+        "identity break before dispersal starts",
+        "birds morphing into blobs",
+        "hard cut/scene change",
+        "duplicated flock artifacts",
+        "jelly deformation",
+        "flickering silhouette",
+        "physics glitches"
+      ],
+      "use_when": "变身 sting、魔法登退场、经首尾帧连接两镜、解体前只需短暂读脸。",
+      "avoid_when": "身份需全程清晰(不止首帧)、需要稳定单主体表演。",
+      "platform_refs": [
+        "可灵 2.1 首尾帧(变身/消散)技法",
+        "即梦 变身/特效类目(形变)",
+        "(无专用飞鸟同名卡)"
+      ],
+      "sources": [
+        "https://zhuanlan.zhihu.com/p/1951276485496271245",
+        "https://news.qq.com/rain/a/20250822A06WXC00"
+      ]
+    },
+    {
+      "id": "mountain_road_chase",
+      "name_zh": "山路追击",
+      "name_en": "winding mountain-road car chase",
+      "aliases_zh": [
+        "盘山追车",
+        "山道追逐",
+        "劈弯追击",
+        "公路追逐"
+      ],
+      "aliases_en": [
+        "mountain chase",
+        "winding pursuit",
+        "hairpin chase"
+      ],
+      "category": "vehicle_scene",
+      "camera_move": "载具跟拍",
+      "identity_risk": "low",
+      "subject_action": "两辆性能跑车连续劈弯，重心侧压、出弯短暂尾滑，车距开合，护栏与悬崖飞掠。",
+      "fx_environment": "黄昏逆光山路、护栏与悬崖飞掠、路旁植被拖影、轮胎扬起碎石与胎烟、低角度镜头眩光、热浪扰动。",
+      "timing": "5-8秒：持续快节奏、过弯处速度斜坡降格后回正、弯到弯的顿挫感。",
+      "core_prompt_zh": "镜头运动：侧向平行跟拍+车尾低角度追随，间插无人机俯冲过发夹弯；速度=高速，过弯瞬间降格；方向=沿盘山公路自上而下连续过弯；起止=进弯咬住领跑车→出弯甩尾拉开车距；主体=两辆性能跑车连续劈弯，重心侧压、出弯短暂尾滑；环境=黄昏逆光山路、护栏与悬崖飞掠、路旁植被拖影；特效=轮胎扬起碎石与胎烟、低角度镜头眩光、热浪扰动；时基=持续快节奏，过弯处速度斜坡降格后回正，5-8秒。",
+      "core_prompt_en": "A high-speed tracking shot of a performance sports car chasing another down a winding mountain road at dusk, camera running parallel from the side then dropping to a low bumper-follow angle, cutting to a drone descending over the hairpins. The cars carve consecutive switchbacks, weight shifting onto each apex with a brief tail-slide out of the corners, gravel and tire smoke kicking up, guardrail and cliff edge whipping past in motion blur, low-sun backlight and anamorphic lens flare, sharp focus on the hero car, cinematic color grade, Need for Speed atmosphere; speed ramps down on the drift apex then snaps back to real time.",
+      "negatives": [
+        "warping bodywork",
+        "morphing wheels",
+        "floating/hovering car",
+        "physics glitches",
+        "road geometry melting",
+        "duplicate cars",
+        "license-plate garble",
+        "jelly suspension",
+        "vehicle color/model identity break"
+      ],
+      "use_when": "动感追逐、第二幕升级、风景可牺牲且无需读脸的英雄车展示。",
+      "avoid_when": "车内对白、需精确车牌/品牌、需一致可辨的司机面部。",
+      "platform_refs": [
+        "Kling 3.0 Pro 动作序列",
+        "Runway Gen-4/Gen-3 high-speed tracking",
+        "(无专用同名模板)"
+      ],
+      "sources": [
+        "https://imagera.ai/prompts/ai-video-generation-prompts-2026",
+        "https://help.runwayml.com/hc/en-us/articles/30586818553107-Gen-3-Alpha-Prompting-Guide"
+      ]
+    },
+    {
+      "id": "snow_rally",
+      "name_zh": "雪地赛车",
+      "name_en": "snow rally / winter drift racing",
+      "aliases_zh": [
+        "雪地拉力",
+        "雪地漂移",
+        "冰雪赛车",
+        "雪林甩尾"
+      ],
+      "aliases_en": [
+        "snow rally",
+        "winter drift",
+        "snow racing"
+      ],
+      "category": "vehicle_scene",
+      "camera_move": "载具跟拍",
+      "identity_risk": "low",
+      "subject_action": "拉力赛车雪地powerslide，反打方向、车尾滑出，从雪堆/树后杀出，扬起巨大雪雾。",
+      "fx_environment": "雪林山道、冷蓝白影调、冬日低太阳、寒气中的排气白雾、扬起的雪浪与飞溅冰屑、空中飘雪。",
+      "timing": "5-8秒：持续高速、甩尾弧顶降格升格后回正、一记大甩尾为节拍。",
+      "core_prompt_zh": "镜头运动：车外弯道外侧广角追拍，间插车内被雪花溅打的POV，手持轻微抖动；速度=高速，甩尾弧线处降格；方向=沿雪林赛道劈弯，从雪堆/树后杀出；起止=进弯前直线加速→甩尾划出巨大雪雾弧线；主体=拉力赛车雪地powerslide，反打方向、车尾滑出；环境=雪林山道、冷蓝白影调、冬日低太阳、寒气中的排气白雾；特效=扬起的雪浪与飞溅冰屑、镜头眩光、空中飘雪；时基=持续高速，甩尾弧顶降格升格后回正，5-8秒。",
+      "core_prompt_en": "A wide cinematic shot of a rally car power-sliding through a snow-covered forest stage, spraying a huge rooster-tail of powder as it drifts around a sharp turn and emerges from behind snow-laden trees, intercut with a shaky in-car POV splattered with flying snow. Counter-steering as the tail steps out, chunks of ice flinging up, cold blue-white color grade, low winter sun flare, exhaust vapor in the freezing air, shot on 35mm with shallow depth of field; the speed ramps down on the drift arc to sell the snow spray then snaps back.",
+      "negatives": [
+        "morphing car body",
+        "warping wheels",
+        "snow behaving like smoke/liquid",
+        "hovering car",
+        "physics glitches",
+        "melting terrain",
+        "duplicate vehicles",
+        "driver face flicker"
+      ],
+      "use_when": "高能量冬季动作、车辆展示、以雪浪为奇观的蒙太奇 stinger。",
+      "avoid_when": "暖色/夏季语境、静态美学镜、需锁定可辨司机身份。",
+      "platform_refs": [
+        "OpenAI Sora rally 展示提示(改雪版)",
+        "Kling 3.0 Pro 动作提示",
+        "(无专用同名模板)"
+      ],
+      "sources": [
+        "https://www.imagine.art/blogs/veo-3-1-prompt-guide",
+        "https://tonaai.io/blog/best-ai-video-prompts-guide-2026"
+      ]
+    },
+    {
+      "id": "city_drive",
+      "name_zh": "city drive",
+      "name_en": "cinematic night-city neon driving",
+      "aliases_zh": [
+        "城市夜驾",
+        "霓虹夜驰",
+        "都市巡航",
+        "夜城开车"
+      ],
+      "aliases_en": [
+        "city drive",
+        "night city cruise",
+        "neon drive"
+      ],
+      "category": "vehicle_scene",
+      "camera_move": "载具跟拍",
+      "identity_risk": "low",
+      "subject_action": "英雄座驾夜巡霓虹街道，从容不疾、轻微变道，倒影在车身与地面拉出光条。",
+      "fx_environment": "雨后湿滑沥青、粉蓝霓虹反射、尾灯拖尾、细雨、街边蒸汽、湿地高光反射、霓虹散景。",
+      "timing": "5-8秒：实时匀速巡航(氛围重于速度)、倒影掠过处轻微升格。",
+      "core_prompt_zh": "镜头运动：与车并行的平滑侧向跟拍，间插挡风玻璃第一视角巡航，稳定器顺滑无抖动；速度=中低速巡航；方向=沿霓虹湿街缓行、轻微变道；起止=驶入霓虹街区→车头掠过招牌倒影缓缓推近；主体=英雄座驾夜巡霓虹街道，从容不疾；环境=雨后湿滑沥青、粉蓝霓虹在车身与地面拉出光条、细雨、尾灯拖尾；特效=湿地高光反射、霓虹散景、街边蒸汽；时基=实时匀速巡航，倒影掠过处轻微升格，5-8秒。",
+      "core_prompt_en": "A sleek hero car cruising down a rain-slicked neon-lit city street at night, camera tracking smoothly alongside on a gimbal then cutting to a windshield POV cruise, pink and blue neon signage streaking in reflections across the wet hood and asphalt, light rain, tail-light trails and steam rising from vents, shallow depth of field with neon bokeh, Blade Runner atmosphere, cinematic color grade, confident unhurried pacing; a gentle slow-motion beat as reflections slide over the bodywork.",
+      "negatives": [
+        "warping car body",
+        "morphing neon text into gibberish",
+        "physics glitches",
+        "hovering car",
+        "jittery camera",
+        "duplicated vehicles",
+        "melting reflections",
+        "license-plate garble"
+      ],
+      "use_when": "氛围定场、英雄车登场、以氛围与倒影承载的音乐节拍镜。",
+      "avoid_when": "需高速追逐能量、明亮白昼、需清晰可读招牌/品牌。",
+      "platform_refs": [
+        "Kling 3.0 霓虹东京雨夜巡航",
+        "Veo 3.1 都市夜景",
+        "(社区常用参考,非官方卡)"
+      ],
+      "sources": [
+        "https://tonaai.io/blog/best-ai-video-prompts-guide-2026",
+        "https://vicsee.com/blog/kling-3-prompts"
+      ]
+    },
+    {
+      "id": "superstar_walkout",
+      "name_zh": "巨星名场面",
+      "name_en": "superstar hero walkout / main-character glamour",
+      "aliases_zh": [
+        "主角登场",
+        "巨星走出",
+        "高光亮相",
+        "名场面"
+      ],
+      "aliases_en": [
+        "hero walkout",
+        "star entrance",
+        "main-character moment"
+      ],
+      "category": "hero_glamour",
+      "camera_move": "环绕",
+      "identity_risk": "high",
+      "subject_action": "巨星昂首走出，风衣与发丝飘动、微停亮相、自信转头，背景人群与闪光灯。",
+      "fx_environment": "红毯/舞台边缘轮廓光与薄雾、背景散景人群与闪光灯、风机吹动衣料、服饰高光反光。",
+      "timing": "5-8秒：走姿50%升格、转头亮相处可降至10%超慢、一次刻意英雄节拍。",
+      "core_prompt_zh": "镜头运动：贴身缓慢环绕接低角度推近，可选后拉展现全身造型，稳定顺滑、主体锁定；速度=从容缓速，走姿降格；方向=主体正面朝镜头走来(walkout)；起止=人群/闪光灯中登场→推近至面部自信转头定格；主体=巨星昂首走出，风衣与发丝飘动、微停亮相；环境=红毯/舞台边缘轮廓光与薄雾、背景散景人群与闪光灯、风机吹动衣料；特效=闪光灯爆点、边缘轮廓光、服饰高光反光；时基=走姿50%升格，转头亮相处可降至10%超慢，5-8秒。",
+      "core_prompt_en": "A superstar strides confidently toward camera in a hero walkout, camera slowly orbiting then pushing in low-angle on the subject, coat and hair flowing in a wind machine, a confident micro-pause and head-turn, flashbulbs popping and a bokeh crowd behind, red-carpet/stage rim-light and light haze, glints on the wardrobe, 50mm portrait feel with shallow depth of field, editorial fashion-film grade; the walk plays at ~50% slow motion with a super-slow 10% beat on the hero head-turn.",
+      "negatives": [
+        "face morphing",
+        "identity break",
+        "extra fingers/limbs",
+        "warping facial features between frames",
+        "teeth/eye distortion",
+        "wardrobe morphing",
+        "flickering crowd faces",
+        "unnatural gait"
+      ],
+      "use_when": "人物登场、偶像/品牌高光时刻、单一可辨面部需读作光彩夺目的海报级节拍。",
+      "avoid_when": "快动作、宽人群覆盖、面部无法参考锁定(身份漂移即失败模式)。",
+      "platform_refs": [
+        "Runway/Veo fashion film(缓推+织物流动+编辑语言)",
+        "可灵 走秀/T台用例(透明玻璃T台)",
+        "(以英雄环绕/缓推构建,非同名卡)"
+      ],
+      "sources": [
+        "https://medium.com/@aitooldiscovery/ai-video-prompts-complete-list-for-cinematic-fashion-sci-fi-ai-influencer-and-more-2026-f8737fd852e1",
+        "https://lzyprompt.com/blog/ai-video-camera-movement-prompts/"
+      ]
+    },
+    {
+      "id": "underwater_slowmo",
+      "name_zh": "水下慢镜头",
+      "name_en": "underwater slow-motion",
+      "aliases_zh": [
+        "水下升格",
+        "水下慢动作",
+        "潜水慢镜",
+        "水中漂浮"
+      ],
+      "aliases_en": [
+        "underwater slow-mo",
+        "submerged slow motion",
+        "aquatic drift"
+      ],
+      "category": "aquatic",
+      "camera_move": "跟拍",
+      "identity_risk": "medium",
+      "subject_action": "人物水下优雅移动，发丝与衣料随水流舒展、肢体拖曳缓转，缓沉或缓升朝向光源。",
+      "fx_environment": "水面射入的丁达尔光束、水底舞动焦散、漂浮微气泡与悬浮微粒、蓝绿体积光、细密真实气泡。",
+      "timing": "整体升格慢镜：如失重漂浮、发丝/衣料舒展处可至25%超慢、连续无切、5-8秒。",
+      "core_prompt_zh": "镜头运动：缓慢漂移跟随并向水面轻微仰摇，或绕主体缓慢环绕，带浮力漂浮感、无抖动；速度=整体慢速、如失重漂浮；方向=随主体缓沉或缓升朝向光源；起止=没入水中→朝水面光束缓缓仰起；主体=人物水下优雅移动，发丝与衣料随水流舒展、肢体拖曳缓转；环境=水面射入的丁达尔光束、水底舞动焦散、漂浮微气泡与悬浮微粒、蓝绿体积光；特效=细密真实气泡、光束闪烁、悬浮沉积微粒、柔和焦散；时基=整体升格慢镜，发丝/衣料舒展处可至25%超慢，连续无切。",
+      "core_prompt_en": "A graceful underwater slow-motion shot of a figure moving weightlessly beneath the surface, hair and fabric billowing and limbs trailing as they slowly turn and rise toward the light, camera drifting in a buoyant follow then tilting gently up toward the surface, god rays / crepuscular light shafts piercing the blue-green water, dancing caustics on the floor, tiny realistic micro-bubbles and floating particles suspended in soft volumetric light, shallow depth of field, cinematic grade; overall slow motion with a 25% super-slow beat as the fabric flares, continuous single take.",
+      "negatives": [
+        "harsh spotlight instead of soft rays",
+        "oversized fake bubbles",
+        "morphing hair/fabric",
+        "physics glitches",
+        "non-buoyant/gravity-bound movement",
+        "warping face",
+        "flickering caustics",
+        "hard cuts"
+      ],
+      "use_when": "梦幻/情感、美学或变身转场、以优雅失重运动为核心的情绪间奏。",
+      "avoid_when": "快动作、需对白清晰、需全程清晰可辨面部(水折射+慢镜会漂身份)。",
+      "platform_refs": [
+        "可灵 1.6 水下慢镜强项",
+        "Sora/Runway/Kling 水下模板(光束/悬浮粒子/慢跟)",
+        "(以升格慢跟构建,非同名卡)"
+      ],
+      "sources": [
+        "https://reelmind.ai/blog/the-best-ai-prompts-for-generating-stunning-underwater-scenes",
+        "https://tomsguide.com/ai/ai-image-video/i-put-kling-1-6-to-the-test-7-prompts-to-make-compelling-ai-videos"
+      ]
+    },
+    {
+      "id": "flying_sword",
+      "name_zh": "御剑飞行",
+      "name_en": "flying-sword flight / sword-riding sky glide",
+      "aliases_zh": [
+        "御剑",
+        "踏空飞行",
+        "驭剑飞行",
+        "剑飞",
+        "乘剑"
+      ],
+      "aliases_en": [
+        "flying sword",
+        "sword riding",
+        "sky glide"
+      ],
+      "category": "wuxia_xianxia",
+      "camera_move": "跟拍",
+      "identity_risk": "medium",
+      "subject_action": "修士立于细长发光飞剑之上，衣袍腰带向后猎猎，穿云破雾、掠过山脊、侧倾转弯后减速悬停回眸。",
+      "fx_environment": "分层体积云、远山雾气视差、疾风、剑身流光尾迹、气流拉丝、云雾撕裂尾流、边缘辉光。",
+      "timing": "5秒：前3秒加速穿云、后2秒升格悬停英雄仰角定格。",
+      "core_prompt_zh": "镜头运动：FPV跟随+推近，微荷兰角随转弯倾斜；速度=快速巡航中段升格；方向=由后向前穿云再侧倾转弯；起止=穿破云层→减速悬停英雄仰角；主体=修士立于细长发光飞剑之上，衣袍腰带向后猎猎，转身回眸；环境=分层体积云、远山雾气视差、疾风；特效=剑身流光尾迹、气流拉丝、云雾撕裂尾流、边缘辉光轮廓光；时基=前3秒加速穿云、后2秒升格悬停定格。",
+      "core_prompt_en": "FPV follow-cam accelerating behind a robed cultivator riding a slender glowing sword, cloth and sash streaming back, blasting forward through layered volumetric clouds and skimming misty mountain ridges; the sword leaves a thin light-ribbon trail with rim glow, air streaks and a parted cloud wake; camera banks with a slight Dutch tilt into a turn, then ramps to slow motion as the figure decelerates into a heroic low-angle hover, wind-driven hair, cinematic depth and atmosphere.",
+      "negatives": [
+        "face morphing",
+        "identity drift",
+        "extra limbs",
+        "sword bending/rubbery physics",
+        "feet clipping through blade",
+        "floating detached hands",
+        "warping background",
+        "jitter",
+        "duplicate swords"
+      ],
+      "use_when": "修士跨空传送/登场，确立机动力或抵达；仙侠/玄幻高光穿越。",
+      "avoid_when": "室内对白、地面近身缠斗、飞剑需保持为静态道具时。",
+      "platform_refs": [
+        "Higgsfield「SUPERFAST FLIGHT」/「FPV」预设",
+        "可灵 特效+自定义相机路径",
+        "(无官方御剑同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/viral-presets",
+        "https://www.klingai.com/document-api/api/effects/templates"
+      ]
+    },
+    {
+      "id": "sword_qi_slash",
+      "name_zh": "剑气斩",
+      "name_en": "sword-qi slash / glowing blade-energy trail",
+      "aliases_zh": [
+        "剑气",
+        "刀光",
+        "气刃",
+        "剑气斩",
+        "刀气",
+        "一剑斩"
+      ],
+      "aliases_en": [
+        "sword qi",
+        "blade energy",
+        "qi slash",
+        "blade trail"
+      ],
+      "category": "wuxia_xianxia",
+      "camera_move": "甩镜",
+      "identity_risk": "medium",
+      "subject_action": "剑客单式决斩，手臂拖出残影；新月气刃自刃口飞出前斩，劈裂雨丝/竹叶/石靶。",
+      "fx_environment": "新月发光气刃尾迹与边缘余辉、压缩剑气环形冲击波、被劈开的雨/叶/尘扇形飞散、接触火花与光溢出。",
+      "timing": "4-5秒：顿(蓄势常速)-快(挥砍极快)-慢(气刃释放与冲击波极慢升格)。",
+      "core_prompt_zh": "镜头运动：甩镜跟随刀光弧线+撞击处急停升格，微手持顿挫；速度=起手常速、挥砍瞬间极快、气刃释放转极慢升格；方向=横向由左向右挥出气刃；起止=蓄势起手→劈出新月剑气→切裂目标环形冲击波；主体=剑客单式决斩，手臂拖出残影；环境=雨丝/竹叶/尘埃被劈开呈扇形；特效=新月发光气刃尾迹、边缘余辉、压缩剑气环形冲击波、接触点火花与光溢出；时基=顿-快-慢三段节奏。",
+      "core_prompt_en": "A swordsman delivers one decisive cut; a crescent blade of glowing sword-qi launches off the edge and slices forward, splitting rain and bamboo leaves that fan outward in slow motion, motion-blur afterimages trailing the arm; a ring-shaped compressed-qi shockwave radiates from the impact with sparks and light bloom. Whip-pan tracks the arc, then a hard speed-ramp into ultra slow-motion on the energy release; tight cinematic framing, high contrast, dramatic rim light.",
+      "negatives": [
+        "face morphing",
+        "identity break",
+        "extra arms",
+        "doubled swords",
+        "rubbery blade bending",
+        "limbs clipping",
+        "stuttering",
+        "warping background",
+        "mushy low-detail energy"
+      ],
+      "use_when": "单式英雄斩、对决高潮、绝技展示。",
+      "avoid_when": "连续多招缠斗(模型易崩)、平静戏。",
+      "platform_refs": [
+        "Higgsfield「KUNG FU HIT」/「SOUL FIGHTER」预设",
+        "可灵 自定义 + speed-ramp",
+        "(无官方剑气同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/viral-presets",
+        "https://github.com/HuyLe82US/awesome-seedance-prompts"
+      ]
+    },
+    {
+      "id": "void_shatter",
+      "name_zh": "破碎虚空",
+      "name_en": "void shatter / rift-tear emergence",
+      "aliases_zh": [
+        "裂空而出",
+        "撕裂虚空",
+        "破界",
+        "裂空",
+        "空间裂缝",
+        "破碎虚空"
+      ],
+      "aliases_en": [
+        "void shatter",
+        "rift tear",
+        "space crack"
+      ],
+      "category": "scifi_transform",
+      "camera_move": "推镜头",
+      "identity_risk": "high",
+      "subject_action": "一道垂直光裂纹撕开虚空，空间如镜面碎裂，裂口扩大，身影破界跨步而出。",
+      "fx_environment": "发光裂缝、玻璃/虚空碎片旋转外崩、空间折射色散、能量余烬、裂口内暗色负空间、气压尘浪。",
+      "timing": "5秒：蓄势2秒-碎裂1秒-出场升格2秒。",
+      "core_prompt_zh": "镜头运动：缓推接裂开瞬间急速推近/撞击变焦，微环绕；速度=先慢后爆再转升格；方向=正面推向裂缝、碎片向外辐射；起止=空中出现光缝→空间如镜面碎裂→人物自裂口跨步而出；主体=一道垂直光裂纹撕开虚空，身影破界而出；环境=裂口内暗色负空间、气压尘浪；特效=发光裂缝、玻璃/虚空碎片旋转外崩、空间折射色散、能量余烬；时基=蓄势2秒-碎裂1秒-出场升格2秒。",
+      "core_prompt_en": "A vertical seam of light splinters across empty air; the space fractures like shattering glass, mirror-like shards spinning outward with refraction and chromatic fringing, glowing embers and a pressure wave of dust. The rift widens onto dark negative space, and a figure strides out through the breach. Camera slowly pushes in, then crash-zooms on the crack and ramps to slow motion as shards float and the figure emerges; wide cinematic scale, dramatic backlight, high contrast.",
+      "negatives": [
+        "face morphing",
+        "identity break",
+        "extra limbs",
+        "mushy shard geometry",
+        "flickering",
+        "warping figure",
+        "incoherent portal interior",
+        "physics glitches",
+        "duplicated body"
+      ],
+      "use_when": "戏剧性登场/异次元降临/BOSS揭示。",
+      "avoid_when": "地面写实、需与实景连续性时。",
+      "platform_refs": [
+        "Higgsfield「DISINTEGRATION」/「MAGIC SPELL」/「STORM GIANT」",
+        "可灵 特效变换槽",
+        "(无官方破碎虚空同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/viral-presets",
+        "https://higgsfield.ai/blog/Higgsfield-VFX-Effects-Pack-to-the-Creator-Toolkit"
+      ]
+    },
+    {
+      "id": "aura_burst",
+      "name_zh": "气场爆发",
+      "name_en": "aura burst / realm-breakthrough shockwave",
+      "aliases_zh": [
+        "破境觉醒",
+        "破境",
+        "气场爆发",
+        "爆气",
+        "能量觉醒",
+        "气浪爆发"
+      ],
+      "aliases_en": [
+        "aura burst",
+        "power-up shockwave",
+        "awakening burst"
+      ],
+      "category": "scifi_transform",
+      "camera_move": "环绕",
+      "identity_risk": "high",
+      "subject_action": "角色蓄力低头→猛然抬头爆气，竖直光柱与扩散能量穹顶自体内爆发，发丝上扬双眼发光。",
+      "fx_environment": "径向地面冲击波环掀飞尘石、竖直能量光柱、升腾粒子余烬、身体轮廓辉光、地裂、体积光束与热浪扭曲。",
+      "timing": "5秒：蓄力2.5秒-瞬爆-冲击波穹顶扩散升格2秒。",
+      "core_prompt_zh": "镜头运动：缓推特写接爆发瞬间镜头震动+快速拉远/环绕；速度=蓄力慢、爆发瞬爆、冲击波扩散升格；方向=能量由主体向四周径向爆开、光柱竖直升腾；起止=角色蓄力低头→猛然抬头爆气→环形冲击波与光柱扩散；主体=人物破境觉醒，发丝上扬双眼发光；环境=地面尘石掀飞、体积光束、热浪扭曲；特效=径向地面冲击波环、竖直能量光柱、升腾粒子余烬、身体轮廓辉光、地裂；时基=蓄力2.5秒-瞬爆-穹顶扩散升格2秒。",
+      "core_prompt_en": "A character charges up, head bowed then snapping upward as a vertical pillar of aura and an expanding dome of energy erupt from the body; a radial ground shockwave ring blasts dust and stones outward, cloth and hair lift, eyes ignite, the ground cracks with volumetric god-rays and heat shimmer. Camera pushes in tight, then shakes and pulls back into a slight orbit as the shockwave expands; the burst hits in one frame then ramps to slow motion on the blooming energy dome, heroic low angle, cinematic backlight.",
+      "negatives": [
+        "face morphing",
+        "identity break",
+        "extra limbs",
+        "melting body",
+        "warping face during burst",
+        "flicker",
+        "duplicated character",
+        "mushy shockwave",
+        "incoherent particle swarm"
+      ],
+      "use_when": "突破/破境/觉醒高潮、转折揭示。",
+      "avoid_when": "细腻情感戏、对白、脸必须绝对稳定时。",
+      "platform_refs": [
+        "Higgsfield「Powder Explosion」/「Clone Explosion」/「SOUL FIGHTER」",
+        "可灵 特效爆发槽",
+        "(无官方破境同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/blog/Higgsfield-VFX-Effects-Pack-to-the-Creator-Toolkit",
+        "https://higgsfield.ai/viral-presets"
+      ]
+    },
+    {
+      "id": "dragon_reveal",
+      "name_zh": "巨龙盘旋",
+      "name_en": "giant dragon reveal / coiling dragon emergence",
+      "aliases_zh": [
+        "龙出场",
+        "巨龙",
+        "神龙盘旋",
+        "盘龙",
+        "巨龙盘旋",
+        "龙现"
+      ],
+      "aliases_en": [
+        "dragon reveal",
+        "coiling dragon",
+        "dragon emergence"
+      ],
+      "category": "creature_reveal",
+      "camera_move": "环绕",
+      "identity_risk": "low",
+      "subject_action": "东方巨龙于风暴云中盘旋游走、蜿蜒穿雾，龙首回转朝镜头睁眼咆哮。",
+      "fx_environment": "翻涌体积风暴云、分雾尾流、闪电微光、金色粒子、大气雾深、鳞片边缘辉光与闪电反光、余烬漂浮。",
+      "timing": "5秒：缓起2秒-环绕加速-龙首咆哮顿点定格。",
+      "core_prompt_zh": "镜头运动：低角度穿云缓推接环绕盘旋龙身、收于龙首正面特写；速度=庄严缓起、环绕中段加速、龙首转镜顿点；方向=镜头绕盘旋龙身弧线运动、龙首转向镜头；起止=云中隐现龙身→环绕盘旋巨龙→龙首回转睁眼咆哮；主体=东方巨龙于风暴云中盘旋游走、蜿蜒穿雾；环境=翻涌体积风暴云、分雾尾流、闪电微光、金色粒子、大气雾深；特效=鳞片边缘辉光与闪电反光、云雾撕裂、余烬漂浮；时基=缓起2秒-环绕加速-龙首咆哮顿点定格。",
+      "core_prompt_en": "A colossal Eastern dragon coils and circles amid churning volumetric storm clouds, its serpentine body weaving in and out of mist with a parted cloud wake, lightning flickering across glowing scales and golden embers drifting. The camera pushes low through cloud, sweeps in an orbit around the coiling body, then settles on a head-on close-up as the dragon's head swings toward camera, eyes opening and jaws parting in a roar; slow majestic reveal ramping to a punchy beat, wide anamorphic scale, atmospheric haze, cinematic rim light.",
+      "negatives": [
+        "extra limbs",
+        "duplicated heads",
+        "tangled/clipping body",
+        "morphing scales",
+        "rubbery neck physics",
+        "flicker",
+        "warping clouds",
+        "low-detail face",
+        "jitter"
+      ],
+      "use_when": "灵兽/神龙登场、召唤、史诗定场。",
+      "avoid_when": "人物身份关键镜、狭窄室内、需巨龙与演员精确交互时。",
+      "platform_refs": [
+        "Higgsfield「DRAGON FANTASY」/「SWORD AND SORCERY」",
+        "Pika 生物插入",
+        "可灵 图生视频生物动画"
+      ],
+      "sources": [
+        "https://higgsfield.ai/viral-presets",
+        "https://pika-art.net/effects/"
+      ]
+    },
+    {
+      "id": "phoenix_rebirth",
+      "name_zh": "凤凰浴火",
+      "name_en": "phoenix rebirth / nirvana immolation reveal",
+      "aliases_zh": [
+        "涅槃",
+        "凤凰涅槃",
+        "浴火重生",
+        "火凤",
+        "凤凰浴火",
+        "羽化重生"
+      ],
+      "aliases_en": [
+        "phoenix rebirth",
+        "nirvana",
+        "immolation reveal"
+      ],
+      "category": "creature_reveal",
+      "camera_move": "升降",
+      "identity_risk": "high",
+      "subject_action": "身影被烈焰吞没化为余烬，重塑为凤凰，展开炽焰双翼升空，羽化为火。",
+      "fx_environment": "包裹烈焰与余烬羽流、羽状火焰、灰烬上旋、热浪扭曲、熔金光辉、体积浓烟、辉光逆光与镜头光晕。",
+      "timing": "5秒：浴火2秒-重生强闪-展翅升腾升格2.5秒。",
+      "core_prompt_zh": "镜头运动：缓推火焰缠绕身影接上升摇臂仰拍、环绕展现全翼展；速度=阴燃慢起、涅槃瞬间强闪、振翅升腾升格；方向=火焰由内向外包裹、身形向上升腾展翅；起止=身影被烈焰吞没化为余烬→重塑为凤凰→展开炽焰双翼升空；主体=人物/凤凰浴火涅槃重生、羽化为火；环境=灰烬上旋、热浪扭曲、熔金光辉、体积浓烟；特效=包裹烈焰与余烬羽流、羽状火焰、辉光逆光与镜头光晕；时基=浴火2秒-重生强闪-展翅升腾升格2.5秒。",
+      "core_prompt_en": "A figure is engulfed in enveloping fire, momentarily dissolving into swirling embers, then re-forming and rising as a phoenix spreading blazing wings of feather-shaped flame, ash particles spiraling upward through heat distortion and molten golden light. Camera pushes in on the immolation, flares bright at the moment of rebirth, then cranes up and orbits into slow motion to reveal the full fiery wingspan ascending; radiant backlight, lens bloom, volumetric smoke, epic hero low angle, cinematic warmth.",
+      "negatives": [
+        "face morphing",
+        "identity break",
+        "extra limbs",
+        "malformed/duplicated wings",
+        "melting features",
+        "flicker",
+        "warping flames",
+        "mushy feather detail",
+        "physics glitches"
+      ],
+      "use_when": "重生/复活/蜕变高潮、女主飞升揭示。",
+      "avoid_when": "脸需在燃烧中保持锁定可辨、地面写实场景。",
+      "platform_refs": [
+        "Higgsfield「ENDING FAIRY」/「MAGIC SPELL」/「DISINTEGRATION」",
+        "可灵 特效变换槽",
+        "(无官方凤凰同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/viral-presets",
+        "https://academy.techpresso.co/prompts/higgsfield-prompts"
+      ]
+    },
+    {
+      "id": "nano_armor_assembly",
+      "name_zh": "纳米装甲合体",
+      "name_en": "nanotech armor assembly / suit-up",
+      "aliases_zh": [
+        "装甲合体",
+        "纳米装甲",
+        "装甲附身",
+        "合体变身",
+        "钢铁合体",
+        "装甲召唤"
+      ],
+      "aliases_en": [
+        "armor assembly",
+        "suit-up",
+        "nanotech armor"
+      ],
+      "category": "scifi_transform",
+      "camera_move": "仰角英雄推",
+      "identity_risk": "medium",
+      "subject_action": "角色微张双臂稳立，纳米装甲碎片自画外流向身体逐段包覆(脚→腿→躯干→臂→头盔)，面罩最后合拢、双眼与胸口反应堆同时点亮。",
+      "fx_environment": "液态金属纳米粒子、六边形拼装缝隙、缝隙熔融辉光、火花与热浪扭曲、体积尘埃、金属反射与冷光边缘光。",
+      "timing": "4-6秒：装甲飞附快、末段合拢定格一拍再点亮，各部位卡点节奏。",
+      "core_prompt_zh": "镜头运动：环绕弧线转正面英雄低角推进；速度=中速起手、合体末段速率骤减定格；方向=由外向内包裹、脚→腿→躯干→臂→头盔顺序；起止=中景站姿起、胸像锁定收；主体=角色微张双臂稳立，纳米装甲碎片自画外流向身体逐段包覆，面罩最后合拢、双眼与胸口反应堆同时点亮；环境=金属反射空间、冷光边缘光；特效=液态金属纳米粒子、六边形拼装缝隙、缝隙熔融辉光、火花与热浪扭曲、体积尘埃；时基=装甲飞附快、末段合拢定格一拍再点亮。",
+      "core_prompt_en": "A hero low-angle shot arcs to the front and pushes in as armor assembles. Nanite metal fragments streak in from off-frame and off the body, wrapping the standing character sequentially — feet, legs, torso, arms — hexagonal plates snapping into place with molten glowing seams, sparks and heat shimmer. The faceplate closes last and the eyes plus chest reactor ignite together. Speed ramps: fast plate flurry, then a hard settle and a brief freeze-beat before the glow. Reflective brushed metal, emissive rim light, thin volumetric dust.",
+      "negatives": [
+        "morphing face",
+        "identity break",
+        "extra limbs",
+        "floating disconnected plates",
+        "physics glitches",
+        "warping geometry",
+        "melting body",
+        "jitter",
+        "duplicate helmet"
+      ],
+      "use_when": "英雄揭示、产品化身装甲揭示、单人稳定的变身高潮。",
+      "avoid_when": "快速群体动作、多人同时合体、非人形主体。",
+      "platform_refs": [
+        "Higgsfield「ANDROID ASSEMBLE」/「Turning Metal + Eyes In」",
+        "可灵「王者归来」AI特效",
+        "(其余平台无同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/viral-presets",
+        "https://higgsfield.ai/collection/effects"
+      ]
+    },
+    {
+      "id": "mecha_transform",
+      "name_zh": "机甲变形",
+      "name_en": "mecha transformation (vehicle↔robot)",
+      "aliases_zh": [
+        "变形金刚",
+        "机甲变身",
+        "载具变形",
+        "变形合体",
+        "机甲变形"
+      ],
+      "aliases_en": [
+        "mecha transform",
+        "vehicle to robot",
+        "transformer"
+      ],
+      "category": "transformation",
+      "camera_move": "环绕",
+      "identity_risk": "low",
+      "subject_action": "车壳分裂旋转、底盘伸缩折叠、轮组化为四肢，机甲起身至直立姿态、头部锁定镜头。",
+      "fx_environment": "咬合机械面板、伺服活塞运动、金属火花、液压蒸汽、扬尘碎屑、painted metal 硬高光、工业反光地面。",
+      "timing": "5-8秒：分段机械级联展开(逐件折叠非同时)、中段加速、落地一记沉重定格。",
+      "core_prompt_zh": "镜头运动：3/4跟拍环绕推进、末段低仰摇臂升起；速度=折叠中段加速、成型落地减速定格；方向=车体面板沿机械转轴外翻重组、由载具态转直立机甲态；起止=行进/静止载具起、全身机甲正面站姿收；主体=车壳分裂旋转、底盘伸缩折叠、轮组化为四肢、机甲起身头部锁定镜头；环境=工业反光地面、扬尘；特效=咬合机械面板、伺服活塞运动、金属火花、液压蒸汽、碎屑、硬高光；时基=分段机械级联展开、落地一记沉重定格。",
+      "core_prompt_en": "A 3/4 tracking camera circles and pushes in, then cranes low-to-high as the vehicle transforms. Body panels split and rotate along mechanical pivots, the chassis folds and telescopes, wheels reconfigure into limbs, and the mecha rises to a full standing pose, head locking to camera. Motion is a staggered mechanical cascade — parts fold in sequence, accelerating through the mid-fold and decelerating into a heavy grounded settle. Metal-on-metal sparks, hydraulic steam, kicked-up dust, hard specular highlights on painted industrial metal.",
+      "negatives": [
+        "morphing organic blob",
+        "identity break",
+        "extra limbs",
+        "parts clipping through body",
+        "physics glitches",
+        "warping",
+        "melting metal",
+        "floating disconnected panels",
+        "mushy geometry"
+      ],
+      "use_when": "载具/机器人揭示、玩具或产品英雄变形、机甲动作片头。",
+      "avoid_when": "软性有机主体、遮住机械结构的贴脸近景、丢失折叠序列的快切。",
+      "platform_refs": [
+        "Pika 车变机器人工作流",
+        "Higgsfield「ANDROID ASSEMBLE」+运镜",
+        "Vidu Q2 参考生Pro",
+        "(无官方机甲变形卡)"
+      ],
+      "sources": [
+        "https://www.creativepadmedia.com/transformers-style-car-to-robot-change-using-pika-ai-and-chatgpt-ai/",
+        "https://higgsfield.ai/viral-presets"
+      ]
+    },
+    {
+      "id": "dust_disintegration",
+      "name_zh": "化尘消散",
+      "name_en": "disintegration / dust dissolve (Thanos-snap)",
+      "aliases_zh": [
+        "灭霸响指",
+        "化灰",
+        "消散",
+        "化尘",
+        "飞灰湮灭",
+        "化为尘埃"
+      ],
+      "aliases_en": [
+        "disintegration",
+        "dust dissolve",
+        "ash dissolve"
+      ],
+      "category": "transformation",
+      "camera_move": "推镜头",
+      "identity_risk": "medium",
+      "subject_action": "人物静止，身体自边缘/指尖开始崩解为细灰，逐层失去轮廓向内消融，随气流上扬飘散直至消失。",
+      "fx_environment": "细密飘灰与余烬、粒子上扬气流、逆光边缘光使尘粒发光、薄雾、地面阴影随质量减少淡出、哀婉调性。",
+      "timing": "3-5秒：延迟起手(先静一拍)、边缘向内溶解、缓出飘散、末端一缕余烬。",
+      "core_prompt_zh": "镜头运动：近锁定微漂移缓推/缓升；速度=慢速、消散前先静止一拍；方向=从边缘/指尖向内侵蚀、灰烬向上随风飘散；起止=完整人物静立起、空场余尘收；主体=人物静止，身体自边缘开始崩解为细灰，逐层失去轮廓向内消融直至消失；环境=薄雾、逆光边缘光使尘粒发光；特效=细密飘灰与余烬、粒子上扬气流、地面阴影随质量减少淡出；时基=延迟起手、边缘向内溶解、缓出飘散、末端一缕余烬。",
+      "core_prompt_en": "A near-locked camera drifts slowly inward. The figure holds still for a beat, then disintegration begins at the edges — fingertips and hairline — and travels inward, the body losing definition and converting to fine ash that lifts on a soft updraft and drifts away until gone. Backlit motes glow against thin haze; the ground shadow fades as mass reduces. Continuous edge-inward erosion, no sudden pop, ending on a final wisp. Muted, mournful grade.",
+      "negatives": [
+        "identity break before dissolve",
+        "extra limbs",
+        "sudden teleport-cut",
+        "chunky blocky breakup",
+        "physics glitches",
+        "warping face",
+        "morphing into another person",
+        "harsh explosion"
+      ],
+      "use_when": "情感性死亡/消失节拍、单主体、挽歌基调。",
+      "avoid_when": "喜剧节奏、主体需存活、繁杂背景遮住灰烬。",
+      "platform_refs": [
+        "Higgsfield「Disintegration」/「Raven Transition」",
+        "Pika「Crumble」/「Dissolve」Pikaffects",
+        "Pippit「Thanos Disintegration」"
+      ],
+      "sources": [
+        "https://higgsfield.ai/motion/4e981984-1cdc-4b96-a2b1-1a7c1ecb822d",
+        "https://www.pippit.ai/templates/thanos-disintegration-effect"
+      ]
+    },
+    {
+      "id": "liquid_metal_morph",
+      "name_zh": "液态金属",
+      "name_en": "liquid-metal morph (chrome/mercury reform)",
+      "aliases_zh": [
+        "液金变形",
+        "水银化形",
+        "chrome morph",
+        "液态金属",
+        "金属化形",
+        "汞化人形"
+      ],
+      "aliases_en": [
+        "liquid metal",
+        "chrome morph",
+        "mercury reform",
+        "T-1000"
+      ],
+      "category": "transformation",
+      "camera_move": "环绕",
+      "identity_risk": "high",
+      "subject_action": "铬/水银表面张力上拉成直立人形，涟漪扫过镜面五官渐清，锁定为实体并保持完美反射。",
+      "fx_environment": "完美铬反射水银、滚动表面涟漪、淡彩虹虹彩、无缝有机流动(一形融入下一形)、光线拉丝反射。",
+      "timing": "4-6秒：聚拢上升加速、涟漪定形微振、缓出静定镜面。",
+      "core_prompt_zh": "镜头运动：平滑慢速环绕/横移使镜面持续接不同角度光、末段微推；速度=上升加速、成型微振荡后缓出静定；方向=液态金属自地面/团块向上聚拢成人形；起止=水银团块起、完整镜面人形静立收；主体=铬/水银表面张力上拉成直立人形、涟漪扫过镜面五官渐清、锁定为实体并保持完美反射；环境=镜面反射空间、光线拉丝；特效=完美铬反射水银、滚动表面涟漪、淡彩虹虹彩、无缝有机流动；时基=聚拢上升加速、涟漪定形微振、缓出静定镜面。",
+      "core_prompt_en": "A smooth slow orbit keeps the reflective surface catching light from changing angles as a chrome-mercury puddle flows upward. Surface tension pulls it into a rising humanoid form; ripples travel across the mirror surface as features sharpen, then it settles into a solid figure holding perfect chrome reflections with subtle rainbow iridescence. Motion is seamless and organic — one form melting into the next — accelerating on the rise, micro-oscillating as features lock, easing out to a still reflective hold.",
+      "negatives": [
+        "identity break",
+        "extra limbs",
+        "matte non-reflective surface",
+        "broken reflections",
+        "physics glitches",
+        "warping",
+        "chunky breakup",
+        "jitter",
+        "texture swimming",
+        "seams"
+      ],
+      "use_when": "变形者/重塑揭示、单人、高镜面英雄镜。",
+      "avoid_when": "哑光或织物主体、无反射可衬托铬感的暗光、快动作。",
+      "platform_refs": [
+        "Higgsfield「Turning Metal」/「Turning Metal + Melting」/「Morphskin」",
+        "Runway Gen-4 液金 chrome-morph",
+        "(可灵/即梦无同名卡)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/collection/effects",
+        "https://higgsfield.ai/motion/6308a9a6-877d-4fb1-be21-481638833983"
+      ]
+    },
+    {
+      "id": "hyperspace_jump",
+      "name_zh": "超空间跳跃",
+      "name_en": "hyperspace jump / warp-speed light tunnel",
+      "aliases_zh": [
+        "时空隧道",
+        "曲速跳跃",
+        "超空间",
+        "光速跳跃",
+        "星际跳跃",
+        "超空间跳跃"
+      ],
+      "aliases_en": [
+        "hyperspace jump",
+        "warp speed",
+        "light tunnel"
+      ],
+      "category": "scifi_transform",
+      "camera_move": "穿越运镜",
+      "identity_risk": "low",
+      "subject_action": "静止星点骤然拉成白色长光条向画外飞掠，彩色能量隧道成形并被穿越。",
+      "fx_environment": "洋红/青色体积气云环绕、径向运动模糊向中心灭点汇聚、镜头泛光与色散、能量丝线。",
+      "timing": "3-5秒：近静一拍→跳跃速率骤增→持续高速冲刺→抵达白爆。",
+      "core_prompt_zh": "镜头运动：第一人称锁定沿Z轴前冲、由静到爆发加速的跳跃感；速度=先静一拍后骤然极速；方向=正前方冲入汇聚灭点隧道；起止=静止星点起、光隧道穿行(可白光爆闪收)；主体=星点骤然拉成白色长光条向画外飞掠、彩色能量隧道成形并被穿越；环境=洋红/青色体积气云环绕、径向运动模糊向中心灭点汇聚；特效=白色光迹拉丝、镜头泛光与色散、能量丝线；时基=近静起手、跳跃速率骤增、持续高速冲刺、抵达白爆。",
+      "core_prompt_en": "A locked first-person POV plunges forward on the Z-axis. A near-still starfield holds for a beat, then snaps into hyper-speed: stars stretch into long white light streaks rushing past the frame edges, magenta and cyan volumetric gas clouds billow around the frame, and radial motion-blur streaks converge to a central vanishing point forming an energy tunnel the camera flies through. Lens bloom and chromatic aberration peak at maximum speed, ending on an optional white-out flash. Extreme forward acceleration.",
+      "negatives": [
+        "identity break",
+        "visible characters",
+        "side-to-side drift",
+        "static frame",
+        "warping geometry",
+        "stuttering",
+        "physics glitches",
+        "muddy low-contrast streaks",
+        "off-center vanishing point"
+      ],
+      "use_when": "转场/门户、科幻旅行节拍、无人物高能片头。",
+      "avoid_when": "以人物为主的镜、对白、需稳定可读环境时。",
+      "platform_refs": [
+        "revid「Space Travel / Cinematic Warp Speed」",
+        "Sora/Veo/Kling 通用曲速隧道提示",
+        "(无官方同名卡)"
+      ],
+      "sources": [
+        "https://www.revid.ai/make/space-travel",
+        "https://lzyprompt.com/blog/ai-video-camera-movement-prompts/"
+      ]
+    },
+    {
+      "id": "time_freeze_walkthrough",
+      "name_zh": "时间静止走过",
+      "name_en": "time-freeze walkthrough (time-stop POV)",
+      "aliases_zh": [
+        "时间静止",
+        "时停行走",
+        "世界定格",
+        "时间冻结走过",
+        "唯我能动",
+        "时停穿行"
+      ],
+      "aliases_en": [
+        "time freeze walkthrough",
+        "time stop",
+        "frozen world walk"
+      ],
+      "category": "time_manip",
+      "camera_move": "跟拍",
+      "identity_risk": "medium",
+      "subject_action": "全场人物与物体彻底定格于动作中途(半步/溅水瞬间)，仅一名主体正常行走穿行其间、绕过定格人物。",
+      "fx_environment": "悬浮的粒子/水滴/碎屑凝滞半空、静止人群衣发不动、世界端轻微去饱和凝滞调、行走者保持自然运动对比。",
+      "timing": "5-8秒：全程实时无速率变化，静止世界与自然速度行者的对比即为核心，粒子完全静止。",
+      "core_prompt_zh": "镜头运动：自由滑行斯坦尼康穿越静止场景(镜头动、世界不动)或随行走者平滑推移；速度=行走者与镜头保持自然真实速率、其余全静；方向=从静止人群/悬浮物间穿行绕过；起止=行人步入静止世界起、穿过定格场景收；主体=全场人物与物体彻底定格于动作中途(半步/溅水瞬间)，仅一名主体正常行走穿行其间；环境=悬浮的粒子/水滴/碎屑凝滞半空、静止人群衣发不动；特效=世界端轻微去饱和凝滞调、行走者保持自然运动对比；时基=全程实时无速率变化，静止世界与自然速度行者的对比即为核心，粒子完全静止。",
+      "core_prompt_en": "A free-gliding steadicam moves continuously through a completely frozen scene — the camera and one subject keep moving while everything else is stopped. Every person and object is frozen mid-motion: a crowd caught mid-step, water droplets and debris suspended motionless in the air, cloth and hair static. One subject walks normally at natural speed, weaving between the frozen figures. The frozen world carries a slightly desaturated 'held' grade against the mover's natural motion. Real-time throughout, no speed-ramp — the contrast of a static world and one natural-speed walker is the effect.",
+      "negatives": [
+        "everyone moving",
+        "subtle drift on frozen figures",
+        "twitching particles",
+        "identity break",
+        "extra limbs",
+        "physics glitches",
+        "warping",
+        "background motion",
+        "slow-motion on the mover",
+        "morphing"
+      ],
+      "use_when": "唯我能动的英雄时刻、揭示走位、人群中唯一行动者。",
+      "avoid_when": "无明确单一主体、需环境氛围运动、无可对比定格物的贴脸近景。",
+      "platform_refs": [
+        "即梦 时间静止(Seedance 2.0)",
+        "Media.io / Morphic AI Time Freeze",
+        "(可灵/Runway/Pika 走提示)"
+      ],
+      "sources": [
+        "https://www.media.io/ai/reference-to-video/ai-time-stop-video-effect",
+        "https://morphic.com/resources/videos/time-freeze-effect-videos"
+      ]
+    },
+    {
+      "id": "liquid_splash",
+      "name_zh": "液体飞溅",
+      "name_en": "liquid splash & pour (product hero)",
+      "aliases_zh": [
+        "饮料倾倒",
+        "液体倾倒",
+        "飞溅",
+        "液体飞溅",
+        "泼溅",
+        "水花四溅"
+      ],
+      "aliases_en": [
+        "liquid splash",
+        "pour splash",
+        "crown splash"
+      ],
+      "category": "product_commercial",
+      "camera_move": "推镜头",
+      "identity_risk": "medium",
+      "subject_action": "饮料从瓶/罐向下倾倒，液柱击打杯口/冰块，围绕产品炸开对称皇冠状飞溅，水珠悬浮回落。",
+      "fx_environment": "高帧慢动作液体、皇冠状 splash crown、悬浮水珠与气泡、逆光透射的琥珀/透明液体、湿面反光与飞溅微雾。",
+      "timing": "4-6秒：注-炸-悬-落；倾倒常速→撞击瞬间120-240fps慢放→末尾轻回速。",
+      "core_prompt_zh": "镜头运动：低角度缓推+15°微弧环绕；速度=推轨慢速、液体高速慢动作；方向=自上而下倾倒、飞溅向外放射；起止=起于瓶口出液、止于水珠悬浮回落；主体=产品瓶身居中不变形，饮料倾入杯中；环境=纯色柔光背景、湿润台面反光；特效=皇冠状飞溅、悬浮水珠气泡、逆光液体透射；时基=倾倒常速→撞击瞬间120-240fps慢放→末尾轻回速。",
+      "core_prompt_en": "Low-angle slow dolly-in with a 15 degree arc around a product bottle, 85mm compressed shallow focus. A drink pours top-down, the stream strikes the glass and bursts into a symmetrical radial crown splash, droplets and bubbles suspended in air, backlit translucent amber liquid, wet reflective surface, clean soft-lit studio backdrop. Speed-ramps from normal pour to 120-240fps ultra slow-motion at impact, then a slight resume as droplets fall. Product geometry stays rigid and photoreal.",
+      "negatives": [
+        "warped product geometry",
+        "morphing bottle/label",
+        "flicker",
+        "physics glitches",
+        "liquid clipping through glass",
+        "disappearing droplets",
+        "identity/shape drift",
+        "jittery splash"
+      ],
+      "use_when": "饮料/酒水/水基护肤的爽感英雄镜、动感+高级感电商主图视频。",
+      "avoid_when": "产品含复杂文字logo需绝对清晰、干态电子/机械产品。",
+      "platform_refs": [
+        "可灵「SplashSplash / Water」单图特效卡",
+        "Higgsfield「Liquid Morph」",
+        "(即梦/Runway/Pika 走提示)"
+      ],
+      "sources": [
+        "https://piapi.ai/docs/kling-api/kling-effects",
+        "https://astorie.ai/en/prompts/video/product-ad-prompts"
+      ]
+    },
+    {
+      "id": "cosmetic_application",
+      "name_zh": "化妆品涂抹",
+      "name_en": "cosmetic application macro",
+      "aliases_zh": [
+        "口红特写",
+        "涂抹特写",
+        "膏体涂抹",
+        "化妆品涂抹",
+        "上妆特写",
+        "质地拉丝"
+      ],
+      "aliases_en": [
+        "cosmetic application",
+        "lipstick swatch",
+        "cream smear macro"
+      ],
+      "category": "macro_intimate",
+      "camera_move": "移镜头",
+      "identity_risk": "high",
+      "subject_action": "口红管旋出膏体特写，膏尖触及唇/皮肤划出饱和色 swatch，或膏霜被指腹抹开呈现绵密质地。",
+      "fx_environment": "高光泽膏体反光、绵密/珠光质地、丝滑拉丝、皮肤微绒毛与湿润高光、柔和棚光边缘光。",
+      "timing": "3-5秒：旋出-触及-拉开-质地定格特写；48-60fps轻慢放、无冻结、收尾缓停于质地。",
+      "core_prompt_zh": "镜头运动：100mm微距缓慢横移并轻推近；速度=极慢跟随、动作近实时；方向=沿涂抹路径横向拉开；起止=起于膏尖触及、止于色块质地铺满画面；主体=口红膏体/面霜涂抹于唇或肌肤，质地绵密饱和；环境=柔光棚拍、干净背景、湿润高光；特效=膏体光泽反光、丝滑拉丝、珠光质感、皮肤细腻绒感；时基=48-60fps轻慢放、无冻结、收尾缓停于质地。",
+      "core_prompt_en": "100mm macro, extreme shallow depth of field, slow lateral tracking with a gentle push-in following the application path. A lipstick bullet twists out and its tip touches the lip drawing a saturated satin swatch, or a cream is smoothed by a fingertip revealing a rich whipped texture. Soft studio key with rim light, glossy specular highlights on the balm, silky drag lines, fine skin detail, clean background. Near-real-time 48-60fps, no freeze, easing to a stop on the texture.",
+      "negatives": [
+        "warped product geometry",
+        "morphing lip/skin",
+        "uncanny finger anatomy",
+        "flicker",
+        "smeared/melting texture",
+        "identity/shape drift",
+        "color banding"
+      ],
+      "use_when": "口红/唇釉/面霜/精华质地种草与卖点特写。",
+      "avoid_when": "需展示真人明星脸部识别、大幅镜头运动的动感广告。",
+      "platform_refs": [
+        "LightX 等美妆提示词模板",
+        "Runway product/beauty 配方",
+        "(无确认的 Cosmetic Application 命名预设)"
+      ],
+      "sources": [
+        "https://www.lightxeditor.com/blog/ai-cosmetic-video-prompts/",
+        "https://runwayml.com/ai-for-ads"
+      ]
+    },
+    {
+      "id": "exploded_assembly",
+      "name_zh": "产品分解组装",
+      "name_en": "exploded-view assembly (teardown / reassemble)",
+      "aliases_zh": [
+        "爆炸图",
+        "分解组装",
+        "拆解组装",
+        "爆炸视图",
+        "产品分解组装",
+        "零件分解"
+      ],
+      "aliases_en": [
+        "exploded view",
+        "teardown assembly",
+        "reassemble"
+      ],
+      "category": "product_commercial",
+      "camera_move": "环绕",
+      "identity_risk": "medium",
+      "subject_action": "产品沿各自轴向分离成悬浮爆炸视图层，零件在空中定格/微旋，随后精准回吸重新组装归位。",
+      "fx_environment": "零件悬浮、轴向分解引导线感、精密机械/金属反光、干净等距或棚光、轻微景深空气感。",
+      "timing": "4-6秒：分解1.5s→悬浮定格微旋1s→回吸组装1.5s、匀速无速度突变。",
+      "core_prompt_zh": "镜头运动：匀速水平环绕轨道、中焦保持全貌；速度=平稳匀速；方向=零件沿各自轴向向外分离再回吸；起止=起于完整产品、经悬浮爆炸视图、止于重新组装归位；主体=产品精密拆解为悬浮层、零件不变形；环境=干净纯色/等距棚光、金属反光；特效=悬浮爆炸视图、轴向分解、精密回吸对齐；时基=分解1.5s→悬浮定格微旋1s→组装1.5s、匀速无速度突变。",
+      "core_prompt_en": "Steady constant-speed orbit around a product, 40mm mid lens keeping the whole object framed. The product separates along each part's axis into a floating exploded view, components hover and slowly rotate in mid-air, then precisely retract and reassemble into place. Clean seamless studio/isometric lighting, crisp metallic reflections, subtle depth-of-field. Three beats — explode 1.5s, hover 1s, reassemble 1.5s — smooth and mechanically exact.",
+      "negatives": [
+        "warped/morphing parts",
+        "mismatched reassembly",
+        "parts clipping/overlapping",
+        "flicker",
+        "physics glitches",
+        "extra or missing components",
+        "identity/shape drift"
+      ],
+      "use_when": "3C电子/机械/家电/手表的结构与工艺卖点展示。",
+      "avoid_when": "软性无内部结构产品(饮料、化妆膏体)、有机形态主体。",
+      "platform_refs": [
+        "Media.io「AI Exploded View Generator」",
+        "(Kling/Runway/即梦无命名玩法)"
+      ],
+      "sources": [
+        "https://www.media.io/ai/effect/create/ai-exploded-view",
+        "https://kling.ai/blog/best-ai-video-generator-2026-kling-ai"
+      ]
+    },
+    {
+      "id": "perfume_mist",
+      "name_zh": "香水雾化",
+      "name_en": "perfume mist / atomized bloom",
+      "aliases_zh": [
+        "香水喷雾",
+        "雾化绽放",
+        "喷雾绽放",
+        "香雾",
+        "香水雾化",
+        "雾化"
+      ],
+      "aliases_en": [
+        "perfume mist",
+        "atomized bloom",
+        "spray plume"
+      ],
+      "category": "product_commercial",
+      "camera_move": "推镜头",
+      "identity_risk": "medium",
+      "subject_action": "香水瓶喷头触发，向斜上方喷出扇形雾柱，雾气在逆光中呈粒子云绽放扩散并缓缓消散，花瓣/光尘漂浮。",
+      "fx_environment": "逆光体积雾、气溶胶粒子云、丁达尔光束、悬浮微粒与花瓣、玻璃瓶折射高光、柔和渐变背景。",
+      "timing": "4-6秒：喷-绽-弥-散；喷发常速→90-120fps慢放绽放→缓速消散。",
+      "core_prompt_zh": "镜头运动：85mm微推近乎静止、浅焦锁瓶身；速度=机位极慢、雾化高帧慢放；方向=喷头向斜上扇形喷出、雾柱向外绽放扩散；起止=起于喷发瞬间、止于雾气弥漫消散；主体=香水瓶身居中不变形、喷头出雾；环境=逆光柔和渐变背景、丁达尔光束、悬浮花瓣光尘；特效=体积雾粒子云绽放、气溶胶扩散、玻璃折射高光；时基=喷发常速→90-120fps慢放绽放→缓速消散。",
+      "core_prompt_en": "85mm near-static slow push-in, shallow focus locked on the bottle. The atomizer fires and a fan-shaped mist plume sprays up and outward, blooming as a backlit volumetric particle cloud that expands and softly dissipates, with god rays, floating petals and light dust, glass refraction highlights, soft gradient backdrop. Speed-ramps from normal at the spray to 90-120fps slow-motion during the bloom, easing as the mist fades.",
+      "negatives": [
+        "warped/morphing bottle",
+        "unnatural mist that looks like smoke/fire",
+        "flicker",
+        "particle popping",
+        "physics glitches",
+        "identity/shape drift",
+        "muddy fog"
+      ],
+      "use_when": "香水/身体喷雾/空气香氛的高级感雾化绽放氛围镜。",
+      "avoid_when": "需清晰产品结构与文字、明亮无逆光的场景。",
+      "platform_refs": [
+        "Higgsfield「liquid morph / particle bloom」类",
+        "(可灵/即梦/Runway/Pika 无同名卡)"
+      ],
+      "sources": [
+        "https://astorie.ai/en/prompts/video/product-ad-prompts",
+        "https://higgsfield.ai/viral-presets"
+      ]
+    },
+    {
+      "id": "glass_shatter_freeze",
+      "name_zh": "玻璃破碎定格",
+      "name_en": "glass / ice shatter freeze",
+      "aliases_zh": [
+        "碎裂定格",
+        "冰裂定格",
+        "破碎悬停",
+        "玻璃破碎定格",
+        "碎片悬浮",
+        "击碎冻结"
+      ],
+      "aliases_en": [
+        "glass shatter freeze",
+        "ice shatter",
+        "frozen shards"
+      ],
+      "category": "action_impact",
+      "camera_move": "环绕",
+      "identity_risk": "medium",
+      "subject_action": "玻璃/冰面被击碎，碎片在空中完全静止悬浮，相机绕行揭示每片碎屑的反光切面，随后产品从碎片中显现。",
+      "fx_environment": "悬浮玻璃/冰晶碎片、每片折射高光与焦散、微尘颗粒、冷调逆光、锋利切面反光、暗背景。",
+      "timing": "3-4秒：击-冻-绕-显；冲击瞬间冻结、碎片零速悬浮、仅相机运动、末尾可轻解冻。",
+      "core_prompt_zh": "镜头运动：匀速环绕轨道绕行冻结主体、35-50mm；速度=相机匀速运动、主体与碎片完全冻结零速；方向=碎片向外放射悬浮、相机绕行360°弧；起止=起于击碎冲击瞬间定格、止于产品自碎片中显现；主体=玻璃/冰完全静止悬浮、产品不变形；环境=冷调逆光、暗背景、微尘颗粒；特效=悬浮玻璃冰晶碎片、每片折射高光焦散、锋利切面反光；时基=冲击瞬间冻结、碎片零速悬浮、仅相机运动、末尾可轻解冻。",
+      "core_prompt_en": "Constant-speed orbital arc around a completely frozen subject, 40mm. Glass or ice shatters and every shard is fully suspended and motionless in mid-air; only the camera moves, sweeping 360 degrees to reveal each shard's refractive facet, caustics and specular highlights, cold backlight, dark background, fine dust particles, before the product emerges from the frozen debris. Bullet-time freeze — shards at zero velocity, camera-only motion, optional slight thaw at the end. Product geometry stays rigid.",
+      "negatives": [
+        "warped product geometry",
+        "morphing shards",
+        "shards drifting/moving during freeze",
+        "flicker",
+        "physics glitches",
+        "melting/blobby glass",
+        "identity/shape drift",
+        "camera stutter"
+      ],
+      "use_when": "冷冽高冲击感的产品揭示——烈酒、香水、手表、科技/冰饮英雄镜。",
+      "avoid_when": "温暖柔性调性、需真人面部一致性的镜头。",
+      "platform_refs": [
+        "可灵「Bullet Time」+「粒子碎裂」",
+        "Higgsfield「Freezing」/「Diamond」",
+        "Pollo AI「Glass Breaking」"
+      ],
+      "sources": [
+        "https://higgsfield.ai/blog/Higgsfield-Effects-Pack-4-Blockbuster-VFX",
+        "https://pollo.ai/video-effects/ai-glass-breaking-video-generator"
+      ]
+    },
+    {
+      "id": "daynight_timelapse",
+      "name_zh": "昼夜流逝",
+      "name_en": "day-to-night / seasonal time-lapse",
+      "aliases_zh": [
+        "四季变换",
+        "昼夜变换",
+        "时间流逝",
+        "日夜延时",
+        "昼夜流逝",
+        "四季流逝"
+      ],
+      "aliases_en": [
+        "day to night timelapse",
+        "seasonal transition",
+        "holy grail timelapse"
+      ],
+      "category": "environment_time",
+      "camera_move": "固定机位",
+      "identity_risk": "low",
+      "subject_action": "同一棵树与山丘/建筑/街道保持不动，太阳弧线扫过、阴影旋转、天空蓝→金→暮→星夜；或绿叶→秋金→落叶积雪→复绿。",
+      "fx_environment": "太阳/阴影扫动、暖冷色温坡道、云streak流动、暮色窗灯逐一亮起、积雪与消融、落叶、花开。",
+      "timing": "5-10秒延时压缩，一天/一年浓缩；平滑连续坡道、无跳切、24-30fps。",
+      "core_prompt_zh": "镜头运动：三脚架锁定/极缓推近；速度=延时压缩，一天/一年浓缩为8秒；方向=固定不动，仅光影与季节变化；起止=清晨蓝调→正午→金色黄昏→星空夜；主体=同一棵树与山丘保持不动、位置形状恒定；环境=太阳弧线扫过、阴影旋转、云streak流动、暮色中窗灯逐一亮起、（四季版）绿叶→秋金→落叶积雪→复绿；特效=色温从冷到暖再到冷平滑过渡、云层拉丝、星轨初现；时基=timelapse连续无缝、无跳切。",
+      "core_prompt_en": "Locked tripod time-lapse (or imperceptible slow push-in) of a single fixed subject — a lone tree on a hill and the skyline behind it — while one full day compresses into 8 seconds: dawn blue hour into golden noon into fiery dusk into star-lit night, the sun visibly arcing across the sky, shadows sweeping around the subject, clouds streaking as soft trails, and city window-lights igniting one by one at nightfall; color temperature ramps cool-warm-cool smoothly, no cuts, continuous seamless time-lapse. Seasonal variant: the same tree cycles green summer, golden autumn, bare snow-covered winter, then spring bloom.",
+      "negatives": [
+        "subject drifting/morphing",
+        "tree changing shape or count",
+        "buildings warping",
+        "flicker/strobing between frames",
+        "jump cuts",
+        "sun jumping position",
+        "melting geometry",
+        "camera shake"
+      ],
+      "use_when": "定场镜、时间流逝/情绪蒙太奇、地标或风景英雄镜。",
+      "avoid_when": "主体需精细动作、脸/身份需锁定、需对白时长(延时破坏对口型)。",
+      "platform_refs": [
+        "可灵 timelapse 提示(日光延时示例)",
+        "Sora 2 / Veo 3.1 time-lapse over one day",
+        "(能力内置文生视频,无同名按钮)"
+      ],
+      "sources": [
+        "https://www.aigc.cn/kling-ai",
+        "https://soprompts.com/blog/sora-2-slow-motion-timelapse"
+      ]
+    },
+    {
+      "id": "growth_timelapse",
+      "name_zh": "生长延时",
+      "name_en": "growth / blooming time-lapse",
+      "aliases_zh": [
+        "绽放延时",
+        "生长延时",
+        "开花延时",
+        "植物生长",
+        "花开延时",
+        "破土生长"
+      ],
+      "aliases_en": [
+        "growth timelapse",
+        "blooming timelapse",
+        "phytography"
+      ],
+      "category": "environment_time",
+      "camera_move": "推镜头",
+      "identity_risk": "low",
+      "subject_action": "单株花朵从含苞到怒放：茎伸展、叶片展开、花瓣螺旋绽放，结构连贯不增不减。",
+      "fx_environment": "柔和侧逆光、体积光、花粉尘埃漂浮、露珠凝结、背景虚化、饱和度随绽放渐浓。",
+      "timing": "4-8秒生长延时：先慢后快再定住(有机加速)、盛开定格。",
+      "core_prompt_zh": "镜头运动：微距缓推/缓升跟随生长顶点；速度=生长延时，数小时压缩为6秒，先慢后快再定住；方向=自下而上跟随茎尖；起止=紧闭花苞→茎伸展→叶片展开→花瓣螺旋绽放至盛开；主体=单株花朵从含苞到怒放、结构连贯不增不减；环境=柔和侧逆光、体积光、花粉尘埃漂浮、露珠凝结、背景虚化；特效=花瓣舒展物理自然、饱和度随绽放渐浓；时基=timelapse平滑加速缓动。",
+      "core_prompt_en": "Macro time-lapse, shallow depth of field, slow push-in that rises with the growing tip: a single flower unfurls from a tight closed bud — stem elongating, leaves splaying open, petals spiraling outward from center to a full open bloom over what feels like hours compressed into 6 seconds; soft backlit key with volumetric light, pollen and dust motes drifting through the beam, dew beading on the petals, creamy bokeh background, saturation blooming richer as it opens; organic ease-in-then-accelerate motion, settling on the full flower, seamless time-lapse.",
+      "negatives": [
+        "petals morphing into wrong shapes",
+        "extra flowers popping in",
+        "jitter/flicker",
+        "stem kinking or teleporting",
+        "plastic/melting texture",
+        "backwards growth",
+        "warping geometry"
+      ],
+      "use_when": "自然/美妆/产品揭示隐喻、片头、象征新生/焕新的转场。",
+      "avoid_when": "需精确植物学准确度、主体需与人物交互。",
+      "platform_refs": [
+        "即梦 图生视频生长关键词",
+        "Sora 2 blooming time-lapse",
+        "Pika 2.5 / Kling speed-ramp+timelapse"
+      ],
+      "sources": [
+        "https://zhuanlan.zhihu.com/p/24784609916",
+        "https://soprompts.com/blog/sora-2-slow-motion-timelapse"
+      ]
+    },
+    {
+      "id": "tiltshift_miniature",
+      "name_zh": "移轴微缩",
+      "name_en": "tilt-shift miniature (fake-miniature / diorama)",
+      "aliases_zh": [
+        "移轴微缩",
+        "假微缩",
+        "玩具微缩",
+        "微缩模型",
+        "移轴",
+        "diorama"
+      ],
+      "aliases_en": [
+        "tilt-shift miniature",
+        "fake miniature",
+        "diorama effect"
+      ],
+      "category": "scale_world",
+      "camera_move": "顶视俯拍",
+      "identity_risk": "low",
+      "subject_action": "真实车流人流像微缩玩具模型般穿行；繁忙十字路口/港口/体育场的微观活动。",
+      "fx_environment": "移轴——上下渐变模糊仅中间一条水平清晰带、极浅景深、色彩饱和对比拉高呈糖果玩具质感、正午硬光。",
+      "timing": "4-6秒：回放加速约1.5倍强化玩具感、节奏匀速。",
+      "core_prompt_zh": "镜头运动：高机位俯拍/大俯角，静止或极缓平移；速度=回放加速1.5倍强化玩具感；方向=俯视锁定；起止=繁忙十字路口全貌；主体=真实车流人流像微缩玩具模型般穿行；环境=移轴效果——画面上下渐变模糊、仅中间一条水平清晰带、极浅景深、色彩饱和对比拉高呈糖果玩具质感、正午硬光；特效=tilt-shift假微缩、diorama布景感；时基=轻微快放、节奏匀速。",
+      "core_prompt_en": "High elevated bird's-eye angle looking steeply down on a busy city intersection so the whole scene reads as a tiny toy diorama; tilt-shift effect with extreme shallow depth of field — only a thin horizontal band across the middle is sharp while the top and bottom fall off into gradient blur; saturation and contrast pushed for a candy-colored model-kit look, crisp midday light; real cars and pedestrians scurry through like miniature figures, playback nudged to ~1.5x to exaggerate the toy-like bustle; static locked camera, 5 seconds.",
+      "negatives": [
+        "full-frame sharpness (kills the effect)",
+        "faces resolving into real detail",
+        "warping cars",
+        "flicker",
+        "camera shake",
+        "blur band drifting/breathing",
+        "melting buildings"
+      ],
+      "use_when": "城市景观、活动、交通枢纽、俏皮/趣味品牌片、转场。",
+      "avoid_when": "英雄人物近景、低机位、需观众与面部情感连接时。",
+      "platform_refs": [
+        "跨平台走提示 tilt-shift miniature",
+        "Runway/Kling/Sora/Pika 均支持",
+        "(无官方同名卡)"
+      ],
+      "sources": [
+        "https://pxz.ai/blog/best-ai-image-to-video-prompts",
+        "https://www.midastools.co/blog/ai-video-prompts-sora-runway-2026"
+      ]
+    },
+    {
+      "id": "astro_timelapse",
+      "name_zh": "星空银河延时",
+      "name_en": "astro / milky-way time-lapse",
+      "aliases_zh": [
+        "银河延时",
+        "星轨延时",
+        "星空延时",
+        "星河流转",
+        "星空银河延时",
+        "银河拱桥"
+      ],
+      "aliases_en": [
+        "milky way timelapse",
+        "star trail",
+        "astro timelapse"
+      ],
+      "category": "environment_time",
+      "camera_move": "固定机位",
+      "identity_risk": "low",
+      "subject_action": "群星与银河带缓慢转动划过天穹，银河核心升起或横扫，偶有流星；剪影前景保持黑暗不动。",
+      "fx_environment": "致密星空、银河核心尘带发光、地平线气辉绿紫渐变、剪影山峦/孤树、云层微动被下方灯光映亮、流星闪。",
+      "timing": "6-10秒延时：整夜压缩、平滑连续旋转、匀速、24fps。",
+      "core_prompt_zh": "镜头运动：三脚架锁定+静态剪影前景，或缓慢横移动态延时制造视差；速度=整夜压缩为8秒延时；方向=群星与银河带缓慢转动划过天穹；起止=银河核心升起→横扫过天顶；主体=剪影化的山峦/孤树前景保持黑暗不动；环境=致密星空、银河核心尘带发光、地平线气辉绿紫渐变、偶有流星划过、云层微动被下方灯光映亮；特效=星辰同心旋转、银河拱桥；时基=timelapse平滑连续无频闪。",
+      "core_prompt_en": "Locked wide-angle tripod astro time-lapse with a dark silhouetted foreground — a jagged mountain ridge and a lone tree that stay perfectly still and black — while the entire star field and the glowing Milky Way band wheel slowly across the sky over one compressed night (about 8 seconds); the Milky Way core glows with visible dust lanes, faint green-magenta airglow gradients sit on the horizon, an occasional meteor streaks through, and low clouds drift lit faintly from below; smooth continuous rotation, no flicker, seamless time-lapse. Optional slow lateral motion-timelapse slide for parallax against the foreground.",
+      "negatives": [
+        "foreground drifting/morphing",
+        "stars strobing or popping in/out",
+        "flicker between frames",
+        "Milky Way warping/duplicating",
+        "blown-out noisy sky",
+        "camera shake",
+        "sun-like brightness"
+      ],
+      "use_when": "史诗风景定场、静谧/敬畏氛围、开场或收尾节拍。",
+      "avoid_when": "需明亮场景、快动作、低光下需细节/身份的主体。",
+      "platform_refs": [
+        "跨平台走 milky way time-lapse 提示",
+        "Kling / Sora / Runway timelapse",
+        "(无官方同名卡)"
+      ],
+      "sources": [
+        "https://www.galactic-hunter.com/post/milky-way-time-lapse",
+        "https://soprompts.com/blog/sora-2-slow-motion-timelapse"
+      ]
+    },
+    {
+      "id": "city_destruction",
+      "name_zh": "末日城市毁灭",
+      "name_en": "apocalyptic city destruction",
+      "aliases_zh": [
+        "城市毁灭",
+        "末日毁灭",
+        "楼群坍塌",
+        "末日城市毁灭",
+        "灾难毁城",
+        "天崩地裂"
+      ],
+      "aliases_en": [
+        "city destruction",
+        "building collapse",
+        "apocalypse"
+      ],
+      "category": "scale_world",
+      "camera_move": "无人机航拍",
+      "identity_risk": "medium",
+      "subject_action": "摩天楼弯折粉碎式坍塌、冲击波依次推倒建筑，(可选)水墙/火风暴吞没城市，碎屑尘云弥漫。",
+      "fx_environment": "翻滚尘埃碎石云、反应式物理落石、火焰浓烟柱、冲击波扭曲、风暴橙色天、破窗火光闪烁、灰烬飘落。",
+      "timing": "5-8秒：实时转0.6倍慢动作凸显碎屑、张力递进后爆发再落尘、可speed-ramp进冲击。",
+      "core_prompt_zh": "镜头运动：影视级无人机缓推/三维环绕天际线，或地面FPV冲向坍塌高楼；速度=坍塌瞬间降为0.6倍慢动作凸显碎屑、冲击前加速；方向=推近至毁灭中心；起止=完整城市天际线→冲击波扫过→楼群连续坍缩→尘云弥漫；主体=摩天楼弯折粉碎式坍塌、冲击波依次推倒建筑、（可选）水墙/火风暴吞没城市；环境=翻滚尘埃碎石云、反应式物理落石、火焰浓烟柱、风暴橙色天、破窗火光闪烁、灰烬飘落；特效=冲击波扭曲、玻璃爆裂、debris粒子；时基=实时转慢动作、张力递进后爆发再落尘。",
+      "core_prompt_en": "Cinematic drone push-in slowly orbiting a modern city skyline at storm-dark dusk when catastrophe hits: a shockwave rips outward and skyscrapers buckle and pancake-collapse one after another, a colossal rolling wall of dust and debris billows through the streets with reactive physics, fire and black smoke plumes erupt, glass shatters and embers rain down under an orange apocalyptic sky; the collapse slows to ~0.6x slow motion to savor the cascading rubble, slight handheld shake on the impact beat, then settling dust. Wide anamorphic cinematic look, 7 seconds.",
+      "negatives": [
+        "buildings melting instead of fracturing",
+        "rubble floating/no gravity",
+        "duplicated or morphing structures",
+        "debris looping",
+        "physics glitches",
+        "smoke flickering",
+        "geometry warping",
+        "cartoonish explosion"
+      ],
+      "use_when": "灾难/科幻/动作奇观、预告高潮、世界危亡定场。",
+      "avoid_when": "需可辨的真实城市/地标(身份+敏感风险)、画面中有特定人物。",
+      "platform_refs": [
+        "Higgsfield「Building Explosion + Disintegration」/「Atomic」/「Explosion」",
+        "可灵 碎屑动力学",
+        "(即梦走提示)"
+      ],
+      "sources": [
+        "https://higgsfield.ai/motion/816671cd-720b-4d90-a1d4-abbcb89be8ba",
+        "https://robotbuilders.net/ai-generated-post-apocalyptic-dystopian-video-prompts-2025-creators-guide/"
+      ]
+    },
+    {
+      "id": "army_charge",
+      "name_zh": "千军万马",
+      "name_en": "massive army charge / epic battle crowd",
+      "aliases_zh": [
+        "军团冲锋",
+        "万马奔腾",
+        "大军冲锋",
+        "千军万马",
+        "军阵冲锋",
+        "万军对垒"
+      ],
+      "aliases_en": [
+        "army charge",
+        "epic battle crowd",
+        "cavalry charge"
+      ],
+      "category": "crowd_scale",
+      "camera_move": "无人机航拍",
+      "identity_risk": "medium",
+      "subject_action": "成千上万士兵与骑兵如浪潮般前突、旌旗长矛林立、军阵延伸至地平线，前排撞入敌阵。",
+      "fx_environment": "脚步马蹄扬起漫天尘雾、大气纵深雾、箭雨飞灰、旌旗猎猎、低角度金色/阴天战场光、硝烟弥漫。",
+      "timing": "5-8秒：实时驱动加速、冲撞点0.5倍慢动作再回实时。",
+      "core_prompt_zh": "镜头运动：高空摇臂/无人机拉远揭示军阵规模，或低机位英雄视角贴着前排横向跟随冲锋；速度=实时激烈冲锋，冲撞瞬间可切0.5倍慢动作再回实时；方向=拉远揭示纵深/横移跟随；起止=千军列阵→呐喊冲锋→前排撞入敌阵；主体=成千上万士兵与骑兵如浪潮般前突、旌旗长矛林立、军阵延伸至地平线；环境=脚步马蹄扬起漫天尘雾、大气纵深雾、箭雨飞灰、旌旗猎猎、低角度金色/阴天战场光、硝烟弥漫；特效=人群规模模拟、尘埃粒子、大气透视；时基=实时驱动加速、冲撞点速度斜坡。",
+      "core_prompt_en": "Epic wide battle shot: a high sweeping crane pulls back to reveal thousands of soldiers and cavalry surging across an open plain in a single charging wave, banners and spears raised, the formation stretching all the way to the hazy horizon; boots and hooves kick up a massive rolling wall of dust, atmospheric depth fog layers the ranks, embers and arrows fill the air, banners ripple under low golden battle light; the camera then drops to a low hero-angle tracking alongside the front rank, and at the moment the charge collides with the enemy line it ramps to 0.5x slow motion before snapping back to real-time. Driving, accelerating rhythm, 7 seconds.",
+      "negatives": [
+        "soldiers morphing or duplicating into blobs",
+        "identical clone-marching",
+        "limbs melting",
+        "ranks flickering",
+        "warping formations",
+        "physics glitches on collision",
+        "faces smearing",
+        "banners tearing unnaturally"
+      ],
+      "use_when": "史诗/历史/奇幻战争奇观、规模定场宽镜、预告节拍。",
+      "avoid_when": "点名英雄近身缠斗(需身份/对口型)、小规模亲密动作(近距人群会糊)。",
+      "platform_refs": [
+        "可灵 大场面/复杂快速运动",
+        "即梦 图生视频人群公式",
+        "Higgsfield Set Extension+运镜"
+      ],
+      "sources": [
+        "https://zhuanlan.zhihu.com/p/24784609916",
+        "https://leonardo.ai/news/kling-ai-prompts"
+      ]
+    }
+  ]
+}

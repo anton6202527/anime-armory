@@ -25,9 +25,10 @@ if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
 
 from video_prompt_compiler import compile_video_prompt, render_compiled_markdown
-from n2d_const import PRODUCTION_MODE_DEFAULT
+from n2d_const import PRODUCTION_MODE_DEFAULT, IDENTITY_LOCK_NEGATIVE_TERMS
 from n2d_platform_profiles import anchor_consumption_plan, select_video_frame_strategy
 from seam_contract import needs_end_anchor, normalize_seam_mode
+from n2d_logic import normalize_signature_effect
 
 KIND = "n2d_video_prompt_pack"
 CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
@@ -986,6 +987,38 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
     return "\n".join(lines)
 
 
+def signature_effect_directive(clip: Mapping[str, Any], probe_text: str) -> Tuple[str, List[str], bool]:
+    """检测本镜声明的命名『特效镜头』，返回 (指引行, 追加负向词, 是否高身份风险)。
+
+    命中来源是 SIGNATURE_EFFECT_LEXICON（特效镜头/manifest.json）。命中即把该特效的可粘贴核心
+    prompt 与回链运镜暴露给操作者；identity_risk=high（换装/换脸/名场面/近脸升格/对打等）自动把该
+    特效 negatives 与身份锁负向词并入本镜提交负向 prompt。未命中则返回空，不改变既有输出。"""
+    probe = " ".join(part for part in [
+        str(probe_text or ""),
+        str(clip.get("signature_effect") or ""),
+    ] if part)
+    sig = normalize_signature_effect(probe)
+    effects = sig.get("effects") or []
+    if not effects:
+        return "", [], False
+    primary = effects[0]
+    extra_negatives: List[str] = []
+    high_risk = bool(sig.get("has_high_identity_risk"))
+    if high_risk:
+        for effect in effects:
+            if effect.get("identity_risk") == "high":
+                extra_negatives.extend(effect.get("negatives") or [])
+        extra_negatives.extend(IDENTITY_LOCK_NEGATIVE_TERMS)
+    hit_names = "、".join(f"{one_line(e.get('zh'))}({one_line(e.get('identity_risk'))})" for e in effects)
+    line = (
+        f"**特效镜头 / Signature Effect**：命中={hit_names}；运镜链={one_line(primary.get('camera_move'))}；"
+        f"核心 prompt（{one_line(primary.get('zh'))}）：{one_line(primary.get('core_prompt_zh'))}"
+    )
+    if high_risk:
+        line += "；⚠️ 高身份风险特效：已自动拼身份锁负向词；换装/换脸类须确认为有意形变，不得用于假冒真实人物。"
+    return line, extra_negatives, high_risk
+
+
 def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: Mapping[str, Any],
                 forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
                 contract_rows: Mapping[str, Mapping[str, Any]],
@@ -1027,6 +1060,18 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     else:
         negative_items.append("原生人声")
     negative = "禁止：" + "；".join(negative_items) + "；表情变化不得改变脸型、眼距、鼻梁或下颌。"
+    signature_probe = " ".join(part for part in [
+        str(camera or ""), " ".join(descs or []), " ".join(prompts or []), str(lenses or ""),
+    ] if part)
+    signature_effect_line, signature_extra_negatives, signature_high_risk = signature_effect_directive(clip, signature_probe)
+    for term in signature_extra_negatives:
+        if term not in negative_items:
+            negative_items.append(term)
+    if signature_high_risk:
+        negative += (
+            " 高身份风险特效已启用身份锁负向词：脸型/五官比例/眼距/鼻梁/下颌/发际线/服装轮廓保持，"
+            "形变仅限声明的转场点，不得用于假冒真实人物。"
+        )
     contract = contract_rows.get(cid, {})
     dramatic = one_line(contract.get("dramatic_function") or clip.get("dramatic_function"))
     audience = one_line(contract.get("audience_effect") or clip.get("audience_effect"))
@@ -1187,6 +1232,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**环境交互**：{env_motion or 'storyboard 未登记专属环境动态；背景保持稳定，不凭空增加天气、粒子、道具或光源运动。'}",
         f"**动作编排契约 / Action Choreography**：{action_choreography_line(route, clip)}",
         f"**专项镜头模板**：template={one_line(route.get('template') or route.get('shot_type'), '无')}；blocking/continuity_must/negative 继承 storyboard，不临场改戏。",
+        *([signature_effect_line] if signature_effect_line else []),
         f"**模型路由**：{route_line}",
         f"**帧策略 / Frame Strategy**：strategy={frame_strategy}；reason={strategy_plan.get('reason')}；shot_count={strategy_plan.get('shot_count')}；anchor_count={strategy_plan.get('anchor_count')}；首尾帧后端不得把 split relay 冒充原生三帧。",
         *([

@@ -1,0 +1,108 @@
+{
+  "kind": "n2d_action_edit_cues",
+  "version": 1,
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_06",
+      "source_id": "EP01_CLIP06",
+      "spectacle_type": "fight_exchange",
+      "cues": [
+        {
+          "cue": "pre_impact_whoosh",
+          "when": "attack_path wind-up",
+          "layer": "weapon/cloth/air"
+        },
+        {
+          "cue": "speed_ramp",
+          "when": "attack_path before impact",
+          "curve": "fast_in_slow_on_hit"
+        },
+        {
+          "cue": "hit_stop",
+          "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。",
+          "duration_frames": 2,
+          "purpose": "make impact readable"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。",
+          "strength": "low",
+          "purpose": "sell force without hiding contact"
+        },
+        {
+          "cue": "impact_sfx",
+          "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。",
+          "layer": "weapon_or_body_hit"
+        },
+        {
+          "cue": "micro_silence_drop",
+          "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。",
+          "duration_frames": 2,
+          "purpose": "make the hit feel expensive"
+        },
+        {
+          "cue": "aftershock_sweetener",
+          "when": "recovery_beat",
+          "layer": "debris/cloth/breath"
+        }
+      ],
+      "mix_notes": [
+        "keep cues as edit-layer hints; do not hide unreadable motion with excessive shake",
+        "if a cue exposes a broken contact or pose, return to n2d-video rather than masking it in compose"
+      ]
+    },
+    {
+      "clip_id": "Clip_08",
+      "source_id": "EP01_CLIP08",
+      "spectacle_type": "fight_exchange",
+      "cues": [
+        {
+          "cue": "pre_impact_whoosh",
+          "when": "attack_path wind-up",
+          "layer": "weapon/cloth/air"
+        },
+        {
+          "cue": "speed_ramp",
+          "when": "attack_path before impact",
+          "curve": "fast_in_slow_on_hit"
+        },
+        {
+          "cue": "hit_stop",
+          "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。",
+          "duration_frames": 2,
+          "purpose": "make impact readable"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。",
+          "strength": "low",
+          "purpose": "sell force without hiding contact"
+        },
+        {
+          "cue": "impact_sfx",
+          "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。",
+          "layer": "weapon_or_body_hit"
+        },
+        {
+          "cue": "micro_silence_drop",
+          "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。",
+          "duration_frames": 2,
+          "purpose": "make the hit feel expensive"
+        },
+        {
+          "cue": "aftershock_sweetener",
+          "when": "recovery_beat",
+          "layer": "debris/cloth/breath"
+        }
+      ],
+      "mix_notes": [
+        "keep cues as edit-layer hints; do not hide unreadable motion with excessive shake",
+        "if a cue exposes a broken contact or pose, return to n2d-video rather than masking it in compose"
+      ]
+    }
+  ],
+  "summary": {
+    "clips_with_cues": 2
+  }
+}

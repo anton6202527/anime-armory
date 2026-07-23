@@ -946,6 +946,29 @@ def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
         raise ValueError(f"{section.clip}: target line missing")
     paths = backticked(line)
 
+    # Prefer an exact prompt-declared suffix before applying the legacy
+    # ``*_end`` shortcut.  A relay clip can legitimately begin from the prior
+    # clip's ``..._end.png`` and also declare its own ``ClipNN_end.png``.  The
+    # old shortcut selected the first path containing ``_end`` and therefore
+    # redrew the relay source instead of the requested tail frame.
+    custom_match = re.fullmatch(rf"{re.escape(section.clip)}_(.+)", shot, re.I)
+    if custom_match:
+        requested_suffix = custom_match.group(1)
+        exact_path = next((
+            raw for raw in paths
+            if declared_target_suffix(section, raw).lower() == requested_suffix.lower()
+            or Path(raw).stem.lower() == requested_suffix.lower()
+        ), "")
+        if exact_path:
+            mode = declared_target_mode(section, exact_path, paths[0] if paths else "")
+            return Target(
+                shot=shot,
+                clip=section.clip,
+                mode=mode,
+                rel_path=rel_to_root(exact_path, episode),
+                section=section,
+            )
+
     if shot.endswith("_end"):
         path = next((p for p in paths if "_end" in Path(p).stem), paths[-1] if paths else "")
         if not path:
@@ -3210,12 +3233,13 @@ def image_request_params(root: Path) -> Dict[str, Any]:
 
 
 def strict_single_image_review_enabled(root: Path) -> bool:
-    """Return whether the persistent one-image review gate is enabled.
+    """The one-image review gate is a project-independent hard floor.
 
-    This setting controls generation granularity and review ordering only.  It
-    never waives compliance or per-run payment authorization.
+    `_设置.md` still records the user's preferred wording for UI/provenance, but
+    no project may weaken the B14 load-bearing pre/post consistency gate.  This
+    deliberately returns True even for legacy projects that lack the setting.
     """
-    return get_setting(str(root), "图片验收模式", "按生成粒度验收") == STRICT_IMAGE_REVIEW_MODE
+    return True
 
 
 _OPTIONAL_SHARED_IDENTITY_VIEWS = {
@@ -4860,17 +4884,18 @@ def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
             problems.append(f"face_reference_coverage:{row.get('reason') or 'missing'}")
 
     checks = payload.get("checks") or {}
-    strict_pixel = str(os.environ.get("N2D_TARGET_QC_STRICT_PIXEL") or "").strip().lower() in {
-        "1", "true", "yes", "on"
-    }
     target_blocks = {
         # Character-shot face coverage is enforced by face_reference_coverage,
         # which knows whether the landed PNG is expected to contain a character.
         # A generic face:noface row is normal for prop/scene inserts and must not
         # stop empty establishing/detail shots.
-        "face": {"block"},
-        "hair": {"block"} if strict_pixel else set(),
-        "outfit": {"block"} if strict_pixel else set(),
+        # Under B14, WARN/UNVERIFIABLE means "machine cannot sign this image",
+        # so the runner pauses before acceptance/next-image advancement.  This
+        # is not a claim that a heuristic proved the pixels wrong; it forces the
+        # required current-pixel visual adjudication instead of auto-passing.
+        "face": {"block", "warn", "unverifiable"},
+        "hair": {"block", "warn"},
+        "outfit": {"block", "warn"},
     }
     for check_name, blocked_verdicts in target_blocks.items():
         for row in (checks.get(check_name) or {}).get("shots") or []:
@@ -4885,6 +4910,19 @@ def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
                     suffix += f"(score={score},floor={floor})"
                 problems.append(f"{check_name}{suffix}")
 
+    # Registered high-risk props/VFX have a current-pixel comparison queue.
+    # A face-consistent frame can still be narratively wrong (for example one
+    # glowing tiger eye where the shot contract requires two).  Do not advance
+    # until every target bound to this exact PNG has a current-hash visual
+    # confirmation; the confirmation helper invalidates stale rows on redraw.
+    prop_review = payload.get("prop_shape_review") or {}
+    for row in prop_review.get("targets") or []:
+        if episode_png_key(str(row.get("png") or ""), episode) != target_key:
+            continue
+        if not row.get("confirmed"):
+            asset = str(row.get("asset") or row.get("asset_name") or "registered_asset")
+            problems.append(f"prop_shape_review:{asset}:unconfirmed_current_pixels")
+
     clip_display = target.clip.replace("_", " ")
     for finding in (payload.get("lint") or {}).get("findings") or []:
         if str(finding.get("level") or "") != "block":
@@ -4897,6 +4935,91 @@ def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
         print(f"[image_qc] {target.shot} blocked: {', '.join(dict.fromkeys(problems))}", file=sys.stderr)
         return False
     print(f"[image_qc] {target.shot} target gate passed")
+    return True
+
+
+def run_target_repair_preflight(root: Path, episode: str, target: Target) -> bool:
+    """Allow one proven-bad current PNG to enter the paid redraw loop.
+
+    The episode-wide ``image_preflight`` deliberately blocks when current
+    pixels fail QC.  That is correct for advancing production but circular for
+    repairing the exact failed PNG.  This target-scoped preflight is not a
+    waiver: it requires a fresh full-precision report, binds the rejected
+    current pixel hash and its concrete face/hair/outfit/coverage findings,
+    then writes a B14 pre-generation receipt.  Shared/reference and compiled
+    request gates still run normally before submission, and post-generation
+    target QC remains mandatory.
+    """
+    report = root / "生产数据" / "image_qc" / episode / f"image_qc_{episode}.json"
+    final = root / target.rel_path
+    if not png_valid(final):
+        print(f"[gate] repair-redraw requires an existing valid PNG: {target.rel_path}", file=sys.stderr)
+        return False
+    try:
+        payload = json.loads(report.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"[gate] repair-redraw requires readable image_qc: {exc}", file=sys.stderr)
+        return False
+    qc_env = payload.get("qc_environment") if isinstance(payload.get("qc_environment"), Mapping) else {}
+    if str(qc_env.get("precision_level") or "") != "full":
+        print("[gate] repair-redraw requires full-precision image_qc", file=sys.stderr)
+        return False
+
+    target_key = episode_png_key(target.rel_path, episode)
+    problems: List[str] = []
+    coverage = payload.get("face_reference_coverage") if isinstance(payload.get("face_reference_coverage"), Mapping) else {}
+    for row in coverage.get("missing") or []:
+        if episode_png_key(str(row.get("png") or ""), episode) == target_key:
+            problems.append(f"face_reference_coverage:{row.get('reason') or 'missing'}")
+    checks = payload.get("checks") if isinstance(payload.get("checks"), Mapping) else {}
+    for check_name in ("face", "hair", "outfit"):
+        check = checks.get(check_name) if isinstance(checks.get(check_name), Mapping) else {}
+        for row in check.get("shots") or []:
+            if episode_png_key(str(row.get("png") or ""), episode) != target_key:
+                continue
+            verdict = str(row.get("verdict") or "")
+            if verdict in {"block", "warn", "unverifiable"}:
+                problems.append(f"{check_name}:{verdict}")
+    problems = list(dict.fromkeys(problems))
+    if not problems:
+        print(
+            f"[gate] repair-redraw refused: current full QC has no identity/appearance failure for {target.rel_path}",
+            file=sys.stderr,
+        )
+        return False
+
+    receipt_dir = root / "生产数据" / "image_preflight_receipts" / episode
+    receipt_dir.mkdir(parents=True, exist_ok=True)
+    stamp = dt.datetime.now().astimezone().strftime("%Y%m%dT%H%M%S%z")
+    receipt = receipt_dir / f"{Path(target.rel_path).stem}__repair_{stamp}.json"
+    receipt.write_text(json.dumps({
+        "kind": "n2d_single_image_consistency_preflight",
+        "schema_version": 1,
+        "created_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
+        "episode": episode,
+        "clip": target.clip,
+        "target": target.rel_path,
+        "mode": "full_qc_targeted_repair",
+        "status": "passed_for_single_target_repair",
+        "review_contract": "B14_pre_generation_consistency",
+        "current_target_sha256": optional_file_sha256(final),
+        "image_qc_report": str(report.relative_to(root)),
+        "image_qc_report_sha256": optional_file_sha256(report),
+        "repair_findings": problems,
+        "preflight_checks": {
+            "current_target_exists_and_decodes": True,
+            "current_target_sha_bound": True,
+            "full_precision_qc": True,
+            "target_has_concrete_identity_or_appearance_failure": True,
+            "single_target_only": True,
+        },
+        "post_generation_required": [
+            "full_machine_qc",
+            "canonical_face_and_current_output_side_by_side_original_pixel_review",
+            "current_output_sha_bound_qa_receipt",
+        ],
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"[gate] B14 targeted repair preflight passed: {receipt}")
     return True
 
 
@@ -5457,7 +5580,6 @@ def process_target(
         target.mode == "shared"
         and requires_controlled_makeup_derivation(target.rel_path)
         and not has_controlled_makeup_source(target.rel_path, reference_inputs)
-        and os.environ.get("N2D_ALLOW_CODEX_TEXT_MAKEUP_VARIANTS") != "1"
     ):
         print(
             "[fail] "
@@ -5473,7 +5595,6 @@ def process_target(
         carried_identity_unanchored(
             reference_bundle, [item.get("rel_path") for item in reference_inputs]
         )
-        and os.environ.get("N2D_ALLOW_UNANCHORED_IDENTITY_PLATE") != "1"
     ):
         carried = "、".join(str(c) for c in reference_bundle.get("carried_identity") or [])
         print(
@@ -5854,6 +5975,11 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--stop-on-fail", action="store_true")
     ap.add_argument("--force", action="store_true", help="regenerate even when this task already has a pass event for the asset")
+    ap.add_argument(
+        "--repair-redraw",
+        action="store_true",
+        help="redraw exactly one current PNG named by a fresh full image_qc failure; writes a B14 target preflight receipt",
+    )
     ap.add_argument("--skip-image-qc", action="store_true", help="skip per-target image_qc after each generated episode shot")
     ap.add_argument("--skip-final-gate", action="store_true", help="do not run the whole-episode image gate after shot generation")
     ap.add_argument("--skip-preflight", action="store_true", help="skip the pre-spend image_preflight gate (logs a dashboard waiver)")
@@ -5881,6 +6007,29 @@ def main(argv: Sequence[str]) -> int:
         targets.extend(build_targets(root, episode, shots))
     if not targets:
         raise SystemExit("no targets resolved")
+    forbidden_consistency_bypasses = [
+        flag
+        for flag, enabled in (
+            ("--skip-preflight", ns.skip_preflight),
+            ("--skip-image-qc", ns.skip_image_qc),
+            ("--skip-final-gate", ns.skip_final_gate),
+        )
+        if enabled
+    ]
+    if forbidden_consistency_bypasses and not ns.dry_run:
+        print(
+            "[gate] B14 每张图片前后双重一致性硬闸不可绕过："
+            + ", ".join(forbidden_consistency_bypasses)
+            + "；修复前置合同/QC 环境后重试。",
+            file=sys.stderr,
+        )
+        return 1
+    if ns.repair_redraw and not ns.dry_run and (not ns.force or len(targets) != 1):
+        print(
+            "[gate] --repair-redraw requires --force and exactly one resolved PNG target",
+            file=sys.stderr,
+        )
+        return 1
     strict_single_review = strict_single_image_review_enabled(root)
     if strict_single_review and not ns.dry_run and len(targets) != 1:
         print(
@@ -5920,7 +6069,10 @@ def main(argv: Sequence[str]) -> int:
     # 生成前先跑 image_preflight 硬闸门（不需要本集 PNG 已存在）；block 即拒绝生成，不花钱。
     # 逃生口 --skip-preflight 必须留痕成 dashboard waiver（执行时松动可审计）。
     if shots and not ns.dry_run:
-        if ns.skip_preflight:
+        if ns.repair_redraw:
+            if not run_target_repair_preflight(root, episode, targets[0]):
+                return 1
+        elif ns.skip_preflight:
             record_waiver(root, episode, "image_preflight", "skip-preflight",
                           "operator passed --skip-preflight; pre-spend image_preflight gate not run")
         elif not run_image_gate(root, episode, stage="image_preflight"):

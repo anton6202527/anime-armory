@@ -1,0 +1,27 @@
+{
+  "event_count": 1,
+  "kind": "n2d_flow_telemetry",
+  "last_event_at": "2026-07-23T11:12:30+0800",
+  "milestone_count": 0,
+  "milestones": {},
+  "next_action_count": 1,
+  "orchestrator_latency_ms": {
+    "max": 0.723,
+    "p50": 0.723,
+    "p95": 0.723
+  },
+  "prework": {
+    "cache_hit_rate": null,
+    "cache_hits": 0,
+    "total": 0
+  },
+  "stage_transitions": {},
+  "stages": {
+    "done": 1
+  },
+  "stop_reasons": {
+    "blocked_by_entry_check": 1
+  },
+  "updated_at": "2026-07-23T11:12:30+0800",
+  "version": 1
+}

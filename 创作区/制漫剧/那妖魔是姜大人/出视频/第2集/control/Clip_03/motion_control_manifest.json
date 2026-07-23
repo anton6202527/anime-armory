@@ -2,6 +2,7 @@
   "kind": "n2d_motion_control_manifest",
   "version": 1,
   "clip_id": "Clip_03",
+  "spectacle_type": "fight_exchange",
   "status": "degrade_only",
   "control_inputs": {
     "pose_sequence": {
@@ -30,14 +31,14 @@
       "path": "出视频/第2集/control/Clip_03/camera_path.json"
     }
   },
+  "degrade_plan": "先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。",
+  "notes": [
+    "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+    "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+    "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+    "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+  ],
   "contact_points": [],
   "occlusion_order": [],
-  "body_part_ownership": [],
-  "failure_modes": [
-    "feature_melting",
-    "limb_fusion",
-    "weapon_contact_drift",
-    "body_interpenetration"
-  ],
-  "degrade_plan": "先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。"
+  "body_part_ownership": []
 }

@@ -1,0 +1,77 @@
+{
+  "checked_lock_ids": [
+    "source_lock",
+    "script_lock",
+    "storyboard_lock",
+    "style_identity_lock",
+    "voice_timing_lock",
+    "video_material_lock",
+    "rough_cut_lock",
+    "picture_lock",
+    "delivery_lock"
+  ],
+  "episode": "第2集",
+  "findings": [
+    {
+      "artifacts": [
+        "出视频/第2集/prompt/video_model_routes.json",
+        "生产数据/image_qc/第2集/image_qc_第2集.json"
+      ],
+      "code": "lock_artifact_stale",
+      "lock_id": "video_material_lock",
+      "message": "video_material_lock 锁定后文件已变化：出视频/第2集/prompt/video_model_routes.json, 生产数据/image_qc/第2集/image_qc_第2集.json",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "生产数据/video_qc_第2集.json"
+      ],
+      "code": "lock_required_artifact_missing",
+      "lock_id": "video_material_lock",
+      "message": "video_material_lock 缺必需实体产物：生产数据/video_qc_第2集.json",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "生产数据/timelines/第2集/timeline.json",
+        "生产数据/views/rough_cut_preview_第2集.html",
+        "生产数据/final_timeline_probe_第2集.json"
+      ],
+      "code": "lock_required_artifact_missing",
+      "lock_id": "rough_cut_lock",
+      "message": "rough_cut_lock 缺必需实体产物：生产数据/timelines/第2集/timeline.json, 生产数据/views/rough_cut_preview_第2集.html, 生产数据/final_timeline_probe_第2集.json",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "合成/第2集/成片*.mp4",
+        "生产数据/final_timeline_probe_第2集.json",
+        "生产数据/script_supervisor_log_第2集.jsonl"
+      ],
+      "code": "lock_required_artifact_missing",
+      "lock_id": "picture_lock",
+      "message": "picture_lock 缺必需实体产物：合成/第2集/成片*.mp4, 生产数据/final_timeline_probe_第2集.json, 生产数据/script_supervisor_log_第2集.jsonl",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "合成/第2集/_proxy/timeline.json"
+      ],
+      "code": "lock_artifact_stale",
+      "lock_id": "delivery_lock",
+      "message": "delivery_lock 锁定后文件已变化：合成/第2集/_proxy/timeline.json",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-23T03:22:54+00:00",
+  "kind": "n2d_production_locks_check",
+  "lock_path": "生产数据/production_locks_第2集.json",
+  "stage": "all",
+  "status": "block",
+  "summary": {
+    "block": 5,
+    "locks": 9,
+    "required_locks": 9
+  },
+  "version": 1
+}

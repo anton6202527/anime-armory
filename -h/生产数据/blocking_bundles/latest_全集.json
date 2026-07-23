@@ -1,0 +1,31 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": true,
+  "blockers": [
+    {
+      "message": "作品根已存在，但没有 `_进度.md`，编排器无法判断 第1集 的生产前沿。先确认源小说并用 n2d-script 粗切/恢复项目骨架，再重新进入 `run.py next`。",
+      "step": "blocked_by_entry_check"
+    }
+  ],
+  "category": "contract_or_gate",
+  "episode": "",
+  "episode_graph": {
+    "graph_hash": "",
+    "lineage_gaps": 0,
+    "status": ""
+  },
+  "gate": {
+    "affected_artifacts": [],
+    "findings_path": null,
+    "return_to_stage": null,
+    "stage": ""
+  },
+  "generated_at": "2026-07-23T11:12:30+0800",
+  "headline": "作品缺少 _进度.md，需先初始化或恢复进度表",
+  "kind": "n2d_blocking_bundle",
+  "owner": "",
+  "repair_commands": [],
+  "stage_key": "",
+  "stop_reason": "blocked_by_entry_check",
+  "version": 1
+}

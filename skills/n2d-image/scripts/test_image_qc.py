@@ -240,6 +240,38 @@ def test_asset_shape_review_covers_weapon_and_clip_without_underscore(tmp_path: 
     assert targets[0]["confirmed"] is False
 
 
+def test_prop_shape_review_covers_episode_prefixed_start_mid_and_end_pngs(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{
+            "id": "VFX_01",
+            "type": "vfx",
+            "name": "双眼墨虎",
+            "constraints": {"must_not_have": ["单眼", "脱离谱页"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第2集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text(
+        "## 镜头 8（EP02_CLIP08 墨虎双眼短亮）\n"
+        "**资产引用注册层**：`VFX_01`；禁形：单眼、脱离谱页。\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第2集" / "图片"
+    img.mkdir(parents=True)
+    for name in ("EP02_CLIP08_start.png", "EP02_CLIP08_start_a1.png", "EP02_CLIP08_end.png"):
+        (img / name).write_bytes(b"not-a-real-png")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第2集")
+
+    assert [row["png"] for row in targets] == [
+        "图片/EP02_CLIP08_end.png",
+        "图片/EP02_CLIP08_start.png",
+        "图片/EP02_CLIP08_start_a1.png",
+    ]
+
+
 def test_prop_shape_review_requires_shared_high_risk_primary_confirmation(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     img = reg / "图片"

@@ -10,7 +10,7 @@
   "category": "contract_or_gate",
   "episode": "第2集",
   "episode_graph": {
-    "graph_hash": "c81f74af5c8b0b65a91ab4607743d7b72db011533fa5ff28795d7a78df8027fd",
+    "graph_hash": "10d3bf3e7918d194b5faf51df8237d48725eec82fa07670fae83f9bb4911350c",
     "lineage_gaps": 0,
     "status": "pass"
   },
@@ -28,7 +28,7 @@
     "return_to_stage": "video",
     "stage": "video_prompt_preflight"
   },
-  "generated_at": "2026-07-22T20:57:28+0800",
+  "generated_at": "2026-07-23T11:18:08+0800",
   "headline": "第2集 视频prompt：入口检查未放行",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-video",

@@ -32,22 +32,22 @@
   "episode": "第2集",
   "files": [
     {
-      "bytes": 2903,
+      "bytes": 3031,
       "exists": true,
-      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=auto_recommended\n- 生视频渠道: 即梦/Dreamina  # source=auto_recommended\n- 视频模型路由: 自动按镜头路由  # source=auto_recommended\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 启用  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n\nraw audit history omitted: records_seen=22, corrections_included=0/3",
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=auto_recommended\n- 生视频渠道: 即梦/Dreamina  # source=auto_recommended\n- 视频模型路由: 自动按镜头路由  # source=auto_recommended\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 跳过  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n\nraw audit history omitted: records_seen=23, corrections_included=0/3",
       "preview_policy": "settings_region_plus_bounded_corrections",
       "relpath": "_设置.md",
-      "sha256": "6fff3d258e49d1de4d1d3ce793ac9a74eabb6f821ab003227bcb7e61cc18bbe1"
+      "sha256": "e7c92ccf72ff50acee3663a5543d209758564a14c169dfeffb6f37d5b90883b9"
     },
     {
-      "bytes": 1621,
+      "bytes": 2080,
       "exists": true,
-      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | 8/8 | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 24/24 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | 8/8 | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 24/24 | ⬜ | 1/8 | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 返修记录\n- 2026-07-23：第2集 Clip 08 三张关键帧因姜月初换脸被用户拒绝；已使用 Codex / GPT Image 2 按“定妆脸锚 → start → start_a1 → end”单向链全部重抽。三张新图均完成 full `image_qc`、原像素身份/发型/服装/场景/VFX/接力目视和当前 SHA 验收；旧图与失败尾帧候选已可恢复归档到 `废料/出图/第2集/图片/identity_drift_2026-07-23/`。出图总数仍为 24/24。",
       "relpath": "_进度.md",
-      "sha256": "0fae6c2460cee2ebe6fb2c01a11114dfc9ea67060f0c5b5af7b82e3133e72aa3"
+      "sha256": "08443a1ba4abf2017c33ff29e632311ae9d8bdeac5237109ce4b2656ae54dacd"
     },
     {
-      "bytes": 56929,
+      "bytes": 58073,
       "exists": true,
       "preview": {
         "clips": [
@@ -70,6 +70,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
                   "at_sec": 3.6,
                   "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "self_check": "pass",
                   "source_duration": 12.606,
                   "use": "edit_cut"
                 },
@@ -77,6 +78,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
                   "at_sec": 8.6,
                   "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "self_check": "pass",
                   "source_duration": 12.606,
                   "use": "edit_cut"
                 },
@@ -84,6 +86,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
                   "at_sec": 12.0,
                   "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "self_check": "pass",
                   "source_duration": 12.606,
                   "use": "edit_cut"
                 }
@@ -121,6 +124,7 @@
             "economy_intent": "三项信息同一空间完成，不另起解释镜",
             "editing_intent": "ECU硬开，微拉建立三角，系统提示与虎爪倒计时并行",
             "end_sec": 12.606,
+            "endframe_png": "出图/第2集/图片/Clip01_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/囚途残损态",
@@ -247,6 +251,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
                   "at_sec": 6.04,
                   "reason": "auto: R2 普通长镜（12.076s/4拍）",
+                  "self_check": "pass",
                   "source_duration": 12.076,
                   "use": "split"
                 }
@@ -337,7 +342,9 @@
                   "CHAR_01",
                   "BEAST_01",
                   "WEAPON_横刀"
-                ]
+                ],
+                "release_frame": "本镜无释放；虎爪保持将触未触，横刀不脱手",
+                "transfer_event": "无所有权转移；横刀始终由CHAR_01双手持有"
               }
             ],
             "label": "二十年尽付一刀",
@@ -366,7 +373,7 @@
                   ]
                 },
                 "lens": "CU缓推",
-                "t": "12.0-19.6s"
+                "t": "12.606-18.646s"
               },
               {
                 "desc": "虎妖右上扑下，姜月初左下起刀，停在将触未触",
@@ -383,7 +390,7 @@
                   ]
                 },
                 "lens": "LS短跟",
-                "t": "19.6-24.1s"
+                "t": "18.646-24.682s"
               }
             ],
             "start_sec": 12.606,
@@ -448,12 +455,14 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP03_impact.png",
                   "at_sec": 1.12,
                   "reason": "导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点",
+                  "self_check": "pass",
                   "use": "keyframe"
                 },
                 {
                   "anchor_png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
                   "at_sec": 2.12,
                   "reason": "导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前",
+                  "self_check": "pass",
                   "use": "split"
                 }
               ],
@@ -485,6 +494,7 @@
             "economy_intent": "一招只给一个命中结果，不追加第二招",
             "editing_intent": "命中CU硬切+两帧hit-stop；先反应后结果，杜绝结果提前",
             "end_sec": 32.072,
+            "endframe_png": "出图/第2集/图片/Clip03_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/囚途残损态",
@@ -543,7 +553,8 @@
                   "BEAST_01",
                   "WEAPON_横刀"
                 ],
-                "release_frame": "虎首仅在命中、错身和单膝落地后才与颈部分离"
+                "release_frame": "虎首仅在命中、错身和单膝落地后才与颈部分离",
+                "transfer_event": "横刀无所有权转移；仅BEAST_01虎首在因果链完成后与躯干分离"
               }
             ],
             "label": "一刀断虎首",
@@ -574,7 +585,7 @@
                   ]
                 },
                 "lens": "CU固定+轻冲击",
-                "t": "24.1-25.6s"
+                "t": "24.682-25.802s"
               },
               {
                 "desc": "姜月初单膝落地喘息，横刀脱手插土",
@@ -590,7 +601,7 @@
                   ]
                 },
                 "lens": "MS固定",
-                "t": "25.6-27.2s"
+                "t": "25.802-26.802s"
               },
               {
                 "desc": "虎首后落，百年结算overlay出现",
@@ -606,7 +617,7 @@
                   ]
                 },
                 "lens": "CU结果镜",
-                "t": "27.2-31.5s"
+                "t": "26.802-32.072s"
               }
             ],
             "spectacle_story_function": "兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。",
@@ -753,7 +764,7 @@
             "economy_intent": "只拍问题和选择，不重复解释百妖谱",
             "editing_intent": "插入镜短拍，系统问题后硬切主角口外反应",
             "end_sec": 37.342,
-            "endframe_png": "",
+            "endframe_png": "出图/第2集/图片/EP02_CLIP04_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/囚途残损态"
@@ -816,7 +827,7 @@
                   ]
                 },
                 "lens": "CU固定",
-                "t": "31.5-36.9s"
+                "t": "32.072-37.342s"
               }
             ],
             "start_sec": 32.072,
@@ -875,6 +886,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
                   "at_sec": 3.07,
                   "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+                  "self_check": "pass",
                   "source_duration": 9.207,
                   "use": "split"
                 },
@@ -882,6 +894,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
                   "at_sec": 6.14,
                   "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+                  "self_check": "pass",
                   "source_duration": 9.207,
                   "use": "split"
                 }
@@ -914,6 +927,7 @@
             "economy_intent": "文字只列成本与结果，复杂知识以动作表现",
             "editing_intent": "慢成形→虎眼apex→快速倒灌→握刀定格",
             "end_sec": 46.549,
+            "endframe_png": "出图/第2集/图片/Clip05_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/囚途残损态→闻弦初境"
@@ -960,7 +974,6 @@
             "scene": "百妖谱主观层/荒野叠化",
             "screen_text_lines": [
               "消耗道行：七十五年",
-              "虎山神（摹影）",
               "猛虎快刀（圆满）"
             ],
             "screen_text_policy": "compose_overlay_only",
@@ -980,7 +993,7 @@
                   ]
                 },
                 "lens": "CU缓推",
-                "t": "36.9-42.0s"
+                "t": "37.342-40.412s"
               },
               {
                 "desc": "力量倒灌，伤势恢复，姜月初重新握刀",
@@ -996,7 +1009,7 @@
                   ]
                 },
                 "lens": "MCU固定",
-                "t": "42.0-45.8s"
+                "t": "40.412-46.549s"
               }
             ],
             "start_sec": 37.342,
@@ -1076,6 +1089,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
                   "at_sec": 5.9,
                   "reason": "MCU握刀理解规则切至CU状态收起与视线下沉；以同一张脸、同一战损服装和同一冷侧光焊住切点",
+                  "self_check": "pass",
                   "use": "edit_cut"
                 }
               ],
@@ -1106,6 +1120,7 @@
             "economy_intent": "状态只结算一次，不独立解释境界体系",
             "editing_intent": "握刀长镜后快速结算，视线切向代价对象",
             "end_sec": 57.069,
+            "endframe_png": "出图/第2集/图片/EP02_CLIP06_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/闻弦初境"
@@ -1171,7 +1186,7 @@
                   ]
                 },
                 "lens": "MCU固定",
-                "t": "45.8-51.7s"
+                "t": "46.549-52.449s"
               },
               {
                 "desc": "极简状态overlay后收起，姜月初视线落向裴",
@@ -1187,7 +1202,7 @@
                   ]
                 },
                 "lens": "CU轻拉",
-                "t": "51.7-56.7s"
+                "t": "52.449-57.069s"
               }
             ],
             "start_sec": 46.549,
@@ -1218,6 +1233,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
                   "at_sec": 3.55,
                   "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+                  "self_check": "pass",
                   "source_duration": 10.645,
                   "use": "split"
                 },
@@ -1225,6 +1241,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
                   "at_sec": 7.1,
                   "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+                  "self_check": "pass",
                   "source_duration": 10.645,
                   "use": "split"
                 }
@@ -1257,6 +1274,7 @@
             "economy_intent": "用合眼动作承担主题，不追加作者总结旁白",
             "editing_intent": "固定长镜让动作完成，合眼后切姜月初反应CU",
             "end_sec": 67.714,
+            "endframe_png": "出图/第2集/图片/Clip07_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/闻弦初境",
@@ -1313,7 +1331,7 @@
                   ]
                 },
                 "lens": "MS轻跟",
-                "t": "56.7-61.6s"
+                "t": "57.069-60.619s"
               },
               {
                 "desc": "右手替裴合眼，前3/4脸悔意与苦涩自嘲",
@@ -1328,7 +1346,7 @@
                   "objects": []
                 },
                 "lens": "CU固定",
-                "t": "61.6-67.1s"
+                "t": "60.619-67.714s"
               }
             ],
             "start_sec": 57.069,
@@ -1354,6 +1372,7 @@
                   "anchor_png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
                   "at_sec": 2.5,
                   "reason": "姜月初前3/4脸抬眼切至谱页墨虎ECU；切点只换主焦点，不复制第二张人物脸",
+                  "self_check": "pass",
                   "use": "edit_cut"
                 }
               ],
@@ -1381,6 +1400,7 @@
             "economy_intent": "四秒只抛一个问题，不提前解释进阶",
             "editing_intent": "CU视线切ECU虎眼，反向低虎啸后硬切黑",
             "end_sec": 71.927,
+            "endframe_png": "出图/第2集/图片/EP02_CLIP08_end.png",
             "entity_schedule": {
               "characters": [
                 "CHAR_01/闻弦初境"
@@ -1439,7 +1459,7 @@
                   ]
                 },
                 "lens": "CU缓推",
-                "t": "67.1-69.6s"
+                "t": "67.714-70.214s"
               },
               {
                 "desc": "纸上墨虎双眼短亮，未离开谱页，硬切黑",
@@ -1453,7 +1473,7 @@
                   ]
                 },
                 "lens": "ECU固定",
-                "t": "69.6-71.7s"
+                "t": "70.214-71.927s"
               }
             ],
             "start_sec": 67.714,
@@ -1508,14 +1528,14 @@
         "version": 1
       },
       "relpath": "脚本/第2集/storyboard.json",
-      "sha256": "58e5d05b4adbf2d81b198c52862e6ed3abd57fc2bcdf59c46fffcb86372efc75"
+      "sha256": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f"
     },
     {
       "exists": false,
       "relpath": "生产数据/video_model_routes_第2集.json"
     },
     {
-      "bytes": 9226,
+      "bytes": 9244,
       "exists": true,
       "preview": {
         "clips": [
@@ -1524,7 +1544,8 @@
             "assets": [
               "BEAST_01",
               "CHAR_01",
-              "CHAR_02"
+              "CHAR_02",
+              "LOC_01"
             ],
             "beat_categories": [
               "attack",
@@ -1564,7 +1585,7 @@
             ],
             "distance_curve": "",
             "in_state": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触",
-            "loc": "LOC_尸骸荒野",
+            "loc": "LOC_01",
             "motion_intensity": 3,
             "out_state": "姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成",
             "premium_passes": {
@@ -1639,10 +1660,10 @@
         "version": 1
       },
       "relpath": "生产数据/spectacle_sequence_plan_第2集.json",
-      "sha256": "d34f8b13cead28174ef99bca569d112b179573499032d2df269d176fcf78a8aa"
+      "sha256": "64f0aea037014eb5a72380e8ed34d177ce131caefd61172c7e82558b241fbee1"
     },
     {
-      "bytes": 28814,
+      "bytes": 28590,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -1656,24 +1677,24 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "5f867949a059a81f60c845ef9269e4c643f6cedb020b62dfe996dedd3af8e806"
+      "sha256": "8472d5cf0e6929c062f6af3cb6f2788075b053ab63a5a7e7466ec542036f8e40"
     },
     {
-      "bytes": 3118,
+      "bytes": 30591,
       "exists": true,
       "preview": {
         "episode": "第2集",
-        "graph_hash": "a5d7d21c00ccb0b138e4deb0397973993afd40efe107c18ed32d2866ed37ddee",
+        "graph_hash": "aefb6e56d476a8732563a3579b1a002547c1debe86834b25356be51acc5edf0e",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
-          "edges": 8,
+          "edges": 71,
           "lineage_gaps": 0,
           "masters": 0,
-          "nodes": 9,
-          "routes": 0,
+          "nodes": 59,
+          "routes": 8,
           "story_clips": 8,
-          "video_media": 0
+          "video_media": 9
         },
         "top_level_keys": [
           "authority",
@@ -1693,7 +1714,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第2集.json",
-      "sha256": "c6c8bc0280958f4b950864b1d673a93ad80f6b396d7378cdbb83b31df62fef7c"
+      "sha256": "9649f9885d8d1e265f4738bc35cd55301e71143afdcc88fe7d894c53fe50505d"
     }
   ],
   "genre_pack_context": {
@@ -1753,7 +1774,7 @@
       }
     ],
     "episode": "第2集",
-    "generated_at": "2026-07-22T12:57:26+00:00",
+    "generated_at": "2026-07-23T03:18:04+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -1899,7 +1920,7 @@
       },
       "合成阶段": {
         "source": "explicit_user",
-        "value": "启用"
+        "value": "跳过"
       },
       "合规用途": {
         "source": "explicit_user",
@@ -1990,10 +2011,10 @@
       "format": "record_section",
       "full_history_omitted": true,
       "limit": 3,
-      "records_seen": 22
+      "records_seen": 23
     },
     "source_path": "_设置.md",
-    "source_sha256": "6fff3d258e49d1de4d1d3ce793ac9a74eabb6f821ab003227bcb7e61cc18bbe1",
+    "source_sha256": "e7c92ccf72ff50acee3663a5543d209758564a14c169dfeffb6f37d5b90883b9",
     "status": "ok",
     "version": 1
   },

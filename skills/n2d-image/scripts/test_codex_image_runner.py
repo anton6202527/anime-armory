@@ -189,6 +189,10 @@ def test_strict_single_image_review_reads_project_setting(tmp_path: Path) -> Non
     assert codex_image_runner.strict_single_image_review_enabled(tmp_path) is True
 
 
+def test_strict_single_image_review_is_hard_floor_without_setting(tmp_path: Path) -> None:
+    assert codex_image_runner.strict_single_image_review_enabled(tmp_path) is True
+
+
 def test_strict_pending_review_requires_later_hash_bound_acceptance(tmp_path: Path) -> None:
     events = tmp_path / "生产数据" / "production_events.jsonl"
     events.parent.mkdir(parents=True)
@@ -760,6 +764,54 @@ def test_load_sections_falls_back_to_storyboard_targets(tmp_path: Path) -> None:
         codex_image_runner.target_for_shot("Clip_12_end", section, "第1集").rel_path
         == "出图/第1集/图片/镜头12_end.png"
     )
+
+
+def test_target_for_shot_prefers_own_tail_over_relay_source_end() -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_05",
+        title="relay clip",
+        body="",
+        target_line=(
+            "`出图/第2集/图片/EP02_CLIP04_end.png` "
+            "`出图/第2集/图片/EP02_CLIP04_end_a1.png` "
+            "`出图/第2集/图片/Clip05_end.png`"
+        ),
+    )
+
+    target = codex_image_runner.target_for_shot("Clip_05_end", section, "第2集")
+
+    assert target.rel_path == "出图/第2集/图片/Clip05_end.png"
+    assert target.mode == "tailframe"
+
+
+def test_target_repair_preflight_binds_full_qc_failure_and_current_pixels(tmp_path: Path) -> None:
+    target = codex_image_runner.Target(
+        shot="Clip_05_end",
+        clip="Clip_05",
+        mode="tailframe",
+        rel_path="出图/第2集/图片/Clip05_end.png",
+        section=codex_image_runner.ClipSection("Clip_05", "", "", ""),
+    )
+    write_tiny_png(tmp_path / target.rel_path)
+    report = tmp_path / "生产数据/image_qc/第2集/image_qc_第2集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "qc_environment": {"precision_level": "full"},
+        "face_reference_coverage": {"missing": []},
+        "checks": {
+            "face": {"shots": [{"png": "图片/Clip05_end.png", "verdict": "block"}]},
+            "hair": {"shots": []},
+            "outfit": {"shots": []},
+        },
+    }), encoding="utf-8")
+
+    assert codex_image_runner.run_target_repair_preflight(tmp_path, "第2集", target)
+    receipts = list((tmp_path / "生产数据/image_preflight_receipts/第2集").glob("*.json"))
+    assert len(receipts) == 1
+    payload = json.loads(receipts[0].read_text(encoding="utf-8"))
+    assert payload["status"] == "passed_for_single_target_repair"
+    assert payload["repair_findings"] == ["face:block"]
+    assert payload["current_target_sha256"]
 
 
 def test_load_sections_drops_appended_compiled_prompt(tmp_path: Path) -> None:
@@ -4460,7 +4512,7 @@ def test_back_view_form_turnaround_is_not_misclassified_as_split_ref() -> None:
     )
 
 
-def test_target_image_qc_treats_pixel_outfit_as_advisory_by_default(tmp_path: Path, monkeypatch) -> None:
+def test_target_image_qc_blocks_pixel_outfit_by_default(tmp_path: Path, monkeypatch) -> None:
     target_png = tmp_path / "出图" / "第1集" / "图片" / "Clip_01.png"
     target_png.parent.mkdir(parents=True)
     target_png.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
@@ -4497,9 +4549,7 @@ def test_target_image_qc_treats_pixel_outfit_as_advisory_by_default(tmp_path: Pa
     )
 
     monkeypatch.setattr(codex_image_runner.subprocess, "run", lambda *args, **kwargs: subprocess.CompletedProcess(args, 0, "", ""))
-    monkeypatch.delenv("N2D_TARGET_QC_STRICT_PIXEL", raising=False)
-
-    assert codex_image_runner.run_target_image_qc(tmp_path, "第1集", target)
+    assert not codex_image_runner.run_target_image_qc(tmp_path, "第1集", target)
 
 
 def test_target_image_qc_allows_noface_for_non_character_target(tmp_path: Path, monkeypatch) -> None:
@@ -4581,6 +4631,49 @@ def test_target_image_qc_blocks_character_coverage_noface(tmp_path: Path, monkey
     )
 
     monkeypatch.setattr(codex_image_runner.subprocess, "run", lambda *args, **kwargs: subprocess.CompletedProcess(args, 0, "", ""))
+
+    assert not codex_image_runner.run_target_image_qc(tmp_path, "第1集", target)
+
+
+def test_target_image_qc_blocks_unconfirmed_current_pixel_prop_review(tmp_path: Path, monkeypatch) -> None:
+    target_png = tmp_path / "出图" / "第1集" / "图片" / "Clip_01.png"
+    target_png.parent.mkdir(parents=True)
+    target_png.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
+    report = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(
+        json.dumps({
+            "qc_environment": {"precision_level": "full"},
+            "face_reference_coverage": {"missing": []},
+            "checks": {},
+            "prop_shape_review": {"targets": [{
+                "png": "图片/Clip_01.png",
+                "asset": "VFX_双眼墨虎",
+                "confirmed": False,
+            }]},
+            "lint": {"findings": []},
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip 01",
+        body="",
+        target_line="`出图/第1集/图片/Clip_01.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_01",
+        clip="Clip_01",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip_01.png",
+        section=section,
+    )
+
+    monkeypatch.setattr(
+        codex_image_runner.subprocess,
+        "run",
+        lambda *args, **kwargs: subprocess.CompletedProcess(args, 0, "", ""),
+    )
 
     assert not codex_image_runner.run_target_image_qc(tmp_path, "第1集", target)
 

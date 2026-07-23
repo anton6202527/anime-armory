@@ -12347,3 +12347,23 @@ def test_generation_recipe_quiet_when_reference_inputs_present(tmp_path):
     gate.check_generation_recipe_evidence(str(root), "第1集", "image")
 
     assert not any("已不在盘上" in f["msg"] for f in gate.findings if f["dim"] == "生成配方证据")
+
+
+def test_generation_recipe_blocks_unverifiable_session_reference_placeholder(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    png = root / "出图" / "第1集" / "图片" / "Clip_01.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"\x89PNG\r\n\x1a\n")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (prod / "production_events.jsonl").write_text(json.dumps(_complete_recipe_event(
+        "出图/第1集/图片/Clip_01.png",
+        "builtin_imagegen_session_reference_bundle; exact path list unavailable from tool receipt",
+    ), ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "image")
+
+    hits = [f for f in gate.findings if f["dim"] == "生成配方证据" and "不可审计占位" in f["msg"]]
+    assert hits and hits[0]["sev"] == gate.BLOCK

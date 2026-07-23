@@ -1,0 +1,1 @@
+{"at": "2026-07-23T11:12:30+0800", "elapsed_ms": 0.723, "episode": "", "event_type": "next_action", "gate": {"blocked": false, "stage": ""}, "kind": "n2d_flow_event", "prework": {"cache_hits": 0, "statuses": {}, "total": 0}, "span_id": "", "stage": "done", "stop_reason": "blocked_by_entry_check", "trace_id": "", "version": 1}
