@@ -1991,6 +1991,14 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 "story_economy_audit 未通过；先回 n2d-script 压缩非战斗/非强情绪长段，把解释、行进、普通反应改成短镜/旁白/蒙太奇后再进贵工位。",
             ),
             (
+                # 集级生成次数预算（P3·复杂度感知）：保守/未设置恒放行；片段经济=紧凑/极简 档下，
+                # 超本集复杂度预算且有可采纳的 merge/单拍多镜省次数 → 阻断（宪法 B10·opt-in strict）。
+                "clip_economy_gate",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "clip_economy_planner.py"),
+                [root, ep, "--strict", "--write", "--json"],
+                "clip_economy 未通过：片段经济=紧凑/极简 档要求先把生成次数压进本集复杂度预算——采纳 clip_economy_plan 的相邻合并/单拍多镜(take_policy=single_take_multishot)候选改 storyboard，或把简单叙事的逐节拍独立 clip 合并；也可降档回保守。",
+            ),
+            (
                 "spectacle_contract_audit",
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_contract_audit.py"),
                 [root, ep, "--strict", "--json"],
@@ -2108,6 +2116,13 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 "redundancy_audit",
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "redundancy_audit.py"),
                 [root, ep, "--write", "--json"],
+            ),
+            (
+                # 反向防瞎编（P2）：改编稿出现源文没有、也无 adaptation_delta 有账引入的专名/设定 → warn。
+                # 前向 source_adaptation_audit 是硬闸（查漏），本层 report-first（查瞎编），不阻断（宪法 B10）。
+                "adaptation_fabrication_scan",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "source_adaptation_audit.py"),
+                [root, ep, "--check-fabrication", "--json"],
             ),
             (
                 "series_bible",

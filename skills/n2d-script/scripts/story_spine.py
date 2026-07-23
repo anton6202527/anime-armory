@@ -116,6 +116,68 @@ def _causality_chain(root: Path) -> List[Dict[str, Any]]:
     return [r for r in cc if isinstance(r, dict)] if isinstance(cc, list) else []
 
 
+def _causal_id(row: Mapping[str, Any]) -> str:
+    return str(row.get("trace_id") or row.get("id") or "").strip()
+
+
+def _causal_ids(root: Path) -> set:
+    """源理解合同因果链里的稳定 trace_id 全集（真值源·防臆造 depends_on/下游依赖 id）。"""
+    return {cid for cid in (_causal_id(r) for r in _causality_chain(root)) if cid}
+
+
+def _must_keep_cause_ids(root: Path) -> set:
+    """因果链里标了 must_keep 的因果 trace_id——这类是主线衔接的硬承接点，裁剪必须 reroute。"""
+    out = set()
+    for r in _causality_chain(root):
+        cid = _causal_id(r)
+        if cid and str(r.get("must_keep") or "").strip():
+            out.add(cid)
+    return out
+
+
+def _spine_ids(spine: Sequence[Mapping[str, Any]]) -> set:
+    return {str(n.get("id") or "").strip() for n in spine if isinstance(n, Mapping) and str(n.get("id") or "").strip()}
+
+
+def _spine_depends_on(spine: Sequence[Mapping[str, Any]]) -> List[Tuple[str, str]]:
+    """(spine_node_id, dep_id) 对：主线节点声明它依赖的上游因果/伏笔/主线 id。"""
+    out: List[Tuple[str, str]] = []
+    for n in spine:
+        if not isinstance(n, Mapping):
+            continue
+        nid = str(n.get("id") or "?").strip()
+        for dep in n.get("depends_on") or []:
+            dep = str(dep).strip()
+            if dep:
+                out.append((nid, dep))
+    return out
+
+
+def _mainline_dep_carriers(threads: Sequence[Mapping[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    """dep_id → 声明「承载/喂给主线该依赖」的线程列表（connectivity.downstream_mainline_deps）。
+
+    这一层此前只在 scaffold 里存在、从不被读取；激活它把「裁这条支线后主线还接得上吗」
+    从 payoff_reroute 的散文断言，升级成可机检的依赖图边。"""
+    out: Dict[str, List[Dict[str, Any]]] = {}
+    for t in threads:
+        if not isinstance(t, Mapping):
+            continue
+        conn = t.get("connectivity") if isinstance(t.get("connectivity"), Mapping) else {}
+        reroute = str(conn.get("payoff_reroute") or "").strip()
+        decision = str(t.get("decision") or "").strip()
+        for dep in conn.get("downstream_mainline_deps") or []:
+            dep = str(dep).strip()
+            if not dep:
+                continue
+            out.setdefault(dep, []).append({
+                "thread_id": t.get("id"),
+                "name": t.get("name"),
+                "decision": decision,
+                "payoff_reroute": reroute,
+            })
+    return out
+
+
 def _protected_functions(root: Path) -> List[str]:
     data = load_json(root / ADAPTATION_STRATEGY)
     if isinstance(data, dict):
@@ -164,6 +226,8 @@ def _scaffold_payload(root: Path) -> Dict[str, Any]:
                 "beat": "待补：主线节点（起因/推进/转折/高潮/兑现之一）",
                 "source_span": "待补：第X章 / 第X-Y章",
                 "causal_role": "起因",
+                # depends_on：本主线节点依赖的上游 id，引用 source_comprehension 因果链 SRC_CAUSE_*
+                # 或伏笔账 SRC_FORESHADOW_* 或前序 SPINE_* —— 禁止臆造，check 会核对是否真实存在。
                 "depends_on": [],
             }
         ],
@@ -180,6 +244,9 @@ def _scaffold_payload(root: Path) -> Dict[str, Any]:
                 "opens_foreshadow": [],
                 "pays_foreshadow": [],
                 "connectivity": {
+                    # downstream_mainline_deps：本支线承载/喂给主线的因果依赖 id（SRC_CAUSE_*/SPINE_*）。
+                    # 若本支线被 cut/fold/compress，check 会验证这些依赖有 payoff_reroute 承接，
+                    # 否则判 mainline_dependency_orphaned（主线衔接断裂）。禁止臆造 id。
                     "downstream_mainline_deps": [],
                     "payoff_reroute": "",
                     "no_orphan_proof": "",
@@ -372,6 +439,55 @@ def check(root: Path, *, write_missing: bool = False) -> Dict[str, Any]:
             _issue(issues, "block", "fix_touches_protected",
                    f"修正 {fid} 触及受保护功能且无冲突证明。")
 
+    # ── 主线衔接机检（"改了之后要能和后面主要情节衔接上"·机器验证而非散文断言）──
+    # 消费源理解合同的因果链 + spine[].depends_on + threads[].connectivity.downstream_mainline_deps，
+    # 把「裁一条支线后主线还接不接得上」从 payoff_reroute 的自由文本升级成可机检的依赖图。
+    causal_ids = _causal_ids(root)
+    must_keep_ids = _must_keep_cause_ids(root)
+    spine_ids = _spine_ids(spine)
+    known_dep_universe = causal_ids | source_fids | spine_ids
+    carriers = _mainline_dep_carriers(threads)
+
+    # (A) 防臆造：depends_on / downstream_mainline_deps 引用的 id 必须是源因果/伏笔/主线里真实存在的。
+    #     只在有可对照的真值源（因果链或伏笔账）时才判，避免无源项目误报。
+    if known_dep_universe:
+        for nid, dep in _spine_depends_on(spine):
+            if dep not in known_dep_universe:
+                _issue(issues, "block", "causal_dep_fabricated",
+                       f"主线节点 {nid} 的 depends_on 引用 {dep} 不在源因果链/伏笔账/主线 id 里——禁止臆造依赖。",
+                       {"spine_node": nid, "dep": dep})
+        for dep, refs in carriers.items():
+            if dep not in known_dep_universe:
+                for r in refs:
+                    _issue(issues, "block", "causal_dep_fabricated",
+                           f"线程 {r.get('thread_id')} 的 downstream_mainline_deps 引用 {dep} 不在源因果链/伏笔账/主线 id 里——禁止臆造依赖。",
+                           {"thread": r.get("thread_id"), "dep": dep})
+
+    # (B) 主线依赖孤儿（fail-closed）：某条被主线节点 depends_on 的源因果依赖，
+    #     其所有承载线程都被 cut/fold 且无 payoff_reroute、也没有任何保留线程承载 → 主线衔接断裂。
+    spine_dep_ids = {dep for _nid, dep in _spine_depends_on(spine)}
+    for dep in sorted(spine_dep_ids & causal_ids):
+        refs = carriers.get(dep) or []
+        if not refs:
+            _issue(issues, "info", "mainline_dep_uncarried",
+                   f"主线依赖 {dep} 未被任何支线登记 downstream_mainline_deps；若它落在主线 spine 本体上可忽略。",
+                   {"dep": dep})
+            continue
+        kept = [r for r in refs if r["decision"] not in NON_KEEP_DECISIONS]
+        cut_with_reroute = [r for r in refs if r["decision"] in NON_KEEP_DECISIONS and r["payoff_reroute"]]
+        if not kept and not cut_with_reroute:
+            _issue(issues, "block", "mainline_dependency_orphaned",
+                   f"主线依赖 {dep} 的承载线程全部被裁/折叠且无 payoff_reroute——裁后主线衔接断裂，后面主要情节接不上。",
+                   {"dep": dep, "refs": refs})
+
+    # (C) must_keep 因果硬承接：源因果链标了 must_keep 的承接点，被裁/折叠线程引用且无 reroute → block。
+    for dep in sorted(must_keep_ids):
+        for r in carriers.get(dep) or []:
+            if r["decision"] in NON_KEEP_DECISIONS and not r["payoff_reroute"]:
+                _issue(issues, "block", "must_keep_cause_cut_without_reroute",
+                       f"因果承接点 {dep}（源理解标 must_keep）被线程 {r.get('thread_id')} {r['decision']} 却无 payoff_reroute——必删的主线因果不得无承接裁剪。",
+                       {"dep": dep, "thread": r.get("thread_id")})
+
     return _finalize(root, mode, mode_source, issues, spine=spine, threads=threads)
 
 
@@ -405,9 +521,10 @@ def _finalize(root: Path, mode: str, mode_source: str, issues: List[Dict[str, An
         "scaffold_command": f"python3 skills/n2d-script/scripts/story_spine.py {root} scaffold --write",
         "next_when_blocked": (
             "补齐 story_spine.json：提炼主线 spine，登记每条支线的 class/decision，"
-            "所有 compress/fold/cut 线程写 connectivity(payoff_reroute + no_orphan_proof)，"
+            "所有 compress/fold/cut 线程写 connectivity(payoff_reroute + no_orphan_proof + "
+            "downstream_mainline_deps 引用 SRC_CAUSE_*/SPINE_* 声明它喂给主线的依赖)，"
             "修正不合理点写 no_contradiction_proof，把 status 改为 confirmed，再重跑 check。"
-            "只对已确认的 因果链/伏笔账 操作，禁止臆造。"
+            "只对已确认的 因果链/伏笔账 操作，禁止臆造 id；被主线 depends_on 的 must_keep 因果被裁必须 reroute。"
         ),
     }
     out = root / "生产数据" / "story_spine_check.json"

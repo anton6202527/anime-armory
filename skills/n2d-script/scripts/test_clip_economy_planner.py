@@ -219,3 +219,76 @@ def test_single_take_candidates_skip_high_risk_and_merged_members():
     root = _mk_storyboard(clips)
     plan = CEP.build_plan(root, "第1集")
     assert plan["summary"]["single_take_candidates"] == 0
+
+
+# ── 复杂度感知预算 + 片段经济强度档（P3）──
+
+def _mk_with_settings(clips, settings_text):
+    root = _mk_storyboard(clips)
+    (root / "_设置.md").write_text(settings_text, encoding="utf-8")
+    return root
+
+
+def test_simple_narrative_gets_low_budget():
+    # 1 场景 / 1 角色 → simple 档。
+    root = _mk_storyboard([_clip(i) for i in range(1, 5)])
+    plan = CEP.build_plan(root, "第1集")
+    cx = plan["summary"]["complexity"]
+    assert cx["class"] == "simple"
+    assert plan["summary"]["budget_per_min"] <= 8.0
+
+
+def test_many_locations_is_complex():
+    clips = [_clip(i, location_id=f"LOC_{i}", scene=f"场景{i}") for i in range(1, 7)]
+    root = _mk_storyboard(clips)
+    cx = CEP.build_plan(root, "第1集")["summary"]["complexity"]
+    assert cx["class"] == "complex"
+    assert cx["distinct_locations"] >= 4
+
+
+def test_action_raises_budget_not_complexity_class():
+    # 单场景单角色但多打斗镜：仍是 simple 广度，但预算被动作加成抬高。
+    clips = [_clip(i) for i in range(1, 6)]
+    for j in (1, 2, 3):
+        clips[j]["template"] = "fight_exchange"
+    cx = CEP.build_plan(_mk_storyboard(clips), "第1集")["summary"]["complexity"]
+    assert cx["class"] == "simple"
+    assert cx["action_budget_allowance"] > 0
+
+
+def test_conservative_default_never_blocks():
+    # 无 片段经济 设置 → 保守：即便超预算也 should_block=False。
+    clips = [_clip(i, duration=5.0) for i in range(1, 13)]  # 密集短镜
+    plan = CEP.build_plan(_mk_storyboard(clips), "第1集")
+    assert plan["summary"]["economy_mode"].startswith("未设置")
+    assert plan["should_block"] is False
+
+
+def test_tight_mode_blocks_when_over_budget_with_savings():
+    # 片段经济=紧凑 + 超预算 + 有可采纳合并 → should_block=True。
+    clips = [_clip(i, duration=5.0) for i in range(1, 13)]
+    root = _mk_with_settings(clips, "片段经济: 紧凑\n")
+    plan = CEP.build_plan(root, "第1集")
+    assert plan["summary"]["economy_mode"] == "紧凑"
+    assert plan["summary"]["over_budget"] is True
+    assert plan["should_block"] is True
+    assert any(f["code"] == "generation_density_over_budget" and f["severity"] == "block"
+               for f in plan["findings"])
+
+
+def test_tight_mode_strict_exit_code():
+    clips = [_clip(i, duration=5.0) for i in range(1, 13)]
+    root = _mk_with_settings(clips, "片段经济: 紧凑\n")
+    rc = CEP.main([str(root), "第1集", "--strict", "--json"])
+    assert rc == 1
+    # 保守档同样输入 → exit 0
+    root2 = _mk_storyboard(clips)
+    assert CEP.main([str(root2), "第1集", "--strict", "--json"]) == 0
+
+
+def test_extreme_mode_tightens_budget():
+    clips = [_clip(i, duration=8.0) for i in range(1, 5)]
+    base = CEP.build_plan(_mk_storyboard(clips), "第1集")["summary"]["budget_per_min"]
+    root = _mk_with_settings(clips, "片段经济: 极简\n")
+    tight = CEP.build_plan(root, "第1集")["summary"]["budget_per_min"]
+    assert tight < base  # 极简收紧一档

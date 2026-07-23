@@ -316,6 +316,77 @@ def important_terms(raw: str) -> List[str]:
     return terms
 
 
+# ── 反向防瞎编：改编稿里出现、源文没有、也没有有账改写引入的专名/称谓/设定 ──
+# 前向 audit 只查 source→adaptation 覆盖（漏没漏）；本层查 adaptation→source（有没有瞎编）。
+# 只认可确定性最高的信号：专名括注（【】《》）与称谓（王爷/长老/宗主…）——它们是
+# "自造设定/凭空多出一个人物或法宝" 的高召回低误报代理。裸人名不查（无模型易误伤）。
+FABRICATION_STOP_TERMS = {
+    "系统", "面板", "任务", "奖励", "提示", "宿主", "警告", "检测",
+}
+# 称谓正则有时把前置连接词/动词一起吞进 term（"是玄冥长老"）；比对源文/授权前先剥掉，
+# 得到真正的专名核（"玄冥长老"），避免误判成瞎编。
+FAB_LEADING_CONNECTIVES = set("是这那有叫让被把请问说喊看听见和跟同对向从到为替给")
+
+
+def entity_core(term: str) -> str:
+    core = term.strip("【】《》").strip()
+    while len(core) > 2 and core[0] in FAB_LEADING_CONNECTIVES:
+        core = core[1:]
+    return core
+
+
+def narrative_adaptation_text(root: str, ep: str) -> str:
+    """观众实际"听到/读到"的改编文本——只取 voiceover.txt（口播台词/旁白）。
+
+    不取 storyboard 技术字段，避免把镜头/风格括注误判成瞎编专名（低误报优先）。"""
+    return read_text(Path(root) / "脚本" / ep / "voiceover.txt")
+
+
+def fabrication_findings(
+    root: str,
+    ep: str,
+    raw: str,
+    triage_items: Sequence[Dict[str, Any]],
+    spine_cuts: Sequence[Dict[str, Any]],
+    limit: int = 10,
+) -> Tuple[List[Dict[str, Any]], int]:
+    """改编稿出现、源文没有、也无有账改写引入的专名/设定 → 瞎编候选（report-first·warn）。"""
+    narrative = narrative_adaptation_text(root, ep)
+    findings: List[Dict[str, Any]] = []
+    if not narrative.strip():
+        return findings, 0
+    candidates: List[str] = []
+    seen: Set[str] = set()
+    for term in important_terms(narrative):
+        core = entity_core(term)
+        if core in FABRICATION_STOP_TERMS or len(core) < 2 or core in seen:
+            continue
+        if present(term, raw) or present(core, raw):
+            continue  # 源文有出处，不算瞎编
+        seen.add(core)
+        candidates.append(core)
+    reported = 0
+    for term in candidates[:limit]:
+        auth = triage_authorizes_term(term, triage_items)
+        if auth:
+            add(findings, "info", "adaptation_new_term_accounted",
+                f"改编稿新增专名/设定 `{term}` 源文未见，但 adaptation_triage 已登记有账改写（rewrite/intensify/combine_minor_role 等）；按有账改编处理。",
+                {"term": term, **triage_summary(auth)})
+            continue
+        spine_auth = spine_authorizes(term, spine_cuts)
+        if spine_auth:
+            add(findings, "info", "adaptation_new_term_by_spine",
+                f"改编稿新增专名 `{term}` 与 story_spine 已登记的改写线程相关；按全书级有账改编处理。",
+                {"term": term, **spine_summary(spine_auth)})
+            continue
+        reported += 1
+        add(findings, "warn", "fabricated_entity_candidate",
+            f"改编稿出现源文没有的专名/称谓 `{term}`，且无 adaptation_delta 有账引入——疑似瞎编/自造设定；"
+            f"确认它是源文别名/合并小角色（去 adaptation_triage 登记 change_type + adaptation_delta），还是应删除。",
+            {"term": term})
+    return findings, reported
+
+
 def key_event_sentences(raw: str, limit: int = 10) -> List[str]:
     candidates = [s for s in split_sentences(raw) if EVENT_RE.search(s)]
     # Prefer sentences containing explicit system/name/title/bracket markers,
@@ -373,7 +444,7 @@ def add(findings: List[Dict[str, Any]], severity: str, code: str, message: str,
     findings.append(row)
 
 
-def audit(root: str, ep: str) -> Dict[str, Any]:
+def audit(root: str, ep: str, *, check_fabrication: bool = False) -> Dict[str, Any]:
     ep = ep_label(ep)
     raw_file = raw_path(root, ep)
     findings: List[Dict[str, Any]] = []
@@ -482,6 +553,11 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
             "源文有多个关键事件信号，但改编稿没有检测到冲突/反转/系统/爽点类词，疑似改得过平。",
             {"raw_event_sentences": raw_event_count})
 
+    fabrication_count = 0
+    if check_fabrication:
+        fab_findings, fabrication_count = fabrication_findings(root, ep, raw, triage_items, spine_cuts)
+        findings.extend(fab_findings)
+
     stats = {
         "raw_chars": len(raw),
         "adaptation_chars": len(adapted),
@@ -497,6 +573,7 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         "omitted_event_sentences": len(omitted_events),
         "scene_function_sentences": len(function_items),
         "lost_scene_functions": len(lost_functions),
+        "fabrication_candidates": fabrication_count,
     }
     ok = not any(f["severity"] in {"must", "warn"} for f in findings)
     return {"episode": ep, "ok": ok, "stats": stats, "findings": findings}
@@ -528,8 +605,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("episode")
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--check-fabrication", action="store_true",
+                    help="额外跑反向防瞎编：改编稿出现源文没有且无有账改写引入的专名/设定 → warn（report-first）。")
     ns = ap.parse_args(argv)
-    result = audit(ns.root.rstrip("/"), ep_label(ns.episode))
+    result = audit(ns.root.rstrip("/"), ep_label(ns.episode), check_fabrication=ns.check_fabrication)
     if ns.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:

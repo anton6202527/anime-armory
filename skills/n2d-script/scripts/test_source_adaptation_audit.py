@@ -193,3 +193,61 @@ def test_spine_draft_does_not_authorize():
     }], status="draft")
     result = SA.audit(root, "第1集")
     assert "source_term_cut_by_spine" not in codes(result)
+
+
+# ── 反向防瞎编（P2·--check-fabrication）──
+
+FAB_RAW = "沈念被逼到宫墙下。系统提示【妖血觉醒】。她反击柳娘子。"
+
+
+def test_fabrication_flags_invented_title():
+    # 改编稿凭空多出源文没有的"玄冥长老"称谓，且无 adaptation_triage 有账 → warn 候选。
+    root = _mk_ep(
+        FAB_RAW,
+        "[镜头1·沈念·惊恐] 系统提示【妖血觉醒】。\n"
+        "[镜头2·沈念·冷冽] 是玄冥长老在背后操盘，我要反击！\n",
+    )
+    result = SA.audit(root, "第1集", check_fabrication=True)
+    assert "fabricated_entity_candidate" in codes(result)
+    assert result["stats"]["fabrication_candidates"] >= 1
+
+
+def test_fabrication_silent_when_default():
+    # 不传 check_fabrication → 反向层不跑，不引入新 warn（老 gate 不受影响）。
+    root = _mk_ep(
+        FAB_RAW,
+        "[镜头2·沈念·冷冽] 是玄冥长老在背后操盘，我要反击！\n",
+    )
+    result = SA.audit(root, "第1集")
+    assert "fabricated_entity_candidate" not in codes(result)
+    assert result["stats"]["fabrication_candidates"] == 0
+
+
+def test_fabrication_not_flagged_when_in_source():
+    # 称谓源文就有 → 不算瞎编。
+    root = _mk_ep(
+        "沈念被逼到宫墙下。玄冥长老在背后操盘。系统提示【妖血觉醒】。",
+        "[镜头1·沈念·冷冽] 是玄冥长老在背后操盘，我反击！\n",
+    )
+    result = SA.audit(root, "第1集", check_fabrication=True)
+    assert "fabricated_entity_candidate" not in codes(result)
+
+
+def test_fabrication_accounted_by_triage():
+    # 改编稿新增"玄冥长老"，但 adaptation_triage 登记了 combine_minor_role 改写账 → info，不 warn。
+    root = _mk_ep(
+        FAB_RAW,
+        "[镜头1·沈念·冷冽] 是玄冥长老在背后操盘，我要反击！\n",
+        triage={"items": [{
+            "id": "T1", "source_span": "第1章", "decision": "rewrite",
+            "change_type": "combine_minor_role",
+            "reason": "把源文两名模糊反派合并成玄冥长老，收束反派线。",
+            "adaptation_delta": "changed_from 两名散兵→changed_to 玄冥长老一人",
+            "preserved_function": "反派施压", "short_drama_reason": "反派聚焦",
+            "delivery": "台词点名玄冥长老",
+        }]},
+    )
+    result = SA.audit(root, "第1集", check_fabrication=True)
+    c = codes(result)
+    assert "fabricated_entity_candidate" not in c
+    assert "adaptation_new_term_accounted" in c

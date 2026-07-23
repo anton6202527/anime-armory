@@ -48,6 +48,16 @@ try:
 except Exception:  # pragma: no cover - planner degrades to duration-only signals
     sea = None  # type: ignore
 
+# 设置读取属同系列 n2d/_lib，缺失时降级为无设置（advisory），不让主流程崩。
+_N2D_LIB = HERE.parent.parent / "n2d" / "_lib"
+if str(_N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(_N2D_LIB))
+try:
+    from settings import load_settings  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover
+    def load_settings(work_root: str) -> Dict[str, str]:  # type: ignore
+        return {}
+
 KIND = "n2d_clip_economy_plan"
 VERSION = 1
 
@@ -56,7 +66,86 @@ VERSION = 1
 # Seedance 2.5 基础 30s（可延长）。简单叙事 1 分钟 ≈ 4-6 次生成是可达口径。
 CAPABILITY_SNAPSHOT_DATE = "2026-07-22"
 DEFAULT_MAX_TAKE_SEC = 15.0
-DENSITY_WARN_PER_MIN = 10.0  # 每分钟预计生成次数超过它 → warn（heuristic，report-only）
+DENSITY_WARN_PER_MIN = 10.0  # 兜底密度上限（复杂度未知/无时长时的旧口径），report-only
+
+# ── 复杂度感知生成预算（治「简单叙事被拆成太多付费 clip」）──
+# 简单叙事优先「更少更长的多镜单拍」，复杂/动作戏才配更高的每分钟生成密度。
+# 每分钟预计付费生成次数上限，按叙事**广度**分档（heuristic·会随后端能力刷新）。
+# 广度=场景数+角色数（简单叙事守在少数地点/人物）；动作密度另作预算加成（打斗合理需要更多镜位），
+# 不把「一段打斗拆成几个 clip」误判成叙事复杂。
+COMPLEXITY_BUDGET_PER_MIN = {
+    "simple": 6.0,
+    "standard": 9.0,
+    "complex": 12.0,
+}
+ACTION_BUDGET_ALLOWANCE_PER_CLIP = 0.5  # 每个动作/奇观镜多给的每分钟生成额度
+ACTION_BUDGET_ALLOWANCE_CAP = 2.0
+
+# 片段经济强度选择点（镜像 主线剪枝 的 advisory/enforce 语义）：
+#   保守（默认/未设置）= 仅建议不阻断，兼容老项目；
+#   紧凑 = 超复杂度预算且有可采纳的合并/单拍省次数 → --strict 阻断；
+#   极简 = 预算再收紧一档（×0.8）后同 紧凑 阻断。
+ECONOMY_ENFORCE_MODES = {"紧凑", "极简"}
+ECONOMY_TIGHT_MODES = {"极简"}
+
+
+def economy_mode(root: Path) -> Tuple[str, bool, float]:
+    """返回 (mode_label, enforce, budget_scale)。缺省/保守 → advisory。"""
+    try:
+        settings = load_settings(str(root))
+    except Exception:
+        settings = {}
+    raw = str(settings.get("片段经济") or settings.get("clip经济") or "").strip()
+    enforce = raw in ECONOMY_ENFORCE_MODES
+    scale = 0.8 if raw in ECONOMY_TIGHT_MODES else 1.0
+    label = raw or "未设置(保守)"
+    return label, enforce, scale
+
+
+def classify_complexity(
+    clips: Sequence[Mapping[str, Any]],
+    economy_rows: Mapping[str, Mapping[str, Any]],
+) -> Dict[str, Any]:
+    """从 storyboard 确定性推断本集叙事复杂度（simple/standard/complex）。
+
+    信号：不同场景数、登场核心角色数、动作/奇观镜数、强揭示/反转节拍数。
+    纯启发式初筛——只决定「生成次数预算档」，不臆断剧情质量。"""
+    locations: set = set()
+    characters: set = set()
+    action_clips = 0
+    premium_beats = 0
+    for i, clip in enumerate(clips, 1):
+        loc = _location_key(clip)
+        if loc:
+            locations.add(loc)
+        for c in clip.get("character_ids") or []:
+            if str(c).strip():
+                characters.add(str(c).strip())
+        if _high_risk(clip):
+            action_clips += 1
+        cid = clip_id(clip, i)
+        if str((economy_rows.get(cid) or {}).get("economy_class") or "") == "premium_detail":
+            premium_beats += 1
+    n_loc = len(locations)
+    n_char = len(characters)
+    # 叙事**广度**判据（只看地点/人物这类真复杂度信号，不把打斗镜位数算进来）：
+    if n_loc >= 4 or n_char >= 8:
+        cls = "complex"
+    elif n_loc <= 2 and n_char <= 4:
+        cls = "simple"
+    else:
+        cls = "standard"
+    action_allowance = min(action_clips * ACTION_BUDGET_ALLOWANCE_PER_CLIP, ACTION_BUDGET_ALLOWANCE_CAP)
+    budget = COMPLEXITY_BUDGET_PER_MIN[cls] + action_allowance
+    return {
+        "class": cls,
+        "distinct_locations": n_loc,
+        "distinct_characters": n_char,
+        "action_clips": action_clips,
+        "premium_beats": premium_beats,
+        "action_budget_allowance": round(action_allowance, 2),
+        "budget_per_min": round(budget, 2),
+    }
 
 # 不进合并候选的高风险信号：高动作模板、显式锚链、奇观镜（安全拆分/锚帧链优先）。
 HIGH_RISK_TEMPLATE_RE = re.compile(
@@ -350,16 +439,40 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
     takes_per_min = round(current_takes / minutes, 2) if minutes else None
     projected_per_min = round(projected_takes / minutes, 2) if minutes else None
 
+    # 复杂度感知预算：简单叙事配更低的每分钟生成密度。
+    complexity = classify_complexity(clips, economy_rows)
+    mode_label, enforce, budget_scale = economy_mode(root)
+    budget_per_min = round(complexity["budget_per_min"] * budget_scale, 2)
+    complexity["applied_budget_per_min"] = budget_per_min
+    savings_available = bool(merge_groups or single_take_candidates or fold_candidates)
+    over_budget = takes_per_min is not None and takes_per_min > budget_per_min
+    # 阻断只在 enforce 档（紧凑/极简）且超预算且有可采纳省次数时成立——可执行、不死锁。
+    should_block = bool(enforce and over_budget and savings_available)
+
     findings: List[Dict[str, Any]] = []
-    if takes_per_min is not None and takes_per_min > DENSITY_WARN_PER_MIN:
+    if over_budget:
+        findings.append({
+            "severity": "block" if should_block else "warn",
+            "code": "generation_density_over_budget",
+            "confidence": "heuristic",
+            "message": (
+                f"本集复杂度={complexity['class']}（{complexity['distinct_locations']}场景/"
+                f"{complexity['distinct_characters']}角色/{complexity['action_clips']}动作镜），"
+                f"当前每分钟预计生成 {takes_per_min} 次 > 预算 {budget_per_min}/min。"
+                f"采纳下方 merge/单拍多镜合并后约 {projected_per_min}/min。"
+                + ("片段经济=" + mode_label + " 档：先把生成次数压进预算或改 storyboard 后再进贵工位。"
+                   if should_block else "简单叙事优先「更少更长的多镜单拍」，不必逐节拍独立成付费 clip。")
+            ),
+        })
+    elif takes_per_min is not None and takes_per_min > DENSITY_WARN_PER_MIN:
         findings.append({
             "severity": "warn",
             "code": "generation_density_high",
             "confidence": "heuristic",
             "message": (
-                f"当前每分钟预计生成 {takes_per_min} 次（> {DENSITY_WARN_PER_MIN:g}/min 口径）。"
+                f"当前每分钟预计生成 {takes_per_min} 次（> 兜底 {DENSITY_WARN_PER_MIN:g}/min）。"
                 f"多镜叙事后端（快照 {CAPABILITY_SNAPSHOT_DATE}）单次可承载多个镜位；"
-                f"按下方 merge/fold 候选合并后约 {projected_per_min}/min。简单叙事优先合并，不必逐节拍独立成付费 clip。"
+                f"按下方 merge/fold 候选合并后约 {projected_per_min}/min。"
             ),
         })
     if merge_groups or single_take_candidates:
@@ -386,13 +499,18 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "single_take_candidates": len(single_take_candidates),
         "max_take_sec": max_take_sec,
         "capability_snapshot_date": CAPABILITY_SNAPSHOT_DATE,
+        "complexity": complexity,
+        "economy_mode": mode_label,
+        "budget_per_min": budget_per_min,
+        "over_budget": over_budget,
     }
     return {
         "kind": KIND,
         "version": VERSION,
         "episode": ep,
         "generated_at": now_iso(),
-        "ok": True,
+        "ok": not should_block,
+        "should_block": should_block,
         "summary": summary,
         "clips": per_clip,
         "merge_groups": merge_groups,
@@ -485,6 +603,9 @@ def render_md(plan: Mapping[str, Any]) -> str:
         f"- 当前预计生成次数: {s.get('current_estimated_takes')}（{s.get('takes_per_minute')}/min）",
         f"- 合并后预计: {s.get('projected_takes_after_merge')}（{s.get('projected_takes_per_minute')}/min）",
         f"- 合并候选组: {s.get('merge_groups')} · 并入相邻强戏候选: {s.get('fold_candidates')} · 单Clip补take_policy候选: {s.get('single_take_candidates')}",
+        (lambda c: f"- 复杂度: {c.get('class')}（{c.get('distinct_locations')}场景/{c.get('distinct_characters')}角色/"
+                   f"{c.get('action_clips')}动作镜）· 预算 {s.get('budget_per_min')}/min · 片段经济档 {s.get('economy_mode')}"
+                   f"{'· 超预算' if s.get('over_budget') else ''}")(s.get('complexity') or {}),
         f"- 能力快照: {s.get('capability_snapshot_date')}（单次多镜上限口径 {s.get('max_take_sec')}s·会过期）",
         "",
         "## 合并候选组",
@@ -542,6 +663,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="单次多镜生成的合计时长口径（默认 15s；按所选后端能力档调整）")
     ap.add_argument("--emit-merge-draft", action="store_true",
                     help="把合并候选组落成可审阅的 storyboard 草案片段（status=draft，不改写 storyboard.json）")
+    ap.add_argument("--strict", action="store_true",
+                    help="片段经济=紧凑/极简 档：超复杂度预算且有可采纳省次数时返回非零（阻断进贵工位）；保守/未设置恒返回 0。")
     ns = ap.parse_args(argv)
     root = Path(ns.root.rstrip("/"))
     ep = ep_label(ns.episode)
@@ -559,7 +682,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(json.dumps(plan, ensure_ascii=False, indent=2))
     else:
         print(render_md(plan))
-    return 0
+    # 退出码：仅 --strict 且 enforce 档判定 should_block 才非零；保守/未设置恒 0，老项目不受影响。
+    return 1 if (ns.strict and plan.get("should_block")) else 0
 
 
 if __name__ == "__main__":

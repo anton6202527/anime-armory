@@ -328,7 +328,7 @@
       "warnings_per_attempt": 1.5621
     },
     {
-      "blockers_per_attempt": 0.5385,
+      "blockers_per_attempt": 0.5147,
       "completion_rate": null,
       "consistency_blockers": 25,
       "consistency_ledger": {
@@ -442,19 +442,19 @@
         "credits": 1584.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "5h00m57s",
-      "duration_sec": 18057.121,
-      "elapsed_per_finished_min_sec": 15062.873,
+      "duration_hms": "5h15m15s",
+      "duration_sec": 18914.591,
+      "elapsed_per_finished_min_sec": 15778.156,
       "episode": "第2集",
-      "event_count": 685,
+      "event_count": 693,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 299,
-      "generation_fails": 34,
-      "generation_pass_rate": 0.8863,
-      "generation_passes": 265,
+      "generation_attempts": 307,
+      "generation_fails": 35,
+      "generation_pass_rate": 0.886,
+      "generation_passes": 272,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
@@ -465,15 +465,15 @@
           "ts": "2026-07-22T12:54:32+00:00"
         }
       ],
-      "one_pass_count": 218,
-      "one_pass_rate": 0.7291,
+      "one_pass_count": 222,
+      "one_pass_rate": 0.7231,
       "progress_next_skill": "n2d-video",
       "progress_next_stage": "视频prompt",
-      "qa_blockers": 161,
-      "qa_blockers_historical": 161,
+      "qa_blockers": 158,
+      "qa_blockers_historical": 162,
       "qa_gate_passes": 1,
       "qa_gate_runs": 5,
-      "qa_infos": 55,
+      "qa_infos": 58,
       "qa_warnings": 214,
       "qa_warnings_historical": 214,
       "recent_blockers": [
@@ -533,7 +533,7 @@
         "prop_structure": 1
       },
       "redraw_count": 5,
-      "redraw_rate": 0.0167,
+      "redraw_rate": 0.0163,
       "redraw_reasons": {
         "Codex built-in imagegen edits 请求网络失败，未返回图片；同配方有界重试一次。": 1,
         "从本轮已验收 start/a1 单向派生；纠正 r1 单眼侧头，使纸上墨虎双眼同时短亮。": 1,
@@ -553,13 +553,13 @@
       "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 18030.094,
-          "generation_attempts": 288,
-          "generation_fails": 34,
-          "generation_passes": 254,
+          "duration_sec": 18887.564,
+          "generation_attempts": 296,
+          "generation_fails": 35,
+          "generation_passes": 261,
           "missing_deliverables": 1,
-          "qa_blockers": 99,
-          "qa_infos": 32,
+          "qa_blockers": 96,
+          "qa_infos": 35,
           "qa_warnings": 113,
           "redraw_count": 5
         },
@@ -643,7 +643,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.7157
+      "warnings_per_attempt": 0.6971
     },
     {
       "blockers_per_attempt": null,
@@ -1087,7 +1087,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-23T11:37:59+00:00",
+  "generated_at": "2026-07-23T12:10:29+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1565,7 +1565,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.7212,
+    "blockers_per_attempt": 0.7022,
     "consistency_blockers": 31,
     "consistency_ledger_counts": {
       "block": 22,
@@ -1580,32 +1580,32 @@
       "credits": 3208.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "8h14m41s",
-    "duration_sec": 29680.641,
-    "elapsed_per_finished_min_sec": 11917.782,
+    "duration_hms": "8h28m58s",
+    "duration_sec": 30538.111,
+    "elapsed_per_finished_min_sec": 12262.086,
     "episode_count": 10,
-    "event_count": 1330,
+    "event_count": 1338,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 2,
-      "gates_passed_per_day": 1.013,
+      "gates_passed_per_day": 1.002,
       "measurement_start": "2026-07-21T12:15:15+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 452,
-    "generation_fails": 34,
-    "generation_pass_rate": 0.9248,
-    "generation_passes": 418,
-    "one_pass_count": 279,
-    "one_pass_rate": 0.6173,
-    "qa_blockers": 326,
-    "qa_blockers_historical": 322,
-    "qa_infos": 121,
+    "generation_attempts": 460,
+    "generation_fails": 35,
+    "generation_pass_rate": 0.9239,
+    "generation_passes": 425,
+    "one_pass_count": 283,
+    "one_pass_rate": 0.6152,
+    "qa_blockers": 323,
+    "qa_blockers_historical": 323,
+    "qa_infos": 124,
     "qa_warnings": 453,
     "qa_warnings_historical": 453,
     "recoup_ratio": {},
@@ -1617,7 +1617,7 @@
       "temporal": 7
     },
     "redraw_count": 45,
-    "redraw_rate": 0.0996,
+    "redraw_rate": 0.0978,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1625,7 +1625,7 @@
     "release_spend_totals": {},
     "runtime_hms": "2m29s",
     "runtime_sec": 149.427,
-    "warnings_per_attempt": 1.0022
+    "warnings_per_attempt": 0.9848
   },
   "version": 1
 }

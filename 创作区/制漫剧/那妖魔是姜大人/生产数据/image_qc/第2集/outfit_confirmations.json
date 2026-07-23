@@ -2,6 +2,23 @@
   "confirmations": [
     {
       "char": "CHAR_01__囚途残损态",
+      "confirmed_at": "2026-07-23T12:05:06+00:00",
+      "floor": 0.9839,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/Clip05_end.png",
+      "png_sha256": "f38b4a3419daba5fe023669a5613da84f2af5acd08067ca479bfe1b924e5b519",
+      "reason": "当前原像素与共享囚服定妆并排严审：灰褐交领、窄袖、腰绳、破损与克制伤污一致；0.637低分来自半跪动作、暗部和特效光，不是换装。确认仅绑定当前SHA。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.637,
+      "shot": "Clip_05",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__囚途残损态",
       "confirmed_at": "2026-07-23T10:40:36+00:00",
       "floor": 0.9839,
       "human_signoff": false,
@@ -14,6 +31,40 @@
       "reviewer_role": "ai_visual_executor",
       "score": 0.4797,
       "shot": "Clip_07",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__囚途残损态",
+      "confirmed_at": "2026-07-23T12:05:06+00:00",
+      "floor": 0.9839,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/EP02_CLIP01_start.png",
+      "png_sha256": "81f1cbe4890b5a8dcd522238e5bcaecf60f337d9670b9bb691b4c0d4d8d8cd90",
+      "reason": "当前原像素与共享定妆严审：灰褐交领囚服、腰绳、脸颊血点与本镜伤污状态一致；0.6929低分来自多人纵深、泥污和暗部，不是换装。确认仅绑定当前SHA。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.6929,
+      "shot": "Clip_01",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__囚途残损态",
+      "confirmed_at": "2026-07-23T12:05:06+00:00",
+      "floor": 0.9839,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/EP02_CLIP06_end.png",
+      "png_sha256": "f0b82c85a4c6df190a4f1ad23432545f3d94b9e9c9130d06a0136f13d3c50783",
+      "reason": "当前原像素与共享定妆严审：灰褐交领、袖型、腰绳、破损与战斗污损连续；0.6919来自全身暗构图和湿污，不是换装。确认仅绑定当前SHA。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.6919,
+      "shot": "Clip_06",
       "source": "image_qc:executor_visual_outfit_confirm",
       "verdict": "ok"
     },
@@ -87,6 +138,6 @@
     }
   ],
   "kind": "n2d_outfit_confirmations",
-  "updated_at": "2026-07-23T10:40:36+00:00",
+  "updated_at": "2026-07-23T12:05:06+00:00",
   "version": 1
 }

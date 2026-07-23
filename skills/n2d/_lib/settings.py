@@ -200,6 +200,12 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     # 只对已确认 因果链/伏笔账 操作，裁剪必须证明无孤儿伏笔且主线仍衔接，禁止臆造。
     SettingSpec("主线剪枝", ("n2d",), ("保守", "突出主线", "激进精简", "自定义"),
                 key_aliases=("主线聚焦", "支线剪枝", "主线提炼"), parameterized=True, syncable=False),
+    # 片段经济：集级生成次数强度档（治「简单叙事拆成太多付费 clip」）。复杂度感知预算=叙事广度
+    # (场景+角色)定基准 + 动作镜加成。保守(默认)=仅 warn 不阻断；紧凑=超预算且有可采纳合并/单拍多镜
+    # 省次数时经 clip_economy_gate 阻断出图/出视频；极简=预算再收紧一档后同紧凑。只阻断「有可采纳
+    # 省次数」的超预算（可执行不死锁），合并仍由编剧确认改 storyboard（宪法 B10）。
+    SettingSpec("片段经济", ("n2d",), ("保守", "紧凑", "极简", "自定义"),
+                key_aliases=("clip经济", "生成次数经济"), parameterized=True, syncable=False),
     # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·
     # 全剧延续性·断点平均强)/付费(小程序剧·前十集卡点峰值+付费墙集)/海外(ReelShort/TikTok·更碎更狠)。
     # 驱动 boundary_audit 的剧级追更骨架与卡点定位。取值与 n2d-script/references/追更骨架.md 对齐。
