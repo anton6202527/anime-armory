@@ -8,14 +8,38 @@ import type { WebContents } from 'electron'
  * (shallow) plus the production sub-trees, with a 300ms debounce, emitting
  * `fs-changed { root }` to the renderer.
  */
+// Above this many distinct changed directories in one debounce window we stop
+// tracking individual dirs and tell the renderer to do a broad refresh — past
+// this point the per-dir bookkeeping costs more than it saves.
+const MAX_TRACKED_DIRS = 48
+
 export class WatchService {
   private watchers = new Map<string, FSWatcher>()
   private lastEmit = new Map<string, number>()
   private pending = new Map<string, NodeJS.Timeout>()
+  // Parent dirs (relative to root, '' for root-level) touched since the last emit.
+  // `null` = broad/unknown → renderer refreshes everything it has open.
+  private changedDirs = new Map<string, Set<string> | null>()
   private sink: WebContents | null = null
 
   attach(sink: WebContents) {
     this.sink = sink
+  }
+
+  /** Record the parent dir of a changed path so the renderer can refresh only
+   *  the affected folders instead of re-listing the whole open tree. */
+  private noteChange(root: string, changedPath: string) {
+    const existing = this.changedDirs.get(root)
+    if (existing === null) return // already broad
+    const set = existing ?? new Set<string>()
+    const relDir = path.relative(root, path.dirname(changedPath)).split(path.sep).join('/')
+    set.add(relDir.startsWith('..') ? '' : relDir)
+    if (set.size > MAX_TRACKED_DIRS) {
+      this.changedDirs.set(root, null) // too many — fall back to broad refresh
+    } else {
+      this.changedDirs.set(root, set)
+    }
+    this.emitChanged(root)
   }
 
   private emitChanged(root: string) {
@@ -24,7 +48,10 @@ export class WatchService {
     const fire = () => {
       this.lastEmit.set(root, Date.now())
       this.pending.delete(root)
-      if (this.sink && !this.sink.isDestroyed()) this.sink.send('fs-changed', { root })
+      const tracked = this.changedDirs.get(root)
+      this.changedDirs.delete(root)
+      const dirs = tracked ? [...tracked] : undefined // undefined = broad refresh
+      if (this.sink && !this.sink.isDestroyed()) this.sink.send('fs-changed', { root, dirs })
     }
     if (now - last >= 300) {
       fire()
@@ -61,7 +88,10 @@ export class WatchService {
       },
     })
     for (const dir of deep) watcher.add(dir) // chokidar dedupes; deep dirs get default depth
-    watcher.on('all', () => this.emitChanged(root))
+    watcher.on('all', (_event: string, changedPath?: string) => {
+      if (changedPath) this.noteChange(root, changedPath)
+      else this.emitChanged(root)
+    })
     this.watchers.set(root, watcher)
   }
 
@@ -72,6 +102,7 @@ export class WatchService {
     const t = this.pending.get(root)
     if (t) clearTimeout(t)
     this.pending.delete(root)
+    this.changedDirs.delete(root)
     await w.close()
   }
 

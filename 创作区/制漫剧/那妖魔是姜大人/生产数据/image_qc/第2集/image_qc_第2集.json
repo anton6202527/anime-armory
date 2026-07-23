@@ -64,7 +64,7 @@
           "raw_intra_floor": null
         },
         "CHAR_01__囚途残损态": {
-          "ep_mean_score": 0.5116,
+          "ep_mean_score": 0.5067,
           "ep_n_shots": 26,
           "floor": 0.5,
           "floor_calibrated": true,
@@ -315,12 +315,14 @@
           "verdict": "ok"
         },
         {
+          "anchor": "best_of_variants",
           "char": "CHAR_01__囚途残损态",
-          "face_idx": 1,
+          "face_idx": 0,
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP06_start.png",
-          "score": 0.7797,
+          "score": 0.6572,
+          "score_vs_main": 0.6519,
           "verdict": "ok"
         },
         {
@@ -610,7 +612,7 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP06_start.png",
-          "score": 0.692,
+          "score": 0.728,
           "verdict": "ok"
         },
         {
@@ -770,15 +772,15 @@
           "shots": 8
         },
         "VFX_系统面板": {
-          "median_dist": 0.371,
+          "median_dist": 0.362,
           "shots": 5
         },
         "WEAPON_01": {
-          "median_dist": 0.455,
+          "median_dist": 0.447,
           "shots": 6
         },
         "WEAPON_横刀": {
-          "median_dist": 0.455,
+          "median_dist": 0.447,
           "shots": 6
         }
       },
@@ -972,11 +974,12 @@
           "verdict": "ok"
         },
         {
+          "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP06_start.png",
-          "score": 0.6876,
-          "verdict": "block"
+          "score": 0.8527,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
@@ -1079,7 +1082,7 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 30.0,
+          "median_dist": 29.8,
           "registered_id": "LOC_01",
           "shots": 26
         }
@@ -1100,7 +1103,7 @@
       "available": true,
       "contradictions": [],
       "notes": [],
-      "relative_floor": 37.0,
+      "relative_floor": 38.0,
       "seams": [
         {
           "action_shift": 0.019,
@@ -1137,18 +1140,18 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.038,
+          "action_shift": 0.058,
           "action_verdict": null,
-          "color_dist": 0.0562,
-          "color_verdict": "ok",
+          "color_dist": 0.165,
+          "color_verdict": "warn",
           "cross_face_cos": null,
-          "dist": 25,
+          "dist": 31,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "EP02_CLIP06_start.png",
           "relative_outlier": false,
           "seam_mode": "graphic_match",
-          "struct_verdict": "warn",
+          "struct_verdict": "block",
           "tail": "Clip05_end.png",
           "transition": "握刀手图形匹配到替裴合眼的手",
           "verdict": "info"
@@ -1455,7 +1458,7 @@
       "出图/第2集/图片/EP02_CLIP04_end_a2.png": "cee0b4df60df347c3f2c77668d8a90522f1252f20c72bf9e9865682ec8274072",
       "出图/第2集/图片/EP02_CLIP04_start.png": "526fece0bc675ffb34c5ebcd30c87b2fe5ece74437d19c09e997a4e76373f5e8",
       "出图/第2集/图片/EP02_CLIP06_end.png": "f0b82c85a4c6df190a4f1ad23432545f3d94b9e9c9130d06a0136f13d3c50783",
-      "出图/第2集/图片/EP02_CLIP06_start.png": "1386542cd6310be9b94b2ef9c8bb3b0404726c576e417cba45b67e5eb6ee7be4",
+      "出图/第2集/图片/EP02_CLIP06_start.png": "80f32d54e7f2f50b968cf42d19c79063f91b2607af2b4cacff28d2cb41fbf3dd",
       "出图/第2集/图片/EP02_CLIP06_start_a1.png": "c3ebc84252a8279e86226e73d2c6c30574414c9343c043895b9d01cbcbef8f16",
       "出图/第2集/图片/EP02_CLIP07_start.png": "2490a4a7e6e065c52165283fe9da239b5d9f79d56061f560c2b3848d7c1f6fda",
       "出图/第2集/图片/EP02_CLIP07_start_a1.png": "988f1b049d54a2a9cff049d0ecf9e48ec0d10b103fa8b884c80e725effb6eb81",
@@ -1470,7 +1473,7 @@
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "773e6e444132eb5f5a9fa62422b8ca6d2675f5cb33ca0704cbe4a9337e7457cb",
       "脚本/第2集/storyboard.json": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f"
     },
-    "sha": "64d92b7097bf84a90aa7a825bd78dff2a5ecb6206615ae8d57769bfa3187192a"
+    "sha": "794600f697abe6075d15e1aaa4028cda85a66ed51d11fe1bbcc6af462978dc75"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -5498,6 +5501,11 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP06_start.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP08_end.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
@@ -5595,10 +5603,10 @@
     "anchor_status": "ok",
     "available": true,
     "checked": 26,
-    "distance": 0.395,
+    "distance": 0.408,
     "episode_fingerprint": {
-      "contrast": 87.3,
-      "edge": 22.9,
+      "contrast": 86.5,
+      "edge": 23.0,
       "sat": 30.5
     },
     "findings": [],
@@ -5664,9 +5672,9 @@
         "warn": 0
       },
       "outfit": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
-        "ok": 25,
+        "ok": 26,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -5697,7 +5705,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 17
+        "warn": 18
       }
     },
     "degraded": false,

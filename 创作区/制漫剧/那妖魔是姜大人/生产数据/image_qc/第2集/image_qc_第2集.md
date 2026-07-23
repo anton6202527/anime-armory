@@ -14,7 +14,7 @@
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
 - 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🟢 block 0 · warn 0
-- 服装 N1: 🔴 block 1 · warn 0
+- 服装 N1: 🟢 block 0 · warn 0
 - 场景 O2: 🟢 block 0 · warn 0
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 人体解剖 N5: 🟢 block 0 · warn 0

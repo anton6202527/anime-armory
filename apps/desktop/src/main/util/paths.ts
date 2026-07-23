@@ -39,13 +39,28 @@ export function canonicalizeForCreate(p: string): string {
   return path.join(real, path.basename(p))
 }
 
+// A work root's canonical path is stable for a session, but resolveWithin runs
+// on every directory listing and every file open — so realpath'ing the root each
+// time is a redundant blocking syscall on the main/IPC thread. Cache it; the leaf
+// realpath below still runs, keeping the symlink-escape guard intact.
+const realRootCache = new Map<string, string>()
+
+function realRootOf(root: string): string {
+  const cached = realRootCache.get(root)
+  if (cached !== undefined) return cached
+  const real = realpathSync(root)
+  if (realRootCache.size > 64) realRootCache.clear()
+  realRootCache.set(root, real)
+  return real
+}
+
 /**
  * Resolve `rel` under `root` and guarantee containment (anti-traversal),
  * following symlinks on the existing part of the path.
  */
 export function resolveWithin(root: string, rel: string): string {
   const cleanRel = validateRelPath(rel)
-  const realRoot = realpathSync(root)
+  const realRoot = realRootOf(root)
   const target = path.join(realRoot, cleanRel)
   let canonical: string
   try {

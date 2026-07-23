@@ -139,29 +139,38 @@ export class WorkFsService {
     const total = entries.length
     const page = entries.slice(offset, offset + clampedLimit)
     const depth = cleanRel ? cleanRel.split('/').length : 0
+    // Stat the page concurrently instead of one blocking await per entry. On a
+    // work with hundreds of siblings this collapses a serial stat storm (the main
+    // cause of expand lag while a generator writes files) into one parallel batch.
+    // Directories need no stat — a Dirent already gives the type, and the tree
+    // never shows a folder's size/mtime — so we only stat files.
+    const stats = await Promise.all(
+      page.map(async (ent) => {
+        const entryRel = cleanRel ? `${cleanRel}/${ent.name}` : ent.name
+        const isDir = ent.isDirectory()
+        if (isDir) return { ent, entryRel, isDir, size: 0, mtime: 0 }
+        try {
+          const st = await fs.stat(path.join(root, entryRel))
+          return { ent, entryRel, isDir, size: st.size, mtime: st.mtimeMs }
+        } catch {
+          return null // raced deletion — drop from the page
+        }
+      }),
+    )
     const out: SkillTreeEntry[] = []
     const fileEntries: Array<{ rel: string; size: number; mtime: number }> = []
-    for (const ent of page) {
-      const entryRel = cleanRel ? `${cleanRel}/${ent.name}` : ent.name
-      let size = 0
-      let mtime = 0
-      try {
-        const st = await fs.stat(path.join(root, entryRel))
-        size = st.size
-        mtime = st.mtimeMs
-      } catch {
-        continue
-      }
+    for (const r of stats) {
+      if (!r) continue
       out.push({
-        name: ent.name,
-        path: entryRel,
+        name: r.ent.name,
+        path: r.entryRel,
         depth,
-        is_dir: ent.isDirectory(),
-        size,
-        mtime: Math.floor(mtime),
+        is_dir: r.isDir,
+        size: r.size,
+        mtime: Math.floor(r.mtime),
         status: '',
       })
-      if (ent.isFile()) fileEntries.push({ rel: entryRel, size, mtime })
+      if (r.ent.isFile()) fileEntries.push({ rel: r.entryRel, size: r.size, mtime: r.mtime })
     }
     const status = await this.baseline.statusForEntries(root, fileEntries)
     for (const entry of out) {

@@ -7,6 +7,7 @@ import {
   useState,
   useSyncExternalStore,
   type CSSProperties,
+  type MutableRefObject,
   type WheelEvent,
 } from "react";
 import { getPathForFile } from "../platform/bridge";
@@ -226,6 +227,7 @@ function decorationTitle(
 export function FilesPane({
   root,
   refreshKey,
+  fsScopeRef,
   allowNovelImport = false,
   active = true,
   sideVisible = true,
@@ -235,6 +237,7 @@ export function FilesPane({
 }: {
   root: WorkRoot;
   refreshKey: number;
+  fsScopeRef?: MutableRefObject<{ dirs: Set<string>; broad: boolean }>;
   allowNovelImport?: boolean;
   active?: boolean;
   sideVisible?: boolean;
@@ -447,6 +450,33 @@ export function FilesPane({
 
   useEffect(() => {
     let alive = true;
+    // Consume the scope hint set by the fs watcher: when we know exactly which
+    // folders changed (and none is root-level), re-list only those open folders
+    // in parallel instead of re-walking the whole open tree. A generator writing
+    // images into one collapsed folder then costs nothing here.
+    const scope = fsScopeRef?.current;
+    const scopedDirs = scope && !scope.broad && scope.dirs.size > 0 && !scope.dirs.has("") ? new Set(scope.dirs) : null;
+    if (scope) {
+      scope.dirs = new Set();
+      scope.broad = false;
+    }
+
+    if (scopedDirs) {
+      const timer = window.setTimeout(() => {
+        // Refresh only changed folders that are actually open, deduped to the
+        // shallowest of any nested pair to avoid a parent/child splice race.
+        const open = new Set(
+          [...dirPagesRef.current.keys()].filter((dir) => dir && !collapsedDirsRef.current.has(dir)),
+        );
+        const targets = [...scopedDirs].filter(
+          (dir) => open.has(dir) && ![...scopedDirs].some((other) => other !== dir && dir.startsWith(`${other}/`)),
+        );
+        if (targets.length === 0) return; // nothing visible changed → no work
+        Promise.all(targets.map((dir) => loadDirectory(dir, 0, true).catch(() => {}))).catch(() => {});
+      }, 120);
+      return () => window.clearTimeout(timer);
+    }
+
     const timer = window.setTimeout(() => {
       const reload = async () => {
         const mutationAtStart = treeMutationRef.current;

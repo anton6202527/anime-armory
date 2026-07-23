@@ -150,7 +150,9 @@ export type IpcResult<C extends IpcChannel> = ReturnType<IpcCommands[C]>
 export interface IpcEvents {
   'pty-data': { id: number; data: string }
   'pty-exit': { id: number }
-  'fs-changed': { root: string }
+  // `dirs`: rel parent-dirs touched since the last emit ('' = root-level).
+  // Absent = broad/unknown change → refresh the whole open tree.
+  'fs-changed': { root: string; dirs?: string[] }
   'app:set-language': 'zh' | 'en'
   'app:switch-workspace': void
   'app:open-recent-work': string

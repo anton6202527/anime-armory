@@ -125,6 +125,10 @@ export function Operation(props: {
   // bumped (debounced) whenever the work root changes on disk → re-pull data
   const [refreshKey, setRefreshKey] = useState(0);
   const [changeScanKey, setChangeScanKey] = useState(0);
+  // Scope hint for the next FilesPane refresh: which rel dirs actually changed
+  // ('' = root-level), or `broad` when the change set is unknown/too large. Lets
+  // the tree re-list only the affected open folders instead of the whole tree.
+  const fsScopeRef = useRef<{ dirs: Set<string>; broad: boolean }>({ dirs: new Set(), broad: false });
   const [baselineVersion, setBaselineVersion] = useState(0);
   const termRef = useRef<TerminalHandle>(null);
   const changeSummaryEpochRef = useRef(0);
@@ -473,6 +477,8 @@ export function Operation(props: {
     watchRoot(root.path).catch(() => {});
     const unlisten = onAppEvent("fs-changed", (payload) => {
       if (payload.root !== root.path) return;
+      if (payload.dirs) for (const d of payload.dirs) fsScopeRef.current.dirs.add(d);
+      else fsScopeRef.current.broad = true; // unknown scope → full refresh
       if (timer.current) window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => {
         setRefreshKey((k) => k + 1);
@@ -511,6 +517,7 @@ export function Operation(props: {
         }
         if (sig !== lastSnapshotRef.current) {
           lastSnapshotRef.current = sig;
+          fsScopeRef.current.broad = true; // polling can't localize the change
           setRefreshKey((k) => k + 1);
           setChangeScanKey((k) => k + 1);
         }
@@ -917,6 +924,7 @@ export function Operation(props: {
                         <FilesPane
                           root={root}
                           refreshKey={refreshKey + baselineVersion}
+                          fsScopeRef={fsScopeRef}
                           allowNovelImport={line.line === "n2d" && workIsEmpty}
                           active={active}
                           sideVisible={sidePanelOpen && tab === "files"}
