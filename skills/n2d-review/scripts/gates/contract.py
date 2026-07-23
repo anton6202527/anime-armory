@@ -229,6 +229,44 @@ def check_contract_inheritance(root: str, ep: str) -> None:
         elif r["status"] == "warn_drift":
             add(WARN, "契约继承", vid_p, f"视觉契约继承提示[{r['field']}]：{r['note']}（出图侧：{r['image_text'] or '缺'}）")
 
+def check_storyboard_image_contract_inheritance(root: str, ep: str) -> None:
+    """script→image 接缝：storyboard.json.visual_contract 种子 → 出图 00_总览 逐字段继承 Diff。
+
+    此前这道接缝只做「字段在不在」的在场校验（check_storyboard_visual_contract / 出图总览），
+    **没有跨接缝的内容 diff**：出图 00_总览 一旦把 storyboard 的光位/轴线种子誊抄改写，就成了下游
+    出图→出视频→合成全部忠实继承的"错误权威源"，却无人拦。本检查与 出图→出视频 的 check_contract_inheritance
+    对称，补上最漏的这道缝：只对**焊进首帧像素**的 场景光位锚/场景轴线视线 改写判 BLOCK，其余 warn。
+    角色状态演进在出图侧常按"以 storyboard 分段状态为上游契约"的指针式承接（不逐字誊抄以免提前泄露后镜状态），
+    故不在本接缝硬拦，只提示。跑在出图 prompt 生成后、烧图/下游继承前。"""
+    sb_p = os.path.join(root, "脚本", ep, "storyboard.json")
+    img_p = os.path.join(root, "出图", ep, "prompt", "00_总览.md")
+    if not os.path.isfile(sb_p) or not os.path.isfile(img_p):
+        return  # storyboard/出图总览缺：各自的在场校验负责，不在此重复
+    sb = load_json(sb_p)
+    vc = sb.get("visual_contract") if isinstance(sb, dict) else None
+    if not isinstance(vc, dict):
+        return  # visual_contract 缺：check_storyboard_visual_contract 已 BLOCK
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    _pointer_re = re.compile(r"(以\s*storyboard|上游契约|分段状态|逐镜\s*prompt|按本镜)")
+    for r in diff_storyboard_image_contract(vc, open(img_p, encoding="utf-8").read()):
+        if r.get("seam_block"):
+            add(
+                BLOCK,
+                "契约继承",
+                img_p,
+                f"分镜→出图契约继承漂移[{r['field']}]：{r['note']}（storyboard 种子：{r['image_text'] or '缺'}）",
+                return_to_stage="script_stage2",
+                rerun_scope=dim["scope"],
+                affected_artifacts=[f"出图/{ep}/prompt/00_总览.md", f"脚本/{ep}/storyboard.json"],
+            )
+        elif r["status"] in {"warn_drift", "block_drift"} and r.get("image_text"):
+            # 角色状态演进走"以 storyboard 分段状态为上游契约"的指针式承接是合规写法，不逐字誊抄，
+            # 不当漂移噪音报（真改写=既不匹配也不指针引用，仍会 warn）。
+            if r["field"] == "角色状态演进" and _pointer_re.search(str(r.get("video_text") or "")):
+                continue
+            add(WARN, "契约继承", img_p,
+                f"分镜→出图契约继承提示[{r['field']}]：{r['note']}（storyboard 种子：{r['image_text'] or '缺'}）")
+
 def check_asset_handoff_inheritance(root: str, ep: str) -> None:
     """逐镜物料约束 出图→出视频 继承（LOC/PROP/WEAPON/OUTFIT/VFX）：出图绑定的资产在出视频对应镜
     丢失=block/warn。视觉契约五字段管 episode 级光位/轴线，本检查补**逐镜**资产锚。
@@ -2102,6 +2140,7 @@ def check_cross_episode_action_handoff(root: str, ep: str) -> None:
 
 __all__ = [
     'check_contract_inheritance',
+    'check_storyboard_image_contract_inheritance',
     'check_asset_handoff_inheritance',
     'check_reference_plan_applied',
     'check_director_camera_plan_consumption',

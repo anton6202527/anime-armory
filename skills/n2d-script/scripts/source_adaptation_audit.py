@@ -102,6 +102,63 @@ def triage_paths(root: str, ep: str) -> List[Path]:
     ]
 
 
+# 全书级"主线提炼 + 支线剪枝"合同：被 spine 显式 cut/compress/fold 的支线，其源文内容
+# 不必再在每集 adaptation_triage 里逐句登记——本审计据 story_spine 的 cut_keywords/source_spans
+# 直接按"有账剪枝"处理，避免"裁一条支线要逐句免账"的摩擦。仅 status=confirmed 时生效。
+SPINE_CUT_DECISIONS = {"cut", "compress", "fold_into_main"}
+
+
+def load_spine_cuts(root: str) -> List[Dict[str, Any]]:
+    path = Path(root) / "开发包" / "story_spine.json"
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(read_text(path))
+    except Exception:
+        return []
+    if not isinstance(data, dict):
+        return []
+    if str(data.get("status") or "").strip().lower() != "confirmed":
+        return []
+    cuts: List[Dict[str, Any]] = []
+    for t in data.get("threads") or []:
+        if not isinstance(t, dict):
+            continue
+        if str(t.get("decision") or "").strip() not in SPINE_CUT_DECISIONS:
+            continue
+        keywords = [str(k).strip() for k in (t.get("cut_keywords") or []) if str(k).strip()]
+        conn = t.get("connectivity") if isinstance(t.get("connectivity"), dict) else {}
+        cuts.append({
+            "thread_id": t.get("id"),
+            "name": t.get("name"),
+            "decision": str(t.get("decision") or "").strip(),
+            "keywords": keywords,
+            "reroute": str(conn.get("payoff_reroute") or "").strip(),
+        })
+    return cuts
+
+
+def spine_authorizes(text: str, cuts: Sequence[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """flagged 源文片段命中某条 spine-cut 线程的关键词 → 按有账剪枝授权。"""
+    if not text:
+        return None
+    for cut in cuts:
+        for kw in cut.get("keywords") or []:
+            if kw and kw in text:
+                return cut
+    return None
+
+
+def spine_summary(cut: Dict[str, Any]) -> Dict[str, Any]:
+    out = {
+        "spine_thread": cut.get("thread_id"),
+        "thread_name": cut.get("name"),
+        "spine_decision": cut.get("decision"),
+        "payoff_reroute": cut.get("reroute"),
+    }
+    return {k: v for k, v in out.items() if v not in (None, "")}
+
+
 def adaptation_text(root: str, ep: str) -> Tuple[str, List[str]]:
     chunks: List[str] = []
     used: List[str] = []
@@ -329,10 +386,12 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         add(findings, "must", "missing_adaptation", f"{ep} 缺 voiceover/storyboard 改编产物，无法核对源文覆盖。")
         return {"episode": ep, "ok": False, "stats": {"raw_chars": len(raw)}, "findings": findings}
     triage_items, triage_used_paths = load_triage_items(root, ep)
+    spine_cuts = load_spine_cuts(root)
 
     terms = important_terms(raw)
     missing_terms = [t for t in terms if not present(t, adapted)]
     triage_authorized_terms = 0
+    spine_authorized = 0
     for term in missing_terms[:12]:
         auth = triage_authorizes_term(term, triage_items)
         if auth:
@@ -340,6 +399,13 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
             add(findings, "info", "source_term_reworked_by_triage",
                 f"源文关键名词 `{term}` 未直接出现在改编稿，但 adaptation_triage 已登记改写/压缩；按有账改编处理。",
                 {"term": term, **triage_summary(auth)})
+            continue
+        spine_auth = spine_authorizes(term, spine_cuts)
+        if spine_auth:
+            spine_authorized += 1
+            add(findings, "info", "source_term_cut_by_spine",
+                f"源文关键名词 `{term}` 属 story_spine 已 {spine_auth.get('decision')} 的支线；按全书级有账剪枝处理。",
+                {"term": term, **spine_summary(spine_auth)})
             continue
         sev = "warn"
         code = "source_term_missing"
@@ -362,6 +428,13 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
                     "源文关键事件未直接覆盖，但 adaptation_triage 已登记短剧化改写/后文带出；按有账改编处理。",
                     {"sentence": sentence[:120], "coverage": round(cov, 3), **triage_summary(auth)})
                 continue
+            spine_auth = spine_authorizes(sentence, spine_cuts)
+            if spine_auth:
+                spine_authorized += 1
+                add(findings, "info", "source_event_cut_by_spine",
+                    f"源文关键事件属 story_spine 已 {spine_auth.get('decision')} 的支线；按全书级有账剪枝处理。",
+                    {"sentence": sentence[:120], "coverage": round(cov, 3), **spine_summary(spine_auth)})
+                continue
             omitted_events.append({"sentence": sentence[:120], "coverage": round(cov, 3), "required_terms": required})
     for item in omitted_events[:8]:
         add(findings, "warn", "source_event_maybe_omitted",
@@ -382,6 +455,13 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
                 add(findings, "info", "scene_function_reworked_by_triage",
                     "源文场景功能未直接覆盖，但 adaptation_triage 已登记压缩/重排/强化；按有账改编处理。",
                     {"sentence": sentence[:120], "functions": item["labels"], "coverage": round(cov, 3), **triage_summary(auth)})
+                continue
+            spine_auth = spine_authorizes(sentence, spine_cuts)
+            if spine_auth:
+                spine_authorized += 1
+                add(findings, "info", "scene_function_cut_by_spine",
+                    f"源文场景功能属 story_spine 已 {spine_auth.get('decision')} 的支线；按全书级有账剪枝处理。",
+                    {"sentence": sentence[:120], "functions": item["labels"], "coverage": round(cov, 3), **spine_summary(spine_auth)})
                 continue
             lost_functions.append({
                 "sentence": sentence[:120],
@@ -409,6 +489,8 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         "triage_paths": triage_used_paths,
         "triage_items": len(triage_items),
         "triage_authorized_terms": triage_authorized_terms,
+        "spine_cut_threads": len(spine_cuts),
+        "spine_authorized_omissions": spine_authorized,
         "important_terms": len(terms),
         "missing_terms": len(missing_terms),
         "key_event_sentences": raw_event_count,

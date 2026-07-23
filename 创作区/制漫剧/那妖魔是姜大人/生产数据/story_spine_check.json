@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-07-23T07:24:20+00:00",
+  "issues": [
+    {
+      "code": "story_spine_missing",
+      "message": "缺 开发包/story_spine.json（主线提炼 + 支线剪枝合同）。已写脚手架，补齐后 confirm。",
+      "severity": "block"
+    }
+  ],
+  "kind": "n2d_story_spine_check",
+  "mode": "advisory",
+  "mode_source": "未设置（默认 advisory，仅建议不阻断）",
+  "next_when_blocked": "补齐 story_spine.json：提炼主线 spine，登记每条支线的 class/decision，所有 compress/fold/cut 线程写 connectivity(payoff_reroute + no_orphan_proof)，修正不合理点写 no_contradiction_proof，把 status 改为 confirmed，再重跑 check。只对已确认的 因果链/伏笔账 操作，禁止臆造。",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "scaffold_command": "python3 skills/n2d-script/scripts/story_spine.py 创作区/制漫剧/那妖魔是姜大人 scaffold --write",
+  "status": "advisory",
+  "summary": {
+    "block": 1,
+    "info": 0,
+    "spine_nodes": 0,
+    "threads": 0,
+    "warn": 0
+  },
+  "version": 1
+}

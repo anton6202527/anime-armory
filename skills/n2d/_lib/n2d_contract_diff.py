@@ -195,3 +195,44 @@ def diff_contracts(img_text: str, vid_text: str) -> list:
                             "（允许细化为超集；「本集导演一致性契约」是运动层、不可替代像素层契约）")
         results.append(item)
     return results
+
+
+# storyboard(阶段2分镜) → 出图 00_总览 的**上游种子**契约继承。此前 script→image 接缝只查
+# 出图/storyboard 各自「字段在不在」（check_storyboard_visual_contract / check_image_prompt_overview），
+# **没有跨接缝的内容 diff**——出图 00_总览 一旦把 storyboard 的光位/轴线种子誊抄改写，就成了下游
+# 全部忠实继承的"错误权威源"，却无人拦。本函数补这道机检，与 diff_contracts(出图→出视频) 对称。
+#
+# 只对**焊进首帧像素**的 场景光位锚 / 场景轴线视线 判 block（改写=与像素打架/越轴/光跳）；
+# 角色状态演进在出图侧常按"以 storyboard 分段状态为上游契约"的**指针式**写法承接（不逐字誊抄，
+# 避免提前泄露后镜状态），故只 warn；色调基线/景别阶梯 warn。storyboard 字段值可为 dict/list，
+# 统一 JSON 串化后归一比对（出图侧本就把种子串化落文，正常继承=超集 pass）。
+STORYBOARD_IMAGE_BLOCK_FIELDS = ("场景光位锚", "场景轴线视线")
+
+
+def _stringify_seed(value) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    try:
+        return json.dumps(value, ensure_ascii=False)
+    except Exception:
+        return str(value)
+
+
+def diff_storyboard_image_contract(storyboard_vc: dict, image_text: str) -> list:
+    """storyboard.json.visual_contract → 出图 00_总览 逐字段继承 diff。
+
+    返回列表元素同 compare_field，另加 `seam_block`（bool，仅光位/轴线漂移为真，供 gate 判 block）。
+    纯函数·可测。storyboard 侧种子缺失=上游问题（由 check_storyboard_visual_contract 负责），此处 warn 不重复 block。"""
+    img_sec = extract_section(image_text)
+    img_fields = parse_contract_fields(img_sec) if img_sec is not None else {}
+    vc = storyboard_vc if isinstance(storyboard_vc, dict) else {}
+    results = []
+    for field in VISUAL_CONTRACT_FIELDS:
+        item = compare_field(field, _stringify_seed(vc.get(field)), img_fields.get(field))
+        # 接缝语义：storyboard 是上游种子，出图应继承为超集；出图侧缺整节时 img=空由上游检查负责。
+        item["seam"] = "storyboard->image"
+        item["seam_block"] = bool(item["status"] == "block_drift" and field in STORYBOARD_IMAGE_BLOCK_FIELDS)
+        results.append(item)
+    return results

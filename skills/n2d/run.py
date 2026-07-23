@@ -1894,6 +1894,35 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 _record_prework_block(p, "development_pack", f"development_pack 无法运行：{detail}")
                 p.prework.append({"step": "development_pack", "status": "block", "detail": detail})
 
+        # story_spine：编剧级"主线提炼 + 支线剪枝"层（消费 source_comprehension + adaptation_strategy）。
+        # 缺省/保守档只建议不阻断（advisory，兼容已拆集老项目）；`主线剪枝=突出主线/激进精简` 才阻断写词。
+        spine_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "story_spine.py")
+        if os.path.exists(spine_script):
+            try:
+                r = _run([sys.executable, spine_script, root, "check", "--json", "--write-missing"])
+                report = _parse_trailing_json(r.stdout) or {}
+                status = str(report.get("status") or ("block" if r.returncode else "pass")).strip()
+                summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+                p.prework.append({
+                    "step": "story_spine",
+                    "status": "block" if status == "block" else "pass",
+                    "detail": (
+                        f"mode={report.get('mode')} spine={summary.get('spine_nodes', 0)} "
+                        f"threads={summary.get('threads', 0)} block/warn={summary.get('block', 0)}/{summary.get('warn', 0)}"
+                    ),
+                    "check_path": report.get("check_path") or os.path.join(root, "生产数据", "story_spine_check.json"),
+                })
+                if status == "block" and not script_stage1_missing_choices:
+                    _record_prework_block(p, "story_spine", (
+                        "主线剪枝档要求先过 story_spine：提炼主线 spine、登记每条支线 class/decision，"
+                        "所有 compress/fold/cut 线程写 connectivity(payoff_reroute + no_orphan_proof)，"
+                        "不合理点写 no_contradiction_proof，把 status 改 confirmed；只对已确认 因果链/伏笔账 操作，"
+                        "禁止臆造。保守档可把 `主线剪枝` 设为 保守 使其仅建议不阻断。"
+                    ))
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                p.prework.append({"step": "story_spine", "status": "advisory", "detail": f"story_spine 无法运行（降级建议）：{detail}"})
+
     # director_blocking_pack：阶段2 分镜前先过导演排戏层，不让 storyboard 临场发明轴线/调度/转场。
     if stage_key == "script_stage2" and ep:
         _run_production_mode_router_prework(p, root, ep)

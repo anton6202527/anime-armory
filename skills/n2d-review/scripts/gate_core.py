@@ -120,7 +120,7 @@ from n2d_contract import (  # noqa: E402
     stage_for_progress_column,
 )
 from n2d_registry import episode_png_fingerprint  # noqa: E402  内容级新鲜度指纹（与 identity.py 共用单一真值源）
-from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
+from n2d_contract_diff import diff_contracts, diff_storyboard_image_contract  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
 from n2d_handoff import (  # noqa: E402  逐镜身份/资产交接 Diff（common 层单一真值源，与 inherit_contract 共用）
     check_asset_handoff,
     check_identity_handoff,
@@ -5480,6 +5480,7 @@ __all__ = [
     'stage_for_progress_column',
     'episode_png_fingerprint',
     'diff_contracts',
+    'diff_storyboard_image_contract',
     'check_asset_handoff',
     'check_identity_handoff',
     'load_thresholds',

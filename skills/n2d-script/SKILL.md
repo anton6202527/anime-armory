@@ -148,6 +148,25 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 
 > **关键铁律**：Stage 1 不再决定生视频模型。出图阶段使用 `基础视觉风格` + 视频兼容锚定策略生成首帧；到 n2d-video 阶段，router 必须优先选择能消化现有首帧风格/锚定的后端。若用户临时固定一个与已出图风格不兼容的后端，必须停下提示重出图/重拼锚定或改路由，不能静默硬切。
 
+### 第 0.5 步 — 主线提炼 + 支线剪枝（拆集前的全书改编策略 · 像真编剧一样整体掌控）
+
+拆集前，像真实编剧改编长篇一样先**提炼主线、砍掉偏离主线的旁枝、修不合理点**，而不是把每条支线都逐集成戏——否则简单叙事也会被拆成过多集/节拍/clip。这一层落 `开发包/story_spine.json`，由 `run.py next` 在 `script_stage1` 消费 `development_pack` 后自动跑（消费 `设定库/source_comprehension.json` 因果链/伏笔账 + `开发包/adaptation_strategy.json` 受保护功能）。
+
+```bash
+python3 skills/n2d-script/scripts/story_spine.py <作品根> scaffold --write
+python3 skills/n2d-script/scripts/story_spine.py <作品根> check --json --write-missing
+```
+
+产物 `开发包/story_spine.json`：
+- `mainline_logline` + `spine[]`：一句话主线 + 主线节点链（每节点写 `source_span`、`causal_role`、`depends_on`），把"主情节"从散文里拎出来。
+- `threads[]`：把每条线程分 `class`=`spine`（主线）/`supporting`（服务主线的支线）/`tangent`（偏离主线的旁枝），给 `decision`=`keep`/`compress`/`fold_into_main`/`cut`。**所有非 keep 决策必须写 `connectivity`**：`payoff_reroute`（裁后伏笔/因果由谁承接或明确退役理由）+ `no_orphan_proof`（证明裁后无孤儿伏笔、下游主线不断裂）；引用 `opens_foreshadow`/`pays_foreshadow` 必须是 `source_comprehension` 里真实存在的 `trace_id`（**禁止臆造**）。给 `cut_keywords/source_spans` 让下游免账。
+- `continuity_fixes[]`：把原著不合理/矛盾点改掉，每条写 `fix` + `no_contradiction_proof`（证明不与后文已确认事件冲突，引用 SPINE/SRC_FORESHADOW id）；触及受保护功能要格外证明。
+- `protected_invariants`：镜像 `adaptation_strategy.protected_functions`，cut/fold 线程不得触碰。
+
+**强度选择点 `主线剪枝`**（见 `n2d/references/选择点与偏好.md`）：`保守`=仅建议不阻断（兼容已拆集老项目）；`突出主线`（推荐新作品）/`激进精简`=缺 confirmed 且过校验的 story_spine 时阻断写词。`_设置.md` 未写此键时按 advisory，不阻断老项目。
+
+**忠实底线**：只对**已确认**的因果链/伏笔账操作；改编要能和后面主要情节衔接；带 `do_not_drop_reason` 的伏笔若唯一承载线程被 cut 且无 reroute → block（防孤儿伏笔）。被 spine 显式 `cut/compress/fold` 且给了 `cut_keywords` 的支线，其源文内容在 `source_adaptation_audit` 按"全书级有账剪枝"免账，不必再逐句登记 `adaptation_triage`——这就是"裁一条支线"和"逐句免账"之间的省力接口。
+
 ### 第 1 步 — 自动拆集 + 建骨架
 
 **拆集节奏不再询问用户，也不默认锚定字数**。系统内部默认 `拆集节奏=前长后短`，只表示节奏倾向；旧项目 `_设置.md` 的 `单集时长` 仅作兼容读取。拆集是三层：

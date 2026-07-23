@@ -32,6 +32,21 @@ VIDEO_SHOT_PLAN_THRESHOLD_SEC = 12.0
 VIDEO_SHOT_HARD_MAX_SEC = 15.0
 VIDEO_SHOT_TARGET_SEC = 6.0
 
+# 拆镜经济性（2026-07-22 clip 经济性回修·第二阶段）：治「简单叙事拆成太多付费 take」。
+# 低风险、纯镜位覆盖、跨度 ≤ 硬上限的多镜位 Clip 默认合并为一次多镜生成（single_take_multishot），
+# 不再要求 storyboard 显式声明；奇观/大表情/高生成风险/需锚帧链/需模板的镜头仍强制安全拆分。
+# storyboard 仍可显式 take_policy=single_take_multishot 覆盖，或用下列关键字显式要求逐镜独立付费 take。
+TAKE_POLICY_OPT_OUT = {"split_each", "multi_take", "multitake", "independent_takes", "force_split"}
+# 只要出现任一「因剧情/风险而拆」的动作，就不自动合并（仅镜位覆盖导致的 split_video_shots 可合并）。
+SAFETY_SPLIT_ACTIONS = {
+    "split_reaction",
+    "split_establish_detail_reaction",
+    "template_required",
+    "add_mid_or_multi_anchor",
+    "defer_to_composite",
+    "compress_before_video",
+}
+
 NARRATIVE_RE = re.compile(
     r"(选择|决定|代价|后果|真相|揭示|反转|爽点|打脸|觉醒|危机|集尾|钩|兑现|承诺|目标|动机|杀局|赴险)"
 )
@@ -281,29 +296,59 @@ def clip_take_policy(clip: Mapping[str, Any]) -> str:
     return str(clip.get("take_policy") or cont.get("take_policy") or "").strip().lower()
 
 
+def _has_editorial_lens_coverage(clip: Mapping[str, Any]) -> bool:
+    """本 Clip 是否是「一个 story clip 内多个镜位覆盖」——合并的前提。"""
+    shot_rows = clip.get("shots") if isinstance(clip.get("shots"), list) else []
+    lensed = [
+        r for r in shot_rows
+        if isinstance(r, Mapping) and any(r.get(k) for k in ("lens", "camera", "shot_size"))
+    ]
+    return len(lensed) > 1
+
+
 def single_take_policy_verdict(
     clip: Mapping[str, Any],
     risk_row: Mapping[str, Any],
     actions: Sequence[str],
-) -> Tuple[bool, str]:
-    """storyboard `take_policy=single_take_multishot` 是否在本 Clip 生效。
+) -> Tuple[bool, str, str]:
+    """本 Clip 是否用一次多镜生成（single_take_multishot），及其来源。
 
-    生效条件：叙事跨度 ≤ 单次生成硬上限，且不属于高生成风险/需多锚镜。
-    不生效时返回 (False, 忽略原因)——安全拆分与锚帧链优先于省次数。"""
-    if clip_take_policy(clip) != "single_take_multishot":
-        return False, ""
+    返回 (single_take, ignored_reason, source)：
+      - source="storyboard_take_policy"：storyboard 显式声明。
+      - source="auto_low_risk_editorial"：低风险纯镜位覆盖镜，默认自动合并。
+      - source=""：不合并（保持逐镜/逐段付费 take）。
+    生效条件：叙事跨度 ≤ 单次生成硬上限，且不属于高生成风险/大表情/奇观/需锚帧链/需模板镜。
+    安全拆分与锚帧链永远优先于省生成次数。"""
+    policy = clip_take_policy(clip)
+    explicit = policy == "single_take_multishot"
+    if policy in TAKE_POLICY_OPT_OUT:
+        # storyboard 显式要求逐镜独立付费 take：尊重，不自动合并。
+        return False, "", ""
     duration = duration_of(clip)
     if duration is None or duration > VIDEO_SHOT_HARD_MAX_SEC:
-        return False, (
-            f"take_policy 忽略：叙事跨度 {duration if duration is not None else '未知'}s 超过单次生成硬上限 "
-            f"{VIDEO_SHOT_HARD_MAX_SEC:g}s，仍按镜位/生成窗口拆 take"
-        )
+        if explicit:
+            return False, (
+                f"take_policy 忽略：叙事跨度 {duration if duration is not None else '未知'}s 超过单次生成硬上限 "
+                f"{VIDEO_SHOT_HARD_MAX_SEC:g}s，仍按镜位/生成窗口拆 take"
+            ), ""
+        return False, "", ""
     # 真高风险才否决（多镜后端在内部镜位切换处自带再锚定，单纯「长于 8s」不算）：
     # 大表情跨度、奇观镜、高生成风险桶（score>=9）。与 anchor_planner「R1/R3 才回锚帧链」同口径。
     tags = set(risk_row.get("tags") or [])
     if risk_row.get("spectacle_type") or "large_expression_span" in tags or generation_risk_bucket(risk_row) >= 4:
-        return False, "take_policy 忽略：大表情/奇观/高生成风险镜，安全拆分与锚帧链优先于省生成次数"
-    return True, ""
+        if explicit:
+            return False, "take_policy 忽略：大表情/奇观/高生成风险镜，安全拆分与锚帧链优先于省生成次数", ""
+        return False, "", ""
+    if explicit:
+        return True, "", "storyboard_take_policy"
+    # 默认自动合并（不需显式声明）：只对「纯镜位覆盖、无任何剧情/风险拆分动作」的多镜位 Clip 生效。
+    # 出现 split_reaction / template_required / add_mid_or_multi_anchor / defer_to_composite / compress 等
+    # 有意义的拆分理由时，保持安全拆分。
+    if any(a in SAFETY_SPLIT_ACTIONS for a in actions):
+        return False, "", ""
+    if _has_editorial_lens_coverage(clip):
+        return True, "", "auto_low_risk_editorial"
+    return False, "", ""
 
 
 def primary_action(actions: Sequence[str]) -> str:
@@ -334,7 +379,7 @@ def action_note(action: str) -> str:
         "defer_to_composite": "把文字、光效、证据标记、复杂同框等交给分层出图或后期合成，避免视频后端自由生成。",
         "split_video_shots": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
         "compress_before_video": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
-        "single_take_multishot": "storyboard 声明 take_policy=single_take_multishot：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take；后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take。",
+        "single_take_multishot": "一次多镜生成：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take。来源可为 storyboard 显式 take_policy，或低风险纯镜位覆盖镜的默认自动合并（single_take_source=auto_low_risk_editorial）。后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take；奇观/大表情/高风险/需锚帧链镜不自动合并。",
     }
     return notes.get(action, "")
 
@@ -373,7 +418,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             row = {}
         economy_row = economy_rows.get(cid, {})
         actions = decide_actions(clip, row, idx, economy_row)
-        single_take, policy_ignored_reason = single_take_policy_verdict(clip, row, actions)
+        single_take, policy_ignored_reason, single_take_source = single_take_policy_verdict(clip, row, actions)
         if single_take:
             actions = [a for a in actions if a != "split_video_shots"]
             actions.insert(0, "single_take_multishot")
@@ -409,6 +454,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             } if economy_row else {},
             "take_policy": clip_take_policy(clip),
             "single_take_multishot": single_take,
+            **({"single_take_source": single_take_source} if single_take else {}),
             **({"take_policy_ignored_reason": policy_ignored_reason} if policy_ignored_reason else {}),
             "video_shot_policy": {
                 "story_clip_plan_threshold_sec": VIDEO_SHOT_PLAN_THRESHOLD_SEC,
@@ -433,6 +479,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         "defer_to_composite": sum(1 for d in decisions if "defer_to_composite" in d["actions"]),
         "video_shot_split": sum(1 for d in decisions if "split_video_shots" in d["actions"]),
         "single_take_multishot": sum(1 for d in decisions if d.get("single_take_multishot")),
+        "single_take_auto": sum(1 for d in decisions if d.get("single_take_source") == "auto_low_risk_editorial"),
         "take_policy_ignored": sum(1 for d in decisions if d.get("take_policy_ignored_reason")),
         "compress_before_video": sum(1 for d in decisions if "compress_before_video" in d["actions"]),
         "direct_submit_blocked": sum(1 for d in decisions if not d["video_shot_policy"]["direct_submit_allowed"]),

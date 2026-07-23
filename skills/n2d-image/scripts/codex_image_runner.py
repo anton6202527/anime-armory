@@ -2442,6 +2442,14 @@ def reference_input_actual_path(item: Dict[str, Any]) -> str:
     return str(item.get("prepared_rel_path") or item.get("rel_path") or item.get("abs_path") or "").strip()
 
 
+def selected_relay_source_path(reference_inputs: Sequence[Mapping[str, Any]]) -> str:
+    """Return the logical source-frame path actually selected for submission."""
+    for item in reference_inputs:
+        if str(item.get("role") or "") == "source_frame":
+            return str(item.get("rel_path") or "").strip()
+    return ""
+
+
 def codex_backend_version() -> str:
     try:
         proc = subprocess.run(
@@ -2695,11 +2703,46 @@ def select_codex_reference_inputs(
     if len(rows) <= limit or target.mode == "shared":
         return rows[:limit]
 
-    sources = [row for row in rows if row.get("role") == "source_frame"][:1]
+    source_rows = [row for row in rows if row.get("role") == "source_frame"]
+
+    def source_rank(row: Mapping[str, Any]) -> tuple[int, int]:
+        """Prefer the nearest already-approved relay frame under a tight cap.
+
+        Multi-anchor clips used to attach the clip firstframe before the
+        immediately preceding anchor.  Because the built-in backend only accepts
+        a small reference set, the previous anchor was then truncated and an a2
+        redraw silently restarted from the firstframe.  That breaks pose, hair,
+        prop-state and VFX continuity even though the full reference manifest is
+        technically correct.
+        """
+        source = str(row.get("source") or "")
+        if target.mode == "midframe":
+            order = {
+                "same_clip_previous_frame": 0,
+                "same_clip_firstframe": 1,
+                "explicit_source_clip": 2,
+            }
+        elif target.mode == "tailframe":
+            order = {
+                "same_clip_anchor": 0,
+                "same_clip_firstframe": 1,
+                "explicit_source_clip": 2,
+            }
+        else:
+            order = {"explicit_source_clip": 0}
+        sequence = int(row.get("sequence") or 0)
+        if target.mode == "tailframe" and source == "same_clip_anchor":
+            sequence = -sequence
+        return (order.get(source, 9), sequence)
+
+    sources = sorted(source_rows, key=source_rank)[:1]
+    discarded_source_ids = {id(row) for row in source_rows if row not in sources}
     characters: Dict[str, List[Dict[str, Any]]] = {}
     contexts: List[Dict[str, Any]] = []
     for row in rows:
         if row in sources:
+            continue
+        if id(row) in discarded_source_ids:
             continue
         if row.get("role") == "character":
             owner = str(row.get("owner") or row.get("rel_path") or "character")
@@ -2775,7 +2818,7 @@ def select_codex_reference_inputs(
     for row in rows:
         if len(selected) >= limit:
             break
-        if id(row) not in selected_ids:
+        if id(row) not in selected_ids and id(row) not in discarded_source_ids:
             selected.append(row)
             selected_ids.add(id(row))
     return selected[:limit]
@@ -4714,11 +4757,7 @@ def record_event(
     if event == "redraw":
         cmd.extend(["--redraw-reason", reason, "--redraw-category", category])
     if target.mode == "midframe" and status == "pass":
-        try:
-            source_target = target_for_shot(target.clip, target.section, episode)
-            source_image = source_target.rel_path
-        except Exception:
-            source_image = ""
+        source_image = selected_relay_source_path(reference_inputs)
         cmd.extend(["--meta", "self_check=pass", "--meta", "midframe_role=between_first_and_end"])
         if source_image:
             cmd.extend(["--meta", f"source_image={source_image}"])
@@ -4875,6 +4914,9 @@ def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
     precision = str(env.get("precision_level") or "")
     target_key = episode_png_key(target.rel_path, episode)
     problems: List[str] = []
+    executor_visual_rejection = latest_hash_bound_executor_visual_rejection(root, target)
+    if executor_visual_rejection:
+        problems.append("executor_visual_rejection")
     if precision != "full":
         problems.append(f"precision={precision or 'unknown'}")
 
@@ -4967,6 +5009,9 @@ def run_target_repair_preflight(root: Path, episode: str, target: Target) -> boo
 
     target_key = episode_png_key(target.rel_path, episode)
     problems: List[str] = []
+    executor_visual_rejection = latest_hash_bound_executor_visual_rejection(root, target)
+    if executor_visual_rejection:
+        problems.append("executor_visual_rejection")
     coverage = payload.get("face_reference_coverage") if isinstance(payload.get("face_reference_coverage"), Mapping) else {}
     for row in coverage.get("missing") or []:
         if episode_png_key(str(row.get("png") or ""), episode) == target_key:
@@ -4983,7 +5028,7 @@ def run_target_repair_preflight(root: Path, episode: str, target: Target) -> boo
     problems = list(dict.fromkeys(problems))
     if not problems:
         print(
-            f"[gate] repair-redraw refused: current full QC has no identity/appearance failure for {target.rel_path}",
+            f"[gate] repair-redraw refused: current full QC/current-pixel review has no repair failure for {target.rel_path}",
             file=sys.stderr,
         )
         return False
@@ -5010,7 +5055,7 @@ def run_target_repair_preflight(root: Path, episode: str, target: Target) -> boo
             "current_target_exists_and_decodes": True,
             "current_target_sha_bound": True,
             "full_precision_qc": True,
-            "target_has_concrete_identity_or_appearance_failure": True,
+            "target_has_concrete_machine_or_current_pixel_failure": True,
             "single_target_only": True,
         },
         "post_generation_required": [

@@ -163,6 +163,94 @@ def test_codex_reference_cap_balances_two_characters_and_location() -> None:
     assert [row["owner"] for row in selected[-2:]] == ["LOC_01", "PROP_01"]
 
 
+def test_codex_reference_cap_prefers_previous_anchor_for_midframe_relay() -> None:
+    section = codex_image_runner.ClipSection(
+        "Clip_05", "## Clip_05", "动作瞬间：墨线在谱页内逐步成虎。", ""
+    )
+    target = codex_image_runner.Target(
+        "Clip_05_end_a2", "Clip_05", "midframe", "a2.png", section
+    )
+    rows = [
+        {
+            "role": "source_frame", "source": "same_clip_firstframe",
+            "owner": "Clip_05", "rel_path": "first.png", "sequence": 0,
+        },
+        {
+            "role": "source_frame", "source": "same_clip_previous_frame",
+            "owner": "Clip_05", "rel_path": "a1.png", "sequence": 1,
+        },
+        {
+            "role": "character", "owner": "CHAR_01/常态",
+            "rel_path": "face.png", "priority": 30, "sequence": 2,
+        },
+        {
+            "role": "asset", "owner": "LOC_01",
+            "rel_path": "location.png", "priority": 100, "sequence": 3,
+        },
+        {
+            "role": "asset", "owner": "VFX_百妖谱",
+            "rel_path": "book.png", "priority": 100, "sequence": 4,
+        },
+        {
+            "role": "style", "owner": "STYLE_ANCHOR",
+            "rel_path": "style.png", "priority": 60, "sequence": 5,
+        },
+    ]
+
+    selected = codex_image_runner.select_codex_reference_inputs(target, rows, 5)
+
+    assert selected[0]["rel_path"] == "a1.png"
+    assert all(row["rel_path"] != "first.png" for row in selected)
+
+
+def test_codex_reference_cap_prefers_latest_anchor_for_tailframe_relay() -> None:
+    section = codex_image_runner.ClipSection(
+        "Clip_05", "## Clip_05", "动作瞬间：接续最后锚帧。", ""
+    )
+    target = codex_image_runner.Target(
+        "Clip_05_end", "Clip_05", "tailframe", "end.png", section
+    )
+    rows = [
+        {
+            "role": "source_frame", "source": "same_clip_firstframe",
+            "owner": "Clip_05", "rel_path": "first.png", "sequence": 0,
+        },
+        {
+            "role": "source_frame", "source": "same_clip_anchor",
+            "owner": "Clip_05", "rel_path": "a1.png", "sequence": 1,
+        },
+        {
+            "role": "source_frame", "source": "same_clip_anchor",
+            "owner": "Clip_05", "rel_path": "a2.png", "sequence": 2,
+        },
+        {
+            "role": "character", "owner": "CHAR_01/常态",
+            "rel_path": "face.png", "priority": 30, "sequence": 3,
+        },
+        {
+            "role": "asset", "owner": "LOC_01",
+            "rel_path": "location.png", "priority": 100, "sequence": 4,
+        },
+        {
+            "role": "style", "owner": "STYLE_ANCHOR",
+            "rel_path": "style.png", "priority": 60, "sequence": 5,
+        },
+    ]
+
+    selected = codex_image_runner.select_codex_reference_inputs(target, rows, 5)
+
+    assert selected[0]["rel_path"] == "a2.png"
+
+
+def test_selected_relay_source_path_reports_actual_selected_anchor() -> None:
+    rows = [
+        {"role": "source_frame", "rel_path": "出图/第2集/图片/a1.png"},
+        {"role": "character", "rel_path": "出图/共享/图片/face.png"},
+    ]
+
+    assert codex_image_runner.selected_relay_source_path(rows) == "出图/第2集/图片/a1.png"
+
+
 def test_transient_codex_image_failure_recognizes_http_5xx_not_4xx() -> None:
     assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 520") is True
     assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 503") is True

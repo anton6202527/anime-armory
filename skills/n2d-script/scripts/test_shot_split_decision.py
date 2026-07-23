@@ -117,7 +117,9 @@ def test_long_fight_clip_keeps_detail_but_splits_video_shots():
     assert row["story_economy"]["economy_class"] == "premium_detail"
 
 
-def test_short_parent_with_two_editorial_shots_becomes_two_physical_takes():
+def test_low_risk_short_multi_lens_clip_auto_collapses_to_single_take():
+    # 拆镜经济性回修：低风险、纯镜位覆盖、跨度 ≤ 硬上限的多镜位短 Clip 默认合并为一次多镜生成，
+    # 不再自动拆成多个独立付费 take，也不需要 storyboard 显式声明 take_policy。
     root = _mk_storyboard([{
         "id": "Clip_07",
         "duration": 5.0,
@@ -131,8 +133,33 @@ def test_short_parent_with_two_editorial_shots_becomes_two_physical_takes():
 
     row = SSD.build_plan(root, "第1集")["decisions"][0]
 
+    assert row["primary_action"] == "single_take_multishot"
+    assert row["single_take_multishot"] is True
+    assert row["single_take_source"] == "auto_low_risk_editorial"
+    assert "split_video_shots" not in row["actions"]
+    assert row["video_shot_policy"]["direct_submit_allowed"] is True
+    assert all(seg["reason"] == "single_take_multishot_internal_shot" and seg["physical_take"] is False
+               for seg in row["video_shot_segments"])
+
+
+def test_multi_lens_clip_opts_out_of_auto_single_take():
+    # storyboard 显式 take_policy=split_each：尊重逐镜独立付费 take，不自动合并。
+    root = _mk_storyboard([{
+        "id": "Clip_07",
+        "duration": 5.0,
+        "take_policy": "split_each",
+        "visual": "先看刀柄，再硬切到人物反应。",
+        "shots": [
+            {"t": "0-2s", "lens": "ECU", "description": "手握刀柄"},
+            {"t": "2-5s", "lens": "CU", "description": "人物抬眼"},
+        ],
+        "continuity": {"shot_size": "ECU→CU", "need_endframe": True},
+    }])
+
+    row = SSD.build_plan(root, "第1集")["decisions"][0]
+
+    assert row["single_take_multishot"] is False
     assert row["primary_action"] == "split_video_shots"
-    assert row["video_shot_policy"]["direct_submit_allowed"] is False
     assert [segment["duration_sec"] for segment in row["video_shot_segments"]] == [2.0, 3.0]
     assert all(segment["reason"] == "storyboard_editorial_cut" for segment in row["video_shot_segments"])
 
@@ -219,3 +246,20 @@ def test_take_policy_ignored_for_spectacle_or_high_risk():
     assert d["single_take_multishot"] is False
     assert "安全拆分与锚帧链优先" in d["take_policy_ignored_reason"]
     assert plan["summary"]["take_policy_ignored"] == 1
+
+
+def test_high_action_clip_not_auto_collapsed_without_explicit_policy():
+    # 无显式 take_policy 的高动作/奇观多镜位镜不得默认自动合并——安全拆分优先。
+    root = _mk_storyboard([{
+        "id": "Clip_01", "duration": 10.0,
+        "label": "妖狼扑杀打斗", "template": "fight_exchange",
+        "shots": [
+            {"t": [0, 5], "lens": "MS", "desc": "妖狼扑杀"},
+            {"t": [5, 10], "lens": "CU", "desc": "格挡命中"},
+        ],
+        "continuity": {},
+    }])
+    plan = SSD.build_plan(root, "第1集")
+    d = plan["decisions"][0]
+    assert d["single_take_multishot"] is False
+    assert plan["summary"]["single_take_auto"] == 0

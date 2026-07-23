@@ -2934,6 +2934,14 @@ def _face_confirmation_path(root: Path, ep: str) -> Path:
     return production_dir(root) / "image_qc" / ep / "face_confirmations.json"
 
 
+def _hair_confirmation_path(root: Path, ep: str) -> Path:
+    return production_dir(root) / "image_qc" / ep / "hair_confirmations.json"
+
+
+def _outfit_confirmation_path(root: Path, ep: str) -> Path:
+    return production_dir(root) / "image_qc" / ep / "outfit_confirmations.json"
+
+
 def _human_image_review_path(root: Path, ep: str) -> Path:
     return production_dir(root) / "image_qc" / ep / "human_image_review.json"
 
@@ -3803,6 +3811,344 @@ def confirm_face_targets(root: Path, ep: str, selector: str,
     res = _upsert_face_rows(root, ep, rows, overwrite=True)
     res.update({"selected": len(chosen), "pending_before": report.get("pending", 0)})
     return res
+
+
+def _load_hair_confirmation_doc(root: Path, ep: str) -> Dict[str, Any]:
+    path = _hair_confirmation_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        data = {}
+    if isinstance(data, list):
+        data = {"confirmations": data}
+    if not isinstance(data, dict):
+        data = {}
+    if not isinstance(data.get("confirmations"), list):
+        data["confirmations"] = []
+    data["kind"] = data.get("kind") or "n2d_hair_confirmations"
+    data["version"] = data.get("version") or 1
+    return data
+
+
+def _save_hair_confirmation_doc(root: Path, ep: str, data: Mapping[str, Any]) -> Path:
+    path = _hair_confirmation_path(root, ep)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = dict(data)
+    out["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def load_hair_confirmations(root: Path, ep: str) -> Dict[Tuple[str, str], Dict[str, Any]]:
+    """Load current-SHA hair confirmations; redraws invalidate old receipts."""
+    ok_values = {"ok", "pass", "confirmed", "true", "yes", "通过", "合格", "确认"}
+    out: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in _load_hair_confirmation_doc(root, ep).get("confirmations") or []:
+        if not isinstance(row, Mapping):
+            continue
+        char = str(row.get("char") or row.get("character") or row.get("id") or "").strip()
+        png = _coverage_png_key(row.get("png") or row.get("image"))
+        verdict = str(row.get("verdict") or row.get("status") or "").strip().lower()
+        row_sha = str(row.get("png_sha256") or row.get("png_sha") or row.get("sha256") or "").strip()
+        current_sha = _episode_png_sha(root, ep, png)
+        if char and png and verdict in ok_values and row_sha and current_sha and row_sha == current_sha:
+            out[(char, png)] = dict(row)
+    return out
+
+
+def apply_hair_confirmations(payload: Dict[str, Any], root: Path, ep: str) -> Dict[str, Any]:
+    """Apply hash-bound visual confirmations while retaining the machine verdict."""
+    confirmations = load_hair_confirmations(root, ep)
+    rows = ((payload.get("checks") or {}).get("hair") or {}).get("shots") or []
+    applied: List[Dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        original_verdict = str(row.get("verdict") or "")
+        if original_verdict not in {"block", "warn"}:
+            continue
+        char = str(row.get("char") or "").strip()
+        png = _coverage_png_key(row.get("png"))
+        confirm = confirmations.get((char, png))
+        if not confirm:
+            continue
+        row["manual_confirmed"] = True
+        row["manual_original_verdict"] = original_verdict
+        row["manual_confirmation_path"] = str(_hair_confirmation_path(root, ep))
+        row["manual_reason"] = confirm.get("reason") or ""
+        row["manual_reviewer"] = confirm.get("reviewer") or ""
+        row["manual_confirmed_at"] = confirm.get("confirmed_at") or confirm.get("updated_at") or ""
+        row["verdict"] = "ok"
+        applied.append({
+            "char": char, "png": png, "original_verdict": original_verdict,
+            "score": row.get("score"), "reviewer": row.get("manual_reviewer"),
+            "reason": row.get("manual_reason"),
+        })
+    payload["hair_manual_confirmations"] = {
+        "available": True,
+        "confirmation_path": str(_hair_confirmation_path(root, ep)),
+        "configured": len(confirmations),
+        "applied": len(applied),
+        "rows": applied,
+    }
+    return payload["hair_manual_confirmations"]
+
+
+def hair_confirmation_targets(root: Path, ep: str,
+                              payload: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    data = payload if payload is not None else _load_latest_qc_payload(root, ep)
+    hair = ((data.get("checks") or {}).get("hair") or {}) if isinstance(data, Mapping) else {}
+    confirmations = load_hair_confirmations(root, ep)
+    out: List[Dict[str, Any]] = []
+    seen: Set[Tuple[str, str]] = set()
+    for row in hair.get("shots") or []:
+        if not isinstance(row, Mapping):
+            continue
+        verdict = str(row.get("manual_original_verdict") or row.get("verdict") or "")
+        if verdict not in {"block", "warn"}:
+            continue
+        char = str(row.get("char") or "").strip()
+        png = _coverage_png_key(row.get("png"))
+        key = (char, png)
+        if not char or not png or key in seen:
+            continue
+        seen.add(key)
+        out.append({
+            "char": char,
+            "shot": _shot_key(png),
+            "png": png,
+            "png_abs": str(_prop_shape_png_path(root, ep, png)),
+            "score": row.get("score"),
+            "floor": row.get("floor"),
+            "original_verdict": verdict,
+            "confirmed": key in confirmations,
+            "confirmation_path": str(_hair_confirmation_path(root, ep)),
+            "reason": "hair_fingerprint_warn_or_block",
+        })
+    return out
+
+
+def hair_confirmation_report(root: Path, ep: str,
+                             payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    targets = hair_confirmation_targets(root, ep, payload=payload)
+    pending = [t for t in targets if not t.get("confirmed")]
+    return {
+        "kind": "n2d_hair_review",
+        "version": 1,
+        "episode": ep,
+        "confirmation_path": str(_hair_confirmation_path(root, ep)),
+        "total": len(targets),
+        "pending": len(pending),
+        "confirmed": len(targets) - len(pending),
+        "targets": targets,
+    }
+
+
+def _upsert_hair_rows(root: Path, ep: str, rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    data = _load_hair_confirmation_doc(root, ep)
+    existing: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in data.get("confirmations") or []:
+        if isinstance(row, Mapping):
+            key = (str(row.get("char") or "").strip(), _coverage_png_key(row.get("png")))
+            if key[0] and key[1]:
+                existing[key] = dict(row)
+    for row in rows:
+        key = (str(row.get("char") or "").strip(), _coverage_png_key(row.get("png")))
+        if not key[0] or not key[1]:
+            continue
+        merged = dict(existing.get(key, {}))
+        merged.update({k: v for k, v in row.items() if v is not None})
+        merged["char"], merged["png"] = key
+        existing[key] = merged
+    data["confirmations"] = sorted(existing.values(), key=lambda r: (str(r.get("char")), str(r.get("png"))))
+    path = _save_hair_confirmation_doc(root, ep, data)
+    return {"ok": True, "path": str(path), "changed": len(rows), "total": len(existing)}
+
+
+def confirm_hair_targets(root: Path, ep: str, selector: str,
+                         *, reviewer: str = "manual", reason: str = "",
+                         review_kind: str = "human") -> Dict[str, Any]:
+    normalized_kind = str(review_kind or "human").strip().lower()
+    if normalized_kind not in {"human", "executor_visual"}:
+        return {"ok": False, "msg": "review_kind 只能是 human 或 executor_visual"}
+    if normalized_kind == "executor_visual" and not executor_visual_review_authorized(root):
+        return {"ok": False, "msg": "项目未明确授权执行者实际像素目视，不能写 executor_visual 发型复核收据"}
+    if normalized_kind == "human" and identity_reviewer_appears_automated(reviewer):
+        return {"ok": False, "msg": "human 复核 reviewer 不能使用自动化/AI 身份；请改用 executor_visual"}
+    report = hair_confirmation_report(root, ep)
+    selector = str(selector or "").strip()
+    targets = report.get("targets") or []
+    if selector.lower() in {"all", "*", "pending"}:
+        chosen = [t for t in targets if not t.get("confirmed")]
+    else:
+        wanted = {s.strip() for s in re.split(r"[,;]", selector) if s.strip()}
+        chosen = [t for t in targets if str(t.get("char")) in wanted
+                  or str(t.get("png")) in wanted or str(t.get("shot")) in wanted
+                  or f"{t.get('char')}::{t.get('png')}" in wanted]
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    rows = [{
+        "char": t.get("char"), "png": t.get("png"),
+        "png_sha256": _episode_png_sha(root, ep, t.get("png")),
+        "shot": t.get("shot"), "verdict": "ok", "reviewer": reviewer,
+        "review_kind": normalized_kind,
+        "reviewer_role": "ai_visual_executor" if normalized_kind == "executor_visual" else "human_creative_reviewer",
+        "human_signoff": normalized_kind == "human",
+        "source": f"image_qc:{normalized_kind}_hair_confirm", "confirmed_at": now,
+        "reason": reason or "原像素与角色发型定妆一致，指纹低分为角度/俯仰/湿发等误报",
+        "original_verdict": t.get("original_verdict"), "score": t.get("score"), "floor": t.get("floor"),
+    } for t in chosen]
+    res = _upsert_hair_rows(root, ep, rows)
+    res.update({"selected": len(chosen), "pending_before": report.get("pending", 0)})
+    return res
+
+
+def _load_outfit_confirmation_doc(root: Path, ep: str) -> Dict[str, Any]:
+    path = _outfit_confirmation_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        data = {}
+    if isinstance(data, list):
+        data = {"confirmations": data}
+    if not isinstance(data, dict):
+        data = {}
+    if not isinstance(data.get("confirmations"), list):
+        data["confirmations"] = []
+    data["kind"] = data.get("kind") or "n2d_outfit_confirmations"
+    data["version"] = data.get("version") or 1
+    return data
+
+
+def _save_outfit_confirmation_doc(root: Path, ep: str, data: Mapping[str, Any]) -> Path:
+    path = _outfit_confirmation_path(root, ep)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = dict(data)
+    out["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def load_outfit_confirmations(root: Path, ep: str) -> Dict[Tuple[str, str], Dict[str, Any]]:
+    ok_values = {"ok", "pass", "confirmed", "true", "yes", "通过", "合格", "确认"}
+    out: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in _load_outfit_confirmation_doc(root, ep).get("confirmations") or []:
+        if not isinstance(row, Mapping):
+            continue
+        char = str(row.get("char") or row.get("character") or row.get("id") or "").strip()
+        png = _coverage_png_key(row.get("png") or row.get("image"))
+        verdict = str(row.get("verdict") or row.get("status") or "").strip().lower()
+        row_sha = str(row.get("png_sha256") or row.get("png_sha") or row.get("sha256") or "").strip()
+        current_sha = _episode_png_sha(root, ep, png)
+        if char and png and verdict in ok_values and row_sha and current_sha and row_sha == current_sha:
+            out[(char, png)] = dict(row)
+    return out
+
+
+def apply_outfit_confirmations(payload: Dict[str, Any], root: Path, ep: str) -> Dict[str, Any]:
+    confirmations = load_outfit_confirmations(root, ep)
+    rows = ((payload.get("checks") or {}).get("outfit") or {}).get("shots") or []
+    applied: List[Dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        original_verdict = str(row.get("verdict") or "")
+        if original_verdict not in {"block", "warn"}:
+            continue
+        char = str(row.get("char") or "").strip()
+        png = _coverage_png_key(row.get("png"))
+        confirm = confirmations.get((char, png))
+        if not confirm:
+            continue
+        row["manual_confirmed"] = True
+        row["manual_original_verdict"] = original_verdict
+        row["manual_confirmation_path"] = str(_outfit_confirmation_path(root, ep))
+        row["manual_reason"] = confirm.get("reason") or ""
+        row["manual_reviewer"] = confirm.get("reviewer") or ""
+        row["manual_confirmed_at"] = confirm.get("confirmed_at") or confirm.get("updated_at") or ""
+        row["verdict"] = "ok"
+        applied.append({"char": char, "png": png, "original_verdict": original_verdict,
+                        "score": row.get("score"), "reviewer": row.get("manual_reviewer"),
+                        "reason": row.get("manual_reason")})
+    payload["outfit_manual_confirmations"] = {
+        "available": True, "confirmation_path": str(_outfit_confirmation_path(root, ep)),
+        "configured": len(confirmations), "applied": len(applied), "rows": applied,
+    }
+    return payload["outfit_manual_confirmations"]
+
+
+def outfit_confirmation_report(root: Path, ep: str,
+                               payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    data = payload if payload is not None else _load_latest_qc_payload(root, ep)
+    outfit = ((data.get("checks") or {}).get("outfit") or {}) if isinstance(data, Mapping) else {}
+    confirmations = load_outfit_confirmations(root, ep)
+    targets: List[Dict[str, Any]] = []
+    seen: Set[Tuple[str, str]] = set()
+    for row in outfit.get("shots") or []:
+        if not isinstance(row, Mapping):
+            continue
+        verdict = str(row.get("manual_original_verdict") or row.get("verdict") or "")
+        char = str(row.get("char") or "").strip()
+        png = _coverage_png_key(row.get("png"))
+        key = (char, png)
+        if verdict not in {"block", "warn"} or not char or not png or key in seen:
+            continue
+        seen.add(key)
+        targets.append({
+            "char": char, "shot": _shot_key(png), "png": png,
+            "png_abs": str(_prop_shape_png_path(root, ep, png)),
+            "score": row.get("score"), "floor": row.get("floor"),
+            "original_verdict": verdict, "confirmed": key in confirmations,
+            "confirmation_path": str(_outfit_confirmation_path(root, ep)),
+            "reason": "outfit_fingerprint_warn_or_block",
+        })
+    pending = [t for t in targets if not t.get("confirmed")]
+    return {"kind": "n2d_outfit_review", "version": 1, "episode": ep,
+            "confirmation_path": str(_outfit_confirmation_path(root, ep)),
+            "total": len(targets), "pending": len(pending),
+            "confirmed": len(targets) - len(pending), "targets": targets}
+
+
+def confirm_outfit_targets(root: Path, ep: str, selector: str,
+                           *, reviewer: str = "manual", reason: str = "",
+                           review_kind: str = "human") -> Dict[str, Any]:
+    normalized_kind = str(review_kind or "human").strip().lower()
+    if normalized_kind not in {"human", "executor_visual"}:
+        return {"ok": False, "msg": "review_kind 只能是 human 或 executor_visual"}
+    if normalized_kind == "executor_visual" and not executor_visual_review_authorized(root):
+        return {"ok": False, "msg": "项目未明确授权执行者实际像素目视，不能写 executor_visual 服装复核收据"}
+    if normalized_kind == "human" and identity_reviewer_appears_automated(reviewer):
+        return {"ok": False, "msg": "human 复核 reviewer 不能使用自动化/AI 身份；请改用 executor_visual"}
+    report = outfit_confirmation_report(root, ep)
+    selector = str(selector or "").strip()
+    targets = report.get("targets") or []
+    if selector.lower() in {"all", "*", "pending"}:
+        chosen = [t for t in targets if not t.get("confirmed")]
+    else:
+        wanted = {s.strip() for s in re.split(r"[,;]", selector) if s.strip()}
+        chosen = [t for t in targets if str(t.get("char")) in wanted
+                  or str(t.get("png")) in wanted or str(t.get("shot")) in wanted
+                  or f"{t.get('char')}::{t.get('png')}" in wanted]
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    rows = [{
+        "char": t.get("char"), "png": t.get("png"),
+        "png_sha256": _episode_png_sha(root, ep, t.get("png")), "shot": t.get("shot"),
+        "verdict": "ok", "reviewer": reviewer, "review_kind": normalized_kind,
+        "reviewer_role": "ai_visual_executor" if normalized_kind == "executor_visual" else "human_creative_reviewer",
+        "human_signoff": normalized_kind == "human",
+        "source": f"image_qc:{normalized_kind}_outfit_confirm", "confirmed_at": now,
+        "reason": reason or "原像素与角色服装定妆一致，指纹低分为姿态/裁切/血污/湿污等误报",
+        "original_verdict": t.get("original_verdict"), "score": t.get("score"), "floor": t.get("floor"),
+    } for t in chosen]
+    data = _load_outfit_confirmation_doc(root, ep)
+    existing = {(str(r.get("char") or ""), _coverage_png_key(r.get("png"))): dict(r)
+                for r in data.get("confirmations") or [] if isinstance(r, Mapping)}
+    for row in rows:
+        key = (str(row.get("char") or ""), _coverage_png_key(row.get("png")))
+        merged = dict(existing.get(key, {})); merged.update(row); existing[key] = merged
+    data["confirmations"] = sorted(existing.values(), key=lambda r: (str(r.get("char")), str(r.get("png"))))
+    path = _save_outfit_confirmation_doc(root, ep, data)
+    return {"ok": True, "path": str(path), "changed": len(rows), "total": len(existing),
+            "selected": len(chosen), "pending_before": report.get("pending", 0)}
 
 
 def _stitch_for_png(payload: Dict[str, Any], png: Optional[str]) -> Optional[str]:
@@ -6007,6 +6353,8 @@ def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Opti
         # inherit_contract）当新鲜信。QC 时 storyboard 必已存在，正常流程不会误 stale。
         os.path.join("脚本", ep, "storyboard.json"),
         os.path.join("生产数据", "image_qc", ep, "face_confirmations.json"),
+        os.path.join("生产数据", "image_qc", ep, "hair_confirmations.json"),
+        os.path.join("生产数据", "image_qc", ep, "outfit_confirmations.json"),
         os.path.join("生产数据", "image_qc", ep, "prop_shape_confirmations.json"),
         os.path.join("生产数据", "image_qc", ep, "human_image_review.json"),
     }
@@ -6182,6 +6530,11 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
     # 人工确认只可覆盖当前 PNG 哈希匹配的 face warn/block 行；覆盖后再计算 face_reference_coverage，
     # 否则 coverage 会把已目检合格的侧脸/暗光/背身误报继续计为硬阻断。
     apply_face_confirmations(payload, root, ep)
+    # Hair fingerprinting is strict but angle/foreshortening can produce false
+    # blocks.  Only a current-SHA visual receipt may change the final verdict;
+    # the machine score and original verdict stay in the row for audit.
+    apply_hair_confirmations(payload, root, ep)
+    apply_outfit_confirmations(payload, root, ep)
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
     payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
@@ -7351,6 +7704,26 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="与 --face-confirm-ok 连用；executor_visual 记录执行者实际像素目视且不冒充人工")
     ap.add_argument("--face-reason", default="",
                     help="与 --face-confirm-ok 连用，写入人工确认原因")
+    ap.add_argument("--hair-report", action="store_true",
+                    help="只输出当前 hair warn/block 的逐图复核队列，不重跑完整 QC")
+    ap.add_argument("--hair-confirm-ok", metavar="SELECTOR",
+                    help="把指定 hair warn/block 复核项标 ok；只接受当前 PNG 哈希的实际像素复核")
+    ap.add_argument("--hair-reviewer", default="manual",
+                    help="与 --hair-confirm-ok 连用，写入 reviewer 字段")
+    ap.add_argument("--hair-review-kind", choices=("human", "executor_visual"), default="human",
+                    help="与 --hair-confirm-ok 连用；executor_visual 记录执行者实际像素目视且不冒充人工")
+    ap.add_argument("--hair-reason", default="",
+                    help="与 --hair-confirm-ok 连用，写入当前像素发型确认原因")
+    ap.add_argument("--outfit-report", action="store_true",
+                    help="只输出当前 outfit warn/block 的逐图复核队列，不重跑完整 QC")
+    ap.add_argument("--outfit-confirm-ok", metavar="SELECTOR",
+                    help="把指定 outfit warn/block 复核项标 ok；只接受当前 PNG 哈希的实际像素复核")
+    ap.add_argument("--outfit-reviewer", default="manual",
+                    help="与 --outfit-confirm-ok 连用，写入 reviewer 字段")
+    ap.add_argument("--outfit-review-kind", choices=("human", "executor_visual"), default="human",
+                    help="与 --outfit-confirm-ok 连用；executor_visual 记录执行者实际像素目视且不冒充人工")
+    ap.add_argument("--outfit-reason", default="",
+                    help="与 --outfit-confirm-ok 连用，写入当前像素服装确认原因")
     ap.add_argument("--prop-shape-report", action="store_true",
                     help="只输出高风险 PROP 禁形/尺寸逐图复核队列与最小重出范围，不重跑完整 QC")
     ap.add_argument("--prop-shape-write-skeleton", action="store_true",
@@ -7428,6 +7801,34 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             reviewer=ns.face_reviewer,
             reason=ns.face_reason,
             review_kind=ns.face_review_kind,
+        )
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if res.get("ok") else 1
+    if ns.hair_report:
+        print(json.dumps(hair_confirmation_report(root, ns.episode), ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.hair_confirm_ok:
+        res = confirm_hair_targets(
+            root,
+            ns.episode,
+            ns.hair_confirm_ok,
+            reviewer=ns.hair_reviewer,
+            reason=ns.hair_reason,
+            review_kind=ns.hair_review_kind,
+        )
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if res.get("ok") else 1
+    if ns.outfit_report:
+        print(json.dumps(outfit_confirmation_report(root, ns.episode), ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.outfit_confirm_ok:
+        res = confirm_outfit_targets(
+            root,
+            ns.episode,
+            ns.outfit_confirm_ok,
+            reviewer=ns.outfit_reviewer,
+            reason=ns.outfit_reason,
+            review_kind=ns.outfit_review_kind,
         )
         print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
         return 0 if res.get("ok") else 1

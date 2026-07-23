@@ -4130,6 +4130,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_contract(root, ep, require_frame_assets=False)
         check_storyboard_possession_gate(root, ep)
         check_storyboard_visual_contract(root, ep)
+        # script→image 接缝内容 diff（补在场校验之外的漂移拦截）：storyboard 光位/轴线种子被出图
+        # 00_总览 誊抄改写=下游全部忠实继承错误权威源。与 出图→出视频 契约继承对称，光位/轴线漂移=BLOCK。
+        check_storyboard_image_contract_inheritance(root, ep)
         check_storyboard_style_contract(root, ep)
         check_cross_episode_style(root, ep)
         check_cross_episode_contract(root, ep)

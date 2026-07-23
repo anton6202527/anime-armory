@@ -647,6 +647,109 @@ def test_face_confirmation_executor_visual_is_explicit_and_authorized(tmp_path: 
     assert receipt["human_signoff"] is False
 
 
+def test_hair_confirmations_require_current_png_hash_and_preserve_machine_verdict(tmp_path: Path) -> None:
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    png = img / "Clip01.png"
+    png.write_bytes(b"hair-v1")
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "checks": {"hair": {"shots": [{
+            "char": "CHAR_01", "png": "图片/Clip01.png",
+            "score": 0.31, "floor": 0.9, "verdict": "block",
+        }]}}
+    }), encoding="utf-8")
+
+    res = image_qc.confirm_hair_targets(tmp_path, "第1集", "all", reviewer="qa")
+    assert res["selected"] == 1
+    payload = {"checks": {"hair": {"shots": [{
+        "char": "CHAR_01", "png": "图片/Clip01.png",
+        "score": 0.31, "floor": 0.9, "verdict": "block",
+    }]}}}
+    image_qc.apply_hair_confirmations(payload, tmp_path, "第1集")
+    row = payload["checks"]["hair"]["shots"][0]
+    assert row["verdict"] == "ok"
+    assert row["manual_original_verdict"] == "block"
+    assert row["score"] == 0.31
+
+    png.write_bytes(b"hair-v2")
+    payload["checks"]["hair"]["shots"][0]["verdict"] = "block"
+    image_qc.apply_hair_confirmations(payload, tmp_path, "第1集")
+    assert payload["checks"]["hair"]["shots"][0]["verdict"] == "block"
+
+
+def test_hair_confirmation_executor_visual_is_explicit_and_authorized(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式: 逐张机器QC+执行者实际像素目视后再继续  # source=explicit_user；用户明确要求\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip01.png").write_bytes(b"hair-v1")
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "checks": {"hair": {"shots": [{
+            "char": "CHAR_01", "png": "图片/Clip01.png", "verdict": "block",
+        }]}}
+    }), encoding="utf-8")
+
+    res = image_qc.confirm_hair_targets(
+        tmp_path, "第1集", "all", reviewer="executor:codex",
+        review_kind="executor_visual", reason="实际像素与发型定妆并排复核",
+    )
+
+    assert res["ok"] is True
+    receipt = json.loads((qc_dir / "hair_confirmations.json").read_text(encoding="utf-8"))["confirmations"][0]
+    assert receipt["review_kind"] == "executor_visual"
+    assert receipt["reviewer_role"] == "ai_visual_executor"
+    assert receipt["human_signoff"] is False
+
+
+def test_outfit_confirmation_is_current_sha_bound_and_auditable(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式: 逐张机器QC+执行者实际像素目视后再继续  # source=explicit_user\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    png = img / "Clip01.png"
+    png.write_bytes(b"outfit-v1")
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "checks": {"outfit": {"shots": [{
+            "char": "CHAR_01", "png": "图片/Clip01.png",
+            "score": 0.4, "floor": 0.9, "verdict": "block",
+        }]}}
+    }), encoding="utf-8")
+
+    res = image_qc.confirm_outfit_targets(
+        tmp_path, "第1集", "图片/Clip01.png", reviewer="executor:codex",
+        review_kind="executor_visual", reason="交领、腰绳、袖口与定妆一致",
+    )
+    assert res["selected"] == 1
+    payload = {"checks": {"outfit": {"shots": [{
+        "char": "CHAR_01", "png": "图片/Clip01.png",
+        "score": 0.4, "floor": 0.9, "verdict": "block",
+    }]}}}
+    image_qc.apply_outfit_confirmations(payload, tmp_path, "第1集")
+    row = payload["checks"]["outfit"]["shots"][0]
+    assert row["verdict"] == "ok"
+    assert row["manual_original_verdict"] == "block"
+    assert row["score"] == 0.4
+
+    receipt = json.loads((qc_dir / "outfit_confirmations.json").read_text(encoding="utf-8"))["confirmations"][0]
+    assert receipt["review_kind"] == "executor_visual"
+    assert receipt["png_sha256"] == image_qc._sha256_file(png)
+
+    png.write_bytes(b"outfit-v2")
+    payload["checks"]["outfit"]["shots"][0]["verdict"] = "block"
+    image_qc.apply_outfit_confirmations(payload, tmp_path, "第1集")
+    assert payload["checks"]["outfit"]["shots"][0]["verdict"] == "block"
+
+
 def test_face_confirmation_allows_face_reference_coverage(tmp_path: Path) -> None:
     img = tmp_path / "出图" / "第1集" / "图片"
     img.mkdir(parents=True)

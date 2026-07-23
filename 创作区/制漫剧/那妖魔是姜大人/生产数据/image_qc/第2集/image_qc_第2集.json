@@ -64,7 +64,7 @@
           "raw_intra_floor": null
         },
         "CHAR_01__囚途残损态": {
-          "ep_mean_score": 0.4421,
+          "ep_mean_score": 0.4903,
           "ep_n_shots": 26,
           "floor": 0.5,
           "floor_calibrated": true,
@@ -74,7 +74,7 @@
           "raw_intra_floor": 0.032
         },
         "CHAR_02__濒死重伤态": {
-          "ep_mean_score": 0.5003,
+          "ep_mean_score": 0.5944,
           "ep_n_shots": 4,
           "floor": 0.6624,
           "floor_calibrated": true,
@@ -109,20 +109,15 @@
           "face_idx": 0,
           "floor": 0.5,
           "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T05:21:20+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已查看当前原像素与脸锚：窄椭圆脸、眼距与细长杏眼、眉形、鼻口比例、发际线和年龄一致；0.4869 边界差来自三分之二侧脸、血污与低位光，不是换人。确认仅绑定当前 PNG SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/Clip03_end.png",
-          "score": 0.417,
-          "score_vs_main": 0.2235,
-          "verdict": "block"
-        },
-        {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚途残损态",
-          "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "png": "图片/Clip05_end.png",
-          "score": 0.5262,
-          "score_vs_main": 0.416,
+          "score": 0.4869,
+          "score_vs_main": 0.4555,
           "verdict": "ok"
         },
         {
@@ -131,10 +126,27 @@
           "face_idx": 0,
           "floor": 0.5,
           "floor_calibrated": true,
+          "png": "图片/Clip05_end.png",
+          "score": 0.5022,
+          "score_vs_main": 0.4536,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 1,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:40:36+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与a2/a1/两套身份锚并排严审：CHAR_01窄椭圆侧脸五官连续；CHAR_02长方脸、浓眉、闭眼鼻唇连续。0.2925来自尾帧更近俯角与遮眼动作，不是换脸。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/Clip07_end.png",
-          "score": 0.3545,
-          "score_vs_main": 0.3135,
-          "verdict": "block"
+          "score": 0.2925,
+          "score_vs_main": 0.1977,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -143,9 +155,9 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP01_start.png",
-          "score": 0.4905,
-          "score_vs_main": 0.4516,
-          "verdict": "warn"
+          "score": 0.5993,
+          "score_vs_main": 0.5793,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -161,12 +173,12 @@
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__囚途残损态",
-          "face_idx": 0,
+          "face_idx": 1,
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP01_start_a2.png",
-          "score": 0.6827,
-          "score_vs_main": 0.6802,
+          "score": 0.5288,
+          "score_vs_main": 0.5182,
           "verdict": "ok"
         },
         {
@@ -187,9 +199,9 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP02_preimpact.png",
-          "score": 0.297,
-          "score_vs_main": 0.1702,
-          "verdict": "block"
+          "score": 0.5523,
+          "score_vs_main": 0.5473,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -198,9 +210,9 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP02_start.png",
-          "score": 0.3612,
-          "score_vs_main": 0.2264,
-          "verdict": "block"
+          "score": 0.5935,
+          "score_vs_main": 0.5916,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -220,9 +232,9 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP03_impact.png",
-          "score": 0.2575,
-          "score_vs_main": 0.2289,
-          "verdict": "block"
+          "score": 0.5138,
+          "score_vs_main": 0.4694,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -231,9 +243,9 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP03_recovery.png",
-          "score": 0.4566,
-          "score_vs_main": 0.2038,
-          "verdict": "warn"
+          "score": 0.5148,
+          "score_vs_main": 0.4745,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -252,10 +264,16 @@
           "face_idx": 0,
           "floor": 0.5,
           "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T05:52:24+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "当前像素原图与共享脸锚并排复核：低头俯视角导致自动分数0.4988略低0.0012；实际仍为同一窄椭圆脸、同样杏眼间距与眼尾、鼻唇比例、年龄感和中分耳后长发，无高髻、无换脸；确认仅绑定当前SHA，不改全局阈值。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP04_end_a1.png",
-          "score": 0.495,
-          "score_vs_main": 0.4426,
-          "verdict": "warn"
+          "score": 0.4988,
+          "score_vs_main": 0.4473,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -263,10 +281,16 @@
           "face_idx": 0,
           "floor": 0.5,
           "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T07:43:54+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "当前原像素与共享脸锚及已通过a1并排复核：俯身低头角度导致embedding 0.4821；实际仍为同一窄椭圆脸、杏眼间距与眼尾、鼻唇比例和年龄感，无换脸。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP04_end_a2.png",
-          "score": 0.4647,
-          "score_vs_main": 0.4127,
-          "verdict": "warn"
+          "score": 0.4821,
+          "score_vs_main": 0.4148,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -286,8 +310,8 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP06_end.png",
-          "score": 0.5332,
-          "score_vs_main": 0.5065,
+          "score": 0.6487,
+          "score_vs_main": 0.6065,
           "verdict": "ok"
         },
         {
@@ -304,59 +328,63 @@
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__囚途残损态",
-          "face_idx": 1,
+          "face_idx": 0,
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP02_CLIP06_start_a1.png",
-          "score": 0.4348,
-          "score_vs_main": 0.3855,
-          "verdict": "warn"
+          "score": 0.6452,
+          "score_vs_main": 0.6008,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
-          "char": "CHAR_02__濒死重伤态",
-          "face_idx": 0,
-          "floor": 0.6624,
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 1,
+          "floor": 0.5,
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
           "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-22T12:16:16+00:00",
-          "manual_original_verdict": "block",
-          "manual_reason": "逐张实际像素并排复核定妆正脸与45度脸锚：四帧保持同一偏长清瘦脸、下颌角、眉骨、直鼻、薄唇、发际发髻、红纹领和额颧浅表旧擦痕；低 embedding 主要由仰躺抬颏角度及眼睑从睁开到闭合的动作变化造成。近景a1/a2/end已明确补充三分之四脸身份锚，未见跨帧换脸。",
-          "manual_reviewer": "automation:codex",
+          "manual_confirmed_at": "2026-07-23T10:16:50+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "当前原尺寸像素与CHAR_01正脸、45度和半身锚并排严审：窄椭圆脸、利落下颌、细长杏眼、直鼻与唇形一致；0.4509来自俯视前3/4角、低头眼睑和双人同框face_idx分配，不是换脸。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start.png",
-          "score": 0.4997,
-          "score_vs_main": 0.4959,
+          "score": 0.4509,
+          "score_vs_main": 0.3524,
           "verdict": "ok"
         },
         {
-          "char": "CHAR_02__濒死重伤态",
-          "face_idx": 1,
-          "floor": 0.6624,
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.5,
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
           "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-22T12:16:16+00:00",
+          "manual_confirmed_at": "2026-07-23T10:24:41+00:00",
           "manual_original_verdict": "block",
-          "manual_reason": "逐张实际像素并排复核定妆正脸与45度脸锚：四帧保持同一偏长清瘦脸、下颌角、眉骨、直鼻、薄唇、发际发髻、红纹领和额颧浅表旧擦痕；低 embedding 主要由仰躺抬颏角度及眼睑从睁开到闭合的动作变化造成。近景a1/a2/end已明确补充三分之四脸身份锚，未见跨帧换脸。",
-          "manual_reviewer": "automation:codex",
+          "manual_reason": "当前原像素与首帧及CHAR_01正脸/45度锚并排严审：窄椭圆脸、下颌、细长眼、直鼻和唇形连续；0.3727来自低头侧脸及手遮挡同框另一人眼部，不是换脸。CHAR_02长方脸与高束发亦连续。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start_a1.png",
-          "score": 0.5361,
+          "score": 0.3727,
+          "score_vs_main": 0.2315,
           "verdict": "ok"
         },
         {
-          "char": "CHAR_02__濒死重伤态",
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
           "face_idx": 1,
-          "floor": 0.6624,
+          "floor": 0.5,
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
           "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-22T12:16:16+00:00",
+          "manual_confirmed_at": "2026-07-23T10:33:55+00:00",
           "manual_original_verdict": "block",
-          "manual_reason": "逐张实际像素并排复核定妆正脸与45度脸锚：四帧保持同一偏长清瘦脸、下颌角、眉骨、直鼻、薄唇、发际发髻、红纹领和额颧浅表旧擦痕；低 embedding 主要由仰躺抬颏角度及眼睑从睁开到闭合的动作变化造成。近景a1/a2/end已明确补充三分之四脸身份锚，未见跨帧换脸。",
-          "manual_reviewer": "automation:codex",
+          "manual_reason": "当前原像素与a1、首帧及两套身份锚逐张并排严审：CHAR_01窄椭圆脸、下颌、侧脸鼻唇连续；CHAR_02长方脸、浓眉、闭眼轮廓连续。0.3109来自更强俯角与手遮眼，不是换脸。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start_a2.png",
-          "score": 0.5122,
+          "score": 0.3109,
+          "score_vs_main": 0.1884,
           "verdict": "ok"
         },
         {
@@ -424,33 +452,45 @@
           "verdict": "ok"
         },
         {
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/Clip03_end.png",
-          "score": 0.0408,
-          "verdict": "block"
+          "score": 0.9471,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T08:37:23+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与共享定妆、a1/a2并排复核：头顶平顺中分，无发髻或马尾根，耳后收束的黑色长发与碎发轮廓一致；0.233低分来自俯身湿发透视。确认仅绑定当前SHA，保留机器原分数和original_verdict。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/Clip05_end.png",
-          "score": 0.1635,
-          "verdict": "block"
+          "score": 0.233,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:40:36+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与a2/定妆严审：CHAR_01中分贴头、后脑低位半束与披发连续，无高髻；CHAR_02高束发连续。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
+          "png": "图片/Clip07_end.png",
+          "score": 0.4179,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
-          "png": "图片/Clip07_end.png",
-          "score": 0.2278,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "warn",
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9817,
           "png": "图片/EP02_CLIP01_start.png",
-          "score": 0.9049,
+          "score": 0.7632,
           "verdict": "ok"
         },
         {
@@ -462,11 +502,11 @@
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP01_start_a2.png",
-          "score": 0.5448,
+          "score": 0.9634,
           "verdict": "ok"
         },
         {
@@ -478,63 +518,69 @@
           "verdict": "ok"
         },
         {
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP02_preimpact.png",
-          "score": 0.1067,
-          "verdict": "block"
-        },
-        {
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9817,
-          "png": "图片/EP02_CLIP02_start.png",
-          "score": 0.1395,
-          "verdict": "block"
+          "score": 0.9729,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP02_start.png",
+          "score": 0.8424,
+          "verdict": "ok"
+        },
+        {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP02_start_a1.png",
           "score": 0.2687,
-          "verdict": "ok"
+          "verdict": "block"
         },
         {
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP03_impact.png",
-          "score": 0.1216,
-          "verdict": "block"
+          "score": 0.945,
+          "verdict": "ok"
         },
         {
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP03_recovery.png",
-          "score": 0.0729,
-          "verdict": "block"
+          "score": 0.9689,
+          "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP04_end.png",
           "score": 0.4737,
-          "verdict": "ok"
+          "verdict": "block"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP04_end_a1.png",
-          "score": 0.7362,
-          "verdict": "ok"
+          "score": 0.5246,
+          "verdict": "block"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T07:43:54+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与共享正面定妆及a1并排复核：头顶平顺中分、无发髻无马尾根、耳后收束且长发自然下垂，发色与碎发轮廓一致；指纹0.2795为俯身透视/湿发纹理误报。确认仅绑定当前SHA，保留机器原分数。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP04_end_a2.png",
-          "score": 0.3846,
+          "score": 0.2795,
           "verdict": "ok"
         },
         {
@@ -550,7 +596,7 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP06_end.png",
-          "score": 0.2309,
+          "score": 0.8477,
           "verdict": "ok"
         },
         {
@@ -562,33 +608,50 @@
           "verdict": "ok"
         },
         {
+          "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "png": "图片/EP02_CLIP06_start_a1.png",
-          "score": 0.1397,
-          "verdict": "block"
-        },
-        {
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9817,
-          "png": "图片/EP02_CLIP07_start.png",
-          "score": 0.1444,
-          "verdict": "block"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9817,
-          "png": "图片/EP02_CLIP07_start_a1.png",
-          "score": 0.2607,
+          "score": 0.7472,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:16:50+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原尺寸像素与CHAR_01半身/45度发型锚严审：中分、头顶贴服、后脑低位半束、余发披肩，未出现上一版高髻/高马尾；低分来自俯身侧角和大片披发。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
+          "png": "图片/EP02_CLIP07_start.png",
+          "score": 0.3982,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:24:41+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与首帧/定妆并排严审：CHAR_01中分贴头、后脑低位半束与余发披肩连续，无高髻；CHAR_02高束发连续。低分来自低头侧角和暗背景。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
+          "png": "图片/EP02_CLIP07_start_a1.png",
+          "score": 0.3664,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:33:56+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与a1/定妆严审：CHAR_01中分贴头、低位半束和披发连续，无高髻；CHAR_02高束发连续。0.3157来自俯角暗发与背景混合。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start_a2.png",
-          "score": 0.2112,
+          "score": 0.3157,
           "verdict": "ok"
         },
         {
@@ -689,7 +752,7 @@
       "episode": "第2集",
       "groups": {
         "LOC_01": {
-          "median_dist": 0.449,
+          "median_dist": 0.433,
           "shots": 8
         },
         "VFX_墨虎谱影": {
@@ -697,19 +760,19 @@
           "skipped": "组<3镜"
         },
         "VFX_百妖谱": {
-          "median_dist": 0.449,
+          "median_dist": 0.433,
           "shots": 8
         },
         "VFX_系统面板": {
-          "median_dist": 0.475,
+          "median_dist": 0.389,
           "shots": 5
         },
         "WEAPON_01": {
-          "median_dist": 0.452,
+          "median_dist": 0.436,
           "shots": 6
         },
         "WEAPON_横刀": {
-          "median_dist": 0.452,
+          "median_dist": 0.436,
           "shots": 6
         }
       },
@@ -753,29 +816,35 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/Clip03_end.png",
-          "score": 0.1006,
-          "verdict": "block"
+          "score": 0.986,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/Clip05_end.png",
-          "score": 0.1969,
+          "score": 0.637,
           "verdict": "block"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:40:36+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与a2/定妆严审：CHAR_01灰褐交领囚服、腰绳、袖型连续；CHAR_02黑红纹领劲装、斜带与包扎连续，未串衣。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/Clip07_end.png",
-          "score": 0.1692,
-          "verdict": "block"
+          "score": 0.4797,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP01_start.png",
-          "score": 0.8687,
+          "score": 0.6929,
           "verdict": "ok"
         },
         {
@@ -787,11 +856,11 @@
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP01_start_a2.png",
-          "score": 0.5263,
+          "score": 0.9684,
           "verdict": "ok"
         },
         {
@@ -806,38 +875,38 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP02_preimpact.png",
-          "score": 0.0861,
-          "verdict": "block"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9839,
-          "png": "图片/EP02_CLIP02_start.png",
-          "score": 0.3022,
+          "score": 0.9897,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP02_start.png",
+          "score": 0.9402,
+          "verdict": "ok"
+        },
+        {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP02_start_a1.png",
           "score": 0.3458,
-          "verdict": "ok"
+          "verdict": "block"
         },
         {
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP03_impact.png",
-          "score": 0.0904,
-          "verdict": "block"
+          "score": 0.9622,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP03_recovery.png",
-          "score": 0.1115,
-          "verdict": "block"
+          "score": 0.9937,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "warn",
@@ -852,7 +921,7 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP04_end_a1.png",
-          "score": 0.8986,
+          "score": 0.895,
           "verdict": "ok"
         },
         {
@@ -860,7 +929,7 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
           "png": "图片/EP02_CLIP04_end_a2.png",
-          "score": 0.6868,
+          "score": 0.7443,
           "verdict": "ok"
         },
         {
@@ -872,47 +941,71 @@
           "verdict": "ok"
         },
         {
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9839,
-          "png": "图片/EP02_CLIP06_end.png",
-          "score": 0.1228,
-          "verdict": "block"
-        },
-        {
           "abs_verdict": "block",
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
-          "png": "图片/EP02_CLIP06_start.png",
-          "score": 0.5451,
+          "png": "图片/EP02_CLIP06_end.png",
+          "score": 0.6919,
           "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
+          "png": "图片/EP02_CLIP06_start.png",
+          "score": 0.5451,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T09:10:41+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与共享全身/半身定妆并排复核：灰褐窄袖交领囚服、腰绳结、袖口宽度、衣摆层次、破损血污和材质均一致；0.5731低分来自站姿全身构图、湿污和大面积暗部，不是换装。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP06_start_a1.png",
-          "score": 0.1417,
-          "verdict": "block"
+          "score": 0.5731,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:16:50+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原尺寸像素严审：CHAR_01灰褐窄袖交领囚服、腰绳和克制污损与定妆一致；CHAR_02墨黑暗赤红纹领、斜带、臂部包扎与重伤态定妆一致，未串衣。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start.png",
-          "score": 0.0798,
-          "verdict": "block"
+          "score": 0.5051,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:24:41+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与首帧/两套定妆严审：CHAR_01灰褐交领囚服、腰绳、袖型一致；CHAR_02黑红纹领劲装、斜带与包扎一致，未串衣。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start_a1.png",
-          "score": 0.2049,
-          "verdict": "block"
+          "score": 0.4932,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9839,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-23T10:33:56+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "当前原像素与a1/定妆严审：CHAR_01灰褐交领囚服、腰绳与袖型连续；CHAR_02黑红纹领劲装、斜带和包扎连续，未串衣。确认仅绑定当前SHA。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP02_CLIP07_start_a2.png",
-          "score": 0.1715,
-          "verdict": "block"
+          "score": 0.4109,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "warn",
@@ -963,7 +1056,7 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 29.3,
+          "median_dist": 29.6,
           "registered_id": "LOC_01",
           "shots": 26
         }
@@ -984,15 +1077,15 @@
       "available": true,
       "contradictions": [],
       "notes": [],
-      "relative_floor": 44.5,
+      "relative_floor": 36.5,
       "seams": [
         {
-          "action_shift": 0.077,
+          "action_shift": 0.019,
           "action_verdict": null,
-          "color_dist": 0.0601,
-          "color_verdict": "ok",
+          "color_dist": 0.2132,
+          "color_verdict": "warn",
           "cross_face_cos": null,
-          "dist": 34,
+          "dist": 33,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "EP02_CLIP02_start.png",
@@ -1004,12 +1097,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.048,
+          "action_shift": 0.07,
           "action_verdict": null,
-          "color_dist": 0.1455,
-          "color_verdict": "warn",
+          "color_dist": 0.1114,
+          "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 24,
+          "dist": 28,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "EP02_CLIP04_start.png",
@@ -1021,46 +1114,46 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.052,
+          "action_shift": 0.013,
           "action_verdict": null,
-          "color_dist": 0.0643,
+          "color_dist": 0.0713,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 22,
+          "dist": 30,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "EP02_CLIP06_start.png",
           "relative_outlier": false,
           "seam_mode": "graphic_match",
-          "struct_verdict": "warn",
+          "struct_verdict": "block",
           "tail": "Clip05_end.png",
           "transition": "握刀手图形匹配到替裴合眼的手",
           "verdict": "info"
         },
         {
-          "action_shift": 0.039,
+          "action_shift": 0.045,
           "action_verdict": null,
-          "color_dist": 0.0949,
+          "color_dist": 0.08,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 33,
+          "dist": 23,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "EP02_CLIP07_start.png",
           "relative_outlier": false,
           "seam_mode": "eyeline_cut",
-          "struct_verdict": "block",
+          "struct_verdict": "warn",
           "tail": "EP02_CLIP06_end.png",
           "transition": "视线切至裴尸体",
           "verdict": "info"
         },
         {
-          "action_shift": 0.094,
+          "action_shift": 0.106,
           "action_verdict": null,
-          "color_dist": 0.0369,
+          "color_dist": 0.0382,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 32,
+          "dist": 30,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "EP02_CLIP08_start.png",
@@ -1076,18 +1169,7 @@
   },
   "cross_episode_face_drift": {
     "available": true,
-    "entries": [
-      {
-        "below_abs_low": true,
-        "char": "CHAR_01__囚途残损态",
-        "drop": -0.089,
-        "episode_from": "第1集",
-        "episode_to": "第2集",
-        "from_mean": 0.3531,
-        "severity": "medium",
-        "to_mean": 0.4421
-      }
-    ],
+    "entries": [],
     "history_chars": 2
   },
   "episode": "第2集",
@@ -1116,87 +1198,74 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 3,
+    "applied": 7,
     "available": true,
-    "configured": 4,
+    "configured": 7,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
     "rows": [
       {
-        "char": "CHAR_02__濒死重伤态",
-        "original_verdict": "block",
-        "png": "图片/EP02_CLIP07_start.png",
-        "reason": "逐张实际像素并排复核定妆正脸与45度脸锚：四帧保持同一偏长清瘦脸、下颌角、眉骨、直鼻、薄唇、发际发髻、红纹领和额颧浅表旧擦痕；低 embedding 主要由仰躺抬颏角度及眼睑从睁开到闭合的动作变化造成。近景a1/a2/end已明确补充三分之四脸身份锚，未见跨帧换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.4997
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "warn",
+        "png": "图片/Clip03_end.png",
+        "reason": "已查看当前原像素与脸锚：窄椭圆脸、眼距与细长杏眼、眉形、鼻口比例、发际线和年龄一致；0.4869 边界差来自三分之二侧脸、血污与低位光，不是换人。确认仅绑定当前 PNG SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4869
       },
       {
-        "char": "CHAR_02__濒死重伤态",
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/Clip07_end.png",
+        "reason": "当前原像素与a2/a1/两套身份锚并排严审：CHAR_01窄椭圆侧脸五官连续；CHAR_02长方脸、浓眉、闭眼鼻唇连续。0.2925来自尾帧更近俯角与遮眼动作，不是换脸。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.2925
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "warn",
+        "png": "图片/EP02_CLIP04_end_a1.png",
+        "reason": "当前像素原图与共享脸锚并排复核：低头俯视角导致自动分数0.4988略低0.0012；实际仍为同一窄椭圆脸、同样杏眼间距与眼尾、鼻唇比例、年龄感和中分耳后长发，无高髻、无换脸；确认仅绑定当前SHA，不改全局阈值。",
+        "reviewer": "executor:codex",
+        "score": 0.4988
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "warn",
+        "png": "图片/EP02_CLIP04_end_a2.png",
+        "reason": "当前原像素与共享脸锚及已通过a1并排复核：俯身低头角度导致embedding 0.4821；实际仍为同一窄椭圆脸、杏眼间距与眼尾、鼻唇比例和年龄感，无换脸。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4821
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "warn",
+        "png": "图片/EP02_CLIP07_start.png",
+        "reason": "当前原尺寸像素与CHAR_01正脸、45度和半身锚并排严审：窄椭圆脸、利落下颌、细长杏眼、直鼻与唇形一致；0.4509来自俯视前3/4角、低头眼睑和双人同框face_idx分配，不是换脸。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4509
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
         "original_verdict": "block",
         "png": "图片/EP02_CLIP07_start_a1.png",
-        "reason": "逐张实际像素并排复核定妆正脸与45度脸锚：四帧保持同一偏长清瘦脸、下颌角、眉骨、直鼻、薄唇、发际发髻、红纹领和额颧浅表旧擦痕；低 embedding 主要由仰躺抬颏角度及眼睑从睁开到闭合的动作变化造成。近景a1/a2/end已明确补充三分之四脸身份锚，未见跨帧换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.5361
+        "reason": "当前原像素与首帧及CHAR_01正脸/45度锚并排严审：窄椭圆脸、下颌、细长眼、直鼻和唇形连续；0.3727来自低头侧脸及手遮挡同框另一人眼部，不是换脸。CHAR_02长方脸与高束发亦连续。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.3727
       },
       {
-        "char": "CHAR_02__濒死重伤态",
+        "char": "CHAR_01__囚途残损态",
         "original_verdict": "block",
         "png": "图片/EP02_CLIP07_start_a2.png",
-        "reason": "逐张实际像素并排复核定妆正脸与45度脸锚：四帧保持同一偏长清瘦脸、下颌角、眉骨、直鼻、薄唇、发际发髻、红纹领和额颧浅表旧擦痕；低 embedding 主要由仰躺抬颏角度及眼睑从睁开到闭合的动作变化造成。近景a1/a2/end已明确补充三分之四脸身份锚，未见跨帧换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.5122
+        "reason": "当前原像素与a1、首帧及两套身份锚逐张并排严审：CHAR_01窄椭圆脸、下颌、侧脸鼻唇连续；CHAR_02长方脸、浓眉、闭眼轮廓连续。0.3109来自更强俯角与手遮眼，不是换脸。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.3109
       }
     ]
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 17,
+    "covered": 21,
     "face_mode": "insightface",
-    "missing": [
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/“囚途残损态”"
-        ],
-        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
-        "png": "图片/EP02_CLIP01_start.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_01"
-      },
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/“囚途残损态”"
-        ],
-        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
-        "png": "图片/EP02_CLIP04_end_a1.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/“囚途残损态”"
-        ],
-        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
-        "png": "图片/EP02_CLIP04_end_a2.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/“囚途残损态”"
-        ],
-        "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
-        "png": "图片/EP02_CLIP06_start_a1.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_06"
-      }
-    ],
+    "missing": [],
     "notes": [],
     "pending": [],
     "precision_level": "full",
@@ -1245,8 +1314,79 @@
         "shot": "Clip_03"
       }
     ],
-    "unclassified": [],
-    "verdict": "block"
+    "unclassified": [
+      {
+        "face_verdict": "ok",
+        "label": "lint_unclassified",
+        "png": "图片/Clip03_end.png",
+        "reason": "unclassified_face_shot",
+        "shot": "Clip_03"
+      },
+      {
+        "face_verdict": "ok",
+        "label": "lint_unclassified",
+        "png": "图片/EP02_CLIP02_preimpact.png",
+        "reason": "unclassified_face_shot",
+        "shot": "Clip_02"
+      }
+    ],
+    "verdict": "ok"
+  },
+  "hair_manual_confirmations": {
+    "applied": 6,
+    "available": true,
+    "configured": 6,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/hair_confirmations.json",
+    "rows": [
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/Clip05_end.png",
+        "reason": "当前原像素与共享定妆、a1/a2并排复核：头顶平顺中分，无发髻或马尾根，耳后收束的黑色长发与碎发轮廓一致；0.233低分来自俯身湿发透视。确认仅绑定当前SHA，保留机器原分数和original_verdict。",
+        "reviewer": "executor:codex",
+        "score": 0.233
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/Clip07_end.png",
+        "reason": "当前原像素与a2/定妆严审：CHAR_01中分贴头、后脑低位半束与披发连续，无高髻；CHAR_02高束发连续。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4179
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP04_end_a2.png",
+        "reason": "当前原像素与共享正面定妆及a1并排复核：头顶平顺中分、无发髻无马尾根、耳后收束且长发自然下垂，发色与碎发轮廓一致；指纹0.2795为俯身透视/湿发纹理误报。确认仅绑定当前SHA，保留机器原分数。",
+        "reviewer": "executor:codex",
+        "score": 0.2795
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP07_start.png",
+        "reason": "当前原尺寸像素与CHAR_01半身/45度发型锚严审：中分、头顶贴服、后脑低位半束、余发披肩，未出现上一版高髻/高马尾；低分来自俯身侧角和大片披发。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.3982
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP07_start_a1.png",
+        "reason": "当前原像素与首帧/定妆并排严审：CHAR_01中分贴头、后脑低位半束与余发披肩连续，无高髻；CHAR_02高束发连续。低分来自低头侧角和暗背景。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.3664
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP07_start_a2.png",
+        "reason": "当前原像素与a1/定妆严审：CHAR_01中分贴头、低位半束和披发连续，无高髻；CHAR_02高束发连续。0.3157来自俯角暗发与背景混合。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.3157
+      }
+    ]
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -1265,39 +1405,41 @@
       "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5",
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
       "出图/第2集/prompt/00_总览.md": "d47f1f60ad3f30f833a209971e5b06bb6ba0918a9f258c954925b55fbfc7f81b",
-      "出图/第2集/prompt/01_分镜出图.md": "18136a0741ff3f886207878e66193210ca44f35691f253570ef3b4d368b527a4",
+      "出图/第2集/prompt/01_分镜出图.md": "44e8792237655fb4c75d5beb92f556caa6ce193d828ed6816596d752365602a7",
       "出图/第2集/图片/Clip01_end.png": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
-      "出图/第2集/图片/Clip03_end.png": "9f0b6948e287d30c94bd9d62661f2a20c452d68a734870f542e9c113546fac44",
-      "出图/第2集/图片/Clip05_end.png": "e86454b7591504c24331973f28e0a666f80fd216a1d70872f1cc1a331645f7f2",
-      "出图/第2集/图片/Clip07_end.png": "97eaf83578bd49cbfd06ef22dc6919e5d7b8ff20a0ce9b7c06dd7d98ddcb7d8b",
-      "出图/第2集/图片/EP02_CLIP01_start.png": "7fd76ce98b905bf35333dcff4aea99cc46ec7e594483a2253a67383bde597033",
+      "出图/第2集/图片/Clip03_end.png": "6a37d284e17ac8b03683f701642d7de7411fa7420fd825f10fbb6ebb5f71bf1a",
+      "出图/第2集/图片/Clip05_end.png": "f38b4a3419daba5fe023669a5613da84f2af5acd08067ca479bfe1b924e5b519",
+      "出图/第2集/图片/Clip07_end.png": "077d4a7040ef411b8a4c5cd111436a47232965685e162235f1f924560a81ce94",
+      "出图/第2集/图片/EP02_CLIP01_start.png": "81f1cbe4890b5a8dcd522238e5bcaecf60f337d9670b9bb691b4c0d4d8d8cd90",
       "出图/第2集/图片/EP02_CLIP01_start_a1.png": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
-      "出图/第2集/图片/EP02_CLIP01_start_a2.png": "af89a8a6ba3bbd53abf8f1e7e5822f4b2a14ed0e6ef097160ace6f7f5e094813",
+      "出图/第2集/图片/EP02_CLIP01_start_a2.png": "e93e56b49f941ce2d4d5c1bf4607383b709351399ab7e122ec4598e73d3eff94",
       "出图/第2集/图片/EP02_CLIP01_start_a3.png": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
-      "出图/第2集/图片/EP02_CLIP02_preimpact.png": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
-      "出图/第2集/图片/EP02_CLIP02_start.png": "e70555f12748daa6cab1e739f80497b17ad4c67368940239f3e97a43d74d8050",
+      "出图/第2集/图片/EP02_CLIP02_preimpact.png": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
+      "出图/第2集/图片/EP02_CLIP02_start.png": "078362a917a57b31e6e7c0f5609773f59071cd27c91e401625e4e015231d9afe",
       "出图/第2集/图片/EP02_CLIP02_start_a1.png": "c64035c133cc1fa9770dcdc758794ac0ca272e40bb3aa9e31eb74789fc3c2bc7",
-      "出图/第2集/图片/EP02_CLIP03_impact.png": "2537373ec7e419038dbdb2646bf921f6d1ed28d1909e220846e6b5f3ee11caea",
-      "出图/第2集/图片/EP02_CLIP03_recovery.png": "9b3f558b4616b40fa9b2aeb16245e48ab4fdefc1f760c739101bf80feb098cec",
+      "出图/第2集/图片/EP02_CLIP03_impact.png": "90ecd3bb7755b22e99eb76751ee1651883cb922d5e25e759e8460c2e9305207b",
+      "出图/第2集/图片/EP02_CLIP03_recovery.png": "0495d3d4dafa4b7d5b8295d26dc0ef52411ce7c73d4e8483f20bc525b3d13577",
       "出图/第2集/图片/EP02_CLIP04_end.png": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
-      "出图/第2集/图片/EP02_CLIP04_end_a1.png": "1cbf2396fa5187c459ece513f9dc29f555886dc73b379abe0d90e7beec7ebfb2",
-      "出图/第2集/图片/EP02_CLIP04_end_a2.png": "1216d0498923aca2ca2e8f4a374ac86273f679243eb89097a3423d6a720fa690",
+      "出图/第2集/图片/EP02_CLIP04_end_a1.png": "46ac30b60ba03c38a92da24dbc56e12d4396628b77ddb39c3fb66d7f8bf87635",
+      "出图/第2集/图片/EP02_CLIP04_end_a2.png": "cee0b4df60df347c3f2c77668d8a90522f1252f20c72bf9e9865682ec8274072",
       "出图/第2集/图片/EP02_CLIP04_start.png": "526fece0bc675ffb34c5ebcd30c87b2fe5ece74437d19c09e997a4e76373f5e8",
-      "出图/第2集/图片/EP02_CLIP06_end.png": "06e1af70018bb661854f6748a523366085b2b2ce67396706169f9a83eacd7e84",
+      "出图/第2集/图片/EP02_CLIP06_end.png": "f0b82c85a4c6df190a4f1ad23432545f3d94b9e9c9130d06a0136f13d3c50783",
       "出图/第2集/图片/EP02_CLIP06_start.png": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644",
-      "出图/第2集/图片/EP02_CLIP06_start_a1.png": "0ef22b871e84c7ddfcb4e3fece43c37add0db5ffba3745e314e9170647ea1faa",
-      "出图/第2集/图片/EP02_CLIP07_start.png": "2c3b3baf3ae01af94c8318d35ee6fff8f92419ec6adc8b21163fc629978a901d",
-      "出图/第2集/图片/EP02_CLIP07_start_a1.png": "bf53a7d5959b94242f5c8b3d79b4971c35adbb4ecd4e0a5337c43fc50470f9e2",
-      "出图/第2集/图片/EP02_CLIP07_start_a2.png": "98c73f4c9407d47148a23b5ffdf8f02aa1d063f4690392a546cc55dd3f805a15",
+      "出图/第2集/图片/EP02_CLIP06_start_a1.png": "c3ebc84252a8279e86226e73d2c6c30574414c9343c043895b9d01cbcbef8f16",
+      "出图/第2集/图片/EP02_CLIP07_start.png": "2490a4a7e6e065c52165283fe9da239b5d9f79d56061f560c2b3848d7c1f6fda",
+      "出图/第2集/图片/EP02_CLIP07_start_a1.png": "988f1b049d54a2a9cff049d0ecf9e48ec0d10b103fa8b884c80e725effb6eb81",
+      "出图/第2集/图片/EP02_CLIP07_start_a2.png": "e947f91dbf550fdc02432455ecd705bd8c30e0ee99716ab4317eabe727354d95",
       "出图/第2集/图片/EP02_CLIP08_end.png": "ccc0962d8afd8f33e86c0a31172efaca74c6b643eead83f75b0259406822940d",
       "出图/第2集/图片/EP02_CLIP08_start.png": "58b5a048800a8b764b042330064d41869949c522bf7bdc1c386d583f7c22f9bc",
       "出图/第2集/图片/EP02_CLIP08_start_a1.png": "311608d6f12edbbe69787cd9a163a275b74731f6e51c8da017f7fc63e8c5f9b9",
-      "生产数据/image_qc/第2集/face_confirmations.json": "1a0ce847b0c8e0ab680f192ad6d759d32b50d798dde0c337c323e828388c6302",
+      "生产数据/image_qc/第2集/face_confirmations.json": "7f7b9df45348f954c69544409116eab288e522502382d915232e293d6d77d5cb",
+      "生产数据/image_qc/第2集/hair_confirmations.json": "924e2a7a9ab9a58d02b9eaa91160733fe624c3d2767684143d0d96d2619a65e4",
       "生产数据/image_qc/第2集/human_image_review.json": null,
-      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "3376ca5ecff4b85c00f37846a61349930c72b8d23117d4f5b16f11d27ea59a71",
+      "生产数据/image_qc/第2集/outfit_confirmations.json": "10edc8510a56dbf6a14df89bac8775dfe3f2104ed8716b22e325ab627ba9a7b2",
+      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "5e295dd4897a0d48cbda26274133d4c7f4b0f553fe359743462382a8756827e0",
       "脚本/第2集/storyboard.json": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f"
     },
-    "sha": "d65e3fb750ce555c9f3833eba2379b755cf87f9edba52c9b072dfcea3186e7f2"
+    "sha": "a8594ef1f8d7a055b3afa4b1fc7b8b9aa08789812346b99e334b80173cfe6f2f"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1601,6 +1743,16 @@
         "msg": "多视图对齐初筛异常 BEAST_01/“穿心复生态”：脚底线不齐：rear_three_quarter(0.936) vs side(0.972)，差 0.036>0.035；视平线不齐：rear_three_quarter(0.29) vs back(0.90)，跨视图脸中心高度差 61%>6%；比例不一：side 脸高是 back 的 2.11 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
       },
       {
+        "code": "static_long_take",
+        "level": "warn",
+        "msg": "静态长镜 EP02_CLIP02：first↔end 锚 dHash=10/64（≤10≈同构图）且时长 12.076s——视频后端拿到起点=终点的锚只会产几乎不动的长镜（成片 PPT 感根源）。处理：①改尾锚为不同构图/景别（推镜落幅、反应镜、插入镜）②按动作拆碎切 ③确属留白/定格镜则在 pacing_role 标注豁免。"
+      },
+      {
+        "code": "duplicate_composition",
+        "level": "warn",
+        "msg": "镜头构图重复 EP02_CLIP02 ↔ EP02_CLIP03：首帧 dHash=10/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。"
+      },
+      {
         "code": "duplicate_composition",
         "level": "warn",
         "msg": "镜头构图重复 EP02_CLIP04 ↔ EP02_CLIP05：首帧 dHash=5/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。"
@@ -1614,6 +1766,54 @@
     "notes": [],
     "shots_linted": 8
   },
+  "outfit_manual_confirmations": {
+    "applied": 5,
+    "available": true,
+    "configured": 5,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/outfit_confirmations.json",
+    "rows": [
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/Clip07_end.png",
+        "reason": "当前原像素与a2/定妆严审：CHAR_01灰褐交领囚服、腰绳、袖型连续；CHAR_02黑红纹领劲装、斜带与包扎连续，未串衣。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4797
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP06_start_a1.png",
+        "reason": "当前原像素与共享全身/半身定妆并排复核：灰褐窄袖交领囚服、腰绳结、袖口宽度、衣摆层次、破损血污和材质均一致；0.5731低分来自站姿全身构图、湿污和大面积暗部，不是换装。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.5731
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP07_start.png",
+        "reason": "当前原尺寸像素严审：CHAR_01灰褐窄袖交领囚服、腰绳和克制污损与定妆一致；CHAR_02墨黑暗赤红纹领、斜带、臂部包扎与重伤态定妆一致，未串衣。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.5051
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP07_start_a1.png",
+        "reason": "当前原像素与首帧/两套定妆严审：CHAR_01灰褐交领囚服、腰绳、袖型一致；CHAR_02黑红纹领劲装、斜带与包扎一致，未串衣。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4932
+      },
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/EP02_CLIP07_start_a2.png",
+        "reason": "当前原像素与a1/定妆严审：CHAR_01灰褐交领囚服、腰绳与袖型连续；CHAR_02黑红纹领劲装、斜带和包扎连续，未串衣。确认仅绑定当前SHA。",
+        "reviewer": "executor:codex",
+        "score": 0.4109
+      }
+    ]
+  },
   "prohibited_face_patch": {
     "available": true,
     "notes": [
@@ -1625,8 +1825,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-    "confirmed": 41,
-    "pending": 38,
+    "confirmed": 65,
+    "pending": 14,
     "targets": [
       {
         "asset": "VFX_墨虎谱影",
@@ -2725,7 +2925,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
         "must_not_have": [
@@ -2926,7 +3126,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
         "must_not_have": [
@@ -3152,7 +3352,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
         "must_not_have": [
@@ -3219,7 +3419,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
         "must_not_have": [
@@ -3339,7 +3539,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
         "must_not_have": [
@@ -3392,7 +3592,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
         "must_not_have": [
@@ -3472,7 +3672,7 @@
         "asset_name": "百妖谱",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
         "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
         "must_not_have": [
@@ -3499,7 +3699,7 @@
         "asset_name": "百妖谱",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
         "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
         "must_not_have": [
@@ -3583,7 +3783,7 @@
         "asset_name": "百妖谱金色古卷面板",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
         "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
         "must_not_have": [
@@ -3613,7 +3813,7 @@
         "asset_name": "百妖谱金色古卷面板",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
         "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
         "must_not_have": [
@@ -3880,7 +4080,7 @@
         "asset_name": "百妖谱",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -3934,7 +4134,7 @@
         "asset_name": "百妖谱",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -3961,7 +4161,7 @@
         "asset_name": "百妖谱金色古卷面板",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -4021,7 +4221,7 @@
         "asset_name": "百妖谱金色古卷面板",
         "asset_type": "vfx",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -4051,7 +4251,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -4185,7 +4385,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -4252,7 +4452,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -4358,7 +4558,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
         "must_not_have": [
@@ -4478,7 +4678,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
         "must_not_have": [
@@ -4545,7 +4745,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
         "must_not_have": [
@@ -4612,7 +4812,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
         "must_not_have": [
@@ -4732,7 +4932,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
         "must_not_have": [
@@ -4785,7 +4985,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
         "must_not_have": [
@@ -4838,7 +5038,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
         "must_not_have": [
@@ -5173,7 +5373,12 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start.png DINO/CLIP cosine=0.02 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip03_end.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start.png DINO/CLIP cosine=0.05 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -5183,7 +5388,7 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start_a2.png DINO/CLIP cosine=0.46 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start_a2.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -5193,12 +5398,22 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP02_start.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP02_preimpact.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP02_start_a1.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP02_start.png DINO/CLIP cosine=0.10 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP03_impact.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP03_recovery.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -5208,12 +5423,12 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP04_end_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP04_end_a1.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP04_end_a2.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP04_end_a2.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -5223,7 +5438,7 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP06_start.png DINO/CLIP cosine=0.35 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP06_end.png DINO/CLIP cosine=0.42 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -5256,6 +5471,13 @@
     "duplicate_pairs": [
       {
         "clips": [
+          "EP02_CLIP02",
+          "EP02_CLIP03"
+        ],
+        "dhash": 10
+      },
+      {
+        "clips": [
           "EP02_CLIP04",
           "EP02_CLIP05"
         ],
@@ -5264,19 +5486,36 @@
     ],
     "findings": [
       {
+        "code": "static_long_take",
+        "level": "warn",
+        "msg": "静态长镜 EP02_CLIP02：first↔end 锚 dHash=10/64（≤10≈同构图）且时长 12.076s——视频后端拿到起点=终点的锚只会产几乎不动的长镜（成片 PPT 感根源）。处理：①改尾锚为不同构图/景别（推镜落幅、反应镜、插入镜）②按动作拆碎切 ③确属留白/定格镜则在 pacing_role 标注豁免。"
+      },
+      {
+        "code": "duplicate_composition",
+        "level": "warn",
+        "msg": "镜头构图重复 EP02_CLIP02 ↔ EP02_CLIP03：首帧 dHash=10/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。"
+      },
+      {
         "code": "duplicate_composition",
         "level": "warn",
         "msg": "镜头构图重复 EP02_CLIP04 ↔ EP02_CLIP05：首帧 dHash=5/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。"
       }
     ],
     "notes": [],
-    "static_pairs": []
+    "static_pairs": [
+      {
+        "clip": "EP02_CLIP02",
+        "dhash": 10,
+        "duration": 12.076
+      }
+    ]
   },
   "state_ledger": {
     "advise": true,
     "available": true,
     "ledger_present": false,
     "markers": [
+      "伤口",
       "染血",
       "血污"
     ],
@@ -5291,11 +5530,11 @@
     "anchor_status": "ok",
     "available": true,
     "checked": 26,
-    "distance": 0.209,
+    "distance": 0.395,
     "episode_fingerprint": {
-      "contrast": 115.5,
-      "edge": 23.5,
-      "sat": 28.5
+      "contrast": 87.3,
+      "edge": 23.0,
+      "sat": 30.0
     },
     "findings": [],
     "intent": {
@@ -5315,7 +5554,7 @@
     }
   },
   "summary": {
-    "advisory": 47,
+    "advisory": 35,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -5323,28 +5562,22 @@
         "ok": 0,
         "warn": 0
       },
-      "cross_episode_face_drift": {
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 26,
+        "warn": 0
+      },
+      "face_reference_coverage_unclassified": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
-      },
-      "face": {
-        "block": 5,
-        "noface": 0,
-        "ok": 16,
-        "warn": 5
-      },
-      "face_reference_coverage": {
-        "block": 4,
-        "noface": 0,
-        "ok": 17,
-        "warn": 0
+        "warn": 2
       },
       "hair": {
-        "block": 8,
+        "block": 3,
         "noface": 0,
-        "ok": 18,
+        "ok": 23,
         "warn": 0
       },
       "human_anatomy": {
@@ -5357,7 +5590,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 7
+        "warn": 9
       },
       "multimodal": {
         "block": 0,
@@ -5366,9 +5599,9 @@
         "warn": 0
       },
       "outfit": {
-        "block": 11,
+        "block": 3,
         "noface": 0,
-        "ok": 15,
+        "ok": 23,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -5378,7 +5611,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 38,
+        "block": 14,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -5399,11 +5632,11 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 15
+        "warn": 18
       }
     },
     "degraded": false,
-    "hard_blocks": 47,
+    "hard_blocks": 14,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
@@ -5416,8 +5649,8 @@
       "evidence": "冷灰青黑+暗红夕照；百妖谱与刀弧使用克制旧金",
       "warmth": "cool"
     },
-    "luma_median": 58.0,
-    "warmth_median": -0.0
+    "luma_median": 47.4,
+    "warmth_median": 0.1
   },
   "turnaround_alignment": {
     "available": true,

@@ -194,6 +194,12 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("基础视觉风格", ("n2d",), BASE_VISUAL_STYLE_CHOICES, parameterized=True),
     SettingSpec("拆集节奏", ("n2d",), ("前长后短", "均衡", "快节奏", "长集", "自定义"),
                 key_aliases=("单集时长", "单集节奏偏好"), parameterized=True, syncable=False),
+    # 主线剪枝：编剧级"主线提炼 + 支线剪枝"强度（拆集前的全书改编策略层）。保守=保留全部支线，
+    # story_spine 仅建议不阻断；突出主线(默认)=允许有连通性证明地压缩/折叠/裁剪偏离主线的旁枝，
+    # 缺 confirmed story_spine 阻断写词；激进精简=更狠地砍旁枝、只保主线与强钩支线。忠实底线：
+    # 只对已确认 因果链/伏笔账 操作，裁剪必须证明无孤儿伏笔且主线仍衔接，禁止臆造。
+    SettingSpec("主线剪枝", ("n2d",), ("保守", "突出主线", "激进精简", "自定义"),
+                key_aliases=("主线聚焦", "支线剪枝", "主线提炼"), parameterized=True, syncable=False),
     # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·
     # 全剧延续性·断点平均强)/付费(小程序剧·前十集卡点峰值+付费墙集)/海外(ReelShort/TikTok·更碎更狠)。
     # 驱动 boundary_audit 的剧级追更骨架与卡点定位。取值与 n2d-script/references/追更骨架.md 对齐。

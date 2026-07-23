@@ -1,0 +1,29 @@
+{
+  "kind": "n2d_single_image_consistency_preflight",
+  "schema_version": 1,
+  "created_at": "2026-07-23T12:38:31+08:00",
+  "episode": "第2集",
+  "clip": "Clip_03",
+  "target": "出图/第2集/图片/EP02_CLIP03_impact.png",
+  "mode": "full_qc_targeted_repair",
+  "status": "passed_for_single_target_repair",
+  "review_contract": "B14_pre_generation_consistency",
+  "current_target_sha256": "878e3d6d6c073b6a26773056e94dbe0eb2d53d898cac0d4641f29a4d3acb8b3d",
+  "image_qc_report": "生产数据/image_qc/第2集/image_qc_第2集.json",
+  "image_qc_report_sha256": "c54ded5e9978bf4978d1b6a74fb433a43bdf841743207d36f075826c8e72d54d",
+  "repair_findings": [
+    "executor_visual_rejection"
+  ],
+  "preflight_checks": {
+    "current_target_exists_and_decodes": true,
+    "current_target_sha_bound": true,
+    "full_precision_qc": true,
+    "target_has_concrete_machine_or_current_pixel_failure": true,
+    "single_target_only": true
+  },
+  "post_generation_required": [
+    "full_machine_qc",
+    "canonical_face_and_current_output_side_by_side_original_pixel_review",
+    "current_output_sha_bound_qa_receipt"
+  ]
+}

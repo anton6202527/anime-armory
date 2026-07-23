@@ -1117,6 +1117,25 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         str(row.get("use") or "split").strip().lower() in {"split", "keyframe"}
         for row in execution_anchors
     )
+    # storyboard 显式声明逐镜独立付费 take：规整为空，不进入单拍多镜。
+    if take_policy in {"split_each", "multi_take", "multitake", "independent_takes", "force_split"}:
+        take_policy = ""
+    # 拆镜经济性默认合并（2026-07-22 clip 经济性回修·第二阶段，与 shot_split_decision 同口径）：
+    # 低风险、纯镜位覆盖、跨度 ≤ 单次生成硬上限的多镜位镜，即使 storyboard 未显式声明也默认单拍多镜，
+    # 由 multishot-native 后端一次生成；奇观/大表情/高身份风险/需锚帧链/需中锚镜不默认合并。
+    # 最终能力/时长闸仍由 select_video_frame_strategy → single_take_multishot_supported 兜底回落 edit_cut。
+    auto_single_take = False
+    if (
+        not take_policy
+        and len(editorial_shots) > 1
+        and not (requires_mid or risk_anchor_present)
+    ):
+        _dur = clip.get("duration") if isinstance(clip.get("duration"), (int, float)) else None
+        _span = str(cont.get("expression_span") or "微")
+        _spectacle_like = bool(clip.get("template") or clip.get("spectacle_type") or signature_high_risk)
+        if _dur is not None and _dur <= 15.0 and _span != "大" and not _spectacle_like:
+            take_policy = "single_take_multishot"
+            auto_single_take = True
     # 安全优先：命中 R1-R3 高风险锚链或需中锚的镜，忽略单拍多镜声明，仍按锚帧链/拆段执行
     # （与 shot_split_decision.single_take_policy_verdict / anchor_planner 同口径）。
     effective_take_policy = "" if (requires_mid or risk_anchor_present) else take_policy

@@ -143,3 +143,53 @@ def test_logged_detail_rewrite_downgrades_source_term_warning():
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-q"]))
+
+
+def _write_spine(root, threads, status="confirmed"):
+    pack = Path(root) / "开发包"
+    pack.mkdir(parents=True, exist_ok=True)
+    (pack / "story_spine.json").write_text(json.dumps({
+        "kind": "n2d_story_spine", "version": 1, "status": status,
+        "spine": [{"id": "SPINE_01", "beat": "主线", "source_span": "第1章"}],
+        "threads": threads,
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_spine_cut_thread_authorizes_omission():
+    # 源文里有"柳娘子"这条支线；改编稿不覆盖它。若 story_spine 已 cut 该支线并给关键词，
+    # 审计按"全书级有账剪枝"处理（info），不再 warn 逼逐句登记。
+    raw = "沈念被逼到宫墙下。系统提示【妖血觉醒】。柳娘子在暗处布局多年，另有隐情。她反击柳娘子。"
+    root = _mk_ep(
+        raw,
+        "[镜头1·沈念·惊恐·快] 系统提示【妖血觉醒】。\n"
+        "[镜头2·沈念·冷冽·快] 这局才刚开始。  🪝集尾\n",
+    )
+    _write_spine(root, [{
+        "id": "THREAD_LIU", "name": "柳娘子宫斗旁枝", "class": "tangent", "decision": "cut",
+        "cut_keywords": ["柳娘子"],
+        "connectivity": {"payoff_reroute": "该宫斗线与主线无关，随线程退役。",
+                          "no_orphan_proof": "无下游主线依赖。"},
+    }])
+
+    result = SA.audit(root, "第1集")
+    c = codes(result)
+    # 被 spine 授权的支线内容记为 *_cut_by_spine（info），而非 warn 级缺失。
+    assert any(code.endswith("_cut_by_spine") for code in c)
+    liu_warn = [f for f in result["findings"]
+                if f["severity"] == "warn" and "柳娘子" in json.dumps(f.get("evidence") or {}, ensure_ascii=False)]
+    assert not liu_warn  # 柳娘子这条被 cut 的支线不再产生 warn
+    assert result["stats"]["spine_cut_threads"] == 1
+    assert result["stats"]["spine_authorized_omissions"] >= 1
+
+
+def test_spine_draft_does_not_authorize():
+    # story_spine 未 confirmed 时不授权免账。
+    raw = "沈念被逼到宫墙下。柳娘子在暗处布局多年。她反击柳娘子。"
+    root = _mk_ep(root=None, raw=raw, voiceover="[镜头1·沈念·惊恐·快] 门外传来怪声。\n") if False else _mk_ep(
+        raw, "[镜头1·沈念·惊恐·快] 门外传来怪声。\n")
+    _write_spine(root, [{
+        "id": "THREAD_LIU", "name": "柳娘子旁枝", "class": "tangent", "decision": "cut",
+        "cut_keywords": ["柳娘子"], "connectivity": {"payoff_reroute": "x", "no_orphan_proof": "y"},
+    }], status="draft")
+    result = SA.audit(root, "第1集")
+    assert "source_term_cut_by_spine" not in codes(result)
