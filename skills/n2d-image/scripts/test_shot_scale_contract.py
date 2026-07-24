@@ -113,3 +113,21 @@ def test_analyze_available_true_when_no_storyboard_scales(tmp_path, monkeypatch)
                         lambda name: types.SimpleNamespace(cv2_face_boxes=lambda *a, **k: []))
     res = ssc.analyze(root, "第1集")
     assert res["available"] is True and res["checked"] == 0 and res["findings"] == []
+
+
+def test_insert_rendered_as_person_pure():
+    # 声明系统/道具 insert 却大脸 → warn；无脸/小脸/非 insert → None
+    assert ssc.insert_rendered_as_person("system_panel", 0.30)["code"] == "insert_rendered_as_person"
+    assert ssc.insert_rendered_as_person("prop", 0.30) is not None
+    assert ssc.insert_rendered_as_person("system_panel", None) is None
+    assert ssc.insert_rendered_as_person("system_panel", 0.05) is None
+    assert ssc.insert_rendered_as_person(None, 0.90) is None
+
+
+def test_clip_insert_subjects_map():
+    sb = {"clips": [
+        {"id": "Clip_01", "template": "system_panel"},
+        {"id": "Clip_02", "template": "object_discovery"},
+        {"id": "Clip_03", "shots": [{"lens": "MS 中景"}], "desc": "人物对话"},
+    ]}
+    assert ssc.clip_insert_subjects(sb) == {1: "system_panel", 2: "prop"}

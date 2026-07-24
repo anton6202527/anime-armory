@@ -12,7 +12,13 @@ from gate_core import (
     _gate_make_clip_id,
     _registry_character_names,
     _registry_relative_scales,
+    _settings_values,
 )
+
+try:  # 非人物特写覆盖策略真值源（n2d/_lib 已由 gate_core 挂入 sys.path）。
+    from n2d_insert_coverage import evaluate_episode as _insert_eval  # type: ignore
+except Exception:  # pragma: no cover - 最小分发兜底
+    _insert_eval = None  # type: ignore
 
 _ACTION_BUDGET_CLIP_FIELDS = (
     "scene", "label", "title", "description", "visual", "action", "shot_type",
@@ -108,6 +114,37 @@ def check_shot_scale_progression(root: str, ep: str) -> None:
             f"{len(unparsed)} 个镜写了 lens 但抽不出景别分级（{sample}）——景别阶梯单调性机检对它们失效；"
             "把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。",
             return_to_stage="image")
+
+def check_noncharacter_insert_coverage(root: str, ep: str) -> None:
+    """非人物特写覆盖·出片复核（早闸 preventive_contracts 之后的净兜底）：本集确有系统面板/关键道具
+    信息态桥段，却没有一个专属 insert 特写镜——治「时时刻刻都给人镜头」，让系统时刻/关键物件别只塞进
+    人物反应镜、也别在分镜排了系统 insert 却被下游悄悄丢掉。
+
+    严重度/口径全由 n2d_insert_coverage 单一真值源裁决（与早闸同源）：`非人物特写覆盖` 选择点缺失=老项目
+    宽限（仅提示，绝不追溯 block）；启用档系统面板缺 insert → BLOCK、道具 → WARN。"""
+    if _insert_eval is None:
+        return
+    sb = load_json(storyboard_path(root, ep))
+    if not isinstance(sb, dict):
+        return  # storyboard 缺失由 check_storyboard_contract 负责 BLOCK
+    clips = sb.get("clips") or sb.get("shots") or []
+    if not isinstance(clips, list):
+        return
+    clips = [c for c in clips if isinstance(c, dict)]
+    if not clips:
+        return
+    mode_vals = [v for v in _settings_values(root, ("非人物特写覆盖",)) if v]
+    genre_vals = _settings_values(root, ("题材",))
+    genre_keys = [g for v in genre_vals for g in re.split(r"[、,，+/\s（）()]+", v) if g]
+    try:
+        result = _insert_eval(clips, genre_keys=genre_keys, mode=(mode_vals[0] if mode_vals else None))
+    except Exception:  # pragma: no cover
+        return
+    for f in result.get("findings") or []:
+        level = BLOCK if str(f.get("severity")) == "block" else WARN
+        add(level, "非人物特写", storyboard_path(root, ep), str(f.get("message") or ""),
+            return_to_stage="script_stage2")
+
 
 def check_cinematic_optical_continuity(root: str, ep: str) -> None:
     """Validate that focal lengths match shot sizes to prevent perspective distortion."""
@@ -320,6 +357,7 @@ def check_action_beat_budget(root: str, ep: str, stage: str = "video") -> None:
 
 __all__ = [
     'check_shot_scale_progression',
+    'check_noncharacter_insert_coverage',
     'check_cinematic_optical_continuity',
     'check_physical_scale_audit',
     'check_spectacle_sequence_plan',

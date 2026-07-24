@@ -4159,6 +4159,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_common_image_prompts(root)
         check_cinematic_optical_continuity(root, ep)
         check_shot_scale_progression(root, ep)
+        check_noncharacter_insert_coverage(root, ep)
         check_physical_scale_audit(root, ep)
         if stage == "image":
             # 生成后落档机检：崩脸/人体解剖N5/接缝断/降级精度近景/角色脸覆盖缺口的**像素**硬挡，此前只挂在

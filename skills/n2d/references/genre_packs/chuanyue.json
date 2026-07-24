@@ -16,7 +16,8 @@
       "label": "系统面板/HUD",
       "production_risks": ["中文字乱码", "数值不一致", "面板风格跨集漂移"],
       "required_contract_fields": ["screen_direction", "degrade_plan"],
-      "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+      "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层",
+      "insert_coverage": {"subject": "system_panel", "required": true, "tier": "block", "note": "系统时刻必须给专属 insert 特写(空光幕底框)，别只塞进人物反应镜；口径见 n2d_insert_coverage"}
     },
     {
       "id": "time_transfer",
@@ -30,7 +31,8 @@
       "label": "现代物品/知识落地",
       "production_risks": ["道具形态漂移", "古今材质冲突", "手持关系错"],
       "required_contract_fields": ["mount_contact", "harness_lock", "screen_direction"],
-      "style_binding": "现代道具登记为 PROP，交互镜必须有 contact/possession 说明"
+      "style_binding": "现代道具登记为 PROP，交互镜必须有 contact/possession 说明",
+      "insert_coverage": {"subject": "prop", "required": true, "tier": "warn", "note": "现代物品/关键道具建议给物件 insert 特写，别永远只在人物手里带过"}
     }
   ],
   "style_binding_policy": {

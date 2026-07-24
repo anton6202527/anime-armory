@@ -1,13 +1,13 @@
 {
-  "event_count": 786,
+  "event_count": 792,
   "kind": "n2d_flow_telemetry",
-  "last_event_at": "2026-07-23T11:18:08+0800",
-  "milestone_count": 759,
+  "last_event_at": "2026-07-24T12:29:57+0800",
+  "milestone_count": 765,
   "milestones": {
-    "actual_rough_cut_planned": 32,
+    "actual_rough_cut_planned": 34,
     "actual_rough_cut_ready": 3,
-    "video_accepted": 35,
-    "video_downloaded": 40,
+    "video_accepted": 37,
+    "video_downloaded": 42,
     "video_qc_blocked": 9,
     "video_queried": 598,
     "video_query_failed": 3,
@@ -35,11 +35,11 @@
   },
   "stages": {
     "compose": 2,
-    "compose_proxy": 35,
+    "compose_proxy": 37,
     "image_prompt": 7,
     "script_stage1": 5,
     "script_stage2": 9,
-    "video": 724,
+    "video": 728,
     "video_prompt": 2,
     "voice": 2
   },
@@ -50,6 +50,6 @@
     "needs_stage_execution": 1,
     "prework_failed": 14
   },
-  "updated_at": "2026-07-23T11:18:08+0800",
+  "updated_at": "2026-07-24T12:29:57+0800",
   "version": 1
 }

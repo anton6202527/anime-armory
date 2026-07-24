@@ -23,6 +23,14 @@ import re
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
+_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+try:  # 非人物特写覆盖：策略真值源在 n2d/_lib，审计只做 report-only 映射，不复制口径。
+    from n2d_insert_coverage import evaluate_episode as _insert_eval  # type: ignore
+except Exception:  # pragma: no cover - 最小分发兜底
+    _insert_eval = None  # type: ignore
+
 # 景别梯度：rank 越大画面越宽。归一到 7 档（含中英别名）。
 # 顺序按**特异性**排（长/含子串的码先匹配），避免 "ELS" 被 "LS"、"MCU" 被 "CU" 子串先吞。
 SCALE_RANKS = (
@@ -174,7 +182,25 @@ def audit_clips(clips: List[Dict[str, Any]]) -> List[Tuple[str, str, str]]:
         if a_prev and a_cur and a_prev == a_cur:
             findings.append(("warn", "thirty_degree_risk",
                              f"镜{idx}-{idx+1} 同景别同机位（{'/'.join(sorted(a_cur))}）：违 30°法则易成跳切，换机位差≥30° 或换景别"))
+
+    # ⑦ 非人物特写覆盖（景别有进程 ≠ 主体有变化）：系统面板/道具/物件的信息态桥段该给专属 insert，
+    # 别时时刻刻都怼人脸。这里只做 report-only 映射（审计恒 advisory），硬闸在 preventive_contracts/gate。
+    findings.extend(insert_coverage_findings(clips))
     return findings
+
+
+def insert_coverage_findings(clips: List[Dict[str, Any]]) -> List[Tuple[str, str, str]]:
+    """非人物特写覆盖 → 审计 (severity, code, msg)。策略走 n2d_insert_coverage（仅提示档：审计不 block）。"""
+    if _insert_eval is None:
+        return []
+    try:
+        result = _insert_eval(clips, mode="仅提示")
+    except Exception:  # pragma: no cover
+        return []
+    out: List[Tuple[str, str, str]] = []
+    for f in result.get("findings") or []:
+        out.append(("warn", str(f.get("code") or "insert_coverage"), str(f.get("message") or "")))
+    return out
 
 
 def storyboard_path(root: str, ep: str) -> str:

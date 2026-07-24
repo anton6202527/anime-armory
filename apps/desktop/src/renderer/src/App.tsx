@@ -4,7 +4,6 @@ import { Home } from "./pages/Home";
 import { Line } from "./pages/Line";
 import { Operation } from "./pages/Operation";
 import { GlobalTooltip } from "./components/GlobalTooltip";
-import { Codicon } from "./components/Codicon";
 import { BreadcrumbHomeIcon } from "./components/BreadcrumbHomeIcon";
 import {
   DEFAULT_REPO,
@@ -96,78 +95,6 @@ type OpenWork = {
   root: WorkRoot;
 };
 
-type FileStatusInfo = {
-  root: string;
-  path: string;
-  name: string;
-  kind: string;
-  ext: string;
-  size: number | null;
-  dirty: boolean;
-};
-
-function formatFileBytes(value?: number | null): string {
-  if (value == null) return "-";
-  if (value < 1024) return `${value} B`;
-  if (value < 1024 * 1024) return `${Math.round(value / 1024)} KB`;
-  return `${(value / 1024 / 1024).toFixed(1)} MB`;
-}
-
-function fileFormatLabel(file: FileStatusInfo): string {
-  if (file.ext) return file.ext.toUpperCase();
-  if (file.kind) return file.kind.toUpperCase();
-  return "TEXT";
-}
-
-function AppStatusBar({
-  activeWork,
-  fileStatus,
-  workspaceRoot,
-}: {
-  activeWork: OpenWork | null;
-  fileStatus: FileStatusInfo | null;
-  workspaceRoot: string;
-}) {
-  const { t } = useI18n();
-  const hasFile = Boolean(fileStatus?.path);
-  const title = activeWork?.root.name ?? t("status.home");
-  const filePath = fileStatus?.path ?? "";
-  return (
-    <div className="statusbar">
-      <div className="statusbar-left">
-        <span className="statusbar-item statusbar-work" title={activeWork?.root.path ?? workspaceRoot}>
-          {title}
-        </span>
-        {hasFile ? (
-          <span className="statusbar-item statusbar-file" title={filePath}>
-            {fileStatus?.dirty ? "● " : ""}
-            {filePath}
-          </span>
-        ) : (
-          <span className="statusbar-item statusbar-muted">{t("status.noFile")}</span>
-        )}
-      </div>
-      <div className="statusbar-right">
-        {hasFile && fileStatus ? (
-          <>
-            {fileStatus.dirty && <span className="statusbar-item statusbar-warn">{t("status.unsaved")}</span>}
-            <span className="statusbar-item">{fileFormatLabel(fileStatus)}</span>
-            <span className="statusbar-item">{formatFileBytes(fileStatus.size)}</span>
-          </>
-        ) : null}
-        <button
-          type="button"
-          className="statusbar-button statusbar-notifications"
-          title={t("status.notifications")}
-          aria-label={t("status.notifications")}
-        >
-          <Codicon name="bell" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export function App() {
   const { setLanguage, t } = useI18n();
   const lineLabel = useLineLabel();
@@ -188,7 +115,6 @@ export function App() {
   const [terminalVisible, setTerminalVisible] = useState(() => {
     return window.localStorage.getItem("aa.terminalVisible") !== "false";
   });
-  const [fileStatusByRoot, setFileStatusByRoot] = useState<Record<string, FileStatusInfo | null>>({});
   const [newTerminalRequest, setNewTerminalRequest] = useState({ seq: 0, targetId: null as string | null });
   const activeIdRef = useRef<string | null>(null);
   const recentWorksRef = useRef(recentWorks);
@@ -241,19 +167,6 @@ export function App() {
       const work = recentWorksRef.current.find((item) => item.root.path === path);
       if (work) openWork(lineFromRecent(work), work.root);
     });
-  }, []);
-
-  useEffect(() => {
-    const onFileStatus = (event: Event) => {
-      const detail = (event as CustomEvent<FileStatusInfo>).detail;
-      if (!detail?.root) return;
-      setFileStatusByRoot((prev) => ({
-        ...prev,
-        [detail.root]: detail.path ? detail : null,
-      }));
-    };
-    window.addEventListener("anime-armory:file-status", onFileStatus);
-    return () => window.removeEventListener("anime-armory:file-status", onFileStatus);
   }, []);
 
   function rememberWork(line: LineInfo, root: WorkRoot) {
@@ -338,7 +251,6 @@ export function App() {
     return <div className="home"><h1>{t("app.name")}</h1><div className="empty">{t("app.initWorkspace")}</div></div>;
   }
 
-  const activeFileStatus = activeId ? fileStatusByRoot[activeId] ?? null : null;
 
   return (
     <div className="app-shell">
@@ -421,14 +333,6 @@ export function App() {
           </div>
         )}
       </div>
-
-      {activeWork && (
-        <AppStatusBar
-          activeWork={activeWork}
-          fileStatus={activeFileStatus}
-          workspaceRoot={workspaceRoot}
-        />
-      )}
 
       {skillsLine && (
         <Suspense fallback={null}>

@@ -1,0 +1,133 @@
+{
+  "kind": "n2d_video_face_drift_watch",
+  "version": 1,
+  "generated_at": "2026-07-24T04:23:06.945773+00:00",
+  "episode": "第2集",
+  "status": "ready_for_human_frame_identity_review",
+  "master": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+  "source_kind": "single_video",
+  "source_clip": "Clip_07_part2",
+  "packet_id": "Clip_07___part2_0.00_7.97s",
+  "master_duration_sec": 8.016,
+  "start_sec": 0.0,
+  "end_sec": 7.966,
+  "interval_sec": 0.5,
+  "segments_source": "single_video",
+  "segments": [
+    {
+      "clip": "Clip_07_part2",
+      "start_sec": 0.0,
+      "end_sec": 8.016,
+      "duration_sec": 8.016,
+      "source": "single_video"
+    }
+  ],
+  "frames": [
+    {
+      "time_sec": 0.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/001_Clip_07_part2_000.000s.jpg",
+      "bytes": 151823
+    },
+    {
+      "time_sec": 0.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/002_Clip_07_part2_000.500s.jpg",
+      "bytes": 150095
+    },
+    {
+      "time_sec": 1.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/003_Clip_07_part2_001.000s.jpg",
+      "bytes": 146542
+    },
+    {
+      "time_sec": 1.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/004_Clip_07_part2_001.500s.jpg",
+      "bytes": 149895
+    },
+    {
+      "time_sec": 2.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/005_Clip_07_part2_002.000s.jpg",
+      "bytes": 150304
+    },
+    {
+      "time_sec": 2.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/006_Clip_07_part2_002.500s.jpg",
+      "bytes": 164611
+    },
+    {
+      "time_sec": 3.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/007_Clip_07_part2_003.000s.jpg",
+      "bytes": 149877
+    },
+    {
+      "time_sec": 3.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/008_Clip_07_part2_003.500s.jpg",
+      "bytes": 148367
+    },
+    {
+      "time_sec": 4.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/009_Clip_07_part2_004.000s.jpg",
+      "bytes": 147119
+    },
+    {
+      "time_sec": 4.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/010_Clip_07_part2_004.500s.jpg",
+      "bytes": 145710
+    },
+    {
+      "time_sec": 5.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/011_Clip_07_part2_005.000s.jpg",
+      "bytes": 148140
+    },
+    {
+      "time_sec": 5.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/012_Clip_07_part2_005.500s.jpg",
+      "bytes": 147737
+    },
+    {
+      "time_sec": 6.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/013_Clip_07_part2_006.000s.jpg",
+      "bytes": 150135
+    },
+    {
+      "time_sec": 6.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/014_Clip_07_part2_006.500s.jpg",
+      "bytes": 149278
+    },
+    {
+      "time_sec": 7.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/015_Clip_07_part2_007.000s.jpg",
+      "bytes": 226049
+    },
+    {
+      "time_sec": 7.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s/016_Clip_07_part2_007.500s.jpg",
+      "bytes": 228788
+    }
+  ],
+  "frames_dir": "生产数据/video_face_drift_watch/第2集/Clip_07___part2_0.00_7.97s",
+  "contact_sheet": "生产数据/video_face_drift_watch_第2集_Clip_07___part2_0.00_7.97s.jpg",
+  "policy": {
+    "clear_wrong_closeup_face": "block",
+    "missing_identity_backend": "use_human_dense_frame_review_or_full_temporal_consistency",
+    "return_to_stage": "video_or_image_then_compose"
+  },
+  "warnings": [],
+  "json_path": "生产数据/video_face_drift_watch_第2集_Clip_07___part2_0_00_7_97s.json",
+  "markdown_path": "生产数据/video_face_drift_watch_第2集_Clip_07___part2_0_00_7_97s.md"
+}

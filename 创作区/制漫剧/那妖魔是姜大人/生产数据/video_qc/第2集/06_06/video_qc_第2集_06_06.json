@@ -1,0 +1,125 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+      "at_sec": 5.9,
+      "clip": "Clip_06",
+      "color_dist": 0.0204,
+      "dist": 0,
+      "file": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "sample_delta_sec": 0.392,
+      "sample_label": "mid",
+      "sample_time_sec": 5.508,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "06_06",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_06",
+      "clip_index": 6,
+      "duration_sec": 11.016667,
+      "file": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "file_clip": "Clip_06",
+      "fps": 24.054,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_02_mid.jpg",
+          "time_sec": 5.508
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_03_end.jpg",
+          "time_sec": 10.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第2集/06_06/contact_sheet_06_06.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第2集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第2集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第2集/_frames",
+  "intra_clips": [
+    {
+      "clip": "Clip_06",
+      "double_frame": false,
+      "file": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "file_clip": "Clip_06",
+      "lens": "",
+      "max_dist": 35,
+      "pairs": [
+        {
+          "color_dist": 0.1364,
+          "dist": 32
+        },
+        {
+          "color_dist": 0.047,
+          "dist": 35
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 1,
+    "anchor_skipped": 0,
+    "anchor_warns": 0,
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 1,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.1166,
+      "color_verdict": "ok",
+      "dist": 30,
+      "from_clip": "Clip_05",
+      "seam_mode": "graphic_match",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_06",
+      "transition": "握刀手图形匹配到替裴合眼的手",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

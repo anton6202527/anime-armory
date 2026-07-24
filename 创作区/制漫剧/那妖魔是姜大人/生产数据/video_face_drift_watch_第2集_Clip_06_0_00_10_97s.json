@@ -1,0 +1,169 @@
+{
+  "kind": "n2d_video_face_drift_watch",
+  "version": 1,
+  "generated_at": "2026-07-24T03:23:45.407966+00:00",
+  "episode": "第2集",
+  "status": "ready_for_human_frame_identity_review",
+  "master": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+  "source_kind": "single_video",
+  "source_clip": "Clip_06",
+  "packet_id": "Clip_06_0.00_10.97s",
+  "master_duration_sec": 11.017,
+  "start_sec": 0.0,
+  "end_sec": 10.967,
+  "interval_sec": 0.5,
+  "segments_source": "single_video",
+  "segments": [
+    {
+      "clip": "Clip_06",
+      "start_sec": 0.0,
+      "end_sec": 11.017,
+      "duration_sec": 11.017,
+      "source": "single_video"
+    }
+  ],
+  "frames": [
+    {
+      "time_sec": 0.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/001_Clip_06_000.000s.jpg",
+      "bytes": 194132
+    },
+    {
+      "time_sec": 0.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/002_Clip_06_000.500s.jpg",
+      "bytes": 192298
+    },
+    {
+      "time_sec": 1.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/003_Clip_06_001.000s.jpg",
+      "bytes": 149520
+    },
+    {
+      "time_sec": 1.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/004_Clip_06_001.500s.jpg",
+      "bytes": 173506
+    },
+    {
+      "time_sec": 2.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/005_Clip_06_002.000s.jpg",
+      "bytes": 179100
+    },
+    {
+      "time_sec": 2.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/006_Clip_06_002.500s.jpg",
+      "bytes": 191919
+    },
+    {
+      "time_sec": 3.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/007_Clip_06_003.000s.jpg",
+      "bytes": 187543
+    },
+    {
+      "time_sec": 3.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/008_Clip_06_003.500s.jpg",
+      "bytes": 190573
+    },
+    {
+      "time_sec": 4.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/009_Clip_06_004.000s.jpg",
+      "bytes": 192917
+    },
+    {
+      "time_sec": 4.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/010_Clip_06_004.500s.jpg",
+      "bytes": 191630
+    },
+    {
+      "time_sec": 5.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/011_Clip_06_005.000s.jpg",
+      "bytes": 189016
+    },
+    {
+      "time_sec": 5.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/012_Clip_06_005.500s.jpg",
+      "bytes": 196452
+    },
+    {
+      "time_sec": 6.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/013_Clip_06_006.000s.jpg",
+      "bytes": 172362
+    },
+    {
+      "time_sec": 6.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/014_Clip_06_006.500s.jpg",
+      "bytes": 151460
+    },
+    {
+      "time_sec": 7.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/015_Clip_06_007.000s.jpg",
+      "bytes": 146878
+    },
+    {
+      "time_sec": 7.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/016_Clip_06_007.500s.jpg",
+      "bytes": 146709
+    },
+    {
+      "time_sec": 8.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/017_Clip_06_008.000s.jpg",
+      "bytes": 150875
+    },
+    {
+      "time_sec": 8.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/018_Clip_06_008.500s.jpg",
+      "bytes": 153297
+    },
+    {
+      "time_sec": 9.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/019_Clip_06_009.000s.jpg",
+      "bytes": 156576
+    },
+    {
+      "time_sec": 9.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/020_Clip_06_009.500s.jpg",
+      "bytes": 161615
+    },
+    {
+      "time_sec": 10.0,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/021_Clip_06_010.000s.jpg",
+      "bytes": 165362
+    },
+    {
+      "time_sec": 10.5,
+      "clip": "Clip_06",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s/022_Clip_06_010.500s.jpg",
+      "bytes": 173400
+    }
+  ],
+  "frames_dir": "生产数据/video_face_drift_watch/第2集/Clip_06_0.00_10.97s",
+  "contact_sheet": "生产数据/video_face_drift_watch_第2集_Clip_06_0.00_10.97s.jpg",
+  "policy": {
+    "clear_wrong_closeup_face": "block",
+    "missing_identity_backend": "use_human_dense_frame_review_or_full_temporal_consistency",
+    "return_to_stage": "video_or_image_then_compose"
+  },
+  "warnings": [],
+  "json_path": "生产数据/video_face_drift_watch_第2集_Clip_06_0_00_10_97s.json",
+  "markdown_path": "生产数据/video_face_drift_watch_第2集_Clip_06_0_00_10_97s.md"
+}

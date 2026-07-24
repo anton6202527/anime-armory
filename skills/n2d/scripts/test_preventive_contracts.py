@@ -39,6 +39,33 @@ def _storyboard(root: Path, episode: str = "第1集") -> None:
     })
 
 
+def _system_storyboard(root: Path, episode: str = "第1集") -> None:
+    """系统面板信息态桥段但全是人物中景、无专属 insert 特写。"""
+    clips = [{
+        "clip_id": f"Clip_{i:02d}",
+        "description": "主角盯着属性面板发呆并念叨系统提示。" if i == 1 else f"人物中景对话{i}。",
+        "dramatic_function": "推进", "editing_intent": "反打",
+        "continuity": {"shot_size": "MCU 中近景" if i == 1 else "MS 中景"},
+    } for i in range(1, 4)]
+    _write_json(root / "脚本" / episode / "storyboard.json", {"kind": "n2d_storyboard", "version": 1, "clips": clips})
+
+
+def test_insert_coverage_blocks_system_panel_when_enforced(tmp_path: Path) -> None:
+    _system_storyboard(tmp_path)
+    (tmp_path / "_设置.md").write_text("- 非人物特写覆盖：启用\n- 题材：穿越\n", encoding="utf-8")
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image_prompt", write_missing=True)
+    blocks = [f for f in report["findings"] if f.get("severity") == "block" and "系统面板 insert" in str(f.get("message", ""))]
+    assert blocks, report["findings"]
+
+
+def test_insert_coverage_legacy_warn_only(tmp_path: Path) -> None:
+    _system_storyboard(tmp_path)  # 无 _设置.md → 老项目宽限
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image_prompt", write_missing=True)
+    sysmsg = [f for f in report["findings"] if "系统面板 insert" in str(f.get("message", ""))]
+    assert sysmsg, report["findings"]
+    assert all(f.get("severity") != "block" for f in sysmsg), sysmsg
+
+
 def _confirmed_contract(root: Path, episode: str = "第1集") -> None:
     char_a_hash = _write_bytes(root / "出图" / "共享" / "CHAR_A_front.png", b"char a")
     char_b_hash = _write_bytes(root / "出图" / "共享" / "CHAR_B_front.png", b"char b")

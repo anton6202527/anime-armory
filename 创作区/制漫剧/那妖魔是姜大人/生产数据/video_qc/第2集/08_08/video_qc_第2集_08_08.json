@@ -1,0 +1,84 @@
+{
+  "batch": "08_08",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_08_part1",
+      "clip_index": 8,
+      "duration_sec": 4.016667,
+      "file": "Clip_08_摹影进阶会变成什么_part1.mp4",
+      "file_clip": "Clip_08",
+      "fps": 24.149,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part1_e622c3ea_def0d930e2f1_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part1_e622c3ea_def0d930e2f1_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part1_e622c3ea_def0d930e2f1_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第2集/08_08/contact_sheet_08_08.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第2集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第2集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第2集/_frames",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.0109,
+      "color_verdict": "ok",
+      "dist": 30,
+      "from_clip": "Clip_07",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_08",
+      "transition": "姜月初抬眼看百妖谱虎影",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

@@ -39,6 +39,17 @@ from seam_contract import (  # noqa: E402
     requirements_for,
     seam_evidence,
 )
+try:  # 非人物特写覆盖：给系统面板/道具信息态桥段排**专属 insert**（而非「反应或道具」二选一）。
+    from n2d_insert_coverage import (  # noqa: E402
+        clip_insert_subject as _insert_subject,
+        clip_text as _insert_text,
+        SYSTEM_INSERT_KEYWORDS as _SYS_KW,
+        PROP_INSERT_KEYWORDS as _PROP_KW,
+        SUBJECT_SYSTEM as _SUBJ_SYS,
+        SUBJECT_PROP as _SUBJ_PROP,
+    )
+except Exception:  # pragma: no cover - 最小分发兜底
+    _insert_subject = None  # type: ignore
 
 KIND = "n2d_director_blocking_pack"
 CHECK_KIND = "n2d_director_blocking_pack_check"
@@ -495,6 +506,28 @@ def _axis_blocking_map(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict[str
     }
 
 
+def _clip_insert_demand(clip: Mapping[str, Any]) -> str:
+    """本镜是否是（或该是）非人物 insert 主体 → 返回专属 insert 要求串；否则空串。走 n2d_insert_coverage 口径。"""
+    if _insert_subject is None:
+        return ""
+    subj = _insert_subject(clip)
+    text = _insert_text(clip) if _insert_text else ""
+    up = text.upper()
+    has_sys = any(k.upper() in up for k in _SYS_KW)
+    has_prop = any(k.upper() in up for k in _PROP_KW)
+    if subj == _SUBJ_SYS or has_sys:
+        return "本镜含系统面板/HUD 信息态：必须给**专属系统面板 insert 特写**（空光幕底框，文字走 overlay），不能只用人物反应镜代替。"
+    if subj == _SUBJ_PROP or has_prop:
+        return "本镜含关键道具/物件：建议给**专属物件 insert 特写**（object_discovery/evidence 近景细节），别只在人物手里带过。"
+    return ""
+
+
+def _insert_or_reaction_rule(clip: Mapping[str, Any]) -> str:
+    base = f"{_clip_audience_effect(clip)}；保留{_clip_chars(clip)}反应或道具/VFX落点。"
+    demand = _clip_insert_demand(clip)
+    return f"{base} {demand}" if demand else base
+
+
 def _shot_progression_plan(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict[str, Any]:
     clips = _storyboard_clips(root, ep)
     if clips:
@@ -508,7 +541,7 @@ def _shot_progression_plan(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict
                 "release_shot_size": _clean_text(_clip_continuity(clip).get("transition"), "cut"),
                 "camera_move": _clip_camera_rule(clip),
                 "camera_motivation": _clip_story_function(clip),
-                "must_have_insert_or_reaction": f"{_clip_audience_effect(clip)}；保留{_clip_chars(clip)}反应或道具/VFX落点。",
+                "must_have_insert_or_reaction": _insert_or_reaction_rule(clip),
             })
         return {
             "kind": "n2d_shot_progression_plan",
@@ -521,6 +554,7 @@ def _shot_progression_plan(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict
                 "scale_ladder": "按 storyboard 的 shot_size 从信息交代推进到反应/动作峰值，避免连续同景别失去节奏。",
                 "peak_closeup": "系统到账、赌刀、斩妖、官道来人等爆点必须有近景或明确反应镜签收。",
                 "movement_motivation": "所有推拉跟移都绑定求生压力、系统信息或动作力线，不做无动机炫技。",
+                "noncharacter_insert": "系统面板/HUD、关键道具/物件的信息态桥段要给专属 insert 特写（别时时刻刻只怼人脸）；系统面板缺 insert 在启用档 gate 会 block，口径见 n2d_insert_coverage。",
             },
             "progressions": progressions,
         }

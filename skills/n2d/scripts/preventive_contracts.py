@@ -42,6 +42,10 @@ try:
     from production_mode_router import build_route as build_production_mode_route
 except Exception:  # pragma: no cover - legacy/minimal distribution fallback
     build_production_mode_route = None  # type: ignore
+try:
+    from n2d_insert_coverage import evaluate_episode as _insert_eval  # type: ignore
+except Exception:  # pragma: no cover - 最小分发兜底：无覆盖检不阻断主流程
+    _insert_eval = None  # type: ignore
 
 
 KIND = "n2d_preventive_contracts"
@@ -1028,6 +1032,31 @@ def check_shot_intent(root: Path, episode: str, contract: Optional[Mapping[str, 
         add_finding(findings, gate, "block", loc, "逐镜缺戏剧功能/剪辑意图：" + "、".join(missing[:12]), return_to_stage="script_stage2")
 
 
+def check_insert_coverage(root: Path, episode: str, findings: List[Dict[str, Any]]) -> None:
+    """非人物特写覆盖早闸（shot_intent_gate·出图 prompt 前）：本集确有系统面板/关键道具信息态桥段，
+    却没排专属 insert 特写 → 早拦早改（改分镜最便宜，别等付费出图后才发现全是人物镜）。
+
+    策略/严重度全由 n2d_insert_coverage 单一真值源裁决：启用档系统面板 block、道具 warn；仅提示档全 warn；
+    `非人物特写覆盖` 选择点缺失=老项目宽限（仅提示，绝不追溯 block）。"""
+    if _insert_eval is None:
+        return
+    clips = storyboard(root, episode)
+    if not clips:
+        return  # storyboard 缺失由 check_shot_intent BLOCK，这里不重复
+    mode = setting_value(root, "非人物特写覆盖") or None
+    genre = setting_value(root, "题材")
+    genre_keys = [g for g in re.split(r"[、,，+/\s（）()]+", genre) if g] if genre else []
+    loc = relpath(root, root / "脚本" / episode / "storyboard.json")
+    try:
+        result = _insert_eval(clips, genre_keys=genre_keys, mode=mode)
+    except Exception:  # pragma: no cover - 防御：覆盖检异常不应打断早闸
+        return
+    for f in result.get("findings") or []:
+        sev = "block" if str(f.get("severity")) == "block" else "warn"
+        add_finding(findings, "shot_intent_gate", sev, loc, str(f.get("message") or ""),
+                    return_to_stage="script_stage2")
+
+
 def _identity_registry_rows(root: Path) -> Dict[str, Mapping[str, Any]]:
     data = load_json(root / "出图" / "共享" / "identity_registry.json")
     out: Dict[str, Mapping[str, Any]] = {}
@@ -1348,6 +1377,7 @@ def build_report(root: Path, episode: str, *, stage: str, write_missing: bool = 
             check_episode_promise(root, episode, contract, findings)
         elif gate == "shot_intent_gate":
             check_shot_intent(root, episode, contract, findings)
+            check_insert_coverage(root, episode, findings)
         elif gate == "reference_slot_gate":
             check_reference_slots(root, episode, contract, findings)
         elif gate == "interaction_physics_gate":

@@ -452,8 +452,11 @@ export function ChangesPane({
               <button
                 type="button"
                 className="change-row"
-                onClick={() => selectChange(change.path)}
-                onDoubleClick={() => openChangedFile(change)}
+                // Single-click opens the file (VSCode-explorer style); the diff
+                // moves to double-click. Deleted files can't be opened, so they
+                // keep showing their removal diff on single-click.
+                onClick={() => (change.kind === "deleted" ? selectChange(change.path) : openChangedFile(change))}
+                onDoubleClick={() => selectChange(change.path)}
               >
                 <WorkFileIcon entry={{ name: fileName(change.path), is_dir: false }} />
                 <span className="change-name">{fileName(change.path)}</span>

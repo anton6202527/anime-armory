@@ -1,0 +1,313 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+      "at_sec": 5.9,
+      "clip": "Clip_06",
+      "color_dist": 0.0204,
+      "dist": 0,
+      "file": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "sample_delta_sec": 0.392,
+      "sample_label": "mid",
+      "sample_time_sec": 5.508,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "05_08",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_05_part1",
+      "clip_index": 5,
+      "duration_sec": 4.016667,
+      "file": "Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "file_clip": "Clip_05",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_f24a70d1ae6d_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_f24a70d1ae6d_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_f24a70d1ae6d_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_05_part2",
+      "clip_index": 5,
+      "duration_sec": 7.016667,
+      "file": "Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "file_clip": "Clip_05",
+      "fps": 24.086,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_b05449fead9b_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_b05449fead9b_02_mid.jpg",
+          "time_sec": 3.508
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_b05449fead9b_03_end.jpg",
+          "time_sec": 6.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_06",
+      "clip_index": 6,
+      "duration_sec": 11.016667,
+      "file": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "file_clip": "Clip_06",
+      "fps": 24.054,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_02_mid.jpg",
+          "time_sec": 5.508
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_03_end.jpg",
+          "time_sec": 10.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_07_part1",
+      "clip_index": 7,
+      "duration_sec": 4.016016,
+      "file": "Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "file_clip": "Clip_07",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_e66946df0a29_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_e66946df0a29_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_e66946df0a29_03_end.jpg",
+          "time_sec": 3.816
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_07_part2",
+      "clip_index": 7,
+      "duration_sec": 8.016667,
+      "file": "Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "file_clip": "Clip_07",
+      "fps": 24.075,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_34239079cecc_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_34239079cecc_02_mid.jpg",
+          "time_sec": 4.008
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_34239079cecc_03_end.jpg",
+          "time_sec": 7.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第2集/05_08/contact_sheet_05_08.jpg",
+  "delivery_consistency": {
+    "findings": [
+      {
+        "clip": "Clip_05_part1",
+        "expected": "720x1280",
+        "kind": "resolution",
+        "value": "1080x1920"
+      }
+    ],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第2集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第2集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第2集/_frames",
+  "intra_clips": [
+    {
+      "clip": "Clip_06",
+      "double_frame": true,
+      "file": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "file_clip": "Clip_06",
+      "lens": "MCU固定；CU轻拉",
+      "max_dist": 35,
+      "pairs": [
+        {
+          "color_dist": 0.1364,
+          "dist": 32
+        },
+        {
+          "color_dist": 0.047,
+          "dist": 35
+        }
+      ],
+      "verdict": "warn"
+    },
+    {
+      "clip": "Clip_07_part1",
+      "double_frame": true,
+      "file": "Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "file_clip": "Clip_07",
+      "lens": "MS轻跟；CU固定",
+      "max_dist": 35,
+      "pairs": [
+        {
+          "color_dist": 0.0389,
+          "dist": 18
+        },
+        {
+          "color_dist": 0.0312,
+          "dist": 35
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "交付一致性 warn：Clip_05_part1 resolution=1080x1920（批内众数 720x1280）——混帧率/混分辨率进 compose 会被静默规格化掩盖，先确认该 clip 是否该重出。"
+  ],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 1,
+    "anchor_skipped": 0,
+    "anchor_warns": 0,
+    "delivery_mismatch_warns": 1,
+    "intra_blocks": 0,
+    "intra_checked": 5,
+    "intra_warns": 2,
+    "seam_blocks": 0,
+    "seam_info": 2,
+    "seam_warns": 0,
+    "seams_checked": 3
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.0427,
+      "color_verdict": "ok",
+      "dist": 4,
+      "from_clip": "Clip_04",
+      "seam_mode": "continuous_take_relay",
+      "strictness": "strict",
+      "struct_verdict": "ok",
+      "to_clip": "Clip_05",
+      "transition": "墨线继续生长成虎形",
+      "verdict": "ok"
+    },
+    {
+      "color_dist": 0.1166,
+      "color_verdict": "ok",
+      "dist": 30,
+      "from_clip": "Clip_05",
+      "seam_mode": "graphic_match",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_06",
+      "transition": "握刀手图形匹配到替裴合眼的手",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0885,
+      "color_verdict": "ok",
+      "dist": 32,
+      "from_clip": "Clip_06",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_07",
+      "transition": "视线切至裴尸体",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

@@ -1,11 +1,11 @@
 {
-  "accepted_story_clip_count": 4,
-  "actual_story_clip_count": 4,
+  "accepted_story_clip_count": 8,
+  "actual_story_clip_count": 8,
   "animatic_snapshot_path": "生产数据/timelines/第2集/animatic_timeline.otio",
   "animatic_snapshot_sha256": "3e247c4aa1afbb21aee6c94469fcfb5382238e05aa8681af6649e867da1a7b78",
-  "duration_sec": 71.927,
+  "duration_sec": 70.214,
   "episode": "第2集",
-  "generated_at": "2026-07-23T01:38:28+00:00",
+  "generated_at": "2026-07-24T04:29:56+00:00",
   "kind": "n2d_editorial_timeline",
   "media": [
     {
@@ -54,24 +54,34 @@
       "sha256": "e08b17471b48eed8635aac9012bea4a5e0af764998512fd2b416eceb7ba91263"
     },
     {
-      "available_sec": 9.207,
-      "path": "出图/第2集/图片/EP02_CLIP04_end.png",
-      "sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34"
+      "available_sec": 4.017,
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "sha256": "b2aa416465c85bbacb6fd2a5b29162cb3718947b8fc8e736732d30a9d74164e4"
     },
     {
-      "available_sec": 10.52,
-      "path": "出图/第2集/图片/EP02_CLIP06_start.png",
-      "sha256": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644"
+      "available_sec": 7.017,
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "sha256": "2e5e41d8601b7590632343e70885246040b612240c515ff02b2d9f2cfdd401f4"
     },
     {
-      "available_sec": 10.645,
-      "path": "出图/第2集/图片/EP02_CLIP07_start.png",
-      "sha256": "2c3b3baf3ae01af94c8318d35ee6fff8f92419ec6adc8b21163fc629978a901d"
+      "available_sec": 11.017,
+      "path": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "sha256": "360513530f81e00766e19ac6bef0533d341a5c8c991be9873fba7c181b583b3f"
     },
     {
-      "available_sec": 4.213,
-      "path": "出图/第2集/图片/EP02_CLIP08_start.png",
-      "sha256": "5d84407c785594f0f70bad3b4978e7b30c496952a00e0ae49bf7ac659b523cbb"
+      "available_sec": 4.016,
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "sha256": "2d9afdef49ba713fb6a8522766bb28ab919ced0396c1bb642cefd8dfe559a7cd"
+    },
+    {
+      "available_sec": 8.016,
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "sha256": "e6cf7a8efa0d5b3f3cbf284c5a3c625a0d1b0a4027f50ea07be95c267d9fe9a0"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "sha256": "c9c7090e3d508099f83f5e8198df08622740afe9c62d2e8e837e551a4799c593"
     },
     {
       "available_sec": 3.553,
@@ -166,8 +176,8 @@
   ],
   "missing_picture_slots": [],
   "otio_path": "生产数据/timelines/第2集/editorial_timeline.otio",
-  "otio_sha256": "7ce31c0b9c17e2f57e2fb29571ffdb71399d17cf68649da94af5b9004a1dde86",
-  "phase": "assembly",
+  "otio_sha256": "8249f80475bab330651feb6f3d781be04a25e5776a9b9aeb860366103b4036a0",
+  "phase": "rough_cut",
   "planned_audio_slot_count": 18,
   "rate": 30.0,
   "seams": [

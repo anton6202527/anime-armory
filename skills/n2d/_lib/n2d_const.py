@@ -791,6 +791,41 @@ MOTIF_MONOTONIC_FIELDS_DEFAULT = ("level", "panel_tier")
 # system_panel overlay 文字层默认字段（n2d-compose render_panel 据此渲染清晰数值，AI 只出空光幕底）。
 SYSTEM_PANEL_OVERLAY_FIELDS = ("title", "level", "attrs")
 
+# ── 非人物特写覆盖（insert coverage）单一真值源 ──────────────────────────────
+# 治「时时刻刻都给人镜头」：某些信息态桥段（系统面板/关键道具/物件）应给专属 insert 特写，
+# 不能永远只怼人脸。三层主体分档（严格度只在 n2d_insert_coverage 策略里裁决，这里只列词面/id）：
+#   · system_panel（系统面板/HUD）：required-eligible，最强档（有 motif/overlay/OCR 基建）。
+#   · prop（道具/关键物件）：required-eligible，提示档。
+#   · environment（环境/空镜 cutaway）：只作节奏建议，永不进配额、永不 block（易被凑数滥用）。
+# 模板 id 取自 n2d_spectacle 专项镜头模板（screen_insert/object_discovery/evidence_search）+ 母题 system_panel。
+SYSTEM_INSERT_TEMPLATE_IDS = ("system_panel", "screen_insert")
+PROP_INSERT_TEMPLATE_IDS = ("object_discovery", "evidence_search")
+# 系统面板/HUD「本集确有系统时刻」的证据词（母题词面的信息态子集，用于判定该不该给 insert）。
+SYSTEM_INSERT_KEYWORDS = (
+    "系统面板", "属性面板", "属性栏", "状态栏", "数据面板", "信息面板", "光幕", "虚拟屏",
+    "HUD", "血条", "经验条", "等级框", "面板浮现", "叮——", "恭喜宿主", "系统提示", "任务栏",
+)
+# 道具/关键物件「本集确有信息态物件」的证据词。命中即期望给物件 insert 特写（提示档）。
+PROP_INSERT_KEYWORDS = (
+    "令牌", "信物", "兵符", "虎符", "丹药", "灵丹", "卷轴", "秘籍", "玉佩", "玉牌", "腰牌",
+    "证物", "书信", "密信", "手札", "地图", "钥匙", "戒指", "手机", "法宝", "残页", "字条",
+    "凭证", "契约书", "遗物", "药瓶", "情报", "纸条",
+)
+# 环境/空镜 cutaway 词（只作节奏建议，never required）。
+ENV_CUTAWAY_KEYWORDS = (
+    "空镜", "远山", "天色", "落叶", "烛火", "雨滴", "月色", "晨雾", "尘土", "流水", "残阳", "风声",
+)
+# 非人物特写覆盖选择点：启用=系统面板缺 insert 走 block、道具 warn；仅提示=全 warn；关闭=静默。
+# 单一真值源同时被 settings.py 选择点 schema 与 n2d_insert_coverage 策略读取。
+INSERT_COVERAGE_SETTING_KEY = "非人物特写覆盖"
+INSERT_COVERAGE_MODE_ENFORCE = "启用"
+INSERT_COVERAGE_MODE_WARN = "仅提示"
+INSERT_COVERAGE_MODE_OFF = "关闭"
+INSERT_COVERAGE_MODES = (INSERT_COVERAGE_MODE_ENFORCE, INSERT_COVERAGE_MODE_WARN, INSERT_COVERAGE_MODE_OFF)
+# 老项目宽限：_设置.md 无此键时默认「仅提示」——历史集照常出片、绝不追溯 block；新项目 init 写「启用」。
+INSERT_COVERAGE_MODE_DEFAULT_LEGACY = INSERT_COVERAGE_MODE_WARN
+INSERT_COVERAGE_MODE_DEFAULT_NEW = INSERT_COVERAGE_MODE_ENFORCE
+
 # ── 拆集边界启发式词典（题材可扩展·单一真值源）─────────────────────────────
 # split_novel.py（粗切）与 boundary_audit.py（预筛）共用：识别"可作粗胚右边界的强钩"+
 # "冲突→爽点/反转"闭环信号。仅启发式，最终钩力/闭环由人或 LLM 精修判定。

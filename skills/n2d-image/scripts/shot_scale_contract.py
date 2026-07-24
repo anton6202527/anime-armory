@@ -29,6 +29,16 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 
+_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+try:  # 非人物特写覆盖分类器（判定某镜是否声明为系统面板/道具 insert）。
+    from n2d_insert_coverage import clip_insert_subject as _insert_subject, SUBJECT_SYSTEM, SUBJECT_PROP  # type: ignore
+except Exception:  # pragma: no cover - 最小分发兜底
+    _insert_subject = None  # type: ignore
+    SUBJECT_SYSTEM, SUBJECT_PROP = "system_panel", "prop"
+
+
 def _envf(name: str, default: float) -> float:
     try:
         return float(os.environ.get(name, str(default)))
@@ -93,6 +103,42 @@ def clip_num_of(text: str) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
+# 声明为系统/道具 insert 的镜，若渲染出占比超此的大脸 = 很可能画成了人物镜（insert 落空）。
+INSERT_FACE_MAX_RATIO = _envf("N2D_INSERT_FACE_MAX", 0.22)
+
+
+def insert_rendered_as_person(subject: Optional[str], face_ratio: Optional[float],
+                              *, face_max: float = INSERT_FACE_MAX_RATIO) -> Optional[Dict[str, str]]:
+    """声明为非人物 insert（系统面板/道具）的镜却渲染出大脸 → 该 insert 可能画成了人物镜（纯函数·可测）。
+
+    face_ratio=None（没检到脸）对 insert 是**正常**（无脸特写本就该），不报；只在检到**大脸**时报。"""
+    if subject not in (SUBJECT_SYSTEM, SUBJECT_PROP) or face_ratio is None:
+        return None
+    if face_ratio > face_max:
+        kind = "系统面板" if subject == SUBJECT_SYSTEM else "关键道具"
+        return {"level": "warn", "code": "insert_rendered_as_person",
+                "tag": f"subject={subject} ratio={face_ratio:.3f}", "kind": kind}
+    return None
+
+
+def clip_insert_subjects(storyboard: Any) -> Dict[int, str]:
+    """storyboard dict → {镜号: 非人物 insert 主体}（system_panel/prop）。走 n2d_insert_coverage 分类器。"""
+    out: Dict[int, str] = {}
+    if _insert_subject is None:
+        return out
+    clips = (storyboard or {}).get("clips") or (storyboard or {}).get("shots") or []
+    for clip in clips:
+        if not isinstance(clip, dict):
+            continue
+        num = clip_num_of(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+        if num is None:
+            continue
+        subj = _insert_subject(clip)
+        if subj in (SUBJECT_SYSTEM, SUBJECT_PROP):
+            out[num] = subj
+    return out
+
+
 def clip_declared_scales(storyboard: Any) -> Dict[int, str]:
     """storyboard dict → {镜号: 声明景别 class}（取每 clip shots[].lens 串）。纯函数·可测。"""
     out: Dict[int, str] = {}
@@ -133,9 +179,10 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         return {"available": True, "checked": 0, "findings": [],
                 "notes": ["storyboard.json 缺失/损坏——无声明景别可对照。"]}
     declared = clip_declared_scales(sb)
-    if not declared:
+    insert_subjects = clip_insert_subjects(sb)
+    if not declared and not insert_subjects:
         return {"available": True, "checked": 0, "findings": [],
-                "notes": ["storyboard 无可解析景别（CU/LS…）——跳过。"]}
+                "notes": ["storyboard 无可解析景别（CU/LS…）与非人物 insert 声明——跳过。"]}
     # 出图帧：镜号 → PNG 绝对路径
     png_dir = root / "出图" / ep / "图片"
     png_by_num: Dict[int, str] = {}
@@ -146,14 +193,28 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
                 png_by_num.setdefault(num, str(p))
     findings: List[Dict[str, str]] = []
     checked = 0
-    for num, cls in sorted(declared.items()):
-        if cls not in CLOSEUP_CLASSES and cls not in WIDE_CLASSES:
-            continue  # 中景/暧昧档不判
+    # 非人物 insert 的镜也要过一遍（即使景别是暧昧档）：声明系统面板/道具 insert 却渲染大脸 = insert 落空。
+    nums_to_check = set(declared) | set(insert_subjects)
+    for num in sorted(nums_to_check):
+        cls = declared.get(num)
+        subj = insert_subjects.get(num)
+        if cls is None and subj is None:
+            continue
         abspath = png_by_num.get(num)
         if not abspath:
             continue
         ratio, _min_dim = ratio_fn(face_mod, abspath)
         checked += 1
+        # 非人物 insert 渲染成人物镜（大脸）→ 独立 advisory（此前 CU+大脸不报，正是这里漏的）。
+        ins = insert_rendered_as_person(subj, ratio)
+        if ins:
+            rel = os.path.relpath(abspath, root)
+            findings.append({"level": ins["level"], "code": ins["code"],
+                             "msg": (f"非人物特写落空：镜{num} 声明为{ins['kind']} insert 特写，但 {rel} 实测脸占比 "
+                                     f"{ratio:.1%} > {INSERT_FACE_MAX_RATIO:.0%}——很可能画成了人物镜而非物件/面板特写。"
+                                     "人判：该 insert 应主体是物/面板（文字走 overlay），不是人脸。")})
+        if cls is None or (cls not in CLOSEUP_CLASSES and cls not in WIDE_CLASSES):
+            continue  # 中景/暧昧档不判景别矛盾
         sig = scale_ratio_contradiction(cls, ratio)
         if not sig:
             continue

@@ -371,8 +371,12 @@ def compose_scene_archetypes(matches: Sequence[Dict[str, Any]]) -> List[Dict[str
                     "required_contract_fields": [],
                     "style_binding": scene.get("style_binding"),
                     "style_bindings": [],
+                    # 非人物特写覆盖期望（首个声明该 scene 的 pack 胜出，advisory 元数据）。
+                    "insert_coverage": scene.get("insert_coverage"),
                 }
             row = rows[dedupe_key]
+            if row.get("insert_coverage") is None and scene.get("insert_coverage") is not None:
+                row["insert_coverage"] = scene.get("insert_coverage")
             row["labels"] = _unique_strings([*row["labels"], scene.get("label")])
             row["genre_keys"] = _unique_strings([*row["genre_keys"], genre_key])
             row["production_risks"] = _unique_strings([
@@ -454,6 +458,7 @@ def build_context(root: Path, episode: str, stage_key: str) -> Dict[str, Any]:
                 "genre_keys": scene.get("genre_keys") or [],
                 "matched_clips": _unique_strings(clip.get("id") or clip.get("clip_id") or "" for clip in matched),
                 "required_contract_fields": scene.get("required_contract_fields") or [],
+                "insert_coverage": scene.get("insert_coverage"),
                 "missing_by_clip": missing_by_clip,
                 "style_binding": scene.get("style_binding"),
                 "style_bindings": scene.get("style_bindings") or [],
