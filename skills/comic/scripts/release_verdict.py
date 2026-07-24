@@ -390,7 +390,7 @@ def vlm_adjudication_summary(root: Path, chapter: str) -> dict[str, Any]:
 
     2026-07 实证：两话 103 条任务 0 裁决仍以 internal profile 放行——
     「画错生物形态」类漂移全程无人拦。gate 只 warn（advisory 哲学），
-    闭环必须在发布裁决收口（同 n2d release_verdict strict 档拒空壳的模式）。
+    闭环必须在发布裁决收口（strict 档拒空壳的通用模式）。
     只统计 SHA 仍然有效的裁决：重抽过的格旧裁决不算数。
     """
     tasks_payload = load_json(root / "生产数据" / f"comic_vlm_judge_tasks_{chapter}.json", {})

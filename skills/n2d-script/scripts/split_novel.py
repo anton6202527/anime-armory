@@ -75,6 +75,12 @@ try:
 except Exception:  # P-1 开发包缺失不拖垮历史拆集；run.py 会在阶段1前 fail-closed。
     scaffold_development_pack = None  # type: ignore
 
+try:
+    # P4：confirmed story_spine 的 cut 决策 → 拆集整章剔除计划（单向依赖：split 消费 spine）。
+    from story_spine import spine_cut_chapter_plan
+except Exception:  # story_spine 缺失不拖垮历史拆集；剪枝退化为不生效。
+    spine_cut_chapter_plan = None  # type: ignore
+
 
 DEFAULT_FIRST_SPLIT_LIMIT = 10
 
@@ -672,9 +678,35 @@ def iter_arc_anchors(plan, source_paras=None):
         yield anchor
 
 
-def episode_unit_spans(episodes, paras, start_cursor=0):
-    """Map machine episode chunks back to the full normalized source-unit axis."""
+def episode_unit_spans(episodes, paras, start_cursor=0, unit_indices=None):
+    """Map machine episode chunks back to the full normalized source-unit axis.
+
+    unit_indices：集内容来自非连续源单元时（主线剪枝整章剔除），给出每个入集段落在
+    **完整源单元轴**上的 0 基索引；span 的 start/end 引用真实源单元，剔除处形成 gap
+    并标 `contains_spine_cut_gaps`，源单元轴本身不缺号。
+    """
     spans = []
+    if unit_indices is not None:
+        cursor = 0
+        for i, episode in enumerate(episodes, 1):
+            parts = str(episode or "").split("\n") if episode else []
+            count = len(parts)
+            idxs = list(unit_indices[cursor:cursor + count])
+            exact = len(idxs) == count and [paras[j] for j in idxs] == parts
+            span = {
+                "episode": i,
+                "start_source_unit_id": f"U{idxs[0] + 1:06d}" if idxs else None,
+                "end_source_unit_id": f"U{idxs[-1] + 1:06d}" if idxs else None,
+                "start_index": idxs[0] + 1 if idxs else 0,
+                "end_index": idxs[-1] + 1 if idxs else 0,
+                "mapping_exact": exact,
+            }
+            if idxs and idxs != list(range(idxs[0], idxs[0] + count)):
+                span["contains_spine_cut_gaps"] = True
+                span["unit_count"] = count
+            spans.append(span)
+            cursor += count
+        return spans
     cursor = max(0, int(start_cursor or 0))
     for i, episode in enumerate(episodes, 1):
         parts = str(episode or "").split("\n") if episode else []
@@ -695,6 +727,56 @@ def episode_unit_spans(episodes, paras, start_cursor=0):
         })
         cursor += count
     return spans
+
+
+def apply_spine_chapter_cuts(paras, offset, cut_plan, apply=True):
+    """按 story_spine 整章剔除计划处理选定窗口段落（P4）。
+
+    apply=True（主线剪枝 enforce 档）：被剔章节的段落不进集内容；
+    apply=False（advisory 预览）：不剔任何段落，只产记账行让编剧看到会剔什么。
+    无论哪档，源单元轴（split_plan.source_units）都保持完整——剔除只发生在集内容层，
+    每一章剔了多少单元/多少字、归哪条 cut 线程，全部逐章记账，绝不静默删。
+    """
+    cut_map = {int(k): v for k, v in (cut_plan.get("cut_chapters") or {}).items()}
+    kept_paras, kept_indices = [], []
+    removed = {}
+    current = None
+    for i, p in enumerate(paras):
+        ch = chapter_number_from_heading(p)
+        if ch is not None:
+            current = ch
+        abs_index = int(offset) + i
+        if current in cut_map:
+            row = removed.setdefault(current, {
+                "chapter": current,
+                "cut_threads": sorted(set(cut_map[current])),
+                "units": 0,
+                "chars": 0,
+                "first_source_unit_id": f"U{abs_index + 1:06d}",
+            })
+            row["units"] += 1
+            row["chars"] += len(p)
+            row["last_source_unit_id"] = f"U{abs_index + 1:06d}"
+            if apply:
+                continue
+        kept_paras.append(p)
+        kept_indices.append(abs_index)
+    rows = [removed[ch] for ch in sorted(removed)]
+    outside = sorted(set(cut_map) - set(removed))
+    return {
+        "applied": bool(apply and rows),
+        "cut_chapters_outside_window": outside,
+        "mode": cut_plan.get("mode"),
+        "mode_source": cut_plan.get("mode_source"),
+        "source": cut_plan.get("source"),
+        "removed_chapters": rows,
+        "removed_unit_total": sum(r["units"] for r in rows),
+        "removed_char_total": sum(r["chars"] for r in rows),
+        "conflicts_skipped": list(cut_plan.get("conflicts") or []),
+        "unparsed_spans": list(cut_plan.get("unparsed_spans") or []),
+        "kept_paras": kept_paras,
+        "kept_indices": kept_indices,
+    }
 
 
 def boundary_quality(paras, position):
@@ -885,6 +967,32 @@ def render_machine_split_review(plan):
         lines.append(
             "| {episode_label} | {source_chars} | {opening_preview} | {ending_preview} | `{raw_rel}` |".format(**ep)
         )
+    pruning = plan.get("spine_pruning") or {}
+    if pruning.get("removed_chapters"):
+        lines.append("")
+        lines.append("## 主线剪枝整章剔除" + ("" if pruning.get("applied") else "（预览·未生效）"))
+        lines.append("")
+        state = "已剔除（不进集内容）" if pruning.get("applied") else \
+            "预览记账：advisory 档/显式逃生口未剔除；设 `主线剪枝: 突出主线/激进精简` 并重跑 split 生效"
+        lines.append(f"- 状态：{state}；依据 `{pruning.get('source')}`（{pruning.get('mode_source')}）。")
+        lines.append("")
+        lines.append("| 章 | cut 线程 | 源单元 | 单元数 | 字数 |")
+        lines.append("|---|---|---|---:|---:|")
+        for row in pruning["removed_chapters"]:
+            lines.append(
+                "| 第{chapter}章 | {threads} | {first}–{last} | {units} | {chars} |".format(
+                    chapter=row.get("chapter"), threads="/".join(row.get("cut_threads") or []),
+                    first=row.get("first_source_unit_id"), last=row.get("last_source_unit_id"),
+                    units=row.get("units"), chars=row.get("chars"),
+                )
+            )
+        for c in pruning.get("conflicts_skipped") or []:
+            lines.append(
+                f"- 冲突保留：第{c.get('chapter')}章同时被 {c.get('cut_threads')} 与 "
+                f"{c.get('protected_by')} 锚定，未剔除。"
+            )
+        if pruning.get("unparsed_spans"):
+            lines.append(f"- 不可机读的 cut 锚（未剔）：{pruning['unparsed_spans']}")
     lines.append("")
     lines.append("## 精修提醒")
     lines.append("")
@@ -927,7 +1035,7 @@ def render_human_split_review_scaffold(plan):
 def write_split_plan(
     root, title, source_snapshot, episodes, n_make, *, split_mode, genre_note,
     partial, start_info=None, source_paras=None, selected_source_paras=None,
-    source_unit_offset=0, legacy_plan_v2=False,
+    source_unit_offset=0, legacy_plan_v2=False, unit_indices=None, spine_pruning=None,
 ):
     """Write a full-series rough split index without overwriting reviewed episode content."""
     script_dir = os.path.join(root, "脚本")
@@ -944,7 +1052,8 @@ def write_split_plan(
     else:
         source_units = build_compact_source_units(source_paras)
         source_arc_anchors = []
-    unit_spans = episode_unit_spans(episodes, source_paras, start_cursor=source_unit_offset)
+    unit_spans = episode_unit_spans(
+        episodes, source_paras, start_cursor=source_unit_offset, unit_indices=unit_indices)
     development_arc = load_development_arc_contract(root)
     plan_episodes = []
     for i, machine_episode in enumerate(episodes, 1):
@@ -1031,7 +1140,13 @@ def write_split_plan(
                 "confirmed season_arc 已纳入意图/哈希审计，但未提供 source_unit 映射，故不伪造边界约束。"
                 if development_arc.get("status") == "confirmed" and not development_arc.get("preferred_positions") else ""
             ),
-            "top_paths": optimize_boundary_paths(
+            # 整章剔除后集内容来自非连续源单元，统一 unit_offset 无法表达 beam 路径的
+            # 真实单元号——诚实跳过而不产出错位建议（boundary_candidates 仍基于真实 span 有效）。
+            "spine_pruning_note": (
+                "已应用主线剪枝整章剔除，beam 建议按剔除后轴无法用统一 offset 表示，跳过。"
+                if unit_indices is not None else ""
+            ),
+            "top_paths": [] if unit_indices is not None else optimize_boundary_paths(
                 selected_source_paras,
                 len(episodes),
                 top_k=3,
@@ -1041,6 +1156,15 @@ def write_split_plan(
         },
         "episodes": plan_episodes,
     }
+    if spine_pruning is not None:
+        plan["spine_pruning"] = {
+            key: value for key, value in spine_pruning.items()
+            if key not in {"kept_paras", "kept_indices"}
+        }
+        plan["spine_pruning"]["axis_note"] = (
+            "source_units 轴保持完整（含被剔章节的单元号）；剔除只作用于集内容，"
+            "episode.source_unit_span 在剔除处形成 gap 并标 contains_spine_cut_gaps。"
+        )
     json_path = os.path.join(script_dir, "split_plan.json")
     md_path = os.path.join(script_dir, "_拆集机器索引.md")
     human_path = os.path.join(script_dir, "_拆集复核.md")
@@ -1452,6 +1576,8 @@ def main():
                     help="从第N章开始粗切（可写 48 / 第48章 / 第四十八章）。仅裁本次 raw 脚手架；中段开工仍需先补 设定库/中段开工前情资产包.md")
     ap.add_argument("--keep-frontmatter", action="store_true",
                     help="保留开头的简介/标签/看点等元数据（默认自动剥离）")
+    ap.add_argument("--no-spine-cuts", action="store_true",
+                    help="逃生口：即使 story_spine 已 confirmed 且主线剪枝为 enforce 档，也不做整章剔除（仍会预览记账）")
     ap.add_argument("--limit", type=int, default=None,
                     help=f"首批粗切：只落地前 N 集（仍按全本估总集数）；缺省={DEFAULT_FIRST_SPLIT_LIMIT}。续切=重跑加大 --limit（已存在集与进度勾选保留）")
     ap.add_argument("--all", action="store_true",
@@ -1585,6 +1711,32 @@ def main():
             paras, start_info = trim_before_chapter(paras, args.start_chapter)
         except ValueError as exc:
             sys.exit(str(exc))
+
+    # ── P4 主线剪枝整章剔除：confirmed story_spine 的 cut 线程章节锚 → 集内容剔除 ──
+    # enforce 档（主线剪枝=突出主线/激进精简）真剔；advisory（缺省/保守）只预览记账不剔；
+    # --no-spine-cuts 显式逃生口。源单元轴始终保持完整，剔除逐章记账进 split_plan。
+    window_offset = int((start_info or {}).get("skipped_paras") or 0)
+    spine_pruning = None
+    unit_indices = None
+    if spine_cut_chapter_plan is not None:
+        try:
+            cut_plan = spine_cut_chapter_plan(Path(root))
+        except Exception as exc:
+            cut_plan = None
+            print(f"[warn] 主线剪枝计划解析失败（跳过整章剔除）：{exc}", file=sys.stderr)
+        if cut_plan and cut_plan.get("status") == "ok" and cut_plan.get("cut_chapters"):
+            enforce = cut_plan.get("mode") == "enforce" and not args.no_spine_cuts
+            spine_pruning = apply_spine_chapter_cuts(paras, window_offset, cut_plan, apply=enforce)
+            if args.no_spine_cuts:
+                spine_pruning["opted_out_by_flag"] = True
+            if spine_pruning["applied"]:
+                if max(existing_episode_numbers(root) or {0}) > 0:
+                    print("[warn] 本项目已有粗切集目录；整章剔除会移动后续边界，"
+                          "已进入出图/出视频的集需先做受影响范围返工计划。", file=sys.stderr)
+                paras = spine_pruning["kept_paras"]
+                unit_indices = spine_pruning["kept_indices"]
+                if not paras:
+                    sys.exit("主线剪枝整章剔除后没有剩余正文——检查 story_spine 的 cut 章节锚是否误覆盖全书。")
 
     # 题材感知边界词典：读 _设置.md `题材`（弱选择点；未设则 base ∪ 古装动作=历史默认）→
     # 重建模块级强钩/冲突/爽点正则，治女频情感/悬疑/都市粗切退化成无闭环。
@@ -1732,8 +1884,10 @@ def main():
         start_info=start_info,
         source_paras=full_source_paras,
         selected_source_paras=paras,
-        source_unit_offset=int((start_info or {}).get("skipped_paras") or 0),
+        source_unit_offset=window_offset,
         legacy_plan_v2=args.legacy_plan_v2,
+        unit_indices=unit_indices,
+        spine_pruning=spine_pruning,
     )
 
     print(f"作品根: {root}")
@@ -1741,6 +1895,18 @@ def main():
         print("P-1 开发包：已创建/刷新 开发包/（默认 draft；阶段1 写词前需补齐并置 confirmed）")
     target_note = f"；字数参考 {args.target}（仅报告，不参与切点）" if args.target else "；未设置字数参考"
     print(f"切分方式：{mode}；边界词典题材：{genre_note}；剥离开头元数据 {dropped} 段。")
+    if spine_pruning and spine_pruning.get("removed_chapters"):
+        cut_desc = "、".join(
+            f"第{r['chapter']}章({'/'.join(r['cut_threads'])}·{r['chars']}字)"
+            for r in spine_pruning["removed_chapters"]
+        )
+        if spine_pruning.get("applied"):
+            print(f"主线剪枝：已整章剔除 {cut_desc}；逐章账见 split_plan.json spine_pruning / _拆集机器索引.md。")
+        else:
+            reason = "--no-spine-cuts 逃生口" if spine_pruning.get("opted_out_by_flag") else "主线剪枝=advisory 档"
+            print(f"主线剪枝（预览·未剔除·{reason}）：{cut_desc}；设 `主线剪枝: 突出主线` 并重跑 split 生效。")
+        for c in spine_pruning.get("conflicts_skipped") or []:
+            print(f"主线剪枝冲突保留：第{c.get('chapter')}章被 {c.get('cut_threads')} 与 {c.get('protected_by')} 同时锚定，未剔除。")
     if start_info:
         approx_note = "" if start_info["exact"] else f"（未找到精确章号，使用之后最近的第{start_info['matched']}章）"
         print(f"起始章节：请求第{start_info['requested']}章，实际从第{start_info['matched']}章开始，跳过 {start_info['skipped_paras']} 段{approx_note}。")

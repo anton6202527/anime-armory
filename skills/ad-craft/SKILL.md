@@ -28,7 +28,7 @@ description: Shared machine contracts and deterministic helpers for the ad-* (�
 | 旧项目迁移 | `scripts/migrate_project.py` | 默认 dry-run；备份后升级 brief/设置/locale/阶段表，旧 ✅ 按当前验收和依赖收据重算，未知授权/法务事实保持 pending |
 | 逐资产依赖图 | `scripts/dependency_graph.py` | 为阶段、逐镜 image/video、逐交付件 compose 建输入/输出 SHA 收据；brief/包装/claim/字幕变化只标记受影响节点 stale |
 | 花钱 gate | `scripts/gate.py` | image/video/compose 正式生产入口统一阻断：brief 合规项、广告法报告、分镜时长、占位 VO、上游产物；video/compose 另读 `ad-review/verifier_coverage` 覆盖账本（video warn、compose fail-closed 硬挡——交付前必须证明机检没空转） |
-| 防降级宪章 | `scripts/consistency_charter.py` + `test_consistency_charter.py` | n2d 同哲学：每条承重硬闸（block code）在宪章占一行（带日期理由），守卫测试内省 gate.py 源码 + 功能验证 advisory 降档/新鲜度/占位 VO 纪律；静默降档立即红灯，降档必须先改宪章行=显式审计决策 |
+| 防降级宪章 | `scripts/consistency_charter.py` + `test_consistency_charter.py` | 每条承重硬闸（block code）在宪章占一行（带日期理由），守卫测试内省 gate.py 源码 + 功能验证 advisory 降档/新鲜度/占位 VO 纪律；静默降档立即红灯，降档必须先改宪章行=显式审计决策 |
 | locale + 发布变体 | `scripts/locale_matrix.py` + `scripts/release_variant_manifest.py` | 逐交付件绑定语言、币种、单位、CTA、法律声明、配音/字幕/排版，以及 deliverable SHA→placement→jurisdiction→claims/disclosures→rights→AI label receipt |
 | AI 使用 + 发布合规 | `scripts/ai_usage.py` + `scripts/compliance_manifest.py` | 记录 AI/授权；消费最终文件实际 provenance 探测、平台主动声明、placement 证据和逐发行辖区法律复核，复核须绑定当前 release content SHA。显式标识责任=self_rendered/burned_in 等自行烧录取值时，必须在 `合规/rendered_text_plan.json` 有 AI 标识文字条目（缺=block `explicit_label_plan_missing`）且落在起始段 ≤3s（否则 warn）——《标识办法》要求视频**起始画面**显著提示，标识经 `rendered_text_qc` OCR 像素验证，不能只在台账记一笔 |
 | 生成止损审计 | `scripts/stop_loss.py` | 读 `生产数据/production_events.jsonl` 生成账本：重抽率>35%、单资产>4 次、credit 超预算线、QC block 未清仍在续抽 → warn。**审不是门**（block 恒 0，止损归人）；gate video/compose 以 advisory 侧车并入，空账显式 `no_evidence` |

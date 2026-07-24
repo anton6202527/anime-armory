@@ -94,7 +94,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 - **镜头别重复单调**：一致性套件保的是"资产不漂"，`ad-script/scripts/shot_variety_audit.py` 补的是**视觉不重复**——出图前查同景别机位反复/画面描述复读/长片单场景单景别。广告有意重复（产品 beauty/片尾板/logo·CTA 板）已豁免，短广告单场景合法只 info。全 advisory，出图 gate 抬进报告不硬挡。
 - **传统结构纪律机检化**：`ad-script/scripts/beat_structure_audit.py`（3s 钩子窗/品牌 5s 进场/CTA 收尾/痛点→方案顺序/ASL 带宽/字卡停留公式/静音可懂/6s 单 idea + Google ABCD 合成分）+ `see_say_audit.py`（DRTV 声画对位：VO 可演示卖点画面须看得见）。全 advisory，同 creative_axis 接法。
 - **打样再放量（传统 PPM「先看小样再开机」）**：全量出图前 `ad-image/scripts/pilot_matrix.py` 从分镜挑 2-5 镜代表样（首镜/产品 hero/最高风险镜/文字板/多主体，风险镜取 `ad_reference_plan` 的 delta_score 最大者）先出先审，画风/产品还原/文字渲染塌在打样里改是小钱。advisory 计划，打不打由人定。
-- **机检不许空转、硬闸不许降档**：`ad-review/scripts/verifier_coverage.py` 是覆盖账本（fail-closed）——逐机检算 适用×真跑×新鲜×检了真实对象，"registry 登记了产品而 product_qc 检了 0 张产品图"这类空转在 compose（交付点）硬挡，唯一出口 `合规/degraded_qc_waiver.json` 签核留痕；`ad-craft/scripts/consistency_charter.py` 是防降级宪章——每条承重硬闸占一行，守卫测试内省 gate.py 源码，静默降档立即红灯（n2d 同哲学）。
+- **机检不许空转、硬闸不许降档**：`ad-review/scripts/verifier_coverage.py` 是覆盖账本（fail-closed）——逐机检算 适用×真跑×新鲜×检了真实对象，"registry 登记了产品而 product_qc 检了 0 张产品图"这类空转在 compose（交付点）硬挡，唯一出口 `合规/degraded_qc_waiver.json` 签核留痕；`ad-craft/scripts/consistency_charter.py` 是防降级宪章——每条承重硬闸占一行，守卫测试内省 gate.py 源码，静默降档立即红灯。
 - **品牌包装 + 交付**：片尾、claim/披露原子 cutdown、多比例 reframe、placement 规格、BT.709、响度、字幕与闪烁快筛。
 - **最终文件证据**：关键口播四路对账、最终像素文字逐项具名确认、实际 C2PA/隐式标识探测、逐资产 contact sheet、逐 deliverable 发布变体链和内容哈希选择性失效。
 

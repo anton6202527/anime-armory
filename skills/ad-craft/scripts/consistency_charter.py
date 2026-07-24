@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ad 线一致性/合规硬闸【防降级宪章】（n2d consistency_charter 同哲学）。
+"""ad 线一致性/合规硬闸【防降级宪章】。
 
 为什么存在：硬闸最常见的死法不是被删掉，而是在某次「优化」提交里被静默降档——
 block 变 warn、无条件变带条件、gate 读报告变「报告缺失也放行」——而没有任何测试变红。
-n2d 线为此立了 charter：**每一条承重闸门在这里占一行，声明它必须保持的最低严重度**；
+解法是立 charter：**每一条承重闸门在这里占一行，声明它必须保持的最低严重度**；
 配套守卫测试直接内省 gate.py 源码 + 功能验证，降档必须来这里改一行**可见、带日期、
 带理由**的记录，把静默降级变成显式审计决策。
 
@@ -90,7 +90,7 @@ LOCKED_BLOCK_CODES = [
      "may_be_conditional": "manual_review_accepted 留痕时不阻断", "decided": "2026-07-23"},
     {"code": "video_clips_missing", "where": "video_clip_findings",
      "rationale": "无 clip 不能进合成", "decided": "2026-07-23"},
-    # —— 覆盖账本（2026-07 新增，n2d consistency_coverage 对位）——
+    # —— 覆盖账本（2026-07 新增）——
     {"code": "verifier_coverage_block", "where": "verifier_coverage_findings",
      "rationale": "适用 × 休眠 → 交付前阻断：机检空转（报告存在但 0 真实对象被检）不算检过；"
                   "唯一出口是 合规/degraded_qc_waiver.json 签核留痕",
@@ -117,7 +117,7 @@ INVARIANTS = [
     {"id": "gate_reads_sidecars_not_subprocess",
      "statement": "gate 读侧车报告文件（load_json），不在 gate 内 subprocess 重跑检测器；"
                   "重跑归各 runner，gate 只消费证据（producer/platform pack 为进程内构建例外）。",
-     "origin": "n2d gate 同构", "decided": "2026-07-23"},
+     "origin": "同构移植", "decided": "2026-07-23"},
 ]
 
 

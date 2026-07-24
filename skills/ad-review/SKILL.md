@@ -53,7 +53,7 @@ python3 skills/ad-review/scripts/asset_drift_report.py "<作品根>" --write
 （`finding()` 在构造层强制降档），紧迫度读 `detail.priority` 而非 severity。硬闸仍是 `product_qc` 的
 prompt-lint 与 provenance。
 
-## 一致性覆盖账本（fail-closed·n2d consistency_coverage 对位）
+## 一致性覆盖账本（fail-closed）
 
 ```bash
 python3 skills/ad-review/scripts/verifier_coverage.py "<作品根>" --write

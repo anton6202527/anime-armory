@@ -621,7 +621,7 @@ def creative_axis_findings(root):
 
 
 def verifier_coverage_findings(root, stage):
-    """一致性覆盖账本（fail-closed·n2d consistency_coverage 对位）。
+    """一致性覆盖账本（fail-closed）。
 
     防的不是「机检报了问题」而是「机检空转」：报告存在但 0 个真实对象被检、
     registry 登记了产品而 product_qc 没检到任何产品图、advisory 侧车 available=false

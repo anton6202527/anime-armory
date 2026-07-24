@@ -4908,6 +4908,26 @@ REQUIRED_VIDEO_EVIDENCE_DIMENSIONS = {
     "视频语义一致(VSEM)",
     "高动态成片证据(SPECV)",
 }
+# `视频证据强度=严格`（P5·2026-07-24 opt-in 强度档）：五个视频证据维度在 video 阶段的
+# WARN 直接升 BLOCK——身份/运动/语义漂移在整批 clip 付费前就挡下，而不是等 compose/review
+# 交付边界才硬化。默认 标准 保持既有行为（只在 evidence_missing/重复/关键场/交付边界升级），
+# 现网项目零变化；净效果只加 BLOCK 不松任何既有闸（B11 对偶方向安全）。签收逃生口照旧。
+_VIDEO_EVIDENCE_STRICT_VALUES = {"严格", "strict"}
+_VIDEO_EVIDENCE_STRICT_CACHE: Dict[str, bool] = {}
+
+
+def _video_evidence_strict_enabled(root: str) -> bool:
+    key = os.path.abspath(str(root or "."))
+    if key not in _VIDEO_EVIDENCE_STRICT_CACHE:
+        enabled = False
+        try:
+            from settings import load_settings  # n2d/_lib（COMMON 已入 sys.path）
+            raw = str(load_settings(key).get("视频证据强度") or "").strip().lower()
+            enabled = raw in _VIDEO_EVIDENCE_STRICT_VALUES
+        except Exception:
+            enabled = False
+        _VIDEO_EVIDENCE_STRICT_CACHE[key] = enabled
+    return _VIDEO_EVIDENCE_STRICT_CACHE[key]
 KEY_SCENE_MARKERS = ("关键", "钩子", "封面", "反转", "高潮", "爆点", "key", "hook", "climax")
 # 口型在「带对白的近景/特写」上最容易被观众抓——AV1 的对白近景 WARN 即便不重复/非关键/非交付边界，
 # production 下也升 BLOCK（口型对不上的脸部大特写是硬伤）。
@@ -5033,14 +5053,23 @@ def _strict_advisory_should_block(root: str, ep: str, stage: str, row: Mapping[s
         and dim in REQUIRED_VIDEO_EVIDENCE_DIMENSIONS
         and bool(row.get("evidence_missing") or row.get("required_evidence_missing"))
     )
+    # `视频证据强度=严格`（opt-in）：video 阶段五个视频证据维度的任何 finding 都升 BLOCK，
+    # 在整批 clip 付费前拦住身份/运动/语义漂移；默认 标准 不改变既有触发条件。
+    video_evidence_strict = (
+        stage == "video"
+        and dim in REQUIRED_VIDEO_EVIDENCE_DIMENSIONS
+        and _video_evidence_strict_enabled(root)
+    )
     # AV1 专属：带对白的近景/特写口型偏移即便孤例也升 block（口型对不上的大特写是观众第一眼硬伤）。
     dialogue_closeup = dim == "音画同步(AV1)" and _row_is_dialogue_closeup(row)
-    if not (repeated or key_scene or deliverable or dialogue_closeup or video_evidence_missing):
+    if not (repeated or key_scene or deliverable or dialogue_closeup
+            or video_evidence_missing or video_evidence_strict):
         return False, ""
     if _advisory_row_signed_off(root, ep, row):
         return False, "已由 consistency_advisory_signoff 签收"
     reason = ("对白近景口型" if dialogue_closeup else "重复同维度" if repeated
-              else "关键场景" if key_scene else "视频后验证据缺失" if video_evidence_missing else "交付边界")
+              else "关键场景" if key_scene else "视频后验证据缺失" if video_evidence_missing
+              else "视频证据严格档" if video_evidence_strict else "交付边界")
     return True, reason
 # 可被「有意不连续」签收为 WARN 的 native BLOCK 维度——只限世界/光线/轴线/调色/景深/状态转场
 # 这类「创作者确可有意改变」的连续性轴（昼夜转场、越轴反打、戏剧性重打光、调色风格切换…）。

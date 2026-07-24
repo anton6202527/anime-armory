@@ -166,7 +166,7 @@ python3 skills/n2d-script/scripts/story_spine.py <作品根> check --json --writ
 
 产物 `开发包/story_spine.json`：
 - `mainline_logline` + `spine[]`：一句话主线 + 主线节点链（每节点写 `source_span`、`causal_role`、`depends_on`），把"主情节"从散文里拎出来。
-- `threads[]`：把每条线程分 `class`=`spine`（主线）/`supporting`（服务主线的支线）/`tangent`（偏离主线的旁枝），给 `decision`=`keep`/`compress`/`fold_into_main`/`cut`。**所有非 keep 决策必须写 `connectivity`**：`payoff_reroute`（裁后伏笔/因果由谁承接或明确退役理由）+ `no_orphan_proof`（证明裁后无孤儿伏笔、下游主线不断裂）；引用 `opens_foreshadow`/`pays_foreshadow` 必须是 `source_comprehension` 里真实存在的 `trace_id`（**禁止臆造**）。给 `cut_keywords/source_spans` 让下游免账。
+- `threads[]`：把每条线程分 `class`=`spine`（主线）/`supporting`（服务主线的支线）/`tangent`（偏离主线的旁枝），给 `decision`=`keep`/`compress`/`fold_into_main`/`cut`。**所有非 keep 决策必须写 `connectivity`**：`payoff_reroute`（裁后伏笔/因果由谁承接或明确退役理由）+ `no_orphan_proof`（证明裁后无孤儿伏笔、下游主线不断裂）；引用 `opens_foreshadow`/`pays_foreshadow` 必须是 `source_comprehension` 里真实存在的 `trace_id`（**禁止臆造**）。给 `cut_keywords/source_spans` 让下游免账；`decision=cut` 线程的 `source_spans` 写成严格机读的「第X章 / 第X-Y章」（或整数 `source_chapters`，机器优先）时，`split_novel.py` 拆集会把这些章**整章剔除出集内容**（enforce 档真剔、advisory 预览记账、冲突章宁保不剔、逐章记账进 `split_plan.json.spine_pruning`，详见 `references/拆集法.md` §主线剪枝）。
 - `continuity_fixes[]`：把原著不合理/矛盾点改掉，每条写 `fix` + `no_contradiction_proof`（证明不与后文已确认事件冲突，引用 SPINE/SRC_FORESHADOW id）；触及受保护功能要格外证明。
 - `protected_invariants`：镜像 `adaptation_strategy.protected_functions`，cut/fold 线程不得触碰。
 

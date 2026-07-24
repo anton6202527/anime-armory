@@ -62,6 +62,170 @@ DEFAULT_PROTECTED = ["人物动机", "选择后果", "伏笔兑现", "状态变�
 ENFORCE_MODES = {"突出主线", "激进精简"}
 ADVISORY_MODES = {"保守"}
 
+# ---------------------------------------------------------------------------
+# 章节锚：source_spans 的机器可读子集（P4 · 让 cut 决策真正驱动拆集）
+# ---------------------------------------------------------------------------
+# 只严格认「第X章」「第X-Y章」「第X章-第Y章」（连接符 - – — ~ ～ 至 到；章/回/节/卷），
+# 任何附加限定（"第3章前半"、"第3章打斗段"）都判不可解析——宁可不剔，不可误剔。
+# 数字解析与 split_novel.parse_chapter_number 同口径（同线复制不 import，避免循环依赖）。
+_CH_NUM = r"[0-9零〇一二三四五六七八九十百千万两]+"
+_CHAPTER_SPAN_RANGE_RE = re.compile(
+    rf"^第\s*({_CH_NUM})\s*[章回节卷]?\s*(?:[-–—~～]|至|到)\s*(?:第\s*)?({_CH_NUM})\s*[章回节卷]$"
+)
+_CHAPTER_SPAN_SINGLE_RE = re.compile(rf"^第\s*({_CH_NUM})\s*[章回节卷]$")
+_CN_DIGITS = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
+              "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+_CN_UNITS = {"十": 10, "百": 100, "千": 1000}
+
+
+def _chapter_token_to_int(token: str) -> Optional[int]:
+    token = str(token or "").strip()
+    if token.isdigit():
+        return int(token)
+    if not token or any(ch not in _CN_DIGITS and ch not in _CN_UNITS and ch != "万" for ch in token):
+        return None
+    total = section = number = 0
+    for ch in token:
+        if ch in _CN_DIGITS:
+            number = _CN_DIGITS[ch]
+        elif ch in _CN_UNITS:
+            section += (number or 1) * _CN_UNITS[ch]
+            number = 0
+        elif ch == "万":
+            total += ((section + number) or 1) * 10000
+            section = number = 0
+    return total + section + number
+
+
+def parse_chapter_span(text: str) -> Optional[Tuple[int, int]]:
+    """严格解析一条 source_span 为闭区间 (start, end)；解析不了返回 None（fail-closed 不剔）。"""
+    s = str(text or "").strip()
+    m = _CHAPTER_SPAN_RANGE_RE.match(s)
+    if m:
+        a, b = _chapter_token_to_int(m.group(1)), _chapter_token_to_int(m.group(2))
+        if a is not None and b is not None and 1 <= a <= b:
+            return (a, b)
+        return None
+    m = _CHAPTER_SPAN_SINGLE_RE.match(s)
+    if m:
+        a = _chapter_token_to_int(m.group(1))
+        return (a, a) if a is not None and a >= 1 else None
+    return None
+
+
+def parse_chapter_spans(spans: Sequence[Any]) -> Tuple[set, List[str]]:
+    """spans 列表 → (可解析章号集合, 不可解析原文列表)。"""
+    chapters: set = set()
+    unparsed: List[str] = []
+    for raw in spans or []:
+        span = parse_chapter_span(raw)
+        if span is None:
+            if str(raw or "").strip():
+                unparsed.append(str(raw).strip())
+        else:
+            chapters.update(range(span[0], span[1] + 1))
+    return chapters, unparsed
+
+
+def _thread_anchor_chapters(t: Mapping[str, Any]) -> Tuple[set, List[str]]:
+    """线程的章节锚：显式 source_chapters（机器优先）∪ 可解析的 source_spans。"""
+    chapters: set = set()
+    explicit = t.get("source_chapters")
+    if isinstance(explicit, list):
+        for x in explicit:
+            try:
+                n = int(x)
+            except (TypeError, ValueError):
+                continue
+            if n >= 1:
+                chapters.add(n)
+    parsed, unparsed = parse_chapter_spans(t.get("source_spans") or [])
+    chapters.update(parsed)
+    return chapters, unparsed
+
+
+def spine_cut_chapter_plan(root: Path) -> Dict[str, Any]:
+    """把 confirmed story_spine 的 cut 决策解析成拆集可执行的整章剔除计划。
+
+    忠实底线：
+      - 只有 decision=cut 的线程参与整章剔除；compress/fold_into_main 的内容部分保留，
+        压缩发生在写词阶段，拆集不得整章丢其源文。
+      - 冲突章（同时被主线 spine 节点 / 非 cut 线程 / 有实质 issue 的 continuity_fix
+        锚定）不剔除，记入 conflicts —— 宁可多保留，不可误剔主线承载文本。
+      - 不可解析的 span 产不出剔除（fail-closed），原文记入 unparsed_spans 供补锚。
+    """
+    mode, mode_source = spine_mode(root)
+    out: Dict[str, Any] = {
+        "kind": "n2d_spine_cut_chapter_plan",
+        "source": f"{PACK_DIR}/{SPINE_FILE}",
+        "mode": mode,
+        "mode_source": mode_source,
+        "status": "missing",
+        "cut_chapters": {},
+        "cut_threads": [],
+        "conflicts": [],
+        "unparsed_spans": [],
+    }
+    data = load_json(root / PACK_DIR / SPINE_FILE)
+    if not isinstance(data, dict):
+        return out
+    if str(data.get("status") or "").strip().lower() != "confirmed":
+        out["status"] = "not_confirmed"
+        return out
+    spine = [n for n in (data.get("spine") or []) if isinstance(n, Mapping)]
+    threads = [t for t in (data.get("threads") or []) if isinstance(t, Mapping)]
+
+    # 保护集：主线节点锚 + 非 cut 线程锚 + 有实质 issue 的修正锚。
+    protected: Dict[int, List[str]] = {}
+
+    def _protect(chapters: set, owner: str) -> None:
+        for ch in chapters:
+            protected.setdefault(ch, []).append(owner)
+
+    spine_span_chapters, _ = parse_chapter_spans(
+        [n.get("source_span") for n in spine if str(n.get("source_span") or "").strip()])
+    _protect(spine_span_chapters, "spine")
+    for t in threads:
+        if str(t.get("decision") or "").strip() != "cut":
+            chapters, _ = _thread_anchor_chapters(t)
+            _protect(chapters, f"thread:{t.get('id')}")
+    fixes = [f for f in (data.get("continuity_fixes") or []) if isinstance(f, Mapping)]
+    fix_chapters, _ = parse_chapter_spans(
+        [f.get("source_span") for f in fixes if str(f.get("issue") or "").strip()])
+    _protect(fix_chapters, "continuity_fix")
+
+    cut_map: Dict[int, List[str]] = {}
+    for t in threads:
+        if str(t.get("decision") or "").strip() != "cut":
+            continue
+        tid = str(t.get("id") or t.get("name") or "?")
+        chapters, unparsed = _thread_anchor_chapters(t)
+        for raw in unparsed:
+            out["unparsed_spans"].append({"thread_id": tid, "span": raw})
+        out["cut_threads"].append({
+            "id": tid,
+            "name": t.get("name"),
+            "anchored_chapters": sorted(chapters),
+        })
+        for ch in chapters:
+            cut_map.setdefault(ch, []).append(tid)
+
+    if not out["cut_threads"]:
+        out["status"] = "no_cut_threads"
+        return out
+
+    for ch in sorted(cut_map):
+        if ch in protected:
+            out["conflicts"].append({
+                "chapter": ch,
+                "cut_threads": sorted(set(cut_map[ch])),
+                "protected_by": sorted(set(protected[ch])),
+            })
+        else:
+            out["cut_chapters"][ch] = sorted(set(cut_map[ch]))
+    out["status"] = "ok"
+    return out
+
 
 def now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
@@ -239,6 +403,9 @@ def _scaffold_payload(root: Path) -> Dict[str, Any]:
                 "serves_mainline": "待补：如何服务主线；若 tangent 写为什么偏离主线",
                 "decision": "keep",
                 "weight": "mid",
+                # source_spans 写成严格的「第X章 / 第X-Y章」可被机读：decision=cut 的线程
+                # 会在 split_novel 拆集时整章剔除（与主线/保留锚冲突的章除外）。
+                # 也可用 source_chapters: [3, 4] 直接给整数章号（机器优先）。
                 "source_spans": ["待补：第X-Y章"],
                 "cut_keywords": [],
                 "opens_foreshadow": [],
@@ -403,6 +570,15 @@ def check(root: Path, *, write_missing: bool = False) -> Dict[str, Any]:
         if decision in NON_KEEP_DECISIONS and not (t.get("source_spans") or t.get("cut_keywords")):
             _issue(issues, "warn", "cut_thread_no_source_anchor",
                    f"线程 {tid} 被 {decision} 但没给 source_spans/cut_keywords；下游 source_adaptation_audit 无法据此免账。")
+        # 整章剔除锚可解析性：cut 线程给了 span 却无一条可机读时，split_novel 无法据此
+        # 整章剔除源文（只剩 cut_keywords 事后免账）——提醒补成「第X章 / 第X-Y章」或 source_chapters。
+        if decision == "cut" and (t.get("source_spans") or t.get("source_chapters")):
+            chapters, unparsed = _thread_anchor_chapters(t)
+            if not chapters and unparsed:
+                _issue(issues, "warn", "cut_thread_spans_unparseable",
+                       f"线程 {tid} decision=cut 但 source_spans 无一条可机读（需 '第X章'/'第X-Y章' 或补整数 "
+                       f"source_chapters）；拆集无法据此整章剔除，仅剩 cut_keywords 事后免账。",
+                       {"thread": tid, "unparsed": unparsed})
 
     # 孤儿伏笔机检（fail-closed）：受保护伏笔的所有承载线程都被 cut 且无 reroute → block
     refmap = _referenced_foreshadows(threads)
@@ -487,6 +663,21 @@ def check(root: Path, *, write_missing: bool = False) -> Dict[str, Any]:
                 _issue(issues, "block", "must_keep_cause_cut_without_reroute",
                        f"因果承接点 {dep}（源理解标 must_keep）被线程 {r.get('thread_id')} {r['decision']} 却无 payoff_reroute——必删的主线因果不得无承接裁剪。",
                        {"dep": dep, "thread": r.get("thread_id")})
+
+    # ── 整章剔除计划透明化（P4）：编剧在 check 时就能看到拆集将剔哪些章、哪些章因
+    #    与主线/保留线程/修正锚冲突而被保留。计划本体由 split_novel 消费（enforce 才真剔）。
+    cut_plan = spine_cut_chapter_plan(root)
+    if cut_plan.get("status") == "ok":
+        for c in cut_plan.get("conflicts") or []:
+            _issue(issues, "warn", "spine_cut_chapter_conflict",
+                   f"第{c['chapter']}章同时被 cut 线程 {c['cut_threads']} 与 {c['protected_by']} 锚定——"
+                   f"拆集不会剔除该章（宁可多保留）；若确要剔，先解开锚冲突。", c)
+        if cut_plan.get("cut_chapters"):
+            chapters = sorted(int(k) for k in cut_plan["cut_chapters"])
+            _issue(issues, "info", "spine_cut_chapters_resolved",
+                   f"整章剔除计划已解析：第 {chapters} 章将在拆集时整章剔除"
+                   f"（mode={cut_plan['mode']}；enforce 才真剔，advisory 只预览记账）。",
+                   {"chapters": chapters})
 
     return _finalize(root, mode, mode_source, issues, spine=spine, threads=threads)
 

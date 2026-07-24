@@ -12369,3 +12369,62 @@ def test_generation_recipe_blocks_unverifiable_session_reference_placeholder(tmp
 
     hits = [f for f in gate.findings if f["dim"] == "生成配方证据" and "不可审计占位" in f["msg"]]
     assert hits and hits[0]["sev"] == gate.BLOCK
+
+
+# ── 视频证据强度=严格（P5·opt-in）：video 阶段五个视频证据维度 WARN 直升 BLOCK ──
+
+def _mk_video_strict_root(tmp_path, value="严格"):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "_设置.md").write_text(f"# _设置\n- 视频证据强度: {value}\n", encoding="utf-8")
+    return str(root)
+
+
+def test_video_evidence_strict_escalates_plain_warn_at_video_stage(tmp_path):
+    root = _mk_video_strict_root(tmp_path)
+    row = {"dimension": "主体视频一致(S2V)", "verdict": "warn", "message": "主体相似度低于阈值"}
+    blocked, reason = gate._strict_advisory_should_block(root, "第1集", "video", row, {})
+    assert blocked is True and "严格档" in reason
+
+
+def test_video_evidence_default_keeps_existing_behavior(tmp_path):
+    # 未设置（默认 标准）：无 evidence_missing/重复/关键场 的 video 阶段 WARN 不升级——现网零变化。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    row = {"dimension": "主体视频一致(S2V)", "verdict": "warn", "message": "主体相似度低于阈值"}
+    assert gate._strict_advisory_should_block(str(root), "第1集", "video", row, {})[0] is False
+
+
+def test_video_evidence_strict_only_applies_to_video_stage(tmp_path):
+    # image 阶段不受本档影响（compose/review 本就走交付边界升级，与本档无关）。
+    root = _mk_video_strict_root(tmp_path)
+    row = {"dimension": "运动质量(MOT1)", "verdict": "warn", "message": "运动伪影"}
+    assert gate._strict_advisory_should_block(root, "第1集", "image", row, {})[0] is False
+
+
+def test_video_evidence_strict_only_applies_to_video_evidence_dims(tmp_path):
+    # 非视频证据维度（如 节奏密度）在 video 阶段不因本档升级。
+    root = _mk_video_strict_root(tmp_path)
+    row = {"dimension": "节奏密度", "verdict": "warn", "message": "镜头节奏偏慢"}
+    assert gate._strict_advisory_should_block(root, "第1集", "video", row, {})[0] is False
+
+
+def test_video_evidence_strict_respects_advisory_signoff(tmp_path):
+    root = _mk_video_strict_root(tmp_path)
+    prod = os.path.join(root, "生产数据")
+    os.makedirs(prod, exist_ok=True)
+    with open(os.path.join(prod, "consistency_advisory_signoff_第1集.json"), "w", encoding="utf-8") as f:
+        json.dump({"accepted": [{
+            "accepted": True, "reviewer": "导演", "reason": "定格转场镜有意低运动分",
+            "expires_at": "2099-01-01", "dimension": "运动质量(MOT1)",
+            "message_contains": "运动分低",
+        }]}, f, ensure_ascii=False)
+    row = {"dimension": "运动质量(MOT1)", "verdict": "warn", "message": "运动分低于基准"}
+    blocked, reason = gate._strict_advisory_should_block(root, "第1集", "video", row, {})
+    assert blocked is False and "签收" in reason
+
+
+def test_video_evidence_strict_alias_value_and_off_value(tmp_path):
+    root_std = _mk_video_strict_root(tmp_path, value="标准")
+    row = {"dimension": "视频语义一致(VSEM)", "verdict": "warn", "message": "语义偏离脚本"}
+    assert gate._strict_advisory_should_block(root_std, "第1集", "video", row, {})[0] is False

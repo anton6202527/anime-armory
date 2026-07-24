@@ -9,14 +9,14 @@
       全部 finding 都是 degraded=no_image——一张产品图都没真正开检，报告却"干净"。
     · advisory 审计 available=false（缺料降级）却被当作"跑过了"。
     · 报告早于其输入产物——干净但过期的证据不是证据（与 gate.report_freshness 同哲学）。
-  对齐 n2d `consistency_coverage.py` 的规矩：**「适用 × 休眠 → 交付前阻断」**（fail-closed）。
+  规矩：**「适用 × 休眠 → 交付前阻断」**（fail-closed）。
   每个核验器算一行 `applies × ran × fresh × effective`，适用却休眠/空转/过期的硬核验器 → block。
 
 严重度边界（必读）：
   本报表**可以产 block**。它不是创意启发式——`score_findings` 立的「创意/启发式只提示复核，
   只有广告法与确定性闸门能 BLOCK」规矩管的是**好不好看**的判断；本账本管的是**机检有没有真跑**，
   与 `report_freshness_findings` / `registry_snapshot_findings` 同族（确定性闸门），
-  遵循的是 n2d 的「适用 × 休眠 → 交付前阻断」。
+  遵循的是「适用 × 休眠 → 交付前阻断」。
   分档纪律：
     · 硬核验器（product_qc / asset_consistency / asset_drift_report / video_qc /
       contract_inheritance）：适用而未跑(dormant) / 过期(stale) / 空转(empty_run) → **block**。
@@ -25,7 +25,7 @@
       但 advisory 核验器自己永不 block，此处也不替它们升档）。
     · applies=false → not_applicable 行如实入表，不产 finding（没有对象不算休眠）。
 
-唯一逃生口（单一咽喉，对齐 n2d degraded_qc_waiver）：
+唯一逃生口（单一咽喉）：
   `合规/degraded_qc_waiver.json`：{"approved": true, "scope": ["product_qc", ...] 或 ["*"],
   "reason": "...", "signed_by": "..."}。有效豁免把命中核验器的 block 降为 warn 并留
   `waiver_active` 痕；缺 reason/signed_by 的豁免**无效**——忽略并 warn `waiver_invalid`。

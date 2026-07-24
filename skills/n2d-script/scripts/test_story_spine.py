@@ -305,6 +305,93 @@ def test_causal_checks_silent_without_source_chain(tmp_path):
     assert report["status"] == "pass", [i for i in report["issues"] if i["severity"] == "block"]
 
 
+# ── P4：章节锚严格解析 + 整章剔除计划 ────────────────────────────────────────
+
+def test_parse_chapter_span_strict():
+    assert SS.parse_chapter_span("第3章") == (3, 3)
+    assert SS.parse_chapter_span("第3-5章") == (3, 5)
+    assert SS.parse_chapter_span("第3章-第5章") == (3, 5)
+    assert SS.parse_chapter_span("第十二章") == (12, 12)
+    assert SS.parse_chapter_span("第一百零三章") == (103, 103)
+    assert SS.parse_chapter_span("第3至5章") == (3, 5)
+    # 任何附加限定/倒序/非章指代 → fail-closed 不可解析
+    assert SS.parse_chapter_span("第3章前半") is None
+    assert SS.parse_chapter_span("第5-3章") is None
+    assert SS.parse_chapter_span("待补：第X章") is None
+    assert SS.parse_chapter_span("狼患支线那几章") is None
+
+
+def test_parse_chapter_spans_mixed():
+    chapters, unparsed = SS.parse_chapter_spans(["第2章", "第4-5章", "第3章打斗段"])
+    assert chapters == {2, 4, 5}
+    assert unparsed == ["第3章打斗段"]
+
+
+def _cut_thread(tid, spans, *, decision="cut", extra=None):
+    t = {"id": tid, "name": f"线程{tid}", "class": "tangent", "serves_mainline": "偏离主线",
+         "decision": decision, "weight": "low", "source_spans": spans, "cut_keywords": ["旁枝"],
+         "opens_foreshadow": [], "pays_foreshadow": [],
+         "connectivity": {"downstream_mainline_deps": [], "payoff_reroute": "主线一句带过",
+                          "no_orphan_proof": "该线无伏笔"}}
+    if extra:
+        t.update(extra)
+    return t
+
+
+def test_spine_cut_chapter_plan_resolves_and_protects(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([
+        _cut_thread("THREAD_CUT", ["第4章", "第6-7章"]),
+        _cut_thread("THREAD_KEEP", ["第6章"], decision="keep"),
+    ])
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    plan = SS.spine_cut_chapter_plan(root)
+    assert plan["status"] == "ok"
+    # 第6章同时被 keep 线程锚定 → 冲突保留；第1章是主线 spine 锚（_good_spine 用第1章）不受影响
+    assert sorted(plan["cut_chapters"]) == [4, 7]
+    assert plan["conflicts"] and plan["conflicts"][0]["chapter"] == 6
+    assert "thread:THREAD_KEEP" in plan["conflicts"][0]["protected_by"]
+
+
+def test_spine_cut_chapter_plan_spine_anchor_protects(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([_cut_thread("THREAD_CUT", ["第1章", "第4章"])])  # 第1章=主线锚
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    plan = SS.spine_cut_chapter_plan(root)
+    assert sorted(plan["cut_chapters"]) == [4]
+    assert any(c["chapter"] == 1 and "spine" in c["protected_by"] for c in plan["conflicts"])
+
+
+def test_spine_cut_chapter_plan_explicit_source_chapters(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([_cut_thread("THREAD_CUT", [], extra={"source_chapters": [8, 9]})])
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    plan = SS.spine_cut_chapter_plan(root)
+    assert sorted(plan["cut_chapters"]) == [8, 9]
+
+
+def test_spine_cut_chapter_plan_requires_confirmed(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([_cut_thread("THREAD_CUT", ["第4章"])], status="draft")
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    assert SS.spine_cut_chapter_plan(root)["status"] == "not_confirmed"
+
+
+def test_check_warns_unparseable_cut_spans_and_reports_resolved(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([
+        _cut_thread("THREAD_BAD", ["狼患那几章"]),
+        _cut_thread("THREAD_OK", ["第4章"]),
+    ])
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    report = SS.check(root)
+    codes = {i["code"] for i in report["issues"]}
+    assert "cut_thread_spans_unparseable" in codes
+    assert "spine_cut_chapters_resolved" in codes
+    # 解析性问题只 warn 不 block（B10：不因锚格式硬阻断创作）
+    assert report["status"] != "block", [i for i in report["issues"] if i["severity"] == "block"]
+
+
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-q"]))

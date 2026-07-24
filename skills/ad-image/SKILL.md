@@ -129,7 +129,7 @@ warn）——创意/启发式不硬挡付费的规矩见 `gate.py` 的 `score_fi
 python3 skills/ad-image/scripts/pilot_matrix.py "<作品根>" --write
 ```
 
-传统 PPM「先看小样再开机」纪律 + n2d `episode_probe_matrix` 对位：全量批次前从分镜挑 **2-5 镜代表样**
+传统 PPM「先看小样再开机」纪律的机检化：全量批次前从分镜挑 **2-5 镜代表样**
 先出先人审，覆盖五轴——`hook`（首镜·被看最多的画面）/ `product_hero`（产品还原：品牌色 ΔE/logo/质感）/
 `risk_max`（`ad_reference_plan` delta_score 最高镜，缺报告退化为资产最多镜）/ `text_render`（文字板/endcard：
 AI 已知弱项，查错别字/字形崩坏）/ `multi_entity`（人+产品同框：比例/构图串染）。一镜可覆盖多轴（择最少镜

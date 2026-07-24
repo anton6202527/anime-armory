@@ -168,7 +168,10 @@ CHARTER: Dict[str, Dict[str, Any]] = {
         "dim": "strict-advisory升级", "required_severity": "block",
         "may_be_profile_gated": False, "may_be_opt_in": False, "review_status": "stable",
         "rationale": "strict-advisory 维度升 BLOCK 的实质条件(重复≥2/关键场/交付边界/对白近景口型/视频证据缺失)"
-                     "demo 也适用，去掉 profile==production 免单。真·脆弱启发式仍由 add() 的 B10 守卫降回 WARN。",
+                     "demo 也适用，去掉 profile==production 免单。真·脆弱启发式仍由 add() 的 B10 守卫降回 WARN。"
+                     "2026-07-24 增补：`_设置.md` `视频证据强度=严格`(opt-in)时五个视频证据维度在 video 阶段"
+                     "WARN 直升 BLOCK（付费出整批 clip 前拦漂移）——该设置只**加** BLOCK，默认 标准 保持既有"
+                     "触发条件不变，不构成对本闸任何既有强制力的降级/门控。",
         "decided": "2026-06-27",
     },
     "check_action_beat_budget": {

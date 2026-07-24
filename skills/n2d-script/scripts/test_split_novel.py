@@ -245,3 +245,111 @@ def test_confirmed_development_arc_is_hashed_and_only_mapped_units_constrain_bea
     assert plan["development_arc_contract"]["sha256"]
     assert plan["boundary_optimization"]["development_arc_constraints_applied"] is True
     assert "U000003" in plan["boundary_optimization"]["top_paths"][0]["boundary_after_source_units"]
+
+
+# ── P4：story_spine cut 决策驱动拆集整章剔除 ─────────────────────────────────
+
+def _spine_cut_plan(chapters, *, mode="enforce", conflicts=None, unparsed=None):
+    return {
+        "kind": "n2d_spine_cut_chapter_plan",
+        "source": "开发包/story_spine.json",
+        "mode": mode,
+        "mode_source": "_设置.md:主线剪枝=突出主线" if mode == "enforce" else "未设置（默认 advisory）",
+        "status": "ok",
+        "cut_chapters": {ch: ["THREAD_CUT"] for ch in chapters},
+        "cut_threads": [{"id": "THREAD_CUT", "name": "旁枝", "anchored_chapters": sorted(chapters)}],
+        "conflicts": conflicts or [],
+        "unparsed_spans": unparsed or [],
+    }
+
+
+def _chaptered_paras(n_chapters=5, bodies=2):
+    paras = []
+    for ch in range(1, n_chapters + 1):
+        paras.append(f"第{ch}章 风起")
+        for i in range(bodies):
+            paras.append(f"正文{ch}-{i}：危机逼近，她反手斩妖，胜负立分！")
+    return paras
+
+
+def test_apply_spine_chapter_cuts_enforce_removes_and_accounts():
+    paras = _chaptered_paras()
+    result = split_novel.apply_spine_chapter_cuts(paras, 0, _spine_cut_plan([2, 4]), apply=True)
+    assert result["applied"] is True
+    kept_text = "\n".join(result["kept_paras"])
+    assert "第2章" not in kept_text and "第4章" not in kept_text
+    assert "第3章 风起" in kept_text
+    rows = {r["chapter"]: r for r in result["removed_chapters"]}
+    assert set(rows) == {2, 4}
+    # 每章 1 标题 + 2 正文 = 3 单元；单元号引用完整源轴
+    assert rows[2]["units"] == 3 and rows[2]["first_source_unit_id"] == "U000004"
+    assert rows[2]["last_source_unit_id"] == "U000006"
+    assert result["removed_unit_total"] == 6
+    # kept_indices 是完整轴上的 0 基索引，跳过被剔章
+    assert result["kept_indices"][:4] == [0, 1, 2, 6]
+
+
+def test_apply_spine_chapter_cuts_advisory_previews_without_removing():
+    paras = _chaptered_paras()
+    result = split_novel.apply_spine_chapter_cuts(paras, 0, _spine_cut_plan([2], mode="advisory"), apply=False)
+    assert result["applied"] is False
+    assert result["kept_paras"] == paras
+    assert [r["chapter"] for r in result["removed_chapters"]] == [2]
+
+
+def test_apply_spine_chapter_cuts_respects_window_offset():
+    paras = _chaptered_paras()[3:]  # 从第2章标题开始的窗口（跳过 3 段）
+    result = split_novel.apply_spine_chapter_cuts(paras, 3, _spine_cut_plan([2]), apply=True)
+    rows = result["removed_chapters"]
+    assert rows[0]["first_source_unit_id"] == "U000004"  # 绝对单元号不受窗口影响
+    assert result["kept_indices"][0] == 6
+
+
+def test_apply_spine_chapter_cuts_reports_out_of_window_chapters():
+    paras = _chaptered_paras(n_chapters=3)
+    result = split_novel.apply_spine_chapter_cuts(paras, 0, _spine_cut_plan([2, 9]), apply=True)
+    assert result["cut_chapters_outside_window"] == [9]
+
+
+def test_episode_unit_spans_with_unit_indices_marks_gaps():
+    paras = _chaptered_paras(n_chapters=3)  # 9 单元；剔第2章（索引 3,4,5）
+    kept_indices = [0, 1, 2, 6, 7, 8]
+    kept = [paras[i] for i in kept_indices]
+    episodes = ["\n".join(kept[:4]), "\n".join(kept[4:])]  # 第1集跨剔除缝
+    spans = split_novel.episode_unit_spans(episodes, paras, unit_indices=kept_indices)
+    assert spans[0]["start_source_unit_id"] == "U000001"
+    assert spans[0]["end_source_unit_id"] == "U000007"
+    assert spans[0]["mapping_exact"] is True
+    assert spans[0]["contains_spine_cut_gaps"] is True and spans[0]["unit_count"] == 4
+    assert spans[1]["start_source_unit_id"] == "U000008"
+    assert spans[1]["mapping_exact"] is True
+    assert "contains_spine_cut_gaps" not in spans[1]
+
+
+def test_split_plan_records_spine_pruning_and_skips_beam_on_gaps(tmp_path):
+    root = tmp_path / "work"
+    paras = _chaptered_paras(n_chapters=3)
+    kept_indices = [0, 1, 2, 6, 7, 8]
+    kept = [paras[i] for i in kept_indices]
+    episodes = ["\n".join(kept[:3]), "\n".join(kept[3:])]
+    source = root / "小说" / "测试.txt"
+    source.parent.mkdir(parents=True)
+    source.write_text("\n".join(paras), encoding="utf-8")
+    pruning = split_novel.apply_spine_chapter_cuts(paras, 0, _spine_cut_plan([2]), apply=True)
+
+    plan = split_novel.write_split_plan(
+        str(root), "测试", str(source), episodes, 2,
+        split_mode="test", genre_note="test", partial=False, source_paras=paras,
+        selected_source_paras=kept, unit_indices=kept_indices, spine_pruning=pruning,
+    )
+
+    sp = plan["spine_pruning"]
+    assert sp["applied"] is True
+    assert "kept_paras" not in sp and "kept_indices" not in sp
+    assert sp["removed_chapters"][0]["chapter"] == 2
+    # 源单元轴保持完整（含被剔章节），beam 因 gap 诚实跳过
+    assert plan["source_units"]["count"] == len(paras)
+    assert plan["boundary_optimization"]["top_paths"] == []
+    assert plan["boundary_optimization"]["spine_pruning_note"]
+    md = (root / "脚本" / "_拆集机器索引.md").read_text(encoding="utf-8")
+    assert "主线剪枝整章剔除" in md and "第2章" in md

@@ -217,6 +217,13 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     # 时自动降级为逐镜，不强推。执行侧真值 n2d-video/multishot_plan.py。
     SettingSpec("原生多镜生成", ("n2d",), ("自动", "开启", "关闭"),
                 aliases={"on": "开启", "启用": "开启", "off": "关闭", "禁用": "关闭", "逐镜": "关闭", "auto": "自动"}),
+    # 视频证据强度：视频阶段五个后验证据维度（运动质量 MOT1 / 相机空间轨迹 CAM1 / 主体视频
+    # 一致 S2V / 视频语义一致 VSEM / 高动态成片证据 SPECV）的升级档。标准(默认)=保持既有行为
+    # （evidence_missing/重复≥2/关键场/交付边界才升 BLOCK）；严格=video 阶段这五维的 WARN 直接
+    # 升 BLOCK，在整批 clip 付费前拦住身份/运动/语义漂移（净效果只加 BLOCK 不松既有闸；
+    # consistency_advisory_signoff 签收逃生口照旧）。真值 n2d-review/gate_core.py。
+    SettingSpec("视频证据强度", ("n2d",), ("标准", "严格"),
+                key_aliases=("视频证据门", "视频门槛"), syncable=False),
     # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·
     # 全剧延续性·断点平均强)/付费(小程序剧·前十集卡点峰值+付费墙集)/海外(ReelShort/TikTok·更碎更狠)。
     # 驱动 boundary_audit 的剧级追更骨架与卡点定位。取值与 n2d-script/references/追更骨架.md 对齐。
