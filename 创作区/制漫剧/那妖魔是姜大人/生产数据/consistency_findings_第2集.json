@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第2集",
-  "generated_at": "2026-07-23T03:08:12+00:00",
+  "generated_at": "2026-07-24T06:38:02+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -84,9 +84,9 @@
         "skipped": true
       },
       "服装配色(N1)": {
-        "block": 11,
+        "block": 8,
         "warn": 0,
-        "ok": 15,
+        "ok": 18,
         "n": 26,
         "skipped": false
       },
@@ -98,9 +98,9 @@
         "skipped": true
       },
       "发型(H1)": {
-        "block": 8,
+        "block": 7,
         "warn": 0,
-        "ok": 18,
+        "ok": 19,
         "n": 26,
         "skipped": false
       },
@@ -113,9 +113,9 @@
       },
       "片内时序(N2)": {
         "block": 0,
-        "warn": 9,
+        "warn": 16,
         "ok": 0,
-        "n": 9,
+        "n": 16,
         "skipped": false
       },
       "状态化表情(EXP2)": {
@@ -154,8 +154,8 @@
         "skipped": false
       },
       "跨集场景漂移(SCNX)": {
-        "block": 0,
-        "warn": 2,
+        "block": 1,
+        "warn": 1,
         "ok": 0,
         "n": 2,
         "skipped": false
@@ -175,9 +175,9 @@
         "skipped": false
       },
       "风格(S1)": {
-        "block": 1,
-        "warn": 1,
-        "ok": 24,
+        "block": 0,
+        "warn": 3,
+        "ok": 23,
         "n": 26,
         "skipped": false
       },
@@ -204,8 +204,8 @@
       },
       "色温调色(GRADE1)": {
         "block": 0,
-        "warn": 2,
-        "ok": 24,
+        "warn": 0,
+        "ok": 26,
         "n": 26,
         "skipped": false
       },
@@ -266,10 +266,10 @@
         "skipped": false
       },
       "天气时辰(W1)": {
-        "block": 5,
-        "warn": 2,
+        "block": 3,
+        "warn": 0,
         "ok": 0,
-        "n": 7,
+        "n": 3,
         "skipped": false
       },
       "字幕安全区(L2)": {
@@ -484,16 +484,16 @@
       },
       "生成配方(RCP)": {
         "block": 0,
-        "warn": 4,
+        "warn": 5,
         "ok": 0,
-        "n": 4,
+        "n": 5,
         "skipped": false
       },
       "强配方Schema(RCP2)": {
         "block": 0,
-        "warn": 4,
+        "warn": 7,
         "ok": 0,
-        "n": 4,
+        "n": 7,
         "skipped": false
       },
       "系列包装(PKG)": {
@@ -616,7 +616,7 @@
         "skipped": false
       }
     },
-    "total_block": 25,
+    "total_block": 19,
     "precision_level": "degraded",
     "evidence_grade": {
       "by_dim": {
@@ -1238,27 +1238,9 @@
   },
   "findings": [
     {
-      "png": "图片/Clip03_end.png",
-      "char": "CHAR_01__囚途残损态",
-      "score": 0.1006,
-      "floor": 0.9839,
-      "verdict": "block",
-      "dimension": "服装配色(N1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
       "png": "图片/Clip05_end.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1969,
+      "score": 0.637,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1276,7 +1258,7 @@
     {
       "png": "图片/Clip07_end.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1692,
+      "score": 0.4797,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1292,9 +1274,9 @@
       "severity": "block"
     },
     {
-      "png": "图片/EP02_CLIP02_preimpact.png",
+      "png": "图片/EP02_CLIP01_start.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.0861,
+      "score": 0.6929,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1302,43 +1284,7 @@
       "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
       "risk_score": 0.55,
       "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/EP02_CLIP03_impact.png",
-      "char": "CHAR_01__囚途残损态",
-      "score": 0.0904,
-      "floor": 0.9839,
-      "verdict": "block",
-      "dimension": "服装配色(N1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/EP02_CLIP03_recovery.png",
-      "char": "CHAR_01__囚途残损态",
-      "score": 0.1115,
-      "floor": 0.9839,
-      "verdict": "block",
-      "dimension": "服装配色(N1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_03"
+        "Clip_01"
       ],
       "affected_artifacts": [
         "出图/第2集/图片"
@@ -1348,7 +1294,7 @@
     {
       "png": "图片/EP02_CLIP06_end.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1228,
+      "score": 0.6919,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1366,7 +1312,7 @@
     {
       "png": "图片/EP02_CLIP06_start_a1.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1417,
+      "score": 0.5731,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1384,7 +1330,7 @@
     {
       "png": "图片/EP02_CLIP07_start.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.0798,
+      "score": 0.5051,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1402,7 +1348,7 @@
     {
       "png": "图片/EP02_CLIP07_start_a1.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.2049,
+      "score": 0.4932,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1420,7 +1366,7 @@
     {
       "png": "图片/EP02_CLIP07_start_a2.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1715,
+      "score": 0.4109,
       "floor": 0.9839,
       "verdict": "block",
       "dimension": "服装配色(N1)",
@@ -1436,27 +1382,9 @@
       "severity": "block"
     },
     {
-      "png": "图片/Clip03_end.png",
-      "char": "CHAR_01__囚途残损态",
-      "score": 0.0408,
-      "floor": 0.9817,
-      "verdict": "block",
-      "dimension": "发型(H1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
       "png": "图片/Clip05_end.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1635,
+      "score": 0.233,
       "floor": 0.9817,
       "verdict": "block",
       "dimension": "发型(H1)",
@@ -1472,9 +1400,9 @@
       "severity": "block"
     },
     {
-      "png": "图片/EP02_CLIP02_preimpact.png",
+      "png": "图片/Clip07_end.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1067,
+      "score": 0.4179,
       "floor": 0.9817,
       "verdict": "block",
       "dimension": "发型(H1)",
@@ -1482,7 +1410,7 @@
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "risk_score": 0.55,
       "affected_shots": [
-        "Clip_02"
+        "Clip_07"
       ],
       "affected_artifacts": [
         "出图/第2集/图片"
@@ -1490,9 +1418,9 @@
       "severity": "block"
     },
     {
-      "png": "图片/EP02_CLIP02_start.png",
+      "png": "图片/EP02_CLIP04_end_a1.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1395,
+      "score": 0.5246,
       "floor": 0.9817,
       "verdict": "block",
       "dimension": "发型(H1)",
@@ -1500,7 +1428,7 @@
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "risk_score": 0.55,
       "affected_shots": [
-        "Clip_02"
+        "Clip_04"
       ],
       "affected_artifacts": [
         "出图/第2集/图片"
@@ -1508,9 +1436,9 @@
       "severity": "block"
     },
     {
-      "png": "图片/EP02_CLIP03_impact.png",
+      "png": "图片/EP02_CLIP04_end_a2.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1216,
+      "score": 0.2795,
       "floor": 0.9817,
       "verdict": "block",
       "dimension": "发型(H1)",
@@ -1518,43 +1446,7 @@
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "risk_score": 0.55,
       "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/EP02_CLIP03_recovery.png",
-      "char": "CHAR_01__囚途残损态",
-      "score": 0.0729,
-      "floor": 0.9817,
-      "verdict": "block",
-      "dimension": "发型(H1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/EP02_CLIP06_start_a1.png",
-      "char": "CHAR_01__囚途残损态",
-      "score": 0.1397,
-      "floor": 0.9817,
-      "verdict": "block",
-      "dimension": "发型(H1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_06"
+        "Clip_04"
       ],
       "affected_artifacts": [
         "出图/第2集/图片"
@@ -1564,7 +1456,43 @@
     {
       "png": "图片/EP02_CLIP07_start.png",
       "char": "CHAR_01__囚途残损态",
-      "score": 0.1444,
+      "score": 0.3982,
+      "floor": 0.9817,
+      "verdict": "block",
+      "dimension": "发型(H1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.55,
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "affected_artifacts": [
+        "出图/第2集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/EP02_CLIP07_start_a1.png",
+      "char": "CHAR_01__囚途残损态",
+      "score": 0.3664,
+      "floor": 0.9817,
+      "verdict": "block",
+      "dimension": "发型(H1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.55,
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "affected_artifacts": [
+        "出图/第2集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/EP02_CLIP07_start_a2.png",
+      "char": "CHAR_01__囚途残损态",
+      "score": 0.3157,
       "floor": 0.9817,
       "verdict": "block",
       "dimension": "发型(H1)",
@@ -1778,9 +1706,163 @@
       "severity": "warn"
     },
     {
+      "clip": "Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "frames": 6,
+      "sampled_target": 6,
+      "duration": 4.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "frames": 11,
+      "sampled_target": 11,
+      "duration": 7.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "frames": 17,
+      "sampled_target": 17,
+      "duration": 11.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "frames": 6,
+      "sampled_target": 6,
+      "duration": 4.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "frames": 12,
+      "sampled_target": 12,
+      "duration": 8.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_08_摹影进阶会变成什么_part1.mp4",
+      "frames": 6,
+      "sampled_target": 6,
+      "duration": 4.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_08_摹影进阶会变成什么_part2.mp4",
+      "frames": 6,
+      "sampled_target": 6,
+      "duration": 4.02,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第2集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
       "verdict": "warn",
       "shot": "场景[尸骸荒野] 跨2集",
-      "msg": "场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4744（vs 前 1 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+      "msg": "场景[尸骸荒野] 跨集色调/光位漂移 L1=0.7866（vs 前 1 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
       "scene": "尸骸荒野",
       "dimension": "跨集场景漂移(SCNX)",
       "return_to_stage": "image",
@@ -1794,13 +1876,10 @@
       "severity": "warn"
     },
     {
-      "verdict": "warn",
+      "verdict": "block",
       "shot": "场景[尸骸荒野] 跨2集结构",
-      "msg": "[allowed_variations 已签收] 场景[尸骸荒野] 跨集结构漂移 dHash 汉明=27（vs 前 1 集结构原型，阈 warn=18·core block=26）——核心场景跨集结构硬漂：色调没动但布局/家具/构图朝向变了（同房间被重新布置/拍反向），回 n2d-image 对齐场景定妆 spatial_layout/floor_plan；若为有意改建/换机位按 allowed_variations 签收。",
+      "msg": "场景[尸骸荒野] 跨集结构漂移 dHash 汉明=28（vs 前 1 集结构原型，阈 warn=18·core block=26）——核心场景跨集结构硬漂：色调没动但布局/家具/构图朝向变了（同房间被重新布置/拍反向），回 n2d-image 对齐场景定妆 spatial_layout/floor_plan；若为有意改建/换机位按 allowed_variations 签收。",
       "scene": "尸骸荒野",
-      "signed_off": true,
-      "signoff_source": "asset_registry.allowed_variations",
-      "signoff_reason": "同一尸骸荒野的合法反打与近景机位变化；地貌、冷灰光位和西南—东北行动轴保持不变。",
       "dimension": "跨集场景漂移(SCNX)",
       "return_to_stage": "image",
       "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
@@ -1810,12 +1889,12 @@
         "出图/共享/asset_registry.json",
         "出图/第2集/图片"
       ],
-      "severity": "warn"
+      "severity": "block"
     },
     {
-      "png": "EP02_CLIP01_start_a2.png",
-      "cohesion": 0.8159,
-      "floor": 0.8898,
+      "png": "Clip01_end.png",
+      "cohesion": 0.858,
+      "floor": 0.927,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1826,15 +1905,33 @@
       ],
       "affected_artifacts": [
         "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP01_start_a2.png"
+        "出图/第2集/图片/Clip01_end.png"
+      ],
+      "severity": "warn"
+    },
+    {
+      "png": "EP02_CLIP01_start_a3.png",
+      "cohesion": 0.8661,
+      "floor": 0.927,
+      "verdict": "warn",
+      "dimension": "风格(S1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "risk_score": 0.3,
+      "affected_shots": [
+        "Clip_01"
+      ],
+      "affected_artifacts": [
+        "出图/第2集/图片",
+        "出图/第2集/图片/EP02_CLIP01_start_a3.png"
       ],
       "severity": "warn"
     },
     {
       "png": "EP02_CLIP08_end.png",
-      "cohesion": 0.7563,
-      "floor": 0.8898,
-      "verdict": "block",
+      "cohesion": 0.8378,
+      "floor": 0.927,
+      "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
       "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
@@ -1846,53 +1943,11 @@
         "出图/第2集/图片",
         "出图/第2集/图片/EP02_CLIP08_end.png"
       ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/EP02_CLIP01_start_a2.png",
-      "scene": "尸骸荒野",
-      "warmth": 0.147,
-      "tint": -0.004,
-      "warmth_dev": 0.183,
-      "tint_dev": 0.021,
-      "verdict": "warn",
-      "message": "图片/EP02_CLIP01_start_a2.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.147 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。",
-      "dimension": "色温调色(GRADE1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.25,
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/EP02_CLIP08_end.png",
-      "scene": "尸骸荒野",
-      "warmth": 0.164,
-      "tint": -0.018,
-      "warmth_dev": 0.2,
-      "tint_dev": 0.007,
-      "verdict": "warn",
-      "message": "图片/EP02_CLIP08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.164 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。",
-      "dimension": "色温调色(GRADE1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.25,
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
       "severity": "warn"
     },
     {
       "metric": "daypart",
-      "png": "EP02_CLIP04_end.png",
+      "png": "Clip03_end.png",
       "scene": "场景_尸骸荒野.png",
       "prev_daypart": "day",
       "daypart": "night",
@@ -1903,38 +1958,17 @@
       "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
       "risk_score": 0.5,
       "affected_shots": [
-        "Clip_04"
+        "Clip_03"
       ],
       "affected_artifacts": [
         "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP04_end.png"
+        "出图/第2集/图片/Clip03_end.png"
       ],
       "severity": "block"
     },
     {
-      "metric": "light_anchor_registered",
-      "png": "Clip05_end.png",
-      "scene": "场景_尸骸荒野.png",
-      "light_az": "right",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip05_end.png"
-      ],
-      "severity": "warn"
-    },
-    {
       "metric": "daypart",
-      "png": "EP02_CLIP01_start_a2.png",
+      "png": "EP02_CLIP01_start_a3.png",
       "scene": "场景_尸骸荒野.png",
       "prev_daypart": "night",
       "daypart": "day",
@@ -1949,13 +1983,13 @@
       ],
       "affected_artifacts": [
         "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP01_start_a2.png"
+        "出图/第2集/图片/EP02_CLIP01_start_a3.png"
       ],
       "severity": "block"
     },
     {
       "metric": "daypart",
-      "png": "EP02_CLIP02_start.png",
+      "png": "EP02_CLIP02_preimpact.png",
       "scene": "场景_尸骸荒野.png",
       "prev_daypart": "day",
       "daypart": "night",
@@ -1970,72 +2004,9 @@
       ],
       "affected_artifacts": [
         "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP02_start.png"
+        "出图/第2集/图片/EP02_CLIP02_preimpact.png"
       ],
       "severity": "block"
-    },
-    {
-      "metric": "daypart",
-      "png": "EP02_CLIP03_impact.png",
-      "scene": "场景_尸骸荒野.png",
-      "prev_daypart": "night",
-      "daypart": "day",
-      "locked": null,
-      "verdict": "block",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP03_impact.png"
-      ],
-      "severity": "block"
-    },
-    {
-      "metric": "daypart",
-      "png": "EP02_CLIP04_end_a1.png",
-      "scene": "场景_尸骸荒野.png",
-      "prev_daypart": "day",
-      "daypart": "night",
-      "locked": null,
-      "verdict": "block",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP04_end_a1.png"
-      ],
-      "severity": "block"
-    },
-    {
-      "metric": "light_anchor_registered",
-      "png": "EP02_CLIP04_end_a2.png",
-      "scene": "场景_尸骸荒野.png",
-      "light_az": "right",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/EP02_CLIP04_end_a2.png"
-      ],
-      "severity": "warn"
     },
     {
       "shot": "镜头4",
@@ -2628,14 +2599,14 @@
     },
     {
       "verdict": "warn",
-      "message": "本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。",
+      "message": "video_eval_manifest 已建立，但这些风险 sidecar 尚未写回：camera:生产数据/camera_trajectory_probe_第2集.json；causal_event:生产数据/causal_event_graph_第2集.json；dialogue_av:生产数据/dialogue_av_alignment_第2集.json；motion:生产数据/motion_quality_第2集.json；physical_event:生产数据/physical_event_graph_第2集.json；subject_video:生产数据/subject_video_consistency_第2集.json；video_semantic:生产数据/video_semantic_consistency_第2集.json；video_vlm:生产数据/video_vlm_consistency_第2集.json",
       "return_to_stage": "review",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/video_eval_manifest_第2集.json",
+        "生产数据/*_第2集.json",
         "出视频/第2集",
-        "合成/第2集",
-        "生产数据/*_第2集.json"
+        "合成/第2集"
       ],
       "dimension": "视频证据完整性(EVID)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
@@ -2674,23 +2645,6 @@
     },
     {
       "verdict": "warn",
-      "message": "出图/第2集/图片/EP02_CLIP06_end.png 生成事件缺配方字段：mode；已可推导 hash=3eea23bb2bd823b405dc5a7e364b30d644641e4451bd89492cf093976133a0f3，但复跑审计证据不完整。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "出图/第2集/图片/EP02_CLIP06_end.png"
-      ],
-      "dimension": "生成配方(RCP)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
       "message": "废料/出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=5f259bd5463b0f06，但复跑审计证据不完整。",
       "return_to_stage": "image",
       "affected_shots": [
@@ -2700,6 +2654,40 @@
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第2集.json",
         "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png"
+      ],
+      "dimension": "生成配方(RCP)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.3,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第2集/图片/EP02_CLIP08_start_a1.png 生成事件缺配方字段：mode；已可推导 hash=b213aae319b83cbdcbd63fccb0d24d019ced1f7d9899d0df01d92a1323ddb15f，但复跑审计证据不完整。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_08"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第2集.json",
+        "出图/第2集/图片/EP02_CLIP08_start_a1.png"
+      ],
+      "dimension": "生成配方(RCP)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.3,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4 生成事件缺配方字段：provider；已可推导 hash=d6902f720be758106c7443b1b4ce2d51c71ccd7d32a6b7ccd5fd4934d4f239a2，但复跑审计证据不完整。",
+      "return_to_stage": "video",
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第2集.json",
+        "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
       ],
       "dimension": "生成配方(RCP)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
@@ -2738,23 +2726,6 @@
     },
     {
       "verdict": "warn",
-      "message": "出图/第2集/图片/EP02_CLIP06_end.png 强配方 schema 缺字段：input_fingerprint；recipe_hash 已有但还不能完整复现/归因。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "出图/第2集/图片/EP02_CLIP06_end.png"
-      ],
-      "dimension": "强配方Schema(RCP2)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
       "message": "废料/出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_sha256, asset_registry_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
       "return_to_stage": "image",
       "affected_shots": [
@@ -2764,6 +2735,74 @@
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第2集.json",
         "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png"
+      ],
+      "dimension": "强配方Schema(RCP2)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.35,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第2集/图片/EP02_CLIP01_start_a1.png 强配方 schema 缺字段：qc_version；recipe_hash 已有但还不能完整复现/归因。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_01"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第2集.json",
+        "出图/第2集/图片/EP02_CLIP01_start_a1.png"
+      ],
+      "dimension": "强配方Schema(RCP2)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.35,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第2集/图片/EP02_CLIP01_start_a3.png 强配方 schema 缺字段：qc_version；recipe_hash 已有但还不能完整复现/归因。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_01"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第2集.json",
+        "出图/第2集/图片/EP02_CLIP01_start_a3.png"
+      ],
+      "dimension": "强配方Schema(RCP2)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.35,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第2集/图片/EP02_CLIP04_start.png 强配方 schema 缺字段：qc_version；recipe_hash 已有但还不能完整复现/归因。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第2集.json",
+        "出图/第2集/图片/EP02_CLIP04_start.png"
+      ],
+      "dimension": "强配方Schema(RCP2)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.35,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第2集/图片/EP02_CLIP08_start_a1.png 强配方 schema 缺字段：input_fingerprint, settings_sha256, identity_registry_sha256, asset_registry_sha256, adapter_version, qc_version；recipe_hash 已有但还不能完整复现/归因。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_08"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第2集.json",
+        "出图/第2集/图片/EP02_CLIP08_start_a1.png"
       ],
       "dimension": "强配方Schema(RCP2)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
@@ -4496,25 +4535,25 @@
       "dimensions": [
         "视频证据完整性(EVID)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/video_eval_manifest_第2集.json、出视频/第2集、合成/第2集、生产数据/*_第2集.json",
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/video_eval_manifest_第2集.json、生产数据/*_第2集.json、出视频/第2集、合成/第2集",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/video_eval_manifest_第2集.json",
+        "生产数据/*_第2集.json",
         "出视频/第2集",
-        "合成/第2集",
-        "生产数据/*_第2集.json"
+        "合成/第2集"
       ],
       "findings": [
         {
           "verdict": "warn",
-          "message": "本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。",
+          "message": "video_eval_manifest 已建立，但这些风险 sidecar 尚未写回：camera:生产数据/camera_trajectory_probe_第2集.json；causal_event:生产数据/causal_event_graph_第2集.json；dialogue_av:生产数据/dialogue_av_alignment_第2集.json；motion:生产数据/motion_quality_第2集.json；physical_event:生产数据/physical_event_graph_第2集.json；subject_video:生产数据/subject_video_consistency_第2集.json；video_semantic:生产数据/video_semantic_consistency_第2集.json；video_vlm:生产数据/video_vlm_consistency_第2集.json",
           "return_to_stage": "review",
           "affected_shots": [],
           "affected_artifacts": [
             "生产数据/video_eval_manifest_第2集.json",
+            "生产数据/*_第2集.json",
             "出视频/第2集",
-            "合成/第2集",
-            "生产数据/*_第2集.json"
+            "合成/第2集"
           ],
           "dimension": "视频证据完整性(EVID)",
           "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
@@ -4527,18 +4566,19 @@
       "dimensions": [
         "生成配方(RCP)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_06、Clip_08；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第2集.json、脚本/第2集/voiceover.txt、脚本/第2集/storyboard.json、出图/第2集/图片/EP02_CLIP06_end.png、出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png",
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_08、Clip_05；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第2集.json、脚本/第2集/voiceover.txt、脚本/第2集/storyboard.json、出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png、出图/第2集/图片/EP02_CLIP08_start_a1.png、出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
       "affected_shots": [
-        "Clip_06",
-        "Clip_08"
+        "Clip_08",
+        "Clip_05"
       ],
       "affected_artifacts": [
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第2集.json",
         "脚本/第2集/voiceover.txt",
         "脚本/第2集/storyboard.json",
-        "出图/第2集/图片/EP02_CLIP06_end.png",
-        "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png"
+        "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png",
+        "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+        "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
       ],
       "findings": [
         {
@@ -4571,22 +4611,6 @@
         },
         {
           "verdict": "warn",
-          "message": "出图/第2集/图片/EP02_CLIP06_end.png 生成事件缺配方字段：mode；已可推导 hash=3eea23bb2bd823b405dc5a7e364b30d644641e4451bd89492cf093976133a0f3，但复跑审计证据不完整。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_06"
-          ],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第2集.json",
-            "出图/第2集/图片/EP02_CLIP06_end.png"
-          ],
-          "dimension": "生成配方(RCP)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.3
-        },
-        {
-          "verdict": "warn",
           "message": "废料/出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=5f259bd5463b0f06，但复跑审计证据不完整。",
           "return_to_stage": "image",
           "affected_shots": [
@@ -4600,6 +4624,38 @@
           "dimension": "生成配方(RCP)",
           "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
           "risk_score": 0.3
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第2集/图片/EP02_CLIP08_start_a1.png 生成事件缺配方字段：mode；已可推导 hash=b213aae319b83cbdcbd63fccb0d24d019ced1f7d9899d0df01d92a1323ddb15f，但复跑审计证据不完整。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_08"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第2集.json",
+            "出图/第2集/图片/EP02_CLIP08_start_a1.png"
+          ],
+          "dimension": "生成配方(RCP)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.3
+        },
+        {
+          "verdict": "warn",
+          "message": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4 生成事件缺配方字段：provider；已可推导 hash=d6902f720be758106c7443b1b4ce2d51c71ccd7d32a6b7ccd5fd4934d4f239a2，但复跑审计证据不完整。",
+          "return_to_stage": "video",
+          "affected_shots": [
+            "Clip_05"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第2集.json",
+            "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+          ],
+          "dimension": "生成配方(RCP)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.3
         }
       ]
     },
@@ -4608,18 +4664,22 @@
       "dimensions": [
         "强配方Schema(RCP2)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_06、Clip_08；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第2集.json、脚本/第2集/voiceover.txt、脚本/第2集/storyboard.json、出图/第2集/图片/EP02_CLIP06_end.png、出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png",
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_08、Clip_01、Clip_04；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第2集.json、脚本/第2集/voiceover.txt、脚本/第2集/storyboard.json、出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png、出图/第2集/图片/EP02_CLIP01_start_a1.png、出图/第2集/图片/EP02_CLIP01_start_a3.png、出图/第2集/图片/EP02_CLIP04_start.png",
       "affected_shots": [
-        "Clip_06",
-        "Clip_08"
+        "Clip_08",
+        "Clip_01",
+        "Clip_04"
       ],
       "affected_artifacts": [
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第2集.json",
         "脚本/第2集/voiceover.txt",
         "脚本/第2集/storyboard.json",
-        "出图/第2集/图片/EP02_CLIP06_end.png",
-        "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png"
+        "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png",
+        "出图/第2集/图片/EP02_CLIP01_start_a1.png",
+        "出图/第2集/图片/EP02_CLIP01_start_a3.png",
+        "出图/第2集/图片/EP02_CLIP04_start.png",
+        "出图/第2集/图片/EP02_CLIP08_start_a1.png"
       ],
       "findings": [
         {
@@ -4652,22 +4712,6 @@
         },
         {
           "verdict": "warn",
-          "message": "出图/第2集/图片/EP02_CLIP06_end.png 强配方 schema 缺字段：input_fingerprint；recipe_hash 已有但还不能完整复现/归因。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_06"
-          ],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第2集.json",
-            "出图/第2集/图片/EP02_CLIP06_end.png"
-          ],
-          "dimension": "强配方Schema(RCP2)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
           "message": "废料/出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_sha256, asset_registry_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
           "return_to_stage": "image",
           "affected_shots": [
@@ -4677,6 +4721,70 @@
             "生产数据/production_events.jsonl",
             "生产数据/generation_recipe_第2集.json",
             "出图/第2集/图片/identity_drift_2026-07-23/candidates/EP02_CLIP08_end_r1__one_tiger_eye.png"
+          ],
+          "dimension": "强配方Schema(RCP2)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.35
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第2集/图片/EP02_CLIP01_start_a1.png 强配方 schema 缺字段：qc_version；recipe_hash 已有但还不能完整复现/归因。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_01"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第2集.json",
+            "出图/第2集/图片/EP02_CLIP01_start_a1.png"
+          ],
+          "dimension": "强配方Schema(RCP2)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.35
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第2集/图片/EP02_CLIP01_start_a3.png 强配方 schema 缺字段：qc_version；recipe_hash 已有但还不能完整复现/归因。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_01"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第2集.json",
+            "出图/第2集/图片/EP02_CLIP01_start_a3.png"
+          ],
+          "dimension": "强配方Schema(RCP2)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.35
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第2集/图片/EP02_CLIP04_start.png 强配方 schema 缺字段：qc_version；recipe_hash 已有但还不能完整复现/归因。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第2集.json",
+            "出图/第2集/图片/EP02_CLIP04_start.png"
+          ],
+          "dimension": "强配方Schema(RCP2)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.35
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第2集/图片/EP02_CLIP08_start_a1.png 强配方 schema 缺字段：input_fingerprint, settings_sha256, identity_registry_sha256, asset_registry_sha256, adapter_version, qc_version；recipe_hash 已有但还不能完整复现/归因。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_08"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第2集.json",
+            "出图/第2集/图片/EP02_CLIP08_start_a1.png"
           ],
           "dimension": "强配方Schema(RCP2)",
           "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",

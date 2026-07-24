@@ -10709,7 +10709,7 @@ def test_consistency_block_dim_blocks_at_image(monkeypatch, tmp_path):
     assert any(f["dim"] == "手部/解剖(N5)" and f["sev"] == "block" for f in fs)
 
 
-def test_fresh_image_qc_downgrades_duplicate_pixel_blocks_at_image(monkeypatch, tmp_path):
+def test_fresh_image_qc_downgrades_duplicate_pixel_blocks_downstream(monkeypatch, tmp_path):
     gate.findings.clear()
     root = tmp_path / "w"
     qc_dir = root / "生产数据" / "image_qc" / "第1集"
@@ -10732,13 +10732,15 @@ def test_fresh_image_qc_downgrades_duplicate_pixel_blocks_at_image(monkeypatch, 
     monkeypatch.setattr(gate.subprocess, "run", lambda *a, **k: _FakeProc(json.dumps(payload), 1))
     monkeypatch.setitem(gate.check_consistency_audit_gate.__globals__, "fingerprint_is_fresh", lambda fp, r: True)
 
-    gate.check_consistency_audit_gate(str(root), "第1集", stage="image")
+    for stage in ("image", "video", "compose", "review"):
+        gate.findings.clear()
+        gate.check_consistency_audit_gate(str(root), "第1集", stage=stage)
 
-    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "脸(G1)" for f in gate.findings)
-    assert any(
-        f["sev"] == gate.WARN and f["dim"] == "脸(G1)" and "fresh image_qc hard=0" in str(f["msg"])
-        for f in gate.findings
-    )
+        assert not any(f["sev"] == gate.BLOCK and f["dim"] == "脸(G1)" for f in gate.findings)
+        assert any(
+            f["sev"] == gate.WARN and f["dim"] == "脸(G1)" and "fresh image_qc hard=0" in str(f["msg"])
+            for f in gate.findings
+        )
 
 
 def test_image_gate_ignores_video_side_consistency_findings(monkeypatch, tmp_path):

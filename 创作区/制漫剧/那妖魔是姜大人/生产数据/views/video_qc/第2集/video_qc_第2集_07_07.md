@@ -7,19 +7,24 @@
 
 | Clip | Source MP4 | Duration | Size | FPS | Audio | Frames | Notes |
 |---|---|---:|---|---:|---|---:|---|
-| Clip_07_part2 | `Clip_07_替裴合眼与还命承诺_part2.mp4` | 8.016s | 720x1280 | 24.075 | no | 3 |  |
+| Clip_07_part1 | `Clip_07_替裴合眼与还命承诺_part1.mp4` | 4.016s | 720x1280 | 24.149 | no | 3 |  |
 
 ## Seam machine check（按 seam_mode 分类；仅 relay 同帧阻断）
 
-- checked: 1 · block: 0 · warn: 0
+- checked: 2 · block: 0 · warn: 0
 - note: storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
-| Clip_06 → Clip_07 | 29 | 0.0362 | info |
+| Clip_06 → Clip_07 | 33 | 0.0228 | info |
+| Clip_07 → Clip_08 | 33 | 0.0247 | info |
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）
 
-- closeup clips checked: 1 · block: 0 · warn: 0（warn=粗筛交人判；block=近景非双帧镜结构远超重画阈值 dHash>44，拒绝验收；精确同人判定走 n2d-review/temporal_consistency.analyze）
+- closeup clips checked: 1 · block: 0 · warn: 1（warn=粗筛交人判；block=近景非双帧镜结构远超重画阈值 dHash>44，拒绝验收；精确同人判定走 n2d-review/temporal_consistency.analyze）
+
+| Clip | Source MP4 | Lens | Max dHash | Verdict |
+|---|---|---|---:|---|
+| Clip_07_part1 | `Clip_07_替裴合眼与还命承诺_part1.mp4` | - | 35 | warn |
 
 Status: pending human review unless the batch manifest marks it accepted.

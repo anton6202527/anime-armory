@@ -72,65 +72,65 @@
   "backend": "dreamina",
   "capability_assertions": {
     "control_idiom": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "structured_multi_prompt"
     },
     "control_idiom_supported": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "frame_control_mode": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "multi_keyframe"
     },
     "identity_mechanism": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "first_last_frame_or_reference_group"
     },
     "lipsync_audio_ref": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": false
     },
     "max_clip_seconds": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": 15
     },
     "max_reference_images": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": null
     },
     "max_timeline_frames": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": 20
     },
     "motion_control_capabilities": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": [
         "first_frame",
@@ -140,51 +140,51 @@
       ]
     },
     "motion_control_level": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "medium"
     },
     "native_audio": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": false
     },
     "native_av": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": false
     },
     "paid_routing_allowed": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "supports_first_frame": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "supports_last_frame": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "supports_native_mid_anchors": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     }
@@ -225,14 +225,14 @@
       "path": "/Users/wesley/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
     }
   ],
-  "evidence_kind": "local_cli_help",
+  "evidence_kind": "cli_help",
   "execution_backend": "dreamina",
   "kind": "n2d_video_backend_refresh_evidence",
-  "note": "官方CLI确认：全能参考支持Seedance 2.0系列，VIP支持1080p、4-15秒、9:16；异步输出由submit_id查询并下载。身份稳定依赖已登记关键帧/参考束，CLI未声明持久身份绑定。",
+  "note": "Dreamina multimodal2video supports image/video/audio references, Seedance 2.0 family, duration 4-15s, 9:16 and VIP 720p/1080p; asynchronous task schema verified.",
   "source_urls": [],
   "sources": [
-    "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+    "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
     "cli_snapshot:dreamina@2026-07-22T13:21:10Z"
   ],
-  "verified_at": "2026-07-23"
+  "verified_at": "2026-07-24"
 }

@@ -267,6 +267,8 @@ def build_clip_sound_routes(
         previous = dict((previous_routes or {}).get(cid) or {})
         base_route_committed = bool(
             not override
+            and has_character_dialogue
+            and mouth_visible
             and str(previous.get("audio_strategy") or "") == "base_video_then_post_lipsync"
             and previous.get("base_video_only") is True
             and _base_video_exists(root, ep, cid)

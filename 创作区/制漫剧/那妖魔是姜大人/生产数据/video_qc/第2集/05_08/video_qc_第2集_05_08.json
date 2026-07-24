@@ -27,19 +27,19 @@
         {
           "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_f24a70d1ae6d_01_start.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_bb57a173adb2_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_f24a70d1ae6d_02_mid.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_bb57a173adb2_02_mid.jpg",
           "time_sec": 2.008
         },
         {
           "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_f24a70d1ae6d_03_end.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_bb57a173adb2_03_end.jpg",
           "time_sec": 3.817
         }
       ],
@@ -60,21 +60,18 @@
       "fps": 24.086,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_b05449fead9b_01_start.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_8d0c8002b2e2_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_b05449fead9b_02_mid.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_8d0c8002b2e2_02_mid.jpg",
           "time_sec": 3.508
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_b05449fead9b_03_end.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_05_part2_f85db858_8d0c8002b2e2_03_end.jpg",
           "time_sec": 6.817
         }
       ],
@@ -97,19 +94,19 @@
         {
           "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_01_start.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_735e2420345b_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_02_mid.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_735e2420345b_02_mid.jpg",
           "time_sec": 5.508
         },
         {
           "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_5406a8858290_03_end.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_06_147a679c_735e2420345b_03_end.jpg",
           "time_sec": 10.817
         }
       ],
@@ -130,21 +127,18 @@
       "fps": 24.149,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_e66946df0a29_01_start.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_f1d30e930bd9_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_e66946df0a29_02_mid.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_f1d30e930bd9_02_mid.jpg",
           "time_sec": 2.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_e66946df0a29_03_end.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_f1d30e930bd9_03_end.jpg",
           "time_sec": 3.816
         }
       ],
@@ -159,30 +153,97 @@
       "audio_streams": [],
       "clip": "Clip_07_part2",
       "clip_index": 7,
-      "duration_sec": 8.016667,
+      "duration_sec": 8.016016,
       "file": "Clip_07_替裴合眼与还命承诺_part2.mp4",
       "file_clip": "Clip_07",
       "fps": 24.075,
       "frames": [
         {
           "label": "start",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_34239079cecc_01_start.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_3636d853c1cb_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_34239079cecc_02_mid.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_3636d853c1cb_02_mid.jpg",
           "time_sec": 4.008
         },
         {
           "label": "end",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_34239079cecc_03_end.jpg",
-          "time_sec": 7.817
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_3636d853c1cb_03_end.jpg",
+          "time_sec": 7.816
         }
       ],
       "has_audio": false,
       "height": 1280,
       "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_08_part1",
+      "clip_index": 8,
+      "duration_sec": 4.016667,
+      "file": "Clip_08_摹影进阶会变成什么_part1.mp4",
+      "file_clip": "Clip_08",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part1_e622c3ea_def0d930e2f1_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part1_e622c3ea_def0d930e2f1_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part1_e622c3ea_def0d930e2f1_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_08_part2",
+      "clip_index": 8,
+      "duration_sec": 4.016667,
+      "file": "Clip_08_摹影进阶会变成什么_part2.mp4",
+      "file_clip": "Clip_08",
+      "fps": 24.149,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part2_d5c42651_f5cd900218c1_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part2_d5c42651_f5cd900218c1_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_08_part2_d5c42651_f5cd900218c1_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
@@ -261,12 +322,12 @@
     "anchor_warns": 0,
     "delivery_mismatch_warns": 1,
     "intra_blocks": 0,
-    "intra_checked": 5,
+    "intra_checked": 7,
     "intra_warns": 2,
     "seam_blocks": 0,
-    "seam_info": 2,
+    "seam_info": 3,
     "seam_warns": 0,
-    "seams_checked": 3
+    "seams_checked": 4
   },
   "root": ".",
   "seams": [
@@ -296,15 +357,28 @@
       "verdict_if_relay": "block"
     },
     {
-      "color_dist": 0.0885,
+      "color_dist": 0.0362,
       "color_verdict": "ok",
-      "dist": 32,
+      "dist": 29,
       "from_clip": "Clip_06",
       "seam_mode": "eyeline_cut",
       "strictness": "info",
-      "struct_verdict": "block",
+      "struct_verdict": "warn",
       "to_clip": "Clip_07",
       "transition": "视线切至裴尸体",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.0081,
+      "color_verdict": "ok",
+      "dist": 32,
+      "from_clip": "Clip_07",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_08",
+      "transition": "姜月初抬眼看百妖谱虎影",
       "verdict": "info",
       "verdict_if_relay": "block"
     }

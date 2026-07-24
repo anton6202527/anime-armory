@@ -12,6 +12,12 @@
       "genre_keys": [
         "chuanyue"
       ],
+      "insert_coverage": {
+        "note": "系统时刻必须给专属 insert 特写(空光幕底框)，别只塞进人物反应镜；口径见 n2d_insert_coverage",
+        "required": true,
+        "subject": "system_panel",
+        "tier": "block"
+      },
       "label": "系统面板/HUD",
       "matched_clips": [
         "EP02_CLIP04",
@@ -55,7 +61,7 @@
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-23T03:18:04+00:00",
+  "generated_at": "2026-07-24T06:03:40+00:00",
   "genre": {
     "genre_key": "chuanyue",
     "label": "穿越",

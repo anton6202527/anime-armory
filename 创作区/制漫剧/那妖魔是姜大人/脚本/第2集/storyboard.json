@@ -186,7 +186,8 @@
         2,
         3
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "裴长青死了。是我亲手杀的。可虎爪，已经落下。",
         "人族最爱讲同袍之义。到头来，也不过如此。",
@@ -371,7 +372,8 @@
         5,
         6
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "对错、良知……活下来以后，才有资格谈。",
         "小丫头，你也敢向我挥刀？",
@@ -558,7 +560,8 @@
         8,
         9
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "给我——斩！",
         "我……活下来了？",
@@ -825,7 +828,8 @@
         10,
         11
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "检测到未收录妖物，是否消耗道行收录？",
         "收录。"
@@ -972,7 +976,8 @@
         12,
         13
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "消耗道行七十五年。摹其影，定其妖形。",
         "虎山神，摹影成功。获得妖物馈赠——猛虎快刀，圆满。"
@@ -1174,7 +1179,8 @@
         14,
         15
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "原来，道行不是拿来挥霍的。收录妖物，才是真正的用法。",
         "宿主：姜月初。境界：闻弦初境。道行：二十五年。"
@@ -1313,7 +1319,8 @@
         16,
         17
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "裴长青，抱歉。若有来日……我会想办法，还你一命。",
         "不过你也别抱太大希望。说不定哪天，我就下去陪你了。"
@@ -1455,7 +1462,8 @@
       "dialogue_indices": [
         18
       ],
-      "narration_indices": [],
+    "narration_indices": [],
+    "mouth_visible": false,
       "subtitle_lines": [
         "摹影只是第一步。那下一步，会把我变成什么？"
       ],

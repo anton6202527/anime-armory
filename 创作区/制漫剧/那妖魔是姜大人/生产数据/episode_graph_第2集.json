@@ -108,6 +108,11 @@
     },
     {
       "relation": "produced",
+      "source": "job:video_batch_第2集_01_08:Clip_06",
+      "target": "media:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "relation": "produced",
       "source": "job:video_batch_第2集_02_02:Clip_02_part1",
       "target": "media:出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
     },
@@ -133,6 +138,11 @@
     },
     {
       "relation": "produced",
+      "source": "job:video_batch_第2集_02_08:Clip_06",
+      "target": "media:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "relation": "produced",
       "source": "job:video_batch_第2集_03_08:Clip_03_part1",
       "target": "media:出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
     },
@@ -150,6 +160,71 @@
       "relation": "produced",
       "source": "job:video_batch_第2集_03_08:Clip_04",
       "target": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_05_part1",
+      "target": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_05_part2",
+      "target": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_07_part1",
+      "target": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_07_part2",
+      "target": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_08_part1",
+      "target": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_03_08:Clip_08_part2",
+      "target": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_05_part1",
+      "target": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_05_part2",
+      "target": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_06",
+      "target": "media:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_07_part1",
+      "target": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_07_part2",
+      "target": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_08_part1",
+      "target": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "relation": "produced",
+      "source": "job:video_batch_第2集_05_08:Clip_08_part2",
+      "target": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
     },
     {
       "relation": "included_in",
@@ -194,6 +269,41 @@
     {
       "relation": "included_in",
       "source": "media:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "target": "rough_cut:第2集"
+    },
+    {
+      "relation": "included_in",
+      "source": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
       "target": "rough_cut:第2集"
     },
     {
@@ -298,6 +408,16 @@
     },
     {
       "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第2集_05_08:Clip_05_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_05",
+      "target": "job:video_batch_第2集_05_08:Clip_05_part2"
+    },
+    {
+      "relation": "executed_as",
       "source": "route:Clip_06",
       "target": "job:video_batch_第2集_01_08:Clip_06"
     },
@@ -315,6 +435,11 @@
       "relation": "executed_as",
       "source": "route:Clip_06",
       "target": "job:video_batch_第2集_03_08:Clip_06_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_06",
+      "target": "job:video_batch_第2集_05_08:Clip_06"
     },
     {
       "relation": "executed_as",
@@ -338,6 +463,16 @@
     },
     {
       "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第2集_05_08:Clip_07_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_07",
+      "target": "job:video_batch_第2集_05_08:Clip_07_part2"
+    },
+    {
+      "relation": "executed_as",
       "source": "route:Clip_08",
       "target": "job:video_batch_第2集_01_08:Clip_08"
     },
@@ -355,11 +490,21 @@
       "relation": "executed_as",
       "source": "route:Clip_08",
       "target": "job:video_batch_第2集_03_08:Clip_08_part2"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第2集_05_08:Clip_08_part1"
+    },
+    {
+      "relation": "executed_as",
+      "source": "route:Clip_08",
+      "target": "job:video_batch_第2集_05_08:Clip_08_part2"
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-23T11:18:08+0800",
-  "graph_hash": "10d3bf3e7918d194b5faf51df8237d48725eec82fa07670fae83f9bb4911350c",
+  "generated_at": "2026-07-24T14:03:43+0800",
+  "graph_hash": "d11f8e60e6e981061eec2f404ec8076e52567f8450d925bf8e53e488a735183d",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -695,7 +840,7 @@
       "physical_clip": "Clip_05_part1",
       "provider": "dreamina",
       "source_manifest": "生产数据/video_batch_第2集_03_08.json",
-      "status": "queried",
+      "status": "accepted",
       "submit_id": "dbce0f8e-567c-4876-9b65-fc6430980744",
       "type": "video_job"
     },
@@ -774,6 +919,83 @@
       "source_manifest": "生产数据/video_batch_第2集_03_08.json",
       "status": "prepared",
       "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第2集_05_08:Clip_05_part1",
+      "physical_clip": "Clip_05_part1",
+      "provider": "seedance",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "prepared",
+      "submit_id": "",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_05",
+      "id": "job:video_batch_第2集_05_08:Clip_05_part2",
+      "physical_clip": "Clip_05_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "accepted",
+      "submit_id": "fbade40a-eaba-413d-8d13-be84c8e442f8",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_06",
+      "id": "job:video_batch_第2集_05_08:Clip_06",
+      "physical_clip": "Clip_06",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "accepted",
+      "submit_id": "3cd20926-738d-46bb-8542-5560fbf391a6",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第2集_05_08:Clip_07_part1",
+      "physical_clip": "Clip_07_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "accepted",
+      "submit_id": "cd2f3fd6-846b-42c6-8782-9e5f14b486a7",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_07",
+      "id": "job:video_batch_第2集_05_08:Clip_07_part2",
+      "physical_clip": "Clip_07_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "accepted",
+      "submit_id": "c222c213-47ad-474f-bc95-783a9c437344",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第2集_05_08:Clip_08_part1",
+      "physical_clip": "Clip_08_part1",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "accepted",
+      "submit_id": "694ac310-2193-43eb-9b77-59d64a60c628",
+      "type": "video_job"
+    },
+    {
+      "adapter_id": "",
+      "clip": "Clip_08",
+      "id": "job:video_batch_第2集_05_08:Clip_08_part2",
+      "physical_clip": "Clip_08_part2",
+      "provider": "dreamina",
+      "source_manifest": "生产数据/video_batch_第2集_05_08.json",
+      "status": "accepted",
+      "submit_id": "437f11d0-1e9e-4825-bd20-2a0e4ad95747",
       "type": "video_job"
     },
     {
@@ -867,10 +1089,80 @@
       "type": "video_media"
     },
     {
+      "bytes": 19509585,
+      "clip": "Clip_05",
+      "id": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "physical_clip": "Clip_05_part1",
+      "sha256": "b2aa416465c85bbacb6fd2a5b29162cb3718947b8fc8e736732d30a9d74164e4",
+      "status": "prepared",
+      "type": "video_media"
+    },
+    {
+      "bytes": 11410509,
+      "clip": "Clip_05",
+      "id": "media:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "physical_clip": "Clip_05_part2",
+      "sha256": "2e5e41d8601b7590632343e70885246040b612240c515ff02b2d9f2cfdd401f4",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 23337372,
+      "clip": "Clip_06",
+      "id": "media:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "path": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "physical_clip": "Clip_06",
+      "sha256": "360513530f81e00766e19ac6bef0533d341a5c8c991be9873fba7c181b583b3f",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 10328497,
+      "clip": "Clip_07",
+      "id": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "physical_clip": "Clip_07_part1",
+      "sha256": "2d9afdef49ba713fb6a8522766bb28ab919ced0396c1bb642cefd8dfe559a7cd",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 12214335,
+      "clip": "Clip_07",
+      "id": "media:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "physical_clip": "Clip_07_part2",
+      "sha256": "e6cf7a8efa0d5b3f3cbf284c5a3c625a0d1b0a4027f50ea07be95c267d9fe9a0",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 10762795,
+      "clip": "Clip_08",
+      "id": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "physical_clip": "Clip_08_part1",
+      "sha256": "c9c7090e3d508099f83f5e8198df08622740afe9c62d2e8e837e551a4799c593",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
+      "bytes": 8081463,
+      "clip": "Clip_08",
+      "id": "media:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
+      "physical_clip": "Clip_08_part2",
+      "sha256": "1a5ff84e25aa8031b0f6e3a70c482c742d7d68d1aab761abbf6edee9d354772e",
+      "status": "accepted",
+      "type": "video_media"
+    },
+    {
       "id": "rough_cut:第2集",
       "path": "合成/第2集/_proxy/actual_rough_cut.mp4",
       "sha256": "",
-      "status": "incomplete",
+      "status": "planned",
       "type": "rough_cut"
     },
     {
@@ -949,16 +1241,16 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "source_files": [
     {
-      "bytes": 133138,
+      "bytes": 133645,
       "path": "出视频/第2集/prompt/video_model_routes.json",
       "role": "video_routes",
-      "sha256": "617e8d82420876c0cde58a5ecbaa16d68f3b3cab17039551b9030ed26db6c42f"
+      "sha256": "7f0ada453310f11e67f6afb92bcde266c20afe5385e47dedaadafd579e4f179d"
     },
     {
-      "bytes": 8653,
+      "bytes": 14794,
       "path": "生产数据/post_video_proxy_第2集.json",
       "role": "rough_cut_manifest",
-      "sha256": "d4a133f8793c88ad037b66f7e506262cfc12a93043c007e8bb86317b356a78dd"
+      "sha256": "831006a7d44b4978ffa422e188f69910cd03eb7955dc06042a5968e142cb9652"
     },
     {
       "bytes": 88083,
@@ -979,10 +1271,16 @@
       "sha256": "4837df9c954b811aaa40a2843c70afe4b910abd6064ada4738e4468b8d6ae39d"
     },
     {
-      "bytes": 141494,
+      "bytes": 161400,
       "path": "生产数据/video_batch_第2集_03_08.json",
       "role": "video_batch",
-      "sha256": "ba133edcc79af78f7666ec058bc507c5dd370b590ab9f903c9379714bf604c7f"
+      "sha256": "2837d8f22fe9ddf8fbd6fef5e99f8e155bdd06ecab9120a041ddba0294a2e167"
+    },
+    {
+      "bytes": 179418,
+      "path": "生产数据/video_batch_第2集_05_08.json",
+      "role": "video_batch",
+      "sha256": "c061b0b3c5e35135ef5545a5bc019c54c346cbfba775436b787e594256cb867f"
     },
     {
       "bytes": 58073,
@@ -993,13 +1291,13 @@
   ],
   "status": "pass",
   "summary": {
-    "edges": 71,
+    "edges": 100,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 59,
+    "nodes": 73,
     "routes": 8,
     "story_clips": 8,
-    "video_media": 9
+    "video_media": 16
   },
   "version": 1
 }

@@ -117,6 +117,38 @@ def test_explicit_mouth_hidden_beats_closeup_inference(tmp_path) -> None:
     assert route["post_lipsync_required"] is False
 
 
+def test_explicit_mouth_hidden_releases_stale_paid_base_lipsync_commitment(tmp_path) -> None:
+    voice = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voice.parent.mkdir(parents=True)
+    voice.write_text("[镜头1·沈念·内心] 不能让他看出来。\n", encoding="utf-8")
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"paid-base-video")
+    clips = [{
+        "id": "EP01_CLIP01",
+        "voiceover_indices": [1],
+        "dialogue_indices": [1],
+        "narration_indices": [],
+        "mouth_visible": False,
+        "shots": [{"lens": "CU", "description": "单人眼神近景，台词为口外音"}],
+    }]
+    _path, lines, _fingerprint = pmr.load_voiceover(tmp_path, "第1集")
+
+    route = pmr.build_clip_sound_routes(
+        tmp_path, "第1集", clips, lines, casting={}, timing_estimate={}, final_manifest=[],
+        previous_routes={"Clip_01": {
+            "audio_strategy": "base_video_then_post_lipsync",
+            "base_video_only": True,
+        }},
+    )[0]
+
+    assert route["mouth_visible"] is False
+    assert route["audio_strategy"] == "post_dub"
+    assert route["base_video_only"] is False
+    assert route["post_lipsync_required"] is False
+    assert route["route_commitment"] == "uncommitted"
+
+
 def test_declared_narration_track_overrides_non_narrator_role_name(tmp_path) -> None:
     voice = tmp_path / "脚本" / "第1集" / "voiceover.txt"
     voice.parent.mkdir(parents=True)

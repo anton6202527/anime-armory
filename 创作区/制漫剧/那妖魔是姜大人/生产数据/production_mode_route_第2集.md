@@ -23,11 +23,11 @@
 
 | Clip | 内容 | 时间基准 | 声音策略 | 表演轨 | 音色锁 | 最终声音阶段 |
 |---|---|---|---|---|---|---|
-| Clip_01 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_02 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_03 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_04 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_05 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_06 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_07 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
-| Clip_08 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_01 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_02 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_03 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_04 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_05 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_06 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_07 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |
+| Clip_08 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | locked | post_video_before_compose |

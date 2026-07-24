@@ -71,65 +71,65 @@
   "backend": "seedance",
   "capability_assertions": {
     "control_idiom": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "structured_multi_prompt"
     },
     "control_idiom_supported": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "frame_control_mode": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "multi_keyframe"
     },
     "identity_mechanism": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "face_lock"
     },
     "lipsync_audio_ref": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "max_clip_seconds": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": 15
     },
     "max_reference_images": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": null
     },
     "max_timeline_frames": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": 20
     },
     "motion_control_capabilities": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": [
         "multimodal_reference",
@@ -138,51 +138,51 @@
       ]
     },
     "motion_control_level": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": "medium"
     },
     "native_audio": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "native_av": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "paid_routing_allowed": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "supports_first_frame": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "supports_last_frame": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     },
     "supports_native_mid_anchors": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
-      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+      "evidence_kind": "cli_help",
+      "observed_text": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
+      "source": "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
       "source_url": "",
       "value": true
     }
@@ -223,14 +223,14 @@
       "path": "/Users/wesley/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
     }
   ],
-  "evidence_kind": "local_cli_help",
+  "evidence_kind": "cli_help",
   "execution_backend": "dreamina",
   "kind": "n2d_video_backend_refresh_evidence",
-  "note": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+  "note": "Seedance 2.0 VIP via Dreamina CLI: 4-15s, 9:16, 720p/1080p, up to 9 image references; asynchronous submit/query. CLI does not claim persistent face ID or native timeline mid-anchor semantics.",
   "source_urls": [],
   "sources": [
-    "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+    "local official Dreamina CLI multimodal2video --help, verified 2026-07-24",
     "cli_snapshot:dreamina@2026-07-22T13:21:10Z"
   ],
-  "verified_at": "2026-07-23"
+  "verified_at": "2026-07-24"
 }

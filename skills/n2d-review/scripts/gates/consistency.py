@@ -196,7 +196,10 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     warn_rows.sort(key=lambda r: -(float(r.get("risk_score", 0.5) or 0.5)))
     non_warn_rows = [r for r in raw_rows if r not in warn_rows or not isinstance(r, dict)]
     sorted_rows = non_warn_rows + warn_rows
-    image_qc_pixel_clear = stage == "image" and _image_qc_clears_pixel_blocks(root, ep)
+    # A fresh/full image-stage pixel verdict remains authoritative downstream.
+    # Video/compose/review must not resurrect the same hair/outfit/face heuristic
+    # rows after image_qc has already cleared the current pixels.
+    image_qc_pixel_clear = stage in {"image", "video", "compose", "review"} and _image_qc_clears_pixel_blocks(root, ep)
     for row in sorted_rows:
         if not isinstance(row, dict):
             continue

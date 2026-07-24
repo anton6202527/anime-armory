@@ -1,15 +1,15 @@
 # n2d 生产告警
 
 - root: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人
-- generated_at: 2026-07-24T04:30:06+00:00
+- generated_at: 2026-07-24T06:30:49+00:00
 - 告警数: 4（critical 2 / warn 2）
 
 | 级别 | 类型 | 范围 | 说明 |
 |---|---|---|---|
-| 🔴 critical | qa_blockers | totals | QA 阻断 352 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
+| 🔴 critical | qa_blockers | totals | QA 阻断 357 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
 | 🔴 critical | unverified_progress | totals | 1 处未验证强标 ✅（第1集）：受闸列没有「真跑过+指纹新鲜」的闸门凭据，本季视为 provisional；对当前产物重跑对应 dashboard gate 销账。 |
 | 🟡 warn | qa_blockers | 第1集 | 第1集 QA 阻断 165 项 |
-| 🟡 warn | qa_blockers | 第2集 | 第2集 QA 阻断 187 项 |
+| 🟡 warn | qa_blockers | 第2集 | 第2集 QA 阻断 192 项 |
 
 ## 当前阈值
 ```json

@@ -706,6 +706,171 @@
       "to": "video:出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
     },
     {
+      "from": "clip:Clip_05",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "from": "route:Clip_05",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip05_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "from": "route:Clip_05",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip05_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "from": "route:Clip_06",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP06_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP06_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP06_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP07_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP07_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP07_start_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP07_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP07_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP07_start_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "from": "route:Clip_08",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP08_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP08_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP08_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "from": "route:Clip_08",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP08_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP08_start.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/EP02_CLIP08_start_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
       "from": "clip:Clip_02",
       "relation": "renders_video",
       "to": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4"
@@ -1278,7 +1443,7 @@
       "kind": "route",
       "label": "Clip_01",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "frame_anchor_required",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1286,7 +1451,7 @@
       "kind": "route",
       "label": "Clip_02",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "cross_episode_baseline",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1294,7 +1459,7 @@
       "kind": "route",
       "label": "Clip_03",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "motion_control_required",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1302,7 +1467,7 @@
       "kind": "route",
       "label": "Clip_04",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "cross_episode_baseline",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1318,7 +1483,7 @@
       "kind": "route",
       "label": "Clip_06",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "cross_episode_baseline",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1326,7 +1491,7 @@
       "kind": "route",
       "label": "Clip_07",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "frame_anchor_required",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1334,7 +1499,7 @@
       "kind": "route",
       "label": "Clip_08",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "cross_episode_baseline",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1392,6 +1557,54 @@
       "path": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
     },
     {
+      "id": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "kind": "video",
+      "label": "Clip_05_摹影虎山神获圆满刀法_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "kind": "video",
+      "label": "Clip_05_摹影虎山神获圆满刀法_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "kind": "video",
+      "label": "Clip_06_结算闻弦初境与二十五年余额.mp4",
+      "path": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "kind": "video",
+      "label": "Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "kind": "video",
+      "label": "Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
+      "kind": "video",
+      "label": "Clip_08_摹影进阶会变成什么_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
+      "kind": "video",
+      "label": "Clip_08_摹影进阶会变成什么_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_downloads/694ac310-2193-43eb-9b77-59d64a60c628_video_1.mp4",
+      "kind": "video",
+      "label": "694ac310-2193-43eb-9b77-59d64a60c628_video_1.mp4",
+      "path": "出视频/第2集/视频/_downloads/694ac310-2193-43eb-9b77-59d64a60c628_video_1.mp4"
+    },
+    {
       "id": "video:出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4",
       "kind": "video",
       "label": "Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4",
@@ -1437,10 +1650,10 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 8,
-    "edges": 188,
+    "edges": 221,
     "images": 28,
-    "nodes": 77,
-    "videos": 16
+    "nodes": 85,
+    "videos": 24
   },
   "version": 1
 }

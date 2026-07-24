@@ -84,7 +84,7 @@
     }
   ],
   "fold_candidates": [],
-  "generated_at": "2026-07-23T17:05:11+00:00",
+  "generated_at": "2026-07-24T06:03:40+00:00",
   "kind": "n2d_clip_economy_plan",
   "merge_groups": [],
   "ok": true,
@@ -120,7 +120,7 @@
     "projected_takes_after_merge": 12,
     "projected_takes_per_minute": 10.01,
     "single_take_candidates": 0,
-    "sunk_cost_clips": 4,
+    "sunk_cost_clips": 8,
     "takes_per_minute": 10.01,
     "total_span_sec": 71.927
   },

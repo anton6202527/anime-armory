@@ -63,7 +63,7 @@
       "severity": "block"
     }
   ],
-  "generated_at": "2026-07-23T03:22:54+00:00",
+  "generated_at": "2026-07-24T05:19:14+00:00",
   "kind": "n2d_production_locks_check",
   "lock_path": "生产数据/production_locks_第2集.json",
   "stage": "all",

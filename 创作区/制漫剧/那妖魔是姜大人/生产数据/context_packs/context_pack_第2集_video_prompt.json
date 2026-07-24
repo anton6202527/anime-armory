@@ -32,12 +32,12 @@
   "episode": "第2集",
   "files": [
     {
-      "bytes": 3031,
+      "bytes": 3586,
       "exists": true,
-      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=auto_recommended\n- 生视频渠道: 即梦/Dreamina  # source=auto_recommended\n- 视频模型路由: 自动按镜头路由  # source=auto_recommended\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 跳过  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n\nraw audit history omitted: records_seen=23, corrections_included=0/3",
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=auto_recommended\n- 生视频渠道: 即梦/Dreamina  # source=auto_recommended\n- 视频模型路由: 自动按镜头路由  # source=auto_recommended\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 跳过  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n- 主线剪枝: 突出主线  # source=auto_recommended\n- 片段经济: 紧凑  # source=auto_recommended\n\nraw audit history omitted: records_seen=24, corrections_included=0/3",
       "preview_policy": "settings_region_plus_bounded_corrections",
       "relpath": "_设置.md",
-      "sha256": "e7c92ccf72ff50acee3663a5543d209758564a14c169dfeffb6f37d5b90883b9"
+      "sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0"
     },
     {
       "bytes": 2080,
@@ -1535,7 +1535,7 @@
       "relpath": "生产数据/video_model_routes_第2集.json"
     },
     {
-      "bytes": 9244,
+      "bytes": 9264,
       "exists": true,
       "preview": {
         "clips": [
@@ -1575,7 +1575,7 @@
               "CHAR_02"
             ],
             "clip_id": "Clip_03",
-            "continuity_text": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触 姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成 姜月初视线锁定虎妖颈部破绽 MCU→CU→MS 大 发力AU4+AU7+AU24→落势瞳孔散、张口喘息 虎血滴落接谱页墨线 insert_cutaway 虎妖血滴与落地虎首 系统主观层结束后回到姜月初右手握刀 False True 出图/第2集/图片/EP02_CLIP03_impact.png 1.12 keyframe 导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点 出图/第2集/图片/EP02_CLIP03_recovery.png 2.12 split 导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前 虎妖由活体进入死亡态，不消失；姜月初仍在原场；出画/画外保留：BEAST_01、WEAPON_横刀；入画/现身：VFX_百妖谱 与EP02_CLIP02尾帧同图：虎爪将触未触，刀未命中",
+            "continuity_text": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触 姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成 姜月初视线锁定虎妖颈部破绽 MCU→CU→MS 大 发力AU4+AU7+AU24→落势瞳孔散、张口喘息 虎血滴落接谱页墨线 insert_cutaway 虎妖血滴与落地虎首 系统主观层结束后回到姜月初右手握刀 False True 出图/第2集/图片/EP02_CLIP03_impact.png pass 1.12 keyframe 导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点 出图/第2集/图片/EP02_CLIP03_recovery.png pass 2.12 split 导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前 虎妖由活体进入死亡态，不消失；姜月初仍在原场；出画/画外保留：BEAST_01、WEAPON_横刀；入画/现身：VFX_百妖谱 与EP02_CLIP02尾帧同图：虎爪将触未触，刀未命中",
             "control_inputs_required": [
               "pose_sequence",
               "depth_sequence",
@@ -1660,10 +1660,10 @@
         "version": 1
       },
       "relpath": "生产数据/spectacle_sequence_plan_第2集.json",
-      "sha256": "64f0aea037014eb5a72380e8ed34d177ce131caefd61172c7e82558b241fbee1"
+      "sha256": "50d484709e7d9cb3b8c32ab5907b304bda9470e0f1928ced14fabf1fd8f1cbd1"
     },
     {
-      "bytes": 28590,
+      "bytes": 28204,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -1677,24 +1677,24 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "8472d5cf0e6929c062f6af3cb6f2788075b053ab63a5a7e7466ec542036f8e40"
+      "sha256": "cfe97d7b8138a2ce026c3e1fdaaf6cd15118ccb3124d2aa08bef7cdc378a8eac"
     },
     {
-      "bytes": 30591,
+      "bytes": 41629,
       "exists": true,
       "preview": {
         "episode": "第2集",
-        "graph_hash": "aefb6e56d476a8732563a3579b1a002547c1debe86834b25356be51acc5edf0e",
+        "graph_hash": "22e284c31f26ef303658243d1bbaad726780724aba2e5c4460e32047b99d88f7",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
-          "edges": 71,
+          "edges": 100,
           "lineage_gaps": 0,
           "masters": 0,
-          "nodes": 59,
+          "nodes": 73,
           "routes": 8,
           "story_clips": 8,
-          "video_media": 9
+          "video_media": 16
         },
         "top_level_keys": [
           "authority",
@@ -1714,7 +1714,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第2集.json",
-      "sha256": "9649f9885d8d1e265f4738bc35cd55301e71143afdcc88fe7d894c53fe50505d"
+      "sha256": "85da34db09d740ebf140cac639fca3d7bf4e815489e8c1f9e742d2db48b05814"
     }
   ],
   "genre_pack_context": {
@@ -1731,6 +1731,12 @@
         "genre_keys": [
           "chuanyue"
         ],
+        "insert_coverage": {
+          "note": "系统时刻必须给专属 insert 特写(空光幕底框)，别只塞进人物反应镜；口径见 n2d_insert_coverage",
+          "required": true,
+          "subject": "system_panel",
+          "tier": "block"
+        },
         "label": "系统面板/HUD",
         "matched_clips": [
           "EP02_CLIP04",
@@ -1774,7 +1780,7 @@
       }
     ],
     "episode": "第2集",
-    "generated_at": "2026-07-23T03:18:04+00:00",
+    "generated_at": "2026-07-24T06:03:40+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -1910,6 +1916,10 @@
       "records_can_override_effective_settings": false
     },
     "effective_settings": {
+      "主线剪枝": {
+        "source": "auto_recommended",
+        "value": "突出主线"
+      },
       "制作模式": {
         "source": "explicit_user",
         "value": "混合自动路由"
@@ -1945,6 +1955,10 @@
       "母题增强": {
         "source": "explicit_user",
         "value": "开启"
+      },
+      "片段经济": {
+        "source": "auto_recommended",
+        "value": "紧凑"
       },
       "生图AI": {
         "source": "explicit_user",
@@ -2011,10 +2025,10 @@
       "format": "record_section",
       "full_history_omitted": true,
       "limit": 3,
-      "records_seen": 23
+      "records_seen": 24
     },
     "source_path": "_设置.md",
-    "source_sha256": "e7c92ccf72ff50acee3663a5543d209758564a14c169dfeffb6f37d5b90883b9",
+    "source_sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0",
     "status": "ok",
     "version": 1
   },

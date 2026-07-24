@@ -1,0 +1,21 @@
+{
+  "contract_path": "脚本/第2集/preventive_contracts.json",
+  "episode": "第2集",
+  "findings": [],
+  "gates": [
+    "interaction_physics_gate",
+    "audio_timing_gate"
+  ],
+  "generated_at": "2026-07-24T06:37:32+00:00",
+  "kind": "n2d_preventive_contract_report",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "scaffolded": false,
+  "stage": "video",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "info": 0,
+    "warn": 0
+  },
+  "version": 1
+}

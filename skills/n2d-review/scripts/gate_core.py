@@ -4940,7 +4940,10 @@ def _advisory_row_signed_off(root: str, ep: str, row: Mapping[str, Any]) -> bool
     accepted = data.get("accepted") or data.get("signoffs") or []
     dim = str(row.get("dimension") or row.get("dim") or "")
     msg = str(row.get("message") or row.get("msg") or "")
-    loc = " ".join(str(x) for x in (row.get("affected_artifacts") or []) if x) if isinstance(row.get("affected_artifacts"), list) else ""
+    loc_parts = [str(row.get(key) or "") for key in ("loc", "path", "png", "asset")]
+    if isinstance(row.get("affected_artifacts"), list):
+        loc_parts.extend(str(x) for x in row.get("affected_artifacts") or [] if x)
+    loc = " ".join(part for part in loc_parts if part)
     shots = " ".join(str(x) for x in (row.get("affected_shots") or []) if x) if isinstance(row.get("affected_shots"), list) else ""
     row_hash = _consistency_finding_hash(row)
     for item in accepted:
@@ -5051,6 +5054,7 @@ INTENTIONAL_DISCONTINUITY_ELIGIBLE_DIMENSIONS = {
     "景深一致(DOF1)",
     "合法不连续(DIS1)",
     "合法状态转场(STE)",
+    "跨集场景漂移(SCNX)",
 }
 def _intentional_discontinuity_module():
     """Lazy-import sibling intentional_discontinuity.py as the single source of truth

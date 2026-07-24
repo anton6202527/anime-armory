@@ -3,9 +3,9 @@
   "actual_story_clip_count": 8,
   "animatic_snapshot_path": "生产数据/timelines/第2集/animatic_timeline.otio",
   "animatic_snapshot_sha256": "3e247c4aa1afbb21aee6c94469fcfb5382238e05aa8681af6649e867da1a7b78",
-  "duration_sec": 70.214,
+  "duration_sec": 71.927,
   "episode": "第2集",
-  "generated_at": "2026-07-24T04:29:56+00:00",
+  "generated_at": "2026-07-24T06:30:50+00:00",
   "kind": "n2d_editorial_timeline",
   "media": [
     {
@@ -82,6 +82,11 @@
       "available_sec": 4.017,
       "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part1.mp4",
       "sha256": "c9c7090e3d508099f83f5e8198df08622740afe9c62d2e8e837e551a4799c593"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
+      "sha256": "1a5ff84e25aa8031b0f6e3a70c482c742d7d68d1aab761abbf6edee9d354772e"
     },
     {
       "available_sec": 3.553,
@@ -176,7 +181,7 @@
   ],
   "missing_picture_slots": [],
   "otio_path": "生产数据/timelines/第2集/editorial_timeline.otio",
-  "otio_sha256": "8249f80475bab330651feb6f3d781be04a25e5776a9b9aeb860366103b4036a0",
+  "otio_sha256": "53afced0e03537bd7adee53e75e35bcc90ac2e6d1c427950c570cc70bb23a145",
   "phase": "rough_cut",
   "planned_audio_slot_count": 18,
   "rate": 30.0,
@@ -225,10 +230,10 @@
       "intentional_discontinuity_reason": "",
       "issues": [],
       "next_firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-      "next_firstframe_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+      "next_firstframe_sha256": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
       "policy": "relay",
       "required_boundary_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-      "required_boundary_frame_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+      "required_boundary_frame_sha256": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
       "same_location": true,
       "scope": "intra_episode",
       "seam_evidence": {
@@ -285,10 +290,10 @@
       "intentional_discontinuity_reason": "",
       "issues": [],
       "next_firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
-      "next_firstframe_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+      "next_firstframe_sha256": "7ad892ab0f109a758d8c2c7f53e04b6f2c3e63e1163e72e95d3437264cb5d8f7",
       "policy": "relay",
       "required_boundary_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
-      "required_boundary_frame_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+      "required_boundary_frame_sha256": "7ad892ab0f109a758d8c2c7f53e04b6f2c3e63e1163e72e95d3437264cb5d8f7",
       "same_location": true,
       "scope": "intra_episode",
       "seam_evidence": {

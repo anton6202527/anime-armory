@@ -294,12 +294,147 @@
       "speaker_source": {
         "source": "none"
       },
-      "updated_at": "2026-07-24T04:29:55+00:00",
+      "updated_at": "2026-07-24T06:30:49+00:00",
       "video_path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part1.mp4"
+    },
+    {
+      "action_sounds": [],
+      "audio_intent": "none",
+      "clip_id": "Clip_08_part2",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": false,
+      "lip_sync": {
+        "evidence": "needs_review",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track"
+      },
+      "review_status": "needs_review",
+      "spatial_acoustics": {
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "needs_review"
+      },
+      "speaker_source": {
+        "source": "none"
+      },
+      "updated_at": "2026-07-24T06:03:17+00:00",
+      "video_path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+    },
+    {
+      "action_sounds": [],
+      "audio_intent": "none",
+      "clip_id": "Clip_05_part2",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": false,
+      "lip_sync": {
+        "evidence": "needs_review",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track"
+      },
+      "review_status": "needs_review",
+      "spatial_acoustics": {
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "needs_review"
+      },
+      "speaker_source": {
+        "source": "none"
+      },
+      "updated_at": "2026-07-24T06:17:12+00:00",
+      "video_path": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4"
+    },
+    {
+      "action_sounds": [],
+      "audio_intent": "none",
+      "clip_id": "Clip_06",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": false,
+      "lip_sync": {
+        "evidence": "needs_review",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track"
+      },
+      "review_status": "needs_review",
+      "spatial_acoustics": {
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "needs_review"
+      },
+      "speaker_source": {
+        "source": "none"
+      },
+      "updated_at": "2026-07-24T06:18:32+00:00",
+      "video_path": "出视频/第2集/视频/Clip_06_结算闻弦初境与二十五年余额.mp4"
+    },
+    {
+      "action_sounds": [],
+      "audio_intent": "none",
+      "clip_id": "Clip_07_part2",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": false,
+      "lip_sync": {
+        "evidence": "needs_review",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track"
+      },
+      "review_status": "needs_review",
+      "spatial_acoustics": {
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "needs_review"
+      },
+      "speaker_source": {
+        "source": "none"
+      },
+      "updated_at": "2026-07-24T06:18:38+00:00",
+      "video_path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4"
+    },
+    {
+      "action_sounds": [],
+      "audio_intent": "none",
+      "clip_id": "Clip_07_part1",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": false,
+      "lip_sync": {
+        "evidence": "needs_review",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track"
+      },
+      "review_status": "needs_review",
+      "spatial_acoustics": {
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "needs_review"
+      },
+      "speaker_source": {
+        "source": "none"
+      },
+      "updated_at": "2026-07-24T06:19:55+00:00",
+      "video_path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4"
     }
   ],
   "episode": "第2集",
   "kind": "n2d_native_av_physics",
-  "updated_at": "2026-07-24T04:29:55+00:00",
+  "updated_at": "2026-07-24T06:30:49+00:00",
   "version": 1
 }

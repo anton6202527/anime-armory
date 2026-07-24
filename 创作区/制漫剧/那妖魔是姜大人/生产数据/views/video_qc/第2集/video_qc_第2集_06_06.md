@@ -11,12 +11,13 @@
 
 ## Seam machine check（按 seam_mode 分类；仅 relay 同帧阻断）
 
-- checked: 1 · block: 0 · warn: 0
+- checked: 2 · block: 0 · warn: 0
 - note: storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
 | Clip_05 → Clip_06 | 30 | 0.1166 | info |
+| Clip_06 → Clip_07 | 29 | 0.0362 | info |
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）
 

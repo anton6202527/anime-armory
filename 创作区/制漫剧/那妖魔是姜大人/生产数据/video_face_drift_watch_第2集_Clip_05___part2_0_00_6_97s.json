@@ -1,7 +1,7 @@
 {
   "kind": "n2d_video_face_drift_watch",
   "version": 1,
-  "generated_at": "2026-07-24T03:13:15.778071+00:00",
+  "generated_at": "2026-07-24T06:17:12.166204+00:00",
   "episode": "第2集",
   "status": "ready_for_human_frame_identity_review",
   "master": "出视频/第2集/视频/Clip_05_摹影虎山神获圆满刀法_part2.mp4",
@@ -114,6 +114,13 @@
     "clear_wrong_closeup_face": "block",
     "missing_identity_backend": "use_human_dense_frame_review_or_full_temporal_consistency",
     "return_to_stage": "video_or_image_then_compose"
+  },
+  "human_review": {
+    "identity_verdict": "pass",
+    "reviewer": "agent:codex:executor_visual",
+    "review_kind": "executor_visual",
+    "reviewed_at": "2026-07-24T06:31:00+00:00",
+    "reason": "逐帧查看当前密集抽帧 contact sheet：姜月初脸型、五官比例、发髻和黑色囚途服装在片内保持同一角色；构图与动作变化未形成换脸证据。"
   },
   "warnings": [],
   "json_path": "生产数据/video_face_drift_watch_第2集_Clip_05___part2_0_00_6_97s.json",

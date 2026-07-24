@@ -291,7 +291,7 @@
     {
       "asset": "VFX_百妖谱",
       "asset_name": "百妖谱",
-      "confirmed_at": "2026-07-23T12:05:15+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
       "human_signoff": false,
       "must_not_have": [
@@ -301,10 +301,10 @@
         "过度血腥猎奇"
       ],
       "png": "图片/EP02_CLIP01_start_a1.png",
-      "png_sha256": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
-      "reason": "当前原像素严审：3.6秒切点系统卷轴尚未显现，未出现现代UI/错误卷轴；裴胸前仅见同一把武器的单柄与局部单刃，无副刀、双持或错误剑式复制。确认仅绑定当前SHA。",
+      "png_sha256": "bac52056bf6fa723a5dfb0504b29f37d8a745939f54573edda8b41b510b05ea5",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -345,7 +345,7 @@
     {
       "asset": "VFX_百妖谱",
       "asset_name": "百妖谱",
-      "confirmed_at": "2026-07-23T12:05:25+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
       "human_signoff": false,
       "must_not_have": [
@@ -355,10 +355,10 @@
         "过度血腥猎奇"
       ],
       "png": "图片/EP02_CLIP01_start_a3.png",
-      "png_sha256": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
-      "reason": "当前原像素严审：12秒切点画幅下缘仅露黑金古卷上沿/卷轴，无现代UI、蓝屏或乱码；武器被人物与画幅遮住，未生成额外、双刃或错误武器。确认仅绑定当前SHA。",
+      "png_sha256": "f22c13e1bee1c10358002a5ff54cc3f3ae92e5123145f6498b3cdc027385d779",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -453,7 +453,7 @@
     {
       "asset": "VFX_百妖谱",
       "asset_name": "百妖谱",
-      "confirmed_at": "2026-07-22T10:41:31+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
       "human_signoff": false,
       "must_not_have": [
@@ -463,10 +463,10 @@
         "过度血腥猎奇"
       ],
       "png": "图片/EP02_CLIP04_start.png",
-      "png_sha256": "526fece0bc675ffb34c5ebcd30c87b2fe5ece74437d19c09e997a4e76373f5e8",
-      "reason": "实际像素与对照拼图复核：Clip04首帧古卷维持旧金、黑墨、卷轴实体与古典符纹边框，内部无文字数字或现代UI；墨虎始终为纸上淡墨线稿，没有脱离谱页实体化；姜月初脸和五指结构清楚。",
+      "png_sha256": "628c6ad9bc6214412c3d84aeb4cb98ce185963f6e39e6cb51da4fddfca6993a7",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "automation:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -507,7 +507,7 @@
     {
       "asset": "VFX_百妖谱",
       "asset_name": "百妖谱",
-      "confirmed_at": "2026-07-22T11:19:16+00:00",
+      "confirmed_at": "2026-07-24T05:11:54+00:00",
       "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
       "human_signoff": false,
       "must_not_have": [
@@ -517,10 +517,10 @@
         "过度血腥猎奇"
       ],
       "png": "图片/EP02_CLIP06_start.png",
-      "png_sha256": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644",
-      "reason": "实际像素与对照复核：Clip06右侧古卷状态面板保持黑墨旧金、完整卷轴和三栏空白框，无文字数字或现代UI；姜月初双手与唯一横刀从黑缠柄、护手、单刃刀身到偏刃侧刀尖连续，旧金仅照明边缘，不形成第二刀刃。",
+      "png_sha256": "c382896794a20bae84ecdbd4a815b9dfb22f3e382565bdc9fd333e5a43d5549b",
+      "reason": "已实际查看修复后当前像素及4张并排图：山崖活虎已移除；百妖谱为黑金实体空白卷轴，无现代UI/文字；横刀仅一把、单柄单刃、无副刀或双持。",
       "review_kind": "executor_visual",
-      "reviewer": "automation:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -762,7 +762,7 @@
     {
       "asset": "VFX_系统面板",
       "asset_name": "百妖谱金色古卷面板",
-      "confirmed_at": "2026-07-23T12:05:15+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
       "human_signoff": false,
       "must_not_have": [
@@ -772,10 +772,10 @@
         "乱码文字"
       ],
       "png": "图片/EP02_CLIP01_start_a1.png",
-      "png_sha256": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
-      "reason": "当前原像素严审：3.6秒切点系统卷轴尚未显现，未出现现代UI/错误卷轴；裴胸前仅见同一把武器的单柄与局部单刃，无副刀、双持或错误剑式复制。确认仅绑定当前SHA。",
+      "png_sha256": "bac52056bf6fa723a5dfb0504b29f37d8a745939f54573edda8b41b510b05ea5",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -822,7 +822,7 @@
     {
       "asset": "VFX_系统面板",
       "asset_name": "百妖谱金色古卷面板",
-      "confirmed_at": "2026-07-23T12:05:25+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
       "human_signoff": false,
       "must_not_have": [
@@ -832,10 +832,10 @@
         "乱码文字"
       ],
       "png": "图片/EP02_CLIP01_start_a3.png",
-      "png_sha256": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
-      "reason": "当前原像素严审：12秒切点画幅下缘仅露黑金古卷上沿/卷轴，无现代UI、蓝屏或乱码；武器被人物与画幅遮住，未生成额外、双刃或错误武器。确认仅绑定当前SHA。",
+      "png_sha256": "f22c13e1bee1c10358002a5ff54cc3f3ae92e5123145f6498b3cdc027385d779",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -942,7 +942,7 @@
     {
       "asset": "VFX_系统面板",
       "asset_name": "百妖谱金色古卷面板",
-      "confirmed_at": "2026-07-22T10:41:31+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
       "human_signoff": false,
       "must_not_have": [
@@ -952,10 +952,10 @@
         "乱码文字"
       ],
       "png": "图片/EP02_CLIP04_start.png",
-      "png_sha256": "526fece0bc675ffb34c5ebcd30c87b2fe5ece74437d19c09e997a4e76373f5e8",
-      "reason": "实际像素与对照拼图复核：Clip04首帧古卷维持旧金、黑墨、卷轴实体与古典符纹边框，内部无文字数字或现代UI；墨虎始终为纸上淡墨线稿，没有脱离谱页实体化；姜月初脸和五指结构清楚。",
+      "png_sha256": "628c6ad9bc6214412c3d84aeb4cb98ce185963f6e39e6cb51da4fddfca6993a7",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "automation:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1002,7 +1002,7 @@
     {
       "asset": "VFX_系统面板",
       "asset_name": "百妖谱金色古卷面板",
-      "confirmed_at": "2026-07-22T11:19:16+00:00",
+      "confirmed_at": "2026-07-24T05:11:54+00:00",
       "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
       "human_signoff": false,
       "must_not_have": [
@@ -1012,10 +1012,10 @@
         "乱码文字"
       ],
       "png": "图片/EP02_CLIP06_start.png",
-      "png_sha256": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644",
-      "reason": "实际像素与对照复核：Clip06右侧古卷状态面板保持黑墨旧金、完整卷轴和三栏空白框，无文字数字或现代UI；姜月初双手与唯一横刀从黑缠柄、护手、单刃刀身到偏刃侧刀尖连续，旧金仅照明边缘，不形成第二刀刃。",
+      "png_sha256": "c382896794a20bae84ecdbd4a815b9dfb22f3e382565bdc9fd333e5a43d5549b",
+      "reason": "已实际查看修复后当前像素及4张并排图：山崖活虎已移除；百妖谱为黑金实体空白卷轴，无现代UI/文字；横刀仅一把、单柄单刃、无副刀或双持。",
       "review_kind": "executor_visual",
-      "reviewer": "automation:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1554,7 +1554,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-23T12:05:15+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -1577,10 +1577,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP02_CLIP01_start_a1.png",
-      "png_sha256": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
-      "reason": "当前原像素严审：3.6秒切点系统卷轴尚未显现，未出现现代UI/错误卷轴；裴胸前仅见同一把武器的单柄与局部单刃，无副刀、双持或错误剑式复制。确认仅绑定当前SHA。",
+      "png_sha256": "bac52056bf6fa723a5dfb0504b29f37d8a745939f54573edda8b41b510b05ea5",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1688,7 +1688,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-23T12:05:25+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -1711,10 +1711,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP02_CLIP01_start_a3.png",
-      "png_sha256": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
-      "reason": "当前原像素严审：12秒切点画幅下缘仅露黑金古卷上沿/卷轴，无现代UI、蓝屏或乱码；武器被人物与画幅遮住，未生成额外、双刃或错误武器。确认仅绑定当前SHA。",
+      "png_sha256": "f22c13e1bee1c10358002a5ff54cc3f3ae92e5123145f6498b3cdc027385d779",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -2224,7 +2224,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-22T11:19:16+00:00",
+      "confirmed_at": "2026-07-24T05:11:54+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -2247,10 +2247,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP02_CLIP06_start.png",
-      "png_sha256": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644",
-      "reason": "实际像素与对照复核：Clip06右侧古卷状态面板保持黑墨旧金、完整卷轴和三栏空白框，无文字数字或现代UI；姜月初双手与唯一横刀从黑缠柄、护手、单刃刀身到偏刃侧刀尖连续，旧金仅照明边缘，不形成第二刀刃。",
+      "png_sha256": "c382896794a20bae84ecdbd4a815b9dfb22f3e382565bdc9fd333e5a43d5549b",
+      "reason": "已实际查看修复后当前像素及4张并排图：山崖活虎已移除；百妖谱为黑金实体空白卷轴，无现代UI/文字；横刀仅一把、单柄单刃、无副刀或双持。",
       "review_kind": "executor_visual",
-      "reviewer": "automation:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -2877,7 +2877,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-23T12:05:15+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -2900,10 +2900,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP02_CLIP01_start_a1.png",
-      "png_sha256": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
-      "reason": "当前原像素严审：3.6秒切点系统卷轴尚未显现，未出现现代UI/错误卷轴；裴胸前仅见同一把武器的单柄与局部单刃，无副刀、双持或错误剑式复制。确认仅绑定当前SHA。",
+      "png_sha256": "bac52056bf6fa723a5dfb0504b29f37d8a745939f54573edda8b41b510b05ea5",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -2983,7 +2983,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-23T12:05:25+00:00",
+      "confirmed_at": "2026-07-24T05:53:23+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -3006,10 +3006,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP02_CLIP01_start_a3.png",
-      "png_sha256": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
-      "reason": "当前原像素严审：12秒切点画幅下缘仅露黑金古卷上沿/卷轴，无现代UI、蓝屏或乱码；武器被人物与画幅遮住，未生成额外、双刃或错误武器。确认仅绑定当前SHA。",
+      "png_sha256": "f22c13e1bee1c10358002a5ff54cc3f3ae92e5123145f6498b3cdc027385d779",
+      "reason": "逐张查看当前像素与对比图：Clip01 a1 仅一把横刀且刀柄/命中关系合理，无额外刀具；a1 尚未显现谱面/面板且无违规现代UI或伪文字；a3 黑金古卷局部入画、空白无字；Clip04 黑金实体古卷卷轴拓扑稳定、内部空白无虎形无伪文字，手部五指自然。",
       "review_kind": "executor_visual",
-      "reviewer": "executor:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -3407,7 +3407,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-22T11:19:16+00:00",
+      "confirmed_at": "2026-07-24T05:11:54+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -3430,10 +3430,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP02_CLIP06_start.png",
-      "png_sha256": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644",
-      "reason": "实际像素与对照复核：Clip06右侧古卷状态面板保持黑墨旧金、完整卷轴和三栏空白框，无文字数字或现代UI；姜月初双手与唯一横刀从黑缠柄、护手、单刃刀身到偏刃侧刀尖连续，旧金仅照明边缘，不形成第二刀刃。",
+      "png_sha256": "c382896794a20bae84ecdbd4a815b9dfb22f3e382565bdc9fd333e5a43d5549b",
+      "reason": "已实际查看修复后当前像素及4张并排图：山崖活虎已移除；百妖谱为黑金实体空白卷轴，无现代UI/文字；横刀仅一把、单柄单刃、无副刀或双持。",
       "review_kind": "executor_visual",
-      "reviewer": "automation:codex",
+      "reviewer": "agent:codex",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -3671,6 +3671,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-07-23T12:05:25+00:00",
+  "updated_at": "2026-07-24T05:53:23+00:00",
   "version": 1
 }

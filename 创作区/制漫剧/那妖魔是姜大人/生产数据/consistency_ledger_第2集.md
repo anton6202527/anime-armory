@@ -1,20 +1,20 @@
 # 验收总账 · 第2集
 
 - 验收状态：阻断
-- ⛔ block 10 · 🔴 high 0 · 🟡 medium 7
+- ⛔ block 7 · 🔴 high 0 · 🟡 medium 10
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | ⛔ block | 14 | 0 | 45 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 角色 | ⛔ block | 63 | 0 | 91 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_prompt_preflight |
-| 资产 | ⛔ block | 5 | 0 | 21 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 镜头 | ⛔ block | 82 | 0 | 89 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 音频 | 🟡 warn | 0 | 0 | 29 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
+| 剧情 | ⛔ block | 2 | 0 | 52 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 角色 | ⛔ block | 51 | 0 | 85 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video |
+| 资产 | ⛔ block | 5 | 0 | 21 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 镜头 | ⛔ block | 43 | 0 | 91 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 音频 | 🟡 warn | 0 | 0 | 31 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 字幕 | 🟡 warn | 0 | 0 | 6 | detect |
-| 合规 | 🟡 warn | 0 | 0 | 6 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, compliance |
-| 生产操作 | ⛔ block | 37 | 0 | 79 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, score |
+| 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
+| 生产操作 | ⛔ block | 49 | 0 | 106 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video, score |
 
 ### 剧情问题
 - warn [detect] 语义谱系(P0):  语义谱系(P0)   复杂镜视频 prompt 未充分继承专项模板契约。 
@@ -47,14 +47,14 @@
 - warn [detect] 系统面板(UI1):  系统面板(UI1)   检出 5 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。 
 
 ### 镜头问题
-- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4744（vs 前 1 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
-- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    [allowed_variations 已签收] 场景[尸骸荒野] 跨集结构漂移 dHash 汉明=27（vs 前 1 集结构原型，阈 warn=18·core block=26）——核心场景跨集结构硬漂：色调没动但布局/家具/构图朝向变了（同房间被重新布置/拍反向），回 n2d-image 对齐场景定妆 spatial_l
-- warn [detect] 色温调色(GRADE1):  色温调色(GRADE1)   图片/EP02_CLIP01_start_a2.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.147 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 
-- warn [detect] 色温调色(GRADE1):  色温调色(GRADE1)   图片/EP02_CLIP08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.164 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 
-- warn [detect] 天气时辰(W1):  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 
-- warn [detect] 天气时辰(W1):  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 
+- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集色调/光位漂移 L1=0.7866（vs 前 1 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
+- block [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集结构漂移 dHash 汉明=28（vs 前 1 集结构原型，阈 warn=18·core block=26）——核心场景跨集结构硬漂：色调没动但布局/家具/构图朝向变了（同房间被重新布置/拍反向），回 n2d-image 对齐场景定妆 spatial_layout/floor_plan；若为有意改建/换
 - warn [detect] 视频语义一致(VSEM):  视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。 
 - warn [detect] 相机空间轨迹(CAM1):  相机空间轨迹(CAM1)   视频含明确镜头运动/空间轨迹，但缺 camera_trajectory_probe；无法核验运动方向、深度、越轴和抖动连续性。 
+- warn [detect] 运动质量(MOT1):  运动质量(MOT1)   视频含明确动作/运动镜，但缺 motion_quality 报告；无法核验冻结、抽搐、速度突变和动作完成度。 
+- warn [detect] 实体记忆(EMB):  实体记忆(EMB)   本集有重复/核心实体（BEAST_01/穿心复生态, CHAR_01, CHAR_01/囚途残损态, CHAR_01/闻弦初境, CHAR_01__, CHAR_01__囚途残损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 
+- warn [detect] 视频证据完整性(EVID):  视频证据完整性(EVID)   video_eval_manifest 已建立，但这些风险 sidecar 尚未写回：camera:生产数据/camera_trajectory_probe_第2集.json；causal_event:生产数据/causal_event_graph_第2集.json；dialogue_av:生产数据/dialogue_av_
+- warn [detect] 场景平面(FP1):  场景平面(FP1)   场景 尸骸荒野 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。 
 
 ### 音频问题
 - warn [detect] 配音情绪弧(VEA):  配音情绪弧(VEA)   镜头4·姜月初：台词含强情绪但配音标注「压抑决绝」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 
@@ -81,6 +81,7 @@
 - warn [gate:image] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video_preflight] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video_prompt_preflight] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:video] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
 ### 生产操作问题
 - warn [detect] 片内时序(N2):  片内时序(N2)    
@@ -94,51 +95,49 @@
 
 ## 根因聚合
 
-- block · asset:WEAPON_01 · multimodal_continuity / 物料漂移预案 / image prompt compiler
-  - block [detect] multimodal_continuity @ 图片/EP02_CLIP01_start_a1.png: multimodal_continuity  图片/EP02_CLIP01_start_a1.png 高风险道具禁形/尺寸/物料拓扑未逐图确认：镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ） 的 `WEAPON_01`（横刀，type=weapon）登记了 must_not_have=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃
-  - block [detect] multimodal_continuity @ 图片/EP02_CLIP01_start_a2.png: multimodal_continuity  图片/EP02_CLIP01_start_a2.png 高风险道具禁形/尺寸/物料拓扑未逐图确认：镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ） 的 `WEAPON_01`（横刀，type=weapon）登记了 must_not_have=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃
-  - block [detect] multimodal_continuity @ 图片/EP02_CLIP01_start_a3.png: multimodal_continuity  图片/EP02_CLIP01_start_a3.png 高风险道具禁形/尺寸/物料拓扑未逐图确认：镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ） 的 `WEAPON_01`（横刀，type=weapon）登记了 must_not_have=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃
+- block · asset:WEAPON_01 · 物料漂移预案 / image prompt compiler / multimodal_continuity
+  - warn [gate:image_preflight] 物料漂移预案 @ 横刀（WEAPON_01）: 物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+  - warn [gate:image_preflight] image prompt compiler @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_01`）: image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16
+  - warn [gate:image_prompt_preflight] 物料漂移预案 @ 横刀（WEAPON_01）: 物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 - block · asset:consumed_contracts_image_prompt_第2集.json · Prompt消费收据
+  - block [gate:image_preflight] Prompt消费收据 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/consumed_contracts_image_prompt_第2集.json: Prompt消费收据 prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成：storyboard 已变更但 prompt 未重签：脚本/第2集/storyboard.json；continuity_chain 已变更但 prompt 未重签：脚本/第2集/continuity_chain.json
   - block [gate:image] Prompt消费收据 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/consumed_contracts_image_prompt_第2集.json: Prompt消费收据 prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成：storyboard 已变更但 prompt 未重签：脚本/第2集/storyboard.json；continuity_chain 已变更但 prompt 未重签：脚本/第2集/continuity_chain.json
-- block · asset:dialogue_fact_contract_第2集.json · 对白事实锁
-  - block [gate:video_prompt_preflight] 对白事实锁 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/dialogue_fact_contract_第2集.json: 对白事实锁 missing_dialogue_fact_contract: native_speech/native_av is active but dialogue_fact_contract is missing; run this script with --write before paid video submit.
 - block · asset:storyboard.json clip#3 · 空间硬控
   - block [gate:image_prompt_preflight] 空间硬控 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#3: 空间硬控 该 fight_exchange 模板具有 pose_reference_required: true 约束，必须配置 pose_image_path。
 - block · asset:storyboard.json clip#8 · 专项镜头模板
   - block [gate:image_prompt_preflight] 专项镜头模板 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8: 专项镜头模板 template=system_panel 的 template_contract 缺字段：growth_ref
   - block [gate:image_prompt_preflight] 专项镜头模板 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8: 专项镜头模板 template=system_panel 的 template_contract 缺字段：panel_tier
 - block · character:Clip03_end.png · character_consistency / outfit_consistency
-  - block [detect] character_consistency @ 图片/Clip03_end.png: character_consistency  图片/Clip03_end.png 崩脸 G1 block：图片/Clip03_end.png（脸/身份漂移机检） 
-  - warn [detect] character_consistency @ 图片/Clip03_end.png: character_consistency  图片/Clip03_end.png 发型 H1 初筛：图片/Clip03_end.png（发色/发型轮廓离群，非阻断） 
-  - warn [detect] outfit_consistency @ 图片/Clip03_end.png: outfit_consistency  图片/Clip03_end.png 服装 N1 初筛：图片/Clip03_end.png（调色板离群，非阻断） 
+  - warn [detect] character_consistency @ 图片/Clip03_end.png: character_consistency  图片/Clip03_end.png 疑似漏分类角色镜：图片/Clip03_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景
+  - block [gate:image] character_consistency @ 图片/Clip03_end.png: character_consistency 崩脸 G1 block：图片/Clip03_end.png（脸/身份漂移机检）
+  - warn [gate:image] character_consistency @ 图片/Clip03_end.png: character_consistency 发型 H1 初筛：图片/Clip03_end.png（发色/发型轮廓离群，非阻断）
 - block · character:Clip07_end.png · character_consistency / outfit_consistency
-  - block [detect] character_consistency @ 图片/Clip07_end.png: character_consistency  图片/Clip07_end.png 崩脸 G1 block：图片/Clip07_end.png（脸/身份漂移机检） 
-  - warn [detect] outfit_consistency @ 图片/Clip07_end.png: outfit_consistency  图片/Clip07_end.png 服装 N1 初筛：图片/Clip07_end.png（调色板离群，非阻断） 
   - block [gate:image] character_consistency @ 图片/Clip07_end.png: character_consistency 崩脸 G1 block：图片/Clip07_end.png（脸/身份漂移机检）
+  - warn [gate:image] outfit_consistency @ 图片/Clip07_end.png: outfit_consistency 服装 N1 初筛：图片/Clip07_end.png（调色板离群，非阻断）
 - block · character:EP02_CLIP01_start.png · character_consistency
-  - warn [detect] character_consistency @ 图片/EP02_CLIP01_start.png: character_consistency  图片/EP02_CLIP01_start.png 崩脸 G1 warn：图片/EP02_CLIP01_start.png（脸/身份漂移机检） 
-  - block [detect] character_consistency @ 图片/EP02_CLIP01_start.png: character_consistency  图片/EP02_CLIP01_start.png 角色脸定妆比对覆盖缺口：镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ） 图片/EP02_CLIP01_start.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 vide
   - warn [gate:image] character_consistency @ 图片/EP02_CLIP01_start.png: character_consistency 崩脸 G1 warn：图片/EP02_CLIP01_start.png（脸/身份漂移机检）
+  - block [gate:image] character_consistency @ 图片/EP02_CLIP01_start.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ） 图片/EP02_CLIP01_start.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
 - block · character:EP02_CLIP02_preimpact.png · character_consistency / outfit_consistency
-  - block [detect] character_consistency @ 图片/EP02_CLIP02_preimpact.png: character_consistency  图片/EP02_CLIP02_preimpact.png 崩脸 G1 block：图片/EP02_CLIP02_preimpact.png（脸/身份漂移机检） 
-  - warn [detect] character_consistency @ 图片/EP02_CLIP02_preimpact.png: character_consistency  图片/EP02_CLIP02_preimpact.png 发型 H1 初筛：图片/EP02_CLIP02_preimpact.png（发色/发型轮廓离群，非阻断） 
-  - warn [detect] outfit_consistency @ 图片/EP02_CLIP02_preimpact.png: outfit_consistency  图片/EP02_CLIP02_preimpact.png 服装 N1 初筛：图片/EP02_CLIP02_preimpact.png（调色板离群，非阻断） 
+  - warn [detect] character_consistency @ 图片/EP02_CLIP02_preimpact.png: character_consistency  图片/EP02_CLIP02_preimpact.png 疑似漏分类角色镜：图片/EP02_CLIP02_preimpact.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份
+  - block [gate:image] character_consistency @ 图片/EP02_CLIP02_preimpact.png: character_consistency 崩脸 G1 block：图片/EP02_CLIP02_preimpact.png（脸/身份漂移机检）
+  - warn [gate:image] character_consistency @ 图片/EP02_CLIP02_preimpact.png: character_consistency 发型 H1 初筛：图片/EP02_CLIP02_preimpact.png（发色/发型轮廓离群，非阻断）
 - block · character:EP02_CLIP02_start.png · character_consistency
-  - block [detect] character_consistency @ 图片/EP02_CLIP02_start.png: character_consistency  图片/EP02_CLIP02_start.png 崩脸 G1 block：图片/EP02_CLIP02_start.png（脸/身份漂移机检） 
-  - warn [detect] character_consistency @ 图片/EP02_CLIP02_start.png: character_consistency  图片/EP02_CLIP02_start.png 发型 H1 初筛：图片/EP02_CLIP02_start.png（发色/发型轮廓离群，非阻断） 
   - block [gate:image] character_consistency @ 图片/EP02_CLIP02_start.png: character_consistency 崩脸 G1 block：图片/EP02_CLIP02_start.png（脸/身份漂移机检）
+  - warn [gate:image] character_consistency @ 图片/EP02_CLIP02_start.png: character_consistency 发型 H1 初筛：图片/EP02_CLIP02_start.png（发色/发型轮廓离群，非阻断）
 - block · character:EP02_CLIP03_impact.png · character_consistency / outfit_consistency
-  - block [detect] character_consistency @ 图片/EP02_CLIP03_impact.png: character_consistency  图片/EP02_CLIP03_impact.png 崩脸 G1 block：图片/EP02_CLIP03_impact.png（脸/身份漂移机检） 
-  - warn [detect] character_consistency @ 图片/EP02_CLIP03_impact.png: character_consistency  图片/EP02_CLIP03_impact.png 发型 H1 初筛：图片/EP02_CLIP03_impact.png（发色/发型轮廓离群，非阻断） 
-  - warn [detect] outfit_consistency @ 图片/EP02_CLIP03_impact.png: outfit_consistency  图片/EP02_CLIP03_impact.png 服装 N1 初筛：图片/EP02_CLIP03_impact.png（调色板离群，非阻断） 
+  - block [gate:image] character_consistency @ 图片/EP02_CLIP03_impact.png: character_consistency 崩脸 G1 block：图片/EP02_CLIP03_impact.png（脸/身份漂移机检）
+  - warn [gate:image] character_consistency @ 图片/EP02_CLIP03_impact.png: character_consistency 发型 H1 初筛：图片/EP02_CLIP03_impact.png（发色/发型轮廓离群，非阻断）
+  - warn [gate:image] outfit_consistency @ 图片/EP02_CLIP03_impact.png: outfit_consistency 服装 N1 初筛：图片/EP02_CLIP03_impact.png（调色板离群，非阻断）
 - block · character:EP02_CLIP04_end_a1.png · character_consistency
-  - warn [detect] character_consistency @ 图片/EP02_CLIP04_end_a1.png: character_consistency  图片/EP02_CLIP04_end_a1.png 崩脸 G1 warn：图片/EP02_CLIP04_end_a1.png（脸/身份漂移机检） 
-  - block [detect] character_consistency @ 图片/EP02_CLIP04_end_a1.png: character_consistency  图片/EP02_CLIP04_end_a1.png 角色脸定妆比对覆盖缺口：镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel） 图片/EP02_CLIP04_end_a1.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full
   - warn [gate:image] character_consistency @ 图片/EP02_CLIP04_end_a1.png: character_consistency 崩脸 G1 warn：图片/EP02_CLIP04_end_a1.png（脸/身份漂移机检）
+  - block [gate:image] character_consistency @ 图片/EP02_CLIP04_end_a1.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel） 图片/EP02_CLIP04_end_a1.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
+- block · character:EP02_CLIP04_end_a2.png · character_consistency
+  - warn [gate:image] character_consistency @ 图片/EP02_CLIP04_end_a2.png: character_consistency 崩脸 G1 warn：图片/EP02_CLIP04_end_a2.png（脸/身份漂移机检）
+  - block [gate:image] character_consistency @ 图片/EP02_CLIP04_end_a2.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel） 图片/EP02_CLIP04_end_a2.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
 
 ## 依赖传播
 
-- nodes=77 · edges=188 · clips=8 · images=28 · videos=16
+- nodes=85 · edges=221 · clips=8 · images=28 · videos=24
 - graph: `创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json`
 
 ## 合法不连续签收
@@ -158,13 +157,13 @@
 | 实体 | 类型 | 综合 | 事前 | 落档 | 契约 |
 |---|---|---|---|---|---|
 | 姜月初（CHAR_01） | character | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 横刀（WEAPON_01） | weapon | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 百妖谱金色古卷面板（VFX_系统面板） | vfx | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 横刀（WEAPON_横刀） | weapon | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 百妖谱（VFX_百妖谱） | vfx | ⛔ block | 🟡 | ⛔ | 🟢 |
+| 尸骸荒野（LOC_01） | scene | ⛔ block | 🟡 | ⛔ | 🟢 |
 | 裴长青（CHAR_02） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 虎妖（BEAST_01） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
-| 尸骸荒野（LOC_01） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 横刀（WEAPON_01） | weapon | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 百妖谱金色古卷面板（VFX_系统面板） | vfx | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 横刀（WEAPON_横刀） | weapon | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 百妖谱（VFX_百妖谱） | vfx | 🟡 medium | 🟡 | 🟢 | 🟢 |
 | 墨虎谱影（VFX_墨虎谱影） | vfx | 🟡 medium | 🟡 | 🟢 | 🟢 |
 
 ## ⛔ 姜月初（CHAR_01）
@@ -172,25 +171,10 @@
 - [block] CHAR_01__囚途残损态 服装配色(N1)    
 - [block] CHAR_01__囚途残损态 服装配色(N1)    
 
-## ⛔ 横刀（WEAPON_01）
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a1.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a2.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a3.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-
-## ⛔ 百妖谱金色古卷面板（VFX_系统面板）
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a1.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a2.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a3.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-
-## ⛔ 横刀（WEAPON_横刀）
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a1.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a2.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a3.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-
-## ⛔ 百妖谱（VFX_百妖谱）
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a1.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a2.png 高风险道具禁形/尺寸/物料拓扑未逐图确
-- [block] multimodal_continuity  图片/EP02_CLIP01_start_a3.png 高风险道具禁形/尺寸/物料拓扑未逐图确
+## ⛔ 尸骸荒野（LOC_01）
+- [warn]  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集色调/光位漂移 L1=0.7866（vs 前 1 集基线，阈 warn=0.45·c
+- [block]  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集结构漂移 dHash 汉明=28（vs 前 1 集结构原型，阈 warn=18·co
+- [warn]  场景平面(FP1)   场景 尸骸荒野 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。
 
 ## 🟡 裴长青（CHAR_02）
 - [warn]  表情连续(EXP1)   Clip_07：角色 CHAR_02 相邻镜情绪硬跳（惊/惧→悲）——确认有节拍/事件依据，否则表演 OOC（情
@@ -201,11 +185,6 @@
 - [warn]  状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。 
 - [warn]  状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。 
 - [warn]  状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。 
-
-## 🟡 尸骸荒野（LOC_01）
-- [warn]  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4744（vs 前 1 集基线，阈 warn=0.45·c
-- [warn]  跨集场景漂移(SCNX)    [allowed_variations 已签收] 场景[尸骸荒野] 跨集结构漂移 dHash 汉明=27（
-- [warn]  场景平面(FP1)   场景 尸骸荒野 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。
 
 ## 未归属到具体角色/资产的一致性问题
 - [warn]  片内时序(N2)    

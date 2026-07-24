@@ -1,6 +1,6 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-22T15:08:57+00:00",
+  "generated_at": "2026-07-24T05:24:45+00:00",
   "inputs": {
     "batch_queue": "生产数据/batch_queue.json",
     "continuity_bible": "脚本/第2集/continuity_bible.json",

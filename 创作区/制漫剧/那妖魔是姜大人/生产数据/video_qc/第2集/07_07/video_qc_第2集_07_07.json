@@ -3,32 +3,35 @@
   "clips": [
     {
       "audio_streams": [],
-      "clip": "Clip_07_part2",
+      "clip": "Clip_07_part1",
       "clip_index": 7,
-      "duration_sec": 8.016016,
-      "file": "Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "duration_sec": 4.016016,
+      "file": "Clip_07_替裴合眼与还命承诺_part1.mp4",
       "file_clip": "Clip_07",
-      "fps": 24.075,
+      "fps": 24.149,
       "frames": [
         {
+          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_d149f783a7f9_01_start.jpg",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_f1d30e930bd9_01_start.jpg",
           "time_sec": 0.0
         },
         {
+          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_d149f783a7f9_02_mid.jpg",
-          "time_sec": 4.008
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_f1d30e930bd9_02_mid.jpg",
+          "time_sec": 2.008
         },
         {
+          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part2_8f779903_d149f783a7f9_03_end.jpg",
-          "time_sec": 7.816
+          "path": "生产数据/video_qc/第2集/_frames/Clip_07_part1_0e5862e5_f1d30e930bd9_03_end.jpg",
+          "time_sec": 3.816
         }
       ],
       "has_audio": false,
       "height": 1280,
-      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_07_替裴合眼与还命承诺_part1.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
@@ -49,7 +52,27 @@
     "rewritten_reports": 0
   },
   "frame_store": "生产数据/video_qc/第2集/_frames",
-  "intra_clips": [],
+  "intra_clips": [
+    {
+      "clip": "Clip_07_part1",
+      "double_frame": false,
+      "file": "Clip_07_替裴合眼与还命承诺_part1.mp4",
+      "file_clip": "Clip_07",
+      "lens": "",
+      "max_dist": 35,
+      "pairs": [
+        {
+          "color_dist": 0.0389,
+          "dist": 18
+        },
+        {
+          "color_dist": 0.0312,
+          "dist": 35
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
   "kind": "n2d_video_qc",
   "machine_notes": [
     "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
@@ -58,26 +81,39 @@
     "delivery_mismatch_warns": 0,
     "intra_blocks": 0,
     "intra_checked": 1,
-    "intra_warns": 0,
+    "intra_warns": 1,
     "seam_blocks": 0,
-    "seam_info": 1,
+    "seam_info": 2,
     "seam_warns": 0,
-    "seams_checked": 1
+    "seams_checked": 2
   },
   "root": ".",
   "seams": [
     {
-      "color_dist": 0.0362,
+      "color_dist": 0.0228,
       "color_verdict": "ok",
-      "dist": 29,
+      "dist": 33,
       "from_clip": "Clip_06",
       "seam_mode": "eyeline_cut",
       "strictness": "info",
-      "struct_verdict": "warn",
+      "struct_verdict": "block",
       "to_clip": "Clip_07",
       "transition": "视线切至裴尸体",
       "verdict": "info",
-      "verdict_if_relay": "warn"
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0247,
+      "color_verdict": "ok",
+      "dist": 33,
+      "from_clip": "Clip_07",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_08",
+      "transition": "姜月初抬眼看百妖谱虎影",
+      "verdict": "info",
+      "verdict_if_relay": "block"
     }
   ],
   "version": 1

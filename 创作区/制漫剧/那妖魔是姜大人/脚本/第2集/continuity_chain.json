@@ -326,7 +326,7 @@
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-22T15:08:57+00:00",
+  "generated_at": "2026-07-24T05:24:45+00:00",
   "inputs": {
     "previous_storyboard": "脚本/第1集/storyboard.json",
     "storyboard": "脚本/第2集/storyboard.json"
@@ -412,10 +412,10 @@
       "intentional_discontinuity_reason": "",
       "issues": [],
       "next_firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-      "next_firstframe_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+      "next_firstframe_sha256": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
       "policy": "relay",
       "required_boundary_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-      "required_boundary_frame_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+      "required_boundary_frame_sha256": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
       "same_location": true,
       "scope": "intra_episode",
       "seam_evidence": {
@@ -472,10 +472,10 @@
       "intentional_discontinuity_reason": "",
       "issues": [],
       "next_firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
-      "next_firstframe_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+      "next_firstframe_sha256": "7ad892ab0f109a758d8c2c7f53e04b6f2c3e63e1163e72e95d3437264cb5d8f7",
       "policy": "relay",
       "required_boundary_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
-      "required_boundary_frame_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+      "required_boundary_frame_sha256": "7ad892ab0f109a758d8c2c7f53e04b6f2c3e63e1163e72e95d3437264cb5d8f7",
       "same_location": true,
       "scope": "intra_episode",
       "seam_evidence": {

@@ -1,9 +1,9 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第2集
-- 总判定: **block** · 硬阻断 4（必须修） · 非阻断初筛 30 · 视觉降级 0
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 30 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
-- 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
+- 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
 ## 本集图片命名空间（硬闸）
 - 🟢 当前 prompt 声明目标 26 张；未声明 live Clip PNG 0 张
@@ -47,11 +47,11 @@
   - 🟡 静态长镜 EP02_CLIP02：first↔end 锚 dHash=10/64（≤10≈同构图）且时长 12.076s——视频后端拿到起点=终点的锚只会产几乎不动的长镜（成片 PPT 感根源）。处理：①改尾锚为不同构图/景别（推镜落幅、反应镜、插入镜）②按动作拆碎切 ③确属留白/定格镜则在 pacing_role 标注豁免。
   - 🟡 静态长镜 EP02_CLIP05：first↔end 锚 dHash=10/64（≤10≈同构图）且时长 9.207s——视频后端拿到起点=终点的锚只会产几乎不动的长镜（成片 PPT 感根源）。处理：①改尾锚为不同构图/景别（推镜落幅、反应镜、插入镜）②按动作拆碎切 ③确属留白/定格镜则在 pacing_role 标注豁免。
   - 🟡 镜头构图重复 EP02_CLIP02 ↔ EP02_CLIP03：首帧 dHash=10/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。
-  - 🟡 镜头构图重复 EP02_CLIP04 ↔ EP02_CLIP05：首帧 dHash=4/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。
+  - 🟡 镜头构图重复 EP02_CLIP04 ↔ EP02_CLIP05：首帧 dHash=6/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。
   - 🟡 VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 79 · pending 4 · confirmed 75
+- total 79 · pending 0 · confirmed 79
 - 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json`
   - 🟢 shared_primary 出图/共享/图片/定妆_特效_墨虎谱影.png（VFX_墨虎谱影 墨虎谱影） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_墨虎谱影_shared_primary_定妆_特效_墨虎谱影_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_特效_百妖谱.png（VFX_百妖谱 百妖谱） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_shared_primary_定妆_特效_百妖谱_compare.png
@@ -104,16 +104,16 @@
   - 🟢 Clip_05 图片/Clip05_end.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_05_Clip05_end_compare.png
   - 🟢 Clip_05 图片/Clip05_end.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_05_Clip05_end_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_end.png（VFX_百妖谱 百妖谱） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_Clip_06_EP02_CLIP06_end_compare.png
-  - 🔴 Clip_06 图片/EP02_CLIP06_start.png（VFX_百妖谱 百妖谱） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_Clip_06_EP02_CLIP06_start_compare.png
+  - 🟢 Clip_06 图片/EP02_CLIP06_start.png（VFX_百妖谱 百妖谱） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_Clip_06_EP02_CLIP06_start_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_start_a1.png（VFX_百妖谱 百妖谱） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_Clip_06_EP02_CLIP06_start_a1_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_end.png（VFX_系统面板 百妖谱金色古卷面板） 禁形=AI生成可读文字、现代手机UI、随机蓝色科幻屏、乱码文字；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_系统面板_Clip_06_EP02_CLIP06_end_compare.png
-  - 🔴 Clip_06 图片/EP02_CLIP06_start.png（VFX_系统面板 百妖谱金色古卷面板） 禁形=AI生成可读文字、现代手机UI、随机蓝色科幻屏、乱码文字；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_系统面板_Clip_06_EP02_CLIP06_start_compare.png
+  - 🟢 Clip_06 图片/EP02_CLIP06_start.png（VFX_系统面板 百妖谱金色古卷面板） 禁形=AI生成可读文字、现代手机UI、随机蓝色科幻屏、乱码文字；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_系统面板_Clip_06_EP02_CLIP06_start_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_start_a1.png（VFX_系统面板 百妖谱金色古卷面板） 禁形=AI生成可读文字、现代手机UI、随机蓝色科幻屏、乱码文字；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_系统面板_Clip_06_EP02_CLIP06_start_a1_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_end.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_06_EP02_CLIP06_end_compare.png
-  - 🔴 Clip_06 图片/EP02_CLIP06_start.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_06_EP02_CLIP06_start_compare.png
+  - 🟢 Clip_06 图片/EP02_CLIP06_start.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_06_EP02_CLIP06_start_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_start_a1.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_06_EP02_CLIP06_start_a1_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_end.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_06_EP02_CLIP06_end_compare.png
-  - 🔴 Clip_06 图片/EP02_CLIP06_start.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_06_EP02_CLIP06_start_compare.png
+  - 🟢 Clip_06 图片/EP02_CLIP06_start.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_06_EP02_CLIP06_start_compare.png
   - 🟢 Clip_06 图片/EP02_CLIP06_start_a1.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_06_EP02_CLIP06_start_a1_compare.png
   - 🟢 Clip_07 图片/Clip07_end.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_07_Clip07_end_compare.png
   - 🟢 Clip_07 图片/EP02_CLIP07_start.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_07_EP02_CLIP07_start_compare.png

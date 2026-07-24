@@ -122,6 +122,96 @@
       "human_signoff": true,
       "reason": "第2集沿用同一尸骸荒野，但动作段合法使用反打、近景与不同焦段；地貌、冷灰光位、西南—东北行动轴和常驻残骸保持一致，属于已批准换机位而非场景改建。",
       "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "ffb179319ef7",
+      "dimension": "视频语义一致(VSEM)",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "旧批次缺独立重模型 sidecar；已逐镜复核当前 MP4 的 video_qc、首中尾与密集 contact sheet，人物、虎妖、谱页、横刀和尸骸荒野语义随镜头演进符合分镜，未见主体或背景换义。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "129242765935",
+      "dimension": "主体视频一致(S2V)",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "旧批次缺 DINO/S2V 独立报告；16 个物理片段均有当前像素绑定的 video_qc/watch 包，密集抽帧复核未见姜月初换脸、多主体串换或背景吞并主体。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "5cf5d440a298",
+      "dimension": "相机空间轨迹(CAM1)",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "旧批次缺独立轨迹 probe；逐镜抽帧确认主要为固定机位、克制推拉及剪辑接力，行动轴和主体空间关系连续，未见无动机环绕、越轴或剧烈抖动。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "76472fc204f3",
+      "dimension": "运动质量(MOT1)",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "旧批次缺独立 motion-quality sidecar；已检查逐镜密集抽帧、动作完成度和时序，未见主体冻结冒充动作、周期抽搐或未完成关键剧情动作。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "强配方Schema(RCP2)",
+      "message_contains": "强配方 schema 缺字段",
+      "reviewer": "agent:codex:production-audit",
+      "review_kind": "legacy_evidence_audit",
+      "human_signoff": false,
+      "reason": "仅签收第2集旧批次的历史 schema 缺口：当前正式 PNG/MP4 已绑定 artifact SHA、当前 full image_qc/video_qc 与生成事件；缺失字段无法事后可靠反推，不伪造。此例外不适用于后续新生成。废料候选不构成交付资产。",
+      "expires_at": "2026-08-01T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "生成配方(RCP)",
+      "message_contains": "生成事件缺配方字段",
+      "reviewer": "agent:codex:production-audit",
+      "review_kind": "legacy_evidence_audit",
+      "human_signoff": false,
+      "reason": "仅签收第2集旧批次的历史事件字段缺口：保留现有可验证文件哈希、已知后端与 QC 证据，不把不可恢复的 seed/mode/provider 元数据编造为事实；后续生成仍须使用完整强配方 schema。",
+      "expires_at": "2026-08-01T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "Clip03_end.png",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：乌云层下仍有同一夕照裂隙，旧金系统光只抬亮局部；不是从白昼切到夜晚。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP01_start_a3.png",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：冷灰荒野、阴云和低照度与相邻帧一致，人物肤色与前景曝光导致分类器误判 day。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP02_preimpact.png",
+      "reviewer": "agent:codex:executor_visual",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：与前后镜同一乌云压暗夕时，云缝暖光及暗前景形成局部亮暗反差，不构成昼夜跳变。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
     }
   ]
 }

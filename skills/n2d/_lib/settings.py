@@ -42,6 +42,8 @@ DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
     "基础视觉风格": "冷灰写实3D国风漫剧",
     "拆集节奏": "前长后短",
+    # 原生多镜生成默认「自动」：后端支持时 single_take_multishot 一次 co-generate 成一个长 clip（少出很多 clip）。
+    "原生多镜生成": "自动",
     # 生成轴=具体模型（设计宪法 C5：指代必须落到模型，不写 agent/渠道）。`生图AI` 退化为访问入口/渠道。
     "生图模型": "GPT Image 2",
     "生图AI": "Codex",
@@ -209,6 +211,12 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     # 省次数」的超预算（可执行不死锁），合并仍由编剧确认改 storyboard（宪法 B10）。
     SettingSpec("片段经济", ("n2d",), ("保守", "紧凑", "极简", "自定义"),
                 key_aliases=("clip经济", "生成次数经济"), parameterized=True, syncable=False),
+    # 原生多镜生成：single_take_multishot 是否真的一次 co-generate 成一个长 clip（治「决定了单拍多镜、
+    # 却仍被逐镜拆成很多 clip」）。自动(默认)=后端 multishot_native 时把 router 的接力组一次出、少出很多
+    # clip，接缝由模型内部消除；开启=同自动但即使不确定也尽量；关闭=退回逐镜独立出。能力门控：后端不支持
+    # 时自动降级为逐镜，不强推。执行侧真值 n2d-video/multishot_plan.py。
+    SettingSpec("原生多镜生成", ("n2d",), ("自动", "开启", "关闭"),
+                aliases={"on": "开启", "启用": "开启", "off": "关闭", "禁用": "关闭", "逐镜": "关闭", "auto": "自动"}),
     # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·
     # 全剧延续性·断点平均强)/付费(小程序剧·前十集卡点峰值+付费墙集)/海外(ReelShort/TikTok·更碎更狠)。
     # 驱动 boundary_audit 的剧级追更骨架与卡点定位。取值与 n2d-script/references/追更骨架.md 对齐。

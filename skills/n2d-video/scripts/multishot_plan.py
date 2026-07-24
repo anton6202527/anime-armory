@@ -6,9 +6,10 @@
 焊接。n2d 的 `n2d-model-router` 已把「连续接力镜 + 支持多镜的 primary」标成 `multishot_groups`
 **候选**（advisory，不自动合并，保逐 Clip 可重跑粒度）。
 
-本脚本把那条候选**升为 opt-in 执行计划**——与 `同场景批量出图`/scene_batch 同范式：
-  • 选择点 `原生多镜生成`=开启 且 primary 后端 multishot_native 时，候选组成为**激活的**一次
-    co-generate 计划；关闭（默认）时零行为变化，仍逐镜独立出（保稳，不强推前沿）。
+本脚本把那条候选**升为执行计划**——与 `同场景批量出图`/scene_batch 同范式：
+  • 选择点 `原生多镜生成`=自动（默认·能力门控）或开启，且 primary 后端 multishot_native 时，候选组成为
+    **激活的**一次 co-generate 计划——治「single_take_multishot 决定了却仍被逐镜拆成很多 clip」；
+    显式 `关闭` 才退回逐镜独立出（保稳）。后端不支持多镜时自动降级为逐镜，不强推。
   • 计划给出 `model_handled_seams`：组内非首成员与前一成员的接缝由模型一次生成内部消除——
     供 seam/QC 层 `seam_is_model_handled()` 消费，对组内接力镜**不再要求逐镜尾帧接力焊接**
     （那是逐镜拼的补丁；原生多镜不需要）。组间接缝仍按逐镜严格。
@@ -35,12 +36,28 @@ if _LIB not in sys.path:
 KIND = "n2d_multishot_plan"
 SETTING_KEY = "原生多镜生成"
 SETTING_ON_VALUES = ("开启", "on", "true", "enabled", "1", "启用")
+SETTING_OFF_VALUES = ("关闭", "off", "false", "disabled", "0", "禁用", "逐镜")
+SETTING_AUTO_VALUES = ("自动", "auto")
 
 
 # ── 纯函数 ─────────────────────────────────────────────────────────────────────
 
 def setting_is_on(value: Optional[str]) -> bool:
     return str(value or "").strip().lower() in {v.lower() for v in SETTING_ON_VALUES}
+
+
+def setting_mode(value: Optional[str]) -> str:
+    """`原生多镜生成` 原值 → 'on' | 'off' | 'auto'。
+
+    缺省/空/不认得 → 'auto'（能力门控默认）：治「single_take_multishot 决定了却仍被逐镜拆成很多 clip」——
+    后端支持原生多镜时默认一次 co-generate 接力组（=更少 clip），只有显式 `关闭` 才退回逐镜独立出。
+    """
+    raw = str(value or "").strip().lower()
+    if raw in {v.lower() for v in SETTING_OFF_VALUES}:
+        return "off"
+    if raw in {v.lower() for v in SETTING_ON_VALUES}:
+        return "on"
+    return "auto"
 
 
 def resolve_plan(routes_payload: Mapping[str, Any], *, active: bool) -> Dict[str, Any]:
@@ -139,25 +156,30 @@ def _primary_is_multishot(routes_payload: Optional[Mapping[str, Any]]) -> bool:
 def build(root: str, ep: str) -> Dict[str, Any]:
     root = root.rstrip("/")
     routes = _load_routes(root, ep)
-    setting_on = setting_is_on(_setting_value(root))
+    mode = setting_mode(_setting_value(root))
+    setting_on = mode in {"on", "auto"}  # 记账：auto 与 on 都算「意图开」，最终仍需 backend_ok
     backend_ok = _primary_is_multishot(routes)
     active = setting_on and backend_ok
     notes: List[str] = []
     if routes is None:
         notes.append("缺 出视频/<集>/prompt/video_model_routes.json——先跑 n2d-model-router 再规划多镜。")
-    elif setting_on and not backend_ok:
+    elif mode == "off":
+        notes.append("选择点『原生多镜生成』=关闭（显式逐镜独立出）；改 `自动`/`开启` 可让支持多镜的后端一次 co-generate 接力组、少出很多 clip。")
+    elif mode == "auto" and not backend_ok:
+        notes.append("选择点=自动，但 primary 后端非 multishot_native——本集无法一次 co-generate，仍逐镜独立出。")
+    elif mode == "on" and not backend_ok:
         notes.append("选择点已开启但 primary 后端非 multishot_native——无法激活原生多镜，仍逐镜独立出。")
-    elif not setting_on:
-        notes.append("选择点『原生多镜生成』未开启（默认逐镜独立出）；开启后支持多镜的后端可一次 co-generate 接力组。")
+    elif active:
         candidate_groups = [
             g for g in (routes.get("multishot_groups") or [])
             if isinstance(g, Mapping) and len([m for m in (g.get("members") or []) if str(m)]) >= 2
-        ] if backend_ok else []
+        ]
         saved = sum(len([m for m in (g.get("members") or []) if str(m)]) - 1 for g in candidate_groups)
         if saved > 0:
+            how = "自动（能力门控默认）" if mode == "auto" else "已开启"
             notes.append(
-                f"省额度推荐：primary 后端支持原生多镜，当前候选 {len(candidate_groups)} 组；"
-                f"在 _设置.md 写 `原生多镜生成: 开启` 可把本集生成次数减少约 {saved} 次（组内接缝由模型内部消除）。"
+                f"原生多镜{how}：primary 后端支持，本集 {len(candidate_groups)} 组一次 co-generate，"
+                f"约少出 {saved} 个 clip（组内接缝由模型内部消除）。要退回逐镜写 `原生多镜生成: 关闭`。"
             )
     plan = resolve_plan(routes or {}, active=active)
     try:

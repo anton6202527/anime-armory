@@ -4,7 +4,7 @@
   "metadata": {
     "n2d": {
       "episode": "第2集",
-      "generated_at": "2026-07-24T04:29:56+00:00",
+      "generated_at": "2026-07-24T06:30:50+00:00",
       "kind": "n2d_editorial_timeline",
       "phase": "rough_cut",
       "planned_audio_slots": 18,
@@ -53,10 +53,10 @@
           "intentional_discontinuity_reason": "",
           "issues": [],
           "next_firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-          "next_firstframe_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+          "next_firstframe_sha256": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
           "policy": "relay",
           "required_boundary_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-          "required_boundary_frame_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
+          "required_boundary_frame_sha256": "b53b793417ad2afe2283ec327e37a71f76502c1819002e0a4d62363644221382",
           "same_location": true,
           "scope": "intra_episode",
           "seam_evidence": {
@@ -113,10 +113,10 @@
           "intentional_discontinuity_reason": "",
           "issues": [],
           "next_firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
-          "next_firstframe_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+          "next_firstframe_sha256": "7ad892ab0f109a758d8c2c7f53e04b6f2c3e63e1163e72e95d3437264cb5d8f7",
           "policy": "relay",
           "required_boundary_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
-          "required_boundary_frame_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
+          "required_boundary_frame_sha256": "7ad892ab0f109a758d8c2c7f53e04b6f2c3e63e1163e72e95d3437264cb5d8f7",
           "same_location": true,
           "scope": "intra_episode",
           "seam_evidence": {
@@ -226,12 +226,12 @@
       ],
       "sound_route_summary": {
         "audio_strategy_counts": {
-          "base_video_then_post_lipsync": 8
+          "post_dub": 8
         },
-        "base_video_only_count": 8,
+        "base_video_only_count": 0,
         "clip_count": 8,
         "final_voice_required": true,
-        "post_lipsync_required": true
+        "post_lipsync_required": false
       },
       "timing_basis": "text_estimate_no_audio",
       "version": 1,
@@ -280,7 +280,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -337,7 +337,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -394,7 +394,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -451,7 +451,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -508,7 +508,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -565,7 +565,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -622,7 +622,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -679,7 +679,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -736,7 +736,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -793,7 +793,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -850,7 +850,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -907,7 +907,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -964,7 +964,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -1021,7 +1021,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -1078,7 +1078,7 @@
             },
             "metadata": {
               "n2d": {
-                "audio_strategy": "base_video_then_post_lipsync",
+                "audio_strategy": "post_dub",
                 "derived_from": "",
                 "phase": "actual_video",
                 "source_status": "accepted",
@@ -1092,6 +1092,63 @@
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
                 "value": 75.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4",
+                    "sha256": "1a5ff84e25aa8031b0f6e3a70c482c742d7d68d1aab761abbf6edee9d354772e"
+                  }
+                },
+                "name": "Clip_08_摹影进阶会变成什么_part2.mp4",
+                "target_url": "出视频/第2集/视频/Clip_08_摹影进阶会变成什么_part2.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "post_dub",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_08"
+              }
+            },
+            "name": "Clip_08_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 51.39
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",

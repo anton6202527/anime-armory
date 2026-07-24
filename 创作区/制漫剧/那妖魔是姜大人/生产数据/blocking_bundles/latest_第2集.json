@@ -3,39 +3,31 @@
   "blocked": true,
   "blockers": [
     {
-      "message": "skill 更新影响当前集，需先执行/确认重制计划：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.md。统一修复/预检入口：python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video_prompt --write-missing --json 已自动执行 repair_preflight（block）：update_plan: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.md；报告：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/repair_preflight_video_prompt_第2集.json",
-      "step": "blocked_by_entry_check"
+      "message": "genre_pack_context 未通过；先补齐本题材典型场景的运动契约/降级方案，再进入下游 gate。",
+      "step": "genre_pack_context"
     }
   ],
-  "category": "contract_or_gate",
+  "category": "creative_or_execution",
   "episode": "第2集",
   "episode_graph": {
-    "graph_hash": "10d3bf3e7918d194b5faf51df8237d48725eec82fa07670fae83f9bb4911350c",
+    "graph_hash": "d11f8e60e6e981061eec2f404ec8076e52567f8450d925bf8e53e488a735183d",
     "lineage_gaps": 0,
     "status": "pass"
   },
   "gate": {
-    "affected_artifacts": [
-      "合规/compliance_manifest.json",
-      "脚本/第2集/storyboard.json",
-      "出图/共享/identity_registry.json",
-      "出图/共享/asset_registry.json",
-      "生产数据/identity_adapter_matrix.json",
-      "出图/第2集/图片",
-      "生产数据/image_qc/第2集"
-    ],
+    "affected_artifacts": [],
     "findings_path": "创作区/制漫剧/那妖魔是姜大人/生产数据/gate_findings_video_prompt_preflight_第2集.json",
-    "return_to_stage": "video",
+    "return_to_stage": null,
     "stage": "video_prompt_preflight"
   },
-  "generated_at": "2026-07-23T11:18:08+0800",
-  "headline": "第2集 视频prompt：入口检查未放行",
+  "generated_at": "2026-07-24T14:03:43+0800",
+  "headline": "第2集 视频prompt：确定性前置失败",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-video",
   "repair_commands": [
     "n2d-video 创作区/制漫剧/那妖魔是姜大人 第2集"
   ],
   "stage_key": "video_prompt",
-  "stop_reason": "blocked_by_entry_check",
+  "stop_reason": "prework_failed",
   "version": 1
 }

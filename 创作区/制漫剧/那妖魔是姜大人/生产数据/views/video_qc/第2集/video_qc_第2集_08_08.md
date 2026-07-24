@@ -7,7 +7,7 @@
 
 | Clip | Source MP4 | Duration | Size | FPS | Audio | Frames | Notes |
 |---|---|---:|---|---:|---|---:|---|
-| Clip_08_part1 | `Clip_08_摹影进阶会变成什么_part1.mp4` | 4.017s | 720x1280 | 24.149 | no | 3 |  |
+| Clip_08_part2 | `Clip_08_摹影进阶会变成什么_part2.mp4` | 4.017s | 720x1280 | 24.149 | no | 3 |  |
 
 ## Seam machine check（按 seam_mode 分类；仅 relay 同帧阻断）
 
@@ -16,7 +16,7 @@
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
-| Clip_07 → Clip_08 | 30 | 0.0109 | info |
+| Clip_07 → Clip_08 | 32 | 0.0081 | info |
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）
 

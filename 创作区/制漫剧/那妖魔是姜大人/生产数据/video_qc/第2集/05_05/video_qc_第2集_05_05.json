@@ -11,16 +11,19 @@
       "fps": 24.149,
       "frames": [
         {
+          "cache_hit": true,
           "label": "start",
           "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_bb57a173adb2_01_start.jpg",
           "time_sec": 0.0
         },
         {
+          "cache_hit": true,
           "label": "mid",
           "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_bb57a173adb2_02_mid.jpg",
           "time_sec": 2.008
         },
         {
+          "cache_hit": true,
           "label": "end",
           "path": "生产数据/video_qc/第2集/_frames/Clip_05_part1_9440cd3d_bb57a173adb2_03_end.jpg",
           "time_sec": 3.817
