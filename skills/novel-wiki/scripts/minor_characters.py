@@ -112,6 +112,107 @@ def recurring_untracked(agg, tracked_names, min_chapters=DEFAULT_MIN_CHAPTERS):
     return out
 
 
+def build_presence(chapter_texts, name_groups):
+    """{规范名: {变体名}} × [(章号, 正文)] → {规范名: [出场章升序]}（任一变体子串命中即在场）。
+
+    子串在场判定故意宽松（宁把"被提及"当在场）：在场误判只会**压掉**失踪告警，方向保守。纯函数·可测。"""
+    presence = {canon: [] for canon in name_groups}
+    for idx, text in chapter_texts:
+        for canon, variants in name_groups.items():
+            if any(v in text for v in variants):
+                presence[canon].append(idx)
+    return {c: sorted(set(chs)) for c, chs in presence.items() if chs}
+
+
+def absent_characters(presence, last_chapter, *, min_appearances=ABSENT_MIN_APPEARANCES,
+                      run_major=ABSENT_RUN, run_minor=ABSENT_RUN_MINOR,
+                      major_floor=ABSENT_MAJOR_FLOOR, exited=None, open_thread_names=None):
+    """出场分布 → 失踪角色清单 [(名, last_seen, 缺席章数, 出场章数, 持线索否)]，缺席降序。纯函数·可测。
+
+    出场 ≥min_appearances 章才纳入监控；高频（≥major_floor 章）缺 run_major 章即报，
+    低频放宽到 run_minor 章；已登记退场者豁免。"""
+    exited = exited or set()
+    open_thread_names = open_thread_names or set()
+    out = []
+    for name, chapters in presence.items():
+        if len(chapters) < min_appearances or name in exited:
+            continue
+        last_seen = chapters[-1]
+        absent = last_chapter - last_seen
+        required = run_major if len(chapters) >= major_floor else run_minor
+        if absent >= required:
+            out.append((name, last_seen, absent, len(chapters), name in open_thread_names))
+    out.sort(key=lambda t: (-t[2], t[0]))
+    return out
+
+
+def _exited_characters(project, alias_map):
+    """已退场角色规范名集合：state_ledger 结构化生命周期事件（death/exit 未被 revival 解除）
+    ∪ 动态百科亡故记录。只认结构化登记（与 graph_sentry 硬闸同口径），关键词退场不豁免。"""
+    exited = set()
+    ledger = _load_json(os.path.join(project, "审稿", "state_ledger.json")) or {}
+    if isinstance(ledger, dict):
+        for _ch, raw_name, _change, event in _iter_character_changes(ledger):
+            if not event:
+                continue
+            name = _canonical(raw_name, alias_map)
+            if event in _REVIVAL_EVENTS:
+                exited.discard(name)
+            elif event in _DEATH_EXIT_EVENTS:
+                exited.add(name)
+    wiki = _load_json(os.path.join(project, "设定", "动态百科.json"))
+    if isinstance(wiki, dict):
+        for name, ent in wiki.items():
+            if isinstance(ent, dict) and ent.get("status") in ("deceased", "dead"):
+                exited.add(_canonical(name, alias_map))
+    return exited
+
+
+def _open_thread_holders(project, name_groups):
+    """open_threads 文本里被点名的规范名集合（持有未闭合线索的角色失踪要加重措辞）。"""
+    ledger = _load_json(os.path.join(project, "审稿", "state_ledger.json")) or {}
+    threads = ledger.get("open_threads") if isinstance(ledger, dict) else None
+    blob = "；".join(json.dumps(t, ensure_ascii=False) if isinstance(t, (dict, list)) else str(t)
+                    for t in (threads if isinstance(threads, list) else []))
+    if not blob:
+        return set()
+    return {canon for canon, variants in name_groups.items() if any(v in blob for v in variants)}
+
+
+def absence_alerts(project, chapter_texts, tracked, candidate_names):
+    """配角失踪检测入口：别名归一 → 出场分布 → 缺席判定 → alert 列表（≤ABSENT_MAX_ALERTS 条）。"""
+    if not chapter_texts:
+        return []
+    last_chapter = max(idx for idx, _ in chapter_texts)
+    ledger = _load_json(os.path.join(project, "审稿", "state_ledger.json")) or {}
+    alias_map = resolved_alias_map(project, ledger if isinstance(ledger, dict) else {})
+    name_groups = {}
+    for name in set(tracked) | set(candidate_names):
+        if len(name) < 2:
+            continue
+        name_groups.setdefault(_canonical(name, alias_map), set()).add(name)
+    presence = build_presence(chapter_texts, name_groups)
+    flagged = absent_characters(
+        presence, last_chapter,
+        exited=_exited_characters(project, alias_map),
+        open_thread_names=_open_thread_holders(project, name_groups))
+    alerts = []
+    for name, last_seen, absent, count, holds_thread in flagged[:ABSENT_MAX_ALERTS]:
+        thread_note = ("——且 open_threads 里仍点着他的名：持有未闭合线索的角色失踪，"
+                       "读者等他回来时早忘了前情" if holds_thread else "")
+        alerts.append({
+            "type": "major_character_absent", "entity": name, "severity": "建议级",
+            "chapter": last_chapter, "last_seen_chapter": last_seen,
+            "absent_chapters": absent, "appearance_count": count,
+            "holds_open_thread": holds_thread, "auto": True,
+            "evidence": f"累计出场 {count} 章，最后见于第{last_seen}章，已连续缺席 {absent} 章",
+            "note": (f"角色「{name}」出场 {count} 章后自第{last_seen}章起连续缺席 {absent} 章{thread_note}。"
+                     "多线长篇建议回访或让他人提及一次；若已有意退场，请忽略本条或在 state_delta "
+                     "character_changes 补登结构化退场事件（event=exit/death）以豁免"),
+        })
+    return alerts
+
+
 def analyze(project, min_chapters=DEFAULT_MIN_CHAPTERS):
     chapters = list(list_chapters(project))
     if not chapters:
@@ -129,6 +230,8 @@ def analyze(project, min_chapters=DEFAULT_MIN_CHAPTERS):
             "auto": True,
             "note": f"配角「{name}」在 {len(chs)} 个不同章反复出场却未建角色卡——建议建卡/纳入动态百科，否则其状态/称谓漂移无人跟踪",
         })
+    chapter_texts = [(idx, text) for idx, _title, text in chapters]
+    alerts.extend(absence_alerts(project, chapter_texts, tracked, agg.keys()))
     return {"ran": True, "alerts": alerts, "tracked": sorted(tracked),
             "flagged": [{"name": n, "chapters": chs} for n, chs in flagged]}
 
@@ -153,11 +256,14 @@ def main(argv=None):
         print(f"ℹ️ {res.get('skipped')}")
         return 0
     if res["alerts"]:
-        print(f"⚠️ {len(res['alerts'])} 个反复出场却未建卡的配角候选（建议级）：")
+        print(f"⚠️ {len(res['alerts'])} 条配角连续性提示（建议级）：")
         for a in res["alerts"]:
-            print(f"  · {a['entity']}（{a['appearance_count']} 章）")
+            if a.get("type") == "major_character_absent":
+                print(f"  · [失踪] {a['entity']}：最后见于第{a['last_seen_chapter']}章，已缺席 {a['absent_chapters']} 章")
+            else:
+                print(f"  · [未建卡] {a['entity']}（{a['appearance_count']} 章）")
     else:
-        print("✅ 未发现反复出场却失跟踪的配角")
+        print("✅ 未发现反复出场却失跟踪、或长期失踪的配角")
     return 0
 
 

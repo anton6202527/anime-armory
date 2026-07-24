@@ -299,3 +299,104 @@ def test_empty_ledger_short_manuscript_still_skips(tmp_path):
         f.write("正文")
     res = fl.analyze(str(tmp_path))
     assert res["ran"] is False
+
+
+# ── 内容级信号：提醒断档 / 提及过密 / 空降回收 ────────────────────────────────
+def _chapters(n, text="平平无奇的正文。"):
+    return [(i, f"# 第{i}章\n{text}") for i in range(1, n + 1)]
+
+
+def _silent_seed():
+    return {"id": "SEED_001", "description": "沈念捡到半块断剑", "status": "pending",
+            "confirmed": True, "planted_chapter": 1, "expected_payoff_chapter": 20,
+            "importance": "high", "linked_entities": ["断剑"]}
+
+
+def test_reminder_gap_flags_long_silent_seed():
+    alerts = fl.scan_mentions([_silent_seed()], _chapters(15), through_chapter=15)
+    assert len(alerts) == 1
+    a = alerts[0]
+    assert a["kind"] == "foreshadow_reminder_gap" and a["severity"] == "建议级"
+    assert a["silent_span"] == 14  # end=min(20,15)=15，span=15-1
+
+
+def test_reminder_gap_quiet_when_mentioned():
+    chapters = _chapters(15)
+    chapters[7] = (8, "# 第8章\n他又摸了摸袖中那截断剑。")
+    assert fl.scan_mentions([_silent_seed()], chapters, through_chapter=15) == []
+
+
+def test_reminder_gap_quiet_below_span_threshold():
+    seed = dict(_silent_seed(), expected_payoff_chapter=8)  # span=7 < 10
+    assert fl.scan_mentions([seed], _chapters(15), through_chapter=15) == []
+
+
+def test_reminder_gap_skips_unconfirmed_and_resolved():
+    seeds = [dict(_silent_seed(), confirmed=False),
+             dict(_silent_seed(), id="SEED_002", status="resolved")]
+    assert fl.scan_mentions(seeds, _chapters(15), through_chapter=15) == []
+
+
+def test_reminder_gap_skips_when_no_chapters_in_window():
+    # 窗口内一章都没写出来（正文只有第 1 章）→ 无从判提及，不臆测
+    assert fl.scan_mentions([_silent_seed()], _chapters(1), through_chapter=15) == []
+
+
+def test_overexposed_flags_dense_mentions():
+    chapters = [(i, f"# 第{i}章\n断剑在鞘中嗡鸣。") for i in range(1, 16)]
+    alerts = fl.scan_mentions([_silent_seed()], chapters, through_chapter=15)
+    assert len(alerts) == 1
+    assert alerts[0]["kind"] == "foreshadow_overexposed"
+    assert alerts[0]["severity"] == "建议级"
+
+
+def test_airdrop_flags_unplanted_reveal_entity(tmp_path):
+    proj = str(tmp_path)
+    os.makedirs(os.path.join(proj, "章节"))
+    os.makedirs(os.path.join(proj, "设定"))
+    for i, body in ((1, "少年在山下砍柴。"), (2, "少年进城赶集。"),
+                    (3, "血魄珠悬于祭坛之上，血魄珠红光大盛，众人拜服于血魄珠前。")):
+        with open(os.path.join(proj, "章节", f"第{i:02d}章.md"), "w", encoding="utf-8") as f:
+            f.write(f"# 第{i}章\n{body}")
+    with open(os.path.join(proj, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+        json.dump({"kind": "novel_scene_cards", "scenes": [
+            {"id": "SC003-01", "chapter": 3, "scene_no": 1,
+             "reveal_or_payoff": "血魄珠现世认主"},
+        ]}, f, ensure_ascii=False)
+    chapters = [(1, "少年在山下砍柴。"), (2, "少年进城赶集。"),
+                (3, "血魄珠悬于祭坛之上，血魄珠红光大盛，众人拜服于血魄珠前。")]
+    alerts = fl.scan_payoff_setup(proj, chapters)
+    assert len(alerts) == 1
+    a = alerts[0]
+    assert a["kind"] == "payoff_without_setup" and a["severity"] == "建议级"
+    assert "血魄珠" in a["terms"] and a["chapter"] == 3
+
+
+def test_airdrop_quiet_when_entity_planted_earlier(tmp_path):
+    proj = str(tmp_path)
+    os.makedirs(os.path.join(proj, "设定"))
+    with open(os.path.join(proj, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+        json.dump({"scenes": [{"id": "SC003-01", "chapter": 3, "scene_no": 1,
+                               "reveal_or_payoff": "血魄珠现世认主"}]}, f, ensure_ascii=False)
+    chapters = [(1, "传说中的血魄珠早已失落。"), (2, "少年进城赶集。"),
+                (3, "血魄珠悬于祭坛之上，血魄珠红光大盛。")]
+    assert fl.scan_payoff_setup(proj, chapters) == []
+
+
+def test_airdrop_quiet_without_scene_cards(tmp_path):
+    assert fl.scan_payoff_setup(str(tmp_path), [(1, "正文"), (2, "正文")]) == []
+
+
+def test_analyze_surfaces_content_alerts(tmp_path):
+    proj = str(tmp_path)
+    os.makedirs(os.path.join(proj, "章节"))
+    os.makedirs(os.path.join(proj, "设定"))
+    for i in range(1, 16):
+        with open(os.path.join(proj, "章节", f"第{i:02d}章.md"), "w", encoding="utf-8") as f:
+            f.write(f"# 第{i}章\n平平无奇的正文。")
+    fl.save_ledger(proj, {"kind": fl.KIND, "seeds": [_silent_seed()]})
+    rep = fl.analyze(proj)
+    assert rep["ran"] is True
+    assert rep["content_alert_count"] == 1
+    assert any(a.get("kind") == "foreshadow_reminder_gap" for a in rep["alerts"])
+    assert rep["blocking"] == 0  # 内容级信号恒不阻断

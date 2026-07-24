@@ -9,7 +9,10 @@ foreshadow_ledger.py — 伏笔台账：种—收对账 + 烂尾预警（确定�
 （kind=novel_foreshadowing_ledger，seeds 列表；字段见 references/entity-schema.md §3）。
 
 机检 vs LLM 的诚实边界（对标 logic_sentry.py 的「只报硬冲突候选」）：
-  - **确定性（脚本算）**：JSON 完整性/去重、超期(overdue)判定、回收率(回收率) 计算、状态机合法迁移。
+  - **确定性（脚本算）**：JSON 完整性/去重、超期(overdue)判定、回收率(回收率) 计算、状态机合法迁移；
+    内容级三信号（恒建议级）：提醒断档 foreshadow_reminder_gap（rule of three：埋→提醒→收，
+    长窗零提及=读者已忘）、提及过密 foreshadow_overexposed（敲黑板太多=泄底）、
+    空降回收 payoff_without_setup（反向契诃夫：回收场景关键实体前文零铺垫）。
   - **LLM/人工（脚本不臆测）**：「这一段到底算不算埋了伏笔 / 算不算回收了」的语义识别。
     本脚本**不做**正则式的「伏笔自动识别」——那种检测在中文长篇里只会制造噪声。
     伏笔的 plant（埋）与 payoff（收）由 agent/人在交互节点判断后，用 plant/payoff 子命令登记；
@@ -255,6 +258,179 @@ def never_fired_at_finale(seeds, through_chapter, target_chapters, grace=DEFAULT
     return out
 
 
+# ── 内容级巡检：提醒断档 / 提及过密 / 空降回收（读正文，恒 advisory） ──────────
+def _seed_mention_keys(seed):
+    """伏笔的「提及」关键词：linked_entities 各串 + description 的 CJK 词段（2-6 字，去停用词）。
+
+    取并集偏「宽认提及」：多认一次提及只会少报一条提醒建议（宁漏勿滥的安全方向）。"""
+    keys = set()
+    for e in seed.get("linked_entities") or []:
+        e = str(e).strip()
+        if len(e) >= 2:
+            keys.add(e)
+    for tok in _CJK_RUN_RE.findall(str(seed.get("description") or "")):
+        if tok not in _MENTION_STOPWORDS:
+            keys.add(tok)
+    return keys
+
+
+def seed_mention_chapters(seed, chapters, end_chapter):
+    """窗口 (planted, end_chapter) 开区间内、正文含任一关键词的章号列表。
+
+    chapters: [(章号, 正文)]。无 planted / 无关键词可查 → None（不臆测）。纯函数。"""
+    planted = seed.get("planted_chapter")
+    if planted is None:
+        return None
+    keys = _seed_mention_keys(seed)
+    if not keys:
+        return None
+    planted = int(planted)
+    return [idx for idx, text in chapters
+            if planted < idx < end_chapter and any(k in text for k in keys)]
+
+
+def scan_mentions(seeds, chapters, through_chapter,
+                  gap=None, overexposed=None):
+    """rule of three 的机检半边：埋（plant）与收（payoff）之间该有 1-2 次低调提醒。
+
+    - `foreshadow_reminder_gap`：埋设→回收窗口 ≥gap 章而中段零提及 → 读者已忘，
+      回收时「拽之通体俱动」变成「读者一脸茫然」（草蛇灰线要求多次低强度复现）。
+    - `foreshadow_overexposed`：中段提及章数 ≥overexposed → 提醒过密，等于把谜底
+      摆在明面上反复敲黑板，意外度会掉。
+    只查 pending 的已确认伏笔（partially_resolved 已有一次回收触达，不再催提醒）。
+    正文为空/窗口内无已写章 → 不判（没证据不臆测）。纯函数，恒建议级。"""
+    gap = REMINDER_GAP_CHAPTERS if gap is None else gap
+    overexposed = OVEREXPOSED_MENTIONS if overexposed is None else overexposed
+    if not chapters:
+        return []
+    alerts = []
+    for s in seeds:
+        if not is_confirmed(s) or s.get("status") != "pending":
+            continue
+        planted = s.get("planted_chapter")
+        if planted is None:
+            continue
+        planted = int(planted)
+        expected = s.get("expected_payoff_chapter")
+        end = min(int(expected), int(through_chapter)) if expected is not None else int(through_chapter)
+        if not any(planted < idx < end for idx, _ in chapters):
+            continue  # 窗口内还没写出任何章，无从判提及
+        hits = seed_mention_chapters(s, chapters, end)
+        if hits is None:
+            continue
+        span = end - planted
+        if span >= gap and not hits:
+            alerts.append({
+                "kind": "foreshadow_reminder_gap", "severity": "建议级", "auto": True,
+                "id": s["id"], "description": s.get("description", ""),
+                "planted_chapter": planted, "expected_payoff_chapter": expected,
+                "silent_span": span,
+                "note": (f"伏笔第{planted}章埋下后已 {span} 章正文零提及——回收前读者早忘了"
+                         "枪挂在哪（rule of three：埋→提醒→收）。在中段找 1-2 处缝隙做"
+                         "低调复现，或调低 importance / 显式 drop"),
+            })
+        elif len(hits) >= overexposed:
+            alerts.append({
+                "kind": "foreshadow_overexposed", "severity": "建议级", "auto": True,
+                "id": s["id"], "description": s.get("description", ""),
+                "planted_chapter": planted, "expected_payoff_chapter": expected,
+                "mention_chapters": hits[:12],
+                "note": (f"伏笔中段已被提及 {len(hits)} 章（第{hits[0]}–{hits[-1]}章间）——"
+                         "提醒过密=反复敲黑板，读者提前拼出谜底，回收时意外度归零。"
+                         "删减部分复现，或提前回收"),
+            })
+    return alerts
+
+
+def _airdrop_candidate_terms(reveal_text, own_text, min_own_hits=None):
+    """从 reveal_or_payoff 文本抽「本章真正着墨的实体候选」：2-4 字 CJK 词段，
+    去停用词，且在本章正文出现 ≥min_own_hits 次（频次筛留下名词性实体，滤掉一笔带过的词）。
+    幸存词按长度降序去子串（「断剑」与「断剑现」并存时留长的）。纯函数。"""
+    min_own_hits = AIRDROP_MIN_OWN_HITS if min_own_hits is None else min_own_hits
+    grams = set()
+    for run in _CJK_RUN_RE.findall(str(reveal_text or "")):
+        for n in (2, 3, 4):
+            for i in range(len(run) - n + 1):
+                grams.add(run[i:i + n])
+    survivors = [g for g in grams
+                 if g not in _MENTION_STOPWORDS and own_text.count(g) >= min_own_hits]
+    survivors.sort(key=len, reverse=True)
+    kept = []
+    for g in survivors:
+        if not any(g in longer for longer in kept):
+            kept.append(g)
+    return kept
+
+
+def scan_payoff_setup(project, chapters, max_alerts=None):
+    """反向契诃夫（payoff_without_setup / 空降检测）：`is_overdue` 管「挂了枪没开」，
+    这里管逆命题「开了枪没挂过」——scene_cards 里 reveal_or_payoff 非空的场景，其关键
+    实体若在本章反复出现而**全部前文零出现** → 疑似空降（deus ex machina 候选）。
+
+    判据故意收窄（宁漏勿滥）：只取 2-4 字 CJK 词段、去停用词、本章 ≥AIRDROP_MIN_OWN_HITS 次、
+    每场景最多报 2 词、全书 cap AIRDROP_MAX_ALERTS 条。scene_cards 缺失/损坏优雅跳过。
+    「该词只是旧事物的新叫法」类误报由人判忽略——恒建议级，从不阻断。"""
+    max_alerts = AIRDROP_MAX_ALERTS if max_alerts is None else max_alerts
+    path = os.path.join(project, "设定", "scene_cards.json")
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except (OSError, ValueError):
+        return []
+    scenes = payload.get("scenes") if isinstance(payload, dict) else None
+    if not isinstance(scenes, list):
+        return []
+    texts = {idx: text for idx, text in chapters}
+    alerts, seen_terms = [], set()
+    for scene in sorted((s for s in scenes if isinstance(s, dict)),
+                        key=lambda s: (int(s.get("chapter") or 0), int(s.get("scene_no") or 0))):
+        if len(alerts) >= max_alerts:
+            break
+        rp = str(scene.get("reveal_or_payoff") or "").strip()
+        try:
+            ch = int(scene.get("chapter") or 0)
+        except (TypeError, ValueError):
+            continue
+        if not rp or ch < 2 or ch not in texts:
+            continue
+        prev_texts = [t for i, t in texts.items() if i < ch]
+        if not prev_texts:
+            continue
+        airdropped = [term for term in _airdrop_candidate_terms(rp, texts[ch])
+                      if term not in seen_terms
+                      and not any(term in t for t in prev_texts)][:2]
+        if not airdropped:
+            continue
+        seen_terms.update(airdropped)
+        terms_str = "、".join(f"「{t}」" for t in airdropped)
+        alerts.append({
+            "kind": "payoff_without_setup", "severity": "建议级", "auto": True,
+            "chapter": ch, "scene_id": scene.get("id"), "terms": airdropped,
+            "note": (f"第{ch}章回收/揭示场景的关键实体 {terms_str} 前文零铺垫——疑似空降"
+                     "（契诃夫之枪的逆命题：要开枪，前文得先挂枪）。回前文补 1-2 处低调"
+                     "植入并登记 plant，或确认只是旧事物换了叫法（误报可忽略）"),
+        })
+    return alerts
+
+
+def content_alerts(project, seeds, through_chapter):
+    """读正文的内容级巡检合集（提醒断档/提及过密/空降），供 analyze 与 CLI scan 共用。
+
+    正文读取走 wiki_builder.list_chapters（同目录既有辅助，不自造第二套）；
+    读取失败整体降级为空列表（内容级信号缺席 ≠ 台账巡检失败）。"""
+    try:
+        from wiki_builder import list_chapters
+        chapters = [(cid, text) for cid, _p, text in list_chapters(project)]
+    except Exception:
+        return []
+    if not chapters:
+        return []
+    return (scan_mentions(seeds, chapters, through_chapter)
+            + scan_payoff_setup(project, chapters))
+
+
 def scan(data, through_chapter, grace=DEFAULT_GRACE, target_chapters=None):
     """巡检：揪超期伏笔（烂尾预警的真实数据源）+ 算回收率 + 终章未击发反查。纯函数，便于单测。"""
     seeds = data.get("seeds", [])
@@ -362,12 +538,16 @@ def analyze(project, through_chapter=None, grace=DEFAULT_GRACE):
         through_chapter = _max_written_chapter(project)
     report = scan(data, through_chapter, grace, target_chapters=_target_chapters(project))
     report["ran"] = True
-    # alerts = 已确认伏笔的超期（可阻断）+ 终章未击发（契诃夫反查，可阻断）+ 待确认候选（建议级，永不阻断）。
+    # alerts = 已确认伏笔的超期（可阻断）+ 终章未击发（契诃夫反查，可阻断）+ 待确认候选（建议级，永不阻断）
+    #        + 内容级信号（提醒断档/提及过密/空降回收，建议级，永不阻断）。
     # 派生线一开局就有候选 → analyze 不再 ran:False 空转，但噪声候选挡不住导出。
     alerts = list(report.get("overdue", [])) + list(report.get("never_fired", []))
     for c in report.get("candidates", []):
         alerts.append({**c, "severity": "建议级", "auto": True,
                        "kind": "foreshadow_candidate"})
+    content = content_alerts(project, seeds, through_chapter)
+    report["content_alert_count"] = len(content)
+    alerts.extend(content)
     report["alerts"] = alerts
     return report
 
@@ -438,6 +618,9 @@ def main():
 
     elif args.cmd == "scan":
         report = scan(data, args.through, args.grace, target_chapters=_target_chapters(args.project_path))
+        content = content_alerts(args.project_path, data.get("seeds", []), args.through)
+        report["content_alert_count"] = len(content)
+        report["content_alerts"] = content
         out_dir = os.path.join(args.project_path, "审稿")
         os.makedirs(out_dir, exist_ok=True)
         out = os.path.join(out_dir, "foreshadow_report.json")
@@ -455,6 +638,11 @@ def main():
             print(f"  [{n['severity']}·未击发] {n['id']} 第{n.get('planted_chapter')}章埋 · {n['description']}")
         for c in report.get("candidates", []):
             print(f"  [候选] {c['id']} 第{c['planted_chapter']}章「{c.get('anchor','')}」· {c['description']} → confirm/drop")
+        for a in report.get("content_alerts", []):
+            label = {"foreshadow_reminder_gap": "提醒断档", "foreshadow_overexposed": "提及过密",
+                     "payoff_without_setup": "空降回收"}.get(a.get("kind"), a.get("kind"))
+            who = a.get("id") or f"第{a.get('chapter')}章"
+            print(f"  [建议级·{label}] {who} · {a['note']}")
 
 
 if __name__ == "__main__":

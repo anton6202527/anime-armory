@@ -58,3 +58,53 @@ def test_min_chapters_threshold():
 def test_extract_court_rank_names():
     cands = mc.extract_name_candidates("本宫替张才人退了。安美人不在，王嬷嬷垂手立着。")
     assert "张才人" in cands and "安美人" in cands and "王嬷嬷" in cands
+
+
+# ── 配角失踪检测（braided-stories：重要角色长期缺席该提醒） ──────────────────
+
+def test_build_presence_matches_any_variant():
+    presence = mc.build_presence(
+        [(1, "沈念入宫。"), (2, "无关。"), (3, "念妃临朝。")],
+        {"沈念": {"沈念", "念妃"}})
+    assert presence["沈念"] == [1, 3]
+
+
+def test_absent_characters_flags_high_freq_long_absence():
+    presence = {"赵四": list(range(1, 11))}   # 出场 10 章（高频）
+    out = mc.absent_characters(presence, 18)  # 缺席 8 章 = 高频阈值
+    assert out and out[0][0] == "赵四" and out[0][2] == 8
+
+
+def test_absent_characters_low_freq_uses_relaxed_threshold():
+    presence = {"钱五": [1, 2, 3, 4, 5]}      # 出场 5 章（低频）
+    assert mc.absent_characters(presence, 13) == []          # 缺席 8 < 放宽阈值 15
+    out = mc.absent_characters(presence, 20)                 # 缺席 15 → 报
+    assert out and out[0][0] == "钱五"
+
+
+def test_absent_characters_exempts_exited_and_rare():
+    presence = {"赵四": list(range(1, 11)), "龙套": [1, 2]}
+    out = mc.absent_characters(presence, 30, exited={"赵四"})
+    assert out == []   # 已登记退场豁免；出场 2 章 < 纳入门槛不监控
+
+
+def test_absent_characters_marks_open_thread_holder():
+    presence = {"赵四": list(range(1, 11))}
+    out = mc.absent_characters(presence, 20, open_thread_names={"赵四"})
+    assert out[0][4] is True
+
+
+def test_absence_alerts_end_to_end(tmp_path):
+    proj = tmp_path / "书"
+    (proj / "章节").mkdir(parents=True)
+    texts = [(i, "赵四出手相救。" if i <= 10 else "旁人叙事。") for i in range(1, 26)]
+    alerts = mc.absence_alerts(str(proj), texts, {"赵四"}, set())
+    assert len(alerts) == 1
+    a = alerts[0]
+    assert a["type"] == "major_character_absent" and a["severity"] == "建议级"
+    assert a["last_seen_chapter"] == 10 and a["absent_chapters"] == 15
+    assert a["auto"] is True
+
+
+def test_absence_alerts_quiet_without_chapters(tmp_path):
+    assert mc.absence_alerts(str(tmp_path), [], {"赵四"}, set()) == []

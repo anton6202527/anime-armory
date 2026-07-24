@@ -470,3 +470,42 @@ def test_world_fact_skipped_in_single_chapter_pass(tmp_path):
         {"key": "皇帝", "value": "秦帝", "established_at": 10},
     ]}, ensure_ascii=False), encoding="utf-8")
     assert logic_sentry.scan_structured_ledgers(str(proj), chapter_index=5) == []
+
+
+# ── N4 悬念真空 ──
+
+def test_suspense_vacuum_when_all_closed_before_window():
+    # 唯一钩子第5章已解，第7-8章账面零活跃 → 真空（与张力分数无关）
+    led = {"unresolved_hooks": [{"id": "h1", "introduced_in_chapter": 1,
+                                 "status": "resolved", "resolved_in_chapter": 5}]}
+    alerts = logic_sentry.scan_tension(led, "x", 8)
+    assert any(a["type"] == "suspense_vacuum" and a["severity"] == "建议级" for a in alerts)
+
+
+def test_suspense_vacuum_quiet_with_active_hook():
+    led = {"unresolved_hooks": [{"id": "h1", "introduced_in_chapter": 3}]}
+    assert not any(a["type"] == "suspense_vacuum"
+                   for a in logic_sentry.scan_tension(led, "x", 8))
+
+
+def test_suspense_vacuum_quiet_with_active_promise():
+    led = {"unresolved_hooks": [{"id": "h1", "introduced_in_chapter": 1,
+                                 "status": "resolved", "resolved_in_chapter": 5}],
+           "reader_promises": [{"id": "p1", "promise": "夺回家主之位",
+                                "introduced_in_chapter": 2}]}
+    assert not any(a["type"] == "suspense_vacuum"
+                   for a in logic_sentry.scan_tension(led, "x", 8))
+
+
+def test_suspense_vacuum_conservative_when_close_chapter_unrecorded():
+    # 已解但没记 resolved_in_chapter → 无从定位关闭点，视为一直活跃（宁漏勿误）
+    led = {"unresolved_hooks": [{"id": "h1", "introduced_in_chapter": 1,
+                                 "status": "resolved"}]}
+    assert not any(a["type"] == "suspense_vacuum"
+                   for a in logic_sentry.scan_tension(led, "x", 8))
+
+
+def test_suspense_vacuum_skipped_on_empty_ledger():
+    # 空账不判真空：没建账 ≠ 没悬念（建账缺失另有提示渠道）
+    assert not any(a["type"] == "suspense_vacuum"
+                   for a in logic_sentry.scan_tension({}, "x", 8))

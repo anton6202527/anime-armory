@@ -772,6 +772,78 @@ class RecentSeamAndForeshadowTest(unittest.TestCase):
             self._project(tmp, 3)
             self.assertEqual(dp.foreshadow_section_for_chapter(tmp, 3), "")
 
+    def _remind_ledger(self, tmp, description="半块断剑", entities=("断剑",)):
+        json.dump({"kind": "novel_foreshadowing_ledger", "seeds": [
+            {"id": "SEED_R01", "description": description, "status": "pending",
+             "confirmed": True, "planted_chapter": 1, "expected_payoff_chapter": 30,
+             "importance": "high", "linked_entities": list(entities)},
+        ]}, open(os.path.join(tmp, "设定", "foreshadowing_ledger.json"), "w", encoding="utf-8"),
+            ensure_ascii=False)
+
+    def test_foreshadow_remind_bucket_flags_long_silent_seed(self):
+        # 埋于第1章、预期第30章收，写第12章时中段正文零复现 → 该补提醒（rule of three 写作端）
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._project(tmp, 11)
+            self._remind_ledger(tmp)
+            sec = dp.foreshadow_section_for_chapter(tmp, 12)
+            self.assertIn("SEED_R01", sec)
+            self.assertIn("零复现", sec)
+
+    def test_foreshadow_remind_quiet_when_mentioned_midway(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._project(tmp, 11)
+            with open(os.path.join(tmp, "章节", "第05章.md"), "a", encoding="utf-8") as f:
+                f.write("\n他又摸了摸腰间的断剑。")
+            self._remind_ledger(tmp)
+            self.assertEqual(dp.foreshadow_section_for_chapter(tmp, 12), "")
+
+    def test_foreshadow_remind_quiet_below_remind_every(self):
+        # 埋下未满提醒周期（默认 8 章）→ 不催
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._project(tmp, 5)
+            self._remind_ledger(tmp)
+            self.assertEqual(dp.foreshadow_section_for_chapter(tmp, 6), "")
+
+
+class PredictedPlotSectionTest(unittest.TestCase):
+    def _write_predictions(self, tmp, chapter, preds):
+        os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
+        json.dump({"schema_version": 1, "kind": "novel_reader_predictions",
+                   "chapter": chapter, "predictions": preds},
+                  open(os.path.join(tmp, "评分", f"reader_predictions_第{chapter:02d}章.json"),
+                       "w", encoding="utf-8"), ensure_ascii=False)
+
+    def test_injects_prev_chapter_predictions_as_negative_constraint(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_predictions(tmp, 9, [
+                {"persona": "rookie", "text": "主角会当场反杀"},
+                {"persona": "veteran", "text": "长老出手救场"},
+            ])
+            sec = dp.predicted_plot_section(tmp, 10)
+            self.assertIn("已猜到的走向", sec)
+            self.assertIn("主角会当场反杀", sec)
+            self.assertIn("[veteran]", sec)
+
+    def test_quiet_without_predictions_or_for_stale_chapter(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
+            # 只有更早章的预测（对象是已写完的旧章）→ 不注入
+            self._write_predictions(tmp, 5, [{"persona": "rookie", "text": "旧预测"}])
+            self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
+
+    def test_quiet_when_predictions_empty_or_malformed(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_predictions(tmp, 9, [])
+            self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
+            self._write_predictions(tmp, 9, [{"persona": "rookie"}, "怪东西"])
+            self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
+
 
 if __name__ == "__main__":
     unittest.main()

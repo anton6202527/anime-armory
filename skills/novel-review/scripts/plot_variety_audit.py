@@ -8,13 +8,16 @@
 想象力塌陷形态。对标兄弟线镜头多样性审计 shot_variety_audit（构图重复/景别单调/再钩间隔）的
 成熟范式，给 novel 补上情节侧的"视觉不重复"审计。
 
-五个信号（全部 advisory·blocking 恒 0）：
+六个信号（全部 advisory·blocking 恒 0）：
   ① beat_monotony        同一主导节拍连续 ≥3 章（打脸连打三章，疲劳）→ 建议级
   ② beat_cycle_repetition 节拍序列出现 ABAB… 周期循环 ≥3 轮 → 建议级
   ③ payoff_gap           商业爽文向连续 >2 章零爽点命中（马良口径：铺垫不超 2 章；
                           品质向平台放宽到 4 章且只 info——别拿爽文密度尺量文学向）
   ④ hook_type_repetition 章末钩型 3 连同型（全靠问句钩/全靠危机钩）→ info
   ⑤ opening_pattern_repetition 连续 ≥4 章开篇同型（都是对话开头/都是醒来开头）→ info
+  ⑥ payoff_without_suppression 爽点密集章的回溯窗口（含本章）零受挫命中=无抑之扬
+                          （欲扬先抑/打脸三拍工艺：没有"抑"垫势能的爽点是打空气，
+                          优越感地基缺失；前 2 章豁免——开局爽点合法）→ 建议级
 
 口径纪律：
   - 节拍识别是**关键词密度启发式**（confidence=heuristic），只报候选，好不好看仍需人判；
@@ -44,9 +47,10 @@ except Exception:  # 独立跑/测试桩兜底：纯函数不依赖它，仍可�
     def list_chapters(project, *a, **k):  # type: ignore
         return []
 try:
-    from keyword_banks import PAYOFF_KW, FEMALE_PAYOFF_KW, payoff_bank_for, classify_platform, PROFILE_COMMERCIAL
+    from keyword_banks import (PAYOFF_KW, FEMALE_PAYOFF_KW, SETBACK_KW, payoff_bank_for,
+                               classify_platform, PROFILE_COMMERCIAL)
 except Exception:
-    PAYOFF_KW, FEMALE_PAYOFF_KW = [], []
+    PAYOFF_KW, FEMALE_PAYOFF_KW, SETBACK_KW = [], [], []
     def payoff_bank_for(*signals):  # type: ignore
         return list(PAYOFF_KW)
     def classify_platform(p):  # type: ignore
@@ -61,6 +65,9 @@ PAYOFF_GAP_COMMERCIAL = int(os.environ.get("NOVEL_PLOTVAR_PAYOFF_GAP", "2"))  # 
 PAYOFF_GAP_LITERARY = int(os.environ.get("NOVEL_PLOTVAR_PAYOFF_GAP_LIT", "4"))
 HOOK_TYPE_RUN = int(os.environ.get("NOVEL_PLOTVAR_HOOK_RUN", "3"))            # 章末钩型几连同型
 OPENING_RUN = int(os.environ.get("NOVEL_PLOTVAR_OPENING_RUN", "4"))           # 开篇同型几连
+PAYOFF_DENSE_MIN = int(os.environ.get("NOVEL_PLOTVAR_PAYOFF_DENSE_MIN", "3"))  # 爽点密集章最少命中
+SUPPRESS_LOOKBACK = int(os.environ.get("NOVEL_PLOTVAR_SUPPRESS_LOOKBACK", "3"))  # "抑"回溯窗口（含本章）
+SUPPRESS_EXEMPT_CHAPTERS = 2   # 开局爽点豁免（黄金三章开局可以直接爽）
 TAIL_CHARS = 120   # 章末断章区（与 hook_endings.TAIL_CHARS 同口径）
 HEAD_CHARS = 60    # 章首开篇区
 PROVENANCE = "internal-heuristic·confidence=low"
@@ -266,6 +273,45 @@ def detect_opening_repetition(opening_seq, alerts, run_len=None):
     return n
 
 
+def setback_hits(text):
+    """受挫/被贬词命中数（欲扬先抑的"抑"）。纯函数·可测。词表 keyword_banks.SETBACK_KW。"""
+    t = text or ""
+    return sum(t.count(w) for w in SETBACK_KW)
+
+
+def detect_payoff_without_suppression(seq, alerts, dense_min=None, lookback=None):
+    """信号⑥：无抑之扬——爽点密集章的回溯窗口内零受挫命中。
+
+    seq=[(章号, 爽点命中数, 受挫命中数|None)]，None=豁免章（打断窗口、不判定）。
+    窗口**含本章**：打脸章内的挑衅/贬低（"废物"出口在前、反转在后）就是同章的"抑"，
+    计入可大幅压误报（宁漏勿滥）。连续密集章只报窗口起点一次，避免同一段连环告警。
+    """
+    dense_min = PAYOFF_DENSE_MIN if dense_min is None else dense_min
+    lookback = SUPPRESS_LOOKBACK if lookback is None else lookback
+    n = 0
+    last_flagged_idx = None
+    for i, (ch, payoff, setback) in enumerate(seq):
+        if setback is None or ch <= SUPPRESS_EXEMPT_CHAPTERS or payoff < dense_min:
+            continue
+        window = [seq[j] for j in range(max(0, i - lookback + 1), i + 1) if seq[j][2] is not None]
+        if sum(s for _, _, s in window) > 0:
+            continue
+        if last_flagged_idx is not None and i - last_flagged_idx == 1:
+            last_flagged_idx = i   # 连续密集章同属一段"无抑"，不重复告警
+            continue
+        last_flagged_idx = i
+        chapters = [c for c, _, _ in window]
+        alerts.append({
+            "type": "payoff_without_suppression", "severity": "建议级", "auto": True,
+            "chapter": ch, "chapters": chapters,
+            "note": (f"第{ch}章爽点密集（命中 {payoff}）但第{chapters[0]}–{chapters[-1]}章窗口内"
+                     f"零受挫/贬低命中——欲扬先抑：没有'抑'垫势能的爽点是打空气（打脸三拍：反派"
+                     f"抬高→主角受压→反转），先垫憋屈值再兑现（{PROVENANCE}·词表初筛会漏非词表的抑）"),
+        })
+        n += 1
+    return n
+
+
 def _load_profile(project):
     """读 _设置.md 的目标平台 → 商业爽文向/品质向。读不到按商业向（网文默认密尺）。"""
     try:
@@ -286,7 +332,7 @@ def analyze(project):
     profile, settings = _load_profile(project)
     payoff_bank = payoff_bank_for(str(settings.get("题材") or ""), str(settings.get("目标平台") or ""))
 
-    beat_seq, payoff_seq, hook_seq, opening_seq, per_chapter = [], [], [], [], []
+    beat_seq, payoff_seq, hook_seq, opening_seq, suppress_seq, per_chapter = [], [], [], [], [], []
     for cid, path, text in chapters:
         if is_exempt(path):
             # 豁免章打断 run（用 None 段隔开），不参与任何判定
@@ -294,18 +340,21 @@ def analyze(project):
             payoff_seq.append((cid, 1))
             hook_seq.append((cid, None))
             opening_seq.append((cid, None))
+            suppress_seq.append((cid, 0, None))
             per_chapter.append({"chapter": cid, "exempt": True})
             continue
         beat = dominant_beat(text)
         payoff_hits = sum((text or "").count(w) for w in payoff_bank)
+        sb_hits = setback_hits(text)
         htype = hook_type(text)
         otype = opening_type(text)
         beat_seq.append((cid, beat))
         payoff_seq.append((cid, payoff_hits))
         hook_seq.append((cid, htype))
         opening_seq.append((cid, otype))
+        suppress_seq.append((cid, payoff_hits, sb_hits))
         per_chapter.append({"chapter": cid, "dominant_beat": beat, "payoff_hits": payoff_hits,
-                            "hook_type": htype, "opening_type": otype})
+                            "setback_hits": sb_hits, "hook_type": htype, "opening_type": otype})
 
     alerts = []
     detect_beat_monotony(beat_seq, alerts)
@@ -313,6 +362,7 @@ def analyze(project):
     detect_payoff_gap(payoff_seq, alerts, profile=profile)
     detect_hook_type_repetition(hook_seq, alerts)
     detect_opening_repetition(opening_seq, alerts)
+    detect_payoff_without_suppression(suppress_seq, alerts)
 
     return {
         "ran": True,
@@ -322,6 +372,7 @@ def analyze(project):
             "cycle_min_repeats": CYCLE_MIN_REPEATS,
             "payoff_gap": PAYOFF_GAP_COMMERCIAL if profile == PROFILE_COMMERCIAL else PAYOFF_GAP_LITERARY,
             "hook_type_run": HOOK_TYPE_RUN, "opening_run": OPENING_RUN,
+            "payoff_dense_min": PAYOFF_DENSE_MIN, "suppress_lookback": SUPPRESS_LOOKBACK,
             "provenance": PROVENANCE,
             "note": "advisory：本检永不阻断；番外/楔子/序章等豁免章打断 run 不计入。",
         },

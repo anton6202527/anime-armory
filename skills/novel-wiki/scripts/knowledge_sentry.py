@@ -13,7 +13,10 @@ who is wrong / reader knowledge / reveal timing），本脚本把它落成账 + 
 机检 vs LLM 的诚实边界（对标 foreshadow_ledger / logic_sentry）：
   - **确定性（脚本算）**：台账结构自洽（得知章 vs 公开章的序）、计划揭示超期、死人"得知"秘密
     （与动态百科交叉）、以及**泄密候选**（tell_keywords 在任何人知道之前的章节出现——正文关键词扫描，
-    脆弱启发式 → 恒建议级，B10）。
+    脆弱启发式 → 恒建议级，B10）。另有**信息释放策略三查**（希区柯克炸弹论，恒建议级）：
+    irony_window_untouched（读者先知的反讽窗口内正文零触碰=悬念资产闲置）、reveal_burst
+    （同章公开 ≥N 条秘密=揭示拥堵）、surprise_heavy（几乎全是读者角色同时知的 surprise 型，
+    无读者先知的 suspense 型）。
   - **LLM/人工（脚本不臆测）**："这段对话有没有说破秘密"的语义识别、误信内容是否仍成立。
     得知(learn)/公开(reveal)由 agent/人在交互节点判断后用子命令登记；脚本把账记准、把矛盾揪出来。
 
@@ -45,6 +48,16 @@ LEDGER_REL = os.path.join("设定", "knowledge_ledger.json")
 KIND = "novel_knowledge_ledger"
 IMPORTANCE = {"low", "medium", "high", "critical"}
 DEFAULT_GRACE = 5  # 计划揭示章的宽容窗口（与伏笔台账 grace 同口径）
+
+# ── 信息释放策略阈值（希区柯克炸弹论·env 可标定）────────────────────────────
+# irony 窗口：读者已知(reader_knows_since) 与 剧内公开(public_since/planned_reveal) 之间
+# 至少隔此章数才值得检查"炸弹旁有没有人说话"。
+IRONY_WINDOW_MIN = int(os.environ.get("NOVEL_IRONY_WINDOW_MIN", "4"))
+# 同一章公开揭示的秘密 ≥ 此数 → 女仆管家式倾泻（结尾揭示拥堵）。
+REVEAL_BURST_MIN = int(os.environ.get("NOVEL_REVEAL_BURST_MIN", "3"))
+# surprise 型占比检查的最小样本量与告警占比。
+SURPRISE_SAMPLE_MIN = int(os.environ.get("NOVEL_SURPRISE_SAMPLE_MIN", "5"))
+SURPRISE_HEAVY_RATIO = float(os.environ.get("NOVEL_SURPRISE_HEAVY_RATIO", "0.8"))
 
 # 无台账时的"该建账没建账"提示信号：正文里反复出现揭示/隐瞒题材词（多章命中才提示，宁缺毋滥）。
 REVEAL_TOPIC_KW = ("掉马", "马甲", "身份暴露", "身份曝光", "隐瞒身份", "假死", "瞒着", "隐情", "冒名", "替身")
@@ -311,12 +324,100 @@ def leak_candidates(secrets, chapter_texts):
     return alerts
 
 
+def irony_window_untouched(secrets, chapter_texts, window_min=None):
+    """戏剧反讽窗口空转（希区柯克炸弹论）：读者已知、剧内未公开的窗口 ≥window_min 章，
+    但窗口内正文对该秘密零触碰（tell_keywords 与知情人名都没出现）——"桌下放了炸弹，
+    却没让任何人坐在桌边聊天"，最贵的张力资产被闲置。
+
+    正文关键词扫描 = 脆弱启发式 → 恒建议级；无 keywords 且无 holders 的秘密无探针，跳过。"""
+    window_min = IRONY_WINDOW_MIN if window_min is None else window_min
+    alerts = []
+    for s in secrets:
+        rk = s.get("reader_knows_since")
+        if rk is None:
+            continue
+        end = s.get("public_since") if s.get("public_since") is not None else s.get("planned_reveal_chapter")
+        if end is None:
+            continue
+        rk, end = int(rk), int(end)
+        if end - rk < window_min:
+            continue
+        probes = ([k for k in (s.get("tell_keywords") or []) if k]
+                  + [h.get("name") for h in s.get("holders", []) if h.get("name")])
+        if not probes:
+            continue
+        window = sorted(c for c in chapter_texts if rk < c < end)
+        if len(window) < window_min - 1:
+            continue  # 窗口章还没写够，判空转为时过早
+        hits = sum(1 for c in window for p in probes if p in chapter_texts[c])
+        if hits == 0:
+            alerts.append({
+                "kind": "irony_window_untouched", "id": s["id"], "severity": "建议级",
+                "auto": True, "confidence": "heuristic",
+                "window": [rk, end], "probes": probes[:6],
+                "note": (f"秘密「{s.get('fact','')}」读者第{rk}章已知、剧内第{end}章才揭——"
+                         f"这 {end - rk} 章的戏剧反讽窗口内正文对它零触碰（关键词/知情人名均未现）。"
+                         "炸弹已放桌下却没人坐在桌边：安排不知情者在秘密附近走动/对话，"
+                         "让读者替角色捏汗，否则这段悬念资产白白闲置"),
+            })
+    return alerts
+
+
+def reveal_burst(secrets, burst_min=None):
+    """揭示拥堵：同一章公开 ≥burst_min 条秘密 = 女仆管家式倾泻（真相挤在一章倒完，
+    每条 reveal 的冲击力互相踩踏）。台账整数比较，确定性。"""
+    burst_min = REVEAL_BURST_MIN if burst_min is None else burst_min
+    by_ch = {}
+    for s in secrets:
+        if s.get("public_since") is not None:
+            by_ch.setdefault(int(s["public_since"]), []).append(s.get("id"))
+    alerts = []
+    for ch, ids in sorted(by_ch.items()):
+        if len(ids) >= burst_min:
+            alerts.append({
+                "kind": "reveal_burst", "severity": "建议级", "auto": True,
+                "confidence": "ledger", "chapter": ch, "secret_ids": ids,
+                "note": (f"第{ch}章同章公开 {len(ids)} 条秘密（{('、'.join(str(i) for i in ids))}）——"
+                         "女仆管家式倾泻：真相拥堵互相稀释冲击力，考虑把部分揭示前移错峰"),
+            })
+    return alerts
+
+
+def surprise_heavy(secrets, sample_min=None, ratio=None):
+    """信息策略失衡：秘密样本 ≥sample_min 条时，surprise 型（读者与角色同时知道：
+    reader_knows_since 空、或不早于 public_since）占比 ≥ratio → 全书几乎没有
+    "读者先知"的 suspense 型。希区柯克口径：surprise 只值 15 秒惊讶，suspense 值 15 分钟
+    悬念——建议把部分秘密改造成读者先知的戏剧反讽（提前 reader_knows_since）。"""
+    sample_min = SURPRISE_SAMPLE_MIN if sample_min is None else sample_min
+    ratio = SURPRISE_HEAVY_RATIO if ratio is None else ratio
+    if len(secrets) < sample_min:
+        return []
+    surprise = [s for s in secrets
+                if s.get("reader_knows_since") is None
+                or (s.get("public_since") is not None
+                    and int(s["reader_knows_since"]) >= int(s["public_since"]))]
+    share = len(surprise) / len(secrets)
+    if share < ratio:
+        return []
+    return [{
+        "kind": "surprise_heavy", "severity": "建议级", "auto": True,
+        "confidence": "ledger", "surprise_count": len(surprise), "total": len(secrets),
+        "note": (f"{len(secrets)} 条秘密中 {len(surprise)} 条（{share:.0%}）是 surprise 型"
+                 "（读者与角色同时才知道）——几乎没有读者先知的 suspense 型。"
+                 "surprise 只值 15 秒惊讶、suspense 值 15 分钟悬念（希区柯克）：挑几条"
+                 "把 reader_knows_since 提到揭示前，让读者先看见桌下的炸弹"),
+    }]
+
+
 def scan(data, through_chapter, chapter_texts=None, death_chapters=None, grace=DEFAULT_GRACE):
-    """纯函数巡检：结构对账 + 揭示超期 + 泄密候选。"""
+    """纯函数巡检：结构对账 + 揭示超期 + 泄密候选 + 信息释放策略（炸弹论三查）。"""
     secrets = data.get("secrets", [])
     alerts = (ledger_conflicts(secrets, death_chapters)
               + reveal_overdue(secrets, through_chapter, grace)
-              + leak_candidates(secrets, chapter_texts or {}))
+              + leak_candidates(secrets, chapter_texts or {})
+              + irony_window_untouched(secrets, chapter_texts or {})
+              + reveal_burst(secrets)
+              + surprise_heavy(secrets))
     blocking = sum(1 for a in alerts if a.get("severity") == "阻断级")
     open_secrets = [s for s in secrets if s.get("public_since") is None]
     return {

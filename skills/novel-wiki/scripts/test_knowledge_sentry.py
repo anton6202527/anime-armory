@@ -177,3 +177,66 @@ def test_packet_section_empty_after_all_public(tmp_path):
     ks.reveal(data, "SECRET_001", 10)
     ks.save_ledger(root, data)
     assert ks.packet_section(root, 20) == ""
+
+
+# ── 信息释放策略三查（希区柯克炸弹论） ──────────────────────────────────────
+def _irony_secret(rk=2, public=10, keywords=("前朝公主",)):
+    return {"id": "S1", "fact": "沈念是前朝公主", "reader_knows_since": rk,
+            "public_since": public, "tell_keywords": list(keywords),
+            "holders": [{"name": "沈念", "learned_chapter": 1}]}
+
+
+def test_irony_window_untouched_flags_idle_bomb():
+    texts = {c: "殿内议事，无人提及旧事。" for c in range(3, 10)}
+    alerts = ks.irony_window_untouched([_irony_secret()], texts)
+    assert len(alerts) == 1
+    a = alerts[0]
+    assert a["kind"] == "irony_window_untouched" and a["severity"] == "建议级"
+
+
+def test_irony_window_quiet_when_secret_touched():
+    texts = {c: "殿内议事。" for c in range(3, 10)}
+    texts[6] = "有人低声议论前朝公主的下落。"   # 窗口内触碰过 → 炸弹旁有人说话
+    assert ks.irony_window_untouched([_irony_secret()], texts) == []
+
+
+def test_irony_window_quiet_when_window_short_or_reader_unknown():
+    texts = {c: "议事。" for c in range(2, 12)}
+    assert ks.irony_window_untouched([_irony_secret(rk=8, public=10)], texts) == []   # 窗口 <4 章
+    s = _irony_secret()
+    s["reader_knows_since"] = None                                                    # mystery 型无窗口
+    assert ks.irony_window_untouched([s], texts) == []
+
+
+def test_reveal_burst_flags_dump_chapter():
+    secrets = [{"id": f"S{i}", "public_since": 50} for i in range(3)]
+    alerts = ks.reveal_burst(secrets)
+    assert len(alerts) == 1 and alerts[0]["kind"] == "reveal_burst"
+    assert alerts[0]["chapter"] == 50 and len(alerts[0]["secret_ids"]) == 3
+
+
+def test_reveal_burst_quiet_below_threshold():
+    secrets = [{"id": "S1", "public_since": 50}, {"id": "S2", "public_since": 50},
+               {"id": "S3", "public_since": 52}]
+    assert ks.reveal_burst(secrets) == []
+
+
+def test_surprise_heavy_flags_all_surprise_book():
+    secrets = [{"id": f"S{i}", "public_since": 10 + i} for i in range(5)]  # 读者从未先知
+    alerts = ks.surprise_heavy(secrets)
+    assert len(alerts) == 1 and alerts[0]["kind"] == "surprise_heavy"
+
+
+def test_surprise_heavy_quiet_with_suspense_mix_or_small_sample():
+    surprise = [{"id": f"S{i}", "public_since": 10 + i} for i in range(3)]
+    suspense = [{"id": f"D{i}", "reader_knows_since": 2, "public_since": 20 + i} for i in range(2)]
+    assert ks.surprise_heavy(surprise + suspense) == []       # 3/5 = 60% < 80%
+    assert ks.surprise_heavy(surprise) == []                  # 样本 <5 不判
+
+
+def test_scan_surfaces_information_strategy_alerts():
+    data = {"kind": ks.KIND, "secrets": [_irony_secret()]}
+    texts = {c: "殿内议事。" for c in range(3, 10)}
+    report = ks.scan(data, 12, chapter_texts=texts)
+    assert any(a["kind"] == "irony_window_untouched" for a in report["alerts"])
+    assert report["blocking"] == sum(1 for a in report["alerts"] if a.get("severity") == "阻断级")

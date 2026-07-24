@@ -75,6 +75,49 @@ def test_payoff_gap_commercial_vs_literary():
     assert pva.detect_payoff_gap(seq, alerts2, profile="品质向") == 0
 
 
+def test_setback_hits_counts_bank():
+    assert pva.setback_hits("众人嘲讽他是废物，将他扫地出门。") >= 3
+    assert pva.setback_hits("风和日丽，众人把酒言欢。") == 0
+
+
+def test_payoff_without_suppression_flags_zero_setback_window():
+    # 第 4 章爽点密集，窗口（2-4 章）零受挫 → 无抑之扬
+    seq = [(1, 0, 0), (2, 0, 0), (3, 0, 0), (4, 5, 0)]
+    alerts = []
+    assert pva.detect_payoff_without_suppression(seq, alerts) == 1
+    a = alerts[0]
+    assert a["type"] == "payoff_without_suppression" and a["chapter"] == 4
+    assert a["severity"] == "建议级"
+
+
+def test_payoff_with_suppression_in_window_ok():
+    # 第 3 章有"抑"（受挫命中）→ 第 4 章的爽合法
+    seq = [(1, 0, 0), (2, 0, 0), (3, 0, 4), (4, 5, 0)]
+    alerts = []
+    assert pva.detect_payoff_without_suppression(seq, alerts) == 0
+
+
+def test_payoff_same_chapter_suppression_ok():
+    # 同章先抑后扬（挑衅在前、反转在后）也算有抑——窗口含本章
+    seq = [(1, 0, 0), (2, 0, 0), (3, 0, 0), (4, 5, 2)]
+    alerts = []
+    assert pva.detect_payoff_without_suppression(seq, alerts) == 0
+
+
+def test_payoff_opening_chapters_exempt():
+    # 前 2 章豁免：开局爽点合法
+    seq = [(1, 6, 0), (2, 6, 0), (3, 1, 0)]
+    alerts = []
+    assert pva.detect_payoff_without_suppression(seq, alerts) == 0
+
+
+def test_payoff_consecutive_dense_reports_once():
+    # 连续密集章同属一段"无抑"，只报一次
+    seq = [(1, 0, 0), (2, 0, 0), (3, 0, 0), (4, 5, 0), (5, 5, 0), (6, 5, 0)]
+    alerts = []
+    assert pva.detect_payoff_without_suppression(seq, alerts) == 1
+
+
 def test_hook_type_repetition_and_opening_repetition():
     alerts = []
     hooks = [(1, "问句钩"), (2, "问句钩"), (3, "问句钩"), (4, "危机钩")]

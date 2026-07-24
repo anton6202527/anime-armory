@@ -148,3 +148,57 @@ def test_interiority_fallback_without_roster():
     text = "沈砚心想，此人必有蹊跷。"
     subs = pca.interiority_subjects(text)
     assert "沈砚" in subs
+
+
+# ── D 组：开场滥调 / 段首同型 ───────────────────────────────────────────────
+
+def test_slush_opening_hits_in_window():
+    hits = pca.slush_opening_hits("他从梦中醒来，窗外阳光明媚。")
+    cats = {h["category"] for h in hits}
+    assert "梦醒起床" in cats and "天气开场" in cats
+
+
+def test_slush_opening_ignores_mid_chapter():
+    # "睁开眼"落在窗口外是正常动作，不算滥调开场
+    text = "刀光一闪，他侧身避开。" * 40 + "他缓缓睁开眼。"
+    assert pca.slush_opening_hits(text, head_chars=300) == []
+
+
+def test_paragraph_openers_pronoun_and_name():
+    text = "他推门而入。\n他转身关门。\n「你来了。」\n沈砚坐下。\n沈默降临。"
+    openers = pca.paragraph_openers(text)
+    # 代词取首字（"他"="他"），对白段跳过，2 字取整（"沈砚"≠"沈默"）
+    assert openers == ["他", "他", "沈砚", "沈默"]
+
+
+def test_opener_max_run():
+    run, val = pca.opener_max_run(["他", "他", "他", "沈砚", "他"])
+    assert run == 3 and val == "他"
+    assert pca.opener_max_run([]) == (0, None)
+
+
+def test_analyze_flags_slush_opening_first_chapter(tmp_path):
+    ch1 = "他从梦中醒来，揉了揉眼睛。\n" + "刀光一闪。沈砚侧身。裴决收势。\n" * 10
+    root = _project(tmp_path, [ch1])
+    res = pca.analyze(root)
+    hits = [a for a in res["alerts"] if a["type"] == "slush_opening_cliche"]
+    assert len(hits) == 1 and hits[0]["chapter"] == 1
+    assert "第一页退稿" in hits[0]["note"]        # 第 1 章文案更重
+    assert res["blocking"] == 0
+
+
+def test_analyze_flags_paragraph_opening_monotony(tmp_path):
+    ch = "他推门而入，看清了屋内的陈设与来客。\n他走到桌边，倒了一杯冷茶一饮而尽。\n" \
+         "他坐下来，慢条斯理地擦拭刀锋。\n他抬起头，目光落在窗外的更漏上。\n" \
+         "他忽然笑了，笑声惊起了檐下宿鸟。\n"
+    root = _project(tmp_path, [ch])
+    res = pca.analyze(root)
+    hits = [a for a in res["alerts"] if a["type"] == "paragraph_opening_monotony"]
+    assert len(hits) == 1 and hits[0]["opener"] == "他" and hits[0]["run"] >= 4
+
+
+def test_analyze_varied_paragraph_openers_no_alert(tmp_path):
+    ch = "他推门而入。\n刀光一闪而过。\n沈砚侧身避开。\n烛火晃了两晃。\n裴决收势而立。\n"
+    root = _project(tmp_path, [ch])
+    res = pca.analyze(root)
+    assert [a for a in res["alerts"] if a["type"] == "paragraph_opening_monotony"] == []

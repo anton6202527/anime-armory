@@ -551,17 +551,60 @@ def alias_expansions(root, names):
 
 
 FORESHADOW_GRACE = 5  # 与 foreshadow_ledger.DEFAULT_GRACE / logic_sentry 宽容窗一致
+# 伏笔提醒周期（rule of three 写作端半边）：埋下 ≥ 此章数且后文零复现 → 写章包提示补一次低调复现
+FORESHADOW_REMIND_EVERY = int(os.environ.get("NOVEL_PACKET_FORESHADOW_REMIND_EVERY", "8"))
+_FORESHADOW_CJK_RE = re.compile(r"[一-鿿]{2,6}")
+# 与 foreshadow_ledger._MENTION_STOPWORDS 同旨的保守小停用表（直读 JSON 不跨 skill import 的约定，
+# 词表按写作端够用的最小集维护，不求两边逐字同步）
+_FORESHADOW_STOP = frozenset({
+    "自己", "他们", "我们", "一个", "什么", "没有", "知道", "已经", "时候", "突然",
+    "终于", "原来", "现在", "这个", "那个", "但是", "因为", "所以", "就是", "真相",
+    "秘密", "身份", "力量", "出现", "发现", "回收", "伏笔", "众人", "一切", "事情",
+})
 
 
-def foreshadow_section_for_chapter(root, chapter, grace=FORESHADOW_GRACE):
-    """读 novel-wiki 权威伏笔台账，注入本章"该收/该补收"的伏笔清单。
+def _foreshadow_mention_keys(seed):
+    """伏笔「提及」关键词：linked_entities 各串 + description 的 CJK 词段（去停用词）。
+    偏「宽认提及」：多认一次提及只会少一条提醒提示（宁静默勿刷屏）。"""
+    keys = set()
+    for e in seed.get("linked_entities") or []:
+        e = str(e).strip()
+        if len(e) >= 2:
+            keys.add(e)
+    for tok in _FORESHADOW_CJK_RE.findall(str(seed.get("description") or "")):
+        if tok not in _FORESHADOW_STOP:
+            keys.add(tok)
+    return keys
+
+
+def _foreshadow_unmentioned_since_plant(root, seed, chapter, text_cache):
+    """planted+1 .. chapter-1 的已写正文里是否**零提及**该伏笔（True=该补提醒）。
+    text_cache: {章号: 正文} 跨 seed 复用，缺章文件按空文处理（不臆测）。"""
+    planted = int(seed.get("planted_chapter") or 0)
+    keys = _foreshadow_mention_keys(seed)
+    if not keys:
+        return False  # 无关键词可查 → 不提示（不臆测）
+    for i in range(planted + 1, chapter):
+        if i not in text_cache:
+            text_cache[i] = read_text(chapter_path(root, i))
+        if any(k in text_cache[i] for k in keys):
+            return False
+    return True
+
+
+def foreshadow_section_for_chapter(root, chapter, grace=FORESHADOW_GRACE,
+                                   remind_every=FORESHADOW_REMIND_EVERY):
+    """读 novel-wiki 权威伏笔台账，注入本章"该收/该补收/该补提醒"的伏笔清单。
 
     只读、不改台账（确定性）：pending 且 confirmed 的伏笔，若 expected_payoff_chapter 落在
     [chapter-grace, chapter+grace] → "到期该考虑回收"；若 chapter 已 > expected+grace →
-    "已超期，尽快补收或显式 drop"。让 AI 在写这一章时就看得见坑，而不是等 scan 事后报烂尾。"""
+    "已超期，尽快补收或显式 drop"；若离回收还远（chapter < expected-grace）但埋下已
+    ≥remind_every 章且后文正文零复现 → "该补提醒"（rule of three 的写作端半边：读者忘了
+    枪挂在哪，回收就拽不动）。让 AI 在写这一章时就看得见坑，而不是等 scan 事后报烂尾。"""
     ledger = load_json(os.path.join(root, "设定", "foreshadowing_ledger.json"), {}) or {}
     seeds = ledger.get("seeds") or []
-    due, overdue = [], []
+    due, overdue, remind = [], [], []
+    text_cache = {}
     for s in seeds:
         if s.get("status") != "pending" or not s.get("confirmed", True):
             continue
@@ -573,7 +616,13 @@ def foreshadow_section_for_chapter(root, chapter, grace=FORESHADOW_GRACE):
             overdue.append(s)
         elif exp - grace <= chapter <= exp + grace:
             due.append(s)
-    if not due and not overdue:
+        else:
+            planted = s.get("planted_chapter")
+            if (planted is not None and int(planted) < chapter < exp - grace
+                    and chapter - int(planted) >= remind_every
+                    and _foreshadow_unmentioned_since_plant(root, s, chapter, text_cache)):
+                remind.append(s)
+    if not due and not overdue and not remind:
         return ""
     lines = ["\n## 伏笔回收提醒（写前必读·台账权威源 foreshadowing_ledger.json）"]
     if due:
@@ -586,6 +635,13 @@ def foreshadow_section_for_chapter(root, chapter, grace=FORESHADOW_GRACE):
         lines.append("> ⚠️ 以下伏笔已超期未收，本章优先考虑补收或显式作废（drop），避免烂尾：")
         for s in overdue:
             lines.append(f"- **{s.get('id')}**（{s.get('importance','medium')}·预期第{s['expected_payoff_chapter']}章·已超期）：{s.get('description','')}")
+    if remind:
+        lines.append("> 🪶 以下伏笔埋下已久且后文正文**零复现**——回收还早，但读者已快忘了枪挂在哪"
+                     "（草蛇灰线：埋→提醒→收，回收前须有 1-2 次低调复现才拽得动）。本章若有缝隙，"
+                     "顺手让它不动声色地闪一下（一句带过即可，别揭晓）：")
+        for s in remind:
+            planted = s.get("planted_chapter")
+            lines.append(f"- **{s.get('id')}**（{s.get('importance','medium')}·第{planted}章埋·预期第{s['expected_payoff_chapter']}章收）：{s.get('description','')}")
     return "\n".join(lines) + "\n"
 
 
@@ -986,6 +1042,41 @@ def ai_tic_section(root, limit=6):
         else:
             span = "多处命中"
         lines.append(f"- {g['msg']}（{span}）")
+    return "\n".join(lines) + "\n"
+
+
+def predicted_plot_section(root, chapter, limit=8):
+    """模拟读者预测回灌（"扔掉第一想法"的生成期筛子）：novel-simulate 面板在第 N-1 章末
+    写下"下一章会发生什么"的预测（评分/reader_predictions_第NN章.json，schema 见
+    behavioral_signals.py 头注）——那正是对**本章**的预测。此前这批预测只在事后算意外度
+    （surprise 低了才报），写作端从没见过；等于放着"读者已经猜到什么"的清单不用，写完再
+    追悔。这里把它注入写章包当负面约束：与 top 预测正面撞车的走向 = 第一想法 = 陈词滥调层。
+    只认恰好第 N-1 章的预测（更早的预测对象是已写完的旧章，注了只会误导）；缺文件零成本。"""
+    for name in (f"reader_predictions_第{chapter - 1:02d}章.json",
+                 f"reader_predictions_第{chapter - 1}章.json"):
+        payload = load_json(os.path.join(root, "评分", name), {}) or {}
+        preds = payload.get("predictions") or []
+        if isinstance(preds, list) and preds:
+            break
+    else:
+        return ""
+    rows = []
+    for p in preds:
+        text = str((p or {}).get("text") or "").strip() if isinstance(p, dict) else ""
+        if text:
+            rows.append((str(p.get("persona") or "读者"), text))
+    if not rows:
+        return ""
+    lines = [
+        "\n## 模拟读者已猜到的走向（写前必读·负面约束）",
+        "- 以下是模拟读者面板读完上一章后对**本章**的预测。与其中任何一条正面重合的方案"
+        "＝读者的第一想法，写出来就是「果然如此」。要么换方案，要么保留终点但在抵达前"
+        "加一次真拐弯（意料之外、情理之中——违背预期线，回看伏笔成立）。",
+    ]
+    for persona, text in rows[:limit]:
+        lines.append(f"- [{persona}] {clip(text, 80)}")
+    if len(rows) > limit:
+        lines.append(f"- …另有 {len(rows) - limit} 条预测，见 `评分/reader_predictions_第{chapter - 1:02d}章.json`。")
     return "\n".join(lines) + "\n"
 
 
@@ -1593,6 +1684,13 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     ai_tic = ai_tic_section(root)
     if ai_tic and MECHANICAL_FINDINGS_REL not in source_paths:
         source_paths.append(MECHANICAL_FINDINGS_REL)
+    # 模拟读者预测回灌：AI 腔账单管"怎么写"（文风惯犯），这个管"写什么"（剧情第一想法）——
+    # 两者同属"下游检测搬上游当负面约束"的闭环。
+    predicted_section = predicted_plot_section(root, chapter)
+    if predicted_section:
+        pred_rel = f"评分/reader_predictions_第{chapter - 1:02d}章.json"
+        if pred_rel not in source_paths:
+            source_paths.append(pred_rel)
     waiver_section = ""
     if demo_waiver:
         waiver_section = f"""
@@ -1749,7 +1847,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {event_cooling_section}
 {observation_section_text}
 {aesthetic_section_text}
-{research_section}{ai_tic}
+{research_section}{ai_tic}{predicted_section}
 {live_check_section}
 {batch_section}
 

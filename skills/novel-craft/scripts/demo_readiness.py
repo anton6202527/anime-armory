@@ -12,6 +12,7 @@ import argparse
 import glob
 import json
 import os
+import re
 from datetime import date
 from typing import Any
 
@@ -60,6 +61,65 @@ def add_issue(items: list[dict[str, str]], issue_id: str, severity: str, message
     items.append({"id": issue_id, "severity": severity, "message": message, "path": path})
 
 
+# ── 黄金三章硬对表（阅文作家专区口径：前三章立矛盾、亮卖点）────────────────────
+# 只在 demo 阶段查前 3 章；输入缺失一律优雅跳过（不臆造），慢热文人工豁免。
+GOLDEN_CHAPTERS = 3
+_TOKEN_STOPWORDS = {"主角", "读者", "故事", "本书", "作品", "开始", "最终", "他们", "自己",
+                    "一个", "以及", "或者", "但是", "因为", "所以", "如果", "这个", "那个"}
+
+
+def _promise_tokens(text: str) -> set[str]:
+    """从承诺句抽 2 字以上 CJK 词面 token（长 run 另拆 2-gram），滤停用词。"""
+    tokens: set[str] = set()
+    for run in re.findall(r"[一-鿿]{2,}", str(text or "")):
+        if run not in _TOKEN_STOPWORDS:
+            tokens.add(run)
+        if len(run) >= 4:
+            tokens.update(run[i:i + 2] for i in range(len(run) - 1))
+    return {t for t in tokens if t not in _TOKEN_STOPWORDS}
+
+
+def golden_chapter_issues(root: str, demo_gate: dict[str, Any], chapters: list[str]) -> list[dict[str, str]]:
+    """黄金三章两项硬对表：开端矛盾（scene_cards conflict）+ 核心卖点铺垫（reader_promises 词面）。
+
+    返回 issue 列表（全 warning——开篇好不好终归人判，这里只逮"完全没立/零铺垫"的确定性形态）。
+    """
+    issues: list[dict[str, str]] = []
+    # ① 开端矛盾：前 3 章 scene_cards 的 conflict 字段 ≥ 半数为空 → 矛盾未立
+    cards = load_json(os.path.join(root, "设定", "scene_cards.json"), {}) or {}
+    if cards.get("kind") == "novel_scene_cards":
+        early = [s for s in cards.get("scenes") or []
+                 if isinstance(s, dict) and int(s.get("chapter") or 0) in range(1, GOLDEN_CHAPTERS + 1)]
+        if early:
+            hollow = [s for s in early if not str(s.get("conflict") or "").strip()]
+            if len(hollow) * 2 >= len(early):
+                add_issue(issues, "DEMO-OPENING-CONFLICT-HOLLOW", "warning",
+                          f"黄金三章硬对表：前 {GOLDEN_CHAPTERS} 章 {len(early)} 张场景卡中 {len(hollow)} 张"
+                          f" conflict 为空——开端矛盾未立是弃读第一诱因（阅文口径：前三章须立开端矛盾）。",
+                          "设定/scene_cards.json")
+    # ② 核心卖点铺垫：reader_promises 的词面在前 3 章正文零命中 → 卖点太晚
+    reader_contract = demo_gate.get("reader_contract") if isinstance(demo_gate.get("reader_contract"), dict) else {}
+    promises = [str(p) for p in (reader_contract.get("reader_promises") or demo_gate.get("reader_promises") or [])
+                if str(p or "").strip()]
+    if promises and chapters:
+        text = ""
+        for path in chapters[:GOLDEN_CHAPTERS]:
+            try:
+                with open(path, encoding="utf-8", errors="replace") as f:
+                    text += f.read()
+            except OSError:
+                pass
+        anchor_tokens: set[str] = set()
+        for p in promises:
+            anchor_tokens |= _promise_tokens(p)
+        if anchor_tokens and text and not any(tok in text for tok in anchor_tokens):
+            add_issue(issues, "DEMO-SELLING-POINT-LATE", "warning",
+                      f"黄金三章硬对表：reader_promises（{len(promises)} 条）的词面在前 "
+                      f"{GOLDEN_CHAPTERS} 章正文零命中——核心卖点前三章零铺垫，读者看不到买点"
+                      f"（金手指/核心设定至少要强预告）；慢热文请人工豁免。", "审稿/demo_gate.json")
+    return issues
+
+
 def build_readiness(root: str) -> dict[str, Any]:
     root = os.path.abspath(root)
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
@@ -87,6 +147,8 @@ def build_readiness(root: str) -> dict[str, Any]:
         add_issue(issues, "DEMO-COMMERCIAL-SCORE-KILL", "blocking", f"score 结论为 {verdict or decision}，不应批量写。", "评分/score_report.json")
     elif decision in {"revise", "major_rewrite"} or verdict in {"大改", "小改"}:
         add_issue(issues, "DEMO-COMMERCIAL-SCORE-REVISE", "warning", f"score 结论为 {verdict or decision}，批量写前应确认开篇已修。", "评分/score_report.json")
+
+    issues.extend(golden_chapter_issues(root, demo_gate, chapters))
 
     samples = aesthetic.get("samples") if isinstance(aesthetic, dict) else []
     literary_score = 0

@@ -25,6 +25,9 @@
 - [Q7：用户已给暂定书名时怎么处理？](#q7)
 - [Q8：这套"持续改进"机制本身怎么用？](#q8)
 - [Q9：agent 可以是 skill 形式吗？supervisor skill 和 runner 状态机怎么分？](#q9)
+- [Q10：2026-07 外部调研沉淀——评估怎么更可信、哪些路线已证伪、长期储备做什么？](#q10)
+- [Q11：2026-07 第三轮传统工艺调研沉淀——对白/弧线/节奏/修订纪律的机检化依据？](#q11)
+- [Q12：2026-07 第四轮传统工艺调研沉淀——伏笔养护/信息策略/场景极性/开场与支线的机检化依据？](#q12)
 
 ---
 
@@ -283,3 +286,70 @@ novel-supervisor critic-loop / qa_gate 演进规划。
   基准，且嗅觉桶已有 StoryScope 信号，重复建设。
 
 **适用范围**：novel-review / novel-craft / novel-edit；阈值全部 env 可标定（见各脚本头部）。
+
+## Q12：2026-07 第四轮传统工艺调研沉淀——伏笔养护/信息策略/场景极性/开场与支线的机检化依据？<a id="q12"></a>
+
+**背景**：第四轮审计（前三轮见 Q10/Q11）继续从传统小说创作手法里挖尚未机检化的部分，
+调研覆盖中国评点派（金圣叹/毛宗岗/脂砚斋）、网文实战方法论（阅文作家专区/番茄公开口径）、
+西方场景工艺与编辑实务（16+ 来源）。原则不变：机检只逮确定性形态、恒 advisory，工艺判断归人/LLM。
+本轮特点：**全部新信号挂在已注册检测器或写作端任务包上，零新增注册面**。
+
+### 本轮机检化的传统手艺（已接线）
+
+- **草蛇灰线 / rule of three（金圣叹《读第五才子书法》；编剧 setup-reminder-payoff 工艺）**：
+  伏笔要"骤看之如无物"地**多次低强度复现**，回收才"拽之通体俱动"。台账此前只管头尾
+  （overdue/never_fired），中拍失明。落地：`foreshadow_ledger` 内容级三信号
+  （foreshadow_reminder_gap / foreshadow_overexposed / payoff_without_setup 反向契诃夫），
+  写作端 `draft_packets` 伏笔注入增"该补提醒"第三桶。
+- **希区柯克炸弹论（surprise 15 秒 vs suspense 15 分钟；Truffaut 访谈）**：knowledge_ledger
+  的 reader_knows_since/public_since 字段早就够算——irony_window_untouched（读者先知窗口
+  内正文零触碰=炸弹旁没人说话）、reveal_burst（同章倾泻）、surprise_heavy（全书无 suspense 型）。
+  零新台账，纯字段复用。
+- **try/fail cycles，yes-but/no-and（Swain；Writing Excuses 16.41）**：scene_cards 增
+  `outcome` 枚举（yes/yes-but/no-and/no-but）+ `plotline` 自由标签；manuscript_map 对账
+  OUTCOME-YES-RUN（连胜无阻力）/OUTCOME-NO-COST-CLIMB（yes 占比 >60%）。
+- **横云断山 / 獭尾法（金圣叹）**：PLOTLINE-LONG-RUN（同线连续 ≥6 场景无间笔）；
+  CLIMAX-NO-AFTERWAVE（张力 top-2 峰值章末场景无 aftermath 且次章开新冲突=
+  "大文字后寂然便住"，弧线级，区别于场景级 SEQUEL-GAP-RUN）。
+- **欲扬先抑（脂批"未扬先抑"；网文打脸三拍：反派抬高→主角受压→反转）**：
+  plot_variety payoff_without_suppression——爽点密集章回溯窗口（含本章）零受挫命中=打空气；
+  词表 `keyword_banks.SETBACK_KW`。反派抬高段检测（valence 归因）误报重，有意不做。
+- **配角失踪（braided-stories 实务，Wrede/Houghton："Reminding ≠ moving"）**：
+  minor_characters major_character_absent，open_threads 持有者加重；结构化退场登记豁免。
+- **悬念真空（MDQ 开闭管理）**：logic_sentry scan_tension 第四规则 suspense_vacuum——
+  活跃钩子+承诺数连续 ≥2 章为 0（≠张力分低，是"账面上没有未决问题吊着读者"）。
+- **行业滥调开场（agent slush pile 退稿统计：梦醒/起床/天气/照镜）+ 段首同型**：
+  prose_craft slush_opening_cliche / paragraph_opening_monotony；与"开篇同型"互补
+  （那查自我重复，这查行业黑名单）。
+- **黄金三章硬对表（阅文作家专区口径）**：demo_readiness 增 DEMO-OPENING-CONFLICT-HOLLOW
+  （前 3 章场景卡 conflict 半数为空）/ DEMO-SELLING-POINT-LATE（reader_promises 词面前
+  3 章正文零命中）。
+- **beta reader 标准六问（Jane Friedman/FoxPrint 口径）**：novel-simulate 问卷协议
+  `评分/reader_survey_第NN章.json`（bored/confused/disbelief/favorite/prediction/recall），
+  behavioral_signals 聚合出 reader_bored_run / reader_confusion_spike / reader_disbelief /
+  recall_failure（复述留存=2-gram 包含度，防长度稀释同 surprise 口径）。
+- **"扔掉第一想法"（brainstorm 实务：first idea = lowest-hanging cliché）**：
+  `draft_packets.predicted_plot_section`——把上一章模拟读者预测注入写章包当负面约束
+  （"读者已猜到的走向禁止照写，或抵达同一终点前加拐弯"）。事后意外度检测搬到生成期当筛子，
+  与 AI 腔账单同属"下游检测搬上游"闭环：账单管怎么写，这个管写什么。
+
+### 有意未做（评估过、按住）
+
+- **期待感/DQ 第四本账**：网文"期待单元"台账与 tension_ledger 的 hooks/promises 语义重合
+  （open/close/超期贬值三规则全部同构）——Q11 已按"台账过密"原则否掉 PPP 全量账，同理不建；
+  suspense_vacuum 已把"活跃期待数=0"的关键判据挂在现有账上。
+- **书内日历约束求解（时间指示词抽取→区间代数对撞：星期矛盾/耗时矛盾/旅行时长）**：
+  收益大但需 LLM 逐章结构化抽取+距离/速度表，属长期储备（与 Q10 FACTTRACK 区间化同族）；
+  timeline_check 已覆盖绝对年+季节倒退的纯文本可判部分。
+- **避犯/犯中求避的四维变奏检测（毛宗岗：三打祝家庄合法，前提每打不同）**：需场景结构
+  指纹（goal 型+对手型+结局型三元组）+ 四维差异比对，plot_variety 的 beat_cycle 已覆盖
+  主形态，增量判据不干净。
+- **背面敷粉（借他人之口写主角）/打脸三拍的"反派抬高段"检测**：都需 valence 归因
+  （这句夸的是谁、贬的是谁），词表级判不干净=假阳性风暴。
+- **midpoint 极性翻转/pinch points 结构点检测（Weiland 37%/50%/62%）**：结构点位是统计
+  倾向非铁律，且"主动 goal 占比时序变化点检测"对 scene_cards 填充质量要求高；
+  tension_fatigue + post_write 40-60% 中段加密回扫已覆盖 sagging middle 主信号。
+- **MICE 括号嵌套检查（Card/Kowal）**：长篇多线本就不必严格嵌套，误报率高价值低。
+
+**适用范围**：novel-review / novel-craft / novel-wiki / novel-simulate / novel-create；
+阈值全部 env 可标定（见各脚本头部）。

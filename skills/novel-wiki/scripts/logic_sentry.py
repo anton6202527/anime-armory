@@ -61,6 +61,9 @@ RELATIONSHIP_TURNING_POINTS = ["背叛", "反目", "决裂", "和解", "牺牲",
 HOOK_OVERDUE_GAP = 10      # urgency=high 钩子超过 此章数 未解 → 悬念发霉（建议级）
 TENSION_FATIGUE_RUN = 3    # 连续 此章数 tension_score < 阈值 → 节奏塌陷预警（建议级）
 TENSION_FATIGUE_SCORE = 5
+# 悬念真空：连续 此章数 无任何活跃钩子/承诺 → 追读断点（建议级）。与 tension_fatigue 正交：
+# 那是"张力分数低"，这是"账面上没有任何未决问题吊着读者"。env 可标定。
+SUSPENSE_VACUUM_RUN = int(os.environ.get("NOVEL_SUSPENSE_VACUUM_RUN", "2"))
 PROMISE_KEPT_STATUSES = {"fulfilled", "kept", "resolved", "兑现", "已兑现", "达成"}
 GUARDRAIL_EXEMPT_HINTS = ["被控制", "失控", "伪装", "冒充", "梦境", "噩梦", "幻境", "闪回", "假装", "演戏"]
 
@@ -262,8 +265,36 @@ def detect_relationship_breaks(graph, chapter_texts=None, total_chapters=None):
     return alerts
 
 
+def _active_span(item, start_keys, end_keys, closed):
+    """钩子/承诺的活跃章区间 (start, end)。start 缺省 1（开账即活跃）；已关闭但没记关闭章 →
+    end=None 视为一直活跃（**保守方向**：无从定位关闭点时宁可压掉真空告警，不误报）。纯函数·可测。"""
+    start = None
+    for k in start_keys:
+        if item.get(k) is not None:
+            try:
+                start = int(item[k])
+                break
+            except (TypeError, ValueError):
+                continue
+    if start is None or start < 1:
+        start = 1
+    end = None
+    if closed:
+        for k in end_keys:
+            if item.get(k) is not None:
+                try:
+                    end = int(item[k])
+                    break
+                except (TypeError, ValueError):
+                    continue
+    return start, end
+
+
+_HOOK_CLOSED_STATUSES = {"resolved", "dropped", "已解", "已回收"}
+
+
 def scan_tension(ledger, text, chapter_index, fallback_curve=None):
-    """张力账本三规则（钩子过期=建议级 / 承诺违约=阻断级 / 张力疲劳=建议级）。纯函数·可测。
+    """张力账本四规则（钩子过期=建议级 / 承诺违约=阻断级 / 张力疲劳=建议级 / 悬念真空=建议级）。纯函数·可测。
 
     fallback_curve：当张力账本自身的 chapter_tension_curve 为空时使用（通常来自
     emotional_progression.json 的逐章 tension_score 实测回填）——否则张力疲劳检测永久 no-op。"""
@@ -315,6 +346,31 @@ def scan_tension(ledger, text, chapter_index, fallback_curve=None):
                 "evidence": "、".join(f"第{c.get('chapter')}章={c.get('tension_score')}" for c in tail),
                 "auto": True,
                 "note": f"连续 {TENSION_FATIGUE_RUN} 章张力 < {TENSION_FATIGUE_SCORE}（连续平淡，节奏塌陷预警——插冲突/钩子）",
+            })
+    # 4) 悬念真空：末 RUN 章账面上没有任何活跃钩子/承诺（≠张力分低——是"无未决问题吊着读者"）
+    hooks = [h for h in ledger.get("unresolved_hooks", []) if isinstance(h, dict)]
+    promises = [p for p in ledger.get("reader_promises", []) if isinstance(p, dict)]
+    if (hooks or promises) and chapter_index >= SUSPENSE_VACUUM_RUN:
+        spans = []
+        for h in hooks:
+            closed = str(h.get("status", "")).lower() in _HOOK_CLOSED_STATUSES
+            spans.append(_active_span(h, ("introduced_in_chapter",),
+                                      ("resolved_in_chapter", "resolved_chapter", "closed_in_chapter"), closed))
+        for p in promises:
+            closed = str(p.get("status", "")).lower() in PROMISE_KEPT_STATUSES
+            spans.append(_active_span(p, ("introduced_in_chapter", "opened_in_chapter"),
+                                      ("fulfilled_in_chapter", "resolved_in_chapter", "kept_in_chapter"), closed))
+        window = range(chapter_index - SUSPENSE_VACUUM_RUN + 1, chapter_index + 1)
+        counts = [sum(1 for s, e in spans if s <= c and (e is None or c <= e)) for c in window]
+        if all(cnt == 0 for cnt in counts):
+            alerts.append({
+                "type": "suspense_vacuum", "entity": "节奏", "severity": "建议级",
+                "chapter": chapter_index,
+                "evidence": f"第{window[0]}–{chapter_index}章活跃钩子/承诺数均为 0",
+                "auto": True,
+                "note": (f"连续 {SUSPENSE_VACUUM_RUN} 章张力账本上没有任何活跃钩子或未兑现承诺——"
+                         "读者手里没有一个未决问题，是追读断点高发段。开一个新钩子/新承诺，"
+                         "或给已解钩子补记 resolved_in_chapter（若是登记缺章号导致的误判）"),
             })
     return alerts
 
