@@ -149,6 +149,81 @@ def spine_authorizes(text: str, cuts: Sequence[Dict[str, Any]]) -> Optional[Dict
     return None
 
 
+# ── 章节锚授权（P4 配套·老项目路径）：keyword 之外的第二条免账通道 ──────────────
+# P4 之后新拆的集根本不含被裁章源文；但 P4 之前已拆集的项目，被裁章还在 raw 里，
+# 逐词补 cut_keywords 摩擦大。这里消费 story_spine.spine_cut_chapter_plan 的已解析
+# 剔除章集合（冲突章已被剔出，天然保守）：被标记的名词/句子在 raw 中的**全部出现**
+# 都落在被裁章内才免账——只要有一次出现落在保留章，缺失仍然可疑，不免。
+try:
+    from story_spine import chapter_heading_number, spine_cut_chapter_plan
+except Exception:  # story_spine 不可用时本通道静默关闭，keyword 通道照旧。
+    chapter_heading_number = None  # type: ignore
+    spine_cut_chapter_plan = None  # type: ignore
+
+
+def load_spine_cut_chapters(root: str) -> Dict[int, List[str]]:
+    """已解析的整章剔除计划 {章号: [thread_id...]}；不可用/未确认/无 cut 线程 → {}。"""
+    if spine_cut_chapter_plan is None:
+        return {}
+    try:
+        plan = spine_cut_chapter_plan(Path(root))
+    except Exception:
+        return {}
+    if plan.get("status") != "ok":
+        return {}
+    return {int(k): list(v) for k, v in (plan.get("cut_chapters") or {}).items()}
+
+
+def raw_chapter_spans(raw: str) -> List[Tuple[Optional[int], int, int]]:
+    """raw 按「第X章」标题切成 (章号, start, end) 偏移段；首个标题前的文本章号为 None。"""
+    if chapter_heading_number is None:
+        return []
+    spans: List[Tuple[Optional[int], int, int]] = []
+    current: Optional[int] = None
+    seg_start = 0
+    pos = 0
+    for line in raw.splitlines(keepends=True):
+        ch = chapter_heading_number(line)
+        if ch is not None:
+            if pos > seg_start:
+                spans.append((current, seg_start, pos))
+            current = ch
+            seg_start = pos
+        pos += len(line)
+    if pos > seg_start:
+        spans.append((current, seg_start, pos))
+    return spans
+
+
+def _chapter_at(spans: Sequence[Tuple[Optional[int], int, int]], pos: int) -> Optional[int]:
+    for ch, start, end in spans:
+        if start <= pos < end:
+            return ch
+    return None
+
+
+def spine_chapter_authorizes(text: str, raw: str,
+                             spans: Sequence[Tuple[Optional[int], int, int]],
+                             cut_chapters: Dict[int, List[str]]) -> Optional[Dict[str, Any]]:
+    """text 在 raw 中的全部出现都落在被裁章内 → 返回 {chapters, cut_threads}；否则 None。"""
+    if not text or not cut_chapters or not spans:
+        return None
+    hit_chapters: Set[int] = set()
+    pos = raw.find(text)
+    if pos < 0:
+        return None
+    guard = 0
+    while pos >= 0 and guard < 200:
+        ch = _chapter_at(spans, pos)
+        if ch is None or ch not in cut_chapters:
+            return None
+        hit_chapters.add(ch)
+        pos = raw.find(text, pos + 1)
+        guard += 1
+    threads = sorted({t for ch in hit_chapters for t in cut_chapters.get(ch, [])})
+    return {"chapters": sorted(hit_chapters), "cut_threads": threads, "via": "chapter_anchor"}
+
+
 def spine_summary(cut: Dict[str, Any]) -> Dict[str, Any]:
     out = {
         "spine_thread": cut.get("thread_id"),
@@ -458,6 +533,8 @@ def audit(root: str, ep: str, *, check_fabrication: bool = False) -> Dict[str, A
         return {"episode": ep, "ok": False, "stats": {"raw_chars": len(raw)}, "findings": findings}
     triage_items, triage_used_paths = load_triage_items(root, ep)
     spine_cuts = load_spine_cuts(root)
+    spine_cut_chapters = load_spine_cut_chapters(root)
+    chapter_spans = raw_chapter_spans(raw) if spine_cut_chapters else []
 
     terms = important_terms(raw)
     missing_terms = [t for t in terms if not present(t, adapted)]
@@ -477,6 +554,14 @@ def audit(root: str, ep: str, *, check_fabrication: bool = False) -> Dict[str, A
             add(findings, "info", "source_term_cut_by_spine",
                 f"源文关键名词 `{term}` 属 story_spine 已 {spine_auth.get('decision')} 的支线；按全书级有账剪枝处理。",
                 {"term": term, **spine_summary(spine_auth)})
+            continue
+        chapter_auth = spine_chapter_authorizes(term, raw, chapter_spans, spine_cut_chapters)
+        if chapter_auth:
+            spine_authorized += 1
+            add(findings, "info", "source_term_cut_by_spine",
+                f"源文关键名词 `{term}` 的全部出现都在 story_spine 已裁的第 {chapter_auth['chapters']} 章内；"
+                "按全书级有账剪枝（章节锚）处理。",
+                {"term": term, **chapter_auth})
             continue
         sev = "warn"
         code = "source_term_missing"
@@ -506,6 +591,13 @@ def audit(root: str, ep: str, *, check_fabrication: bool = False) -> Dict[str, A
                     f"源文关键事件属 story_spine 已 {spine_auth.get('decision')} 的支线；按全书级有账剪枝处理。",
                     {"sentence": sentence[:120], "coverage": round(cov, 3), **spine_summary(spine_auth)})
                 continue
+            chapter_auth = spine_chapter_authorizes(sentence, raw, chapter_spans, spine_cut_chapters)
+            if chapter_auth:
+                spine_authorized += 1
+                add(findings, "info", "source_event_cut_by_spine",
+                    f"源文关键事件位于 story_spine 已裁的第 {chapter_auth['chapters']} 章内；按全书级有账剪枝（章节锚）处理。",
+                    {"sentence": sentence[:120], "coverage": round(cov, 3), **chapter_auth})
+                continue
             omitted_events.append({"sentence": sentence[:120], "coverage": round(cov, 3), "required_terms": required})
     for item in omitted_events[:8]:
         add(findings, "warn", "source_event_maybe_omitted",
@@ -533,6 +625,13 @@ def audit(root: str, ep: str, *, check_fabrication: bool = False) -> Dict[str, A
                 add(findings, "info", "scene_function_cut_by_spine",
                     f"源文场景功能属 story_spine 已 {spine_auth.get('decision')} 的支线；按全书级有账剪枝处理。",
                     {"sentence": sentence[:120], "functions": item["labels"], "coverage": round(cov, 3), **spine_summary(spine_auth)})
+                continue
+            chapter_auth = spine_chapter_authorizes(sentence, raw, chapter_spans, spine_cut_chapters)
+            if chapter_auth:
+                spine_authorized += 1
+                add(findings, "info", "scene_function_cut_by_spine",
+                    f"源文场景功能位于 story_spine 已裁的第 {chapter_auth['chapters']} 章内；按全书级有账剪枝（章节锚）处理。",
+                    {"sentence": sentence[:120], "functions": item["labels"], "coverage": round(cov, 3), **chapter_auth})
                 continue
             lost_functions.append({
                 "sentence": sentence[:120],
@@ -566,6 +665,7 @@ def audit(root: str, ep: str, *, check_fabrication: bool = False) -> Dict[str, A
         "triage_items": len(triage_items),
         "triage_authorized_terms": triage_authorized_terms,
         "spine_cut_threads": len(spine_cuts),
+        "spine_cut_chapters": sorted(spine_cut_chapters),
         "spine_authorized_omissions": spine_authorized,
         "important_terms": len(terms),
         "missing_terms": len(missing_terms),

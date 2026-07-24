@@ -97,6 +97,15 @@ def _chapter_token_to_int(token: str) -> Optional[int]:
     return total + section + number
 
 
+_CHAPTER_HEADING_RE = re.compile(rf"^\s*第\s*({_CH_NUM})\s*[章回节卷]")
+
+
+def chapter_heading_number(line: str) -> Optional[int]:
+    """一行文本若是「第X章」式标题则返回章号（供下游按章定位源文；非标题返回 None）。"""
+    m = _CHAPTER_HEADING_RE.match(str(line or ""))
+    return _chapter_token_to_int(m.group(1)) if m else None
+
+
 def parse_chapter_span(text: str) -> Optional[Tuple[int, int]]:
     """严格解析一条 source_span 为闭区间 (start, end)；解析不了返回 None（fail-closed 不剔）。"""
     s = str(text or "").strip()
@@ -678,6 +687,28 @@ def check(root: Path, *, write_missing: bool = False) -> Dict[str, Any]:
                    f"整章剔除计划已解析：第 {chapters} 章将在拆集时整章剔除"
                    f"（mode={cut_plan['mode']}；enforce 才真剔，advisory 只预览记账）。",
                    {"chapters": chapters})
+            # 被裁章已进已拆集的集 → 提醒返工路径（重拆会移动后续边界；不 block——
+            # 追溯返工是显式决策，走 seam_migrate/n2d-update 最小重制，宪法 F4 语义）。
+            cut_set = set(chapters)
+            hit_eps: List[Dict[str, Any]] = []
+            for raw_file in sorted((root / "脚本").glob("第*集/raw.txt")):
+                try:
+                    found = sorted({
+                        ch for ch in (
+                            chapter_heading_number(line)
+                            for line in raw_file.read_text(encoding="utf-8").splitlines()
+                        ) if ch in cut_set
+                    })
+                except Exception:
+                    continue
+                if found:
+                    hit_eps.append({"episode": raw_file.parent.name, "chapters": found})
+            if hit_eps:
+                _issue(issues, "warn", "spine_cut_chapter_already_split",
+                       f"被裁章已存在于 {len(hit_eps)} 个已拆集的集里（{[h['episode'] for h in hit_eps]}）——"
+                       "剔除只作用于之后的重拆；要让已拆集内容生效需重跑 split（会移动后续边界，"
+                       "先做受影响范围返工计划）或走 seam_migrate 最小迁移。",
+                       {"episodes": hit_eps})
 
     return _finalize(root, mode, mode_source, issues, spine=spine, threads=threads)
 

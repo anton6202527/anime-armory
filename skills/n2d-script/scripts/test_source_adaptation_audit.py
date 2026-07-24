@@ -251,3 +251,64 @@ def test_fabrication_accounted_by_triage():
     c = codes(result)
     assert "fabricated_entity_candidate" not in c
     assert "adaptation_new_term_accounted" in c
+
+
+# ── 章节锚授权（P4 配套·老项目路径）──────────────────────────────────────────
+
+CH_RAW = (
+    "第3章 反击\n"
+    "沈念被逼到宫墙下。系统提示【妖血觉醒】。她反击柳娘子！\n"
+    "第4章 旧忆\n"
+    "少年递来【青梅盟约】的信物，与她细数旧事，另有隐情。\n"
+)
+
+
+def _cut_ch4_thread():
+    return [{
+        "id": "THREAD_QINGMEI", "name": "青梅旁枝", "class": "tangent", "decision": "cut",
+        "source_spans": ["第4章"], "cut_keywords": [],
+        "connectivity": {"payoff_reroute": "主线一句带过", "no_orphan_proof": "该线无伏笔"},
+    }]
+
+
+def test_chapter_anchor_authorizes_cut_chapter_content():
+    # 旧项目 raw 仍含被裁章；cut 线程只给章节锚（无 cut_keywords）→ 按章节锚免账。
+    root = _mk_ep(
+        CH_RAW,
+        "[镜头1·沈念·惊恐·快] 系统提示【妖血觉醒】。\n"
+        "[镜头2·沈念·冷冽·快] 我要反击柳娘子！  💥爽点\n"
+        "[镜头3·沈念·阴狠·慢] 这局才刚开始。  🪝集尾\n",
+    )
+    _write_spine(root, _cut_ch4_thread())
+    result = SA.audit(root, "第1集")
+    infos = [f for f in result["findings"] if f["code"].endswith("_cut_by_spine")]
+    assert infos, codes(result)
+    assert any((f.get("evidence") or {}).get("via") == "chapter_anchor" for f in infos)
+    qingmei_warn = [f for f in result["findings"] if f["severity"] == "warn"
+                    and "青梅" in json.dumps(f.get("evidence") or {}, ensure_ascii=False)]
+    assert not qingmei_warn
+
+
+def test_chapter_anchor_not_authorized_when_term_also_in_kept_chapter():
+    # 同一名词也出现在保留章 → 不免账（保守：缺失仍可疑）。
+    raw = CH_RAW.replace("她反击柳娘子！", "她反击柳娘子！【青梅盟约】早有预兆。")
+    root = _mk_ep(
+        raw,
+        "[镜头1·沈念·惊恐·快] 系统提示【妖血觉醒】。她反击柳娘子。\n"
+        "[镜头2·沈念·阴狠·慢] 这局才刚开始。  🪝集尾\n",
+    )
+    _write_spine(root, _cut_ch4_thread())
+    result = SA.audit(root, "第1集")
+    assert "source_term_missing" in codes(result)
+
+
+def test_chapter_anchor_ignored_without_confirmed_spine():
+    root = _mk_ep(
+        CH_RAW,
+        "[镜头1·沈念·惊恐·快] 系统提示【妖血觉醒】。她反击柳娘子。\n",
+    )
+    _write_spine(root, _cut_ch4_thread(), status="draft")
+    result = SA.audit(root, "第1集")
+    assert not any(
+        (f.get("evidence") or {}).get("via") == "chapter_anchor" for f in result["findings"]
+    )

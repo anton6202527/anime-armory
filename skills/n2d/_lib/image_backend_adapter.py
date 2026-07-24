@@ -5,7 +5,7 @@
 This module normalizes image-generation backends into one capability model so
 stage scripts can ask for capabilities instead of branching on vendor names.
 
-采集日期：2026-07-01
+采集日期：2026-07-24
 """
 from __future__ import annotations
 
@@ -187,6 +187,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
     },
     "seedream": {
         "label": "Seedream Universal Reference (访问入口 Seedream 官方 API)",
+        # 2026-07-24 实搜复核：Seedream 5.0 Pro 已于 2026-07-08 正式发布（火山方舟首发，2K、
+        # 10+ 可分离图层、精修编辑，社区评图像质量达 GPT Image 2 级、API ~$0.03/图）。登记默认
+        # 仍以 4.5 Universal Reference 为已验路径；切 5.0 Pro 前须 per-run 官方 endpoint 证据。
         "model": "Seedream 4.5 (Universal Reference·版本以 per-run 证据为准)",
         "channel": "Seedream 官方 API",
         "adapter_kind": "seedream_api",

@@ -17,7 +17,7 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 # 这是「生视频模型/渠道」选择点的能力档快照；max_clip_seconds/native_av/frame_control、以及
 # 下方 MOTION_CONTROL_PROFILES（运镜/运动控制能力）和 lipsync_audio_ref（音频参考口型）都随后端迭代变，
 # 同属本快照、同一个戳记覆盖（freshness 注册 id=n2d-video-backends）。
-# 采集日期：2026-07-11  来源：Google Gemini API video/Omni/Veo docs + ByteDance Seedance 2.0 official + Kling VIDEO 3.0 official guide + PixVerse C1 official launch + cli_snapshots/
+# 采集日期：2026-07-24  来源：Google Gemini API video/Omni/Veo docs + ByteDance Seedance 2.0/2.5 official launch（即梦体验中心 07-06 上线·API 随后）+ Kling VIDEO 3.0 official guide + PixVerse C1 official launch + cli_snapshots/
 CATALOG_VERIFIED = {
     "date": "2026-07-11",
     "source": (
@@ -127,9 +127,12 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "capability_confidence": "conservative",
         "aliases": ("seedance", "Seedance 2.0", "seedance2.0", "seedance 2.0",
                     "Seedance 2.5", "seedance2.5", "seedance 2.5"),
-        # 2026 新鲜度：Seedance 2.5（~2026-07 预告）扩到更多全模态参考（@素材槽）+ 更长单次生成；
-        # 能力仍按 multishot_native + 当前 max_clip_seconds 保守登记，具体上限以 cli_snapshots 复核为准，
-        # 不在档里写死未验证的「50 参考 / 30s」数字（防过期）。
+        # 2026 新鲜度（2026-07-24 实搜复核）：Seedance 2.5 已正式上线——即梦体验中心 ~2026-07-06、
+        # API 随后开放；官方发布口径为单段原生 30s + 最多 50 个全模态参考 + 音视频同 latent 联合生成
+        # （「原生 4K」多篇报道实际归属同场升级的 Seedance 2.0，2.5 是否 4K 仍存疑）。对 n2d 的意义：
+        # 30s 单段直接抬高 single_take_multishot 接力组的合并上限（更少 clip）。能力仍按
+        # multishot_native + 当前 max_clip_seconds 保守登记：执行渠道 per-run cli_snapshots 验到 2.5
+        # 且时长档确认前，家族上限不升到 30（防把未验数字写死进预算）。
         "max_clip_seconds": 15,
         "default_mode": "image2video",
         "identity_mechanism": "face_lock",

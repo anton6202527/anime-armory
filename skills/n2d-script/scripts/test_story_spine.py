@@ -395,3 +395,34 @@ def test_check_warns_unparseable_cut_spans_and_reports_resolved(tmp_path):
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-q"]))
+
+
+def test_chapter_heading_number():
+    assert SS.chapter_heading_number("第4章 旧忆") == 4
+    assert SS.chapter_heading_number("第十二回 风波再起") == 12
+    assert SS.chapter_heading_number("正文里提到第4章的事") is None
+
+
+def test_check_warns_when_cut_chapter_already_in_split_episode(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([_cut_thread("THREAD_CUT", ["第4章"])])
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    ep = root / "脚本" / "第2集"
+    ep.mkdir(parents=True)
+    (ep / "raw.txt").write_text("第4章 旧忆\n少年递来信物。\n", encoding="utf-8")
+    report = SS.check(root)
+    rows = [i for i in report["issues"] if i["code"] == "spine_cut_chapter_already_split"]
+    assert rows and rows[0]["severity"] == "warn"
+    assert rows[0]["evidence"]["episodes"][0]["episode"] == "第2集"
+    assert report["status"] != "block"  # 追溯返工是显式决策，不阻断
+
+
+def test_check_no_already_split_warning_when_raw_clean(tmp_path):
+    comp = _comprehension([])
+    spine = _good_spine([_cut_thread("THREAD_CUT", ["第4章"])])
+    root = _mk(tmp_path, comprehension=comp, spine=spine, settings="主线剪枝: 突出主线")
+    ep = root / "脚本" / "第1集"
+    ep.mkdir(parents=True)
+    (ep / "raw.txt").write_text("第3章 反击\n她反击！\n", encoding="utf-8")
+    report = SS.check(root)
+    assert "spine_cut_chapter_already_split" not in {i["code"] for i in report["issues"]}

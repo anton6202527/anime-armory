@@ -132,7 +132,7 @@ def _video_aliases() -> Dict[str, str]:
 VIDEO_BACKEND_SETTING_ALIASES = _video_aliases()
 
 VIDEO_MODEL_CHOICES = (
-    "Seedance 2.0", "Seedance",
+    "Seedance 2.5", "Seedance 2.0", "Seedance",
     "Veo 3.1", "Veo",
     "Kling 3.0", "Kling",
     "Hailuo 02", "Hailuo 2.3", "Hailuo",
