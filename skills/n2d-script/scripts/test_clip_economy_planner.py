@@ -292,3 +292,88 @@ def test_extreme_mode_tightens_budget():
     root = _mk_with_settings(clips, "片段经济: 极简\n")
     tight = CEP.build_plan(root, "第1集")["summary"]["budget_per_min"]
     assert tight < base  # 极简收紧一档
+
+
+# ── 沉没成本口径（2026-07-23）：已生成视频的 Clip 不计省次数、不触发 enforce 阻断 ──
+
+def _touch_video(root, ordinal, name="已生成"):
+    d = root / "出视频" / "第1集" / "视频"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"Clip_{ordinal:02d}_{name}_part1.mp4").write_bytes(b"x")
+
+
+def _multi_shot_clip(i, duration=12.0):
+    third = duration / 3.0
+    return _clip(i, duration=duration, shots=[
+        {"t": [0, third], "lens": "MS 50mm", "desc": "起"},
+        {"t": [third, third * 2], "lens": "CU 85mm", "desc": "承"},
+        {"t": [third * 2, duration], "lens": "MS 35mm", "desc": "合"},
+    ])
+
+
+def test_generated_clip_excluded_from_single_take_candidates():
+    root = _mk_storyboard([_multi_shot_clip(1), _clip(2, duration=9.0, scene="县衙大堂", location_id="LOC_hall")])
+    _touch_video(root, 1)
+    plan = CEP.build_plan(root, "第1集")
+    assert plan["summary"]["sunk_cost_clips"] == 1
+    assert all(c["clip"] != "Clip_01" for c in plan["single_take_candidates"])
+    codes = {f["code"] for f in plan["findings"]}
+    assert "sunk_cost_clips_excluded" in codes
+    info = next(f for f in plan["findings"] if f["code"] == "sunk_cost_clips_excluded")
+    assert info["severity"] == "info" and "Clip_01" in info["message"]
+
+
+def test_generated_clip_breaks_merge_chain():
+    root = _mk_storyboard([_clip(1), _clip(2), _clip(3)])
+    _touch_video(root, 2)
+    plan = CEP.build_plan(root, "第1集")
+    member_ids = {m for g in plan["merge_groups"] for m in g["members"]}
+    assert "Clip_02" not in member_ids
+
+
+def test_tight_mode_does_not_block_when_only_savings_are_sunk_cost():
+    # 密集多 take 但全部已生成 → 无可采纳节省 → 紧凑档不阻断（可执行、不死锁）
+    clips = [_multi_shot_clip(i, duration=6.0) for i in range(1, 4)]
+    for i, c in enumerate(clips, 1):
+        c["scene"] = f"独立场景{i}"
+        c["location_id"] = f"LOC_{i}"
+        c["character_ids"] = [f"CHAR_{i:02d}", f"CHAR_{i+10:02d}"]
+    root = _mk_storyboard(clips)
+    (root / "_设置.md").write_text("- 片段经济：紧凑\n", encoding="utf-8")
+    for i in range(1, 4):
+        _touch_video(root, i)
+    plan = CEP.build_plan(root, "第1集")
+    assert plan["summary"]["sunk_cost_clips"] == 3
+    assert plan["single_take_candidates"] == []
+    assert plan["should_block"] is False
+    over = [f for f in plan["findings"] if f["code"] == "generation_density_over_budget"]
+    assert all(f["severity"] == "warn" for f in over)
+
+
+def test_tight_mode_still_blocks_when_ungenerated_candidate_exists():
+    clips = [_multi_shot_clip(1, duration=6.0), _multi_shot_clip(2, duration=6.0)]
+    for i, c in enumerate(clips, 1):
+        c["scene"] = f"独立场景{i}"
+        c["location_id"] = f"LOC_{i}"
+        c["character_ids"] = [f"CHAR_{i:02d}", f"CHAR_{i+10:02d}"]
+    root = _mk_storyboard(clips)
+    (root / "_设置.md").write_text("- 片段经济：紧凑\n", encoding="utf-8")
+    _touch_video(root, 1)  # Clip_02 未生成，仍是可采纳候选
+    plan = CEP.build_plan(root, "第1集")
+    if plan["summary"]["over_budget"]:
+        assert plan["should_block"] is True
+    assert any(c["clip"] == "Clip_02" for c in plan["single_take_candidates"])
+
+
+def test_video_out_field_also_marks_sunk_cost():
+    root = _mk_storyboard([_multi_shot_clip(1)])
+    rel = "出视频/第1集/视频/自定义名.mp4"
+    (root / "出视频" / "第1集" / "视频").mkdir(parents=True, exist_ok=True)
+    (root / rel).write_bytes(b"x")
+    clips_path = root / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(clips_path.read_text(encoding="utf-8"))
+    data["clips"][0]["video_out"] = rel
+    clips_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    plan = CEP.build_plan(root, "第1集")
+    assert plan["summary"]["sunk_cost_clips"] == 1
+    assert plan["single_take_candidates"] == []

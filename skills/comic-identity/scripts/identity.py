@@ -35,7 +35,10 @@ TIER_REQUIRED_VIEWS: dict[str, tuple[str, ...]] = {
     "core_full": ("front", "three_quarter", "side", "back", "face"),
     "recurring_standard": ("front", "three_quarter", "face"),
     "named_minimal": ("front", "face"),
-    "restricted_partial": (),
+    # 2026-07-23：() → ("front",)。零必需视图让 restricted_partial 成为整档免检旁路
+    # （聊斋第1话全员此档、画皮鬼零视图零签收当话即漂移）；最低档也要一张正面锚。
+    # 与 model_pack.py 同名表保持一致。
+    "restricted_partial": ("front",),
 }
 
 

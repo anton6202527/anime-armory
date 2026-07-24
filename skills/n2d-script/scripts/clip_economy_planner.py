@@ -347,11 +347,14 @@ def find_merge_groups(
 def find_fold_candidates(
     clips: Sequence[Mapping[str, Any]],
     economy_rows: Mapping[str, Mapping[str, Any]],
+    generated: frozenset = frozenset(),
 ) -> List[Dict[str, Any]]:
     """弱信息微镜（compact/micro/montage）→ 并入相邻强戏候选（不独立成付费 clip）。"""
     out: List[Dict[str, Any]] = []
     for i, clip in enumerate(clips, 1):
         cid = clip_id(clip, i)
+        if cid in generated:
+            continue
         row = economy_rows.get(cid) or {}
         economy_class = str(row.get("economy_class") or "")
         duration = duration_of(clip)
@@ -421,8 +424,10 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
             **({"merge_blocked_reason": why} if why else {}),
         })
 
-    merge_groups = find_merge_groups(clips, max_take_sec)
-    fold_candidates = find_fold_candidates(clips, economy_rows)
+    # 沉没成本口径：已有付费视频落盘的 Clip 不进任何省次数候选（合并=废弃重生成，无节省）。
+    generated = frozenset(generated_clip_ids(root, ep, clips))
+    merge_groups = find_merge_groups(clips, max_take_sec, generated)
+    fold_candidates = find_fold_candidates(clips, economy_rows, generated)
 
     by_id = {row["clip"]: row for row in per_clip}
     member_ids = set()
@@ -438,10 +443,16 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
     # 声明 take_policy=single_take_multishot 后一次生成即可。真实项目主浪费点常在这里：
     # 相邻 clip 往往已够长合不动，省次数靠不拆内部镜位。
     single_take_candidates: List[Dict[str, Any]] = []
+    sunk_cost_skipped: List[str] = []
     for i, clip in enumerate(clips, 1):
         cid = clip_id(clip, i)
         if cid in member_ids or cid in folded_ids:
             continue  # 已被合并/并入候选覆盖，不重复计
+        if cid in generated:
+            takes_now = int((by_id.get(cid) or {}).get("estimated_takes") or 1)
+            if takes_now > 1 and clip_take_policy(clip) != "single_take_multishot":
+                sunk_cost_skipped.append(cid)  # 本可合并，但视频已生成 → 沉没成本，不计节省
+            continue
         duration = duration_of(clip)
         takes = int((by_id.get(cid) or {}).get("estimated_takes") or 1)
         if takes <= 1 or clip_take_policy(clip) == "single_take_multishot":
@@ -509,6 +520,18 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
                 f"按下方 merge/fold 候选合并后约 {projected_per_min}/min。"
             ),
         })
+    if sunk_cost_skipped:
+        findings.append({
+            "severity": "info",
+            "code": "sunk_cost_clips_excluded",
+            "confidence": "heuristic",
+            "message": (
+                f"{len(sunk_cost_skipped)} 个多 take Clip（{', '.join(sunk_cost_skipped[:6])}"
+                f"{'…' if len(sunk_cost_skipped) > 6 else ''}）已有生成视频落盘，按沉没成本处理：不计入可采纳"
+                "省次数、不参与 enforce 阻断（此刻合并=废弃已付费产物重新生成）。确要返工走 n2d-update 最小重制计划；"
+                "本口径只约束存量，后续集的 storyboard 仍按预算规划。"
+            ),
+        })
     if merge_groups or single_take_candidates:
         findings.append({
             "severity": "warn",
@@ -531,6 +554,7 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "merge_groups": len(merge_groups),
         "fold_candidates": len(fold_candidates),
         "single_take_candidates": len(single_take_candidates),
+        "sunk_cost_clips": len(generated),
         "max_take_sec": max_take_sec,
         "capability_snapshot_date": CAPABILITY_SNAPSHOT_DATE,
         "complexity": complexity,
@@ -553,6 +577,7 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "findings": findings,
         "rules": [
             "生成次数预算按集看，不只按单 Clip 时长看：简单叙事优先「更少更长的多镜单拍」而不是逐节拍独立 clip。",
+            "已生成视频的 Clip 是沉没成本：不进省次数候选、不触发 enforce 阻断；进行中的集不追溯返工，返工走 n2d-update 最小重制。",
             "合并候选只提案不执行：改 storyboard 是签收产物变更，须编剧在阶段2精修确认。",
             "高动作模板/锚链/奇观镜不进合并候选：安全拆分与锚帧链优先于省次数（与 shot_split_decision 同口径）。",
             "本报告全部启发式、report-only（宪法 B10）；密度口径带能力快照日期，会过期，执行前按 C2 刷新。",

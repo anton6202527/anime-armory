@@ -34,7 +34,10 @@ TIER_REQUIRED_VIEWS = {
     "core_full": ("front", "three_quarter", "side", "back", "face"),
     "recurring_standard": ("front", "three_quarter", "face"),
     "named_minimal": ("front", "face"),
-    "restricted_partial": (),
+    # 2026-07-23 实证修正：restricted_partial 曾是 ()——零必需视图 + signoff_required=False
+    # + readiness 自动 ready，等于整档免检旁路。第1话全员标此档后「多视图齐套 pass」，
+    # 画皮鬼单锚图零签收，4/5 实体当话即漂移。最低档也必须有一张正面锚 + 人审签收。
+    "restricted_partial": ("front",),
 }
 
 
@@ -432,16 +435,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     assets = registry.get("assets") if isinstance(registry.get("assets"), Mapping) else {}
     selected = [item.strip() for item in args.characters.split(",") if item.strip()]
     if not selected:
-        # 2026-07-17：monster 从 opt-in 改为按档位默认纳管。此前 monster 需手动打
-        # model_pack_required=true 才进审计，虎妖（recurring_standard·16/30 格在场）漏管，
-        # P015 画成四足普通虎无人拦。现 core_full/recurring_standard 生物默认纳管，
-        # model_pack_required 仍可显式 true/false 覆盖。
+        # 2026-07-17：monster 从 opt-in 改为按档位默认纳管（虎妖 P015 画成普通虎漏管）。
+        # 2026-07-23 再修：当时只纳 core_full/recurring_standard，named_minimal/未标档
+        # monster 仍被默认排除——与 character（任何档位都纳管）不对称，也违背 identity.py
+        # 「未标档宁多不漏」的保守原则。聊斋第2话狐仆(named_minimal·8/16 格在场)因此零定妆
+        # 审计。现 monster 与 character 同标准全档纳管；model_pack_required 仍可显式 false 豁免。
         def monster_managed(asset: Mapping) -> bool:
             flag = asset.get("model_pack_required")
             if flag is True or flag is False:
                 return flag
-            tier = str(asset.get("library_tier") or asset.get("tier") or "").strip()
-            return tier in ("core_full", "recurring_standard")
+            return True
 
         selected = sorted(
             aid for aid, asset in assets.items()

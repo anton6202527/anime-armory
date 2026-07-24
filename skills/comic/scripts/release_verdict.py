@@ -385,6 +385,83 @@ def review_gate_summary(root: Path, chapter: str) -> dict[str, Any]:
     }
 
 
+def vlm_adjudication_summary(root: Path, chapter: str) -> dict[str, Any]:
+    """VLM 三轴（角色/生物身份、背景、道具）裁决覆盖摘要。
+
+    2026-07 实证：两话 103 条任务 0 裁决仍以 internal profile 放行——
+    「画错生物形态」类漂移全程无人拦。gate 只 warn（advisory 哲学），
+    闭环必须在发布裁决收口（同 n2d release_verdict strict 档拒空壳的模式）。
+    只统计 SHA 仍然有效的裁决：重抽过的格旧裁决不算数。
+    """
+    tasks_payload = load_json(root / "生产数据" / f"comic_vlm_judge_tasks_{chapter}.json", {})
+    tasks = tasks_payload.get("tasks") if isinstance(tasks_payload, Mapping) else None
+    tasks = [task for task in tasks or [] if isinstance(task, Mapping)]
+    expected = {
+        str(task.get("task_id")): str((task.get("panel") or {}).get("sha256") or "")
+        for task in tasks
+        if task.get("task_id")
+    }
+    verdict_payload = load_json(root / "生产数据" / f"comic_vlm_judge_verdicts_{chapter}.json", {})
+    records = verdict_payload.get("verdicts") if isinstance(verdict_payload, Mapping) else None
+    adjudicated: dict[str, str] = {}
+    for record in records or []:
+        if not isinstance(record, Mapping):
+            continue
+        task_id = str(record.get("task_id") or "")
+        if task_id not in expected:
+            continue
+        if str(record.get("panel_sha256") or "") != expected[task_id]:
+            continue  # 该格已重抽，旧裁决作废
+        verdict = str(record.get("verdict") or "")
+        if verdict in {"pass", "suspect"}:
+            adjudicated[task_id] = verdict
+    open_suspects = sorted(tid for tid, verdict in adjudicated.items() if verdict == "suspect")
+    return {
+        "tasks_file_present": bool(tasks_payload),
+        "total": len(expected),
+        "adjudicated": len(adjudicated),
+        "open_suspects": open_suspects,
+    }
+
+
+def check_vlm_adjudication(root: Path, chapter: str, summary: Mapping[str, Any]) -> list[dict[str, Any]]:
+    issues: list[dict[str, Any]] = []
+    total = int(summary.get("total") or 0)
+    adjudicated = int(summary.get("adjudicated") or 0)
+    open_suspects = list(summary.get("open_suspects") or [])
+    if not summary.get("tasks_file_present"):
+        if (root / "生产数据" / f"comic_character_consistency_{chapter}.json").is_file():
+            issues.append(issue(
+                "vlm_tasks_missing",
+                "角色一致性报告存在但 VLM 并排判定任务包缺失——身份三轴机检未建立，不能声称完成生产验收。",
+                domain="production",
+            ))
+        return issues
+    if total > 0 and adjudicated == 0:
+        issues.append(issue(
+            "vlm_adjudication_missing",
+            f"VLM 并排判定任务包 {total} 条、有效裁决 0 条——角色/生物身份、背景、道具三轴机检空转，"
+            "画错生物形态这类漂移不会被拦。先用 vlm_adjudicate.py queue/submit 完成裁决。",
+            domain="production",
+        ))
+    elif total > 0 and adjudicated < total:
+        issues.append(issue(
+            "vlm_adjudication_partial",
+            f"VLM 裁决覆盖不完整：{adjudicated}/{total}（重抽过的格需重建任务包后再裁决）。",
+            domain="release",
+            blocking_profiles=PUBLIC_PROFILES,
+        ))
+    if open_suspects:
+        issues.append(issue(
+            "vlm_suspect_unresolved",
+            f"VLM 裁决存在未处置的 suspect {len(open_suspects)} 条（{', '.join(open_suspects[:6])}"
+            f"{' …' if len(open_suspects) > 6 else ''}）——确认漂移的格必须重抽并重新裁决，或书面豁免。",
+            domain="release",
+            blocking_profiles=PUBLIC_PROFILES,
+        ))
+    return issues
+
+
 def review_receipt_binding(root: Path, chapter: str) -> dict[str, str]:
     path = root / "生产数据" / "gate_receipts" / f"review_{chapter}.json"
     receipt = load_json(path, {})
@@ -513,6 +590,8 @@ def build(root: Path, chapter: str, profile: str) -> dict[str, Any]:
     issues.extend(platform_issues)
 
     issues.extend(check_review_receipt(root, chapter))
+    adjudication = vlm_adjudication_summary(root, chapter)
+    issues.extend(check_vlm_adjudication(root, chapter, adjudication))
     issues.extend(check_acceptance(root, chapter, artifacts, profile))
 
     meta = load_json(root / "_meta.json", {})
@@ -550,6 +629,7 @@ def build(root: Path, chapter: str, profile: str) -> dict[str, Any]:
         "platform_profile": platform_profile,
         "verdict": "pass" if not profile_blocks else "blocked",
         "review_gate_summary": review_gate_summary(root, chapter),
+        "vlm_adjudication": adjudication,
         "delivery_states": delivery_states,
         "artifacts": artifacts,
         "issues": issues,
@@ -581,6 +661,12 @@ def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[
     for waiver in gate_summary.get("waivers") or []:
         lines.append(
             f"- 豁免留痕: `{waiver.get('path')}`（{waiver.get('stage')}；{waiver.get('reason')}）"
+        )
+    adjudication = report.get("vlm_adjudication") or {}
+    if adjudication.get("tasks_file_present"):
+        lines.append(
+            f"- VLM 三轴裁决覆盖: {adjudication.get('adjudicated', 0)}/{adjudication.get('total', 0)}"
+            + (f"，未处置 suspect {len(adjudication.get('open_suspects') or [])} 条" if adjudication.get("open_suspects") else "")
         )
     lines += [
         "",
