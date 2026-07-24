@@ -196,3 +196,21 @@ def test_anchor_consumption_plan_single_take_mode():
         frame_strategy="single_take_multishot",
     )
     assert unsupported["consumption_mode"] == "unsupported_multishot_take"
+
+
+def test_single_take_merge_ceiling_floor_and_capability():
+    from n2d_platform_profiles import single_take_merge_ceiling_seconds
+    # 未定/未知后端 → floor（历史 15s）；小上限后端不把合并压得比历史更碎。
+    assert single_take_merge_ceiling_seconds("") == 15.0
+    assert single_take_merge_ceiling_seconds("不存在的后端") == 15.0
+    assert single_take_merge_ceiling_seconds("Veo 3.1") == 15.0  # veo 8s → floor 兜底
+    assert single_take_merge_ceiling_seconds("Seedance 2.0") == 15.0  # 当前家族上限 15
+    # floor 之上跟随已验后端能力（floor 缩小时能看到真实后端上限生效）。
+    assert single_take_merge_ceiling_seconds("Veo 3.1", floor=6.0) == 8.0
+
+
+def test_single_take_merge_ceiling_follows_capability_lift(monkeypatch):
+    # 前向接线：per-run 证据把家族上限升到 30 后，合并上限自动跟进（不需改脚本层）。
+    import n2d_platform_profiles as P
+    monkeypatch.setitem(P.VIDEO_BACKEND_MAX_SECONDS, "seedance", 30)
+    assert P.single_take_merge_ceiling_seconds("Seedance 2.5") == 30.0

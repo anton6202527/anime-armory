@@ -656,6 +656,22 @@ def video_backend_max_seconds(backend: Optional[str], default: int = 8) -> int:
     return VIDEO_BACKEND_MAX_SECONDS.get(key, default)
 
 
+def single_take_merge_ceiling_seconds(backend: Optional[str], *, floor: float = 15.0) -> float:
+    """编辑侧「单拍多镜」合并上限（秒）：后端能力感知的前向接线。
+
+    返回 max(floor, 已验后端单段生成上限)。设计意图：
+      - 后端未定（自动路由）/未知 → floor（历史 15s 行为，绝不倒退合并机会）；
+      - 后端单段上限经 per-run 证据升高（如 Seedance 2.5 验到 30s 后更新
+        VIDEO_BACKEND_MAX_SECONDS）→ 脚本层合并上限自动跟进，不需再改代码；
+      - 上限较小的后端（如 8s 档）不把编辑侧合并压得比历史更碎——最终能不能一次
+        生成仍由 select_video_frame_strategy / 时长闸兜底回落，编辑侧只管合并意图。
+    消费方：n2d-script shot_split_decision.single_take_policy_verdict 与
+    n2d-video prompt_pack 的 auto_single_take（同口径）。
+    """
+    backend_max = float(video_backend_max_seconds(backend, default=0))
+    return max(float(floor), backend_max)
+
+
 def video_backend_duration_control(
     backend: Optional[str],
     channel: Optional[str] = None,

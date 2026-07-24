@@ -27,6 +27,16 @@ try:
 except Exception:  # pragma: no cover - planner still works without advisory layer
     sea = None  # type: ignore
 
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+try:  # 单拍多镜合并上限：后端能力感知（同线 _lib）；不可用时回落历史 15s。
+    from n2d_platform_profiles import single_take_merge_ceiling_seconds  # type: ignore  # noqa: E402
+    from n2d_settings import get_setting  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover
+    single_take_merge_ceiling_seconds = None  # type: ignore
+    get_setting = None  # type: ignore
+
 KIND = "n2d_shot_split_decision_plan"
 VIDEO_SHOT_PLAN_THRESHOLD_SEC = 12.0
 VIDEO_SHOT_HARD_MAX_SEC = 15.0
@@ -306,10 +316,24 @@ def _has_editorial_lens_coverage(clip: Mapping[str, Any]) -> bool:
     return len(lensed) > 1
 
 
+def project_single_take_ceiling(root: Path) -> float:
+    """本项目的单拍多镜合并上限（秒）：读 `_设置.md` 生视频模型（旧键 生视频AI 兼容）→
+    后端能力表；未设/未知/查询失败 → 历史 15s。下限钳 VIDEO_SHOT_HARD_MAX_SEC，
+    只会随已验后端单段上限升高（如 Seedance 2.5 验到 30s）而放大合并机会，绝不倒退。"""
+    if single_take_merge_ceiling_seconds is None or get_setting is None:
+        return VIDEO_SHOT_HARD_MAX_SEC
+    try:
+        backend = get_setting(str(root), "生视频模型", "") or get_setting(str(root), "生视频AI", "")
+        return float(single_take_merge_ceiling_seconds(backend, floor=VIDEO_SHOT_HARD_MAX_SEC))
+    except Exception:
+        return VIDEO_SHOT_HARD_MAX_SEC
+
+
 def single_take_policy_verdict(
     clip: Mapping[str, Any],
     risk_row: Mapping[str, Any],
     actions: Sequence[str],
+    ceiling_seconds: Optional[float] = None,
 ) -> Tuple[bool, str, str]:
     """本 Clip 是否用一次多镜生成（single_take_multishot），及其来源。
 
@@ -324,12 +348,13 @@ def single_take_policy_verdict(
     if policy in TAKE_POLICY_OPT_OUT:
         # storyboard 显式要求逐镜独立付费 take：尊重，不自动合并。
         return False, "", ""
+    limit = float(ceiling_seconds) if ceiling_seconds and ceiling_seconds > 0 else VIDEO_SHOT_HARD_MAX_SEC
     duration = duration_of(clip)
-    if duration is None or duration > VIDEO_SHOT_HARD_MAX_SEC:
+    if duration is None or duration > limit:
         if explicit:
             return False, (
-                f"take_policy 忽略：叙事跨度 {duration if duration is not None else '未知'}s 超过单次生成硬上限 "
-                f"{VIDEO_SHOT_HARD_MAX_SEC:g}s，仍按镜位/生成窗口拆 take"
+                f"take_policy 忽略：叙事跨度 {duration if duration is not None else '未知'}s 超过单次生成上限 "
+                f"{limit:g}s（后端能力感知），仍按镜位/生成窗口拆 take"
             ), ""
         return False, "", ""
     # 真高风险才否决（多镜后端在内部镜位切换处自带再锚定，单纯「长于 8s」不算）：
@@ -408,6 +433,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         except Exception:
             economy_report = {}
             economy_rows = {}
+    single_take_ceiling = project_single_take_ceiling(root)
     decisions: List[Dict[str, Any]] = []
     for idx, clip in enumerate(clips, 1):
         cid = clip_id(clip, idx)
@@ -418,7 +444,8 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             row = {}
         economy_row = economy_rows.get(cid, {})
         actions = decide_actions(clip, row, idx, economy_row)
-        single_take, policy_ignored_reason, single_take_source = single_take_policy_verdict(clip, row, actions)
+        single_take, policy_ignored_reason, single_take_source = single_take_policy_verdict(
+            clip, row, actions, ceiling_seconds=single_take_ceiling)
         if single_take:
             actions = [a for a in actions if a != "split_video_shots"]
             actions.insert(0, "single_take_multishot")

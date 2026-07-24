@@ -26,7 +26,11 @@ if str(N2D_LIB) not in sys.path:
 
 from video_prompt_compiler import compile_video_prompt, render_compiled_markdown
 from n2d_const import PRODUCTION_MODE_DEFAULT, IDENTITY_LOCK_NEGATIVE_TERMS
-from n2d_platform_profiles import anchor_consumption_plan, select_video_frame_strategy
+from n2d_platform_profiles import (
+    anchor_consumption_plan,
+    select_video_frame_strategy,
+    single_take_merge_ceiling_seconds,
+)
 from seam_contract import needs_end_anchor, normalize_seam_mode
 from n2d_logic import normalize_signature_effect
 
@@ -1133,7 +1137,11 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         _dur = clip.get("duration") if isinstance(clip.get("duration"), (int, float)) else None
         _span = str(cont.get("expression_span") or "微")
         _spectacle_like = bool(clip.get("template") or clip.get("spectacle_type") or signature_high_risk)
-        if _dur is not None and _dur <= 15.0 and _span != "大" and not _spectacle_like:
+        # 合并上限后端能力感知（与 shot_split_decision.project_single_take_ceiling 同口径）：
+        # 未设/未知后端 → 历史 15s；已验后端单段上限更高时自动跟进。
+        _ceiling = single_take_merge_ceiling_seconds(
+            project_setting(root, "生视频模型", "") or project_setting(root, "生视频AI", ""), floor=15.0)
+        if _dur is not None and _dur <= _ceiling and _span != "大" and not _spectacle_like:
             take_policy = "single_take_multishot"
             auto_single_take = True
     # 安全优先：命中 R1-R3 高风险锚链或需中锚的镜，忽略单拍多镜声明，仍按锚帧链/拆段执行

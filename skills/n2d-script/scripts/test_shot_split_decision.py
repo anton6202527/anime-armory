@@ -227,7 +227,7 @@ def test_take_policy_ignored_over_hard_max():
     plan = SSD.build_plan(root, "第1集")
     d = plan["decisions"][0]
     assert d["single_take_multishot"] is False
-    assert "超过单次生成硬上限" in d["take_policy_ignored_reason"]
+    assert "超过单次生成上限" in d["take_policy_ignored_reason"]
     assert "split_video_shots" in d["actions"]
 
 
@@ -263,3 +263,47 @@ def test_high_action_clip_not_auto_collapsed_without_explicit_policy():
     d = plan["decisions"][0]
     assert d["single_take_multishot"] is False
     assert plan["summary"]["single_take_auto"] == 0
+
+
+# ── 单拍多镜合并上限：后端能力感知（R3·前向接线）────────────────────────────
+
+def _lens_clip(duration):
+    return {
+        "id": "Clip_X", "duration": duration, "label": "对话递进",
+        "shots": [
+            {"t": [0, duration / 2], "lens": "MS", "desc": "正打"},
+            {"t": [duration / 2, duration], "lens": "CU", "desc": "反应"},
+        ],
+        "continuity": {},
+    }
+
+
+def test_single_take_ceiling_default_keeps_15s_behavior():
+    # 未传 ceiling（后端未定）→ 历史 15s：20s 镜不自动合并。
+    ok, reason, source = SSD.single_take_policy_verdict(_lens_clip(20.0), {}, [])
+    assert ok is False and source == ""
+
+
+def test_single_take_ceiling_expands_merge_window():
+    # 已验后端单段上限 30s（如 Seedance 2.5 验后）→ 20s 纯镜位覆盖镜自动合并。
+    ok, reason, source = SSD.single_take_policy_verdict(_lens_clip(20.0), {}, [], ceiling_seconds=30.0)
+    assert ok is True and source == "auto_low_risk_editorial"
+
+
+def test_single_take_ceiling_does_not_relax_safety():
+    # 上限放大不放松安全拆分：奇观/高风险镜 30s 档下仍不合并。
+    risk = {"spectacle_type": "magic_burst", "tags": []}
+    ok, _reason, _source = SSD.single_take_policy_verdict(_lens_clip(20.0), risk, [], ceiling_seconds=30.0)
+    assert ok is False
+
+
+def test_explicit_policy_over_ceiling_reports_limit():
+    clip = _lens_clip(40.0)
+    clip["take_policy"] = "single_take_multishot"
+    ok, reason, _source = SSD.single_take_policy_verdict(clip, {}, [], ceiling_seconds=30.0)
+    assert ok is False and "30" in reason
+
+
+def test_project_single_take_ceiling_defaults_to_hard_max(tmp_path):
+    # 无 _设置.md（后端未定）→ 15；能力查询失败也回落 15，绝不倒退。
+    assert SSD.project_single_take_ceiling(tmp_path) == SSD.VIDEO_SHOT_HARD_MAX_SEC
