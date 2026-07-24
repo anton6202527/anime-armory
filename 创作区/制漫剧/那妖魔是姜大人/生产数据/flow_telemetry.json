@@ -1,7 +1,7 @@
 {
-  "event_count": 813,
+  "event_count": 820,
   "kind": "n2d_flow_telemetry",
-  "last_event_at": "2026-07-24T14:30:50+0800",
+  "last_event_at": "2026-07-24T15:50:49+0800",
   "milestone_count": 785,
   "milestones": {
     "actual_rough_cut_planned": 40,
@@ -14,42 +14,42 @@
     "video_submit_failed": 3,
     "video_submitted": 37
   },
-  "next_action_count": 28,
+  "next_action_count": 35,
   "orchestrator_latency_ms": {
     "max": 58576.06,
-    "p50": 1706.069,
-    "p95": 45117.267
+    "p50": 1678.877,
+    "p95": 34080.203
   },
   "prework": {
     "cache_hit_rate": 0.0,
     "cache_hits": 0,
-    "total": 517
+    "total": 585
   },
   "stage_transitions": {
     "image_prompt->compose": 1,
     "image_prompt->video_prompt": 1,
     "script_stage1->script_stage2": 1,
-    "script_stage1->voice": 1,
+    "script_stage1->voice": 2,
     "script_stage2->image_prompt": 2,
-    "voice->script_stage2": 1
+    "voice->script_stage2": 2
   },
   "stages": {
     "compose": 2,
     "compose_proxy": 43,
     "image_prompt": 7,
-    "script_stage1": 5,
-    "script_stage2": 9,
+    "script_stage1": 7,
+    "script_stage2": 13,
     "video": 742,
     "video_prompt": 3,
-    "voice": 2
+    "voice": 3
   },
   "stop_reasons": {
-    "blocked_by_entry_check": 5,
+    "blocked_by_entry_check": 6,
     "blocked_by_gate": 1,
-    "needs_agent_gen": 6,
-    "needs_stage_execution": 1,
-    "prework_failed": 15
+    "needs_agent_gen": 8,
+    "needs_stage_execution": 2,
+    "prework_failed": 18
   },
-  "updated_at": "2026-07-24T14:30:50+0800",
+  "updated_at": "2026-07-24T15:50:49+0800",
   "version": 1
 }

@@ -1,0 +1,65 @@
+{
+  "beats": [
+    {
+      "audience_question": "这些人为何把姜月初当成唯一救命者？",
+      "beat_id": "Beat_01",
+      "director_intent": "先用众人跪求的高压结果冷开，再倒回埋尸，让身份反噬成为本集命题。",
+      "dramatic_function": "悬念 / 道德余震",
+      "emotional_value_shift": {
+        "from": "被奉为救星",
+        "to": "孤身埋葬死者"
+      },
+      "must_keep_reaction": "姜月初面对裴长青浅坟的沉默半拍。",
+      "source_voiceover_hint": "[镜头1·飞鹰门众人·焦急恳求·快] 恳请镇魔司大人出手，救上盘村百十口性命！  ⚡钩子 … [镜头4·姜月初·克制自嘲·常速] 人死了，东西还得活人用。|| ……得罪了，兄弟。",
+      "source_voiceover_range": "voiceover lines 1-4"
+    },
+    {
+      "audience_question": "她换上制服究竟能救命还是招祸？",
+      "beat_id": "Beat_02",
+      "director_intent": "用衣料、束发、佩刀完成可见换装，让贱籍死局压成快速动作与短句。",
+      "dramatic_function": "选择 / 身份状态改变 / 危机逼近",
+      "emotional_value_shift": {
+        "from": "囚犯活靶子",
+        "to": "假镇魔司临时护身"
+      },
+      "must_keep_reaction": "马蹄逼近时姜月初握刀、瞳孔收紧。",
+      "source_voiceover_hint": "[镜头5·姜月初·警惕决断·常速] 囚服是活靶子。黑衣赤纹虽险，至少——能唬人。|| 真唬住了，也可能把我架到狼窝门口。  ⚡钩子 … [镜头9·姜月初·骤然警觉·快] 马蹄声？|| 十几骑！",
+      "source_voiceover_range": "voiceover lines 5-9"
+    },
+    {
+      "audience_question": "她会不会一句话就暴露身份？",
+      "beat_id": "Beat_03",
+      "director_intent": "以马队急停建立人数压力，用陈青源的降姿态和姜月初的沉默完成误认反转。",
+      "dramatic_function": "冲突 / 误认反转 / 假身份兑现",
+      "emotional_value_shift": {
+        "from": "可能被围杀",
+        "to": "竟被当作上官敬畏"
+      },
+      "must_keep_reaction": "陈青源听到年轻女声后的短暂诧异，以及姜月初压住心虚。",
+      "source_voiceover_hint": "[镜头10·陈青源·戒备试探·常速] 敢问……可是镇魔司的大人当面？ … [镜头13·姜月初·暗自慌乱·快] 不能解释。解释一句，就多一个破绽。|| 装，接着装。",
+      "source_voiceover_range": "voiceover lines 10-13"
+    },
+    {
+      "audience_question": "她会为百十条人命冒险赴上盘村吗？",
+      "beat_id": "Beat_04",
+      "director_intent": "由单人陈情升级为群体跪求，把虚假的权力高位拍成道德夹逼。",
+      "dramatic_function": "施压 / 情绪峰 / 集尾悬念",
+      "emotional_value_shift": {
+        "from": "假身份成功的短暂安全",
+        "to": "被架上救村死局"
+      },
+      "must_keep_reaction": "众人跪地后切姜月初僵住的手与强装冷静的脸。",
+      "source_voiceover_hint": "[镜头14·陈青源·沉痛恳切·快] 活人都被圈在祠堂里，每日拖出去几个。去兰州求援，来回至少十天——他们等不到了！  ⚡钩子 … [镜头18·姜月初·被迫镇定·慢] 狼妖、假身份、百十条人命。|| 这趟要是去了，我还能活着回来吗？  🪝集尾",
+      "source_voiceover_range": "voiceover lines 14-18"
+    }
+  ],
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:16:10+00:00",
+  "inputs": {
+    "development_pack": "开发包/",
+    "voiceover": "脚本/第3集/voiceover.txt"
+  },
+  "kind": "n2d_director_beat_sheet",
+  "status": "confirmed",
+  "version": 1
+}

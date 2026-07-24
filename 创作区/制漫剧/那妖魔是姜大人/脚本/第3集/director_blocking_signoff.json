@@ -1,0 +1,121 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第3集/axis_blocking_map.json",
+          "sha256": "ecb86411c1941f6c267ececa12af2b67800e2aac367718a3f2b3f561f60e14bf"
+        },
+        {
+          "path": "脚本/第3集/director_beat_sheet.json",
+          "sha256": "fea70751b10a51aa9ce2daa7cb0344d9c463254d7533a45f028ba2154c32e2f1"
+        },
+        {
+          "path": "脚本/第3集/edit_rhythm_map.json",
+          "sha256": "75f894061518ebd5bbd40e727c0f68c2a06351ef339e55f13d029b69aca9dc83"
+        },
+        {
+          "path": "脚本/第3集/shot_progression_plan.json",
+          "sha256": "27abe898a1dc686c9e66a48a2c05cab91eaee0616cc810b01ada47d53351dbb8"
+        },
+        {
+          "path": "脚本/第3集/transition_map.json",
+          "sha256": "f1191e8d546343beab24e05107e2fd26ebba63643a1b6012e0405214d9b9b197"
+        },
+        {
+          "path": "脚本/第3集/vertical_composition_plan.json",
+          "sha256": "087659bbc93d8436792007ee227aa39e12c0017cb1ddc3205172bb5ada2af7fc"
+        }
+      ],
+      "note": "补齐接缝模式专属证据后重签",
+      "reviewed_at": "2026-07-24T07:50:48+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "bedcf9eaf1c75fcdd257e9a1649759557e991c74ff7a989b409eca21adbc4d95",
+      "signed_input_fingerprint_sha": "8c4ef9dd890fddd437d9cdebaa3638d0cecc324268800a80e2571bad7abd59de",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第3集/axis_blocking_map.json",
+          "sha256": "ecb86411c1941f6c267ececa12af2b67800e2aac367718a3f2b3f561f60e14bf"
+        },
+        {
+          "path": "脚本/第3集/director_beat_sheet.json",
+          "sha256": "fea70751b10a51aa9ce2daa7cb0344d9c463254d7533a45f028ba2154c32e2f1"
+        },
+        {
+          "path": "脚本/第3集/edit_rhythm_map.json",
+          "sha256": "75f894061518ebd5bbd40e727c0f68c2a06351ef339e55f13d029b69aca9dc83"
+        },
+        {
+          "path": "脚本/第3集/shot_progression_plan.json",
+          "sha256": "27abe898a1dc686c9e66a48a2c05cab91eaee0616cc810b01ada47d53351dbb8"
+        },
+        {
+          "path": "脚本/第3集/transition_map.json",
+          "sha256": "f1191e8d546343beab24e05107e2fd26ebba63643a1b6012e0405214d9b9b197"
+        },
+        {
+          "path": "脚本/第3集/vertical_composition_plan.json",
+          "sha256": "087659bbc93d8436792007ee227aa39e12c0017cb1ddc3205172bb5ada2af7fc"
+        }
+      ],
+      "note": "补齐接缝模式专属证据后重签",
+      "reviewed_at": "2026-07-24T07:50:49+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "bedcf9eaf1c75fcdd257e9a1649759557e991c74ff7a989b409eca21adbc4d95",
+      "signed_input_fingerprint_sha": "8c4ef9dd890fddd437d9cdebaa3638d0cecc324268800a80e2571bad7abd59de",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p2_director_blocking",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-24T07:50:48+00:00",
+  "episode": "第3集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第3集/axis_blocking_map.json": "ecb86411c1941f6c267ececa12af2b67800e2aac367718a3f2b3f561f60e14bf",
+      "脚本/第3集/director_beat_sheet.json": "fea70751b10a51aa9ce2daa7cb0344d9c463254d7533a45f028ba2154c32e2f1",
+      "脚本/第3集/edit_rhythm_map.json": "75f894061518ebd5bbd40e727c0f68c2a06351ef339e55f13d029b69aca9dc83",
+      "脚本/第3集/shot_progression_plan.json": "27abe898a1dc686c9e66a48a2c05cab91eaee0616cc810b01ada47d53351dbb8",
+      "脚本/第3集/transition_map.json": "f1191e8d546343beab24e05107e2fd26ebba63643a1b6012e0405214d9b9b197",
+      "脚本/第3集/vertical_composition_plan.json": "087659bbc93d8436792007ee227aa39e12c0017cb1ddc3205172bb5ada2af7fc"
+    },
+    "sha": "bedcf9eaf1c75fcdd257e9a1649759557e991c74ff7a989b409eca21adbc4d95"
+  },
+  "input_fingerprint": {
+    "files": {
+      "脚本/第3集/table_read_packet.json": "f49bb441c606190f0a5cd7fe5d0e7c111d6b6a659b684edc13ca5f1d80ce071f",
+      "脚本/第3集/table_read_signoff.json": "ecd9f7083bf40b53e0589ae4507dc595ead4cbf9ef035e4bdb3d53298b2cd155",
+      "脚本/第3集/voiceover.txt": "1fb0cbe1de68c2dad42e45aa4f703b6158f1a56878d4ff451de82d7286ba3c0b",
+      "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
+    },
+    "sha": "8c4ef9dd890fddd437d9cdebaa3638d0cecc324268800a80e2571bad7abd59de"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-24T07:50:49+00:00",
+  "version": 1
+}

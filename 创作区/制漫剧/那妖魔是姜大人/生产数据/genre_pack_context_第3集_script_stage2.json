@@ -1,0 +1,98 @@
+{
+  "activation": {
+    "reason": "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。",
+    "state": "storyboard_missing",
+    "storyboard_clip_count": 0,
+    "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+    "storyboard_state": "missing",
+    "triggered": false
+  },
+  "active_scene_archetypes": [],
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:50:49+00:00",
+  "genre": {
+    "genre_key": "chuanyue",
+    "label": "穿越",
+    "matched": true,
+    "matched_genre_keys": [
+      "chuanyue"
+    ],
+    "matched_labels": [
+      "穿越"
+    ],
+    "matches": [
+      {
+        "genre_key": "chuanyue",
+        "label": "穿越",
+        "match_start": 0,
+        "matched_term": "系统流",
+        "priority": 1
+      }
+    ],
+    "raw": "系统流"
+  },
+  "issues": [],
+  "kind": "n2d_genre_pack_context",
+  "pack": {
+    "degrade_plans": [
+      "复杂系统面板改为独立 UI 图层叠加",
+      "时空转换用环境变体前后对照，不强求长镜头变形",
+      "现代物品进入古代场景时先出道具参考，避免模型改形"
+    ],
+    "genre_keys": [
+      "chuanyue"
+    ],
+    "labels": [
+      "穿越"
+    ],
+    "matched_packs": [
+      {
+        "genre_key": "chuanyue",
+        "label": "穿越",
+        "match_start": 0,
+        "matched_term": "系统流",
+        "priority": 1
+      }
+    ],
+    "motion_contract_fields": [
+      "mount_contact",
+      "harness_lock",
+      "screen_direction",
+      "parallax_layers",
+      "degrade_plan"
+    ],
+    "qc_focus": [
+      "时代物件一致",
+      "系统面板 OCR",
+      "前后身份/服饰状态",
+      "空间转换因果"
+    ],
+    "style_binding_policy": {
+      "bind_to_visual_style": true,
+      "by_genre": [
+        {
+          "bind_to_visual_style": true,
+          "genre_key": "chuanyue",
+          "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+        }
+      ],
+      "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+    }
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "script_stage2",
+  "status": "pass",
+  "summary": {
+    "activation_state": "storyboard_missing",
+    "active_scenes": 0,
+    "issues": 0,
+    "matched_clips": 0,
+    "matched_genre_keys": [
+      "chuanyue"
+    ],
+    "matched_packs": 1,
+    "storyboard_clip_count": 0,
+    "storyboard_state": "missing"
+  },
+  "version": 1
+}

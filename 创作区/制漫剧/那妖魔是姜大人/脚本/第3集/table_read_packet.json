@@ -1,0 +1,59 @@
+{
+  "acceptance": {
+    "dialogue_voice_distinct": "accepted",
+    "duration_risk_understood": "accepted",
+    "exposition_not_overloaded": "accepted",
+    "reviewer": "",
+    "rewrite_notes": [],
+    "signoff_manifest": "脚本/第3集/table_read_signoff.json"
+  },
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:17:09+00:00",
+  "inputs": {
+    "script_quality_contract": "生产数据/script_quality_contract_第3集.json",
+    "timing_estimate": "合成/第3集/配音/timing_estimate.json",
+    "timing_manifest": "合成/第3集/配音/时长清单.json",
+    "voiceover": "脚本/第3集/voiceover.txt"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第3集/配音/timing_estimate.json": "d5a95c4b69315498482bc33e8771938c1a933c1381b8c9cd908621e964f4db9c",
+      "合成/第3集/配音/时长清单.json": null,
+      "脚本/第3集/voiceover.txt": "1fb0cbe1de68c2dad42e45aa4f703b6158f1a56878d4ff451de82d7286ba3c0b"
+    },
+    "sha": "a2cc25aab6034710110999f17b4db2b1ea0a9f9e67d9f9d8c468d62a9c838a88"
+  },
+  "kind": "n2d_table_read_packet",
+  "machine_reference": {
+    "advisory": true,
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": "not_applicable_before_storyboard",
+    "timing_estimate": {
+      "duration_sec": 86.948,
+      "line_count": 18,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "writer_director_producer",
+  "read_through": {
+    "line_count": 18,
+    "placeholder_or_rough_timing_mentions": 0,
+    "sample_lines": [
+      "[镜头1·飞鹰门众人·焦急恳求·快] 恳请镇魔司大人出手，救上盘村百十口性命！  ⚡钩子",
+      "[镜头2·姜月初·错愕心虚·慢] 我只是想借这身皮活命。|| 怎么一转眼，就成了他们唯一的救命稻草？",
+      "[镜头3·姜月初·压抑疲惫·慢] 裴长青，荒郊野岭，只能委屈你了。",
+      "[镜头4·姜月初·克制自嘲·常速] 人死了，东西还得活人用。|| ……得罪了，兄弟。",
+      "[镜头5·姜月初·警惕决断·常速] 囚服是活靶子。黑衣赤纹虽险，至少——能唬人。|| 真唬住了，也可能把我架到狼窝门口。  ⚡钩子",
+      "[镜头6·姜月初·短暂安定·慢] 刀在腰上，我才算有一点像个能活下去的人。",
+      "[镜头7·姜月初·烦躁盘算·快] 姜家获罪，我是贱籍；没有路引，进不了城，也住不了店。躲进村子？迟早被查。伪造？我连门路都没有。",
+      "[镜头8·姜月初·苦涩无奈·慢] 刚从虎口里爬出来，前面又是死路。|| 行吧，走一步算一步。  ⚡钩子",
+      "[镜头9·姜月初·骤然警觉·快] 马蹄声？|| 十几骑！",
+      "[镜头10·陈青源·戒备试探·常速] 敢问……可是镇魔司的大人当面？",
+      "[镜头11·姜月初·强装冷硬·慢] ……何事？  ⚡钩子",
+      "[镜头12·陈青源·急切恭敬·快] 在下飞鹰门陈青源，奉县令手令驰援上盘村。狼妖占村三日，我们折了七八个好手，实在杀不进去。可我不能扔下他们等死。"
+    ],
+    "timing_status": "estimate_only"
+  },
+  "status": "confirmed",
+  "version": 1
+}

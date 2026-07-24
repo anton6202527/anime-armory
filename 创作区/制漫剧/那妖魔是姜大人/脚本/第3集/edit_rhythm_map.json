@@ -1,0 +1,43 @@
+{
+  "beats": [
+    {
+      "beat_id": "Beat_01",
+      "estimated_seconds": "约18秒",
+      "reaction_cut": "姜月初面对浅坟的沉默。",
+      "sound_or_bgm_cue": "跪地重音切到铲土声，随后只留荒风。",
+      "tempo": "冷开硬切 → 道德余震长镜"
+    },
+    {
+      "beat_id": "Beat_02",
+      "estimated_seconds": "约28秒",
+      "reaction_cut": "马蹄声打断盘算，姜月初握刀。",
+      "sound_or_bgm_cue": "换装金属泛音后加快梆子，马蹄J-cut进入。",
+      "tempo": "换装压缩 → 盘算加速 → 危机硬切"
+    },
+    {
+      "beat_id": "Beat_03",
+      "estimated_seconds": "约24秒",
+      "reaction_cut": "陈青源诧异女声与姜月初压住心虚。",
+      "sound_or_bgm_cue": "‘镇魔司大人’后一次心跳，沉默只留火把。",
+      "tempo": "马队急停碎切 → 沉默拉长 → ‘何事’微推"
+    },
+    {
+      "beat_id": "Beat_04",
+      "estimated_seconds": "约30秒",
+      "reaction_cut": "众人齐跪后停在姜月初僵手与眼神。",
+      "sound_or_bgm_cue": "‘等不到了’撤乐，齐跪重音，最后低鼓未落完。",
+      "tempo": "陈情递进 → 跪地重击 → 黑色幽默留白 → 悬念定格"
+    }
+  ],
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:16:10+00:00",
+  "kind": "n2d_edit_rhythm_map",
+  "status": "confirmed",
+  "timeline": {
+    "cliffhanger": "姜月初是否赴上盘村，在答案前切黑；下一集从众人等待答复冷开。",
+    "first_3s_hook": "十余名武人向黑衣赤纹的姜月初单膝跪地。",
+    "first_6s_proposition": "她被误认为镇魔司大人，成了百十条人命的唯一希望。",
+    "hook_cadence": "跪求→换装→贱籍死局→马队→误认→村民倒计时→赴死选择。"
+  },
+  "version": 1
+}

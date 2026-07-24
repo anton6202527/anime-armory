@@ -1,7 +1,7 @@
 {
   "kind": "n2d_thread_scheduler",
   "version": 1,
-  "generated_at": "2026-07-22",
+  "generated_at": "2026-07-24",
   "threads": [
     {
       "id": "THREAD_E0001",
@@ -30,6 +30,22 @@
       "open_question": "不过你也别抱太大希望。|| 说不定哪天，我就下去陪你了。 摹影只是第一步。|| 那下一步，会把我变成什么？  🪝集尾",
       "touch_keywords": [
         "姜月初"
+      ]
+    },
+    {
+      "id": "THREAD_E0003",
+      "thread_id": "T_E0003",
+      "source": "story_integrity_audit",
+      "status": "candidate",
+      "opened_ep": "第3集",
+      "last_touched_ep": "第3集",
+      "next_due_ep": "第4集",
+      "payoff_ep": "",
+      "open_question": "好好好……老天爷，你非要这么玩是吧？|| 那我还活鸡毛了。  💥反差爽点 狼妖、假身份、百十条人命。|| 这趟要是去了，我还能活着回来吗？  🪝集尾",
+      "touch_keywords": [
+        "姜月初",
+        "恳请大人",
+        "飞鹰门众人"
       ]
     }
   ]

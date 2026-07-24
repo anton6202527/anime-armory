@@ -1,0 +1,33 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": false,
+  "blockers": [
+    {
+      "message": "读 n2d-script 的 prompt 包 → 调 LLM 生成 → 注入项目；完成后回写进度再 run next。",
+      "step": "needs_agent_gen"
+    }
+  ],
+  "category": "creative_or_execution",
+  "episode": "第3集",
+  "episode_graph": {
+    "graph_hash": "ebbd89866ac0b4af3722954d9d4f32bfe91a0acfb05c06fd78dfa7ec4cb500d5",
+    "lineage_gaps": 0,
+    "status": "pass"
+  },
+  "gate": {
+    "affected_artifacts": [],
+    "findings_path": null,
+    "return_to_stage": null,
+    "stage": ""
+  },
+  "generated_at": "2026-07-24T15:07:52+0800",
+  "headline": "第3集 阶段1·剧本改编：脚手架就绪，待代理生成",
+  "kind": "n2d_blocking_bundle",
+  "owner": "n2d-script",
+  "repair_commands": [
+    "n2d-script 创作区/制漫剧/那妖魔是姜大人 第3集"
+  ],
+  "stage_key": "script_stage1",
+  "stop_reason": "needs_agent_gen",
+  "version": 1
+}

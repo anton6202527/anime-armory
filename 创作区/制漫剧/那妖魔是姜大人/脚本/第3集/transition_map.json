@@ -1,0 +1,68 @@
+{
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:16:10+00:00",
+  "kind": "n2d_transition_map",
+  "seams": [
+    {
+      "continuity_guard": "倒叙切换明确；冷开场黑衣赤纹，回到荒坡仍是灰囚服，换装前不得提前出现制服。",
+      "from_beat": "Beat_01",
+      "in_point": "横刀铲入冷土。",
+      "need_endframe": false,
+      "out_point": "众人膝盖落地、刀鞘碰撞。",
+      "seam_evidence": {
+        "action_phase_out": "众人屈膝下落至触地前",
+        "action_phase_in": "横刀由上向下铲入土中",
+        "screen_direction": "两段动作均沿竖屏向下",
+        "matched_motion": "跪地向下与横刀铲土向下同向",
+        "time_shift": "冷色荒坡与灰囚服明确倒叙"
+      },
+      "seam_id": "Seam_01",
+      "seam_mode": "match_on_action",
+      "seam_mode_source": "explicit",
+      "sound_bridge": "跪地重音延续为铲土声。",
+      "to_beat": "Beat_02",
+      "transition_type": "action_cut"
+    },
+    {
+      "continuity_guard": "黑衣赤纹、马尾、横刀持续锁定；官道前进方向保持画面上方。",
+      "from_beat": "Beat_02",
+      "in_point": "火把光从官道纵深逼近。",
+      "need_endframe": false,
+      "out_point": "姜月初握紧刀柄看向声源。",
+      "seam_evidence": {
+        "eyeline_source": "姜月初转头看向官道远端",
+        "eyeline_target": "由纵深逼近的火把马队",
+        "axis": "官道纵深轴，来骑沿上方向下压近",
+        "gaze_target": "官道远端来骑",
+        "screen_direction": "来骑由画面上方纵深向下压近"
+      },
+      "seam_id": "Seam_02",
+      "seam_mode": "eyeline_cut",
+      "seam_mode_source": "explicit",
+      "sound_bridge": "马蹄声先于马队画面进入。",
+      "to_beat": "Beat_03",
+      "transition_type": "eyeline"
+    },
+    {
+      "continuity_guard": "官道轴线不变；姜右陈左，火把主光与制服赤纹连续。",
+      "from_beat": "Beat_03",
+      "in_point": "陈青源继续陈情并带出身后门众反应。",
+      "need_endframe": false,
+      "out_point": "姜月初沉默装冷硬。",
+      "seam_evidence": {
+        "stimulus": "姜月初长时间沉默且只说‘何事’",
+        "reaction_beat": "陈青源把沉默理解为上官权衡，转为更恭敬急切的陈情",
+        "reaction_subject": "陈青源与门众对沉默的敬畏",
+        "axis_lock": "姜右陈左不交换"
+      },
+      "seam_id": "Seam_03",
+      "seam_mode": "reaction_cut",
+      "seam_mode_source": "explicit",
+      "sound_bridge": "陈青源陈情跨反应镜连续。",
+      "to_beat": "Beat_04",
+      "transition_type": "reaction_cut"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

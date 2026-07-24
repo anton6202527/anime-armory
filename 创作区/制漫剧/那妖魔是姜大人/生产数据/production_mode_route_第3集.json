@@ -1,0 +1,66 @@
+{
+  "clip_routes": [],
+  "decision": {
+    "advisory_only": true,
+    "aligned": true,
+    "reasons": [
+      "本集同时包含不同声音需求，按镜头路由：可见口型对白走表演音轨/后期表演驱动，旁白与口外音只锁估算节奏，动作/空镜画面先行，native_speech 镜单独处理。"
+    ],
+    "recommended_mode": "混合自动路由",
+    "risks": [],
+    "selected_mode": "混合自动路由"
+  },
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:50:49+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "_设置.md": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0",
+      "合成/第3集/配音/timing_estimate.json": "d5a95c4b69315498482bc33e8771938c1a933c1381b8c9cd908621e964f4db9c",
+      "合成/第3集/配音/时长清单.json": null,
+      "脚本/第3集/storyboard.json": null,
+      "脚本/第3集/voiceover.txt": "1fb0cbe1de68c2dad42e45aa4f703b6158f1a56878d4ff451de82d7286ba3c0b",
+      "设定库/voice_casting.json": "3b6c5a4063cb9a42581d81b91b1788b57a38aa80ec2d47b4f78bac20f3e305cc"
+    },
+    "sha": "80d3ad426295d4345a2f48d559892398f9ca542c2e2d8ed44396951f26be4feb"
+  },
+  "kind": "n2d_production_mode_route",
+  "mode_source": "explicit_user",
+  "next": "执行逐镜声音路线；最终配音只在音色锁定后批量渲染。",
+  "signals": {
+    "action_or_montage_clip_count": 0,
+    "audio_strategy_counts": {},
+    "character_dialogue_count": 18,
+    "closeup_speaking_clip_count": 0,
+    "episode": "第3集",
+    "final_voice_manifest_present": false,
+    "final_voice_required_clip_count": 0,
+    "mouth_visible_clip_count": 0,
+    "narration_count": 0,
+    "native_speech_clip_count": 0,
+    "placeholder_timing": false,
+    "post_lipsync_clip_count": 0,
+    "sample": [
+      "[镜头1·飞鹰门众人·焦急恳求·快] 恳请镇魔司大人出手，救上盘村百十口性命！  ⚡钩子",
+      "[镜头2·姜月初·错愕心虚·慢] 我只是想借这身皮活命。|| 怎么一转眼，就成了他们唯一的救命稻草？",
+      "[镜头3·姜月初·压抑疲惫·慢] 裴长青，荒郊野岭，只能委屈你了。",
+      "[镜头4·姜月初·克制自嘲·常速] 人死了，东西还得活人用。|| ……得罪了，兄弟。",
+      "[镜头5·姜月初·警惕决断·常速] 囚服是活靶子。黑衣赤纹虽险，至少——能唬人。|| 真唬住了，也可能把我架到狼窝门口。  ⚡钩子"
+    ],
+    "speaking_clip_count": 0,
+    "spoken_line_count": 18,
+    "storyboard_clip_count": 0,
+    "timing_estimate_present": true,
+    "timing_manifest_present": false,
+    "voice_casting_status": "casting",
+    "voiceover_present": true
+  },
+  "status": "aligned",
+  "summary": {
+    "audio_strategy_counts": {},
+    "base_video_only_count": 0,
+    "clip_count": 0,
+    "final_voice_required": false,
+    "post_lipsync_required": false
+  },
+  "version": 2
+}

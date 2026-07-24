@@ -1,0 +1,51 @@
+{
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:16:10+00:00",
+  "kind": "n2d_shot_progression_plan",
+  "progressions": [
+    {
+      "beat_id": "Beat_01",
+      "camera_motivation": "倒叙钩先压迫后收进私人道德余震。",
+      "camera_move": "跪地群像固定低机位，硬切浅坟后缓慢推近。",
+      "must_have_insert_or_reaction": "膝盖落地、横刀铲土、姜月初沉默反应。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MS",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "Beat_02",
+      "camera_motivation": "用换装细节把身份选择焊进像素，再让马蹄打断盘算。",
+      "camera_move": "固定手部插入与半身换装，官道跟拍后快速摇向声源。",
+      "must_have_insert_or_reaction": "赤纹衣襟、束发、横刀入鞘、握刀手。",
+      "peak_shot_size": "ECU",
+      "release_shot_size": "LS",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_03",
+      "camera_motivation": "由数量压迫转成权力倒置，移动只服务误认揭示。",
+      "camera_move": "马队纵深压近后急停；固定正反打，‘何事’时微推姜月初。",
+      "must_have_insert_or_reaction": "勒缰、制服赤纹被火光照亮、陈青源抱拳、姜月初眼神。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MS",
+      "start_shot_size": "ELS"
+    },
+    {
+      "beat_id": "Beat_04",
+      "camera_motivation": "跪地动作让姜月初被迫居于高位，推近揭示高位其实是陷阱。",
+      "camera_move": "陈青源陈情固定中近景，群体跪地短促下摇，姜月初脸部缓推。",
+      "must_have_insert_or_reaction": "众人齐跪、姜月初压刀的僵手、远处狼眼意象。",
+      "peak_shot_size": "ECU",
+      "release_shot_size": "LS",
+      "start_shot_size": "MCU"
+    }
+  ],
+  "rules": {
+    "establishing": "荒坡与官道各有定场关系镜；竖屏群像分纵深，不牺牲核心脸可读性。",
+    "movement_motivation": "只在身份揭示、威胁逼近和道德压力升级时移动。",
+    "peak_closeup": "‘何事’和集尾选择落姜月初CU/ECU，陈青源求援保留反应镜。",
+    "scale_ladder": "LS定场→MS行动→CU选择；群像后必须回核心单人近景。"
+  },
+  "status": "confirmed",
+  "version": 1
+}

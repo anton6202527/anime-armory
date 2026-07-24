@@ -1,0 +1,34 @@
+{
+  "episode": "第3集",
+  "files": [
+    {
+      "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/table_read_packet.json",
+      "issues": [],
+      "packet": "table_read",
+      "status": "pass"
+    },
+    {
+      "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/table_read_packet.md",
+      "issues": [],
+      "packet": "table_read",
+      "status": "pass"
+    },
+    {
+      "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/table_read_signoff.json",
+      "issues": [],
+      "packet": "table_read",
+      "status": "pass"
+    }
+  ],
+  "generated_at": "2026-07-24T07:50:49+00:00",
+  "kind": "n2d_story_acceptance_packets_check",
+  "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
+  "packet_kind": "table_read",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "pass": 3,
+    "required": 3
+  },
+  "version": 1
+}

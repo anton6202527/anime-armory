@@ -1,8 +1,8 @@
 {
   "episodes_scanned": [
-    "第2集"
+    "第3集"
   ],
-  "generated_at": "2026-07-22T06:50:02+00:00",
+  "generated_at": "2026-07-24T07:16:09+00:00",
   "kind": "n2d_voice_casting",
   "policy": "casting_first_final_render_later",
   "roles": [
@@ -11,22 +11,22 @@
       "approved_by": "automation:codex",
       "audition_lines": [
         {
-          "cue": "惊惧警觉·快",
-          "episode": "第2集",
-          "line_index": 1,
-          "text": "裴长青死了。是我亲手杀的。可虎爪，已经落下。"
+          "cue": "错愕心虚·慢",
+          "episode": "第3集",
+          "line_index": 2,
+          "text": "我只是想借这身皮活命。怎么一转眼，就成了他们唯一的救命稻草？"
         },
         {
-          "cue": "压抑决绝·快",
-          "episode": "第2集",
+          "cue": "压抑疲惫·慢",
+          "episode": "第3集",
+          "line_index": 3,
+          "text": "裴长青，荒郊野岭，只能委屈你了。"
+        },
+        {
+          "cue": "克制自嘲·常速",
+          "episode": "第3集",
           "line_index": 4,
-          "text": "对错、良知……活下来以后，才有资格谈。我想活。这二十年，是我唯一的生机，也是杀人的代价。"
-        },
-        {
-          "cue": "孤注一掷·快",
-          "episode": "第2集",
-          "line_index": 6,
-          "text": "二十年道行——尽付一刀！"
+          "text": "人死了，东西还得活人用。……得罪了，兄弟。"
         }
       ],
       "authorization": "synthetic",
@@ -34,9 +34,10 @@
       "canonical_sample": "设定库/voicebank/姜月初.wav",
       "episodes": [
         "第1集",
-        "第2集"
+        "第2集",
+        "第3集"
       ],
-      "line_count": 10,
+      "line_count": 12,
       "lock_hash": "2a70ad112bc56c696f659dc26fc629cc2f15387239c9fe46d3d7a3a311756f8a",
       "model": "CosyVoice2-0.5B",
       "reference_audio": "",
@@ -170,6 +171,90 @@
         "performance_boundary": "",
         "texture": ""
       }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "戒备试探·常速",
+          "episode": "第3集",
+          "line_index": 10,
+          "text": "敢问……可是镇魔司的大人当面？"
+        },
+        {
+          "cue": "急切恭敬·快",
+          "episode": "第3集",
+          "line_index": 12,
+          "text": "在下飞鹰门陈青源，奉县令手令驰援上盘村。狼妖占村三日，我们折了七八个好手，实在杀不进去。可我不能扔下他们等死。"
+        },
+        {
+          "cue": "沉痛恳切·快",
+          "episode": "第3集",
+          "line_index": 14,
+          "text": "活人都被圈在祠堂里，每日拖出去几个。去兰州求援，来回至少十天——他们等不到了！"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第3集"
+      ],
+      "line_count": 4,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "陈青源",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "焦急恳求·快",
+          "episode": "第3集",
+          "line_index": 1,
+          "text": "恳请镇魔司大人出手，救上盘村百十口性命！"
+        },
+        {
+          "cue": "齐声恳求·快",
+          "episode": "第3集",
+          "line_index": 16,
+          "text": "恳请大人出手！"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第3集"
+      ],
+      "line_count": 2,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "飞鹰门众人",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
     }
   ],
   "rules": [
@@ -177,12 +262,12 @@
     "A text timing estimate is not a voice asset and creates no WAV files.",
     "Guide audio must be explicitly guide_approved or locked; never treat an arbitrary filler voice as performance truth."
   ],
-  "status": "locked",
+  "status": "casting",
   "summary": {
     "locked_count": 4,
-    "pending_count": 0,
-    "required_count": 4,
-    "role_count": 4
+    "pending_count": 2,
+    "required_count": 6,
+    "role_count": 6
   },
   "version": 1
 }

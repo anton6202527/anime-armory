@@ -1,0 +1,43 @@
+{
+  "beat_composition": [
+    {
+      "beat_id": "Beat_01",
+      "foreground_midground_background": "前景跪地门众，中景姜月初，背景冷月；倒叙荒坡以横刀和坟土作前景。",
+      "primary_subject_zone": "上中",
+      "subtitle_clearance": "下中字幕区避开膝盖与刀柄。",
+      "vertical_motion": "跪地向下与铲土向下形成竖向匹配。"
+    },
+    {
+      "beat_id": "Beat_02",
+      "foreground_midground_background": "前景赤纹衣襟和刀柄，中景姜月初，背景官道与孤月。",
+      "primary_subject_zone": "中部",
+      "subtitle_clearance": "下20%保持无关键手部动作。",
+      "vertical_motion": "束发上提、刀入鞘下落、视线抬向马蹄声。"
+    },
+    {
+      "beat_id": "Beat_03",
+      "foreground_midground_background": "前景马首火把虚焦，中景陈青源与姜月初，背景门众分层。",
+      "primary_subject_zone": "中部偏右/偏左成对",
+      "subtitle_clearance": "字幕不遮赤纹和抱拳手势。",
+      "vertical_motion": "陈青源下马降位，姜月初保持直立高位。"
+    },
+    {
+      "beat_id": "Beat_04",
+      "foreground_midground_background": "前景跪地肩背，中景姜月初，背景官道黑暗与极淡狼眼意象。",
+      "primary_subject_zone": "上中",
+      "subtitle_clearance": "姜月初脸和压刀手之间不放字幕。",
+      "vertical_motion": "群体齐跪向下，镜头反向缓推姜月初上半身。"
+    }
+  ],
+  "composition_rules": {
+    "face_readability": "核心反应镜脸部至少占画面高度25%，群像仍保证姜月初身份脸清晰。",
+    "overlay_policy": "本集无系统面板；字幕仅后期overlay，图片与视频禁止烤字。",
+    "safe_zone": "顶部12%和底部18%避免关键脸、手、刀与赤纹。",
+    "z_axis_depth": "马队和跪地群像沿官道纵深排布，不横向挤成脸墙。"
+  },
+  "episode": "第3集",
+  "generated_at": "2026-07-24T07:16:10+00:00",
+  "kind": "n2d_vertical_composition_plan",
+  "status": "confirmed",
+  "version": 1
+}

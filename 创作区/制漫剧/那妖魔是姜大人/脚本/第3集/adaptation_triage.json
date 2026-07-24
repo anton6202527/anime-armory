@@ -1,0 +1,104 @@
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "episode": "第3集",
+  "boundary_decision": {
+    "source": "原著第3章完整窗口",
+    "core_attraction": "假镇魔司身份刚骗过众人，立刻被百十条人命逼成真任务",
+    "opening_bridge": "承接第2集斩虎、裴长青死亡与姜月初存活后的道德余震",
+    "ending_throw": "上盘村狼妖危机与假身份穿帮风险同时压下，逼问姜月初是否赴死",
+    "why_keep_boundary": "同一章形成换装选择→身份死局→误认反转→救村请求的完整因果链，章末恰为强危机断点。"
+  },
+  "items": [
+    {
+      "source_span": "埋葬裴长青并搜取镇魔卫遗物",
+      "beat_function": "后果/关系/状态",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "保留杀裴后果和生存伦理，只压缩重复动作描写。",
+      "delivery": "voiceover镜头3-4，以埋土、道歉和取衣三个动作完成。",
+      "adaptation_delta": {"changed_from": "逐项描写碎银、肉脯、水囊与剥衣过程", "changed_to": "聚焦埋葬、道歉、换衣的道德选择", "preserved_function": "姜月初务实求生但并非麻木", "short_drama_reason": "避免尸体搜身变成多个低价值镜头", "payoff_guard": "保留获得生存物资与制服的结果"},
+      "risk_if_removed": "会切断第2集杀人代价，并让制服来源凭空出现。"
+    },
+    {
+      "source_span": "脱囚服、换黑衣赤纹制服、束发佩刀",
+      "beat_function": "选择/状态/伏笔",
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "这是本集假身份因果的起点，也是跨集服装形态变化。",
+      "delivery": "voiceover镜头5-6，把‘两害相权’外化成一句可演选择。",
+      "adaptation_delta": {"changed_from": "内心解释穿哪件都危险", "changed_to": "‘囚服是活靶子，黑衣赤纹至少能唬人’", "preserved_function": "主动选择更可控的风险", "short_drama_reason": "选择句同时提供情绪和信息回报", "payoff_guard": "后续被陈青源误认必须由制服触发"},
+      "risk_if_removed": "误认会失去可信因果。"
+    },
+    {
+      "source_span": "陇右地理、都护府、边患与妖魔背景",
+      "beat_function": "世界观",
+      "decision": "defer",
+      "change_type": "compress",
+      "reason": "当前冲突不需要完整地理课，停下来解释会削弱身份线。",
+      "delivery": "陇右、兰州距离与妖患由陈青源求援台词及后续赶路/村庄行为自然带出。",
+      "adaptation_delta": {"changed_from": "长段历史地理说明", "changed_to": "只保留兰州求援来回十天这一危机事实", "preserved_function": "边地求援困难、妖患严重", "short_drama_reason": "让世界观附着在救人倒计时上", "payoff_guard": "后续进入广武县与兰州线时补足行政地理"},
+      "risk_if_removed": "若后续不补，会削弱边地孤立感。"
+    },
+    {
+      "source_span": "户帖、路引、黑户、流民与姜家贱籍说明",
+      "beat_function": "动机/世界观/冲突",
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "必须解释她为何不能隐居或进城，但制度细节不值得逐项成戏。",
+      "delivery": "voiceover镜头7压成‘贱籍—无路引—进不了城住不了店’的因果短链。",
+      "adaptation_delta": {"changed_from": "户部至州县乡的完整制发制度", "changed_to": "角色当下能感到的三个生存后果", "preserved_function": "身份死局与自由身承诺", "short_drama_reason": "一句独白承载多个必要信息点", "payoff_guard": "裴长青许诺消籍仍是后续债务"},
+      "risk_if_removed": "姜月初冒险借身份会显得无动机。"
+    },
+    {
+      "source_span": "隐姓埋名、伪造户籍等方案逐一否决",
+      "beat_function": "选择/动机",
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "保留她思考过替代方案，不逐条拍空转心理镜。",
+      "delivery": "并入voiceover镜头7-8，以短句快速否决。",
+      "adaptation_delta": {"changed_from": "多段设问与回答", "changed_to": "急促三连短句", "preserved_function": "条条死路与无奈继续前行", "short_drama_reason": "用语速制造焦虑而非增加clip", "payoff_guard": "假身份成为唯一暂时可用方案"},
+      "risk_if_removed": "会让她显得未经思考便冒险。"
+    },
+    {
+      "source_span": "十数骑拦路、陈青源因制服误认",
+      "beat_function": "冲突/反转/关系",
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "本集主反转与假身份第一次兑现。",
+      "delivery": "voiceover镜头9-13，保留马蹄逼近、误认、沉默施压与‘何事’。",
+      "adaptation_delta": {"changed_from": "原文完整场面", "changed_to": "压缩旁白、保留核心对白和沉默", "preserved_function": "制服误认与姜月初临场装下去", "short_drama_reason": "沉默和一句短问比解释更有表演张力", "payoff_guard": "陈青源必须真诚信服而非突然降智"},
+      "risk_if_removed": "本集核心看点消失。"
+    },
+    {
+      "source_span": "飞鹰门奉命救援、折损七八人、狼妖占村",
+      "beat_function": "冲突/危机/世界观",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "建立任务难度和陈青源求援的可信动机。",
+      "delivery": "voiceover镜头12，以县令手令、折损人数、杀不进去三项事实完成。",
+      "adaptation_delta": {"changed_from": "陈青源分段陈述", "changed_to": "一口气的紧迫汇报", "preserved_function": "官方求援、门派失败、狼妖强度", "short_drama_reason": "把说明变成施压", "payoff_guard": "七八人折损数字不改写"},
+      "risk_if_removed": "观众会质疑为何十几名武人跪求陌生女子。"
+    },
+    {
+      "source_span": "村民被圈养、州府救援来回十天半月",
+      "beat_function": "危机/情绪峰/倒计时",
+      "decision": "dramatize",
+      "change_type": "rewrite_detail",
+      "reason": "保留人命压力与救援时限，避免消费女性与儿童受害的猎奇细节。",
+      "delivery": "voiceover镜头14，仅说圈在祠堂、每日拖走、求援至少十天。",
+      "adaptation_delta": {"changed_from": "开膛、生吞及女性儿童受辱的具体描述", "changed_to": "以圈养、拖走和等不到救援表达惨状", "preserved_function": "狼妖残暴、百姓命悬一线、姜月初是唯一希望", "short_drama_reason": "更克制且更集中于选择压力", "payoff_guard": "上盘村救援紧迫性不削弱"},
+      "risk_if_removed": "救村请求缺少道德重量。"
+    },
+    {
+      "source_span": "陈青源与众人跪求，姜月初内心崩溃",
+      "beat_function": "选择/情绪峰/集尾钩",
+      "decision": "dramatize",
+      "change_type": "add_hook",
+      "reason": "用黑色幽默完成反差回报，再把选择悬在集尾。",
+      "delivery": "voiceover镜头15-18，先群体跪求，再以‘还能活着回来吗’硬断。",
+      "adaptation_delta": {"changed_from": "原文停在众人把她视作唯一希望", "changed_to": "增加姜月初对狼妖、假身份、人命三重死局的内心问句", "preserved_function": "她被迫面对是否出手的选择", "short_drama_reason": "给下一集明确可承接问题", "payoff_guard": "不提前替她答应，也不改变后续决定"},
+      "risk_if_removed": "结尾会停在说明而非危机悬置。"
+    }
+  ]
+}

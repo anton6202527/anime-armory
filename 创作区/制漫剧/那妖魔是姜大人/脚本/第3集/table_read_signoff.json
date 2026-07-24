@@ -1,0 +1,56 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第3集/table_read_packet.json",
+          "sha256": "f49bb441c606190f0a5cd7fe5d0e7c111d6b6a659b684edc13ca5f1d80ce071f"
+        },
+        {
+          "path": "脚本/第3集/table_read_packet.md",
+          "sha256": "54a5f0a65ac436fed39d448d4f9068d975978007f99bcff7d400e00cba9f759f"
+        }
+      ],
+      "note": "重新绑定当前18句文本估时；围读确认可演性与时长风险",
+      "reviewed_at": "2026-07-24T07:17:09+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "1f4cb803129091f1f8cb8c18f9758e5a5cf5057e1a6e1ded103b7858897bf052",
+      "signed_input_fingerprint_sha": "defc350946d99c279b5be5bef8279264f28a67caf01ac52cbe4764692dea8a8e",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "stage1_table_read",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-24T07:17:09+00:00",
+  "episode": "第3集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第3集/table_read_packet.json": "f49bb441c606190f0a5cd7fe5d0e7c111d6b6a659b684edc13ca5f1d80ce071f",
+      "脚本/第3集/table_read_packet.md": "54a5f0a65ac436fed39d448d4f9068d975978007f99bcff7d400e00cba9f759f"
+    },
+    "sha": "1f4cb803129091f1f8cb8c18f9758e5a5cf5057e1a6e1ded103b7858897bf052"
+  },
+  "input_fingerprint": {
+    "files": {
+      "合成/第3集/配音/时长清单.json": null,
+      "脚本/第3集/voiceover.txt": "1fb0cbe1de68c2dad42e45aa4f703b6158f1a56878d4ff451de82d7286ba3c0b"
+    },
+    "sha": "defc350946d99c279b5be5bef8279264f28a67caf01ac52cbe4764692dea8a8e"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "editorial",
+      "roles": [
+        "director",
+        "head_writer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-24T07:17:09+00:00",
+  "version": 1
+}

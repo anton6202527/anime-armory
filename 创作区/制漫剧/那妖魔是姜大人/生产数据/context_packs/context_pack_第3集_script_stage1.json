@@ -1,0 +1,412 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_check",
+      "source_comprehension_gate",
+      "update_plan",
+      "doctor",
+      "development_pack",
+      "midstart_context",
+      "boundary_audit"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage1",
+    "stop_policy": "needs_choice_or_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第3集",
+  "files": [
+    {
+      "bytes": 3586,
+      "exists": true,
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=auto_recommended\n- 生视频渠道: 即梦/Dreamina  # source=auto_recommended\n- 视频模型路由: 自动按镜头路由  # source=auto_recommended\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 跳过  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n- 主线剪枝: 突出主线  # source=auto_recommended\n- 片段经济: 紧凑  # source=auto_recommended\n\nraw audit history omitted: records_seen=24, corrections_included=0/3",
+      "preview_policy": "settings_region_plus_bounded_corrections",
+      "relpath": "_设置.md",
+      "sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0"
+    },
+    {
+      "bytes": 3134,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | 8/8 | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 24/24 | ✅ | 8/8 | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 返修记录\n- 2026-07-24：第2集指定的 6 个视频片段已全部完成 Dreamina / Seedance 2.0 VIP 提交与验收：Clip05 part2、Clip06、Clip07 part1、Clip07 part2、Clip08 part1、Clip08 part2；累计消耗 756 credits（含 Clip07 part2 两次拒收重试）。Clip08 part2 已按 8fps 全时段 32 帧接触表复核并通过，纸上墨虎未离开谱页、无伪文字、姜月初身份/发型/服装稳定。合成阶段仍按项目设置默认跳过。视频列暂保持 provisional，待旧批次的后验一致性与配方证据闸门销账后再标 8/8，禁止强写完成。\n- 2026-07-24：视频预检发现 3 张旧图参考输入证据不可审计，已真实重抽 `EP02_CLIP01_start_a1.png`、`EP02_CLIP01_start_a3.png`、`EP02_CLIP04_start.png`，并为每次调用登记实际参考路径、prompt/reference/artifact SHA-256。另修复 `EP02_CLIP06_start.png` 山脊活虎乱入。全量 full image_qc 结果：脸/发型/服装各 26/26 ok，人物参考覆盖 21/21，prop pending=0，hard_blocks=0；`video_preflight` 已通过。\n- 2026-07-23：第2集 Clip 08 三张关键帧因姜月初换脸被用户拒绝；已使用 Codex / GPT Image 2 按“定妆脸锚 → start → start_a1 → end”单向链全部重抽。三张新图均完成 full `image_qc`、原像素身份/发型/服装/场景/VFX/接力目视和当前 SHA 验收；旧图与失败尾帧候选已可恢复归档到 `废料/出图/第2集/图片/identity_drift_2026-07-23/`。出图总数仍为 24/24。",
+      "relpath": "_进度.md",
+      "sha256": "b1a82e0d4ae250f93c149176778a21e867d247f071d3e1cf1c3e2b97f2df9f03"
+    },
+    {
+      "bytes": 3028,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_series_bible\nversion: 1\nstatus: confirmed\n---\n# 那妖魔是姜大人 — P-1 剧集开发圣经\n## 一句话卖点\n现代女子姜月初穿成大唐死囚，靠斩杀生灵换取道行、以妖血摹影妖能；她从一刀杀人求生开始，披上死者官服，在“斩妖”与“成妖”的边界上活成令人敬畏的姜大人。\n## 目标受众\n- 目标平台：红果向 9:16 竖屏漫剧，发行地区中国大陆；当前制作阶段为内部样片。\n- 核心人群：18—35 岁，偏好大女主、系统升级、斩妖玄幻、反杀爽感和身份悬疑的用户。\n- 观看场景：移动端碎片化追更；单集约 90—120 秒，首 3 秒给生死选择，结尾留下不可逆后果或下一战承诺。\n## 主角欲望\n- 外在目标：先活过尸场，再摆脱囚犯身份，在大唐镇魔秩序中获得合法且足以自保的位置。\n- 内在缺口：她擅长把恐惧换算成利弊，却尚未学会承担选择对他人的真实代价。\n- 首批核心问题：她杀裴、斩虎、夺衣冒名之后，能否守住秘密，并用来路不正的力量救下第一批求助者。\n## 长线悬念\n- 百妖谱为何选择她，斩杀与摹影是否会反噬她的人性和身份。\n- 姜月初为何以罪臣之女/囚犯身份出现在尸场，姜家旧案与镇魔司追查如何交汇。\n- “姜大人”到底是斩妖者、借妖者，还是世人眼中的另一只妖魔。\n## 世界观规则\n- 大唐官府以镇魔司处理妖患；江湖门派和村镇既依赖镇魔司，也畏惧其权力。\n- 凡尘三境按闻弦、鸣骨、成丹递进；更高层级必须从后文核验后才进入剧集圣经。\n- 百妖谱只为姜月初亲手完成的有效斩杀结算道行；妖血可摹影对应妖物能力，道行可作一次性爆发或成长资源。\n- 伤势、资源和身份物件都具有跨镜、跨集连续性；越境反杀必须先展示条件与代价。\n## 核心爽感\n- 死局算计：对手更强，但姜月初发现规则漏洞，以冷静选择翻盘。\n- 数值兑现：道行入账、消耗、能力获得均有明确账本，观众能预判也能期待变招。\n- 身份错位：死囚穿上镇魔司制服，被迫把误认演成真的威势。\n- 妖能奇观：冷灰世界中，墨黑妖影与稀疏暖金谱纹成为唯一高饱和回报。\n- 黑色幽默：越危险，姜月初越用一句克制的现代心声把荒诞戳破。\n## 关键角色弧\n- 姜月初：want 是活命与自由；need 是承认选择有代价；flaw 是把一切先当生存算式；长线从求生者变成建立规则的人。\n- 裴长青：want 是完成镇魔职责并控制囚犯；他的死亡把官服、武器、职责与追查一并留给姜月初。\n- 陈青源：want 是救上盘村；他对“镇魔司姜大人”的信任迫使姜月初第一次用伪身份承担真实责任。\n- 百妖谱：不是人格化导师，不替主角作决定；它只提供冷酷规则和结果，诱惑来自姜月初自己的选择。",
+      "relpath": "开发包/series_bible.md",
+      "sha256": "606ac4747030367cf31917e15a871b62154a81a01e7d2ff81126ed6ed25f8e40"
+    },
+    {
+      "bytes": 2194,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_adaptation_strategy",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "status",
+          "generated_at",
+          "principles",
+          "triage_policy",
+          "protected_functions",
+          "forbidden_changes"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/adaptation_strategy.json",
+      "sha256": "3c6d212e4b4dd74e979dd8b3c4340fd1c8fabc565ee2fdf50c2cc55ffb29c602"
+    },
+    {
+      "bytes": 3836,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_season_arc",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "status",
+          "generated_at",
+          "series_promise",
+          "front_arc",
+          "monetization_or_follow_points",
+          "signature_scenes"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/season_arc.json",
+      "sha256": "93f3909aaf01df3714357668aa30f907e6059a74e83de53b976e2075f42943ed"
+    },
+    {
+      "bytes": 3943,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_production_feasibility",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "status",
+          "generated_at",
+          "core_characters",
+          "core_locations",
+          "props_vfx_spectacle",
+          "voice_and_music",
+          "model_route_risks",
+          "compliance_risks"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/production_feasibility.json",
+      "sha256": "d3f1f7719ec8e197a1f799eb87b7725911d878fff8de202d8909ca3fd6d75eae"
+    },
+    {
+      "bytes": 2784,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_pilot_greenlight\nversion: 1\nstatus: confirmed\n---\n# 那妖魔是姜大人 — P-1 试播打样绿灯\n## 打样范围\n- 第1集完成剧本、围读、导演排戏、分镜、定妆、逐镜出图、视频、配音、字幕、合成和验收全链路。\n- 第2—3集先锁文字追更链；只在第1集通过身份、动作、系统视觉和成片体验后继续烧图。\n## 高风险 Clip 打样清单\n| 优先级 | 集/Clip | 为什么必须先打样 | 通过标准 | 失败回退 |\n|---|---|---|---|---|\n| P0 | 第1集 冷开场刀尖抉择 | 同时承担首3秒钩子、主角脸、手刀关系与集尾回环 | 竖屏一眼读懂谁将杀谁；姜月初与已通过的项目内无水印身份母本一致；无错手、无穿帮字 | 分成刀尖极特写、双人侧剪影、眼神特写三镜 |\n| P0 | 第1集 虎妖濒死复苏 | 需要建立体型、伤势、空间轴和超常恢复力 | 虎妖伤口位置固定；三角站位清楚；压迫感不靠光污染 | 静帧序列加尘雾、呼吸、伤口局部动效 |\n| P0 | 第1集 百妖谱规则显现 | AI文字、界面可读性和系统母题风险最高 | 底图无乱码；中文后期叠加；墨黑暖金视觉与全局风格一致 | 完全采用后期图形层，不让生图模型写字 |\n| P1 | 第1集 裴长青重伤对白 | 要验证双人近景、反打轴线和口型策略 | 角色身份稳定；重伤连续；一句一镜可剪；嘴型不过度抢戏 | 用过肩静帧、轻推拉和短口型片段混剪 |\n| P1 | 第2集 一刀斩虎预研帧 | 决定系统爽点能否在预算内兑现 | 动作起落清楚；刀弧不遮主角脸；尺度连续 | 五相位拆镜配遮挡硬切，不生成长时连续打斗 |\n## 绿灯标准\n- 第1集前3秒可读，结尾刺裴与冷开场闭环，下一集“二十年道行斩虎”的承诺明确。\n- 姜月初五角 turnaround、表情板和灰囚衣定妆通过；外部水印图不上传，关键镜逐张引用同一项目内身份锚，脸、发际线、瞳色、年龄感稳定。\n- 原创合成声路线可执行；字幕留在画面安全区，口白与内心声不会互相争抢。\n- Codex/GPT Image 2 能生成无水印关键帧；重抽优先 P0 镜头，预算策略为充足。\n- 系统文字采用后期叠加；复杂动作有拆镜和2.5D降级方案。\n- 机器 QC、逐张目视、review-ui、评分与一致性账无阻断项，最终成片由人类终审后才进入发布流程。\n## 小批量放量条件\n- 第1集内部样片通过画面、声音、节奏与连续性验收后，推进第2—3集完整制作。\n- 第3集完成“斩虎兑现 + 假镇魔司身份启动”小弧复盘后，再决定是否扩至第10集；每批保留源理解、P2、animatic、P3、图像QC与成片验收闸门。",
+      "relpath": "开发包/pilot_greenlight.md",
+      "sha256": "4fe14deb7dee9f544bddd78aed5b6daac0595566e380a5e45f81e29b1e2f8b0b"
+    },
+    {
+      "bytes": 7520,
+      "exists": true,
+      "preview": "第3章 那我还活鸡毛了，跳了兄弟\n第3章 那我还活鸡毛了，跳了兄弟\n月色凄冷。\n姜月初拖着裴长青的尸体，找到一块还算平整的土坡，用横刀挖着。\n挖了半天，也只是个浅坑。\n罢了。\n这荒郊野岭的，能入土为安，已经算对得起他了。\n做完这一切，她才回身，走向那些镇魔卫的尸体。\n人死鸟朝天，不死万万年。\n可人死了，身上的东西还是有用的。\n她耐着恶心，在尸首身上摸索起来。\n碎银几两，干硬的肉脯，一个牛皮水囊。\n最后，她的目光落在一具身材与自己相仿的尸身上。\n那人很年轻，脸上还带着几分稚气。\n姜月初沉默片刻。\n“......得罪了，兄弟。”\n她低声说了一句，动手剥下了他身上那件黑衣赤纹的劲装。\n囚服是肯定不能再穿了，那玩意儿走到哪都是个活靶子。\n换上这身镇魔司的衣服，同样凶险。\n可两害相权，她宁可选那个看起来更不好惹的身份。\n至少，能唬人。\n衣物上满是血污和破口，穿在身上又冷又硬。\n她将长发束起，按着记忆里的样子，胡乱扎了个马尾，又将横刀挂在腰间。\n镜子是没有的，但她能想象出自己此刻的样子。\n不伦不类。\n可当她的手握住刀柄时，一种莫名的安定感涌了上来。\n她不再停留，辨明了方向，踏上了官道。\n镇魔司制服——黑衣赤纹\n...\n官道上空无一人，只有孤月相伴。\n姜月初默默走着，脑子里飞速盘算。\n好在这个世界的大唐，疆域地理与她记忆中的历史大差不差。\n按照记忆，自己如今身处的陇右道，大致便是后世的甘肃一带。\n自古陇右，民风彪悍，与西域诸国，草原部族接壤，向来是兵家必争之地。\n大唐在此地屯驻重兵，设都护府，以震慑四方。\n可饶是如此，马匪流寇依旧横行，再加上妖魔作祟，寻常百姓的日子，过得并不好。\n眼下的当务之急，便是解决户籍路引的问题。\n按照这具身体破碎的记忆，大唐的户籍制度，名为户帖。\n由尚书省户部统一制发，再由州、县、乡、层层下发。\n一户一帖，载明户主、家眷、年龄、田产，甚至连样貌特征都会有简单描述。\n此为籍。\n有了户籍，方能向官府申领路引。\n凭路引，才能于大唐境内通行无阻，入城过关，投宿住店。\n无籍者，是为黑户。\n无引者，是为流民。\n两者一旦被官府查获，下场都好不到哪里去。\n她这具身体的原主，本是京城高官的独女，自然是有户籍的。\n可问题就出在这。\n随着姜家获罪，她的户籍也被打上了贱籍的烙印。\n裴长青死前许诺，还她自由身。\n所指的，便是替她消了这贱籍。\n姜月初揉了揉眉心，只觉得头疼。\n啧......\n这叫什么事儿。\n刚解决了生存危机，转头就掉进了身份的死局里。\n如何解决？\n虽说有这金手指傍身，在这荒郊野岭，杀些野兽妖物，换取道行，提升实力，混个温饱甚至逍遥快活，并非难事。\n可她这辈子不想当个野人。\n找个偏远村落，隐姓埋名？\n风险太大。\n大唐这户籍查得严，一个来路不明的陌生人，迟早会被盘问出来。\n伪造户籍路引？\n更是天方夜谭。\n她一个身无分文的弱女子，去哪找这门路？\n思来想去，条条都是死路。\n姜月初停下脚步，抬头看了一眼天上的孤月。\n罢了......\n还能咋样。\n走一步看一步吧。\n正如此想着，前方忽有一阵急促的马蹄声由远及近。\n嘚嘚嘚——\n十数骑卷着烟尘，直奔而来。\n姜月初瞳孔一缩，下意识握紧了腰间的刀柄。\n马队越来越近，为首之人似乎也发现了官道中央那道孤零零的身影，猛地一勒缰绳。\n“吁——”\n十几匹健马齐齐停下。\n火把的光亮驱散了些许黑暗，也照亮了来人的面庞。\n那是一群劲装武人，个个风尘仆仆，神色焦急，腰间都配着刀剑。\n为首的是个中年汉子，国字脸，一脸虬髯，眼神锐利。\n他本是满脸戒备，可当火光照清姜月初身上那件黑衣赤纹的制服时，神色骤然一变。",
+      "relpath": "脚本/第3集/raw.txt",
+      "sha256": "ea1ecf03933a7b93b57a5d1646254cdd2f93a848b0fcb8c4db011d613ae7f8dd"
+    },
+    {
+      "bytes": 726,
+      "exists": true,
+      "preview": {
+        "episode": "第3集",
+        "graph_hash": "ebbd89866ac0b4af3722954d9d4f32bfe91a0acfb05c06fd78dfa7ec4cb500d5",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 0,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 1,
+          "routes": 0,
+          "story_clips": 0,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第3集.json",
+      "sha256": "75f3321f8ddf0371f39374301019325009fda76e60b4f27591aeb8adc9a59517"
+    }
+  ],
+  "genre_pack_context": {
+    "activation": {
+      "reason": "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。",
+      "state": "storyboard_missing",
+      "storyboard_clip_count": 0,
+      "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+      "storyboard_state": "missing",
+      "triggered": false
+    },
+    "active_scene_archetypes": [],
+    "episode": "第3集",
+    "generated_at": "2026-07-24T07:07:50+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "matched_genre_keys": [
+        "chuanyue"
+      ],
+      "matched_labels": [
+        "穿越"
+      ],
+      "matches": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 0,
+          "matched_term": "系统流",
+          "priority": 1
+        }
+      ],
+      "raw": "系统流"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形"
+      ],
+      "genre_keys": [
+        "chuanyue"
+      ],
+      "labels": [
+        "穿越"
+      ],
+      "matched_packs": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 0,
+          "matched_term": "系统流",
+          "priority": 1
+        }
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "by_genre": [
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "chuanyue",
+            "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+          }
+        ],
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+      }
+    },
+    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+    "stage_key": "script_stage1",
+    "status": "pass",
+    "summary": {
+      "activation_state": "storyboard_missing",
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0,
+      "matched_genre_keys": [
+        "chuanyue"
+      ],
+      "matched_packs": 1,
+      "storyboard_clip_count": 0,
+      "storyboard_state": "missing"
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "settings_context": {
+    "authority": {
+      "audit_records": "provenance_only_non_authoritative",
+      "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+      "records_can_override_effective_settings": false
+    },
+    "effective_settings": {
+      "主线剪枝": {
+        "source": "auto_recommended",
+        "value": "突出主线"
+      },
+      "制作模式": {
+        "source": "explicit_user",
+        "value": "混合自动路由"
+      },
+      "发行地区": {
+        "source": "explicit_user",
+        "value": "中国大陆"
+      },
+      "合成阶段": {
+        "source": "explicit_user",
+        "value": "跳过"
+      },
+      "合规用途": {
+        "source": "explicit_user",
+        "value": "internal_only"
+      },
+      "图片验收模式": {
+        "source": "explicit_user",
+        "value": "逐张机器QC+实际目视"
+      },
+      "基础视觉风格": {
+        "source": "explicit_user",
+        "value": "冷灰写实3D国风漫剧"
+      },
+      "字幕语言": {
+        "source": "explicit_user",
+        "value": "中文"
+      },
+      "执行者实际像素目视": {
+        "source": "explicit_user",
+        "value": "授权"
+      },
+      "母题增强": {
+        "source": "explicit_user",
+        "value": "开启"
+      },
+      "片段经济": {
+        "source": "auto_recommended",
+        "value": "紧凑"
+      },
+      "生图AI": {
+        "source": "explicit_user",
+        "value": "Codex CLI"
+      },
+      "生图模型": {
+        "source": "explicit_user",
+        "value": "GPT Image 2"
+      },
+      "生成优先序": {
+        "source": "explicit_user",
+        "value": "关键镜优先"
+      },
+      "生成粒度": {
+        "source": "explicit_user",
+        "value": "整集"
+      },
+      "生视频模型": {
+        "source": "auto_recommended",
+        "value": "Seedance 2.0"
+      },
+      "生视频渠道": {
+        "source": "auto_recommended",
+        "value": "即梦/Dreamina"
+      },
+      "画幅": {
+        "source": "explicit_user",
+        "value": "9:16"
+      },
+      "目标平台": {
+        "source": "explicit_user",
+        "value": "红果"
+      },
+      "脚本批次": {
+        "source": "explicit_user",
+        "value": "逐集"
+      },
+      "视频模型路由": {
+        "source": "auto_recommended",
+        "value": "自动按镜头路由"
+      },
+      "重抽预算策略": {
+        "source": "explicit_user",
+        "value": "预算充足"
+      },
+      "项目规模": {
+        "source": "explicit_user",
+        "value": "长篇量产"
+      },
+      "题材": {
+        "source": "explicit_user",
+        "value": "系统流"
+      },
+      "首切范围": {
+        "source": "explicit_user",
+        "value": "部分先切"
+      }
+    },
+    "kind": "n2d_settings_context",
+    "recent_corrections": [],
+    "record_summary": {
+      "corrections_included": 0,
+      "corrections_seen": 0,
+      "format": "record_section",
+      "full_history_omitted": true,
+      "limit": 3,
+      "records_seen": 24
+    },
+    "source_path": "_设置.md",
+    "source_sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0",
+    "status": "ok",
+    "version": 1
+  },
+  "stage_key": "script_stage1",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "开发包/series_bible.md",
+      "开发包/adaptation_strategy.json",
+      "开发包/season_arc.json",
+      "开发包/production_feasibility.json",
+      "开发包/pilot_greenlight.md",
+      "脚本/第3集/raw.txt",
+      "生产数据/episode_graph_第3集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

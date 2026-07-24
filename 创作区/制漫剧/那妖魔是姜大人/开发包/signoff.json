@@ -24,12 +24,12 @@
           "sha256": "606ac4747030367cf31917e15a871b62154a81a01e7d2ff81126ed6ed25f8e40"
         }
       ],
-      "note": "依据用户持续授权，确认第2话开工前P-1开发包、追更弧与视觉制作路线继续有效。",
-      "reviewed_at": "2026-07-22T06:18:52+00:00",
+      "note": "用户明确要求继续制作下一话；接受当前开发包与第3集按最新skill最小重制计划推进",
+      "reviewed_at": "2026-07-24T07:07:49+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "director",
       "signed_evidence_fingerprint_sha": "42fbbae8f9399a621f26ddfa391ab76be7a5d8c0a8574a8187130f98325a3ff2",
-      "signed_input_fingerprint_sha": "4a0c299134cbfea433607caf78676489ed19fd69495a682a7118ba31e912183c",
+      "signed_input_fingerprint_sha": "69c484481390371c277f108926415da7d6c9dcc398dc5c38f3b593fc3dab376f",
       "unresolved_risks": [],
       "waiver_reason": ""
     },
@@ -57,19 +57,19 @@
           "sha256": "606ac4747030367cf31917e15a871b62154a81a01e7d2ff81126ed6ed25f8e40"
         }
       ],
-      "note": "依据用户持续授权，批准第2话按整集模式和预算充足策略进入生产。",
-      "reviewed_at": "2026-07-22T06:18:52+00:00",
+      "note": "用户明确要求继续制作下一话；批准第3集非付费前置制作，付费生成仍按工位边界另行确认",
+      "reviewed_at": "2026-07-24T07:07:49+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "producer",
       "signed_evidence_fingerprint_sha": "42fbbae8f9399a621f26ddfa391ab76be7a5d8c0a8574a8187130f98325a3ff2",
-      "signed_input_fingerprint_sha": "4a0c299134cbfea433607caf78676489ed19fd69495a682a7118ba31e912183c",
+      "signed_input_fingerprint_sha": "69c484481390371c277f108926415da7d6c9dcc398dc5c38f3b593fc3dab376f",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "p1_development_greenlight",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-22T06:18:52+00:00",
+  "created_at": "2026-07-24T07:07:49+00:00",
   "episode": "",
   "evidence_fingerprint": {
     "files": {
@@ -83,11 +83,11 @@
   },
   "input_fingerprint": {
     "files": {
-      "_设置.md": "6fff3d258e49d1de4d1d3ce793ac9a74eabb6f821ab003227bcb7e61cc18bbe1",
+      "_设置.md": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0",
       "小说/那妖魔是姜大人.txt": "4b7e02353bd41d79e5f1a7c08cce88d2f54fbf9ec8f75259147b9e0eb9fe4ee1",
       "那妖魔是姜大人.txt": "4b7e02353bd41d79e5f1a7c08cce88d2f54fbf9ec8f75259147b9e0eb9fe4ee1"
     },
-    "sha": "4a0c299134cbfea433607caf78676489ed19fd69495a682a7118ba31e912183c"
+    "sha": "69c484481390371c277f108926415da7d6c9dcc398dc5c38f3b593fc3dab376f"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -107,6 +107,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-22T06:18:52+00:00",
+  "updated_at": "2026-07-24T07:07:49+00:00",
   "version": 1
 }

@@ -1,0 +1,140 @@
+{
+  "_agent_guidance": "像真实编剧整体改良：① 砍/合 tangent_candidates 里的琐碎支线以突出主情节；② 补还或删除 foreshadow_debt 里埋了没还的伏笔；③ mainline_gaps 处把主线承接点接回 spine.depends_on；④ 不合理点写进 story_spine.continuity_fixes（最小改动+no_contradiction_proof）。所有改动落回 story_spine.json 的 threads[].decision/connectivity 与 continuity_fixes，再跑 story_spine.py check 做防瞎编+衔接硬校验。禁止臆造任何 id；改后主线必须仍衔接。",
+  "consumes": [
+    "设定库/source_comprehension.json",
+    "开发包/story_spine.json"
+  ],
+  "foreshadow_debt": [
+    {
+      "foreshadow_id": "SRC_FORESHADOW_001",
+      "protected": true,
+      "setup": "姜月初为何成为囚犯并被押往边地",
+      "suggestion": "受保护伏笔，必须补还回收，不能砍"
+    },
+    {
+      "foreshadow_id": "SRC_FORESHADOW_002",
+      "protected": true,
+      "setup": "百妖谱的来源、上限与代价",
+      "suggestion": "受保护伏笔，必须补还回收，不能砍"
+    },
+    {
+      "foreshadow_id": "SRC_FORESHADOW_003",
+      "protected": true,
+      "setup": "裴长青之死及镇魔司遗物",
+      "suggestion": "受保护伏笔，必须补还回收，不能砍"
+    }
+  ],
+  "generated_at": "2026-07-24T07:07:52+00:00",
+  "inputs_missing": [],
+  "kind": "n2d_editorial_revision_worksheet",
+  "mainline_gaps": [],
+  "revision_ledger": [],
+  "status": "draft",
+  "summary": {
+    "foreshadow_debt": 3,
+    "mainline_gaps": 0,
+    "tangent_candidates": 1,
+    "threads_scored": 8
+  },
+  "tangent_candidates": [
+    {
+      "class": "supporting",
+      "decision": "keep",
+      "mainline_deps": [],
+      "name": "青面郎君威胁线",
+      "note": "低主线贡献的琐碎支线；提案精简以突出主情节（砍前须给 payoff_reroute/no_orphan_proof，由 story_spine.check 校验）。",
+      "pays_protected": [],
+      "proposal": "compress",
+      "score": 1,
+      "thread_id": "THREAD_QINGMIAN"
+    }
+  ],
+  "thread_contributions": [
+    {
+      "class": "supporting",
+      "decision": "keep",
+      "mainline_deps": [
+        "SRC_CAUSE_003",
+        "SRC_CAUSE_005"
+      ],
+      "name": "虎妖恢复力与摹影标尺线",
+      "pays_protected": [
+        "SRC_FORESHADOW_004"
+      ],
+      "score": 6,
+      "thread_id": "THREAD_TIGER"
+    },
+    {
+      "class": "supporting",
+      "decision": "keep",
+      "mainline_deps": [
+        "SRC_CAUSE_002",
+        "SRC_CAUSE_003",
+        "SRC_CAUSE_005"
+      ],
+      "name": "裴长青因果债与镇魔司遗物线",
+      "pays_protected": [],
+      "score": 5,
+      "thread_id": "THREAD_PEI"
+    },
+    {
+      "class": "supporting",
+      "decision": "keep",
+      "mainline_deps": [],
+      "name": "广武县上盘村狼患救援小弧",
+      "pays_protected": [
+        "SRC_FORESHADOW_005"
+      ],
+      "score": 4,
+      "thread_id": "THREAD_WOLF"
+    },
+    {
+      "class": "supporting",
+      "decision": "compress",
+      "mainline_deps": [
+        "SRC_CAUSE_004"
+      ],
+      "name": "百妖谱来源与代价线",
+      "pays_protected": [],
+      "score": 2,
+      "thread_id": "THREAD_SYSTEM"
+    },
+    {
+      "class": "supporting",
+      "decision": "compress",
+      "mainline_deps": [],
+      "name": "姜家旧案与囚犯来历线",
+      "pays_protected": [],
+      "score": 1,
+      "thread_id": "THREAD_JIANG"
+    },
+    {
+      "class": "supporting",
+      "decision": "compress",
+      "mainline_deps": [],
+      "name": "镇魔司组织全貌线",
+      "pays_protected": [],
+      "score": 1,
+      "thread_id": "THREAD_ZHENMOSI"
+    },
+    {
+      "class": "supporting",
+      "decision": "keep",
+      "mainline_deps": [],
+      "name": "青面郎君威胁线",
+      "pays_protected": [],
+      "score": 1,
+      "thread_id": "THREAD_QINGMIAN"
+    },
+    {
+      "class": "tangent",
+      "decision": "compress",
+      "mainline_deps": [],
+      "name": "行路流水、重复惊惧与网文回顾体（散文肌理，非情节线）",
+      "pays_protected": [],
+      "score": -2,
+      "thread_id": "THREAD_PROSE"
+    }
+  ],
+  "version": 1
+}
