@@ -1923,6 +1923,29 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 detail = str(e)[:160]
                 p.prework.append({"step": "story_spine", "status": "advisory", "detail": f"story_spine 无法运行（降级建议）：{detail}"})
 
+        # editorial_revision：编剧级整体改良的**提案层**（story_spine 上游生成器）。机检挖出琐碎支线/
+        # 埋了没还的伏笔/主线接不上，产出编辑工作单指导 AI 编剧做整体改良。**恒 advisory**——只提案不阻断，
+        # 真正的防瞎编+衔接硬校验仍由 story_spine.check 兜（本步只额外软提醒未处理的受保护伏笔债/臆造 id）。
+        editorial_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "editorial_revision.py")
+        if os.path.exists(editorial_script):
+            try:
+                _run([sys.executable, editorial_script, root, "build", "--write"])
+                r = _run([sys.executable, editorial_script, root, "check", "--json"])
+                report = _parse_trailing_json(r.stdout) or {}
+                summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+                p.prework.append({
+                    "step": "editorial_revision",
+                    "status": "advisory",
+                    "detail": (
+                        f"编辑提案（改良剧本·突出主线）：见 开发包/views/editorial_revision_worksheet.md；"
+                        f"未处理 block/warn={summary.get('block', 0)}/{summary.get('warn', 0)}——"
+                        f"砍琐碎支线/补伏笔债/接主线缺口后落回 story_spine.json 再过 check。"
+                    ),
+                })
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                p.prework.append({"step": "editorial_revision", "status": "advisory", "detail": f"editorial_revision 无法运行（降级建议）：{detail}"})
+
     # director_blocking_pack：阶段2 分镜前先过导演排戏层，不让 storyboard 临场发明轴线/调度/转场。
     if stage_key == "script_stage2" and ep:
         _run_production_mode_router_prework(p, root, ep)

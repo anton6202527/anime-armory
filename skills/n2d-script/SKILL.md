@@ -152,10 +152,17 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 
 拆集前，像真实编剧改编长篇一样先**提炼主线、砍掉偏离主线的旁枝、修不合理点**，而不是把每条支线都逐集成戏——否则简单叙事也会被拆成过多集/节拍/clip。这一层落 `开发包/story_spine.json`，由 `run.py next` 在 `script_stage1` 消费 `development_pack` 后自动跑（消费 `设定库/source_comprehension.json` 因果链/伏笔账 + `开发包/adaptation_strategy.json` 受保护功能）。
 
+**先拿机检提案，再做语义取舍（`editorial_revision.py`·整体改良的提案层）**：不要对着空 story_spine 从零起草。`run.py` 会在 story_spine 前自动跑 `editorial_revision.py build`，机检挖出三类编辑信号落 `开发包/editorial_revision_worksheet.md`——① **与主线不相干的琐碎支线**（贡献分低的 tangent/supporting 线程，按最该砍排序 → 提案 cut/compress）；② **埋了没还的伏笔**（`status=open` 却没线程回收 → 补还或删设定，受保护伏笔必须补还）；③ **主线接不上处**（`must_keep` 因果承接点没被任何 spine 节点 `depends_on` 引用）。你**像真实编剧**据此做语义判断：砍琐碎、合冗余、修不合理、突出主情节，把决定落回 `story_spine.json` 的 `threads[].decision/connectivity` 与 `continuity_fixes`。**贡献分是机械信号防误判**——承载受保护伏笔/主线因果依赖/高权重的支线分高、不会被当琐碎误砍。
+
 ```bash
+python3 skills/n2d-script/scripts/editorial_revision.py <作品根> build --write   # 机检编辑提案 → 工作单
 python3 skills/n2d-script/scripts/story_spine.py <作品根> scaffold --write
+# 据工作单把 threads 决策/continuity_fixes 填进 story_spine.json，再：
+python3 skills/n2d-script/scripts/editorial_revision.py <作品根> check --json     # 防瞎编：动作账 id 必须真实 + 砍除须有 reroute
 python3 skills/n2d-script/scripts/story_spine.py <作品根> check --json --write-missing
 ```
+
+> **防瞎编铁律（改编不能编）**：`editorial_revision.check` 与 `story_spine.check` 都只认 `source_comprehension`/`story_spine` 里**真实存在的 id**——`revision_ledger` 引用任何臆造的 foreshadow/causal/thread id → block；任何 `cut/fold` 动作缺 `reroute`（砍后主线/伏笔由谁承接）→ block。这就是「你得整体掌控小说、不能瞎编、改了之后要能和后面主要情节衔接上」的机器保证。
 
 产物 `开发包/story_spine.json`：
 - `mainline_logline` + `spine[]`：一句话主线 + 主线节点链（每节点写 `source_span`、`causal_role`、`depends_on`），把"主情节"从散文里拎出来。
