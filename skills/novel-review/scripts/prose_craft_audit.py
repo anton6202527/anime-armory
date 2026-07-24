@@ -43,6 +43,15 @@
                         （都是"他…"或同一人名），句长 cv 之外的**段落级**节奏盲区；
                         传统 line-edit checklist 的 vary-paragraph-openings 项。
 
+【E. 段落极端形态】（2026-07 第五轮补，出处见 novel/Q&A.md Q13）：
+  ⑯ wall_of_text        墙文本——单段超长（编辑口径：约超过半页的连续段落即墙）；
+                        手机端网文尤其致命（一屏全是字=划走）。纯字数判。
+  ⑰ fragmented_paragraph_run 碎句体 run——连续多个叙述段每段只有几个字
+                        （"一声。/又一声。"式短剧碎句体）。生产实锤：王敦外传
+                        第20章大量单句成段，信息密度被拉薄、行文滑向短视频脚本腔。
+                        只数叙述段（对话行天然短，跳过不断 run）；动作场景有意
+                        碎拍合法，恒 advisory。
+
 口径纪律：论文比例是英文短篇语料的**方向**不是中文网文阈值——本模块阈值全部
 internal-heuristic、env 可标定、恒 advisory；burstiness/重复率等风格侧归 mechanical_check，
 本模块只管**篇章/手艺侧**（改写后判别力 93% vs 风格侧 3%，见 keyword_banks 注释）。
@@ -119,6 +128,11 @@ FIRST_PERSON_PER_K = float(os.environ.get("NOVEL_PROSE_FIRSTPERSON_PER_K", "8"))
 # D 组阈值（开场滥调/段首同型）
 SLUSH_HEAD_CHARS = int(os.environ.get("NOVEL_PROSE_SLUSH_HEAD_CHARS", "300"))   # 开篇窗口字数
 PARA_OPEN_RUN = int(os.environ.get("NOVEL_PROSE_PARA_OPEN_RUN", "4"))           # 段首同型连续段数
+# E 组阈值（段落极端形态）
+WALL_PARA_CHARS = int(os.environ.get("NOVEL_PROSE_WALL_CHARS", "400"))          # 单段字数上限（墙）
+WALL_MIN_PARAS = int(os.environ.get("NOVEL_PROSE_WALL_MIN_PARAS", "2"))         # 章内墙段数达此才报
+FRAG_PARA_CHARS = int(os.environ.get("NOVEL_PROSE_FRAG_CHARS", "12"))           # 碎段字数下限
+FRAG_RUN = int(os.environ.get("NOVEL_PROSE_FRAG_RUN", "8"))                     # 连续碎段数
 PROVENANCE = "internal-heuristic·confidence=low"
 
 # 过滤词（filter words）：POV 角色与感知之间的"滤镜"。只算**叙述行**（引号外），
@@ -376,6 +390,27 @@ def opener_max_run(openers):
     return best_run, best_val
 
 
+# ── E 组纯函数（段落极端形态）────────────────────────────────────────────
+def paragraph_extremes(text):
+    """(墙段列表[前30字], 最长叙述碎段连续 run)。纯函数·可测。
+
+    墙 = 单段 ≥WALL_PARA_CHARS 字（所有段都算，长对白段同样是墙）；
+    碎段 run = **叙述段**连续 <FRAG_PARA_CHARS 字的最长 run——对话行天然短，
+    跳过且**不断** run（碎句体的病灶在叙述侧，混排对白不该稀释信号）。"""
+    walls, frag_run, frag_best = [], 0, 0
+    for para in (text or "").splitlines():
+        p = para.strip()
+        if not p or p.startswith("#"):
+            continue
+        if len(p) >= WALL_PARA_CHARS:
+            walls.append(p[:30])
+        if _DIALOGUE_LINE_RE.match(p):
+            continue
+        frag_run = frag_run + 1 if len(p) < FRAG_PARA_CHARS else 0
+        frag_best = max(frag_best, frag_run)
+    return walls, frag_best
+
+
 def _load_settings(project):
     try:
         from project_io import load_project_settings
@@ -496,6 +531,22 @@ def analyze(project):
                                     f"（阈 {PARA_OPEN_RUN}）——段首同型是句长之外的段落级单调；"
                                     f"传统 line-edit：换主语、换句式、动作或场景先行（{PROVENANCE}）")})
 
+        # ── E 组：段落极端形态（逐章）──────────────────────────────────────
+        walls, frag_best = paragraph_extremes(text)
+        if len(walls) >= WALL_MIN_PARAS:
+            alerts.append({"type": "wall_of_text", "severity": "建议级", "auto": True,
+                           "chapter": cid, "count": len(walls), "evidence": "；".join(walls[:2]),
+                           "note": (f"第{cid}章 {len(walls)} 个超长段（≥{WALL_PARA_CHARS} 字/段）——"
+                                    f"墙文本：编辑口径约半页不分段即墙，手机端一屏全是字=划走；"
+                                    f"按动作/视点/话题转换拆段，留白也是节奏（{PROVENANCE}）")})
+        if frag_best >= FRAG_RUN:
+            alerts.append({"type": "fragmented_paragraph_run", "severity": "建议级", "auto": True,
+                           "chapter": cid, "run": frag_best,
+                           "note": (f"第{cid}章连续 {frag_best} 个叙述段每段不足 {FRAG_PARA_CHARS} 字"
+                                    f"（阈 {FRAG_RUN}）——碎句体：单句成段连排是短视频脚本腔，"
+                                    f"信息密度被拉薄、庄重感流失；碎拍留给真正的爆点，"
+                                    f"其余合并成正常段落（动作场景有意碎拍合法，人工取舍）（{PROVENANCE}）")})
+
         tot_chars += chars
         tot_label += emotion_label_count(text)
         tot_physio += physio_cooccur_count(text)
@@ -552,6 +603,8 @@ def analyze(project):
                        "crutch_per_k": CRUTCH_PER_K, "echo_window": ECHO_WINDOW,
                        "headhop_min_hits": HEADHOP_MIN_HITS,
                        "slush_head_chars": SLUSH_HEAD_CHARS, "para_open_run": PARA_OPEN_RUN,
+                       "wall_chars": WALL_PARA_CHARS, "frag_chars": FRAG_PARA_CHARS,
+                       "frag_run": FRAG_RUN,
                        "smell_exempt": smell_exempt, "provenance": PROVENANCE,
                        "note": "advisory：StoryScope 比例是英文短篇的方向非中文阈值；恒不阻断。"},
         "chapters": rows,

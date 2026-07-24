@@ -202,3 +202,40 @@ def test_analyze_varied_paragraph_openers_no_alert(tmp_path):
     root = _project(tmp_path, [ch])
     res = pca.analyze(root)
     assert [a for a in res["alerts"] if a["type"] == "paragraph_opening_monotony"] == []
+
+
+# ── E 组：段落极端形态 ───────────────────────────────────────────────────────
+
+def test_paragraph_extremes_detects_wall_and_frag_run():
+    wall = "灵气在他经脉里奔涌不休，" * 40   # 单段 ≥400 字
+    frags = "\n".join(["一声。", "又一声。", "更近了。", "停了。", "再响。", "门外。", "廊下。", "床前。"])
+    walls, frag_best = pca.paragraph_extremes(wall + "\n" + frags)
+    assert len(walls) == 1 and frag_best == 8
+
+
+def test_paragraph_extremes_dialogue_lines_skipped_not_breaking():
+    # 对话行天然短：跳过且不断叙述碎段 run
+    lines = ["一声。", "「谁？」", "又一声。", "「别动。」", "更近了。", "停了。", "再响。", "门外。", "廊下。", "床前。"]
+    _, frag_best = pca.paragraph_extremes("\n".join(lines))
+    assert frag_best == 8
+
+
+def test_paragraph_extremes_normal_prose_clean():
+    normal = "他推门而入，看清了屋内的陈设与来客，烛火在穿堂风里晃了两晃才稳住。\n" * 5
+    walls, frag_best = pca.paragraph_extremes(normal)
+    assert walls == [] and frag_best == 0
+
+
+def test_analyze_flags_fragmented_paragraph_run(tmp_path):
+    frags = "\n".join(["一声。", "又一声。", "更近了。", "停了。", "再响。", "门外。", "廊下。", "床前。", "灭了。"])
+    root = _project(tmp_path, [frags])
+    res = pca.analyze(root)
+    hits = [a for a in res["alerts"] if a["type"] == "fragmented_paragraph_run"]
+    assert len(hits) == 1 and hits[0]["run"] >= 8 and res["blocking"] == 0
+
+
+def test_analyze_flags_wall_of_text(tmp_path):
+    ch = ("灵气在他经脉里奔涌不休，" * 40 + "\n") * 2
+    root = _project(tmp_path, [ch])
+    res = pca.analyze(root)
+    assert any(a["type"] == "wall_of_text" for a in res["alerts"])

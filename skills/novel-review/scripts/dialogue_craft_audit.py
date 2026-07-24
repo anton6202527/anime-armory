@@ -23,6 +23,25 @@
                            设计报废。与 manuscript_map 的 SENSORY-ANCHOR-DROPPED
                            互为镜像：意象锚该出现而没出现；潜台词**不该**出现而出现。
 
+2026-07 第五轮增（对白**归属**工艺三信号，出处见 novel/Q&A.md Q13）：
+  ⑤ said_bookism           华丽说话动词（Elmore Leonard 第 3 条 / Browne & King
+                           checklist）——"咆哮道/娇嗔道/咬牙切齿道"把情绪塞进 tag，
+                           台词与动作节拍失职。中文口径：说/道/笑道/叹道等传统
+                           朴素与白话惯用 tag 合法，只逮词表内华丽形态的章内密度
+                           （词表 keyword_banks.SAID_BOOKISM_KW，全 X…道 复合形，
+                           词面即 tag 零歧义）。与 prose_craft 的 adverb_dialogue_tag
+                           正交：那查"副词+说"，这查动词本身被替换。
+  ⑥ untagged_dialogue_run  长对话无归属跟丢（Self-Editing 实务：几行内须重新锚定
+                           说话人）——连续 ≥N 行**纯引语**（引号外零叙述字）读者
+                           数不清谁在说。生产实锤：王敦外传第20章 3-5 轮无标签
+                           问答已近失锚。两人快节奏对峙故意去 tag 合法，故阈值
+                           取保守 8 行、恒 advisory。
+  ⑦ talking_heads_run      悬浮头对话 / white-room（K.M. Weiland talking heads；
+                           编辑判据：对白必须周期性被动作/环境/内心 beat 打断）——
+                           连续 ≥N 行对话行、每行引号外叙述字 <beat 下限（tag 本身
+                           不算 beat），人物成了白房间里的两颗悬浮头。电话/审讯
+                           场景合法，恒 advisory。
+
 诚实声明：对白质量是最"软"的工艺，本模块只逮确定性形态（词面共现），逮不到
 "形式有摩擦但假"或"直给得恰到好处"（有时直给正是高潮的正确写法——所以恒
 advisory、宁缺毋滥、绝不阻断）。
@@ -49,9 +68,10 @@ except Exception:
     def list_chapters(project, *a, **k):  # type: ignore
         return []
 try:
-    from keyword_banks import EMOTION_LABEL_KW, FRICTION_KW, AS_YOU_KNOW_MARKERS
+    from keyword_banks import (EMOTION_LABEL_KW, FRICTION_KW, AS_YOU_KNOW_MARKERS,
+                               SAID_BOOKISM_KW)
 except Exception:
-    EMOTION_LABEL_KW = FRICTION_KW = AS_YOU_KNOW_MARKERS = []
+    EMOTION_LABEL_KW = FRICTION_KW = AS_YOU_KNOW_MARKERS = SAID_BOOKISM_KW = []
 # 对话行拆分复用 prose_craft_audit 的单一实现（同目录），避免两套引号口径漂移。
 try:
     from prose_craft_audit import split_narration_dialogue
@@ -64,6 +84,10 @@ ONTN_PER_CH = int(os.environ.get("NOVEL_DIALOGUE_ONTN_PER_CH", "3"))       # 直
 FRICTION_MIN_LINES = int(os.environ.get("NOVEL_DIALOGUE_FRICTION_MIN", "24"))  # 零摩擦判定的对话行下限
 AYK_MIN_CHARS = int(os.environ.get("NOVEL_DIALOGUE_AYK_MIN_CHARS", "40"))  # 播报句最短长度
 SUBTEXT_MIN_LEN = int(os.environ.get("NOVEL_DIALOGUE_SUBTEXT_MIN_LEN", "4"))  # 潜台词短语最短匹配长度
+BOOKISM_PER_CH = int(os.environ.get("NOVEL_DIALOGUE_BOOKISM_PER_CH", "4"))     # 华丽说话动词/章 上限
+UNTAGGED_RUN = int(os.environ.get("NOVEL_DIALOGUE_UNTAGGED_RUN", "8"))         # 连续纯引语行（零归属）
+BEAT_MIN_CHARS = int(os.environ.get("NOVEL_DIALOGUE_BEAT_MIN_CHARS", "6"))     # 引号外叙述字≥此数算 beat
+TALKING_HEADS_RUN = int(os.environ.get("NOVEL_DIALOGUE_HEADS_RUN", "12"))      # 连续无 beat 对话行
 PROVENANCE = "internal-heuristic·confidence=low"
 
 _CAUSAL_RE = re.compile(r"因为|所以|由于|正因")
@@ -108,6 +132,50 @@ def as_you_know_hits(dialogue_lines):
         if len(line) >= AYK_MIN_CHARS and any(m in line for m in AS_YOU_KNOW_MARKERS):
             hits.append(line[:40])
     return hits
+
+
+def said_bookism_counts(text):
+    """{华丽说话动词: 次数}（只留 >0 项）。纯函数。词表全为 X…道 复合形——词面即
+    对话 tag，不必再判引号邻接（"咆哮道"不会出现在非 tag 语境）。"""
+    t = text or ""
+    out = {}
+    for w in SAID_BOOKISM_KW:
+        c = t.count(w)
+        if c:
+            out[w] = c
+    return out
+
+
+_QUOTE_SPAN_RE = re.compile(r"[「『][^」』]*[」』]?|“[^”]*”?|\"[^\"]*\"")
+_CJK_CHAR_RE = re.compile(r"[一-鿿]")
+# 对话行判定与 prose_craft 同口径（引号开头，可带 ≤12 字前置人名短语）。
+_DIALOGUE_HEAD_RE = re.compile(r"^[^「“\"『]{0,12}[「“\"『]")
+
+
+def dialogue_beat_runs(text):
+    """按行序扫描，返回 (最长纯引语连续行数, 最长无 beat 对话连续行数)。纯函数·可测。
+
+    对每个对话行剥掉引号内内容，数**引号外**剩余 CJK 字：
+      =0        → 纯引语行（零归属：没有 tag、没有动作、没有前置人名）
+      <BEAT_MIN → 无 beat 行（"他说"式裸 tag 有归属但无场景锚定，不算 beat）
+    叙述行两个 run 都清零（一段叙述既是归属锚也是 beat）；空行跳过不断 run
+    （md 段间空行不是叙述）。两信号阈值不同、语义不同：untagged 管"谁在说"
+    跟丢，talking heads 管"人在哪"悬浮。"""
+    untagged_run = untagged_best = 0
+    beatless_run = beatless_best = 0
+    for line in (text or "").splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        if _DIALOGUE_HEAD_RE.match(s):
+            outside = len(_CJK_CHAR_RE.findall(_QUOTE_SPAN_RE.sub("", s)))
+            untagged_run = untagged_run + 1 if outside == 0 else 0
+            beatless_run = beatless_run + 1 if outside < BEAT_MIN_CHARS else 0
+        else:
+            untagged_run = beatless_run = 0
+        untagged_best = max(untagged_best, untagged_run)
+        beatless_best = max(beatless_best, beatless_run)
+    return untagged_best, beatless_best
 
 
 def _load_scene_subtexts(project):
@@ -187,6 +255,35 @@ def analyze(project):
                                     f"说话人向已知情的对方复述设定=对读者广播；改法：让不知情者问出来，"
                                     f"或拆进冲突按需露出（{PROVENANCE}）")})
 
+        bookisms = said_bookism_counts(text)
+        bookism_n = sum(bookisms.values())
+        if bookism_n >= BOOKISM_PER_CH:
+            top = sorted(bookisms.items(), key=lambda kv: -kv[1])[:4]
+            alerts.append({"type": "said_bookism", "severity": "建议级", "auto": True,
+                           "chapter": cid, "top": [{"verb": v, "count": c} for v, c in top],
+                           "note": (f"第{cid}章华丽说话动词 {bookism_n} 处"
+                                    f"（{'、'.join(f'{v}×{c}' for v, c in top)}，阈 {BOOKISM_PER_CH}）——"
+                                    f"Leonard 手艺：对话动词只留朴素的说/道（笑道/叹道等白话惯用合法），"
+                                    f"『咆哮道/娇嗔道』是把情绪塞进标签喊出来；情绪该由台词内容和"
+                                    f"动作节拍承载（{PROVENANCE}）")})
+
+        untagged_best, beatless_best = dialogue_beat_runs(text)
+        if untagged_best >= UNTAGGED_RUN:
+            alerts.append({"type": "untagged_dialogue_run", "severity": "建议级", "auto": True,
+                           "chapter": cid, "run": untagged_best,
+                           "note": (f"第{cid}章连续 {untagged_best} 行纯引语（引号外零字：无 tag、"
+                                    f"无动作、无前置人名，阈 {UNTAGGED_RUN}）——长对话无归属跟丢：读者"
+                                    f"数不清谁在说，回读即弃感；传统实务是每几行用 tag 或动作 beat "
+                                    f"重新锚定说话人（两人快节奏对峙故意去 tag 合法，人工取舍）"
+                                    f"（{PROVENANCE}）")})
+        elif beatless_best >= TALKING_HEADS_RUN:
+            alerts.append({"type": "talking_heads_run", "severity": "建议级", "auto": True,
+                           "chapter": cid, "run": beatless_best,
+                           "note": (f"第{cid}章连续 {beatless_best} 行对话每行引号外叙述 <{BEAT_MIN_CHARS} 字"
+                                    f"（裸 tag 不算 beat，阈 {TALKING_HEADS_RUN}）——talking heads/白房间：人物"
+                                    f"只剩两颗悬浮头在真空里说话；每隔几轮给一个动作/环境/内心 beat，"
+                                    f"让对话落回身体和房间（电话/审讯等场景合法，人工取舍）（{PROVENANCE}）")})
+
         spoken = subtext_spoken_hits(dialogue, subtext_by_ch.get(cid))
         for h in spoken:
             alerts.append({"type": "subtext_spoken_aloud", "severity": "建议级", "auto": True,
@@ -199,6 +296,8 @@ def analyze(project):
         "ran": True,
         "thresholds": {"ontn_per_ch": ONTN_PER_CH, "friction_min_lines": FRICTION_MIN_LINES,
                        "ayk_min_chars": AYK_MIN_CHARS, "subtext_min_len": SUBTEXT_MIN_LEN,
+                       "bookism_per_ch": BOOKISM_PER_CH, "untagged_run": UNTAGGED_RUN,
+                       "beat_min_chars": BEAT_MIN_CHARS, "talking_heads_run": TALKING_HEADS_RUN,
                        "provenance": PROVENANCE,
                        "note": "advisory：直给有时是高潮的正确写法，恒不阻断，取舍归人判。"},
         "chapters": rows,

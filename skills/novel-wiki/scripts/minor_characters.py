@@ -19,6 +19,18 @@ minor_characters.py — 配角连续性盲区报告（建议级·纯标准库）
 已按 state_ledger 结构化生命周期事件（death/exit 未被 revival 解除）或动态百科亡故记录退场者豁免；
 关键词式退场（_EXIT_RE 级）不可靠故不豁免——有意退场请忽略该条或补登结构化退场事件。
 
+2026-07 第五轮增两信号（出处见 novel/Q&A.md Q13）：
+`confusable_character_names`（命名混淆矩阵，编辑实务：列全员名单查近形名——Fictionary/
+K.M. Weiland 口径；水浒真实案例：张青 vs 张清）：角色卡名 ∪ 高频配角候选两两比对，
+① 等长且编辑距离 ≤1（张青/张清）② 双方 ≥3 字、同姓且名部共字（李长风/李清风）→ 报混淆对。
+别名归一后同一角色的变体不比（那是合法别名）；亲属/系列名故意同构合法，恒 advisory。
+
+`opening_cast_overload`（开篇人物过载，DearEditor 行业口径：第 1 章主角+1-2 配角为宜，
+12 个必然过载；网文口径同向——开头人多该用特征代称不给名）：第 1 章出现的具名角色数
+> 阈值、前 3 章累计 > 阈值 → 报。命名即承诺（named character 须有戏份），与
+major_character_absent 互补：那查"出场后消失"，这查"入口拥塞"。群像流（水浒式开局）
+按 env 调参。
+
 软冲突——纯启发式 NER（无模型），只报建议级候选，绝不阻断。
 依赖 wiki_builder（list_chapters/parse_character_names/_CJK）与 graph_sentry（别名归一/退场账）。
 纯函数（抽取/聚合/定档/缺席判定）带 pytest。
@@ -49,6 +61,12 @@ ABSENT_RUN = int(os.environ.get("NOVEL_ABSENT_RUN", "8"))
 ABSENT_RUN_MINOR = int(os.environ.get("NOVEL_ABSENT_RUN_MINOR", "15"))
 ABSENT_MAJOR_FLOOR = int(os.environ.get("NOVEL_ABSENT_MAJOR_FLOOR", "10"))
 ABSENT_MAX_ALERTS = 6  # 每书最多报此数条，按缺席时长降序取头部
+
+# 命名混淆 / 开篇人物过载阈值（env 可标定）
+CONFUSABLE_MAX_ALERTS = int(os.environ.get("NOVEL_NAME_CONFUSABLE_MAX_ALERTS", "6"))
+CAST_CH1_MAX = int(os.environ.get("NOVEL_CAST_CH1_MAX", "6"))         # 第 1 章具名角色上限
+CAST_OPENING_MAX = int(os.environ.get("NOVEL_CAST_OPENING_MAX", "12"))  # 前 3 章累计上限
+CAST_OPENING_CHAPTERS = 3
 
 # ① 对话归属式：2-3 字名 + 说话动词。名非贪婪、动词用 lookahead（多字动词在前），
 #    避免贪婪把动词首字吃进名里（治"钱五笑道"误抽成"钱五笑"）。
@@ -146,6 +164,58 @@ def absent_characters(presence, last_chapter, *, min_appearances=ABSENT_MIN_APPE
     return out
 
 
+def _edit_distance(a, b):
+    """短字符串 Levenshtein 距离（角色名 ≤5 字，朴素 DP 足够）。纯函数。"""
+    if a == b:
+        return 0
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+def confusable_pairs(names, same_canonical=None):
+    """名单两两比对 → 疑似混淆对 [(a, b, 判据)]。纯函数·可测。
+
+    判据（保守，编辑检查表口径）：
+      ① 等长且编辑距离 ≤1（张青/张清、李元芳/李元霸）——近形名头号病；
+      ② 双方 ≥3 字、同姓（首字同）且名部（去姓）共字 ≥1（李长风/李清风）。
+    same_canonical(a, b)->bool 为真的对跳过（别名归一后同一角色的变体是合法别名）。
+    互为子串的对跳过（"老张/张三"类简称由别名机制管，不是混淆）。"""
+    out = []
+    uniq = sorted({n for n in names or [] if n and len(n) >= 2})
+    for i, a in enumerate(uniq):
+        for b in uniq[i + 1:]:
+            if same_canonical and same_canonical(a, b):
+                continue
+            if a in b or b in a:
+                continue
+            if len(a) == len(b) and _edit_distance(a, b) <= 1:
+                out.append((a, b, "等长近形（编辑距离≤1）"))
+            elif len(a) >= 3 and len(b) >= 3 and a[0] == b[0] and set(a[1:]) & set(b[1:]):
+                out.append((a, b, f"同姓且名部共字「{'、'.join(sorted(set(a[1:]) & set(b[1:])))}」"))
+    return out
+
+
+def opening_cast_counts(chapter_texts, name_groups, opening_chapters=CAST_OPENING_CHAPTERS):
+    """(第 1 章具名角色数, 前 opening_chapters 章累计具名角色数)。纯函数·可测。
+
+    name_groups：{规范名: {变体}}；任一变体子串命中即算该章出现（与 build_presence 同口径）。"""
+    ch1, opening = set(), set()
+    for idx, text in chapter_texts or []:
+        if idx > opening_chapters:
+            continue
+        for canon, variants in name_groups.items():
+            if any(v in text for v in variants):
+                opening.add(canon)
+                if idx == 1:
+                    ch1.add(canon)
+    return len(ch1), len(opening)
+
+
 def _exited_characters(project, alias_map):
     """已退场角色规范名集合：state_ledger 结构化生命周期事件（death/exit 未被 revival 解除）
     ∪ 动态百科亡故记录。只认结构化登记（与 graph_sentry 硬闸同口径），关键词退场不豁免。"""
@@ -213,6 +283,51 @@ def absence_alerts(project, chapter_texts, tracked, candidate_names):
     return alerts
 
 
+def naming_alerts(project, chapter_texts, tracked, recurring_names):
+    """命名混淆 + 开篇人物过载 → alert 列表。tracked=角色卡名，recurring_names=
+    高频配角候选（≥min_chapters 章复现，已由调用方过滤）。"""
+    ledger = _load_json(os.path.join(project, "审稿", "state_ledger.json")) or {}
+    alias_map = resolved_alias_map(project, ledger if isinstance(ledger, dict) else {})
+    pool = {n for n in set(tracked) | set(recurring_names) if len(n) >= 2}
+
+    def _same_canon(a, b):
+        return _canonical(a, alias_map) == _canonical(b, alias_map)
+
+    alerts = []
+    pairs = confusable_pairs(pool, same_canonical=_same_canon)
+    for a, b, why in pairs[:CONFUSABLE_MAX_ALERTS]:
+        alerts.append({
+            "type": "confusable_character_names", "severity": "建议级", "auto": True,
+            "entities": [a, b], "evidence": why,
+            "note": (f"角色名「{a}」与「{b}」疑似混淆对（{why}）——编辑检查表口径：近形名"
+                     f"让读者反复出戏认人（水浒张青/张清是行业经典教训）；建议改其一，"
+                     f"或确认是亲属/系列名的有意同构（有意则忽略本条）"),
+        })
+
+    name_groups = {}
+    for name in pool:
+        name_groups.setdefault(_canonical(name, alias_map), set()).add(name)
+    ch1_n, opening_n = opening_cast_counts(chapter_texts, name_groups)
+    if ch1_n > CAST_CH1_MAX:
+        alerts.append({
+            "type": "opening_cast_overload", "severity": "建议级", "auto": True, "chapter": 1,
+            "count": ch1_n,
+            "note": (f"第1章出现 {ch1_n} 个具名角色（阈 {CAST_CH1_MAX}）——开篇人物过载：行业口径"
+                     f"第一章主角+一两个配角为宜，命名即承诺（给了名读者就要记）；次要人物"
+                     f"先用特征代称（高个狱卒/白袍老者），等有戏份再给名（群像流按 "
+                     f"NOVEL_CAST_CH1_MAX 调参）"),
+        })
+    elif opening_n > CAST_OPENING_MAX:
+        alerts.append({
+            "type": "opening_cast_overload", "severity": "建议级", "auto": True, "chapter": CAST_OPENING_CHAPTERS,
+            "count": opening_n,
+            "note": (f"前{CAST_OPENING_CHAPTERS}章累计出现 {opening_n} 个具名角色"
+                     f"（阈 {CAST_OPENING_MAX}）——黄金三章期人物入口拥塞，读者记不住=谁都不重要；"
+                     f"合并功能重复的配角，或推迟出场（群像流按 NOVEL_CAST_OPENING_MAX 调参）"),
+        })
+    return alerts
+
+
 def analyze(project, min_chapters=DEFAULT_MIN_CHAPTERS):
     chapters = list(list_chapters(project))
     if not chapters:
@@ -232,6 +347,8 @@ def analyze(project, min_chapters=DEFAULT_MIN_CHAPTERS):
         })
     chapter_texts = [(idx, text) for idx, _title, text in chapters]
     alerts.extend(absence_alerts(project, chapter_texts, tracked, agg.keys()))
+    recurring = [n for n, chs in agg.items() if len(chs) >= min_chapters]
+    alerts.extend(naming_alerts(project, chapter_texts, tracked, recurring))
     return {"ran": True, "alerts": alerts, "tracked": sorted(tracked),
             "flagged": [{"name": n, "chapters": chs} for n, chs in flagged]}
 

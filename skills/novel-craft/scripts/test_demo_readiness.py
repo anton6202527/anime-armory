@@ -116,3 +116,27 @@ def test_golden_chapters_skip_without_cards_or_promises():
             f.write("# 第1章\n")
         ids = {i["id"] for i in demo_readiness.build_readiness(root)["issues"]}
         assert not {"DEMO-OPENING-CONFLICT-HOLLOW", "DEMO-SELLING-POINT-LATE"} & ids
+
+
+# ── 第五轮：早期闪回闸 ──────────────────────────────────────────────────────
+
+def test_flashback_paragraphs_counts_strong_markers_only():
+    text = "他想起要去买米。\n思绪回到十年前的那个雪夜。\n那是三年前的旧事了。"
+    assert demo_readiness.flashback_paragraphs(text) == 2  # 单个"想起"不算
+
+
+def test_golden_chapters_flag_early_flashback():
+    with tempfile.TemporaryDirectory() as root:
+        _golden_project(root, conflicts=["夺舍危机", "追杀", "宗门大比"],
+                        chapter_text="# 第1章\n思绪回到十年前的雪夜。\n打斗正酣。\n他回想起师父临终的话。")
+        issues = demo_readiness.build_readiness(root)["issues"]
+        hits = [i for i in issues if i["id"] == "DEMO-EARLY-FLASHBACK"]
+        assert len(hits) == 1 and hits[0]["severity"] == "warning"
+
+
+def test_golden_chapters_quiet_without_flashback_run():
+    with tempfile.TemporaryDirectory() as root:
+        _golden_project(root, conflicts=["夺舍危机", "追杀", "宗门大比"],
+                        chapter_text="# 第1章\n刀光落下的瞬间他侧身，肩头仍中了一记。")
+        ids = {i["id"] for i in demo_readiness.build_readiness(root)["issues"]}
+        assert "DEMO-EARLY-FLASHBACK" not in ids

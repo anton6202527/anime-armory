@@ -15,11 +15,15 @@ from datetime import date
 
 REQUIRED_FIELDS = ("pov", "desire", "obstacle", "conflict", "turn", "value_shift")
 OPTIONAL_FIELDS = ("location", "time", "reveal_or_payoff", "subtext", "sensory_anchor",
-                   "outcome", "plotline")
+                   "outcome", "plotline", "turn_source")
 # 场景结局极性（Swain/Sanderson try-fail 循环）：yes=达成、yes-but=达成但付代价、
 # no-and=失败且恶化、no-but=失败但有转机。中段应以 yes-but / no-and 为主——
 # 连胜无代价 = 张力自由落体（manuscript_map 的 OUTCOME-* 检测消费此字段）。
 OUTCOME_VALUES = ("yes", "yes-but", "no-and", "no-but")
+# 转折的能动性来源（Pixar 第 19 条巧合纪律：巧合可以把人物**推进**麻烦，不可以把人物
+# **捞出**麻烦）。"伏笔兑现"指转折由前文已埋伏笔触发（≠巧合）；"巧合"+有利 outcome
+# 会被 manuscript_map 的 TURN-COINCIDENCE-RESCUE 提示。留空=不判定。
+TURN_SOURCE_VALUES = ("主角行动", "对手行动", "盟友援手", "伏笔兑现", "巧合")
 CHARACTER_ENGINE_FIELDS = (
     "want",
     "need",
@@ -107,6 +111,9 @@ def empty_card(chapter, scene_no, outline_item):
         "outcome": "",
         # 本场所属情节线自由标签（主线/某支线名）；连续同线过长会被"横云断山"检测提示。
         "plotline": "",
+        # 转折能动性来源（Pixar 巧合纪律）：主角行动/对手行动/盟友援手/伏笔兑现/巧合；
+        # "巧合"+有利结局会被巧合救场检测提示。留空=不判定。
+        "turn_source": "",
         "reveal_or_payoff": "",
         "subtext": "",
         "sensory_anchor": "",
@@ -206,6 +213,16 @@ def check(root, chapter=None):
                 "scene_id": scene.get("id"),
                 "reason": f"outcome=「{outcome}」不在枚举 {'/'.join(OUTCOME_VALUES)} 内；"
                           "留空=不判定，填了就要可机读（try-fail 检测靠它）。",
+            })
+        turn_source = str(scene.get("turn_source") or "").strip()
+        if turn_source and turn_source not in TURN_SOURCE_VALUES:
+            findings.append({
+                "id": "SCENE-CARD-TURN-SOURCE-INVALID",
+                "severity": "warning",
+                "chapter": scene.get("chapter"),
+                "scene_id": scene.get("id"),
+                "reason": f"turn_source=「{turn_source}」不在枚举 {'/'.join(TURN_SOURCE_VALUES)} 内；"
+                          "留空=不判定，填了就要可机读（巧合救场检测靠它）。",
             })
         character_missing = [field for field in CHARACTER_ENGINE_FIELDS if not str(scene.get(field) or "").strip()]
         if character_missing:

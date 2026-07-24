@@ -108,3 +108,54 @@ def test_absence_alerts_end_to_end(tmp_path):
 
 def test_absence_alerts_quiet_without_chapters(tmp_path):
     assert mc.absence_alerts(str(tmp_path), [], {"赵四"}, set()) == []
+
+
+# ── confusable_pairs / opening_cast_counts（第五轮：命名混淆 + 开篇过载）──────
+
+def test_confusable_pairs_edit_distance_one():
+    pairs = mc.confusable_pairs(["张青", "张清", "鲁智深"])
+    assert len(pairs) == 1 and set(pairs[0][:2]) == {"张清", "张青"}
+
+
+def test_confusable_pairs_same_surname_shared_given_char():
+    # 编辑距离 2（规则①不触发），但同姓且名部共字"风" → 规则②命中
+    pairs = mc.confusable_pairs(["李长风", "李风吟"])
+    assert len(pairs) == 1 and "风" in pairs[0][2]
+
+
+def test_confusable_pairs_distinct_names_clean():
+    assert mc.confusable_pairs(["王敦", "贺平生", "重华", "梁画秋"]) == []
+
+
+def test_confusable_pairs_substring_and_alias_exempt():
+    # 互为子串（简称）不报；别名归一后同角色不报
+    assert mc.confusable_pairs(["张三", "老张三"]) == []
+    pairs = mc.confusable_pairs(["沈青崖", "沈青禾"], same_canonical=lambda a, b: True)
+    assert pairs == []
+
+
+def test_opening_cast_counts_windows():
+    groups = {n: {n} for n in ("赵一", "钱二", "孙三", "李四")}
+    texts = [(1, "赵一遇见钱二。"), (2, "孙三登场。"), (3, "李四路过。"), (9, "全员大战。")]
+    ch1, opening = mc.opening_cast_counts(texts, groups)
+    assert ch1 == 2 and opening == 4
+
+
+def test_naming_alerts_end_to_end(tmp_path):
+    proj = tmp_path / "书"
+    (proj / "章节").mkdir(parents=True)
+    texts = [(1, "张青和张清一起出场。"), (2, "张青说话。"), (3, "张清说话。")]
+    alerts = mc.naming_alerts(str(proj), texts, {"张青", "张清"}, set())
+    kinds = {a["type"] for a in alerts}
+    assert "confusable_character_names" in kinds
+    assert all(a["severity"] == "建议级" for a in alerts)
+
+
+def test_naming_alerts_cast_overload(tmp_path):
+    proj = tmp_path / "书"
+    (proj / "章节").mkdir(parents=True)
+    names = ["东方一", "西门二", "南宫三", "北堂四", "皇甫五", "尉迟六", "长孙七"]
+    texts = [(1, "，".join(names) + "齐聚一堂。")]
+    alerts = mc.naming_alerts(str(proj), texts, set(names), set())
+    hits = [a for a in alerts if a["type"] == "opening_cast_overload"]
+    assert len(hits) == 1 and hits[0]["count"] == 7 and hits[0]["chapter"] == 1

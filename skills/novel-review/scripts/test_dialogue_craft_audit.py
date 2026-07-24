@@ -71,6 +71,55 @@ def test_subtext_kept_underwater_no_hit():
     assert dca.subtext_spoken_hits(dialogue, subtexts) == []
 
 
+# ── said_bookism_counts ──────────────────────────────────────────────────────
+
+def test_said_bookism_counts_fancy_verbs():
+    text = "「滚出去！」他咆哮道。\n「人家不依嘛。」她娇嗔道。\n「好。」他咬牙道。"
+    counts = dca.said_bookism_counts(text)
+    assert counts.get("咆哮道") == 1 and counts.get("娇嗔道") == 1 and counts.get("咬牙道") == 1
+
+
+def test_said_bookism_plain_and_vernacular_tags_exempt():
+    # 朴素 tag 与白话惯用（说/道/笑道/叹道/沉声道）不算 bookism
+    text = "「走吧。」他说。\n「好。」她笑道。\n「唉。」老者叹道。\n「进来。」他沉声道。"
+    assert dca.said_bookism_counts(text) == {}
+
+
+# ── dialogue_beat_runs ───────────────────────────────────────────────────────
+
+def test_untagged_run_counts_pure_quotes():
+    # 连续纯引语（引号外零字）→ untagged run 累计；带 tag 行清零 untagged
+    lines = ["「你去过？」", "「去过。」", "「几时？」", "「去年。」"]
+    untagged, beatless = dca.dialogue_beat_runs("\n".join(lines))
+    assert untagged == 4 and beatless == 4
+
+
+def test_tagged_line_breaks_untagged_but_not_beatless():
+    # "他说"式裸 tag：有归属（untagged 清零）但不算 beat（beatless 继续累计）
+    lines = ["「你去过？」", "「去过。」他说。", "「几时？」", "「去年。」"]
+    untagged, beatless = dca.dialogue_beat_runs("\n".join(lines))
+    assert untagged < 4 and beatless == 4
+
+
+def test_narration_line_resets_both_runs():
+    lines = ["「你去过？」", "「去过。」", "他起身走到窗边，望着远处的山影沉默了很久。", "「几时？」", "「去年。」"]
+    untagged, beatless = dca.dialogue_beat_runs("\n".join(lines))
+    assert untagged == 2 and beatless == 2
+
+
+def test_action_beat_in_dialogue_line_breaks_beatless():
+    # 引号外叙述 ≥ BEAT_MIN_CHARS（动作 beat）→ 两个 run 都清零
+    lines = ["「你去过？」", "「去过。」他把茶盏放回桌上，指节在案沿敲了两下。", "「几时？」"]
+    untagged, beatless = dca.dialogue_beat_runs("\n".join(lines))
+    assert untagged == 1 and beatless == 1
+
+
+def test_blank_lines_do_not_break_runs():
+    # md 段间空行不是叙述，不断 run
+    untagged, _ = dca.dialogue_beat_runs("「一。」\n\n「二。」\n\n「三。」")
+    assert untagged == 3
+
+
 # ── _load_scene_subtexts / analyze 优雅跳过 ──────────────────────────────────
 
 def test_load_scene_subtexts(tmp_path):

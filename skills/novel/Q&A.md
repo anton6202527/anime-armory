@@ -28,6 +28,7 @@
 - [Q10：2026-07 外部调研沉淀——评估怎么更可信、哪些路线已证伪、长期储备做什么？](#q10)
 - [Q11：2026-07 第三轮传统工艺调研沉淀——对白/弧线/节奏/修订纪律的机检化依据？](#q11)
 - [Q12：2026-07 第四轮传统工艺调研沉淀——伏笔养护/信息策略/场景极性/开场与支线的机检化依据？](#q12)
+- [Q13：2026-07 第五轮传统工艺调研沉淀——对白归属/场景落地/命名工艺/巧合纪律/正犯法的机检化依据？](#q13)
 
 ---
 
@@ -353,3 +354,85 @@ novel-supervisor critic-loop / qa_gate 演进规划。
 
 **适用范围**：novel-review / novel-craft / novel-wiki / novel-simulate / novel-create；
 阈值全部 env 可标定（见各脚本头部）。
+
+## Q13：2026-07 第五轮传统工艺调研沉淀——对白归属/场景落地/命名工艺/巧合纪律/正犯法的机检化依据？<a id="q13"></a>
+
+**背景**：第五轮审计（前四轮见 Q10–Q12）继续挖传统小说创作手法中未机检化的部分。本轮
+特殊性：**首次有生产实锤对照**——git 历史里的王敦外传（20 章全流程跑通的原创项目）第 20 章
+实测出「3-5 轮无归属对白」「轻度 white-room」「单句成段碎句体」「归属标签模板化」，与外部
+调研候选精确对上，判据按实锤病灶标定。原则不变：机检只逮确定性形态、恒 advisory
+（唯 scene_cards 枚举校验是既有 warning 面）、零新增检测器注册面（全部挂在已注册检测器上）。
+
+### 本轮机检化的传统手艺（已接线）
+
+- **对白归属三件套（Elmore Leonard《10 Rules》第 3/4 条；Browne & King《Self-Editing for
+  Fiction Writers》第 5 章 checklist；Savannah Gilbo"3-4 exchanges 须重新锚定"口径）**：
+  `dialogue_craft_audit` 增 ① said_bookism（华丽说话动词密度；中文口径校准：说/道/笑道/
+  叹道等白话惯用**合法**——金庸满篇笑道，只逮词表内华丽形态，词表 `keyword_banks.
+  SAID_BOOKISM_KW` 全收 X…道 复合形、词面即 tag 零歧义）② untagged_dialogue_run
+  （连续 ≥8 行纯引语=引号外零字，读者数不清谁在说）③ talking_heads_run（连续 ≥12 行
+  对话每行引号外叙述 <6 字——裸 tag 不算 beat；Weiland talking heads/white-room）。
+  ②命中时同章不再报③（同病更重形态优先）。副词粘 tag 第二轮已做（adverb_dialogue_tag），
+  本轮不重复。
+- **段落极端形态（编辑口径：约半页不分段即墙——Editor World；碎句体是生产实锤病）**：
+  `prose_craft` E 组 wall_of_text（单段 ≥400 字）+ fragmented_paragraph_run（连续 ≥8 个
+  叙述段每段 <12 字=短剧碎句腔；**只数叙述段，对话行跳过且不断 run**——碎句病灶在叙述侧）。
+- **命名混淆矩阵（Fictionary/K.M. Weiland 编辑检查表：列全员名单查近形名；水浒张青/张清
+  是行业经典教训）**：`minor_characters` 增 confusable_character_names——角色卡名∪高频
+  配角候选两两比：等长且编辑距离 ≤1，或双方 ≥3 字同姓且名部共字。别名归一后同角色不比、
+  互为子串（简称）不比；亲属/系列名有意同构人工豁免。
+- **开篇人物过载（DearEditor 行业口径：第 1 章主角+1-2 配角为宜，12 个必然过载；"命名即
+  承诺"）**：同检测器 opening_cast_overload——第 1 章具名 >6 或前 3 章累计 >12。与
+  major_character_absent 互补：那查出场后消失，这查入口拥塞。群像流按 env 调参。
+- **场景落地对账（Writers Helping Writers"换场前两段锚定 who/where/when"口径）**：
+  `manuscript_map` 增 SCENE-GROUNDING-DROPPED——场景卡登记 pov+location(/time)，章首
+  250 字 pov 与地点/时间词段（拆 2-gram 命中，误判方向=压告警保守安全）**双双**零命中才报。
+  与 SENSORY-ANCHOR-DROPPED 同构（计划字段 vs 正文对账）。
+- **巧合纪律（Pixar 第 19 条/Emma Coats："巧合送人进麻烦是好戏，捞人出麻烦是作弊"）**：
+  scene_cards 增可选枚举字段 `turn_source`（主角行动/对手行动/盟友援手/伏笔兑现/巧合），
+  manuscript_map 增 TURN-COINCIDENCE-RESCUE——turn_source=巧合 且 outcome 有利
+  （yes/yes-but）→ 提示；巧合+失败合法不报。纯文本判"巧合"不可行（因果语义），枚举
+  自证是唯一确定性路径——本轮唯一的新增字段面（1 字段）。
+- **正犯法/犯中求避（金圣叹《读第五才子书法》"正犯"；毛宗岗"同树异枝、同枝异叶"——
+  重复不是罪，重复而不变化才是罪，正是 AI 长篇头号病）**：manuscript_map 增
+  SCENE-REPEAT-NO-VARIATION——跨章两场景同 pov、同 location、同 outcome（均非空）且
+  desire+obstacle char-2gram Jaccard ≥0.6。与 Q12 否掉的"四维变奏检测"不同：那需要
+  场景语义分型（判据不干净），这是**纯字段对字段**的保守窄版，只逮"照原样重打一遍"。
+- **早期闪回闸（Jane Friedman"读者未投资当前场景前禁止闪回"；Maass"backstory 推迟
+  100 页"；编辑退稿实务）**：`demo_readiness` 增 DEMO-EARLY-FLASHBACK——前 3 章单章
+  ≥2 段命中强闪回引导（`keyword_banks.FLASHBACK_MARKERS` + "N年前"数量词型；单个
+  "想起"不算）。倒叙框架结构人工豁免；只报最早一章。
+- **倒序审校（Writer's Digest/ALLi："backwards editing"破坏叙事惯性防顺读催眠）**：
+  novel-edit SKILL 增 copyedit 层倒序纪律（批次任务按章号降序派发，零成本流程化）；
+  line_edit 层不倒序（行文节奏需顺读语境）。
+
+### 有意未做（评估过，按住）
+
+- **章末软着陆位置几何**（张力峰值偏移 <85% 且末段收束词）：需**章内** beat 位置数据，
+  emotional_progression 只有章级张力分；hook_endings 的 weak_chapter_ending 词面打分已覆盖
+  尾段平淡主形态，增量不干净。
+- **章字数带宽**：mechanical_check 字数维度已有；平台完读率/留存硬指标（番茄章均完读 >35%
+  等）是平台侧数据非文本机检，价值在回灌目标函数，留给 novel-promote/feedback 真实数据接入。
+- **read-aloud 拗口代理**（同音连缀等）：假阳性高，判不可行；若未来接 TTS 有声化，停顿
+  异常可当免费信号（机会主义储备）。
+- **笙箫夹鼓张力交替**（连续高张力无间歇）：logic_sentry tension_fatigue 已覆盖主形态。
+- **留白类评点手法**（不写之写/背面敷粉扩展）、**移堂就树**：语义判断，确定性不可行
+  （Q12 同结论，本轮复核维持）。
+- **三五聚散/近山浓抹**（人物聚散节奏/主次详略比）：可判但阈值无出处支撑、收益证据薄。
+- **断更/全勤节奏**：属发布调度器逻辑，不是文本机检。
+
+### 生产实锤复核清单（本轮判据的事实依据）
+
+王敦外传（`git show 5a609465^:...`）：第 01 章工艺扎实 vs 第 20 章滑向短剧碎句体——
+①大量单句成段（"一声。/又一声。"）→ fragmented_paragraph_run 判据来源；②3-5 轮无标签
+问答靠上下文辨认说话人 → untagged_dialogue_run 阈值参照（生产 3-5 轮尚可追踪，阈取 8 保守）；
+③屏风偷听场大段纯对白+内心、靠两处物件锚定救场 → talking_heads_run 的 beat 判据（物件
+锚定=beat，合法）；④"贺平生道"×12 模板化归属 → mechanical 句式模板已覆盖，said_bookism
+管的是另一极（华丽动词），两头都有闸。另：tension_ledger/world_state_ledger 双空壳、
+伏笔 confirmed 全 false、读者问卷从未实跑——**流程空转病**（非本轮工艺范围）已有既存闸
+（foreshadow_ledger 空账显式报缺、suspense_vacuum、taxonomy 覆盖表 degraded 标记），
+待项目重启时按 Q10 长期储备推进。
+
+**来源**：2026-07-24 第五轮审计会话（外部调研代理 30+ 来源 + 生产数据取证代理 git 历史
+复原 + 机检体系全景比对）。**适用范围**：novel-review / novel-craft / novel-wiki /
+novel-edit；阈值全部 env 可标定（见各脚本头部）。

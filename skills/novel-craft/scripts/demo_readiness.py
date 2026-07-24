@@ -13,8 +13,18 @@ import glob
 import json
 import os
 import re
+import sys
 from datetime import date
 from typing import Any
+
+_LIB = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "..", "..", "novel", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+try:
+    from keyword_banks import FLASHBACK_MARKERS
+except Exception:
+    FLASHBACK_MARKERS = []
 
 
 READINESS_KIND = "novel_demo_readiness"
@@ -66,6 +76,12 @@ def add_issue(items: list[dict[str, str]], issue_id: str, severity: str, message
 GOLDEN_CHAPTERS = 3
 _TOKEN_STOPWORDS = {"主角", "读者", "故事", "本书", "作品", "开始", "最终", "他们", "自己",
                     "一个", "以及", "或者", "但是", "因为", "所以", "如果", "这个", "那个"}
+# 早期闪回闸（Jane Friedman：读者尚未投资当前场景前禁止闪回；编辑退稿实务：开篇
+# backstory 过载是标准退稿信号）。判据：前 3 章内单章 ≥N 个段落命中强闪回引导形态
+# （词表 keyword_banks.FLASHBACK_MARKERS + "N年前"数量词型）→ warning。
+# 单个"想起"不算（太常见）；倒叙框架结构是 premise 级设计，人工豁免。
+FLASHBACK_PARAS_WARN = int(os.environ.get("NOVEL_DEMO_FLASHBACK_PARAS", "2"))
+_YEARS_AGO_RE = re.compile(r"[一二三五六七八九十几多百\d]+年前")
 
 
 def _promise_tokens(text: str) -> set[str]:
@@ -77,6 +93,18 @@ def _promise_tokens(text: str) -> set[str]:
         if len(run) >= 4:
             tokens.update(run[i:i + 2] for i in range(len(run) - 1))
     return {t for t in tokens if t not in _TOKEN_STOPWORDS}
+
+
+def flashback_paragraphs(text: str) -> int:
+    """命中强闪回引导形态的段落数。纯函数·可测。"""
+    n = 0
+    for para in str(text or "").splitlines():
+        p = para.strip()
+        if not p:
+            continue
+        if any(m in p for m in FLASHBACK_MARKERS) or _YEARS_AGO_RE.search(p):
+            n += 1
+    return n
 
 
 def golden_chapter_issues(root: str, demo_gate: dict[str, Any], chapters: list[str]) -> list[dict[str, str]]:
@@ -117,6 +145,20 @@ def golden_chapter_issues(root: str, demo_gate: dict[str, Any], chapters: list[s
                       f"黄金三章硬对表：reader_promises（{len(promises)} 条）的词面在前 "
                       f"{GOLDEN_CHAPTERS} 章正文零命中——核心卖点前三章零铺垫，读者看不到买点"
                       f"（金手指/核心设定至少要强预告）；慢热文请人工豁免。", "审稿/demo_gate.json")
+    # ③ 早期闪回：前 3 章任一章 ≥N 段命中强闪回引导 → 开篇回忆杀（第五轮，Q13）
+    for i, path in enumerate(chapters[:GOLDEN_CHAPTERS], 1):
+        try:
+            with open(path, encoding="utf-8", errors="replace") as f:
+                fb = flashback_paragraphs(f.read())
+        except OSError:
+            continue
+        if fb >= FLASHBACK_PARAS_WARN:
+            add_issue(issues, "DEMO-EARLY-FLASHBACK", "warning",
+                      f"第{i}章有 {fb} 个段落命中强闪回引导（思绪回到/回想起/N年前…，"
+                      f"阈 {FLASHBACK_PARAS_WARN}）——开篇回忆杀是标准退稿信号：读者尚未投资"
+                      f"当前场景，闪回=把刚点着的火按灭；身世信息推迟或拆进冲突按需露出。"
+                      f"倒叙框架结构请人工豁免。", os.path.relpath(path, root))
+            break  # 报最早一章即可，避免同病三连报
     return issues
 
 

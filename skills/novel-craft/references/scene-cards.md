@@ -31,6 +31,7 @@
       "value_shift": "情绪/关系/权力/信息从什么变成什么",
       "outcome": "场景结局极性：yes / yes-but / no-and / no-but（可留空）",
       "plotline": "本场所属情节线自由标签：主线/某支线名（可留空）",
+      "turn_source": "转折能动性来源：主角行动 / 对手行动 / 盟友援手 / 伏笔兑现 / 巧合（可留空）",
       "reveal_or_payoff": "揭示或兑现了什么",
       "subtext": "对白或动作底下真正争的东西",
       "sensory_anchor": "一个具体五感锚点",
@@ -55,6 +56,7 @@
 - `value_shift` 写成“从 A 到 B”，例如“从安全感到被背叛”“从劣势到握住证据”。
 - `outcome` 是 try-fail 循环纪律（Swain/Sanderson）：`yes`=干净达成、`yes-but`=达成但付代价、`no-and`=失败且恶化、`no-but`=失败但有转机。中段应以 `yes-but`/`no-and` 为主；连续 `yes` 会被 `manuscript_map` 的 `OUTCOME-YES-RUN` 提示（无阻力连胜=张力自由落体）。
 - `plotline` 标注本场所属情节线；同一线连续过长会被 `PLOTLINE-LONG-RUN` 提示（金圣叹"横云断山"：文长无断则累坠，插间笔再续）。
+- `turn_source` 是巧合纪律（Pixar 第 19 条）：**巧合可以把人物推进麻烦，不可以把人物捞出麻烦**。`巧合`+有利 outcome 会被 `TURN-COINCIDENCE-RESCUE` 提示——改成主角行动/付代价换来，或补一笔伏笔升级成 `伏笔兑现`；`巧合`+失败结局完全合法（天降横祸是好戏）。
 - `subtext` 帮对白有戏：角色嘴上谈 A，底下争 B。
 - `sensory_anchor` 防止场景漂浮：声音、气味、温度、材质、空间位置至少一个。
 - `want/need/misbelief/wound/fear/tactic/moral_boundary/choice_cost` 构成人物引擎。缺这些字段不一定阻断写作，但会让人物容易变成剧情工具人。

@@ -209,3 +209,64 @@ def test_dropped_sensory_anchor_flagged_and_honored(tmp_path):
         f.write("灶上的药味漫出来。")
     res2 = mm.analyze(root)
     assert "SENSORY-ANCHOR-DROPPED" not in [a["type"] for a in res2["alerts"]]
+
+
+# ── 第五轮：场景落地 / 巧合救场 / 正犯不避 ──────────────────────────────────
+
+def test_grounding_dropped_flagged_and_honored(tmp_path):
+    import json, os
+    import manuscript_map as mm
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+    with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+        f.write("有人在黑暗里数着更声，一声比一声近。" * 10)
+    scenes = [_scene(1, 1, pov="沈砚", location="城南义庄", time="三日后")]
+    alerts = mm.detect_grounding_dropped(root, scenes)
+    assert len(alerts) == 1 and alerts[0]["type"] == "SCENE-GROUNDING-DROPPED"
+    # 章首出现地点锚 → 已落地不报
+    with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+        f.write("义庄的门板吱呀一响。有人在黑暗里数着更声。" * 10)
+    assert mm.detect_grounding_dropped(root, scenes) == []
+
+
+def test_grounding_skipped_without_fields(tmp_path):
+    import manuscript_map as mm
+    # pov/location 未填 → 无从对账，跳过
+    assert mm.detect_grounding_dropped(str(tmp_path), [_scene(1, 1, pov="", location="")]) == []
+
+
+def test_coincidence_rescue_only_favorable():
+    import manuscript_map as mm
+    scenes = [
+        _scene(3, 1, turn_source="巧合", outcome="yes"),      # 巧合捞人 → 报
+        _scene(4, 1, turn_source="巧合", outcome="no-and"),   # 巧合推人进麻烦 → 合法
+        _scene(5, 1, turn_source="主角行动", outcome="yes"),  # 自己挣的 → 合法
+    ]
+    alerts = mm.detect_coincidence_rescue(scenes)
+    assert len(alerts) == 1 and alerts[0]["chapter"] == 3
+    assert alerts[0]["type"] == "TURN-COINCIDENCE-RESCUE"
+
+
+def test_repeat_no_variation_detection():
+    import manuscript_map as mm
+    a = _scene(2, 1, pov="沈砚", location="演武场", outcome="yes-but",
+               desire="在比试中赢下对手证明自己", obstacle="对手境界高出一阶")
+    b = _scene(9, 1, pov="沈砚", location="演武场", outcome="yes-but",
+               desire="在比试中赢下对手证明自己", obstacle="对手境界高出一阶")
+    alerts = mm.detect_repeat_no_variation([a, b])
+    assert len(alerts) == 1 and alerts[0]["type"] == "SCENE-REPEAT-NO-VARIATION"
+    # 换了地点（一个维度已变）→ 不报
+    b2 = dict(b, location="生死台")
+    assert mm.detect_repeat_no_variation([a, b2]) == []
+    # 同章两场景不比（正犯法管跨章复写）
+    b3 = dict(b, chapter=2)
+    assert mm.detect_repeat_no_variation([a, b3]) == []
+
+
+def test_repeat_no_variation_needs_similar_text():
+    import manuscript_map as mm
+    a = _scene(2, 1, pov="沈砚", location="演武场", outcome="yes-but",
+               desire="赢下比试证明自己", obstacle="对手境界更高")
+    b = _scene(9, 1, pov="沈砚", location="演武场", outcome="yes-but",
+               desire="从看守手里偷出名册", obstacle="巡夜换岗只有一炷香空隙")
+    assert mm.detect_repeat_no_variation([a, b]) == []

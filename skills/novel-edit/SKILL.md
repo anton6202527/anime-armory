@@ -38,6 +38,12 @@ description: Professional editing workflow for completed or in-progress novel dr
 通读专注机检抓不到的主观断点。行文层的朗读 pass（读出来拗口的句子必有问题）放在
 `line_edit` 内做，不单独成层。
 
+**倒序审校（backwards editing）——`copyedit_proofread` 层的传统手法**：终稿清扫按
+**章序倒着来**（最后一章→第一章；行文级也可段落倒序）。原理：顺读时叙事惯性会催眠
+审校眼——读者被故事带着走就看不见错字与机械复读；倒序破坏叙事流，每一段都被当成
+孤立文本冷眼检视（Writer's Digest / ALLi 编辑实务）。AI 生产线等价物：把 `copyedit`
+批次任务按章号**降序**派发即可，零成本；`line_edit` 层不倒序（行文节奏需要顺读语境）。
+
 ## 工作流
 
 1. 先跑已有证据层：`novel-review`、必要时 `novel-score`、`novel-balance`、`novel-simulate`、`novel-feedback`；多份报告已齐时先用 `novel-craft/scripts/revision_planner.py` 汇成 `修订/revision_plan.json`。

@@ -53,3 +53,25 @@ def test_scaffold_includes_outcome_and_plotline(tmp_path):
     # 可选字段清单同步（SCENE-CARD-WEAK-FIELDS 会提示补齐）
     assert "outcome" in scene_cards.OPTIONAL_FIELDS
     assert "plotline" in scene_cards.OPTIONAL_FIELDS
+
+
+def test_turn_source_enum_validation(tmp_path):
+    root = str(tmp_path)
+    _write_cards(root, [
+        _full_card(id="SC001-01", turn_source="巧合"),                  # 枚举内，合法
+        _full_card(id="SC001-02", scene_no=2, turn_source="天降神兵"),  # 枚举外 → warning
+        _full_card(id="SC001-03", scene_no=3, turn_source=""),          # 留空=不判定
+    ])
+    result = scene_cards.check(root)
+    hits = [f for f in result["findings"] if f["id"] == "SCENE-CARD-TURN-SOURCE-INVALID"]
+    assert len(hits) == 1 and hits[0]["scene_id"] == "SC001-02"
+    assert result["blocking"] == 0
+
+
+def test_scaffold_includes_turn_source(tmp_path):
+    root = str(tmp_path)
+    scene_cards.scaffold(root, chapters=[1])
+    with open(os.path.join(root, "设定", "scene_cards.json"), encoding="utf-8") as f:
+        data = json.load(f)
+    assert "turn_source" in data["scenes"][0]
+    assert "turn_source" in scene_cards.OPTIONAL_FIELDS

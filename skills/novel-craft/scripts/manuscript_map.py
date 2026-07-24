@@ -226,6 +226,11 @@ PLOTLINE_FILL_MIN = float(os.environ.get("NOVEL_MM_PLOTLINE_FILL_MIN", "0.5"))  
 PLOTLINE_RUN = int(os.environ.get("NOVEL_MM_PLOTLINE_RUN", "6"))                # 同线连续场景数
 CLIMAX_TOPK = int(os.environ.get("NOVEL_MM_CLIMAX_TOPK", "2"))                  # 取张力峰值章数
 CLIMAX_MIN_CURVE = int(os.environ.get("NOVEL_MM_CLIMAX_MIN_CURVE", "6"))        # 张力曲线最少章数
+# —— 第五轮（场景落地/巧合救场/正犯不避）阈值 ——
+GROUNDING_HEAD_CHARS = int(os.environ.get("NOVEL_MM_GROUNDING_HEAD_CHARS", "250"))  # 章首锚定窗口
+GROUNDING_MAX_ALERTS = int(os.environ.get("NOVEL_MM_GROUNDING_MAX_ALERTS", "8"))
+REPEAT_JACCARD = float(os.environ.get("NOVEL_MM_REPEAT_JACCARD", "0.6"))        # 正犯判定 2-gram 相似度
+REPEAT_MAX_ALERTS = int(os.environ.get("NOVEL_MM_REPEAT_MAX_ALERTS", "4"))
 
 
 def detect_sequel_gaps(rows: list[dict[str, Any]], run_len: int = SEQUEL_GAP_RUN) -> list[dict[str, Any]]:
@@ -284,6 +289,9 @@ def analyze(root: str) -> dict[str, Any]:
     alerts.extend(detect_outcome_signals(scenes))
     alerts.extend(detect_plotline_long_runs(scenes))
     alerts.extend(detect_climax_no_afterwave(root, scenes))
+    alerts.extend(detect_grounding_dropped(root, scenes))
+    alerts.extend(detect_coincidence_rescue(scenes))
+    alerts.extend(detect_repeat_no_variation(scenes))
     return {"ran": True, "alerts": alerts, "total": len(alerts), "blocking": 0}
 
 
@@ -499,6 +507,141 @@ def detect_climax_no_afterwave(root: str, scenes: list[dict[str, Any]],
                          f"须作余波演漾；给峰值章补一段余波（反应/代价/回望），"
                          f"或让下一章缓开场"),
             })
+    return alerts
+
+
+def detect_grounding_dropped(root: str, scenes: list[dict[str, Any]],
+                             head_chars: int = GROUNDING_HEAD_CHARS,
+                             limit: int = GROUNDING_MAX_ALERTS) -> list[dict[str, Any]]:
+    """场景落地对账（编辑实务：换场后前两段内锚定 who/where/when——Writers Helping
+    Writers 口径）。场景卡登记了 pov+location(/time)，章首窗口却**谁和哪儿都没出现**
+    → 读者悬空开场。与 SENSORY-ANCHOR-DROPPED 同构（计划字段 vs 正文对账）；与
+    chapter_transition 的 orphan_chapter_opening 互补（那查与前章人物零交集，这查
+    本章自己的计划锚定没写进开头）。故意迷失定向的开场（昏迷醒来）合法，恒 advisory。
+
+    保守判据：pov 与 location/time 词段**双双**零命中才报（任一命中=已锚定）。"""
+    files = chapter_files(root)
+    first_by_chapter: dict[int, dict[str, Any]] = {}
+    for scene in scenes:
+        try:
+            ch = int(scene.get("chapter") or 0)
+        except (TypeError, ValueError):
+            continue
+        if ch and ch not in first_by_chapter:
+            first_by_chapter[ch] = scene
+    alerts: list[dict[str, Any]] = []
+    for ch in sorted(first_by_chapter):
+        scene = first_by_chapter[ch]
+        pov = str(scene.get("pov") or "").strip()
+        place_segs = []
+        for field in ("location", "time"):
+            place_segs.extend(_ANCHOR_SEG_RE.findall(str(scene.get(field) or "")))
+        path = files.get(ch)
+        if not pov or not place_segs or not path:
+            continue
+        abs_path = path if os.path.isabs(path) else os.path.join(root, path)
+        try:
+            with open(abs_path, encoding="utf-8") as f:
+                head = f.read()[:head_chars]
+        except OSError:
+            continue
+        # 词段拆到 2-gram 再命中（"城南义庄"要能对上正文只写"义庄"）；误判方向是
+        # 多算已锚定 → 压掉告警，保守安全（宁缺毋滥）。
+        def _grams(segs):
+            out = set()
+            for seg in segs:
+                out.update(seg[i:i + 2] for i in range(len(seg) - 1))
+            return out
+
+        pov_hit = pov in head or any(g in head for g in _grams(_ANCHOR_SEG_RE.findall(pov)))
+        place_hit = any(g in head for g in _grams(place_segs))
+        if not pov_hit and not place_hit:
+            alerts.append({
+                "type": "SCENE-GROUNDING-DROPPED", "severity": "info", "auto": True,
+                "chapter": ch,
+                "note": (f"第{ch}章场景卡登记 pov=「{pov}」、地点/时间=「{'、'.join(place_segs[:3])}」，"
+                         f"章首 {head_chars} 字内两者均零命中——换场落地工艺：开场两段内要让读者"
+                         f"知道谁在哪（时间跳变还要给时间锚）；补锚定，或确认是有意迷失定向的开场"),
+            })
+            if len(alerts) >= limit:
+                break
+    return alerts
+
+
+_FAVORABLE_OUTCOMES = ("yes", "yes-but")
+
+
+def detect_coincidence_rescue(scenes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """巧合救场检测（Pixar 第 19 条：巧合送人**进**麻烦是好戏，巧合捞人**出**麻烦是
+    作弊）。scene_cards.turn_source=「巧合」且 outcome 有利（yes/yes-but）→ 提示。
+    巧合+失败（no-and/no-but）完全合法（制造麻烦），不报。字段只在填了时判定，
+    无填充率门槛（枚举自证）。纯函数·可测。"""
+    alerts: list[dict[str, Any]] = []
+    for scene in scenes:
+        if str(scene.get("turn_source") or "").strip() != "巧合":
+            continue
+        if _outcome(scene) in _FAVORABLE_OUTCOMES:
+            alerts.append({
+                "type": "TURN-COINCIDENCE-RESCUE", "severity": "建议级", "auto": True,
+                "chapter": scene.get("chapter"), "scene_id": scene.get("id"),
+                "note": (f"场景 {scene.get('id')} 的转折来源=巧合、结局有利"
+                         f"（outcome={_outcome(scene)}）——巧合纪律：巧合可以把人物推进麻烦，"
+                         f"不可以把人物捞出麻烦（读者会觉得被骗）；改为主角行动/付代价换来，"
+                         f"或回头补一笔伏笔让它变成「伏笔兑现」"),
+            })
+    return alerts
+
+
+def _char_2grams(text: str) -> set:
+    t = re.sub(r"\s+", "", str(text or ""))
+    return {t[i:i + 2] for i in range(len(t) - 1)}
+
+
+def detect_repeat_no_variation(scenes: list[dict[str, Any]],
+                               jaccard_min: float = REPEAT_JACCARD,
+                               limit: int = REPEAT_MAX_ALERTS) -> list[dict[str, Any]]:
+    """正犯不避检测（金圣叹「正犯法」：同题材重写必须各极其妙；毛宗岗「同树异枝、
+    同枝异叶」——重复不是罪，重复而**不变化**才是罪，这正是 AI 长篇的头号病：自我
+    复写同型场景）。与 plot_variety 的 beat_cycle 互补：那在正文词面层查桥段循环，
+    这在**计划字段层**查场景设计撞车。
+
+    保守判据（全部字段对字段，不做语义分型）：跨章两场景 pov 相同、location 相同
+    （均非空）、outcome 相同（非空），且 desire+obstacle 的 char-2gram Jaccard
+    ≥ jaccard_min → 同景同人同结局同目标 = 犯而不避。系列套路戏（每卷晋级战）是
+    题材合约，人工豁免。纯函数·可测。"""
+    keyed = []
+    for scene in scenes:
+        pov = str(scene.get("pov") or "").strip()
+        loc = str(scene.get("location") or "").strip()
+        outcome = _outcome(scene)
+        grams = _char_2grams(str(scene.get("desire") or "") + str(scene.get("obstacle") or ""))
+        try:
+            ch = int(scene.get("chapter") or 0)
+        except (TypeError, ValueError):
+            ch = 0
+        if pov and loc and outcome and grams and ch:
+            keyed.append((scene, ch, pov, loc, outcome, grams))
+    alerts: list[dict[str, Any]] = []
+    for i, (sa, cha, pa, la, oa, ga) in enumerate(keyed):
+        for sb, chb, pb, lb, ob, gb in keyed[i + 1:]:
+            if cha == chb or pa != pb or la != lb or oa != ob:
+                continue
+            union = ga | gb
+            if not union:
+                continue
+            jac = len(ga & gb) / len(union)
+            if jac >= jaccard_min:
+                alerts.append({
+                    "type": "SCENE-REPEAT-NO-VARIATION", "severity": "建议级", "auto": True,
+                    "chapter": chb, "scenes": [str(sa.get("id") or ""), str(sb.get("id") or "")],
+                    "similarity": round(jac, 2),
+                    "note": (f"第{cha}章 {sa.get('id')} 与第{chb}章 {sb.get('id')} 同 POV、同地点、"
+                             f"同结局极性，且目标/阻碍相似度 {jac:.0%}——正犯法纪律（金圣叹）：同类"
+                             f"场景可以再写，但须「同树异枝」（换手段/换对手型/换代价/换信息差），"
+                             f"照原样重打一遍=自我复写；给后一场至少换两个维度，或删并"),
+                })
+                if len(alerts) >= limit:
+                    return alerts
     return alerts
 
 

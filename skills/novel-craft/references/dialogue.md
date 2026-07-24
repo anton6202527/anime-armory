@@ -21,6 +21,8 @@
 - **优先用动作节拍（action beat）替代提示语**：`她把茶杯搁下。"那就这样吧。"` ——既标明谁说，又给画面、给情绪，还控制了节奏。这也顺手满足 `chapter.md` 的"反 talking heads / 空间锚点"。
 - **副词提示语是警报**：`"我无所谓，"他冷漠地说`——"冷漠地"是在告诉读者该有什么感受，说明对白本身没演出来。删副词，让台词和动作自己证明。
 - **三人以上对话**：靠**说话方式差异**（见下）+ 间歇 action beat 区分，而不是每句都挂名字。
+- **别一路裸奔**：连续多轮纯引语（无 tag、无 beat、无行内称呼）读者会数不清谁在说——每几轮用 tag 或动作 beat 重新锚定；连续多轮对话零 beat 则是 talking heads（人物成了白房间里的悬浮头），每隔几轮让对话落回身体和房间。
+- 机检对应（`dialogue_craft_audit`，全 advisory）：`said_bookism`（华丽说话动词密度）、`untagged_dialogue_run`（连续纯引语跟丢）、`talking_heads_run`（连续无 beat 悬浮）；副词提示语归 `prose_craft` 的 `adverb_dialogue_tag`。
 
 ## 三、一人一腔（角色语言指纹差异化）
 
