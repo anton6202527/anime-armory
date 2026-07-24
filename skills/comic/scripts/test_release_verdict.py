@@ -237,3 +237,66 @@ def test_release_rechecks_current_platform_with_publish_like_severity(tmp_path: 
     assert report["target_platform"] == "Tapas"
     assert report["verdict"] == "blocked"
     assert "platform_width_mismatch" in {item["code"] for item in report["issues"]}
+
+
+def _write_vlm_tasks(root: Path, tasks: list[dict]) -> None:
+    write_json(root / "生产数据" / "comic_vlm_judge_tasks_第1话.json", {
+        "kind": "comic_vlm_judge_tasks", "chapter": "第1话",
+        "task_count": len(tasks), "tasks": tasks,
+    })
+
+
+def test_zero_vlm_adjudication_blocks_production_even_internal(tmp_path: Path) -> None:
+    # 103 条任务 0 裁决仍 internal 放行的空转旁路必须堵死。
+    # vlm 文件先落盘再建 receipt，避免 review 指纹陈旧混入 production block 干扰断言。
+    _write_vlm_tasks(tmp_path, [
+        {"task_id": "P001__CHAR_A__character", "axis": "character_identity",
+         "panel": {"panel_id": "P001", "sha256": "aa"}},
+        {"task_id": "P001__LOC_X__background", "axis": "background_continuity",
+         "panel": {"panel_id": "P001", "sha256": "aa"}},
+    ])
+    prepare_project(tmp_path)
+    report = release_verdict.build(tmp_path, "第1话", "internal")
+    codes = {item["code"] for item in report["issues"]}
+    assert "vlm_adjudication_missing" in codes
+    assert not report["delivery_states"]["production_complete"]
+    assert report["vlm_adjudication"]["total"] == 2
+    assert report["vlm_adjudication"]["adjudicated"] == 0
+
+
+def test_partial_or_suspect_vlm_adjudication_blocks_public_only(tmp_path: Path) -> None:
+    _write_vlm_tasks(tmp_path, [
+        {"task_id": "T1", "axis": "character_identity", "panel": {"sha256": "aa"}},
+        {"task_id": "T2", "axis": "prop_identity", "panel": {"sha256": "bb"}},
+        {"task_id": "T3", "axis": "background_continuity", "panel": {"sha256": "cc"}},
+    ])
+    write_json(tmp_path / "生产数据" / "comic_vlm_judge_verdicts_第1话.json", {"verdicts": [
+        {"task_id": "T1", "panel_sha256": "aa", "verdict": "pass"},
+        {"task_id": "T2", "panel_sha256": "bb", "verdict": "suspect"},
+        {"task_id": "T3", "panel_sha256": "STALE", "verdict": "pass"},  # 该格已重抽，裁决作废
+    ]})
+    prepare_project(tmp_path)
+    report = release_verdict.build(tmp_path, "第1话", "internal")
+    codes = {item["code"] for item in report["issues"]}
+    assert "vlm_adjudication_missing" not in codes
+    assert "vlm_adjudication_partial" in codes
+    assert "vlm_suspect_unresolved" in codes
+    assert report["delivery_states"]["production_complete"]  # 部分覆盖不拦内部
+    assert not report["delivery_states"]["publish_ready_digital"]
+    assert report["vlm_adjudication"]["adjudicated"] == 2
+    assert report["vlm_adjudication"]["open_suspects"] == ["T2"]
+
+
+def test_missing_vlm_tasks_without_consistency_report_is_backwards_compatible(tmp_path: Path) -> None:
+    prepare_project(tmp_path)
+    report = release_verdict.build(tmp_path, "第1话", "internal")
+    codes = {item["code"] for item in report["issues"]}
+    assert not codes & {"vlm_tasks_missing", "vlm_adjudication_missing"}
+
+
+def test_missing_vlm_tasks_with_consistency_report_blocks_production(tmp_path: Path) -> None:
+    write_json(tmp_path / "生产数据" / "comic_character_consistency_第1话.json", {"kind": "x"})
+    prepare_project(tmp_path)
+    report = release_verdict.build(tmp_path, "第1话", "internal")
+    assert "vlm_tasks_missing" in {item["code"] for item in report["issues"]}
+    assert not report["delivery_states"]["production_complete"]

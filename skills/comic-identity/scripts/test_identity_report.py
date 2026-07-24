@@ -1272,7 +1272,7 @@ def test_required_views_for_tiers():
     assert _id.required_views_for({"library_tier": "core_full"}) == _id.REQUIRED_CHARACTER_VIEWS
     assert _id.required_views_for({}) == _id.REQUIRED_CHARACTER_VIEWS
     assert _id.required_views_for(None) == _id.REQUIRED_CHARACTER_VIEWS
-    assert _id.required_views_for({"library_tier": "restricted_partial"}) == ()
+    assert _id.required_views_for({"library_tier": "restricted_partial"}) == ("front",)
 
 
 def test_story_bible_notes_use_exact_stable_heading_id(tmp_path: Path) -> None:

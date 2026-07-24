@@ -173,7 +173,10 @@ def ensure_character_contract(asset_id: str, raw: Mapping[str, Any]) -> dict[str
         "id": asset_id,
         "type": asset_type_for_id(asset_id, str(asset.get("type") or "")),
         "display_name": str(asset.get("display_name") or asset.get("name") or asset_id).strip(),
-        "library_tier": str(asset.get("library_tier") or asset.get("tier") or ("restricted_partial" if asset_id.startswith("MON_") else "core_full")),
+        # 2026-07-23：MON_ 默认档位从 restricted_partial 改为与 CHAR_ 同的 core_full。
+        # 旧默认让妖怪一进注册表就落进最弱档（当时还是零必需视图免检档），聊斋两话
+        # 「妖怪画错生物」无人拦即源于此。档位仍可显式声明降档，但默认必须宁多不漏。
+        "library_tier": str(asset.get("library_tier") or asset.get("tier") or "core_full"),
         "forms": forms,
         "outfits": outfits,
         "expressions": expressions,

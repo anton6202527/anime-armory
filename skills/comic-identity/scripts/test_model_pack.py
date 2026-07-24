@@ -75,13 +75,30 @@ def test_every_tier_with_required_views_needs_current_sha_signoff(tmp_path: Path
         assert model_pack.evaluate_character(tmp_path, registry, "CHAR_A")["readiness"] == "ready"
 
 
-def test_restricted_partial_has_no_view_or_signoff_requirement(tmp_path: Path) -> None:
+def test_restricted_partial_still_requires_front_anchor_and_signoff(tmp_path: Path) -> None:
+    # 零必需视图曾让 restricted_partial 成为整档免检旁路（自动 ready·免签收）；
+    # 最低档也必须有一张正面锚 + 当前 SHA 人审签收。
     registry = registry_fixture(tmp_path)
     registry["assets"]["CHAR_A"]["library_tier"] = "restricted_partial"
     report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
-    assert report["required_views"] == []
-    assert report["signoff_required"] is False
-    assert report["readiness"] == "ready"
+    assert report["required_views"] == ["front"]
+    assert report["signoff_required"] is True
+    assert report["readiness"] == "needs_approval"
+    confirmations = {key: True for key in model_pack.REQUIRED_CONFIRMATIONS}
+    model_pack.create_signoff(tmp_path, registry, "CHAR_A", "editor", "并排确认受限档正面锚", confirmations)
+    assert model_pack.evaluate_character(tmp_path, registry, "CHAR_A")["readiness"] == "ready"
+
+
+def test_default_selection_enrolls_all_monster_tiers_like_characters() -> None:
+    # named_minimal/未标档 monster 曾被默认排除（与 character 不对称），聊斋狐仆零定妆审计。
+    assets = {
+        "CHAR_A": {"type": "character", "library_tier": "named_minimal"},
+        "MON_MINIMAL": {"type": "monster", "library_tier": "named_minimal"},
+        "MON_UNTIERED": {"type": "monster"},
+        "MON_OPTOUT": {"type": "monster", "model_pack_required": False},
+        "LOC_X": {"type": "location"},
+    }
+    assert model_pack.default_selected_assets(assets) == ["CHAR_A", "MON_MINIMAL", "MON_UNTIERED"]
 
 
 def test_report_summary_separates_characters_and_monsters() -> None:
@@ -162,9 +179,9 @@ def test_model_pack_signoff_requires_accountable_identity_and_reason(tmp_path: P
         assert report["readiness"] == "needs_approval"
 
 
-def test_monster_default_managed_by_tier_and_opt_out(tmp_path: Path) -> None:
-    # 2026-07-17 虎妖漏管回归：core_full/recurring_standard 生物必须默认进 model-pack 审计；
-    # named_minimal 生物不默认纳管；model_pack_required=False 可显式退出。
+def test_monster_default_managed_all_tiers_with_opt_out(tmp_path: Path) -> None:
+    # 2026-07-17 虎妖漏管回归 + 2026-07-23 再修：monster 与 character 同标准全档默认纳管
+    # （named_minimal 狐仆曾因档位排除零定妆审计）；model_pack_required=False 仍可显式退出。
     registry = registry_fixture(tmp_path)
     registry["assets"]["MON_TIGER"] = {"id": "MON_TIGER", "type": "monster", "library_tier": "recurring_standard"}
     registry["assets"]["MON_BG"] = {"id": "MON_BG", "type": "monster", "library_tier": "named_minimal"}
@@ -176,8 +193,8 @@ def test_monster_default_managed_by_tier_and_opt_out(tmp_path: Path) -> None:
     model_pack.main([str(tmp_path), "check", "--write"])
     payload = json.loads((tmp_path / "生产数据" / "comic_model_pack_report.json").read_text(encoding="utf-8"))
     audited = {row["character_id"] for row in payload["characters"]}
-    assert audited == {"CHAR_A", "MON_TIGER"}
-    assert payload["summary"]["monsters"] == 1
+    assert audited == {"CHAR_A", "MON_TIGER", "MON_BG"}
+    assert payload["summary"]["monsters"] == 2
 
 
 def test_build_montage_creates_labelled_contact_sheet(tmp_path: Path) -> None:

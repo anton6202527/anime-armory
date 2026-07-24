@@ -125,6 +125,31 @@ def _heuristic_pixel_warning(evidence: list[dict[str, Any]]) -> list[dict[str, A
     return warnings
 
 
+def default_selected_assets(assets: Mapping[str, Any]) -> list[str]:
+    """默认纳管集合：character 与 monster 同标准全档纳管。
+
+    2026-07-17：monster 从 opt-in 改为按档位默认纳管（虎妖 P015 画成普通虎漏管）。
+    2026-07-23 再修：当时只纳 core_full/recurring_standard，named_minimal/未标档
+    monster 仍被默认排除——与 character（任何档位都纳管）不对称，也违背 identity.py
+    「未标档宁多不漏」的保守原则。聊斋第2话狐仆(named_minimal·8/16 格在场)因此零定妆
+    审计。model_pack_required 仍可显式 false 豁免。
+    """
+    def monster_managed(asset: Mapping[str, Any]) -> bool:
+        flag = asset.get("model_pack_required")
+        if flag is True or flag is False:
+            return flag
+        return True
+
+    return sorted(
+        aid for aid, asset in assets.items()
+        if isinstance(asset, Mapping)
+        and (
+            str(asset.get("type")) == "character"
+            or (str(asset.get("type")) == "monster" and monster_managed(asset))
+        )
+    )
+
+
 def signoff_path(root: Path, character_id: str) -> Path:
     return root / "生产数据" / "comic_model_pack_signoffs" / f"{character_id}.json"
 
@@ -435,25 +460,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     assets = registry.get("assets") if isinstance(registry.get("assets"), Mapping) else {}
     selected = [item.strip() for item in args.characters.split(",") if item.strip()]
     if not selected:
-        # 2026-07-17：monster 从 opt-in 改为按档位默认纳管（虎妖 P015 画成普通虎漏管）。
-        # 2026-07-23 再修：当时只纳 core_full/recurring_standard，named_minimal/未标档
-        # monster 仍被默认排除——与 character（任何档位都纳管）不对称，也违背 identity.py
-        # 「未标档宁多不漏」的保守原则。聊斋第2话狐仆(named_minimal·8/16 格在场)因此零定妆
-        # 审计。现 monster 与 character 同标准全档纳管；model_pack_required 仍可显式 false 豁免。
-        def monster_managed(asset: Mapping) -> bool:
-            flag = asset.get("model_pack_required")
-            if flag is True or flag is False:
-                return flag
-            return True
-
-        selected = sorted(
-            aid for aid, asset in assets.items()
-            if isinstance(asset, Mapping)
-            and (
-                str(asset.get("type")) == "character"
-                or (str(asset.get("type")) == "monster" and monster_managed(asset))
-            )
-        )
+        selected = default_selected_assets(assets)
     if args.command == "signoff":
         if len(selected) != 1:
             raise SystemExit("signoff requires exactly one --characters ID")

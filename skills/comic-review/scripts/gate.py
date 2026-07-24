@@ -1562,6 +1562,7 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
     - 分话节拍：首格开场钩/末格结尾钩/高潮位/格数带/全书拆分蓝图（chapter_beat_audit·comic-script）。
     - 追更再入：N≥2 话开场前情锚是否够、中段是否冒出未交代实体（reentry_context_audit·comic-script）。
     - 实体在场：画面文本提到已登记实体但该格未绑参考、entity_schedule 必在/禁入契约（entity_presence_audit·comic-script）。
+    - 反向防瞎编：读者文本/画面描述出现源文没有、也无有账登记的专名/称谓（source_fabrication_audit·comic-script）。
     - 话内冗余：台词同义反复/事实复现/旁白硬转占比/构图重复计划（redundancy_audit·本目录）。
     - 去 AI 味：自陈情绪/旁白概括情绪/动机过度解释/信息直给/集级直白率（subtext_audit·本目录）。
     机检产物落 生产数据/，findings 以 warn/info 并入本 gate（must→warn：advisory 期不阻断付费）。
@@ -1573,6 +1574,7 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
         ("setup_payoff_ledger", here.parent.parent / "comic-script" / "scripts" / "setup_payoff_ledger.py"),
         ("reentry_context_audit", here.parent.parent / "comic-script" / "scripts" / "reentry_context_audit.py"),
         ("entity_presence_audit", here.parent.parent / "comic-script" / "scripts" / "entity_presence_audit.py"),
+        ("source_fabrication_audit", here.parent.parent / "comic-script" / "scripts" / "source_fabrication_audit.py"),
         ("redundancy_audit", here / "redundancy_audit.py"),
         ("subtext_audit", here / "subtext_audit.py"),
     ]
