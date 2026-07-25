@@ -265,6 +265,27 @@ export function Operation(props: {
     return () => window.clearTimeout(timer);
   }, [active, termReady, root.path]);
 
+  // 空闲预热 Monaco chunk（~7MB 脚本的拉取+解析是"第一次打开文件"顿挫的主源）：
+  // 等次级面板就绪后再排到 idle 档，不与终端/画布首屏抢主线程。模块级幂等，
+  // 多次进入工作台不重复付费。
+  useEffect(() => {
+    if (!active || !secondaryReady) return;
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const preload = () => {
+      void import("../components/MonacoFileEditor").catch(() => {});
+    };
+    const handle = w.requestIdleCallback
+      ? w.requestIdleCallback(preload, { timeout: 4000 })
+      : window.setTimeout(preload, 1200);
+    return () => {
+      if (w.cancelIdleCallback) w.cancelIdleCallback(handle);
+      else window.clearTimeout(handle);
+    };
+  }, [active, secondaryReady]);
+
   useEffect(() => {
     if (rightWidth == null || terminalDock !== "side") return;
     const sync = () => {

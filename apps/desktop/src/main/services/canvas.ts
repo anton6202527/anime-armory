@@ -1418,18 +1418,36 @@ async function buildCanvas(root: string, ep: string): Promise<CanvasData> {
   return out
 }
 
+// Single-flight：生成高峰期 fs watcher 每 300ms 一批事件，上一趟 buildCanvas 的目录
+// 扫描还没跑完下一趟又进来会重叠烧 I/O；同 (root, ep) 的并发读合并到同一次构建。
+const buildInflight = new Map<string, Promise<{ data: CanvasData; sig: string }>>()
+
+function buildCanvasWithSig(root: string, ep: string): Promise<{ data: CanvasData; sig: string }> {
+  const key = `${root}\0${ep}`
+  const existing = buildInflight.get(key)
+  if (existing) return existing
+  const task = (async () => {
+    let data: CanvasData
+    try {
+      data = await buildCanvas(root, ep)
+    } catch {
+      data = { source: 'none', episode: ep, episodes: [], shared_assets: [], clips: [], seams: [] }
+    }
+    const sig = fnv1a64(Buffer.from(JSON.stringify(data), 'utf8'))
+    return { data, sig }
+  })().finally(() => {
+    buildInflight.delete(key)
+  })
+  buildInflight.set(key, task)
+  return task
+}
+
 /** 画布数据 + 内容签名。renderer 带上一次的 sig 来读：未变更时只回 `{ sig, unchanged }`，
  *  省掉整棵 CanvasData 的 IPC 结构化克隆与 renderer 侧反序列化——fs watcher 的多数事件
  *  （终端输出/临时文件）与画布无关，这条短路是画布不卡的主保障。签名在主进程算
  *  （fnv1a64 over JSON），renderer 不再自己 stringify 大 payload。 */
 export async function readCanvas(root: string, ep: string, knownSig?: string): Promise<CanvasReadResult> {
-  let data: CanvasData
-  try {
-    data = await buildCanvas(root, ep)
-  } catch {
-    data = { source: 'none', episode: ep, episodes: [], shared_assets: [], clips: [], seams: [] }
-  }
-  const sig = fnv1a64(Buffer.from(JSON.stringify(data), 'utf8'))
+  const { data, sig } = await buildCanvasWithSig(root, ep)
   if (knownSig && knownSig === sig) return { sig, unchanged: true }
   return { sig, canvas: data }
 }
