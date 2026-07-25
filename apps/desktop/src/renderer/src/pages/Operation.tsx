@@ -382,6 +382,7 @@ export function Operation(props: {
 
   useEffect(() => {
     setChangeSummary(null);
+    canvasSigRef.current = null;
   }, [root.path]);
 
   useEffect(() => {
@@ -404,18 +405,21 @@ export function Operation(props: {
   useEffect(() => {
     let alive = true;
     if (!active || !secondaryReady || !sidePanelOpen || !shouldReadCanvas) return;
-    readCanvas(root.path, ep)
+    // fs events unrelated to the canvas (terminal output, temp files) also bump
+    // refreshKey. We pass the last content signature down to the main process:
+    // unchanged reads come back as a tiny `{ sig, unchanged }` envelope——no full
+    // CanvasData structured-clone over IPC, no renderer-side JSON.stringify of a
+    // large payload (both used to run on every fs event and janked the canvas).
+    readCanvas(root.path, ep, canvasSigRef.current || undefined)
       .then((d) => {
         if (!alive) return;
-        // fs events unrelated to the canvas (terminal output, temp files) also
-        // bump refreshKey; keep the old object identity when nothing changed so
-        // CanvasPane's node/edge memos don't rebuild for a byte-identical read.
-        const sig = JSON.stringify(d);
-        if (sig !== canvasSigRef.current) {
-          canvasSigRef.current = sig;
-          setCanvas(d);
+        if (d.unchanged || !d.canvas) {
+          canvasSigRef.current = d.sig;
+          return;
         }
-        if (d.episodes.length && !d.episodes.includes(ep)) setEp(d.episodes[0]);
+        canvasSigRef.current = d.sig;
+        setCanvas(d.canvas);
+        if (d.canvas.episodes.length && !d.canvas.episodes.includes(ep)) setEp(d.canvas.episodes[0]);
       })
       .catch((e) => alive && setErr(String(e)));
     return () => {

@@ -587,6 +587,8 @@ export function ChangesPane({
                     entry={openedEditorEntry}
                     absPath={openedAbs}
                     text={openedText}
+                    // 本分支仅在 openedLoading=false 时渲染——文本必已就绪。
+                    textReady
                     loadVersion={`${openedEntry.path}:${openedEntry.new_size ?? "unknown"}:${openedEntry.new_mtime ?? "unknown"}:${openedReloadKey}`}
                     expectedMtime={openedEntry.new_mtime ?? 0}
                     onDirtyChange={setOpenedDirty}

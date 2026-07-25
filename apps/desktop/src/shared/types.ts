@@ -297,6 +297,14 @@ export interface CanvasData {
   quality?: CanvasQualitySummary;
 }
 
+/** canvas.read 的增量应答：fs 事件多数与画布无关，renderer 带上一次的 sig 来读，
+ *  未变更时只回 `{ sig, unchanged }`——省掉整棵 CanvasData 的 IPC 结构化克隆。 */
+export interface CanvasReadResult {
+  sig: string;
+  unchanged?: boolean;
+  canvas?: CanvasData;
+}
+
 export interface QualityInsightMetric {
   label: string;
   value: string;

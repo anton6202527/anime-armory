@@ -263,6 +263,9 @@ export function FilesPane({
   const [tabs, setTabs] = useState<EditorTab[]>([]);
   const [focusedPath, setFocusedPath] = useState<string>("");
   const [text, setText] = useState<string>("");
+  // 磁盘文本已就绪的 previewVersion——Monaco 侧靠它区分"文本还在路上"与"真是空文件"，
+  // 未就绪时绝不拿空串覆盖缓存 model。
+  const [textVersion, setTextVersion] = useState<string>("");
   const [err, setErr] = useState<string>("");
   const [importNotice, setImportNotice] = useState<string>("");
   const [importing, setImporting] = useState(false);
@@ -623,15 +626,35 @@ export function FilesPane({
 
   const canImportNovel = active && allowNovelImport && tree.length === 0;
 
-  function confirmDiscardForSwitch(nextPath: string): boolean {
-    if (!editorDirty || nextPath === sel) return true;
-    const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
-    if (ok) setEditorDirty(false);
-    return ok;
+  // Monaco model 随 tab 缓存（见 MonacoFileEditor releaseEditorDocs）；模块是 lazy
+  // chunk，用动态 import 归还——有模型在时模块必已加载，resolve 是同步缓存命中。
+  function releaseDocs(paths?: string[]) {
+    void import("./MonacoFileEditor")
+      .then((mod) => mod.releaseEditorDocs(root.path, paths))
+      .catch(() => {});
   }
 
+  useEffect(() => {
+    return () => {
+      void import("./MonacoFileEditor")
+        .then((mod) => mod.releaseEditorDocs(root.path))
+        .catch(() => {});
+    };
+  }, [root.path]);
+
   function openFileTab(path: string, pinned: boolean) {
-    if (!path || !confirmDiscardForSwitch(path)) return;
+    if (!path) return;
+    // 模型缓存后，未保存改动随 tab 存活——普通切换不再丢改动、无需确认；
+    // 只有"脏 tab 正占着预览位、即将被新预览挤掉"时才要确认丢弃。
+    if (editorDirty && path !== sel && !pinned && !tabs.some((tab) => tab.path === path)) {
+      const previewTab = tabs.find((tab) => !tab.pinned);
+      if (previewTab?.path === sel) {
+        const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
+        if (!ok) return;
+        setEditorDirty(false);
+        releaseDocs([sel]);
+      }
+    }
     setFocusedPath(path);
     setSel(path);
     setTabs((prev) => {
@@ -658,16 +681,24 @@ export function FilesPane({
     };
     window.addEventListener("anime-armory:open-work-file", onOpenFile);
     return () => window.removeEventListener("anime-armory:open-work-file", onOpenFile);
-  }, [editorDirty, root.path, sel]);
+  }, [editorDirty, root.path, sel, tabs]);
 
-  function closeEditorTab(path: string) {
+  async function closeEditorTab(path: string) {
     const index = tabs.findIndex((tab) => tab.path === path);
     if (index < 0) return;
-    if (editorDirty && sel === path) {
+    // 非活动 tab 也可能带着未保存改动（模型缓存语义）——关前查缓存里的 dirty。
+    let cachedDirty = false;
+    if (sel !== path) {
+      cachedDirty = await import("./MonacoFileEditor")
+        .then((mod) => mod.isEditorDocDirty(root.path, path))
+        .catch(() => false);
+    }
+    if ((editorDirty && sel === path) || cachedDirty) {
       const ok = window.confirm(t("files.discardUnsavedConfirm", { path }));
       if (!ok) return;
-      setEditorDirty(false);
+      if (sel === path) setEditorDirty(false);
     }
+    releaseDocs([path]);
     const nextTabs = tabs.filter((tab) => tab.path !== path);
     setTabs(nextTabs);
     if (sel !== path) return;
@@ -685,6 +716,7 @@ export function FilesPane({
     const removedActive = sel ? matches(sel) : false;
     const firstRemovedIndex = Math.max(0, tabs.findIndex((tab) => matches(tab.path)));
     const nextTabs = tabs.filter((tab) => !matches(tab.path));
+    releaseDocs(tabs.filter((tab) => matches(tab.path)).map((tab) => tab.path));
     setTabs(nextTabs);
     if (removedActive) {
       const nextActive = nextTabs[Math.min(firstRemovedIndex, nextTabs.length - 1)] ?? null;
@@ -704,6 +736,8 @@ export function FilesPane({
       if (entry.is_dir && path.startsWith(`${entry.path}/`)) return `${nextRel}${path.slice(entry.path.length)}`;
       return path;
     };
+    // 改名后旧路径的缓存 model 作废（URI 绑定旧绝对路径），归还防泄漏。
+    releaseDocs(tabs.filter((tab) => renamedPath(tab.path) !== tab.path).map((tab) => tab.path));
     setTabs((prev) =>
       prev
         .map((tab) => {
@@ -950,15 +984,18 @@ export function FilesPane({
       previewCacheRef.current.delete(cacheKey);
       previewCacheRef.current.set(cacheKey, cached);
       setText(cached);
+      setTextVersion(previewVersion);
       return;
     }
     setText("");
+    setTextVersion("");
     let alive = true;
     const reader = kind === "docx" ? readWorkDocx : readWorkFile;
     reader(root.path, selEntry.path)
       .then((s) => {
         if (!alive) return;
         setText(s);
+        setTextVersion(previewVersion);
         if (s.length <= PREVIEW_CACHE_TEXT_LIMIT) {
           const cache = previewCacheRef.current;
           cache.set(cacheKey, s);
@@ -1355,6 +1392,7 @@ export function FilesPane({
                 entry={selEntry}
                 absPath={abs}
                 text={text}
+                textReady={Boolean(previewVersion) && textVersion === previewVersion}
                 loadVersion={previewVersion}
                 expectedMtime={selEntry.mtime ?? 0}
                 navigateTo={editorNavigation}

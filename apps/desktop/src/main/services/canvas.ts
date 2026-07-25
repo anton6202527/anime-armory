@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import { existsSync, realpathSync, statSync, type Dirent } from 'node:fs'
 import path from 'node:path'
 import type {
+  CanvasReadResult,
   CanvasClip,
   CanvasData,
   CanvasFrame,
@@ -18,6 +19,7 @@ import type {
   QaFlag,
 } from '@shared/types'
 import { isIgnoredName, resolveWithin } from '../util/paths'
+import { fnv1a64 } from '../util/hash'
 
 /**
  * Canvas service — TypeScript port of the Tauri canvas commands
@@ -1416,12 +1418,20 @@ async function buildCanvas(root: string, ep: string): Promise<CanvasData> {
   return out
 }
 
-export async function readCanvas(root: string, ep: string): Promise<CanvasData> {
+/** 画布数据 + 内容签名。renderer 带上一次的 sig 来读：未变更时只回 `{ sig, unchanged }`，
+ *  省掉整棵 CanvasData 的 IPC 结构化克隆与 renderer 侧反序列化——fs watcher 的多数事件
+ *  （终端输出/临时文件）与画布无关，这条短路是画布不卡的主保障。签名在主进程算
+ *  （fnv1a64 over JSON），renderer 不再自己 stringify 大 payload。 */
+export async function readCanvas(root: string, ep: string, knownSig?: string): Promise<CanvasReadResult> {
+  let data: CanvasData
   try {
-    return await buildCanvas(root, ep)
+    data = await buildCanvas(root, ep)
   } catch {
-    return { source: 'none', episode: ep, episodes: [], shared_assets: [], clips: [], seams: [] }
+    data = { source: 'none', episode: ep, episodes: [], shared_assets: [], clips: [], seams: [] }
   }
+  const sig = fnv1a64(Buffer.from(JSON.stringify(data), 'utf8'))
+  if (knownSig && knownSig === sig) return { sig, unchanged: true }
+  return { sig, canvas: data }
 }
 
 export async function readEpisodeWorkspace(

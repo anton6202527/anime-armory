@@ -1,8 +1,8 @@
 import type {
   AgentInfo,
-  CanvasData,
   CanvasLayout,
   CanvasNodePosition,
+  CanvasReadResult,
   ClipEditData,
   ClipEditPatch,
   DemoDownloadInfo,
@@ -97,7 +97,7 @@ export interface IpcCommands {
   'changes.deleted': (a: { root: string }) => string[]
 
   // canvas / pipeline
-  'canvas.read': (a: { root: string; ep: string }) => CanvasData
+  'canvas.read': (a: { root: string; ep: string; knownSig?: string }) => CanvasReadResult
   'canvas.readLayout': (a: { root: string; ep: string }) => CanvasLayout
   'canvas.writeLayout': (a: { root: string; ep: string; nodes: CanvasNodePosition[] }) => void
   'canvas.readClipEdit': (a: {

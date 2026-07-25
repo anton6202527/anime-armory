@@ -5,7 +5,7 @@
 import { bridge } from "./platform/bridge";
 import type {
   AgentInfo,
-  CanvasData,
+  CanvasReadResult,
   CanvasLayout,
   CanvasNodePosition,
   ClipEditData,
@@ -346,8 +346,8 @@ export function pickDefaultAgent(agents: AgentInfo[]): AgentInfo | null {
   );
 }
 
-export async function readCanvas(root: string, ep: string): Promise<CanvasData> {
-  return invoke("canvas.read", { root, ep });
+export async function readCanvas(root: string, ep: string, knownSig?: string): Promise<CanvasReadResult> {
+  return invoke("canvas.read", { root, ep, knownSig });
 }
 
 export async function readEpisodeWorkspace(root: string, ep: string): Promise<EpisodeWorkspace | null> {

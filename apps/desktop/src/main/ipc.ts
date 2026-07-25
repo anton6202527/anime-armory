@@ -87,7 +87,7 @@ export function registerIpc(s: MainServices) {
     'changes.restoreOne': (a) => s.baseline.restoreOne(a.root, a.rel),
     'changes.deleted': (a) => s.baseline.deletedPaths(a.root),
 
-    'canvas.read': (a) => canvas.readCanvas(a.root, a.ep),
+    'canvas.read': (a) => canvas.readCanvas(a.root, a.ep, a.knownSig),
     'canvas.readLayout': (a) => canvas.readCanvasLayout(a.root, a.ep),
     'canvas.writeLayout': (a) => canvas.writeCanvasLayout(a.root, a.ep, a.nodes),
     'canvas.readClipEdit': (a) => canvas.readClipEdit(a.root, a.ep, a.clipId, a.number),
