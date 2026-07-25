@@ -47,6 +47,8 @@ SEESAY_SIM_FLOOR = float(os.environ.get("AD_SEESAY_SIM_FLOOR", "0.06"))
 VO_ORPHAN_FRAC = float(os.environ.get("AD_SEESAY_ORPHAN_FRAC", "0.5"))
 # 画面描述最少字符：低于此视为没写画面，不判该镜。
 VISUAL_MIN_CHARS = int(os.environ.get("AD_SEESAY_VISUAL_MIN_CHARS", "4"))
+# 信息态桥段 insert 覆盖：信息态 VO 句达到此数而全片零 insert 镜才报（宁缺毋滥）。
+INFO_BEAT_MIN = int(os.environ.get("AD_SEESAY_INFO_BEAT_MIN", "2"))
 NGRAM = 2
 PROVENANCE = "internal-heuristic·confidence=low"
 
@@ -63,6 +65,10 @@ _CONCRETE_RE = re.compile(
     r"before|after|成分|配方|材质|面料|重量|尺寸|容量|升级|提速|加热|制冷|过滤|"
     r"耐磨|透气|拉伸|承重|一键|按下|操作|演示|倒入|涂抹|擦拭|喷洒|清洗|水洗|烹煮|烘烤|油炸|切开|切片",
     re.IGNORECASE)  # 单字动词（喷/洗/切…）是常用字子串（如"一切"），噪声太大，只收双字锚定形。
+# 信息态 VO（数字/价格/参数句）与 insert 镜形态（第七轮 info_beat_no_insert 消费）。
+_INFO_BEAT_RE = re.compile(r"\d+(?:\.\d+)?\s*(?:%|折|元|克|g|ml|mAh|小时|分钟|天|倍|档|种)|价格|参数|规格")
+_INSERT_RE = re.compile(r"特写|insert|微距|close.?up|macro|UI|界面|屏幕|价格板|包装(?:特写|细节)|手部|贴脸",
+                        re.IGNORECASE)
 
 
 def now_iso() -> str:
@@ -235,6 +241,23 @@ def audit_see_say(shots: List[Tuple[str, Dict[str, Any]]], root: Path,
                 f"没有对应视觉（相似度 {sim:.0%}）——DRTV 纪律：说到就要演到，"
                 "改画面演示该卖点，或把这句 VO 挪到有对应画面的镜（advisory·关键词初筛）",
                 [sid]))
+    # ── 信息态桥段 insert 覆盖（2026-07 第七轮·n2d"非人物特写覆盖"的广告对应物）────
+    # VO 里的数字/价格/参数/功能句是"信息态桥段"——该给专属 insert 特写（UI/包装/价格板/
+    # 演示手部），而不是叠在人物镜里念完拉倒。判据：信息态 VO 句 ≥2 而全片没有任何一镜
+    # 是 insert/特写形态 → warn（豁免镜也算 insert——产品特写正是 insert 的典型形态）。
+    info_beats = [vo for _sid2, shot2 in shots
+                  for vo in [shot_vo(shot2)]
+                  if vo and (_INFO_BEAT_RE.search(vo) or concrete_hits(vo, tokens))]
+    has_insert = any(_INSERT_RE.search(
+        " ".join(str(s.get(k) or "") for k in ("shot", "frame", "画面", "shot_type", "景别", "prompt")))
+        for _sid2, s in shots)
+    if len(info_beats) >= INFO_BEAT_MIN and not has_insert:
+        findings.append(finding(
+            "warn", "info_beat_no_insert",
+            f"VO 有 {len(info_beats)} 句信息态内容（数字/价格/参数/可演示卖点）但全片没有一镜是"
+            "insert/特写形态（UI 特写/包装特写/价格板/演示手部）——信息态桥段叠在人物镜里念完"
+            "＝观众看脸没看货；给关键信息各切一个专属 insert（advisory·关键词初筛）"))
+
     if eligible >= 3 and len(mismatches) / eligible > VO_ORPHAN_FRAC:
         worst = sorted(mismatches)[:3]
         findings.append(finding(

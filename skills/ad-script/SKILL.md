@@ -54,6 +54,7 @@ python3 skills/ad-script/scripts/product_craft_audit.py "<作品根>" --write  #
 python3 skills/ad-script/scripts/performance_cue_audit.py "<作品根>" --write # 人物镜表演三轴（情绪/视线/可演动作）
 python3 skills/ad-script/scripts/beat_structure_audit.py "<作品根>" --write # 叙事结构/节拍工艺（传统广告结构纪律）
 python3 skills/ad-script/scripts/see_say_audit.py "<作品根>" --write        # 声画对位（DRTV see-say）
+python3 skills/ad-script/scripts/claim_substantiation_audit.py "<作品根>" --write  # 承诺-证据配对预检
 ```
 
 - **`idea_payoff_ledger`（创意承诺兑现账本）**：`创意/concept.json` 的 big idea / key message /
@@ -97,7 +98,23 @@ python3 skills/ad-script/scripts/see_say_audit.py "<作品根>" --write        #
   收敛设计：情绪化 VO 铺在产品 beauty 镜上合法不报；endcard/slogan 豁免；只有 VO 含具体 claim 且
   与画面零重合才 warn；过半失配才聚合报 `vo_visual_ratio`。落 `生产数据/ad_see_say_audit.json`。
 - **finalize_storyboard 附带 pack shot 行规**：endcard/收版镜实测停留 <1.5s → warn `endcard_hold_short`
-  （logo/CTA 要呼吸感，读不完等于没放）。
+  （logo/CTA 要呼吸感，读不完等于没放）；2026-07 第七轮增 `multi_ratio_protect_missing`——交付计划
+  声明 ≥2 个画幅比例而分镜有镜头无 safe_area/protect 声明 → warn（shoot & protect 惯例：多比例
+  须计划期锁中心保护框，出图后发现竖版切头只能重出）。
+- **`claim_substantiation_audit`（承诺-证据配对预检·2026-07 第七轮）**：广告法闸管词面红线，
+  本审计管**配对**纪律（平台高频拒因）：证言形态无演绎免责（AI 人物=非真实使用者，FTC
+  actual-consumer+广告法 38 条双红线）、结果承诺句无试验依据/因人而异披露（FTC 2023 已废除
+  results-not-typical 万能免责）、折扣算术不符（"原价199现价139"却说5折——纯算术零假阳性）、
+  划线价无七日口径依据、紧迫话术无截止/库存兑现依据、诱导点击词（平台明文拒审）。
+  落 `生产数据/ad_claim_substantiation_audit.json`。
+- **beat_structure 第七轮增**：`brand_pulse_gap`/`branding_monolithic`（Teixeira 品牌脉冲实证：
+  短脉冲多频次降回避、一坨式压 logo 触发跳出；品牌可见=品牌词∪产品在画词，产品即品牌占比
+  ≥70% 豁免）+ `sound_design_missing`（≥15s 而无任何音乐/音效规划亦无"本轮无音乐"显式决定
+  → info——星盒实锤盲区：30s 竖版零声音设计）。
+- **copy_quality 第七轮增**：`emotional_flatline`（Lemon/System1 左脑说明书哨兵：VO 全篇功能/
+  参数词密集而情绪词零命中；品牌目标 warn、转化目标 info——效果广告直给合法）。
+- **see_say 第七轮增**：`info_beat_no_insert`（n2d"非人物特写覆盖"的广告对应物：信息态 VO 句
+  ≥2 而全片无一镜 insert/特写形态——数字/价格/参数叠在人物镜里念完=观众看脸没看货）。
 
 > 这几个（含 `ad-concept` 的 `concept_pack.py`）都由 gate 以 **advisory** 并入：报告缺失只 info，
 > 报告里的 block 降为 warn。规矩见 `gate.py` 的 `score_findings`——**创意启发式只提示复核，

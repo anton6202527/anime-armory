@@ -617,6 +617,12 @@ def creative_axis_findings(root):
         "未跑声画对位机检；建议出图前跑 ad-script/scripts/see_say_audit.py"
         "（DRTV see-say 纪律：VO 里可演示的具体卖点画面里要看得见，否则是配画外音的广播）",
         sources=[os.path.join("脚本", "storyboard.json"), os.path.join("脚本", "voiceover.txt")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_claim_substantiation_audit.json"), "ad_claim_substantiation",
+        "未跑承诺-证据配对预检；建议跑 ad-script/scripts/claim_substantiation_audit.py"
+        "（证言免责/结果句披露/价格算术/紧迫话术依据——平台高频拒因的投前预检，"
+        "广告法闸管词面红线，这里管配对纪律）",
+        sources=[os.path.join("脚本", "storyboard.json"), os.path.join("脚本", "voiceover.txt")]))
     return out
 
 
@@ -690,6 +696,21 @@ def run_gate(root, stage, allow_placeholder=False):
             "（先出 2-5 镜代表样验画风/产品还原/文字渲染，再放量）",
             sources=[os.path.join("脚本", "storyboard.json"),
                      os.path.join("设定库", "asset_registry.json")]))
+        # 产品漂移风险账本（advisory·mv/n2d drift_risk 的 ad 版）：出图前把逐镜风险排好序，
+        # 高危镜先打样/加锚——reference_planner 开处方，这里排优先级。
+        findings.extend(_advisory_report_findings(
+            root, os.path.join("生产数据", "ad_product_drift_risk.json"), "ad_product_drift_risk",
+            "未生成产品漂移风险账本；建议出图前跑 ad-image/scripts/product_drift_risk.py"
+            "（逐镜风险排序+高危镜先打样；产品特写/包装文字/透明材质是最贵的翻车镜）",
+            sources=[os.path.join("脚本", "storyboard.json"),
+                     os.path.join("生产数据", "ad_reference_plan.json")]))
+        # 生成次数预算（advisory·n2d clip_economy 薄版）：结构性浪费在分镜定稿时已注定，
+        # 出图前算账最省钱；stop_loss 管事后止损，这里管事前预算。
+        findings.extend(_advisory_report_findings(
+            root, os.path.join("生产数据", "ad_generation_budget.json"), "ad_generation_budget",
+            "未算生成次数预算；建议出图前跑 ad-craft/scripts/generation_budget.py"
+            "（逐镜生成账 + 相邻同场景合并候选，事前省一次是一次）",
+            sources=[os.path.join("脚本", "storyboard.json")]))
     if stage in ("video", "compose"):
         findings.extend(platform_pack_findings(root))
         # 图已生成：查存在性 + 产品/品牌色一致性机检（最便宜的拦截点）+ 契约继承。
@@ -706,6 +727,14 @@ def run_gate(root, stage, allow_placeholder=False):
             sources=[os.path.join("生产数据", "production_events.jsonl")]))
         # animatic 预演（advisory·传统 PPM 纪律）：image2video 是最贵一步，先用首帧+实测时长+VO
         # 拼免费预演签核节奏/镜序，再进付费生成；首帧或时长变更后预演过期。
+        # 补拍任务包（advisory·传统 pickup list 纪律）：QC 抓到问题只是一半，
+        # 把 fail 变成结构化处置任务才是闭环——生产实锤教训：block 悬置不清=项目死因。
+        findings.extend(_advisory_report_findings(
+            root, os.path.join("生产数据", "ad_pickup_plan.json"), "ad_pickup_plan",
+            "未生成补拍任务包；建议 QC 出结论后跑 ad-craft/scripts/pickup_plan.py"
+            "（把 product_qc/video_qc 的 fail 逐条变成带处置建议的补拍任务，防 block 悬置烂尾）",
+            sources=[os.path.join("出图", "分镜", "product_qc.json"),
+                     os.path.join("出视频", "分镜", "video_qc.json")]))
         findings.extend(_advisory_report_findings(
             root, os.path.join("生产数据", "ad_animatic_manifest.json"), "ad_animatic",
             "未拼 animatic 预演；建议跑 ad-video/scripts/animatic.py"

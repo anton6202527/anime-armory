@@ -433,6 +433,43 @@ def load_vo_seconds(root: Path) -> Tuple[Optional[float], bool]:
     return (round(total, 3) or None), bool(placeholder)
 
 
+# ── 左脑说明书哨兵（2026-07 第七轮·Orlando Wood《Lemon》/System1 口径）────────────
+# 右脑特征（具名角色/对话/地点感/旋律）与长效品牌效果强相关；"flat voiceover 念功能点"
+# 是左脑特征的教科书形态。确定性子集：VO 全篇功能/参数词密集而情绪词零命中 = 零情绪节拍
+# 候选。效果广告（转化目标）本就该直给 → 降 info；品牌目标才 warn。CreativeX 已把这套
+# 做成结构化打分——证明可结构化，这里取词表可判子集。
+_FUNCTIONAL_RE = re.compile(
+    r"\d+(?:\.\d+)?\s*(?:%|折|元|克|g|ml|mAh|小时|分钟|天|倍|档|种)|"
+    r"参数|成分|配方|配置|功率|容量|材质|工艺|技术|算法|芯片|续航|转速", re.IGNORECASE)
+_EMOTION_COPY_RE = re.compile(
+    r"爱|温暖|安心|放松|治愈|开心|快乐|感动|陪伴|心动|自由|勇敢|温柔|惊喜|幸福|"
+    r"舒服|安全感|松一口气|不慌|踏实|想念|回家")
+FLATLINE_MIN_LINES = int(os.environ.get("AD_COPY_FLATLINE_MIN_LINES", "3"))
+FLATLINE_FUNC_MIN = int(os.environ.get("AD_COPY_FLATLINE_FUNC_MIN", "3"))
+
+
+def emotional_flatline_finding(lines: List[Dict[str, Any]], brief: Optional[Mapping[str, Any]]) -> Optional[Dict[str, str]]:
+    """VO 零情绪节拍候选：功能/参数词 ≥FLATLINE_FUNC_MIN 且情绪词零命中。纯函数·可测。
+
+    品牌目标 → warn；转化/效果目标或目标缺失 → info（效果广告直给合法）。"""
+    if len(lines) < FLATLINE_MIN_LINES:
+        return None
+    blob = "\n".join(str(ln.get("text") or "") for ln in lines)
+    func_hits = _FUNCTIONAL_RE.findall(blob)
+    if len(func_hits) < FLATLINE_FUNC_MIN or _EMOTION_COPY_RE.search(blob):
+        return None
+    objective = str((brief or {}).get("campaign_objective") or (brief or {}).get("objective") or
+                    (brief or {}).get("投放目标") or (brief or {}).get("目标") or "")
+    is_brand = bool(re.search(r"品牌|心智|认知|brand|awareness", objective, re.IGNORECASE))
+    sev = "warn" if is_brand else "info"
+    return finding(sev, "emotional_flatline",
+                   f"VO 全篇 {len(func_hits)} 处功能/参数词、零情绪词命中——左脑说明书形态"
+                   "（Lemon 口径：flat voiceover 念功能点与长效品牌效果负相关）；"
+                   + ("品牌目标广告建议至少给一个情绪节拍（人物处境/关系/如释重负的瞬间）"
+                      if is_brand else
+                      "转化目标直给合法，仅提示：一个情绪节拍能显著提升分享/记忆（advisory）"))
+
+
 def build(root: Path) -> Dict[str, Any]:
     """契约形状（findings 用 `msg` 键，ad gate 可直接消费）：
 
@@ -470,6 +507,9 @@ def build(root: Path) -> Dict[str, Any]:
                                     "brand——无法排除品牌名/slogan/CTA/法律声明，冗余检测**可能把刻意的"
                                     "品牌重复误报为冗余**；补齐后复跑再看本报告。"))
         findings.extend(build_findings(lines, phrases, law_flagged_lines(law), seconds, placeholder))
+        flatline = emotional_flatline_finding(lines, brief)
+        if flatline:
+            findings.append(flatline)
 
     return {
         "schema_version": VERSION,

@@ -59,6 +59,13 @@ SIX_SEC_MAX_SHOTS = int(os.environ.get("AD_BEAT_SIX_SEC_MAX_SHOTS", "3"))
 # 节奏前紧后松判定的最小镜数与容差（信息流留存工艺：开头密度最高）。
 MIN_SHOTS_FOR_PACING = int(os.environ.get("AD_BEAT_MIN_SHOTS_PACING", "6"))
 PACING_TOLERANCE = float(os.environ.get("AD_BEAT_PACING_TOLERANCE", "1.1"))
+# 品牌脉冲露出（Teixeira et al. Marketing Science 2010：总曝光恒定时短脉冲多频次显著降低
+# 回避，单次长时间压 logo 反而触发跳出；Kantar LINK branding 诊断同以"出现时点/时长"为口径）。
+BRAND_GAP_MAX = float(os.environ.get("AD_BEAT_BRAND_GAP_MAX", "12.0"))    # 进场后最长无品牌区间
+BRAND_RUN_MAX = float(os.environ.get("AD_BEAT_BRAND_RUN_MAX", "6.0"))     # 单段连续压品牌上限
+BRAND_RATIO_EXEMPT = float(os.environ.get("AD_BEAT_BRAND_RATIO_EXEMPT", "0.7"))  # 产品即品牌豁免线
+BRAND_PULSE_MIN_TOTAL = float(os.environ.get("AD_BEAT_BRAND_PULSE_MIN_TOTAL", "15.0"))
+SOUND_MIN_TOTAL = float(os.environ.get("AD_BEAT_SOUND_MIN_TOTAL", "15.0"))  # 短于此不判声音设计
 PROVENANCE = "internal-heuristic·confidence=low"
 
 _NOISE_RE = re.compile(r"[\s，。！？、；：…—\-\|,.!?;:\"'“”‘’()（）\[\]【】]+")
@@ -427,6 +434,85 @@ def audit_hook_taxonomy(storyboard, concept, findings) -> None:
                             "并在变体批次里保证钩子多样性（advisory）"))
 
 
+def audit_brand_pulse(timed, total: float, timeline_ok: bool, brand_tokens, findings) -> None:
+    """品牌脉冲露出（2026-07 第七轮·Teixeira pulsing 工艺）：品牌该"短脉冲、多频次"地出现。
+
+    两信号（都要 timeline 可信且总时长 ≥BRAND_PULSE_MIN_TOTAL 才判）：
+      · brand_pulse_gap    品牌进场后出现超长"品牌黑洞"（连续 >BRAND_GAP_MAX 秒无一镜提及
+        品牌/产品）——中段大段裸奔，划走的观众全程没带走品牌记忆。
+      · branding_monolithic 单段连续压品牌 >BRAND_RUN_MAX 秒——一坨式露出触发回避，
+        拆成多次短脉冲更抗跳出。
+    产品即品牌品类（品牌镜占比 ≥BRAND_RATIO_EXEMPT，包装全程在画）两信号都豁免。"""
+    if not timeline_ok or total < BRAND_PULSE_MIN_TOTAL:
+        return
+
+    # 品牌可见 = 品牌词命中 ∪ 产品在画词（机身/瓶身/包装…）——分镜常写"机身细节滑过"
+    # 而不点品名，产品在画就是品牌露出，只认品牌词会把演示段误判成黑洞。
+    def _visible(blob: str) -> bool:
+        return _mentions_brand(blob, brand_tokens) or bool(
+            re.search(r"产品|机身|瓶身|包装|logo|界面|UI|app|图标|二维码", blob, re.IGNORECASE))
+
+    marks = [(start, dur, _visible(shot_text(shot)))
+             for _sid, shot, start, dur in timed if dur]
+    branded = [(s, d) for s, d, hit in marks if hit]
+    if not branded:
+        return  # brand_entry_unknown 已报，不重复
+    branded_secs = sum(d for _s, d in branded)
+    if total and branded_secs / total >= BRAND_RATIO_EXEMPT:
+        return  # 产品即品牌：全程在画合法
+    # 最长无品牌区间（从品牌首次进场起算到片尾）。
+    entry = branded[0][0]
+    gap = 0.0
+    worst_gap = 0.0
+    for s, d, hit in marks:
+        if s + d <= entry:
+            continue
+        if hit:
+            worst_gap = max(worst_gap, gap)
+            gap = 0.0
+        else:
+            gap += d
+    worst_gap = max(worst_gap, gap)
+    if worst_gap > BRAND_GAP_MAX:
+        findings.append(finding("warn", "brand_pulse_gap",
+                                f"品牌进场后有连续 {worst_gap:.1f}s 无任何品牌/产品露出"
+                                f"（>{BRAND_GAP_MAX:.0f}s）——脉冲工艺：品牌该短脉冲多频次地回来，"
+                                "中段黑洞里划走的观众没带走任何品牌记忆；在中段补一次轻露出"
+                                "（产品入画/角标/口播带品名均可）"))
+    run = 0.0
+    worst_run = 0.0
+    for _s, d, hit in marks:
+        run = run + d if hit else 0.0
+        worst_run = max(worst_run, run)
+    if worst_run > BRAND_RUN_MAX:
+        findings.append(finding("info", "branding_monolithic",
+                                f"单段连续压品牌 {worst_run:.1f}s（>{BRAND_RUN_MAX:.0f}s）——"
+                                "实证口径：总曝光相同时，一坨式露出比短脉冲更触发回避；"
+                                "拆成多次短露出（脉冲）更抗跳出"))
+
+
+_SOUND_RE = re.compile(r"音乐|BGM|配乐|音效|SFX|soundtrack|jingle|声音设计|sonic", re.IGNORECASE)
+_NO_MUSIC_RE = re.compile(r"无音乐|不使用音乐|不用音乐|无BGM|纯人声|无配乐", re.IGNORECASE)
+
+
+def audit_sound_design(storyboard, brief, total: float, findings) -> None:
+    """声音设计缺失（2026-07 第七轮·生产实锤盲区：星盒 30s 竖版零 SFX/BGM 规划）。
+
+    总时长 ≥SOUND_MIN_TOTAL 而 storyboard/brief 全文找不到任何 音乐/BGM/音效 声明、
+    也没有"无音乐"的显式决定 → info。诚实声明"本轮无音乐"即豁免（决定归人，
+    但不许没想过这件事）。"""
+    if total < SOUND_MIN_TOTAL:
+        return
+    blob = json.dumps(storyboard or {}, ensure_ascii=False) + json.dumps(brief or {}, ensure_ascii=False)
+    if _NO_MUSIC_RE.search(blob):
+        return
+    if not _SOUND_RE.search(blob):
+        findings.append(finding("info", "sound_design_missing",
+                                f"全片 {total:.0f}s 但 storyboard/brief 里没有任何音乐/音效/BGM 规划，"
+                                "也没有『本轮不使用音乐』的显式决定——竖版信息流成片零声音设计"
+                                "会明显拉低完成度；补 BGM/SFX 计划，或在 brief 显式声明无音乐"))
+
+
 def build_abcd(timed, timeline_ok: bool, first_hook_at, first_brand_at, cta_found: bool) -> Dict[str, Any]:
     """Google ABCD 四轴（1.7 万+ 条广告验证：合规条目短期销量 ↑~30%）。纯数据，不产 finding。"""
     attention = (first_hook_at is not None and first_hook_at <= HOOK_WINDOW) if timeline_ok else None
@@ -483,6 +569,8 @@ def build(root: Path) -> Dict[str, Any]:
             audit_open_self_contained(timed, timeline_ok, brand_tokens, benefit_text_of(concept), findings)
             audit_six_second(timed, total, timeline_ok, findings)
             audit_hook_taxonomy(storyboard, concept, findings)
+            audit_brand_pulse(timed, total, timeline_ok, brand_tokens, findings)
+            audit_sound_design(storyboard, brief, total, findings)
             abcd = build_abcd(timed, timeline_ok, first_hook_at, first_brand_at, cta_found)
 
     return {
@@ -497,6 +585,8 @@ def build(root: Path) -> Dict[str, Any]:
             "supers_per_char": SUPERS_PER_CHAR, "supers_per_word": SUPERS_PER_WORD,
             "supers_base": SUPERS_BASE, "six_sec_max": SIX_SEC_MAX,
             "six_sec_max_shots": SIX_SEC_MAX_SHOTS, "pacing_tolerance": PACING_TOLERANCE,
+            "brand_gap_max": BRAND_GAP_MAX, "brand_run_max": BRAND_RUN_MAX,
+            "brand_ratio_exempt": BRAND_RATIO_EXEMPT, "sound_min_total": SOUND_MIN_TOTAL,
             "provenance": PROVENANCE,
             "note": "advisory：本检永不产 block。CTA/endcard 有意重复豁免；单场景/慢节奏广告合法"
                     "（ASL/节奏只 info）；关键词初筛，好不好看仍需人判。",

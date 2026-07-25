@@ -155,3 +155,35 @@ def test_kind_and_schema(tmp_path):
     # findings 必须用 ad house 的 msg 键
     for f in report["findings"]:
         assert "msg" in f and "severity" in f and "code" in f
+
+
+# ── 第七轮：信息态桥段 insert 覆盖（info_beat_no_insert）─────────────────────
+
+def test_info_beats_without_insert_flagged(tmp_path):
+    _write_brief(tmp_path, {"brand": "洁风", "product": "洁风吸尘器"})
+    _write_storyboard(tmp_path, [
+        {"shot_id": "C01", "vo": "续航 48 小时，只要 199 元", "shot": "女生坐在沙发上微笑说话"},
+        {"shot_id": "C02", "vo": "三档功率 15 种模式", "shot": "女生站在客厅中央比划"},
+    ])
+    report = ssa.build(tmp_path)
+    assert "info_beat_no_insert" in _codes(report)
+    assert report["summary"]["block"] == 0
+
+
+def test_info_beats_with_insert_quiet(tmp_path):
+    _write_brief(tmp_path, {"brand": "洁风", "product": "洁风吸尘器"})
+    _write_storyboard(tmp_path, [
+        {"shot_id": "C01", "vo": "续航 48 小时，只要 199 元", "shot": "女生坐在沙发上微笑说话"},
+        {"shot_id": "C02", "vo": "三档功率 15 种模式", "shot": "机身按键特写 手部操作演示"},
+    ])
+    assert "info_beat_no_insert" not in _codes(ssa.build(tmp_path))
+
+
+def test_single_info_beat_not_flagged(tmp_path):
+    # 信息态句不足 2 句不报（宁缺毋滥）
+    _write_brief(tmp_path, {"brand": "洁风"})
+    _write_storyboard(tmp_path, [
+        {"shot_id": "C01", "vo": "只要 199 元", "shot": "女生微笑"},
+        {"shot_id": "C02", "vo": "轻松一点", "shot": "女生瘫在沙发"},
+    ])
+    assert "info_beat_no_insert" not in _codes(ssa.build(tmp_path))

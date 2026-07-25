@@ -136,6 +136,19 @@ AI 已知弱项，查错别字/字形崩坏）/ `multi_entity`（人+产品同�
 覆盖最多轴），某轴无候选如实报 `absent` 不臆造。产 `生产数据/ad_pilot_matrix.{json,md}`，逐镜给中文理由 +
 审看焦点清单。纯计划零花钱、advisory（gate `--stage image` 同 advisory 接法），打不打样由人定。
 
+### 产品漂移风险账本（事前·2026-07 第七轮·mv/n2d drift_risk 的 ad 版）
+
+```bash
+python3 skills/ad-image/scripts/product_drift_risk.py "<作品根>" --write
+```
+
+reference_planner 开处方（每镜喂什么参考）、product_qc 事后诊断之间缺的一层：**出图前把
+逐镜漂移风险打分排序**。分数来源：处方 delta_score 复用 + 分镜词面风险信号（产品特写/微距 +14、
+包装文字渲染 +12、透明反光材质 +10、极端角度 +8、人+产品同框 +10、场景首现 +6、资产未登记
+参考 +18）+ **实测回灌**（product_qc 已报 warn/block 的镜直升 high，不臆造）。≥40 分为 high；
+high 镜不在 `ad_pilot_matrix` 打样集 → warn `high_risk_unpiloted`（高危镜没打样就全量=最贵翻车
+路径）。产 `生产数据/ad_product_drift_risk.{json,md}`，advisory·block 恒 0，gate image 侧车。
+
 ## 重抽预算策略（两档）
 
 图片重抽只保留两档：`预算充足` / `预算一般`，默认 `预算充足`。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限。

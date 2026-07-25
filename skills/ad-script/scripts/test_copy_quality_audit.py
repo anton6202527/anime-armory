@@ -432,3 +432,35 @@ def test_write_emits_json_and_md(tmp_path, capsys):
     assert json.loads(out.read_text(encoding="utf-8"))["kind"] == "ad_copy_quality_audit"
     assert "广告文案质量机检" in out.with_suffix(".md").read_text(encoding="utf-8")
     assert not list((tmp_path / "生产数据").glob("*.tmp"))  # 原子写不留临时文件
+
+
+# ── 第七轮：左脑说明书哨兵（emotional_flatline）──────────────────────────────
+
+def _lines_of(texts):
+    return [{"line": i + 1, "text": t} for i, t in enumerate(texts)]
+
+
+def test_emotional_flatline_brand_objective_warns():
+    import copy_quality_audit as cqa
+    lines = _lines_of(["2000mAh 大容量，续航 48 小时", "三档功率 15 种模式", "钛合金材质 仅重 300 克"])
+    f = cqa.emotional_flatline_finding(lines, {"campaign_objective": "品牌认知"})
+    assert f and f["severity"] == "warn" and f["code"] == "emotional_flatline"
+
+
+def test_emotional_flatline_performance_objective_info():
+    import copy_quality_audit as cqa
+    lines = _lines_of(["2000mAh 大容量，续航 48 小时", "三档功率 15 种模式", "钛合金材质 仅重 300 克"])
+    f = cqa.emotional_flatline_finding(lines, {"campaign_objective": "电商转化"})
+    assert f and f["severity"] == "info"
+
+
+def test_emotional_flatline_quiet_with_emotion_beat():
+    import copy_quality_audit as cqa
+    lines = _lines_of(["2000mAh 大容量，续航 48 小时", "三档功率 15 种模式", "到家那一刻，只剩安心"])
+    assert cqa.emotional_flatline_finding(lines, {"campaign_objective": "品牌认知"}) is None
+
+
+def test_emotional_flatline_needs_enough_functional_hits():
+    import copy_quality_audit as cqa
+    lines = _lines_of(["把碎片收成一页手账草稿", "不用把今天重新排一遍", "把今天稳稳收好"])
+    assert cqa.emotional_flatline_finding(lines, {"campaign_objective": "品牌认知"}) is None

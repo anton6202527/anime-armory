@@ -32,6 +32,8 @@ description: Shared machine contracts and deterministic helpers for the ad-* (�
 | locale + 发布变体 | `scripts/locale_matrix.py` + `scripts/release_variant_manifest.py` | 逐交付件绑定语言、币种、单位、CTA、法律声明、配音/字幕/排版，以及 deliverable SHA→placement→jurisdiction→claims/disclosures→rights→AI label receipt |
 | AI 使用 + 发布合规 | `scripts/ai_usage.py` + `scripts/compliance_manifest.py` | 记录 AI/授权；消费最终文件实际 provenance 探测、平台主动声明、placement 证据和逐发行辖区法律复核，复核须绑定当前 release content SHA。显式标识责任=self_rendered/burned_in 等自行烧录取值时，必须在 `合规/rendered_text_plan.json` 有 AI 标识文字条目（缺=block `explicit_label_plan_missing`）且落在起始段 ≤3s（否则 warn）——《标识办法》要求视频**起始画面**显著提示，标识经 `rendered_text_qc` OCR 像素验证，不能只在台账记一笔 |
 | 生成止损审计 | `scripts/stop_loss.py` | 读 `生产数据/production_events.jsonl` 生成账本：重抽率>35%、单资产>4 次、credit 超预算线、QC block 未清仍在续抽 → warn。**审不是门**（block 恒 0，止损归人）；gate video/compose 以 advisory 侧车并入，空账显式 `no_evidence` |
+| 生成次数预算 | `scripts/generation_budget.py` | **事前**结构性预算（n2d clip_economy 薄版，与 stop_loss 事后止损互补）：逐镜生成账（首帧+尾帧+视频）+ 相邻同场景合并候选链（≤10s，endcard/时长缺失断链）+ `AD_BUDGET_MAX_GENERATIONS` 预算线。advisory·block 恒 0；gate image 侧车 |
+| 补拍任务包 | `scripts/pickup_plan.py` | 传统 pickup list 纪律：把 product_qc/video_qc 的 block/warn 逐条变成带确定性处置建议的补拍任务（dHash→补参考重出、clip 未回收→先回收、后端冲突→重出或签核 override 二选一）；联动生成账本，单资产 >4 次仍 fail → 升级"改分镜/换处方"。生产实锤教训（星盒：22 block 悬置至项目死亡）的闭环件。advisory；gate video/compose 侧车 |
 
 ## 共享脚本
 

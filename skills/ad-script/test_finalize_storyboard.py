@@ -279,5 +279,28 @@ class EndcardHoldTest(unittest.TestCase):
             {"shot_id": "S9", "shot": "endcard"}]}))
 
 
+class MultiRatioProtectTest(unittest.TestCase):
+    """第七轮：多比例 shoot & protect 声明对账。"""
+
+    BRIEF = {"deliverables": [{"ratio": "9:16"}, {"ratio": "16:9"}, {"ratio": "1:1"}]}
+
+    def test_multi_ratio_without_protect_warns(self):
+        sb = {"shots": [{"shot_id": "S1", "shot": "产品演示"},
+                        {"shot_id": "S2", "shot": "人物近景", "safe_area": "center_6x6"}]}
+        findings = fs.multi_ratio_protect_check(self.BRIEF, sb)
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0]["kind"], "multi_ratio_protect_missing")
+        self.assertIn("S1", findings[0]["msg"])
+
+    def test_all_protected_quiet(self):
+        sb = {"shots": [{"shot_id": "S1", "shot": "产品演示", "safe_area": "center_6x6"},
+                        {"shot_id": "S2", "shot": "人物近景", "protect": {"primary": "16:9"}}]}
+        self.assertFalse(fs.multi_ratio_protect_check(self.BRIEF, sb))
+
+    def test_single_ratio_not_judged(self):
+        sb = {"shots": [{"shot_id": "S1", "shot": "产品演示"}]}
+        self.assertFalse(fs.multi_ratio_protect_check({"deliverables": [{"ratio": "9:16"}]}, sb))
+
+
 if __name__ == "__main__":
     unittest.main()

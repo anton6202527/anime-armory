@@ -193,3 +193,69 @@ def test_kind_and_schema(tmp_path):
     assert set(report["abcd"]) >= {"attention", "branding", "connection", "direction", "score"}
     for f in report["findings"]:
         assert "msg" in f and "severity" in f and "code" in f
+
+
+# ── 第七轮：品牌脉冲露出 / 声音设计缺失 ──────────────────────────────────────
+
+def _pulse_shots(mid_brand=False):
+    """30s：品牌开场露出后中段 20s 无品牌/产品在画（mid_brand=True 时中段补一次轻露出）。"""
+    shots = [
+        {"shot_id": "S1", "duration": 3, "shot": "开场 星盒app 界面特写", "vo": "碎片又散了"},
+        {"shot_id": "S2", "duration": 5, "shot": "女生在地铁上疲惫望窗", "vo": "一天太满"},
+        {"shot_id": "S3", "duration": 5, "shot": "咖啡店窗边发呆", "vo": "不想整理"},
+        {"shot_id": "S4", "duration": 5, "shot": "街头走路空镜", "vo": "都散着"},
+        {"shot_id": "S5", "duration": 5, "shot": "夜晚路灯下等车", "vo": "又一天"},
+        {"shot_id": "S6", "duration": 4, "shot": "回家路上", "vo": "回家"},
+        {"shot_id": "S7", "duration": 3, "shot": "endcard：星盒 logo + 下载", "vo": "立即下载"},
+    ]
+    if mid_brand:
+        shots[3] = {"shot_id": "S4", "duration": 5, "shot": "手机亮起 星盒 通知角标", "vo": "都散着"}
+    return shots
+
+
+def test_brand_pulse_gap_flagged(tmp_path):
+    _write(tmp_path, "需求/brief.json", {"品牌": "星盒", "产品": "星盒手账App"})
+    _write_storyboard(tmp_path, _pulse_shots())
+    report = bsa.build(tmp_path)
+    assert "brand_pulse_gap" in _codes(report)
+    assert report["summary"]["block"] == 0
+
+
+def test_brand_pulse_gap_quiet_with_mid_touch(tmp_path):
+    _write(tmp_path, "需求/brief.json", {"品牌": "星盒", "产品": "星盒手账App"})
+    _write_storyboard(tmp_path, _pulse_shots(mid_brand=True))
+    assert "brand_pulse_gap" not in _codes(bsa.build(tmp_path))
+
+
+def test_branding_monolithic_and_product_as_brand_exempt(tmp_path):
+    _write(tmp_path, "需求/brief.json", {"品牌": "洁风", "产品": "洁风吸尘器"})
+    # 单段连续压品牌 8s（>6s）但整体占比 <70% → monolithic info
+    _write_storyboard(tmp_path, [
+        {"shot_id": "S1", "duration": 8, "shot": "洁风 logo 大字压屏", "vo": "洁风"},
+        {"shot_id": "S2", "duration": 6, "shot": "女生扫地", "vo": "扫不完"},
+        {"shot_id": "S3", "duration": 6, "shot": "街景空镜", "vo": "每天如此"},
+    ])
+    assert "branding_monolithic" in _codes(bsa.build(tmp_path))
+    # 产品即品牌（占比 ≥70%）→ 两信号全豁免
+    _write_storyboard(tmp_path, [
+        {"shot_id": "S1", "duration": 8, "shot": "洁风机身细节", "vo": "细节"},
+        {"shot_id": "S2", "duration": 8, "shot": "洁风吸尘器实拍 产品", "vo": "实拍"},
+        {"shot_id": "S3", "duration": 4, "shot": "路人回头", "vo": "谁在用"},
+    ])
+    codes = _codes(bsa.build(tmp_path))
+    assert "branding_monolithic" not in codes and "brand_pulse_gap" not in codes
+
+
+def test_sound_design_missing_info_and_declared_exempt(tmp_path):
+    _write(tmp_path, "需求/brief.json", {"品牌": "星盒"})
+    _write_storyboard(tmp_path, _pulse_shots())
+    report = bsa.build(tmp_path)
+    hits = [f for f in report["findings"] if f["code"] == "sound_design_missing"]
+    assert hits and hits[0]["severity"] == "info"
+    # brief 显式声明无音乐 → 豁免（决定归人，但不许没想过）
+    _write(tmp_path, "需求/brief.json", {"品牌": "星盒", "music": "本轮不使用音乐"})
+    assert "sound_design_missing" not in _codes(bsa.build(tmp_path))
+    # storyboard 里有 BGM 规划 → 安静
+    _write(tmp_path, "需求/brief.json", {"品牌": "星盒"})
+    _write_storyboard(tmp_path, _pulse_shots(), extra={"music": "轻钢琴 BGM，副歌处渐强"})
+    assert "sound_design_missing" not in _codes(bsa.build(tmp_path))

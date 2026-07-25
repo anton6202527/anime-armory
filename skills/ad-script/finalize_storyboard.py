@@ -467,6 +467,39 @@ def endcard_hold_check(storyboard):
     return findings
 
 
+_RATIO_RE = re.compile(r"\b(?:9\s*[:x×]\s*16|16\s*[:x×]\s*9|1\s*[:x×]\s*1|4\s*[:x×]\s*5|3\s*[:x×]\s*4)\b")
+
+
+def multi_ratio_protect_check(brief, storyboard):
+    """多比例 shoot & protect 声明对账（2026-07 第七轮·BBC/EBU shoot-and-protect 惯例 +
+    Netflix framing charts 口径）：交付计划声明 ≥2 个画幅比例，分镜却有镜头没写
+    safe_area/protect 构图保护声明 → warn。竖版救不回来是出图后才发现的高频翻车——
+    这一检把它提前到计划期（画面主体不在保护框内，裁 9:16 时必然切头切字）。
+    比例 <2 或分镜为空不判；per-ratio 重构图（每比例独立分镜行）属高级用法，
+    有任一 protect 类字段即视为已声明。"""
+    findings = []
+    blob = json.dumps(brief or {}, ensure_ascii=False)
+    ratios = set(_RATIO_RE.findall(blob.replace("：", ":")))
+    if len(ratios) < 2:
+        return findings
+    shots = (storyboard or {}).get("shots") or (storyboard or {}).get("clips") or []
+    if not shots:
+        return findings
+    unprotected = []
+    for i, sh in enumerate(shots, 1):
+        if any(sh.get(k) for k in ("safe_area", "protect", "protected_ratios", "安全区")):
+            continue
+        unprotected.append(str(sh.get("shot_id") or sh.get("clip_id") or f"镜头{i}"))
+    if unprotected:
+        findings.append({
+            "severity": "warn", "kind": "multi_ratio_protect_missing",
+            "msg": f"交付计划含 {len(ratios)} 个画幅比例（{'、'.join(sorted(ratios))}）但 "
+                   f"{len(unprotected)} 镜（{'、'.join(unprotected[:4])}…）无 safe_area/protect 构图"
+                   "保护声明——shoot & protect 惯例：多比例交付须在计划期锁中心保护框，"
+                   "否则裁竖版时切头切字只能重出图；补 safe_area 声明或按比例分别重构图"})
+    return findings
+
+
 def _settings_master_seconds(root):
     """--master 缺省时，尝试从 <root>/_设置.md 读「主片时长」选择点（纯文本宽松解析）。"""
     p = os.path.join(root, "_设置.md")
@@ -517,6 +550,7 @@ def main():
     findings += claim_presentation_check(brief, sb)
     findings += seam_check(sb)
     findings += endcard_hold_check(sb)
+    findings += multi_ratio_protect_check(brief, sb)
 
     # 主片时长缺失：不静默放过整条总时长约束，至少 warn。
     if not master_sec:
