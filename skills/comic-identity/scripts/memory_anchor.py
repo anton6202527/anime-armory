@@ -87,7 +87,7 @@ def appearance_history(root: Path) -> Dict[str, List[int]]:
                 continue
             for cid in panel.get("characters") or []:
                 cid = str(cid).strip()
-                if cid.startswith(("CHAR_", "MON_")):
+                if cid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
                     history.setdefault(cid, set()).add(num)
     return {cid: sorted(nums) for cid, nums in history.items()}
 

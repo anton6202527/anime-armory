@@ -60,7 +60,7 @@ REFERENCE_VIEW_PRIORITY = {
     "side": 4,
     "back": 5,
 }
-REFERENCE_ID_PREFIXES = ("CHAR_", "MON_", "LOC_", "PROP_", "OUTFIT_", "SYS_", "FX_", "VFX_", "STYLE_")
+REFERENCE_ID_PREFIXES = ("CHAR_", "MON_", "BEAST_", "ANIMAL_", "LOC_", "PROP_", "WEAPON_", "OUTFIT_", "SYS_", "FX_", "VFX_", "STYLE_")
 
 
 class ReferencePlanBlocked(ValueError):
@@ -225,7 +225,7 @@ def panel_reference_ids(panel: dict) -> list[str]:
     for binding in panel.get("character_bindings") or []:
         if isinstance(binding, dict):
             ref_id = str(binding.get("character_id") or binding.get("id") or "").strip()
-            if ref_id.startswith(("CHAR_", "MON_")) and ref_id not in ids:
+            if ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) and ref_id not in ids:
                 ids.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
@@ -341,7 +341,7 @@ def reference_priority(item: dict[str, str]) -> tuple[int, str]:
 
 
 def ref_kind(ref_id: str) -> str:
-    if ref_id.startswith("CHAR_") or ref_id.startswith("MON_"):
+    if ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
         return "character"
     if ref_id.startswith("STYLE_"):
         return "style"
@@ -623,7 +623,7 @@ def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict, fi
     if panel.get("dialogue") or panel.get("narration"):
         parts.append("在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字")
     parts.append("定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除")
-    if panel.get("characters") or any(ref_id.startswith(("CHAR_", "MON_")) for ref_id in ref_ids):
+    if panel.get("characters") or any(ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) for ref_id in ref_ids):
         parts.append("角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位")
         parts.append("除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标")
     parts.append("线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字")
@@ -673,7 +673,7 @@ def compile_panel_prompt(
         )
         if compact_metadata(finish.get(key), max_len=180)
     )
-    has_identity_refs = any(str(ref.get("id") or "").startswith(("CHAR_", "MON_")) for ref in references)
+    has_identity_refs = any(str(ref.get("id") or "").startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) for ref in references)
     identity_hold = (
         "按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣"
         if has_identity_refs else

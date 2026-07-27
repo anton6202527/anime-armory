@@ -1,11 +1,12 @@
 {
   "schema_version": 2,
   "kind": "comic_vlm_judge_tasks",
-  "protocol": "CANVAS-ContinuityEval-3axis",
+  "protocol": "CANVAS-ContinuityEval-4axis",
   "chapter": "第2话",
-  "created_at": "2026-07-22T15:24:27",
+  "created_at": "2026-07-24T08:09:03",
   "axes": [
     "character_identity",
+    "location_identity",
     "background_continuity",
     "prop_identity"
   ],
@@ -33,7 +34,7 @@
       }
     ]
   },
-  "task_count": 57,
+  "task_count": 73,
   "tasks": [
     {
       "task_id": "P001__CHAR_JIA_CHILD__character",
@@ -50,14 +51,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "92af93e7aa3d37d59f9d8c1d2e03591857c3525584525938c32d01183276046a"
+      "task_sha256": "82c3986062ecd66b234a7adf774df522bb08bd24a46ec6b22833b007b9584044"
     },
     {
       "task_id": "P001__MON_FOX_SERVANT__character",
@@ -72,12 +73,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "2f0908932ef89c6881e1e232465333e040a54e0ff7e8f8c2a1282e0c0b499996"
+      "task_sha256": "b5b2346ca39e851e9061f79ba7e64f5d8b2cd6bf3a3f1baa586b30ebccf4d092"
     },
     {
       "task_id": "P002__CHAR_JIA_CHILD__character",
@@ -94,14 +95,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "7921f4ab2d016fc411371ca32bb518fec23ae3898677de5b0516b3385bf47c93"
+      "task_sha256": "54085d1f8a132eac6449af3b92370c3fe5ca4e0c6eda65bad5c3cafb4cbe3d08"
     },
     {
       "task_id": "P002__CHAR_JIA_MOTHER__character",
@@ -117,13 +118,13 @@
         "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
         "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_MOTHER 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_MOTHER 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_MOTHER__face.png": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
         "出图/共享/图片/CHAR_JIA_MOTHER__front.png": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
         "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca"
       },
-      "task_sha256": "598606df41e044bc901737faa2ece95dbeb7a64b5cc478d1f78f51de8dbddd33"
+      "task_sha256": "7140537b4076ab065df76ee10357d0bff8cf18ea9d0daa2a0762246c031464f9"
     },
     {
       "task_id": "P002__MON_FOX_BROTHERS__character",
@@ -138,12 +139,12 @@
         "出图/共享/图片/MON_FOX_BROTHERS__face.png",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
       },
-      "task_sha256": "6e01508f1f7814caedd714e62f1e0a31b0e0c4eac349f4f34af2b868c491c8d8"
+      "task_sha256": "50e693d6528e7ec7d3bc093e28cda8c9547ea1414aa7e3d11534f2863ed23c5d"
     },
     {
       "task_id": "P003__CHAR_JIA_CHILD__character",
@@ -160,14 +161,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "72bacec0fcdd92ed7d95a19d7c1f9f3974a89e3e6af6854193a223d83b6b99fc"
+      "task_sha256": "1094e10b4f8c48dc4000153a368ee144e5cef86fe19ad1dba4855bcb901c405c"
     },
     {
       "task_id": "P003__CHAR_JIA_MOTHER__character",
@@ -183,13 +184,13 @@
         "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
         "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_MOTHER 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_MOTHER 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_MOTHER__face.png": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
         "出图/共享/图片/CHAR_JIA_MOTHER__front.png": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
         "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca"
       },
-      "task_sha256": "cbce2f0efdf451564fd720a8c43fc4d30003cf7245823a49300927b3fd0e6a9c"
+      "task_sha256": "fefb2fa0b60bb187ecf2482a782ca913513ae2eac1758a48f516ce0cd9d0ffcf"
     },
     {
       "task_id": "P004__CHAR_JIA_CHILD__character",
@@ -206,14 +207,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "526458b56ae0ca5959f01aaf521ff3e09b66ec6842247d23da058b4ac91a2e63"
+      "task_sha256": "09bb82d878420a3c6148fa8a1ccf31b5dba47771b1f118a0eda36fd8c7f77d8a"
     },
     {
       "task_id": "P004__MON_FOX_BROTHERS__character",
@@ -228,12 +229,12 @@
         "出图/共享/图片/MON_FOX_BROTHERS__face.png",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
       },
-      "task_sha256": "2d5ca71874497579f00408746bbdb0998eb48e1157c86c3b9de6e6ff6c9d6736"
+      "task_sha256": "c8cc1e29813390d602b74b3cfcbc3d5cadfae9666276defaa1f90c9bcb5abc23"
     },
     {
       "task_id": "P005__CHAR_JIA_CHILD__character",
@@ -250,14 +251,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "a56c40070f13dd51d30ce1b1df53e2414134132da9c5bb278aed293208db27ec"
+      "task_sha256": "26de09f31abf628b7238aba24ea14a6fcc1c0c1057271b45b1400bcad1ed0941"
     },
     {
       "task_id": "P006__CHAR_JIA_CHILD__character",
@@ -274,14 +275,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "551065c662cfa6370c3f0e104bc1f744bd8989e2dfd654f04799900c54e1bb22"
+      "task_sha256": "ce1ecc34fdff73528de387e33b211d8ade78f018cdfaaab3ffe743fac268e332"
     },
     {
       "task_id": "P006__CHAR_JIA_FATHER__character",
@@ -297,13 +298,13 @@
         "出图/共享/图片/CHAR_JIA_FATHER__front.png",
         "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_FATHER 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_FATHER 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_FATHER__face.png": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
         "出图/共享/图片/CHAR_JIA_FATHER__front.png": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
         "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0"
       },
-      "task_sha256": "1a51416c246c7f1ab9837eb365ff93b816eabc726a250a26009eb933364b9f52"
+      "task_sha256": "1e32914b3f945982b4b5407aa63bc8fa5252df7d965fb5bbfc989076f7a568b1"
     },
     {
       "task_id": "P007__CHAR_JIA_CHILD__character",
@@ -320,14 +321,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "a9e12d00b0f77807da4b65cf409e10162d88d101b10a97acdd359a99b24f1c58"
+      "task_sha256": "502caa3d2e13cb322579c8a39ddfcccf6ebdc5f050c5115f237fca3d76e0f824"
     },
     {
       "task_id": "P007__MON_FOX_BROTHERS__character",
@@ -342,12 +343,12 @@
         "出图/共享/图片/MON_FOX_BROTHERS__face.png",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
       },
-      "task_sha256": "1e0fdb8656508e5dc4557378b70fbbde6f48cb5b39247df960cf37b65d84287c"
+      "task_sha256": "5895d6bb85e8a95fe0777ac279c1ddde3b912a3b379813850e9eefe473923add"
     },
     {
       "task_id": "P007__MON_FOX_SERVANT__character",
@@ -362,12 +363,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "cd15422af7b0fa759a1955e5a3187225b90d3711c3057de627c5ed0d85703985"
+      "task_sha256": "3fe02007d654a08e6a80359f5408130ad5728f0598cee1b11cddec8f4fa5bc59"
     },
     {
       "task_id": "P008__CHAR_JIA_CHILD__character",
@@ -384,14 +385,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "9cb088a9569a4a0227b6b9520eaac930787ba430b465b6019de27ada90b773f0"
+      "task_sha256": "13ff6077285efb211b263fb0fac694b6b2b777ac365ad2ec649d8af17b401683"
     },
     {
       "task_id": "P008__MON_FOX_SERVANT__character",
@@ -406,12 +407,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "4e10dd1206e28ab7c5b37043c6bde30409ec48e7589e312795fbf7925de1215b"
+      "task_sha256": "7dc15fb045db9ce9e5875a8173d7ef586830baede3575cedfebffbb6dd0f89ab"
     },
     {
       "task_id": "P009__CHAR_JIA_CHILD__character",
@@ -428,14 +429,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "67ecbf98097b3a5709fda3b7abb7bbe4f09cad9d63ca7bfadb72092f3685cf9d"
+      "task_sha256": "094a1049aae148f4bf4e944e17bb2324c5d5bf815ee22a2c0bae50a302fad130"
     },
     {
       "task_id": "P010__CHAR_JIA_CHILD__character",
@@ -452,14 +453,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "f38fae7160854ab2dfb03dda40aceaa85c4d2a12794b6c664223112b4be62a37"
+      "task_sha256": "2cff2ef78791d77a031be88e1576710ec2a896e825609a9c28eade5ad00237e5"
     },
     {
       "task_id": "P011__CHAR_JIA_CHILD__character",
@@ -476,14 +477,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "7c2afddb297a7e37c4d8b7bfa701b63ad08d21a6a54a9511e6e61cf2d3dedee2"
+      "task_sha256": "5221e076466b8591ca43cea4220335c18c873457c9d26b165437c70e907c22c1"
     },
     {
       "task_id": "P011__MON_FOX_SERVANT__character",
@@ -498,12 +499,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "94a8321ac3d5295b9f4638928b114be24a271c8117717545624d4f22b1dea0ef"
+      "task_sha256": "65d3e75a93cf74daef8cc52bd9062df0cc844882a3af9d18567f515c77fc880f"
     },
     {
       "task_id": "P012__CHAR_JIA_CHILD__character",
@@ -520,14 +521,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "94ee2e04fe35f8fcc765dc8e8e496f9763ed2c8604015f82d6bab26cc87482b3"
+      "task_sha256": "a5c54e4b102ceb05312ce8e5cb5a22419fd2b002f2c4ed274427af63c8c10290"
     },
     {
       "task_id": "P012__MON_FOX_SERVANT__character",
@@ -542,12 +543,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "512de92b3e3556cb99dc04da7ee4c8ed27cdfbad697c2f06b778d340a6d0466b"
+      "task_sha256": "ee7701d242c9a1245207cf39bd70149da63f7358f28666d933f14ca1c95ca0df"
     },
     {
       "task_id": "P013__CHAR_JIA_CHILD__character",
@@ -564,14 +565,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "3dd05b053f00c1f3537be64d40841e9c6da2e544402de2c6633ecdbb9caefc6f"
+      "task_sha256": "ec06a2f8a7e836a521c79c6a70515c467d1743586a7c49fba51f6f796bd61782"
     },
     {
       "task_id": "P013__MON_FOX_SERVANT__character",
@@ -586,12 +587,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "1c586e63e7ad210bd00baa6e6fc325949c6dcb9d918a032612f08df1cbccdca9"
+      "task_sha256": "05a4306ebc716aa0105df1b4ba0c8f3283d2b4f021b75768b8e10346bed32c2a"
     },
     {
       "task_id": "P014__CHAR_JIA_CHILD__character",
@@ -608,14 +609,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "c07ac7f09ae4dc0b486261666f892996edafa9fa1ab8970fac785f389710efe4"
+      "task_sha256": "cdb6eba1174c7a6ecd9e47b4bdcb11fbc4b76fb3ac27041d1dfab4993e5f1bef"
     },
     {
       "task_id": "P014__MON_FOX_SERVANT__character",
@@ -630,12 +631,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "3c2bf0d4d6099189140663396dc8feee67953ebb11645f514fd4e83054d139c0"
+      "task_sha256": "d3baa2ab416232a1042dbfc6a6134449f7180840fc49d5e829d04aa99c8c3fff"
     },
     {
       "task_id": "P015__CHAR_JIA_CHILD__character",
@@ -652,14 +653,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "494d04b909be7141e1c7da1641828cf70e1ad097ecd41008acad77c50fe08e98"
+      "task_sha256": "2805741f6800de1c513bdcaf3daed8598aef4b9207420f3fcd553301d817700e"
     },
     {
       "task_id": "P015__MON_FOX_BROTHERS__character",
@@ -674,12 +675,12 @@
         "出图/共享/图片/MON_FOX_BROTHERS__face.png",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_BROTHERS 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
         "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
       },
-      "task_sha256": "3d54631d46e359cc19140eb5798cd1bb19db061000b7320bd9f33e69365fb21f"
+      "task_sha256": "4c6e4779d8e60e9b0a4d5f5380cd0ed012c7395a0446dc827ecd7509949ddd44"
     },
     {
       "task_id": "P015__MON_FOX_SERVANT__character",
@@ -694,12 +695,12 @@
         "出图/共享/图片/MON_FOX_SERVANT__face.png",
         "出图/共享/图片/MON_FOX_SERVANT__front.png"
       ],
-      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_FOX_SERVANT 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
         "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
       },
-      "task_sha256": "56ddf956d5cb7c0a46b46c3a778953ea1531e34d211e371efa4f2827b8183c40"
+      "task_sha256": "48f8fece7e5c926ce08c1157da49e07f774a7d34fbb6e20e388e9bcc72c9df51"
     },
     {
       "task_id": "P016__CHAR_JIA_CHILD__character",
@@ -716,14 +717,14 @@
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_CHILD 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
         "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
         "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
         "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
       },
-      "task_sha256": "9e8ffa37d06e10d45204d8ca4621c0bc170b18c36c756162ccea1dab9171e1c7"
+      "task_sha256": "a440b71b30563ec20366848f0a50c91c9fafb42cd7ac96988d871448951e2a11"
     },
     {
       "task_id": "P016__CHAR_JIA_FATHER__character",
@@ -739,13 +740,301 @@
         "出图/共享/图片/CHAR_JIA_FATHER__front.png",
         "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_JIA_FATHER 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_JIA_FATHER 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_JIA_FATHER__face.png": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
         "出图/共享/图片/CHAR_JIA_FATHER__front.png": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
         "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0"
       },
-      "task_sha256": "13bfafbb55038c5b30b54e9774fb706e9c099c4f0dfd549f9594b3bff6a48213"
+      "task_sha256": "6b47fe699efe456eddd8283bae3616b0993badd9e6acd5518efdc57eda009df6"
+    },
+    {
+      "task_id": "P001__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P001",
+        "path": "出图/第2话/panels/P001.png",
+        "sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "c704927798882221da8eb513486dfe5f872e5c891db08dc62208208be836ac55"
+    },
+    {
+      "task_id": "P002__LOC_JIA_HOME__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P002",
+        "path": "出图/第2话/panels/P002.png",
+        "sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771"
+      },
+      "subject": "LOC_JIA_HOME",
+      "references": [
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_JIA_HOME。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "task_sha256": "d6a49b7081fab51befaa83ff2ee9e3d8530b61e6ce0794c4ed522a24aeb7e4a7"
+    },
+    {
+      "task_id": "P003__LOC_JIA_HOME__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P003",
+        "path": "出图/第2话/panels/P003.png",
+        "sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3"
+      },
+      "subject": "LOC_JIA_HOME",
+      "references": [
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_JIA_HOME。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "task_sha256": "59344e0dc31787fd97543d1c92e46e06825dc5e5b7037cc9361865904660daf2"
+    },
+    {
+      "task_id": "P004__LOC_JIA_HOME__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P004",
+        "path": "出图/第2话/panels/P004.png",
+        "sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f"
+      },
+      "subject": "LOC_JIA_HOME",
+      "references": [
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_JIA_HOME。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "task_sha256": "124dc206b428012242571ea492f55d8af3c698b3327b626c30af80ea76bc1a69"
+    },
+    {
+      "task_id": "P005__LOC_HE_GARDEN__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P005",
+        "path": "出图/第2话/panels/P005.png",
+        "sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a"
+      },
+      "subject": "LOC_HE_GARDEN",
+      "references": [
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_HE_GARDEN。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "task_sha256": "fda7e1d1b182077edeb13aaa9891ee0f90403711882b9dfca861865a94ed3023"
+    },
+    {
+      "task_id": "P006__LOC_JIA_HOME__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P006",
+        "path": "出图/第2话/panels/P006.png",
+        "sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf"
+      },
+      "subject": "LOC_JIA_HOME",
+      "references": [
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_JIA_HOME。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "task_sha256": "51c904b4d43a90546b64f039ba6d66c8613ce5704d27fd691cb8fd09837b25e8"
+    },
+    {
+      "task_id": "P007__LOC_HE_GARDEN__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P007",
+        "path": "出图/第2话/panels/P007.png",
+        "sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b"
+      },
+      "subject": "LOC_HE_GARDEN",
+      "references": [
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_HE_GARDEN。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "task_sha256": "79e3c3d763e91e075ca5dbf97d3de751a7a0a30dd45042f06eae79c9b6e7709e"
+    },
+    {
+      "task_id": "P008__LOC_HE_GARDEN__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P008",
+        "path": "出图/第2话/panels/P008.png",
+        "sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52"
+      },
+      "subject": "LOC_HE_GARDEN",
+      "references": [
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_HE_GARDEN。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "task_sha256": "e47abd8d2ca2a24d802ccfcb1952521db11e19ce40c322e5f395445123594dd8"
+    },
+    {
+      "task_id": "P009__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P009",
+        "path": "出图/第2话/panels/P009.png",
+        "sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "0c1a6b5fa45dbe41c7645fa486357e2ceb859cd2005dfb7d10582ed4eab74210"
+    },
+    {
+      "task_id": "P010__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P010",
+        "path": "出图/第2话/panels/P010.png",
+        "sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "dfb60137069d230313ab924dabb2787e0f73b282cdb10ae8aa849c59913e1cb9"
+    },
+    {
+      "task_id": "P011__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P011",
+        "path": "出图/第2话/panels/P011.png",
+        "sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "0e323f2e2cfb5968d64869c43bcc2f08fa46b3108fb0ea29d9a3ca70a2abcc3c"
+    },
+    {
+      "task_id": "P012__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P012",
+        "path": "出图/第2话/panels/P012.png",
+        "sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "fa04f5be739ecd8e88065f74433c634e856497fd71605f65dc9c721e961da2b0"
+    },
+    {
+      "task_id": "P013__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P013",
+        "path": "出图/第2话/panels/P013.png",
+        "sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "c8009dbb9b02c0194fe73365ce06733fc779488908ccd1d51dda356eec4e230e"
+    },
+    {
+      "task_id": "P014__LOC_MARKET_STREET__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P014",
+        "path": "出图/第2话/panels/P014.png",
+        "sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b"
+      },
+      "subject": "LOC_MARKET_STREET",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_STREET。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "task_sha256": "478df8f624b77a3b5515cf26a431b019e91dfb538aa8696386b2a60de4c5c562"
+    },
+    {
+      "task_id": "P015__LOC_HE_GARDEN__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P015",
+        "path": "出图/第2话/panels/P015.png",
+        "sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c"
+      },
+      "subject": "LOC_HE_GARDEN",
+      "references": [
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_HE_GARDEN。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "task_sha256": "f35cfe6da7f40ddfc7d23399278e58d075fa92fed66d048770f7b7d759f0b231"
+    },
+    {
+      "task_id": "P016__LOC_HE_GARDEN__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P016",
+        "path": "出图/第2话/panels/P016.png",
+        "sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918"
+      },
+      "subject": "LOC_HE_GARDEN",
+      "references": [
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_HE_GARDEN。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "task_sha256": "fc70fd763cfafc3a697258c345f80777d807f8ad89ad3ad0a0837b9244105708"
     },
     {
       "task_id": "P002__P003__background",
@@ -1006,11 +1295,11 @@
       "references": [
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
       },
-      "task_sha256": "a7bf1d5cc663ddc0f5c504f129508b915f4f46345f7489b5ada3f0c45072fffd"
+      "task_sha256": "895c24ea36f3c73824ec225af4ec5f4ec6997a94e190b3d195f82310439e6e2e"
     },
     {
       "task_id": "P009__PROP_FAKE_FOX_TAIL__prop",
@@ -1024,11 +1313,11 @@
       "references": [
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
       },
-      "task_sha256": "3bb5c2f3143a041995f2d375c8d50e2ce82d1d81ff1ed6361e43c313fadf2269"
+      "task_sha256": "26388dcfa95584b38fed6a64d2b6b2b6e80924805ad502b4c516be4ef8260228"
     },
     {
       "task_id": "P009__PROP_POISON_WINE__prop",
@@ -1042,11 +1331,11 @@
       "references": [
         "出图/共享/图片/PROP_POISON_WINE__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
       },
-      "task_sha256": "cdad0a89c7adae4554b2d3943400aec6bf70801819d0d8ee78adb0f1e90932f2"
+      "task_sha256": "88eac8d54a8b963242c7698ad8996caadcc735907587ca86702e12eb9bc2bb70"
     },
     {
       "task_id": "P010__PROP_FAKE_FOX_TAIL__prop",
@@ -1060,11 +1349,11 @@
       "references": [
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
       },
-      "task_sha256": "94792afb49ab34f2caa22f8ab0ad2d5e98dc9e7187d69338c13e8458f3f207f6"
+      "task_sha256": "c0fbbaee0ad43e3f3cee0aad26321e9a64fa027a2aa8353eabd7c7e57d86042a"
     },
     {
       "task_id": "P010__PROP_POISON_WINE__prop",
@@ -1078,11 +1367,11 @@
       "references": [
         "出图/共享/图片/PROP_POISON_WINE__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
       },
-      "task_sha256": "d869dd05a0b44dd21566574969b674f8334e557993eb49268328788774050f53"
+      "task_sha256": "9de1639f671da8b0f9633dfc7fa52e4de7b993ddd7fff1006af7f4e459fbe147"
     },
     {
       "task_id": "P011__PROP_FAKE_FOX_TAIL__prop",
@@ -1096,11 +1385,11 @@
       "references": [
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
       },
-      "task_sha256": "46bddb290c3e4afc35049c57bec4ce39b3ef7a4c1ab6ff1d8faf0c5aa302f200"
+      "task_sha256": "4345b3e1df42130ed5680ef8453249a37f5532b2a8de0f0394311c348fcc8f1c"
     },
     {
       "task_id": "P012__PROP_FAKE_FOX_TAIL__prop",
@@ -1114,11 +1403,11 @@
       "references": [
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
       },
-      "task_sha256": "06063909fecc4967f91917e12d7b65eb78843b6beae57c19e1492414d5d85f81"
+      "task_sha256": "0b45eb32611edeb67f45f2c913f60d1cce8979f58f26175bf6336dbe45730924"
     },
     {
       "task_id": "P012__PROP_POISON_WINE__prop",
@@ -1132,11 +1421,11 @@
       "references": [
         "出图/共享/图片/PROP_POISON_WINE__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
       },
-      "task_sha256": "523c0d669ee50d6c7b0ba521f7ac907d7575e49cb26f790b98c05e648d15cc23"
+      "task_sha256": "7015889c9335cac262fbf977e09c474e3352aab4453dbe4ae9ad76294d304f7c"
     },
     {
       "task_id": "P013__PROP_POISON_WINE__prop",
@@ -1150,11 +1439,11 @@
       "references": [
         "出图/共享/图片/PROP_POISON_WINE__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
       },
-      "task_sha256": "a506532b712337d19bcdd8905227eacd6ec3235d0aade40e83270280cba011ff"
+      "task_sha256": "87fecc00b13518af5ea95151c9b9ed765bd5871c9677302a081e39b0281b36d9"
     },
     {
       "task_id": "P014__PROP_POISON_WINE__prop",
@@ -1168,11 +1457,11 @@
       "references": [
         "出图/共享/图片/PROP_POISON_WINE__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
       },
-      "task_sha256": "1daff947d5a76f8c8f84e9f89bdf5bd4644e85b0ac618e86c72f8cf1b2aafb56"
+      "task_sha256": "2c7959f8020a6e28e5ff7458baab59b045d3ef4f5f01da691a54f81c4486ef07"
     },
     {
       "task_id": "P015__PROP_POISON_WINE__prop",
@@ -1186,11 +1475,11 @@
       "references": [
         "出图/共享/图片/PROP_POISON_WINE__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_POISON_WINE。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
       },
-      "task_sha256": "791d17a354b569a9e33a7e2670862a9f966af1ad09950d8fbb363c29ca71368a"
+      "task_sha256": "545589cbb30442d198389a63334de0a4999e2dcdd5ec3b47e03ebf8517a65eda"
     },
     {
       "task_id": "P016__PROP_FAKE_FOX_TAIL__prop",
@@ -1204,11 +1493,11 @@
       "references": [
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png"
       ],
-      "question": "本格应出现道具/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "本格应出现道具/武器/物件 PROP_FAKE_FOX_TAIL。对照参考图：该物件是否出现在画面、结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、位置与人物的持有/接触关系是否合理。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
       },
-      "task_sha256": "3ebdba3e5370283c48938914fb6d5a8342a071187cec2956c2adf8645167db27"
+      "task_sha256": "62902035b00b17758a076645e8a19c23bdbb97cb8ee66e5cd8dd89acf217170f"
     }
   ]
 }

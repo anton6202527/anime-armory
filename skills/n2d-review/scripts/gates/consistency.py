@@ -435,8 +435,8 @@ def check_consistency_reality_coverage(root: str, ep: str, stage: str) -> None:
     summ = cov.coverage_summary(rows)
     if summ["applicable"]:
         add(INFO, "现实覆盖", ep,
-            f"场景现实验证器覆盖 {summ['ran_fresh']}/{summ['applicable']} 真跑（DINOv2/OWLv2）；"
-            f"休眠 {summ['dormant']}（适用但后端没真出活）。stage={stage}")
+            f"现实验证器覆盖 {summ['ran_fresh']}/{summ['applicable']} 真跑（场景 DINOv2/OWLv2 + 道具在场 O3V + "
+            f"外观判官 VAP + 服装 CLIP-I）；休眠 {summ['dormant']}（适用但后端/裁决没真出活）。stage={stage}")
     if not deliverable:
         return
     allow_degraded = degraded_qc_active(root)
@@ -445,6 +445,8 @@ def check_consistency_reality_coverage(root: str, ep: str, stage: str) -> None:
             continue
         loc = r["sidecar"]
         run_hint = f"跑 python3 skills/n2d-review/scripts/{r['producer']} \"{root}\" {ep} --write（需对应重型后端 env）"
+        if r.get("hint"):
+            run_hint += f"；或：{r['hint']}"
         if allow_degraded:
             note_degraded_qc_waiver("现实覆盖", ep, loc, f"{r['label']} 后端休眠·交付降级放行")
             add(WARN, "现实覆盖", loc,
@@ -458,6 +460,59 @@ def check_consistency_reality_coverage(root: str, ep: str, stage: str) -> None:
                 risk_score=0.85, return_to_stage="image",
                 rerun_scope=f"对当前产物跑 {r['producer']} --write（真后端）", affected_artifacts=[loc])
 
+def check_series_ledger_gate(root: str, ep: str) -> None:
+    """剧级总账闸（2026-07-26 落地）：series_ledger 的季级铁律——集 ledger 缺签收、任一集 blocked、
+    跨集脸漂 block、多集季缺身份实测报告——此前**从未被流水线调用**（只能手动 --strict），季级一致性
+    enforcement 悬空。本闸在 review 阶段真跑它并把 delivery_surface 落成 finding；逃生口同走
+    N2D_ALLOW_DEGRADED_QC 单一 chokepoint。
+
+    集范围只取**已生产**的集（有出图 PNG 或已有 consistency_ledger），不把只写了脚本、尚未进产线的
+    未来集当缺签收（否则首集 review 会被计划中的第3-10集永久卡死）。"""
+    try:
+        import series_ledger as sl
+    except Exception:
+        return
+    produced: List[str] = []
+    for cand in sl.discover_episodes(root):
+        has_png = os.path.isdir(os.path.join(root, "出图", cand, "图片"))
+        has_ledger = os.path.isfile(os.path.join(root, "生产数据", f"consistency_ledger_{cand}.json"))
+        if has_png or has_ledger:
+            produced.append(cand)
+    if len(produced) < 2:
+        return  # 单集/首集无跨集语义，季级总账不设闸
+    try:
+        ledger = sl.run(root, episodes=produced)
+    except Exception as exc:
+        add(WARN, "剧级总账", "series_ledger", f"剧级总账构建失败：{exc}——季级一致性 enforcement 此刻无数据。")
+        return
+    surface = ledger.get("delivery_surface") or {}
+    if str(surface.get("status")) != "blocked":
+        add(INFO, "剧级总账", "生产数据/series_ledger.json",
+            f"剧级总账 pass：{ledger.get('ledgers_present')}/{ledger.get('episode_count')} 集已签收，"
+            "跨集身份无 block。")
+        return
+    blocking = surface.get("blocking") or {}
+    reasons = []
+    if blocking.get("episodes_missing_ledger"):
+        reasons.append(f"缺集签收 {blocking['episodes_missing_ledger']}")
+    if blocking.get("episodes_blocked"):
+        reasons.append(f"集内 block 未清 {blocking['episodes_blocked']}")
+    if blocking.get("identity_block_characters"):
+        reasons.append(f"跨集脸漂 block {[c.get('character') for c in blocking['identity_block_characters'] if isinstance(c, Mapping)]}")
+    if blocking.get("identity_report_missing"):
+        reasons.append("多集季缺身份实测报告（跨集崩脸未核验）")
+    msg = ("剧级总账 blocked：" + "；".join(reasons) +
+           "。按 series_ledger.md 的最薄弱集次序回源修复/签收后复跑 review。")
+    if degraded_qc_active(root):
+        note_degraded_qc_waiver("剧级总账", ep, "生产数据/series_ledger.json", "季级总账 blocked·交付降级放行")
+        add(WARN, "剧级总账", "生产数据/series_ledger.json",
+            msg + f"（已通过{degraded_qc_waiver_label(root)}放行·自负其责·已计债）", risk_score=0.8)
+    else:
+        add(BLOCK, "剧级总账", "生产数据/series_ledger.json", msg,
+            risk_score=0.9, return_to_stage="review",
+            affected_artifacts=["生产数据/series_ledger.json"])
+
+
 __all__ = [
     'check_semantic_lineage',
     'check_state_continuity',
@@ -465,4 +520,5 @@ __all__ = [
     'check_consistency_audit_gate',
     'check_consistency_ledger_gate',
     'check_consistency_reality_coverage',
+    'check_series_ledger_gate',
 ]

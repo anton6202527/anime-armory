@@ -148,7 +148,16 @@ def write(root: str, ep: str) -> str:
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
-    _run_batch(path)  # batch 后端就地填 findings 覆写
+    if _run_batch(path):  # batch 后端就地填 findings 覆写
+        try:  # 覆盖账本 freshness 戳：batch 真跑过（findings 全空=全过也算裁决）
+            with open(path, encoding="utf-8") as fh:
+                stamped = json.load(fh)
+            stamped["adjudicated"] = True
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(stamped, fh, ensure_ascii=False, indent=2)
+                fh.write("\n")
+        except Exception as exc:
+            print(f"[object_presence][warn] 无法盖 adjudicated 戳：{exc}", file=sys.stderr)
     return path
 
 

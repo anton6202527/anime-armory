@@ -4340,6 +4340,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_series_retention_gate(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="review")
         check_consistency_ledger_gate(root, ep)
+        check_series_ledger_gate(root, ep)  # 2026-07-26：季级总账铁律此前从未被流水线调用，落地为 review 闸
         check_progress_receipt_reconcile(root, ep, current_stage="review")  # H3：验收前对账每个上游受闸列 ✅ 都有新鲜凭据（抓带外 ✅）
     else:
         add(BLOCK, "参数", stage, "未知 stage")

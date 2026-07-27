@@ -79,11 +79,11 @@ def reference_role_label(record: dict[str, str]) -> str:
         return "仅继承线条、色彩、光影与材质语言的画风参考"
     if role in {"front", "face", "three_quarter", "side", "back", "outfit"} or ref_id.startswith("CHAR_"):
         return f"角色身份/服装参考（{ref_id}，不得与其他角色串脸串衣）"
-    if ref_id.startswith("MON_"):
-        return f"生物身份与体型参考（{ref_id}）"
+    if ref_id.startswith(("MON_", "BEAST_", "ANIMAL_")):
+        return f"生物/动物身份与体型参考（{ref_id}，不得画成同类里的另一物种）"
     if role == "location" or ref_id.startswith("LOC_"):
         return f"场景结构、材质与光位参考（{ref_id}）"
-    if role == "prop" or ref_id.startswith("PROP_"):
+    if role == "prop" or ref_id.startswith(("PROP_", "WEAPON_")):
         return f"道具结构与材质参考（{ref_id}）"
     return f"视觉参考（{ref_id}）"
 
@@ -522,7 +522,7 @@ def main() -> int:
         selected_subjects = {
             str(record.get("id") or "")
             for record in records
-            if str(record.get("id") or "").startswith(("CHAR_", "MON_"))
+            if str(record.get("id") or "").startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_"))
         }
         required_subjects = {
             str(binding.get("character_id") or "")

@@ -9,11 +9,14 @@
 哪个伏笔埋了没还、主线哪里接不上」从零起草升级成**有依据的提案**，交 AI 编剧定夺、再由 story_spine.check
 做最终防瞎编 + 衔接硬校验。
 
-只做**机械信号挖掘**（确定性、可测）；砍/改/合的**语义判断交 AI 编剧**（SKILL 指引）。三类编辑信号：
+只做**机械信号挖掘**（确定性、可测）；砍/改/合的**语义判断交 AI 编剧**（SKILL 指引）。四类编辑信号：
   · foreshadow_debt      —— status=open 却没有任何线程 pays_foreshadow 承接 = 埋了没还 → 改（补还）或砍设定。
   · mainline_gap         —— 因果链 must_keep 的承接点没被任何 spine 节点 depends_on 引用 = 主线可能接不上。
   · tangent_candidates   —— 贡献分低 + class∈{tangent,supporting} + decision=keep = 与主线不相干的琐碎支线，
                             提案 cut/compress（贡献分=机械信号：承载的受保护伏笔/must_keep 因果/主线依赖 + 权重）。
+  · unreasonable_beats   —— 「改掉不合理的地方」的信号真空补齐：巧合/便利/天降词面(contrivance)、动机缺阻力
+                            (motive_without_stakes)、力量无代价(uncosted_power_use)、前因缺失(ungrounded_cause·零重叠保守判)。
+                            **只点名候选交 AI 编剧核原著**，绝不内联问 LLM「合理吗」、绝不据它瞎编加情节。
 
 防瞎编：工作单里引用的 foreshadow/causal/thread id 必须真实存在于 source_comprehension / story_spine，
 check() 核对，臆造 id → block。**只提案不改稿**（宪法 B10）；改 story_spine 决策仍由编剧确认。
@@ -45,6 +48,29 @@ TANGENT_CLASSES = {"tangent", "supporting"}
 CUTTABLE_DECISIONS = {"keep"}  # 只对仍 keep 的低贡献支线提案精简（已决定 cut/compress 的不重复提案）
 # 贡献分阈值：≤ 此分且 class∈tangent/supporting 且 decision=keep → 琐碎支线提案精简。
 CONTRIBUTION_CUT_THRESHOLD = 1
+
+# 「不合理点」机检词库（治「改掉一些不合理的地方」的信号真空）——巧合/便利/天降式便宜达成的
+# 因果标记。命中=候选，交 AI 编剧核（可能是原著本有的合理铺垫，也可能真是硬伤）；绝不自动改稿。
+# 收窄到「因果便利」类，不收 突然/忽然（正常叙事高频）以压误报。
+CONTRIVANCE_MARKERS = (
+    "恰好", "正好", "刚好", "碰巧", "正巧", "巧合", "机缘巧合", "无缘无故", "不知为何",
+    "不知怎么", "凭空", "莫名其妙", "莫名地", "天降", "主角光环", "说时迟那时快",
+    "轻而易举", "易如反掌", "毫不费力", "瞬间学会", "一下子就会", "自动就",
+)
+# 权力/系统「有代价」的标记：源理解 power_system_rules 里出现这些=世界观设定了力量有成本；
+# 若某因果 effect 动用了系统/异能却整条没提代价 → 可能是「无代价力量蠕变」候选。
+POWER_COST_MARKERS = ("代价", "上限", "反噬", "限制", "冷却", "副作用", "损耗", "透支", "禁忌", "后遗")
+POWER_USE_MARKERS = ("系统", "百妖谱", "技能", "异能", "法术", "秘术", "神通", "妖力", "灵力", "外挂")
+
+
+def _bigrams(text: str) -> set:
+    s = "".join(ch for ch in str(text or "") if not ch.isspace())
+    return {s[i:i + 2] for i in range(len(s) - 1)} if len(s) >= 2 else set()
+
+
+def _hit_markers(text: str, markers: Sequence[str]) -> List[str]:
+    t = str(text or "")
+    return [m for m in markers if m in t]
 
 
 def now_iso() -> str:
@@ -81,6 +107,22 @@ def _foreshadow_ledger(root: Path) -> List[Dict[str, Any]]:
 def _causality_chain(root: Path) -> List[Dict[str, Any]]:
     cc = _understanding_contract(root).get("causality_chain")
     return [r for r in cc if isinstance(r, dict)] if isinstance(cc, list) else []
+
+
+def _character_motives(root: Path) -> List[Dict[str, Any]]:
+    cm = _understanding_contract(root).get("character_motives")
+    return [r for r in cm if isinstance(r, dict)] if isinstance(cm, list) else []
+
+
+def _power_system_text(root: Path) -> str:
+    psr = _understanding_contract(root).get("power_system_rules")
+    if isinstance(psr, str):
+        return psr
+    if isinstance(psr, Mapping):
+        return " ".join(str(v) for v in psr.values())
+    if isinstance(psr, list):
+        return " ".join(json.dumps(r, ensure_ascii=False) if isinstance(r, (dict, list)) else str(r) for r in psr)
+    return ""
 
 
 def _spine_and_threads(root: Path) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
@@ -181,15 +223,106 @@ def tangent_candidates(threads: Sequence[Mapping[str, Any]], ledger: Sequence[Ma
     return out
 
 
+def unreasonable_beat_candidates(
+    chain: Sequence[Mapping[str, Any]],
+    motives: Sequence[Mapping[str, Any]],
+    power_system_text: str,
+) -> List[Dict[str, Any]]:
+    """机检「不合理点」候选（治「改掉一些不合理的地方」的信号真空）。
+
+    确定性信号挖掘·**只点名候选交 AI 编剧核**（绝不内联问 LLM「合理吗」，与 causal_graph 同纪律）。
+    每条引用真实 trace_id（防瞎编原生）。三类结构/词面信号（保守·宁少报不滥报）：
+      · contrivance         —— 因果 cause/effect/adaptation_note 命中「巧合/便利/天降」类便宜达成标记。
+      · motive_without_stakes —— character_motive 缺 obstacle 或 choice_pressure = want 可能过易达成（无张力）。
+      · uncosted_power_use  —— 世界观设定了力量有代价（power_system 出现代价类词），但某 effect 动用系统/异能却整条没提代价。
+      · ungrounded_cause    —— 因果 cause（非首条）与「此前所有 cause/effect + 伏笔 setup + 角色 want」零二字重叠 = 可能天降、缺前因。
+    """
+    out: List[Dict[str, Any]] = []
+
+    # 1) 巧合/便利/天降 词面信号
+    for row in chain:
+        cid = _tid(row)
+        if not cid:
+            continue
+        blob = " ".join(str(row.get(k) or "") for k in ("cause", "effect", "adaptation_note"))
+        hits = _hit_markers(blob, CONTRIVANCE_MARKERS)
+        if hits:
+            out.append({
+                "kind": "contrivance",
+                "trace_id": cid,
+                "evidence": f"因果链命中便宜达成标记：{'、'.join(hits)}",
+                "cause": str(row.get("cause") or ""),
+                "effect": str(row.get("effect") or ""),
+                "suggestion": "核对原著是否本有合理铺垫；若是硬伤，在 story_spine.continuity_fixes 写最小改动 + no_contradiction_proof。",
+            })
+
+    # 2) 权力无代价：世界观设了代价，但 effect 用了系统/异能却整条没提代价
+    world_has_cost = bool(_hit_markers(power_system_text, POWER_COST_MARKERS))
+    if world_has_cost:
+        for row in chain:
+            cid = _tid(row)
+            if not cid:
+                continue
+            blob = " ".join(str(row.get(k) or "") for k in ("cause", "effect", "adaptation_note"))
+            if _hit_markers(blob, POWER_USE_MARKERS) and not _hit_markers(blob, POWER_COST_MARKERS):
+                out.append({
+                    "kind": "uncosted_power_use",
+                    "trace_id": cid,
+                    "evidence": "世界观设定了力量有代价，但此因果动用系统/异能却未体现代价（可能无代价力量蠕变）。",
+                    "effect": str(row.get("effect") or ""),
+                    "suggestion": "核对原著该处是否付了代价；若视觉/旁白省略了成本，补回或标注，避免读者觉得开挂。",
+                })
+
+    # 3) 动机无阻力：want 存在但缺 obstacle 或 choice_pressure
+    for row in motives:
+        mid = _tid(row)
+        if not mid or not str(row.get("want") or "").strip():
+            continue
+        missing = [k for k in ("obstacle", "choice_pressure") if not str(row.get(k) or "").strip()]
+        if missing:
+            out.append({
+                "kind": "motive_without_stakes",
+                "trace_id": mid,
+                "character": str(row.get("character") or ""),
+                "evidence": f"动机缺 {'、'.join(missing)}——想要的东西可能过易达成，缺戏剧张力。",
+                "suggestion": "补明阻力/选择压力（源里若有就回填，没有则这条线可能本就是琐碎支线，考虑并入或砍）。",
+            })
+
+    # 4) 前因缺失（天降候选·极保守：与已建立世界零二字重叠才报）
+    grounded = set()
+    for row in motives:
+        for k in ("want", "obstacle", "arc_delta"):
+            grounded |= _bigrams(row.get(k))
+    prior = set(grounded)
+    for idx, row in enumerate(chain):
+        cid = _tid(row)
+        cause = str(row.get("cause") or "")
+        if idx >= 1 and cid and len("".join(cause.split())) >= 4:
+            if not (_bigrams(cause) & prior):
+                out.append({
+                    "kind": "ungrounded_cause",
+                    "trace_id": cid,
+                    "evidence": "此因果的 cause 与此前所有因果/伏笔/动机零重叠——可能缺前因（天降）。",
+                    "cause": cause,
+                    "suggestion": "核对原著是否在更早处铺垫了此因；若确缺，补一处前因锚或在 continuity_fixes 记最小修补。",
+                })
+        # 本条并入「已建立世界」，供后续条判定前因
+        prior |= _bigrams(row.get("cause")) | _bigrams(row.get("effect"))
+    return out
+
+
 # ── 工作单 build ──────────────────────────────────────────────────────────────
 
 def build_worksheet(root: Path) -> Dict[str, Any]:
     ledger = _foreshadow_ledger(root)
     chain = _causality_chain(root)
+    motives = _character_motives(root)
+    power_text = _power_system_text(root)
     spine, threads = _spine_and_threads(root)
     debt = foreshadow_debt(ledger, threads)
     gap = mainline_gap(chain, spine)
     tangents = tangent_candidates(threads, ledger)
+    unreasonable = unreasonable_beat_candidates(chain, motives, power_text)
     contributions = sorted((thread_contribution(t, ledger) for t in threads), key=lambda r: r["score"], reverse=True)
     inputs_missing: List[str] = []
     if not _understanding_contract(root):
@@ -207,21 +340,25 @@ def build_worksheet(root: Path) -> Dict[str, Any]:
             "foreshadow_debt": len(debt),
             "mainline_gaps": len(gap),
             "tangent_candidates": len(tangents),
+            "unreasonable_beats": len(unreasonable),
             "threads_scored": len(contributions),
         },
         # 编辑信号（机检提案）——AI 编剧据此做语义取舍，落回 story_spine.json 的 decision/continuity_fixes。
         "foreshadow_debt": debt,
         "mainline_gaps": gap,
         "tangent_candidates": tangents,
+        "unreasonable_beats": unreasonable,
         "thread_contributions": contributions,
         # 编剧动作账（人/agent 填）：每条改动须引用真实 id，check 防瞎编。
         "revision_ledger": [],
         "_agent_guidance": (
             "像真实编剧整体改良：① 砍/合 tangent_candidates 里的琐碎支线以突出主情节；② 补还或删除 "
             "foreshadow_debt 里埋了没还的伏笔；③ mainline_gaps 处把主线承接点接回 spine.depends_on；"
-            "④ 不合理点写进 story_spine.continuity_fixes（最小改动+no_contradiction_proof）。所有改动落回 "
-            "story_spine.json 的 threads[].decision/connectivity 与 continuity_fixes，再跑 story_spine.py check "
-            "做防瞎编+衔接硬校验。禁止臆造任何 id；改后主线必须仍衔接。"
+            "④ unreasonable_beats 逐条核对原著：真是硬伤就写进 story_spine.continuity_fixes（最小改动+"
+            "no_contradiction_proof+touches_protected 标注），是原著本有合理铺垫或有意为之就在 revision_ledger "
+            "记 dismiss 理由。所有改动落回 story_spine.json 的 threads[].decision/connectivity 与 continuity_fixes，"
+            "再跑 story_spine.py check 做防瞎编+衔接硬校验。禁止臆造任何 id；改后主线必须仍衔接。"
+            "unreasonable_beats 全是候选不是定论——不得据它凭空加情节，只能核原著后做最小修补或标注。"
         ),
     }
 
@@ -302,7 +439,12 @@ def _worksheet_md(ws: Mapping[str, Any]) -> str:
     lines = [f"# 编辑修订工作单（编剧级整体改良提案）", "",
              f"- 埋了没还的伏笔：{s.get('foreshadow_debt', 0)}",
              f"- 主线接不上处：{s.get('mainline_gaps', 0)}",
-             f"- 琐碎支线提案精简：{s.get('tangent_candidates', 0)}", ""]
+             f"- 琐碎支线提案精简：{s.get('tangent_candidates', 0)}",
+             f"- 不合理点候选（待核原著）：{s.get('unreasonable_beats', 0)}", ""]
+    if ws.get("unreasonable_beats"):
+        lines.append("## 不合理点候选（机检·须逐条核对原著，绝不据此瞎编）")
+        for u in ws["unreasonable_beats"]:
+            lines.append(f"- **{u.get('trace_id')}**（{u.get('kind')}）：{u.get('evidence')}")
     if ws.get("tangent_candidates"):
         lines.append("## 与主线不相干的琐碎支线（提案 cut/compress，突出主情节）")
         for t in ws["tangent_candidates"]:
@@ -339,6 +481,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         else:
             s = ws["summary"]
             print(f"编辑提案：琐碎支线 {s['tangent_candidates']} · 伏笔债 {s['foreshadow_debt']} · 主线缺口 {s['mainline_gaps']}"
+                  f" · 不合理点候选 {s.get('unreasonable_beats', 0)}"
                   + ("（已写工作单）" if ns.write else "（未写，加 --write 落盘）"))
         return 0
     res = check(root)

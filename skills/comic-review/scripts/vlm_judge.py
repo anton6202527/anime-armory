@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""CANVAS 三轴 VLM 并排判定任务包（漫画线自包含实现）。
+"""CANVAS 四轴 VLM 并排判定任务包（漫画线自包含实现）。
 
-三轴取自 CANVAS ContinuityEval 协议：
-  1. character_identity   角色一致（脸 / 服装 / 体型）
-  2. background_continuity 背景连续（同场景锚相邻格的布局 / 光位 / 轴线）
-  3. prop_identity        道具身份与位置
+轴取自 CANVAS ContinuityEval 协议，2026-07-24 扩到四轴（补 location_identity）：
+  1. character_identity   角色/生物一致（脸 / 服装 / 体型）——含 MON_/BEAST_/ANIMAL_
+  2. location_identity    场景身份（本格背景 vs 该 LOC 自己的定妆锚，非相邻格）
+  3. background_continuity 背景连续（同场景锚相邻格的布局 / 光位 / 轴线）
+  4. prop_identity        道具/武器身份与位置——含 WEAPON_
+
+  轴1 与轴2 的分工：轴2 抓「这一格背景到底是不是这个场景」（画错场景／换成别处），
+  轴3 抓「同一场景相邻格之间有没有翻转」（布局/光位漂移）。二者互补，缺一漏一类错误。
 
 本脚本只产任务包和回读裁决，不调用任何 VLM API：任务由 agent（Claude/Codex
 等多模态模型）逐条看图执行，把裁决写回 verdict 文件。裁决只做**相对排序 /
@@ -25,7 +29,16 @@ from typing import Any
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
-AXES = ("character_identity", "background_continuity", "prop_identity")
+AXES = ("character_identity", "location_identity", "background_continuity", "prop_identity")
+# 角色轴纳管的前缀：人物 + 一切「有脸/有身形、需锁身份」的生物。
+# MON_ 妖怪、BEAST_ 走兽异兽、ANIMAL_ 真实动物都按角色级（定妆+相似度+并排）核。
+CHARACTER_AXIS_PREFIXES = ("CHAR_", "MON_", "BEAST_", "ANIMAL_")
+# 道具轴纳管的前缀：道具 + 武器 + 系统/特效/换装件。武器（WEAPON_）最易被换成同类替代品
+# （断横刀→弯刀），必须逐格核对是不是同一件而非同类。
+PROP_AXIS_PREFIXES = ("PROP_", "WEAPON_", "SYS_", "FX_", "VFX_", "OUTFIT_")
+# 无适配判定引擎兜底的轴：这些轴一旦 0 裁决就是完全空转（CCIP 只覆盖角色身份，
+# 覆盖不到场景/背景/道具/生物形态）。gate liveness 据此在硬闸下升 block。
+AXES_WITHOUT_DETERMINISTIC_FALLBACK = ("location_identity", "background_continuity", "prop_identity")
 SCORE_GUIDE = (
     "score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；"
     "3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。"
@@ -175,13 +188,13 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
             sha_cache[key] = file_sha256(path)
         return {"panel_id": pid, "path": rel(root, path), "sha256": sha_cache[key]}
 
-    # 轴1：角色一致（脸/服装/体型）——含 MON_，一格一角色一任务。
+    # 轴1：角色/生物一致（脸/服装/体型）——含 MON_/BEAST_/ANIMAL_，一格一主体一任务。
     for panel in panels:
         pid = str(panel.get("panel_id"))
         entry = panel_entry(pid)
         if not entry:
             continue
-        for char_id in panel_ref_ids(panel, ("CHAR_", "MON_")):
+        for char_id in panel_ref_ids(panel, CHARACTER_AXIS_PREFIXES):
             refs = asset_reference_paths(root, registry, char_id)
             if not refs:
                 continue
@@ -193,14 +206,43 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
                     "subject": char_id,
                     "references": refs,
                     "question": (
-                        f"并排对比 panel 图与 {char_id} 的定妆参考：这是同一个角色吗？"
-                        "分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、"
-                        "outfit（领型/纽扣/花纹/配饰）、build（体型比例）。" + SCORE_GUIDE
+                        f"并排对比 panel 图与 {char_id} 的定妆参考：这是同一个角色/生物吗？"
+                        "分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、"
+                        "outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。"
+                        "特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。" + SCORE_GUIDE
                     ),
                 }
             )
 
-    # 轴2：背景连续——同场景锚在阅读顺序上相邻的两格。
+    # 轴2：场景身份——本格背景 vs 该 LOC 自己的定妆锚（不是相邻格）。
+    # 抓「这一格到底是不是这个场景」：画错地点、换成别处、结构性布局崩坏。
+    for panel in panels:
+        pid = str(panel.get("panel_id"))
+        anchor = panel_scene_anchor(panel)
+        if not anchor.startswith("LOC_"):
+            continue
+        refs = asset_reference_paths(root, registry, anchor, limit=2)
+        if not refs:
+            continue
+        entry = panel_entry(pid)
+        if not entry:
+            continue
+        tasks.append(
+            {
+                "task_id": f"{pid}__{anchor}__location",
+                "axis": "location_identity",
+                "panel": entry,
+                "subject": anchor,
+                "references": refs,
+                "question": (
+                    f"本格场景锚为 {anchor}。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？"
+                    "看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；"
+                    "机位与光线可变，但不得换成另一个场景或另一种建筑风格。" + SCORE_GUIDE
+                ),
+            }
+        )
+
+    # 轴3：背景连续——同场景锚在阅读顺序上相邻的两格。
     prev_by_anchor: dict[str, dict[str, str]] = {}
     for panel in panels:
         pid = str(panel.get("panel_id"))
@@ -229,13 +271,13 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
             )
         prev_by_anchor[anchor] = entry
 
-    # 轴3：道具身份与位置——有参考图的 PROP_/SYS_/FX_/VFX_/OUTFIT_ 资产逐格核对。
+    # 轴4：道具/武器身份与位置——有参考图的 PROP_/WEAPON_/SYS_/FX_/VFX_/OUTFIT_ 资产逐格核对。
     for panel in panels:
         pid = str(panel.get("panel_id"))
         entry = panel_entry(pid)
         if not entry:
             continue
-        for prop_id in panel_ref_ids(panel, ("PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_")):
+        for prop_id in panel_ref_ids(panel, PROP_AXIS_PREFIXES):
             refs = asset_reference_paths(root, registry, prop_id, limit=2)
             if not refs:
                 continue
@@ -247,8 +289,9 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
                     "subject": prop_id,
                     "references": refs,
                     "question": (
-                        f"本格应出现道具/物件 {prop_id}。对照参考图：该物件是否出现在画面、"
-                        "结构与材质是否为同一个（不是同类替代品）、位置与人物的持有/接触关系是否合理。" + SCORE_GUIDE
+                        f"本格应出现道具/武器/物件 {prop_id}。对照参考图：该物件是否出现在画面、"
+                        "结构与材质是否为同一件（不是同类替代品——断横刀不得换成弯刀/双刃剑，酒壶不得换器型）、"
+                        "位置与人物的持有/接触关系是否合理。" + SCORE_GUIDE
                     ),
                 }
             )
@@ -261,7 +304,7 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
     payload = {
         "schema_version": 2,
         "kind": "comic_vlm_judge_tasks",
-        "protocol": "CANVAS-ContinuityEval-3axis",
+        "protocol": "CANVAS-ContinuityEval-4axis",
         "chapter": chapter,
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "axes": list(AXES),
@@ -362,16 +405,26 @@ def judge_status(root: Path, chapter: str) -> dict[str, Any]:
     tasks = load_json(tasks_path(root, chapter), {})
     task_list = tasks.get("tasks") or [] if isinstance(tasks, dict) else []
     verdicts = load_verdicts(root, chapter)
+    by_axis: dict[str, dict[str, int]] = {}
+    for task in task_list:
+        if not isinstance(task, dict):
+            continue
+        axis = str(task.get("axis") or "?")
+        bucket = by_axis.setdefault(axis, {"task_count": 0, "verdict_count": 0})
+        bucket["task_count"] += 1
+        if str(task.get("task_id")) in verdicts:
+            bucket["verdict_count"] += 1
     return {
         "task_count": len(task_list),
         "verdict_count": sum(1 for task in task_list if isinstance(task, dict) and str(task.get("task_id")) in verdicts),
+        "by_axis": by_axis,
         "tasks_file": rel(root, tasks_path(root, chapter)),
         "verdict_file": rel(root, verdicts_path(root, chapter)),
     }
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="生成/查看漫画 VLM 并排判定任务包（CANVAS 三轴）")
+    parser = argparse.ArgumentParser(description="生成/查看漫画 VLM 并排判定任务包（CANVAS 四轴）")
     parser.add_argument("project_root")
     parser.add_argument("--chapter", default="第1话")
     parser.add_argument("--status", action="store_true", help="只输出任务/裁决完成度，不重建任务包")

@@ -1,9 +1,9 @@
 # 漫画场景/道具一致性报告 — 第2话
 
-- 生成时间：2026-07-22T15:20:44
-- 结论：pass
+- 生成时间：2026-07-24T20:06:47
+- 结论：warn
 - 场景锚：3 | 道具：3
-- block/warn：0 / 0
+- block/warn：0 / 3
 
 ## 场景锚
 
@@ -23,8 +23,12 @@
 
 ## Findings
 
-- 未发现场景/道具一致性问题。
+| severity | code | subject | panel | reason |
+|---|---|---|---|---|
+| warn | vlm_judge_prop_suspect | PROP_FAKE_FOX_TAIL | P001 | VLM 并排判定低分/存疑：identity=2；PROP_FAKE_FOX_TAIL anchor is a grey-tan/black rope-bound bristly costume piece, but the panel shows a smooth bright orange-red tail with a distinct white tip tucked in the belt — a clear color/material mismatch, reading as a natural fox tail rather than the reference craft object. |
+| warn | vlm_judge_prop_suspect | PROP_POISON_WINE | P010 | VLM 并排判定低分/存疑：identity=2；The reference sheet's defining poison material is a dark reddish-brown clumped powder, but the panel shows the girl pouring a light/white powder from the paper packet into the jar; the jar itself also lacks the reference's clear side loop-handle and reads wider-mouthed than the amphora-style reference jugs. |
+| warn | vlm_judge_prop_suspect | PROP_FAKE_FOX_TAIL | P011 | VLM 并排判定低分/存疑：identity=2；Same drift as P001: the tail hanging from the child's hip is a smooth bright orange-red fox-colored tail with a white tip, not the grey/tan/black rope-bound bristly object shown in the PROP_FAKE_FOX_TAIL anchor. |
 
 ## 记录
 
-- VLM 三轴裁决进度：0/57（生产数据/comic_vlm_judge_verdicts_第2话.json）。
+- VLM 四轴裁决进度：73/73（生产数据/comic_vlm_judge_verdicts_第2话.json）。

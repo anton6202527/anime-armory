@@ -17,13 +17,19 @@ from typing import Any, Mapping, Sequence
 
 SCHEMA_VERSION = 2
 KIND = "comic_identity_registry"
-CHARACTER_TYPES = {"character", "monster"}
+# 生物级（人物 + 一切有脸/有身形、需锁身份的主体）：全档深校验 + 定妆 + 相似度。
+# 2026-07-24 从 {character,monster} 扩到含 beast（走兽异兽）、animal（真实动物），
+# 使「每一个动物/生物都做一致性对比」在注册表层就是一等公民，而非硬塞进 MON_。
+CHARACTER_TYPES = {"character", "monster", "beast", "animal"}
 TIER_VALUES = {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}
 PREFIX_TYPES = {
     "CHAR": "character",
     "MON": "monster",
+    "BEAST": "beast",
+    "ANIMAL": "animal",
     "LOC": "location",
     "PROP": "prop",
+    "WEAPON": "weapon",
     "OUTFIT": "outfit",
     "STYLE": "style",
     "FX": "vfx",

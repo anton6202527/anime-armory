@@ -143,10 +143,16 @@ def analyze(root: str, ep: str) -> Dict[str, Any]:
         model, preprocess, device = _load_clip()
     except Exception as exc:
         return {"available": False, "notes": [f"CLIP 加载失败：{exc}。跳过服装独立维度。"], "shots": []}
-    # Discover character names from identity_registry
-    identity_path = os.path.join(root, "identity_registry.json")
+    # Discover character names from identity_registry.
+    # 2026-07-26 修：此前只读 root/identity_registry.json——项目机器真值在 出图/共享/ 下，
+    # 结果本模块在真实项目上恒 available=False「未找到角色定义」（即使装了 torch+CLIP 也永久休眠）。
     character_names: List[str] = []
-    if os.path.isfile(identity_path):
+    for identity_path in (
+        os.path.join(root, "出图", "共享", "identity_registry.json"),
+        os.path.join(root, "identity_registry.json"),
+    ):
+        if not os.path.isfile(identity_path):
+            continue
         try:
             with open(identity_path, encoding="utf-8") as fh:
                 reg = json.load(fh)
@@ -156,6 +162,8 @@ def analyze(root: str, ep: str) -> Dict[str, Any]:
                     character_names.append(cid)
         except Exception:
             pass
+        if character_names:
+            break
     if not character_names:
         return {"available": False, "notes": ["未找到角色定义（identity_registry.json 缺失或无角色）。"], "shots": []}
     refs = _discover_costume_refs(root, character_names)
@@ -218,8 +226,18 @@ def main(argv: List[str]) -> int:
     ap.add_argument("root", help="作品根目录")
     ap.add_argument("episode", help="集号，如 第1集")
     ap.add_argument("--json", action="store_true", help="输出 JSON")
+    ap.add_argument("--write", action="store_true",
+                    help="落盘 生产数据/costume_consistency_第N集.json（覆盖账本 freshness 读它；无 CLIP 时落 available=False 的休眠证据）")
     ns = ap.parse_args(argv)
     result = analyze(ns.root.rstrip("/"), ns.episode)
+    if ns.write:
+        out = os.path.join(ns.root.rstrip("/"), "生产数据", f"costume_consistency_{ns.episode}.json")
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        with open(out, "w", encoding="utf-8") as fh:
+            json.dump({"kind": "n2d_costume_consistency", "version": 1, "episode": ns.episode, **result},
+                      fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+        print(f"[ok] {out}")
     if ns.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:

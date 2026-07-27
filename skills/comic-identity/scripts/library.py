@@ -20,9 +20,12 @@ IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".avif"}
 TYPE_BY_PREFIX = {
     "CHAR_": "character",
     "MON_": "character",
+    "BEAST_": "character",
+    "ANIMAL_": "character",
     "GROUP_": "character_group",
     "LOC_": "scene",
     "PROP_": "prop",
+    "WEAPON_": "prop",
     "OUTFIT_": "outfit",
     "STYLE_": "style",
     "FX_": "effect",

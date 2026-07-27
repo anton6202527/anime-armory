@@ -4572,14 +4572,50 @@ def test_reality_coverage_image_stage_no_block(tmp_path):
 
 
 def test_reality_coverage_not_applicable_no_block(tmp_path):
-    # 项目没登记 LOC/resident/门窗 → 验证器不适用 → 不要求 → 不 block
+    # 项目没登记 LOC/resident/门窗/CHAR/持久道具 → 验证器全不适用 → 不要求 → 不 block
+    # （2026-07-26 起 CHAR_ 会触发 VAP/COST 适用、PROP_/WEAPON_ 会触发 O3V 适用，故本例只留 VFX_）
     root = tmp_path / "剧"
     d = root / "出图" / "共享"
     d.mkdir(parents=True)
-    (d / "asset_registry.json").write_text('{"assets": [{"id": "CHAR_A"}]}', encoding="utf-8")
+    (d / "asset_registry.json").write_text('{"assets": [{"id": "VFX_烟"}]}', encoding="utf-8")
     gate.findings.clear()
     gate.check_consistency_reality_coverage(str(root), "第1集", "review")
     assert not any(f["dim"] == "现实覆盖" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_reality_coverage_char_dormant_vap_cost_blocks(tmp_path):
+    # 2026-07-26 扩容回归（那妖魔ep1 实证）：登记了 CHAR_/WEAPON_、有待判对象却零裁决 → review BLOCK。
+    # （autorun 会重写 manifest，故预置**带待判对象、无裁决戳**的 sidecar 模拟「生成了任务包没人裁」。）
+    import json as _json
+    root = tmp_path / "剧"
+    d = root / "出图" / "共享"
+    d.mkdir(parents=True)
+    (d / "asset_registry.json").write_text('{"assets": [{"id": "WEAPON_横刀"}]}', encoding="utf-8")
+    (d / "identity_registry.json").write_text('{"characters": [{"id": "CHAR_01"}]}', encoding="utf-8")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "appearance_judge_第1集.json").write_text(
+        _json.dumps({"pairs": [{"shot": "Clip_01", "character": "CHAR_01"}], "findings": []}), encoding="utf-8")
+    (prod / "object_presence_第1集.json").write_text(
+        _json.dumps({"probes": [{"shot": "Clip_01", "expected_assets": [{"asset": "WEAPON_横刀"}]}],
+                     "findings": []}), encoding="utf-8")
+    (prod / "costume_consistency_第1集.json").write_text(
+        _json.dumps({"available": False, "notes": ["CLIP 不可用"], "shots": []}), encoding="utf-8")
+    gate.findings.clear()
+    gate.check_consistency_reality_coverage(str(root), "第1集", "review")
+    blocks = [f for f in gate.findings if f["dim"] == "现实覆盖" and f["sev"] == gate.BLOCK]
+    joined = "\n".join(f["msg"] for f in blocks)
+    assert "外观判官" in joined and "服装独立" in joined and "道具/武器在场" in joined
+    # 裁决后（agent 盖戳/补 findings、CLIP 真跑）→ 不再 block
+    (prod / "appearance_judge_第1集.json").write_text(
+        _json.dumps({"pairs": [{"shot": "Clip_01"}], "findings": [], "adjudicated": True}), encoding="utf-8")
+    (prod / "object_presence_第1集.json").write_text(
+        _json.dumps({"probes": [{"shot": "Clip_01"}], "findings": [], "detector": "owl"}), encoding="utf-8")
+    (prod / "costume_consistency_第1集.json").write_text(
+        _json.dumps({"available": True, "shots": []}), encoding="utf-8")
+    gate.findings.clear()
+    gate.check_consistency_reality_coverage(str(root), "第1集", "review")
+    assert not [f for f in gate.findings if f["dim"] == "现实覆盖" and f["sev"] == gate.BLOCK]
 
 
 # ── 声纹 band=bad 实测硬漂 → BLOCK（音色侧 ArcFace·与脸 G5 对称）─────────────────
@@ -11063,6 +11099,19 @@ def test_drift_report_freshness_pure_function_cases():
     # 覆盖齐全 → 无 finding
     assert gate.drift_report_freshness(
         ["第1集", "第2集"], {"available": True, "episodes": ["第1集", "第2集"]}) == []
+    # 空账（那妖魔实证）：available=true 覆盖齐但 characters=={} → 逐角色漂移零实测的『陈旧绿』→ BLOCK
+    out = gate.drift_report_freshness(
+        ["第1集", "第2集"],
+        {"available": True, "episodes": ["第1集", "第2集"], "characters": {}})
+    assert len(out) == 1 and out[0][0] == gate.BLOCK and "空账" in out[0][1]
+    # 老报告没有 characters 字段 → 不误伤（backcompat）
+    assert gate.drift_report_freshness(
+        ["第1集"], {"available": True, "episodes": ["第1集"]}) == []
+    # characters 有实测内容 → 不触发空账
+    assert gate.drift_report_freshness(
+        ["第1集", "第2集"],
+        {"available": True, "episodes": ["第1集", "第2集"],
+         "characters": {"CHAR_01": {"drift": 0.1}}}) == []
 
 
 def _fresh_write_png(root, ep):
@@ -12428,3 +12477,36 @@ def test_video_evidence_strict_alias_value_and_off_value(tmp_path):
     root_std = _mk_video_strict_root(tmp_path, value="标准")
     row = {"dimension": "视频语义一致(VSEM)", "verdict": "warn", "message": "语义偏离脚本"}
     assert gate._strict_advisory_should_block(root_std, "第1集", "video", row, {})[0] is False
+
+
+def test_check_series_ledger_gate_blocks_unsigned_produced_episode(tmp_path):
+    """季级总账落地：两集都出了图、其中一集没签收 consistency_ledger → review BLOCK。"""
+    import json as _json
+    gate.findings.clear()
+    root = str(tmp_path)
+    for ep in ("第1集", "第2集"):
+        d = os.path.join(root, "出图", ep, "图片")
+        os.makedirs(d, exist_ok=True)
+        with open(os.path.join(d, "Clip_01.png"), "wb") as fh:
+            fh.write(b"x")
+        os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    os.makedirs(os.path.join(root, "生产数据"), exist_ok=True)
+    # 只有第1集有签收账本；第2集出了图但没签收
+    with open(os.path.join(root, "生产数据", "consistency_ledger_第1集.json"), "w", encoding="utf-8") as fh:
+        _json.dump({"counts": {"block": 0, "high": 0, "medium": 0}}, fh)
+    gate.check_series_ledger_gate(root, "第2集")
+    rows = [f for f in gate.findings if f["dim"] == "剧级总账"]
+    assert rows and any(f["sev"] == gate.BLOCK for f in rows)
+    assert any("第2集" in f["msg"] for f in rows if f["sev"] == gate.BLOCK)
+
+
+def test_check_series_ledger_gate_single_episode_no_gate(tmp_path):
+    """单集/首集无跨集语义：不设季级闸（不卡首集）。"""
+    gate.findings.clear()
+    root = str(tmp_path)
+    d = os.path.join(root, "出图", "第1集", "图片")
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "Clip_01.png"), "wb") as fh:
+        fh.write(b"x")
+    gate.check_series_ledger_gate(root, "第1集")
+    assert not [f for f in gate.findings if f["dim"] == "剧级总账"]

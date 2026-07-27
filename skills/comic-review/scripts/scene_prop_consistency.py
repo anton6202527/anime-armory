@@ -7,7 +7,7 @@
   1. 同 scene_anchor 组 contact sheet（LOC_ 锚点参考图在前，出场格并排在后）；
   2. 组内布局指纹（3x3 边缘/亮度网格）离群提示——机位可变、结构不该整格换掉；
   3. PROP_/SYS_/FX_ 并排复核图（参考图 + 出场格）；
-  4. 合并 VLM 三轴任务包的 background_continuity / prop_identity 裁决。
+  4. 合并 VLM 四轴任务包的 location_identity / background_continuity / prop_identity 裁决。
 机检部分全部 warn-only（场景机位变化天然合法），真判断交给并排人审 + VLM 轴。
 """
 from __future__ import annotations
@@ -268,7 +268,7 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
         anchor = panel_scene_anchor(panel)
         if anchor:
             scene_groups.setdefault(anchor, []).append(entry)
-        for prop_id in panel_ref_ids(panel, ("PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_")):
+        for prop_id in panel_ref_ids(panel, ("PROP_", "WEAPON_", "SYS_", "FX_", "VFX_", "OUTFIT_")):
             prop_groups.setdefault(prop_id, []).append(entry)
 
     scenes: list[dict[str, Any]] = []
@@ -353,11 +353,15 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
     if not pillow_ready:
         notes.append("未装 Pillow，场景/道具并排图与布局指纹跳过，只保留结构性检查。")
 
-    # 合并 VLM 三轴的 background / prop 裁决。
+    # 合并 VLM 四轴的 background / prop 裁决。
     try:
         import vlm_judge
 
-        for axis, code in (("background_continuity", "vlm_judge_background_suspect"), ("prop_identity", "vlm_judge_prop_suspect")):
+        for axis, code in (
+            ("location_identity", "vlm_judge_location_suspect"),
+            ("background_continuity", "vlm_judge_background_suspect"),
+            ("prop_identity", "vlm_judge_prop_suspect"),
+        ):
             for item in vlm_judge.suspect_verdicts(root, chapter, axis):
                 task = item["task"]
                 verdict = item["verdict"]
@@ -377,7 +381,7 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
                     evidence_family="vlm_judge",
                 )
         status = vlm_judge.judge_status(root, chapter)
-        notes.append(f"VLM 三轴裁决进度：{status['verdict_count']}/{status['task_count']}（{status['verdict_file']}）。")
+        notes.append(f"VLM 四轴裁决进度：{status['verdict_count']}/{status['task_count']}（{status['verdict_file']}）。")
     except Exception as exc:  # pragma: no cover
         notes.append(f"VLM 并排判定不可用：{exc}")
 

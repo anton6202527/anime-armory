@@ -1,5 +1,5 @@
 {
-  "_agent_guidance": "像真实编剧整体改良：① 砍/合 tangent_candidates 里的琐碎支线以突出主情节；② 补还或删除 foreshadow_debt 里埋了没还的伏笔；③ mainline_gaps 处把主线承接点接回 spine.depends_on；④ 不合理点写进 story_spine.continuity_fixes（最小改动+no_contradiction_proof）。所有改动落回 story_spine.json 的 threads[].decision/connectivity 与 continuity_fixes，再跑 story_spine.py check 做防瞎编+衔接硬校验。禁止臆造任何 id；改后主线必须仍衔接。",
+  "_agent_guidance": "像真实编剧整体改良：① 砍/合 tangent_candidates 里的琐碎支线以突出主情节；② 补还或删除 foreshadow_debt 里埋了没还的伏笔；③ mainline_gaps 处把主线承接点接回 spine.depends_on；④ unreasonable_beats 逐条核对原著：真是硬伤就写进 story_spine.continuity_fixes（最小改动+no_contradiction_proof+touches_protected 标注），是原著本有合理铺垫或有意为之就在 revision_ledger 记 dismiss 理由。所有改动落回 story_spine.json 的 threads[].decision/connectivity 与 continuity_fixes，再跑 story_spine.py check 做防瞎编+衔接硬校验。禁止臆造任何 id；改后主线必须仍衔接。unreasonable_beats 全是候选不是定论——不得据它凭空加情节，只能核原著后做最小修补或标注。",
   "consumes": [
     "设定库/source_comprehension.json",
     "开发包/story_spine.json"
@@ -24,17 +24,49 @@
       "suggestion": "受保护伏笔，必须补还回收，不能砍"
     }
   ],
-  "generated_at": "2026-07-24T07:07:52+00:00",
+  "generated_at": "2026-07-25T06:21:42+00:00",
   "inputs_missing": [],
   "kind": "n2d_editorial_revision_worksheet",
   "mainline_gaps": [],
-  "revision_ledger": [],
-  "status": "draft",
+  "revision_ledger": [
+    {
+      "action": "dismiss",
+      "causal_id": "SRC_CAUSE_004",
+      "note": "不合理点候选（ungrounded_cause）核对原著后不成立：第1章百妖谱现身与规则展示先于其驱动杀裴决策；改编第1集 CLIP07 亦以『绝境触发→卷轴展开→规则同屏』完成入画。残余的前向风险已落 story_spine.continuity_fixes[0]（新规则先入画再驱动决策）。来源/上限/代价长线由 THREAD_SYSTEM compress 合同调度，SRC_FORESHADOW_002 保持 open 不受影响。",
+      "source_trace": [
+        "SRC_CAUSE_004",
+        "SRC_FORESHADOW_002"
+      ]
+    },
+    {
+      "action": "compress",
+      "note": "机检提案 compress 采纳：贡献分低（无伏笔承载、无主线因果依赖）但 serves_mainline 指明其供给集尾钩——故压缩篇幅而非整线砍除，功能节拍保留。已同步改 story_spine.threads[THREAD_QINGMIAN].decision=compress 并补 connectivity 证明。",
+      "reroute": "保留『当众叫破假身份』节拍作前弧集尾钩，其余独立威胁戏份并入狼妖弧主冲突呈现。",
+      "target_thread_id": "THREAD_QINGMIAN"
+    },
+    {
+      "action": "schedule_payoff",
+      "foreshadow_id": "SRC_FORESHADOW_001",
+      "note": "按合同 payoff_plan（随镇魔司调查与姜家线逐步回收）保持 open 并延后：当前窗口（前5集）不硬塞身世揭示；THREAD_JIANG 已按 compress 合同承载释放节奏。非砍除，兑现义务不变。"
+    },
+    {
+      "action": "schedule_payoff",
+      "foreshadow_id": "SRC_FORESHADOW_002",
+      "note": "按合同 payoff_plan（先展示可验证规则、来源延后、每次新能力增补合同）延后：第1集已入画三条可验证规则；来源/上限/代价随狼妖弧新能力需要时增量释放（story_spine.continuity_fixes[0] 前向护栏同口径）。"
+    },
+    {
+      "action": "schedule_payoff",
+      "foreshadow_id": "SRC_FORESHADOW_003",
+      "note": "按合同 payoff_plan（在镇魔司追查、伪装身份与良知压力中持续推进）延后：第3集埋尸告别与取衣是本伏笔的持续推进拍（EP03_CLIP02 沉默半拍），全量回收在镇魔司追查线，不在当前窗口结清。"
+    }
+  ],
+  "status": "reviewed",
   "summary": {
     "foreshadow_debt": 3,
     "mainline_gaps": 0,
     "tangent_candidates": 1,
-    "threads_scored": 8
+    "threads_scored": 8,
+    "unreasonable_beats": 1
   },
   "tangent_candidates": [
     {
@@ -134,6 +166,15 @@
       "pays_protected": [],
       "score": -2,
       "thread_id": "THREAD_PROSE"
+    }
+  ],
+  "unreasonable_beats": [
+    {
+      "cause": "百妖谱给出斩杀结算规则",
+      "evidence": "此因果的 cause 与此前所有因果/伏笔/动机零重叠——可能缺前因（天降）。",
+      "kind": "ungrounded_cause",
+      "suggestion": "核对原著是否在更早处铺垫了此因；若确缺，补一处前因锚或在 continuity_fixes 记最小修补。",
+      "trace_id": "SRC_CAUSE_004"
     }
   ],
   "version": 1

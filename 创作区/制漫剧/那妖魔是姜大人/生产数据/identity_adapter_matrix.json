@@ -1,8 +1,8 @@
 {
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
-  "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-21T19:59:30+00:00",
+  "root": ".",
+  "generated_at": "2026-07-26T08:48:03+00:00",
   "summary": {
     "forms": 3,
     "forms_with_reference_group_ready": 3,
@@ -12,7 +12,10 @@
     "forms_with_gaps": 0,
     "anchor_fingerprint": "f4bb3f44a5afc0d9406dfaaa6c72650a06374c24d532af278516d223d76afe55",
     "forms_with_anchor_pinned": 3,
-    "characters_needing_lora_upgrade": []
+    "characters_needing_lora_upgrade": [
+      "CHAR_01",
+      "CHAR_02"
+    ]
   },
   "forms": [
     {

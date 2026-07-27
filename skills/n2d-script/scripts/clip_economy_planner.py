@@ -81,6 +81,20 @@ COMPLEXITY_BUDGET_PER_MIN = {
 ACTION_BUDGET_ALLOWANCE_PER_CLIP = 0.5  # 每个动作/奇观镜多给的每分钟生成额度
 ACTION_BUDGET_ALLOWANCE_CAP = 2.0
 
+# ── 绝对 clip 数预算（治「简单叙事 clip 数太多」的独立轴）──
+# 上面的 takes/min 只治「一个 clip 拆几次付费生成」；治不了「本集被作者拆成太多 clip」。
+# clip 数是在 storyboard 编排期就定死的（一节拍一 clip），后续省次数工具只并 take、不减 clip。
+# 简单叙事应「更少更长的多镜单拍」——用每分钟 clip 数上限（按复杂度分档）单独把这条兜住。
+COMPLEXITY_CLIP_BUDGET_PER_MIN = {
+    "simple": 6.0,
+    "standard": 8.0,
+    "complex": 11.0,
+}
+# 「每个 clip 简短点」轴：clip 时长超单次生成窗口会被拆成多段付费 part。
+# 一个 clip 被拆成 ≥ 此段数就点名——建议把该 beat 写短（≤单次窗口一段成）或合并镜位，
+# 直接减 part 数（用户诉求「每个独立生成 clip 再简短点」）。
+LONG_CLIP_PART_FLAG_THRESHOLD = 3
+
 # 片段经济强度选择点（镜像 主线剪枝 的 advisory/enforce 语义）：
 #   保守（默认/未设置）= 仅建议不阻断，兼容老项目；
 #   紧凑 = 超复杂度预算且有可采纳的合并/单拍省次数 → --strict 阻断；
@@ -119,8 +133,11 @@ def classify_complexity(
         if loc:
             locations.add(loc)
         for c in clip.get("character_ids") or []:
-            if str(c).strip():
-                characters.add(str(c).strip())
+            # storyboard 惯例 "CHAR_01/囚服残损态"：斜杠后是状态后缀，不是另一个角色。
+            # 不剥后缀会把单角色多状态数成多人、虚抬复杂度档（实证：第3集 4 实体被数成 8）。
+            base = str(c).strip().split("/", 1)[0].strip()
+            if base:
+                characters.add(base)
         if _high_risk(clip):
             action_clips += 1
         cid = clip_id(clip, i)
@@ -491,8 +508,19 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
     complexity["applied_budget_per_min"] = budget_per_min
     savings_available = bool(merge_groups or single_take_candidates or fold_candidates)
     over_budget = takes_per_min is not None and takes_per_min > budget_per_min
-    # 阻断只在 enforce 档（紧凑/极简）且超预算且有可采纳省次数时成立——可执行、不死锁。
-    should_block = bool(enforce and over_budget and savings_available)
+    # ── 绝对 clip 数轴（治「简单叙事 clip 太多」）──
+    clip_budget_per_min = round(COMPLEXITY_CLIP_BUDGET_PER_MIN[complexity["class"]] * budget_scale, 2)
+    complexity["clip_budget_per_min"] = clip_budget_per_min
+    clips_per_min = round(len(clips) / minutes, 2) if minutes else None
+    clips_over_budget = clips_per_min is not None and clips_per_min > clip_budget_per_min
+    # ── 「每个 clip 简短点」轴：点名被拆成多段付费 part 的长 clip（沉没成本已生成的不计）──
+    long_clips = [
+        {"clip": row["clip"], "duration_sec": row["duration_sec"], "estimated_takes": row["estimated_takes"]}
+        for row in per_clip
+        if int(row.get("estimated_takes") or 0) >= LONG_CLIP_PART_FLAG_THRESHOLD and row["clip"] not in generated
+    ]
+    # 阻断只在 enforce 档（紧凑/极简）且超预算（生成密度或 clip 数任一）且有可采纳省次数时成立——可执行、不死锁。
+    should_block = bool(enforce and (over_budget or clips_over_budget) and savings_available)
 
     findings: List[Dict[str, Any]] = []
     if over_budget:
@@ -518,6 +546,35 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
                 f"当前每分钟预计生成 {takes_per_min} 次（> 兜底 {DENSITY_WARN_PER_MIN:g}/min）。"
                 f"多镜叙事后端（快照 {CAPABILITY_SNAPSHOT_DATE}）单次可承载多个镜位；"
                 f"按下方 merge/fold 候选合并后约 {projected_per_min}/min。"
+            ),
+        })
+    if clips_over_budget:
+        # clip 数超预算与 take 密度超预算是两条正交轴：前者治「作者拆了太多 clip」，
+        # 后者治「一个 clip 拆几次生成」。二者可各自独立触发。
+        clip_should_block = bool(enforce and savings_available)
+        findings.append({
+            "severity": "block" if clip_should_block else "warn",
+            "code": "clip_count_over_budget",
+            "confidence": "heuristic",
+            "message": (
+                f"本集复杂度={complexity['class']}，却有 {len(clips)} 个 clip"
+                f"（{clips_per_min}/min > clip 数预算 {clip_budget_per_min}/min）。"
+                "简单叙事应把相邻节拍并成「更少更长的多镜单拍」，而不是一节拍一 clip。"
+                + ("片段经济=" + mode_label + " 档：先按下方 merge/fold 候选把 clip 数压进预算（改 storyboard）再进贵工位。"
+                   if clip_should_block else "考虑合并相邻同景 clip 以减少 clip 总数（沉没成本已生成的不追溯）。")
+            ),
+        })
+    if long_clips:
+        preview = ", ".join(f"{c['clip']}({c['duration_sec']}s→{c['estimated_takes']}段)" for c in long_clips[:6])
+        findings.append({
+            "severity": "warn",
+            "code": "long_clips_force_part_split",
+            "confidence": "heuristic",
+            "message": (
+                f"{len(long_clips)} 个 clip 时长超单次生成窗口，被拆成 ≥{LONG_CLIP_PART_FLAG_THRESHOLD} 段付费 part："
+                f"{preview}{'…' if len(long_clips) > 6 else ''}。"
+                "「每个独立生成 clip 再简短点」：把这些 beat 写短到单次窗口一段成，或合并内部镜位"
+                "（take_policy=single_take_multishot），直接减 part 数。时长/节奏改动属阶段2签收变更，本脚本不自动改写。"
             ),
         })
     if sunk_cost_skipped:
@@ -561,6 +618,10 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "economy_mode": mode_label,
         "budget_per_min": budget_per_min,
         "over_budget": over_budget,
+        "clips_per_minute": clips_per_min,
+        "clip_budget_per_min": clip_budget_per_min,
+        "clips_over_budget": clips_over_budget,
+        "long_clips_forcing_parts": len(long_clips),
     }
     return {
         "kind": KIND,
@@ -574,9 +635,12 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "merge_groups": merge_groups,
         "fold_candidates": fold_candidates,
         "single_take_candidates": single_take_candidates,
+        "long_clips": long_clips,
         "findings": findings,
         "rules": [
+            "两条正交预算：takes/min（一个 clip 拆几次生成）与 clips/min（本集被拆成几个 clip）。前者靠 merge/单拍省，后者靠合并相邻节拍减 clip 数。",
             "生成次数预算按集看，不只按单 Clip 时长看：简单叙事优先「更少更长的多镜单拍」而不是逐节拍独立 clip。",
+            "长 clip（超单次生成窗口、被拆成多段付费 part）会被点名 shorten：把 beat 写短到单次窗口一段成，直接减 part 数（用户诉求「每个独立生成 clip 再简短点」）。",
             "已生成视频的 Clip 是沉没成本：不进省次数候选、不触发 enforce 阻断；进行中的集不追溯返工，返工走 n2d-update 最小重制。",
             "合并候选只提案不执行：改 storyboard 是签收产物变更，须编剧在阶段2精修确认。",
             "高动作模板/锚链/奇观镜不进合并候选：安全拆分与锚帧链优先于省次数（与 shot_split_decision 同口径）。",

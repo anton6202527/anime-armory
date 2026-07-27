@@ -377,3 +377,56 @@ def test_video_out_field_also_marks_sunk_cost():
     plan = CEP.build_plan(root, "第1集")
     assert plan["summary"]["sunk_cost_clips"] == 1
     assert plan["single_take_candidates"] == []
+
+
+def test_clip_count_over_budget_warns_for_simple_narrative():
+    # 8 个短 clip、简单叙事（1 场景/1 角色）→ clip 数超预算，但未设 enforce → warn。
+    root = _mk_storyboard([_clip(i) for i in range(1, 9)])
+    plan = CEP.build_plan(root, "第1集")
+    s = plan["summary"]
+    assert s["complexity"]["class"] == "simple"
+    assert s["clips_over_budget"] is True
+    codes = {(f["code"], f["severity"]) for f in plan["findings"]}
+    assert ("clip_count_over_budget", "warn") in codes
+    assert plan["should_block"] is False  # 保守/未设置不阻断
+
+
+def test_clip_count_over_budget_blocks_under_enforce_with_savings():
+    # 紧凑档 + clip 数超预算 + 有可采纳合并（相邻同景）+ 未生成 → block。
+    root = _mk_with_settings([_clip(i) for i in range(1, 9)], "- 片段经济：紧凑\n")
+    plan = CEP.build_plan(root, "第1集")
+    assert plan["summary"]["clips_over_budget"] is True
+    assert plan["summary"]["merge_groups"] >= 1  # savings available
+    block_codes = {f["code"] for f in plan["findings"] if f["severity"] == "block"}
+    assert "clip_count_over_budget" in block_codes
+    assert plan["should_block"] is True
+
+
+def test_long_clip_forcing_parts_is_flagged():
+    # 20s 单 clip 会被拆成多段付费 part → long_clips_force_part_split。
+    root = _mk_storyboard([_clip(1, duration=20.0), _clip(2, duration=5.0)])
+    plan = CEP.build_plan(root, "第1集")
+    assert plan["summary"]["long_clips_forcing_parts"] >= 1
+    assert any(f["code"] == "long_clips_force_part_split" for f in plan["findings"])
+    assert any(c["clip"] == "Clip_01" for c in plan["long_clips"])
+
+
+def test_long_clip_flag_excludes_sunk_cost_generated():
+    # 已生成的长 clip 是沉没成本，不点名 shorten（不追溯返工）。
+    root = _mk_storyboard([_clip(1, duration=20.0), _clip(2, duration=5.0)])
+    _touch_video(root, 1)
+    plan = CEP.build_plan(root, "第1集")
+    assert all(c["clip"] != "Clip_01" for c in plan["long_clips"])
+
+
+def test_state_suffix_variants_count_as_one_character():
+    # "CHAR_01/囚服态" 与 "CHAR_01/制服态" 是同一角色的两个状态，不得数成两人虚抬复杂度。
+    clips = [
+        _clip(1, character_ids=["CHAR_01/囚服态", "CHAR_02/遗体态"]),
+        _clip(2, character_ids=["CHAR_01/制服态", "CHAR_03"]),
+    ]
+    root = _mk_storyboard(clips)
+    plan = CEP.build_plan(root, "第1集")
+    cx = plan["summary"]["complexity"]
+    assert cx["distinct_characters"] == 3  # CHAR_01/02/03
+    assert cx["class"] == "simple"

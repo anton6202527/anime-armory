@@ -164,12 +164,12 @@ def panel_reference_ids(panel_script: dict) -> set[str]:
                 continue
             for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id"):
                 ref_id = str(binding.get(key) or "").strip()
-                if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
+                if ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_", "LOC_", "PROP_", "WEAPON_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
                     ids.add(ref_id)
         for key in ("references", "characters"):
             for raw in panel.get(key) or []:
                 ref_id = str(raw).strip()
-                if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
+                if ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_", "LOC_", "PROP_", "WEAPON_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
                     ids.add(ref_id)
     return ids
 
@@ -206,7 +206,7 @@ def panel_refs(panel: dict) -> list[str]:
 
 
 def panel_character_refs(panel: dict) -> list[str]:
-    return [ref_id for ref_id in panel_refs(panel) if ref_id.startswith(("CHAR_", "MON_"))]
+    return [ref_id for ref_id in panel_refs(panel) if ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_"))]
 
 
 def panel_character_count(panel: dict) -> int:

@@ -1,0 +1,1536 @@
+{
+  "schema_version": 2,
+  "kind": "comic_vlm_judge_verdicts",
+  "chapter": "第2话",
+  "updated_at": "2026-07-24T20:06:29",
+  "verdicts": [
+    {
+      "task_id": "P001__CHAR_JIA_CHILD__character",
+      "panel_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+      "task_sha256": "82c3986062ecd66b234a7adf774df522bb08bd24a46ec6b22833b007b9584044",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Bun+bangs hairstyle, round face/eyes, and blue duijin jacket with frog buttons over cream underlayer match the CHAR_JIA_CHILD reference sheets exactly."
+    },
+    {
+      "task_id": "P001__MON_FOX_SERVANT__character",
+      "panel_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+      "task_sha256": "b5b2346ca39e851e9061f79ba7e64f5d8b2cd6bf3a3f1baa586b30ebccf4d092",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Topknot with loose strands, goatee, and tattered brown robe with jagged torn hem over dark undergarment match MON_FOX_SERVANT reference precisely; tall lanky build consistent."
+    },
+    {
+      "task_id": "P001__LOC_MARKET_STREET__location",
+      "panel_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+      "task_sha256": "c704927798882221da8eb513486dfe5f872e5c891db08dc62208208be836ac55",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Stone/brick shopfronts, hanging fabric banners, tiled roofs and muted grey misty palette match the anchor; this shot frames a hat stall vs. the anchor's pottery stall, a plausible different angle of the same market."
+    },
+    {
+      "task_id": "P001__PROP_FAKE_FOX_TAIL__prop",
+      "panel_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+      "task_sha256": "895c24ea36f3c73824ec225af4ec5f4ec6997a94e190b3d195f82310439e6e2e",
+      "references_sha256": {
+        "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 2,
+        "placement": 4
+      },
+      "verdict": "suspect",
+      "notes": "PROP_FAKE_FOX_TAIL anchor is a grey-tan/black rope-bound bristly costume piece, but the panel shows a smooth bright orange-red tail with a distinct white tip tucked in the belt — a clear color/material mismatch, reading as a natural fox tail rather than the reference craft object."
+    },
+    {
+      "task_id": "P006__CHAR_JIA_CHILD__character",
+      "panel_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+      "task_sha256": "ce1ecc34fdff73528de387e33b211d8ade78f018cdfaaab3ffe743fac268e332",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Child at the gate holding the lantern matches CHAR_JIA_CHILD reference in face, hairstyle, and blue jacket; night lighting doesn't affect identity."
+    },
+    {
+      "task_id": "P006__CHAR_JIA_FATHER__character",
+      "panel_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+      "task_sha256": "1e32914b3f945982b4b5407aa63bc8fa5252df7d965fb5bbfc989076f7a568b1",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_FATHER__face.png": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
+        "出图/共享/图片/CHAR_JIA_FATHER__front.png": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+        "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Black wrapped headscarf, goatee, and brown wrap robe with teal-grey sash bracing the door bar match CHAR_JIA_FATHER reference exactly."
+    },
+    {
+      "task_id": "P006__LOC_JIA_HOME__location",
+      "panel_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+      "task_sha256": "51c904b4d43a90546b64f039ba6d66c8613ce5704d27fd691cb8fd09837b25e8",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Heavy wooden plank gate with sliding latch bar, stone entry steps, and tiled roofline match the LOC_JIA_HOME anchor's main gate view directly."
+    },
+    {
+      "task_id": "P004__P006__background",
+      "panel_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+      "task_sha256": "d0fc6ace15e0c9de1d5380ddb20e5ee7607cf90075660449faf8218d43fdb06c",
+      "references_sha256": {
+        "出图/第2话/panels/P004.png": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 3,
+        "lighting": 4,
+        "axis": 3
+      },
+      "verdict": "pass",
+      "notes": "P004 (child alone fighting a fox indoors near a bed/window) and P006 (father+child at the exterior gate) are different rooms of the same home with no directly overlapping geometry to verify strict axis continuity, but timber/wall material and warm-lamp-vs-dark-exterior lighting scheme are consistent."
+    },
+    {
+      "task_id": "P011__CHAR_JIA_CHILD__character",
+      "panel_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "task_sha256": "5221e076466b8591ca43cea4220335c18c873457c9d26b165437c70e907c22c1",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Seen from a rear three-quarter angle in the market crowd; visible partial profile, hairstyle and blue jacket match reference, face score slightly lowered only due to limited angle visibility."
+    },
+    {
+      "task_id": "P011__MON_FOX_SERVANT__character",
+      "panel_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "task_sha256": "65d3e75a93cf74daef8cc52bd9062df0cc844882a3af9d18567f515c77fc880f",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Tattered brown robe with torn hem, long hair topknot, and tall build walking ahead in the market match MON_FOX_SERVANT reference."
+    },
+    {
+      "task_id": "P011__LOC_MARKET_STREET__location",
+      "panel_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "task_sha256": "0e323f2e2cfb5968d64869c43bcc2f08fa46b3108fb0ea29d9a3ca70a2abcc3c",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Hat-stall shelves, hanging banners, jars on tables, and cobblestone street match the anchor's market architecture and era."
+    },
+    {
+      "task_id": "P010__P011__background",
+      "panel_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "task_sha256": "b3b2b547fbc6c3209dd037706749d33c224466f169bcda840b9e5f5c80856e08",
+      "references_sha256": {
+        "出图/第2话/panels/P010.png": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "Both panels share the same overcast grey misty palette, stone steps, and background market storefronts/awnings; camera moved from a low kneeling angle to a walking crowd shot without contradicting the established layout."
+    },
+    {
+      "task_id": "P011__PROP_FAKE_FOX_TAIL__prop",
+      "panel_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "task_sha256": "4345b3e1df42130ed5680ef8453249a37f5532b2a8de0f0394311c348fcc8f1c",
+      "references_sha256": {
+        "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 2,
+        "placement": 4
+      },
+      "verdict": "suspect",
+      "notes": "Same drift as P001: the tail hanging from the child's hip is a smooth bright orange-red fox-colored tail with a white tip, not the grey/tan/black rope-bound bristly object shown in the PROP_FAKE_FOX_TAIL anchor."
+    },
+    {
+      "task_id": "P016__CHAR_JIA_CHILD__character",
+      "panel_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "task_sha256": "a440b71b30563ec20366848f0a50c91c9fafb42cd7ac96988d871448951e2a11",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Standing in the garden holding the fur bundle, face, bun/bangs, and blue jacket match CHAR_JIA_CHILD reference exactly."
+    },
+    {
+      "task_id": "P016__CHAR_JIA_FATHER__character",
+      "panel_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "task_sha256": "6b47fe699efe456eddd8283bae3616b0993badd9e6acd5518efdc57eda009df6",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_FATHER__face.png": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
+        "出图/共享/图片/CHAR_JIA_FATHER__front.png": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+        "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Kneeling father with headscarf, goatee, and brown robe matches CHAR_JIA_FATHER reference precisely."
+    },
+    {
+      "task_id": "P016__LOC_HE_GARDEN__location",
+      "panel_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "task_sha256": "fc70fd763cfafc3a697258c345f80777d807f8ad89ad3ad0a0837b9244105708",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Bamboo grove, round stone moon-gate wall, and gravel garden path match the LOC_HE_GARDEN anchor's structure; time-of-day shifted from moonlit night to golden dawn, which is an allowed lighting variation."
+    },
+    {
+      "task_id": "P015__P016__background",
+      "panel_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "task_sha256": "1f89309fd3aff0ce68c899cde5f1c2cfba487c7fa550d1d69fd6cf34c954d8d6",
+      "references_sha256": {
+        "出图/第2话/panels/P015.png": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 3,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "Same round moon-gate wall and bamboo remain on the right side of frame across both panels (axis preserved); lighting shifted from blue moonlit night (P015) to warm golden dawn (P016), a large but not contradictory time-of-day change."
+    },
+    {
+      "task_id": "P016__PROP_FAKE_FOX_TAIL__prop",
+      "panel_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "task_sha256": "62902035b00b17758a076645e8a19c23bdbb97cb8ee66e5cd8dd89acf217170f",
+      "references_sha256": {
+        "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 4,
+        "placement": 5
+      },
+      "verdict": "pass",
+      "notes": "The fur bundle held between father and child is grey-tan/brown bristly, matching the anchor's color palette much more closely than the belt tail seen in P001/P011; the rope-segment binding is less distinct at this scale but no species/color swap is evident."
+    },
+    {
+      "task_id": "P002__CHAR_JIA_CHILD__character",
+      "panel_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+      "task_sha256": "54085d1f8a132eac6449af3b92370c3fe5ca4e0c6eda65bad5c3cafb4cbe3d08",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "前景女孩：发髻+刘海、藏青对襟外衣配米白内衬、卡其束脚裤、深色布鞋，与四张定妆图完全一致。"
+    },
+    {
+      "task_id": "P002__CHAR_JIA_MOTHER__character",
+      "panel_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+      "task_sha256": "7140537b4076ab065df76ee10357d0bff8cf18ea9d0daa2a0762246c031464f9",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_MOTHER__face.png": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
+        "出图/共享/图片/CHAR_JIA_MOTHER__front.png": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+        "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "室内人物为逆光剪影，仅可辨认低发髻与瘦削体型轮廓，与参考大致吻合，但脸部/衣着细节因背光无法确认，建议人工复核。"
+    },
+    {
+      "task_id": "P002__MON_FOX_BROTHERS__character",
+      "panel_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+      "task_sha256": "50e693d6528e7ec7d3bc093e28cda8c9547ea1414aa7e3d11534f2863ed23c5d",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+        "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 2,
+        "outfit": 2,
+        "build": 1
+      },
+      "verdict": "suspect",
+      "notes": "室内剪影中被母亲搂抱的是一个体型娇小、头顶有两个尖耳状轮廓的孩童体态角色，与参考图中两位成年男子（无兽耳、成人身材、着长袍）完全不符，疑似被画成了另一种（幼态/兽耳）形象。"
+    },
+    {
+      "task_id": "P002__LOC_JIA_HOME__location",
+      "panel_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+      "task_sha256": "d6a49b7081fab51befaa83ff2ee9e3d8530b61e6ce0794c4ed522a24aeb7e4a7",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "瓦顶木柱檐廊、白灰砖墙、格窗、木门五金与石阶台面与定妆锚图的院落主景一致，属同一民居形制。"
+    },
+    {
+      "task_id": "P007__CHAR_JIA_CHILD__character",
+      "panel_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "task_sha256": "502caa3d2e13cb322579c8a39ddfcccf6ebdc5f050c5115f237fca3d76e0f824",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "竹丛后蹲伏偷看的女孩发髻/刘海/藏青外衣/米白内衬/卡其裤与定妆图一致。"
+    },
+    {
+      "task_id": "P007__MON_FOX_BROTHERS__character",
+      "panel_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "task_sha256": "5895d6bb85e8a95fe0777ac279c1ddde3b912a3b379813850e9eefe473923add",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+        "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "凉亭石桌旁二人：左为褐色长袍、右为藏蓝长袍，发髻样式与脸型与参考完全一致，服装颜色分配也对应参考左右次序。"
+    },
+    {
+      "task_id": "P007__MON_FOX_SERVANT__character",
+      "panel_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "task_sha256": "3fe02007d654a08e6a80359f5408130ad5728f0598cee1b11cddec8f4fa5bc59",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "捧壶行走的男子破边褐色长袍、散发挽髻的轮廓与参考一致；因夜景距离较远面部细节（须型）无法完全确认，建议复核。"
+    },
+    {
+      "task_id": "P007__LOC_HE_GARDEN__location",
+      "panel_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "task_sha256": "79e3c3d763e91e075ca5dbf97d3de751a7a0a30dd45042f06eae79c9b6e7709e",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "竹丛、月洞门、廊道石径与围墙形制与锚图一致，仅机位/月色氛围不同。"
+    },
+    {
+      "task_id": "P005__P007__background",
+      "panel_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "task_sha256": "8a017aa217d466662a7cb5c0ae594fd4b618f0cf150901b02383811bb1863568",
+      "references_sha256": {
+        "出图/第2话/panels/P005.png": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 3,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "两格均可见月洞门居右、竹丛居左、通往凉亭的石径，空间布局与轴线一致；但P005为拂晓冷灰光、P007为夜间月光+灯笼暖光，光调差异明显，建议人工确认是否为刻意的昼夜转换。"
+    },
+    {
+      "task_id": "P012__CHAR_JIA_CHILD__character",
+      "panel_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "task_sha256": "a5c54e4b102ceb05312ce8e5cb5a22419fd2b002f2c4ed274427af63c8c10290",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "集市中女孩发髻/刘海/五官与定妆图一致，藏青外衣款式一致（腰间多系一条道具狐尾，不影响角色识别）。"
+    },
+    {
+      "task_id": "P012__MON_FOX_SERVANT__character",
+      "panel_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "task_sha256": "ee7701d242c9a1245207cf39bd70149da63f7358f28666d933f14ca1c95ca0df",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "弯腰打量女孩的老者：蓬乱发髻、破边褐色外袍、缠布腿型与定妆图一致。"
+    },
+    {
+      "task_id": "P012__LOC_MARKET_STREET__location",
+      "panel_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "task_sha256": "fa04f5be739ecd8e88065f74433c634e856497fd71605f65dc9c721e961da2b0",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "布幡招牌、木构店铺、货架陶罐、斗笠货架与石板路与锚图市集形制一致。"
+    },
+    {
+      "task_id": "P011__P012__background",
+      "panel_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "task_sha256": "7e19660362f9e199ee2b7dd30cd0bc6a0c1252d2505c6c8491cbd26e7fa7c921",
+      "references_sha256": {
+        "出图/第2话/panels/P011.png": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 3
+      },
+      "verdict": "pass",
+      "notes": "斗笠架、陶罐、木构布幡等市集元素在两格中重复出现，整体冷灰日光基调一致；P012取景收窄为店铺一角，与P011宽街全景相比机位跳跃较大，轴线延续性建议复核。"
+    },
+    {
+      "task_id": "P012__PROP_FAKE_FOX_TAIL__prop",
+      "panel_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "task_sha256": "0b45eb32611edeb67f45f2c913f60d1cce8979f58f26175bf6336dbe45730924",
+      "references_sha256": {
+        "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 4,
+        "placement": 4
+      },
+      "verdict": "pass",
+      "notes": "女孩腰间系挂的蓬松尾巴（白尖）造型与锚图长尾道具一致，系带方式相符，仅毛色略偏橙棕（锚图偏灰褐），细微差异不影响识别。"
+    },
+    {
+      "task_id": "P012__PROP_POISON_WINE__prop",
+      "panel_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "task_sha256": "7015889c9335cac262fbf977e09c474e3352aab4453dbe4ae9ad76294d304f7c",
+      "references_sha256": {
+        "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 4,
+        "placement": 4
+      },
+      "verdict": "pass",
+      "notes": "女孩左手所提圆腹陶罐器型与锚图酒壶基本一致（圆肩窄口、把手），持握姿势合理；把手细节因画面较小略难完全确认。"
+    },
+    {
+      "task_id": "P003__CHAR_JIA_CHILD__character",
+      "panel_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+      "task_sha256": "1094e10b4f8c48dc4000153a368ee144e5cef86fe19ad1dba4855bcb901c405c",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Child in doorway matches all four turnaround refs: same round face/hairline with bun+bangs, blue frog-button jacket over cream inner layer, tan trousers, dark cloth shoes, and child-sized proportions."
+    },
+    {
+      "task_id": "P003__CHAR_JIA_MOTHER__character",
+      "panel_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+      "task_sha256": "fefb2fa0b60bb187ecf2482a782ca913513ae2eac1758a48f516ce0cd9d0ffcf",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_MOTHER__face.png": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
+        "出图/共享/图片/CHAR_JIA_MOTHER__front.png": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+        "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Mother is shown fully back-turned so the face cannot be directly confirmed against reference, but the bun hairstyle, cream wrap blouse over a dark long skirt with sash, and adult build all match the reference set with no contradicting evidence."
+    },
+    {
+      "task_id": "P003__LOC_JIA_HOME__location",
+      "panel_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+      "task_sha256": "59344e0dc31787fd97543d1c92e46e06825dc5e5b7037cc9361865904660daf2",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Interior beams, tile floor, wooden bed/stool furniture, lattice window, and the glimpse of a tiled-roof courtyard through the open door all match the LOC_JIA_HOME anchor's interior/exterior sub-views of the same rural courtyard house."
+    },
+    {
+      "task_id": "P002__P003__background",
+      "panel_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+      "task_sha256": "5675933b6da078de8dc1a170e7f7f1b14ee4b19eb703eadd3cb3918ee27ff163",
+      "references_sha256": {
+        "出图/第2话/panels/P002.png": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 5,
+        "lighting": 5,
+        "axis": 5
+      },
+      "verdict": "pass",
+      "notes": "P003 reuses the identical room layout as P002 -- same workbench with lamp and cleaver, same bed/stool/jar placement, same window-left/door-right axis, and same warm-lamp vs cool-window light sources -- continuity fully preserved."
+    },
+    {
+      "task_id": "P008__CHAR_JIA_CHILD__character",
+      "panel_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+      "task_sha256": "13ff6077285efb211b263fb0fac694b6b2b777ac365ad2ec649d8af17b401683",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Child peeking through bamboo is seen from behind/side (face largely hidden) but the bun-with-ribbon hairstyle, blue jacket, and small build match the reference set with no contradicting evidence."
+    },
+    {
+      "task_id": "P008__MON_FOX_SERVANT__character",
+      "panel_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+      "task_sha256": "7dc15fb045db9ce9e5875a8173d7ef586830baede3575cedfebffbb6dd0f89ab",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Seated man matches reference exactly: topknot, goatee/beard, tattered brown wrap robe over dark trousers with wrapped shins, sandals, and crucially the same bushy reddish-brown fox tail -- correctly kept as a human-with-tail hybrid, not drifted into a plain animal."
+    },
+    {
+      "task_id": "P008__LOC_HE_GARDEN__location",
+      "panel_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+      "task_sha256": "e47abd8d2ca2a24d802ccfcb1952521db11e19ce40c322e5f395445123594dd8",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Bamboo grove, pitted scholar's rock, distant tiled-roof courtyard buildings, and full-moon night lighting all match the LOC_HE_GARDEN anchor's garden setting."
+    },
+    {
+      "task_id": "P007__P008__background",
+      "panel_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+      "task_sha256": "3768ff70d3798950784212c5aa44f806ac037cb77a930b97dd476df13f8f6a86",
+      "references_sha256": {
+        "出图/第2话/panels/P007.png": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 5,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "Camera moves from the pavilion/moon-gate view (P007) to the rock/bamboo view (P008), but the same full moon in the upper right, bamboo on the left, warm lantern-lit buildings in the background, and night-garden color grading carry over consistently."
+    },
+    {
+      "task_id": "P013__CHAR_JIA_CHILD__character",
+      "panel_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "task_sha256": "ec06a2f8a7e836a521c79c6a70515c467d1743586a7c49fba51f6f796bd61782",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Child in the market street matches the reference set closely: same face/eyes, bun-with-bangs hairstyle, blue frog-button jacket, tan trousers, dark shoes, and child proportions."
+    },
+    {
+      "task_id": "P013__MON_FOX_SERVANT__character",
+      "panel_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "task_sha256": "05a4306ebc716aa0105df1b4ba0c8f3283d2b4f021b75768b8e10346bed32c2a",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "Bearded, topknotted man in tattered brown robe matches reference face/outfit exactly; the fox tail is not visible in this bent-forward pose (likely occluded by the robe), a small unconfirmed detail rather than a contradiction, and a fox-eared shadow is cast on the wall behind him reinforcing his identity."
+    },
+    {
+      "task_id": "P013__LOC_MARKET_STREET__location",
+      "panel_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "task_sha256": "c8009dbb9b02c0194fe73365ce06733fc779488908ccd1d51dda356eec4e230e",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Hanging tattered shop banner, wooden stall with jars/pottery on a table, cobblestone street receding into fog toward a distant gate tower all match the LOC_MARKET_STREET anchor's market street."
+    },
+    {
+      "task_id": "P012__P013__background",
+      "panel_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "task_sha256": "4dc4b7d7d0443edb2c5da08b8bc74ce177aa8a4d7757ef19c6b610213e54968e",
+      "references_sha256": {
+        "出图/第2话/panels/P012.png": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "Camera pulls back from the close doorway two-shot (P012) to a wider street view with stalls (P013), but the same foggy sepia color grading, stone wall material, and pottery/jar dressing continue consistently without any axis flip."
+    },
+    {
+      "task_id": "P013__PROP_POISON_WINE__prop",
+      "panel_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "task_sha256": "87fecc00b13518af5ea95151c9b9ed765bd5871c9677302a081e39b0281b36d9",
+      "references_sha256": {
+        "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 4,
+        "placement": 5
+      },
+      "verdict": "pass",
+      "notes": "Child carries a rounded tan stoneware jug with narrow neck matching the reference jug's silhouette and material; the reference's integrated loop handle reads as a rope tie in the panel, a minor rendering difference rather than a different vessel type, and it is held appropriately in the child's hand."
+    },
+    {
+      "task_id": "P004__CHAR_JIA_CHILD__character",
+      "panel_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+      "task_sha256": "09bb82d878420a3c6148fa8a1ccf31b5dba47771b1f118a0eda36fd8c7f77d8a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "发髻+刘海、藏青短袄铜扣、卡其阔腿裤与四张定妆图完全一致,面部五官比例吻合,判定同一角色。"
+    },
+    {
+      "task_id": "P004__MON_FOX_BROTHERS__character",
+      "panel_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+      "task_sha256": "c8cc1e29813390d602b74b3cfcbc3d5cadfae9666276defaa1f90c9bcb5abc23",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+        "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "本格画的是狐妖真身(全橘红毛色、白尖尾、尾根带血伤),与定妆图人形化身背后露出的狐尾毛色/形状吻合,判断为剧情内的真身现形而非物种漂移;但因参考图只提供人形定妆、无真狐形态锚图,面部特征无法逐一核对,建议留意此类变身镜头。"
+    },
+    {
+      "task_id": "P004__LOC_JIA_HOME__location",
+      "panel_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+      "task_sha256": "124dc206b428012242571ea492f55d8af3c698b3327b626c30af80ea76bc1a69",
+      "references_sha256": {
+        "出图/共享/图片/LOC_JIA_HOME__anchor.png": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "木格窗棂、矮几花瓶、木门与青砖地面同定妆锚中室内房间陈设风格一致,仅具体陈设排布随镜位略有出入,不影响认景。"
+    },
+    {
+      "task_id": "P003__P004__background",
+      "panel_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+      "task_sha256": "d3030ecf7104ac3fb395e70a97af896785cea0b59aa9ad7f975438981969aff0",
+      "references_sha256": {
+        "出图/第2话/panels/P003.png": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 5
+      },
+      "verdict": "pass",
+      "notes": "窗、床、木门方位与前格P003一致,暖色油灯主光源同样来自画面左下,轴线延续未翻转,仅几案位置随镜位小幅平移。"
+    },
+    {
+      "task_id": "P009__CHAR_JIA_CHILD__character",
+      "panel_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "task_sha256": "094a1049aae148f4bf4e944e17bb2324c5d5bf815ee22a2c0bae50a302fad130",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "侧脸发髻刘海、藏青短袄、卡其裤与深蓝布鞋均与定妆图一致,体型比例正常童体,判定同一角色。"
+    },
+    {
+      "task_id": "P009__LOC_MARKET_STREET__location",
+      "panel_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "task_sha256": "0c1a6b5fa45dbe41c7645fa486357e2ceb859cd2005dfb7d10582ed4eab74210",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "青石板路面、木构摊棚、悬挂布幡及陶罐器物与场景锚气质一致,仅本格为摊位近景特写,建筑元素与定妆锚同源。"
+    },
+    {
+      "task_id": "P001__P009__background",
+      "panel_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "task_sha256": "f9a072b169087e36a6ad42e9e488152b5130f8a34ca7d5e13f93801f581ebddd",
+      "references_sha256": {
+        "出图/第2话/panels/P001.png": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "两格同属阴天散射光的市集环境,木构摊位、货架与石板地面风格延续,机位从人物对话中景切到货摊特写,未见轴线翻转。"
+    },
+    {
+      "task_id": "P009__PROP_FAKE_FOX_TAIL__prop",
+      "panel_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "task_sha256": "26388dcfa95584b38fed6a64d2b6b2b6e80924805ad502b4c516be4ef8260228",
+      "references_sha256": {
+        "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 4,
+        "placement": 5
+      },
+      "verdict": "pass",
+      "notes": "货架悬挂的毛尾状物件、绳结分段捆扎方式与定妆锚一致,仅毛色偏橘红(定妆锚偏灰褐)属细节小偏差,女孩伸手取挂位置合理。"
+    },
+    {
+      "task_id": "P009__PROP_POISON_WINE__prop",
+      "panel_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "task_sha256": "88eac8d54a8b963242c7698ad8996caadcc735907587ca86702e12eb9bc2bb70",
+      "references_sha256": {
+        "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 5,
+        "placement": 5
+      },
+      "verdict": "pass",
+      "notes": "陶罐鼓腹造型、单侧把手与罐口布巾捆扎同定妆锚完全一致,由男孩双手递交给狐妖装扮的商贩,持有关系合理。"
+    },
+    {
+      "task_id": "P014__CHAR_JIA_CHILD__character",
+      "panel_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "task_sha256": "cdb6eba1174c7a6ecd9e47b4bdcb11fbc4b76fb3ac27041d1dfab4993e5f1bef",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "发髻刘海、藏青短袄、卡其裤与定妆图完全一致,手提陶罐姿态未改变角色识别度。"
+    },
+    {
+      "task_id": "P014__MON_FOX_SERVANT__character",
+      "panel_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "task_sha256": "d3baa2ab416232a1042dbfc6a6134449f7180840fc49d5e829d04aa99c8c3fff",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "络腮胡、发髻、破烂棕色长袍与深色绑腿裤同定妆完全一致;墙上投影露出狐耳暗示妖身,属剧情伏笔而非绘制漂移。"
+    },
+    {
+      "task_id": "P014__LOC_MARKET_STREET__location",
+      "panel_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "task_sha256": "478df8f624b77a3b5515cf26a431b019e91dfb538aa8696386b2a60de4c5c562",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "石墙巷弄、木构棚摊、陶罐货架与场景锚建筑气质一致,本格取景更贴近墙角小巷,属机位差异非换景。"
+    },
+    {
+      "task_id": "P013__P014__background",
+      "panel_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "task_sha256": "69bcc7f3acd92e1a683c0428fa46a974179e709d45c231cb86c489ea98627a90",
+      "references_sha256": {
+        "出图/第2话/panels/P013.png": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "两格同为市集巷弄,阴天散射光与木构建筑元素延续,男孩与商贩相对位置及轴线关系未翻转。"
+    },
+    {
+      "task_id": "P014__PROP_POISON_WINE__prop",
+      "panel_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "task_sha256": "2c7959f8020a6e28e5ff7458baab59b045d3ef4f5f01da691a54f81c4486ef07",
+      "references_sha256": {
+        "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 4,
+        "placement": 5
+      },
+      "verdict": "pass",
+      "notes": "男孩手提绳系陶罐鼓腹造型与定妆锚一致,仅画面尺寸略小,持握方式(绳提)合理不改变器型。"
+    },
+    {
+      "task_id": "P005__CHAR_JIA_CHILD__character",
+      "panel_sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a",
+      "task_sha256": "26de09f31abf628b7238aba24ea14a6fcc1c0c1057271b45b1400bcad1ed0941",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Girl in P005 has identical top-bun-with-ribbon hairstyle, bangs, blue frog-button jacket over cream undergarment, tan trousers, and dark cloth shoes matching all four CHAR_JIA_CHILD reference sheets; face shape and eyes match closely."
+    },
+    {
+      "task_id": "P005__LOC_HE_GARDEN__location",
+      "panel_sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a",
+      "task_sha256": "fda7e1d1b182077edeb13aaa9891ee0f90403711882b9dfca861865a94ed3023",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "Same perforated scholar's rock silhouette, bamboo grove, and cracked stone path/brick wall appear in both; panel additionally shows a round moon-gate not clearly visible in the anchor frame, but this reads as a different vantage of the same garden (day vs. night lighting differs as permitted)."
+    },
+    {
+      "task_id": "P010__CHAR_JIA_CHILD__character",
+      "panel_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "task_sha256": "2cff2ef78791d77a031be88e1576710ec2a896e825609a9c28eade5ad00237e5",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Kneeling girl retains the same bun/ribbon hair, blue toggle-button jacket with waist tie, cream inner layer, tan trousers and dark shoes as the reference sheets; face proportions match."
+    },
+    {
+      "task_id": "P010__LOC_MARKET_STREET__location",
+      "panel_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "task_sha256": "dfb60137069d230313ab924dabb2787e0f73b282cdb10ae8aa849c59913e1cb9",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_STREET__anchor.png": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "Wooden stall shelving with stacked ceramic jars, hanging cloth banners, stone-paved street and hazy sky match the market-street anchor; panel view is a stall interior/threshold rather than open street, but architecture and wares are consistent."
+    },
+    {
+      "task_id": "P009__P010__background",
+      "panel_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "task_sha256": "0a047225fadb4730b236ad03fbf66236cd844f38430d1141fe4c953457f276d6",
+      "references_sha256": {
+        "出图/第2话/panels/P009.png": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "P010 continues the same stall/steps threshold glimpsed at the back of P009's frame; ambient overcast light and warm interior lamp glow carry over consistently, camera has simply pushed in without contradicting the established space."
+    },
+    {
+      "task_id": "P010__PROP_FAKE_FOX_TAIL__prop",
+      "panel_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "task_sha256": "c0fbbaee0ad43e3f3cee0aad26321e9a64fa027a2aa8353eabd7c7e57d86042a",
+      "references_sha256": {
+        "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 3,
+        "placement": 4
+      },
+      "verdict": "pass",
+      "notes": "A rope-bound furry tapered tail lies beside a straw broom on the ground, matching the reference's two-part tail+bundle set in construction, but its color reads solid orange/white in the panel versus the reference's grey/black/white banding -- likely explained by the scene's warm indoor lamp lighting, worth a spot-check."
+    },
+    {
+      "task_id": "P010__PROP_POISON_WINE__prop",
+      "panel_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "task_sha256": "9de1639f671da8b0f9633dfc7fa52e4de7b993ddd7fff1006af7f4e459fbe147",
+      "references_sha256": {
+        "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 5,
+        "identity": 2,
+        "placement": 4
+      },
+      "verdict": "suspect",
+      "notes": "The reference sheet's defining poison material is a dark reddish-brown clumped powder, but the panel shows the girl pouring a light/white powder from the paper packet into the jar; the jar itself also lacks the reference's clear side loop-handle and reads wider-mouthed than the amphora-style reference jugs."
+    },
+    {
+      "task_id": "P015__CHAR_JIA_CHILD__character",
+      "panel_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "task_sha256": "2805741f6800de1c513bdcaf3daed8598aef4b9207420f3fcd553301d817700e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_JIA_CHILD__face.png": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+        "出图/共享/图片/CHAR_JIA_CHILD__front.png": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+        "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+        "出图/共享/图片/CHAR_JIA_CHILD__side.png": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Girl holding the lantern retains the bun-with-ribbon hairstyle, blue jacket with waist sash, tan trousers and dark shoes seen in all reference sheets; the ribbon reads more blue-toned here but that is consistent with the night moonlight color grading."
+    },
+    {
+      "task_id": "P015__MON_FOX_BROTHERS__character",
+      "panel_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "task_sha256": "4c6e4779d8e60e9b0a4d5f5380cd0ed012c7395a0446dc827ecd7509949ddd44",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_BROTHERS__face.png": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+        "出图/共享/图片/MON_FOX_BROTHERS__front.png": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 2,
+        "outfit": 2,
+        "build": 3
+      },
+      "verdict": "suspect",
+      "notes": "No humanoid figures matching the MON_FOX_BROTHERS reference (brown/grey robed twin men) appear in this panel at all -- only three collapsed ordinary-looking red foxes are visible on the ground; this is very plausibly an intentional 'true fox form revealed in death' story beat (three dead foxes = two brothers + one servant, consistent with the poison-wine plot in P010), but it cannot be visually confirmed against the humanoid reference sheet, so flagging for manual script confirmation rather than treating as a confirmed error."
+    },
+    {
+      "task_id": "P015__MON_FOX_SERVANT__character",
+      "panel_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "task_sha256": "48f8fece7e5c926ce08c1157da49e07f774a7d34fbb6e20e388e9bcc72c9df51",
+      "references_sha256": {
+        "出图/共享/图片/MON_FOX_SERVANT__face.png": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+        "出图/共享/图片/MON_FOX_SERVANT__front.png": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 2,
+        "outfit": 2,
+        "build": 3
+      },
+      "verdict": "suspect",
+      "notes": "Same issue as MON_FOX_BROTHERS: the ragged-robed, goateed, fox-tailed servant seen in the reference sheet (and matching the man in P008) does not appear humanoid here -- only three dead ordinary-looking foxes are present. Likely an intentional true-form-in-death reveal given the poison-wine setup, but not visually verifiable against the humanoid reference, so flagged for manual confirmation."
+    },
+    {
+      "task_id": "P015__LOC_HE_GARDEN__location",
+      "panel_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "task_sha256": "f35cfe6da7f40ddfc7d23399278e58d075fa92fed66d048770f7b7d759f0b231",
+      "references_sha256": {
+        "出图/共享/图片/LOC_HE_GARDEN__anchor.png": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "Bamboo grove, scholar's rock, stone path, upturned-eave pavilion roof and round moon-gate all match the anchor's garden elements and night moonlit color grading; consistent with the same location as P008."
+    },
+    {
+      "task_id": "P008__P015__background",
+      "panel_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "task_sha256": "81124ef3f484b5139696ab845415ce2270837d369873086a70f8ddd7f44c64d5",
+      "references_sha256": {
+        "出图/第2话/panels/P008.png": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "Both panels place the lit pavilion and round gate on the right/background with the bamboo grove framing the left foreground and the moon lighting the scene from above with warm lantern glow from the pavilion window; camera has moved but the spatial arrangement is preserved."
+    },
+    {
+      "task_id": "P015__PROP_POISON_WINE__prop",
+      "panel_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "task_sha256": "545589cbb30442d198389a63334de0a4999e2dcdd5ec3b47e03ebf8517a65eda",
+      "references_sha256": {
+        "出图/共享/图片/PROP_POISON_WINE__anchor.png": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "presence": 3,
+        "identity": 3,
+        "placement": 3
+      },
+      "verdict": "pass",
+      "notes": "A small dark rounded container with a chain is visible on the ground near the foreground fox, but it is small, dimly lit, and rendered in dark night tones, so it cannot be confidently confirmed as the same ceramic poison-wine jug from the reference sheet; recommend a manual close-up check rather than treating as a confirmed match or mismatch."
+    }
+  ]
+}

@@ -105,10 +105,63 @@ def test_hard_gate_with_no_ccip_and_zero_verdicts_blocks(tmp_path: Path) -> None
 
 
 def test_hard_gate_with_live_ccip_keeps_warn(tmp_path: Path) -> None:
-    """CCIP 活着时身份轴有机检，0 裁决只 warn 不 block。"""
+    """CCIP 活着且只有角色轴任务时，0 裁决只 warn 不 block（角色轴有 CCIP 兜底）。"""
     write_tasks_file(tmp_path, "第1话", 3)
     (tmp_path / "_设置.md").write_text("- 角色一致性硬闸: 开启\n", encoding="utf-8")
     findings: list = []
     gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"ccip": True}}, findings, [])
+    unadjudicated = [item for item in findings if item["code"] == "vlm_judge_unadjudicated"]
+    assert unadjudicated and unadjudicated[0]["severity"] == "warn"
+
+
+def write_axis_tasks_file(root: Path, chapter: str, axis_counts: dict[str, int]) -> None:
+    """按轴构造任务包：judge_status 会据 axis 字段聚合 by_axis。"""
+    path = root / "生产数据" / f"comic_vlm_judge_tasks_{chapter}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tasks = []
+    i = 0
+    for axis, count in axis_counts.items():
+        for _ in range(count):
+            tasks.append({"task_id": f"T{i}", "axis": axis, "panel": {"sha256": "x"},
+                          "task_sha256": f"ts{i}", "references_sha256": {}})
+            i += 1
+    path.write_text(json.dumps({"tasks": tasks}, ensure_ascii=False), encoding="utf-8")
+
+
+def test_hard_gate_live_ccip_blind_background_axis_blocks(tmp_path: Path) -> None:
+    """聊斋实证回归：硬闸开启 + CCIP 已装，但 background/location 轴 0 裁决 —— CCIP 覆盖不到场景，
+    这些轴完全空转，「背景该是虎妖画成别的生物」类漂移必须 block，不准因 CCIP 活着降 warn。"""
+    write_axis_tasks_file(tmp_path, "第1话", {"character_identity": 32, "background_continuity": 14, "location_identity": 5})
+    (tmp_path / "_设置.md").write_text("- 角色一致性硬闸: 开启\n", encoding="utf-8")
+    findings: list = []
+    gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"pillow": True, "ccip": True}}, findings, [])
+    unadjudicated = [item for item in findings if item["code"] == "vlm_judge_unadjudicated"]
+    assert unadjudicated and unadjudicated[0]["severity"] == "block"
+    assert "background_continuity" in unadjudicated[0]["reason"] or "location_identity" in unadjudicated[0]["reason"]
+
+
+def test_hard_gate_partial_coverage_but_prop_axis_blind_blocks(tmp_path: Path) -> None:
+    """角色轴全裁决、但道具轴一条没裁决：整体覆盖过半看着没事，实则道具轴空转，硬闸下 block。"""
+    write_axis_tasks_file(tmp_path, "第1话", {"character_identity": 2, "prop_identity": 3})
+    (tmp_path / "_设置.md").write_text("- 角色一致性硬闸: 开启\n", encoding="utf-8")
+    verdicts = {"verdicts": [
+        {"task_id": "T0", "panel_sha256": "x", "task_sha256": "ts0", "references_sha256": {},
+         "verdict": "pass", "evaluator": {"model": "m", "version": "v"}},
+        {"task_id": "T1", "panel_sha256": "x", "task_sha256": "ts1", "references_sha256": {},
+         "verdict": "pass", "evaluator": {"model": "m", "version": "v"}},
+    ]}
+    (tmp_path / "生产数据" / "comic_vlm_judge_verdicts_第1话.json").write_text(json.dumps(verdicts), encoding="utf-8")
+    findings: list = []
+    gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"pillow": True, "ccip": True}}, findings, [])
+    blind = [item for item in findings if item["code"] == "vlm_judge_axis_blind"]
+    assert blind and blind[0]["severity"] == "block"
+    assert "prop_identity" in blind[0]["reason"]
+
+
+def test_soft_gate_blind_axis_stays_warn(tmp_path: Path) -> None:
+    """硬闸关闭时不升 block：advisory 语义，0 裁决仍是 warn。"""
+    write_axis_tasks_file(tmp_path, "第1话", {"background_continuity": 5})
+    findings: list = []
+    gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"pillow": True, "ccip": True}}, findings, [])
     unadjudicated = [item for item in findings if item["code"] == "vlm_judge_unadjudicated"]
     assert unadjudicated and unadjudicated[0]["severity"] == "warn"

@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "kind": "comic_scene_prop_consistency",
-  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/聊斋志异",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/聊斋志异",
   "chapter": "第2话",
-  "created_at": "2026-07-22T15:20:44",
+  "created_at": "2026-07-24T20:06:47",
   "available": true,
-  "verdict": "pass",
+  "verdict": "warn",
   "summary": {
     "scene_anchor_count": 3,
     "prop_count": 3,
-    "finding_count": 0,
+    "finding_count": 3,
     "block_count": 0,
-    "warn_count": 0,
+    "warn_count": 3,
     "info_count": 0
   },
   "scenes": [
@@ -253,8 +253,45 @@
       "contact_sheet": "生产数据/qa_previews/第2话_prop_PROP_POISON_WINE_sheet.jpg"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_FAKE_FOX_TAIL",
+      "panel_id": "P001",
+      "artifact": "出图/第2话/panels/P001.png",
+      "reason": "VLM 并排判定低分/存疑：identity=2；PROP_FAKE_FOX_TAIL anchor is a grey-tan/black rope-bound bristly costume piece, but the panel shows a smooth bright orange-red tail with a distinct white tip tucked in the belt — a clear color/material mismatch, reading as a natural fox tail rather than the reference craft object.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_POISON_WINE",
+      "panel_id": "P010",
+      "artifact": "出图/第2话/panels/P010.png",
+      "reason": "VLM 并排判定低分/存疑：identity=2；The reference sheet's defining poison material is a dark reddish-brown clumped powder, but the panel shows the girl pouring a light/white powder from the paper packet into the jar; the jar itself also lacks the reference's clear side loop-handle and reads wider-mouthed than the amphora-style reference jugs.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_FAKE_FOX_TAIL",
+      "panel_id": "P011",
+      "artifact": "出图/第2话/panels/P011.png",
+      "reason": "VLM 并排判定低分/存疑：identity=2；Same drift as P001: the tail hanging from the child's hip is a smooth bright orange-red fox-colored tail with a white tip, not the grey/tan/black rope-bound bristly object shown in the PROP_FAKE_FOX_TAIL anchor.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    }
+  ],
   "notes": [
-    "VLM 三轴裁决进度：0/57（生产数据/comic_vlm_judge_verdicts_第2话.json）。"
+    "VLM 四轴裁决进度：73/73（生产数据/comic_vlm_judge_verdicts_第2话.json）。"
   ]
 }

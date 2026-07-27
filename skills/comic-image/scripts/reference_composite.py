@@ -51,7 +51,7 @@ def _pil():
 
 def composable_subject(record: dict[str, Any]) -> str:
     rid = str(record.get("id") or "")
-    if rid.startswith(("CHAR_", "MON_")):
+    if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
         return rid
     return ""
 

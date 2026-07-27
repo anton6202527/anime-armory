@@ -234,6 +234,7 @@ def write(root: str, ep: str) -> str:
         try:
             with open(path, encoding="utf-8") as fh:
                 manifest = cap_vlm_findings(json.load(fh))
+            manifest["adjudicated"] = True  # 覆盖账本 freshness 戳：batch 真跑过（哪怕 findings 全空=全过）
             with open(path, "w", encoding="utf-8") as fh:
                 json.dump(manifest, fh, ensure_ascii=False, indent=2)
                 fh.write("\n")

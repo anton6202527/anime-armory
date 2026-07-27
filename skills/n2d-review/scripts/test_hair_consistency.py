@@ -82,3 +82,14 @@ def test_same_image_high_sim_recolored_low(tmp_path):
     red_b = make((205, 35, 35))
     blue = make((30, 30, 210))     # 发色大改（红→蓝）
     assert hc.hair_sim(red_a, red_b) > hc.hair_sim(red_a, blue)
+
+
+def test_implausibility_downgrade_pure():
+    """度量自证护栏（那妖魔ep1 实证：floor 0.9817 vs score 0.086）：落差≥0.6 的 block 更像
+    头部裁切失真而非发型漂移 → 降 warn 交人判；中等落差（真漂档）不动。"""
+    import hair_consistency as hc
+    assert hc.implausibility_downgrade("block", 0.086, 0.9817) == "warn"   # 实证案例
+    assert hc.implausibility_downgrade("block", 0.55, 0.9817) == "block"   # 中等落差=真漂嫌疑，保持
+    assert hc.implausibility_downgrade("block", 0.30, 0.85) == "block"     # 0.55 落差 < 0.6，保持
+    assert hc.implausibility_downgrade("warn", 0.086, 0.9817) == "warn"    # 只降 block，不动 warn
+    assert hc.implausibility_downgrade("ok", 0.9, 0.95) == "ok"

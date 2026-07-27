@@ -69,7 +69,7 @@ NON_STRONG_EXPRESSION_INTENSITIES = {
     "neutral", "low", "medium", "subtle", "moderate",
     "中性", "低", "中", "轻微", "中等",
 }
-CHARACTER_PREFIXES = ("CHAR_", "MON_")
+CHARACTER_PREFIXES = ("CHAR_", "MON_", "BEAST_", "ANIMAL_")
 ASSET_PREFIX_TYPES = {
     "LOC_": "location",
     "PROP_": "prop",
@@ -160,7 +160,7 @@ def panel_character_ids(panel: Mapping[str, Any]) -> List[str]:
     for key in ("references", "characters", "character_ids"):
         for raw in panel.get(key) or []:
             rid = str(raw or "").split("/", 1)[0].strip()
-            if rid.startswith(("CHAR_", "MON_")) and rid not in ids:
+            if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) and rid not in ids:
                 ids.append(rid)
     return ids
 
@@ -372,7 +372,7 @@ def plan_character_in_panel(
     # 对四足兽/蛇类要锁的是体表、鳞毛与解剖，不应伪造服装阻断。
     outfit_ids = char.get("outfit_ids") if isinstance(char.get("outfit_ids"), (set, list, tuple)) else set()
     panel_outfit = str(char.get("panel_outfit_id") or "").strip()
-    is_wearable_character = str(char.get("asset_type") or "character").strip().lower() == "character" and not cid.startswith("MON_")
+    is_wearable_character = str(char.get("asset_type") or "character").strip().lower() == "character" and not cid.startswith(("MON_", "BEAST_", "ANIMAL_"))
     if panel_outfit and is_wearable_character:
         outfit_ref = str((char.get("outfit_refs") or {}).get(panel_outfit) or "").strip()
         if outfit_ref and outfit_ref not in have_paths:
@@ -586,7 +586,7 @@ def load_characters(registry: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     assets = registry.get("assets") if isinstance(registry.get("assets"), Mapping) else {}
     out: Dict[str, Dict[str, Any]] = {}
     for cid, asset in assets.items():
-        if not isinstance(asset, Mapping) or not str(cid).startswith(("CHAR_", "MON_")):
+        if not isinstance(asset, Mapping) or not str(cid).startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
             continue
         views = dict(asset.get("views") or {})
         # reference_images 里的 anchor/view 兜底进 views（older schema 无独立 views 时）。
@@ -620,7 +620,7 @@ def load_characters(registry: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
 
         out[str(cid)] = {
             "id": str(cid),
-            "asset_type": str(asset.get("type") or ("monster" if str(cid).startswith("MON_") else "character")),
+            "asset_type": str(asset.get("type") or ({"MON_": "monster", "BEAST_": "beast", "ANIMAL_": "animal"}.get(str(cid).split("_", 1)[0] + "_", "character"))),
             "display_name": str(asset.get("display_name") or cid),
             "tier": str(asset.get("library_tier") or asset.get("tier") or "core_full"),
             "scope": str(asset.get("scope") or ""),

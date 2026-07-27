@@ -1,0 +1,1274 @@
+{
+  "schema_version": 2,
+  "kind": "comic_vlm_judge_verdicts",
+  "chapter": "第1话",
+  "updated_at": "2026-07-24T08:19:48",
+  "verdicts": [
+    {
+      "task_id": "P001__MON_PAINTED_SKIN__character",
+      "panel_sha256": "25a49acc75860fe1a3b0cff1c7d473f12bac432921bbd227e9c6de7f13c5d0f1",
+      "task_sha256": "3dab3205fae278afb75c0da322adccb6ab25f433dc895a74b2a15762c1364a60",
+      "references_sha256": {
+        "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Gaunt skull-like face with bared teeth, long stringy dark hair, greenish emaciated skeletal torso and tattered waist wrap match the anchor's true monster form closely."
+    },
+    {
+      "task_id": "P001__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "25a49acc75860fe1a3b0cff1c7d473f12bac432921bbd227e9c6de7f13c5d0f1",
+      "task_sha256": "7aff7bcd1d78b0c87b44ecd64ecc77796c9789673add84e87720d7fb61e8b9b7",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "This is an interior room, not the courtyard exterior itself, but the wood-lattice paper window over a brick sill and dark-wood furnishings are consistent with the anchor's construction materials and era; reads as inside the same residence complex."
+    },
+    {
+      "task_id": "P005__CHAR_WANG__character",
+      "panel_sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885",
+      "task_sha256": "37a93b36ba50f21f887c5c4849834a1c92e3f2e498e803dc344e82a945956072",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "This is the sliver of a man peeking through a door at night, wearing a dark-blue/grey robe consistent with the reference, but only one eye and brow are visible and he wears a wrapped black headscarf rather than the reference's flat squared cap with ribbon — plausible as an undressed night look but worth a human glance."
+    },
+    {
+      "task_id": "P005__MON_PAINTED_SKIN__character",
+      "panel_sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885",
+      "task_sha256": "5ce2d92a637481c180a7aae5dfcda23b098a2e679f2ee01f3694eb990378c9c4",
+      "references_sha256": {
+        "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Ghoul holding up the painted skin cloak in front of the bookshelf shows the same gaunt skeletal build, long dark hair and greenish tattered wrap as the anchor's true form."
+    },
+    {
+      "task_id": "P005__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885",
+      "task_sha256": "55f3f84bf618bb4efc8f8e3363c70a41f7dd6a53cd63b46c3c1fe5bafb16be76",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 3,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "This shows an enclosed study with bookshelf/writing desk rather than the courtyard exterior; material palette (dark wood, paper lattice, warm lamp light) is consistent with the anchor's era/materials though the specific structure can't be directly cross-checked against the exterior shot."
+    },
+    {
+      "task_id": "P003__P005__background",
+      "panel_sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885",
+      "task_sha256": "224edfde803644980301ada833c056ff80f6142e9bb7477034105bf753daa61a",
+      "references_sha256": {
+        "出图/第1话/panels/P003.png": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 3,
+        "lighting": 3,
+        "axis": 3
+      },
+      "verdict": "pass",
+      "notes": "P003 shows an open door to a sunlit courtyard plus a curtained daybed on the right; P005's study framing shows a bookshelf and writing desk instead — same dark-wood/warm-lamp interior style but the specific furniture layout isn't directly verifiable as the same room, worth a look."
+    },
+    {
+      "task_id": "P009__CHAR_DAOIST__character",
+      "panel_sha256": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c",
+      "task_sha256": "2799611ba616bf7d90ff4c9a6a72dd732f672237a3b59c9039c351f4e8876a8c",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 4,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Same bearded elder with topknot and grey-blue robe as the reference; he wields a sword and jug instead of the reference's fly-whisk, a props change for this action beat, not a costume/identity drift."
+    },
+    {
+      "task_id": "P009__MON_PAINTED_SKIN__character",
+      "panel_sha256": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c",
+      "task_sha256": "793ef983071e505492c2f69791494b2984e9ef5c8a5035e26ebf966e7b22859e",
+      "references_sha256": {
+        "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "The exorcised creature retains the anchor's gaunt greenish skeletal form, long dark hair and tattered wrap; correctly kept as the ghoul form rather than being simplified into a mundane creature."
+    },
+    {
+      "task_id": "P009__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c",
+      "task_sha256": "61fb67932151bf5ed9962dda7eb47b5cbd90438024175059a08b39565f8947ce",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "Grey brick walls, tiled roofline, stone-paved courtyard floor, potted plants, and the alley receding to further brick buildings all match the anchor almost exactly."
+    },
+    {
+      "task_id": "P008__P009__background",
+      "panel_sha256": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c",
+      "task_sha256": "1d78b898e1860b7c762e2eda91c31bcb95857676d88b187bbc88b6eee2fa8faf",
+      "references_sha256": {
+        "出图/第1话/panels/P008.png": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 2,
+        "lighting": 2,
+        "axis": 2
+      },
+      "verdict": "suspect",
+      "notes": "P008 is an enclosed dim interior bedroom (bed, hanging curtain, small candlelit side table) while P009 is a bright open exterior brick courtyard/alley with tiled roofs — this is not a camera move within one room but a jump to an entirely different physical space, so layout/lighting/axis do not carry over at all."
+    },
+    {
+      "task_id": "P013__CHAR_CHEN__character",
+      "panel_sha256": "e49d03b98cb56647097d93d91158fe6851138a713ea43f9950808008510a295a",
+      "task_sha256": "2db70407b55beba8407a6fac7817ae58785c3970afb958cfbf04c34d6541200c",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 4,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Reference shows hair in a neat low bun; here in this grief/rescue beat her hair is loose and flowing, understandable emotional-state variation but a visible hairstyle departure from the anchor worth a glance; robe tone and slender build otherwise consistent."
+    },
+    {
+      "task_id": "P013__CHAR_WANG__character",
+      "panel_sha256": "e49d03b98cb56647097d93d91158fe6851138a713ea43f9950808008510a295a",
+      "task_sha256": "9932edce22e2a26075264594a6d4da6bee186b365bbb4336582cf17b5588a86b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "Man lying wounded on the bed shows the same facial structure and dark blue-grey robe as the reference; black head covering reads consistent with the reference cap even lying down."
+    },
+    {
+      "task_id": "P013__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "e49d03b98cb56647097d93d91158fe6851138a713ea43f9950808008510a295a",
+      "task_sha256": "3596a347d6dca184a7ae932524f80083f9252a8983014cb17b18c7147c6c044a",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 3,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "Interior bedroom with wood bed frame and hanging fabric drapery, consistent dark-wood/era material palette with the exterior anchor though the exact structure isn't directly comparable to an outdoor shot."
+    },
+    {
+      "task_id": "P012__P013__background",
+      "panel_sha256": "e49d03b98cb56647097d93d91158fe6851138a713ea43f9950808008510a295a",
+      "task_sha256": "ef76962ae7c5b804bc59452fe27f4172fe341284b3230089c08313355fd18d7e",
+      "references_sha256": {
+        "出图/第1话/panels/P012.png": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "Both panels show the same bed with matching frame/headboard style, a hanging curtain in the same position, and warm low candlelight — consistent continuation of the same bedroom as the story beat advances."
+    },
+    {
+      "task_id": "P002__CHAR_WANG__character",
+      "panel_sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8",
+      "task_sha256": "7c712ad5cfc76df084fff1eee932b54b3a503b2c20d82281e47636d44aac8c09",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Same black scholar cap, teal-grey robe with white collar and dark sash, and slim build as reference; face angled/downcast in panel but consistent hairline and features."
+    },
+    {
+      "task_id": "P002__MON_PAINTED_SKIN__character",
+      "panel_sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8",
+      "task_sha256": "fd343f692b113bbca80dc6475de23f6e6b10bd2054239eea6e37ba5c223132bd",
+      "references_sha256": {
+        "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Panel shows the human-disguise form matching the anchor's left figure: same loose long hair with top hairpin, mauve/red wrap top over blue-grey pleated skirt, slender build."
+    },
+    {
+      "task_id": "P002__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8",
+      "task_sha256": "f630557d3407e7588e3f04a27651292e8cc61621feb6d2ded9f072a8993aba06",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 1,
+        "materials": 2,
+        "era": 4
+      },
+      "verdict": "suspect",
+      "notes": "Anchor is a private brick courtyard residence with tiled roof, lattice windows and a canal; panel P002 is an open-air market street with awning stalls and a distant city gate tower — a different building type/location entirely, not merely a different camera angle."
+    },
+    {
+      "task_id": "P001__P002__background",
+      "panel_sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8",
+      "task_sha256": "0d81e9c754c13f7eee3e8b9909f77ab3a3be01a07809bfd98049ba6993d425af",
+      "references_sha256": {
+        "出图/第1话/panels/P001.png": "25a49acc75860fe1a3b0cff1c7d473f12bac432921bbd227e9c6de7f13c5d0f1"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 1,
+        "lighting": 1,
+        "axis": 2
+      },
+      "verdict": "suspect",
+      "notes": "P001 is a night-time interior room (monster painting a portrait at a desk by lamplight); P002 is a daytime outdoor market street — no shared layout, light direction, or axis between the two panels."
+    },
+    {
+      "task_id": "P006__CHAR_WANG__character",
+      "panel_sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52",
+      "task_sha256": "86635aeeaa166b04dcc00cffcf67fc087aa976706f2375e0568f15346b5dcc1b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Kneeling figure retains the same black scholar cap, teal robe, white collar and sash, and slim build; face consistent though partly shadowed in the night scene."
+    },
+    {
+      "task_id": "P006__CHAR_DAOIST__character",
+      "panel_sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52",
+      "task_sha256": "1d2e15d130284bb6cd1a11cf79ee98c07733cd7319cfaf5be78ae7a7925f9625",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Grey robe, black waist wrap, goatee beard and hair topknot all match the reference exactly; holding a different prop (whisk vs fan) does not affect identity."
+    },
+    {
+      "task_id": "P006__LOC_MARKET_TEMPLE__location",
+      "panel_sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52",
+      "task_sha256": "895512d56ffdfae773de96ab24559da5d88c7813fd0c93c39f3cb4704a4e1f87",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 2,
+        "materials": 3,
+        "era": 4
+      },
+      "verdict": "suspect",
+      "notes": "Anchor's landmark is a thick city-wall gate tower with a carved archway; panel P006 instead shows a freestanding temple gate on a stepped platform flanked by stone lions — a different gate structure, not the same building re-angled."
+    },
+    {
+      "task_id": "P004__P006__background",
+      "panel_sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52",
+      "task_sha256": "58c1f93fe7071e0dc12d09909ec86ddd1acd103d931ff3cfb9430087ddbdf635",
+      "references_sha256": {
+        "出图/第1话/panels/P004.png": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 3,
+        "lighting": 2,
+        "axis": 3
+      },
+      "verdict": "suspect",
+      "notes": "P004 is overcast daylight with the gate tower distant on the right; P006 is full night with a different-looking temple gate now in the left foreground — lighting flips from day to night and the landmark structure itself differs, not just camera position."
+    },
+    {
+      "task_id": "P010__CHAR_CHEN__character",
+      "panel_sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b",
+      "task_sha256": "673aa4fb692972163ee52393f6eff3f4bb83f8da2f1eadd410eef938ede1bb74",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "White blouse over tan/brown pleated skirt and low hair bun match the reference; kneeling praying pose does not obscure key identity features."
+    },
+    {
+      "task_id": "P010__CHAR_DAOIST__character",
+      "panel_sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b",
+      "task_sha256": "d4fb8e78563fb6362a30a8c2a29fc80e55345f953a98016c5aed8cb66cca9f5f",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "Grey robe, dark sash, beard and topknot consistent with reference; holding scroll/pouch instead of fan is just scene prop, not an identity change."
+    },
+    {
+      "task_id": "P010__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b",
+      "task_sha256": "baa4382499cb4df0167d85b3b0388f657dfd9ddb7fefd0ba7cdc76a51cb9a7d1",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "Same wooden double doors, lattice windows and stone-paved patio with potted plants as the anchor; the wider shot additionally reveals the market street beyond the gate, consistent with a residence opening onto the market."
+    },
+    {
+      "task_id": "P009__P010__background",
+      "panel_sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b",
+      "task_sha256": "0264a912238c7d4cd2ebf288b843e959f7456470ce72774a5f25245218a65fce",
+      "references_sha256": {
+        "出图/第1话/panels/P009.png": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 3,
+        "lighting": 4,
+        "axis": 3
+      },
+      "verdict": "pass",
+      "notes": "Building doors/patio carry over from P009, but P009's distinctive canal-with-railing feature on the right is absent in P010, replaced by an open market street; plausible if camera panned toward the gate, but worth a manual spot-check."
+    },
+    {
+      "task_id": "P014__CHAR_CHEN__character",
+      "panel_sha256": "0bbdceabbd1e965d9348b901fd447f4135b02757fc59be0a6af277e851972414",
+      "task_sha256": "7748652ea212d448e08c8d006573b133c4a2791a923cb225592e907eb322dc70",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "Low hair bun with side strands and hairpin matches reference; face is shown mostly from behind/side in a dark night scene and skirt color is obscured by shadow, so identity cannot be fully confirmed but nothing contradicts it."
+    },
+    {
+      "task_id": "P014__CHAR_WANG__character",
+      "panel_sha256": "0bbdceabbd1e965d9348b901fd447f4135b02757fc59be0a6af277e851972414",
+      "task_sha256": "ff1a4f6d5b6e66878c71e02582f8beb476797c0e3d4267c31bbfbc0592716f3a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "Lying figure retains the black cap and dark blue-grey robe consistent with reference; eyes closed (unconscious) prevents full facial comparison but face shape/hairline match."
+    },
+    {
+      "task_id": "P014__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "0bbdceabbd1e965d9348b901fd447f4135b02757fc59be0a6af277e851972414",
+      "task_sha256": "98208dc58c598ac32d7b64794fb85598fcf4f92e210711478974740760dc7374",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 3,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "P014 is a dark interior bedroom (bed, cushions, curtain) with no exterior architectural elements visible, so it cannot be directly compared against the anchor's exterior courtyard view; nothing in the furniture/wood tones contradicts the same period residence."
+    },
+    {
+      "task_id": "P013__P014__background",
+      "panel_sha256": "0bbdceabbd1e965d9348b901fd447f4135b02757fc59be0a6af277e851972414",
+      "task_sha256": "4ee58a12d5cb33bd5eb99622c67e07590bf992fc17408413c0545eb8ee2f5063",
+      "references_sha256": {
+        "出图/第1话/panels/P013.png": "e49d03b98cb56647097d93d91158fe6851138a713ea43f9950808008510a295a"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 5,
+        "lighting": 5,
+        "axis": 5
+      },
+      "verdict": "pass",
+      "notes": "Same bed, cushions, curtain and camera angle continue directly from P013 to P014; this is the same continuous moment with identical lighting and axis."
+    },
+    {
+      "task_id": "P003__CHAR_WANG__character",
+      "panel_sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+      "task_sha256": "bb55fee2939b1df768b4b455cf3364de0a642185051686ae110d3bf93f25a39e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "黑色平顶方巾、藏青色宽袖长袍配白色内搭、腰间深色系带均与参考完全一致，侧脸五官与发际线吻合。"
+    },
+    {
+      "task_id": "P003__CHAR_CHEN__character",
+      "panel_sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+      "task_sha256": "a7494eca7f26ff28b482304c22f863df6ce67251ef52e5d4ee09ab9d388ecd56",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "白色上衣配棕黄色长裙、低发髻与参考一致，脸型圆润度与眉眼与参考吻合。"
+    },
+    {
+      "task_id": "P003__MON_PAINTED_SKIN__character",
+      "panel_sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+      "task_sha256": "60ac55b33f0caf39f48318edab8728b0e019a1d4ead9f5d080c0ef5a63354a20",
+      "references_sha256": {
+        "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "窗外仅可见一个人影剪影（似为伏笔镜头），无可辨认的五官/服饰花纹细节，无法与锚点图的人形/真身两种形态精确比对；轮廓体型不矛盾，未见明显物种错误，但建议人工复核该剪影身份。"
+    },
+    {
+      "task_id": "P003__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+      "task_sha256": "561c10edcdefb9dab561dcabf18b1d8b28e575ec5f7fa3b31c6a9393b1cedf37",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "室内深色木格窗、门外可见的院落石铺地面与盆栽，与锚点院落的建筑形制、木作用材及时代气质一致，仅因本格为室内视角未完整展示院落全貌。"
+    },
+    {
+      "task_id": "P002__P003__background",
+      "panel_sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+      "task_sha256": "06c7d29c7ef138faa5fd55c47befc7bad0a02bda586b8473ea27925692e133b8",
+      "references_sha256": {
+        "出图/第1话/panels/P002.png": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 2,
+        "lighting": 2,
+        "axis": 2
+      },
+      "verdict": "suspect",
+      "notes": "P002为雨天集市街道（远景城门楼、摊棚苫布、泥泞道路，风格更接近LOC_MARKET_TEMPLE而非王家院落），P003为室内厅堂（暗色木案、油灯、软榻），空间布局与光源冷暖完全不同，怀疑该背景延续性标注与LOC_WANG_COURTYARD锚点不符。"
+    },
+    {
+      "task_id": "P007__CHAR_WANG__character",
+      "panel_sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe",
+      "task_sha256": "03d4defc8bb0d939d40bb8789a6d1bb36ce190be90ebc0a8a8d701ea8713f483",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "惊坐起男子的黑色平顶巾、脸型五官与参考一致；因被褥遮挡下半身，可见的藏青色外袍与参考基本吻合。"
+    },
+    {
+      "task_id": "P007__MON_PAINTED_SKIN__character",
+      "panel_sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe",
+      "task_sha256": "c54499314a1940f682a5143b94a1da92b0edc02f81aa8e05485a847ca78f19e5",
+      "references_sha256": {
+        "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 3,
+        "build": 3
+      },
+      "verdict": "pass",
+      "notes": "攻击者呈灰绿鬼脸獠牙、蓬乱长发，与锚点\"真身\"骷髅脸相符；但仍穿着近似人形伪装期的红棕色衣衫（锚点真身为裸露褴褛下裙无上衣），服装与体型呈人形/真身混合状态，建议人工复核是否为有意的撕皮显形过渡设计。"
+    },
+    {
+      "task_id": "P007__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe",
+      "task_sha256": "3bb6cf18c6e0397ece39d91f54525d69c56eaf590a7d1ec2d5083dc72f2967b1",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "卧房木隔墙、字画卷轴、门外夜色下的院落建筑轮廓与锚点院落风格及时代气质一致。"
+    },
+    {
+      "task_id": "P005__P007__background",
+      "panel_sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe",
+      "task_sha256": "98def535b8c4a2f3d40689f306bfcebd28d3c9dad96377155c3c5a86f31f3cdb",
+      "references_sha256": {
+        "出图/第1话/panels/P005.png": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 2,
+        "lighting": 3,
+        "axis": 2
+      },
+      "verdict": "suspect",
+      "notes": "P005为书房场景（书架、烛台、条案，男主在门外窥视），P007为卧房场景（床榻、床头柜），两格家具配置与房间功能完全不同，虽同为暖色夜间光源，但门窗/家具方位无法视为同一镜头的延续，怀疑该背景延续性标注有误。"
+    },
+    {
+      "task_id": "P011__CHAR_CHEN__character",
+      "panel_sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53",
+      "task_sha256": "f2e6d1ef0f2be0a38d80106990dccc332d6407fa8fb7ebf55d4b47265b9d091f",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "跪地女子的白色上衣、棕黄色长裙、发髻样式与参考完全一致，脸型五官吻合。"
+    },
+    {
+      "task_id": "P011__CHAR_BEGGAR__character",
+      "panel_sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53",
+      "task_sha256": "6eb09e7cafe6c83caae11c91394333fb7eec1f4af3af1165469ab620a866c192",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_BEGGAR__front.png": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+        "出图/共享/图片/CHAR_BEGGAR__anchor.png": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "蓬乱灰白发髻、破烂多层衣衫、竹杖与锚点一致，因下蹲姿态体型有透视变化但整体比例吻合。"
+    },
+    {
+      "task_id": "P011__LOC_MARKET_TEMPLE__location",
+      "panel_sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53",
+      "task_sha256": "db1d6fc2161a4c6d2ca4f22b5627bb08929d19dbd363a73be5ee14f2ecc092e6",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "背景城门楼形制、泥地道路、两侧民居与锚点集市庙门场景风格一致。"
+    },
+    {
+      "task_id": "P006__P011__background",
+      "panel_sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53",
+      "task_sha256": "d329081c27f6befaf7c1b360d986eadc326a2e45185a92cc800a85c2b12bb24f",
+      "references_sha256": {
+        "出图/第1话/panels/P006.png": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "两格同一城门楼、石狮、右侧摊棚与泥地布局延续，光位均为傍晚/夜间冷暗色调，轴线基本一致。"
+    },
+    {
+      "task_id": "P015__CHAR_CHEN__character",
+      "panel_sha256": "bba317a49fd1452f994df1309b269fff70066332428a160250bd73cb5042d0ef",
+      "task_sha256": "33e82da0c81690abf3d73db5acfc6df7d066f06efbef943ef7066dd97ab763d6",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "本格施加了颗粒状白色特效纹理（表现施术/元气外泄），使面部与衣料细节模糊，但发髻轮廓、脸型与服装剪影仍与CHAR_CHEN参考一致，判断为场景特效而非角色漂移，建议人工复核纹理是否为有意VFX。"
+    },
+    {
+      "task_id": "P015__CHAR_WANG__character",
+      "panel_sha256": "bba317a49fd1452f994df1309b269fff70066332428a160250bd73cb5042d0ef",
+      "task_sha256": "403bda63edca15fa807cb3ec8bfdfdc28bde0d6bed21261ac55686d2939c7bcb",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "闭眼平躺男子的黑色头巾轮廓、脸型与参考CHAR_WANG基本一致，因特效纹理覆盖细节略显模糊但服装色调仍可辨认为同一角色。"
+    },
+    {
+      "task_id": "P015__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "bba317a49fd1452f994df1309b269fff70066332428a160250bd73cb5042d0ef",
+      "task_sha256": "e0b64a0eb9cf1ff9f4680a938168268699008410213adfd6f1fba06c7a42e002",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "深色木窗棂、床帐帘布陈设与锚点院落室内木作风格及时代气质一致。"
+    },
+    {
+      "task_id": "P014__P015__background",
+      "panel_sha256": "bba317a49fd1452f994df1309b269fff70066332428a160250bd73cb5042d0ef",
+      "task_sha256": "b4a856adc39b736c826071fa109068437a6e39650ba681ebc6c326fd6e63c002",
+      "references_sha256": {
+        "出图/第1话/panels/P014.png": "0bbdceabbd1e965d9348b901fd447f4135b02757fc59be0a6af277e851972414"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 5,
+        "lighting": 5,
+        "axis": 5
+      },
+      "verdict": "pass",
+      "notes": "同一房间机位拉近（P014→P015），床榻/窗棂/柜架位置与暖色夜间光源方向保持一致，仅镜头拉近未改变场景结构。"
+    },
+    {
+      "task_id": "P004__CHAR_WANG__character",
+      "panel_sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008",
+      "task_sha256": "c5d6ce8ae786f1c7a95e0d2593b70aa4a0dde033a9953f8e07bdee0adfed209d",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "同款黑方巾、深青绿长袍、白色内领与黑腰带在panel与front/anchor间完全一致，脸型五官无偏差。"
+    },
+    {
+      "task_id": "P004__CHAR_DAOIST__character",
+      "panel_sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008",
+      "task_sha256": "8475b3abec6353386053309542e054563642e299d0de8b294e9236dab43e4a80",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "白须、发髻簪、灰蓝长袍与手持流苏物件均与参考一致；panel中因手臂姿势遮挡未见参考里明显的斜挎黑带，判定为姿态差异非漂移。"
+    },
+    {
+      "task_id": "P004__LOC_MARKET_TEMPLE__location",
+      "panel_sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008",
+      "task_sha256": "3339e9cf617ac861b12eb51c19173b56ca3afab9df477311f0aba66a93a31831",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 5,
+        "materials": 5,
+        "era": 5
+      },
+      "verdict": "pass",
+      "notes": "泥泞土路、茅棚摊位、远处叠檐城门楼与参考锚图建筑形制、材质完全一致。"
+    },
+    {
+      "task_id": "P008__CHAR_CHEN__character",
+      "panel_sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7",
+      "task_sha256": "d99632d46cb0d803d32500a9cb88fc71b1475d44cfbb512ac0fc1c0f4b581c84",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "发髻中分、圆润面容与白色上衣均与参考一致；跪姿被桌案遮挡未见下裙，无法完全核实但无冲突证据。"
+    },
+    {
+      "task_id": "P008__CHAR_WANG__character",
+      "panel_sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7",
+      "task_sha256": "ac9d2baedf7d87f0d5c5f7490cf45d12a331920b9151beb32a03e0525186c725",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "黑方巾、脸型轮廓与参考一致；因重伤昏迷躺卧衣襟敞开露胸，未见完整青绿长袍属剧情合理状态变化。"
+    },
+    {
+      "task_id": "P008__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7",
+      "task_sha256": "48a901abafee4017091d4e3e16d72bf09af685e545b9f2068e12097e0056dccd",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "panel为室内视角、锚图为室外院落，二者木格窗棂样式与深色木料、灰调墙面材质高度一致，建筑风格无冲突；因取景为室内-室外的不同侧面，无法逐一比对完全同一结构点，故不给满分。"
+    },
+    {
+      "task_id": "P007__P008__background",
+      "panel_sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7",
+      "task_sha256": "94c3e2f4f8f77b8df7738db0b4f9dbbaad74d5f706538d94733b668f14616f12",
+      "references_sha256": {
+        "出图/第1话/panels/P007.png": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 4,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "两格均为门/窗居左、床铺居右的布局，主光源方位一致；P007为夜袭冷月光、P008转为暖色调符合剧情次日情节，非光位翻转。"
+    },
+    {
+      "task_id": "P012__CHAR_CHEN__character",
+      "panel_sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8",
+      "task_sha256": "c94ece5b29bc5ffe99af1b3389fcfed8c06c278437f877c655e02d58f1e17c6e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "发髻与柔和面容与参考一致；穿的是浅色寝衣而非日常白衫+棕裙组合，符合夜间场景的合理换装，非角色错置。"
+    },
+    {
+      "task_id": "P012__CHAR_WANG__character",
+      "panel_sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8",
+      "task_sha256": "b66a535bfbb428308ecd8dfbaff74cbf6596049d0709baafadbbcb392d849789",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "被抱之人面部埋入陈氏怀中、标志性黑方巾不可见，无法从画面直接核实脸部/服饰细节，建议人工复核；体型比例与参考无冲突。"
+    },
+    {
+      "task_id": "P012__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8",
+      "task_sha256": "7ad02efacbe1a14933da8bf03f8185585600e07831369b32033ac5c62d02495e",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "室内深色木桌、木家具与整体灰褐色调与院落宅邸的木石材质、年代气质一致，未见风格冲突。"
+    },
+    {
+      "task_id": "P010__P012__background",
+      "panel_sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8",
+      "task_sha256": "114a8feef55ec41da3f89c48d9c6744d59b5a67e4c0b5d855f44c0eadecb5db7",
+      "references_sha256": {
+        "出图/第1话/panels/P010.png": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 3,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "P010为宅院门口白日外景、P012为室内夜景烛光，取景面完全不同故无法逐一比对同一结构，但两者无直接矛盾证据；日夜光色差异较大，建议结合剧本确认是否为时间跳跃。"
+    },
+    {
+      "task_id": "P016__CHAR_WANG__character",
+      "panel_sha256": "5907f28060b5f9e3abcc7a0a04c68465a966686b6d9d34868f48ac925bff707b",
+      "task_sha256": "2bd876408b3e542b6711f82846e8fd55be03e2b14ca377d891caad6d8a53c66b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "黑方巾、青绿长袍、脸型五官与参考完全一致。"
+    },
+    {
+      "task_id": "P016__CHAR_CHEN__character",
+      "panel_sha256": "5907f28060b5f9e3abcc7a0a04c68465a966686b6d9d34868f48ac925bff707b",
+      "task_sha256": "1c4f2b6b037fabca65b63eb69b618f9ed43353aaa0b8a2ba41e6c4e6d6f73513",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "face": 3,
+        "outfit": 3,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "画中院内晾衣女子为侧背影小插图且以灰调速写风格呈现，五官不可见、服色因去饱和处理难辨，仅发髻轮廓与体型与参考相符，建议人工复核。"
+    },
+    {
+      "task_id": "P016__LOC_WANG_COURTYARD__location",
+      "panel_sha256": "5907f28060b5f9e3abcc7a0a04c68465a966686b6d9d34868f48ac925bff707b",
+      "task_sha256": "7a20f89ef2527223dcba46333fbf22438daaca9b7ce026a7e5250ed686fcb969",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "structure": 4,
+        "materials": 4,
+        "era": 4
+      },
+      "verdict": "pass",
+      "notes": "木格窗棂样式、深色木书架与整体材质年代气质与院落宅邸一致。"
+    },
+    {
+      "task_id": "P015__P016__background",
+      "panel_sha256": "5907f28060b5f9e3abcc7a0a04c68465a966686b6d9d34868f48ac925bff707b",
+      "task_sha256": "4c502bf99748dac362e510080f28a42614da3f0a48e7ba31107e910a7019c1ac",
+      "references_sha256": {
+        "出图/第1话/panels/P015.png": "bba317a49fd1452f994df1309b269fff70066332428a160250bd73cb5042d0ef"
+      },
+      "evaluator": {
+        "model": "claude-opus-4-8",
+        "version": "2026-07-24",
+        "reviewed_at": "2026-07-24T00:00:00Z"
+      },
+      "scores": {
+        "layout": 2,
+        "lighting": 3,
+        "axis": 2
+      },
+      "verdict": "suspect",
+      "notes": "P015中深色书架/柜位于画面左侧、窗棂居中偏右；P016中同款书架却出现在画面右侧、窗棂居中偏左，家具左右位置发生镜像翻转而非合理的反打机位，怀疑场景结构被镜像/翻转。"
+    }
+  ]
+}

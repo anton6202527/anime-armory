@@ -1,11 +1,12 @@
 {
   "schema_version": 2,
   "kind": "comic_vlm_judge_tasks",
-  "protocol": "CANVAS-ContinuityEval-3axis",
+  "protocol": "CANVAS-ContinuityEval-4axis",
   "chapter": "第1话",
-  "created_at": "2026-07-21T22:13:40",
+  "created_at": "2026-07-24T08:09:03",
   "axes": [
     "character_identity",
+    "location_identity",
     "background_continuity",
     "prop_identity"
   ],
@@ -33,7 +34,7 @@
       }
     ]
   },
-  "task_count": 46,
+  "task_count": 62,
   "tasks": [
     {
       "task_id": "P001__MON_PAINTED_SKIN__character",
@@ -47,11 +48,11 @@
       "references": [
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
       },
-      "task_sha256": "f52fce7efd0c663b1a19ee6ce9941c50995da52341ab4bf474c158b03cf8e0ee"
+      "task_sha256": "3dab3205fae278afb75c0da322adccb6ab25f433dc895a74b2a15762c1364a60"
     },
     {
       "task_id": "P002__CHAR_WANG__character",
@@ -66,12 +67,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "0c3ef7fa65c496fdc32761538fb5a30571422574fc2554205ade7fc9f6faa57f"
+      "task_sha256": "7c712ad5cfc76df084fff1eee932b54b3a503b2c20d82281e47636d44aac8c09"
     },
     {
       "task_id": "P002__MON_PAINTED_SKIN__character",
@@ -85,11 +86,11 @@
       "references": [
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
       },
-      "task_sha256": "1e50d3caf58fcf90d127d54a3f3abffba00e02fa34f2a6dc1926dfb2291f3c6b"
+      "task_sha256": "fd343f692b113bbca80dc6475de23f6e6b10bd2054239eea6e37ba5c223132bd"
     },
     {
       "task_id": "P003__CHAR_WANG__character",
@@ -104,12 +105,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "2c01c969c406f73107a13affff38eabf7721419de30ca77277679b7340b73565"
+      "task_sha256": "bb55fee2939b1df768b4b455cf3364de0a642185051686ae110d3bf93f25a39e"
     },
     {
       "task_id": "P003__CHAR_CHEN__character",
@@ -124,12 +125,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "bb484b2ead16e116011cad22041ae726d65dc9d235a401bd72887037dc357880"
+      "task_sha256": "a7494eca7f26ff28b482304c22f863df6ce67251ef52e5d4ee09ab9d388ecd56"
     },
     {
       "task_id": "P003__MON_PAINTED_SKIN__character",
@@ -143,11 +144,11 @@
       "references": [
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
       },
-      "task_sha256": "0328e93eafeddc663688b7124a7973fa1383d73175aab57cec5a865511b44b60"
+      "task_sha256": "60ac55b33f0caf39f48318edab8728b0e019a1d4ead9f5d080c0ef5a63354a20"
     },
     {
       "task_id": "P004__CHAR_WANG__character",
@@ -162,12 +163,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "95a6276b6d4ef1d2c729cff134c1c6956436a149f8996a76cee329bb2d1deaca"
+      "task_sha256": "c5d6ce8ae786f1c7a95e0d2593b70aa4a0dde033a9953f8e07bdee0adfed209d"
     },
     {
       "task_id": "P004__CHAR_DAOIST__character",
@@ -182,12 +183,12 @@
         "出图/共享/图片/CHAR_DAOIST__front.png",
         "出图/共享/图片/CHAR_DAOIST__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
         "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
       },
-      "task_sha256": "9aed201dc00ef74b8011545a36e378c0a2b02985847d250f804467a7c14083e4"
+      "task_sha256": "8475b3abec6353386053309542e054563642e299d0de8b294e9236dab43e4a80"
     },
     {
       "task_id": "P005__CHAR_WANG__character",
@@ -202,12 +203,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "b58b670e19f1a412cb38535b94c5fc517489815f14adc0102cffda14d3a7dd50"
+      "task_sha256": "37a93b36ba50f21f887c5c4849834a1c92e3f2e498e803dc344e82a945956072"
     },
     {
       "task_id": "P005__MON_PAINTED_SKIN__character",
@@ -221,11 +222,11 @@
       "references": [
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
       },
-      "task_sha256": "3675cf47794048a6ab0449949c0886d274e3cd47517e8a34e5e8847c043d415f"
+      "task_sha256": "5ce2d92a637481c180a7aae5dfcda23b098a2e679f2ee01f3694eb990378c9c4"
     },
     {
       "task_id": "P006__CHAR_WANG__character",
@@ -240,12 +241,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "b32f3c3d4b4239ef5d654bec5689872508aae7f27c96f24b1edd36dd316458ad"
+      "task_sha256": "86635aeeaa166b04dcc00cffcf67fc087aa976706f2375e0568f15346b5dcc1b"
     },
     {
       "task_id": "P006__CHAR_DAOIST__character",
@@ -260,12 +261,12 @@
         "出图/共享/图片/CHAR_DAOIST__front.png",
         "出图/共享/图片/CHAR_DAOIST__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
         "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
       },
-      "task_sha256": "a9115af5724d83703ade929ecee0bd1f9d8d156b66c1fb10f105b6306b216b42"
+      "task_sha256": "1d2e15d130284bb6cd1a11cf79ee98c07733cd7319cfaf5be78ae7a7925f9625"
     },
     {
       "task_id": "P007__CHAR_WANG__character",
@@ -280,12 +281,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "cc0303fb2c35ea2e69a1a662ec5fb1a8604dd376b6941b58edd84f6f53a1bf5a"
+      "task_sha256": "03d4defc8bb0d939d40bb8789a6d1bb36ce190be90ebc0a8a8d701ea8713f483"
     },
     {
       "task_id": "P007__MON_PAINTED_SKIN__character",
@@ -299,11 +300,11 @@
       "references": [
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
       },
-      "task_sha256": "43b9ff81e114371a67187e93f664482b607fe54403b14e0de9642bf9593e0a49"
+      "task_sha256": "c54499314a1940f682a5143b94a1da92b0edc02f81aa8e05485a847ca78f19e5"
     },
     {
       "task_id": "P008__CHAR_CHEN__character",
@@ -318,12 +319,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "4b46bcd378060dc019215b82b4c068060ca45e19dfaf9f1ebcdaa7414a47a8d5"
+      "task_sha256": "d99632d46cb0d803d32500a9cb88fc71b1475d44cfbb512ac0fc1c0f4b581c84"
     },
     {
       "task_id": "P008__CHAR_WANG__character",
@@ -338,12 +339,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "66c0d29ac6c911d790c3a6431c5cb33de66fd5e1e23d47cc6f57e2ab7f91a665"
+      "task_sha256": "ac9d2baedf7d87f0d5c5f7490cf45d12a331920b9151beb32a03e0525186c725"
     },
     {
       "task_id": "P009__CHAR_DAOIST__character",
@@ -358,12 +359,12 @@
         "出图/共享/图片/CHAR_DAOIST__front.png",
         "出图/共享/图片/CHAR_DAOIST__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
         "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
       },
-      "task_sha256": "40b316ac7811721927f77cf83b3f44c05b23766269d5bfb192770253b4463ac8"
+      "task_sha256": "2799611ba616bf7d90ff4c9a6a72dd732f672237a3b59c9039c351f4e8876a8c"
     },
     {
       "task_id": "P009__MON_PAINTED_SKIN__character",
@@ -377,11 +378,11 @@
       "references": [
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 MON_PAINTED_SKIN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/MON_PAINTED_SKIN__anchor.png": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
       },
-      "task_sha256": "cae3ff9870e1f3a0f517314c979f9c241f30b792bf495c6fb5004fddf5f3869c"
+      "task_sha256": "793ef983071e505492c2f69791494b2984e9ef5c8a5035e26ebf966e7b22859e"
     },
     {
       "task_id": "P010__CHAR_CHEN__character",
@@ -396,12 +397,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "6b8637179e9424abf5ed1aaab75c81f95df123c90a6fb2a86514233832a872bd"
+      "task_sha256": "673aa4fb692972163ee52393f6eff3f4bb83f8da2f1eadd410eef938ede1bb74"
     },
     {
       "task_id": "P010__CHAR_DAOIST__character",
@@ -416,12 +417,12 @@
         "出图/共享/图片/CHAR_DAOIST__front.png",
         "出图/共享/图片/CHAR_DAOIST__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_DAOIST 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_DAOIST__front.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
         "出图/共享/图片/CHAR_DAOIST__anchor.png": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
       },
-      "task_sha256": "98e77827f602e4cb2c4c0df7ded7bf9856e810f76cce2bf162b66f525f53a013"
+      "task_sha256": "d4fb8e78563fb6362a30a8c2a29fc80e55345f953a98016c5aed8cb66cca9f5f"
     },
     {
       "task_id": "P011__CHAR_CHEN__character",
@@ -436,12 +437,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "dc8d71ffc73e5d8f2281f66271f792591b120ab3d6a2433b49837cb3533bbca9"
+      "task_sha256": "f2e6d1ef0f2be0a38d80106990dccc332d6407fa8fb7ebf55d4b47265b9d091f"
     },
     {
       "task_id": "P011__CHAR_BEGGAR__character",
@@ -456,12 +457,12 @@
         "出图/共享/图片/CHAR_BEGGAR__front.png",
         "出图/共享/图片/CHAR_BEGGAR__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_BEGGAR 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_BEGGAR 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_BEGGAR__front.png": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
         "出图/共享/图片/CHAR_BEGGAR__anchor.png": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7"
       },
-      "task_sha256": "ff94b8e9ba23da5369f1e6008cdc7293ed048313a99e443f35e0e35468ee98a4"
+      "task_sha256": "6eb09e7cafe6c83caae11c91394333fb7eec1f4af3af1165469ab620a866c192"
     },
     {
       "task_id": "P012__CHAR_CHEN__character",
@@ -476,12 +477,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "f8d223340870e8579041ec609deb41d0eca64bbb071d52bc19a99dea0dae6078"
+      "task_sha256": "c94ece5b29bc5ffe99af1b3389fcfed8c06c278437f877c655e02d58f1e17c6e"
     },
     {
       "task_id": "P012__CHAR_WANG__character",
@@ -496,12 +497,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "191f706ae973f934ec90189f2fe09b71fc8f4410272ec244cab987707e887c4c"
+      "task_sha256": "b66a535bfbb428308ecd8dfbaff74cbf6596049d0709baafadbbcb392d849789"
     },
     {
       "task_id": "P013__CHAR_CHEN__character",
@@ -516,12 +517,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "d3686fbee60fcaf0a81f78ef2f7ee77649acf6ddf0ad463cd8aca66db4da1238"
+      "task_sha256": "2db70407b55beba8407a6fac7817ae58785c3970afb958cfbf04c34d6541200c"
     },
     {
       "task_id": "P013__CHAR_WANG__character",
@@ -536,12 +537,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "11b33f268c1a437a42842e81e0408e027775bf3e26ee32be3f276e49209ff679"
+      "task_sha256": "9932edce22e2a26075264594a6d4da6bee186b365bbb4336582cf17b5588a86b"
     },
     {
       "task_id": "P014__CHAR_CHEN__character",
@@ -556,12 +557,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "1203ecae42e56ad467e995c67d208e286cd12033c65b213477ef3f02c0772133"
+      "task_sha256": "7748652ea212d448e08c8d006573b133c4a2791a923cb225592e907eb322dc70"
     },
     {
       "task_id": "P014__CHAR_WANG__character",
@@ -576,12 +577,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "9d196407e52b177e8516cf74505dc19d7859f1ba5f1f336036c0a19fae113644"
+      "task_sha256": "ff1a4f6d5b6e66878c71e02582f8beb476797c0e3d4267c31bbfbc0592716f3a"
     },
     {
       "task_id": "P015__CHAR_CHEN__character",
@@ -596,12 +597,12 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "c9e0c2d8de4f2c841b27e594e7e4e0b3247509ad170be09aa665116e221e5f2e"
+      "task_sha256": "33e82da0c81690abf3d73db5acfc6df7d066f06efbef943ef7066dd97ab763d6"
     },
     {
       "task_id": "P015__CHAR_WANG__character",
@@ -616,12 +617,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "a1b5492ba5ecccf81eb4bce916697e4eb83b3d046aca5c06293591e300b6bc86"
+      "task_sha256": "403bda63edca15fa807cb3ec8bfdfdc28bde0d6bed21261ac55686d2939c7bcb"
     },
     {
       "task_id": "P016__CHAR_WANG__character",
@@ -636,12 +637,12 @@
         "出图/共享/图片/CHAR_WANG__front.png",
         "出图/共享/图片/CHAR_WANG__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_WANG 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_WANG__front.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
         "出图/共享/图片/CHAR_WANG__anchor.png": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
       },
-      "task_sha256": "931c859bdcc3e06f14488f7966f8657b1a0c515f91e8f311578b22666c55dbde"
+      "task_sha256": "2bd876408b3e542b6711f82846e8fd55be03e2b14ca377d891caad6d8a53c66b"
     },
     {
       "task_id": "P016__CHAR_CHEN__character",
@@ -656,12 +657,300 @@
         "出图/共享/图片/CHAR_CHEN__front.png",
         "出图/共享/图片/CHAR_CHEN__anchor.png"
       ],
-      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "question": "并排对比 panel 图与 CHAR_CHEN 的定妆参考：这是同一个角色/生物吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、outfit（领型/纽扣/花纹/配饰，生物则看毛色/鳞甲/体表）、build（体型比例/物种）。特别注意：不得画成同类里的另一个物种（虎妖画成普通虎、狐妖画成狗）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
         "出图/共享/图片/CHAR_CHEN__front.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
         "出图/共享/图片/CHAR_CHEN__anchor.png": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
       },
-      "task_sha256": "0107197121919815a655725834b7e2f4feb6c936276ac4d1f0f84c0580ee4eb4"
+      "task_sha256": "1c4f2b6b037fabca65b63eb69b618f9ed43353aaa0b8a2ba41e6c4e6d6f73513"
+    },
+    {
+      "task_id": "P001__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P001",
+        "path": "出图/第1话/panels/P001.png",
+        "sha256": "25a49acc75860fe1a3b0cff1c7d473f12bac432921bbd227e9c6de7f13c5d0f1"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "7aff7bcd1d78b0c87b44ecd64ecc77796c9789673add84e87720d7fb61e8b9b7"
+    },
+    {
+      "task_id": "P002__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P002",
+        "path": "出图/第1话/panels/P002.png",
+        "sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "f630557d3407e7588e3f04a27651292e8cc61621feb6d2ded9f072a8993aba06"
+    },
+    {
+      "task_id": "P003__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P003",
+        "path": "出图/第1话/panels/P003.png",
+        "sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "561c10edcdefb9dab561dcabf18b1d8b28e575ec5f7fa3b31c6a9393b1cedf37"
+    },
+    {
+      "task_id": "P004__LOC_MARKET_TEMPLE__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P004",
+        "path": "出图/第1话/panels/P004.png",
+        "sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008"
+      },
+      "subject": "LOC_MARKET_TEMPLE",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_TEMPLE。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+      },
+      "task_sha256": "3339e9cf617ac861b12eb51c19173b56ca3afab9df477311f0aba66a93a31831"
+    },
+    {
+      "task_id": "P005__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P005",
+        "path": "出图/第1话/panels/P005.png",
+        "sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "55f3f84bf618bb4efc8f8e3363c70a41f7dd6a53cd63b46c3c1fe5bafb16be76"
+    },
+    {
+      "task_id": "P006__LOC_MARKET_TEMPLE__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P006",
+        "path": "出图/第1话/panels/P006.png",
+        "sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52"
+      },
+      "subject": "LOC_MARKET_TEMPLE",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_TEMPLE。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+      },
+      "task_sha256": "895512d56ffdfae773de96ab24559da5d88c7813fd0c93c39f3cb4704a4e1f87"
+    },
+    {
+      "task_id": "P007__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P007",
+        "path": "出图/第1话/panels/P007.png",
+        "sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "3bb6cf18c6e0397ece39d91f54525d69c56eaf590a7d1ec2d5083dc72f2967b1"
+    },
+    {
+      "task_id": "P008__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P008",
+        "path": "出图/第1话/panels/P008.png",
+        "sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "48a901abafee4017091d4e3e16d72bf09af685e545b9f2068e12097e0056dccd"
+    },
+    {
+      "task_id": "P009__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P009",
+        "path": "出图/第1话/panels/P009.png",
+        "sha256": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "61fb67932151bf5ed9962dda7eb47b5cbd90438024175059a08b39565f8947ce"
+    },
+    {
+      "task_id": "P010__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P010",
+        "path": "出图/第1话/panels/P010.png",
+        "sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "baa4382499cb4df0167d85b3b0388f657dfd9ddb7fefd0ba7cdc76a51cb9a7d1"
+    },
+    {
+      "task_id": "P011__LOC_MARKET_TEMPLE__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P011",
+        "path": "出图/第1话/panels/P011.png",
+        "sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53"
+      },
+      "subject": "LOC_MARKET_TEMPLE",
+      "references": [
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_MARKET_TEMPLE。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+      },
+      "task_sha256": "db1d6fc2161a4c6d2ca4f22b5627bb08929d19dbd363a73be5ee14f2ecc092e6"
+    },
+    {
+      "task_id": "P012__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P012",
+        "path": "出图/第1话/panels/P012.png",
+        "sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "7ad02efacbe1a14933da8bf03f8185585600e07831369b32033ac5c62d02495e"
+    },
+    {
+      "task_id": "P013__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P013",
+        "path": "出图/第1话/panels/P013.png",
+        "sha256": "e49d03b98cb56647097d93d91158fe6851138a713ea43f9950808008510a295a"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "3596a347d6dca184a7ae932524f80083f9252a8983014cb17b18c7147c6c044a"
+    },
+    {
+      "task_id": "P014__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P014",
+        "path": "出图/第1话/panels/P014.png",
+        "sha256": "0bbdceabbd1e965d9348b901fd447f4135b02757fc59be0a6af277e851972414"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "98208dc58c598ac32d7b64794fb85598fcf4f92e210711478974740760dc7374"
+    },
+    {
+      "task_id": "P015__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P015",
+        "path": "出图/第1话/panels/P015.png",
+        "sha256": "bba317a49fd1452f994df1309b269fff70066332428a160250bd73cb5042d0ef"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "e0b64a0eb9cf1ff9f4680a938168268699008410213adfd6f1fba06c7a42e002"
+    },
+    {
+      "task_id": "P016__LOC_WANG_COURTYARD__location",
+      "axis": "location_identity",
+      "panel": {
+        "panel_id": "P016",
+        "path": "出图/第1话/panels/P016.png",
+        "sha256": "5907f28060b5f9e3abcc7a0a04c68465a966686b6d9d34868f48ac925bff707b"
+      },
+      "subject": "LOC_WANG_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png"
+      ],
+      "question": "本格场景锚为 LOC_WANG_COURTYARD。对照该场景的定妆锚参考图：这一格的背景是不是同一个场景？看建筑形制/材质、标志性陈设与结构（门窗/梁柱/院墙方位）、时代与地域气质是否一致；机位与光线可变，但不得换成另一个场景或另一种建筑风格。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+      },
+      "task_sha256": "7a20f89ef2527223dcba46333fbf22438daaca9b7ce026a7e5250ed686fcb969"
     },
     {
       "task_id": "P001__P002__background",

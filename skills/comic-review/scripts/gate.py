@@ -494,7 +494,7 @@ def panel_reference_ids(panel: dict[str, Any]) -> list[str]:
 
 
 def panel_has_character(panel: dict[str, Any]) -> bool:
-    return bool(panel.get("characters")) or any(ref_id.startswith(("CHAR_", "MON_")) for ref_id in panel_reference_ids(panel))
+    return bool(panel.get("characters")) or any(ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) for ref_id in panel_reference_ids(panel))
 
 
 def panel_scene_anchor_id(panel: dict[str, Any]) -> str:
@@ -592,7 +592,7 @@ def visual_scene_anchors(visual_contract: dict[str, Any]) -> dict[str, Any]:
 
 
 def panel_character_refs(panel: dict[str, Any]) -> list[str]:
-    return [ref_id for ref_id in panel_reference_ids(panel) if ref_id.startswith(("CHAR_", "MON_"))]
+    return [ref_id for ref_id in panel_reference_ids(panel) if ref_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_"))]
 
 
 def panel_character_count(panel: dict[str, Any]) -> int:
@@ -1772,22 +1772,49 @@ def check_machine_audit_liveness(root: Path, chapter: str, char_report: dict[str
             ),
             evidence_family="vlm_judge_fallback" if fallback_complete else "capability_degraded",
         )
+    hard_gate_on = read_setting(root, "角色一致性硬闸", "关闭").strip() in {"开启", "on", "true"}
+    by_axis = status.get("by_axis") if isinstance(status.get("by_axis"), dict) else {}
+    # 无适配判定引擎兜底的轴（场景/背景/道具/生物形态）：CCIP 只覆盖角色身份 embedding，
+    # 覆盖不到这些轴。这些轴一旦 0 裁决就是**完全空转**——无论 CCIP 装没装。
+    # 聊斋实证：硬闸=开启、CCIP=已装，却因旧逻辑 fully_blind 要求「CCIP 未装」而只 warn，
+    # 结果 background/location/prop 14+ 条 0 裁决照样过闸，「背景该是虎妖画成别的生物」漏放。
+    fallback_axes = getattr(vlm_judge, "AXES_WITHOUT_DETERMINISTIC_FALLBACK",
+                            ("location_identity", "background_continuity", "prop_identity"))
+    blind_axes = [
+        axis for axis in fallback_axes
+        if int((by_axis.get(axis) or {}).get("task_count") or 0) > 0
+        and int((by_axis.get(axis) or {}).get("verdict_count") or 0) == 0
+    ]
     if task_count and verdict_count == 0:
-        # 确定性升闸（三个条件都是可复算事实，非启发式）：一致性硬闸开启、
-        # CCIP 不可用、裁决覆盖率为 0 —— 此时三轴身份机检完全空转，靠"人审
-        # 兜底"的叙事放行过（第1话四足虎实证）。必须显式裁决或显式豁免。
-        hard_gate_on = read_setting(root, "角色一致性硬闸", "关闭").strip() in {"开启", "on", "true"}
-        fully_blind = hard_gate_on and not caps.get("ccip")
+        # 确定性升闸（全是可复算事实，非启发式）：一致性硬闸开启且存在任一「无引擎兜底轴」0 裁决，
+        # 或角色轴在 CCIP 未装时也 0 裁决 —— 身份机检空转，必须显式裁决或显式豁免。
+        char_axis_blind = hard_gate_on and not caps.get("ccip")
+        must_block = hard_gate_on and (bool(blind_axes) or char_axis_blind)
+        reason = f"VLM 并排判定任务包已生成 {task_count} 条但 0 条裁决——角色/生物身份、场景、背景、道具四轴机检空转，画错生物形态/画错场景/换道具这类漂移不会被拦。"
+        if must_block:
+            detail = "、".join(blind_axes) if blind_axes else "character_identity"
+            reason += f"（角色一致性硬闸=开启：{detail} 轴无判定引擎兜底且 0 裁决，升级为 block。CCIP 覆盖不到场景/背景/道具/生物形态。）"
         add(
             findings,
-            "block" if fully_blind else "warn",
+            "block" if must_block else "warn",
             "vlm_judge_unadjudicated",
             str(status.get("tasks_file") or ""),
-            f"VLM 并排判定任务包已生成 {task_count} 条但 0 条裁决——角色/生物身份、背景、道具三轴机检空转，画错生物形态这类漂移不会被拦。"
-            + ("（角色一致性硬闸=开启 且 CCIP 不可用：身份轴完全无机检，升级为 block。）" if fully_blind else ""),
+            reason,
             "review",
             f"用 vlm_adjudicate.py queue 出队、由多模态 agent 看图打分后 submit 回写 {status.get('verdict_file')}；"
-            "或恢复 CCIP（comicqc env）后重跑 gate。",
+            "场景/背景/道具轴无 CCIP 兜底，只能靠并排裁决。",
+        )
+    elif hard_gate_on and blind_axes:
+        # 部分覆盖但恰好把「无引擎兜底轴」整轴漏了：角色轴有 CCIP 兜底看着覆盖过半，
+        # 但场景/背景/道具轴一条没裁决，仍是这些轴完全空转。硬闸下 block。
+        add(
+            findings,
+            "block",
+            "vlm_judge_axis_blind",
+            str(status.get("tasks_file") or ""),
+            f"VLM 裁决覆盖 {verdict_count}/{task_count}，但 {('、'.join(blind_axes))} 轴 0 裁决——这些轴无 CCIP/指纹兜底，画错场景/背景漂移/换道具不会被拦。",
+            "review",
+            f"补齐上述轴的并排裁决写回 {status.get('verdict_file')} 后重跑 gate。",
         )
     elif task_count and verdict_count < task_count:
         add(

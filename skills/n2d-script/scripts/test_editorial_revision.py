@@ -159,3 +159,57 @@ def test_check_missing_worksheet_warns(tmp_path):
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-q"]))
+
+
+# ── unreasonable_beat_candidates（不合理点机检） ─────────────────────────────
+
+def test_contrivance_marker_flagged():
+    chain = [
+        {"trace_id": "C1", "cause": "主角走投无路", "effect": "陷入死局"},
+        {"trace_id": "C2", "cause": "恰好路过的高人出手相救", "effect": "主角脱险"},
+    ]
+    out = er.unreasonable_beat_candidates(chain, [], "")
+    hits = [u for u in out if u["kind"] == "contrivance"]
+    assert any(u["trace_id"] == "C2" for u in hits)
+    assert "恰好" in next(u for u in hits if u["trace_id"] == "C2")["evidence"]
+
+
+def test_motive_without_stakes_flagged():
+    motives = [
+        {"trace_id": "M1", "character": "甲", "want": "夺回家业", "obstacle": "宿敌把持", "choice_pressure": "杀或被杀"},
+        {"trace_id": "M2", "character": "乙", "want": "成为天下第一"},  # 缺 obstacle+choice_pressure
+    ]
+    out = er.unreasonable_beat_candidates([], motives, "")
+    gaps = [u for u in out if u["kind"] == "motive_without_stakes"]
+    assert [u["trace_id"] for u in gaps] == ["M2"]
+
+
+def test_uncosted_power_use_flagged_only_when_world_sets_cost():
+    chain = [{"trace_id": "C1", "cause": "催动系统技能", "effect": "秒杀强敌"}]  # 用系统·没提代价
+    # 世界观未设代价 → 不报
+    assert not [u for u in er.unreasonable_beat_candidates(chain, [], "系统给数值") if u["kind"] == "uncosted_power_use"]
+    # 世界观设了代价 → 报
+    out = er.unreasonable_beat_candidates(chain, [], "系统每次动用都有反噬代价")
+    assert any(u["kind"] == "uncosted_power_use" and u["trace_id"] == "C1" for u in out)
+
+
+def test_ungrounded_cause_conservative_zero_overlap_only():
+    chain = [
+        {"trace_id": "C1", "cause": "穿越落在荒野", "effect": "缺资源只能求生"},
+        {"trace_id": "C2", "cause": "缺资源逼她冒险", "effect": "接近武器"},          # 与前重叠 → 不报
+        {"trace_id": "C3", "cause": "祖传玉佩突现异象引来仙人", "effect": "获传承"},   # 零重叠 → 报
+    ]
+    out = er.unreasonable_beat_candidates(chain, [], "")
+    ung = [u["trace_id"] for u in out if u["kind"] == "ungrounded_cause"]
+    assert "C3" in ung and "C1" not in ung and "C2" not in ung
+
+
+def test_worksheet_includes_unreasonable_beats(tmp_path):
+    root = _mk(tmp_path, comprehension={
+        "causality_chain": [{"trace_id": "C1", "cause": "恰好天降机缘", "effect": "白得神功"}],
+        "character_motives": [],
+        "foreshadowing_ledger": [], "power_system_rules": "",
+    }, spine={"spine": [], "threads": []})
+    ws = er.build_worksheet(root)
+    assert ws["summary"]["unreasonable_beats"] >= 1
+    assert any(u["kind"] == "contrivance" for u in ws["unreasonable_beats"])

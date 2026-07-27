@@ -1141,7 +1141,7 @@ def character_view_prompt(
     backend: str = "codex",
 ) -> str:
     view_label = VIEW_LABELS.get(view, view)
-    is_monster = character_id.startswith("MON_")
+    is_monster = character_id.startswith(("MON_", "BEAST_", "ANIMAL_"))
     subject_label = "生物设定" if is_monster else "角色定妆"
     opening = (
         f"请用内置 image_generation 工具生成漫画{subject_label}专门参考图。"
@@ -1245,7 +1245,7 @@ def character_text_anchor_prompt(
     style_reference_attached: bool = False,
     aspect_ratio: str = "",
 ) -> str:
-    is_monster = character_id.startswith("MON_")
+    is_monster = character_id.startswith(("MON_", "BEAST_", "ANIMAL_"))
     style_reference_note = (
         "已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质和墨晕语言；"
         "不得继承其中人物的脸、发型、服装、体态、姿势、构图或具体场景。"
@@ -1344,12 +1344,12 @@ def asset_anchor_prompt(
     )
     prop_contract = compact_contract(
         asset.get("prop_contract")
-        or (asset.get("description") if kind in {"monster", "location", "prop", "vfx"} else ""),
+        or (asset.get("description") if kind in {"monster", "beast", "animal", "location", "prop", "vfx"} else ""),
         max_len=900,
     )
     dna_contract = compact_contract(
         asset.get("dna_contract")
-        or (asset.get("character_dna") if kind == "monster" else ""),
+        or (asset.get("character_dna") if kind in {"monster", "beast", "animal"} else ""),
         max_len=900,
     )
     forbidden = compact_contract(asset.get("forbidden_inheritance"), max_len=900)
@@ -1366,11 +1366,12 @@ def asset_anchor_prompt(
             "人物脸、手和材质要清楚可读，但不得自行假定古典、水墨、矿物淡彩、现代摄影或任何其他未登记时代/媒介。"
             "这不是项目角色、影视演员、剧情镜头、拼贴、九宫格、角色卡、设定表或多视图。"
         )
-    elif kind == "monster":
+    elif kind in {"monster", "beast", "animal"}:
         subject_rules = (
-            "生成单体妖物 reference art：首先严格执行 dna_contract 登记的解剖结构与姿态；"
-            "完整主体入画，该有的头、躯干、手臂/前肢、腿/后肢和永久标志必须清楚；"
-            "人身兽首必须保持直立双足人体结构，不得改成四足兽；"
+            "生成单体生物 reference art（妖物/走兽/真实动物）：首先严格执行 dna_contract 登记的物种、解剖结构与姿态；"
+            "完整主体入画，该有的头、躯干、四肢/前后肢和永久标志（毛色/鳞甲/花纹）必须清楚；"
+            "人身兽首必须保持直立双足人体结构，不得改成四足兽；四足生物不得改成两足；"
+            "不得画成同类里的另一个物种（虎不得画成豹/普通家猫，狐不得画成狗）；"
             "dna_contract 未登记尾巴、翅膀、额外肢体时不得自行增加；"
             "中性低饱和背景，不要血腥内脏，不要战斗叙事，不要人物。"
         )
@@ -1772,8 +1773,11 @@ def ref_type(ref_id: str) -> str:
     return {
         "CHAR": "character",
         "MON": "monster",
+        "BEAST": "beast",
+        "ANIMAL": "animal",
         "LOC": "location",
         "PROP": "prop",
+        "WEAPON": "weapon",
         "STYLE": "style",
         "FX": "vfx",
         "SYS": "system_asset",
@@ -2158,7 +2162,7 @@ def seed(args: argparse.Namespace) -> int:
             **(assets.get(rid) if isinstance(assets.get(rid), dict) else {}),
             "id": rid,
             "type": ref_type(rid),
-            "status": "partial" if rid.startswith(("CHAR_", "MON_")) else "ready",
+            "status": "partial" if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) else "ready",
             "anchor_path": rel,
             "source": {
                 "kind": "accepted_panel_anchor",
@@ -2408,7 +2412,7 @@ def report(args: argparse.Namespace) -> int:
     registry_assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     # 2026-07-17 实证修正：一致性审计不再只看 CHAR_。第1话 P015 虎妖被画成四足普通虎，
     # 就是因为 MON_ 不进视图完整性/model-pack/rerun 审计，registry 有定妆也没人核对出图。
-    char_ids = sorted(rid for rid in refs_seen | set(registry_assets.keys()) if rid.startswith(("CHAR_", "MON_")))
+    char_ids = sorted(rid for rid in refs_seen | set(registry_assets.keys()) if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")))
     missing_character_views: dict[str, list[str]] = {}
     character_views: dict[str, dict[str, str]] = {}
     for rid in char_ids:
@@ -3827,7 +3831,7 @@ def generate_views(args: argparse.Namespace) -> int:
     assets = registry.setdefault("assets", {})
     if not isinstance(assets, dict):
         raise SystemExit("identity_registry.json assets must be an object")
-    characters = parse_csv(args.characters, tuple(sorted(rid for rid in assets if rid.startswith(("CHAR_", "MON_")))))
+    characters = parse_csv(args.characters, tuple(sorted(rid for rid in assets if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")))))
     views = parse_csv(args.views, REQUIRED_CHARACTER_VIEWS)
     unknown_views = [view for view in views if view not in REQUIRED_CHARACTER_VIEWS]
     if unknown_views:

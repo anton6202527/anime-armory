@@ -21,6 +21,10 @@ from typing import Any, Sequence
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 REFERENCE_VIEW_ORDER = ("face", "front", "three_quarter", "side", "back", "anchor", "primary_path", "path")
 DEFAULT_BINS = 10
+# 角色级身份（定妆+相似度+并排复核）纳管的前缀：人物 + 一切有脸/有身形的生物。
+# 2026-07-24 从 (CHAR_,MON_) 扩到含 BEAST_ 走兽异兽、ANIMAL_ 真实动物，
+# 使「每一个动物/生物都做一致性对比」落到相似度引擎与 contact sheet 上。
+CHARACTER_PREFIXES = ("CHAR_", "MON_", "BEAST_", "ANIMAL_")
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -60,12 +64,12 @@ def panel_character_ids(panel: dict[str, Any]) -> list[str]:
         if not isinstance(binding, dict):
             continue
         ref_id = str(binding.get("character_id") or "").strip()
-        if ref_id.startswith(("CHAR_", "MON_")) and ref_id not in out:
+        if ref_id.startswith(CHARACTER_PREFIXES) and ref_id not in out:
             out.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw or "").strip()
-            if ref_id.startswith(("CHAR_", "MON_")) and ref_id not in out:
+            if ref_id.startswith(CHARACTER_PREFIXES) and ref_id not in out:
                 out.append(ref_id)
     return out
 
@@ -82,7 +86,7 @@ def panel_unbound_names(panel: dict[str, Any], registry: dict[str, Any]) -> list
     out: list[str] = []
     for raw in panel.get("characters") or []:
         name = str(raw or "").strip()
-        if not name or name.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "STYLE_")):
+        if not name or name.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_", "LOC_", "PROP_", "WEAPON_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
             continue
         if name in known_names:
             continue
@@ -96,7 +100,7 @@ def name_to_ref_id(name: str, registry: dict[str, Any]) -> str:
     for ref_id, asset in assets.items():
         if not isinstance(asset, dict):
             continue
-        if str(asset.get("display_name") or asset.get("name") or "").strip() == name and str(ref_id).startswith(("CHAR_", "MON_")):
+        if str(asset.get("display_name") or asset.get("name") or "").strip() == name and str(ref_id).startswith(CHARACTER_PREFIXES):
             return str(ref_id)
     return ""
 
@@ -685,7 +689,7 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
             "获得阈值化的同角色判定（threshold=0.178）。"
         )
 
-    # CANVAS 三轴 VLM 并排判定：刷新任务包，合并已回写的 character 轴裁决。
+    # CANVAS 四轴 VLM 并排判定：刷新任务包，合并已回写的 character 轴裁决。
     try:
         import vlm_judge
 

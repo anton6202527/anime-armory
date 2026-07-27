@@ -1,0 +1,61 @@
+{
+  "counts": {
+    "block": 19,
+    "high": 0,
+    "medium": 15
+  },
+  "cross_episode": {
+    "identity_drift": {
+      "available": true,
+      "block_characters": [],
+      "warn_characters": []
+    },
+    "retention": null
+  },
+  "delivery_surface": {
+    "blocking": {
+      "episodes_blocked": [
+        "第1集",
+        "第2集"
+      ],
+      "episodes_missing_ledger": [],
+      "identity_block_characters": [],
+      "identity_report_missing": false
+    },
+    "blocking_counts": {
+      "block": 19,
+      "high": 0
+    },
+    "status": "blocked",
+    "weakest_episodes": [
+      "第1集",
+      "第2集"
+    ]
+  },
+  "episode_count": 2,
+  "episodes": [
+    {
+      "counts": {
+        "block": 12,
+        "high": 0,
+        "medium": 5
+      },
+      "episode": "第1集",
+      "present": true,
+      "status": "blocked"
+    },
+    {
+      "counts": {
+        "block": 7,
+        "high": 0,
+        "medium": 10
+      },
+      "episode": "第2集",
+      "present": true,
+      "status": "blocked"
+    }
+  ],
+  "kind": "n2d_series_ledger",
+  "ledgers_present": 2,
+  "version": 1
+}

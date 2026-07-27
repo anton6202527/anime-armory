@@ -192,7 +192,7 @@ def audit_delta_bindings(
                     f"continuity_delta 的 entity_id={entity_id!r} 既不是已登记资产，也不在 entry/exit_state 里（疑似写成显示名或拼写错误，将永远绑不到真实资产）。",
                 )
             )
-        elif dim and not entity_id.startswith(("CHAR_", "MON_")):
+        elif dim and not entity_id.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
             seen_entity_issue.add(entity_id)
             findings.append(
                 binding_finding(

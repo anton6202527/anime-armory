@@ -66,11 +66,11 @@ def char_status_in_report(report: Mapping[str, Any]) -> Dict[str, Dict[str, Any]
     out: Dict[str, Dict[str, Any]] = {}
     for row in report.get("characters") or []:
         cid = str(row.get("character_id") or "").strip()
-        if cid.startswith(("CHAR_", "MON_")):
+        if cid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
             out.setdefault(cid, {"rank": 0, "codes": set()})
     for f in report.get("findings") or []:
         cid = str(f.get("character_id") or "").strip()
-        if not cid.startswith(("CHAR_", "MON_")):
+        if not cid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
             continue
         rank = _SEV_RANK.get(str(f.get("severity") or "warn"), 1)
         entry = out.setdefault(cid, {"rank": 0, "codes": set()})

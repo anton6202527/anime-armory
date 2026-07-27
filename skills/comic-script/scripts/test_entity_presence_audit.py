@@ -42,7 +42,9 @@ def test_visual_mention_without_binding_warns_and_dialogue_mention_is_info(tmp_p
     ])
     report = epa.audit(tmp_path, "第2话")
     got = codes(report)
-    assert ("mentioned_not_bound", "P001", "warn") in got
+    # 虎妖=生物：画面提到未绑 → 醒目的 creature 码（这是「画错生物」病根）。
+    assert ("creature_mentioned_not_bound", "P001", "warn") in got
+    # 断横刀=道具，只在台词提到 → 普通码 info。
     assert ("mentioned_not_bound", "P002", "info") in got
     assert all(item[1] != "P003" for item in got), "已绑定的格不得误报"
 

@@ -46,6 +46,19 @@ DEFAULT_HEAD_FRAC = 0.55          # 头部区取画面上半比例（含发型�
 # 发型轮廓含角度依赖（侧脸轮廓 ≠ 正脸），定妆组内地板天然低于配色 → fallback 给较低值，
 # 避免把"同人不同角度"误判成漂；真漂靠 margin + 相对校准抓。
 DEFAULT_FALLBACK_FLOOR = 0.55
+# 度量自证护栏（2026-07-26·那妖魔ep1 实证：floor 0.9817 vs score 0.086 出 3 条 block）：
+# 复合色相+边缘指纹对"真发型漂移"（披发↔盘发/变色）的落差通常在 0.1-0.4 档；比 floor 低 ≥0.6
+# 更像**头部裁切没裁到头**（几何启发在大远景/群像里裁到景物/他人），是度量失真而非发型漂移。
+# 这类分数继续出 block 是垃圾自信——降 warn 交人判并排，注明 crop_suspect；真漂（中等落差）仍 block。
+IMPLAUSIBLE_GAP = 0.6
+
+
+def implausibility_downgrade(verdict: str, score: float, floor: float,
+                             gap: float = IMPLAUSIBLE_GAP) -> str:
+    """block 且 (floor - score) ≥ gap → warn（度量失真嫌疑>真漂移嫌疑）。纯函数·可测。"""
+    if verdict == "block" and (float(floor) - float(score)) >= gap:
+        return "warn"
+    return verdict
 
 
 # ---------- 纯数学（无依赖 · pytest 覆盖） ----------
@@ -162,7 +175,15 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN, bins: int = DEFA
                 fl = char_floor.get(c, DEFAULT_FALLBACK_FLOOR)
                 v = fc.band(sc, fl, margin)
                 row = {"char": c, "score": round(sc, 4), "floor": round(fl, 4), "verdict": v}
-                if worst is None or fc._sev(v) > fc._sev(worst["verdict"]):
+                # 度量自证：落差大到不像发型漂移（更像头部裁切失真）→ 降 warn 交人判，别出垃圾自信 block。
+                v2 = implausibility_downgrade(v, sc, fl)
+                if v2 != v:
+                    row["abs_verdict"] = v
+                    row["verdict"] = v2
+                    row["crop_suspect"] = True
+                    row["note"] = ("分数比 floor 低≥%.1f：更像头部区几何裁切没裁到头（大远景/群像裁到景物），"
+                                   "非发型漂移——请并排人判；若确为裁切失真可忽略。" % IMPLAUSIBLE_GAP)
+                if worst is None or fc._sev(row["verdict"]) > fc._sev(worst["verdict"]):
                     worst = row
         if worst:
             row = {"png": png, **worst}

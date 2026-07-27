@@ -1,0 +1,10 @@
+{
+  "kind": "n2d_costume_consistency",
+  "version": 1,
+  "episode": "第1集",
+  "available": false,
+  "notes": [
+    "CLIP 不可用：缺 torch 或 clip 库。跳过服装独立维度。"
+  ],
+  "shots": []
+}

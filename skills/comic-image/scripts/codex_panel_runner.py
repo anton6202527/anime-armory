@@ -277,9 +277,9 @@ def reference_attachment_priority(record: dict[str, str]) -> int:
     ref_id = str(record.get("id") or "").upper()
     if ref_id.startswith("CHAR_"):
         return 0
-    if ref_id.startswith(("LOC_", "MON_")):
+    if ref_id.startswith(("LOC_", "MON_", "BEAST_", "ANIMAL_")):
         return 1
-    if ref_id.startswith("PROP_"):
+    if ref_id.startswith(("PROP_", "WEAPON_")):
         return 2
     if ref_id.startswith("STYLE_"):
         return 3
@@ -306,11 +306,11 @@ def select_reference_attachments(
         role = str(record.get("role") or "").lower()
         if record.get("required"):
             mandatory_indices.append(index)
-            if rid.startswith(("CHAR_", "MON_")):
+            if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")):
                 seen_characters.add(rid)
             if rid.startswith("STYLE_") or role == "style":
                 style_reserved = True
-        elif rid.startswith(("CHAR_", "MON_")) and rid not in seen_characters:
+        elif rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) and rid not in seen_characters:
             mandatory_indices.append(index)
             seen_characters.add(rid)
         elif not style_reserved and (rid.startswith("STYLE_") or role == "style"):
@@ -1117,7 +1117,7 @@ def main() -> int:
             print(f"[info] {pid} 多视图折叠为拼板参考：{sheets}", flush=True)
         reference_records, omitted_reference_records = select_reference_attachments(all_reference_records, reference_limit)
         omitted_required = [record for record in omitted_reference_records if record.get("required")]
-        selected_subjects = {str(record.get("id") or "") for record in reference_records if str(record.get("id") or "").startswith(("CHAR_", "MON_"))}
+        selected_subjects = {str(record.get("id") or "") for record in reference_records if str(record.get("id") or "").startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_"))}
         required_subjects = {str(binding.get("character_id") or "") for binding in job.get("character_bindings") or [] if isinstance(binding, dict)}
         if omitted_required or not required_subjects.issubset(selected_subjects):
             missing_subjects = sorted(required_subjects - selected_subjects)

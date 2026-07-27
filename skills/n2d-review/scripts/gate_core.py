@@ -1939,6 +1939,17 @@ def drift_report_freshness(prior_imaged_eps: Sequence[str],
                  f"脸漂实测报告陈旧：已出图历史集 {prior} 中 {stale} 未进 identity_drift_report 覆盖集 {sorted(covered)}——"
                  "报告在、measured-drift 环会读它并据旧数据误判『全绿』放行，比缺报告更危险。重跑 "
                  "`python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 覆盖全部历史出图集后再出图。")]
+    # 空账核对（2026-07-26·那妖魔实证）：available=true、episodes 覆盖齐、指纹在——但 characters=={}，
+    # 即逐角色漂移账一条没记（per-episode 脸均值缺失时 producer 会产出这种「看着新鲜实则空转」的报告）。
+    # measured-drift 环读它 → 零漂移 → 绿灯，与 stale 同级的『陈旧绿』，同判 BLOCK。
+    chars = report.get("characters")
+    if isinstance(chars, Mapping) and not chars:
+        return [(BLOCK,
+                 f"脸漂实测报告空账：available=true 且覆盖集齐（{sorted(covered)}），但 characters 为空——逐角色跨集"
+                 "漂移一条没实测（常见根因：历史集缺 per-episode 脸均值，如 face_ep_means 只有部分集）。"
+                 "measured-drift 环会据空账误判『无漂移』放行。重跑 "
+                 "`python3 skills/n2d-identity/scripts/identity.py <作品根> --write`（insightface 环境）"
+                 "回填各历史集脸均值后再出图。")]
     # 内容级核对：仅当调用方传入了当前指纹时进行（保持纯函数对旧调用零行为变更）。
     if current_fingerprints is None:
         return []

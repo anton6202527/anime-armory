@@ -1,19 +1,136 @@
 {
   "kind": "n2d_identity_drift_report",
   "version": 1,
-  "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-24T05:23:11+00:00",
+  "root": ".",
+  "generated_at": "2026-07-26T08:48:03+00:00",
   "available": true,
   "episodes": [
     "第1集",
     "第2集"
   ],
-  "characters": {},
+  "characters": {
+    "CHAR_01__囚途残损态": {
+      "episodes": {
+        "第1集": {
+          "ok": 14,
+          "warn": 15,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.3407,
+          "floor": 0.5,
+          "mean_score": 0.3533,
+          "n_shots": 32
+        },
+        "第2集": {
+          "ok": 18,
+          "warn": 5,
+          "block": 3,
+          "noface": 0,
+          "worst_score": 0.294,
+          "floor": 0.5,
+          "mean_score": 0.5036,
+          "n_shots": 26
+        }
+      },
+      "total_warn": 20,
+      "total_block": 3,
+      "first_bad_episode": "第2集",
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
+    },
+    "CHAR_02__濒死重伤态": {
+      "episodes": {
+        "第1集": {
+          "ok": 0,
+          "warn": 0,
+          "block": 3,
+          "noface": 0,
+          "worst_score": 0.52,
+          "floor": 0.6648,
+          "mean_score": 0.4432,
+          "n_shots": 3
+        },
+        "第2集": {
+          "ok": 0,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": null,
+          "floor": null,
+          "mean_score": 0.596,
+          "n_shots": 4
+        }
+      },
+      "total_warn": 0,
+      "total_block": 3,
+      "first_bad_episode": "第1集",
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
+    }
+  },
   "notes": [],
   "png_fingerprints": {
     "第1集": "29e3ee985a115010905c50789b33274d0d5089f5d369e55091c0611f9b736ea8",
-    "第2集": "5d24e13649683cd7143207dca55eb72c80615a508524b43d8c3756e9cccf5a84"
+    "第2集": "2059acf3ae054c4a0316d6870d3a71ff04c1718599a4c7d2ef663e91e55aa595"
   },
-  "embedding_drift": {},
-  "recommendations": []
+  "embedding_drift": {
+    "CHAR_02__濒死重伤态": [
+      {
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.4432,
+        "to_mean": 0.596,
+        "drop": -0.1528,
+        "below_abs_low": true,
+        "severity": "medium"
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "type": "lora_upgrade",
+      "character": "CHAR_01__囚途残损态",
+      "character_id": "CHAR_01",
+      "character_name": "姜月初",
+      "form": "“囚途残损态”",
+      "lora_status": "not_needed",
+      "bad_episodes": [
+        "第1集",
+        "第2集"
+      ],
+      "first_bad_episode": "第2集",
+      "embedding_drift_high": 0,
+      "episode_count": 2,
+      "proactive": false,
+      "has_face_embedding": false,
+      "intermediate_rung": "face_embedding",
+      "reason": "2 集脸部相似度低于阈值（第1集,第2集）；first_bad_episode=第2集（出现过 block 级漂移）；LoRA status=not_needed，reference_group/原生主体未压住跨集漂移；中间档建议：先挂 face_embedding（IP-Adapter FaceID 等免训练脸嵌入锁，比 LoRA 快/省），仍漂再升 LoRA",
+      "next_command": "python3 skills/n2d-lora/scripts/lora.py init '.' --character-id CHAR_01 --form '“囚途残损态”'"
+    },
+    {
+      "type": "lora_upgrade",
+      "character": "CHAR_02__濒死重伤态",
+      "character_id": "CHAR_02",
+      "character_name": "裴长青",
+      "form": "“濒死重伤态”",
+      "lora_status": "not_needed",
+      "bad_episodes": [
+        "第1集"
+      ],
+      "first_bad_episode": "第1集",
+      "embedding_drift_high": 0,
+      "episode_count": 2,
+      "proactive": false,
+      "has_face_embedding": false,
+      "intermediate_rung": "face_embedding",
+      "reason": "first_bad_episode=第1集（出现过 block 级漂移）；LoRA status=not_needed，reference_group/原生主体未压住跨集漂移；中间档建议：先挂 face_embedding（IP-Adapter FaceID 等免训练脸嵌入锁，比 LoRA 快/省），仍漂再升 LoRA",
+      "next_command": "python3 skills/n2d-lora/scripts/lora.py init '.' --character-id CHAR_02 --form '“濒死重伤态”'"
+    }
+  ]
 }

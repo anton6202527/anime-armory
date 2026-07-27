@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "kind": "comic_scene_prop_consistency",
-  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/聊斋志异",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/聊斋志异",
   "chapter": "第1话",
-  "created_at": "2026-07-21T22:13:15",
+  "created_at": "2026-07-24T08:20:24",
   "available": true,
-  "verdict": "pass",
+  "verdict": "warn",
   "summary": {
     "scene_anchor_count": 2,
     "prop_count": 1,
-    "finding_count": 0,
+    "finding_count": 8,
     "block_count": 0,
-    "warn_count": 0,
+    "warn_count": 8,
     "info_count": 0
   },
   "scenes": [
@@ -177,8 +177,105 @@
       "contact_sheet": "生产数据/qa_previews/第1话_prop_OUTFIT_BASE_sheet.jpg"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_location_suspect",
+      "subject": "LOC_WANG_COURTYARD",
+      "panel_id": "P002",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "VLM 并排判定低分/存疑：structure=1、materials=2；Anchor is a private brick courtyard residence with tiled roof, lattice windows and a canal; panel P002 is an open-air market street with awning stalls and a distant city gate tower — a different building type/location entirely, not merely a different camera angle.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_location_suspect",
+      "subject": "LOC_MARKET_TEMPLE",
+      "panel_id": "P006",
+      "artifact": "出图/第1话/panels/P006.png",
+      "reason": "VLM 并排判定低分/存疑：structure=2；Anchor's landmark is a thick city-wall gate tower with a carved archway; panel P006 instead shows a freestanding temple gate on a stepped platform flanked by stone lions — a different gate structure, not the same building re-angled.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_WANG_COURTYARD",
+      "panel_id": "P002",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "VLM 并排判定低分/存疑：layout=1、lighting=1、axis=2；P001 is a night-time interior room (monster painting a portrait at a desk by lamplight); P002 is a daytime outdoor market street — no shared layout, light direction, or axis between the two panels.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_WANG_COURTYARD",
+      "panel_id": "P003",
+      "artifact": "出图/第1话/panels/P003.png",
+      "reason": "VLM 并排判定低分/存疑：layout=2、lighting=2、axis=2；P002为雨天集市街道（远景城门楼、摊棚苫布、泥泞道路，风格更接近LOC_MARKET_TEMPLE而非王家院落），P003为室内厅堂（暗色木案、油灯、软榻），空间布局与光源冷暖完全不同，怀疑该背景延续性标注与LOC_WANG_COURTYARD锚点不符。",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_MARKET_TEMPLE",
+      "panel_id": "P006",
+      "artifact": "出图/第1话/panels/P006.png",
+      "reason": "VLM 并排判定低分/存疑：lighting=2；P004 is overcast daylight with the gate tower distant on the right; P006 is full night with a different-looking temple gate now in the left foreground — lighting flips from day to night and the landmark structure itself differs, not just camera position.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_WANG_COURTYARD",
+      "panel_id": "P007",
+      "artifact": "出图/第1话/panels/P007.png",
+      "reason": "VLM 并排判定低分/存疑：layout=2、axis=2；P005为书房场景（书架、烛台、条案，男主在门外窥视），P007为卧房场景（床榻、床头柜），两格家具配置与房间功能完全不同，虽同为暖色夜间光源，但门窗/家具方位无法视为同一镜头的延续，怀疑该背景延续性标注有误。",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_WANG_COURTYARD",
+      "panel_id": "P009",
+      "artifact": "出图/第1话/panels/P009.png",
+      "reason": "VLM 并排判定低分/存疑：layout=2、lighting=2、axis=2；P008 is an enclosed dim interior bedroom (bed, hanging curtain, small candlelit side table) while P009 is a bright open exterior brick courtyard/alley with tiled roofs — this is not a camera move within one room but a jump to an entirely different physical space, so layout/lighting/axis do not carry over at all.",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_WANG_COURTYARD",
+      "panel_id": "P016",
+      "artifact": "出图/第1话/panels/P016.png",
+      "reason": "VLM 并排判定低分/存疑：layout=2、axis=2；P015中深色书架/柜位于画面左侧、窗棂居中偏右；P016中同款书架却出现在画面右侧、窗棂居中偏左，家具左右位置发生镜像翻转而非合理的反打机位，怀疑场景结构被镜像/翻转。",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    }
+  ],
   "notes": [
-    "VLM 三轴裁决进度：0/46（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
+    "VLM 四轴裁决进度：62/62（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
   ]
 }

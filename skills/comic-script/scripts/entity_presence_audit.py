@@ -49,6 +49,9 @@ VISUAL_FIELDS = ("description", "art_notes", "location")
 STORY_FIELDS = ("dialogue", "narration")
 # 风格锚不是画面实体；SYS_ 系统面板类通常后期嵌字，不强制逐格绑定。
 SKIP_PREFIXES = ("STYLE_",)
+# 生物/动物前缀：这类实体一旦"画面提到但没绑参考"，模型会自由发挥物种形态——
+# 正是「背景该是虎妖却画成别的生物」的病根，比忘绑一件道具后果重。单独出码醒目化。
+CREATURE_PREFIXES = ("MON_", "BEAST_", "ANIMAL_")
 
 
 def now_iso() -> str:
@@ -155,11 +158,14 @@ def check_panel(panel: Mapping[str, Any], names: Mapping[str, List[str]]) -> Lis
                     severity="info", entity=aid,
                 ))
             else:
+                is_creature = str(aid).startswith(CREATURE_PREFIXES)
                 findings.append(finding(
-                    "mentioned_not_bound", pid,
-                    f"{pid} 画面描述提到「{hit}」（registry 实体 {aid}），但该格 characters/references/"
-                    f"scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。"
-                    f"确认入画则补进该格 references（或 characters）；不入画则改写描述，"
+                    "creature_mentioned_not_bound" if is_creature else "mentioned_not_bound", pid,
+                    f"{pid} 画面描述提到「{hit}」（registry {'生物/动物' if is_creature else '实体'} {aid}），但该格 characters/references/"
+                    f"scene_anchor 都没绑它——出图不会附其定妆参考，"
+                    + ("物种/形态全靠模型自由发挥（虎妖易画成普通虎、狐妖易画成狗）。" if is_creature
+                       else "形态全靠模型自由发挥。")
+                    + f"确认入画则补进该格 references（或 characters）；不入画则改写描述，"
                     f"或在该格写 unbound_mention_ack.{aid} 签收理由。",
                     entity=aid,
                 ))

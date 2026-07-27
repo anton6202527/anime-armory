@@ -134,7 +134,11 @@ def default_selected_assets(assets: Mapping[str, Any]) -> list[str]:
     「未标档宁多不漏」的保守原则。聊斋第2话狐仆(named_minimal·8/16 格在场)因此零定妆
     审计。model_pack_required 仍可显式 false 豁免。
     """
-    def monster_managed(asset: Mapping[str, Any]) -> bool:
+    # 2026-07-24：beast/animal（走兽异兽/真实动物）与 monster 同为生物级，按同一档位默认纳管。
+    # 补「给每一个动物也做定妆一致性」——动物一旦复现就得锁身份，否则同一匹马逐格换毛色。
+    creature_types = {"monster", "beast", "animal"}
+
+    def creature_managed(asset: Mapping[str, Any]) -> bool:
         flag = asset.get("model_pack_required")
         if flag is True or flag is False:
             return flag
@@ -145,7 +149,7 @@ def default_selected_assets(assets: Mapping[str, Any]) -> list[str]:
         if isinstance(asset, Mapping)
         and (
             str(asset.get("type")) == "character"
-            or (str(asset.get("type")) == "monster" and monster_managed(asset))
+            or (str(asset.get("type")) in creature_types and creature_managed(asset))
         )
     )
 

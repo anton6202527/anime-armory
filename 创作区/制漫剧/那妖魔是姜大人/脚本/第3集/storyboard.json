@@ -1,0 +1,688 @@
+{
+  "kind": "n2d_storyboard",
+  "version": 2,
+  "episode": "第3集",
+  "title": "冒名镇魔司",
+  "status": "stage2_draft",
+  "timing_basis": "text_estimate_no_audio",
+  "total_duration": 81.1,
+  "core_attraction": {
+    "category": "假身份反差 + 误认反转 + 道德夹逼",
+    "why_watch": "刚埋掉恩人尸体、偷穿镇魔司制服求生的姜月初，被十几骑武人当场跪求出手救村——假身份第一次兑现，就把她架上狼妖死局。",
+    "audience_payoff": "观众看她如何用沉默唬住整支马队，又在百十条人命的重压下被迫接下必死任务，收获误认反转的爽点与集尾悬念。"
+  },
+  "first_3s_visual_hook": {
+    "visual_hook": "十几名带刀武人在官道上齐刷刷跪倒，向一个黑衣赤纹的年轻女子叩首求救；她僵在原地，指节收紧。",
+    "hook_type": "反差/悬念",
+    "content_proposition": "这些刀客为什么跪求一个假货救命？",
+    "onscreen_text": "他们跪求的镇魔司大人——是个刚埋完尸的假货",
+    "onscreen_duration_sec": 2.2,
+    "muted_safe_proof": "群跪、叩首、黑衣赤纹与女子僵住的手构成无需文字的身份反差冲突。",
+    "muted_safe": true,
+    "muted_readable": true,
+    "content_promise": "她将如何背着假身份接下这场救村死局？",
+    "expected_metric": {
+      "primary": "retention_3s",
+      "target": 0.8
+    }
+  },
+  "retention_promise_ledger": [
+    {
+      "hook_id": "OPEN_01",
+      "promise_type": "opening_hook",
+      "hook_type": "反差",
+      "opened_at": "EP03_CLIP01",
+      "promise": "这些人为何把姜月初当成唯一救命者",
+      "payoff_due": "EP03_CLIP07",
+      "payoff_status": "paid",
+      "payoff_clip": "EP03_CLIP07",
+      "payoff_evidence": "时间线追上冷开场：黑衣赤纹被误认成镇魔司、狼妖屠村求援无门，众人把唯一希望压在她身上。"
+    },
+    {
+      "hook_id": "MID_01",
+      "promise_type": "identity_risk",
+      "hook_type": "危机",
+      "opened_at": "EP03_CLIP03",
+      "promise": "偷穿制服究竟是护身符还是催命符",
+      "payoff_due": "EP03_CLIP06",
+      "payoff_status": "paid",
+      "payoff_clip": "EP03_CLIP06",
+      "payoff_evidence": "陈青源降姿态执礼，假身份第一次唬住马队；但『把我架到狼窝门口』的预言同集应验，长线穿帮风险移交后续集。"
+    },
+    {
+      "hook_id": "TAIL_01",
+      "promise_type": "cliffhanger",
+      "hook_type": "死局悬念",
+      "opened_at": "EP03_CLIP08",
+      "promise": "顶着假身份去上盘村剿狼妖，她能活着回来吗",
+      "payoff_due": "第4集",
+      "payoff_status": "open",
+      "delayed_payoff_ep": "第4集"
+    }
+  ],
+  "pacing_allocation": {
+    "primary_runtime_focus": [
+      "EP03_CLIP01",
+      "EP03_CLIP05",
+      "EP03_CLIP06",
+      "EP03_CLIP07",
+      "EP03_CLIP08"
+    ],
+    "selective_runtime": [
+      "EP03_CLIP02",
+      "EP03_CLIP03",
+      "EP03_CLIP04"
+    ],
+    "compressed_clip_ids": [],
+    "strategy": "冷开群跪反差、马队急停、误认反转、人命压身与集尾死局吃主时长；埋尸告别、换装与贱籍盘算用最短可读动作与短句承接。"
+  },
+  "visual_contract": {
+    "色调基线": "冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。",
+    "场景光位锚": {
+      "LOC_01": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。",
+      "LOC_02": "阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。"
+    },
+    "场景轴线视线": {
+      "LOC_01": "浅坟在画左前景、姜月初画右侧跪；她看坟向画左下，与第1-2集虎妖轴线区分。",
+      "LOC_02": "官道纵深由画右前伸向画左后；马队自画左后冲入，姜月初画右前迎向；众人跪拜均面向画右前的姜月初。"
+    },
+    "角色状态演进": {
+      "CHAR_01": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
+      "CHAR_02": "仅以遗体与浅坟出现：面容平静、胸口刀创不外露、以衣物遮覆；不复原、不睁眼。",
+      "CHAR_03": "风尘仆仆的江湖劲装，左臂缠布带；由马上戒备→下马抱拳→单膝跪地，姿态逐级降低。",
+      "GROUP_01": "飞鹰门武人十余骑：统一土褐劲装、外形彼此可区分但不抢戏；由列队戒备→随陈青源齐跪。"
+    },
+    "景别阶梯": [
+      "35mm ELS群跪冷开反差钩",
+      "50mm MS浅坟告别",
+      "50/85mm MCU换装三动作",
+      "35mm LS官道行路与85mm CU盘算",
+      "35mm LS马队急停压迫",
+      "50/85mm MS-MCU试探与陈情",
+      "35mm ELS群跪与85mm ECU僵住的手",
+      "85mm CU集尾定格"
+    ]
+  },
+  "style_contract": {
+    "风格名": "冷灰写实3D国风漫剧",
+    "基础视觉风格": "冷灰写实3D国风漫剧",
+    "视觉基调": "粗粝唐代边荒、写实国漫人物、真实皮肤毛发和磨损布料；镇魔司黑底赤纹制服是本集唯一制度感符号。",
+    "镜头与构图": "9:16；前景枯草/车辙/刀柄，中景人物，后景官道纵深或荒坡；动作后必须回人物反应。",
+    "光色策略": "阴天有来源的冷色漫射与侧逆光；制服赤纹做点睛色，不加金光特效。",
+    "运动边界": "固定、慢推、短跟、短摇、硬切；马队冲近沿官道纵深轴，不做无重量环绕。",
+    "风格禁忌": [
+      "白衣仙女",
+      "华丽发髻",
+      "主角妖化",
+      "巨型毛笔",
+      "网红脸",
+      "虎妖萌宠化",
+      "猎奇伤口",
+      "尸体特写凝视",
+      "烤字",
+      "水印Logo"
+    ],
+    "style_anchor": [
+      "出图/共享/图片/风格锚_冷灰写实3D国风.png"
+    ]
+  },
+  "policy": {
+    "seam_taxonomy_version": 1,
+    "midframe_default": false,
+    "midframe_default_mode": "risk_only",
+    "system_text": "compose_overlay_only",
+    "violence_treatment": "埋尸与死亡只拍因果与结果，不做伤口与遗容的猎奇凝视"
+  },
+  "series_handoff": {
+    "previous_episode": "第2集",
+    "previous_hook": "虎山神摹影在百妖谱上亮眼，姜月初意识到摹影仍能继续进阶",
+    "previous_episode_pickup": "承接第2集战后：虎妖已死、裴长青遗体在侧、她握有横刀与百妖谱首笔道行账。",
+    "opening_bridge": "冷开先抛『众人跪求镇魔司大人』的未来片段，再回切埋尸告别，让第2集的死亡后果直接压进本集身份选择。",
+    "hook_bridge": {
+      "from_episode": "第2集",
+      "thread_id": "fake_identity_bootstrap",
+      "answers_prev_hook": false,
+      "bridge_text": "摹影进阶长期账不在本集兑现；本集兑现的是杀裴之后『人死了，东西还得活人用』的身份代价线。"
+    },
+    "next_episode": "第4集",
+    "next_thread": "顶着镇魔司假身份随飞鹰门驰援上盘村，直面狼妖巢穴",
+    "ending_throw": "狼妖、假身份、百十条人命三重压力齐聚，她自问能否活着回来。",
+    "next_episode_receivable_hook": "第4集冷开场须接『应下驰援/踏上去上盘村的路』，狼妖村惨状与青面郎君威胁自此进入正面冲突。"
+  },
+  "clips": [
+    {
+      "id": "EP03_CLIP01",
+      "beat_id": "Beat_01",
+      "label": "众人跪求的假大人",
+      "duration": 9.6,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [1, 2],
+      "dialogue_indices": [1, 2],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "恳请镇魔司大人出手，救上盘村百十口性命！",
+        "我只是想借这身皮活命。怎么一转眼，就成了他们唯一的救命稻草？"
+      ],
+      "mouth_visible": true,
+      "scene": "LOC_02/未来片段·官道群跪",
+      "rhythm": "冷开场·ELS压CU硬切",
+      "pacing_role": "冷开场主钩与身份反差",
+      "runtime_priority": "primary",
+      "economy_intent": "selective_detail",
+      "target_story_clip_sec": { "min": 8, "max": 11 },
+      "dramatic_function": "先展示假身份被跪求的结果，再回到换装之前，让身份反噬成为本集命题。",
+      "editing_intent": "0-3秒内完成『群跪+叩首+她僵住』三信息；VO2内心声压在她的CU上，随后硬切回埋尸时间线，不提前解释制服来历。",
+      "audience_effect": "立刻追问这些刀客为何跪求一个年轻女子，她又为何心虚。",
+      "description": "35mm ELS：黄土官道上十几名土褐劲装武人齐刷刷跪倒叩首，马匹在后；画右前景黑衣赤纹束发佩刀的姜月初背影僵直；切85mm CU她错愕心虚的脸与收紧的指节。",
+      "character_slots": [
+        { "character_id": "CHAR_01", "slot": "RIGHT_SLOT", "position": "画右前景背影转CU主焦点" },
+        { "character_id": "CHAR_03", "slot": "CENTER_SLOT", "position": "跪伏众人最前领拜者" },
+        { "character_id": "GROUP_01", "slot": "BACKGROUND_SLOT", "position": "官道纵深处齐跪武人群" }
+      ],
+      "multi_subject_strategy": "regional_construct_required：前景单人主体区与中后景群跪区分层构建，群像不抢单人脸部细节",
+      "character_ids": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/齐跪态"],
+      "object_ids": ["WEAPON_横刀"],
+      "location_id": "LOC_02",
+      "entity_schedule": {
+        "characters": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/齐跪态"],
+        "objects": ["WEAPON_横刀"],
+        "locations": ["LOC_02"],
+        "knowledge_state": {
+          "CHAR_01": ["知道自己是冒牌货，心虚但不敢露"],
+          "CHAR_03": ["误认她为镇魔司官员"],
+          "GROUP_01": ["随首领视她为唯一救兵"]
+        },
+        "required_presence": ["CHAR_01", "CHAR_03", "GROUP_01"],
+        "forbidden_presence": ["CHAR_02", "BEAST_01"],
+        "offscreen_presence": []
+      },
+      "shots": [
+        { "id": "S01A", "shot_size": "ELS", "lens": "35mm", "camera": "固定", "desc": "官道群跪全景，尘土未落，马队在后。" },
+        { "id": "S01B", "shot_size": "CU", "lens": "85mm", "camera": "微推", "desc": "姜月初错愕心虚的脸，指节收紧，喉头轻动。" }
+      ],
+      "continuity": {
+        "start_state": "未来片段：众人已跪，姜月初已着镇魔司制服。",
+        "end_state": "她僵在群跪之前，内心自问如何沦为救命稻草。",
+        "transition": "时间回切至埋尸。",
+        "seam_mode": "intentional_discontinuity",
+        "seam_evidence": { "reason": "冷开未来片段切回埋尸时点，保留『他们为何跪她』的悬念。" },
+        "need_endframe": false,
+        "entry_exit": "只交代群跪、制服、心虚三要素；不出现浅坟与囚服。",
+        "shot_size": "ELS→CU",
+        "eyeline": "众人向画右前叩首；姜月初视线低垂向画左下。",
+        "expression_span": "中",
+        "end_anchor_required": false
+      },
+      "start_sec": 0.0,
+      "end_sec": 9.6
+    },
+    {
+      "id": "EP03_CLIP02",
+      "beat_id": "Beat_01",
+      "label": "荒坡埋尸告别",
+      "duration": 8.0,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [3, 4],
+      "dialogue_indices": [3, 4],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "裴长青，荒郊野岭，只能委屈你了。",
+        "人死了，东西还得活人用。……得罪了，兄弟。"
+      ],
+      "mouth_visible": true,
+      "scene": "LOC_01/荒野边缘浅坟",
+      "rhythm": "慢·静场",
+      "pacing_role": "道德余震与身份选择的起点",
+      "runtime_priority": "selective",
+      "economy_intent": "selective_detail",
+      "target_story_clip_sec": { "min": 6, "max": 9 },
+      "dramatic_function": "她亲手埋葬给过她自由承诺的人，并拿走死者之物——杀裴的道德代价落地为可见动作。",
+      "editing_intent": "浅坟合土、插枝为记、抱起叠好的黑色制服包袱三个动作一气呵成；『得罪了兄弟』压在她低头半拍上，必留她面对浅坟的沉默半拍。",
+      "audience_effect": "感到她的自嘲与愧疚，理解拿走制服是求生而非贪财。",
+      "description": "50mm MS：荒野边缘新覆土的浅坟，插一截断枝为记；姜月初囚服残损、跪在坟侧拍实浮土，转身抱起叠放的黑底赤纹制服与横刀；不拍遗容。",
+      "character_slots": [
+        { "character_id": "CHAR_01", "slot": "RIGHT_SLOT", "position": "画右侧跪于坟前主焦点" },
+        { "character_id": "CHAR_02", "slot": "LEFT_SLOT", "position": "画左前景浅坟（遗体已覆土不可见）" }
+      ],
+      "multi_subject_strategy": "single_subject_focus：单人主体，浅坟作前景情绪锚",
+      "character_ids": ["CHAR_01/囚服残损态", "CHAR_02/浅坟遗体态"],
+      "object_ids": ["WEAPON_横刀", "PROP_镇魔司制服"],
+      "location_id": "LOC_01",
+      "entity_schedule": {
+        "characters": ["CHAR_01/囚服残损态", "CHAR_02/浅坟遗体态"],
+        "objects": ["WEAPON_横刀", "PROP_镇魔司制服"],
+        "locations": ["LOC_01"],
+        "knowledge_state": {
+          "CHAR_01": ["知道杀裴换来生机，愧疚但已决定活下去", "已决定取走制服与刀"]
+        },
+        "required_presence": ["CHAR_01", "PROP_镇魔司制服"],
+        "forbidden_presence": ["BEAST_01", "CHAR_03", "GROUP_01"],
+        "offscreen_presence": ["CHAR_02"]
+      },
+      "shots": [
+        { "id": "S02A", "shot_size": "MS", "lens": "50mm", "camera": "固定", "desc": "浅坟与断枝，姜月初拍实浮土后静默半拍。" },
+        { "id": "S02B", "shot_size": "MCU", "lens": "85mm", "camera": "轻摇", "desc": "她低头道『得罪了兄弟』，抱起制服包袱与横刀起身。" }
+      ],
+      "continuity": {
+        "start_state": "时间回切：埋尸刚完成，她仍穿残损囚服。",
+        "end_state": "她抱起制服与横刀起身，背向浅坟。",
+        "transition": "同场景接换装。",
+        "seam_mode": "hard_cut",
+        "need_endframe": false,
+        "entry_exit": "浅坟、断枝、制服包袱首次入画；遗容全程不入画。",
+        "shot_size": "MS→MCU",
+        "eyeline": "她看坟向画左下，起身后视线转向怀中制服。",
+        "expression_span": "中",
+        "end_anchor_required": false
+      },
+      "start_sec": 9.6,
+      "end_sec": 17.6
+    },
+    {
+      "id": "EP03_CLIP03",
+      "beat_id": "Beat_02",
+      "label": "黑衣赤纹换装",
+      "duration": 11.0,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [5, 6],
+      "dialogue_indices": [5, 6],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "囚服是活靶子。黑衣赤纹虽险，至少——能唬人。真唬住了，也可能把我架到狼窝门口。",
+        "刀在腰上，我才算有一点像个能活下去的人。"
+      ],
+      "mouth_visible": false,
+      "scene": "LOC_01/荒野边缘换装",
+      "rhythm": "常速·三动作蒙太奇",
+      "pacing_role": "身份状态改变的可见完成",
+      "runtime_priority": "selective",
+      "economy_intent": "selective_detail",
+      "target_story_clip_sec": { "min": 8, "max": 12 },
+      "dramatic_function": "囚犯到假镇魔司的身份转换用衣料、束发、佩刀三动作完成；她清醒知道这步棋的双刃。",
+      "editing_intent": "只拍换装的三个完成点：赤纹披上肩、束发收紧、横刀入腰扣；VO以内心声铺在动作上，唇不动；结尾一个站定的全身剪影确认新身份。",
+      "audience_effect": "看见她『变成』镇魔司的过程，同时被『狼窝门口』的预言埋下不安。",
+      "description": "50mm MCU三连：黑底赤纹衣料披过肩头、指间束发绳收紧、横刀插入腰带扣实；切35mm LS她黑衣束发佩刀立于荒野边缘，囚服弃于脚边。",
+      "character_slots": [
+        { "character_id": "CHAR_01", "slot": "CENTER_SLOT", "position": "居中单人主体" }
+      ],
+      "multi_subject_strategy": "single_subject_focus：单人换装特写链",
+      "character_ids": ["CHAR_01/囚服转制服态"],
+      "object_ids": ["WEAPON_横刀", "PROP_镇魔司制服"],
+      "location_id": "LOC_01",
+      "entity_schedule": {
+        "characters": ["CHAR_01/囚服转制服态"],
+        "objects": ["WEAPON_横刀", "PROP_镇魔司制服"],
+        "locations": ["LOC_01"],
+        "knowledge_state": {
+          "CHAR_01": ["知道制服既能唬人也可能引来镇魔司真身", "把佩刀视作活下去的底气"]
+        },
+        "required_presence": ["CHAR_01", "PROP_镇魔司制服", "WEAPON_横刀"],
+        "forbidden_presence": ["CHAR_02", "CHAR_03", "GROUP_01", "BEAST_01"],
+        "offscreen_presence": []
+      },
+      "shots": [
+        { "id": "S03A", "shot_size": "MCU", "lens": "50mm", "camera": "固定", "desc": "赤纹披肩、束发、佩刀三个动作完成点连切。" },
+        { "id": "S03B", "shot_size": "LS", "lens": "35mm", "camera": "慢推", "desc": "黑衣赤纹全身立姿，囚服弃于脚边，手按刀柄。" }
+      ],
+      "continuity": {
+        "start_state": "她抱着制服立于浅坟旁，仍着囚服。",
+        "end_state": "换装完成：黑衣赤纹、束发、佩刀，囚服弃地。",
+        "transition": "离开荒野切官道行路。",
+        "seam_mode": "hard_cut",
+        "need_endframe": true,
+        "entry_exit": "囚服自此退场；制服态自此为常态。",
+        "shot_size": "MCU→LS",
+        "eyeline": "低头看衣料与刀，站定后望向画左后官道方向。",
+        "expression_span": "小",
+        "end_anchor_required": true,
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/EP03_CLIP03_a1.png",
+            "at_sec": 9.0,
+            "use": "edit_cut",
+            "reason": "换装完成的全身站姿锚：锁定制服态外观供后续所有 clip 与后续集引用"
+          }
+        ]
+      },
+      "start_sec": 17.6,
+      "end_sec": 28.6
+    },
+    {
+      "id": "EP03_CLIP04",
+      "beat_id": "Beat_02",
+      "label": "贱籍死局与马蹄",
+      "duration": 12.5,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [7, 8, 9],
+      "dialogue_indices": [7, 8, 9],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "姜家获罪，我是贱籍；没有路引，进不了城，也住不了店。躲进村子？迟早被查。伪造？我连门路都没有。",
+        "刚从虎口里爬出来，前面又是死路。行吧，走一步算一步。",
+        "马蹄声？十几骑！"
+      ],
+      "mouth_visible": false,
+      "scene": "LOC_02/官道行路",
+      "rhythm": "快盘算转骤停",
+      "pacing_role": "危机信息压缩与马队逼近的转点",
+      "runtime_priority": "selective",
+      "economy_intent": "selective_detail",
+      "target_story_clip_sec": { "min": 9, "max": 13 },
+      "dramatic_function": "贱籍无路引的死局把她的选择压到墙角，马蹄声在绝路尽头骤然响起。",
+      "editing_intent": "行路LS铺内心快盘算，节奏词随步频；『走一步算一步』落在苦笑半拍；马蹄声起，她驻足、瞳孔收紧、手按刀柄，镜头回身望向道路尽头。",
+      "audience_effect": "理解她为何只能硬着头皮扮下去，并因马蹄声瞬间提起心弦。",
+      "description": "35mm LS：黑衣赤纹的姜月初沿黄土官道独行，枯草车辙纵深；切85mm CU她烦躁盘算的侧脸；骤闻马蹄，她猛然驻足回身，远处尘头初起。",
+      "character_slots": [
+        { "character_id": "CHAR_01", "slot": "CENTER_SLOT", "position": "官道纵深中的独行主体" }
+      ],
+      "multi_subject_strategy": "single_subject_focus：单人行路与反应",
+      "character_ids": ["CHAR_01/镇魔司制服态"],
+      "object_ids": ["WEAPON_横刀"],
+      "location_id": "LOC_02",
+      "entity_schedule": {
+        "characters": ["CHAR_01/镇魔司制服态"],
+        "objects": ["WEAPON_横刀"],
+        "locations": ["LOC_02"],
+        "knowledge_state": {
+          "CHAR_01": ["知道贱籍无路引寸步难行", "尚不知来者是敌是友"]
+        },
+        "required_presence": ["CHAR_01", "WEAPON_横刀"],
+        "forbidden_presence": ["CHAR_03", "GROUP_01"],
+        "offscreen_presence": ["GROUP_01"]
+      },
+      "shots": [
+        { "id": "S04A", "shot_size": "LS", "lens": "35mm", "camera": "短跟", "desc": "官道独行，纵深车辙，步频承内心盘算。" },
+        { "id": "S04B", "shot_size": "CU", "lens": "85mm", "camera": "固定", "desc": "烦躁苦笑转骤然警觉：驻足回身，手按刀柄，远处尘头。" }
+      ],
+      "continuity": {
+        "start_state": "换装完成后独行官道。",
+        "end_state": "她驻足回身按刀，马队尘头在道路尽头出现。",
+        "transition": "马队冲近接急停。",
+        "seam_mode": "hard_cut",
+        "need_endframe": false,
+        "entry_exit": "官道与车辙纵深首次入画；马队以远处尘头预告入画。",
+        "shot_size": "LS→CU",
+        "eyeline": "行路视线向画左后纵深；回身后望向画左后尘头。",
+        "expression_span": "中",
+        "end_anchor_required": false
+      },
+      "start_sec": 28.6,
+      "end_sec": 41.1
+    },
+    {
+      "id": "EP03_CLIP05",
+      "beat_id": "Beat_03",
+      "label": "马队急停试探",
+      "duration": 6.0,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [10, 11],
+      "dialogue_indices": [10, 11],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "敢问……可是镇魔司的大人当面？",
+        "……何事？"
+      ],
+      "mouth_visible": true,
+      "scene": "LOC_02/官道对峙",
+      "rhythm": "急停·压迫对峙",
+      "pacing_role": "人数压迫与误认反转的入口",
+      "runtime_priority": "primary",
+      "economy_intent": "selective_detail",
+      "target_story_clip_sec": { "min": 5, "max": 8 },
+      "dramatic_function": "十几骑的武力压迫在一件制服前放缓成试探；她用两个字撑住第一回合。",
+      "editing_intent": "马队沿纵深轴冲近急停、尘土漫过她衣摆；陈青源勒马拱手试探，注意到玄色赤纹后语气转敬；她背对镜头半拍后只回『何事』，强装冷硬。",
+      "audience_effect": "为她第一句话捏汗，又因『两个字唬住刀客』获得反转快感。",
+      "description": "35mm LS：十几骑土褐劲装武人沿官道纵深冲近、勒马急停，尘土卷起；前景姜月初立定不退；切50mm MS陈青源马上拱手，目光扫过她的黑衣赤纹。",
+      "character_slots": [
+        { "character_id": "CHAR_01", "slot": "RIGHT_SLOT", "position": "画右前景立定背影转侧脸" },
+        { "character_id": "CHAR_03", "slot": "CENTER_SLOT", "position": "马上领队拱手试探" },
+        { "character_id": "GROUP_01", "slot": "BACKGROUND_SLOT", "position": "急停列队的骑手群" }
+      ],
+      "multi_subject_strategy": "regional_construct_required：前景单人区与马队群像区分层，马匹动势沿纵深轴不越轴",
+      "character_ids": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/列队戒备态"],
+      "object_ids": ["WEAPON_横刀"],
+      "location_id": "LOC_02",
+      "entity_schedule": {
+        "characters": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/列队戒备态"],
+        "objects": ["WEAPON_横刀"],
+        "locations": ["LOC_02"],
+        "knowledge_state": {
+          "CHAR_01": ["不知对方来意，赌制服能唬住"],
+          "CHAR_03": ["急寻救兵，见制服先礼后探"],
+          "GROUP_01": ["随首领急停列队，观望"]
+        },
+        "required_presence": ["CHAR_01", "CHAR_03", "GROUP_01"],
+        "forbidden_presence": ["BEAST_01"],
+        "offscreen_presence": []
+      },
+      "shots": [
+        { "id": "S05A", "shot_size": "LS", "lens": "35mm", "camera": "固定", "desc": "马队冲近急停，尘土漫过她衣摆，她立定不退。" },
+        { "id": "S05B", "shot_size": "MS", "lens": "50mm", "camera": "轻摇", "desc": "陈青源马上拱手试探；她半拍沉默后侧首吐出两字。" }
+      ],
+      "continuity": {
+        "start_state": "马队自尘头冲至眼前。",
+        "end_state": "急停对峙成形：陈青源执礼试探，她以『何事』撑住。",
+        "transition": "同场景接陈情。",
+        "seam_mode": "hard_cut",
+        "need_endframe": false,
+        "entry_exit": "陈青源与飞鹰门马队正式入画。",
+        "shot_size": "LS→MS",
+        "eyeline": "陈青源自马上俯向画右前；她侧首回望向画左后。",
+        "expression_span": "中",
+        "end_anchor_required": false
+      },
+      "start_sec": 41.1,
+      "end_sec": 47.1
+    },
+    {
+      "id": "EP03_CLIP06",
+      "beat_id": "Beat_03",
+      "label": "陈情与硬装",
+      "duration": 12.5,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [12, 13],
+      "dialogue_indices": [12, 13],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "在下飞鹰门陈青源，奉县令手令驰援上盘村。狼妖占村三日，我们折了七八个好手，实在杀不进去。可我不能扔下他们等死。",
+        "不能解释。解释一句，就多一个破绽。装，接着装。"
+      ],
+      "mouth_visible": true,
+      "scene": "LOC_02/官道陈情",
+      "rhythm": "常速陈情压内心快切",
+      "pacing_role": "误认反转兑现与假身份第一次得逞",
+      "runtime_priority": "primary",
+      "economy_intent": "premium_detail",
+      "target_story_clip_sec": { "min": 10, "max": 14 },
+      "dramatic_function": "陈青源报名陈情坐实误认；她的沉默被读作官威，假身份第一次真正兑现。",
+      "editing_intent": "陈青源下马抱拳陈情，信息量大但一镜承载；穿插她眼神游移的MCU与攥紧的拇指压『装，接着装』内心快声；她始终不接话——沉默即官威。",
+      "audience_effect": "同时看见两层戏：明面的求援陈情与暗面的心虚硬撑。",
+      "description": "50mm MS：陈青源已下马、抱拳躬身陈情，身后骑手静默；反打85mm MCU姜月初面沉如水、眼神却微微游移，拇指抠着刀柄侧。",
+      "character_slots": [
+        { "character_id": "CHAR_03", "slot": "LEFT_SLOT", "position": "画左下马抱拳陈情" },
+        { "character_id": "CHAR_01", "slot": "RIGHT_SLOT", "position": "画右受礼者反打主焦点" },
+        { "character_id": "GROUP_01", "slot": "BACKGROUND_SLOT", "position": "静默列队背景" }
+      ],
+      "multi_subject_strategy": "shot_reverse_shot：双人正反打为主，群像仅作背景层",
+      "character_ids": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/列队戒备态"],
+      "object_ids": ["WEAPON_横刀"],
+      "location_id": "LOC_02",
+      "entity_schedule": {
+        "characters": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/列队戒备态"],
+        "objects": ["WEAPON_横刀"],
+        "locations": ["LOC_02"],
+        "knowledge_state": {
+          "CHAR_01": ["得知狼妖占村、飞鹰门折损七八人", "确认自己被误认，决定将错就错沉默到底"],
+          "CHAR_03": ["相信眼前人是镇魔司官员", "急于求援上盘村"],
+          "GROUP_01": ["静默列队，等首领结果"]
+        },
+        "required_presence": ["CHAR_01", "CHAR_03"],
+        "forbidden_presence": ["BEAST_01"],
+        "offscreen_presence": ["GROUP_01"]
+      },
+      "shots": [
+        { "id": "S06A", "shot_size": "MS", "lens": "50mm", "camera": "固定", "desc": "陈青源下马抱拳陈情，信息完整不切碎。" },
+        { "id": "S06B", "shot_size": "MCU", "lens": "85mm", "camera": "微推", "desc": "她面沉如水的反打：眼神游移半寸，拇指抠刀柄。" }
+      ],
+      "continuity": {
+        "start_state": "对峙已成，陈青源开始报名陈情。",
+        "end_state": "陈情说完，她仍未接话；心虚被读作深沉。",
+        "transition": "同场景升级为跪求。",
+        "seam_mode": "hard_cut",
+        "need_endframe": false,
+        "entry_exit": "上盘村、狼妖、县令手令等信息全部由台词入局，不闪回。",
+        "shot_size": "MS→MCU",
+        "eyeline": "陈青源仰视画右前；她俯视画左下，避开对视半寸。",
+        "expression_span": "中",
+        "end_anchor_required": false
+      },
+      "start_sec": 47.1,
+      "end_sec": 59.6
+    },
+    {
+      "id": "EP03_CLIP07",
+      "beat_id": "Beat_04",
+      "label": "百十条人命压身",
+      "duration": 12.0,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [14, 15, 16],
+      "dialogue_indices": [14, 15, 16],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "活人都被圈在祠堂里，每日拖出去几个。去兰州求援，来回至少十天——他们等不到了！",
+        "此地只有大人能救他们。陈某，恳请大人出手！",
+        "恳请大人出手！"
+      ],
+      "mouth_visible": true,
+      "scene": "LOC_02/官道群跪",
+      "rhythm": "层层加压至情绪峰",
+      "pacing_role": "道德夹逼情绪峰·兑现冷开场",
+      "runtime_priority": "primary",
+      "economy_intent": "premium_detail",
+      "target_story_clip_sec": { "min": 10, "max": 14 },
+      "dramatic_function": "由单人陈情升级为群体跪求，虚假的权力高位被拍成道德夹逼；时间线在此追上冷开场。",
+      "editing_intent": "祠堂惨状只走台词不闪回；陈青源单膝跪下、身后众人随之齐跪，构图复现冷开场ELS完成时间线闭合；切她僵住的手与强装冷静的脸。",
+      "audience_effect": "认出这就是开场那一跪，悬念闭环；替她感到百十条人命压上肩的窒息。",
+      "description": "50mm MS陈青源沉痛陈述转单膝跪地；35mm ELS身后十几名武人齐刷刷随跪叩首，复现冷开场构图；切85mm ECU姜月初僵住的手指与强装镇定的脸。",
+      "character_slots": [
+        { "character_id": "CHAR_03", "slot": "CENTER_SLOT", "position": "由立转跪的领拜者" },
+        { "character_id": "CHAR_01", "slot": "RIGHT_SLOT", "position": "画右受拜者，手部ECU情绪锚" },
+        { "character_id": "GROUP_01", "slot": "BACKGROUND_SLOT", "position": "齐跪叩首群像" }
+      ],
+      "multi_subject_strategy": "regional_construct_required：群跪区与单人反应区分层构建，复用冷开场构图记忆",
+      "character_ids": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/齐跪态"],
+      "object_ids": ["WEAPON_横刀"],
+      "location_id": "LOC_02",
+      "entity_schedule": {
+        "characters": ["CHAR_01/镇魔司制服态", "CHAR_03/风尘劲装态", "GROUP_01/齐跪态"],
+        "objects": ["WEAPON_横刀"],
+        "locations": ["LOC_02"],
+        "knowledge_state": {
+          "CHAR_01": ["得知村民正被逐日拖走、援兵十天不可达", "意识到自己已无退路"],
+          "CHAR_03": ["押上全部尊严跪求"],
+          "GROUP_01": ["随首领齐跪，把希望全压在她身上"]
+        },
+        "required_presence": ["CHAR_01", "CHAR_03", "GROUP_01"],
+        "forbidden_presence": ["BEAST_01"],
+        "offscreen_presence": []
+      },
+      "shots": [
+        { "id": "S07A", "shot_size": "MS", "lens": "50mm", "camera": "固定", "desc": "陈青源沉痛陈述，单膝落地。" },
+        { "id": "S07B", "shot_size": "ELS", "lens": "35mm", "camera": "固定", "desc": "众人齐跪叩首，复现冷开场构图，尘土轻扬。" },
+        { "id": "S07C", "shot_size": "ECU", "lens": "85mm", "camera": "微推", "desc": "她僵住的手指与强装冷静的脸。" }
+      ],
+      "continuity": {
+        "start_state": "陈情结束，压力升级。",
+        "end_state": "众人齐跪叩首，时间线与冷开场闭合，她被架上高位。",
+        "transition": "情绪峰顶接她的崩溃自嘲。",
+        "seam_mode": "hard_cut",
+        "need_endframe": false,
+        "entry_exit": "群跪构图与EP03_CLIP01同锚复现；祠堂惨状仅在台词中。",
+        "shot_size": "MS→ELS→ECU",
+        "eyeline": "众人向画右前叩首；她视线从人群缓缓垂落到自己手上。",
+        "expression_span": "大",
+        "end_anchor_required": true,
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/EP03_CLIP07_a1.png",
+            "at_sec": 8.0,
+            "use": "edit_cut",
+            "reason": "群跪ELS与冷开场同构图锚：锁定时间线闭合的构图记忆"
+          }
+        ]
+      },
+      "start_sec": 59.6,
+      "end_sec": 71.6
+    },
+    {
+      "id": "EP03_CLIP08",
+      "beat_id": "Beat_04",
+      "label": "被迫接局·集尾",
+      "duration": 9.5,
+      "take_policy": "single_take_multishot",
+      "voiceover_indices": [17, 18],
+      "dialogue_indices": [17, 18],
+      "narration_indices": [],
+      "subtitle_lines": [
+        "好好好……老天爷，你非要这么玩是吧？那我还活鸡毛了。",
+        "狼妖、假身份、百十条人命。这趟要是去了，我还能活着回来吗？"
+      ],
+      "mouth_visible": true,
+      "scene": "LOC_02/官道集尾",
+      "rhythm": "慢·崩溃自嘲收束成死局定格",
+      "pacing_role": "反差爽点与集尾悬念",
+      "runtime_priority": "primary",
+      "economy_intent": "selective_detail",
+      "target_story_clip_sec": { "min": 8, "max": 11 },
+      "dramatic_function": "她对老天的怨怼化作破罐子破摔的决意；三重死局并置，集尾悬置在『能否活着回来』。",
+      "editing_intent": "『好好好』三连用微仰头苦笑消化，众人仍跪未起；『那我还活鸡毛了』落在她压平呼吸转身面向众人的半拍；集尾内心三词并置压CU定格，切黑。",
+      "audience_effect": "在她自嘲中获得反差爽感，又被『活着回来吗』钉进下一集。",
+      "description": "85mm CU：姜月初仰头看天苦笑三声，喉头滚动；压平呼吸后转身面向仍跪伏的众人；镜头缓推她强装镇定的脸，眼底疲惫与决意并存，定格切黑。",
+      "character_slots": [
+        { "character_id": "CHAR_01", "slot": "CENTER_SLOT", "position": "居中CU主体" },
+        { "character_id": "GROUP_01", "slot": "BACKGROUND_SLOT", "position": "焦外仍跪伏的群像" }
+      ],
+      "multi_subject_strategy": "single_subject_focus：单人CU为主，群跪虚化为背景压力层",
+      "character_ids": ["CHAR_01/镇魔司制服态", "GROUP_01/齐跪态焦外"],
+      "object_ids": ["WEAPON_横刀"],
+      "location_id": "LOC_02",
+      "entity_schedule": {
+        "characters": ["CHAR_01/镇魔司制服态", "GROUP_01/齐跪态焦外"],
+        "objects": ["WEAPON_横刀"],
+        "locations": ["LOC_02"],
+        "knowledge_state": {
+          "CHAR_01": ["接受已无退路的现实", "决定顶着假身份走向上盘村"]
+        },
+        "required_presence": ["CHAR_01"],
+        "forbidden_presence": ["BEAST_01"],
+        "offscreen_presence": ["CHAR_03", "GROUP_01"]
+      },
+      "shots": [
+        { "id": "S08A", "shot_size": "CU", "lens": "85mm", "camera": "固定", "desc": "仰头苦笑三声，喉头滚动，怨怼老天。" },
+        { "id": "S08B", "shot_size": "CU", "lens": "85mm", "camera": "缓推", "desc": "压平呼吸转身面向众人，眼底疲惫与决意并存，定格切黑。" }
+      ],
+      "continuity": {
+        "start_state": "群跪未起，她站在情绪峰顶。",
+        "end_state": "她默认接下驰援，集尾定格切黑；狼妖村之行悬置到第4集。",
+        "transition": "切黑收束，第4集冷开接踏上驰援之路。",
+        "seam_mode": "hard_cut",
+        "need_endframe": true,
+        "entry_exit": "本集人物无新增退场；三重压力以台词并置收束。",
+        "shot_size": "CU→CU",
+        "eyeline": "先仰望画上方，后平视画左前众人。",
+        "expression_span": "大",
+        "end_anchor_required": true,
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/EP03_CLIP08_a1.png",
+            "at_sec": 8.5,
+            "use": "edit_cut",
+            "reason": "集尾定格帧：锁定制服态表情锚，供第4集冷开承接"
+          }
+        ]
+      },
+      "start_sec": 71.6,
+      "end_sec": 81.1
+    }
+  ]
+}
