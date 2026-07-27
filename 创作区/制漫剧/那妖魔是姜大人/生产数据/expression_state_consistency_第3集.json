@@ -1,0 +1,23 @@
+{
+  "counts": {
+    "block": 0,
+    "warn": 2
+  },
+  "findings": [
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP03_CLIP07",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    },
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP03_CLIP08",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    }
+  ],
+  "kind": "n2d_expression_state_consistency",
+  "status": "pass",
+  "version": 1
+}

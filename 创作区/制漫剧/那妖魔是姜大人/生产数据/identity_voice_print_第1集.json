@@ -1,9 +1,9 @@
 {
   "kind": "n2d_identity_voice_print_report",
   "episode": "第1集",
-  "manifest": "./合成/第1集/配音/时长清单.json",
+  "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/配音/时长清单.json",
   "native_voice_identity": {
-    "path": "./生产数据/native_voice_identity_第1集.json",
+    "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/native_voice_identity_第1集.json",
     "episode": "第1集",
     "status": "missing",
     "segments": 0,

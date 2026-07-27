@@ -1,28 +1,250 @@
 {
   "authority": "derived index only; _进度.md and existing gates remain authoritative",
-  "edges": [],
+  "edges": [
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_01",
+      "target": "route:Clip_01"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_02",
+      "target": "route:Clip_02"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_03",
+      "target": "route:Clip_03"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_04",
+      "target": "route:Clip_04"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_05",
+      "target": "route:Clip_05"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_06",
+      "target": "route:Clip_06"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_07",
+      "target": "route:Clip_07"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_08",
+      "target": "route:Clip_08"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_01"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_02"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_03"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_04"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_05"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_06"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_07"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第3集",
+      "target": "clip:Clip_08"
+    }
+  ],
   "episode": "第3集",
-  "generated_at": "2026-07-24T15:50:49+0800",
-  "graph_hash": "ebbd89866ac0b4af3722954d9d4f32bfe91a0acfb05c06fd78dfa7ec4cb500d5",
+  "generated_at": "2026-07-27T15:35:56+0800",
+  "graph_hash": "d98d87ac342b54c1d643a9adf15f7dd699ac88304ce3e13be332b47401a9d004",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
     {
+      "clip": "Clip_01",
+      "duration_sec": 10.52,
+      "id": "clip:Clip_01",
+      "scene": "LOC_02/未来片段·官道群跪",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_02",
+      "duration_sec": 7.441,
+      "id": "clip:Clip_02",
+      "scene": "LOC_01/荒野边缘浅坟",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_03",
+      "duration_sec": 11.755,
+      "id": "clip:Clip_03",
+      "scene": "LOC_01/荒野边缘换装",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_04",
+      "duration_sec": 15.383,
+      "id": "clip:Clip_04",
+      "scene": "LOC_02/官道行路",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_05",
+      "duration_sec": 4.428,
+      "id": "clip:Clip_05",
+      "scene": "LOC_02/官道对峙",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_06",
+      "duration_sec": 15.551,
+      "id": "clip:Clip_06",
+      "scene": "LOC_02/官道陈情",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_07",
+      "duration_sec": 12.221,
+      "id": "clip:Clip_07",
+      "scene": "LOC_02/官道群跪",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_08",
+      "duration_sec": 11.534,
+      "id": "clip:Clip_08",
+      "scene": "LOC_02/官道集尾",
+      "type": "story_clip"
+    },
+    {
       "episode": "第3集",
       "id": "episode:第3集",
       "type": "episode"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_01",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_01",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_02",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_02",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_03",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_03",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_04",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_04",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_05",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_05",
+      "type": "video_route"
+    },
+    {
+      "backend": "dreamina",
+      "channel": "",
+      "clip": "Clip_06",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_06",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_07",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_07",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_08",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_08",
+      "type": "video_route"
     }
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-  "source_files": [],
+  "source_files": [
+    {
+      "bytes": 135716,
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "role": "video_routes",
+      "sha256": "c6018c791760540e53d4edfed23cb42be79bbbb5108a029b8562d7c41cd2c4af"
+    },
+    {
+      "bytes": 53507,
+      "path": "脚本/第3集/storyboard.json",
+      "role": "storyboard",
+      "sha256": "2adb9bbca8cdbff42a94c7c52d50a4732b034b2267e95a5ff800e7469afe6608"
+    }
+  ],
   "status": "pass",
   "summary": {
-    "edges": 0,
+    "edges": 16,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 1,
-    "routes": 0,
-    "story_clips": 0,
+    "nodes": 17,
+    "routes": 8,
+    "story_clips": 8,
     "video_media": 0
   },
   "version": 1

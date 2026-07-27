@@ -3,10 +3,10 @@
   "kind": "comic_gate_findings",
   "chapter": "第2话",
   "stage": "image_preflight",
-  "created_at": "2026-07-22T14:49:33",
+  "created_at": "2026-07-27T10:21:02",
   "summary": {
-    "finding_count": 8,
-    "block_count": 1,
+    "finding_count": 11,
+    "block_count": 4,
     "warn_count": 6,
     "info_count": 1
   },
@@ -14,11 +14,22 @@
     {
       "severity": "block",
       "dimension": "comic_gate",
-      "code": "panel_jobs_stale_contract",
-      "artifact": "出图/第2话/prompt/panel_jobs.json",
-      "reason": "这些格的落盘出图包与当前脚本/收尾/风格契约不一致（改了契约没重建出图包）：P001、P002、P003、P004、P005、P006、P007、P008、P009、P010、P011、P012、P013、P014、P015、P016",
-      "return_to_stage": "image",
-      "suggested_fix": "重跑 comic-image/scripts/build_panel_jobs.py（陈旧格自动回 planned），再重抽这些格。",
+      "code": "model_pack_not_signed_off",
+      "artifact": "生产数据/comic_model_pack_report.json",
+      "reason": "角色多视图技术齐套与人审签收 未通过：_sha256\": \"ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc\",\n            \"crop_box\": []\n          }\n        }\n      ],\n      \"model_pack_fingerprint\": \"73b3169cb60d1f972353d73a9dadf7b5061fc5dac4aa1d02740bd87463662532\",\n      \"signoff\": {\n        \"path\": \"生产数据/comic_model_pack_signoffs/MON_FOX_SERVANT.json\",\n        \"status\": \"current\",\n        \"approved_at\": \"2026-07-22T03:07:31+00:00\",\n        \"reviewer\": \"Codex制作代理\"\n      },\n      \"signoff_required\": true,\n      \"readiness\": \"ready\",\n      \"technical_block\": false,\n      \"findings\": []\n    },\n    {\n      \"kind\": \"comic_character_model_pack\",\n      \"version\": 1,\n      \"character_id\": \"MON_PAINTED_SKIN\",\n      \"asset_type\": \"monster\",\n      \"tier\": \"restricted_partial\",\n      \"required_views\": [\n        \"front\"\n      ],\n      \"view_evidence\": [\n        {\n          \"view\": \"front\",\n          \"path\": \"\",\n          \"sha256\": \"\",\n          \"width\": 0,\n          \"height\": 0,\n          \"source_view\": \"\",\n          \"derivation\": {}\n        }\n      ],\n      \"model_pack_fingerprint\": \"6d26b2dbe52a6da5af90d07978bacfa7396bb1be13f3c20af5337145b8ad7ed2\",\n      \"signoff\": {\n        \"path\": \"生产数据/comic_model_pack_signoffs/MON_PAINTED_SKIN.json\",\n        \"status\": \"missing\",\n        \"approved_at\": \"\",\n        \"reviewer\": \"\"\n      },\n      \"signoff_required\": true,\n      \"readiness\": \"needs_fix\",\n      \"technical_block\": true,\n      \"findings\": [\n        {\n          \"severity\": \"block\",\n          \"code\": \"model_pack_view_missing\",\n          \"view\": \"front\",\n          \"message\": \"缺必需视图 front\"\n        }\n      ],\n      \"montage\": \"生产数据/model_pack_montage/MON_PAINTED_SKIN.jpg\"\n    }\n  ],\n  \"summary\": {\n    \"assets\": 10,\n    \"characters\": 7,\n    \"monsters\": 3,\n    \"ready\": 5,\n    \"needs_approval\": 4,\n    \"needs_fix\": 1\n  }\n}",
+      "return_to_stage": "identity",
+      "suggested_fix": "按 角色多视图技术齐套与人审签收 输出修复并重新签收后重跑 gate。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "missing_character_views",
+      "artifact": "生产数据/comic_identity_report.json",
+      "reason": "长线专门定妆未补齐：MON_PAINTED_SKIN 缺 front",
+      "return_to_stage": "identity",
+      "suggested_fix": "补 front/three_quarter/side/back/face 后重跑 gate。",
       "evidence_family": "deterministic",
       "confidence": "deterministic"
     },
@@ -63,6 +74,28 @@
       "reason": "伏笔「疯乞让陈氏吞下的浓痰停在胸间。」兑现话 第1话 已早于本话 第2话 但仍 open——坑该收没收=长线断供/忘坑；补收并标 done，或改 payoff_chapter/标 ongoing。",
       "return_to_stage": "comic-script",
       "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "reference_plan_stale",
+      "artifact": "生产数据/comic_reference_plan_第2话.json",
+      "reason": "已落盘处方的 inputs_fingerprint 与当前输入不一致。",
+      "return_to_stage": "identity",
+      "suggested_fix": "重跑 comic-image 构建参考处方和 panel_jobs。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "reference_plan_stale",
+      "artifact": "生产数据/comic_reference_plan_第2话.json",
+      "reason": "已落盘处方的 plan_sha256 与当前输入不一致。",
+      "return_to_stage": "identity",
+      "suggested_fix": "重跑 comic-image 构建参考处方和 panel_jobs。",
       "evidence_family": "deterministic",
       "confidence": "deterministic"
     },

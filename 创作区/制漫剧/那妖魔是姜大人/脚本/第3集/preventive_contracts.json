@@ -1,6 +1,111 @@
 {
   "audio_timing": {
-    "dialogue_closeups": [],
+    "dialogue_closeups": [
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_01",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第3集/视频_lipsync/Clip_01_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=9.6s；dialogue_indices=[1, 2]；voiceover_indices=[1, 2]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_02",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第3集/视频_lipsync/Clip_02_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=8.0s；dialogue_indices=[3, 4]；voiceover_indices=[3, 4]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_03",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=11.0s；dialogue_indices=[5, 6]；voiceover_indices=[5, 6]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_04",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=12.5s；dialogue_indices=[7, 8, 9]；voiceover_indices=[7, 8, 9]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_05",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第3集/视频_lipsync/Clip_05_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=6.0s；dialogue_indices=[10, 11]；voiceover_indices=[10, 11]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_06",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第3集/视频_lipsync/Clip_06_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=12.5s；dialogue_indices=[12, 13]；voiceover_indices=[12, 13]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_07",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第3集/视频_lipsync/Clip_07_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=12.0s；dialogue_indices=[14, 15, 16]；voiceover_indices=[14, 15, 16]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_08",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第3集/视频_lipsync/Clip_08_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=9.5s；dialogue_indices=[17, 18]；voiceover_indices=[17, 18]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      }
+    ],
     "mode": "混合自动路由  # source=explicit_user",
     "native_av_policy": {
       "lipsync_policy": "逐镜 route 决定；项目级对口型=关闭。",
@@ -23,14 +128,700 @@
     "promise": "观众将看到姜月初如何用假镇魔司身份在边地求生，以及这次冒名会迫使她首次正面承担斩妖责任。",
     "source_trace_ids": []
   },
-  "interaction_physics": [],
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "start_state: 未来片段：众人已跪，姜月初已着镇魔司制服。",
+        "end_state: 她僵在群跪之前，内心自问如何沦为救命稻草。",
+        "entry_exit: 只交代群跪、制服、心虚三要素；不出现浅坟与囚服。",
+        "35mm ELS：黄土官道上十几名土褐劲装武人齐刷刷跪倒叩首，马匹在后；画右前景黑衣赤纹束发佩刀的姜月初背影僵直；切85mm CU她错愕心虚的脸与收紧的指节。"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01：画右前景背影转CU主焦点",
+        "CHAR_03：跪伏众人最前领拜者",
+        "GROUP_01：官道纵深处齐跪武人群"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 时间回切：埋尸刚完成，她仍穿残损囚服。",
+        "end_state: 她抱起制服与横刀起身，背向浅坟。",
+        "entry_exit: 浅坟、断枝、制服包袱首次入画；遗容全程不入画。",
+        "50mm MS：荒野边缘新覆土的浅坟，插一截断枝为记；姜月初囚服残损、跪在坟侧拍实浮土，转身抱起叠放的黑底赤纹制服与横刀；不拍遗容。"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01：画右侧跪于坟前主焦点",
+        "CHAR_02：画左前景浅坟（遗体已覆土不可见）"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "衣料披肩",
+        "束发佩刀",
+        "全身立姿确认",
+        "start_state: 她抱起制服与横刀起身，背向浅坟。",
+        "end_state: 换装完成：黑衣赤纹、束发、佩刀，囚服弃地。",
+        "entry_exit: 囚服自此退场；制服态自此为常态。；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服",
+        "50mm MCU三连：黑底赤纹衣料披过肩头、指间束发绳收紧、横刀插入腰带扣实；切35mm LS她黑衣束发佩刀立于荒野边缘，囚服弃于脚边。"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "黑衣赤纹换装 动作不稳时拆为建立镜 + 关键动作 + 反应/结果镜，保留剧情 beat。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_01：居中单人主体",
+        "动作插入镜均保持姜月初朝画左三分之四侧，落幅全身仍在同一侧"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 马队自尘头冲至眼前。",
+        "end_state: 急停对峙成形：陈青源执礼试探，她以『何事』撑住。",
+        "entry_exit: 陈青源与飞鹰门马队正式入画。",
+        "35mm LS：十几骑土褐劲装武人沿官道纵深冲近、勒马急停，尘土卷起；前景姜月初立定不退；切50mm MS陈青源马上拱手，目光扫过她的黑衣赤纹。"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01：画右前景立定背影转侧脸",
+        "CHAR_03：马上领队拱手试探",
+        "GROUP_01：急停列队的骑手群"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 对峙已成，陈青源开始报名陈情。",
+        "end_state: 陈情说完，她仍未接话；心虚被读作深沉。",
+        "entry_exit: 上盘村、狼妖、县令手令等信息全部由台词入局，不闪回。",
+        "50mm MS：陈青源已下马、抱拳躬身陈情，身后骑手静默；反打85mm MCU姜月初面沉如水、眼神却微微游移，拇指抠着刀柄侧。"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_03：画左下马抱拳陈情",
+        "CHAR_01：画右受礼者反打主焦点",
+        "GROUP_01：静默列队背景"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 陈情结束，压力升级。",
+        "end_state: 众人齐跪叩首，时间线与冷开场闭合，她被架上高位。",
+        "entry_exit: 群跪构图与EP03_CLIP01同锚复现；祠堂惨状仅在台词中。",
+        "50mm MS陈青源沉痛陈述转单膝跪地；35mm ELS身后十几名武人齐刷刷随跪叩首，复现冷开场构图；切85mm ECU姜月初僵住的手指与强装镇定的脸。"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_03：由立转跪的领拜者",
+        "CHAR_01：画右受拜者，手部ECU情绪锚",
+        "GROUP_01：齐跪叩首群像"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 群跪未起，她站在情绪峰顶。",
+        "end_state: 她默认接下驰援，集尾定格切黑；狼妖村之行悬置到第4集。",
+        "entry_exit: 本集人物无新增退场；三重压力以台词并置收束。",
+        "85mm CU：姜月初仰头看天苦笑三声，喉头滚动；压平呼吸后转身面向仍跪伏的众人；镜头缓推她强装镇定的脸，眼底疲惫与决意并存，定格切黑。"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01：居中CU主体",
+        "GROUP_01：焦外仍跪伏的群像"
+      ],
+      "vfx_layers": []
+    }
+  ],
   "kind": "n2d_preventive_contracts",
   "reference_slots": {
-    "assets": [],
-    "characters": [],
-    "scenes": []
+    "assets": [
+      {
+        "id": "PROP_镇魔司制服",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "WEAPON_横刀",
+        "lock_strategy": {
+          "blade_topology": [
+            "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。"
+          ],
+          "face_policy": "faceless",
+          "must_not_have": [
+            "变成长剑",
+            "华丽仙剑",
+            "现代军刀",
+            "多把复制",
+            "副刀",
+            "短刃",
+            "匕首",
+            "右手第二把刀",
+            "副手持刀",
+            "后手短刀",
+            "双持",
+            "刀鞘变成刀刃",
+            "双刃",
+            "多刃",
+            "双向开刃",
+            "第二把刀刃",
+            "光效变成实体刀刃"
+          ],
+          "structure": "同一把唐横刀，刃长、刀镡、刀柄缠绳不漂。"
+        },
+        "reference_slots": [
+          {
+            "path": "生产数据/卡片快照/资产/WEAPON_横刀.md",
+            "sha256": "c702fb869492cb46cd6ae4f5ff541eb9c3fb451a98e357c0738da9b61bf8ea41",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
+            "sha256": "6223c678a5b78e17e6899235e59290242b8328f8af849955f5df59091a3ad647",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
+            "sha256": "de473ac3f8d6c0c1bcbcd5a3800be6490d7c9f2523b5a19211fa52d84bc9bf0a",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      }
+    ],
+    "characters": [
+      {
+        "id": "CHAR_01",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "设定库/characters/姜月初.md",
+            "sha256": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+            "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+            "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+            "sha256": "34472f5a8bd7384657bcbe00eaf840f38d418d10150d69b47e95a85a0b2d18d3",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+            "sha256": "34472f5a8bd7384657bcbe00eaf840f38d418d10150d69b47e95a85a0b2d18d3",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+            "sha256": "7486b5c1050b361a664fb96da22a7544ddf4bacaabb07ba1a6f7c0cb46659f93",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+            "sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+            "sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+            "sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+            "sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+            "slot": "rear_three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+            "sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+            "sha256": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+            "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+            "sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+            "sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+            "sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+            "slot": "rear_three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+            "sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+            "sha256": "34472f5a8bd7384657bcbe00eaf840f38d418d10150d69b47e95a85a0b2d18d3",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+            "sha256": "7486b5c1050b361a664fb96da22a7544ddf4bacaabb07ba1a6f7c0cb46659f93",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+            "sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+            "slot": "expression_refs",
+            "status": "ready"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "设定库/characters/裴长青.md",
+            "sha256": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+            "sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+            "sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+            "sha256": "b2aa5313add850923b450aa61b02880f73153391b51026107829826b388cbf45",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+            "sha256": "b2aa5313add850923b450aa61b02880f73153391b51026107829826b388cbf45",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+            "sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+            "sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+            "sha256": "6907dedab4f7d55bd070ceb4b765e70a8f94a41fbe1ff43d84d865dc8265bce9",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+            "sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+            "sha256": "6907dedab4f7d55bd070ceb4b765e70a8f94a41fbe1ff43d84d865dc8265bce9",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+            "sha256": "b2aa5313add850923b450aa61b02880f73153391b51026107829826b388cbf45",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+            "sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+            "sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+            "slot": "expression_refs",
+            "status": "ready"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_03",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "GROUP_01/列队戒备态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "GROUP_01/齐跪态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "GROUP_01/齐跪态焦外",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "LOC_01",
+        "lock_strategy": {
+          "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
+          "face_policy": "faceless",
+          "layout": "保持 storyboard 场景轴线和地标。",
+          "light_anchor": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+          "lighting_signature": {
+            "color_temperature": "mixed_cool_warm",
+            "key_light_direction": "left",
+            "numeric_measurement": "pending_after_landed_frame_qc",
+            "saturation_profile": "low_desaturated",
+            "source_text": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光；尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光"
+          },
+          "must_not_have": [
+            "现代物件",
+            "平台UI",
+            "水印",
+            "空间轴线随机跳变"
+          ]
+        },
+        "reference_slots": [
+          {
+            "path": "设定库/locations/尸骸荒野.md",
+            "sha256": "7817b42c5d71f16b728d739920a67f7d9f88a2196d804e081388a810f674fccb",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+            "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+            "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+            "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+            "sha256": "684e345c9db2d41a07b78bdbf5134d053c1b9cbc17977a469c8c0337cbb41280",
+            "slot": "reverse",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png",
+            "sha256": "9dd195f171758074ff50e70cf083240de9c3c25fd77b14afda2499c0d0957db0",
+            "slot": "floor_plan",
+            "status": "ready"
+          }
+        ],
+        "type": "scene"
+      },
+      {
+        "id": "LOC_02",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "scene"
+      }
+    ]
   },
-  "shots": [],
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "dramatic_function": "先展示假身份被跪求的结果，再回到换装之前，让身份反噬成为本集命题。",
+      "editing_intent": "0-3秒内完成『群跪+叩首+她僵住』三信息；VO2内心声压在她的CU上，随后硬切回埋尸时间线，不提前解释制服来历。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_02",
+      "dramatic_function": "她亲手埋葬给过她自由承诺的人，并拿走死者之物——杀裴的道德代价落地为可见动作。",
+      "editing_intent": "浅坟合土、插枝为记、抱起叠好的黑色制服包袱三个动作一气呵成；『得罪了兄弟』压在她低头半拍上，必留她面对浅坟的沉默半拍。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_03",
+      "dramatic_function": "囚犯到假镇魔司的身份转换用衣料、束发、佩刀三动作完成；她清醒知道这步棋的双刃。",
+      "editing_intent": "只拍换装的三个完成点：赤纹披上肩、束发收紧、横刀入腰扣；VO以内心声铺在动作上，唇不动；结尾一个站定的全身剪影确认新身份。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_04",
+      "dramatic_function": "贱籍无路引的死局把她的选择压到墙角，马蹄声在绝路尽头骤然响起。",
+      "editing_intent": "行路LS铺内心快盘算，节奏词随步频；『走一步算一步』落在苦笑半拍；马蹄声起，她驻足、瞳孔收紧、手按刀柄，镜头回身望向道路尽头。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_05",
+      "dramatic_function": "十几骑的武力压迫在一件制服前放缓成试探；她用两个字撑住第一回合。",
+      "editing_intent": "马队沿纵深轴冲近急停、尘土漫过她衣摆；陈青源勒马拱手试探，注意到玄色赤纹后语气转敬；她背对镜头半拍后只回『何事』，强装冷硬。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_06",
+      "dramatic_function": "陈青源报名陈情坐实误认；她的沉默被读作官威，假身份第一次真正兑现。",
+      "editing_intent": "陈青源下马抱拳陈情，信息量大但一镜承载；穿插她眼神游移的MCU与攥紧的拇指压『装，接着装』内心快声；她始终不接话——沉默即官威。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_07",
+      "dramatic_function": "由单人陈情升级为群体跪求，虚假的权力高位被拍成道德夹逼；时间线在此追上冷开场。",
+      "editing_intent": "祠堂惨状只走台词不闪回；陈青源单膝跪下、身后众人随之齐跪，构图复现冷开场ELS完成时间线闭合；切她僵住的手与强装冷静的脸。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_08",
+      "dramatic_function": "她对老天的怨怼化作破罐子破摔的决意；三重死局并置，集尾悬置在『能否活着回来』。",
+      "editing_intent": "『好好好』三连用微仰头苦笑消化，众人仍跪未起；『那我还活鸡毛了』落在她压平呼吸转身面向众人的半拍；集尾内心三词并置压CU定格，切黑。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    }
+  ],
   "status": "confirmed",
   "version": 1
 }

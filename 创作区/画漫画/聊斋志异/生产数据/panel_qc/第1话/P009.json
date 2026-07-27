@@ -3,16 +3,34 @@
   "kind": "comic_panel_post_qc",
   "chapter": "第1话",
   "panel_id": "P009",
-  "created_at": "2026-07-21T22:10:32",
-  "verdict": "warn",
+  "created_at": "2026-07-27T14:44:25",
+  "verdict": "pass",
   "path": "出图/第1话/panels/P009.png",
   "size": {
-    "width": 1537,
-    "height": 1023
+    "width": 1296,
+    "height": 1040
   },
   "expected_size": {
     "width": 1296,
     "height": 1040
+  },
+  "resolution_policy": "legacy_unspecified",
+  "resolution_provenance": {
+    "requested_resolution_tier": "highest_available",
+    "maximum_verified": false,
+    "native_size": {
+      "width": 1383,
+      "height": 1137
+    },
+    "native_sha256": "b6e52ba354ffd318566fa1b9213fdc078f0289a8dd96746d5018ef7839333de1",
+    "master_path": "出图/第1话/masters/P009.png",
+    "derivative_size": {
+      "width": 1296,
+      "height": 1040
+    },
+    "normalization_scale": 0.937093,
+    "upscaled": false,
+    "normalization": "center_crop_then_lanczos_downsample"
   },
   "declared_reference_count": 5,
   "declared_reference_binding_count": 5,
@@ -22,19 +40,7 @@
   "omitted_attachment_count": 0,
   "omitted_attachment_ids": [],
   "blank_region_candidates": [],
-  "issues": [
-    {
-      "severity": "warn",
-      "category": "size",
-      "reason": "image size 1537x1023 differs from job size 1296x1040"
-    }
-  ],
-  "manual_review_required": true,
-  "manual_review": {
-    "verdict": "accepted",
-    "reviewed_by": "Codex制作代理",
-    "reviewer_role": "用户授权制作代理",
-    "reviewed_at": "2026-07-21T22:10:00+08:00",
-    "reason": "整集长图逐格视觉复核通过；无字原画、人物身份与叙事动作可读。尺寸差异及裁切边为内置 imagegen 画布转 layout 的已知适配，不是烘焙气泡或截图 UI。"
-  }
+  "large_edge_blank_band_candidates": [],
+  "issues": [],
+  "manual_review_required": false
 }

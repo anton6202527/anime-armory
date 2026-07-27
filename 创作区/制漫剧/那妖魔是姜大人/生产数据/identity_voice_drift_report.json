@@ -1,12 +1,12 @@
 {
   "kind": "n2d_identity_voice_drift_report",
   "version": 1,
-  "root": ".",
-  "generated_at": "2026-07-26T08:48:03+00:00",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "generated_at": "2026-07-27T07:35:54+00:00",
   "episodes": [
     {
       "episode": "第1集",
-      "manifest": "合成/第1集/配音/时长清单.json",
+      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/配音/时长清单.json",
       "status": "ok",
       "lines": 22,
       "characters": {

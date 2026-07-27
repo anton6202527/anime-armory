@@ -1,15 +1,15 @@
 {
   "activation": {
-    "reason": "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。",
-    "state": "storyboard_missing",
-    "storyboard_clip_count": 0,
+    "reason": "题材包已匹配且 storyboard 可读，但当前 clips 未命中题材高风险场景。",
+    "state": "no_scene_archetype_triggered",
+    "storyboard_clip_count": 8,
     "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
-    "storyboard_state": "missing",
+    "storyboard_state": "ready",
     "triggered": false
   },
   "active_scene_archetypes": [],
   "episode": "第3集",
-  "generated_at": "2026-07-24T07:50:49+00:00",
+  "generated_at": "2026-07-27T02:07:48+00:00",
   "genre": {
     "genre_key": "chuanyue",
     "label": "穿越",
@@ -83,7 +83,7 @@
   "stage_key": "script_stage2",
   "status": "pass",
   "summary": {
-    "activation_state": "storyboard_missing",
+    "activation_state": "no_scene_archetype_triggered",
     "active_scenes": 0,
     "issues": 0,
     "matched_clips": 0,
@@ -91,8 +91,8 @@
       "chuanyue"
     ],
     "matched_packs": 1,
-    "storyboard_clip_count": 0,
-    "storyboard_state": "missing"
+    "storyboard_clip_count": 8,
+    "storyboard_state": "ready"
   },
   "version": 1
 }

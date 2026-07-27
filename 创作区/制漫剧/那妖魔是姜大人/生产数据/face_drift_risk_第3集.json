@@ -1,0 +1,128 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 1,
+  "blocking": true,
+  "characters": [
+    {
+      "angle_tokens": [
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP03_CLIP01",
+        "EP03_CLIP02"
+      ],
+      "band": "block",
+      "character_id": "CHAR_01",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "极端角度 1 镜",
+          "points": 6
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "“囚途残损态”",
+      "library_tier": "core_full",
+      "measured_drift": {
+        "drift_char": "CHAR_01__囚途残损态",
+        "embedding_drift_high": 0,
+        "first_bad_episode": "第2集",
+        "spans": "",
+        "total_block": 3
+      },
+      "name": "姜月初",
+      "reference_gaps": [],
+      "scope": "核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角",
+      "score": 22.0,
+      "signals": {
+        "angle": 1,
+        "appear": 2,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 0,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "⛔ 上一集已实测跨集脸漂（已出现 block 级脸漂 3 镜（first=第2集））：本集出图前先处置（重出漂移集 / 升原生主体或 LoRA），别带病续出——这是既成事实不是预测。",
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第3集",
+  "high": 0,
+  "kind": "n2d_face_drift_risk",
+  "medium": 0,
+  "missing_3q_baseline": 0,
+  "notes": [],
+  "prior_drift_available": true,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "LOC_02",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "WEAPON_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      },
+      {
+        "asset_id": "WEAPON_横刀",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      },
+      {
+        "asset_id": "LOC_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_镇魔司制服",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 5,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

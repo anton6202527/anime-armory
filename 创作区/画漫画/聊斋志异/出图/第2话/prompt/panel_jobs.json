@@ -305,12 +305,12 @@
       },
       "result_path": "出图/第2话/panels/P001.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P001.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:22",
-      "artifact_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+      "generated_at": "2026-07-27T10:56:13",
+      "artifact_sha256": "f53c163bcf905d96ee8be37c0230d0a95cf43151ae26ae2742cbc8b8d159116a",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "2f1c5cbbdbd71c8f2c83adafb3148a2af4ea01ad155527200a332160349baf4a",
@@ -318,12 +318,21 @@
       "generated_from_execution_input_sha256": "8edf2c338fbc7aad845343ef4ca71f6e04bf236a3f6802c8f1a19baae202b6d9",
       "master_path": "出图/第2话/masters/P001.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1457,
+          "height": 1080
+        },
+        "native_sha256": "61100cb6b98d132ef6cf8c83818c329d6959530af619526b12b0997f23bcc4a7",
         "master_path": "出图/第2话/masters/P001.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "normalization_scale": 0.889499,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -648,12 +657,12 @@
       },
       "result_path": "出图/第2话/panels/P002.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P002.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T15:14:53",
-      "artifact_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+      "generated_at": "2026-07-27T10:56:13",
+      "artifact_sha256": "1d1bfb63a6b13204bb777c8322ea8cb10c8139572c311f304fa966ac67d023b0",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "5d2011a7d86d1839ad40ec775fd523a44a9600103af3141e5752372335279333",
@@ -661,12 +670,21 @@
       "generated_from_execution_input_sha256": "9a2e66ac8a21d52bec22a164bb0643723b5c5ee4275b27e8e5d09d632ecb8731",
       "master_path": "出图/第2话/masters/P002.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1350,
+          "height": 1165
+        },
+        "native_sha256": "5ad9106350b0e0f17ba6660d466349f0ceef990b4fc208c8b0009ce4892d438b",
         "master_path": "出图/第2话/masters/P002.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "normalization_scale": 0.961373,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -957,12 +975,12 @@
       },
       "result_path": "出图/第2话/panels/P003.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P003.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:22",
-      "artifact_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+      "generated_at": "2026-07-27T10:56:13",
+      "artifact_sha256": "45c9e729af24d0ea74121d1816c018b0b341c06a6e08eb1b2a40c1fac728ec20",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "313ad3bc097854b22263c6658408257dfa8a5a3fd6fe942d13b38e4f5e1aa26f",
@@ -970,12 +988,21 @@
       "generated_from_execution_input_sha256": "66d548cdb51efa90bdfe40a3f8cc789604507e16361a7d1cb282e3405a612b89",
       "master_path": "出图/第2话/masters/P003.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1426,
+          "height": 1103
+        },
+        "native_sha256": "43dc67761cf19fbf219862d775c47f9539f69c7574c23350369c26997a52179b",
         "master_path": "出图/第2话/masters/P003.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "normalization_scale": 0.834089,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -1266,12 +1293,12 @@
       },
       "result_path": "出图/第2话/panels/P004.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P004.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+      "generated_at": "2026-07-27T11:13:03",
+      "artifact_sha256": "4b4e305d2a1746b2950421b8b8a7214ecb5ad3f980c605b0c60ae553bbb02184",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "37bae65d0ecff5fc16abb3dbafea9d08e1819f25ca938f7d502d24b9ce940a50",
@@ -1279,12 +1306,21 @@
       "generated_from_execution_input_sha256": "7ebdb995ce525865bbc483de97d3ca7ece18730756ad0d7cb7146edb7bd35a0d",
       "master_path": "出图/第2话/masters/P004.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1431,
+          "height": 1099
+        },
+        "native_sha256": "0551486cb4213698cb8ba67171934d1f91946ef869e6b9a33a66b8e14260f700",
         "master_path": "出图/第2话/masters/P004.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.946315,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -1534,12 +1570,12 @@
       },
       "result_path": "出图/第2话/panels/P005.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P005.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a",
+      "generated_at": "2026-07-27T11:13:03",
+      "artifact_sha256": "0ee2b58fed7c438e8e79b79f69a599ca10afee57e103c533f117fb372d8cd057",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "d0adfe6db370d9e0d36c39552c8832585c6253a1f83d865a6b41d13e2ac6ec1f",
@@ -1547,12 +1583,21 @@
       "generated_from_execution_input_sha256": "bc405c99874909426caf263462978d11cac875ce95850589fb459c67f7253396",
       "master_path": "出图/第2话/masters/P005.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1426,
+          "height": 1103
+        },
+        "native_sha256": "c70869d30f430ee15f4dbbc81987a9c4c2e94cc2ef0d9592de3a8357a97873b0",
         "master_path": "出图/第2话/masters/P005.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "normalization_scale": 0.834089,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -1843,12 +1888,12 @@
       },
       "result_path": "出图/第2话/panels/P006.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P006.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+      "generated_at": "2026-07-27T10:21:24",
+      "artifact_sha256": "b8fa5ffa46abf0fa48e1eaa31a151f8e78dddbf1bce843b9275055012cc9958f",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "622951bc323ee8f401241aee01cc740cd16324c3564a5d3bc416179de2ab850d",
@@ -1856,12 +1901,21 @@
       "generated_from_execution_input_sha256": "7e16c089d95384a51bb039c13c8e76d0fd912cb63ff558905122a680bdc1c46c",
       "master_path": "出图/第2话/masters/P006.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1122,
-        "native_height": 1402,
-        "native_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1350,
+          "height": 1165
+        },
+        "native_sha256": "79c6a8c721fff5ca9c874fc7682706f9eb785f9e072adda95556087043842ea5",
         "master_path": "出图/第2话/masters/P006.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "normalization_scale": 0.961373,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -2186,12 +2240,12 @@
       },
       "result_path": "出图/第2话/panels/P007.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P007.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "generated_at": "2026-07-27T11:13:03",
+      "artifact_sha256": "cb30be57d33d83aa585486be9eabd81f30b83e39d124c814e8614b5e890d2dd0",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "6ebcb7892c3370a2dcd83cc23267b077fcc4296e502319ef7c5e6a26d2f7ff00",
@@ -2199,12 +2253,21 @@
       "generated_from_execution_input_sha256": "fc462c83caac92d423a564f359b16bc362391ddd589a5a036f93bf265f625929",
       "master_path": "出图/第2话/masters/P007.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1353,
+          "height": 1163
+        },
+        "native_sha256": "5a552deae5707dc208747356870defb58b2a5e826120b4edc3084c39b4b620b0",
         "master_path": "出图/第2话/masters/P007.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "normalization_scale": 0.963027,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -2484,12 +2547,12 @@
       },
       "result_path": "出图/第2话/panels/P008.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P008.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+      "generated_at": "2026-07-27T11:47:53",
+      "artifact_sha256": "3bfafbdff3ed11165a3904451c63f2338c85c48bfc769106098869e599735b21",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "651685d048bad79ed1a9dbe8d9a23a2981640a711f09272ca3d440805ae58b67",
@@ -2497,12 +2560,21 @@
       "generated_from_execution_input_sha256": "a322ba3f9504f77c7c2c15d2e568366fdbf0bf990df91bf4cbaaad67c9284112",
       "master_path": "出图/第2话/masters/P008.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1422,
+          "height": 1106
+        },
+        "native_sha256": "2af4c4618b12a95eb3309485d84afc6df4417f46e2d22a32bf71e8cf37e4a826",
         "master_path": "出图/第2话/masters/P008.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1188,
+          "height": 840
+        },
+        "normalization_scale": 0.835443,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -2763,12 +2835,12 @@
       },
       "result_path": "出图/第2话/panels/P009.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P009.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "generated_at": "2026-07-27T11:26:18",
+      "artifact_sha256": "78a39150e0a3c5fb93252403ef34c54cd9b8ba3a0e5a9b4939df42262ff7034b",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "8430559420d60250708f0cc0baf7ea132cdfc1a78057d0486a267a2bed703a12",
@@ -2776,12 +2848,21 @@
       "generated_from_execution_input_sha256": "be0fd524e3a2e0e67a2b301b1cf6af534d1dfc8c4fad2fcab73c267a6c14d6af",
       "master_path": "出图/第2话/masters/P009.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1519,
+          "height": 1036
+        },
+        "native_sha256": "0a9165cfd796a6b03ed3af78cf80cda34988d5481a00a132eac4e60a0b309849",
         "master_path": "出图/第2话/masters/P009.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "normalization_scale": 0.888031,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -3042,12 +3123,12 @@
       },
       "result_path": "出图/第2话/panels/P010.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P010.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "generated_at": "2026-07-27T11:47:53",
+      "artifact_sha256": "b84a5bd99609cda9727c39bfdfdbb26df44c3255a773dcc4aeb4cd4cb0622088",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "9e4cf5d9e527ca0a81b4806dde0e8b149a544ed221b9b96fc102c0b1928def5a",
@@ -3055,12 +3136,21 @@
       "generated_from_execution_input_sha256": "0c73413bb7480cd0526f6b1a1eefb96c6689970c24888e1344e0159c5a907106",
       "master_path": "出图/第2话/masters/P010.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1422,
+          "height": 1106
+        },
+        "native_sha256": "6d6278038e9f0082c7a7a34acdf0937015ac4cd556310d436ffd8ce39b1cd9b5",
         "master_path": "出图/第2话/masters/P010.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1080,
+          "height": 780
+        },
+        "normalization_scale": 0.759494,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -3340,12 +3430,12 @@
       },
       "result_path": "出图/第2话/panels/P011.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P011.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "generated_at": "2026-07-27T12:02:06",
+      "artifact_sha256": "636541f5082fd568602233b4af932776febf10c6c8b020016bd4f6fb0475e4bf",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "9fe0b0bf106d885cd3693c0218858f9edd70db7bb2140c09f89d67058ba6e88b",
@@ -3353,12 +3443,21 @@
       "generated_from_execution_input_sha256": "e6541a51feedd75112c0a011e3f50ed8bf09e2cef7891d5426b0e3b0a8cbe8bb",
       "master_path": "出图/第2话/masters/P011.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1469,
+          "height": 1071
+        },
+        "native_sha256": "21b68272ee1d05f6dfec71af5e3c39ac7d75b70067af50ba15a11d9811234678",
         "master_path": "出图/第2话/masters/P011.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "normalization_scale": 0.85901,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -3638,12 +3737,12 @@
       },
       "result_path": "出图/第2话/panels/P012.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P012.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "generated_at": "2026-07-27T12:02:06",
+      "artifact_sha256": "47f9a2a726cbf0c0e5ff9cc6c0e04f7cf5c045421fe6a3e453b6385fdd62549f",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "d078c332148c314361c031c0f1e7252aed3aac1e81c0858a303e75fafb0ea1ed",
@@ -3651,12 +3750,21 @@
       "generated_from_execution_input_sha256": "f6ad061d001fe76697744a46c9657f88396bdcdad8bce75feab4115589869320",
       "master_path": "出图/第2话/masters/P012.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1461,
+          "height": 1077
+        },
+        "native_sha256": "2a438e375126bc27ced6eeee873bd3b66090f3976c4df357ef19b20d3a4cb740",
         "master_path": "出图/第2话/masters/P012.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "normalization_scale": 0.891365,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -3936,12 +4044,12 @@
       },
       "result_path": "出图/第2话/panels/P013.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P013.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "generated_at": "2026-07-27T12:20:51",
+      "artifact_sha256": "5bef513a678ede3365a4fa3bc54f3f0f7bffdc6db253afcb1accab50ae06df90",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "3cbc3f980490ac5a17657e4b4f389996332a1163d46eb93656a519a4a3ee40d2",
@@ -3949,12 +4057,21 @@
       "generated_from_execution_input_sha256": "e3e96c038d3f281b1cf0415072eb83188953066ab90306cbd0a4eae3ff2cb163",
       "master_path": "出图/第2话/masters/P013.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1448,
+          "height": 1086
+        },
+        "native_sha256": "ee93569fe41050bbe197b55c30ef048a50ae0ce49155a8abd254703d4ebe4a46",
         "master_path": "出图/第2话/masters/P013.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1188,
+          "height": 840
+        },
+        "normalization_scale": 0.820442,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -4234,12 +4351,12 @@
       },
       "result_path": "出图/第2话/panels/P014.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P014.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "generated_at": "2026-07-27T12:27:26",
+      "artifact_sha256": "9a3cbcc8986c57d0e7162ac5cc768cf6c8e00f70dd80d497fa11cfa2d8c74a67",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "df1cad39a9623a1ed56e7965f4217d99e7d98ca0507266da4a1f11ef10fcd5e9",
@@ -4247,12 +4364,21 @@
       "generated_from_execution_input_sha256": "ee8a8f80e37bd86b5d049da374f7f2efac074060c0770bd3df7dc200d52d7ab2",
       "master_path": "出图/第2话/masters/P014.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1402,
+          "height": 1122
+        },
+        "native_sha256": "435bde6c8055548cbfd37bc8890d48ba99970247bb1b033aa7d306759e554a73",
         "master_path": "出图/第2话/masters/P014.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1088
+        },
+        "normalization_scale": 0.969697,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -4566,12 +4692,12 @@
       },
       "result_path": "出图/第2话/panels/P015.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P015.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "generated_at": "2026-07-27T12:27:26",
+      "artifact_sha256": "51702a1a867d490e6aa234a7ed5979ab5e83f8925d605c438d67d0582c8ce838",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "56c8b4d4fa777e384447e30d1cc5ce1c2ae06aa27a45a4dfd37b025a88f284bf",
@@ -4579,12 +4705,21 @@
       "generated_from_execution_input_sha256": "8fe532a9fa58deca7f495a8b77a4a67e3c2fe08c8bf7a439625842aae11989c2",
       "master_path": "出图/第2话/masters/P015.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1423,
+          "height": 1105
+        },
+        "native_sha256": "fd0bb631ccdfb1daa56c744f0b0c39a205c141725f6e31e7782e627d915b1a92",
         "master_path": "出图/第2话/masters/P015.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1088
+        },
+        "normalization_scale": 0.984615,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     },
     {
@@ -4864,12 +4999,12 @@
       },
       "result_path": "出图/第2话/panels/P016.png",
       "source": "Codex CLI",
-      "post_qc": "warn",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第2话/P016.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-22T14:56:23",
-      "artifact_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "generated_at": "2026-07-27T12:29:44",
+      "artifact_sha256": "065e4e579aabae3036c97ef6bf504f9b75f3bfb37f8405aa7263924f7c172f21",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,
       "generated_from_contract_sha256": "f9ab5d2dfae50754b1bb4fc884eb33018f439b882c4f8adbe2e638bfd0b60788",
@@ -4877,12 +5012,21 @@
       "generated_from_execution_input_sha256": "3db978a925f309d3d58e0f33923fb082318c2941ad788528760c6030a02332db",
       "master_path": "出图/第2话/masters/P016.png",
       "resolution_provenance": {
-        "policy": "后端最高可达",
-        "native_width": 1024,
-        "native_height": 1536,
-        "native_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1330,
+          "height": 1183
+        },
+        "native_sha256": "7583aa3eeb8e62baff846c521caa9cd73a247ecfb0c267860f03ce7fc70dccfd",
         "master_path": "出图/第2话/masters/P016.png",
-        "derived_resize": false
+        "derivative_size": {
+          "width": 1296,
+          "height": 1160
+        },
+        "normalization_scale": 0.980558,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
       }
     }
   ]

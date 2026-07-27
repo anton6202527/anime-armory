@@ -151,7 +151,7 @@
           "updated_at": "2026-07-21T21:08:00"
         }
       ],
-      "status": "ready",
+      "status": "needs_approval",
       "updated_at": "2026-07-21T21:01:55",
       "views": {
         "front": "出图/共享/图片/CHAR_WANG__front.png",
@@ -167,11 +167,13 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "544ba6712a1733984d5f5a21273bc7208b4ccea426db3e4b6a2cf638dbb9f230",
-        "readiness": "ready",
+        "fingerprint": "13b106d7e02eb1bc6b7f47fef03bd0d2cb8f3106752325c2196af428e2020836",
+        "readiness": "needs_approval",
         "signoff_status": "missing",
-        "required_views": [],
-        "updated_at": "2026-07-21T13:01:55+00:00"
+        "required_views": [
+          "front"
+        ],
+        "updated_at": "2026-07-27T02:21:00+00:00"
       },
       "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
     },
@@ -292,7 +294,7 @@
           "updated_at": "2026-07-21T21:08:00"
         }
       ],
-      "status": "ready",
+      "status": "needs_approval",
       "updated_at": "2026-07-21T21:01:55",
       "views": {
         "front": "出图/共享/图片/CHAR_CHEN__front.png",
@@ -308,11 +310,13 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "6009def619d7b7a838855fc030208a5e00994de21407c8160d647f327ea7663e",
-        "readiness": "ready",
+        "fingerprint": "0a58369b734107c3e429751df52d61e5e15dfada0e95412d7d88574679373ca1",
+        "readiness": "needs_approval",
         "signoff_status": "missing",
-        "required_views": [],
-        "updated_at": "2026-07-21T13:01:55+00:00"
+        "required_views": [
+          "front"
+        ],
+        "updated_at": "2026-07-27T02:21:00+00:00"
       },
       "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
     },
@@ -402,7 +406,7 @@
           "updated_at": "2026-07-21T21:02:10"
         }
       ],
-      "status": "ready",
+      "status": "partial",
       "updated_at": "2026-07-21T21:02:10",
       "anchor_path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
       "primary_path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
@@ -410,11 +414,13 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "fb68b3cc6c0c42361ed1cfaacc76cb1152d13d186a461002bfd3a800f552edcb",
-        "readiness": "ready",
+        "fingerprint": "6d26b2dbe52a6da5af90d07978bacfa7396bb1be13f3c20af5337145b8ad7ed2",
+        "readiness": "needs_fix",
         "signoff_status": "missing",
-        "required_views": [],
-        "updated_at": "2026-07-21T13:49:59+00:00"
+        "required_views": [
+          "front"
+        ],
+        "updated_at": "2026-07-27T02:21:00+00:00"
       }
     },
     "CHAR_DAOIST": {
@@ -534,7 +540,7 @@
           "updated_at": "2026-07-21T21:08:00"
         }
       ],
-      "status": "ready",
+      "status": "needs_approval",
       "updated_at": "2026-07-21T21:02:10",
       "views": {
         "front": "出图/共享/图片/CHAR_DAOIST__front.png",
@@ -550,11 +556,13 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "83e7f7e35c843f225c6c97c31d54ef6d59ab520c19a5613521558d488a64b58a",
-        "readiness": "ready",
+        "fingerprint": "7a7be1a31211d57d061e737d3df4ae7038420c91c741e35ae624a69d9dc2036f",
+        "readiness": "needs_approval",
         "signoff_status": "missing",
-        "required_views": [],
-        "updated_at": "2026-07-21T13:02:10+00:00"
+        "required_views": [
+          "front"
+        ],
+        "updated_at": "2026-07-27T02:21:00+00:00"
       },
       "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
     },
@@ -675,7 +683,7 @@
           "updated_at": "2026-07-21T21:08:00"
         }
       ],
-      "status": "ready",
+      "status": "needs_approval",
       "updated_at": "2026-07-21T21:02:10",
       "views": {
         "front": "出图/共享/图片/CHAR_BEGGAR__front.png",
@@ -691,11 +699,13 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "ead8f8c12081797c22afe1a7b55d42452600b95a9e3bce78d58fd20b7b25d3f7",
-        "readiness": "ready",
+        "fingerprint": "9ca2f63aea9fd23929286a088a01e6f623179d9c2b2250bc777620bfb884b9b6",
+        "readiness": "needs_approval",
         "signoff_status": "missing",
-        "required_views": [],
-        "updated_at": "2026-07-21T13:02:10+00:00"
+        "required_views": [
+          "front"
+        ],
+        "updated_at": "2026-07-27T02:21:00+00:00"
       },
       "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
     },

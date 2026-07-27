@@ -4,7 +4,7 @@
 - 阶段：script_stage2
 - specialist：n2d-script-agent
 - genre packs：chuanyue
-- genre scene activation：storyboard_missing
+- genre scene activation：no_scene_archetype_triggered
 
 ## Files
 
@@ -22,7 +22,7 @@
 | 脚本/第3集/voiceover.txt | True | 2911 | `1fb0cbe1de68` |
 | 脚本/第3集/bgm.txt | True | 2223 | `12a72983601b` |
 | 出图/共享/identity_registry.json | True | 88730 | `e76f725caa3b` |
-| 生产数据/episode_graph_第3集.json | True | 726 | `7b50c256e7df` |
+| 生产数据/episode_graph_第3集.json | True | 3090 | `58ff406cbe61` |
 
 ## Missing
 

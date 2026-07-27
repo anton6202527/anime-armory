@@ -1,6 +1,6 @@
 # 道具卡 — 横刀（ID: WEAPON_横刀）
 
-- episode_scope: 第2集
+- episode_scope: 第3集
 - type: weapon
 - target_reference: `出图/共享/图片/定妆_武器_横刀.png`
 - source: `出图/共享/asset_registry.json`

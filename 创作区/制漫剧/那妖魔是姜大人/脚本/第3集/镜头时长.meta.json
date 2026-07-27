@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_shot_timing_basis",
+  "version": 1,
+  "episode": "第3集",
+  "timing_basis": "text_estimate_no_audio",
+  "provisional": true,
+  "source": "创作区/制漫剧/那妖魔是姜大人/合成/第3集/配音/timing_estimate.json",
+  "source_fingerprint": "2c889cd97c498ae3d3e8317fb46468f56422a579bbfbbda76da7e923cf6a6f96",
+  "final_voice_required_before_compose": true,
+  "restrictions": [
+    "not_final_mix",
+    "not_final_lipsync",
+    "visible_mouth_clips_follow production_mode_route"
+  ]
+}

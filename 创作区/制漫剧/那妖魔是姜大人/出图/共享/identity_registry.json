@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-22T07:10:49+00:00",
+  "generated_at": "2026-07-27T02:27:24+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -894,8 +894,7 @@
           "performance_signature": "先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀",
           "signature_equipment": [
             "WEAPON_01",
-            "WEAPON_横刀",
-            "VFX_系统面板"
+            "WEAPON_横刀"
           ],
           "self_check_passed": true,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
@@ -925,6 +924,847 @@
         "identity_anchor_form": "“囚途残损态”",
         "forms": [
           "“囚途残损态”"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_03",
+      "name": "03",
+      "scope": "本集入镜角色",
+      "tier": "单集角色",
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0,
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_03__常态",
+          "anchor_phrase": "03·03 的剧情视觉真值必须入画：本集入镜角色；成年古装角色，年龄感按剧情身份保守处理；03 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+          "character_dna": {
+            "face": "03 的剧情视觉真值必须入画：本集入镜角色；成年古装角色，年龄感按剧情身份保守处理；03 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。",
+            "hair": "03 使用古装束发或布巾束发，发型轮廓跨镜保持。",
+            "outfit": "03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+            "accessories": "无固定配饰；若本镜另有道具，以分镜 prompt 为准。",
+            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "按 storyboard 中同框体量关系保持。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把03换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "不要把03换成普通俊美人类",
+              "不要丢失03 scope里的非人/妖物视觉特征"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-27T05:51:13.556747+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-27T05:51:13.556775+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-27T05:51:13.556785+00:00"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556807+00:00"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556818+00:00"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-27T05:51:13.556829+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared side reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214407+00:00"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_后45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared rear_three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214414+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared back reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214422+00:00"
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "named_minimal",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556866+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556875+00:00"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared side reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214445+00:00"
+                }
+              },
+              "rear_three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_后45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared rear_three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214452+00:00"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared back reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214459+00:00"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556903+00:00"
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556912+00:00"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.556922+00:00"
+                }
+              }
+            ],
+            "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "生产数据/卡片快照/角色/CHAR_03_03.md",
+              "status": "ready",
+              "sha256": "6622010b30467a2ac0b6decce6762897bfb3e583089bd0cf15388f74b476460e"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+              "status": "planned"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              79479730,
+              79479731,
+              79479732,
+              79479733,
+              79479734,
+              79479735
+            ],
+            "usage": {
+              "turnaround": 79479730,
+              "expression": 79479731,
+              "closeup": 79479732,
+              "shot": 79479733
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "rear_three_quarter",
+              "back",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把03换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "不要把03换成普通俊美人类",
+            "不要丢失03 scope里的非人/妖物视觉特征"
+          ],
+          "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
+          "signature_equipment": [
+            "WEAPON_01",
+            "WEAPON_横刀"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "anchor_sha": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
+          "artifact_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
+          "self_check_at": "2026-07-27T05:51:13+00:00",
+          "self_check_by": "image_qc.mark_finalized"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "角色库/CHAR_03__03/manifest.json",
+        "package_dir": "角色库/CHAR_03__03",
+        "base_dir": "角色库/CHAR_03__03",
+        "sections": {
+          "reference": "角色库/CHAR_03__03/reference",
+          "prompts": "角色库/CHAR_03__03/prompts",
+          "lora": "角色库/CHAR_03__03/lora",
+          "voice": "角色库/CHAR_03__03/voice",
+          "adapters": "角色库/CHAR_03__03/adapters",
+          "qc": "角色库/CHAR_03__03/qc"
+        },
+        "tier": "named_minimal",
+        "planned_episode_count": 0
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      }
+    },
+    {
+      "id": "GROUP_01",
+      "name": "GROUP_01",
+      "scope": "本集入镜角色",
+      "tier": "局部参考",
+      "library_tier": "restricted_partial",
+      "planned_episode_count": 0,
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "GROUP_01__常态",
+          "anchor_phrase": "GROUP_01·GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。",
+          "character_dna": {
+            "face": "GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。",
+            "hair": "背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份。",
+            "outfit": "三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。",
+            "accessories": "无固定配饰；背景人群不携带抢焦道具。",
+            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "按 storyboard 中同框体量关系保持。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把GROUP_01换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "不要单人全身定妆",
+              "不要清晰正脸或可识别主要角色",
+              "不要华丽长袍",
+              "不要把GROUP_01换成普通俊美人类",
+              "不要丢失GROUP_01 scope里的非人/妖物视觉特征"
+            ]
+          },
+          "reference_group": {
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared silhouette reference passed finalized review",
+                "reviewed_at": "2026-07-27T05:51:13.640675+00:00"
+              }
+            },
+            "hand": {
+              "path": "出图/共享/图片/定妆_GROUP_01__常态_手部局部.png",
+              "status": "planned"
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_GROUP_01__常态_布料局部.png",
+              "status": "planned",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315175+00:00"
+              },
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+              "silhouette": {
+                "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared silhouette reference passed finalized review",
+                  "reviewed_at": "2026-07-27T05:51:13.640723+00:00"
+                }
+              },
+              "hand": {
+                "path": "出图/共享/图片/定妆_GROUP_01__常态_手部局部.png",
+                "status": "planned"
+              },
+              "outfit": {
+                "path": "出图/共享/图片/定妆_GROUP_01__常态_布料局部.png",
+                "status": "planned"
+              }
+            },
+            "no_full_face": true,
+            "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "生产数据/卡片快照/角色/GROUP_01.md",
+              "status": "ready",
+              "sha256": "04802835b790a96dbdd990c700b475ec9e0802ef92210a8d60460b9452f2dd46"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "status": "planned"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1280155517,
+              1280155518,
+              1280155519,
+              1280155520,
+              1280155521,
+              1280155522
+            ],
+            "usage": {
+              "turnaround": 1280155517,
+              "expression": 1280155518,
+              "closeup": 1280155519,
+              "shot": 1280155520
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "rear_three_quarter",
+              "back",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把GROUP_01换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "不要单人全身定妆",
+            "不要清晰正脸或可识别主要角色",
+            "不要华丽长袍",
+            "不要把GROUP_01换成普通俊美人类",
+            "不要丢失GROUP_01 scope里的非人/妖物视觉特征"
+          ],
+          "performance_signature": "只作远后景笑声和肩部轮廓层，不单独表演，不出现可识别清晰脸。",
+          "signature_equipment": [
+            "WEAPON_01",
+            "WEAPON_横刀"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "restricted_partial": true,
+          "no_full_face": true,
+          "anchor_sha": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9",
+          "artifact_sha256": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9",
+          "self_check_at": "2026-07-27T05:51:13+00:00",
+          "self_check_by": "image_qc.mark_finalized"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "角色库/GROUP_01__GROUP_01/manifest.json",
+        "package_dir": "角色库/GROUP_01__GROUP_01",
+        "base_dir": "角色库/GROUP_01__GROUP_01",
+        "sections": {
+          "reference": "角色库/GROUP_01__GROUP_01/reference",
+          "prompts": "角色库/GROUP_01__GROUP_01/prompts",
+          "lora": "角色库/GROUP_01__GROUP_01/lora",
+          "voice": "角色库/GROUP_01__GROUP_01/voice",
+          "adapters": "角色库/GROUP_01__GROUP_01/adapters",
+          "qc": "角色库/GROUP_01__GROUP_01/qc"
+        },
+        "tier": "restricted_partial",
+        "planned_episode_count": 0
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
         ]
       }
     },
@@ -1452,10 +2292,7 @@
             "不要丢失本角色锚点句"
           ],
           "performance_signature": "极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀",
-          "signature_equipment": [
-            "WEAPON_01",
-            "WEAPON_横刀"
-          ],
+          "signature_equipment": [],
           "self_check_passed": true,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
           "self_check_at": "2026-07-21T14:59:58+00:00",

@@ -4,7 +4,7 @@
 - 阶段：script_stage2
 - 题材原值：系统流
 - 命中 pack：chuanyue
-- 场景触发：storyboard_missing — 题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。
+- 场景触发：no_scene_archetype_triggered — 题材包已匹配且 storyboard 可读，但当前 clips 未命中题材高风险场景。
 - 状态：pass
 
 ## QC Focus
@@ -18,4 +18,4 @@
 
 | packs | scene | clips | missing |
 |---|---|---|---|
-| - | 未触发（storyboard_missing） | - | - |
+| - | 未触发（no_scene_archetype_triggered） | - | - |

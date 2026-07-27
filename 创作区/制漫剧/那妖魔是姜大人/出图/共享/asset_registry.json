@@ -1,36 +1,36 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-24T05:21:58+00:00",
+  "generated_at": "2026-07-27T02:27:24+00:00",
   "assets": [
     {
-      "id": "LOC_01",
+      "id": "LOC_02",
       "type": "scene",
-      "name": "尸骸荒野",
+      "name": "LOC_02",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_02.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-22T07:32:28.207579+00:00"
+            "reviewed_at": "2026-07-27T05:51:13.723345+00:00"
           }
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_02.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-22T07:32:28.207707+00:00"
+            "reviewed_at": "2026-07-27T05:51:13.723499+00:00"
           }
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
-          "status": "ready",
+          "path": "出图/共享/图片/定妆_场景_LOC_02_反打.png",
+          "status": "planned",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
@@ -39,8 +39,8 @@
           }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png",
-          "status": "ready",
+          "path": "出图/共享/图片/定妆_场景_LOC_02_平面图.png",
+          "status": "planned",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
@@ -52,21 +52,20 @@
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "设定库/locations/尸骸荒野.md",
+          "path": "生产数据/卡片快照/场景/LOC_02.md",
           "status": "ready",
-          "sha256": "7817b42c5d71f16b728d739920a67f7d9f88a2196d804e081388a810f674fccb"
+          "sha256": "d9a9e58d0a9978b90df382e342cce69d0b4bd7b641a6cd5cc1491e6f4b0d1338"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
-          "status": "ready",
-          "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
+          "path": "出图/共享/图片/定妆_场景_LOC_02.png",
+          "status": "planned"
         }
       ],
       "constraints": {
         "layout": "保持 storyboard 场景轴线和地标。",
-        "light_anchor": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
-        "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
+        "light_anchor": "阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。",
+        "axis_rules": "官道纵深由画右前伸向画左后；马队自画左后冲入，姜月初画右前迎向；众人跪拜均面向画右前的姜月初。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -77,8 +76,8 @@
         "lighting_signature": {
           "color_temperature": "mixed_cool_warm",
           "saturation_profile": "low_desaturated",
-          "key_light_direction": "left",
-          "source_text": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光；尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+          "key_light_direction": "right",
+          "source_text": "阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。；阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。",
           "numeric_measurement": "pending_after_landed_frame_qc"
         }
       },
@@ -88,15 +87,15 @@
         "不要把本场景随机改成仙宫、现代空间或无关地点"
       ],
       "scene_dna": {
-        "belonging_anchor": "尸骸荒野",
+        "belonging_anchor": "LOC_02",
         "landmarks": [
-          "尸骸荒野"
+          "LOC_02"
         ],
         "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "大唐西北边荒；连片枯草、风蚀黄土、零散黑灰巨岩与翻覆木囚车；尸骸分散形成押送队伍遇袭轨迹 阴天将雨的白昼，铅灰云层，荒风持续；冷色漫射天光，偶有微弱侧逆光 冷灰、土褐、炭黑、极少暗赤；死寂、血腥、空旷、无处躲藏",
-        "color_lighting_weather": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+        "architecture_materials": "LOC_02",
+        "color_lighting_weather": "阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。",
         "resident_assets": [
-          "尸骸荒野"
+          "LOC_02"
         ],
         "forbidden": [
           "现代物件",
@@ -111,23 +110,23 @@
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
       "floor_plan": "保持 storyboard 场景轴线和地标。",
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
-      "screen_direction_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
+      "axis_rules": "官道纵深由画右前伸向画左后；马队自画左后冲入，姜月初画右前迎向；众人跪拜均面向画右前的姜月初。",
+      "screen_direction_rules": "官道纵深由画右前伸向画左后；马队自画左后冲入，姜月初画右前迎向；众人跪拜均面向画右前的姜月初。",
       "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+            "path": "出图/共享/图片/定妆_场景_LOC_02.png",
             "status": "ready",
             "human_review": {
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-22T07:32:28.207737+00:00"
+              "reviewed_at": "2026-07-27T05:51:13.723537+00:00"
             }
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
-            "status": "ready",
+            "path": "出图/共享/图片/定妆_场景_LOC_02_反打.png",
+            "status": "planned",
             "human_review": {
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
@@ -137,9 +136,9 @@
           }
         }
       },
-      "self_check_at": "2026-07-22T07:32:28+00:00",
-      "self_check_by": "image_qc.mark_finalized",
-      "artifact_sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
+      "artifact_sha256": "9ddb8fd7f716bf39ad9aa860c495b3274e800af3fe75db9a8b3c492b7f98fd6d",
+      "self_check_at": "2026-07-27T05:51:13+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "WEAPON_01",
@@ -182,7 +181,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/WEAPON_01_横刀.md",
           "status": "ready",
-          "sha256": "ced1994c650d9f8b9094e2cbf9e7f97f9f0f316bb7f660b0c0dd6d52ab1a7edd"
+          "sha256": "3a76ab2fcc1e6232c2410cfb4ca5c2613b6111cffa4b6101f1835914ca065c96"
         },
         {
           "slot": "primary_reference",
@@ -294,82 +293,6 @@
       "artifact_sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
     },
     {
-      "id": "VFX_系统面板",
-      "type": "vfx",
-      "name": "百妖谱金色古卷面板",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:39:54.989949+00:00"
-          }
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/VFX_系统面板_百妖谱金色古卷面板.md",
-          "status": "ready",
-          "sha256": "0166d13b391c26dd73b4e03f2028348bb5d1b4b5be0400c5394f0adc6835d47b"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "status": "ready",
-          "sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
-        }
-      ],
-      "constraints": {
-        "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
-        "face_policy": "none",
-        "must_not_have": [
-          "AI生成可读文字",
-          "现代手机UI",
-          "随机蓝色科幻屏",
-          "乱码文字"
-        ]
-      },
-      "face_policy": "none",
-      "drift_forbidden": [
-        "不要让百妖谱金色古卷面板结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇",
-        "不要AI生成可读文字",
-        "不要现代手机UI",
-        "不要随机蓝色科幻屏",
-        "不要乱码文字"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "百妖谱金色古卷面板 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "百妖谱金色古卷面板"
-        ],
-        "spatial_layout": "百妖谱金色古卷面板只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "百妖谱金色古卷空光幕，符纹边框固定，内部文字区留空，所有可读文字由 compose overlay 后期叠加。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "百妖谱金色古卷面板"
-        ],
-        "forbidden": [
-          "百妖谱金色古卷面板结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "self_check_at": "2026-07-21T13:39:54+00:00",
-      "self_check_by": "image_qc.mark_finalized",
-      "artifact_sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
-    },
-    {
       "id": "WEAPON_横刀",
       "type": "weapon",
       "name": "横刀",
@@ -410,7 +333,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/WEAPON_横刀.md",
           "status": "ready",
-          "sha256": "c702fb869492cb46cd6ae4f5ff541eb9c3fb451a98e357c0738da9b61bf8ea41"
+          "sha256": "da1d61d1c4e2beb24fd665959b1a5deb0125bb67ad289190fa87b280c722376e"
         },
         {
           "slot": "primary_reference",
@@ -527,148 +450,229 @@
       "artifact_sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
     },
     {
-      "id": "VFX_百妖谱",
-      "type": "vfx",
-      "name": "百妖谱",
+      "id": "LOC_01",
+      "type": "scene",
+      "name": "尸骸荒野",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_百妖谱.png",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
           "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:32:28.207579+00:00"
+          }
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:32:28.207707+00:00"
+          }
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:32:28.207719+00:00"
+          }
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:32:28.207727+00:00"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "设定库/locations/尸骸荒野.md",
+          "status": "ready",
+          "sha256": "7817b42c5d71f16b728d739920a67f7d9f88a2196d804e081388a810f674fccb"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "status": "ready",
+          "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。",
+        "axis_rules": "浅坟在画左前景、姜月初画右侧跪；她看坟向画左下，与第1-2集虎妖轴线区分。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "cool_low_key",
+          "saturation_profile": "controlled",
+          "key_light_direction": "left",
+          "source_text": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。；阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "尸骸荒野",
+        "landmarks": [
+          "尸骸荒野"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "大唐西北边荒；连片枯草、风蚀黄土、零散黑灰巨岩与翻覆木囚车；尸骸分散形成押送队伍遇袭轨迹 阴天将雨的白昼，铅灰云层，荒风持续；冷色漫射天光，偶有微弱侧逆光 冷灰、土褐、炭黑、极少暗赤；死寂、血腥、空旷、无处躲藏",
+        "color_lighting_weather": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。",
+        "resident_assets": [
+          "尸骸荒野"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "浅坟在画左前景、姜月初画右侧跪；她看坟向画左下，与第1-2集虎妖轴线区分。",
+      "screen_direction_rules": "浅坟在画左前景、姜月初画右侧跪；她看坟向画左下，与第1-2集虎妖轴线区分。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-22T07:32:28.207737+00:00"
+            }
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-22T07:32:28.207744+00:00"
+            }
+          }
+        }
+      },
+      "self_check_at": "2026-07-22T07:32:28+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
+    },
+    {
+      "id": "PROP_镇魔司制服",
+      "type": "prop",
+      "name": "镇魔司制服",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_镇魔司制服.png",
+          "status": "planned",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
             "reviewed_at": "2026-07-21T13:39:55.056965+00:00"
           }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_镇魔司制服_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_镇魔司制服_手持.png",
+          "status": "planned"
         }
       },
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/VFX_百妖谱.md",
+          "path": "生产数据/卡片快照/资产/PROP_镇魔司制服.md",
           "status": "ready",
-          "sha256": "351a9d5fed54f2476d47bb58337c8b5357342e759f63413f5ef9831c845d2e66"
+          "sha256": "364fae701d323f138310aa21203059603a852a09d64c9afbb5529ea1e3403856"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_特效_百妖谱.png",
-          "status": "ready",
-          "sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
+          "path": "出图/共享/图片/定妆_道具_镇魔司制服.png",
+          "status": "planned"
         }
       ],
       "constraints": {
-        "structure": "百妖谱",
+        "structure": "镇魔司制服",
         "face_policy": "faceless",
         "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
         ]
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让百妖谱结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要让镇魔司制服结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "百妖谱 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "镇魔司制服 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "百妖谱"
+          "镇魔司制服"
         ],
-        "spatial_layout": "百妖谱只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "百妖谱",
+        "spatial_layout": "镇魔司制服只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "镇魔司制服",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
-          "百妖谱"
+          "镇魔司制服"
         ],
         "forbidden": [
-          "百妖谱结构漂移",
+          "镇魔司制服结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
         ]
       },
-      "self_check_passed": true,
+      "self_check_passed": false,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "self_check_at": "2026-07-21T13:39:55+00:00",
-      "self_check_by": "image_qc.mark_finalized",
+      "owner": "剧情资产",
+      "current_state": "镇魔司制服",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      },
       "artifact_sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
-    },
-    {
-      "id": "VFX_墨虎谱影",
-      "type": "vfx",
-      "name": "墨虎谱影",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_特效_墨虎谱影.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-22T07:32:28.281823+00:00"
-          }
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/VFX_墨虎谱影.md",
-          "status": "ready",
-          "sha256": "1c4cea80d7cfa29399769f9e45a506fe733b865c11e83e4fc3ee54be4d30cefd"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_特效_墨虎谱影.png",
-          "status": "ready",
-          "sha256": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31"
-        }
-      ],
-      "constraints": {
-        "structure": "由 BEAST_01 剪影派生的纸上墨虎，无字、黑墨旧金、不可脱离谱页实体化。",
-        "face_policy": "faceless",
-        "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
-        ]
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要让墨虎谱影结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "墨虎谱影 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "墨虎谱影"
-        ],
-        "spatial_layout": "墨虎谱影只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "由 BEAST_01 剪影派生的纸上墨虎，无字、黑墨旧金、不可脱离谱页实体化。",
-        "color_lighting_weather": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
-        "resident_assets": [
-          "墨虎谱影"
-        ],
-        "forbidden": [
-          "墨虎谱影结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "self_check_at": "2026-07-22T07:32:28+00:00",
-      "self_check_by": "image_qc.mark_finalized",
-      "artifact_sha256": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31"
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

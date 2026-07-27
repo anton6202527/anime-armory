@@ -208,20 +208,20 @@
       "sha256": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8"
     },
     {
-      "bytes": 726,
+      "bytes": 3090,
       "exists": true,
       "preview": {
         "episode": "第3集",
-        "graph_hash": "ebbd89866ac0b4af3722954d9d4f32bfe91a0acfb05c06fd78dfa7ec4cb500d5",
+        "graph_hash": "9032eeeb9b82d6899622ae1c72df03174874c5e2f77bbe11d4341e5cbc92745c",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
-          "edges": 0,
+          "edges": 8,
           "lineage_gaps": 0,
           "masters": 0,
-          "nodes": 1,
+          "nodes": 9,
           "routes": 0,
-          "story_clips": 0,
+          "story_clips": 8,
           "video_media": 0
         },
         "top_level_keys": [
@@ -242,21 +242,21 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第3集.json",
-      "sha256": "7b50c256e7dfea23a4696f46f78c7761f13d85eeabc976ba55f4abc6c0c29a11"
+      "sha256": "58ff406cbe61573326d2724745793dba85dc03abced6c33f21ca826027071976"
     }
   ],
   "genre_pack_context": {
     "activation": {
-      "reason": "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。",
-      "state": "storyboard_missing",
-      "storyboard_clip_count": 0,
+      "reason": "题材包已匹配且 storyboard 可读，但当前 clips 未命中题材高风险场景。",
+      "state": "no_scene_archetype_triggered",
+      "storyboard_clip_count": 8,
       "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
-      "storyboard_state": "missing",
+      "storyboard_state": "ready",
       "triggered": false
     },
     "active_scene_archetypes": [],
     "episode": "第3集",
-    "generated_at": "2026-07-24T07:50:49+00:00",
+    "generated_at": "2026-07-27T02:07:48+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -330,7 +330,7 @@
     "stage_key": "script_stage2",
     "status": "pass",
     "summary": {
-      "activation_state": "storyboard_missing",
+      "activation_state": "no_scene_archetype_triggered",
       "active_scenes": 0,
       "issues": 0,
       "matched_clips": 0,
@@ -338,8 +338,8 @@
         "chuanyue"
       ],
       "matched_packs": 1,
-      "storyboard_clip_count": 0,
-      "storyboard_state": "missing"
+      "storyboard_clip_count": 8,
+      "storyboard_state": "ready"
     },
     "version": 1
   },

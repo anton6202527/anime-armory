@@ -1,16 +1,16 @@
 {
   "authority": "repair view only; it does not create a new gate or override existing verdicts",
-  "blocked": false,
+  "blocked": true,
   "blockers": [
     {
-      "message": "读 n2d-script 的 prompt 包 → 调 LLM 生成 → 注入项目；完成后回写进度再 run next。",
-      "step": "needs_agent_gen"
+      "message": "skill 更新影响当前集，需先执行/确认重制计划：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.md。统一修复/预检入口：python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage script_stage2 --write-missing --json 已自动执行 repair_preflight（block）：update_plan: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.md；报告：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/repair_preflight_script_stage2_第3集.json",
+      "step": "blocked_by_entry_check"
     }
   ],
-  "category": "creative_or_execution",
+  "category": "contract_or_gate",
   "episode": "第3集",
   "episode_graph": {
-    "graph_hash": "ebbd89866ac0b4af3722954d9d4f32bfe91a0acfb05c06fd78dfa7ec4cb500d5",
+    "graph_hash": "9032eeeb9b82d6899622ae1c72df03174874c5e2f77bbe11d4341e5cbc92745c",
     "lineage_gaps": 0,
     "status": "pass"
   },
@@ -20,14 +20,14 @@
     "return_to_stage": null,
     "stage": ""
   },
-  "generated_at": "2026-07-24T15:50:49+0800",
-  "headline": "第3集 阶段2·分镜设计：脚手架就绪，待代理生成",
+  "generated_at": "2026-07-27T10:07:49+0800",
+  "headline": "第3集 阶段2·分镜设计：入口检查未放行",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-script",
   "repair_commands": [
     "n2d-script 创作区/制漫剧/那妖魔是姜大人 第3集  (配音后定稿)"
   ],
   "stage_key": "script_stage2",
-  "stop_reason": "needs_agent_gen",
+  "stop_reason": "blocked_by_entry_check",
   "version": 1
 }

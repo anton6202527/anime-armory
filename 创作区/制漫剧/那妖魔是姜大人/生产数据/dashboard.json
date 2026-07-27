@@ -1,16 +1,16 @@
 {
   "alert_counts": {
     "critical": 2,
-    "warn": 2
+    "warn": 3
   },
   "alerts": [
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 315 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 507 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 315
+      "value": 507
     },
     {
       "kind": "unverified_progress",
@@ -36,6 +36,15 @@
       "scope": "第2集",
       "threshold": 0,
       "value": 150
+    },
+    {
+      "episode": "第3集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第3集 QA 阻断 192 项",
+      "scope": "第3集",
+      "threshold": 0,
+      "value": 192
     }
   ],
   "episodes": [
@@ -685,42 +694,190 @@
       "warnings_per_attempt": 0.7652
     },
     {
-      "blockers_per_attempt": 0.0,
+      "blockers_per_attempt": 96.0,
       "completion_rate": null,
-      "consistency_blockers": 0,
-      "consistency_ledger": {},
-      "consistency_warnings": 0,
+      "consistency_blockers": 7,
+      "consistency_ledger": {
+        "counts": {
+          "block": 9,
+          "high": 0,
+          "medium": 8
+        },
+        "delivery_surface": {
+          "blocking_counts": {
+            "block": 9,
+            "high": 0
+          },
+          "required_domains": [
+            "剧情",
+            "角色",
+            "资产",
+            "镜头",
+            "音频",
+            "字幕",
+            "合规",
+            "生产操作"
+          ],
+          "status": "blocked"
+        },
+        "path": "生产数据/consistency_ledger_第3集.json",
+        "row_count": 10,
+        "severe_rows": [
+          {
+            "contract": "ok",
+            "detect": "block",
+            "id": "CHAR_01",
+            "kind": "character",
+            "name": "姜月初",
+            "overall": "block",
+            "prevent": "block"
+          },
+          {
+            "contract": "ok",
+            "detect": "block",
+            "id": "CHAR_03",
+            "kind": "character",
+            "name": "03",
+            "overall": "block",
+            "prevent": "ok"
+          },
+          {
+            "contract": "ok",
+            "detect": "block",
+            "id": "CHAR_02",
+            "kind": "character",
+            "name": "裴长青",
+            "overall": "block",
+            "prevent": "ok"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "BEAST_01",
+            "kind": "character",
+            "name": "虎妖",
+            "overall": "warn",
+            "prevent": "ok"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "LOC_02",
+            "kind": "scene",
+            "name": "LOC_02",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "WEAPON_01",
+            "kind": "weapon",
+            "name": "横刀",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "WEAPON_横刀",
+            "kind": "weapon",
+            "name": "横刀",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "LOC_01",
+            "kind": "scene",
+            "name": "尸骸荒野",
+            "overall": "medium",
+            "prevent": "medium"
+          }
+        ]
+      },
+      "consistency_warnings": 59,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": 1.0,
+      "deliverable_pass_rate": 0.0,
       "duration_hms": "10m00s",
       "duration_sec": 600.0,
-      "elapsed_per_finished_min_sec": null,
+      "elapsed_per_finished_min_sec": 405.255,
       "episode": "第3集",
-      "event_count": 1,
+      "event_count": 351,
       "false_positive_recoveries": 0,
-      "false_positive_recovery_rate": null,
-      "final_pass_rate": 1.0,
+      "false_positive_recovery_rate": 0.0,
+      "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 1,
+      "generation_attempts": 2,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 1,
+      "generation_passes": 2,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 1,
+      "one_pass_count": 2,
       "one_pass_rate": 1.0,
-      "progress_next_skill": "n2d-voice",
-      "progress_next_stage": "声音选角 / 时间基准 / 最终配音",
-      "qa_blockers": 0,
-      "qa_blockers_historical": 0,
+      "progress_next_skill": "n2d-video",
+      "progress_next_stage": "视频prompt",
+      "qa_blockers": 192,
+      "qa_blockers_historical": 185,
       "qa_gate_passes": 0,
-      "qa_gate_runs": 0,
-      "qa_infos": 0,
-      "qa_warnings": 0,
-      "qa_warnings_historical": 0,
-      "recent_blockers": [],
+      "qa_gate_runs": 4,
+      "qa_infos": 29,
+      "qa_warnings": 130,
+      "qa_warnings_historical": 130,
+      "recent_blockers": [
+        {
+          "dim": "脸漂实测",
+          "loc": "姜月初（CHAR_01）",
+          "msg": "上一集已实测脸漂漂移（既成事实非预测）：⛔ 上一集已实测跨集脸漂（已出现 block 级脸漂 3 镜（first=第2集））：本集出图前先处置（重出漂移集 / 升原生主体或 LoRA），别带病续出——这是既成事实不是预测。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "表情一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
+          "msg": "continuity.expression_span='小' 非法；必须是 微/中/大 之一。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "实体排程",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#2",
+          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：CHAR_02。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "实体排程",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
+          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "实体排程",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
+          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "持有账本(POS)",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+          "msg": "storyboard 已出现核心道具/武器/证物/法宝的持有、交接、丢失或拾取（EP03_CLIP01:PROP_镇魔司制服、EP03_CLIP02:PROP_镇魔司制服、EP03_CLIP03:PROP_镇魔司制服），但缺 possession_ledger；请先在 创作区/制漫剧/那妖魔是姜大人/生产数据/possession_ledger_第3集.json 记录 clip、asset、holder、action，避免道具跨镜瞬移。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "跨集承接合同",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+          "msg": "早期集必须显式写跨集承接合同，避免集与集之间像拼接短片：ending_throw/next_episode_receivable_hook 没有明确写承接/兑现/延迟/可接收问题。建议字段：series_handoff.previous_episode_pickup / opening_bridge / ending_throw / next_episode_receivable_hook。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "P-3制片交接包",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第3集.json",
+          "msg": "P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第3集/production_handoff_pack.json: inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff；脚本/第3集/production_handoff_signoff.json: input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[codex-script-supervisor:script_supervisor] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_prompt_preflight --write-missing`。",
+          "stage": "image_prompt_preflight"
+        }
+      ],
       "recoup_ratio": {},
       "redraw_categories": {},
       "redraw_count": 0,
@@ -733,23 +890,80 @@
       "release_spend_totals": {},
       "retention_15s": null,
       "retention_3s": null,
-      "runtime_hms": "—",
-      "runtime_sec": null,
-      "runtime_source": "",
+      "runtime_hms": "1m29s",
+      "runtime_sec": 88.833,
+      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
       "stages": {
+        "image": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 92,
+          "qa_infos": 10,
+          "qa_warnings": 70,
+          "redraw_count": 0
+        },
+        "image_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 49,
+          "qa_infos": 9,
+          "qa_warnings": 44,
+          "redraw_count": 0
+        },
+        "image_prompt_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 8,
+          "qa_infos": 7,
+          "qa_warnings": 3,
+          "redraw_count": 0
+        },
+        "review": {
+          "consistency_blockers": 7,
+          "consistency_warnings": 59,
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 7,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        },
         "script": {
           "duration_sec": 600.0,
-          "generation_attempts": 1,
+          "generation_attempts": 2,
           "generation_fails": 0,
-          "generation_passes": 1,
+          "generation_passes": 2,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
+        },
+        "video_prompt_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 36,
+          "qa_infos": 3,
+          "qa_warnings": 13,
+          "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.0
+      "warnings_per_attempt": 65.0
     },
     {
       "blockers_per_attempt": null,
@@ -1138,7 +1352,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-24T07:15:10+00:00",
+  "generated_at": "2026-07-27T07:35:56+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1616,16 +1830,16 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.6535,
-    "consistency_blockers": 25,
+    "blockers_per_attempt": 1.0497,
+    "consistency_blockers": 32,
     "consistency_ledger_counts": {
-      "block": 19,
+      "block": 28,
       "high": 0,
-      "medium": 15
+      "medium": 23
     },
-    "consistency_warnings": 219,
+    "consistency_warnings": 278,
     "cost_per_finished_min": {
-      "credits": 1554.739103
+      "credits": 975.069252
     },
     "cost_totals": {
       "credits": 3872.0
@@ -1633,32 +1847,32 @@
     "deliverable_pass_rate": 0.0,
     "duration_hms": "9h44m04s",
     "duration_sec": 35044.399,
-    "elapsed_per_finished_min_sec": 14071.513,
+    "elapsed_per_finished_min_sec": 8825.082,
     "episode_count": 10,
-    "event_count": 1407,
+    "event_count": 1757,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 4,
-      "gates_passed_per_day": 1.433,
+      "gates_passed_per_day": 0.689,
       "measurement_start": "2026-07-21T12:15:15+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 482,
+    "generation_attempts": 483,
     "generation_fails": 40,
-    "generation_pass_rate": 0.917,
-    "generation_passes": 442,
-    "one_pass_count": 300,
-    "one_pass_rate": 0.6224,
-    "qa_blockers": 315,
-    "qa_blockers_historical": 325,
-    "qa_infos": 133,
-    "qa_warnings": 490,
-    "qa_warnings_historical": 490,
+    "generation_pass_rate": 0.9172,
+    "generation_passes": 443,
+    "one_pass_count": 301,
+    "one_pass_rate": 0.6232,
+    "qa_blockers": 507,
+    "qa_blockers_historical": 510,
+    "qa_infos": 162,
+    "qa_warnings": 620,
+    "qa_warnings_historical": 620,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 5,
@@ -1668,15 +1882,15 @@
       "temporal": 7
     },
     "redraw_count": 45,
-    "redraw_rate": 0.0934,
+    "redraw_rate": 0.0932,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
     "release_rows": 0,
     "release_spend_totals": {},
-    "runtime_hms": "2m29s",
-    "runtime_sec": 149.427,
-    "warnings_per_attempt": 1.0166
+    "runtime_hms": "3m58s",
+    "runtime_sec": 238.26,
+    "warnings_per_attempt": 1.2836
   },
   "version": 1
 }

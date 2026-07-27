@@ -1,0 +1,208 @@
+{
+  "anchor_chains": [
+    {
+      "anchors": [],
+      "clip": "Clip_01",
+      "end_anchor_required": false,
+      "first_frame": "出图/第3集/图片/Clip_01.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "intentional_discontinuity",
+      "status": "minimal"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_02",
+      "end_anchor_required": false,
+      "first_frame": "出图/第3集/图片/Clip_02.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "minimal"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 9.0,
+          "image": "出图/第3集/图片/EP03_CLIP03_a1.png",
+          "kind": "anchor",
+          "reason": "换装完成的全身站姿锚：锁定制服态外观供后续所有 clip 与后续集引用"
+        }
+      ],
+      "clip": "Clip_03",
+      "end_anchor_required": true,
+      "first_frame": "出图/第3集/图片/Clip_03.png",
+      "last_frame": "出图/第3集/图片/Clip_03_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_04",
+      "end_anchor_required": false,
+      "first_frame": "出图/第3集/图片/Clip_04.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "minimal"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_05",
+      "end_anchor_required": false,
+      "first_frame": "出图/第3集/图片/Clip_05.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "minimal"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 3.12,
+          "image": "出图/第3集/图片/EP03_CLIP06_a1.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）"
+        },
+        {
+          "at_sec": 6.25,
+          "image": "出图/第3集/图片/EP03_CLIP06_a2.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）"
+        },
+        {
+          "at_sec": 9.38,
+          "image": "出图/第3集/图片/EP03_CLIP06_a3.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）"
+        }
+      ],
+      "clip": "Clip_06",
+      "end_anchor_required": false,
+      "first_frame": "出图/第3集/图片/Clip_06.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 8.0,
+          "image": "出图/第3集/图片/EP03_CLIP07_a1.png",
+          "kind": "anchor",
+          "reason": "群跪ELS与冷开场同构图锚：锁定时间线闭合的构图记忆"
+        }
+      ],
+      "clip": "Clip_07",
+      "end_anchor_required": true,
+      "first_frame": "出图/第3集/图片/Clip_07.png",
+      "last_frame": "出图/第3集/图片/Clip_07_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 8.5,
+          "image": "出图/第3集/图片/EP03_CLIP08_a1.png",
+          "kind": "anchor",
+          "reason": "集尾定格帧：锁定制服态表情锚，供第4集冷开承接"
+        }
+      ],
+      "clip": "Clip_08",
+      "end_anchor_required": true,
+      "first_frame": "出图/第3集/图片/Clip_08.png",
+      "last_frame": "出图/第3集/图片/Clip_08_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "ready"
+    }
+  ],
+  "episode": "第3集",
+  "kind": "n2d_video_production_pack",
+  "motion_sample_plan": [
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_07",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第3集/motion_samples/Clip_07_sample.mp4",
+      "sample_required": true,
+      "shot_type": "ensemble_blocking"
+    }
+  ],
+  "notes": [
+    "不触发视频生成；这是出视频前的锚帧/动作小样/路由实测生产侧车。"
+  ],
+  "route_empirical_scorecard": {
+    "episode": "第3集",
+    "kind": "n2d_route_empirical_scorecard",
+    "policy": "后续 router 可优先 measured/pass_rate 高的 backend+shot_type；无证据只作 pending，不臆造通过率。",
+    "rows": [
+      {
+        "attempts": 1,
+        "backend": "dreamina",
+        "clips": [
+          "Clip_06"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_03"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "attempts": 4,
+        "backend": "seedance",
+        "clips": [
+          "Clip_01",
+          "Clip_05",
+          "Clip_07",
+          "Clip_08"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "ensemble_blocking"
+      },
+      {
+        "attempts": 2,
+        "backend": "seedance",
+        "clips": [
+          "Clip_02",
+          "Clip_04"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "general_motion"
+      }
+    ]
+  },
+  "summary": {
+    "anchor_chains": 8,
+    "clips": 8,
+    "motion_samples_required": 1,
+    "route_rows": 8,
+    "route_score_rows": 4
+  },
+  "version": 1
+}

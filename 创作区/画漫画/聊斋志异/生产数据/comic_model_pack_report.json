@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-22T03:45:14+00:00",
+  "created_at": "2026-07-27T02:21:01+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -9,19 +9,37 @@
       "character_id": "CHAR_BEGGAR",
       "asset_type": "character",
       "tier": "restricted_partial",
-      "required_views": [],
-      "view_evidence": [],
-      "model_pack_fingerprint": "ead8f8c12081797c22afe1a7b55d42452600b95a9e3bce78d58fd20b7b25d3f7",
+      "required_views": [
+        "front"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+          "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+          "width": 346,
+          "height": 665,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+            "source_sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "9ca2f63aea9fd23929286a088a01e6f623179d9c2b2250bc777620bfb884b9b6",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_BEGGAR.json",
         "status": "missing",
         "approved_at": "",
         "reviewer": ""
       },
-      "signoff_required": false,
-      "readiness": "ready",
+      "signoff_required": true,
+      "readiness": "needs_approval",
       "technical_block": false,
-      "findings": []
+      "findings": [],
+      "montage": "生产数据/model_pack_montage/CHAR_BEGGAR.jpg"
     },
     {
       "kind": "comic_character_model_pack",
@@ -29,19 +47,37 @@
       "character_id": "CHAR_CHEN",
       "asset_type": "character",
       "tier": "restricted_partial",
-      "required_views": [],
-      "view_evidence": [],
-      "model_pack_fingerprint": "6009def619d7b7a838855fc030208a5e00994de21407c8160d647f327ea7663e",
+      "required_views": [
+        "front"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+          "width": 255,
+          "height": 665,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "source_sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "0a58369b734107c3e429751df52d61e5e15dfada0e95412d7d88574679373ca1",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_CHEN.json",
         "status": "missing",
         "approved_at": "",
         "reviewer": ""
       },
-      "signoff_required": false,
-      "readiness": "ready",
+      "signoff_required": true,
+      "readiness": "needs_approval",
       "technical_block": false,
-      "findings": []
+      "findings": [],
+      "montage": "生产数据/model_pack_montage/CHAR_CHEN.jpg"
     },
     {
       "kind": "comic_character_model_pack",
@@ -49,19 +85,37 @@
       "character_id": "CHAR_DAOIST",
       "asset_type": "character",
       "tier": "restricted_partial",
-      "required_views": [],
-      "view_evidence": [],
-      "model_pack_fingerprint": "83e7f7e35c843f225c6c97c31d54ef6d59ab520c19a5613521558d488a64b58a",
+      "required_views": [
+        "front"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+          "width": 305,
+          "height": 665,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "source_sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "7a7be1a31211d57d061e737d3df4ae7038420c91c741e35ae624a69d9dc2036f",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_DAOIST.json",
         "status": "missing",
         "approved_at": "",
         "reviewer": ""
       },
-      "signoff_required": false,
-      "readiness": "ready",
+      "signoff_required": true,
+      "readiness": "needs_approval",
       "technical_block": false,
-      "findings": []
+      "findings": [],
+      "montage": "生产数据/model_pack_montage/CHAR_DAOIST.jpg"
     },
     {
       "kind": "comic_character_model_pack",
@@ -316,27 +370,189 @@
       "character_id": "CHAR_WANG",
       "asset_type": "character",
       "tier": "restricted_partial",
-      "required_views": [],
-      "view_evidence": [],
-      "model_pack_fingerprint": "544ba6712a1733984d5f5a21273bc7208b4ccea426db3e4b6a2cf638dbb9f230",
+      "required_views": [
+        "front"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+          "width": 290,
+          "height": 665,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG__front.png",
+            "source_sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "13b106d7e02eb1bc6b7f47fef03bd0d2cb8f3106752325c2196af428e2020836",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG.json",
         "status": "missing",
         "approved_at": "",
         "reviewer": ""
       },
-      "signoff_required": false,
+      "signoff_required": true,
+      "readiness": "needs_approval",
+      "technical_block": false,
+      "findings": [],
+      "montage": "生产数据/model_pack_montage/CHAR_WANG.jpg"
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_FOX_BROTHERS",
+      "asset_type": "monster",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+          "width": 1536,
+          "height": 1024,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+          "sha256": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+          "width": 1536,
+          "height": 1024,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "eb65b6b0defa9ffe92bd95a36998a2d55e1330ffa800343c09e944ed0b1c3ad8",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_FOX_BROTHERS.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:32+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
       "readiness": "ready",
       "technical_block": false,
       "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_FOX_SERVANT",
+      "asset_type": "monster",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+          "sha256": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "73b3169cb60d1f972353d73a9dadf7b5061fc5dac4aa1d02740bd87463662532",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_FOX_SERVANT.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_PAINTED_SKIN",
+      "asset_type": "monster",
+      "tier": "restricted_partial",
+      "required_views": [
+        "front"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "6d26b2dbe52a6da5af90d07978bacfa7396bb1be13f3c20af5337145b8ad7ed2",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_PAINTED_SKIN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        }
+      ],
+      "montage": "生产数据/model_pack_montage/MON_PAINTED_SKIN.jpg"
     }
   ],
   "summary": {
-    "assets": 7,
+    "assets": 10,
     "characters": 7,
-    "monsters": 0,
-    "ready": 7,
-    "needs_approval": 0,
-    "needs_fix": 0
+    "monsters": 3,
+    "ready": 5,
+    "needs_approval": 4,
+    "needs_fix": 1
   }
 }

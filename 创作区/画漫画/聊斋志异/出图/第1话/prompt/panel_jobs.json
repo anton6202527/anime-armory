@@ -259,12 +259,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
       "generated_from_execution_input_sha256": "27f2c0265a7721009da41fac8e6364c594ebb6961bb2bfddb645432b1ab92495",
       "reference_input_count": 3,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:02:14",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "25a49acc75860fe1a3b0cff1c7d473f12bac432921bbd227e9c6de7f13c5d0f1",
+      "artifact_sha256": "c12fd5ab1a9c9c1547bdb9afedbbd709c0def14df14a33f5155507831e10b7ed",
       "generated_from_submit_prompt_sha256": "5ca5d12b4fb65d276f5f16279858b3a7a674c332c56cc51fefbf02ce21917a50",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P001.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1515,
+          "height": 1038
+        },
+        "native_sha256": "aea9ff794e4ffab9903fa77b618c6cc833dee1d96ccb65d85506c14af136f9c4",
+        "master_path": "出图/第1话/masters/P001.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "normalization_scale": 0.924855,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P002",
@@ -546,12 +564,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
       "generated_from_execution_input_sha256": "6bc92f07cd732c37f585888e4dcc273b9a14de2a8a4985deb79b6b8f9186b7a6",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:02:14",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8",
+      "artifact_sha256": "7992df1f851ed41e203daa08e0b15a58d5cb80e0ad1277542f6c70f6ddf64d87",
       "generated_from_submit_prompt_sha256": "453e73bc24096ca7c1fa2df4f475288022c0fd85e0c72d1c5b874a82fc1f9d8c",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P002.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1355,
+          "height": 1161
+        },
+        "native_sha256": "7d4a8ae8f5dd1e14594c1f5a333d8c857d9cb9b5f3db78ad2374a215b7e528e5",
+        "master_path": "出图/第1话/masters/P002.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1160
+        },
+        "normalization_scale": 0.999139,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P003",
@@ -867,12 +903,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
       "generated_from_execution_input_sha256": "637dcbe701e496791207ab40937e0155889c906a29a75bfaaa383ae84cf0449e",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:02:14",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+      "artifact_sha256": "b49c5fe310db2970791185c885039de531e9292e8f1733527c9e14ba1b75ed63",
       "generated_from_submit_prompt_sha256": "97b16003f9e12c57d7b000cec1290914273ab699149a74cbcf7302c2a803e16b",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P003.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1517,
+          "height": 1037
+        },
+        "native_sha256": "65b75873af12be4ebf30aa10bd38afabe6bb7b63781b8a26fb2326e8e6c84fd2",
+        "master_path": "出图/第1话/masters/P003.png",
+        "derivative_size": {
+          "width": 1188,
+          "height": 960
+        },
+        "normalization_scale": 0.925747,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P004",
@@ -1154,12 +1208,27 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
       "generated_from_execution_input_sha256": "ac694965ec0f34931ba5aaa2184bc06452bc3b48622f0d8a112492f40eee5e8c",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T11:26:50",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008",
+      "artifact_sha256": "d3ff90c29b6ad73b39e361d4f789ce2c8ef4235efc464133cb81df6fa2963a4f",
       "generated_from_submit_prompt_sha256": "1b57ec05df7a220fd3dfc43bac105f9c06cd1d00d6eaadf587abd10f3136a7a7",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P004.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1536,
+        "native_height": 1024,
+        "native_sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008",
+        "master_path": "出图/第1话/masters/P004.png",
+        "derived_resize": true,
+        "derivative_size": {
+          "width": 1188,
+          "height": 960
+        },
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P005",
@@ -1441,12 +1510,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
       "generated_from_execution_input_sha256": "052047b0e0c936198bc53074ded1935c47f6d5bfb5a3b5450e8262215da919f9",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:21:35",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885",
+      "artifact_sha256": "0a0c6cae6f39daf92c1c1e6c065387bf46da9ecc56b04051bc3589908c551933",
       "generated_from_submit_prompt_sha256": "2d422e41ead13409da90697c7962c0d29fe49c9e33b3bee826c4134400583ede",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P005.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1392,
+          "height": 1130
+        },
+        "native_sha256": "f8ee620c583479e66f99fe5db106e4acf99e28ea90c4b72f652efca68ed8fe28",
+        "master_path": "出图/第1话/masters/P005.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.931034,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P006",
@@ -1728,12 +1815,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
       "generated_from_execution_input_sha256": "febc78db28c14987d37f4cbdc1066ddf4fb37a1bc0981b6a5fd5a10e9c9a6ad1",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:21:35",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52",
+      "artifact_sha256": "b3cfb6abbf328bbe7878fe3be57c19e04cbe984d97f41408b8c5faa32aa9b2c7",
       "generated_from_submit_prompt_sha256": "335ad3fe82ddc036486d3449d0780bdcaa3924e1928dfde575125cc75e236f88",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P006.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1387,
+          "height": 1134
+        },
+        "native_sha256": "d3dcb4d04dc1bbf9fbb1f388bab92e4836dd158336293225bfb0e1777efb0b13",
+        "master_path": "出图/第1话/masters/P006.png",
+        "derivative_size": {
+          "width": 1188,
+          "height": 840
+        },
+        "normalization_scale": 0.856525,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P007",
@@ -2026,12 +2131,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
       "generated_from_execution_input_sha256": "841b373fcbad2e3b4bc29c894bd777a0134aaf060898fca8dd20e7a7578c1a95",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:21:35",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe",
+      "artifact_sha256": "66f02b81c57811a282b50d662230e2256ccfc39ea9a34ed00c078a2bb71592cc",
       "generated_from_submit_prompt_sha256": "06b142f9700f18efde34e3ec735ed66626221ebfdbbb992852aa351bf8773e61",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P007.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1387,
+          "height": 1134
+        },
+        "native_sha256": "350dddcdf1d1c2013a329fa819b4cedd79c4dbe86f84c33c9ac976abcdf358ef",
+        "master_path": "出图/第1话/masters/P007.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.934391,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P008",
@@ -2313,12 +2436,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
       "generated_from_execution_input_sha256": "828a97c6a0b87abc01349ff223191c8924e3c73d2f617dde0553eab8761121c4",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:44:25",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7",
+      "artifact_sha256": "54811377f23bf1ff295f3a3c239fdfd0285013730449f5a8348ae18cb66ba513",
       "generated_from_submit_prompt_sha256": "1566488079dcd1542c2b8f99baf6f6d3ef058c336e96829077bee259c5718b38",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P008.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1382,
+          "height": 1138
+        },
+        "native_sha256": "598dbc6a8426a900aa76d4a455bbe2f0e942fae40c6e23c1e6c42a9873c19203",
+        "master_path": "出图/第1话/masters/P008.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.937771,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P009",
@@ -2611,12 +2752,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
       "generated_from_execution_input_sha256": "7b98e6a44615575d6bb92eba635f7bf3ec38d4b6b00fd27dfb7fbae04c166758",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T14:44:25",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "6bb5acbf994007015aa231def28a77da5ac4b2728f0e988963f286d6bfaec64c",
+      "artifact_sha256": "9a140ca460d4ae52c5a7f151e6380edd1a0cb9c6d3e82fc2b645288987a723a8",
       "generated_from_submit_prompt_sha256": "bd97dad34c3ae374389abb57f99b9ac9c4a2da1e2d14a52e548e45fd454a3138",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P009.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1383,
+          "height": 1137
+        },
+        "native_sha256": "b6e52ba354ffd318566fa1b9213fdc078f0289a8dd96746d5018ef7839333de1",
+        "master_path": "出图/第1话/masters/P009.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.937093,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P010",
@@ -2898,12 +3057,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
       "generated_from_execution_input_sha256": "fd9c0bc6611a62ec6cc02b433ad80e7e8665c84877af33bae4585c9277c5a7d3",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T15:15:12",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b",
+      "artifact_sha256": "db34d2f3cc468c65b12ea6c8d4c5da08d2c598f926d4fd98ce7a1036d1fa6686",
       "generated_from_submit_prompt_sha256": "e54dacb5d3b6677af9885557576ee99b53c7f3e07a06b203257c0f6c87f142d4",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P010.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1466,
+          "height": 1073
+        },
+        "native_sha256": "0f30bdea3bb95a01fc078b78c5560275d68d3cd7d488776593ca355507d6b5a8",
+        "master_path": "出图/第1话/masters/P010.png",
+        "derivative_size": {
+          "width": 1188,
+          "height": 960
+        },
+        "normalization_scale": 0.894688,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P011",
@@ -3185,12 +3362,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
       "generated_from_execution_input_sha256": "1ee4cd616fe3a3fdb4ca22d2a0ac4f5f76818004916c0ebc49b9fb72911ddcd0",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T15:15:12",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53",
+      "artifact_sha256": "6921e0efbea7ac780f7e39563ca1b09260b54a4d9b66a6fd9716e3e424c024eb",
       "generated_from_submit_prompt_sha256": "25c66e3919e3131b67ee72e59780c6807afe3cd3d55a02a07373d15ce0b02408",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P011.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1383,
+          "height": 1137
+        },
+        "native_sha256": "066d70e30991af5f9fdf54ee527677b4313b11ac75fe72a5273962619b28ffd3",
+        "master_path": "出图/第1话/masters/P011.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1080
+        },
+        "normalization_scale": 0.949868,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P012",
@@ -3472,12 +3667,30 @@
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
       "generated_from_execution_input_sha256": "9fe7f5cec6eccb7d4878f5e05c4c6deed24ec312930dcbfbccdaa093360f0aab",
       "reference_input_count": 5,
-      "post_qc": "warn",
-      "generated_at": "2026-07-21T22:10:32",
+      "post_qc": "pass",
+      "generated_at": "2026-07-27T16:09:58",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
-      "artifact_sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8",
+      "artifact_sha256": "053d5cb2e1cc77c79bdb5e2b4d2d08cd2005cdd260919eb1be92857e4c8075ea",
       "generated_from_submit_prompt_sha256": "e6ef470011d5d48ed300baf94abd89f5be31b2efc423e451826f6b4873f5e9dc",
-      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）"
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "master_path": "出图/第1话/masters/P012.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": false,
+        "native_size": {
+          "width": 1452,
+          "height": 1083
+        },
+        "native_sha256": "0ff98ddfb5e67e6b30d997769475a703c36da74195b8f54836bed60c13b0137a",
+        "master_path": "出图/第1话/masters/P012.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.960295,
+        "upscaled": false,
+        "normalization": "center_crop_then_lanczos_downsample"
+      }
     },
     {
       "panel_id": "P013",

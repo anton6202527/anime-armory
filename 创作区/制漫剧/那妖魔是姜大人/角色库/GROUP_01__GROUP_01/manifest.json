@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "GROUP_01",
+  "name": "GROUP_01",
+  "scope": "本集入镜角色",
+  "library_tier": "restricted_partial",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/GROUP_01__GROUP_01/reference",
+    "prompts": "角色库/GROUP_01__GROUP_01/prompts",
+    "lora": "角色库/GROUP_01__GROUP_01/lora",
+    "voice": "角色库/GROUP_01__GROUP_01/voice",
+    "adapters": "角色库/GROUP_01__GROUP_01/adapters",
+    "qc": "角色库/GROUP_01__GROUP_01/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/GROUP_01.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-27T02:27:24+00:00"
+}

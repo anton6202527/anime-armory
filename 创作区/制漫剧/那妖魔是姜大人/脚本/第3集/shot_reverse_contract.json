@@ -1,0 +1,90 @@
+{
+  "kind": "n2d_shot_reverse_contract",
+  "version": 1,
+  "episode": "第3集",
+  "status": "pass",
+  "generated_at": "2026-07-27T02:13:41+00:00",
+  "generated_by": "skills/n2d-script/scripts/shot_reverse_contract.py",
+  "sources": [
+    {
+      "name": "storyboard",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+      "exists": true,
+      "sha256": "8d5cf29e5e41a7ad9605faca085a66efafc16cb49550a0e4756e9e589bdc269e"
+    },
+    {
+      "name": "axis_blocking_map",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/axis_blocking_map.json",
+      "exists": true,
+      "sha256": "ecb86411c1941f6c267ececa12af2b67800e2aac367718a3f2b3f561f60e14bf"
+    },
+    {
+      "name": "continuity_bible",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/continuity_bible.json",
+      "exists": false,
+      "sha256": ""
+    },
+    {
+      "name": "cinematic_coverage_grammar",
+      "path": "/Users/wesley/learn/anime-armory/skills/n2d-script/references/cinematic_coverage_grammar.json",
+      "exists": true,
+      "sha256": "1ed90ee789b7cc755324be108394358c17a060eb5ed83a52c0f8a799ae79213b"
+    }
+  ],
+  "summary": {
+    "patterns": 0,
+    "block": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "patterns": [],
+  "audit_issues": [],
+  "cinematic_technique_usage": [
+    {
+      "clip_id": "EP03_CLIP01",
+      "techniques": [
+        "match_on_action",
+        "insert_cutaway",
+        "reaction_shot"
+      ]
+    },
+    {
+      "clip_id": "EP03_CLIP03",
+      "techniques": [
+        "match_on_action",
+        "insert_cutaway",
+        "reaction_shot"
+      ]
+    },
+    {
+      "clip_id": "EP03_CLIP06",
+      "techniques": [
+        "match_on_action",
+        "insert_cutaway",
+        "reaction_shot"
+      ]
+    },
+    {
+      "clip_id": "EP03_CLIP07",
+      "techniques": [
+        "match_on_action",
+        "insert_cutaway",
+        "reaction_shot"
+      ]
+    },
+    {
+      "clip_id": "EP03_CLIP08",
+      "techniques": [
+        "match_on_action",
+        "insert_cutaway",
+        "reaction_shot"
+      ]
+    }
+  ],
+  "cinematic_grammar_library": "skills/n2d-script/references/cinematic_coverage_grammar.json",
+  "vertical_9x16_global_rules": {
+    "avoid": "不要频繁横向多人并排；清晰近景不要同时塞多张脸。",
+    "prefer": "前景肩部 + 背景脸、纵深站位、道具插入、反应近景、建立/重建空间镜。",
+    "reason": "竖屏脸部可读面积有限，横向多人并排会让脸小、关系乱、视线难对。"
+  }
+}

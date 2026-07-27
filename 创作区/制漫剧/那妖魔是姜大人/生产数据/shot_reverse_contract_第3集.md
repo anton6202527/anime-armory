@@ -1,0 +1,33 @@
+# 第3集 正反打合同与镜头语法审计
+
+- status: pass
+- patterns: 0
+- block: 0
+- warn: 0
+
+## 正反打合同
+
+| Clip | A | B | 站位模式 | 轴线 | 覆盖 | 审计 |
+|---|---|---|---|---|---|---|
+
+## 审计问题
+
+| Clip | Severity | Code | Message |
+|---|---|---|---|
+| - | pass | - | 未发现确定性硬伤 |
+
+## 传统影视镜头语法使用建议
+
+| Clip | Techniques |
+|---|---|
+| EP03_CLIP01 | match_on_action, insert_cutaway, reaction_shot |
+| EP03_CLIP03 | match_on_action, insert_cutaway, reaction_shot |
+| EP03_CLIP06 | match_on_action, insert_cutaway, reaction_shot |
+| EP03_CLIP07 | match_on_action, insert_cutaway, reaction_shot |
+| EP03_CLIP08 | match_on_action, insert_cutaway, reaction_shot |
+
+## 9:16 规则
+
+- 不频繁横向多人并排，近景优先单人 clean single / OTS。
+- 使用前景肩部、背景脸、上下高低位和纵深站位维持关系。
+- 插入道具、手部、火把、门框、尘土、眼神反应用于节奏和越轴缓冲。

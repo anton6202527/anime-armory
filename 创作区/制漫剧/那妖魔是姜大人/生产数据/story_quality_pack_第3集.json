@@ -1,0 +1,99 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "] 在下飞鹰门陈青源，奉县令手令驰援上盘村。进村后我们才发现，狼妖已占村三日；我们折了七八个好手，实在杀不进去。可我",
+      "50mm MS 陈青源马上拱手 | 马队越来越近，为首之人似乎也发现了官道中央那道孤零零的身影，猛地一勒缰绳；尘土漫过衣摆；",
+      "把是动机光，负补光压住半边脸；沉默被误读为官威；硬切跪求升级 | | EP03_CLIP07 百十条人命压身 | 59",
+      "妖危机，她以沉默唬住众人 | `hard_cut`：陈情升级为跪求 | | EP03_CLIP07 | 12.0s",
+      "EP03_CLIP07 | 12.0s | 层层加压至情绪峰 | 单人跪求升级为群跪，时间线追上冷开 | `hard_cut`：道德夹",
+      "生的姜月初，被十几骑武人当场跪求出手救村——假身份第一次兑现，就把她架上狼妖死局。 audience_payoff",
+      "源报名陈情坐实误认；她的沉默被读作官威，假身份第一次真正兑现。 scene LOC_02/官道陈情 subtitle_lines",
+      "念闭环。 dramatic_function 由单人陈情升级为群体跪求，虚假的权力高位被拍成道德夹逼；时间线在此追上"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "唬人成功 → 上盘村惨案与唯一希望反噬 → 被迫接下狼妖任务悬断 # 节拍点：0-3s 众人跪求倒叙钩；约15s 黑",
+        "question_id": "Q01",
+        "signal": "任务",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "纹制服是唯一高饱和制度符号；全集不出现百妖谱金光、妖化或系统面板。 | Clip | 时间 | 镜头与机位 | 动",
+        "question_id": "Q02",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "何用沉默唬住整支马队，又在百十条人命的重压下被迫接下必死任务，收获误认反转的爽点与集尾悬念。 visual_hook",
+        "question_id": "Q03",
+        "signal": "任务",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "/悬念 content_proposition 这些刀客为什么跪求一个假货救命？ onscreen_text 他们跪求",
+        "question_id": "Q04",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "opened_at EP03_CLIP01 promise 这些人为何把姜月初当成唯一救命者 payoff_due EP03_CLIP07",
+        "question_id": "Q05",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "稻草？ audience_effect 立刻追问这些刀客为何跪求一个年轻女子，她又为何心虚。 label 众人跪求的",
+        "question_id": "Q06",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "audience_effect 立刻追问这些刀客为何跪求一个年轻女子，她又为何心虚。 label 众人跪求的假大人 continuity_story",
+        "question_id": "Q07",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "马蹄声？十几骑！ audience_effect 理解她为何只能硬着头皮扮下去，并因马蹄声瞬间提起心弦。 label",
+        "question_id": "Q08",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": true,
+    "current_head": "# 那妖魔是姜大人_第3集_配音文案\n# 取材：原著第3章《那我还活鸡毛了，跳了兄弟》\n# 核心看点：姜月初为摆脱贱籍偷穿镇魔司制服，刚靠沉默唬住飞鹰门，却被百十条人命逼着冒充镇魔司去剿狼妖\n# 留存曲线：众人跪求救命倒叙钩 → 埋尸换装的身份选择 → 贱籍死局 → 马队拦路 → 假身份唬人成功 → 上盘村惨案与唯一希望反噬 → 被迫接下狼妖任务悬断\n# 节拍点：0-3s 众人跪求倒叙钩；约15s 黑衣赤纹换装；约30s 贱籍死局；约45s 马队急停；约60s “镇魔司大人”误认反转；约80s 百十条人命压身；集尾狼妖村危机悬置\n\n[镜头1·飞鹰门众人·焦急恳求·快] 恳请镇魔司大人出手，救上盘村百十口性命！  ⚡钩子\n[镜头2·姜月初·错愕心虚·慢] 我只是想借这身皮活命。|| 怎么一转眼，就成了他们唯一的救命稻草？\n[镜头3·姜月初·压抑疲惫·慢] 裴长青，荒郊野岭，只能委屈你了。\n[镜头4·姜月初·克制自嘲·常速] 人死了，东西还得活人用。|| ……得罪了，兄弟。",
+    "finding": null,
+    "hook_bridge": null,
+    "previous_episode": "第2集",
+    "previous_tail": "visual_hook 裴长青失焦的眼在下前景，姜月初带血颤手居中，上方巨大虎爪已经落下 hook_type 危机 content_proposition 她杀人换来的力量能否让她活过下一爪 content_promise 本集立即兑现杀裴所得二十年如何转化为斩虎生机 viewer_question 二十年，够她活下来吗？ onscreen_text 亲手杀人换来的二十年道行，究竟够不够她活下来？ muted_safe_proof 关声仍能从死者、带血刀手和压顶虎爪读懂杀人后仍将被杀 muted_readable True expected_metric primary retention_3s target 0.8\nhook_id EP02_OPEN promise_type opening_hook opened_at EP02_CLIP01 promise 杀裴所得二十年能否救命 payoff_due EP02_CLIP03 payoff_status paid payoff_clip EP02_CLIP03 payoff_evidence 二十年尽付一刀，虎首在命中后落地 ba",
+    "shared_signals": [
+      "危机"
+    ],
+    "status": "pass"
+  },
+  "episode": "第3集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "0e529decec5c1fca",
+  "performance_prompt_cues": [],
+  "summary": {
+    "boundary_status": "pass",
+    "open_questions": 0,
+    "performance_cue_clips": 0
+  },
+  "version": 1
+}

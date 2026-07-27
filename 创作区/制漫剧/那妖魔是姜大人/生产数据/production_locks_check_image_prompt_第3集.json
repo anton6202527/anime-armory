@@ -1,0 +1,20 @@
+{
+  "checked_lock_ids": [
+    "source_lock",
+    "script_lock",
+    "storyboard_lock"
+  ],
+  "episode": "第3集",
+  "findings": [],
+  "generated_at": "2026-07-27T02:27:06+00:00",
+  "kind": "n2d_production_locks_check",
+  "lock_path": "生产数据/production_locks_第3集.json",
+  "stage": "image_prompt",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "locks": 3,
+    "required_locks": 3
+  },
+  "version": 1
+}

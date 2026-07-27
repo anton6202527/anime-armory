@@ -1,0 +1,142 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 2,
+  "episode": "第3集",
+  "storyboard_sha": "2e94091d7882fa09b6134d6c8b64a6c58ff80b67c878f6fc5c681b5b0484a24c",
+  "shots": [
+    {
+      "clip": "EP03_CLIP01",
+      "clip_no": 1,
+      "expression_span": "中",
+      "seam_mode": "intentional_discontinuity",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP02",
+      "clip_no": 2,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP03",
+      "clip_no": 3,
+      "expression_span": "小",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP04",
+      "clip_no": 4,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP05",
+      "clip_no": 5,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP06",
+      "clip_no": 6,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP07",
+      "clip_no": 7,
+      "expression_span": "大",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP03_CLIP08",
+      "clip_no": 8,
+      "expression_span": "大",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "CHAR_01",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_02",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "仅以遗体与浅坟出现：面容平静、胸口刀创不外露、以衣物遮覆；不复原、不睁眼。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_03",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "风尘仆仆的江湖劲装，左臂缠布带；由马上戒备→下马抱拳→单膝跪地，姿态逐级降低。",
+      "source": "seed"
+    },
+    {
+      "character": "GROUP_01",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "飞鹰门武人十余骑：统一土褐劲装、外形彼此可区分但不抢戏；由列队戒备→随陈青源齐跪。",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/seam_mode/need_endframe/end_anchor_required/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

@@ -71,6 +71,38 @@
       "risk_if_removed": "本集核心看点消失。"
     },
     {
+      "source_span": "马队越来越近，为首之人似乎也发现了官道中央那道孤零零的身影，猛地一勒缰绳。",
+      "beat_function": "冲突/空间压迫",
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "马队急停是误认发生前的必要空间因果。",
+      "delivery": "storyboard EP03_CLIP04尘头起、EP03_CLIP05十几骑勒马急停。",
+      "adaptation_delta": {
+        "changed_from": "原文连续马队逼近描写",
+        "changed_to": "尘头预告后硬切急停",
+        "preserved_function": "孤身女子与十几骑的力量反差",
+        "short_drama_reason": "以一个动作落点取代重复逼近句",
+        "payoff_guard": "先急停后看清制服，误认因果不可倒置"
+      },
+      "risk_if_removed": "陈青源会像凭空出现并立刻跪求。"
+    },
+    {
+      "source_span": "胯下皆是高头大马，想杀人灭口，难以保证不走漏一个。",
+      "beat_function": "选择/动机",
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "保留她不能武力灭口、只能继续伪装的判断，不直说杀人方案。",
+      "delivery": "storyboard EP03_CLIP05十几骑、高头大马和列队戒备构成静音可读的不可灭口证据；voiceover镜头13直接进入‘装，接着装’的结论。",
+      "adaptation_delta": {
+        "changed_from": "显式内心杀人灭口盘算",
+        "changed_to": "以人数、马匹和戒备队形给出视觉证据，台词只留伪装结论",
+        "preserved_function": "她为何不能脱身且必须继续假扮镇魔司",
+        "short_drama_reason": "让观众从画面得出结论，避免第二段盘算旁白",
+        "payoff_guard": "十几骑必须在EP03_CLIP05清晰成势"
+      },
+      "risk_if_removed": "她不逃走、不翻脸、只说何事的选择会缺乏动机。"
+    },
+    {
       "source_span": "飞鹰门奉命救援、折损七八人、狼妖占村",
       "beat_function": "冲突/危机/世界观",
       "decision": "dramatize",

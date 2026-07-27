@@ -3,12 +3,12 @@
   "kind": "comic_panel_post_qc",
   "chapter": "第2话",
   "panel_id": "P009",
-  "created_at": "2026-07-22T14:56:23",
-  "verdict": "warn",
+  "created_at": "2026-07-27T11:26:18",
+  "verdict": "pass",
   "path": "出图/第2话/panels/P009.png",
   "size": {
-    "width": 1024,
-    "height": 1536
+    "width": 1188,
+    "height": 920
   },
   "expected_size": {
     "width": 1188,
@@ -16,12 +16,21 @@
   },
   "resolution_policy": "后端最高可达",
   "resolution_provenance": {
-    "policy": "后端最高可达",
-    "native_width": 1024,
-    "native_height": 1536,
-    "native_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+    "requested_resolution_tier": "highest_available",
+    "maximum_verified": false,
+    "native_size": {
+      "width": 1519,
+      "height": 1036
+    },
+    "native_sha256": "0a9165cfd796a6b03ed3af78cf80cda34988d5481a00a132eac4e60a0b309849",
     "master_path": "出图/第2话/masters/P009.png",
-    "derived_resize": false
+    "derivative_size": {
+      "width": 1188,
+      "height": 920
+    },
+    "normalization_scale": 0.888031,
+    "upscaled": false,
+    "normalization": "center_crop_then_lanczos_downsample"
   },
   "declared_reference_count": 5,
   "declared_reference_binding_count": 5,
@@ -31,12 +40,7 @@
   "omitted_attachment_count": 0,
   "omitted_attachment_ids": [],
   "blank_region_candidates": [],
-  "issues": [
-    {
-      "severity": "warn",
-      "category": "size",
-      "reason": "image size 1024x1536 differs from job size 1188x920"
-    }
-  ],
-  "manual_review_required": true
+  "large_edge_blank_band_candidates": [],
+  "issues": [],
+  "manual_review_required": false
 }

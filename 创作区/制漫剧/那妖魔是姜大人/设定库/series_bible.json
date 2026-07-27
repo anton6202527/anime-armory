@@ -17,27 +17,6 @@
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "PROP_横刀",
-      "name": "横刀",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "PROP_断刀",
-      "name": "断刀",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "PROP_翻覆囚车",
-      "name": "翻覆囚车",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
       "id": "VFX_系统面板",
       "name": "百妖谱金色古卷面板",
       "type": "vfx"
@@ -45,8 +24,22 @@
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
+      "id": "WEAPON_横刀",
+      "name": "横刀",
+      "type": "weapon"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
       "id": "VFX_百妖谱",
       "name": "百妖谱",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_墨虎谱影",
+      "name": "墨虎谱影",
       "type": "vfx"
     }
   ],
@@ -59,6 +52,7 @@
           "has_performance_signature": true,
           "signature_equipment": [
             "WEAPON_01",
+            "WEAPON_横刀",
             "VFX_系统面板"
           ]
         }
@@ -74,7 +68,8 @@
           "form": "“濒死重伤态”",
           "has_performance_signature": true,
           "signature_equipment": [
-            "WEAPON_01"
+            "WEAPON_01",
+            "WEAPON_横刀"
           ]
         }
       ],
@@ -89,7 +84,8 @@
           "form": "“穿心复生态”",
           "has_performance_signature": true,
           "signature_equipment": [
-            "WEAPON_01"
+            "WEAPON_01",
+            "WEAPON_横刀"
           ]
         }
       ],
@@ -113,7 +109,7 @@
   "findings": [
     {
       "code": "episode_missing_storyboard",
-      "message": "部分集缺 storyboard.json：第3集、第4集、第5集、第6集、第7集、第8集、第9集、第10集",
+      "message": "部分集缺 storyboard.json：第4集、第5集、第6集、第7集、第8集、第9集、第10集",
       "severity": "info"
     },
     {
@@ -122,7 +118,7 @@
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-22T06:59:49+00:00",
+  "generated_at": "2026-07-27T02:26:44+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -297,9 +293,10 @@
       },
       {
         "assets": [
-          "LOC_尸骸荒野",
+          "LOC_01",
           "WEAPON_横刀",
           "VFX_百妖谱",
+          "LOC_01冷灰侧逆光无人物底板",
           "VFX_墨虎谱影",
           "VFX_系统面板"
         ],
@@ -312,7 +309,7 @@
         "clips": [
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "WEAPON_横刀",
               "VFX_百妖谱"
             ],
@@ -326,7 +323,7 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "WEAPON_横刀",
               "VFX_百妖谱"
             ],
@@ -339,8 +336,9 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "WEAPON_横刀",
+              "LOC_01冷灰侧逆光无人物底板",
               "VFX_百妖谱"
             ],
             "characters": [
@@ -352,7 +350,7 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "VFX_百妖谱",
               "WEAPON_横刀",
               "VFX_墨虎谱影"
@@ -365,7 +363,7 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "VFX_百妖谱",
               "VFX_墨虎谱影",
               "WEAPON_横刀"
@@ -378,7 +376,7 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "VFX_百妖谱",
               "WEAPON_横刀",
               "VFX_墨虎谱影"
@@ -391,7 +389,7 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "WEAPON_横刀",
               "VFX_百妖谱",
               "VFX_墨虎谱影"
@@ -405,7 +403,7 @@
           },
           {
             "assets": [
-              "LOC_尸骸荒野",
+              "LOC_01",
               "VFX_百妖谱",
               "VFX_墨虎谱影",
               "WEAPON_横刀",
@@ -432,25 +430,153 @@
           "s | 留白·定格 | 摹影进阶隐患真相半露 | hard_cut：虎眼亮后切黑 | 爽点卡点",
           "虎眼 apex 约 42s。字幕、系统文字与数值全部后期叠加。 { \"kind\": \"n",
           "ssion_strategy\": \"系统解释只显示一次规则与一次数值结果，文字走overlay；",
+          "承接第1集横刀刚没入裴长青胸前衣料、系统尚未结算、虎妖仍在逼近。\", \"opening_",
           "t\": \"ECU硬开，微拉建立三角，系统提示与虎爪倒计时并行\", \"audience",
           "\"return_anchor\": \"系统主观层结束后回到姜月初右手握刀\" },",
           "g_intent\": \"插入镜短拍，系统问题后硬切主角口外反应\", \"audienc",
-          "ct_strategy\": \"单人+系统主观层\", \"template\": \"sys",
-          "motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V"
+          "ct_strategy\": \"单人+系统主观层\", \"template\": \"sys"
         ]
       },
       {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
+        "assets": [
+          "LOC_02",
+          "LOC_02黄土官道的双车辙",
+          "WEAPON_横刀",
+          "PROP_镇魔司制服",
+          "LOC_01"
+        ],
+        "characters": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/风尘劲装态",
+          "GROUP_01/齐跪态",
+          "CHAR_01/囚服残损态",
+          "CHAR_02/浅坟遗体态",
+          "CHAR_01/囚服转制服态",
+          "GROUP_01/列队戒备态",
+          "GROUP_01/齐跪态焦外"
+        ],
+        "clip_count": 8,
+        "clips": [
+          {
+            "assets": [
+              "LOC_02",
+              "LOC_02黄土官道的双车辙",
+              "WEAPON_横刀",
+              "PROP_镇魔司制服"
+            ],
+            "characters": [
+              "CHAR_01/镇魔司制服态",
+              "CHAR_03/风尘劲装态",
+              "GROUP_01/齐跪态"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "WEAPON_横刀",
+              "PROP_镇魔司制服"
+            ],
+            "characters": [
+              "CHAR_01/囚服残损态",
+              "CHAR_02/浅坟遗体态"
+            ],
+            "hook_signal": false,
+            "id": "EP03_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "WEAPON_横刀",
+              "PROP_镇魔司制服"
+            ],
+            "characters": [
+              "CHAR_01/囚服转制服态"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP03"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "WEAPON_横刀",
+              "PROP_镇魔司制服"
+            ],
+            "characters": [
+              "CHAR_01/镇魔司制服态"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP04"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "WEAPON_横刀"
+            ],
+            "characters": [
+              "CHAR_01/镇魔司制服态",
+              "CHAR_03/风尘劲装态",
+              "GROUP_01/列队戒备态"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP05"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "WEAPON_横刀"
+            ],
+            "characters": [
+              "CHAR_01/镇魔司制服态",
+              "CHAR_03/风尘劲装态",
+              "GROUP_01/列队戒备态"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP06"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "WEAPON_横刀"
+            ],
+            "characters": [
+              "CHAR_01/镇魔司制服态",
+              "CHAR_03/风尘劲装态",
+              "GROUP_01/齐跪态"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP07"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "WEAPON_横刀"
+            ],
+            "characters": [
+              "CHAR_01/镇魔司制服态",
+              "GROUP_01/齐跪态焦外"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP08"
+          }
+        ],
         "episode": "第3集",
-        "has_storyboard": false,
+        "has_storyboard": true,
         "hooks": [
           "可两害相权，她宁可选那个看起来更不好惹的身份。",
-          "刚解决了生存危机，转头就掉进了身份的死局里。"
+          "刚解决了生存危机，转头就掉进了身份的死局里。",
+          "# 留存曲线：众人跪求救命倒叙钩 → 埋尸换装的身份选择 → 贱籍死局 → 马队拦路 → 假身份唬人成功 → 上盘村惨案与唯一希望反噬 → 被迫接下狼妖任务悬断",
+          "# 节拍点：0-3s 众人跪求倒叙钩；约15s 黑衣赤纹换装；约30s 贱籍死局；约45s 马队急停；约60s “镇魔司大人”误认反转；约80s 百十条人命压身；集尾狼妖村危机悬置",
+          "[镜头1·飞鹰门众人·焦急恳求·快] 恳请镇魔司大人出手，救上盘村百十口性命！  ⚡钩子",
+          "[镜头5·姜月初·警惕决断·常速] 囚服是活靶子。黑衣赤纹虽险，至少——能唬人。|| 真唬住了，也可能把我架到狼窝门口。  ⚡钩子"
         ],
-        "threads": []
+        "threads": [
+          "惨案与唯一希望反噬 → 被迫接下狼妖任务悬断 # 节拍点：0-3s 众人跪求倒叙钩；约15s 黑",
+          "度符号；全集不出现百妖谱金光、妖化或系统面板。 | Clip | 时间 | 镜头与机位 | 动",
+          "，又在百十条人命的重压下被迫接下必死任务，收获误认反转的爽点与集尾悬念。\" }, \"fi",
+          "roposition\": \"这些刀客为什么跪求一个假货救命？\", \"onscreen_te"
+        ]
       },
       {
         "assets": [],
@@ -542,8 +668,8 @@
         "threads": []
       }
     ],
-    "hook_count": 25,
-    "thread_count": 17
+    "hook_count": 29,
+    "thread_count": 21
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "truth_sources": {

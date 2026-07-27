@@ -1,0 +1,164 @@
+{
+  "editorial_timeline": {
+    "outputs": {
+      "animatic_snapshot": "生产数据/timelines/第3集/animatic_timeline.otio",
+      "otio": "生产数据/timelines/第3集/editorial_timeline.otio",
+      "sidecar": "生产数据/editorial_timeline_第3集.json"
+    },
+    "phase": "animatic",
+    "status": "ready"
+  },
+  "episode": "第3集",
+  "findings": [],
+  "generated_at": "2026-07-27T02:26:37+00:00",
+  "inputs": {
+    "episode_images": "出图/第3集/图片",
+    "shot_durations": "脚本/第3集/镜头时长.json",
+    "storyboard": "脚本/第3集/storyboard.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/第3集/图片": null,
+      "脚本/第3集/storyboard.json": "2adb9bbca8cdbff42a94c7c52d50a4732b034b2267e95a5ff800e7469afe6608",
+      "脚本/第3集/镜头时长.json": "49276dd01a1efd9f7ceea9eb8342fd11f89b4d0ecf0fa8ecaa81b6194231a0de"
+    },
+    "sha": "5dac94b550738013c5ad807bdd8aeb7304d02c0b2ec454b27c68f777688f4de0"
+  },
+  "json_path": "生产数据/animatic_第3集.json",
+  "kind": "n2d_animatic_preview",
+  "notes": [
+    "HTML 预览按 storyboard 时长播放；缺图片时使用文字 slate，仍可检查节奏和信息可读性。",
+    "正式出图前 animatic_packet 仍需人工/agent confirmed 签收。"
+  ],
+  "preview_artifact": "生产数据/animatic_第3集.html",
+  "status": "pass",
+  "summary": {
+    "clip_count": 8,
+    "image_backed_clips": 0,
+    "text_slate_clips": 8,
+    "total_duration_sec": 88.833
+  },
+  "timeline": [
+    {
+      "clip_id": "EP03_CLIP01",
+      "dramatic_function": "先展示假身份被跪求的结果，再回到换装之前，让身份反噬成为本集命题。",
+      "duration_sec": 10.52,
+      "end_sec": 10.52,
+      "image": "",
+      "index": 1,
+      "label": "众人跪求的假大人",
+      "pacing_role": "冷开场主钩与身份反差",
+      "scene": "LOC_02/未来片段·官道群跪",
+      "screen_direction": "众人向画右前叩首；姜月初视线低垂向画左下。",
+      "source": "storyboard",
+      "start_sec": 0.0,
+      "transition": "时间回切至埋尸。"
+    },
+    {
+      "clip_id": "EP03_CLIP02",
+      "dramatic_function": "她亲手埋葬给过她自由承诺的人，并拿走死者之物——杀裴的道德代价落地为可见动作。",
+      "duration_sec": 7.441,
+      "end_sec": 17.961,
+      "image": "",
+      "index": 2,
+      "label": "荒坡埋尸告别",
+      "pacing_role": "主干强情绪·杀裴后果与求生选择",
+      "scene": "LOC_01/荒野边缘浅坟",
+      "screen_direction": "她看坟向画左下，起身后视线转向怀中制服。",
+      "source": "storyboard",
+      "start_sec": 10.52,
+      "transition": "同场景接换装。"
+    },
+    {
+      "clip_id": "EP03_CLIP03",
+      "dramatic_function": "囚犯到假镇魔司的身份转换用衣料、束发、佩刀三动作完成；她清醒知道这步棋的双刃。",
+      "duration_sec": 11.755,
+      "end_sec": 29.716,
+      "image": "",
+      "index": 3,
+      "label": "黑衣赤纹换装",
+      "pacing_role": "主干身份转折·假镇魔司状态可见完成",
+      "scene": "LOC_01/荒野边缘换装",
+      "screen_direction": "低头看衣料与刀，站定后望向画左后官道方向。",
+      "source": "storyboard",
+      "start_sec": 17.961,
+      "transition": "离开荒野切官道行路。"
+    },
+    {
+      "clip_id": "EP03_CLIP04",
+      "dramatic_function": "贱籍无路引的死局把她的选择压到墙角，马蹄声在绝路尽头骤然响起。",
+      "duration_sec": 15.383,
+      "end_sec": 45.099,
+      "image": "",
+      "index": 4,
+      "label": "贱籍死局与马蹄",
+      "pacing_role": "主干因果·贱籍死局逼出假身份并引爆马队危机",
+      "scene": "LOC_02/官道行路",
+      "screen_direction": "行路视线向画左后纵深；回身后望向画左后尘头。",
+      "source": "storyboard",
+      "start_sec": 29.716,
+      "transition": "马队冲近接急停。"
+    },
+    {
+      "clip_id": "EP03_CLIP05",
+      "dramatic_function": "十几骑的武力压迫在一件制服前放缓成试探；她用两个字撑住第一回合。",
+      "duration_sec": 4.428,
+      "end_sec": 49.527,
+      "image": "",
+      "index": 5,
+      "label": "马队急停试探",
+      "pacing_role": "人数压迫与误认反转的入口",
+      "scene": "LOC_02/官道对峙",
+      "screen_direction": "陈青源自马上俯向画右前；她侧首回望向画左后。",
+      "source": "storyboard",
+      "start_sec": 45.099,
+      "transition": "同场景接陈情。"
+    },
+    {
+      "clip_id": "EP03_CLIP06",
+      "dramatic_function": "陈青源报名陈情坐实误认；她的沉默被读作官威，假身份第一次真正兑现。",
+      "duration_sec": 15.551,
+      "end_sec": 65.078,
+      "image": "",
+      "index": 6,
+      "label": "陈情与硬装",
+      "pacing_role": "误认反转兑现与假身份第一次得逞",
+      "scene": "LOC_02/官道陈情",
+      "screen_direction": "陈青源仰视画右前；她俯视画左下，避开对视半寸。",
+      "source": "storyboard",
+      "start_sec": 49.527,
+      "transition": "同场景升级为跪求。"
+    },
+    {
+      "clip_id": "EP03_CLIP07",
+      "dramatic_function": "由单人陈情升级为群体跪求，虚假的权力高位被拍成道德夹逼；时间线在此追上冷开场。",
+      "duration_sec": 12.221,
+      "end_sec": 77.299,
+      "image": "",
+      "index": 7,
+      "label": "百十条人命压身",
+      "pacing_role": "道德夹逼情绪峰·兑现冷开场",
+      "scene": "LOC_02/官道群跪",
+      "screen_direction": "众人向画右前叩首；她视线从人群缓缓垂落到自己手上。",
+      "source": "storyboard",
+      "start_sec": 65.078,
+      "transition": "情绪峰顶接她的崩溃自嘲。"
+    },
+    {
+      "clip_id": "EP03_CLIP08",
+      "dramatic_function": "她对老天的怨怼化作破罐子破摔的决意；三重死局并置，集尾悬置在『能否活着回来』。",
+      "duration_sec": 11.534,
+      "end_sec": 88.833,
+      "image": "",
+      "index": 8,
+      "label": "被迫接局·集尾",
+      "pacing_role": "反差爽点与集尾悬念",
+      "scene": "LOC_02/官道集尾",
+      "screen_direction": "先仰望画上方，后平视画左前众人。",
+      "source": "storyboard",
+      "start_sec": 77.299,
+      "transition": "切黑收束，第4集冷开接踏上驰援之路。"
+    }
+  ],
+  "version": 1
+}

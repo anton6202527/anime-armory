@@ -1,0 +1,75 @@
+{
+  "batches": [],
+  "budget": {
+    "accepted_total": 0.0,
+    "blocked_tasks": 0,
+    "estimated_total": 0.0,
+    "limit": null,
+    "recomputed_at": "2026-07-27T02:09:28+00:00",
+    "scope": "ledger",
+    "unit": "mixed"
+  },
+  "coordination": {
+    "backend": "local_file",
+    "config_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/coordination_backend.json",
+    "external_adapter": false,
+    "lock_mode": "flock",
+    "lock_ttl_sec": 120.0,
+    "note": "local queue coordination; leases and reclaim provide crash recovery",
+    "status": "ok"
+  },
+  "generated_at": "2026-07-27T02:09:28+00:00",
+  "kind": "n2d_batch_queue",
+  "max_concurrency": 1,
+  "max_retries": 1,
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "summary": {
+    "by_stage": {
+      "script_stage1": 1
+    },
+    "by_status": {
+      "blocked_agent": 1
+    },
+    "total": 1
+  },
+  "tasks": [
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "agent_command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
+      "created_at": "2026-07-27T02:09:28+00:00",
+      "episode": "第3集",
+      "estimated_cost": {
+        "amount": 0.2,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": null,
+      "history": [
+        {
+          "action": "blocked_agent",
+          "note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集` manually, then re-plan deterministic downstream stages.",
+          "ts": "2026-07-27T02:09:28+00:00"
+        }
+      ],
+      "id": "003-script_stage1-rerun",
+      "idempotency_key": "8b684e91c5b71f79",
+      "last_note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集` manually, then re-plan deterministic downstream stages.",
+      "max_retries": 1,
+      "owner": "n2d-script",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 script_stage2",
+      "runner_mode": "agent_required",
+      "stage_key": "script_stage1",
+      "stage_label": "阶段1·剧本改编",
+      "status": "blocked_agent",
+      "updated_at": "2026-07-27T02:09:28+00:00"
+    }
+  ],
+  "updated_at": "2026-07-27T02:09:28+00:00",
+  "version": 1
+}

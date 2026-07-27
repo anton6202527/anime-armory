@@ -1,11 +1,17 @@
 # 漫画一致性报告 — 第2话
 
-- 生成时间：2026-07-22T15:17:18
+- 生成时间：2026-07-27T10:21:01
 - reference 总数：11
 - 缺失 reference：0
 - 需要重抽格：0
 - registry v2 结构问题：0
-- model pack 待修/待签收：0
+- model pack 待修/待签收：5
+
+## 人物多视图缺口
+
+| character | missing views |
+|---|---|
+| MON_PAINTED_SKIN | front |
 
 ## 每格状态
 

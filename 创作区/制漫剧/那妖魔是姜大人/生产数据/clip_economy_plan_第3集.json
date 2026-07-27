@@ -2,7 +2,7 @@
   "clips": [
     {
       "clip": "EP03_CLIP01",
-      "duration_sec": 9.6,
+      "duration_sec": 10.52,
       "economy_class": "selective_detail",
       "estimated_takes": 1,
       "mergeable": true,
@@ -10,7 +10,7 @@
     },
     {
       "clip": "EP03_CLIP02",
-      "duration_sec": 8.0,
+      "duration_sec": 7.441,
       "economy_class": "selective_detail",
       "estimated_takes": 1,
       "mergeable": true,
@@ -18,7 +18,7 @@
     },
     {
       "clip": "EP03_CLIP03",
-      "duration_sec": 11.0,
+      "duration_sec": 11.755,
       "economy_class": "selective_detail",
       "estimated_takes": 1,
       "mergeable": true,
@@ -26,15 +26,15 @@
     },
     {
       "clip": "EP03_CLIP04",
-      "duration_sec": 12.5,
-      "economy_class": "selective_detail",
-      "estimated_takes": 1,
+      "duration_sec": 15.383,
+      "economy_class": "premium_detail",
+      "estimated_takes": 3,
       "mergeable": true,
       "take_policy": "single_take_multishot"
     },
     {
       "clip": "EP03_CLIP05",
-      "duration_sec": 6.0,
+      "duration_sec": 4.428,
       "economy_class": "selective_detail",
       "estimated_takes": 1,
       "mergeable": true,
@@ -42,23 +42,25 @@
     },
     {
       "clip": "EP03_CLIP06",
-      "duration_sec": 12.5,
+      "duration_sec": 15.551,
       "economy_class": "premium_detail",
-      "estimated_takes": 1,
-      "mergeable": true,
+      "estimated_takes": 3,
+      "merge_blocked_reason": "高动作模板/锚链/奇观镜（安全拆分优先）",
+      "mergeable": false,
       "take_policy": "single_take_multishot"
     },
     {
       "clip": "EP03_CLIP07",
-      "duration_sec": 12.0,
+      "duration_sec": 12.221,
       "economy_class": "premium_detail",
-      "estimated_takes": 1,
-      "mergeable": true,
+      "estimated_takes": 3,
+      "merge_blocked_reason": "高动作模板/锚链/奇观镜（安全拆分优先）",
+      "mergeable": false,
       "take_policy": "single_take_multishot"
     },
     {
       "clip": "EP03_CLIP08",
-      "duration_sec": 9.5,
+      "duration_sec": 11.534,
       "economy_class": "selective_detail",
       "estimated_takes": 1,
       "mergeable": true,
@@ -66,11 +68,40 @@
     }
   ],
   "episode": "第3集",
-  "findings": [],
+  "findings": [
+    {
+      "code": "generation_density_over_budget",
+      "confidence": "heuristic",
+      "message": "本集复杂度=simple（2场景/4角色/2动作镜），当前每分钟预计生成 9.46 次 > 预算 7.0/min。采纳下方 merge/单拍多镜合并后约 9.46/min。简单叙事优先「更少更长的多镜单拍」，不必逐节拍独立成付费 clip。",
+      "severity": "warn"
+    },
+    {
+      "code": "long_clips_force_part_split",
+      "confidence": "heuristic",
+      "message": "3 个 clip 时长超单次生成窗口，被拆成 ≥3 段付费 part：EP03_CLIP04(15.383s→3段), EP03_CLIP06(15.551s→3段), EP03_CLIP07(12.221s→3段)。「每个独立生成 clip 再简短点」：把这些 beat 写短到单次窗口一段成，或合并内部镜位（take_policy=single_take_multishot），直接减 part 数。时长/节奏改动属阶段2签收变更，本脚本不自动改写。",
+      "severity": "warn"
+    }
+  ],
   "fold_candidates": [],
-  "generated_at": "2026-07-25T12:15:10+00:00",
+  "generated_at": "2026-07-27T07:35:53+00:00",
   "kind": "n2d_clip_economy_plan",
-  "long_clips": [],
+  "long_clips": [
+    {
+      "clip": "EP03_CLIP04",
+      "duration_sec": 15.383,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP03_CLIP06",
+      "duration_sec": 15.551,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP03_CLIP07",
+      "duration_sec": 12.221,
+      "estimated_takes": 3
+    }
+  ],
   "merge_groups": [],
   "ok": true,
   "rules": [
@@ -85,36 +116,36 @@
   "should_block": false,
   "single_take_candidates": [],
   "summary": {
-    "budget_per_min": 6.0,
+    "budget_per_min": 7.0,
     "capability_snapshot_date": "2026-07-22",
     "clip_budget_per_min": 6.0,
     "clips": 8,
     "clips_over_budget": false,
-    "clips_per_minute": 5.92,
+    "clips_per_minute": 5.4,
     "complexity": {
-      "action_budget_allowance": 0.0,
-      "action_clips": 0,
-      "applied_budget_per_min": 6.0,
-      "budget_per_min": 6.0,
+      "action_budget_allowance": 1.0,
+      "action_clips": 2,
+      "applied_budget_per_min": 7.0,
+      "budget_per_min": 7.0,
       "class": "simple",
       "clip_budget_per_min": 6.0,
       "distinct_characters": 4,
       "distinct_locations": 2,
-      "premium_beats": 2
+      "premium_beats": 3
     },
-    "current_estimated_takes": 8,
+    "current_estimated_takes": 14,
     "economy_mode": "紧凑",
     "fold_candidates": 0,
-    "long_clips_forcing_parts": 0,
+    "long_clips_forcing_parts": 3,
     "max_take_sec": 15.0,
     "merge_groups": 0,
-    "over_budget": false,
-    "projected_takes_after_merge": 8,
-    "projected_takes_per_minute": 5.92,
+    "over_budget": true,
+    "projected_takes_after_merge": 14,
+    "projected_takes_per_minute": 9.46,
     "single_take_candidates": 0,
     "sunk_cost_clips": 0,
-    "takes_per_minute": 5.92,
-    "total_span_sec": 81.1
+    "takes_per_minute": 9.46,
+    "total_span_sec": 88.833
   },
   "version": 1
 }

@@ -1,10 +1,10 @@
 # Clip 经济性规划（生成次数预算 + 合并候选）
 
 - episode: 第3集
-- 当前预计生成次数: 8（5.92/min）
-- 合并后预计: 8（5.92/min）
+- 当前预计生成次数: 14（9.46/min）
+- 合并后预计: 14（9.46/min）
 - 合并候选组: 0 · 并入相邻强戏候选: 0 · 单Clip补take_policy候选: 0
-- 复杂度: simple（2场景/4角色/0动作镜）· 预算 6.0/min · 片段经济档 紧凑
+- 复杂度: simple（2场景/4角色/2动作镜）· 预算 7.0/min · 片段经济档 紧凑· 超预算
 - 能力快照: 2026-07-22（单次多镜上限口径 15.0s·会过期）
 
 ## 合并候选组
@@ -18,6 +18,11 @@
 ## 单 Clip 补 take_policy 候选（内部镜位一次生成）
 
 - 无
+
+## Findings（全部 heuristic·report-only）
+
+- WARN generation_density_over_budget: 本集复杂度=simple（2场景/4角色/2动作镜），当前每分钟预计生成 9.46 次 > 预算 7.0/min。采纳下方 merge/单拍多镜合并后约 9.46/min。简单叙事优先「更少更长的多镜单拍」，不必逐节拍独立成付费 clip。
+- WARN long_clips_force_part_split: 3 个 clip 时长超单次生成窗口，被拆成 ≥3 段付费 part：EP03_CLIP04(15.383s→3段), EP03_CLIP06(15.551s→3段), EP03_CLIP07(12.221s→3段)。「每个独立生成 clip 再简短点」：把这些 beat 写短到单次窗口一段成，或合并内部镜位（take_policy=single_take_multishot），直接减 part 数。时长/节奏改动属阶段2签收变更，本脚本不自动改写。
 
 ## Rules
 

@@ -1,0 +1,482 @@
+{
+  "decisions": [
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "add_mid_or_multi_anchor",
+        "split_video_shots"
+      ],
+      "clip": "EP03_CLIP01",
+      "duration_sec": 10.52,
+      "generation_risk": 4,
+      "grammar_need": 2,
+      "label": "众人跪求的假大人",
+      "narrative_weight": 2,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 10,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": false,
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 11.0,
+          "min": 8.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "take_policy_ignored_reason": "take_policy 忽略：大表情/奇观/高生成风险镜，安全拆分与锚帧链优先于省生成次数",
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "single_take_multishot",
+        "split_reaction",
+        "add_mid_or_multi_anchor"
+      ],
+      "clip": "EP03_CLIP02",
+      "duration_sec": 7.441,
+      "generation_risk": 3,
+      "grammar_need": 0,
+      "label": "荒坡埋尸告别",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "single_take_multishot",
+      "reason": "一次多镜生成：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take。来源可为 storyboard 显式 take_policy，或低风险纯镜位覆盖镜的默认自动合并（single_take_source=auto_low_risk_editorial）。后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take；奇观/大表情/高风险/需锚帧链镜不自动合并。",
+      "risk_score": 8,
+      "risk_tags": [
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": true,
+      "single_take_source": "storyboard_take_policy",
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 9.0,
+          "min": 6.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "single_take_multishot",
+        "template_required"
+      ],
+      "clip": "EP03_CLIP03",
+      "duration_sec": 11.755,
+      "generation_risk": 3,
+      "grammar_need": 2,
+      "label": "黑衣赤纹换装",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "single_take_multishot",
+      "reason": "一次多镜生成：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take。来源可为 storyboard 显式 take_policy，或低风险纯镜位覆盖镜的默认自动合并（single_take_source=auto_low_risk_editorial）。后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take；奇观/大表情/高风险/需锚帧链镜不自动合并。",
+      "risk_score": 8,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": true,
+      "single_take_source": "storyboard_take_policy",
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 12.0,
+          "min": 8.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "add_mid_or_multi_anchor",
+        "split_video_shots"
+      ],
+      "clip": "EP03_CLIP04",
+      "duration_sec": 15.383,
+      "generation_risk": 4,
+      "grammar_need": 2,
+      "label": "贱籍死局与马蹄",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 10,
+      "risk_tags": [
+        "long_clip_12s",
+        "mouth_visible",
+        "closeup",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": false,
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 16.0,
+          "min": 9.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "take_policy_ignored_reason": "take_policy 忽略：叙事跨度 15.383s 超过单次生成上限 15s（后端能力感知），仍按镜位/生成窗口拆 take",
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.128,
+          "end_sec": 5.128,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP04",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot01"
+        },
+        {
+          "duration_sec": 5.127,
+          "end_sec": 10.255,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP04",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 5.128,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot02"
+        },
+        {
+          "duration_sec": 5.128,
+          "end_sec": 15.383,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP04",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 10.255,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "single_take_multishot",
+        "template_required",
+        "split_reaction"
+      ],
+      "clip": "EP03_CLIP05",
+      "duration_sec": 4.428,
+      "generation_risk": 3,
+      "grammar_need": 1,
+      "label": "马队急停试探",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "single_take_multishot",
+      "reason": "一次多镜生成：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take。来源可为 storyboard 显式 take_policy，或低风险纯镜位覆盖镜的默认自动合并（single_take_source=auto_low_risk_editorial）。后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take；奇观/大表情/高风险/需锚帧链镜不自动合并。",
+      "risk_score": 6,
+      "risk_tags": [
+        "mouth_visible",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": true,
+      "single_take_source": "storyboard_take_policy",
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP03_CLIP06",
+      "duration_sec": 15.551,
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "陈情与硬装",
+      "narrative_weight": 0,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 12,
+      "risk_tags": [
+        "long_clip_12s",
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": false,
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 1.551,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 14.0,
+          "min": 10.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "take_policy_ignored_reason": "take_policy 忽略：叙事跨度 15.551s 超过单次生成上限 15s（后端能力感知），仍按镜位/生成窗口拆 take",
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.184,
+          "end_sec": 5.184,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP06",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot01"
+        },
+        {
+          "duration_sec": 5.183,
+          "end_sec": 10.367,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP06",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 5.184,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot02"
+        },
+        {
+          "duration_sec": 5.184,
+          "end_sec": 15.551,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP06",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 10.367,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP03_CLIP07",
+      "duration_sec": 12.221,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "百十条人命压身",
+      "narrative_weight": 0,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 18,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": false,
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 14.0,
+          "min": 10.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "take_policy_ignored_reason": "take_policy 忽略：大表情/奇观/高生成风险镜，安全拆分与锚帧链优先于省生成次数",
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.074,
+          "end_sec": 4.074,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP07",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP07_shot01"
+        },
+        {
+          "duration_sec": 4.073,
+          "end_sec": 8.147,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP07",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 4.074,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP07_shot02"
+        },
+        {
+          "duration_sec": 4.074,
+          "end_sec": 12.221,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP07",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 8.147,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP07_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
+      ],
+      "clip": "EP03_CLIP08",
+      "duration_sec": 11.534,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "被迫接局·集尾",
+      "narrative_weight": 2,
+      "pilot_candidate": true,
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+      "risk_score": 13,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "single_take_multishot": false,
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 0.534,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 11.0,
+          "min": 8.0
+        }
+      },
+      "take_policy": "single_take_multishot",
+      "take_policy_ignored_reason": "take_policy 忽略：大表情/奇观/高生成风险镜，安全拆分与锚帧链优先于省生成次数",
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    }
+  ],
+  "episode": "第3集",
+  "findings": [],
+  "kind": "n2d_shot_split_decision_plan",
+  "notes": [
+    "report-first；真正硬阻塞仍由 validate_storyboard_contract / shot_risk_audit / spectacle_contract_audit 执行。",
+    "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。",
+    "compress_before_video 表示先改编剧表达，不应把啰嗦剧情直接切成多个付费视频段。"
+  ],
+  "ok": true,
+  "summary": {
+    "add_anchor": 3,
+    "clips": 8,
+    "compress_before_video": 1,
+    "defer_to_composite": 3,
+    "direct_submit_blocked": 3,
+    "keep_single": 0,
+    "single_take_auto": 0,
+    "single_take_multishot": 3,
+    "split_or_template": 8,
+    "story_economy_over_budget": 2,
+    "take_policy_ignored": 5,
+    "template_required": 6,
+    "video_shot_split": 5
+  }
+}

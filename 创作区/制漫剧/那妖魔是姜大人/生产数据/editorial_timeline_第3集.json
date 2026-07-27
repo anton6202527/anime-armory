@@ -1,0 +1,377 @@
+{
+  "accepted_story_clip_count": 0,
+  "actual_story_clip_count": 0,
+  "animatic_snapshot_path": "生产数据/timelines/第3集/animatic_timeline.otio",
+  "animatic_snapshot_sha256": "415f0428172ef59b4de0cb1a173db9311edea322e4f72be7cbc6765c125ed687",
+  "duration_sec": 88.833,
+  "episode": "第3集",
+  "generated_at": "2026-07-27T02:26:37+00:00",
+  "kind": "n2d_editorial_timeline",
+  "media": [
+    {
+      "available_sec": 10.52,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 7.441,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 11.755,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 15.383,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 4.428,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 15.551,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 12.221,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 11.534,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 3.369,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 6.151,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 3.136,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 3.505,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 6.654,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 4.101,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 7.551,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 5.186,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 1.246,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 2.628,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 0.8,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 10.906,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 3.645,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 6.206,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 3.461,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 1.154,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 5.105,
+      "path": "",
+      "sha256": ""
+    },
+    {
+      "available_sec": 5.729,
+      "path": "",
+      "sha256": ""
+    }
+  ],
+  "missing_picture_slots": [
+    "Clip_01",
+    "Clip_02",
+    "Clip_03",
+    "Clip_04",
+    "Clip_05",
+    "Clip_06",
+    "Clip_07",
+    "Clip_08"
+  ],
+  "otio_path": "生产数据/timelines/第3集/editorial_timeline.otio",
+  "otio_sha256": "415f0428172ef59b4de0cb1a173db9311edea322e4f72be7cbc6765c125ed687",
+  "phase": "animatic",
+  "planned_audio_slot_count": 18,
+  "rate": 30.0,
+  "seams": [
+    {
+      "common_entities": [
+        "CHAR_01",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "只交代群跪、制服、心虚三要素；不出现浅坟与囚服。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；浅坟、断枝、制服包袱首次入画；遗容全程不入画。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；换场 LOC_02 -> LOC_01",
+      "from_clip": "Clip_01",
+      "from_end_state": "她僵在群跪之前，内心自问如何沦为救命稻草。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "intentional_discontinuity",
+      "required_boundary_frame": "",
+      "same_location": false,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reason": "冷开未来片段切回埋尸时点，保留『他们为何跪她』的悬念。"
+      },
+      "seam_mode": "intentional_discontinuity",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_02",
+      "to_episode": "第3集",
+      "to_start_state": "她僵在群跪之前，内心自问如何沦为救命稻草。",
+      "transition": "时间回切至埋尸。"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "PROP_镇魔司制服",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "浅坟、断枝、制服包袱首次入画；遗容全程不入画。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；囚服自此退场；制服态自此为常态。；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服",
+      "from_clip": "Clip_02",
+      "from_end_state": "她抱起制服与横刀起身，背向浅坟。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "editorial_intent": "以抱起制服的动作结果硬切到换装三个完成点，省略无信息量的穿衣过程。"
+      },
+      "seam_mode": "hard_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_03",
+      "to_episode": "第3集",
+      "to_start_state": "她抱起制服与横刀起身，背向浅坟。",
+      "transition": "同场景接换装。"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "囚服自此退场；制服态自此为常态。；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；官道与车辙纵深首次入画；马队以远处尘头预告入画。；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；换场 LOC_01 -> LOC_02",
+      "from_clip": "Clip_03",
+      "from_end_state": "换装完成：黑衣赤纹、束发、佩刀，囚服弃地。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": false,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "editorial_intent": "制服态站定是身份转换完成点；硬切官道行路建立时空推进，不要求相邻画面同帧。"
+      },
+      "seam_mode": "hard_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_04",
+      "to_episode": "第3集",
+      "to_start_state": "换装完成：黑衣赤纹、束发、佩刀，囚服弃地。",
+      "transition": "离开荒野切官道行路。"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_01/镇魔司制服态",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "官道与车辙纵深首次入画；马队以远处尘头预告入画。；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；陈青源与飞鹰门马队正式入画。；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01",
+      "from_clip": "Clip_04",
+      "from_end_state": "她驻足回身按刀，马队尘头在道路尽头出现。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "editorial_intent": "用她按住刀柄、看向远处尘头的视线作出口，硬切马队冲近急停，提升危机速度。"
+      },
+      "seam_mode": "hard_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_05",
+      "to_episode": "第3集",
+      "to_start_state": "她驻足回身按刀，马队尘头在道路尽头出现。",
+      "transition": "马队冲近接急停。"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_01/镇魔司制服态",
+        "CHAR_03",
+        "CHAR_03/风尘劲装态",
+        "GROUP_01/列队戒备态",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "陈青源与飞鹰门马队正式入画。；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01；上盘村、狼妖、县令手令等信息全部由台词入局，不闪回。",
+      "from_clip": "Clip_05",
+      "from_end_state": "急停对峙成形：陈青源执礼试探，她以『何事』撑住。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "editorial_intent": "马队急停的空间压迫落地后，硬切陈青源下马抱拳，把武力冲突转成身份试探。"
+      },
+      "seam_mode": "hard_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_06",
+      "to_episode": "第3集",
+      "to_start_state": "急停对峙成形：陈青源执礼试探，她以『何事』撑住。",
+      "transition": "同场景接陈情。"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_01/镇魔司制服态",
+        "CHAR_03",
+        "CHAR_03/风尘劲装态",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "上盘村、狼妖、县令手令等信息全部由台词入局，不闪回。；群跪构图与EP03_CLIP01同锚复现；祠堂惨状仅在台词中。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03",
+      "from_clip": "Clip_06",
+      "from_end_state": "陈情说完，她仍未接话；心虚被读作深沉。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "editorial_intent": "陈情信息结束后硬切单膝落地，以姿态降低把口头求援升级成道德夹逼。"
+      },
+      "seam_mode": "hard_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_07",
+      "to_episode": "第3集",
+      "to_start_state": "陈情说完，她仍未接话；心虚被读作深沉。",
+      "transition": "同场景升级为跪求。"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_01/镇魔司制服态",
+        "WEAPON_横刀"
+      ],
+      "entity_entry_exit": "群跪构图与EP03_CLIP01同锚复现；祠堂惨状仅在台词中。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03；本集人物无新增退场；三重压力以台词并置收束。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03",
+      "from_clip": "Clip_07",
+      "from_end_state": "众人齐跪叩首，时间线与冷开场闭合，她被架上高位。",
+      "from_episode": "第3集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "editorial_intent": "群跪构图闭合冷开悬念后，硬切她微仰头的黑色幽默反应，让峰值压力转为主观荒诞。"
+      },
+      "seam_mode": "hard_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_08",
+      "to_episode": "第3集",
+      "to_start_state": "众人齐跪叩首，时间线与冷开场闭合，她被架上高位。",
+      "transition": "情绪峰顶接她的崩溃自嘲。"
+    }
+  ],
+  "status": "ready",
+  "story_clip_count": 8,
+  "subtitle_marker_count": 18,
+  "timing_basis": "text_estimate_no_audio",
+  "track_names": [
+    "V1 Picture",
+    "A1 Dialogue_Narration",
+    "A2 Ambience_Foley",
+    "A3 BGM"
+  ],
+  "version": 1,
+  "voice_casting_status": "casting"
+}
