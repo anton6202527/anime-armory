@@ -6,13 +6,13 @@
   "accepted": true,
   "reviewer": "Codex n2d-video prompt pack",
   "generated_by": "skills/n2d-video/scripts/prompt_pack.py",
-  "generated_at": "2026-07-27T11:42:39+00:00",
+  "generated_at": "2026-07-28T02:21:24+00:00",
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第3集/storyboard.json",
       "exists": true,
-      "sha256": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825"
+      "sha256": "e87078e2fb3013f5d90e697969a138c54574b28ff9a2d5af982a9351468b4da2"
     },
     {
       "name": "continuity_chain",
@@ -49,12 +49,12 @@
     {
       "path": "出视频/第3集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "c2973820e7cc2494d6b9affd4b28a54afb020eae151af064a41a65b4ad5aea67"
+      "sha256": "ad401f431daf2453c463b46e6cc5f649f0aa1d7ff6aeb07dccec7f12c5c657cb"
     },
     {
       "path": "出视频/第3集/prompt/01_clips.md",
       "exists": true,
-      "sha256": "686ff3462647534bea4366978e66e24e8841f6a0f85c040ecb7d6c69f39dd0ef"
+      "sha256": "00b3fa8ffa7d0e27ba6ea727f5fe550ecfeaf93c4b66dc78027433c5c7b109dd"
     }
   ]
 }

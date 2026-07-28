@@ -3,14 +3,14 @@
   "episode": "第3集",
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-27T11:42:38+00:00",
+  "reviewed_at": "2026-07-28T07:28:44+00:00",
   "plan_path": "生产数据/director_camera_plan_第3集.json",
   "plan_sha256": "08f2f51e9bfeb03e8c212ccd394638c77e2a39d178cdbd0b61c437d338a97cef",
   "scopes": [
     {
       "scope": "出图",
       "prompt_path": "出图/第3集/prompt/01_分镜出图.md",
-      "prompt_sha256": "b87bb955739c9fe96b65ade18b1bad7eba3dc41da4c77c44985445bd29641c34",
+      "prompt_sha256": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
       "applied_clip_ids": [
         "EP03_CLIP01",
         "EP03_CLIP02",

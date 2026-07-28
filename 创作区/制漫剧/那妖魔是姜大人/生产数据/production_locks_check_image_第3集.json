@@ -7,7 +7,7 @@
   ],
   "episode": "第3集",
   "findings": [],
-  "generated_at": "2026-07-27T06:10:59+00:00",
+  "generated_at": "2026-07-28T07:28:55+00:00",
   "kind": "n2d_production_locks_check",
   "lock_path": "生产数据/production_locks_第3集.json",
   "stage": "image",

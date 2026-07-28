@@ -818,10 +818,17 @@ def parse_clip(clip: Mapping[str, Any]) -> Dict[str, Any]:
     if scheduled_chars is not None:
         offscreen = {str(x).strip() for x in (schedule.get("offscreen_presence") or []) if str(x).strip()}
         forbidden = {str(x).strip() for x in (schedule.get("forbidden_presence") or []) if str(x).strip()}
-        cids = [str(x).strip() for x in scheduled_chars
-                if str(x).strip() and str(x).strip() not in offscreen and str(x).strip() not in forbidden]
+        scheduled_visible = [str(x).strip() for x in scheduled_chars
+                             if str(x).strip() and str(x).strip() not in offscreen and str(x).strip() not in forbidden]
+        # entity_schedule may bind an exact form as CHAR_01/形态.  Identity
+        # lookup is by stable character id, while the full token remains in
+        # clip text so _pick_form can select the declared form.
+        parts += scheduled_visible
+        cids = [value.split("/", 1)[0] for value in scheduled_visible]
     else:
-        cids = [str(x) for x in (clip.get("character_ids") or []) if x]
+        declared = [str(x) for x in (clip.get("character_ids") or []) if x]
+        parts += declared
+        cids = [value.split("/", 1)[0] for value in declared]
     if not cids and isinstance(raw_characters, (list, tuple)):
         for item in raw_characters:
             text = str(item or "").strip()

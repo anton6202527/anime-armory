@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "comic_project",
+  "project_id": "comic_4caa08ac454a4de9",
+  "line": "comic",
+  "title": "金瓶梅",
+  "created": "2026-07-28",
+  "mode": "源本改漫画",
+  "format": "条漫",
+  "source": {
+    "path": "源本/金瓶梅.docx",
+    "original_name": "金瓶梅.docx"
+  },
+  "synopsis": "",
+  "cover": null,
+  "rights": {
+    "source_status": "original_or_user_provided",
+    "font_status": "pending_before_publish",
+    "asset_status": "pending_before_publish"
+  }
+}

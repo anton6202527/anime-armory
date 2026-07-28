@@ -1,0 +1,51 @@
+{
+  "kind": "comic_split_blueprint",
+  "version": 2,
+  "status": "draft",
+  "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。",
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "source_path": "源本/待补.txt",
+          "start": "第1章",
+          "end": "第1章"
+        }
+      ],
+      "reader_promise": "待补：本话向读者承诺什么体验/答案",
+      "core_conflict": "待补：谁想要什么、什么在阻止",
+      "turning_point": "待补：选择、反转或认知变化",
+      "payoff": "待补：本话兑现的爽点/情绪/信息",
+      "ending_mode": "cliffhanger",
+      "budget": {
+        "unit": "panels",
+        "target": 36,
+        "soft_range": [
+          24,
+          48
+        ]
+      },
+      "entry_state": {
+        "story": "待补：本话进入时的剧情状态"
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "CHAR_MAIN",
+          "field": "story_state",
+          "from": "待补：进入状态",
+          "to": "待补：不可逆新状态",
+          "panel_id": "P001",
+          "reason": "待补：哪个可见事件造成变化"
+        }
+      ],
+      "exit_state": {
+        "story": "待补：下话必须继承的退出状态"
+      },
+      "status": "draft"
+    }
+  ]
+}

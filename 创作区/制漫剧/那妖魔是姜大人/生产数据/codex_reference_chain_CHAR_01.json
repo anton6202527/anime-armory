@@ -1,0 +1,28 @@
+{
+  "kind": "n2d_image2image_reference_chain",
+  "character_id": "CHAR_01",
+  "backend": "codex",
+  "mode": "image2image_reference_chain",
+  "status": "ready",
+  "actual_image_input_required": true,
+  "reference_manifest_required": true,
+  "full_qc_required": true,
+  "qc_policy": "full_image_qc",
+  "forms": [
+    {
+      "form": "“囚途残损态”",
+      "primary_reference": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+      "turnaround": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+      "expression_reference": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png"
+    },
+    {
+      "form": "镇魔司制服态",
+      "primary_reference": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+      "turnaround": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+      "expression_reference": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+      "costume_scale_reference": "出图/共享/图片/定妆_道具_镇魔司制服_比例.png",
+      "costume_holding_reference": "出图/共享/图片/定妆_道具_镇魔司制服_手持.png"
+    }
+  ],
+  "execution_contract": "codex_image_runner must pass the selected form's real PNG references as image inputs and preserve the per-shot reference bundle; every promoted Clip PNG must pass full image QC."
+}

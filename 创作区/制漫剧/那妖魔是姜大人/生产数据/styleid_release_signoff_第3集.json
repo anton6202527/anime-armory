@@ -1,0 +1,7 @@
+{
+  "kind": "n2d_styleid_release_signoff",
+  "accepted": true,
+  "reviewer": "项目视觉执行席-01",
+  "reason": "第3集当前为内部制作母版；StyleID 权重尚未配置，已用当前像素逐视图验收、ArcFace 漂移台账、Codex 真实多参考图链与逐张 full QC 补偿。公开投放前须重新评估并优先补 StyleID。",
+  "expires_at": "2026-08-28"
+}

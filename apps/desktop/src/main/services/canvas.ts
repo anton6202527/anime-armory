@@ -6,6 +6,10 @@ import type {
   CanvasClip,
   CanvasData,
   CanvasFrame,
+  CanvasGenerationConfig,
+  CanvasGenerationKind,
+  CanvasGenerationModel,
+  CanvasGenerationProfile,
   CanvasLayout,
   CanvasMetric,
   CanvasNodePosition,
@@ -215,6 +219,227 @@ function storyboardPath(root: string, ep: string): string | null {
 
 function panelScriptPath(root: string, ep: string): string | null {
   return existingWorkPath(root, `脚本/${ep}/panel_script.json`)
+}
+
+// ------------------------------------------------ canvas generation profile
+
+async function readProjectSettings(root: string): Promise<Map<string, string>> {
+  let text = ''
+  try {
+    text = await fs.readFile(path.join(root, '_设置.md'), 'utf8')
+  } catch {
+    return new Map()
+  }
+  const settings = new Map<string, string>()
+  for (const line of text.split(/\r?\n/)) {
+    const match = /^\s*-\s*([^：:#]+?)\s*[：:]\s*(.*?)\s*(?:#.*)?$/.exec(line)
+    if (!match) continue
+    const key = match[1].trim()
+    const value = match[2].trim()
+    if (key && value) settings.set(key, value)
+  }
+  return settings
+}
+
+function assertionValue(data: Json, key: string): Json {
+  return get(get(get(data, 'capability_assertions'), key), 'value')
+}
+
+function assertionBool(data: Json, key: string): boolean | undefined {
+  return asBool(assertionValue(data, key))
+}
+
+function assertionNumber(data: Json, key: string): number | undefined {
+  const value = assertionValue(data, key)
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+}
+
+function assertionStrings(data: Json, key: string): string[] {
+  const value = assertionValue(data, key)
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []
+}
+
+function normalizedModelKey(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, '')
+}
+
+function modelMatches(model: CanvasGenerationModel, value: string): boolean {
+  const needle = normalizedModelKey(value)
+  if (!needle) return false
+  const haystacks = [model.id, model.label, model.channel ?? ''].map(normalizedModelKey)
+  return haystacks.some((item) => item === needle || item.includes(needle) || needle.includes(item))
+}
+
+function observedResolutions(data: Json): string[] {
+  const text = JSON.stringify(data)
+  const values: string[] = []
+  for (const match of text.matchAll(/(?:^|[^a-z0-9])(480p|720p|1080p|4k)(?=$|[^a-z0-9])/gi)) {
+    const value = match[1].toUpperCase() === '4K' ? '4K' : match[1].toLowerCase()
+    if (!values.includes(value)) values.push(value)
+  }
+  return values
+}
+
+async function capabilityModels(
+  root: string,
+  kind: CanvasGenerationKind
+): Promise<CanvasGenerationModel[]> {
+  const dir = path.join(root, '生产数据', `${kind}_backend_capabilities`)
+  let entries: Dirent[]
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true })
+  } catch {
+    return []
+  }
+  const models: CanvasGenerationModel[] = []
+  for (const entry of entries.filter((item) => item.isFile() && item.name.endsWith('.json')).slice(0, 40)) {
+    const data = await readJson(path.join(dir, entry.name))
+    const adapter = get(data, 'adapter')
+    const id = s(adapter, 'canonical') ?? s(data, 'backend') ?? path.parse(entry.name).name
+    const label = s(adapter, 'label') ?? s(adapter, 'model') ?? id
+    if (!id.trim() || models.some((model) => model.id === id)) continue
+    const referenceInput = get(adapter, 'reference_input')
+    const frameControl = get(adapter, 'frame_control')
+    const supportsFirst = asBool(get(frameControl, 'supports_first_frame')) ?? assertionBool(data, 'supports_first_frame') ?? false
+    const supportsLast = asBool(get(frameControl, 'supports_last_frame')) ?? assertionBool(data, 'supports_last_frame') ?? false
+    const maxTimeline = nF64(frameControl, 'max_timeline_frames') ?? assertionNumber(data, 'max_timeline_frames') ?? 0
+    const motionCapabilities = assertionStrings(data, 'motion_control_capabilities')
+    const generationModes = (asArray(get(adapter, 'generation_modes')) ?? [])
+      .filter((item): item is string => typeof item === 'string')
+    const nativeReferences =
+      (asBool(get(adapter, 'multi_reference')) ?? false) ||
+      motionCapabilities.includes('multimodal_reference') ||
+      get(referenceInput, 'mode') !== undefined
+    const modes = kind === 'video'
+      ? [
+          'project_route',
+          'text2video',
+          ...(supportsFirst ? ['image2video'] : []),
+          ...(supportsLast ? ['frames2video'] : []),
+          ...(maxTimeline > 1 ? ['multiframe2video'] : []),
+          ...(nativeReferences ? ['multimodal2video'] : []),
+        ]
+      : generationModes.length
+        ? generationModes
+        : ['text2image', ...(nativeReferences ? ['image_reference'] : [])]
+    const evidence = s(adapter, 'evidence') ?? s(get(adapter, 'evidence'), 'source')
+    const available =
+      kind === 'video'
+        ? (asBool(get(adapter, 'paid_routing_allowed')) ?? assertionBool(data, 'paid_routing_allowed') ?? true)
+        : (asBool(get(adapter, 'auto_runnable')) ?? assertionBool(data, 'auto_runnable') ?? true)
+    models.push({
+      id,
+      label,
+      kind,
+      channel: s(adapter, 'channel') ?? s(data, 'channel'),
+      description: evidence ? shortText(evidence, 150) : undefined,
+      available,
+      premium: /vip|pro|premium/i.test(`${label} ${JSON.stringify(data).slice(0, 12000)}`),
+      min_duration: kind === 'video' ? 4 : undefined,
+      max_duration: kind === 'video'
+        ? (nF64(adapter, 'max_clip_seconds') ?? assertionNumber(data, 'max_clip_seconds') ?? 15)
+        : undefined,
+      resolutions: observedResolutions(data),
+      modes: Array.from(new Set(modes)),
+      native_audio: kind === 'video'
+        ? (asBool(get(adapter, 'native_audio')) ?? assertionBool(data, 'native_audio') ?? false)
+        : false,
+      native_references: nativeReferences,
+      source: `生产数据/${kind}_backend_capabilities/${entry.name}`,
+    })
+  }
+  return models
+}
+
+function promoteProjectModel(
+  models: CanvasGenerationModel[],
+  kind: CanvasGenerationKind,
+  projectModel: string | undefined,
+  channel: string | undefined,
+  fallbackId: string | undefined
+): string | undefined {
+  let preferred = projectModel ? models.find((model) => modelMatches(model, projectModel)) : undefined
+  preferred ??= fallbackId ? models.find((model) => modelMatches(model, fallbackId)) : undefined
+  if (!preferred && projectModel) {
+    preferred = {
+      id: fallbackId || normalizedModelKey(projectModel) || 'project-default',
+      label: projectModel,
+      kind,
+      channel,
+      description: '来自本作 _设置.md；能力由本线适配层在执行前核验',
+      available: true,
+      preferred: true,
+      premium: /vip|pro|premium/i.test(projectModel),
+      min_duration: kind === 'video' ? 4 : undefined,
+      max_duration: kind === 'video' ? 15 : undefined,
+      resolutions: kind === 'video' ? ['720p'] : [],
+      modes: kind === 'video' ? ['project_route', 'image2video'] : ['text2image', 'image_reference'],
+      native_audio: false,
+      native_references: true,
+      source: '_设置.md',
+    }
+    models.unshift(preferred)
+  }
+  if (!preferred && models.length) preferred = models[0]
+  if (!preferred) {
+    preferred = {
+      id: 'project-default',
+      label: '项目默认 · 自动路由',
+      kind,
+      channel,
+      description: '由当前作品线的设置与适配层决定实际执行后端',
+      available: true,
+      preferred: true,
+      min_duration: kind === 'video' ? 4 : undefined,
+      max_duration: kind === 'video' ? 15 : undefined,
+      resolutions: kind === 'video' ? ['720p'] : [],
+      modes: kind === 'video' ? ['project_route'] : ['text2image'],
+      native_audio: false,
+      native_references: false,
+      source: '_设置.md / 本线适配层',
+    }
+    models.unshift(preferred)
+  }
+  preferred.preferred = true
+  if (projectModel) preferred.label = projectModel
+  if (channel) preferred.channel = channel
+  models.sort((a, b) => Number(Boolean(b.preferred)) - Number(Boolean(a.preferred)) || a.label.localeCompare(b.label))
+  return preferred.id
+}
+
+async function generationProfile(root: string, ep: string): Promise<CanvasGenerationProfile> {
+  const settings = await readProjectSettings(root)
+  const [imageModels, videoModels, routes, imageBaseline] = await Promise.all([
+    capabilityModels(root, 'image'),
+    capabilityModels(root, 'video'),
+    readJson(path.join(root, '出视频', ep, 'prompt', 'video_model_routes.json')),
+    readJson(path.join(root, '生产数据', 'image_backend_baseline.json')),
+  ])
+  const baselineSelection = get(imageBaseline, 'selection')
+  const defaultImageModel = promoteProjectModel(
+    imageModels,
+    'image',
+    settings.get('生图模型') ?? s(baselineSelection, 'image_model') ?? s(baselineSelection, 'adapter_model'),
+    settings.get('生图AI') ?? settings.get('生图渠道') ?? s(baselineSelection, 'channel'),
+    s(baselineSelection, 'backend')
+  )
+  const defaultVideoModel = promoteProjectModel(
+    videoModels,
+    'video',
+    settings.get('生视频模型'),
+    settings.get('生视频渠道'),
+    s(routes, 'default_backend')
+  )
+  return {
+    default_aspect_ratio: settings.get('画幅') ?? settings.get('画面比例') ?? 'Auto',
+    default_resolution: settings.get('视频分辨率') ?? '720p',
+    default_image_model: defaultImageModel,
+    default_video_model: defaultVideoModel,
+    default_video_duration: 10,
+    audio_policy: settings.get('视频生成音频策略') ?? s(routes, 'video_generation_audio_policy'),
+    image_models: imageModels,
+    video_models: videoModels,
+  }
 }
 
 // -------------------------------------------------------- media abs/revision
@@ -1373,6 +1598,7 @@ async function buildCanvas(root: string, ep: string): Promise<CanvasData> {
     episode: ep,
     episodes: await listEpisodes(root),
     shared_assets: await sharedAssetFrames(root),
+    generation_profile: await generationProfile(root, ep),
     clips: [],
     seams: [],
   }
@@ -1544,6 +1770,116 @@ export async function writeCanvasLayout(
     nodes: clean,
   }
   await fs.writeFile(file, `${JSON.stringify(layout, null, 2)}\n`, 'utf8')
+}
+
+// ---------------------------------------------------- generation controls
+
+function generationControlsPath(root: string, ep: string): string {
+  validateEpisodeName(ep)
+  return path.join(realWorkRoot(root), '生产数据', `canvas_generation_controls_${ep}.json`)
+}
+
+function cleanGenerationString(value: Json, fallback: string, max = 120): string {
+  return typeof value === 'string' && value.trim()
+    ? Array.from(value.trim()).slice(0, max).join('')
+    : fallback
+}
+
+function cleanGenerationList(value: Json, maxItems: number): string[] {
+  if (!Array.isArray(value)) return []
+  const out: string[] = []
+  for (const item of value) {
+    if (typeof item !== 'string') continue
+    const clean = Array.from(item.trim()).slice(0, 100).join('')
+    if (!clean || out.includes(clean)) continue
+    out.push(clean)
+    if (out.length >= maxItems) break
+  }
+  return out
+}
+
+function cleanGenerationReference(root: string, value: string): string | null {
+  const base = realWorkRoot(root)
+  let candidate: string
+  try {
+    candidate = path.isAbsolute(value) ? path.resolve(value) : resolveWithin(base, value)
+    if (!existsSync(candidate) || !statSync(candidate).isFile()) return null
+    const real = realpathSync(candidate)
+    const relativeReal = path.relative(base, real)
+    if (relativeReal === '' || relativeReal.startsWith('..') || path.isAbsolute(relativeReal)) return null
+    return path.relative(base, candidate).replaceAll('\\', '/')
+  } catch {
+    return null
+  }
+}
+
+function sanitizeGenerationConfig(root: string, raw: Json): CanvasGenerationConfig {
+  const kind: CanvasGenerationKind = get(raw, 'kind') === 'video' ? 'video' : 'image'
+  const rawCount = nI64(raw, 'count')
+  const count: 1 | 2 | 4 = rawCount === 2 || rawCount === 4 ? rawCount : 1
+  const rawDuration = nF64(raw, 'duration') ?? 10
+  const referencePaths = cleanGenerationList(get(raw, 'reference_paths'), 24)
+    .map((item) => cleanGenerationReference(root, item))
+    .filter((item): item is string => item !== null)
+  const promptLanguage = get(raw, 'prompt_language')
+  return {
+    kind,
+    model: cleanGenerationString(get(raw, 'model'), 'project-default'),
+    mode: cleanGenerationString(get(raw, 'mode'), kind === 'video' ? 'project_route' : 'text2image'),
+    aspect_ratio: cleanGenerationString(get(raw, 'aspect_ratio'), 'Auto', 20),
+    resolution: cleanGenerationString(get(raw, 'resolution'), kind === 'video' ? '720p' : 'project', 24),
+    duration: Math.round(Math.max(1, Math.min(60, rawDuration)) * 10) / 10,
+    audio_enabled: kind === 'video' && Boolean(asBool(get(raw, 'audio_enabled'))),
+    count,
+    reference_paths: referencePaths,
+    marks: cleanGenerationList(get(raw, 'marks'), 12),
+    effects: cleanGenerationList(get(raw, 'effects'), 12),
+    camera_motion: cleanGenerationString(get(raw, 'camera_motion'), 'none', 40),
+    prompt_language: promptLanguage === 'zh' || promptLanguage === 'en' ? promptLanguage : 'project',
+    prompt_override: cleanGenerationString(get(raw, 'prompt_override'), '', 12_000),
+  }
+}
+
+export async function readCanvasGenerationConfig(
+  root: string,
+  ep: string,
+  clipId: string,
+  kind: CanvasGenerationKind
+): Promise<CanvasGenerationConfig | null> {
+  if (!clipId.trim() || clipId.length > 240) throw new Error('非法节点 ID')
+  const data = await readJson(generationControlsPath(root, ep))
+  const raw = get(get(data, 'configs'), `${kind}:${clipId}`)
+  if (!isObj(raw)) return null
+  return sanitizeGenerationConfig(root, { ...raw, kind })
+}
+
+export async function writeCanvasGenerationConfig(
+  root: string,
+  ep: string,
+  clipId: string,
+  config: CanvasGenerationConfig
+): Promise<CanvasGenerationConfig> {
+  if (!clipId.trim() || clipId.length > 240) throw new Error('非法节点 ID')
+  const clean = sanitizeGenerationConfig(root, config)
+  await productionDirForWrite(root)
+  const file = generationControlsPath(root, ep)
+  const current = await readJson(file)
+  const configs = isObj(get(current, 'configs')) ? { ...(get(current, 'configs') as Record<string, Json>) } : {}
+  configs[`${clean.kind}:${clipId}`] = {
+    ...clean,
+    updated_at: new Date().toISOString(),
+  }
+  const payload = {
+    kind: 'anime_armory_canvas_generation_controls',
+    version: 1,
+    episode: ep,
+    updated_at: new Date().toISOString(),
+    configs,
+  }
+  const temp = `${file}.${process.pid}.${Date.now()}.tmp`
+  await fs.writeFile(temp, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
+  await fs.rename(temp, file)
+  return clean
 }
 
 // ------------------------------------------------------------------ clip edit

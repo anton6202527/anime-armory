@@ -11,44 +11,18 @@
     "default_midframe": false,
     "midframe_exempt_below": 3.0
   },
-  "planned": [
-    {
-      "clip_index": 6,
-      "clip_id": "EP03_CLIP06",
-      "duration": 12.5,
-      "rule": "R1 高运动信号（文本/运镜或大表情，12.5s）",
-      "anchors": [
-        {
-          "anchor_png": "出图/第3集/图片/EP03_CLIP06_a1.png",
-          "at_sec": 3.12,
-          "use": "split",
-          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）",
-          "source_duration": 12.5
-        },
-        {
-          "anchor_png": "出图/第3集/图片/EP03_CLIP06_a2.png",
-          "at_sec": 6.25,
-          "use": "split",
-          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）",
-          "source_duration": 12.5
-        },
-        {
-          "anchor_png": "出图/第3集/图片/EP03_CLIP06_a3.png",
-          "at_sec": 9.38,
-          "use": "split",
-          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）",
-          "source_duration": 12.5
-        }
-      ],
-      "added_cost": {
-        "images": 3,
-        "video_segments": 3
-      }
-    }
-  ],
+  "planned": [],
   "skipped": [
     {
+      "clip": "EP03_CLIP01",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
       "clip": "EP03_CLIP03",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP03_CLIP06",
       "why": "已手动声明 anchors，人工优先"
     },
     {
@@ -62,10 +36,10 @@
   ],
   "exempted": [],
   "summary": {
-    "clips_planned": 1,
-    "total_anchors": 3,
-    "added_images": 3,
-    "added_video_segments": 3,
+    "clips_planned": 0,
+    "total_anchors": 0,
+    "added_images": 0,
+    "added_video_segments": 0,
     "exempted_clips": 0
   },
   "backend_selection": {

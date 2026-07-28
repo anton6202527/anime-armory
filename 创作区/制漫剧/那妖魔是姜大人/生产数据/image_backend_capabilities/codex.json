@@ -84,100 +84,100 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": true
     },
     "exact_model_id": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": ""
     },
     "max_reference_images": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "model_precision": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "normalized_family"
     },
     "negative_strategy": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "inline_constraints"
     },
     "official": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": false
     },
     "prompt_language": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "zh"
     },
     "prompt_profile": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": [
         "aspect_ratio",
@@ -186,49 +186,49 @@
       ]
     },
     "reference_mode": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "local_probe",
-      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
-      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
+      "evidence_kind": "official_cli",
+      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "local_probe",
+  "evidence_kind": "official_cli",
   "kind": "n2d_image_backend_refresh_evidence",
   "model_evidence": {
     "exact_model_id": "",
@@ -236,10 +236,10 @@
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
     "precision": "normalized_family"
   },
-  "note": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+  "note": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
   "source_urls": [],
   "sources": [
-    "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation"
+    "本机 Codex CLI 官方发行版与当前 imagegen 工具实测"
   ],
-  "verified_at": "2026-07-22"
+  "verified_at": "2026-07-28"
 }

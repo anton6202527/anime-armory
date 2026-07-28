@@ -7,6 +7,7 @@ import { GlobalTooltip } from "./components/GlobalTooltip";
 import { BreadcrumbHomeIcon } from "./components/BreadcrumbHomeIcon";
 import {
   DEFAULT_REPO,
+  createWork,
   defaultWorkspace,
   pickDirectory,
   resolveRepo,
@@ -93,6 +94,7 @@ type OpenWork = {
   id: string;
   line: LineInfo;
   root: WorkRoot;
+  initialPrompt?: string;
 };
 
 export function App() {
@@ -228,9 +230,60 @@ export function App() {
 
   // Opening another work replaces the current work. The previous one remains
   // available from the native recent-projects menu.
-  function openWork(line: LineInfo, root: WorkRoot) {
-    setActiveWork({ id: root.path, line, root });
+  function openWork(line: LineInfo, root: WorkRoot, initialPrompt?: string) {
+    setActiveWork({ id: root.path, line, root, initialPrompt });
     rememberWork(line, root);
+  }
+
+  async function startFromHub(line: LineInfo, prompt: string, attachments: string[]) {
+    const cleanPrompt = prompt.trim();
+    if (!cleanPrompt && attachments.length === 0) return;
+    const recent = recentWorksRef.current.find((work) =>
+      work.line.line === line.line && line.roots.some((root) => root.path === work.root.path),
+    );
+    let root = recent
+      ? line.roots.find((item) => item.path === recent.root.path) ?? recent.root
+      : line.roots[0];
+    if (!root) {
+      const firstAttachmentName = attachments[0]?.split(/[\\/]/).filter(Boolean).pop() ?? "";
+      const stem = (cleanPrompt || firstAttachmentName)
+        .split(/\r?\n/, 1)[0]
+        .replace(/[\\/:*?"<>|]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 22) || plainLineLabel(lineLabel(line));
+      const stamp = new Date().toLocaleString("zh-CN", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).replace(/[\s/:]/g, "");
+      try {
+        const name = `${stem}-${stamp}`;
+        const path = await createWork(line.dir, repoRoot, name);
+        root = { name, path, has_progress: false, is_demo: false };
+      } catch (error) {
+        console.error("hub create work failed", error);
+        setHomeRoute({ kind: "line", line });
+        return;
+      }
+    }
+    const routedPrompt = [
+      `请使用 ${line.line} 处理当前作品中的以下需求。`,
+      "先读取 _进度.md 与 _设置.md，遵循本线状态机、选择点、适配层和 gate。",
+      "",
+      cleanPrompt || "请结合用户附加的文件开始创作。",
+      ...(attachments.length > 0 ? [
+        "",
+        "用户从首页附加了以下本地文件：",
+        ...attachments.map((path) => `- ${path}`),
+        "请先检查这些文件，并按所选创作线的约定将需要的素材导入当前作品后再继续。",
+      ] : []),
+    ].join("\n");
+    window.localStorage.setItem("aa.terminalVisible", "true");
+    setTerminalVisible(true);
+    openWork(line, root, routedPrompt);
   }
 
   function closeWork(id: string) {
@@ -255,7 +308,7 @@ export function App() {
   return (
     <div className="app-shell">
       {!activeWork && (
-        <div className={"window-titlebar" + (isMacPlatform ? " window-titlebar-mac" : "")}>
+        <div className={"window-titlebar" + (isMacPlatform ? " window-titlebar-mac" : "") + (homeRoute.kind === "home" ? " window-titlebar-hub" : "")}>
           {homeRoute.kind === "line" && (
             <>
               <button
@@ -294,6 +347,7 @@ export function App() {
               onPickWorkspace={pickWorkspace}
               onShowSkills={(line) => setSkillsLine(line)}
               onEnter={(line) => setHomeRoute({ kind: "line", line })}
+              onStart={startFromHub}
             />
           )}
         </div>
@@ -308,6 +362,7 @@ export function App() {
               terminalVisible={terminalVisible}
               newTerminalRequestSeq={newTerminalRequest.seq}
               newTerminalRequestTargetId={newTerminalRequest.targetId}
+              initialPrompt={activeWork.initialPrompt}
               onRootChanged={(root) => replaceWorkRoot(activeWork.id, activeWork.line, root)}
               onCloseTerminal={() => {
                 window.localStorage.setItem("aa.terminalVisible", "false");

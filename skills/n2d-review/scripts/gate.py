@@ -108,6 +108,7 @@ from gate_core import (  # 显式带上 import* 默认会漏的下划线私有�
     _final_media_rels,
     _recipe_return_stage_for_asset,
     _recipe_event_missing_fields,
+    select_video_frame_strategy,
     _midframe_self_check_value,
     _check_midframe_generation_self_check,
     _listify,
@@ -1912,6 +1913,67 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
             add(sev, "一角一后端", p,
                 f"{clip_id} 跨集后端亲和冲突：{bits}。同角色跨集换后端→脸质感漂移；处理：{action}。",
                 return_to_stage="video")
+
+
+def check_storyboard_video_feasibility_before_images(root: str, ep: str) -> None:
+    """Catch video duration/boundary-frame debt before paid episode images.
+
+    The final video compiler is authoritative, but waiting for it used to let
+    multi-shot clips consume image budget before discovering that an editorial
+    boundary frame was missing.  This lightweight planning pass consumes the
+    same frame-strategy selector and the router output when available.
+    """
+    storyboard_path = os.path.join(root, "脚本", ep, "storyboard.json")
+    storyboard = load_json(storyboard_path)
+    if not isinstance(storyboard, Mapping):
+        return
+    routes_path = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    route_data = load_json(routes_path)
+    routes = route_data.get("routes") if isinstance(route_data, Mapping) else []
+    route_map = {
+        str(row.get("clip_id") or ""): row
+        for row in routes or [] if isinstance(row, Mapping)
+    }
+    channel = get_setting(root, "生视频渠道", "").strip()
+    default_backend = get_setting(root, "生视频模型", "").strip() or "seedance"
+    clips = storyboard.get("clips") if isinstance(storyboard.get("clips"), list) else []
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        clip_id = str(clip.get("clip_id") or clip.get("id") or f"Clip_{idx:02d}")
+        route = route_map.get(clip_id, {})
+        backend = str(route.get("primary_backend") or default_backend)
+        shots = [row for row in clip.get("shots") or [] if isinstance(row, Mapping)]
+        editorial = [row for row in shots if any(row.get(k) for k in ("lens", "camera", "shot_size"))]
+        if len(editorial) <= 1:
+            continue
+        continuity = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+        anchors = [row for row in continuity.get("anchors") or [] if isinstance(row, Mapping)]
+        executable_anchors = [
+            row for row in anchors
+            if str(row.get("use") or "split").strip().lower() not in {"qc", "reference", "reference_qc", "review"}
+        ]
+        take_policy = str(clip.get("take_policy") or continuity.get("take_policy") or "").strip().lower()
+        strategy = select_video_frame_strategy(
+            backend,
+            channel,
+            shot_count=len(editorial),
+            anchor_count=len(executable_anchors),
+            need_end=bool(clip.get("endframe_png")) or needs_end_anchor(continuity),
+            requires_mid_anchors=bool(route.get("risk_flags") and "split_relay_required" in route.get("risk_flags", [])),
+            explicit=str((continuity.get("frame_strategy") or {}).get("strategy") if isinstance(continuity.get("frame_strategy"), Mapping) else continuity.get("frame_strategy") or ""),
+            take_policy=take_policy,
+            duration_sec=clip.get("duration") if isinstance(clip.get("duration"), (int, float)) else None,
+        )
+        if str(strategy.get("strategy") or "") == "edit_cut_pending_assets":
+            add(
+                BLOCK, "视频可执行性前置", storyboard_path,
+                f"{clip_id} 在出图前已可判定为多镜位 edit_cut，但缺镜位边界帧/尾帧；"
+                "先把边界图加入 anchor plan 和出图任务，再开始整集付费生图。",
+                return_to_stage="script_stage2",
+                affected_shots=[clip_id],
+                affected_artifacts=[storyboard_path, f"出图/{ep}/prompt"],
+            )
 def check_motion_control_manifest(root: str, path: str, route: Dict[str, object], required_inputs: List[str]) -> None:
     data = load_json(path)
     loc = path
@@ -4084,6 +4146,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_backend_reachable(root, ep)
         check_budget_cap(root, ep)
         if stage == "image_preflight":
+            check_storyboard_video_feasibility_before_images(root, ep)
             check_production_locks_preflight(root, ep, stage)
             check_image_backend_api_refresh(root, ep)
         # 已测得的跨集脸/资产漂移 BLOCK 不分预检/出图后——整个 image family 都跑，避免直接 `--stage image`
@@ -4211,6 +4274,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_core_expression_anchor_coverage(root, ep)
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
+        # Router feasibility and image-generation receipts are both knowable
+        # before video prompt generation; do not defer them to paid-video preflight.
+        check_video_model_routes(root, ep, "本集模型路由表", os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json"))
+        check_generation_recipe_evidence(root, ep, stage)
         check_multimodal_continuity(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)

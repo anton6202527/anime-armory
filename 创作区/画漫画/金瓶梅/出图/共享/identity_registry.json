@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "kind": "comic_identity_registry",
+  "assets": {},
+  "schema_meta": {
+    "initialized_at": "2026-07-28",
+    "initialized_by": "comic init_project bootstrap"
+  }
+}

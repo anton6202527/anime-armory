@@ -607,7 +607,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T10:27:06+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -630,10 +630,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/Clip06_first.png",
-      "png_sha256": "304e93e4200c4a0e1bcf1ddacb1056ab48b93ba1aa4a6c36d26255e97cdeb741",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "efad3259e2760e5f0fde8a44d499dcb27a05fb6e03288646c3c441c7cf1644fb",
+      "reason": "已查看当前像素：横刀本帧未入画，画内无错误武器或第二把刀；后景骑队器具无主体签名武器矛盾。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -741,7 +741,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T09:27:28+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -764,10 +764,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/Clip07_first.png",
-      "png_sha256": "89ea6864387d605214f3b6db4cbc1a7557391775e1ced45843a9e0324e5311c4",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "fe9e0eacb000fa08a72102c05750d34e2237d85d71923ccb7922ad82e89acf95",
+      "reason": "已查看 Clip07_first 当前像素：本时点横刀按定时子镜合同尚未入画；画内无错误武器、第二把刀或矛盾结构。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -803,6 +803,73 @@
       "shot": "Clip_07",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_07_Clip07_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "WEAPON_01",
+      "asset_name": "横刀",
+      "confirmed_at": "2026-07-28T09:35:35+00:00",
+      "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+      "human_signoff": false,
+      "must_not_have": [
+        "变成长剑",
+        "华丽仙剑",
+        "现代军刀",
+        "多把复制",
+        "副刀",
+        "短刃",
+        "匕首",
+        "右手第二把刀",
+        "副手持刀",
+        "后手短刀",
+        "双持",
+        "刀鞘变成刀刃",
+        "双刃",
+        "多刃",
+        "双向开刃",
+        "第二把刀刃",
+        "光效变成实体刀刃"
+      ],
+      "png": "图片/Clip07_first_a1.png",
+      "png_sha256": "a849db2b3eb286f0714cfe57f794e9159b05f3ed4cd15175a5e72e6d02c7aefd",
+      "reason": "当前帧横刀按定时子镜合同尚未入画；画内无错误武器或第二把刀。",
+      "review_kind": "executor_visual",
+      "reviewer": "项目视觉执行席-01",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "weapon_count=1",
+        "single_hilt=1",
+        "single_blade=1",
+        "cutting_edge_count=1",
+        "一侧为连续锋利刃口",
+        "另一侧为连续厚钝刀背",
+        "刀尖偏向刃侧",
+        "不得居中形成对称剑尖",
+        "禁止双面开刃",
+        "双刃剑轮廓或第二条锋刃",
+        "single_straight_blade=1",
+        "主角只持一把实体横刀",
+        "副手",
+        "后手不得生成短刃",
+        "匕首",
+        "副刀或第二把刀",
+        "大唐镇魔司制式横刀",
+        "暗银直身刀刃",
+        "黑色刀柄",
+        "旧金属护手",
+        "战损血尘克制",
+        "单把实体武器",
+        "刀光只作半透明运动轨迹",
+        "刀光",
+        "光轨",
+        "残影只能是半透明运动轨迹或边缘高光",
+        "不得变成实体刀刃",
+        "第二把刀或可握持武器"
+      ],
+      "shot": "Clip_07",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_07_Clip07_first_a1_compare.png",
       "verdict": "ok"
     },
     {
@@ -875,7 +942,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T05:36:52+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -898,10 +965,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/Clip08_first.png",
-      "png_sha256": "f6d8dc7e9dd0eba08615bb3adb31eea0df41c856fea8f5c4e6d2fa99fa9696f9",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "bdc06b57f21a76ea5aabfc502fd488bc0addc38a6ea8cde30c32ceaead74251f",
+      "reason": "已查看当前像素：本帧为胸像近景，构图裁止腰带下缘，横刀左髋挂载区在画外；画内无任何刀刃、刀鞘、第二武器或错误剑形，故不存在禁形/数量漂移。横刀连续性由同镜已验收 EP03_CLIP08_a1 的当前 SHA 明确承接。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1210,7 +1277,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T10:17:00+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -1233,10 +1300,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP03_CLIP07_a1.png",
-      "png_sha256": "e229a9f04e8057721f8396977bd8e0b35bf6c2f4f376bef3b0ec9a9980182638",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "cf8585d08847bd52fb011ff3883ab192830d5db593c94d0ccbf2683af79bfe6a",
+      "reason": "当前帧横刀依定时子镜合同不入画；画内无错误武器、第二把刀或矛盾结构。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1277,7 +1344,7 @@
     {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T03:30:03+00:00",
       "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
       "human_signoff": false,
       "must_not_have": [
@@ -1300,10 +1367,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP03_CLIP08_a1.png",
-      "png_sha256": "536f1f2d844b58559af4ef157af73c95478ff6ec9a2b220b4ffcd869d4f75b9e",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
+      "reason": "已查看当前像素与横刀共享母版：仅一把入鞘唐横刀，单刀柄、单刀镡、单刀鞘；以两点挂带固定在角色左髋，沿左腿外侧后斜下垂，无第二武器、无裸刃、无剑形漂移。确认仅绑定当前 PNG SHA。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1715,7 +1782,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T10:27:06+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -1738,10 +1805,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/Clip06_first.png",
-      "png_sha256": "304e93e4200c4a0e1bcf1ddacb1056ab48b93ba1aa4a6c36d26255e97cdeb741",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "efad3259e2760e5f0fde8a44d499dcb27a05fb6e03288646c3c441c7cf1644fb",
+      "reason": "已查看当前像素：横刀本帧未入画，画内无错误武器或第二把刀；后景骑队器具无主体签名武器矛盾。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1821,7 +1888,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T09:27:28+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -1844,10 +1911,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/Clip07_first.png",
-      "png_sha256": "89ea6864387d605214f3b6db4cbc1a7557391775e1ced45843a9e0324e5311c4",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "fe9e0eacb000fa08a72102c05750d34e2237d85d71923ccb7922ad82e89acf95",
+      "reason": "已查看 Clip07_first 当前像素：本时点横刀按定时子镜合同尚未入画；画内无错误武器、第二把刀或矛盾结构。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -1869,6 +1936,59 @@
       "shot": "Clip_07",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_07_Clip07_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "WEAPON_横刀",
+      "asset_name": "横刀",
+      "confirmed_at": "2026-07-28T09:35:35+00:00",
+      "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+      "human_signoff": false,
+      "must_not_have": [
+        "变成长剑",
+        "华丽仙剑",
+        "现代军刀",
+        "多把复制",
+        "副刀",
+        "短刃",
+        "匕首",
+        "右手第二把刀",
+        "副手持刀",
+        "后手短刀",
+        "双持",
+        "刀鞘变成刀刃",
+        "双刃",
+        "多刃",
+        "双向开刃",
+        "第二把刀刃",
+        "光效变成实体刀刃"
+      ],
+      "png": "图片/Clip07_first_a1.png",
+      "png_sha256": "a849db2b3eb286f0714cfe57f794e9159b05f3ed4cd15175a5e72e6d02c7aefd",
+      "reason": "当前帧横刀按定时子镜合同尚未入画；画内无错误武器或第二把刀。",
+      "review_kind": "executor_visual",
+      "reviewer": "项目视觉执行席-01",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "weapon_count=1",
+        "single_hilt=1",
+        "single_blade=1",
+        "cutting_edge_count=1",
+        "一侧为连续锋利刃口",
+        "另一侧为连续厚钝刀背",
+        "刀尖偏向刃侧",
+        "不得居中形成对称剑尖",
+        "禁止双面开刃",
+        "双刃剑轮廓或第二条锋刃",
+        "同一把唐横刀",
+        "刃长",
+        "刀镡",
+        "刀柄缠绳不漂"
+      ],
+      "shot": "Clip_07",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_07_Clip07_first_a1_compare.png",
       "verdict": "ok"
     },
     {
@@ -1927,7 +2047,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T05:36:52+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -1950,10 +2070,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/Clip08_first.png",
-      "png_sha256": "f6d8dc7e9dd0eba08615bb3adb31eea0df41c856fea8f5c4e6d2fa99fa9696f9",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "bdc06b57f21a76ea5aabfc502fd488bc0addc38a6ea8cde30c32ceaead74251f",
+      "reason": "已查看当前像素：本帧为胸像近景，构图裁止腰带下缘，横刀左髋挂载区在画外；画内无任何刀刃、刀鞘、第二武器或错误剑形，故不存在禁形/数量漂移。横刀连续性由同镜已验收 EP03_CLIP08_a1 的当前 SHA 明确承接。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -2192,7 +2312,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T10:17:00+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -2215,10 +2335,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP03_CLIP07_a1.png",
-      "png_sha256": "e229a9f04e8057721f8396977bd8e0b35bf6c2f4f376bef3b0ec9a9980182638",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "cf8585d08847bd52fb011ff3883ab192830d5db593c94d0ccbf2683af79bfe6a",
+      "reason": "当前帧横刀依定时子镜合同不入画；画内无错误武器、第二把刀或矛盾结构。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -2245,7 +2365,7 @@
     {
       "asset": "WEAPON_横刀",
       "asset_name": "横刀",
-      "confirmed_at": "2026-07-27T05:51:17+00:00",
+      "confirmed_at": "2026-07-28T03:30:03+00:00",
       "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
       "human_signoff": false,
       "must_not_have": [
@@ -2268,10 +2388,10 @@
         "光效变成实体刀刃"
       ],
       "png": "图片/EP03_CLIP08_a1.png",
-      "png_sha256": "536f1f2d844b58559af4ef157af73c95478ff6ec9a2b220b4ffcd869d4f75b9e",
-      "reason": "逐张实际目视：横刀均为单把带鞘实体，无双持副刀或现代军刀；制服无现代物件、文字和数量漂移",
+      "png_sha256": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
+      "reason": "已查看当前像素与横刀共享母版：仅一把入鞘唐横刀，单刀柄、单刀镡、单刀鞘；以两点挂带固定在角色左髋，沿左腿外侧后斜下垂，无第二武器、无裸刃、无剑形漂移。确认仅绑定当前 PNG SHA。",
       "review_kind": "executor_visual",
-      "reviewer": "codex-visual-executor",
+      "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
       "scale": "None",
       "shape_contract": [
@@ -2297,6 +2417,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-07-27T11:44:34+00:00",
+  "updated_at": "2026-07-28T10:27:06+00:00",
   "version": 1
 }

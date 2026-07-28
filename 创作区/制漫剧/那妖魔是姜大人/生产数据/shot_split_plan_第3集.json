@@ -4,7 +4,6 @@
       "actions": [
         "template_required",
         "split_reaction",
-        "add_mid_or_multi_anchor",
         "split_video_shots"
       ],
       "clip": "EP03_CLIP01",
@@ -48,9 +47,7 @@
     },
     {
       "actions": [
-        "single_take_multishot",
-        "split_reaction",
-        "add_mid_or_multi_anchor"
+        "single_take_multishot"
       ],
       "clip": "EP03_CLIP02",
       "duration_sec": 7.441,
@@ -61,11 +58,10 @@
       "pilot_candidate": false,
       "primary_action": "single_take_multishot",
       "reason": "一次多镜生成：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take。来源可为 storyboard 显式 take_policy，或低风险纯镜位覆盖镜的默认自动合并（single_take_source=auto_low_risk_editorial）。后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take；奇观/大表情/高风险/需锚帧链镜不自动合并。",
-      "risk_score": 8,
+      "risk_score": 6,
       "risk_tags": [
         "mouth_visible",
         "closeup",
-        "multi_character",
         "vfx_or_asset"
       ],
       "single_take_multishot": true,
@@ -465,7 +461,7 @@
   ],
   "ok": true,
   "summary": {
-    "add_anchor": 3,
+    "add_anchor": 1,
     "clips": 8,
     "compress_before_video": 1,
     "defer_to_composite": 3,

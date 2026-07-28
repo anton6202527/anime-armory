@@ -88,6 +88,7 @@ export function Operation(props: {
   terminalVisible: boolean;
   newTerminalRequestSeq: number;
   newTerminalRequestTargetId: string | null;
+  initialPrompt?: string;
   onRootChanged: (root: WorkRoot) => void;
   onCloseTerminal: () => void;
   onToggleTerminal: () => void;
@@ -103,6 +104,7 @@ export function Operation(props: {
     terminalVisible,
     newTerminalRequestSeq,
     newTerminalRequestTargetId,
+    initialPrompt,
     onRootChanged,
     onCloseTerminal,
     onToggleTerminal,
@@ -145,6 +147,7 @@ export function Operation(props: {
   const toastSeq = useRef(0);
   const toastTimer = useRef<number | null>(null);
   const autoEnteredAgentRootRef = useRef<string | null>(null);
+  const initialPromptSentRef = useRef<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [rightWidth, setRightWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.op.rightWidth"));
@@ -256,6 +259,7 @@ export function Operation(props: {
     activeAgentRef.current = null;
     setTerminalMode("native");
     autoEnteredAgentRootRef.current = null;
+    initialPromptSentRef.current = null;
   }, [root.path]);
 
   useEffect(() => {
@@ -385,7 +389,17 @@ export function Operation(props: {
     activeAgentRef.current = def;
     setTerminalMode("agent");
     termRef.current?.switchCommand(def.command, def.id);
-  }, [active, secondaryReady, termReady, agents, root.path, terminalMode]);
+    const launchPrompt = initialPrompt?.trim();
+    const promptKey = launchPrompt ? `${root.path}\0${launchPrompt}` : "";
+    if (launchPrompt && initialPromptSentRef.current !== promptKey) {
+      initialPromptSentRef.current = promptKey;
+      window.setTimeout(() => {
+        termRef.current?.runCommand(launchPrompt);
+        setRefreshKey((key) => key + 1);
+        setChangeScanKey((key) => key + 1);
+      }, 720);
+    }
+  }, [active, secondaryReady, termReady, agents, initialPrompt, root.path, terminalMode]);
 
   useEffect(() => {
     let alive = true;
@@ -1034,7 +1048,18 @@ export function Operation(props: {
                           <LoadingHint className="stub-view" label={t("common.loading")} />
                         ) : (
                           <Suspense fallback={<LoadingHint className="stub-view" label={t("common.loading")} />}>
-                            <CanvasPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
+                            <CanvasPane
+                              canvas={canvas}
+                              root={root}
+                              ep={ep}
+                              line={line.line}
+                              repoRoot={repoRoot}
+                              refreshKey={refreshKey}
+                              onGeneratePrompt={(prompt) => {
+                                if (!terminalVisible) onToggleTerminal();
+                                runPromptInAgent(prompt);
+                              }}
+                            />
                           </Suspense>
                         )}
                       </div>

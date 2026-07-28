@@ -1,29 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
   <defs>
-    <linearGradient id="tile" x1="168" y1="128" x2="856" y2="896" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#2B63A5"/>
-      <stop offset="0.52" stop-color="#1C3F70"/>
-      <stop offset="1" stop-color="#14253F"/>
+    <linearGradient id="tile" x1="164" y1="112" x2="868" y2="912" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9B96FF"/>
+      <stop offset="0.48" stop-color="#8881FF"/>
+      <stop offset="1" stop-color="#716AF0"/>
     </linearGradient>
-    <linearGradient id="shine" x1="282" y1="232" x2="748" y2="798" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#B8E3FF"/>
-      <stop offset="1" stop-color="#72B7EA"/>
-    </linearGradient>
-    <filter id="shadow" x="32" y="48" width="960" height="976" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="28" stdDeviation="34" flood-color="#050B12" flood-opacity="0.42"/>
+    <filter id="shadow" x="24" y="28" width="976" height="988" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="28" stdDeviation="30" flood-color="#090621" flood-opacity="0.46"/>
     </filter>
   </defs>
 
   <g filter="url(#shadow)">
-    <rect x="72" y="64" width="880" height="880" rx="204" fill="url(#tile)"/>
-    <rect x="84" y="76" width="856" height="856" rx="192" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="12"/>
-  </g>
-
-  <g transform="translate(192 192) scale(26.6667)" stroke="url(#shine)" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 7.5h16v11a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-11Z" fill="#10233D" fill-opacity="0.38"/>
-    <path d="M4 7.5 5.4 3.8A1.5 1.5 0 0 1 6.8 3h11.7A1.5 1.5 0 0 1 20 4.5v3"/>
-    <path d="M7 3.2 9 7.5M12 3.2 14 7.5M17 3.2 19 7.5"/>
-    <path d="M8 11.5h4.2M8 15.5h3"/>
-    <path d="M15 11.2 18.2 13 15 14.8Z" fill="#F5FBFF" stroke="none"/>
+    <g transform="translate(32 24) scale(20)">
+      <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#tile)" stroke="#F5F5F8" stroke-width="1.8"/>
+      <path d="M12 18h24v18H12zM12 18l5-7 6 7 6-7 7 7" stroke="#F5F5F8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="m22 23 9 5-9 5z" fill="#F5F5F8"/>
+    </g>
   </g>
 </svg>

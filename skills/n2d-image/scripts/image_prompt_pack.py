@@ -4382,6 +4382,7 @@ def shared_character_prompt(story: Optional[Mapping[str, Any]] = None, root: Opt
             parts += [
                 "",
                 f"## {cfg['name']}（`{cid}/{merged['form']}`）",
+                f"**library_tier**：`{character_library_tier_for_cfg(merged)}`",
                 f"**目标存档**：`{target}`",
                 f"**身份注册**：`identity_registry.json` -> `{cid}/{merged['form']}`；此形态与 `{cid}/{cfg['form']}` 共用同一脸锚，只换服装/发束/道具状态。",
                 f"**角色定妆组**：正面 `_正面`、前3/4 `_45度`、侧面 `_侧面`、后3/4 `_后45度`、背面 `_背面`、半身服装 `_半身`、脸部特写 `_脸部特写`、turnaround 总览 `_三视图`（旧文件名兼容）；`core_full` 派生形态也必须齐五角基础包，不能只出单张正面。",

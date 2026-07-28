@@ -7,6 +7,8 @@ import type {
   AgentInfo,
   CanvasReadResult,
   CanvasLayout,
+  CanvasGenerationConfig,
+  CanvasGenerationKind,
   CanvasNodePosition,
   ClipEditData,
   ClipEditPatch,
@@ -333,8 +335,18 @@ export async function detectAgents(force = false): Promise<AgentInfo[]> {
 /** The agent to use for auto-enter / executing a prompt. Priority:
  *  only one installed -> use it; otherwise codex -> image-capable yes -> maybe
  *  -> OpenCode fallback -> any found agent. Null if none installed. */
-export function pickDefaultAgent(agents: AgentInfo[]): AgentInfo | null {
+export function pickDefaultAgent(agents: AgentInfo[], preferredId?: string | null): AgentInfo | null {
   const found = agents.filter((a) => a.found);
+  let savedPreference = preferredId ?? "";
+  if (!savedPreference) {
+    try {
+      savedPreference = window.localStorage.getItem("aa.preferredAgentId") ?? "";
+    } catch {
+      savedPreference = "";
+    }
+  }
+  const preferred = found.find((agent) => agent.id === savedPreference);
+  if (preferred) return preferred;
   if (found.length === 1) return found[0];
   return (
     found.find((a) => a.id === "codex") ||
@@ -391,6 +403,24 @@ export async function writeClipEdit(
   patch: ClipEditPatch,
 ): Promise<ClipEditData> {
   return invoke("canvas.writeClipEdit", { root, ep, clipId, number, patch });
+}
+
+export async function readCanvasGenerationConfig(
+  root: string,
+  ep: string,
+  clipId: string,
+  kind: CanvasGenerationKind,
+): Promise<CanvasGenerationConfig | null> {
+  return invoke("canvas.readGenerationConfig", { root, ep, clipId, kind });
+}
+
+export async function writeCanvasGenerationConfig(
+  root: string,
+  ep: string,
+  clipId: string,
+  config: CanvasGenerationConfig,
+): Promise<CanvasGenerationConfig> {
+  return invoke("canvas.writeGenerationConfig", { root, ep, clipId, config });
 }
 
 export async function readNextAction(

@@ -137,6 +137,23 @@
       "verdict": "ok"
     },
     {
+      "char": "CHAR_01__镇魔司制服态",
+      "confirmed_at": "2026-07-28T03:30:02+00:00",
+      "floor": 0.85,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP03_CLIP08_a1.png",
+      "png_sha256": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
+      "reason": "已查看当前像素并与制服正面、比例图及主角制服态多视图并排核验：黑底暗赤卷草纹、交领、束腰、护腕、长摆结构连续；自动色彩分数偏低来自户外冷灰光与大面积阴影，不是换装。确认仅绑定当前 PNG SHA。",
+      "review_kind": "executor_visual",
+      "reviewer": "项目视觉执行席-01",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.7546,
+      "shot": "Clip_08",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_03__常态",
       "confirmed_at": "2026-07-27T09:26:13+00:00",
       "floor": 0.98,
@@ -172,6 +189,6 @@
     }
   ],
   "kind": "n2d_outfit_confirmations",
-  "updated_at": "2026-07-27T09:26:13+00:00",
+  "updated_at": "2026-07-28T03:30:02+00:00",
   "version": 1
 }

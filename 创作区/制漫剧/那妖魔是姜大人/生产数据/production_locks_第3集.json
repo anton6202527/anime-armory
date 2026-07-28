@@ -2,9 +2,12 @@
   "episode": "第3集",
   "generated_at": "2026-07-27T06:10:59+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-27T11:52:20+00:00",
-  "last_confirmed_by": "codex-visual-supervisor",
+  "last_confirmed_at": "2026-07-28T07:28:55+00:00",
+  "last_confirmed_by": "项目视觉执行席-01",
   "last_confirmed_lock_ids": [
+    "source_lock",
+    "script_lock",
+    "storyboard_lock",
     "style_identity_lock"
   ],
   "locks": [
@@ -15,8 +18,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-27T11:47:36+00:00",
-      "approver": "automation:codex refreshed identity adapter matrix",
+      "approved_at": "2026-07-28T07:28:55+00:00",
+      "approver": "项目视觉执行席-01",
       "artifact_count": 2,
       "artifacts": [
         {
@@ -56,8 +59,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-27T11:47:36+00:00",
-      "approver": "automation:codex refreshed identity adapter matrix",
+      "approved_at": "2026-07-28T07:28:55+00:00",
+      "approver": "项目视觉执行席-01",
       "artifact_count": 3,
       "artifacts": [
         {
@@ -104,15 +107,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-27T11:47:36+00:00",
-      "approver": "automation:codex refreshed identity adapter matrix",
+      "approved_at": "2026-07-28T07:28:55+00:00",
+      "approver": "项目视觉执行席-01",
       "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-27T11:42:24+00:00",
+          "mtime": "2026-07-28T02:56:30+00:00",
           "path": "脚本/第3集/storyboard.json",
-          "sha256": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825"
+          "sha256": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
         },
         {
           "exists": true,
@@ -152,8 +155,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-27T11:52:20+00:00",
-      "approver": "codex-visual-supervisor",
+      "approved_at": "2026-07-28T07:28:55+00:00",
+      "approver": "项目视觉执行席-01",
       "artifact_count": 4,
       "artifacts": [
         {
@@ -170,15 +173,15 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-27T11:51:05+00:00",
+          "mtime": "2026-07-28T07:28:43+00:00",
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d4c8576276f67a5df045727fc53152c6c72f5ebeca6f4c4935a3638537434a44"
+          "sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08"
         },
         {
           "exists": true,
-          "mtime": "2026-07-27T11:51:07+00:00",
+          "mtime": "2026-07-28T07:25:41+00:00",
           "path": "生产数据/identity_adapter_matrix.json",
-          "sha256": "316ff5d3bb41dd6a9c1c89dd9d294a871c894e8d8167a514957b979a51e954c3"
+          "sha256": "5f1310c6976a7f43ab92454174711c38e19ebab7611f2587f3b45c58305fa6b4"
         }
       ],
       "episode": "第3集",
@@ -447,6 +450,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-27T11:52:20+00:00",
+  "updated_at": "2026-07-28T07:28:55+00:00",
   "version": 1
 }

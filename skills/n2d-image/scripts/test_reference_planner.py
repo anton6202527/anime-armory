@@ -879,3 +879,11 @@ def test_plan_shared_assets_face_locked_folds_owner_anchor(tmp_path):
     assert a["face_policy"] == "face_locked" and a["carried_identities"] == ["CHAR_J"]
     assert a["face_refs"] and a["face_refs"][0]["role"] == "face_anchor" and "CHAR_J" in a["face_refs"][0]["carried"]
     assert a.get("issue") is None and sa["actions"] == []
+def test_parse_clip_normalizes_structured_character_form_binding():
+    parsed = rp.parse_clip({
+        "entity_schedule": {"characters": ["CHAR_01/制服态"]},
+        "character_ids": ["CHAR_99/不应覆盖"],
+        "continuity": {},
+    })
+    assert parsed["character_ids"] == ["CHAR_01"]
+    assert "CHAR_01/制服态" in parsed["text"]

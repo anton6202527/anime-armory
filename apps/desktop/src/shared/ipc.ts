@@ -1,6 +1,8 @@
 import type {
   AgentInfo,
   CanvasLayout,
+  CanvasGenerationConfig,
+  CanvasGenerationKind,
   CanvasNodePosition,
   CanvasReadResult,
   ClipEditData,
@@ -113,6 +115,18 @@ export interface IpcCommands {
     number?: number | null
     patch: Partial<ClipEditPatch>
   }) => ClipEditData
+  'canvas.readGenerationConfig': (a: {
+    root: string
+    ep: string
+    clipId: string
+    kind: CanvasGenerationKind
+  }) => CanvasGenerationConfig | null
+  'canvas.writeGenerationConfig': (a: {
+    root: string
+    ep: string
+    clipId: string
+    config: CanvasGenerationConfig
+  }) => CanvasGenerationConfig
   'canvas.readEpisodeWorkspace': (a: { root: string; ep: string }) => EpisodeWorkspace | null
   'quality.read': (a: { root: string; line: string; ep?: string | null }) => QualityInsights
   'pipeline.nextAction': (a: { repoRoot: string; root: string; ep: string }) => string

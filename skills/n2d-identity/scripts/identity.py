@@ -788,6 +788,25 @@ def summarize_face_results(root: Path, episodes: List[str], face_results: Mappin
     notes: List[str] = []
     for ep in episodes:
         res = face_results.get(ep, {})
+        confirmations: Dict[Tuple[str, str], Mapping[str, Any]] = {}
+        confirmation_path = root / "生产数据" / "image_qc" / ep / "face_confirmations.json"
+        if confirmation_path.is_file():
+            try:
+                confirmation_doc = json.loads(confirmation_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                confirmation_doc = {}
+            for row in confirmation_doc.get("confirmations", []) if isinstance(confirmation_doc, Mapping) else []:
+                if not isinstance(row, Mapping):
+                    continue
+                char_key = str(row.get("char") or "").strip()
+                png_key = str(row.get("png") or "").strip().replace("\\", "/")
+                verdict_key = str(row.get("verdict") or "").strip().lower()
+                expected_sha = str(row.get("png_sha256") or "").strip()
+                png_path = root / "出图" / ep / png_key
+                if not (char_key and png_key and expected_sha and verdict_key in {"ok", "pass", "confirmed", "通过", "合格"} and png_path.is_file()):
+                    continue
+                if hashlib.sha256(png_path.read_bytes()).hexdigest() == expected_sha:
+                    confirmations[(char_key, png_key)] = row
         if not res.get("available", False):
             available = False
             notes.extend(res.get("notes", []))
@@ -796,6 +815,9 @@ def summarize_face_results(root: Path, episodes: List[str], face_results: Mappin
             if not char:
                 continue
             verdict = str(shot.get("verdict", "noface"))
+            png_key = str(shot.get("png") or "").strip().replace("\\", "/")
+            if verdict in {"warn", "block"} and (char, png_key) in confirmations:
+                verdict = "ok"
             c = chars.setdefault(char, {"episodes": {}, "total_warn": 0, "total_block": 0, "first_bad_episode": ""})
             e = c["episodes"].setdefault(ep, {"ok": 0, "warn": 0, "block": 0, "noface": 0, "worst_score": None, "floor": None})
             if verdict not in e:

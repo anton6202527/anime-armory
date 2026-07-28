@@ -28,19 +28,19 @@
           "sha256": "fcc3a528c72c80b4629c066e555b7c19cb2dd8f246b18c7f8a04e0e78527f70b"
         }
       ],
-      "note": "最终在场链、首尾锚与当前出图复核通过。",
-      "reviewed_at": "2026-07-27T11:47:09+00:00",
+      "note": "身份漂移确认回灌、参考计划、prompt pack 与验收包最终刷新后批准。",
+      "reviewed_at": "2026-07-28T03:05:38+00:00",
       "reviewer_id": "codex-script-supervisor",
       "reviewer_role": "script_supervisor",
       "signed_evidence_fingerprint_sha": "ddbe9f59cb9b0334a4281ada2bc4ce979b481529ce6721345097e42c39978dd0",
-      "signed_input_fingerprint_sha": "459c16fac3a1fe1b660a3c1bafc6d0482b39d54227010682e6af032418f6323d",
+      "signed_input_fingerprint_sha": "c456665401cf0685687ed6d793e83530151bed8016377076dae59bd7ee50d2aa",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "p3_production_handoff",
   "authored_by": "codex-producer",
-  "created_at": "2026-07-27T11:47:09+00:00",
+  "created_at": "2026-07-28T02:57:11+00:00",
   "episode": "第3集",
   "evidence_fingerprint": {
     "files": {
@@ -59,12 +59,12 @@
       "脚本/第3集/animatic_signoff.json": "fc251bfa40c4cb2c5f0c8a4cc2912e0319d160e509b733d3bd244eb25b75e4fa",
       "脚本/第3集/director_blocking_signoff.json": "8ba5f6b62a281f7da0dde0fd296992792a75d76a52f17dff7756c64773093b54",
       "脚本/第3集/preventive_contracts.json": "432e32d0ba6f90fac412f51c651121906cd900eec286cf915ef03c38070ea8b3",
-      "脚本/第3集/storyboard.json": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825",
+      "脚本/第3集/storyboard.json": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4",
       "脚本/第3集/voiceover.txt": "f2155a421a350ef9e10b829c5e47dc997bf0f313f327eaa5b5f770aa04438c64",
       "脚本/第3集/镜头时长.json": "49276dd01a1efd9f7ceea9eb8342fd11f89b4d0ecf0fa8ecaa81b6194231a0de",
       "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
     },
-    "sha": "459c16fac3a1fe1b660a3c1bafc6d0482b39d54227010682e6af032418f6323d"
+    "sha": "c456665401cf0685687ed6d793e83530151bed8016377076dae59bd7ee50d2aa"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -78,6 +78,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-27T11:47:09+00:00",
+  "updated_at": "2026-07-28T03:05:38+00:00",
   "version": 1
 }

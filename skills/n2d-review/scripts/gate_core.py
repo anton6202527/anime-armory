@@ -134,6 +134,7 @@ from style_policy import face_encoder_policy  # noqa: E402
 from n2d_platform_profiles import (  # noqa: E402
     anchor_consumption_plan,
     backend_supports_three_plus_frames,
+    select_video_frame_strategy,
     video_backend_frame_control,
     video_backend_max_seconds,
 )

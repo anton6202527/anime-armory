@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "kind": "comic_panel_script",
+  "title": "金瓶梅",
+  "chapter": "第1话",
+  "status": "draft",
+  "chapter_contract": {
+    "path": "脚本/split_blueprint.json",
+    "chapter_contract_sha256": "",
+    "status": "draft"
+  },
+  "source_semantics": {
+    "path": "脚本/第1话/source_semantics.json",
+    "requires_normalization": false,
+    "source_language": "",
+    "target_text_language": "",
+    "target_text_metadata": {},
+    "status": "pass"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "opening_hook",
+      "source_excerpt": "",
+      "meaning_zh": "",
+      "text_target": "",
+      "adaptation_note": "",
+      "description": "待补：首格画面",
+      "characters": [],
+      "character_bindings": [],
+      "source_segment_refs": [],
+      "location": "",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "",
+      "layout_weight": "heavy",
+      "panel_shape": "full_width",
+      "border_style": "standard",
+      "gutter_intent": "opening pause",
+      "ink_plan": "clean outer contour, readable face/hands/props, solid black only where it supports focal contrast",
+      "tone_plan": "style-driven tones or grayscale; keep text-safe areas low detail",
+      "effects_plan": "use action/focus/speed lines only when they clarify motion or impact",
+      "references": []
+    }
+  ]
+}

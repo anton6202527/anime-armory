@@ -1,10 +1,14 @@
 import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent as ReactMouseEvent } from "react";
-import { createPortal } from "react-dom";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { getMediaPort, mediaUrl, saveCanvasCapture, subscribeMediaPort } from "../api";
 import { useI18n } from "../i18n";
-import type { CanvasClip, CanvasFrame } from "../types";
+import type { CanvasClip, CanvasFrame, CanvasGenerationProfile, LineKey } from "../types";
 import { DecodedImage } from "../mediaPreview/DecodedImage";
+import {
+  CanvasMediaDetailDialog,
+  type CanvasMediaDetailReference,
+  type CanvasMediaDetailState,
+} from "./CanvasMediaDetailDialog";
 
 type CanvasNodeVariant = "asset-anchor" | "character" | "reference" | "frame" | "shot" | "video" | "lane";
 interface SharedAssetImage {
@@ -28,26 +32,13 @@ type EditableCanvasClip = CanvasClip & {
   refImageRevision?: string;
   refRoles?: string[];
   rootPath?: string;
+  repoRoot?: string;
+  episode?: string;
+  line?: LineKey;
+  generationProfile?: CanvasGenerationProfile;
+  onGeneratePrompt?: (prompt: string) => void;
   onEdit?: () => void;
 };
-
-interface MediaDetailReference {
-  id: string;
-  label: string;
-  url: string;
-  role?: string;
-}
-
-interface MediaDetailState {
-  kind: "image" | "video";
-  title: string;
-  subtitle?: string;
-  prompt?: string;
-  mediaUrl?: string;
-  references: MediaDetailReference[];
-  anchor: { x: number; y: number };
-  expanded?: boolean;
-}
 
 function detailAnchor(event: ReactMouseEvent<HTMLElement>): { x: number; y: number } {
   return { x: event.clientX, y: event.clientY };
@@ -95,7 +86,6 @@ function waitForSeek(video: HTMLVideoElement, time: number): Promise<void> {
 }
 
 type VideoControlIconName = "play" | "pause" | "volumeOn" | "volumeOff" | "camera";
-type MediaDetailToolIconName = "reference" | "mark" | "effects" | "character" | "cameraMove";
 
 function VideoControlIcon({ name }: { name: VideoControlIconName }) {
   switch (name) {
@@ -140,68 +130,6 @@ function VideoControlIcon({ name }: { name: VideoControlIconName }) {
             d="M5 11h4.5l3.2-4.5h6.6l3.2 4.5H27a2.5 2.5 0 0 1 2.5 2.5v13A2.5 2.5 0 0 1 27 29H5a2.5 2.5 0 0 1-2.5-2.5v-13A2.5 2.5 0 0 1 5 11Z"
           />
           <circle className="cv-stroke" cx="16" cy="19.5" r="4.6" />
-        </svg>
-      );
-  }
-}
-
-function MediaDetailExpandIcon({ expanded }: { expanded: boolean }) {
-  if (expanded) {
-    return (
-      <svg className="media-detail-expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M9.5 4.5v5h-5" />
-        <path d="M4.8 9.2 10.7 3.3" />
-        <path d="M14.5 19.5v-5h5" />
-        <path d="M19.2 14.8 13.3 20.7" />
-      </svg>
-    );
-  }
-  return (
-    <svg className="media-detail-expand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M14.5 4.5h5v5" />
-      <path d="M19.2 4.8 13.3 10.7" />
-      <path d="M9.5 19.5h-5v-5" />
-      <path d="M4.8 19.2 10.7 13.3" />
-    </svg>
-  );
-}
-
-function MediaDetailToolIcon({ name }: { name: MediaDetailToolIconName }) {
-  switch (name) {
-    case "reference":
-      return (
-        <svg className="media-detail-tool-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <path d="M10 3.2v13.6M3.2 10h13.6" />
-        </svg>
-      );
-    case "mark":
-      return (
-        <svg className="media-detail-tool-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <path d="M15.4 8.4c0 4.1-5.4 8-5.4 8s-5.4-3.9-5.4-8a5.4 5.4 0 0 1 10.8 0Z" />
-          <circle cx="10" cy="8.4" r="1.6" />
-          <path d="M15.8 13.5v3.4M14.1 15.2h3.4" />
-        </svg>
-      );
-    case "effects":
-      return (
-        <svg className="media-detail-tool-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <path d="M4.1 7.1h11.8v8.3H4.1Z" />
-          <path d="m7 7.1 1.2-2h3.6l1.2 2" />
-          <circle cx="10" cy="11.2" r="2.3" />
-        </svg>
-      );
-    case "character":
-      return (
-        <svg className="media-detail-tool-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <path d="M10 3.2 15.5 5.6v4.1c0 3.5-2.3 5.8-5.5 7.1-3.2-1.3-5.5-3.6-5.5-7.1V5.6Z" />
-          <path d="m7.7 9.9 1.6 1.6 3.2-3.4" />
-        </svg>
-      );
-    case "cameraMove":
-      return (
-        <svg className="media-detail-tool-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <path d="M3.8 6.2h8.1v7.6H3.8Z" />
-          <path d="m11.9 8.2 4.3-2.4v8.4l-4.3-2.4" />
         </svg>
       );
   }
@@ -482,7 +410,7 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
   const isVideo = variant === "video";
   const isLane = variant === "lane";
   const isAssetAnchor = variant === "asset-anchor";
-  const [mediaDetail, setMediaDetail] = useState<MediaDetailState | null>(null);
+  const [mediaDetail, setMediaDetail] = useState<CanvasMediaDetailState | null>(null);
   // re-render once the media server port is ready (else thumbs stay "未出图")
   useSyncExternalStore(subscribeMediaPort, getMediaPort);
   const withRevision = (url: string, revision?: string) =>
@@ -539,7 +467,7 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
     ].filter(Boolean).join("\n");
   }
 
-  function mediaRefsFromFrames(sourceFrames: CanvasFrame[]): MediaDetailReference[] {
+  function mediaRefsFromFrames(sourceFrames: CanvasFrame[]): CanvasMediaDetailReference[] {
     const seen = new Set<string>();
     return sourceFrames.flatMap((frame, index) => {
       if (!frame.exists || !frame.abs || seen.has(frame.abs)) return [];
@@ -549,11 +477,12 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
         label: frame.label || t("canvas.imageNumber", { count: index + 1 }),
         role: frame.role,
         url: withRevision(mediaUrl(frame.abs), frame.revision),
+        path: frame.abs,
       }];
     }).slice(0, 14);
   }
 
-  function mediaRefsFromAssets(assets: SharedAssetImage[]): MediaDetailReference[] {
+  function mediaRefsFromAssets(assets: SharedAssetImage[]): CanvasMediaDetailReference[] {
     return assets.flatMap((asset, index) => {
       if (!asset.exists || !asset.abs) return [];
       return [{
@@ -561,6 +490,7 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
         label: asset.label || t("canvas.imageNumber", { count: index + 1 }),
         role: asset.roles[0],
         url: withRevision(mediaUrl(asset.abs), asset.revision),
+        path: asset.abs,
       }];
     }).slice(0, 14);
   }
@@ -609,6 +539,7 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
         label: clip.label,
         role: "reference",
         url: refImageUrl,
+        path: clip.refImageAbs,
       }],
       anchor: detailAnchor(event),
     });
@@ -631,96 +562,20 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
   }
 
   function renderMediaDetail() {
-    if (!mediaDetail) return null;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const expanded = Boolean(mediaDetail.expanded);
-    const width = expanded
-      ? Math.min(1600, Math.max(760, viewportWidth - 96))
-      : Math.min(1320, Math.max(640, viewportWidth - 160));
-    const height = expanded
-      ? Math.min(1160, Math.max(520, viewportHeight - 96))
-      : Math.min(560, Math.max(380, viewportHeight - 112));
-    const left = Math.max(24, (viewportWidth - width) / 2);
-    const top = expanded
-      ? Math.max(24, Math.min(32, (viewportHeight - height) / 2))
-      : Math.max(24, Math.min(44, (viewportHeight - height) / 2));
-    const cardStyle: CSSProperties = { width, height, maxHeight: height, left, top };
-    const references = mediaDetail.references.length
-      ? mediaDetail.references
-      : mediaDetail.mediaUrl
-        ? [{
-            id: "current-media",
-            label: mediaDetail.kind === "video" ? t("canvas.video") : t("canvas.imageNumber", { count: 1 }),
-            url: mediaDetail.mediaUrl,
-          }]
-        : [];
-
-    return createPortal(
-      <div
-        className="canvas-media-detail-backdrop"
-        role="dialog"
-        aria-modal="true"
-        onPointerDown={(event) => event.stopPropagation()}
-        onClick={(event) => {
-          event.stopPropagation();
-          setMediaDetail(null);
-        }}
-      >
-        <div
-          className={"canvas-media-detail-card" + (expanded ? " expanded" : "")}
-          style={cardStyle}
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={(event) => event.stopPropagation()}
-        >
-          <div className="canvas-media-detail-head">
-            <div className="canvas-media-detail-actions">
-              <span className="canvas-media-detail-pill"><MediaDetailToolIcon name="reference" />{t("canvas.mediaDetailReference")}</span>
-              <span className="canvas-media-detail-pill"><MediaDetailToolIcon name="mark" />{t("canvas.mediaDetailMark")}</span>
-              <span className="canvas-media-detail-pill"><MediaDetailToolIcon name="effects" />{t("canvas.mediaDetailEffects")}</span>
-              <span className="canvas-media-detail-pill"><MediaDetailToolIcon name="character" />{t("canvas.mediaDetailCharacterLibrary")}</span>
-              <span className="canvas-media-detail-pill"><MediaDetailToolIcon name="cameraMove" />{t("canvas.mediaDetailCameraMove")}</span>
-            </div>
-            <button
-              type="button"
-              className="canvas-media-detail-expand-btn"
-              aria-label={expanded ? t("canvas.mediaDetailCollapse") : t("canvas.mediaDetailExpand")}
-              title={expanded ? t("canvas.mediaDetailCollapse") : t("canvas.mediaDetailExpand")}
-              onClick={() => setMediaDetail((current) => current ? { ...current, expanded: !current.expanded } : current)}
-            >
-              <MediaDetailExpandIcon expanded={expanded} />
-            </button>
-          </div>
-          {references.length > 0 && (
-            <div className="canvas-media-detail-refs">
-              {references.map((reference, index) => (
-                <div className="canvas-media-detail-ref" key={reference.id}>
-                  <DecodedImage src={reference.url} alt={reference.label} maxDecodeDimension={256} />
-                  <span className="canvas-media-detail-ref-index">{index + 1}</span>
-                  {reference.role && <span className="canvas-media-detail-ref-role">{reference.role}</span>}
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="canvas-media-detail-text">
-            <p>{mediaDetail.prompt || t("canvas.mediaDetailNoPrompt")}</p>
-          </div>
-          <div className="canvas-media-detail-footer">
-            <span>{mediaDetail.kind === "video" ? t("canvas.video") : t("canvas.mediaDetailReference")}</span>
-            <span>·</span>
-            <span>{references.length}{t("canvas.mediaDetailRefUnit")}</span>
-            {clip.duration != null && (
-              <>
-                <span>·</span>
-                <span>{clip.duration}s</span>
-              </>
-            )}
-            <span className="canvas-media-detail-footer-spacer" />
-            <span className="canvas-media-detail-send">↑</span>
-          </div>
-        </div>
-      </div>,
-      document.body,
+    if (!mediaDetail || !clip.rootPath || !clip.episode || !clip.line) return null;
+    return (
+      <CanvasMediaDetailDialog
+        detail={mediaDetail}
+        clip={clip}
+        line={clip.line}
+        repoRoot={clip.repoRoot ?? ""}
+        rootPath={clip.rootPath}
+        episode={clip.episode}
+        profile={clip.generationProfile}
+        onClose={() => setMediaDetail(null)}
+        onToggleExpanded={() => setMediaDetail((current) => current ? { ...current, expanded: !current.expanded } : current)}
+        onGeneratePrompt={clip.onGeneratePrompt}
+      />
     );
   }
 

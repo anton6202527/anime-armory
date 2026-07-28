@@ -1,79 +1,18 @@
 {
   "contract_path": "脚本/第3集/preventive_contracts.json",
   "episode": "第3集",
-  "findings": [
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_03",
-      "message": "核心/出场角色 CHAR_03 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_03__常态.png 不存在；出图/共享/图片/定妆_CHAR_03__常态.png 不存在；出图/共享/图片/定妆_CHAR_03__常态_半身.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "GROUP_01/列队戒备态",
-      "message": "核心/出场角色 GROUP_01/列队戒备态 引用槽位未绑定真实产物：出图/共享/图片/定妆_GROUP_01__常态.png 不存在；出图/共享/图片/定妆_GROUP_01__常态.png 不存在；出图/共享/图片/定妆_GROUP_01__常态_手部局部.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "GROUP_01/齐跪态",
-      "message": "核心/出场角色 GROUP_01/齐跪态 引用槽位未绑定真实产物：出图/共享/图片/定妆_GROUP_01__常态.png 不存在；出图/共享/图片/定妆_GROUP_01__常态.png 不存在；出图/共享/图片/定妆_GROUP_01__常态_手部局部.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "GROUP_01/齐跪态焦外",
-      "message": "核心/出场角色 GROUP_01/齐跪态焦外 引用槽位未绑定真实产物：出图/共享/图片/定妆_GROUP_01__常态.png 不存在；出图/共享/图片/定妆_GROUP_01__常态.png 不存在；出图/共享/图片/定妆_GROUP_01__常态_手部局部.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "LOC_02",
-      "message": "道具/场景 LOC_02 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_LOC_02.png 不存在；出图/共享/图片/定妆_场景_LOC_02.png 不存在；出图/共享/图片/定妆_场景_LOC_02.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "PROP_镇魔司制服",
-      "message": "道具/场景 PROP_镇魔司制服 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_镇魔司制服.png 不存在；出图/共享/图片/定妆_道具_镇魔司制服.png 不存在；出图/共享/图片/定妆_道具_镇魔司制服_比例.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    }
-  ],
+  "findings": [],
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-07-27T02:27:24+00:00",
+  "generated_at": "2026-07-28T10:27:40+00:00",
   "kind": "n2d_preventive_contract_report",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "scaffolded": false,
   "stage": "image_preflight",
-  "status": "blocked",
+  "status": "pass",
   "summary": {
-    "block": 6,
+    "block": 0,
     "info": 0,
     "warn": 0
   },

@@ -145,7 +145,7 @@
     },
     "next_episode": "第4集",
     "next_thread": "顶着镇魔司假身份随飞鹰门驰援上盘村，直面狼妖巢穴",
-    "ending_throw": "狼妖、假身份、百十条人命三重压力齐聚，她自问能否活着回来。",
+    "ending_throw": "明确交给第4集承接：狼妖、假身份、百十条人命三重压力齐聚，她是否应下驰援、能否活着回来，必须在下一集开场兑现。",
     "next_episode_receivable_hook": "第4集冷开场须接『应下驰援/踏上去上盘村的路』，狼妖村惨状与青面郎君威胁自此进入正面冲突。"
   },
   "clips": [
@@ -329,7 +329,16 @@
         "shot_size": "ELS→CU",
         "eyeline": "众人向画右前叩首；姜月初视线低垂向画左下。",
         "expression_span": "中",
-        "end_anchor_required": false
+        "end_anchor_required": false,
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip01_first_a1.png",
+            "at_sec": 5.26,
+            "use": "split",
+            "reason": "auto: R2 普通长镜（10.52s/3拍）",
+            "source_duration": 10.52
+          }
+        ]
       },
       "start_sec": 0.0,
       "end_sec": 10.52
@@ -377,7 +386,7 @@
       ],
       "multi_subject_strategy": "single_subject_focus：单人主体，浅坟作前景情绪锚",
       "character_ids": [
-        "CHAR_01/囚服残损态"
+        "CHAR_01/“囚途残损态”"
       ],
       "object_ids": [
         "WEAPON_横刀",
@@ -386,7 +395,7 @@
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
-          "CHAR_01/囚服残损态"
+          "CHAR_01/“囚途残损态”"
         ],
         "objects": [
           "WEAPON_横刀",
@@ -532,7 +541,8 @@
       ],
       "multi_subject_strategy": "single_subject_focus：单人换装特写链",
       "character_ids": [
-        "CHAR_01/囚服转制服态"
+        "CHAR_01/“囚途残损态”",
+        "CHAR_01/镇魔司制服态"
       ],
       "object_ids": [
         "WEAPON_横刀",
@@ -541,7 +551,8 @@
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
-          "CHAR_01/囚服转制服态"
+          "CHAR_01/“囚途残损态”",
+          "CHAR_01/镇魔司制服态"
         ],
         "objects": [
           "WEAPON_横刀",
@@ -618,6 +629,7 @@
     {
       "id": "EP03_CLIP04",
       "firstframe_png": "出图/第3集/图片/Clip04_first.png",
+      "endframe_png": "出图/第3集/图片/Clip04_end.png",
       "beat_id": "Beat_02",
       "label": "贱籍死局与马蹄",
       "duration": 15.383,
@@ -727,7 +739,16 @@
         "eyeline": "行路视线向画左后纵深；回身后望向画左后尘头。",
         "expression_span": "中",
         "end_anchor_required": false,
-        "previous_start_state_note": "换装完成后独行官道。"
+        "previous_start_state_note": "换装完成后独行官道。",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a1.png",
+            "at_sec": 7.69,
+            "use": "edit_cut",
+            "reason": "S04A 官道独行远景切入 S04B 回身警觉近景的物理 take 边界",
+            "source_duration": 15.383
+          }
+        ]
       },
       "start_sec": 29.716,
       "end_sec": 45.099
@@ -888,7 +909,16 @@
         "eyeline": "陈青源自马上俯向画右前；她侧首回望向画左后。",
         "expression_span": "中",
         "end_anchor_required": false,
-        "previous_start_state_note": "马队自尘头冲至眼前。"
+        "previous_start_state_note": "马队自尘头冲至眼前。",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip05_first_a1.png",
+            "at_sec": 2.21,
+            "use": "edit_cut",
+            "reason": "S05A 马队急停广角切入 S05B 首领执礼试探中景的物理 take 边界",
+            "source_duration": 4.428
+          }
+        ]
       },
       "start_sec": 45.099,
       "end_sec": 49.527
@@ -896,6 +926,7 @@
     {
       "id": "EP03_CLIP06",
       "firstframe_png": "出图/第3集/图片/Clip06_first.png",
+      "endframe_png": "出图/第3集/图片/Clip06_end.png",
       "template": "dialogue_shot_reverse",
       "template_contract": {
         "template_id": "dialogue_shot_reverse",
@@ -1058,25 +1089,25 @@
         "previous_start_state_note": "对峙已成，陈青源开始报名陈情。",
         "anchors": [
           {
-            "anchor_png": "出图/第3集/图片/EP03_CLIP06_a1.png",
-            "at_sec": 3.12,
+            "anchor_png": "出图/第3集/图片/Clip06_first_a1.png",
+            "at_sec": 3.89,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）",
-            "source_duration": 12.5
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.551s）",
+            "source_duration": 15.551
           },
           {
-            "anchor_png": "出图/第3集/图片/EP03_CLIP06_a2.png",
-            "at_sec": 6.25,
+            "anchor_png": "出图/第3集/图片/Clip06_first_a2.png",
+            "at_sec": 7.78,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）",
-            "source_duration": 12.5
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.551s）",
+            "source_duration": 15.551
           },
           {
-            "anchor_png": "出图/第3集/图片/EP03_CLIP06_a3.png",
-            "at_sec": 9.38,
+            "anchor_png": "出图/第3集/图片/Clip06_first_a3.png",
+            "at_sec": 11.66,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.5s）",
-            "source_duration": 12.5
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.551s）",
+            "source_duration": 15.551
           }
         ]
       },
@@ -1253,6 +1284,12 @@
         "end_anchor_required": true,
         "endframe_png": "出图/第3集/图片/EP03_CLIP07_a1.png",
         "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip07_first_a1.png",
+            "at_sec": 4.0,
+            "use": "edit_cut",
+            "reason": "S07A 单膝跪求中景切入 S07B 群体齐跪全景的物理 take 边界"
+          },
           {
             "anchor_png": "出图/第3集/图片/EP03_CLIP07_a1.png",
             "at_sec": 8.0,

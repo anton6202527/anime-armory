@@ -10,42 +10,1593 @@
     {
       "clip_id": "EP03_CLIP01",
       "lens": "35mm 85mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "镇魔司制服态",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup",
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "turnaround",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 6,
+            "selected": 6,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "CHAR_03",
+          "name": "03",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.6
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 5,
+            "selected": 5,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": false,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "GROUP_01",
+          "name": "GROUP_01",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "single_reference",
+            "guidance": "",
+            "tagged_inputs": [],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [
+            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+            "脸部特写基础锚（所有角色/形态强制 ready）",
+            "脸部特写主参考"
+          ],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ],
+      "multi_subject_strategy": {
+        "applies": true,
+        "mode": "regional_construct_required",
+        "backend_label": "GPT Image 2（渠道 Codex CLI）",
+        "persistent_subject": false,
+        "needs_registration": false,
+        "slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "char_id": "CHAR_01",
+            "form": "镇魔司制服态",
+            "tier": "multi_reference",
+            "face_priority": "primary",
+            "required_binding": "`CHAR_01/镇魔司制服态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "char_id": "CHAR_03",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`CHAR_03/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "FOREGROUND_SLOT",
+            "char_id": "GROUP_01",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`GROUP_01/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          }
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "distinct_anchors": {
+          "per_char": [
+            {
+              "char_id": "CHAR_01",
+              "hair_bucket": "黑",
+              "outfit_bucket": "红",
+              "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神"
+            },
+            {
+              "char_id": "CHAR_03",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "03·03 的剧情视觉真值必须入画：本集入镜角色；成年古装角色，年龄感按剧情身份保守处理；03 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。"
+            },
+            {
+              "char_id": "GROUP_01",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "GROUP_01·GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+            }
+          ],
+          "collision": false,
+          "collisions": [],
+          "embedding_checked": true,
+          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        },
+        "relative_scale": {
+          "CHAR_01": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域",
+          "CHAR_03": "按 storyboard 中同框体量关系保持。",
+          "GROUP_01": "按 storyboard 中同框体量关系保持。"
+        },
+        "shot_scheduling": {
+          "verdict": "slots_required",
+          "default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+          "note": "2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区；gate 仍要求槽位+策略。"
+        },
+        "needs_action": true
+      }
     },
     {
       "clip_id": "EP03_CLIP02",
       "lens": "50mm 85mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "“囚途残损态”",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+              "strength_hint": 0.6
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 5,
+            "selected": 5,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ]
     },
     {
       "clip_id": "EP03_CLIP03",
       "lens": "50mm 35mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "“囚途残损态”",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup",
+            "extreme_angle:face_too_small"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "turnaround",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 6,
+            "selected": 6,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ]
     },
     {
       "clip_id": "EP03_CLIP04",
       "lens": "35mm 85mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "镇魔司制服态",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup",
+            "extreme_angle:face_too_small"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "turnaround",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 6,
+            "selected": 6,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ]
     },
     {
       "clip_id": "EP03_CLIP05",
       "lens": "35mm 50mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "镇魔司制服态",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "turnaround",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 5,
+            "selected": 5,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:turnaround"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "CHAR_03",
+          "name": "03",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 4,
+            "selected": 4,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": false,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "GROUP_01",
+          "name": "GROUP_01",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "single_reference",
+            "guidance": "",
+            "tagged_inputs": [],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [
+            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+            "脸部特写基础锚（所有角色/形态强制 ready）"
+          ],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ],
+      "multi_subject_strategy": {
+        "applies": true,
+        "mode": "regional_construct_required",
+        "backend_label": "GPT Image 2（渠道 Codex CLI）",
+        "persistent_subject": false,
+        "needs_registration": false,
+        "slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "char_id": "CHAR_01",
+            "form": "镇魔司制服态",
+            "tier": "multi_reference",
+            "face_priority": "primary",
+            "required_binding": "`CHAR_01/镇魔司制服态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "char_id": "CHAR_03",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`CHAR_03/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "FOREGROUND_SLOT",
+            "char_id": "GROUP_01",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`GROUP_01/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          }
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "distinct_anchors": {
+          "per_char": [
+            {
+              "char_id": "CHAR_01",
+              "hair_bucket": "黑",
+              "outfit_bucket": "红",
+              "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神"
+            },
+            {
+              "char_id": "CHAR_03",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "03·03 的剧情视觉真值必须入画：本集入镜角色；成年古装角色，年龄感按剧情身份保守处理；03 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。"
+            },
+            {
+              "char_id": "GROUP_01",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "GROUP_01·GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+            }
+          ],
+          "collision": false,
+          "collisions": [],
+          "embedding_checked": true,
+          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        },
+        "relative_scale": {
+          "CHAR_01": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域",
+          "CHAR_03": "按 storyboard 中同框体量关系保持。",
+          "GROUP_01": "按 storyboard 中同框体量关系保持。"
+        },
+        "shot_scheduling": {
+          "verdict": "slots_required",
+          "default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+          "note": "2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区；gate 仍要求槽位+策略。"
+        },
+        "needs_action": true
+      }
     },
     {
       "clip_id": "EP03_CLIP06",
       "lens": "50mm 85mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "镇魔司制服态",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+              "strength_hint": 0.6
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 5,
+            "selected": 5,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "CHAR_03",
+          "name": "03",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.6
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 5,
+            "selected": 5,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": false,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "GROUP_01",
+          "name": "GROUP_01",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "single_reference",
+            "guidance": "",
+            "tagged_inputs": [],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [
+            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+            "脸部特写基础锚（所有角色/形态强制 ready）",
+            "脸部特写主参考"
+          ],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ],
+      "multi_subject_strategy": {
+        "applies": true,
+        "mode": "regional_construct_required",
+        "backend_label": "GPT Image 2（渠道 Codex CLI）",
+        "persistent_subject": false,
+        "needs_registration": false,
+        "slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "char_id": "CHAR_01",
+            "form": "镇魔司制服态",
+            "tier": "multi_reference",
+            "face_priority": "primary",
+            "required_binding": "`CHAR_01/镇魔司制服态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "char_id": "CHAR_03",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`CHAR_03/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "FOREGROUND_SLOT",
+            "char_id": "GROUP_01",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`GROUP_01/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          }
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "distinct_anchors": {
+          "per_char": [
+            {
+              "char_id": "CHAR_01",
+              "hair_bucket": "黑",
+              "outfit_bucket": "红",
+              "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神"
+            },
+            {
+              "char_id": "CHAR_03",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "03·03 的剧情视觉真值必须入画：本集入镜角色；成年古装角色，年龄感按剧情身份保守处理；03 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。"
+            },
+            {
+              "char_id": "GROUP_01",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "GROUP_01·GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+            }
+          ],
+          "collision": false,
+          "collisions": [],
+          "embedding_checked": true,
+          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        },
+        "relative_scale": {
+          "CHAR_01": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域",
+          "CHAR_03": "按 storyboard 中同框体量关系保持。",
+          "GROUP_01": "按 storyboard 中同框体量关系保持。"
+        },
+        "shot_scheduling": {
+          "verdict": "split_or_layer_required",
+          "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+          "note": "3 个具名角色近景同框：近景是串脸最高发档，必须有 `多人同框身份槽位` + `多人同框执行策略`，且策略应是反打、景别分层或分别出图+合成；不是删戏。"
+        },
+        "needs_action": true
+      }
     },
     {
       "clip_id": "EP03_CLIP07",
       "lens": "50mm 35mm 85mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "镇魔司制服态",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup",
+            "strong_emotion",
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "turnaround",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 6,
+            "selected": 6,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "CHAR_03",
+          "name": "03",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "strong_emotion",
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+              "strength_hint": 0.6
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 5,
+            "selected": 5,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [
+            "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
+          ],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "GROUP_01",
+          "name": "GROUP_01",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "strong_emotion",
+            "extreme_angle:face_too_small",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "single_reference",
+            "guidance": "",
+            "tagged_inputs": [],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [
+            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+            "脸部特写基础锚（所有角色/形态强制 ready）",
+            "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
+          ],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ],
+      "multi_subject_strategy": {
+        "applies": true,
+        "mode": "regional_construct_required",
+        "backend_label": "GPT Image 2（渠道 Codex CLI）",
+        "persistent_subject": false,
+        "needs_registration": false,
+        "slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "char_id": "CHAR_01",
+            "form": "镇魔司制服态",
+            "tier": "multi_reference",
+            "face_priority": "primary",
+            "required_binding": "`CHAR_01/镇魔司制服态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "char_id": "CHAR_03",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`CHAR_03/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "FOREGROUND_SLOT",
+            "char_id": "GROUP_01",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`GROUP_01/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          }
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "distinct_anchors": {
+          "per_char": [
+            {
+              "char_id": "CHAR_01",
+              "hair_bucket": "黑",
+              "outfit_bucket": "红",
+              "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神"
+            },
+            {
+              "char_id": "CHAR_03",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "03·03 的剧情视觉真值必须入画：本集入镜角色；成年古装角色，年龄感按剧情身份保守处理；03 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·03 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。"
+            },
+            {
+              "char_id": "GROUP_01",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "GROUP_01·GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+            }
+          ],
+          "collision": false,
+          "collisions": [],
+          "embedding_checked": true,
+          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        },
+        "relative_scale": {
+          "CHAR_01": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域",
+          "CHAR_03": "按 storyboard 中同框体量关系保持。",
+          "GROUP_01": "按 storyboard 中同框体量关系保持。"
+        },
+        "shot_scheduling": {
+          "verdict": "slots_required",
+          "default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+          "note": "2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区；gate 仍要求槽位+策略。"
+        },
+        "needs_action": true
+      }
     },
     {
       "clip_id": "EP03_CLIP08",
       "lens": "85mm 85mm",
-      "characters": []
+      "characters": [
+        {
+          "char_id": "CHAR_01",
+          "name": "姜月初",
+          "form": "镇魔司制服态",
+          "tier": "multi_reference",
+          "library_tier": "core_full",
+          "variation_delta": [
+            "closeup",
+            "strong_emotion",
+            "extreme_angle:extreme_low",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
+              "role": "face_anchor",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+              "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 6,
+            "selected": 6,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "tagged_multi_image",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "tagged_inputs": [
+              "@Image1:front",
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:side"
+            ],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [],
+          "native_subject_action": null,
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        },
+        {
+          "char_id": "GROUP_01",
+          "name": "GROUP_01",
+          "form": "常态",
+          "tier": "multi_reference",
+          "library_tier": "named_minimal",
+          "variation_delta": [
+            "closeup",
+            "strong_emotion",
+            "extreme_angle:extreme_low",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": null,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "controlnet": [
+            "pose",
+            "depth"
+          ],
+          "reference_feed": {
+            "mode": "single_reference",
+            "guidance": "",
+            "tagged_inputs": [],
+            "video_reference_supported": false,
+            "video_reference_hint": ""
+          },
+          "missing_references": [
+            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+            "脸部特写基础锚（所有角色/形态强制 ready）",
+            "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）",
+            "侧脸参考（极端角度/转头镜）"
+          ],
+          "native_subject_action": null,
+          "escalation": null,
+          "needs_action": true,
+          "memory_anchor_reinjected": false,
+          "memory_anchor_refs_requested": [],
+          "memory_anchor_refs_consumed": [],
+          "memory_anchor_refs_dropped": [],
+          "pose_gaze_directive": null,
+          "prompt_required": []
+        }
+      ],
+      "multi_subject_strategy": {
+        "applies": true,
+        "mode": "regional_construct_required",
+        "backend_label": "GPT Image 2（渠道 Codex CLI）",
+        "persistent_subject": false,
+        "needs_registration": false,
+        "slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "char_id": "CHAR_01",
+            "form": "镇魔司制服态",
+            "tier": "multi_reference",
+            "face_priority": "primary",
+            "required_binding": "`CHAR_01/镇魔司制服态` + 自己的 reference_group / 脸部特写 / 表情库"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "char_id": "GROUP_01",
+            "form": "常态",
+            "tier": "multi_reference",
+            "face_priority": "secondary",
+            "required_binding": "`GROUP_01/常态` + 自己的 reference_group / 脸部特写 / 表情库"
+          }
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "distinct_anchors": {
+          "per_char": [
+            {
+              "char_id": "CHAR_01",
+              "hair_bucket": "黑",
+              "outfit_bucket": "红",
+              "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神"
+            },
+            {
+              "char_id": "GROUP_01",
+              "hair_bucket": null,
+              "outfit_bucket": null,
+              "anchor_phrase": "GROUP_01·GROUP_01 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+            }
+          ],
+          "collision": false,
+          "collisions": [],
+          "embedding_checked": true,
+          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        },
+        "relative_scale": {
+          "CHAR_01": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域",
+          "GROUP_01": "按 storyboard 中同框体量关系保持。"
+        },
+        "shot_scheduling": {
+          "verdict": "split_or_layer_required",
+          "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+          "note": "2 个具名角色近景同框：近景是串脸最高发档，必须有 `多人同框身份槽位` + `多人同框执行策略`，且策略应是反打、景别分层或分别出图+合成；不是删戏。"
+        },
+        "needs_action": true
+      }
     }
   ],
   "shared_assets": {
@@ -100,28 +1651,436 @@
     "clip_count": 8,
     "shared_person_bearing_assets": 5,
     "shared_asset_actions": 0,
-    "weak_backend_large_delta_clips": 0,
+    "weak_backend_large_delta_clips": 8,
     "chars_need_native_registration": [],
-    "chars_need_lora": [],
-    "multi_subject_actions": [],
-    "action_required": [
+    "chars_need_lora": [
+      "CHAR_01/“囚途残损态”",
+      "CHAR_01/镇魔司制服态"
+    ],
+    "multi_subject_actions": [
       {
-        "kind": "memory_anchor_contract",
-        "issue": "missing",
-        "errors": [
-          "memory_anchor_plan_missing"
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP01",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
         ],
-        "fix": "先运行 n2d-identity memory_anchor.py <作品根> 第3集，再重建 reference_plan。"
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "slots_required",
+        "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP05",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "slots_required",
+        "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP06",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "split_or_layer_required",
+        "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP07",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "slots_required",
+        "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP08",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "split_or_layer_required",
+        "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
       }
     ],
-    "multi_person_clips": 0,
+    "action_required": [
+      {
+        "clip": "EP03_CLIP01",
+        "char_id": "CHAR_01",
+        "form": "镇魔司制服态",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP01",
+        "char_id": "GROUP_01",
+        "form": "常态",
+        "missing": [
+          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+          "脸部特写基础锚（所有角色/形态强制 ready）",
+          "脸部特写主参考"
+        ],
+        "escalation": null,
+        "native_subject_action": null
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP01",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "slots_required",
+        "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "clip": "EP03_CLIP02",
+        "char_id": "CHAR_01",
+        "form": "“囚途残损态”",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP03",
+        "char_id": "CHAR_01",
+        "form": "“囚途残损态”",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP04",
+        "char_id": "CHAR_01",
+        "form": "镇魔司制服态",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP05",
+        "char_id": "CHAR_01",
+        "form": "镇魔司制服态",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP05",
+        "char_id": "GROUP_01",
+        "form": "常态",
+        "missing": [
+          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+          "脸部特写基础锚（所有角色/形态强制 ready）"
+        ],
+        "escalation": null,
+        "native_subject_action": null
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP05",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "slots_required",
+        "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "clip": "EP03_CLIP06",
+        "char_id": "CHAR_01",
+        "form": "镇魔司制服态",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP06",
+        "char_id": "GROUP_01",
+        "form": "常态",
+        "missing": [
+          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+          "脸部特写基础锚（所有角色/形态强制 ready）",
+          "脸部特写主参考"
+        ],
+        "escalation": null,
+        "native_subject_action": null
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP06",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "split_or_layer_required",
+        "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "clip": "EP03_CLIP07",
+        "char_id": "CHAR_01",
+        "form": "镇魔司制服态",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP07",
+        "char_id": "CHAR_03",
+        "form": "常态",
+        "missing": [
+          "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
+        ],
+        "escalation": null,
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP07",
+        "char_id": "GROUP_01",
+        "form": "常态",
+        "missing": [
+          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+          "脸部特写基础锚（所有角色/形态强制 ready）",
+          "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
+        ],
+        "escalation": null,
+        "native_subject_action": null
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP07",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "slots_required",
+        "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      },
+      {
+        "clip": "EP03_CLIP08",
+        "char_id": "CHAR_01",
+        "form": "镇魔司制服态",
+        "missing": [],
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "native_subject_action": null
+      },
+      {
+        "clip": "EP03_CLIP08",
+        "char_id": "GROUP_01",
+        "form": "常态",
+        "missing": [
+          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
+          "脸部特写基础锚（所有角色/形态强制 ready）",
+          "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）",
+          "侧脸参考（极端角度/转头镜）"
+        ],
+        "escalation": null,
+        "native_subject_action": null
+      },
+      {
+        "kind": "multi_subject_strategy",
+        "clip": "EP03_CLIP08",
+        "mode": "regional_construct_required",
+        "chars": [
+          "CHAR_01/镇魔司制服态",
+          "GROUP_01/常态"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "多人同框执行策略",
+          "screen_positions/blocking",
+          "逐主体参考绑定",
+          "primary 星标具体注册角色ID*",
+          "区分锚点（互斥发色/服装主色/配饰）",
+          "空场景底板 empty_plate",
+          "区域遮罩/region masks",
+          "统一 relighting/color match",
+          "相对身量/身高比例（relative_scale）"
+        ],
+        "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
+        "shot_scheduling": "split_or_layer_required",
+        "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+        "anchor_collision": false,
+        "anchor_embedding_confusable": false,
+        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+      }
+    ],
+    "multi_person_clips": 5,
     "action_eyeline_lock_clips": 0,
     "memory_anchor_reinjected_clips": 0,
     "memory_anchor_contract": {
-      "status": "missing",
-      "available": false,
+      "status": "ready",
+      "available": true,
       "path": "生产数据/memory_anchor_plan_第3集.json",
-      "sha256": "",
+      "sha256": "be26c5d589bf424981ec6f80d632d25aaedbeee20cd9be99c52f024aea5360bb",
       "required_rows": 0,
       "required_char_keys": [],
       "consumed_char_keys": [],
@@ -129,18 +2088,26 @@
       "missing_reference_rows": [],
       "missing_reference_files": {},
       "validated_reference_sha256_by_char": {},
-      "errors": [
-        "memory_anchor_plan_missing"
-      ],
-      "source_fingerprint": {},
-      "current_source_fingerprint": {},
+      "errors": [],
+      "source_fingerprint": {
+        "identity_drift_report_sha256": "9c7072fd878a8a800edaed8d6c446dd7fab3f2f5a19a5b12353d261b382242bc",
+        "identity_registry_sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08",
+        "storyboard_sha256": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+      },
+      "current_source_fingerprint": {
+        "identity_registry_sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08",
+        "identity_drift_report_sha256": "9c7072fd878a8a800edaed8d6c446dd7fab3f2f5a19a5b12353d261b382242bc",
+        "storyboard_sha256": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+      },
       "unconsumed_char_keys": []
     },
     "required_char_keys": [],
     "consumed_char_keys": [],
     "consumed_clip_ids_by_char": {},
-    "tagged_multi_image_clips": 0,
+    "tagged_multi_image_clips": 8,
     "video_reference_candidate_clips": 0
   },
-  "notes": []
+  "notes": [
+    "G3 多人同框：本集 5/8 镜多人同框，当前生图模型 GPT Image 2（渠道 Codex CLI）（非持久主体/reference-library 后端）。多人同框是 2026 崩脸/串脸高发区，若本剧群像/对手戏重，建议在选择点 `生图模型` 把**整项目**统一切到 reference-library 后端（Seedream Universal Reference / 可灵主体库 / Sora Character Cameo·官方多参考后端按官方口径最多约 14 张/保 5 人）。注意：勿逐镜换后端（=项目内模型混用，gate 会拦）；切则整项目切并重置后端主体/Face Lock 状态。（本集多人镜占比高，优先评估）"
+  ]
 }

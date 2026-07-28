@@ -30,7 +30,7 @@ import { readCanvasLayout, readClipEdit, writeCanvasLayout, writeClipEdit } from
 import { ClipNode } from "./ClipNode";
 import { Codicon } from "./Codicon";
 import { useI18n } from "../i18n";
-import type { CanvasClip, CanvasFrame, ClipEditData, ClipEditPatch } from "../types";
+import type { CanvasClip, CanvasFrame, ClipEditData, ClipEditPatch, LineKey } from "../types";
 import type { ViewProps } from "../views/registry";
 
 const nodeTypes = { clip: ClipNode };
@@ -60,6 +60,10 @@ type EditableCanvasClip = CanvasClip & {
   laneMeta?: string[];
   promptTooltip?: string;
   rootPath?: string;
+  repoRoot?: string;
+  episode?: string;
+  line?: LineKey;
+  onGeneratePrompt?: (prompt: string) => void;
   onEdit?: () => void;
 };
 interface CanvasAssetImage {
@@ -607,7 +611,13 @@ function CanvasControlDock(props: {
 }
 
 // Infinite canvas for visual production lines: character context -> shot nodes -> clip videos.
-export function CanvasPane({ canvas, root }: ViewProps) {
+export function CanvasPane({
+  canvas,
+  root,
+  line,
+  repoRoot,
+  onGeneratePrompt,
+}: ViewProps & { line: LineKey; repoRoot: string; onGeneratePrompt?: (prompt: string) => void }) {
   const { t } = useI18n();
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<Node>([]);
   const [editing, setEditing] = useState<CanvasClip | null>(null);
@@ -711,6 +721,12 @@ export function CanvasPane({ canvas, root }: ViewProps) {
             variant: "frame",
             promptTooltip: clipPromptTooltip(clip),
             __renderKey: clipSig.get(clip.id),
+            rootPath: root.path,
+            repoRoot,
+            episode: canvas.episode,
+            line,
+            generationProfile: canvas.generation_profile,
+            onGeneratePrompt,
             onEdit: () => setEditing(clip),
           } as unknown as Record<string, unknown>,
         } satisfies Node;
@@ -729,13 +745,18 @@ export function CanvasPane({ canvas, root }: ViewProps) {
               promptTooltip: clipPromptTooltip(clip),
               __renderKey: clipSig.get(clip.id),
               rootPath: root.path,
+              repoRoot,
+              episode: canvas.episode,
+              line,
+              generationProfile: canvas.generation_profile,
+              onGeneratePrompt,
               onEdit: () => setEditing(clip),
             } as unknown as Record<string, unknown>,
           } satisfies Node;
         })
       : [];
     return [...assetAnchorNodes, ...frameNodes, ...videoNodes];
-  }, [assetImages, canvas, hasVideoLane, layout, root.path]);
+  }, [assetImages, canvas, hasVideoLane, layout, line, onGeneratePrompt, repoRoot, root.path]);
 
   useEffect(() => {
     let alive = true;

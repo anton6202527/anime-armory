@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-27T06:13:48.043887+00:00",
+  "generated_at": "2026-07-28T07:28:55.643367+00:00",
   "identity_registry_path": "出图/共享/identity_registry.json",
-  "identity_registry_sha256": "a16514030ad427736f49ed403912ed1431900038d3dec7bc146e31da3c521ef9",
+  "identity_registry_sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08",
   "kind": "n2d_identity_eval_pack",
   "rows": [
     {
@@ -31,8 +31,8 @@
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_turnaround_view_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-21T13:03:23+00:00",
-          "reviewer": "automation:codex",
+          "reviewed_at": "2026-07-28T02:51:03+00:00",
+          "reviewer": "项目视觉执行席-01",
           "reviewer_role": "ai_visual_executor",
           "sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
           "status": "pass",
@@ -94,8 +94,8 @@
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_turnaround_view_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-21T13:03:22+00:00",
-          "reviewer": "automation:codex",
+          "reviewed_at": "2026-07-28T02:49:10+00:00",
+          "reviewer": "项目视觉执行席-01",
           "reviewer_role": "ai_visual_executor",
           "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
           "status": "pass",
@@ -126,8 +126,8 @@
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_turnaround_view_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-21T13:03:22+00:00",
-          "reviewer": "automation:codex",
+          "reviewed_at": "2026-07-28T02:50:44+00:00",
+          "reviewer": "项目视觉执行席-01",
           "reviewer_role": "ai_visual_executor",
           "sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
           "status": "pass",
@@ -158,8 +158,8 @@
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_turnaround_view_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-21T13:03:22+00:00",
-          "reviewer": "automation:codex",
+          "reviewed_at": "2026-07-28T02:50:26+00:00",
+          "reviewer": "项目视觉执行席-01",
           "reviewer_role": "ai_visual_executor",
           "sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
           "status": "pass",
@@ -190,8 +190,8 @@
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_turnaround_view_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-21T13:03:22+00:00",
-          "reviewer": "automation:codex",
+          "reviewed_at": "2026-07-28T02:50:05+00:00",
+          "reviewer": "项目视觉执行席-01",
           "reviewer_role": "ai_visual_executor",
           "sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
           "status": "pass",
@@ -222,8 +222,8 @@
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_turnaround_view_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-21T13:03:23+00:00",
-          "reviewer": "automation:codex",
+          "reviewed_at": "2026-07-28T02:51:22+00:00",
+          "reviewer": "项目视觉执行席-01",
           "reviewer_role": "ai_visual_executor",
           "sha256": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f",
           "status": "pass",
@@ -244,12 +244,253 @@
         "turnaround"
       ],
       "verdict": "pass"
+    },
+    {
+      "buckets": {
+        "back": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "aea67882999fb938672fda75e1570e32a8dd09206758704e93c3cd84d6d19898",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+          "registry_binding_fingerprint": "f34397918e33269c482ac96e9f4029fb435707eaee72921a65c05a041b9b8d2f",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-28T02:52:56+00:00",
+          "reviewer": "项目视觉执行席-01",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "0cf890e7059d5d3ed40da1828bdc228404b97b33f71abbe44df2fdaae1fea9a4",
+          "status": "pass",
+          "view": "back"
+        },
+        "expression": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "expression_readable_without_identity_drift",
+            "hair_accessories_and_costume_continuity",
+            "neutral_or_declared_expression_lighting",
+            "same_identity_as_canonical_face_anchor"
+          ],
+          "decoded_pixel_fingerprint": "5d4898b5ccdea67a9259311b12bcbee8f5d0c5a8e63b2ddfb567f7a78f5ab274",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+          "registry_binding_fingerprint": "18674bfd102654fb79a32fb5825462b3074490da5f96d2f9df346a612dd3e190",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_expression_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-27T09:24:09+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "5944379f0c6f3f97c69f683fed41e881e31e4e8c5faa05f97ede1f8828f416be",
+          "status": "pass",
+          "view": "expression"
+        },
+        "front": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "9d2586dfde7a5b40d0aaedd89692a1cd9ffc66b627595c395ddf52fbd0f4c0e4",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+          "registry_binding_fingerprint": "d6df41027f23c74d36b23338f9f0d67eb04dc883f553b9e5166f6c1f61bc0f73",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-28T02:51:40+00:00",
+          "reviewer": "项目视觉执行席-01",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+          "status": "pass",
+          "view": "front"
+        },
+        "rear_three_quarter": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "1faf1e3db78f9704e01962122057c909718478543b44659af614e8c2223f8379",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+          "registry_binding_fingerprint": "8952315125fc6da8a9236c1a64bb03f72f592a40575ac2d1029b414c18c6ff24",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-28T02:52:37+00:00",
+          "reviewer": "项目视觉执行席-01",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "ed9481d7af6092842af90bddd812648471cb20401b620a26711d5fec605f9879",
+          "status": "pass",
+          "view": "rear_three_quarter"
+        },
+        "side": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "b8720ebab5c1330d8fc8ffddd85caf2a8ca536f6803fd1c7071ebd7452a45abf",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+          "registry_binding_fingerprint": "dbe18e44836a7de917f2c92fa94f1a73f20e758c520f44e7b221a49fd3327a52",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-28T02:52:18+00:00",
+          "reviewer": "项目视觉执行席-01",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "e99b2e94d48b37382f9a936dc9ff947bb62cc75f3e61711b03ac2fbadd2f7bac",
+          "status": "pass",
+          "view": "side"
+        },
+        "three_quarter": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "38dd19fd0d02b6fba88472d649cc34d4d1dd14a253e253acea41d1dd06650bbe",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+          "registry_binding_fingerprint": "20d172e21285fa9bfc180756ffd30f58e009fc9a28813435e126288def3ce019",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-28T02:51:59+00:00",
+          "reviewer": "项目视觉执行席-01",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "9dda42a09b3c822ce2e85f27e4376e2a19f3d3ce5d53a8d365824f460804fa38",
+          "status": "pass",
+          "view": "three_quarter"
+        },
+        "turnaround": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "2f04a6f6d1cf55bcb878c28b53172bcf09155202413ba9d08b09ef8db6212a79",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "镇魔司制服态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+          "registry_binding_fingerprint": "7fda6f1a1f4b1f66fe339b087bd4291d73f687afffb1a3c70e4b02ba3bad9a04",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-28T02:53:15+00:00",
+          "reviewer": "项目视觉执行席-01",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "88c18c7c28ecde182205114164742ce4c0c722def1a8cfbf7ada11ceb9ef422d",
+          "status": "pass",
+          "view": "turnaround"
+        }
+      },
+      "character_id": "CHAR_01",
+      "failed_buckets": [],
+      "form": "镇魔司制服态",
+      "library_tier": "core_full",
+      "required_buckets": [
+        "front",
+        "three_quarter",
+        "side",
+        "rear_three_quarter",
+        "back",
+        "expression",
+        "turnaround"
+      ],
+      "verdict": "pass"
     }
   ],
   "summary": {
-    "core_forms": 1,
+    "core_forms": 2,
     "failed": 0,
-    "passed": 1
+    "passed": 2
   },
   "version": 3
 }

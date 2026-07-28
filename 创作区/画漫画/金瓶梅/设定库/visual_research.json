@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "kind": "comic_visual_research",
+  "status": "draft",
+  "scope": "待填：时代、地域、章节与主要角色/场景",
+  "project_style_anchor_id": "STYLE_JINPINGMEI_MING_URBAN",
+  "sources": [
+    {
+      "source_id": "FILM_001",
+      "title": "待填：官方/版权方影视条目",
+      "url": "",
+      "provider": "",
+      "accessed_at": "2026-07-28",
+      "type": "film_tv_narrative",
+      "usage_boundary": "research_only",
+      "findings": []
+    },
+    {
+      "source_id": "PRIMARY_001",
+      "title": "待填：博物馆/权威机构一手参考",
+      "url": "",
+      "provider": "",
+      "accessed_at": "2026-07-28",
+      "type": "museum_primary",
+      "usage_boundary": "research_only",
+      "findings": []
+    },
+    {
+      "source_id": "PRIMARY_002",
+      "title": "待填：第二项博物馆/权威机构一手参考",
+      "url": "",
+      "provider": "",
+      "accessed_at": "2026-07-28",
+      "type": "institution_primary",
+      "usage_boundary": "research_only",
+      "findings": []
+    }
+  ],
+  "derived_style": {
+    "summary": "",
+    "decisions": [
+      {
+        "dimension": "character",
+        "decision": "",
+        "evidence_source_ids": []
+      },
+      {
+        "dimension": "environment",
+        "decision": "",
+        "evidence_source_ids": []
+      },
+      {
+        "dimension": "palette",
+        "decision": "",
+        "evidence_source_ids": []
+      }
+    ],
+    "do_not_copy": [
+      "影视演员脸、具体剧照构图与镜头",
+      "单一影视版本的整套服饰组合"
+    ]
+  },
+  "rights_rules": {
+    "research_only": true,
+    "no_actor_likeness_direct_anchor": true,
+    "no_film_still_as_generation_reference": true,
+    "no_specific_composition_replication": true,
+    "no_costume_combination_replication": true,
+    "only_licensed_or_open_assets_in_generation": true,
+    "notes": [
+      "本合同只保存 URL、研究发现与派生设计决策，不下载或挂载影视截图。"
+    ]
+  }
+}

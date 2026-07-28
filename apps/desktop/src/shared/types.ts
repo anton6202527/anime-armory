@@ -210,6 +210,57 @@ export interface CanvasClip {
   qa_infos: number;
 }
 
+export type CanvasGenerationKind = "image" | "video";
+
+/** One project-backed model/backend choice shown in the canvas generation composer. */
+export interface CanvasGenerationModel {
+  id: string;
+  label: string;
+  kind: CanvasGenerationKind;
+  channel?: string;
+  description?: string;
+  available: boolean;
+  preferred?: boolean;
+  premium?: boolean;
+  min_duration?: number;
+  max_duration?: number;
+  resolutions: string[];
+  modes: string[];
+  native_audio: boolean;
+  native_references: boolean;
+  source?: string;
+}
+
+/** Defaults and verified capabilities derived from the work's settings/routes. */
+export interface CanvasGenerationProfile {
+  default_aspect_ratio: string;
+  default_resolution: string;
+  default_image_model?: string;
+  default_video_model?: string;
+  default_video_duration: number;
+  audio_policy?: string;
+  image_models: CanvasGenerationModel[];
+  video_models: CanvasGenerationModel[];
+}
+
+/** Per-node controls persisted under 生产数据/canvas_generation_controls_<集>.json. */
+export interface CanvasGenerationConfig {
+  kind: CanvasGenerationKind;
+  model: string;
+  mode: string;
+  aspect_ratio: string;
+  resolution: string;
+  duration: number;
+  audio_enabled: boolean;
+  count: 1 | 2 | 4;
+  reference_paths: string[];
+  marks: string[];
+  effects: string[];
+  camera_motion: string;
+  prompt_language: "project" | "zh" | "en";
+  prompt_override: string;
+}
+
 export interface CanvasNodePosition {
   id: string;
   x: number;
@@ -295,6 +346,7 @@ export interface CanvasData {
   clips: CanvasClip[];
   seams: CanvasSeam[];
   quality?: CanvasQualitySummary;
+  generation_profile?: CanvasGenerationProfile;
 }
 
 /** canvas.read 的增量应答：fs 事件多数与画布无关，renderer 带上一次的 sig 来读，

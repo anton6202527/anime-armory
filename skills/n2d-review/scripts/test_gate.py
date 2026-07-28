@@ -4743,11 +4743,30 @@ def test_video_prompt_preflight_does_not_require_video_prompt(monkeypatch, tmp_p
     monkeypatch.setattr(gate, "check_video_stage_raw_output_policy", fail)
     monkeypatch.setattr(gate, "check_contract_inheritance", fail)
     monkeypatch.setattr(gate, "check_asset_handoff_inheritance", fail)
+    monkeypatch.setattr(gate, "check_video_model_routes", lambda *a, **k: None)
+    monkeypatch.setattr(gate, "check_generation_recipe_evidence", lambda *a, **k: None)
 
     gate.findings.clear()
     gate.run(str(root), "第1集", "video_prompt_preflight")
 
     assert not gate.findings
+
+
+def test_image_preflight_blocks_multishot_without_boundary_assets(tmp_path):
+    root = tmp_path / "work"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 生视频模型: seedance\n- 生视频渠道: 即梦/Dreamina\n", encoding="utf-8")
+    (sb_dir / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "clip_id": "Clip_01", "duration": 10.0,
+            "shots": [{"lens": "wide"}, {"lens": "close"}],
+            "continuity": {"seam_mode": "hard_cut", "anchors": []},
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    gate.findings.clear()
+    gate.check_storyboard_video_feasibility_before_images(str(root), "第1集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "视频可执行性前置" for f in gate.findings)
 
 
 def test_compose_gate_blocks_missing_srt_voice_first(tmp_path):

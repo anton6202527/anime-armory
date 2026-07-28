@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-27T09:28:16+00:00",
+  "generated_at": "2026-07-28T02:21:24+00:00",
   "production_sound_route": {
     "status": "aligned",
     "kind": "n2d_production_mode_route",
@@ -71,6 +71,7 @@
         "identity_drift_risk",
         "identity_escalated",
         "multi_person",
+        "native_multiframe",
         "post_lipsync_required"
       ],
       "seam_relay": {
@@ -118,7 +119,8 @@
         "single-backend generic generation often swaps faces or screen positions",
         "5+ 同框/群像：Sora 已从自动路由移除；Kling 负责槽位/主体约束，仍不稳按 degrade_plan 拆组，不要把 5+ 清晰正脸压在同一镜。",
         "混合路由：当前无已签收表演音轨，只生成中性嘴型的基础视频；音轨就绪后走独立后期表演/口型驱动。",
-        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 10.52s exceeds kling max 10s）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 10.52s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
         "⚠️本镜 identity 已失败 4 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
@@ -202,11 +204,11 @@
         "backend": "seedance",
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
-        "anchor_count": 0,
+        "anchor_count": 1,
         "need_end": false,
-        "consumption_mode": "first_frame",
+        "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
-        "consumes_mid_anchors_natively": false,
+        "consumes_mid_anchors_natively": true,
         "consumes_endframe": false,
         "requires_split_relay": false,
         "reference_only": false,
@@ -214,7 +216,7 @@
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "manual confirmation required before paid generation"
+        "action": "submit first/mid frames in one native multi-keyframe request; no storyboard endframe is submitted"
       },
       "locked_backend": "seedance",
       "quality_tier": "high",
@@ -247,9 +249,9 @@
         "frame_inputs": {
           "first_frame": true,
           "last_frame": false,
-          "mid_anchors": 0,
-          "consumption_mode": "first_frame",
-          "native_timeline_frames": 1,
+          "mid_anchors": 1,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 2,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -472,7 +474,7 @@
             "policy": "frame_anchor_required",
             "priority": 6,
             "active": true,
-            "effect": "anchors=0 consumption=first_frame"
+            "effect": "anchors=1 consumption=native_multiframe"
           },
           {
             "policy": "cross_episode_baseline",
@@ -1342,10 +1344,12 @@
     },
     {
       "clip_id": "Clip_04",
-      "shot_type": "general_motion",
+      "shot_type": "empty_establishing",
       "template": "none",
       "primary_backend": "seedance",
-      "fallback_backends": [],
+      "fallback_backends": [
+        "dreamina"
+      ],
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
@@ -1360,7 +1364,9 @@
       "max_clip_seconds": 15,
       "clip_seconds": 15.383,
       "risk_flags": [
-        "long_duration"
+        "duration_segment_relay",
+        "low_identity_risk",
+        "native_multiframe"
       ],
       "seam_relay": {
         "is_relay": false,
@@ -1388,14 +1394,18 @@
         "required": false
       },
       "rationale": [
-        "general motion can use the project default backend for cost and speed",
-        "本镜超过 seedance 单次上限，且无法用现有锚帧形成安全分段：clip exceeds backend cap but lacks mid+end timeline anchors for deterministic relay",
+        "empty/ambience shots have low identity risk and can use native ambience when opted in",
+        "text2video is acceptable when no character identity must be preserved",
+        "本镜 15.383s 超过 seedance 单次上限 15s；执行侧必须按现有首/中/尾帧拆成 2 段 first_last_relay 付费提交，每段不超过上限，再在后续合成阶段接回。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
         "质量档=fast：通用/低身份风险镜走量产快档省成本（落档侧解析为后端 fast model_version）。"
       ],
       "prompt_requirements": [
-        "keep character/camera/dynamic detail three-part prompt explicit"
+        "confirm mouth_visible=no and speech_policy=no_native_speech",
+        "keep ambience sound low-risk; no voices, no narration, no humming",
+        "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
       ],
-      "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type.",
+      "degrade_plan": "Use Dreamina/Seedance silent clip and add SFX/BGM in compose.",
       "character_backend_conflicts": [],
       "sound_route": {
         "clip_id": "Clip_04",
@@ -1460,27 +1470,47 @@
         "backend": "seedance",
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
-        "anchor_count": 0,
-        "need_end": false,
-        "consumption_mode": "first_frame",
+        "anchor_count": 1,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
-        "consumes_mid_anchors_natively": false,
-        "consumes_endframe": false,
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
         "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "manual confirmation required before paid generation"
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
       "duration_segment_relay": {
         "required": true,
-        "supported": false,
+        "supported": true,
         "max_clip_seconds": 15,
         "clip_seconds": 15.383,
-        "segments": [],
-        "reason": "clip exceeds backend cap but lacks mid+end timeline anchors for deterministic relay"
+        "segments": [
+          {
+            "segment_id": "Clip_04_seg01",
+            "start_sec": 0.0,
+            "end_sec": 7.69,
+            "duration_sec": 7.69,
+            "from_frame": "first_frame",
+            "to_frame": "mid_anchor_1",
+            "submit_mode": "first_last_relay"
+          },
+          {
+            "segment_id": "Clip_04_seg02",
+            "start_sec": 7.69,
+            "end_sec": 15.383,
+            "duration_sec": 7.693,
+            "from_frame": "mid_anchor_1",
+            "to_frame": "end_frame",
+            "submit_mode": "first_last_relay"
+          }
+        ],
+        "max_segment_seconds": 7.693,
+        "reason": "split paid generation into first/mid/end relay segments under backend cap"
       },
       "quality_tier": "fast",
       "motion_reference": {
@@ -1494,10 +1524,10 @@
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
-          "last_frame": false,
-          "mid_anchors": 0,
-          "consumption_mode": "first_frame",
-          "native_timeline_frames": 1,
+          "last_frame": true,
+          "mid_anchors": 1,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 3,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -1541,13 +1571,42 @@
           "base_video_mouth_policy": "route_default"
         },
         "fallback": {
-          "fallback_backends": [],
-          "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type."
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "Use Dreamina/Seedance silent clip and add SFX/BGM in compose."
         },
         "capability_match": {
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "video_segments": {
+          "required": true,
+          "mode": "first_last_relay",
+          "reason": "split paid generation into first/mid/end relay segments under backend cap",
+          "max_clip_seconds": 15,
+          "max_segment_seconds": 7.693,
+          "segments": [
+            {
+              "segment_id": "Clip_04_seg01",
+              "start_sec": 0.0,
+              "end_sec": 7.69,
+              "duration_sec": 7.69,
+              "from_frame": "first_frame",
+              "to_frame": "mid_anchor_1",
+              "submit_mode": "first_last_relay"
+            },
+            {
+              "segment_id": "Clip_04_seg02",
+              "start_sec": 7.69,
+              "end_sec": 15.383,
+              "duration_sec": 7.693,
+              "from_frame": "mid_anchor_1",
+              "to_frame": "end_frame",
+              "submit_mode": "first_last_relay"
+            }
+          ]
         },
         "post_video_qc": {
           "identity_qc_required": true,
@@ -1563,7 +1622,6 @@
         }
       },
       "urgency_tier": "realtime",
-      "baseline_anchored": true,
       "execution_adapter": {
         "kind": "n2d_video_execution_status",
         "version": 2,
@@ -1594,13 +1652,44 @@
         },
         "message": "local automation is ready"
       },
-      "fallback_execution_adapters": [],
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
       "route_executable": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_04",
-        "winner": "cross_episode_baseline",
+        "winner": "cost_quality_tier",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1662,8 +1751,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": true,
-            "effect": "baseline primary=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "spectacle_benchmark",
@@ -1696,17 +1785,7 @@
             "effect": ""
           }
         ],
-        "conflicts": [
-          {
-            "surface": "backend_choice",
-            "policies": [
-              "cross_episode_baseline",
-              "cost_quality_tier"
-            ],
-            "winner": "cross_episode_baseline",
-            "resolution": "priority_lattice"
-          }
-        ],
+        "conflicts": [],
         "signoff_required": false
       }
     },
@@ -1743,6 +1822,7 @@
         "identity_drift_risk",
         "identity_escalated",
         "multi_person",
+        "native_multiframe",
         "post_lipsync_required"
       ],
       "seam_relay": {
@@ -1790,7 +1870,8 @@
         "single-backend generic generation often swaps faces or screen positions",
         "5+ 同框/群像：Sora 已从自动路由移除；Kling 负责槽位/主体约束，仍不稳按 degrade_plan 拆组，不要把 5+ 清晰正脸压在同一镜。",
         "混合路由：当前无已签收表演音轨，只生成中性嘴型的基础视频；音轨就绪后走独立后期表演/口型驱动。",
-        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
         "⚠️本镜 identity 已失败 4 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
@@ -1874,11 +1955,11 @@
         "backend": "seedance",
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
-        "anchor_count": 0,
+        "anchor_count": 1,
         "need_end": false,
-        "consumption_mode": "first_frame",
+        "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
-        "consumes_mid_anchors_natively": false,
+        "consumes_mid_anchors_natively": true,
         "consumes_endframe": false,
         "requires_split_relay": false,
         "reference_only": false,
@@ -1886,7 +1967,7 @@
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "manual confirmation required before paid generation"
+        "action": "submit first/mid frames in one native multi-keyframe request; no storyboard endframe is submitted"
       },
       "locked_backend": "seedance",
       "quality_tier": "high",
@@ -1919,9 +2000,9 @@
         "frame_inputs": {
           "first_frame": true,
           "last_frame": false,
-          "mid_anchors": 0,
-          "consumption_mode": "first_frame",
-          "native_timeline_frames": 1,
+          "mid_anchors": 1,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 2,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -2144,7 +2225,7 @@
             "policy": "frame_anchor_required",
             "priority": 6,
             "active": true,
-            "effect": "anchors=0 consumption=first_frame"
+            "effect": "anchors=1 consumption=native_multiframe"
           },
           {
             "policy": "cross_episode_baseline",
@@ -2201,8 +2282,10 @@
       "clip_id": "Clip_06",
       "shot_type": "dialogue_shot_reverse",
       "template": "dialogue_shot_reverse",
-      "primary_backend": "dreamina",
-      "fallback_backends": [],
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
@@ -2225,13 +2308,11 @@
       "clip_seconds": 15.551,
       "risk_flags": [
         "base_video_only",
-        "baseline_deferred_by_locked_backend",
-        "frame_anchor_rerouted",
+        "duration_segment_relay",
         "identity_escalated",
-        "long_duration",
         "mouth_visible",
-        "post_lipsync_required",
-        "split_relay_required"
+        "native_multiframe",
+        "post_lipsync_required"
       ],
       "seam_relay": {
         "is_relay": false,
@@ -2245,10 +2326,9 @@
         "required_inputs": [],
         "backend_control_level": "medium",
         "backend_capabilities": [
-          "first_frame",
-          "first_last_frame",
-          "native_multiframe",
-          "multimodal_reference"
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
         ],
         "recommended_control_backends": [],
         "failure_modes": [],
@@ -2263,16 +2343,17 @@
         "dialogue shots are identity-sensitive and often need lip-sync or strong reference controls",
         "default n2d audio remains voiceover-first; do not let the video backend generate speech",
         "混合路由：当前无已签收表演音轨，只生成中性嘴型的基础视频；音轨就绪后走独立后期表演/口型驱动。",
-        "本镜超过 kling 单次上限，且无法用现有锚帧形成安全分段：clip exceeds backend cap but lacks mid+end timeline anchors for deterministic relay",
-        "本镜中段锚帧不能被 primary 原生消费，执行侧必须拆段接力，锚帧作为段边界首尾帧。",
-        "⚠️本镜 identity 已失败 10 次：primary「kling」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
-        "跨集基线要求「seedance」，但角色后端亲和已锁「kling」；保持身份一致，基线不覆盖。",
-        "frame_anchor_required: 本镜声明中段锚帧，kling 只能 split_relay；改用 dreamina 原生多关键帧以避免中锚被降级。"
+        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 15.551s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "本镜 15.551s 超过 seedance 单次上限 15s；执行侧必须按现有首/中/尾帧拆成 4 段 first_last_relay 付费提交，每段不超过上限，再在后续合成阶段接回。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 10 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
         "mark mouth_visible and speech_policy=no_native_speech",
         "prefer side/back/OTS if lip-sync is disabled",
-        "base_video_only=true；嘴唇保持自然闭合/静息，不做可辨识发音动作，不让模型即兴说话；为后期表演驱动保留稳定正脸与表情空间。"
+        "base_video_only=true；嘴唇保持自然闭合/静息，不做可辨识发音动作，不让模型即兴说话；为后期表演驱动保留稳定正脸与表情空间。",
+        "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
       ],
       "degrade_plan": "先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。",
       "character_backend_conflicts": [],
@@ -2345,48 +2426,86 @@
         "verified": "2026-06-12 local official dreamina CLI --help snapshot"
       },
       "anchor_consumption": {
-        "backend": "dreamina",
+        "backend": "seedance",
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
         "anchor_count": 3,
-        "need_end": false,
+        "need_end": true,
         "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
         "consumes_mid_anchors_natively": true,
-        "consumes_endframe": false,
+        "consumes_endframe": true,
         "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "submit first/mid frames in one native multi-keyframe request; no storyboard endframe is submitted"
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
       "duration_segment_relay": {
         "required": true,
-        "supported": false,
+        "supported": true,
         "max_clip_seconds": 15,
         "clip_seconds": 15.551,
-        "segments": [],
-        "reason": "clip exceeds backend cap but lacks mid+end timeline anchors for deterministic relay"
+        "segments": [
+          {
+            "segment_id": "Clip_06_seg01",
+            "start_sec": 0.0,
+            "end_sec": 3.89,
+            "duration_sec": 3.89,
+            "from_frame": "first_frame",
+            "to_frame": "mid_anchor_1",
+            "submit_mode": "first_last_relay"
+          },
+          {
+            "segment_id": "Clip_06_seg02",
+            "start_sec": 3.89,
+            "end_sec": 7.78,
+            "duration_sec": 3.89,
+            "from_frame": "mid_anchor_1",
+            "to_frame": "mid_anchor_2",
+            "submit_mode": "first_last_relay"
+          },
+          {
+            "segment_id": "Clip_06_seg03",
+            "start_sec": 7.78,
+            "end_sec": 11.66,
+            "duration_sec": 3.88,
+            "from_frame": "mid_anchor_2",
+            "to_frame": "mid_anchor_3",
+            "submit_mode": "first_last_relay"
+          },
+          {
+            "segment_id": "Clip_06_seg04",
+            "start_sec": 11.66,
+            "end_sec": 15.551,
+            "duration_sec": 3.891,
+            "from_frame": "mid_anchor_3",
+            "to_frame": "end_frame",
+            "submit_mode": "first_last_relay"
+          }
+        ],
+        "max_segment_seconds": 3.891,
+        "reason": "split paid generation into first/mid/end relay segments under backend cap"
       },
-      "locked_backend": "kling",
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
       },
       "execution_recipe": {
-        "backend": "dreamina",
+        "backend": "seedance",
         "execution_backend": "dreamina",
         "mode": "image2video",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
-          "last_frame": false,
+          "last_frame": true,
           "mid_anchors": 3,
           "consumption_mode": "native_multiframe",
-          "native_timeline_frames": 4,
+          "native_timeline_frames": 5,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -2440,13 +2559,60 @@
           "base_video_mouth_policy": "neutral_rest_no_visible_articulation"
         },
         "fallback": {
-          "fallback_backends": [],
+          "fallback_backends": [
+            "dreamina"
+          ],
           "degrade_plan": "先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。"
         },
         "capability_match": {
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "video_segments": {
+          "required": true,
+          "mode": "first_last_relay",
+          "reason": "split paid generation into first/mid/end relay segments under backend cap",
+          "max_clip_seconds": 15,
+          "max_segment_seconds": 3.891,
+          "segments": [
+            {
+              "segment_id": "Clip_06_seg01",
+              "start_sec": 0.0,
+              "end_sec": 3.89,
+              "duration_sec": 3.89,
+              "from_frame": "first_frame",
+              "to_frame": "mid_anchor_1",
+              "submit_mode": "first_last_relay"
+            },
+            {
+              "segment_id": "Clip_06_seg02",
+              "start_sec": 3.89,
+              "end_sec": 7.78,
+              "duration_sec": 3.89,
+              "from_frame": "mid_anchor_1",
+              "to_frame": "mid_anchor_2",
+              "submit_mode": "first_last_relay"
+            },
+            {
+              "segment_id": "Clip_06_seg03",
+              "start_sec": 7.78,
+              "end_sec": 11.66,
+              "duration_sec": 3.88,
+              "from_frame": "mid_anchor_2",
+              "to_frame": "mid_anchor_3",
+              "submit_mode": "first_last_relay"
+            },
+            {
+              "segment_id": "Clip_06_seg04",
+              "start_sec": 11.66,
+              "end_sec": 15.551,
+              "duration_sec": 3.891,
+              "from_frame": "mid_anchor_3",
+              "to_frame": "end_frame",
+              "submit_mode": "first_last_relay"
+            }
+          ]
         },
         "post_video_qc": {
           "identity_qc_required": true,
@@ -2462,16 +2628,11 @@
         }
       },
       "urgency_tier": "realtime",
-      "baseline_deferred": {
-        "wanted_backend": "seedance",
-        "current_primary": "kling",
-        "locked_backend": "kling",
-        "reason": "identity_affinity_locked_backend"
-      },
+      "baseline_anchored": true,
       "execution_adapter": {
         "kind": "n2d_video_execution_status",
         "version": 2,
-        "backend": "dreamina",
+        "backend": "seedance",
         "channel": "dreamina",
         "execution_backend": "dreamina",
         "state": "automated_ready",
@@ -2498,7 +2659,38 @@
         },
         "message": "local automation is ready"
       },
-      "fallback_execution_adapters": [],
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
       "route_executable": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
@@ -2543,7 +2735,7 @@
             "policy": "identity_affinity",
             "priority": 3,
             "active": true,
-            "effect": "locked_backend=kling"
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -2567,7 +2759,7 @@
             "policy": "cross_episode_baseline",
             "priority": 7,
             "active": true,
-            "effect": "baseline primary=dreamina"
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2612,7 +2804,7 @@
             "resolution": "priority_lattice"
           }
         ],
-        "signoff_required": true
+        "signoff_required": false
       }
     },
     {
@@ -2783,7 +2975,7 @@
         "backend": "seedance",
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
-        "anchor_count": 1,
+        "anchor_count": 2,
         "need_end": true,
         "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
@@ -2828,9 +3020,9 @@
         "frame_inputs": {
           "first_frame": true,
           "last_frame": true,
-          "mid_anchors": 1,
+          "mid_anchors": 2,
           "consumption_mode": "native_multiframe",
-          "native_timeline_frames": 3,
+          "native_timeline_frames": 4,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -3053,7 +3245,7 @@
             "policy": "frame_anchor_required",
             "priority": 6,
             "active": true,
-            "effect": "anchors=1 consumption=native_multiframe"
+            "effect": "anchors=2 consumption=native_multiframe"
           },
           {
             "policy": "cross_episode_baseline",
@@ -3588,16 +3780,7 @@
     }
   ],
   "motion_spectacle_guidance_applied": 0,
-  "baseline_drift": [
-    {
-      "clip_id": "Clip_06",
-      "shot_type": "dialogue_shot_reverse",
-      "was": "kling",
-      "now": "kling",
-      "skipped": "seedance",
-      "reason": "identity_affinity_locked_backend"
-    }
-  ],
+  "baseline_drift": [],
   "baseline_anchored": true,
   "hero_multi_version": {
     "enabled": false,

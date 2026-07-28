@@ -1,0 +1,27 @@
+{
+  "kind": "comic_adaptation_strategy",
+  "version": 2,
+  "status": "draft",
+  "adaptation_boundary": "待补：哪些内容不改编/如何镜外化（露骨/敏感/超纲情节的处理边界）",
+  "promise_ledger": [
+    {
+      "promise_id": "PRM_001",
+      "promise": "待补：向读者立的第一个核心悬念/欲望承诺",
+      "opened_chapter": "第1话",
+      "payoff_chapter": "待补",
+      "status": "open"
+    }
+  ],
+  "causality_spine": [
+    "待补：全书因果链主干（事件A→导致B→逼出选择C…，改编时不可断的链）"
+  ],
+  "foreshadowing_ledger": [
+    {
+      "setup_id": "FSH_001",
+      "setup": "待补：伏笔内容",
+      "planted_chapter": "第1话",
+      "payoff_chapter": "待补",
+      "status": "planted"
+    }
+  ]
+}

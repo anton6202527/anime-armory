@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "kind": "comic_wardrobe_prop_contract",
+  "status": "review",
+  "default_policy": {
+    "mode": "recommended_unless_user_override",
+    "setting_profile": "historical_traceable",
+    "evidence_hierarchy": [
+      "A_physical_archaeology",
+      "B_contemporary_image",
+      "C_historical_text",
+      "D_museum_academic",
+      "E_production_reference",
+      "F_lead_only"
+    ],
+    "decision_axes": [
+      "era",
+      "polity_region",
+      "identity_rank",
+      "occasion_activity",
+      "season_climate",
+      "story_state",
+      "production_variant"
+    ],
+    "user_override": {
+      "allowed": true,
+      "requires_scope_and_reason": true
+    }
+  },
+  "world_context": {
+    "era": "",
+    "date_range": "",
+    "polity_region": "",
+    "historical_confidence": "medium",
+    "notes": ""
+  },
+  "sources": [],
+  "wardrobe": [],
+  "props": [],
+  "overrides": []
+}

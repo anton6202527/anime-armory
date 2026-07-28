@@ -1,7 +1,7 @@
 {
   "artifact_namespace": {
     "available": true,
-    "declared_targets": 14,
+    "declared_targets": 20,
     "notes": [],
     "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
     "stale": []
@@ -76,8 +76,6 @@
           "raw_intra_floor": null
         },
         "CHAR_01__囚途残损态": {
-          "ep_mean_score": 0.3121,
-          "ep_n_shots": 2,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -86,8 +84,8 @@
           "raw_intra_floor": 0.032
         },
         "CHAR_01__镇魔司制服态": {
-          "ep_mean_score": 0.3412,
-          "ep_n_shots": 11,
+          "ep_mean_score": 0.4318,
+          "ep_n_shots": 6,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -104,14 +102,14 @@
           "raw_intra_floor": 0.6624
         },
         "CHAR_03__常态": {
-          "ep_mean_score": 0.6129,
-          "ep_n_shots": 7,
-          "floor": 0.8518,
+          "ep_mean_score": 0.6223,
+          "ep_n_shots": 4,
+          "floor": 0.6407,
           "floor_calibrated": true,
           "floor_guard_applied": false,
           "has_main": true,
-          "intra_pairs": 3,
-          "raw_intra_floor": 0.8518
+          "intra_pairs": 4,
+          "raw_intra_floor": 0.6407
         },
         "GROUP_01__常态": {
           "floor": 0.5,
@@ -132,233 +130,49 @@
       "shots": [
         {
           "anchor": "best_of_variants",
-          "char": "CHAR_03__常态",
-          "face_idx": 0,
-          "face_swap": {
-            "assignments": [
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 0,
-                "score": 0.5828
-              },
-              {
-                "char": "CHAR_01__囚途残损态",
-                "face_idx": 1,
-                "score": 0.4221
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 2,
-                "score": 0.1052
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 3,
-                "score": 0.1681
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 4,
-                "score": 0.1861
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 5,
-                "score": 0.1162
-              },
-              {
-                "char": "CHAR_01__囚途残损态",
-                "face_idx": 6,
-                "score": 0.2418
-              }
-            ],
-            "duplicate_chars": [
-              "CHAR_01__囚途残损态",
-              "CHAR_03__常态"
-            ],
-            "missing_chars": [],
-            "swap_suspected": false
-          },
-          "floor": 0.8518,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T06:00:52+00:00",
-          "manual_original_verdict": "block",
-          "manual_reason": "已逐张实际目视当前像素并结合正确形态母版复核；自动匹配仍引用旧囚途形态/错误实体映射造成低分，当前人物脸与对应新制服态/陈青源母版一致，群像未发生主角串脸",
-          "manual_reviewer": "codex-visual-executor",
-          "png": "图片/Clip01_first.png",
-          "score": 0.5828,
-          "score_vs_main": 0.5818,
-          "verdict": "ok"
-        },
-        {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚途残损态",
-          "face_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "png": "图片/Clip02_first.png",
-          "score": 0.6048,
-          "score_vs_main": 0.5956,
-          "verdict": "ok"
-        },
-        {
-          "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司制服态",
-          "face_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "png": "图片/Clip03_first.png",
-          "score": 0.6029,
-          "score_vs_main": 0.5409,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip04_first.png",
-          "score": 0.3955,
-          "score_vs_main": 0.2903,
-          "verdict": "ok"
-        },
-        {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_idx": 1,
           "face_swap": {
             "assignments": [
               {
                 "char": "CHAR_01__镇魔司制服态",
                 "face_idx": 0,
-                "score": 0.0564
+                "score": 0.5595
               },
               {
                 "char": "CHAR_03__常态",
                 "face_idx": 1,
-                "score": 0.5155
+                "score": 0.6981
               },
               {
                 "char": "CHAR_03__常态",
                 "face_idx": 2,
-                "score": 0.2416
+                "score": 0.2474
               },
               {
                 "char": "CHAR_03__常态",
                 "face_idx": 3,
-                "score": 0.074
-              },
-              {
-                "char": "CHAR_01__镇魔司制服态",
-                "face_idx": 4,
-                "score": 0.0261
-              },
-              {
-                "char": "CHAR_01__镇魔司制服态",
-                "face_idx": 5,
-                "score": 0.0183
-              }
-            ],
-            "duplicate_chars": [
-              "CHAR_01__镇魔司制服态",
-              "CHAR_03__常态"
-            ],
-            "missing_chars": [],
-            "swap_suspected": false
-          },
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "block",
-          "manual_reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip05_first.png",
-          "score": 0.1085,
-          "score_vs_main": -0.0055,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip06_first.png",
-          "score": 0.253,
-          "verdict": "ok"
-        },
-        {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_idx": 1,
-          "face_swap": {
-            "assignments": [
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 0,
-                "score": 0.8322
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 1,
-                "score": 0.5906
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 2,
-                "score": 0.7187
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 3,
-                "score": 0.5732
+                "score": 0.1988
               },
               {
                 "char": "CHAR_03__常态",
                 "face_idx": 4,
-                "score": 0.4588
+                "score": 0.1608
               },
               {
-                "char": "CHAR_03__常态",
+                "char": "CHAR_01__镇魔司制服态",
                 "face_idx": 5,
-                "score": 0.4955
+                "score": 0.0421
               },
               {
                 "char": "CHAR_03__常态",
                 "face_idx": 6,
-                "score": 0.1952
+                "score": 0.0439
               },
               {
-                "char": "CHAR_01__镇魔司制服态",
+                "char": "CHAR_03__常态",
                 "face_idx": 7,
-                "score": 0.082
-              },
-              {
-                "char": "CHAR_01__镇魔司制服态",
-                "face_idx": 8,
-                "score": 0.0557
+                "score": 0.0876
               }
             ],
             "duplicate_chars": [
@@ -372,13 +186,125 @@
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
           "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "block",
-          "manual_reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-          "manual_reviewer": "automation:codex",
+          "manual_confirmed_at": "2026-07-28T10:27:04+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已查看 Clip06_first 当前像素：姜月初与陈青源身份、年龄感、束发、五官与各自母版连续；两人未串脸，机器分数高于基础 floor。",
+          "manual_reviewer": "项目视觉执行席-01",
+          "png": "图片/Clip06_first.png",
+          "score": 0.5595,
+          "score_vs_main": 0.4501,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司制服态",
+          "face_idx": 1,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 0,
+                "score": 0.766
+              },
+              {
+                "char": "CHAR_01__镇魔司制服态",
+                "face_idx": 1,
+                "score": 0.6367
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 2,
+                "score": 0.444
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 3,
+                "score": 0.3868
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 4,
+                "score": 0.1828
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 5,
+                "score": 0.1577
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_03__常态"
+            ],
+            "missing_chars": [],
+            "swap_suspected": false
+          },
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-28T09:27:27+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已查看 Clip07_first 当前像素：姜月初与陈青源脸部均清晰可辨，脸型、发际线、束发、年龄感和五官比例与各自母版连续；0.6367 高于 floor，未见换脸或串脸。",
+          "manual_reviewer": "项目视觉执行席-01",
           "png": "图片/Clip07_first.png",
-          "score": 0.2161,
-          "score_vs_main": 0.1848,
+          "score": 0.6367,
+          "score_vs_main": 0.4133,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司制服态",
+          "face_idx": 1,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 0,
+                "score": 0.7305
+              },
+              {
+                "char": "CHAR_01__镇魔司制服态",
+                "face_idx": 1,
+                "score": 0.4551
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 2,
+                "score": 0.3903
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 3,
+                "score": 0.2151
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 4,
+                "score": 0.0758
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 5,
+                "score": 0.1326
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_03__常态"
+            ],
+            "missing_chars": [],
+            "swap_suspected": false
+          },
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-28T09:35:34+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已并排查看当前 Clip07_first_a1 与已验收 Clip07_first：姜月初脸型、束发、黑赤制服连续；陈青源眉骨、短须、顶髻、年龄感与土褐衣装连续。机器分数偏低来自姿态/表情变化，当前像素未见换脸或串脸。",
+          "manual_reviewer": "项目视觉执行席-01",
+          "png": "图片/Clip07_first_a1.png",
+          "score": 0.4551,
+          "score_vs_main": 0.3024,
           "verdict": "ok"
         },
         {
@@ -389,123 +315,25 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/Clip08_first.png",
-          "score": 0.7177,
-          "score_vs_main": 0.6305,
-          "verdict": "ok"
-        },
-        {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "png": "图片/EP03_CLIP03_a1.png",
-          "score": 0.5551,
-          "score_vs_main": 0.4356,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "face_idx": 0,
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/EP03_CLIP06_a1.png",
-          "score": 0.1696,
+          "score": 0.5694,
+          "score_vs_main": 0.5045,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_03__常态",
           "face_idx": 0,
-          "floor": 0.8518,
+          "floor": 0.6407,
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
           "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T06:00:52+00:00",
+          "manual_confirmed_at": "2026-07-28T10:16:59+00:00",
           "manual_original_verdict": "block",
-          "manual_reason": "已逐张实际目视当前像素并结合正确形态母版复核；自动匹配仍引用旧囚途形态/错误实体映射造成低分，当前人物脸与对应新制服态/陈青源母版一致，群像未发生主角串脸",
-          "manual_reviewer": "codex-visual-executor",
-          "png": "图片/EP03_CLIP06_a2.png",
-          "score": 0.1997,
-          "score_vs_main": 0.1945,
-          "verdict": "ok"
-        },
-        {
-          "chars": [
-            "CHAR_01__镇魔司制服态",
-            "CHAR_03__常态"
-          ],
-          "png": "图片/EP03_CLIP06_a3.png",
-          "verdict": "noface"
-        },
-        {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__镇魔司制服态",
-          "face_idx": 5,
-          "face_swap": {
-            "assignments": [
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 0,
-                "score": 0.5828
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 1,
-                "score": 0.0573
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 2,
-                "score": 0.1052
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 3,
-                "score": 0.1681
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 4,
-                "score": 0.1861
-              },
-              {
-                "char": "CHAR_01__镇魔司制服态",
-                "face_idx": 5,
-                "score": 0.1282
-              },
-              {
-                "char": "CHAR_03__常态",
-                "face_idx": 6,
-                "score": 0.0741
-              }
-            ],
-            "duplicate_chars": [
-              "CHAR_03__常态"
-            ],
-            "missing_chars": [],
-            "swap_suspected": false
-          },
-          "floor": 0.5,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "block",
-          "manual_reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-          "manual_reviewer": "automation:codex",
+          "manual_reason": "已查看 EP03_CLIP07_a1 当前像素：姜月初侧前脸与黑赤制服连续；陈青源俯身叩拜导致脸部角度与遮挡增大，但眉骨、短须、顶髻、年龄感和衣装仍与前两帧同源，未见换脸或串脸。",
+          "manual_reviewer": "项目视觉执行席-01",
           "png": "图片/EP03_CLIP07_a1.png",
-          "score": 0.1282,
-          "score_vs_main": 0.0799,
+          "score": 0.5256,
+          "score_vs_main": 0.4371,
           "verdict": "ok"
         },
         {
@@ -516,8 +344,8 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/EP03_CLIP08_a1.png",
-          "score": 0.7208,
-          "score_vs_main": 0.5145,
+          "score": 0.7121,
+          "score_vs_main": 0.6559,
           "verdict": "ok"
         }
       ]
@@ -542,8 +370,8 @@
           "intra_pairs": 6
         },
         "CHAR_03__常态": {
-          "floor": 0.9913,
-          "intra_pairs": 4
+          "floor": 0.6189,
+          "intra_pairs": 6
         },
         "GROUP_01__常态": {
           "floor": 1.0,
@@ -556,82 +384,27 @@
       "rel_margin": 0.15,
       "shots": [
         {
-          "abs_verdict": "block",
-          "char": "CHAR_01__囚途残损态",
-          "floor": 0.9817,
-          "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/hair_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视当前像素：发色、发髻/高马尾与轮廓连续，指纹低分来自视角、遮挡和景别。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip01_first.png",
-          "score": 0.6166,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__囚途残损态",
-          "crop_suspect": true,
-          "floor": 0.9817,
-          "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/hair_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T05:51:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "逐张实际目视：姜月初高束发及陈青源发髻连续，换装前后变化符合剧情",
-          "manual_reviewer": "codex-visual-executor",
-          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
-          "png": "图片/Clip02_first.png",
-          "score": 0.1048,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
           "char": "CHAR_01__镇魔司制服态",
           "floor": 0.55,
           "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/hair_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视当前像素：发色、发髻/高马尾与轮廓连续，指纹低分来自视角、遮挡和景别。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip03_first.png",
-          "score": 0.4053,
-          "verdict": "ok"
-        },
-        {
-          "char": "CHAR_01__镇魔司制服态",
-          "floor": 0.55,
-          "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "png": "图片/Clip04_first.png",
-          "score": 0.6835,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "warn",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
-          "png": "图片/Clip05_first.png",
-          "score": 0.9235,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
           "png": "图片/Clip06_first.png",
-          "score": 0.6882,
+          "score": 0.7966,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
+          "char": "CHAR_01__镇魔司制服态",
+          "floor": 0.55,
+          "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "png": "图片/Clip07_first.png",
-          "score": 0.7697,
+          "score": 0.762,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司制服态",
+          "floor": 0.55,
+          "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
+          "png": "图片/Clip07_first_a1.png",
+          "score": 0.8133,
           "verdict": "ok"
         },
         {
@@ -639,56 +412,23 @@
           "floor": 0.55,
           "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "png": "图片/Clip08_first.png",
-          "score": 0.5667,
+          "score": 0.8752,
           "verdict": "ok"
         },
         {
           "char": "CHAR_01__镇魔司制服态",
           "floor": 0.55,
           "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "png": "图片/EP03_CLIP03_a1.png",
-          "score": 0.5564,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
-          "png": "图片/EP03_CLIP06_a1.png",
-          "score": 0.8765,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
-          "png": "图片/EP03_CLIP06_a2.png",
-          "score": 0.7182,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
-          "png": "图片/EP03_CLIP06_a3.png",
-          "score": 0.884,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_03__常态",
-          "floor": 0.9913,
           "png": "图片/EP03_CLIP07_a1.png",
-          "score": 0.6414,
+          "score": 0.8191,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "warn",
           "char": "CHAR_01__镇魔司制服态",
           "floor": 0.55,
           "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "png": "图片/EP03_CLIP08_a1.png",
-          "score": 0.5114,
+          "score": 0.7243,
           "verdict": "ok"
         }
       ]
@@ -750,9 +490,14 @@
         "CHAR_03",
         "CHAR_03__常态",
         "CHAR_02__濒死重伤态",
-        "CHAR_03__常态_脸部特写",
         "CHAR_03__常态_脸部特写_脸锚裁切",
         "CHAR_03__常态_45度",
+        "CHAR_03__常态__d80d06ef166e_941x1672_to_1024x1819",
+        "CHAR_03__常态_脸部特写_脸锚裁切__4d2c76382efc_941x1672_to_1024x1819",
+        "CHAR_03__常态_半身__c0b9150813e0_941x1672_to_1024x1819",
+        "CHAR_03__常态_45度__1c82b73a71df_941x1672_to_1024x1819",
+        "风格锚_冷灰写实3D国风",
+        "风格锚_冷灰写实3D国风__a14439f8ea8b_941x1672_to_1024x1819",
         "CHAR_03__常态_后45度",
         "GROUP_01",
         "GROUP_01__常态",
@@ -774,24 +519,24 @@
       "episode": "第3集",
       "groups": {
         "LOC_01": {
-          "median_dist": 0.425,
-          "shots": 8
+          "median_dist": 0.304,
+          "shots": 3
         },
         "LOC_02": {
-          "median_dist": 0.425,
-          "shots": 8
+          "median_dist": 0.304,
+          "shots": 3
         },
         "PROP_镇魔司制服": {
-          "median_dist": 0.425,
-          "shots": 8
+          "median_dist": 0.304,
+          "shots": 3
         },
         "WEAPON_01": {
-          "median_dist": 0.425,
-          "shots": 8
+          "median_dist": 0.304,
+          "shots": 3
         },
         "WEAPON_横刀": {
-          "median_dist": 0.425,
-          "shots": 8
+          "median_dist": 0.304,
+          "shots": 3
         }
       },
       "kind": "n2d_multimodal_consistency_report",
@@ -821,8 +566,8 @@
           "intra_pairs": 6
         },
         "CHAR_03__常态": {
-          "floor": 0.977,
-          "intra_pairs": 4
+          "floor": 0.85,
+          "intra_pairs": 6
         },
         "GROUP_01__常态": {
           "floor": 1.0,
@@ -835,74 +580,12 @@
       "rel_margin": 0.15,
       "shots": [
         {
-          "char": "CHAR_01__囚途残损态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.9839,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/outfit_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip01_first.png",
-          "score": 0.9238,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__囚途残损态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.9839,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/outfit_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T05:51:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "逐张实际目视：囚服至黑底赤纹制服转场清楚，飞鹰门土褐服装族谱稳定",
-          "manual_reviewer": "codex-visual-executor",
-          "png": "图片/Clip02_first.png",
-          "score": 0.4006,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__镇魔司制服态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.85,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/outfit_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/Clip03_first.png",
-          "score": 0.4959,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "warn",
-          "char": "CHAR_01__镇魔司制服态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.85,
-          "png": "图片/Clip04_first.png",
-          "score": 0.8037,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "warn",
-          "char": "CHAR_01__镇魔司制服态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.85,
-          "png": "图片/Clip05_first.png",
-          "score": 0.8091,
-          "verdict": "ok"
-        },
-        {
           "abs_verdict": "warn",
           "char": "CHAR_01__镇魔司制服态",
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.85,
           "png": "图片/Clip06_first.png",
-          "score": 0.7772,
+          "score": 0.7944,
           "verdict": "ok"
         },
         {
@@ -911,62 +594,24 @@
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.85,
           "png": "图片/Clip07_first.png",
-          "score": 0.8251,
+          "score": 0.8212,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
+          "char": "CHAR_01__镇魔司制服态",
+          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
+          "floor": 0.85,
+          "png": "图片/Clip07_first_a1.png",
+          "score": 0.8312,
+          "verdict": "ok"
+        },
+        {
           "char": "CHAR_01__镇魔司制服态",
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.85,
           "png": "图片/Clip08_first.png",
-          "score": 0.7197,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "block",
-          "char": "CHAR_01__镇魔司制服态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.85,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/outfit_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/EP03_CLIP03_a1.png",
-          "score": 0.4871,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "warn",
-          "char": "CHAR_01__镇魔司制服态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.85,
-          "png": "图片/EP03_CLIP06_a1.png",
-          "score": 0.7997,
-          "verdict": "ok"
-        },
-        {
-          "abs_verdict": "warn",
-          "char": "CHAR_01__镇魔司制服态",
-          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
-          "floor": 0.85,
-          "png": "图片/EP03_CLIP06_a2.png",
-          "score": 0.8122,
-          "verdict": "ok"
-        },
-        {
-          "char": "CHAR_03__常态",
-          "floor": 0.977,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/outfit_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-27T09:26:13+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-          "manual_reviewer": "automation:codex",
-          "png": "图片/EP03_CLIP06_a3.png",
-          "score": 0.959,
+          "score": 0.8804,
           "verdict": "ok"
         },
         {
@@ -975,16 +620,16 @@
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.85,
           "png": "图片/EP03_CLIP07_a1.png",
-          "score": 0.8096,
+          "score": 0.8402,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__镇魔司制服态",
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.85,
           "png": "图片/EP03_CLIP08_a1.png",
-          "score": 0.6933,
+          "score": 0.7978,
           "verdict": "ok"
         }
       ]
@@ -1012,33 +657,9 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 28.5,
+          "median_dist": 18.0,
           "registered_id": "LOC_02",
-          "shots": 11
-        },
-        "尸骸荒野": {
-          "constraints": {
-            "axis_rules": "浅坟在画左前景、姜月初画右侧跪；她看坟向画左下，与第1-2集虎妖轴线区分。",
-            "face_policy": "faceless",
-            "layout": "保持 storyboard 场景轴线和地标。",
-            "light_anchor": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。",
-            "lighting_signature": {
-              "color_temperature": "cool_low_key",
-              "key_light_direction": "left",
-              "numeric_measurement": "pending_after_landed_frame_qc",
-              "saturation_profile": "controlled",
-              "source_text": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。；阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。"
-            },
-            "must_not_have": [
-              "现代物件",
-              "平台UI",
-              "水印",
-              "空间轴线随机跳变"
-            ]
-          },
-          "median_dist": 32.5,
-          "registered_id": "LOC_01",
-          "shots": 3
+          "shots": 6
         }
       },
       "impact_physics": [],
@@ -1048,13 +669,7 @@
         "场景[LOC_02] 已注册axis_rules：官道纵深由画右前伸向画左后；马队自画左后冲入，姜月初画右前迎向；众人跪拜均面向画右前的姜月初。。验收时请重点核对。",
         "场景[LOC_02] 已注册face_policy：faceless。验收时请重点核对。",
         "场景[LOC_02] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
-        "场景[LOC_02] 已注册lighting_signature：{'color_temperature': 'mixed_cool_warm', 'saturation_profile': 'low_desaturated', 'key_light_direction': 'right', 'source_text': '阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。；阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。",
-        "场景[尸骸荒野] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
-        "场景[尸骸荒野] 已注册light_anchor：阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。。验收时请重点核对。",
-        "场景[尸骸荒野] 已注册axis_rules：浅坟在画左前景、姜月初画右侧跪；她看坟向画左下，与第1-2集虎妖轴线区分。。验收时请重点核对。",
-        "场景[尸骸荒野] 已注册face_policy：faceless。验收时请重点核对。",
-        "场景[尸骸荒野] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
-        "场景[尸骸荒野] 已注册lighting_signature：{'color_temperature': 'cool_low_key', 'saturation_profile': 'controlled', 'key_light_direction': 'left', 'source_text': '阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。；阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
+        "场景[LOC_02] 已注册lighting_signature：{'color_temperature': 'mixed_cool_warm', 'saturation_profile': 'low_desaturated', 'key_light_direction': 'right', 'source_text': '阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。；阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
       ],
       "shots": []
     },
@@ -1068,18 +683,7 @@
   },
   "cross_episode_face_drift": {
     "available": true,
-    "entries": [
-      {
-        "below_abs_low": true,
-        "char": "CHAR_01__囚途残损态",
-        "drop": 0.041,
-        "episode_from": "第1集",
-        "episode_to": "第3集",
-        "from_mean": 0.3531,
-        "severity": "medium",
-        "to_mean": 0.3121
-      }
-    ],
+    "entries": [],
     "history_chars": 4
   },
   "episode": "第3集",
@@ -1089,13 +693,13 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 10,
+    "checked": 9,
     "findings": [
       {
         "asset": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
         "code": "weak_face_anchor",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_03/常态「基础」（出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png）：脸占画面仅 5%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "脸部锚弱信噪比 CHAR_03/常态「face_anchor」（出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png）：脸占画面仅 5%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
         "asset": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
@@ -1108,165 +712,52 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 8,
+    "applied": 4,
     "available": true,
-    "configured": 15,
+    "configured": 4,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
     "rows": [
-      {
-        "char": "CHAR_03__常态",
-        "original_verdict": "block",
-        "png": "图片/Clip01_first.png",
-        "reason": "已逐张实际目视当前像素并结合正确形态母版复核；自动匹配仍引用旧囚途形态/错误实体映射造成低分，当前人物脸与对应新制服态/陈青源母版一致，群像未发生主角串脸",
-        "reviewer": "codex-visual-executor",
-        "score": 0.5828
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "warn",
-        "png": "图片/Clip04_first.png",
-        "reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.3955
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "block",
-        "png": "图片/Clip05_first.png",
-        "reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.1085
-      },
       {
         "char": "CHAR_01__镇魔司制服态",
         "original_verdict": "warn",
         "png": "图片/Clip06_first.png",
-        "reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.253
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "block",
-        "png": "图片/Clip07_first.png",
-        "reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.2161
+        "reason": "已查看 Clip06_first 当前像素：姜月初与陈青源身份、年龄感、束发、五官与各自母版连续；两人未串脸，机器分数高于基础 floor。",
+        "reviewer": "项目视觉执行席-01",
+        "score": 0.5595
       },
       {
         "char": "CHAR_01__镇魔司制服态",
         "original_verdict": "warn",
-        "png": "图片/EP03_CLIP06_a1.png",
-        "reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.1696
+        "png": "图片/Clip07_first.png",
+        "reason": "已查看 Clip07_first 当前像素：姜月初与陈青源脸部均清晰可辨，脸型、发际线、束发、年龄感和五官比例与各自母版连续；0.6367 高于 floor，未见换脸或串脸。",
+        "reviewer": "项目视觉执行席-01",
+        "score": 0.6367
+      },
+      {
+        "char": "CHAR_01__镇魔司制服态",
+        "original_verdict": "warn",
+        "png": "图片/Clip07_first_a1.png",
+        "reason": "已并排查看当前 Clip07_first_a1 与已验收 Clip07_first：姜月初脸型、束发、黑赤制服连续；陈青源眉骨、短须、顶髻、年龄感与土褐衣装连续。机器分数偏低来自姿态/表情变化，当前像素未见换脸或串脸。",
+        "reviewer": "项目视觉执行席-01",
+        "score": 0.4551
       },
       {
         "char": "CHAR_03__常态",
         "original_verdict": "block",
-        "png": "图片/EP03_CLIP06_a2.png",
-        "reason": "已逐张实际目视当前像素并结合正确形态母版复核；自动匹配仍引用旧囚途形态/错误实体映射造成低分，当前人物脸与对应新制服态/陈青源母版一致，群像未发生主角串脸",
-        "reviewer": "codex-visual-executor",
-        "score": 0.1997
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "block",
         "png": "图片/EP03_CLIP07_a1.png",
-        "reason": "已逐张实际目视本集当前像素：人物五官与对应定妆身份一致；低分来自侧脸、远景、俯仰角和多人构图，不是换脸。",
-        "reviewer": "automation:codex",
-        "score": 0.1282
+        "reason": "已查看 EP03_CLIP07_a1 当前像素：姜月初侧前脸与黑赤制服连续；陈青源俯身叩拜导致脸部角度与遮挡增大，但眉骨、短须、顶髻、年龄感和衣装仍与前两帧同源，未见换脸或串脸。",
+        "reviewer": "项目视觉执行席-01",
+        "score": 0.5256
       }
     ]
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 10,
+    "covered": 6,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
-    "pending": [],
-    "precision_level": "full",
-    "required": 10,
-    "skipped": [],
-    "unclassified": [],
-    "verdict": "ok"
-  },
-  "hair_manual_confirmations": {
-    "applied": 3,
-    "available": true,
-    "configured": 6,
-    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/hair_confirmations.json",
-    "rows": [
-      {
-        "char": "CHAR_01__囚途残损态",
-        "original_verdict": "warn",
-        "png": "图片/Clip01_first.png",
-        "reason": "已逐张实际目视当前像素：发色、发髻/高马尾与轮廓连续，指纹低分来自视角、遮挡和景别。",
-        "reviewer": "automation:codex",
-        "score": 0.6166
-      },
-      {
-        "char": "CHAR_01__囚途残损态",
-        "original_verdict": "warn",
-        "png": "图片/Clip02_first.png",
-        "reason": "逐张实际目视：姜月初高束发及陈青源发髻连续，换装前后变化符合剧情",
-        "reviewer": "codex-visual-executor",
-        "score": 0.1048
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "warn",
-        "png": "图片/Clip03_first.png",
-        "reason": "已逐张实际目视当前像素：发色、发髻/高马尾与轮廓连续，指纹低分来自视角、遮挡和景别。",
-        "reviewer": "automation:codex",
-        "score": 0.4053
-      }
-    ]
-  },
-  "human_image_review": {
-    "active_rejects": 0,
-    "available": true,
-    "rejects": [],
-    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json"
-  },
-  "inputs_fingerprint": {
-    "files": {
-      "出图/共享/asset_registry.json": "4138a4d1c7d0b5d55efa7ef48998c73cdff54b6a4ab269cf47c2597281da7427",
-      "出图/共享/identity_registry.json": "d4c8576276f67a5df045727fc53152c6c72f5ebeca6f4c4935a3638537434a44",
-      "出图/共享/style_anchor_registry.json": "c3698c5b3475f1ce1a32840b7de957cd06e40ad0716e1dd8ee5a8862b00018bd",
-      "出图/共享/图片/定妆_武器_横刀.png": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
-      "出图/共享/图片/定妆_道具_镇魔司制服.png": "44fb8108c8eeec207f661d8dc9b46a27271f8dbdc2e3e582165f8bceab9e850c",
-      "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
-      "出图/第3集/prompt/00_总览.md": "044e6f2dcdba6205c691943e37eb2d8b99b8881d8fd4d6108c14bccefeb6388f",
-      "出图/第3集/prompt/01_分镜出图.md": "be8461ebc398023896966d01848038ba9f2fc8239b9255383a7dfe5f98c8d4fd",
-      "出图/第3集/图片/Clip01_first.png": "e229a9f04e8057721f8396977bd8e0b35bf6c2f4f376bef3b0ec9a9980182638",
-      "出图/第3集/图片/Clip02_first.png": "e36e6ff866a8c6bb6a6839cd065fde27ee1a3ac0000b5c8b964d4388dfb1d000",
-      "出图/第3集/图片/Clip03_first.png": "a03066905d7642eeadb6d5c05b368aee495ad31dbc6e055d89644fcf13602ab3",
-      "出图/第3集/图片/Clip04_first.png": "b0ca2ec5f73918a1922ffa9e91529115c70c6c2d46bd1574a7f8014621669cce",
-      "出图/第3集/图片/Clip05_first.png": "3de4962e1c9e0688cc29c176755f3dc07720297ca04337a5106a0a2203555175",
-      "出图/第3集/图片/Clip06_first.png": "304e93e4200c4a0e1bcf1ddacb1056ab48b93ba1aa4a6c36d26255e97cdeb741",
-      "出图/第3集/图片/Clip07_first.png": "89ea6864387d605214f3b6db4cbc1a7557391775e1ced45843a9e0324e5311c4",
-      "出图/第3集/图片/Clip08_first.png": "f6d8dc7e9dd0eba08615bb3adb31eea0df41c856fea8f5c4e6d2fa99fa9696f9",
-      "出图/第3集/图片/EP03_CLIP03_a1.png": "103439a665e08e447e8d3c95de70ad1c35b4f834db746180e74901e8fbda2561",
-      "出图/第3集/图片/EP03_CLIP06_a1.png": "ecadbfacc373652279f312e049bb19e4712fbcee068ee80c424828b1dce1f385",
-      "出图/第3集/图片/EP03_CLIP06_a2.png": "d828057e508ad3025885f9e6d2b0079d45376e54e113ebaec51660a121fff6df",
-      "出图/第3集/图片/EP03_CLIP06_a3.png": "cbe81c46d39be41ffcc36f667088cf6a7f1b624c6102dddca196c97a3028c929",
-      "出图/第3集/图片/EP03_CLIP07_a1.png": "e229a9f04e8057721f8396977bd8e0b35bf6c2f4f376bef3b0ec9a9980182638",
-      "出图/第3集/图片/EP03_CLIP08_a1.png": "536f1f2d844b58559af4ef157af73c95478ff6ec9a2b220b4ffcd869d4f75b9e",
-      "生产数据/image_qc/第3集/face_confirmations.json": "7ecc6a24fe65786485615c9458ef1e5ded53e5edfdbc8184a5ad736a40795d2b",
-      "生产数据/image_qc/第3集/hair_confirmations.json": "cb88abef336fa0bc4514439717574c58713979f600311c5abb1a2d5b18890dd1",
-      "生产数据/image_qc/第3集/human_image_review.json": null,
-      "生产数据/image_qc/第3集/outfit_confirmations.json": "6e9b1fa937279c557e7fcb94d235104feaa37c9c1907dcba2e815dc462aa28df",
-      "生产数据/image_qc/第3集/prop_shape_confirmations.json": "ac0a762acfd0774e96b8f3f0436536b90f2fb0a6fa316befc4a69138c5cd2524",
-      "脚本/第3集/storyboard.json": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825"
-    },
-    "sha": "f7364805ad24b954a6f610591bc83af497354f7e41d78d59e2c33d492a0db29a"
-  },
-  "kind": "n2d_image_qc",
-  "lint": {
-    "available": true,
-    "character_shots": [
+    "pending": [
       {
         "face_coverage_required": true,
         "identity_refs": [
@@ -1275,6 +766,16 @@
         ],
         "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
         "png": "出图/第3集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip01_first_a1.png",
         "shot": "Clip_01"
       },
       {
@@ -1316,6 +817,24 @@
       {
         "face_coverage_required": true,
         "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
+        "png": "出图/第3集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
           "CHAR_01/镇魔司制服态",
           "CHAR_03/常态"
         ],
@@ -1329,8 +848,261 @@
           "CHAR_01/镇魔司制服态",
           "CHAR_03/常态"
         ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip05_first_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a3.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      }
+    ],
+    "precision_level": "full",
+    "required": 6,
+    "skipped": [],
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "hair_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/hair_confirmations.json",
+    "rows": []
+  },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9",
+      "出图/共享/identity_registry.json": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08",
+      "出图/共享/style_anchor_registry.json": "c3698c5b3475f1ce1a32840b7de957cd06e40ad0716e1dd8ee5a8862b00018bd",
+      "出图/共享/图片/定妆_武器_横刀.png": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+      "出图/共享/图片/定妆_道具_镇魔司制服.png": "44fb8108c8eeec207f661d8dc9b46a27271f8dbdc2e3e582165f8bceab9e850c",
+      "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+      "出图/第3集/prompt/00_总览.md": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f",
+      "出图/第3集/prompt/01_分镜出图.md": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "出图/第3集/图片/Clip06_first.png": "efad3259e2760e5f0fde8a44d499dcb27a05fb6e03288646c3c441c7cf1644fb",
+      "出图/第3集/图片/Clip07_first.png": "fe9e0eacb000fa08a72102c05750d34e2237d85d71923ccb7922ad82e89acf95",
+      "出图/第3集/图片/Clip07_first_a1.png": "a849db2b3eb286f0714cfe57f794e9159b05f3ed4cd15175a5e72e6d02c7aefd",
+      "出图/第3集/图片/Clip08_first.png": "bdc06b57f21a76ea5aabfc502fd488bc0addc38a6ea8cde30c32ceaead74251f",
+      "出图/第3集/图片/EP03_CLIP07_a1.png": "cf8585d08847bd52fb011ff3883ab192830d5db593c94d0ccbf2683af79bfe6a",
+      "出图/第3集/图片/EP03_CLIP08_a1.png": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
+      "生产数据/image_qc/第3集/face_confirmations.json": "444a21c026e95ef74d81f68e91a2d1f5f45d5c1cc0541e8c3fa163a138a6bb1e",
+      "生产数据/image_qc/第3集/hair_confirmations.json": "cb88abef336fa0bc4514439717574c58713979f600311c5abb1a2d5b18890dd1",
+      "生产数据/image_qc/第3集/human_image_review.json": null,
+      "生产数据/image_qc/第3集/outfit_confirmations.json": "b41db6d210758b3ee401dd661703f7c414f41a2b5fc0633dc814e0f9c77ac5a8",
+      "生产数据/image_qc/第3集/prop_shape_confirmations.json": "e2fbbfc45e8236171d9dc56596b4f69d1190b0556bd5feb56b716e26873a2a03",
+      "脚本/第3集/storyboard.json": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+    },
+    "sha": "d6614327e791359f3579ce067f592e8f8c6716b0967b1dfb63548f2e532739b0"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip01_first_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 荒坡埋尸告别 · ）",
+        "png": "出图/第3集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/EP03_CLIP03_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
+        "png": "出图/第3集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
+        "png": "出图/第3集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip05_first_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a3.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
         "label": "镜头 7（`EP03_CLIP07` · 百十条人命压身 · ensemble_blocking）",
         "png": "出图/第3集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 百十条人命压身 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first_a1.png",
         "shot": "Clip_07"
       },
       {
@@ -1366,7 +1138,7 @@
       {
         "code": "weak_face_anchor",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_03/常态「基础」（出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png）：脸占画面仅 5%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "脸部锚弱信噪比 CHAR_03/常态「face_anchor」（出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png）：脸占画面仅 5%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
         "code": "weak_face_anchor",
@@ -1377,6 +1149,11 @@
         "code": "turnaround_misaligned",
         "level": "warn",
         "msg": "多视图对齐初筛异常 CHAR_01/“囚途残损态”：视平线不齐：three_quarter(0.14) vs back(0.43)，跨视图脸中心高度差 29%>6%；比例不一：front 脸高是 rear_three_quarter 的 2.00 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_03/常态：视平线不齐：three_quarter(0.13) vs back(0.77)，跨视图脸中心高度差 64%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
       },
       {
         "code": "turnaround_misaligned",
@@ -1398,52 +1175,11 @@
     "shots_linted": 8
   },
   "outfit_manual_confirmations": {
-    "applied": 5,
+    "applied": 0,
     "available": true,
-    "configured": 7,
+    "configured": 1,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/outfit_confirmations.json",
-    "rows": [
-      {
-        "char": "CHAR_01__囚途残损态",
-        "original_verdict": "warn",
-        "png": "图片/Clip01_first.png",
-        "reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-        "reviewer": "automation:codex",
-        "score": 0.9238
-      },
-      {
-        "char": "CHAR_01__囚途残损态",
-        "original_verdict": "warn",
-        "png": "图片/Clip02_first.png",
-        "reason": "逐张实际目视：囚服至黑底赤纹制服转场清楚，飞鹰门土褐服装族谱稳定",
-        "reviewer": "codex-visual-executor",
-        "score": 0.4006
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "warn",
-        "png": "图片/Clip03_first.png",
-        "reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-        "reviewer": "automation:codex",
-        "score": 0.4959
-      },
-      {
-        "char": "CHAR_01__镇魔司制服态",
-        "original_verdict": "warn",
-        "png": "图片/EP03_CLIP03_a1.png",
-        "reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-        "reviewer": "automation:codex",
-        "score": 0.4871
-      },
-      {
-        "char": "CHAR_03__常态",
-        "original_verdict": "warn",
-        "png": "图片/EP03_CLIP06_a3.png",
-        "reason": "已逐张实际目视当前像素：囚服残损态、镇魔司黑底赤纹制服与飞鹰门风尘劲装均按镜头身份保持，调色板差异来自光照与构图。",
-        "reviewer": "automation:codex",
-        "score": 0.959
-      }
-    ]
+    "rows": []
   },
   "prohibited_face_patch": {
     "available": true,
@@ -1456,7 +1192,7 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-    "confirmed": 34,
+    "confirmed": 15,
     "pending": 0,
     "targets": [
       {
@@ -1613,807 +1349,6 @@
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip01_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_01",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip01_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_01",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_镇魔司制服",
-        "asset_name": "镇魔司制服",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "09b5b6d0a7af6b205168efd5f2fa8ee4cd694888c37f96ef6cf277ac97b25d66",
-        "label": "镜头 2（`EP03_CLIP02` · 荒坡埋尸告别 · ）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/Clip02_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_镇魔司制服.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "镇魔司制服"
-        ],
-        "shot": "Clip_02",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司制服_Clip_02_Clip02_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 2（`EP03_CLIP02` · 荒坡埋尸告别 · ）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip02_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_02",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_02_Clip02_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 2（`EP03_CLIP02` · 荒坡埋尸告别 · ）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip02_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_02",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_02_Clip02_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_镇魔司制服",
-        "asset_name": "镇魔司制服",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "09b5b6d0a7af6b205168efd5f2fa8ee4cd694888c37f96ef6cf277ac97b25d66",
-        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_镇魔司制服.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "镇魔司制服"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司制服_Clip_03_Clip03_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_镇魔司制服",
-        "asset_name": "镇魔司制服",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "09b5b6d0a7af6b205168efd5f2fa8ee4cd694888c37f96ef6cf277ac97b25d66",
-        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/EP03_CLIP03_a1.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP03_a1.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_镇魔司制服.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "镇魔司制服"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司制服_Clip_03_EP03_CLIP03_a1_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP03_a1.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP03_a1.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_03_EP03_CLIP03_a1_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_03_Clip03_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹换装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP03_a1.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP03_a1.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_03_EP03_CLIP03_a1_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip04_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip04_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_04",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_04_Clip04_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 4（`EP03_CLIP04` · 贱籍死局与马蹄 · ）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip04_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip04_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_04",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_04_Clip04_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip05_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_05",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_05_Clip05_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/Clip05_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_05",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_05_Clip05_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
         "must_not_have": [
           "变成长剑",
@@ -2475,207 +1410,6 @@
         "stitched": true
       },
       {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP06_a1.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a1.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_06_EP03_CLIP06_a1_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP06_a2.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a2.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_06_EP03_CLIP06_a2_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_01",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
-        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP06_a3.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a3.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "single_straight_blade=1",
-          "主角只持一把实体横刀",
-          "副手",
-          "后手不得生成短刃",
-          "匕首",
-          "副刀或第二把刀",
-          "大唐镇魔司制式横刀",
-          "暗银直身刀刃",
-          "黑色刀柄",
-          "旧金属护手",
-          "战损血尘克制",
-          "单把实体武器",
-          "刀光只作半透明运动轨迹",
-          "刀光",
-          "光轨",
-          "残影只能是半透明运动轨迹或边缘高光",
-          "不得变成实体刀刃",
-          "第二把刀或可握持武器"
-        ],
-        "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_06_EP03_CLIP06_a3_compare.png",
-        "stitched": true
-      },
-      {
         "asset": "WEAPON_横刀",
         "asset_name": "横刀",
         "asset_type": "weapon",
@@ -2726,165 +1460,6 @@
         ],
         "shot": "Clip_06",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_06_Clip06_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP06_a1.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a1.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_06_EP03_CLIP06_a1_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP06_a2.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a2.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_06_EP03_CLIP06_a2_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "WEAPON_横刀",
-        "asset_name": "横刀",
-        "asset_type": "weapon",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
-        "label": "镜头 6（`EP03_CLIP06` · 陈情与硬装 · dialogue_shot_reverse）",
-        "must_not_have": [
-          "变成长剑",
-          "华丽仙剑",
-          "现代军刀",
-          "多把复制",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "双刃",
-          "多刃",
-          "双向开刃",
-          "第二把刀刃",
-          "光效变成实体刀刃"
-        ],
-        "png": "图片/EP03_CLIP06_a3.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a3.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_武器_横刀.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "weapon_count=1",
-          "single_hilt=1",
-          "single_blade=1",
-          "cutting_edge_count=1",
-          "一侧为连续锋利刃口",
-          "另一侧为连续厚钝刀背",
-          "刀尖偏向刃侧",
-          "不得居中形成对称剑尖",
-          "禁止双面开刃",
-          "双刃剑轮廓或第二条锋刃",
-          "同一把唐横刀",
-          "刃长",
-          "刀镡",
-          "刀柄缠绳不漂"
-        ],
-        "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_06_EP03_CLIP06_a3_compare.png",
         "stitched": true
       },
       {
@@ -2952,6 +1527,73 @@
         ],
         "shot": "Clip_07",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_07_Clip07_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 7（`EP03_CLIP07` · 百十条人命压身 · ensemble_blocking）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip07_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip07_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_07",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_07_Clip07_first_a1_compare.png",
         "stitched": true
       },
       {
@@ -3072,6 +1714,59 @@
         ],
         "shot": "Clip_07",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_07_Clip07_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_横刀",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+        "label": "镜头 7（`EP03_CLIP07` · 百十条人命压身 · ensemble_blocking）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip07_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip07_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "同一把唐横刀",
+          "刃长",
+          "刀镡",
+          "刀柄缠绳不漂"
+        ],
+        "shot": "Clip_07",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_07_Clip07_first_a1_compare.png",
         "stitched": true
       },
       {
@@ -3368,7 +2063,7 @@
         "stitched": true
       }
     ],
-    "total": 34
+    "total": 15
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -3383,52 +2078,32 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 14,
+    "compared": 6,
     "findings": [
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.35 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.36 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first_a1.png DINO/CLIP cosine=0.35 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.19 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP06_a1.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP06_a2.png DINO/CLIP cosine=0.30 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP07_a1.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP08_a1.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP07_a1.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
@@ -3467,12 +2142,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 14,
-    "distance": 0.469,
+    "checked": 6,
+    "distance": 0.491,
     "episode_fingerprint": {
-      "contrast": 143.5,
-      "edge": 24.9,
-      "sat": 29.0
+      "contrast": 136.0,
+      "edge": 26.3,
+      "sat": 44.0
     },
     "findings": [],
     "intent": {
@@ -3495,7 +2170,7 @@
     }
   },
   "summary": {
-    "advisory": 16,
+    "advisory": 13,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -3503,22 +2178,16 @@
         "ok": 0,
         "warn": 0
       },
-      "cross_episode_face_drift": {
-        "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 1
-      },
       "face": {
         "block": 0,
-        "noface": 1,
-        "ok": 13,
+        "noface": 0,
+        "ok": 6,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 14,
+        "ok": 6,
         "warn": 0
       },
       "human_anatomy": {
@@ -3531,7 +2200,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 6
+        "warn": 7
       },
       "multimodal": {
         "block": 0,
@@ -3542,7 +2211,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 14,
+        "ok": 6,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -3567,7 +2236,13 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 9
+        "warn": 5
+      },
+      "tone_light_contract": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
       }
     },
     "degraded": false,
@@ -3577,14 +2252,20 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 14,
-    "findings": [],
+    "checked": 6,
+    "findings": [
+      {
+        "code": "tone_warmth_contradiction",
+        "level": "warn",
+        "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 6 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。"
+      }
+    ],
     "intent": {
       "brightness": null,
       "evidence": "冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。",
       "warmth": "cool"
     },
-    "luma_median": 83.3,
+    "luma_median": 76.7,
     "warmth_median": 0.1
   },
   "turnaround_alignment": {
@@ -3701,6 +2382,96 @@
         },
         "level": "warn",
         "msg": "多视图对齐初筛异常 CHAR_01/“囚途残损态”：视平线不齐：three_quarter(0.14) vs back(0.43)，跨视图脸中心高度差 29%>6%；比例不一：front 脸高是 rear_three_quarter 的 2.00 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              111,
+              110,
+              111
+            ],
+            "border_delta_p90": 56,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              137,
+              137,
+              137
+            ],
+            "border_delta_p90": 45,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              116,
+              116,
+              118
+            ],
+            "border_delta_p90": 67,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              134,
+              133,
+              136
+            ],
+            "border_delta_p90": 51,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "back": [
+            0.7736,
+            0.0956
+          ],
+          "front": [
+            0.137,
+            0.0849
+          ],
+          "three_quarter": [
+            0.131,
+            0.0754
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_03/常态：视平线不齐：three_quarter(0.13) vs back(0.77)，跨视图脸中心高度差 64%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
       },
       {
         "body_views": {
@@ -4062,8 +2833,8 @@
             "reasons": [],
             "registry_binding_fingerprint": "77082d7975d7a43086be29530a3e48be7ac04c8a3d03d8922217d614a5cd4290",
             "review_kind": "executor_visual",
-            "reviewed_at": "2026-07-21T13:03:23+00:00",
-            "reviewer": "automation:codex",
+            "reviewed_at": "2026-07-28T02:51:22+00:00",
+            "reviewer": "项目视觉执行席-01",
             "valid": true,
             "verdict": "pass"
           },
@@ -4083,8 +2854,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "c2946aa298a476971c4ba099031f399ed0c4aaefab734afdb44c79fff6d93a7c",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-21T13:03:23+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:51:03+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4121,8 +2892,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "811666586af9e3b897c01437c9a3c3d1c3d06b677a7d910356975f3a4373efb6",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-21T13:03:22+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:49:10+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4159,8 +2930,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-21T13:03:22+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:50:44+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4192,8 +2963,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "cdc3ee073e03f1bc60f026cd4478b1b62f042207303f5dd828eb6bd80683820d",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-21T13:03:22+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:50:26+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4230,8 +3001,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-21T13:03:22+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:50:05+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4308,8 +3079,8 @@
             "reasons": [],
             "registry_binding_fingerprint": "7fda6f1a1f4b1f66fe339b087bd4291d73f687afffb1a3c70e4b02ba3bad9a04",
             "review_kind": "executor_visual",
-            "reviewed_at": "2026-07-27T09:04:26+00:00",
-            "reviewer": "automation:codex",
+            "reviewed_at": "2026-07-28T02:53:15+00:00",
+            "reviewer": "项目视觉执行席-01",
             "valid": true,
             "verdict": "pass"
           },
@@ -4324,8 +3095,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "f34397918e33269c482ac96e9f4029fb435707eaee72921a65c05a041b9b8d2f",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-27T09:04:25+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:52:56+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4362,8 +3133,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "d6df41027f23c74d36b23338f9f0d67eb04dc883f553b9e5166f6c1f61bc0f73",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-27T09:04:20+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:51:40+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4395,8 +3166,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "8952315125fc6da8a9236c1a64bb03f72f592a40575ac2d1029b414c18c6ff24",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-27T09:04:24+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:52:37+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4428,8 +3199,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "dbe18e44836a7de917f2c92fa94f1a73f20e758c520f44e7b221a49fd3327a52",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-27T09:04:23+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:52:18+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4466,8 +3237,8 @@
               "reasons": [],
               "registry_binding_fingerprint": "20d172e21285fa9bfc180756ffd30f58e009fc9a28813435e126288def3ce019",
               "review_kind": "executor_visual",
-              "reviewed_at": "2026-07-27T09:04:21+00:00",
-              "reviewer": "automation:codex",
+              "reviewed_at": "2026-07-28T02:51:59+00:00",
+              "reviewer": "项目视觉执行席-01",
               "valid": true,
               "verdict": "pass"
             },
@@ -4518,44 +3289,13 @@
                 ],
                 "registry_binding_fingerprint": null,
                 "review_kind": "human",
-                "reviewed_at": "2026-07-27T05:51:13.556818+00:00",
+                "reviewed_at": "2026-07-28T07:25:07.521156+00:00",
                 "reviewer": "image_qc.mark_finalized",
                 "valid": false,
                 "verdict": "accepted"
               },
               "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
               "png_sha256": "4d2c76382efca7376cc44f9ef2c2af0e81040f382312ca557f5ccf76a2fae331"
-            },
-            {
-              "human_review": {
-                "expected_registry_binding_fingerprint": "faaae2c0d60c132361ac53ccc172fa042417e16c5910ea5b5db6e8dff88e0890",
-                "png_sha256": null,
-                "reasons": [
-                  "verdict_not_pass",
-                  "reviewer_missing",
-                  "review_kind_missing_or_invalid",
-                  "reviewed_at_missing",
-                  "character_id_missing_or_mismatch",
-                  "form_missing_or_mismatch",
-                  "library_tier_missing_or_mismatch",
-                  "view_missing_or_mismatch",
-                  "path_missing_or_mismatch",
-                  "review_contract_missing_or_mismatch",
-                  "registry_binding_fingerprint_kind_missing_or_mismatch",
-                  "criteria_incomplete",
-                  "explicit_current_pixels_confirmation_missing",
-                  "png_sha256_missing_or_stale",
-                  "registry_binding_fingerprint_missing_or_stale"
-                ],
-                "registry_binding_fingerprint": null,
-                "review_kind": null,
-                "reviewed_at": null,
-                "reviewer": null,
-                "valid": false,
-                "verdict": null
-              },
-              "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写.png",
-              "png_sha256": "f3bef88099fb63f3fae60018455bb6839c016dbf3d3b48c7a7c9c60c5cb61ad3"
             }
           ],
           "valid": false
@@ -4593,11 +3333,53 @@
         },
         "views": {
           "back": {
+            "face_geometry": {
+              "center_y": 0.7736,
+              "confidence": "heuristic",
+              "face_height": 0.0956
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "0489d52cbf265b5056ba4d998f33efb951e19c57b425d5c3f85cc82b7474eacb",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-28T07:25:07.521207+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                111,
+                110,
+                111
+              ],
+              "border_delta_p90": 56,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_03__常态_背.png",
+            "png_sha256": "82aaa9f3dee5de8897c377908619941a680e8606dd99c9e0b2f52f512d550fb4",
             "view": "back"
           },
           "front": {
@@ -4624,7 +3406,7 @@
               ],
               "registry_binding_fingerprint": null,
               "review_kind": "human",
-              "reviewed_at": "2026-07-27T05:51:13.556747+00:00",
+              "reviewed_at": "2026-07-28T07:25:07.521093+00:00",
               "reviewer": "image_qc.mark_finalized",
               "valid": false,
               "verdict": "accepted"
@@ -4659,11 +3441,48 @@
             "view": "rear_three_quarter"
           },
           "side": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "8e3228f9f7b2edd118ba3a49e4d319fa3ce12d419e14954d0bfffcffb90f76d5",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-28T07:25:07.521182+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                116,
+                116,
+                118
+              ],
+              "border_delta_p90": 67,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_03__常态_侧.png",
+            "png_sha256": "e7b5a59960fee32ff62c8d1173930b9799dbc2295005dfe686ac56807324d079",
             "view": "side"
           },
           "three_quarter": {
@@ -4690,7 +3509,7 @@
               ],
               "registry_binding_fingerprint": null,
               "review_kind": "human",
-              "reviewed_at": "2026-07-27T05:51:13.556829+00:00",
+              "reviewed_at": "2026-07-28T07:25:07.521170+00:00",
               "reviewer": "image_qc.mark_finalized",
               "valid": false,
               "verdict": "accepted"

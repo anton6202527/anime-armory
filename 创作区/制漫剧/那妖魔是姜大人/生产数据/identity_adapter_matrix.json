@@ -2,11 +2,11 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-27T11:51:05+00:00",
+  "generated_at": "2026-07-28T07:25:07+00:00",
   "summary": {
     "forms": 6,
     "forms_with_reference_group_ready": 6,
-    "forms_with_native_image_ready": 0,
+    "forms_with_native_image_ready": 2,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
     "forms_with_gaps": 0,
@@ -207,11 +207,11 @@
                 "library_tier": "core_full",
                 "view": "three_quarter",
                 "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
-                "reviewer": "automation:codex",
+                "reviewer": "项目视觉执行席-01",
                 "review_kind": "executor_visual",
                 "reviewer_role": "ai_visual_executor",
                 "human_signoff": false,
-                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "reviewed_at": "2026-07-28T02:50:05+00:00",
                 "png_sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
                 "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
                 "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
@@ -227,7 +227,7 @@
                   "kind": "explicit_current_pixels_acceptance",
                   "accepted_current_pixels": true
                 },
-                "note": "已实际目视：前45度身份、服装结构与母版一致，手脚完整。"
+                "note": "已实际查看当前像素；身份五官、低束长发、囚服轮廓与同源母版连续，构图无裁切、无文字水印。"
               }
             },
             "rear_three_quarter": {
@@ -252,11 +252,11 @@
                 "library_tier": "core_full",
                 "view": "rear_three_quarter",
                 "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
-                "reviewer": "automation:codex",
+                "reviewer": "项目视觉执行席-01",
                 "review_kind": "executor_visual",
                 "reviewer_role": "ai_visual_executor",
                 "human_signoff": false,
-                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "reviewed_at": "2026-07-28T02:50:44+00:00",
                 "png_sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
                 "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
                 "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
@@ -272,7 +272,7 @@
                   "kind": "explicit_current_pixels_acceptance",
                   "accepted_current_pixels": true
                 },
-                "note": "已实际目视：后45度发束与囚服后片连续，未露错误正脸。"
+                "note": "已实际查看当前像素；身份五官、低束长发、囚服轮廓与同源母版连续，构图无裁切、无文字水印。"
               }
             }
           },
@@ -290,10 +290,10 @@
       "reference_group_ready": true,
       "image_bindings": {
         "codex": {
-          "mode": "reference_group",
-          "status": "fallback_reference_group",
+          "mode": "image2image_reference_chain",
+          "status": "ready",
           "ready": true,
-          "binding": "reference_group",
+          "binding": "image2image_reference_chain",
           "handle": "",
           "needs_action": "",
           "gaps": [],
@@ -452,7 +452,6 @@
       ],
       "gaps": [],
       "recommendations": [
-        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
       ]
     },
@@ -647,11 +646,11 @@
                 "library_tier": "core_full",
                 "view": "three_quarter",
                 "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
-                "reviewer": "automation:codex",
+                "reviewer": "项目视觉执行席-01",
                 "review_kind": "executor_visual",
                 "reviewer_role": "ai_visual_executor",
                 "human_signoff": false,
-                "reviewed_at": "2026-07-27T09:04:21+00:00",
+                "reviewed_at": "2026-07-28T02:51:59+00:00",
                 "png_sha256": "9dda42a09b3c822ce2e85f27e4376e2a19f3d3ce5d53a8d365824f460804fa38",
                 "registry_binding_fingerprint": "20d172e21285fa9bfc180756ffd30f58e009fc9a28813435e126288def3ce019",
                 "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
@@ -667,7 +666,7 @@
                   "kind": "explicit_current_pixels_acceptance",
                   "accepted_current_pixels": true
                 },
-                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                "note": "已实际查看当前像素；姜月初身份、束发、黑底暗赤纹制服、体态与左腰佩刀在各视角连续，表情不改身份，无文字水印。"
               }
             },
             "rear_three_quarter": {
@@ -692,11 +691,11 @@
                 "library_tier": "core_full",
                 "view": "rear_three_quarter",
                 "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
-                "reviewer": "automation:codex",
+                "reviewer": "项目视觉执行席-01",
                 "review_kind": "executor_visual",
                 "reviewer_role": "ai_visual_executor",
                 "human_signoff": false,
-                "reviewed_at": "2026-07-27T09:04:24+00:00",
+                "reviewed_at": "2026-07-28T02:52:37+00:00",
                 "png_sha256": "ed9481d7af6092842af90bddd812648471cb20401b620a26711d5fec605f9879",
                 "registry_binding_fingerprint": "8952315125fc6da8a9236c1a64bb03f72f592a40575ac2d1029b414c18c6ff24",
                 "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
@@ -712,7 +711,7 @@
                   "kind": "explicit_current_pixels_acceptance",
                   "accepted_current_pixels": true
                 },
-                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                "note": "已实际查看当前像素；姜月初身份、束发、黑底暗赤纹制服、体态与左腰佩刀在各视角连续，表情不改身份，无文字水印。"
               }
             }
           },
@@ -730,10 +729,10 @@
       "reference_group_ready": true,
       "image_bindings": {
         "codex": {
-          "mode": "reference_group",
-          "status": "fallback_reference_group",
+          "mode": "image2image_reference_chain",
+          "status": "ready",
           "ready": true,
-          "binding": "reference_group",
+          "binding": "image2image_reference_chain",
           "handle": "",
           "needs_action": "",
           "gaps": [],
@@ -896,7 +895,6 @@
       ],
       "gaps": [],
       "recommendations": [
-        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
       ]
     },
@@ -916,13 +914,13 @@
         },
         "side": {
           "path": "出图/共享/图片/定妆_CHAR_03__常态_侧.png",
-          "status": "planned",
-          "exists": false
+          "status": "ready",
+          "exists": true
         },
         "back": {
           "path": "出图/共享/图片/定妆_CHAR_03__常态_背.png",
-          "status": "planned",
-          "exists": false
+          "status": "ready",
+          "exists": true
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
@@ -981,18 +979,12 @@
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
-                "reviewed_at": "2026-07-27T05:51:13.556785+00:00"
-              },
-              "sha256": "c0b9150813e01676b77ca901be1659a1bfdfbcab98c58801a4cb3d6143aee6d3",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                "reviewed_at": "2026-07-28T07:25:07.521129+00:00"
               }
             },
             "face_anchor_refs": [
               {
-                "label": "CHAR_03/常态 同源脸锚",
-                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写.png",
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -1007,10 +999,11 @@
                   "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:51:05+00:00"
                 },
-                "sha256": "f3bef88099fb63f3fae60018455bb6839c016dbf3d3b48c7a7c9c60c5cb61ad3",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-28T07:25:07.521143+00:00"
                 }
               }
             ],
@@ -1034,7 +1027,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared expressions[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-27T05:51:13.556818+00:00"
+                  "reviewed_at": "2026-07-28T07:25:07.521156+00:00"
                 }
               }
             ],
@@ -1056,7 +1049,7 @@
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared three_quarter reference passed finalized review",
-                "reviewed_at": "2026-07-27T05:51:13.556829+00:00"
+                "reviewed_at": "2026-07-28T07:25:07.521170+00:00"
               }
             },
             "rear_three_quarter": {
@@ -1576,11 +1569,6 @@
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
                 "reviewed_at": "2026-07-21T14:59:58.214372+00:00"
-              },
-              "sha256": "cb331c5df5609236cfba1e7107c6efdf5b3e94d0c3eae7bbfb287ac36d7e5b9c",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
               }
             },
             "face_anchor_refs": [
@@ -1605,12 +1593,6 @@
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-21T14:59:58.214381+00:00"
-                },
-                "label": "CHAR_02/“濒死重伤态” 同源脸锚",
-                "sha256": "a53a9e0ce533bffa3e0f717d184b7a7bfc24d27cb8bcfb8595596cdd09b2e604",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
                 }
               }
             ],

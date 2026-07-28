@@ -92,6 +92,8 @@ export function registerIpc(s: MainServices) {
     'canvas.writeLayout': (a) => canvas.writeCanvasLayout(a.root, a.ep, a.nodes),
     'canvas.readClipEdit': (a) => canvas.readClipEdit(a.root, a.ep, a.clipId, a.number),
     'canvas.writeClipEdit': (a) => canvas.writeClipEdit(a.root, a.ep, a.clipId, a.number, a.patch),
+    'canvas.readGenerationConfig': (a) => canvas.readCanvasGenerationConfig(a.root, a.ep, a.clipId, a.kind),
+    'canvas.writeGenerationConfig': (a) => canvas.writeCanvasGenerationConfig(a.root, a.ep, a.clipId, a.config),
     'canvas.readEpisodeWorkspace': (a) => canvas.readEpisodeWorkspace(a.root, a.ep),
     'quality.read': (a) => readQualityInsights(a.root, a.line, a.ep),
     'pipeline.nextAction': (a) => readNextAction(a.repoRoot, a.root, a.ep),
