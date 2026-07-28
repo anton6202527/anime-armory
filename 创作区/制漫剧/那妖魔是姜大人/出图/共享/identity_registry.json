@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-27T02:27:24+00:00",
+  "generated_at": "2026-07-27T11:40:51+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -902,6 +902,897 @@
           "self_check_by": "image_qc.mark_finalized",
           "artifact_sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
           "anchor_sha": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d"
+        },
+        {
+          "form": "镇魔司制服态",
+          "asset_key": "CHAR_01__镇魔司制服态",
+          "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+          "character_dna": {
+            "face": "姜月初 的剧情视觉真值必须入画：核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角；约19岁；窄椭圆脸，利落但不过尖的下颌；细长杏眼，深褐近黑瞳，平直微扬眉，秀直鼻梁，自然薄唇；肤色偏冷白但有真实血色；无痣无疤",
+            "hair": "黑色长发利落束起，碎发少，动作中保持东方少女脸锚不变。",
+            "outfit": "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。",
+            "accessories": "横刀、黑衣赤纹束腰、血尘；不得新增现代徽章或可读文字。",
+            "texture": "冷灰写实3D国风漫剧；炭灰 #4A4B49 + 灰褐 #777167；系统反光仅用古金 #C99A3D"
+          },
+          "physical_scale": {
+            "relative_scale": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域"
+          },
+          "wardrobe_profile": {
+            "silhouette": "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把姜月初换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "原创母版确认后，脸型、眼距、眼型、鼻唇比例、下颌线、体态比例不得无账变化",
+              "不要把姜月初换成普通俊美人类",
+              "不要丢失姜月初 scope里的非人/妖物视觉特征",
+              "不要套回囚衣",
+              "不要丢失黑衣赤纹",
+              "不要把赤纹画成文字",
+              "不要把横刀变成长剑"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "status": "ready",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "front",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:20+00:00",
+                "png_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "registry_binding_fingerprint": "d6df41027f23c74d36b23338f9f0d67eb04dc883f553b9e5166f6c1f61bc0f73",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:17:49+00:00",
+                  "png_sha256": "58b7a59dff98aef13781b57c45c161588f08f2884849d2e49e2049b50aa89d27",
+                  "registry_binding_fingerprint": "725d6a207e2bb95cb3c8f9a32cf2fb2f9e37bb94a3769fd5b57bc22d253defbe",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视当前像素：紧脸锚保持制服态身份、五官与高马尾一致，灰底均匀光，脸部清晰可比对。"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:24:09+00:00",
+                  "png_sha256": "5944379f0c6f3f97c69f683fed41e881e31e4e8c5faa05f97ede1f8828f416be",
+                  "registry_binding_fingerprint": "18674bfd102654fb79a32fb5825462b3074490da5f96d2f9df346a612dd3e190",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视当前六联表：六格身份一致、各表情不同、紧脸近景、均匀灰底光，无文字和额外人物。"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:21+00:00",
+                "png_sha256": "9dda42a09b3c822ce2e85f27e4376e2a19f3d3ce5d53a8d365824f460804fa38",
+                "registry_binding_fingerprint": "20d172e21285fa9bfc180756ffd30f58e009fc9a28813435e126288def3ce019",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:23+00:00",
+                "png_sha256": "e99b2e94d48b37382f9a936dc9ff947bb62cc75f3e61711b03ac2fbadd2f7bac",
+                "registry_binding_fingerprint": "dbe18e44836a7de917f2c92fa94f1a73f20e758c520f44e7b221a49fd3327a52",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:24+00:00",
+                "png_sha256": "ed9481d7af6092842af90bddd812648471cb20401b620a26711d5fec605f9879",
+                "registry_binding_fingerprint": "8952315125fc6da8a9236c1a64bb03f72f592a40575ac2d1029b414c18c6ff24",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:25+00:00",
+                "png_sha256": "0cf890e7059d5d3ed40da1828bdc228404b97b33f71abbe44df2fdaae1fea9a4",
+                "registry_binding_fingerprint": "f34397918e33269c482ac96e9f4029fb435707eaee72921a65c05a041b9b8d2f",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+              "status": "ready",
+              "layout": "unknown_existing",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "turnaround",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:26+00:00",
+                "png_sha256": "88c18c7c28ecde182205114164742ce4c0c722def1a8cfbf7ada11ceb9ef422d",
+                "registry_binding_fingerprint": "7fda6f1a1f4b1f66fe339b087bd4291d73f687afffb1a3c70e4b02ba3bad9a04",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "core_full",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "status": "ready",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "front",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:04:20+00:00",
+                  "png_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "registry_binding_fingerprint": "d6df41027f23c74d36b23338f9f0d67eb04dc883f553b9e5166f6c1f61bc0f73",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:04:21+00:00",
+                  "png_sha256": "9dda42a09b3c822ce2e85f27e4376e2a19f3d3ce5d53a8d365824f460804fa38",
+                  "registry_binding_fingerprint": "20d172e21285fa9bfc180756ffd30f58e009fc9a28813435e126288def3ce019",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:04:23+00:00",
+                  "png_sha256": "e99b2e94d48b37382f9a936dc9ff947bb62cc75f3e61711b03ac2fbadd2f7bac",
+                  "registry_binding_fingerprint": "dbe18e44836a7de917f2c92fa94f1a73f20e758c520f44e7b221a49fd3327a52",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                }
+              },
+              "rear_three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:04:24+00:00",
+                  "png_sha256": "ed9481d7af6092842af90bddd812648471cb20401b620a26711d5fec605f9879",
+                  "registry_binding_fingerprint": "8952315125fc6da8a9236c1a64bb03f72f592a40575ac2d1029b414c18c6ff24",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:04:25+00:00",
+                  "png_sha256": "0cf890e7059d5d3ed40da1828bdc228404b97b33f71abbe44df2fdaae1fea9a4",
+                  "registry_binding_fingerprint": "f34397918e33269c482ac96e9f4029fb435707eaee72921a65c05a041b9b8d2f",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:17:49+00:00",
+                  "png_sha256": "58b7a59dff98aef13781b57c45c161588f08f2884849d2e49e2049b50aa89d27",
+                  "registry_binding_fingerprint": "725d6a207e2bb95cb3c8f9a32cf2fb2f9e37bb94a3769fd5b57bc22d253defbe",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视当前像素：紧脸锚保持制服态身份、五官与高马尾一致，灰底均匀光，脸部清晰可比对。"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:24:09+00:00",
+                  "png_sha256": "5944379f0c6f3f97c69f683fed41e881e31e4e8c5faa05f97ede1f8828f416be",
+                  "registry_binding_fingerprint": "18674bfd102654fb79a32fb5825462b3074490da5f96d2f9df346a612dd3e190",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视当前六联表：六格身份一致、各表情不同、紧脸近景、均匀灰底光，无文字和额外人物。"
+                }
+              }
+            ],
+            "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "设定库/characters/姜月初.md",
+              "status": "ready",
+              "sha256": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+              "status": "ready",
+              "sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              717311763,
+              717311764,
+              717311765,
+              717311766,
+              717311767,
+              717311768
+            ],
+            "usage": {
+              "turnaround": 717311763,
+              "expression": 717311764,
+              "closeup": 717311765,
+              "shot": 717311766
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "rear_three_quarter",
+              "back",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把姜月初换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "原创母版确认后，脸型、眼距、眼型、鼻唇比例、下颌线、体态比例不得无账变化",
+            "不要把姜月初换成普通俊美人类",
+            "不要丢失姜月初 scope里的非人/妖物视觉特征",
+            "不要套回囚衣",
+            "不要丢失黑衣赤纹",
+            "不要把赤纹画成文字",
+            "不要把横刀变成长剑"
+          ],
+          "performance_signature": "冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。",
+          "signature_equipment": [
+            "WEAPON_01",
+            "WEAPON_横刀",
+            "PROP_镇魔司黑衣赤纹"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "PNG exists but requires explicit visual/QC signoff",
+          "self_check_at": "2026-07-27T09:04:29+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+          "anchor_sha": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab"
         }
       ],
       "asset_bundle": {
@@ -920,10 +1811,11 @@
         "planned_episode_count": 10
       },
       "evolution_profile": {
-        "mode": "single_anchor",
+        "mode": "multi_form",
         "identity_anchor_form": "“囚途残损态”",
         "forms": [
-          "“囚途残损态”"
+          "“囚途残损态”",
+          "镇魔司制服态"
         ]
       }
     },
@@ -1004,42 +1896,51 @@
               "status": "ready",
               "derivation": {
                 "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                "source_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
-                ]
+                  941,
+                  936
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-07-27T11:51:04+00:00"
               },
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
                 "reviewed_at": "2026-07-27T05:51:13.556785+00:00"
+              },
+              "sha256": "c0b9150813e01676b77ca901be1659a1bfdfbcab98c58801a4cb3d6143aee6d3",
+              "dimensions": {
+                "width": 941,
+                "height": 1672
               }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "label": "CHAR_03/常态 同源脸锚",
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                  "source_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    353,
+                    75,
+                    587,
+                    309
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:51:05+00:00"
                 },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-27T05:51:13.556807+00:00"
+                "sha256": "f3bef88099fb63f3fae60018455bb6839c016dbf3d3b48c7a7c9c60c5cb61ad3",
+                "dimensions": {
+                  "width": 1024,
+                  "height": 1024
                 }
               }
             ],
@@ -1254,43 +2155,52 @@
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                  "source_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
-                  ]
+                    941,
+                    936
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:51:04+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared half_body reference passed finalized review",
                   "reviewed_at": "2026-07-27T05:51:13.556903+00:00"
+                },
+                "sha256": "c0b9150813e01676b77ca901be1659a1bfdfbcab98c58801a4cb3d6143aee6d3",
+                "dimensions": {
+                  "width": 941,
+                  "height": 1672
                 }
               }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "label": "CHAR_03/常态 同源脸锚",
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                  "source_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    353,
+                    75,
+                    587,
+                    309
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:51:05+00:00"
                 },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-27T05:51:13.556912+00:00"
+                "sha256": "f3bef88099fb63f3fae60018455bb6839c016dbf3d3b48c7a7c9c60c5cb61ad3",
+                "dimensions": {
+                  "width": 1024,
+                  "height": 1024
                 }
               }
             ],
@@ -1330,7 +2240,8 @@
             {
               "slot": "primary_reference",
               "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
-              "status": "planned"
+              "status": "ready",
+              "sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f"
             }
           ],
           "identity_adapters": {
@@ -1460,10 +2371,10 @@
           ],
           "self_check_passed": true,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-          "anchor_sha": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
-          "artifact_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
           "self_check_at": "2026-07-27T05:51:13+00:00",
-          "self_check_by": "image_qc.mark_finalized"
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
+          "anchor_sha": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f"
         }
       ],
       "asset_bundle": {
@@ -1544,12 +2455,12 @@
               }
             },
             "hand": {
-              "path": "出图/共享/图片/定妆_GROUP_01__常态_手部局部.png",
-              "status": "planned"
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "status": "ready"
             },
             "outfit": {
-              "path": "出图/共享/图片/定妆_GROUP_01__常态_布料局部.png",
-              "status": "planned",
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "status": "ready",
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
@@ -1583,12 +2494,12 @@
                 }
               },
               "hand": {
-                "path": "出图/共享/图片/定妆_GROUP_01__常态_手部局部.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+                "status": "ready"
               },
               "outfit": {
-                "path": "出图/共享/图片/定妆_GROUP_01__常态_布料局部.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+                "status": "ready"
               }
             },
             "no_full_face": true,
@@ -1604,7 +2515,8 @@
             {
               "slot": "primary_reference",
               "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
-              "status": "planned"
+              "status": "ready",
+              "sha256": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9"
             }
           ],
           "identity_adapters": {
@@ -1739,10 +2651,10 @@
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
           "restricted_partial": true,
           "no_full_face": true,
-          "anchor_sha": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9",
-          "artifact_sha256": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9",
           "self_check_at": "2026-07-27T05:51:13+00:00",
-          "self_check_by": "image_qc.mark_finalized"
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9",
+          "anchor_sha": "eec41cfa8ff7cb761d38cfd65532cf4dcacc260df48c62f6bea4950164b735e9"
         }
       ],
       "asset_bundle": {
@@ -1823,7 +2735,7 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                 "crop_box": [
                   0,
                   0,
@@ -1844,19 +2756,26 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
-                ]
+                  941,
+                  936
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-07-27T11:42:38+00:00"
               },
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
                 "reviewed_at": "2026-07-21T14:59:58.214372+00:00"
+              },
+              "sha256": "cb331c5df5609236cfba1e7107c6efdf5b3e94d0c3eae7bbfb287ac36d7e5b9c",
+              "dimensions": {
+                "width": 941,
+                "height": 1672
               }
             },
             "face_anchor_refs": [
@@ -1866,19 +2785,27 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    353,
+                    75,
+                    587,
+                    309
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:42:39+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-21T14:59:58.214381+00:00"
+                },
+                "label": "CHAR_02/“濒死重伤态” 同源脸锚",
+                "sha256": "a53a9e0ce533bffa3e0f717d184b7a7bfc24d27cb8bcfb8595596cdd09b2e604",
+                "dimensions": {
+                  "width": 1024,
+                  "height": 1024
                 }
               }
             ],
@@ -2094,19 +3021,26 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
-                  ]
+                    941,
+                    936
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:42:38+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared half_body reference passed finalized review",
                   "reviewed_at": "2026-07-21T14:59:58.214465+00:00"
+                },
+                "sha256": "cb331c5df5609236cfba1e7107c6efdf5b3e94d0c3eae7bbfb287ac36d7e5b9c",
+                "dimensions": {
+                  "width": 941,
+                  "height": 1672
                 }
               }
             },
@@ -2117,19 +3051,27 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    353,
+                    75,
+                    587,
+                    309
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:42:39+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-21T14:59:58.214473+00:00"
+                },
+                "label": "CHAR_02/“濒死重伤态” 同源脸锚",
+                "sha256": "a53a9e0ce533bffa3e0f717d184b7a7bfc24d27cb8bcfb8595596cdd09b2e604",
+                "dimensions": {
+                  "width": 1024,
+                  "height": 1024
                 }
               }
             ],

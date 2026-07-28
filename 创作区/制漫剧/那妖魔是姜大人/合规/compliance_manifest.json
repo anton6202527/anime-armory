@@ -35,12 +35,22 @@
         "status": "synthetic_character",
         "evidence": "姜月初为原创合成角色；外部水印图仅作人工抽象 DNA，不上传后端、不逐像素复制"
       },
-      {
-        "character_id": "CHAR_02",
-        "status": "synthetic_character",
-        "evidence": "裴长青为依据原著文字生成的原创合成角色"
-      },
-      {
+    {
+      "character_id": "CHAR_02",
+      "status": "synthetic_character",
+      "evidence": "裴长青为依据原著文字生成的原创合成角色"
+    },
+    {
+      "character_id": "CHAR_03",
+      "status": "synthetic_character",
+      "evidence": "陈青源为依据自有剧情文本生成的原创合成角色，不对应真人肖像"
+    },
+    {
+      "character_id": "GROUP_01",
+      "status": "synthetic_character",
+      "evidence": "飞鹰门群像为依据自有剧情文本生成的原创合成群体，不对应真人肖像"
+    },
+    {
         "character_id": "BEAST_01",
         "status": "synthetic_character",
         "evidence": "虎妖为依据原著文字生成的原创合成妖物"

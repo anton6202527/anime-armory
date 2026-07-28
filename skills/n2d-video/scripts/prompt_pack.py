@@ -124,6 +124,28 @@ def clip_id(value: Any, fallback: int) -> str:
     return f"Clip_{clip_num(value, fallback):02d}"
 
 
+def resolved_frame_paths(clip: Mapping[str, Any], ep: str, idx: int) -> Tuple[str, str]:
+    """Resolve physical frames using the n2d-image naming contract."""
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    first = str(
+        clip.get("firstframe_png")
+        or cont.get("firstframe_png")
+        or f"出图/{ep}/图片/Clip{idx:02d}_first.png"
+    )
+    end = str(cont.get("endframe_png") or clip.get("endframe_png") or "")
+    if not end and bool(cont.get("end_anchor_required")):
+        anchors = [row for row in cont.get("anchors") or [] if isinstance(row, Mapping)]
+        anchors = [
+            row for row in anchors
+            if str(row.get("use") or "split").strip().lower()
+            not in {"qc", "reference", "reference_qc", "review"}
+            and str(row.get("anchor_png") or "").strip()
+        ]
+        if anchors:
+            end = str(max(anchors, key=lambda row: float(row.get("at_sec") or 0)).get("anchor_png") or "")
+    return first, end
+
+
 def load_json(path: Path) -> Optional[Any]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -1098,8 +1120,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     asset_ids = [x for x in [location] + objects if x]
     inner_focus = inner_focus_directive(clip, chars, asset_ids)
     env_motion = environment_motion(clip)
-    first = str(clip.get("firstframe_png") or f"出图/{ep}/图片/{cid}.png")
-    endframe = str(cont.get("endframe_png") or clip.get("endframe_png") or "")
+    first, endframe = resolved_frame_paths(clip, ep, idx)
     anchors = [a for a in cont.get("anchors") or [] if isinstance(a, Mapping)]
     mid = cont.get("midframe") if isinstance(cont.get("midframe"), Mapping) else None
     execution_anchors = [

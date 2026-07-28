@@ -1909,8 +1909,13 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
                 "package_dir": bundle_package,
             } if bundle_manifest else None,
         }
-        if cid == "CHAR_01" and "镇魔司伪装态" in f"{material_profile} {flatten(story.get('asset_requirements') or [])} {flatten(story.get('clips') or [])}":
-            disguise_form = "镇魔司伪装态"
+        form_probe = f"{material_profile} {flatten(story.get('asset_requirements') or [])} {flatten(story.get('clips') or [])}"
+        zhenmosi_form = next(
+            (candidate for candidate in ("镇魔司制服态", "镇魔司伪装态") if candidate in form_probe),
+            "",
+        )
+        if cid == "CHAR_01" and zhenmosi_form:
+            disguise_form = zhenmosi_form
             disguise_outfit = "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。"
             row["extra_forms"] = [
                 {

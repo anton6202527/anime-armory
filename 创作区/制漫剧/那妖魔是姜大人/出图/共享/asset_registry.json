@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-27T02:27:24+00:00",
+  "generated_at": "2026-07-27T11:40:51+00:00",
   "assets": [
     {
       "id": "LOC_02",
@@ -29,8 +29,8 @@
           }
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_LOC_02_反打.png",
-          "status": "planned",
+          "path": "出图/共享/图片/定妆_场景_LOC_02.png",
+          "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
@@ -39,8 +39,8 @@
           }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_LOC_02_平面图.png",
-          "status": "planned",
+          "path": "出图/共享/图片/定妆_场景_LOC_02.png",
+          "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
@@ -59,7 +59,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_LOC_02.png",
-          "status": "planned"
+          "status": "ready",
+          "sha256": "9ddb8fd7f716bf39ad9aa860c495b3274e800af3fe75db9a8b3c492b7f98fd6d"
         }
       ],
       "constraints": {
@@ -125,8 +126,8 @@
             }
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_LOC_02_反打.png",
-            "status": "planned",
+            "path": "出图/共享/图片/定妆_场景_LOC_02.png",
+            "status": "ready",
             "human_review": {
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
@@ -136,9 +137,9 @@
           }
         }
       },
-      "artifact_sha256": "9ddb8fd7f716bf39ad9aa860c495b3274e800af3fe75db9a8b3c492b7f98fd6d",
       "self_check_at": "2026-07-27T05:51:13+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "9ddb8fd7f716bf39ad9aa860c495b3274e800af3fe75db9a8b3c492b7f98fd6d"
     },
     {
       "id": "WEAPON_01",
@@ -594,12 +595,12 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_镇魔司制服.png",
-          "status": "planned",
+          "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:39:55.056965+00:00"
+            "reviewed_at": "2026-07-27T11:39:11.452099+00:00"
           }
         },
         "scale_ref": {
@@ -621,7 +622,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_镇魔司制服.png",
-          "status": "planned"
+          "status": "ready",
+          "sha256": "44fb8108c8eeec207f661d8dc9b46a27271f8dbdc2e3e582165f8bceab9e850c"
         }
       ],
       "constraints": {
@@ -660,7 +662,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "镇魔司制服",
@@ -672,7 +674,9 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
+      "self_check_at": "2026-07-27T11:39:11+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "44fb8108c8eeec207f661d8dc9b46a27271f8dbdc2e3e582165f8bceab9e850c"
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

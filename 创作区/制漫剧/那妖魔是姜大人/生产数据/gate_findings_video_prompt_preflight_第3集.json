@@ -200,56 +200,6 @@
           "dimension": "合规前置",
           "episode": "第3集",
           "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-          "message": "identity_registry 中角色 CHAR_03 缺肖像/角色授权记录",
-          "msg": "identity_registry 中角色 CHAR_03 缺肖像/角色授权记录",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "合规前置",
-          "dim_key": "合规前置",
-          "dimension": "合规前置",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-          "message": "identity_registry 中角色 GROUP_01 缺肖像/角色授权记录",
-          "msg": "identity_registry 中角色 GROUP_01 缺肖像/角色授权记录",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "合规前置",
-          "dim_key": "合规前置",
-          "dimension": "合规前置",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
           "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
@@ -333,632 +283,6 @@
             "生产数据/image_qc/第3集"
           ],
           "affected_shots": [],
-          "dim": "资产身份注册层",
-          "dim_key": "character_consistency",
-          "dimension": "资产身份注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-          "message": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "msg": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产身份注册层",
-          "dim_key": "character_consistency",
-          "dimension": "资产身份注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-          "message": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "msg": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产身份注册层",
-          "dim_key": "character_consistency",
-          "dimension": "资产身份注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-          "message": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "msg": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产身份注册层",
-          "dim_key": "character_consistency",
-          "dimension": "资产身份注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-          "message": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "msg": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产身份注册层",
-          "dim_key": "character_consistency",
-          "dimension": "资产身份注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "第3集 CHAR_id",
-          "message": "本集分镜/出图 prompt 引用了未登记的角色标记 `CHAR_id`，但它不在 identity_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该角色尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-          "msg": "本集分镜/出图 prompt 引用了未登记的角色标记 `CHAR_id`，但它不在 identity_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该角色尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "表情一致性",
-          "dim_key": "character_consistency",
-          "dimension": "表情一致性",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-          "message": "continuity.expression_span='小' 非法；必须是 微/中/大 之一（大=跨情绪如 平静→爆哭/隐忍→暴怒）。",
-          "msg": "continuity.expression_span='小' 非法；必须是 微/中/大 之一（大=跨情绪如 平静→爆哭/隐忍→暴怒）。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "场景多机位锁(G-I2)",
-          "dim_key": "scene_consistency",
-          "dimension": "场景多机位锁(G-I2)",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
-          "message": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=ready、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-          "msg": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=ready、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "尾帧",
-          "dim_key": "scene_consistency",
-          "dimension": "尾帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-          "message": "镜头需要尾锚但未填写 endframe_png",
-          "msg": "镜头需要尾锚但未填写 endframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "尾帧",
-          "dim_key": "scene_consistency",
-          "dimension": "尾帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
-          "message": "镜头需要尾锚但未填写 endframe_png",
-          "msg": "镜头需要尾锚但未填写 endframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "尾帧",
-          "dim_key": "scene_consistency",
-          "dimension": "尾帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-          "message": "镜头需要尾锚但未填写 endframe_png",
-          "msg": "镜头需要尾锚但未填写 endframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "资产引用注册层"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_道具_镇魔司制服.png",
-          "message": "reference_group.primary 路径不存在",
-          "msg": "reference_group.primary 路径不存在",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "第3集 VFX_墨虎谱影",
-          "message": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_墨虎谱影`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-          "msg": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_墨虎谱影`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "第3集 VFX_百妖谱",
-          "message": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_百妖谱`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-          "msg": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_百妖谱`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "首帧"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#1",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#2",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#4",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#5",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "首帧",
-          "dim_key": "首帧",
-          "dimension": "首帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-          "message": "缺 firstframe_png",
-          "msg": "缺 firstframe_png",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "character_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "表情一致性",
-          "dim_key": "character_consistency",
-          "dimension": "表情一致性",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-          "message": "continuity.expression_span='小' 非法；必须是 微/中/大 之一。",
-          "msg": "continuity.expression_span='小' 非法；必须是 微/中/大 之一。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
           "dim": "表情一致性",
           "dim_key": "character_consistency",
           "dimension": "表情一致性",
@@ -1000,389 +324,6 @@
         }
       ],
       "return_to_stage": "script_stage2",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "中段锚帧"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "中段锚帧",
-          "dim_key": "中段锚帧",
-          "dimension": "中段锚帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-          "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP03_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP03_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "中段锚帧",
-          "dim_key": "中段锚帧",
-          "dimension": "中段锚帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-          "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "中段锚帧",
-          "dim_key": "中段锚帧",
-          "dimension": "中段锚帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-          "message": "锚帧 2 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a2.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "msg": "锚帧 2 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a2.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "中段锚帧",
-          "dim_key": "中段锚帧",
-          "dimension": "中段锚帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-          "message": "锚帧 3 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a3.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "msg": "锚帧 3 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a3.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "中段锚帧",
-          "dim_key": "中段锚帧",
-          "dimension": "中段锚帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
-          "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP07_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP07_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "中段锚帧",
-          "dim_key": "中段锚帧",
-          "dimension": "中段锚帧",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-          "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP08_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP08_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "实体排程"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "实体排程",
-          "dim_key": "实体排程",
-          "dimension": "实体排程",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#2",
-          "message": "同一实体同时被登记为可见/必须出现和 offscreen_presence：CHAR_02。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：CHAR_02。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "实体排程",
-          "dim_key": "实体排程",
-          "dimension": "实体排程",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-          "message": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "实体排程",
-          "dim_key": "实体排程",
-          "dimension": "实体排程",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-          "message": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "对白事实锁"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "对白事实锁",
-          "dim_key": "对白事实锁",
-          "dimension": "对白事实锁",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/dialogue_fact_contract_第3集.json",
-          "message": "missing_dialogue_fact_contract: native_speech/native_av is active but dialogue_fact_contract is missing; run this script with --write before paid video submit.",
-          "msg": "missing_dialogue_fact_contract: native_speech/native_av is active but dialogue_fact_contract is missing; run this script with --write before paid video submit.",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "video_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
-    },
-    {
-      "affected_artifacts": [
-        "['生产数据/identity_adapter_matrix.json']"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "生产锁版账"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "['生产数据/identity_adapter_matrix.json']"
-          ],
-          "affected_shots": [],
-          "dim": "生产锁版账",
-          "dim_key": "生产锁版账",
-          "dimension": "生产锁版账",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_video_prompt_preflight_第3集.json",
-          "message": "video_prompt_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：生产数据/identity_adapter_matrix.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage video_prompt_preflight --write-missing`。",
-          "msg": "video_prompt_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：生产数据/identity_adapter_matrix.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage video_prompt_preflight --write-missing`。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：['生产数据/identity_adapter_matrix.json']"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "出图落档QC"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "生产数据/image_qc/第3集"
-          ],
-          "affected_shots": [],
-          "dim": "出图落档QC",
-          "dim_key": "出图落档QC",
-          "dimension": "出图落档QC",
-          "episode": "第3集",
-          "gate_stage": "video_prompt_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.json",
-          "message": "输入首帧 image_qc 仍有 38 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-          "msg": "输入首帧 image_qc 仍有 38 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-          "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
       "scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、生产数据/image_qc/第3集"
     },
     {
@@ -1391,7 +332,13 @@
         "出视频/第3集/prompt",
         "脚本/第3集/storyboard.json"
       ],
-      "affected_shots": [],
+      "affected_shots": [
+        "Clip_01",
+        "Clip_03",
+        "Clip_05",
+        "Clip_07",
+        "Clip_08"
+      ],
       "dimensions": [
         "semantic_continuity"
       ],
@@ -1437,10 +384,125 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第3集/prompt",
+            "出视频/第3集/prompt",
+            "脚本/第3集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_01"
+          ],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第3集",
+          "gate_stage": "video_prompt_preflight",
+          "loc": "video Clip 1",
+          "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初位于画右前景背身、陈青源与飞鹰门众位于中景偏左、马匹留在后景、camera_rule、建立群跪层级后切、单人反应、不在近景强塞群脸",
+          "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初位于画右前景背身、陈青源与飞鹰门众位于中景偏左、马匹留在后景、camera_rule、建立群跪层级后切、单人反应、不在近景强塞群脸",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第3集/prompt",
+            "出视频/第3集/prompt",
+            "脚本/第3集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第3集",
+          "gate_stage": "video_prompt_preflight",
+          "loc": "video Clip 3",
+          "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、动作插入镜均保持、姜月初朝画左三分、之四侧、落幅全身仍在同一侧、camera_rule、动作插入与、全身确认组成同轴",
+          "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、动作插入镜均保持、姜月初朝画左三分、之四侧、落幅全身仍在同一侧、camera_rule、动作插入与、全身确认组成同轴",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第3集/prompt",
+            "出视频/第3集/prompt",
+            "脚本/第3集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05"
+          ],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第3集",
+          "gate_stage": "video_prompt_preflight",
+          "loc": "video Clip 5",
+          "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景立定、陈青源画左中景领队、余骑纵深排布于后景、camera_rule、先35mm全景交代冲近和急停、再50mm只突出陈青源、姜月初画右",
+          "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景立定、陈青源画左中景领队、余骑纵深排布于后景、camera_rule、先35mm全景交代冲近和急停、再50mm只突出陈青源、姜月初画右",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第3集/prompt",
+            "出视频/第3集/prompt",
+            "脚本/第3集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_07"
+          ],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第3集",
+          "gate_stage": "video_prompt_preflight",
+          "loc": "video Clip 7",
+          "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景、陈青源画左中景领跪、余众在其后形成纵深队列、camera_rule、50mm领跪、85mm单人反应三级递进、复现EP03_CLIP01左右关系",
+          "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景、陈青源画左中景领跪、余众在其后形成纵深队列、camera_rule、50mm领跪、85mm单人反应三级递进、复现EP03_CLIP01左右关系",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第3集/prompt",
+            "出视频/第3集/prompt",
+            "脚本/第3集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_08"
+          ],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第3集",
+          "gate_stage": "video_prompt_preflight",
+          "loc": "video Clip 8",
+          "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景单人清晰、跪众留在画左中后景并保持低位、camera_rule、85mm只拍姜月初、跪众作为虚化方向锚不抢脸、姜月初仍在画右、跪众仍在画左低位",
+          "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景单人清晰、跪众留在画左中后景并保持低位、camera_rule、85mm只拍姜月初、跪众作为虚化方向锚不抢脸、姜月初仍在画右、跪众仍在画左低位",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "script_stage2",
-      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位产物：出图/第3集/prompt、出视频/第3集/prompt、脚本/第3集/storyboard.json"
+      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位镜头：Clip_01、Clip_03、Clip_05、Clip_07、Clip_08；定位产物：出图/第3集/prompt、出视频/第3集/prompt、脚本/第3集/storyboard.json"
     },
     {
       "affected_artifacts": [
@@ -1655,56 +717,6 @@
       "dimension": "合规前置",
       "episode": "第3集",
       "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-      "message": "identity_registry 中角色 CHAR_03 缺肖像/角色授权记录",
-      "msg": "identity_registry 中角色 CHAR_03 缺肖像/角色授权记录",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "合规前置",
-      "dim_key": "合规前置",
-      "dimension": "合规前置",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-      "message": "identity_registry 中角色 GROUP_01 缺肖像/角色授权记录",
-      "msg": "identity_registry 中角色 GROUP_01 缺肖像/角色授权记录",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "合规前置",
-      "dim_key": "合规前置",
-      "dimension": "合规前置",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
       "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
       "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
       "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
@@ -1750,768 +762,18 @@
         "生产数据/image_qc/第3集"
       ],
       "affected_shots": [],
-      "dim": "资产身份注册层",
-      "dim_key": "character_consistency",
-      "dimension": "资产身份注册层",
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
       "episode": "第3集",
       "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-      "message": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "msg": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
+      "message": "director_camera_plan_第3集.json（8 镜）的出图运镜词汇已现身 prompt 包（命中 5/5：起幅、运动余量、构图防呆、导演意图、镜头/机位）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第3集.json（结构化签收）。",
+      "msg": "director_camera_plan_第3集.json（8 镜）的出图运镜词汇已现身 prompt 包（命中 5/5：起幅、运动余量、构图防呆、导演意图、镜头/机位）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第3集.json（结构化签收）。",
       "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
       "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产身份注册层",
-      "dim_key": "character_consistency",
-      "dimension": "资产身份注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-      "message": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "msg": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产身份注册层",
-      "dim_key": "character_consistency",
-      "dimension": "资产身份注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-      "message": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "msg": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产身份注册层",
-      "dim_key": "character_consistency",
-      "dimension": "资产身份注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-      "message": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "msg": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "场景多机位锁(G-I2)",
-      "dim_key": "scene_consistency",
-      "dimension": "场景多机位锁(G-I2)",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
-      "message": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=ready、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-      "msg": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=ready、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_道具_镇魔司制服.png",
-      "message": "reference_group.primary 路径不存在",
-      "msg": "reference_group.primary 路径不存在",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产身份注册层",
-      "dim_key": "character_consistency",
-      "dimension": "资产身份注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "第3集 CHAR_id",
-      "message": "本集分镜/出图 prompt 引用了未登记的角色标记 `CHAR_id`，但它不在 identity_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该角色尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-      "msg": "本集分镜/出图 prompt 引用了未登记的角色标记 `CHAR_id`，但它不在 identity_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该角色尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "第3集 VFX_墨虎谱影",
-      "message": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_墨虎谱影`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-      "msg": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_墨虎谱影`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "第3集 VFX_百妖谱",
-      "message": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_百妖谱`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-      "msg": "本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_百妖谱`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#1",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#2",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "表情一致性",
-      "dim_key": "character_consistency",
-      "dimension": "表情一致性",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-      "message": "continuity.expression_span='小' 非法；必须是 微/中/大 之一。",
-      "msg": "continuity.expression_span='小' 非法；必须是 微/中/大 之一。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "尾帧",
-      "dim_key": "scene_consistency",
-      "dimension": "尾帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-      "message": "镜头需要尾锚但未填写 endframe_png",
-      "msg": "镜头需要尾锚但未填写 endframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "中段锚帧",
-      "dim_key": "中段锚帧",
-      "dimension": "中段锚帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-      "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP03_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP03_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#4",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#5",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "中段锚帧",
-      "dim_key": "中段锚帧",
-      "dimension": "中段锚帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-      "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "中段锚帧",
-      "dim_key": "中段锚帧",
-      "dimension": "中段锚帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-      "message": "锚帧 2 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a2.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "msg": "锚帧 2 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a2.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "中段锚帧",
-      "dim_key": "中段锚帧",
-      "dimension": "中段锚帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-      "message": "锚帧 3 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a3.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "msg": "锚帧 3 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP06_a3.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "尾帧",
-      "dim_key": "scene_consistency",
-      "dimension": "尾帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
-      "message": "镜头需要尾锚但未填写 endframe_png",
-      "msg": "镜头需要尾锚但未填写 endframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "中段锚帧",
-      "dim_key": "中段锚帧",
-      "dimension": "中段锚帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
-      "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP07_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP07_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "首帧",
-      "dim_key": "首帧",
-      "dimension": "首帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-      "message": "缺 firstframe_png",
-      "msg": "缺 firstframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "尾帧",
-      "dim_key": "scene_consistency",
-      "dimension": "尾帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-      "message": "镜头需要尾锚但未填写 endframe_png",
-      "msg": "镜头需要尾锚但未填写 endframe_png",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "中段锚帧",
-      "dim_key": "中段锚帧",
-      "dimension": "中段锚帧",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-      "message": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP08_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "msg": "锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第3集/图片/EP03_CLIP08_a1.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "实体排程",
-      "dim_key": "实体排程",
-      "dimension": "实体排程",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#2",
-      "message": "同一实体同时被登记为可见/必须出现和 offscreen_presence：CHAR_02。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-      "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：CHAR_02。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "实体排程",
-      "dim_key": "实体排程",
-      "dimension": "实体排程",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6",
-      "message": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-      "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "实体排程",
-      "dim_key": "实体排程",
-      "dimension": "实体排程",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#8",
-      "message": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-      "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "对白事实锁",
-      "dim_key": "对白事实锁",
-      "dimension": "对白事实锁",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/dialogue_fact_contract_第3集.json",
-      "message": "missing_dialogue_fact_contract: native_speech/native_av is active but dialogue_fact_contract is missing; run this script with --write before paid video submit.",
-      "msg": "missing_dialogue_fact_contract: native_speech/native_av is active but dialogue_fact_contract is missing; run this script with --write before paid video submit.",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "video_prompt",
-      "sev": "block",
-      "severity": "block",
+      "sev": "info",
+      "severity": "info",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2530,11 +792,11 @@
       "dimension": "导演运镜落实",
       "episode": "第3集",
       "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
-      "message": "director_camera_plan_第3集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第3集.json·SHA 绑定 plan+prompt）。",
-      "msg": "director_camera_plan_第3集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第3集.json·SHA 绑定 plan+prompt）。",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md",
+      "message": "director_camera_plan_第3集.json（8 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第3集.json（结构化签收）。",
+      "msg": "director_camera_plan_第3集.json（8 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第3集.json（结构化签收）。",
       "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
+      "return_to_stage": "video",
       "sev": "info",
       "severity": "info",
       "source": "n2d-dashboard/gate"
@@ -2562,25 +824,6 @@
       "return_to_stage": "script_stage2",
       "sev": "info",
       "severity": "info",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "['生产数据/identity_adapter_matrix.json']"
-      ],
-      "affected_shots": [],
-      "dim": "生产锁版账",
-      "dim_key": "生产锁版账",
-      "dimension": "生产锁版账",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_video_prompt_preflight_第3集.json",
-      "message": "video_prompt_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：生产数据/identity_adapter_matrix.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage video_prompt_preflight --write-missing`。",
-      "msg": "video_prompt_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：生产数据/identity_adapter_matrix.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage video_prompt_preflight --write-missing`。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2624,31 +867,6 @@
       "dimension": "表情一致性",
       "episode": "第3集",
       "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3",
-      "message": "continuity.expression_span='小' 非法；必须是 微/中/大 之一（大=跨情绪如 平静→爆哭/隐忍→暴怒）。",
-      "msg": "continuity.expression_span='小' 非法；必须是 微/中/大 之一（大=跨情绪如 平静→爆哭/隐忍→暴怒）。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "表情一致性",
-      "dim_key": "character_consistency",
-      "dimension": "表情一致性",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
       "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#7",
       "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
       "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
@@ -2681,31 +899,6 @@
       "return_to_stage": "script_stage2",
       "sev": "warn",
       "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "生产数据/image_qc/第3集"
-      ],
-      "affected_shots": [],
-      "dim": "出图落档QC",
-      "dim_key": "出图落档QC",
-      "dimension": "出图落档QC",
-      "episode": "第3集",
-      "gate_stage": "video_prompt_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.json",
-      "message": "输入首帧 image_qc 仍有 38 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-      "msg": "输入首帧 image_qc 仍有 38 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-      "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2752,6 +945,121 @@
     },
     {
       "affected_artifacts": [
+        "出图/第3集/prompt",
+        "出视频/第3集/prompt",
+        "脚本/第3集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_01"
+      ],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第3集",
+      "gate_stage": "video_prompt_preflight",
+      "loc": "video Clip 1",
+      "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初位于画右前景背身、陈青源与飞鹰门众位于中景偏左、马匹留在后景、camera_rule、建立群跪层级后切、单人反应、不在近景强塞群脸",
+      "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初位于画右前景背身、陈青源与飞鹰门众位于中景偏左、马匹留在后景、camera_rule、建立群跪层级后切、单人反应、不在近景强塞群脸",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第3集/prompt",
+        "出视频/第3集/prompt",
+        "脚本/第3集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第3集",
+      "gate_stage": "video_prompt_preflight",
+      "loc": "video Clip 3",
+      "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、动作插入镜均保持、姜月初朝画左三分、之四侧、落幅全身仍在同一侧、camera_rule、动作插入与、全身确认组成同轴",
+      "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、动作插入镜均保持、姜月初朝画左三分、之四侧、落幅全身仍在同一侧、camera_rule、动作插入与、全身确认组成同轴",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第3集/prompt",
+        "出视频/第3集/prompt",
+        "脚本/第3集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第3集",
+      "gate_stage": "video_prompt_preflight",
+      "loc": "video Clip 5",
+      "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景立定、陈青源画左中景领队、余骑纵深排布于后景、camera_rule、先35mm全景交代冲近和急停、再50mm只突出陈青源、姜月初画右",
+      "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景立定、陈青源画左中景领队、余骑纵深排布于后景、camera_rule、先35mm全景交代冲近和急停、再50mm只突出陈青源、姜月初画右",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第3集/prompt",
+        "出视频/第3集/prompt",
+        "脚本/第3集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第3集",
+      "gate_stage": "video_prompt_preflight",
+      "loc": "video Clip 7",
+      "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景、陈青源画左中景领跪、余众在其后形成纵深队列、camera_rule、50mm领跪、85mm单人反应三级递进、复现EP03_CLIP01左右关系",
+      "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景、陈青源画左中景领跪、余众在其后形成纵深队列、camera_rule、50mm领跪、85mm单人反应三级递进、复现EP03_CLIP01左右关系",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第3集/prompt",
+        "出视频/第3集/prompt",
+        "脚本/第3集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_08"
+      ],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第3集",
+      "gate_stage": "video_prompt_preflight",
+      "loc": "video Clip 8",
+      "message": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景单人清晰、跪众留在画左中后景并保持低位、camera_rule、85mm只拍姜月初、跪众作为虚化方向锚不抢脸、姜月初仍在画右、跪众仍在画左低位",
+      "msg": "复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、姜月初画右前景单人清晰、跪众留在画左中后景并保持低位、camera_rule、85mm只拍姜月初、跪众作为虚化方向锚不抢脸、姜月初仍在画右、跪众仍在画左低位",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第3集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -2777,24 +1085,20 @@
     }
   ],
   "gate_stage": "video_prompt_preflight",
-  "generated_at": "2026-07-27T07:35:56+00:00",
+  "generated_at": "2026-07-27T11:52:23+00:00",
   "inputs_fingerprint": {
     "files": {
-      "['生产数据/identity_adapter_matrix.json']": null,
-      "出图/共享/asset_registry.json": "bca0490d4fd524c30ce05e60192de1d191abcd355fa31ec6effe257907391e48",
-      "出图/共享/identity_registry.json": "a16514030ad427736f49ed403912ed1431900038d3dec7bc146e31da3c521ef9",
+      "出图/共享/asset_registry.json": "4138a4d1c7d0b5d55efa7ef48998c73cdff54b6a4ab269cf47c2597281da7427",
+      "出图/共享/identity_registry.json": "d4c8576276f67a5df045727fc53152c6c72f5ebeca6f4c4935a3638537434a44",
       "出图/第3集/prompt": null,
       "出图/第3集/图片": null,
       "出图/第3集/图片/Clip01_first.png": "e229a9f04e8057721f8396977bd8e0b35bf6c2f4f376bef3b0ec9a9980182638",
       "出图/第3集/图片/Clip02_first.png": "e36e6ff866a8c6bb6a6839cd065fde27ee1a3ac0000b5c8b964d4388dfb1d000",
-      "出图/第3集/图片/Clip03_end.png": "2e58040057d21658351ed17a83870a51e8faefbec7616f51f6ce3991ceabdd8a",
       "出图/第3集/图片/Clip03_first.png": "a03066905d7642eeadb6d5c05b368aee495ad31dbc6e055d89644fcf13602ab3",
       "出图/第3集/图片/Clip04_first.png": "b0ca2ec5f73918a1922ffa9e91529115c70c6c2d46bd1574a7f8014621669cce",
       "出图/第3集/图片/Clip05_first.png": "3de4962e1c9e0688cc29c176755f3dc07720297ca04337a5106a0a2203555175",
       "出图/第3集/图片/Clip06_first.png": "304e93e4200c4a0e1bcf1ddacb1056ab48b93ba1aa4a6c36d26255e97cdeb741",
-      "出图/第3集/图片/Clip07_end.png": "5c8e6247fbcbc3a5ba11c25bea0c3249668a3cfbb1dc946cb76f35e9f057e3b6",
       "出图/第3集/图片/Clip07_first.png": "89ea6864387d605214f3b6db4cbc1a7557391775e1ced45843a9e0324e5311c4",
-      "出图/第3集/图片/Clip08_end.png": "03ec051a822a213d8db587ef4871e7024a54da6e3826640a4563473cc0c5af67",
       "出图/第3集/图片/Clip08_first.png": "f6d8dc7e9dd0eba08615bb3adb31eea0df41c856fea8f5c4e6d2fa99fa9696f9",
       "出图/第3集/图片/EP03_CLIP03_a1.png": "103439a665e08e447e8d3c95de70ad1c35b4f834db746180e74901e8fbda2561",
       "出图/第3集/图片/EP03_CLIP06_a1.png": "ecadbfacc373652279f312e049bb19e4712fbcee068ee80c424828b1dce1f385",
@@ -2803,16 +1107,18 @@
       "出图/第3集/图片/EP03_CLIP07_a1.png": "e229a9f04e8057721f8396977bd8e0b35bf6c2f4f376bef3b0ec9a9980182638",
       "出图/第3集/图片/EP03_CLIP08_a1.png": "536f1f2d844b58559af4ef157af73c95478ff6ec9a2b220b4ffcd869d4f75b9e",
       "出视频/第3集/prompt": null,
-      "出视频/第3集/prompt/video_model_routes.md": "9ff758ee8e1975531d4aa9b54b5ca9a3369c023f32409443283f7bb40dfffdf2",
-      "合规/compliance_manifest.json": "674a9cc9322462ee4e11dc503fdb129fe819244f65e2495ac0917258de878452",
-      "生产数据/identity_adapter_matrix.json": "73df16235e22bc0cbfb383329eb679129d81a0ee89480080a78538ebc32793cf",
+      "出视频/第3集/prompt/00_总览.md": "c2973820e7cc2494d6b9affd4b28a54afb020eae151af064a41a65b4ad5aea67",
+      "出视频/第3集/prompt/01_clips.md": "686ff3462647534bea4366978e66e24e8841f6a0f85c040ecb7d6c69f39dd0ef",
+      "出视频/第3集/prompt/video_model_routes.md": "db0709cf791877c6fb9a5298496a88df6b2175370db95bd3f93aef2516baf981",
+      "合规/compliance_manifest.json": "2fb173c90b1216c820c470394bb1144e26ad7f7831a73c0917b2866cd02da49b",
+      "生产数据/identity_adapter_matrix.json": "316ff5d3bb41dd6a9c1c89dd9d294a871c894e8d8167a514957b979a51e954c3",
       "生产数据/image_qc/第3集": null,
-      "脚本/第3集/storyboard.json": "2adb9bbca8cdbff42a94c7c52d50a4732b034b2267e95a5ff800e7469afe6608",
+      "脚本/第3集/storyboard.json": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825",
       "设定库/characters/姜月初.md": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e",
       "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
       "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
     },
-    "sha": "f633d0d67aec1cb98a60f34cc53c5eaafa89dc375ea884fd8c058f5b7bfd306a"
+    "sha": "53b3b40f7aa5e632696019672450ed43d04cd6ef614cc738304d3a78046795e8"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -2822,16 +1128,6 @@
   },
   "summary": {
     "by_dim": {
-      "中段锚帧": {
-        "block": 6,
-        "info": 0,
-        "warn": 0
-      },
-      "出图落档QC": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
       "剧本可看性合同": {
         "block": 0,
         "info": 1,
@@ -2843,7 +1139,7 @@
         "warn": 0
       },
       "合规前置": {
-        "block": 2,
+        "block": 0,
         "info": 0,
         "warn": 1
       },
@@ -2852,29 +1148,9 @@
         "info": 0,
         "warn": 6
       },
-      "场景多机位锁(G-I2)": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
-      "实体排程": {
-        "block": 3,
-        "info": 0,
-        "warn": 0
-      },
-      "对白事实锁": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
       "导演运镜落实": {
         "block": 0,
-        "info": 1,
-        "warn": 0
-      },
-      "尾帧": {
-        "block": 3,
-        "info": 0,
+        "info": 2,
         "warn": 0
       },
       "时间基准": {
@@ -2882,48 +1158,28 @@
         "info": 0,
         "warn": 1
       },
-      "生产锁版账": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
       "生视频后端连通性": {
         "block": 0,
         "info": 0,
         "warn": 1
       },
       "表情一致性": {
-        "block": 2,
+        "block": 0,
         "info": 0,
         "warn": 2
       },
       "语义谱系(P0)": {
         "block": 0,
         "info": 0,
-        "warn": 2
-      },
-      "资产引用注册层": {
-        "block": 3,
-        "info": 0,
-        "warn": 0
-      },
-      "资产身份注册层": {
-        "block": 5,
-        "info": 0,
-        "warn": 0
-      },
-      "首帧": {
-        "block": 8,
-        "info": 0,
-        "warn": 0
+        "warn": 7
       }
     },
     "severity": {
-      "block": 36,
-      "info": 3,
-      "warn": 13
+      "block": 0,
+      "info": 4,
+      "warn": 18
     },
-    "total": 52
+    "total": 22
   },
   "version": 1
 }

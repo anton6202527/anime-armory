@@ -257,17 +257,17 @@
     "selected_mode": "混合自动路由"
   },
   "episode": "第3集",
-  "generated_at": "2026-07-27T07:35:53+00:00",
+  "generated_at": "2026-07-27T09:28:16+00:00",
   "inputs_fingerprint": {
     "files": {
       "_设置.md": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0",
       "合成/第3集/配音/timing_estimate.json": "b99684951fc791a30d98f2bb8204cc1b28544ceb91e3ce5cd16576b6e0d6aaa1",
       "合成/第3集/配音/时长清单.json": null,
-      "脚本/第3集/storyboard.json": "2adb9bbca8cdbff42a94c7c52d50a4732b034b2267e95a5ff800e7469afe6608",
+      "脚本/第3集/storyboard.json": "0aed9732a62c98c0e219ab1d85a7b794b277296047c62debe6552ee0df64fc56",
       "脚本/第3集/voiceover.txt": "f2155a421a350ef9e10b829c5e47dc997bf0f313f327eaa5b5f770aa04438c64",
       "设定库/voice_casting.json": "7377a69f0e5ba2030c201736c633eee527d6487c0799df38bc2fe309684ee488"
     },
-    "sha": "624af5fc3daeda405eb0910e8989c6e5a2af161b2391323b38423ac95940e101"
+    "sha": "93158bed6b4083e1d2d751c38c79f7e6dd26c9e63513ff384c780db1ea334bb9"
   },
   "kind": "n2d_production_mode_route",
   "mode_source": "explicit_user",

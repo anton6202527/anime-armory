@@ -417,7 +417,7 @@
         "common_entities": [
           "CHAR_01"
         ],
-        "entity_entry_exit": "全体实体均未物理离场；以切黑结束；出画/画外保留：CHAR_02、WEAPON_横刀；入画/现身：VFX_墨虎谱影、VFX_百妖谱；只交代群跪、制服、心虚三要素；不出现浅坟与囚服。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；换场 LOC_01 -> LOC_02",
+        "entity_entry_exit": "第3集以姜月初默认接下驰援后切黑结束；CHAR_03 与 GROUP_01 保持画外或焦外压力层，未登记特效不入画；场景由 LOC_01 浅坟切换至 LOC_02 官道。",
         "from_clip": "Clip_08",
         "from_end_state": "墨虎双眼短亮，姜月初未得到答案，切黑",
         "from_episode": "第2集",

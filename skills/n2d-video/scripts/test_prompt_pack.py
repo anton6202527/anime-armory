@@ -26,6 +26,20 @@ def test_route_execution_channel_uses_adapter_channel() -> None:
     assert prompt_pack.route_execution_channel(route) == "dreamina"
 
 
+def test_resolved_frame_paths_follow_image_stage_and_end_anchor() -> None:
+    clip = {
+        "continuity": {
+            "end_anchor_required": True,
+            "anchors": [
+                {"anchor_png": "出图/第3集/图片/EP03_CLIP08_a1.png", "at_sec": 8.5, "use": "edit_cut"},
+            ],
+        },
+    }
+    first, end = prompt_pack.resolved_frame_paths(clip, "第3集", 8)
+    assert first == "出图/第3集/图片/Clip08_first.png"
+    assert end == "出图/第3集/图片/EP03_CLIP08_a1.png"
+
+
 def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"

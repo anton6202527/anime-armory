@@ -151,16 +151,38 @@
   "clips": [
     {
       "id": "EP03_CLIP01",
+      "firstframe_png": "出图/第3集/图片/Clip01_first.png",
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",
-        "beats": ["群骑急停", "十余人齐跪", "姜月初僵直反应"],
+        "beats": [
+          "群骑急停",
+          "十余人齐跪",
+          "姜月初僵直反应"
+        ],
         "blocking": "姜月初位于画右前景背身，陈青源与飞鹰门众位于中景偏左，马匹留在后景",
         "camera_rule": "35mm建立群跪层级后切85mm单人反应，不在近景强塞群脸",
-        "continuity_must": ["姜月初始终画右", "跪众始终画左中景", "马匹保持后景"],
-        "negative": ["不交换左右", "不让背景众人抢焦", "不新增清晰具名脸"],
-        "screen_positions": {"right_foreground": "CHAR_01", "left_midground": "CHAR_02与飞鹰门众", "background": "马队"},
-        "focus_hierarchy": ["CHAR_01", "CHAR_02", "飞鹰门众", "马队"],
+        "continuity_must": [
+          "姜月初始终画右",
+          "跪众始终画左中景",
+          "马匹保持后景"
+        ],
+        "negative": [
+          "不交换左右",
+          "不让背景众人抢焦",
+          "不新增清晰具名脸"
+        ],
+        "screen_positions": {
+          "right_foreground": "CHAR_01",
+          "left_midground": "CHAR_02与飞鹰门众",
+          "background": "马队"
+        },
+        "focus_hierarchy": [
+          "CHAR_01",
+          "CHAR_02",
+          "飞鹰门众",
+          "马队"
+        ],
         "crowd_simplification": "除陈青源外的人群以统一土褐劲装、背影、侧影和浅景深处理"
       },
       "beat_id": "Beat_01",
@@ -303,7 +325,7 @@
           "reason": "长线摉影进阶承诺延后处理；本集先承接杀裴的现实后果和身份代价。"
         },
         "need_endframe": false,
-        "entry_exit": "只交代群跪、制服、心虚三要素；不出现浅坟与囚服。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服",
+        "entry_exit": "只交代群跪、制服、心虚三要素；不出现浅坟与囚服。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：PROP_镇魔司制服",
         "shot_size": "ELS→CU",
         "eyeline": "众人向画右前叩首；姜月初视线低垂向画左下。",
         "expression_span": "中",
@@ -314,6 +336,7 @@
     },
     {
       "id": "EP03_CLIP02",
+      "firstframe_png": "出图/第3集/图片/Clip02_first.png",
       "beat_id": "Beat_01",
       "label": "荒坡埋尸告别",
       "duration": 7.441,
@@ -350,17 +373,11 @@
           "character_id": "CHAR_01",
           "slot": "RIGHT_SLOT",
           "position": "画右侧跪于坟前主焦点"
-        },
-        {
-          "character_id": "CHAR_02",
-          "slot": "LEFT_SLOT",
-          "position": "画左前景浅坟（遗体已覆土不可见）"
         }
       ],
       "multi_subject_strategy": "single_subject_focus：单人主体，浅坟作前景情绪锚",
       "character_ids": [
-        "CHAR_01/囚服残损态",
-        "CHAR_02/浅坟遗体态"
+        "CHAR_01/囚服残损态"
       ],
       "object_ids": [
         "WEAPON_横刀",
@@ -369,8 +386,7 @@
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
-          "CHAR_01/囚服残损态",
-          "CHAR_02/浅坟遗体态"
+          "CHAR_01/囚服残损态"
         ],
         "objects": [
           "WEAPON_横刀",
@@ -425,7 +441,7 @@
           "editorial_intent": "以抱起制服的动作结果硬切到换装三个完成点，省略无信息量的穿衣过程。"
         },
         "need_endframe": false,
-        "entry_exit": "浅坟、断枝、制服包袱首次入画；遗容全程不入画。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02",
+        "entry_exit": "浅坟、断枝、制服包袱首次入画；遗容全程不入画。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：CHAR_03、GROUP_01；入画/现身：PROP_镇魔司制服",
         "shot_size": "MS→MCU",
         "eyeline": "她看坟向画左下，起身后视线转向怀中制服。",
         "expression_span": "中",
@@ -437,19 +453,40 @@
     },
     {
       "id": "EP03_CLIP03",
+      "firstframe_png": "出图/第3集/图片/Clip03_first.png",
       "template": "dialogue_shot_reverse",
       "template_contract": {
         "template_id": "dialogue_shot_reverse",
-        "beats": ["衣料披肩", "束发佩刀", "全身立姿确认"],
+        "beats": [
+          "衣料披肩",
+          "束发佩刀",
+          "全身立姿确认"
+        ],
         "blocking": "动作插入镜均保持姜月初朝画左三分之四侧，落幅全身仍在同一侧",
         "camera_rule": "50mm动作插入与35mm全身确认组成同轴覆盖，不越轴",
-        "continuity_must": ["黑衣赤纹逐步增加", "横刀始终在左腰", "囚服只留脚边"],
-        "negative": ["不改变刀的佩戴侧", "不瞬间换装", "不直视镜头"],
+        "continuity_must": [
+          "黑衣赤纹逐步增加",
+          "横刀始终在左腰",
+          "囚服只留脚边"
+        ],
+        "negative": [
+          "不改变刀的佩戴侧",
+          "不瞬间换装",
+          "不直视镜头"
+        ],
         "axis": "姜月初身体朝向与衣物包袱之间的画左—画右轴",
-        "screen_sides": {"left": "姜月初动作目标", "right": "姜月初身体主位"},
+        "screen_sides": {
+          "left": "姜月初动作目标",
+          "right": "姜月初身体主位"
+        },
         "eyeline": "姜月初向画左下方看衣物与刀，不看镜头",
         "shot_pairing": "手部与衣料插入镜对全身落幅",
-        "coverage_order": ["披肩插入", "束发插入", "佩刀插入", "全身重建立"],
+        "coverage_order": [
+          "披肩插入",
+          "束发插入",
+          "佩刀插入",
+          "全身重建立"
+        ],
         "camera_coverage": "clean insert + clean single",
         "lens_height_distance_match": "插入镜同侧平视，落幅降低焦段但不改轴",
         "crossing_axis_policy": "禁止越轴",
@@ -559,11 +596,12 @@
           "editorial_intent": "制服态站定是身份转换完成点；硬切官道行路建立时空推进，不要求相邻画面同帧。"
         },
         "need_endframe": false,
-        "entry_exit": "囚服自此退场；制服态自此为常态。；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服",
+        "entry_exit": "囚服自此退场；制服态自此为常态。；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；出画/画外保留：CHAR_02；出画/画外保留：PROP_镇魔司制服；出画/画外保留：PROP_镇魔司制服",
         "shot_size": "MCU→LS",
         "eyeline": "低头看衣料与刀，站定后望向画左后官道方向。",
-        "expression_span": "小",
+        "expression_span": "微",
         "end_anchor_required": true,
+        "endframe_png": "出图/第3集/图片/EP03_CLIP03_a1.png",
         "anchors": [
           {
             "anchor_png": "出图/第3集/图片/EP03_CLIP03_a1.png",
@@ -579,6 +617,7 @@
     },
     {
       "id": "EP03_CLIP04",
+      "firstframe_png": "出图/第3集/图片/Clip04_first.png",
       "beat_id": "Beat_02",
       "label": "贱籍死局与马蹄",
       "duration": 15.383,
@@ -683,7 +722,7 @@
           "editorial_intent": "用她按住刀柄、看向远处尘头的视线作出口，硬切马队冲近急停，提升危机速度。"
         },
         "need_endframe": false,
-        "entry_exit": "官道与车辙纵深首次入画；马队以远处尘头预告入画。；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01",
+        "entry_exit": "官道与车辙纵深首次入画；马队以远处尘头预告入画。；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01；出画/画外保留：PROP_镇魔司制服；入画/现身：CHAR_03、GROUP_01",
         "shot_size": "LS→CU",
         "eyeline": "行路视线向画左后纵深；回身后望向画左后尘头。",
         "expression_span": "中",
@@ -695,16 +734,37 @@
     },
     {
       "id": "EP03_CLIP05",
+      "firstframe_png": "出图/第3集/图片/Clip05_first.png",
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",
-        "beats": ["马队纵深冲近", "勒马急停", "陈青源拱手试探"],
+        "beats": [
+          "马队纵深冲近",
+          "勒马急停",
+          "陈青源拱手试探"
+        ],
         "blocking": "姜月初画右前景立定，陈青源画左中景领队，余骑纵深排布于后景",
         "camera_rule": "先35mm全景交代冲近和急停，再50mm只突出陈青源",
-        "continuity_must": ["姜月初画右", "陈青源画左", "马队沿官道纵深"],
-        "negative": ["不让群马穿模", "不交换人物左右", "不要求十余张清晰脸"],
-        "screen_positions": {"right_foreground": "CHAR_01", "left_midground": "CHAR_02", "background_depth": "飞鹰门骑手与马匹"},
-        "focus_hierarchy": ["CHAR_01", "CHAR_02", "马队"],
+        "continuity_must": [
+          "姜月初画右",
+          "陈青源画左",
+          "马队沿官道纵深"
+        ],
+        "negative": [
+          "不让群马穿模",
+          "不交换人物左右",
+          "不要求十余张清晰脸"
+        ],
+        "screen_positions": {
+          "right_foreground": "CHAR_01",
+          "left_midground": "CHAR_02",
+          "background_depth": "飞鹰门骑手与马匹"
+        },
+        "focus_hierarchy": [
+          "CHAR_01",
+          "CHAR_02",
+          "马队"
+        ],
         "crowd_simplification": "余骑以统一服装、尘雾遮挡和纵深缩小处理"
       },
       "beat_id": "Beat_03",
@@ -823,7 +883,7 @@
           "editorial_intent": "马队急停的空间压迫落地后，硬切陈青源下马抱拳，把武力冲突转成身份试探。"
         },
         "need_endframe": false,
-        "entry_exit": "陈青源与飞鹰门马队正式入画。；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01",
+        "entry_exit": "陈青源与飞鹰门马队正式入画。；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01",
         "shot_size": "LS→MS",
         "eyeline": "陈青源自马上俯向画右前；她侧首回望向画左后。",
         "expression_span": "中",
@@ -835,19 +895,39 @@
     },
     {
       "id": "EP03_CLIP06",
+      "firstframe_png": "出图/第3集/图片/Clip06_first.png",
       "template": "dialogue_shot_reverse",
       "template_contract": {
         "template_id": "dialogue_shot_reverse",
-        "beats": ["陈青源下马陈情", "信息完整说出", "姜月初心虚反应"],
+        "beats": [
+          "陈青源下马陈情",
+          "信息完整说出",
+          "姜月初心虚反应"
+        ],
         "blocking": "陈青源在画左面向画右，姜月初在画右面向画左，余众只在陈青源后景",
         "camera_rule": "50mm陈青源A面接85mm姜月初B面，机位始终留在轴线同侧",
-        "continuity_must": ["陈青源画左", "姜月初画右", "主光方向一致"],
-        "negative": ["不越轴", "不看镜头", "不在姜月初近景带入额外清晰脸"],
+        "continuity_must": [
+          "陈青源画左",
+          "姜月初画右",
+          "主光方向一致"
+        ],
+        "negative": [
+          "不越轴",
+          "不看镜头",
+          "不在姜月初近景带入额外清晰脸"
+        ],
         "axis": "陈青源与姜月初之间的官道横向对话轴",
-        "screen_sides": {"left": "CHAR_02", "right": "CHAR_01"},
+        "screen_sides": {
+          "left": "CHAR_02",
+          "right": "CHAR_01"
+        },
         "eyeline": "CHAR_02看画右，CHAR_01看画左下方后短暂游移",
         "shot_pairing": "A面50mm中景陈情，B面85mm单人反应",
-        "coverage_order": ["A面完整陈情", "B面反应", "刀柄手部微动作"],
+        "coverage_order": [
+          "A面完整陈情",
+          "B面反应",
+          "刀柄手部微动作"
+        ],
         "camera_coverage": "clean single + reaction + hand insert",
         "lens_height_distance_match": "两面同眼高；B面更近用于权力与心虚反差",
         "crossing_axis_policy": "禁止越轴",
@@ -943,9 +1023,7 @@
         "forbidden_presence": [
           "BEAST_01"
         ],
-        "offscreen_presence": [
-          "GROUP_01"
-        ]
+        "offscreen_presence": []
       },
       "shots": [
         {
@@ -1007,17 +1085,38 @@
     },
     {
       "id": "EP03_CLIP07",
+      "firstframe_png": "出图/第3集/图片/Clip07_first.png",
       "spectacle_story_function": "十余人同步跪下不是动作炫技，而是把假身份带来的虚假权力瞬间转化为百余村民性命压在姜月初肩上的道德夹逼，并复现冷开场完成悬念闭环。",
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",
-        "beats": ["陈青源单膝落地", "众人齐跪复现", "姜月初僵住"],
+        "beats": [
+          "陈青源单膝落地",
+          "众人齐跪复现",
+          "姜月初僵住"
+        ],
         "blocking": "姜月初画右前景，陈青源画左中景领跪，余众在其后形成纵深队列",
         "camera_rule": "50mm领跪、35mm群跪复现、85mm单人反应三级递进",
-        "continuity_must": ["复现EP03_CLIP01左右关系", "跪姿方向统一", "马匹仍在后景"],
-        "negative": ["不做奔跑追逐", "不交换左右", "不让群众表情喧宾夺主"],
-        "screen_positions": {"right_foreground": "CHAR_01", "left_midground": "CHAR_02", "background": "飞鹰门众与马匹"},
-        "focus_hierarchy": ["CHAR_02落膝", "群跪构图", "CHAR_01反应"],
+        "continuity_must": [
+          "复现EP03_CLIP01左右关系",
+          "跪姿方向统一",
+          "马匹仍在后景"
+        ],
+        "negative": [
+          "不做奔跑追逐",
+          "不交换左右",
+          "不让群众表情喧宾夺主"
+        ],
+        "screen_positions": {
+          "right_foreground": "CHAR_01",
+          "left_midground": "CHAR_02",
+          "background": "飞鹰门众与马匹"
+        },
+        "focus_hierarchy": [
+          "CHAR_02落膝",
+          "群跪构图",
+          "CHAR_01反应"
+        ],
         "crowd_simplification": "群体保持统一服装与跪姿节奏，除陈青源外不追求清晰面孔"
       },
       "beat_id": "Beat_04",
@@ -1147,11 +1246,12 @@
           "editorial_intent": "群跪构图闭合冷开悬念后，硬切她微仰头的黑色幽默反应，让峰值压力转为主观荒诞。"
         },
         "need_endframe": false,
-        "entry_exit": "群跪构图与EP03_CLIP01同锚复现；祠堂惨状仅在台词中。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03",
+        "entry_exit": "群跪构图与EP03_CLIP01同锚复现；祠堂惨状仅在台词中。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03",
         "shot_size": "MS→ELS→ECU",
         "eyeline": "众人向画右前叩首；她视线从人群缓缓垂落到自己手上。",
         "expression_span": "大",
         "end_anchor_required": true,
+        "endframe_png": "出图/第3集/图片/EP03_CLIP07_a1.png",
         "anchors": [
           {
             "anchor_png": "出图/第3集/图片/EP03_CLIP07_a1.png",
@@ -1167,16 +1267,36 @@
     },
     {
       "id": "EP03_CLIP08",
+      "firstframe_png": "出图/第3集/图片/Clip08_first.png",
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",
-        "beats": ["姜月初仰头苦笑", "压平呼吸", "转身面对跪众"],
+        "beats": [
+          "姜月初仰头苦笑",
+          "压平呼吸",
+          "转身面对跪众"
+        ],
         "blocking": "姜月初画右前景单人清晰，跪众留在画左中后景并保持低位",
         "camera_rule": "85mm只拍姜月初，跪众作为虚化方向锚不抢脸",
-        "continuity_must": ["姜月初仍在画右", "跪众仍在画左低位", "黑衣赤纹与左腰横刀不变"],
-        "negative": ["不把群众拉入同焦平面", "不交换左右", "不新增文字"],
-        "screen_positions": {"right_foreground": "CHAR_01", "left_background": "CHAR_02与飞鹰门众"},
-        "focus_hierarchy": ["CHAR_01面部", "CHAR_01手与刀柄", "虚化跪众"],
+        "continuity_must": [
+          "姜月初仍在画右",
+          "跪众仍在画左低位",
+          "黑衣赤纹与左腰横刀不变"
+        ],
+        "negative": [
+          "不把群众拉入同焦平面",
+          "不交换左右",
+          "不新增文字"
+        ],
+        "screen_positions": {
+          "right_foreground": "CHAR_01",
+          "left_background": "CHAR_02与飞鹰门众"
+        },
+        "focus_hierarchy": [
+          "CHAR_01面部",
+          "CHAR_01手与刀柄",
+          "虚化跪众"
+        ],
         "crowd_simplification": "跪众仅作低位色块、轮廓和浅景深背景"
       },
       "beat_id": "Beat_04",
@@ -1255,8 +1375,7 @@
           "BEAST_01"
         ],
         "offscreen_presence": [
-          "CHAR_03",
-          "GROUP_01"
+          "CHAR_03"
         ]
       },
       "shots": [
@@ -1284,11 +1403,12 @@
           "editorial_intent": "在『能活着回来吗』的决意未完全落定时切黑，把接下驰援的动作留给第4集冷开。"
         },
         "need_endframe": false,
-        "entry_exit": "本集人物无新增退场；三重压力以台词并置收束。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03",
+        "entry_exit": "本集人物无新增退场；三重压力以台词并置收束。；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03；出画/画外保留：CHAR_03",
         "shot_size": "CU→CU",
         "eyeline": "先仰望画上方，后平视画左前众人。",
         "expression_span": "大",
         "end_anchor_required": true,
+        "endframe_png": "出图/第3集/图片/EP03_CLIP08_a1.png",
         "anchors": [
           {
             "anchor_png": "出图/第3集/图片/EP03_CLIP08_a1.png",

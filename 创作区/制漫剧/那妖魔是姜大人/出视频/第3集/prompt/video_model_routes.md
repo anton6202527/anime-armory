@@ -5,14 +5,14 @@
 - production_mode: 混合自动路由 (av_mode=hybrid)
 - default_backend: seedance
 - execution_adapter_v2: {'automated_ready': 8}
-- generated_at: 2026-07-27T07:35:53+00:00
+- generated_at: 2026-07-27T09:28:16+00:00
 
 ## 本集模型路由表
 
 | Clip | characters | shot_type | primary | fallback | mode | 时间基准 | 声音策略 | 表演轨 | 档 | 帧消费 | native_audio | identity | motion_control | policy | 风险 | 降级 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Clip_01 | CHAR_01/镇魔司制服态, CHAR_03/风尘劲装态, GROUP_01/齐跪态 | ensemble_blocking | seedance | dreamina | image2video | text_estimate_no_audio | base_video_then_post_lipsync | missing | high | first_frame | none | native_identity_lock_required | required | identity_affinity | base_video_only, identity_drift_risk, identity_escalated, multi_person, post_lipsync_required | 先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。 |
-| Clip_02 | CHAR_01/囚服残损态, CHAR_02/浅坟遗体态 | general_motion | seedance | dreamina | image2video | text_estimate_no_audio | base_video_then_post_lipsync | missing | high | first_frame | none | native_identity_lock_required | none | identity_affinity | base_video_only, identity_escalated, post_lipsync_required | 先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。 |
+| Clip_02 | CHAR_01/囚服残损态 | general_motion | seedance | dreamina | image2video | text_estimate_no_audio | base_video_then_post_lipsync | missing | high | first_frame | none | native_identity_lock_required | none | identity_affinity | base_video_only, identity_escalated, post_lipsync_required | 先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。 |
 | Clip_03 | CHAR_01/囚服转制服态 | dialogue_shot_reverse | seedance | dreamina | image2video | text_estimate_no_audio | post_dub | missing | high | native_multiframe | none | native_identity_lock_required | none | identity_affinity | identity_escalated, mouth_visible, native_multiframe | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
 | Clip_04 | CHAR_01/镇魔司制服态 | general_motion | seedance |  | image2video | text_estimate_no_audio | post_dub | missing | fast | first_frame | none | reference_group | none | cross_episode_baseline | long_duration | If action or identity fails twice, reroute to the nearest specialized shot type. |
 | Clip_05 | CHAR_01/镇魔司制服态, CHAR_03/风尘劲装态, GROUP_01/列队戒备态 | ensemble_blocking | seedance | dreamina | image2video | text_estimate_no_audio | base_video_then_post_lipsync | missing | high | first_frame | none | native_identity_lock_required | required | identity_affinity | base_video_only, identity_drift_risk, identity_escalated, multi_person, post_lipsync_required | 先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。 |
@@ -54,7 +54,7 @@
 - degrade_plan: 先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。基础视频未经该 pass 不得作为最终说话镜进入 compose。
 
 ### Clip_02 — general_motion
-- characters: CHAR_01/囚服残损态, CHAR_02/浅坟遗体态
+- characters: CHAR_01/囚服残损态
 - primary: seedance
 - fallback: dreamina
 - mode: image2video

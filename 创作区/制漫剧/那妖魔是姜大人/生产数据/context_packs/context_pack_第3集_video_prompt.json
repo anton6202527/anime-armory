@@ -47,7 +47,7 @@
       "sha256": "97382069c2e411ff3fa426dafc992c4b7654f3c5c53a395f49acfdd0c16993f6"
     },
     {
-      "bytes": 53507,
+      "bytes": 53273,
       "exists": true,
       "preview": {
         "clips": [
@@ -239,19 +239,13 @@
             "audience_effect": "感到她的自嘲与愧疚，理解拿走制服是求生而非贪财。",
             "beat_id": "Beat_01",
             "character_ids": [
-              "CHAR_01/囚服残损态",
-              "CHAR_02/浅坟遗体态"
+              "CHAR_01/囚服残损态"
             ],
             "character_slots": [
               {
                 "character_id": "CHAR_01",
                 "position": "画右侧跪于坟前主焦点",
                 "slot": "RIGHT_SLOT"
-              },
-              {
-                "character_id": "CHAR_02",
-                "position": "画左前景浅坟（遗体已覆土不可见）",
-                "slot": "LEFT_SLOT"
               }
             ],
             "continuity": {
@@ -282,8 +276,7 @@
             "end_sec": 17.961,
             "entity_schedule": {
               "characters": [
-                "CHAR_01/囚服残损态",
-                "CHAR_02/浅坟遗体态"
+                "CHAR_01/囚服残损态"
               ],
               "forbidden_presence": [
                 "BEAST_01",
@@ -1348,7 +1341,7 @@
         "version": 2
       },
       "relpath": "脚本/第3集/storyboard.json",
-      "sha256": "2adb9bbca8cdbff42a94c7c52d50a4732b034b2267e95a5ff800e7469afe6608"
+      "sha256": "0aed9732a62c98c0e219ab1d85a7b794b277296047c62debe6552ee0df64fc56"
     },
     {
       "exists": false,
@@ -1383,7 +1376,7 @@
       "sha256": "10a4f3db14612dd7c4afb5d9f26fe158d82ca1a133f889de2497aeae2ed647fb"
     },
     {
-      "bytes": 28263,
+      "bytes": 28319,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -1397,22 +1390,22 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "bca0490d4fd524c30ce05e60192de1d191abcd355fa31ec6effe257907391e48"
+      "sha256": "1aa89a23e9a87b106c279410976dc7ff7e1798e8c1bbe22d244bbd9a3c1811ce"
     },
     {
-      "bytes": 3107,
+      "bytes": 5908,
       "exists": true,
       "preview": {
         "episode": "第3集",
-        "graph_hash": "771de5e6497cf64785910137792796c060da3ae405f7d18f838a7b6307acd6db",
+        "graph_hash": "fc50881c6dd87a129cf2bc3437818bc17a54d6fa465322783d81a7c727ef9f1c",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
-          "edges": 8,
+          "edges": 16,
           "lineage_gaps": 0,
           "masters": 0,
-          "nodes": 9,
-          "routes": 0,
+          "nodes": 17,
+          "routes": 8,
           "story_clips": 8,
           "video_media": 0
         },
@@ -1434,7 +1427,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第3集.json",
-      "sha256": "3cdd970902995d573d003e47e36b2d4992d1b49123e3b067ae3cabf0e0a1ef86"
+      "sha256": "e657407bb705d289a7d3c3912ac9d138f72f2eb446e50fbee2b596b3800b55c9"
     }
   ],
   "genre_pack_context": {
@@ -1512,7 +1505,7 @@
       }
     ],
     "episode": "第3集",
-    "generated_at": "2026-07-27T07:35:52+00:00",
+    "generated_at": "2026-07-27T09:28:15+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",

@@ -72,7 +72,7 @@
     {
       "code": "generation_density_over_budget",
       "confidence": "heuristic",
-      "message": "本集复杂度=simple（2场景/4角色/2动作镜），当前每分钟预计生成 9.46 次 > 预算 7.0/min。采纳下方 merge/单拍多镜合并后约 9.46/min。简单叙事优先「更少更长的多镜单拍」，不必逐节拍独立成付费 clip。",
+      "message": "本集复杂度=simple（2场景/3角色/2动作镜），当前每分钟预计生成 9.46 次 > 预算 7.0/min。采纳下方 merge/单拍多镜合并后约 9.46/min。简单叙事优先「更少更长的多镜单拍」，不必逐节拍独立成付费 clip。",
       "severity": "warn"
     },
     {
@@ -83,7 +83,7 @@
     }
   ],
   "fold_candidates": [],
-  "generated_at": "2026-07-27T07:35:53+00:00",
+  "generated_at": "2026-07-27T09:28:16+00:00",
   "kind": "n2d_clip_economy_plan",
   "long_clips": [
     {
@@ -129,7 +129,7 @@
       "budget_per_min": 7.0,
       "class": "simple",
       "clip_budget_per_min": 6.0,
-      "distinct_characters": 4,
+      "distinct_characters": 3,
       "distinct_locations": 2,
       "premium_beats": 3
     },

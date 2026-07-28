@@ -1,0 +1,154 @@
+{
+  "backend": "dreamina",
+  "batch": "06-06",
+  "batch_id": "06_06",
+  "channel": "即梦/Dreamina",
+  "created_at": "2026-07-27T19:53:31+0800",
+  "episode": "第3集",
+  "execution_adapter": {
+    "adapter_id": "dreamina_cli_v2",
+    "automated": true,
+    "backend": "dreamina",
+    "capabilities": {
+      "async_query": true,
+      "batch_async": false,
+      "cancel": false,
+      "idempotency": "runner_guarded",
+      "multishot": false
+    },
+    "channel": "dreamina",
+    "command": [
+      "dreamina"
+    ],
+    "execution_backend": "dreamina",
+    "implementation": "embedded",
+    "kind": "n2d_video_execution_status",
+    "message": "local automation is ready",
+    "missing_operations": [],
+    "operations": [
+      "query",
+      "submit"
+    ],
+    "route_executable": true,
+    "state": "automated_ready",
+    "supports_cancel": false,
+    "supports_multishot": false,
+    "version": 2
+  },
+  "items": [
+    {
+      "actual_image_inputs": [
+        "出图/第3集/图片/Clip06_first.png"
+      ],
+      "anchor_consumption": {
+        "action": "create missing shot-boundary images before paid generation",
+        "anchor_count": 3,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": false,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "edit_cut_pending_assets",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "frame_strategy": "edit_cut_pending_assets",
+        "known_profile": true,
+        "need_end": false,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_issue": "mid anchors declared but end frame is missing for split relay",
+      "anchor_consumption_mode": "edit_cut_pending_assets",
+      "clip": "Clip_06",
+      "duration_plan": {
+        "backend_request_sec": 15.0,
+        "backend_surplus_sec": 0.0,
+        "duration_control_kind": "integer_range",
+        "edit_target_sec": 15.551,
+        "execution_backend": "dreamina",
+        "model_version": "seedance2.0_vip",
+        "quantization_reason": "integer_range:4-15/step=1",
+        "requires_manual_confirmation": false,
+        "requires_split": true,
+        "story_span_sec": 15.551,
+        "trim_mode": "none",
+        "usable_window": [
+          0.0,
+          15.0
+        ],
+        "verified": "2026-06-22 local official Dreamina CLI --help snapshots"
+      },
+      "duration_segment_issue": "edit target 15.551s exceeds the selected backend request ceiling; prepare explicit physical parts before paid submission",
+      "edit_target_duration": 15.551,
+      "end_image": null,
+      "end_image_rel": null,
+      "frame_control_mode": "multi_keyframe",
+      "frame_strategy": "edit_cut_pending_assets",
+      "frame_strategy_issue": "multiple storyboard shots require edit-cut boundary images and an end frame before paid generation",
+      "heading": "## Clip 06（时长 15.551s · EP03_CLIP06 · 陈情与硬装）",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip06_first.png",
+      "image_rel": "出图/第3集/图片/Clip06_first.png",
+      "model_version": "seedance2.0_vip",
+      "negative_prompt": "",
+      "post_video_qc": {
+        "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+        "dense_face_watch_required": true,
+        "identity_qc_required": true,
+        "required_reports": [
+          "video_qc",
+          "temporal_consistency",
+          "video_face_drift_watch"
+        ],
+        "return_to_stage": "video_or_image_then_compose",
+        "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows"
+      },
+      "prepared_prompt_chars": 325,
+      "prepared_prompt_sha256": "0c7040840f9e4d53f40ba0b5e412eda7b0611b05ca3df7fe1aeb19bd8475c1fd",
+      "prompt_compiler": {
+        "backend": "dreamina",
+        "frame_strategy": "edit_cut_pending_assets",
+        "kind": "n2d_compiled_video_prompt",
+        "language": "zh",
+        "mode": "image2video",
+        "native_audio_policy": "none",
+        "profile": "zh_motion_first",
+        "profile_version": "2026-07-22.1",
+        "source_contract_sha256": "5dc7bde8405cd1cccc882cc24a35bd8da1c6d4ab22cc85f1ec56b01b09f54f06",
+        "version": 2
+      },
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/06_06/prompts/Clip_06_陈情与硬装.prompt.txt",
+      "prompt_source_kind": "compiled_submit_prompt",
+      "reference_bundle_sha256": "165461a37e1c05b04d4ab458d8e34d4bf2be0173a46ba4acd52ecdae7cf6875f",
+      "route_clip_id": "Clip_06",
+      "route_execution_recipe_hash": "35572f6d3f91ff7e1901f3a7478bb3acd40d1cee2c91476354c54701fbe9e993",
+      "route_hash": "1d1f523ad1d0e068775897fa873e68c5182daf2f82246c6c27e6286f1b9da135",
+      "route_mode": "image2video",
+      "route_primary_backend": "dreamina",
+      "speed_mode": "trim",
+      "status": "prepared",
+      "story_duration": 15.551,
+      "submit_duration": 15.0,
+      "target": "Clip_06_陈情与硬装.mp4",
+      "video_budget_tier": "预算充足",
+      "video_shot_split_plan": {
+        "direct_submit_allowed": false,
+        "hard_max_sec": 15.0,
+        "policy": "split editorial camera changes first; then keep each continuous generation take within the selected backend window",
+        "recommended_parts": 3,
+        "required": true,
+        "story_duration_sec": 15.551,
+        "target_video_shot_sec": 6.0,
+        "threshold_sec": 12.0
+      }
+    }
+  ],
+  "kind": "n2d_video_batch",
+  "model_version": "seedance2.0_vip",
+  "ratio": "9:16",
+  "requested_model_version": "seedance2.0_vip",
+  "requested_video_resolution": "720p",
+  "version": 2,
+  "video_budget_tier": "预算充足",
+  "video_resolution": "720p"
+}

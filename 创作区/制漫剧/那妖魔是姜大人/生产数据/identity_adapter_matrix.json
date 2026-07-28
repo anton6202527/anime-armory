@@ -2,20 +2,17 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-27T07:35:54+00:00",
+  "generated_at": "2026-07-27T11:51:05+00:00",
   "summary": {
-    "forms": 5,
-    "forms_with_reference_group_ready": 4,
+    "forms": 6,
+    "forms_with_reference_group_ready": 6,
     "forms_with_native_image_ready": 0,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
-    "forms_with_gaps": 1,
-    "anchor_fingerprint": "665efa6b10ecd9f606b353f9e2005f4a29d3180054249c9efd6783e22164b13f",
-    "forms_with_anchor_pinned": 5,
-    "characters_needing_lora_upgrade": [
-      "CHAR_01",
-      "CHAR_02"
-    ]
+    "forms_with_gaps": 0,
+    "anchor_fingerprint": "f55a997a22d2935cf97153f42e7af92381aaabb5e62a64db98792c46bc608309",
+    "forms_with_anchor_pinned": 6,
+    "characters_needing_lora_upgrade": []
   },
   "forms": [
     {
@@ -460,6 +457,450 @@
       ]
     },
     {
+      "character_id": "CHAR_01",
+      "character_name": "姜月初",
+      "scope": "核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角",
+      "library_tier": "core_full",
+      "form": "镇魔司制服态",
+      "asset_key": "CHAR_01__镇魔司制服态",
+      "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+          "status": "ready",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+          "status": "ready",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+          "status": "ready",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+          "status": "ready",
+          "exists": true
+        },
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "face_anchor_refs": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "expressions": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "rear_three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:17:49+00:00",
+                  "png_sha256": "58b7a59dff98aef13781b57c45c161588f08f2884849d2e49e2049b50aa89d27",
+                  "registry_binding_fingerprint": "725d6a207e2bb95cb3c8f9a32cf2fb2f9e37bb94a3769fd5b57bc22d253defbe",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视当前像素：紧脸锚保持制服态身份、五官与高马尾一致，灰底均匀光，脸部清晰可比对。"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                  "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "镇魔司制服态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-27T09:24:09+00:00",
+                  "png_sha256": "5944379f0c6f3f97c69f683fed41e881e31e4e8c5faa05f97ede1f8828f416be",
+                  "registry_binding_fingerprint": "18674bfd102654fb79a32fb5825462b3074490da5f96d2f9df346a612dd3e190",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视当前六联表：六格身份一致、各表情不同、紧脸近景、均匀灰底光，无文字和额外人物。"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:21+00:00",
+                "png_sha256": "9dda42a09b3c822ce2e85f27e4376e2a19f3d3ce5d53a8d365824f460804fa38",
+                "registry_binding_fingerprint": "20d172e21285fa9bfc180756ffd30f58e009fc9a28813435e126288def3ce019",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+                "source_sha256": "1b9a3548c11a2e05efa54d7c223e2eb28ed99d62cbc527919c1d91561bc44dab",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "镇魔司制服态",
+                "library_tier": "core_full",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-27T09:04:24+00:00",
+                "png_sha256": "ed9481d7af6092842af90bddd812648471cb20401b620a26711d5fec605f9879",
+                "registry_binding_fingerprint": "8952315125fc6da8a9236c1a64bb03f72f592a40575ac2d1029b414c18c6ff24",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视当前像素：独立标准视角，身份、黑底暗赤纹制服、发型、体态和左腰单刀连续稳定；无文字水印。"
+              }
+            }
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "front",
+        "three_quarter",
+        "side",
+        "rear_three_quarter",
+        "back",
+        "turnaround"
+      ],
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "rear_three_quarter",
+          "back",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把姜月初换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句",
+        "原创母版确认后，脸型、眼距、眼型、鼻唇比例、下颌线、体态比例不得无账变化",
+        "不要把姜月初换成普通俊美人类",
+        "不要丢失姜月初 scope里的非人/妖物视觉特征",
+        "不要套回囚衣",
+        "不要丢失黑衣赤纹",
+        "不要把赤纹画成文字",
+        "不要把横刀变成长剑"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
       "character_id": "CHAR_03",
       "character_name": "03",
       "scope": "本集入镜角色",
@@ -525,42 +966,51 @@
               "status": "ready",
               "derivation": {
                 "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                "source_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
-                ]
+                  941,
+                  936
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-07-27T11:51:04+00:00"
               },
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
                 "reviewed_at": "2026-07-27T05:51:13.556785+00:00"
+              },
+              "sha256": "c0b9150813e01676b77ca901be1659a1bfdfbcab98c58801a4cb3d6143aee6d3",
+              "dimensions": {
+                "width": 941,
+                "height": 1672
               }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+                "label": "CHAR_03/常态 同源脸锚",
+                "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+                  "source_sha256": "d80d06ef166e54741dcd2ac5aa640565b567bdfa71d08af013ae3ddba093e33f",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    353,
+                    75,
+                    587,
+                    309
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:51:05+00:00"
                 },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-27T05:51:13.556807+00:00"
+                "sha256": "f3bef88099fb63f3fae60018455bb6839c016dbf3d3b48c7a7c9c60c5cb61ad3",
+                "dimensions": {
+                  "width": 1024,
+                  "height": 1024
                 }
               }
             ],
@@ -830,9 +1280,9 @@
           "exists": false
         },
         "outfit": {
-          "path": "出图/共享/图片/定妆_GROUP_01__常态_布料局部.png",
-          "status": "planned",
-          "exists": false
+          "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+          "status": "ready",
+          "exists": true
         },
         "turnaround": {
           "path": "",
@@ -845,9 +1295,9 @@
           "exists": true
         },
         "hand": {
-          "path": "出图/共享/图片/定妆_GROUP_01__常态_手部局部.png",
-          "status": "planned",
-          "exists": false
+          "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+          "status": "ready",
+          "exists": true
         },
         "_extra": {
           "value": {
@@ -862,8 +1312,8 @@
               }
             },
             "hand": {
-              "path": "出图/共享/图片/定妆_GROUP_01__常态_手部局部.png",
-              "status": "planned"
+              "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
+              "status": "ready"
             }
           },
           "exists": true
@@ -873,78 +1323,66 @@
         "silhouette",
         "outfit"
       ],
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "openai": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "seedream": {
           "mode": "universal_reference",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "kling": {
           "mode": "character_id",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "sora": {
           "mode": "character_cameo",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -952,61 +1390,51 @@
         "dreamina": {
           "mode": "first_last_frame",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "kling": {
           "mode": "character_id",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "seedance": {
           "mode": "face_lock",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "veo": {
           "mode": "reference_controls",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "sora": {
           "mode": "character_cameo",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1060,20 +1488,7 @@
         "不要把GROUP_01换成普通俊美人类",
         "不要丢失GROUP_01 scope里的非人/妖物视觉特征"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "image.dreamina:reference_group_assets_missing",
-        "image.kling:reference_group_assets_missing",
-        "image.openai:reference_group_assets_missing",
-        "image.seedream:reference_group_assets_missing",
-        "image.sora:reference_group_assets_missing",
-        "missing_reference:outfit",
-        "video.dreamina:reference_group_assets_missing",
-        "video.kling:reference_group_assets_missing",
-        "video.seedance:reference_group_assets_missing",
-        "video.sora:reference_group_assets_missing",
-        "video.veo:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -1146,19 +1561,26 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
-                ]
+                  941,
+                  936
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-07-27T11:42:38+00:00"
               },
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
                 "reviewed_at": "2026-07-21T14:59:58.214372+00:00"
+              },
+              "sha256": "cb331c5df5609236cfba1e7107c6efdf5b3e94d0c3eae7bbfb287ac36d7e5b9c",
+              "dimensions": {
+                "width": 941,
+                "height": 1672
               }
             },
             "face_anchor_refs": [
@@ -1168,19 +1590,27 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    353,
+                    75,
+                    587,
+                    309
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-27T11:42:39+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-21T14:59:58.214381+00:00"
+                },
+                "label": "CHAR_02/“濒死重伤态” 同源脸锚",
+                "sha256": "a53a9e0ce533bffa3e0f717d184b7a7bfc24d27cb8bcfb8595596cdd09b2e604",
+                "dimensions": {
+                  "width": 1024,
+                  "height": 1024
                 }
               }
             ],

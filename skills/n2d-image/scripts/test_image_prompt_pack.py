@@ -94,6 +94,27 @@ def test_missing_character_card_gets_project_specific_visual_fallback(tmp_path: 
     assert "瘦小少年脸" in defs["CHAR_HE_PINGSHENG"]["face"]
 
 
+def test_char01_zhenmosi_uniform_form_uses_storyboard_name(tmp_path: Path) -> None:
+    card_dir = tmp_path / "设定库" / "characters"
+    card_dir.mkdir(parents=True)
+    (card_dir / "姜月初.md").write_text(
+        "# 角色卡 — 姜月初（ID: CHAR_01）\n"
+        "- 身份：核心主角/全篇长线\n"
+        "- 形态变体：囚途残损态\n"
+        "- 识别锚点：窄椭圆脸、细长杏眼、乌黑长发\n",
+        encoding="utf-8",
+    )
+    story = {
+        "clips": [{"character_ids": ["CHAR_01/镇魔司制服态"]}],
+        "asset_requirements": {"characters": ["CHAR_01/镇魔司制服态"]},
+    }
+
+    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
+
+    assert defs["CHAR_01"]["extra_forms"][0]["form"] == "镇魔司制服态"
+    assert defs["CHAR_01"]["extra_forms"][0]["asset_key"] == "CHAR_01__镇魔司制服态"
+
+
 def test_unknown_character_card_fallback_is_drawable_not_placeholder(tmp_path: Path) -> None:
     story = {"clips": [{"character_ids": ["CHAR_UNKNOWN_GUARD"]}]}
 

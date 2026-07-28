@@ -1344,6 +1344,20 @@ def test_lint_does_not_treat_labelled_style_taboo_as_positive_frontal_request() 
     assert "combat_frontal_portrait_bias" not in codes
 
 
+def test_lint_does_not_treat_explicit_no_clear_frontal_face_as_positive_request() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态", "GROUP_01"}
+    blk = _char_block("Clip 06 持刀对峙")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；attack_path=持刀压迫。"
+        "\n**群像构图锚**：GROUP_01 作为压迫背景，不建立清晰正脸。"
+        "\n### 后端编译提交 image prompt\n```text\n"
+        "角色视线锁住对手；非 POV 镜不看镜头；三分之二侧脸。\n```"
+    )
+
+    codes = {f["code"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert "combat_frontal_portrait_bias" not in codes
+
+
 def test_lint_keeps_positive_frontal_request_after_labelled_style_taboo() -> None:
     valid = {"CHAR_01", "CHAR_01/常态"}
     blk = _char_block("Clip 08 斜劈")

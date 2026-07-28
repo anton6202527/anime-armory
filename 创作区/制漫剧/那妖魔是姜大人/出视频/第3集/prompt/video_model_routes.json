@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-27T07:35:53+00:00",
+  "generated_at": "2026-07-27T09:28:16+00:00",
   "production_sound_route": {
     "status": "aligned",
     "kind": "n2d_production_mode_route",
@@ -541,10 +541,6 @@
         {
           "character_id": "CHAR_01",
           "form": "囚服残损态"
-        },
-        {
-          "character_id": "CHAR_02",
-          "form": "浅坟遗体态"
         }
       ],
       "loc": "LOC_01",
@@ -702,11 +698,6 @@
             {
               "character_id": "CHAR_01",
               "form": "囚服残损态",
-              "binding": "native_identity_lock_required"
-            },
-            {
-              "character_id": "CHAR_02",
-              "form": "浅坟遗体态",
               "binding": "native_identity_lock_required"
             }
           ],

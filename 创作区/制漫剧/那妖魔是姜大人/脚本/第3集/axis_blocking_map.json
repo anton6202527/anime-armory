@@ -72,7 +72,7 @@
         "不要把反打拍成随机角度"
       ],
       "pattern_id": "SR_DEFAULT",
-      "screen_sides": "正式正反打出现时，先把 A/B 角色固定为画左/画右并写 CHAR_id。",
+      "screen_sides": "正式正反打出现时，先把 A/B 角色固定为画左/画右并写各自已登记角色 ID。",
       "shot_pairing": "双人建立或空间锚 → A 面 clean single/OTS → B 面 reverse clean single/OTS → 插入物/反应缓冲。"
     }
   ],

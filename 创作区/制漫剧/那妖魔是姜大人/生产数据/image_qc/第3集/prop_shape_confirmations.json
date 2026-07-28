@@ -3,6 +3,33 @@
     {
       "asset": "PROP_镇魔司制服",
       "asset_name": "镇魔司制服",
+      "confirmed_at": "2026-07-27T11:44:34+00:00",
+      "contract_fingerprint": "09b5b6d0a7af6b205168efd5f2fa8ee4cd694888c37f96ef6cf277ac97b25d66",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_镇魔司制服.png",
+      "png_sha256": "44fb8108c8eeec207f661d8dc9b46a27271f8dbdc2e3e582165f8bceab9e850c",
+      "reason": "实际目视新生成共享制服道具：黑底暗赤纹、折叠衣物、腰带与护腕结构清晰，无现代物、文字、水印或重复服装。",
+      "review_kind": "executor_visual",
+      "reviewer": "automation:codex",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "镇魔司制服"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司制服_shared_primary_定妆_道具_镇魔司制服_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_镇魔司制服",
+      "asset_name": "镇魔司制服",
       "confirmed_at": "2026-07-27T05:51:17+00:00",
       "contract_fingerprint": "09b5b6d0a7af6b205168efd5f2fa8ee4cd694888c37f96ef6cf277ac97b25d66",
       "human_signoff": false,
@@ -2270,6 +2297,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-07-27T05:51:17+00:00",
+  "updated_at": "2026-07-27T11:44:34+00:00",
   "version": 1
 }

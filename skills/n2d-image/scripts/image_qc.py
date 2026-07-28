@@ -1853,7 +1853,8 @@ def _has_camera_gaze_exception(body: str) -> bool:
 def _frontal_match_is_negated(text: str, start: int) -> bool:
     prefix = text[max(0, start - 36):start].lower()
     return any(token in prefix for token in (
-        "no ", "not ", "without ", "禁止", "不得", "不要", "不做", "不许", "不能", "不允许", "不生成", "无",
+        "no ", "not ", "without ", "禁止", "不得", "不要", "不做", "不许", "不能", "不允许", "不生成",
+        "不建立", "不出现", "避免", "无",
     ))
 
 

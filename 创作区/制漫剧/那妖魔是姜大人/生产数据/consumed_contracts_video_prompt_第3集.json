@@ -1,0 +1,60 @@
+{
+  "kind": "n2d_prompt_consumed_contracts",
+  "version": 1,
+  "episode": "第3集",
+  "scope": "video_prompt",
+  "accepted": true,
+  "reviewer": "Codex n2d-video prompt pack",
+  "generated_by": "skills/n2d-video/scripts/prompt_pack.py",
+  "generated_at": "2026-07-27T11:42:39+00:00",
+  "contracts": [
+    {
+      "name": "storyboard",
+      "path": "脚本/第3集/storyboard.json",
+      "exists": true,
+      "sha256": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825"
+    },
+    {
+      "name": "continuity_chain",
+      "path": "脚本/第3集/continuity_chain.json",
+      "exists": true,
+      "sha256": "4dc2f4b87fba8b82ba00093f126a67a83bf74e1ed668c57e5816f80689f26d27"
+    },
+    {
+      "name": "shot_reverse_contract",
+      "path": "脚本/第3集/shot_reverse_contract.json",
+      "exists": true,
+      "sha256": "45a3a90ed9a63bad557aaf0b747be51db210b723d9f8f18353d7e1c64880b5b2"
+    },
+    {
+      "name": "script_quality_contract",
+      "path": "生产数据/script_quality_contract_第3集.json",
+      "exists": true,
+      "sha256": "c1583b45004fff7614de591e0a8dfe40af8c9087442da13c197bb8159848db8d"
+    },
+    {
+      "name": "director_camera_plan",
+      "path": "生产数据/director_camera_plan_第3集.json",
+      "exists": true,
+      "sha256": "08f2f51e9bfeb03e8c212ccd394638c77e2a39d178cdbd0b61c437d338a97cef"
+    },
+    {
+      "name": "reference_plan",
+      "path": "生产数据/reference_plan_第3集.json",
+      "exists": true,
+      "sha256": "79a91835491637af27e09b6f9924a6473007b7f796456caa814a3d9a40065326"
+    }
+  ],
+  "prompt_files": [
+    {
+      "path": "出视频/第3集/prompt/00_总览.md",
+      "exists": true,
+      "sha256": "c2973820e7cc2494d6b9affd4b28a54afb020eae151af064a41a65b4ad5aea67"
+    },
+    {
+      "path": "出视频/第3集/prompt/01_clips.md",
+      "exists": true,
+      "sha256": "686ff3462647534bea4366978e66e24e8841f6a0f85c040ecb7d6c69f39dd0ef"
+    }
+  ]
+}

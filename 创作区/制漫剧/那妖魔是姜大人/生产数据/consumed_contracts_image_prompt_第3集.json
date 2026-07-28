@@ -6,19 +6,19 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-27T02:27:24+00:00",
+  "generated_at": "2026-07-27T11:42:38+00:00",
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第3集/storyboard.json",
       "exists": true,
-      "sha256": "2adb9bbca8cdbff42a94c7c52d50a4732b034b2267e95a5ff800e7469afe6608"
+      "sha256": "2a8139ff5bce420a70d3d674c3ede672f27dcf885024248525b4ae7689ce6825"
     },
     {
       "name": "continuity_chain",
       "path": "脚本/第3集/continuity_chain.json",
       "exists": true,
-      "sha256": "6638b7275062e9defe8577432befc68fa2a20e7976df7923a273500dd4801efb"
+      "sha256": "4dc2f4b87fba8b82ba00093f126a67a83bf74e1ed668c57e5816f80689f26d27"
     },
     {
       "name": "shot_reverse_contract",
@@ -49,12 +49,12 @@
     {
       "path": "出图/第3集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "e3192208abc9c5a897cc9248f26fd81d900c68ed72312913814d3dfb6d94afb3"
+      "sha256": "044e6f2dcdba6205c691943e37eb2d8b99b8881d8fd4d6108c14bccefeb6388f"
     },
     {
       "path": "出图/第3集/prompt/01_分镜出图.md",
       "exists": true,
-      "sha256": "06db4f982c392cfcd7ba9d1cbd6b90e8070977dd493a6fb4d7432abcd77f2a23"
+      "sha256": "b87bb955739c9fe96b65ade18b1bad7eba3dc41da4c77c44985445bd29641c34"
     }
   ]
 }
