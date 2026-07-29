@@ -1,7 +1,7 @@
 {
   "artifact_namespace": {
     "available": true,
-    "declared_targets": 20,
+    "declared_targets": 22,
     "notes": [],
     "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
     "stale": []
@@ -76,8 +76,8 @@
           "raw_intra_floor": null
         },
         "CHAR_01__囚途残损态": {
-          "ep_mean_score": 0.5181,
-          "ep_n_shots": 3,
+          "ep_mean_score": 0.4992,
+          "ep_n_shots": 4,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -104,8 +104,8 @@
           "raw_intra_floor": 0.6624
         },
         "CHAR_03__常态": {
-          "ep_mean_score": 0.5938,
-          "ep_n_shots": 12,
+          "ep_mean_score": 0.5981,
+          "ep_n_shots": 13,
           "floor": 0.6407,
           "floor_calibrated": true,
           "floor_guard_applied": false,
@@ -130,6 +130,41 @@
         "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
       ],
       "shots": [
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_01__囚途残损态",
+                "face_idx": 0,
+                "score": 0.4461
+              },
+              {
+                "char": "CHAR_03__常态",
+                "face_idx": 1,
+                "score": 0.7291
+              },
+              {
+                "char": "CHAR_01__囚途残损态",
+                "face_idx": 2,
+                "score": 0.0579
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__囚途残损态"
+            ],
+            "missing_chars": [],
+            "swap_suspected": false
+          },
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_end.png",
+          "score": 0.4461,
+          "score_vs_main": 0.4424,
+          "verdict": "warn"
+        },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__囚途残损态",
@@ -924,6 +959,15 @@
           "char": "CHAR_01__囚途残损态",
           "floor": 0.9817,
           "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
+          "png": "图片/Clip01_end.png",
+          "score": 0.9341,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "png": "图片/Clip01_first.png",
           "score": 0.6409,
           "verdict": "ok"
@@ -1249,6 +1293,15 @@
           "char": "CHAR_01__囚途残损态",
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.9839,
+          "png": "图片/Clip01_end.png",
+          "score": 0.9786,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚途残损态",
+          "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
+          "floor": 0.9839,
           "png": "图片/Clip01_first.png",
           "score": 0.8955,
           "verdict": "ok"
@@ -1460,9 +1513,9 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 22.6,
+          "median_dist": 22.2,
           "registered_id": "LOC_02",
-          "shots": 17
+          "shots": 18
         },
         "尸骸荒野": {
           "constraints": {
@@ -1512,6 +1565,23 @@
       "contradictions": [],
       "notes": [],
       "seams": [
+        {
+          "action_shift": 0.046,
+          "action_verdict": null,
+          "color_dist": 0.246,
+          "color_verdict": "warn",
+          "cross_face_cos": null,
+          "dist": 33,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_first.png",
+          "relative_outlier": false,
+          "seam_mode": "intentional_discontinuity",
+          "struct_verdict": "block",
+          "tail": "Clip01_end.png",
+          "transition": "时间回切至埋尸。",
+          "verdict": "info"
+        },
         {
           "action_shift": 0.012,
           "action_verdict": null,
@@ -1687,14 +1757,38 @@
     "available": true,
     "covered": 20,
     "face_mode": "insightface",
-    "missing": [],
+    "missing": [
+      {
+        "face_coverage_required": true,
+        "face_verdict": "warn",
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "png": "图片/Clip01_end.png",
+        "reason": "face_verdict_warn",
+        "shot": "Clip_01"
+      }
+    ],
     "notes": [],
-    "pending": [],
+    "pending": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      }
+    ],
     "precision_level": "full",
-    "required": 20,
+    "required": 21,
     "skipped": [],
     "unclassified": [],
-    "verdict": "ok"
+    "verdict": "block"
   },
   "hair_manual_confirmations": {
     "applied": 2,
@@ -1734,8 +1828,9 @@
       "出图/共享/图片/定妆_武器_横刀.png": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
       "出图/共享/图片/定妆_道具_镇魔司制服.png": "44fb8108c8eeec207f661d8dc9b46a27271f8dbdc2e3e582165f8bceab9e850c",
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
-      "出图/第3集/prompt/00_总览.md": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f",
-      "出图/第3集/prompt/01_分镜出图.md": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "出图/第3集/prompt/00_总览.md": "1221cfcc1e79ae9fa05a0830e6faba3d44c5544ee041766fc61bab96078ccdb3",
+      "出图/第3集/prompt/01_分镜出图.md": "be21fbb7c6c085ffa275b804c41127b44680bd9f0a0a28f9813f9cf069aae043",
+      "出图/第3集/图片/Clip01_end.png": "b8db068c4873a579c466128e512cdae9f2d069c75f49b519573e5ab4f2217113",
       "出图/第3集/图片/Clip01_first.png": "8421097323eadf58ae01fb0f128e716fcc146eef5fe79ed485caaa4b4dbe308a",
       "出图/第3集/图片/Clip01_first_a1.png": "7d6e0c59574c92e2a2b6d03542addfa891fe0bb77a7004454b3c2f7f4ed53dcb",
       "出图/第3集/图片/Clip02_first.png": "94672945bfb257340da1c483dacc3d66293c5ea970cd67efd1225476ba844f2d",
@@ -1761,9 +1856,9 @@
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/outfit_confirmations.json": "9dc4fcd25a4b5f3bd50061e185ddf03497d7b2d5e03e7912d8c5c076e2a94b84",
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": "656ac8e239a4b6b2e35ac3d63a9a00c7c3dd33a3c784fa194f7fecc682b32bf7",
-      "脚本/第3集/storyboard.json": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+      "脚本/第3集/storyboard.json": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
     },
-    "sha": "184eaf6e8c39429a46ccae3469101f7432070fea872050b449a818ef24db5045"
+    "sha": "a851a2acd09bdb90c53fe86c43027571a6c8522a62c4894386fea0202c9cb6ae"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1787,6 +1882,16 @@
         ],
         "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
         "png": "出图/第3集/图片/Clip01_first_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip01_end.png",
         "shot": "Clip_01"
       },
       {
@@ -1861,6 +1966,16 @@
         ],
         "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
         "png": "出图/第3集/图片/Clip05_first_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司制服态",
+          "CHAR_03/常态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队急停试探 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip05_end.png",
         "shot": "Clip_05"
       },
       {
@@ -2043,7 +2158,7 @@
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
     "confirmed": 46,
-    "pending": 0,
+    "pending": 2,
     "targets": [
       {
         "asset": "PROP_镇魔司制服",
@@ -2197,6 +2312,73 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
@@ -2324,6 +2506,59 @@
         ],
         "shot": "Clip_01",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_横刀",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "同一把唐横刀",
+          "刃长",
+          "刀镡",
+          "刀柄缠绳不漂"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_end_compare.png",
         "stitched": true
       },
       {
@@ -4674,23 +4909,28 @@
         "stitched": true
       }
     ],
-    "total": 46
+    "total": 48
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 20,
+    "compared": 21,
     "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.38 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
       {
         "code": "semantic_drift_low",
         "level": "warn",
@@ -4789,7 +5029,7 @@
   },
   "shot_variety": {
     "available": true,
-    "clips_checked": 2,
+    "clips_checked": 3,
     "duplicate_pairs": [],
     "findings": [
       {
@@ -4825,12 +5065,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 20,
-    "distance": 0.527,
+    "checked": 21,
+    "distance": 0.509,
     "episode_fingerprint": {
-      "contrast": 131.8,
+      "contrast": 131.7,
       "edge": 26.3,
-      "sat": 46.0
+      "sat": 45.0
     },
     "findings": [],
     "intent": {
@@ -4853,7 +5093,7 @@
     }
   },
   "summary": {
-    "advisory": 25,
+    "advisory": 27,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -4865,12 +5105,18 @@
         "block": 0,
         "noface": 0,
         "ok": 20,
+        "warn": 1
+      },
+      "face_reference_coverage": {
+        "block": 1,
+        "noface": 0,
+        "ok": 20,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 20,
+        "ok": 21,
         "warn": 0
       },
       "human_anatomy": {
@@ -4894,11 +5140,17 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 20,
+        "ok": 21,
         "warn": 0
       },
       "prohibited_face_patch": {
         "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 2,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -4919,7 +5171,7 @@
         "block": 0,
         "noface": 0,
         "ok": 1,
-        "warn": 16
+        "warn": 17
       },
       "tone_light_contract": {
         "block": 0,
@@ -4929,18 +5181,18 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 0,
+    "hard_blocks": 3,
     "unavailable_visual_checks": [],
-    "verdict": "review"
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 20,
+    "checked": 21,
     "findings": [
       {
         "code": "tone_warmth_contradiction",
         "level": "warn",
-        "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。"
+        "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 21 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。"
       }
     ],
     "intent": {
@@ -4948,7 +5200,7 @@
       "evidence": "冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。",
       "warmth": "cool"
     },
-    "luma_median": 76.3,
+    "luma_median": 76.1,
     "warmth_median": 0.1
   },
   "turnaround_alignment": {

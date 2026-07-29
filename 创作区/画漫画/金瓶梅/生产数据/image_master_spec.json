@@ -92,16 +92,30 @@
     {
       "asset_id": "CHAR_WUSONG",
       "variant": "face",
-      "status": "candidate",
-      "path": "出图/共享/candidates/CHAR_WUSONG/face/20260729_batch01/candidate_01_native.png",
+      "status": "adopted",
+      "path": "出图/共享/图片/CHAR_WUSONG__face.png",
       "native_sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
     },
     {
       "asset_id": "CHAR_PANJINLIAN",
       "variant": "face",
-      "status": "candidate",
-      "path": "出图/共享/candidates/CHAR_PANJINLIAN/face/20260729_batch01/candidate_01_native.png",
+      "status": "adopted",
+      "path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
       "native_sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d"
+    },
+    {
+      "asset_id": "CHAR_WUDA",
+      "variant": "three_quarter",
+      "status": "candidate",
+      "path": "出图/共享/candidates/CHAR_WUDA/three_quarter/20260729_batch01/candidate_01_native.png",
+      "native_sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98"
+    },
+    {
+      "asset_id": "MON_TIGER",
+      "variant": "front",
+      "status": "candidate",
+      "path": "出图/共享/candidates/MON_TIGER/front/20260729_batch02/candidate_02_native.png",
+      "native_sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
     }
   ]
 }

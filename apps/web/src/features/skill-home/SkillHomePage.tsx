@@ -27,7 +27,12 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { BrandIcon } from "../../components/BrandIcon";
 import { LineIcon } from "../../components/LineIcon";
 import { MODEL_GROUPS } from "../../catalog/models";
-import { loadSkillSourceFiles, type SkillSourceFile } from "../../catalog/skillSources";
+import {
+  listSkillSourceGroups,
+  loadSkillSourceFile,
+  type SkillSourceFile,
+  type SkillSourceGroup,
+} from "../../catalog/skillSources";
 import { SKILLS } from "../../catalog/skills";
 import type { ModelDefinition, ModelModality, SkillCategory, SkillDefinition } from "../../catalog/types";
 import { getMySettings, signInOrSignUpWithEmail, signOut, subscribeAuth, updateMySettings, type AuthUser } from "../../lib/auth";
@@ -156,14 +161,17 @@ export function SkillHomePage({
   const [favorites, setFavorites] = useState<Set<string>>(readFavorites);
   const [detailSkill, setDetailSkill] = useState<SkillDefinition | null>(null);
   const [failedPreviewSkillId, setFailedPreviewSkillId] = useState<string | null>(null);
-  const [detailSkillSources, setDetailSkillSources] = useState<SkillSourceFile[]>([]);
+  const [detailSkillSourceGroups, setDetailSkillSourceGroups] = useState<SkillSourceGroup[]>([]);
+  const [activeSourceGroupId, setActiveSourceGroupId] = useState("");
   const [activeSourceFileId, setActiveSourceFileId] = useState("");
+  const [activeSourceText, setActiveSourceText] = useState("");
+  const [sourceLoading, setSourceLoading] = useState(false);
   const [promoVisible, setPromoVisible] = useState(true);
   const [toast, setToast] = useState("");
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [openMineAfterAuth, setOpenMineAfterAuth] = useState(false);
+  const [pageAfterAuth, setPageAfterAuth] = useState<"favorite" | "mine" | null>(null);
   const [accountOpen, setAccountOpen] = useState(false);
   const [createSkillOpen, setCreateSkillOpen] = useState(false);
   const [userSkillRecords, setUserSkillRecords] = useState<UserSkillRecord[]>([]);
@@ -185,9 +193,13 @@ export function SkillHomePage({
     [modality, selectedModels],
   );
   const detailPreview = useMemo(() => detailSkill ? getSkillPreview(detailSkill) : undefined, [detailSkill]);
+  const activeSourceGroup = useMemo(
+    () => detailSkillSourceGroups.find((group) => group.id === activeSourceGroupId) ?? detailSkillSourceGroups[0],
+    [activeSourceGroupId, detailSkillSourceGroups],
+  );
   const activeSourceFile = useMemo(
-    () => detailSkillSources.find((file) => file.id === activeSourceFileId) ?? detailSkillSources[0],
-    [activeSourceFileId, detailSkillSources],
+    () => activeSourceGroup?.files.find((file) => file.id === activeSourceFileId) ?? activeSourceGroup?.files[0],
+    [activeSourceFileId, activeSourceGroup],
   );
   const ready = Boolean(prompt.trim() || attachments.length) && Boolean(selectedSkill && selectedModel);
 
@@ -215,12 +227,12 @@ export function SkillHomePage({
   useEffect(() => subscribeAuth((user) => { setAuthUser(user); setAuthReady(true); }), []);
 
   useEffect(() => {
-    if (!authUser || !openMineAfterAuth) return;
-    setPageTab("mine");
+    if (!authUser || !pageAfterAuth) return;
+    setPageTab(pageAfterAuth);
     setCategory("推荐");
-    setOpenMineAfterAuth(false);
+    setPageAfterAuth(null);
     window.requestAnimationFrame(() => document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }));
-  }, [authUser, openMineAfterAuth]);
+  }, [authUser, pageAfterAuth]);
 
   useEffect(() => {
     let cancelled = false;
@@ -262,33 +274,36 @@ export function SkillHomePage({
   useEffect(() => setFailedPreviewSkillId(null), [detailSkill?.id]);
 
   useEffect(() => {
-    let cancelled = false;
     if (!detailSkill) {
-      setDetailSkillSources([]);
+      setDetailSkillSourceGroups([]);
+      setActiveSourceGroupId("");
       setActiveSourceFileId("");
+      setActiveSourceText("");
       return undefined;
     }
-    setDetailSkillSources([]);
-    setActiveSourceFileId("");
-    void loadSkillSourceFiles(detailSkill)
-      .then((files) => {
-        if (cancelled) return;
-        setDetailSkillSources(files);
-        setActiveSourceFileId(files[0]?.id ?? "");
-      })
-      .catch(() => {
-        if (cancelled) return;
-        const failedFile = {
-          id: "skill-source-error",
-          name: "读取失败",
-          path: "SKILL.md",
-          source: "# Skill 源码读取失败\n\n请关闭详情后重试。",
-        };
-        setDetailSkillSources([failedFile]);
-        setActiveSourceFileId(failedFile.id);
-      });
-    return () => { cancelled = true; };
+    const groups = listSkillSourceGroups(detailSkill);
+    const firstGroup = groups[0];
+    setDetailSkillSourceGroups(groups);
+    setActiveSourceGroupId(firstGroup?.id ?? "");
+    setActiveSourceFileId(firstGroup?.files[0]?.id ?? "");
+    return undefined;
   }, [detailSkill]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!activeSourceFile) {
+      setActiveSourceText("");
+      setSourceLoading(false);
+      return undefined;
+    }
+    setSourceLoading(true);
+    setActiveSourceText("");
+    void loadSkillSourceFile(activeSourceFile)
+      .then((source) => { if (!cancelled) setActiveSourceText(source); })
+      .catch(() => { if (!cancelled) setActiveSourceText("# 文件读取失败\n\n请切换文件或关闭详情后重试。"); })
+      .finally(() => { if (!cancelled) setSourceLoading(false); });
+    return () => { cancelled = true; };
+  }, [activeSourceFile]);
 
   function toggleFavorite(skillId: string) {
     setFavorites((current) => {
@@ -299,6 +314,14 @@ export function SkillHomePage({
       if (authUser) void updateMySettings({ preferences: { favoriteSkillIds: [...next] } }).catch(() => undefined);
       return next;
     });
+  }
+
+  function requestFavorite(skillId: string) {
+    if (!authUser) {
+      openAuth();
+      return;
+    }
+    toggleFavorite(skillId);
   }
 
   function useSkill(skill: SkillDefinition) {
@@ -342,7 +365,7 @@ export function SkillHomePage({
 
   function openMine() {
     if (!authUser) {
-      setOpenMineAfterAuth(true);
+      setPageAfterAuth("mine");
       openAuth();
       return;
     }
@@ -350,9 +373,19 @@ export function SkillHomePage({
     setCategory("推荐");
   }
 
+  function openFavorites() {
+    if (!authUser) {
+      setPageAfterAuth("favorite");
+      openAuth();
+      return;
+    }
+    setPageTab("favorite");
+    setCategory("推荐");
+  }
+
   function selectSkillPickerTab(nextTab: SkillTab) {
-    if (nextTab === "mine" && !authUser) {
-      setOpenMineAfterAuth(true);
+    if ((nextTab === "mine" || nextTab === "favorite") && !authUser) {
+      setPageAfterAuth(nextTab);
       openAuth();
       return;
     }
@@ -363,7 +396,7 @@ export function SkillHomePage({
     setOpenMenu(null);
     if (!authUser) {
       setToast("登录后即可创建并云端保存 Skill");
-      setOpenMineAfterAuth(true);
+      setPageAfterAuth("mine");
       openAuth();
       return;
     }
@@ -605,7 +638,7 @@ export function SkillHomePage({
             <div className="market-tabs">
               <div>
                 <button className={pageTab === "skills" ? "active" : ""} type="button" onClick={() => setPageTab("skills")}>Skill</button>
-                <button className={pageTab === "favorite" ? "active" : ""} type="button" onClick={() => setPageTab("favorite")}>收藏</button>
+                <button className={pageTab === "favorite" ? "active" : ""} type="button" onClick={openFavorites}>收藏</button>
                 <button className={pageTab === "mine" ? "active" : ""} type="button" onClick={openMine}>我的</button>
               </div>
               {pageTab === "mine" && authUser && <button className="create-skill-button" type="button" onClick={openCreateSkill}><Plus size={15} />创建 Skill</button>}
@@ -624,7 +657,7 @@ export function SkillHomePage({
               <span><UserRound size={24} /></span>
               <strong>登录后管理你的 Skill</strong>
               <p>输入邮箱和密码，首次登录会自动创建账号。</p>
-              <div><button type="button" onClick={openAuth}>登录 / 注册</button></div>
+              <div><button type="button" onClick={openAuth}>登录</button></div>
             </div>
           ) : userSkillsLoading && pageTab === "mine" ? (
             <div className="empty-skills"><LoaderCircle className="spinning" size={28} /><strong>正在加载我的 Skill</strong><span>从云端同步你的个人工作流</span></div>
@@ -644,7 +677,7 @@ export function SkillHomePage({
                     <footer><span>{skill.creator}</span><span className="card-metric"><Play size={12} />{skill.views > 0 ? compactNumber(skill.views) : "已实现"}</span></footer>
                   </div>
                   <div className="skill-card-actions">
-                    <button type="button" title={favorites.has(skill.id) ? "取消收藏" : "收藏"} aria-label={favorites.has(skill.id) ? "取消收藏" : "收藏"} className={favorites.has(skill.id) ? "favorite active" : "favorite"} onClick={(event) => { event.stopPropagation(); toggleFavorite(skill.id); }}><Star size={17} fill={favorites.has(skill.id) ? "currentColor" : "none"} /></button>
+                    <button type="button" title={favorites.has(skill.id) ? "取消收藏" : "收藏"} aria-label={favorites.has(skill.id) ? "取消收藏" : "收藏"} className={favorites.has(skill.id) ? "favorite active" : "favorite"} onClick={(event) => { event.stopPropagation(); requestFavorite(skill.id); }}><Star size={17} fill={favorites.has(skill.id) ? "currentColor" : "none"} /></button>
                     {customSkillIds.has(skill.id) && <button type="button" className="skill-delete-button" title="删除 Skill" aria-label={`删除 ${skill.title}`} onClick={(event) => { event.stopPropagation(); void removeUserSkill(skill).catch((reason) => setToast(reason instanceof Error ? reason.message : "删除失败")); }}><Trash2 size={15} /></button>}
                     <button type="button" className="use-skill-button" onClick={(event) => { event.stopPropagation(); useSkill(skill); }}>使用</button>
                   </div>
@@ -676,22 +709,47 @@ export function SkillHomePage({
               </div>
             ) : (
               <div className="skill-detail-preview source-mode">
-                <div className="skill-source-tabs" role="tablist" aria-label={`${detailSkill.title}系列 Skill 文件`}>
-                  {detailSkillSources.length ? detailSkillSources.map((file) => (
+                <div className="skill-source-tabs" role="tablist" aria-label={`${detailSkill.title}系列 Skill`}>
+                  {detailSkillSourceGroups.length ? detailSkillSourceGroups.map((group) => (
                     <button
-                      className={activeSourceFile?.id === file.id ? "active" : ""}
+                      className={activeSourceGroup?.id === group.id ? "active" : ""}
                       type="button"
                       role="tab"
-                      aria-selected={activeSourceFile?.id === file.id}
-                      title={file.path}
-                      key={file.id}
-                      onClick={() => setActiveSourceFileId(file.id)}
+                      aria-selected={activeSourceGroup?.id === group.id}
+                      title={`${group.path} · ${group.files.length} 个文件`}
+                      key={group.id}
+                      onClick={() => {
+                        setActiveSourceGroupId(group.id);
+                        setActiveSourceFileId(group.files[0]?.id ?? "");
+                      }}
                     >
-                      <FileCode2 size={14} /><span>{file.name}</span>
+                      <FileCode2 size={14} /><span>{group.name}</span>
                     </button>
                   )) : <span className="skill-source-loading"><LoaderCircle className="spinning" size={14} />正在读取 Skill 文件…</span>}
                 </div>
-                <pre key={activeSourceFile?.id ?? "loading"}><code>{activeSourceFile?.source || "正在读取 Skill 源码…"}</code></pre>
+                <div className="skill-source-workspace">
+                  <aside className="skill-source-files" aria-label={`${activeSourceGroup?.name ?? "Skill"}文件列表`}>
+                    <header><span>{activeSourceGroup?.name ?? "Skill"}</span><small>{activeSourceGroup?.files.length ?? 0}</small></header>
+                    <div>
+                      {activeSourceGroup?.files.map((file) => {
+                        const parentPath = file.relativePath.includes("/") ? file.relativePath.slice(0, file.relativePath.lastIndexOf("/")) : "";
+                        return (
+                          <button
+                            className={activeSourceFile?.id === file.id ? "active" : ""}
+                            type="button"
+                            title={file.path}
+                            key={file.id}
+                            onClick={() => setActiveSourceFileId(file.id)}
+                          >
+                            <FileCode2 size={13} />
+                            <span><b>{file.name}</b>{parentPath && <small>{parentPath}</small>}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </aside>
+                  <pre key={activeSourceFile?.id ?? "loading"}><code>{sourceLoading ? "正在读取文件…" : activeSourceText || "请选择一个文件"}</code></pre>
+                </div>
               </div>
             )}
             <div className="skill-detail-copy">
@@ -700,7 +758,7 @@ export function SkillHomePage({
               <p className="detail-creator">by {detailSkill.creator} · <Play size={12} />{compactNumber(detailSkill.views)} 次使用</p>
               <div className="detail-actions">
                 <button type="button" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setToast("页面链接已复制"); }}><Share2 size={15} />分享</button>
-                <button className={favorites.has(detailSkill.id) ? "active favorite-detail" : "favorite-detail"} type="button" onClick={() => toggleFavorite(detailSkill.id)}><Star size={15} fill={favorites.has(detailSkill.id) ? "currentColor" : "none"} />收藏</button>
+                <button className={favorites.has(detailSkill.id) ? "active favorite-detail" : "favorite-detail"} type="button" onClick={() => requestFavorite(detailSkill.id)}><Star size={15} fill={favorites.has(detailSkill.id) ? "currentColor" : "none"} />收藏</button>
                 {customSkillIds.has(detailSkill.id) && <button className="danger" type="button" onClick={() => { void removeUserSkill(detailSkill).catch((reason) => setToast(reason instanceof Error ? reason.message : "删除失败")); }}><Trash2 size={15} />删除</button>}
                 <button className="primary" type="button" onClick={() => useSkill(detailSkill)}><Plus size={16} />添加 Skill</button>
               </div>

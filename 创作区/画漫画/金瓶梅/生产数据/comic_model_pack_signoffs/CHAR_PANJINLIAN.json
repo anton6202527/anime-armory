@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_PANJINLIAN",
+  "tier": "core_full",
+  "model_pack_fingerprint": "d7ac4214fe5eba611f6a39f6f347bef62c97a1d0217f587c81bb5e24d5eecdb2",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+      "sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+        "source_sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+      "sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+        "source_sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "side",
+      "path": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+      "sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "side",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+        "source_sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "back",
+      "path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+      "sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "back",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+        "source_sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
+      "sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "face",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
+        "source_sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "用户",
+  "reason": "用户逐张确认front、45度、侧面、背面和脸部当前原生像素；统一格式与角色一致性通过",
+  "approved_at": "2026-07-29T12:54:33+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

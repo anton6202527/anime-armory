@@ -59,9 +59,9 @@ export function AuthDialog({ open, configured, onClose, onContinue }: AuthDialog
   return (
     <div className="account-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !submitting) onClose(); }}>
       <section className="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-dialog-title">
-        <button className="dialog-close" type="button" onClick={onClose} aria-label="关闭登录注册窗口"><X size={18} /></button>
+        <button className="dialog-close" type="button" onClick={onClose} aria-label="关闭登录窗口"><X size={18} /></button>
         <div className="auth-dialog-brand"><span><ShieldCheck size={21} /></span><b>LabuTV 账号</b></div>
-        <h2 id="auth-dialog-title">登录 / 注册</h2>
+        <h2 id="auth-dialog-title">登录</h2>
         <p>输入邮箱和密码，首次登录会自动创建账号。</p>
 
         {!configured ? (
@@ -72,7 +72,7 @@ export function AuthDialog({ open, configured, onClose, onContinue }: AuthDialog
             <label><span>密码</span><div><LockKeyhole size={16} /><input type={passwordVisible ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="至少 6 位" autoComplete="current-password" /><button type="button" onClick={() => setPasswordVisible((visible) => !visible)} aria-label={passwordVisible ? "隐藏密码" : "显示密码"}>{passwordVisible ? <EyeOff size={16} /> : <Eye size={16} />}</button></div></label>
             {error && <div className="auth-feedback error" role="alert">{error}</div>}
             {message && <div className="auth-feedback success" role="status">{message}</div>}
-            <button className="auth-submit" type="submit" disabled={submitting}>{submitting ? <LoaderCircle className="spinning" size={17} /> : <>继续<ArrowRight size={16} /></>}</button>
+            <button className="auth-submit" type="submit" disabled={submitting}>{submitting ? <LoaderCircle className="spinning" size={17} /> : <>登录<ArrowRight size={16} /></>}</button>
           </form>
         )}
         <small className="auth-policy">继续即表示你同意仅将邮箱用于账户、作品与 Skill 同步。</small>

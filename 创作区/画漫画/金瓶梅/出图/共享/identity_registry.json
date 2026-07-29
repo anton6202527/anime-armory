@@ -218,7 +218,10 @@
             "source_sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
             "crop_box": []
           },
-          "canvas": {"width": 1086, "height": 1448},
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
           "updated_at": "2026-07-29T18:50:00+08:00"
         },
         {
@@ -245,11 +248,14 @@
             "source_sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
             "crop_box": []
           },
-          "canvas": {"width": 1086, "height": 1448},
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
           "updated_at": "2026-07-29T19:05:00+08:00"
         }
       ],
-      "status": "partial",
+      "status": "ready",
       "updated_at": "2026-07-29T14:48:18",
       "views": {
         "front": "出图/共享/图片/CHAR_WUSONG__front.png",
@@ -280,9 +286,9 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "ddb0a7a8b38860f7b3144a164f83042625d627b30ac319049127498d95ad21f1",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "b53fc3aed667be7fc965ddf1bc8b24325bd9dfb9315f2acf620d819f3da5a20e",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
@@ -290,7 +296,7 @@
           "back",
           "face"
         ],
-        "updated_at": "2026-07-29T10:33:30+00:00"
+        "updated_at": "2026-07-29T12:54:33+00:00"
       }
     },
     "MON_TIGER": {
@@ -706,7 +712,10 @@
             "source_sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
             "crop_box": []
           },
-          "canvas": {"width": 1086, "height": 1448},
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
           "updated_at": "2026-07-29T18:50:00+08:00"
         },
         {
@@ -733,11 +742,14 @@
             "source_sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
             "crop_box": []
           },
-          "canvas": {"width": 1086, "height": 1448},
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
           "updated_at": "2026-07-29T19:05:00+08:00"
         }
       ],
-      "status": "partial",
+      "status": "ready",
       "updated_at": "2026-07-29T16:04:40",
       "views": {
         "front": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
@@ -768,9 +780,9 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "bc7cc18beeabe0317d46af685dfad4728255eaeb3a10be3cb7f6000a6b8b270d",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "d7ac4214fe5eba611f6a39f6f347bef62c97a1d0217f587c81bb5e24d5eecdb2",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
@@ -778,7 +790,7 @@
           "back",
           "face"
         ],
-        "updated_at": "2026-07-29T10:28:20+00:00"
+        "updated_at": "2026-07-29T12:54:33+00:00"
       }
     },
     "CHAR_XIMENQING": {

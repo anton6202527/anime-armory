@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_WUSONG",
+  "tier": "core_full",
+  "model_pack_fingerprint": "b53fc3aed667be7fc965ddf1bc8b24325bd9dfb9315f2acf620d819f3da5a20e",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+      "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_WUSONG__front.png",
+        "source_sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+      "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+        "source_sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "side",
+      "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+      "sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "side",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_WUSONG__side.png",
+        "source_sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "back",
+      "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+      "sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "back",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_WUSONG__back.png",
+        "source_sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+      "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "face",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_WUSONG__face.png",
+        "source_sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "用户",
+  "reason": "用户逐张确认front、45度、侧面、背面和脸部当前原生像素；统一格式与角色一致性通过",
+  "approved_at": "2026-07-29T12:54:33+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

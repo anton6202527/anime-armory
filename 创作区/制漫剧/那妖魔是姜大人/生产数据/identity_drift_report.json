@@ -2,20 +2,151 @@
   "kind": "n2d_identity_drift_report",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-29T12:33:20+00:00",
+  "generated_at": "2026-07-29T12:48:48+00:00",
   "available": true,
   "episodes": [
     "第1集",
     "第2集",
     "第3集"
   ],
-  "characters": {},
+  "characters": {
+    "CHAR_01__囚途残损态": {
+      "episodes": {
+        "第1集": {
+          "ok": 14,
+          "warn": 15,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.3076,
+          "floor": 0.5,
+          "mean_score": 0.3531,
+          "n_shots": 32
+        },
+        "第2集": {
+          "ok": 26,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.2925,
+          "floor": 0.5,
+          "mean_score": 0.5038,
+          "n_shots": 26
+        },
+        "第3集": {
+          "ok": 3,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.4562,
+          "floor": 0.5,
+          "mean_score": 0.5181,
+          "n_shots": 3
+        }
+      },
+      "total_warn": 15,
+      "total_block": 0,
+      "first_bad_episode": "",
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
+    },
+    "CHAR_02__濒死重伤态": {
+      "episodes": {
+        "第1集": {
+          "ok": 3,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.516,
+          "floor": 0.6624,
+          "mean_score": 0.4424,
+          "n_shots": 3
+        },
+        "第2集": {
+          "ok": 0,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": null,
+          "floor": null,
+          "mean_score": 0.5944,
+          "n_shots": 4
+        }
+      },
+      "total_warn": 0,
+      "total_block": 0,
+      "first_bad_episode": "",
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
+    },
+    "CHAR_01__镇魔司制服态": {
+      "episodes": {
+        "第3集": {
+          "ok": 14,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.2863,
+          "floor": 0.5,
+          "mean_score": 0.4632,
+          "n_shots": 17
+        }
+      },
+      "total_warn": 0,
+      "total_block": 0,
+      "first_bad_episode": "",
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
+    },
+    "CHAR_03__常态": {
+      "episodes": {
+        "第3集": {
+          "ok": 3,
+          "warn": 0,
+          "block": 0,
+          "noface": 0,
+          "worst_score": 0.4895,
+          "floor": 0.6407,
+          "mean_score": 0.5938,
+          "n_shots": 12
+        }
+      },
+      "total_warn": 0,
+      "total_block": 0,
+      "first_bad_episode": "",
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
+    }
+  },
   "notes": [],
   "png_fingerprints": {
     "第1集": "29e3ee985a115010905c50789b33274d0d5089f5d369e55091c0611f9b736ea8",
     "第2集": "2059acf3ae054c4a0316d6870d3a71ff04c1718599a4c7d2ef663e91e55aa595",
     "第3集": "73851d3fafac59885fea60a4ab580a1ba5f63b7f992b3224b25376a9f71ffbf3"
   },
-  "embedding_drift": {},
+  "embedding_drift": {
+    "CHAR_02__濒死重伤态": [
+      {
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.4424,
+        "to_mean": 0.5944,
+        "drop": -0.152,
+        "below_abs_low": true,
+        "severity": "medium"
+      }
+    ]
+  },
   "recommendations": []
 }

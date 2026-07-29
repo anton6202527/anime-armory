@@ -6,13 +6,13 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-29T12:45:06+00:00",
+  "generated_at": "2026-07-29T12:51:03+00:00",
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第3集/storyboard.json",
       "exists": true,
-      "sha256": "0d77443dce734ca8e42018bdb775cbdc5e66fc2cd94933036de424687dfa44d9"
+      "sha256": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
     },
     {
       "name": "continuity_chain",
@@ -42,7 +42,7 @@
       "name": "reference_plan",
       "path": "生产数据/reference_plan_第3集.json",
       "exists": true,
-      "sha256": "50f52c6821b404e5aa7777184d0bb6641bdade94bab1d822d79cb6779f337906"
+      "sha256": "7661325068509827118a29708838eae3ecc353b5ef36d171989270c274e93137"
     }
   ],
   "prompt_files": [
