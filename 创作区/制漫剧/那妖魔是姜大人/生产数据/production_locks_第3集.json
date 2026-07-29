@@ -2,8 +2,8 @@
   "episode": "第3集",
   "generated_at": "2026-07-27T06:10:59+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-28T07:28:55+00:00",
-  "last_confirmed_by": "项目视觉执行席-01",
+  "last_confirmed_at": "2026-07-29T12:47:51+00:00",
+  "last_confirmed_by": "codex-script-supervisor",
   "last_confirmed_lock_ids": [
     "source_lock",
     "script_lock",
@@ -18,8 +18,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-28T07:28:55+00:00",
-      "approver": "项目视觉执行席-01",
+      "approved_at": "2026-07-29T12:47:51+00:00",
+      "approver": "codex-script-supervisor",
       "artifact_count": 2,
       "artifacts": [
         {
@@ -59,8 +59,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-28T07:28:55+00:00",
-      "approver": "项目视觉执行席-01",
+      "approved_at": "2026-07-29T12:47:51+00:00",
+      "approver": "codex-script-supervisor",
       "artifact_count": 3,
       "artifacts": [
         {
@@ -107,15 +107,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-28T07:28:55+00:00",
-      "approver": "项目视觉执行席-01",
+      "approved_at": "2026-07-29T12:47:51+00:00",
+      "approver": "codex-script-supervisor",
       "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-28T02:56:30+00:00",
+          "mtime": "2026-07-29T12:46:58+00:00",
           "path": "脚本/第3集/storyboard.json",
-          "sha256": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+          "sha256": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
         },
         {
           "exists": true,
@@ -155,8 +155,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-28T07:28:55+00:00",
-      "approver": "项目视觉执行席-01",
+      "approved_at": "2026-07-29T12:47:51+00:00",
+      "approver": "codex-script-supervisor",
       "artifact_count": 4,
       "artifacts": [
         {
@@ -173,13 +173,13 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-28T07:28:43+00:00",
+          "mtime": "2026-07-29T12:45:06+00:00",
           "path": "出图/共享/identity_registry.json",
           "sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08"
         },
         {
           "exists": true,
-          "mtime": "2026-07-28T07:25:41+00:00",
+          "mtime": "2026-07-28T10:32:55+00:00",
           "path": "生产数据/identity_adapter_matrix.json",
           "sha256": "5f1310c6976a7f43ab92454174711c38e19ebab7611f2587f3b45c58305fa6b4"
         }
@@ -450,6 +450,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-28T07:28:55+00:00",
+  "updated_at": "2026-07-29T12:47:51+00:00",
   "version": 1
 }
