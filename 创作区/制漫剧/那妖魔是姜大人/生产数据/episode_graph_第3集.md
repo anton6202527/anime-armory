@@ -1,8 +1,8 @@
 # Episode Graph · 第3集
 
 - 状态：pass
-- graph hash：`f8750864f485318b`
-- nodes / edges：17 / 16
+- graph hash：`0a704758d39d6884`
+- nodes / edges：27 / 26
 - story / routes / media / masters：8 / 8 / 0 / 0
 
 ## Lineage gaps

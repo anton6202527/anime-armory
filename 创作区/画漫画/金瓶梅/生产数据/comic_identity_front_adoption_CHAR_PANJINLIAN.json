@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-29T16:04:40",
+  "ref_id": "CHAR_PANJINLIAN",
+  "candidate_path": "出图/共享/candidates/CHAR_PANJINLIAN/front/20260729_batch01/candidate_01_native.png",
+  "candidate_sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+  "adopted_path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+  "adopted_sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户明确确认；采用内置imagegen原生PNG master，符合统一最高规格合同",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

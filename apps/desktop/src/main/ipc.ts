@@ -7,6 +7,7 @@ import { BaselineService } from './services/baseline'
 import { PtyService } from './services/pty'
 import { WatchService } from './services/watch'
 import { MediaService } from './services/media'
+import { LocalBridgeService } from './services/localBridge'
 import { detectAgents } from './services/agents'
 import { readNextAction } from './services/pipeline'
 import { installDemo, listDemoDownloads, seedDemos } from './services/demos'
@@ -26,19 +27,22 @@ export interface MainServices {
   pty: PtyService
   watch: WatchService
   media: MediaService
+  bridge: LocalBridgeService
   ui: AppUiState
 }
 
 export function createServices(ui: AppUiState): MainServices {
   const baseline = new BaselineService()
+  const workspace = new WorkspaceService()
   return {
-    workspace: new WorkspaceService(),
+    workspace,
     skills: new SkillsService(),
     baseline,
     workfs: new WorkFsService(baseline),
     pty: new PtyService(),
     watch: new WatchService(),
     media: new MediaService(),
+    bridge: new LocalBridgeService(workspace),
     ui,
   }
 }

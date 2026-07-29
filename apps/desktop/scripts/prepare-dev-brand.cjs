@@ -17,7 +17,7 @@ if (process.platform === 'darwin') {
 
   if (existsSync(plist)) {
     for (const key of ['CFBundleDisplayName', 'CFBundleName']) {
-      execFileSync('/usr/bin/plutil', ['-replace', key, '-string', 'AnimeArmory', plist])
+      execFileSync('/usr/bin/plutil', ['-replace', key, '-string', 'LabuTV', plist])
     }
     const now = new Date()
     utimesSync(plist, now, now)

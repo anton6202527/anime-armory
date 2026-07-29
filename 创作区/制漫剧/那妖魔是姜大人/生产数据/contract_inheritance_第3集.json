@@ -68,22 +68,28 @@
   },
   "pixel_contract": {
     "available": true,
-    "fresh": false,
-    "findings": [],
-    "note": "image_qc 像素佐证新鲜度=stale（出图后又重出），不采纳旧像素证据；先对当前图重跑 image_qc 再校验契约。"
+    "fresh": true,
+    "findings": [
+      {
+        "code": "tone_warmth_contradiction",
+        "level": "warn",
+        "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。"
+      }
+    ],
+    "note": "image_qc 实测首帧像素与申报色调/光位意图矛盾（pixel 非 text）。"
   },
-  "verdict": "pass",
+  "verdict": "warn",
   "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
-  "generated_at": "2026-07-27T11:41:57Z",
+  "generated_at": "2026-07-29T12:43:03Z",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "4138a4d1c7d0b5d55efa7ef48998c73cdff54b6a4ab269cf47c2597281da7427",
-      "出图/第3集/prompt/00_总览.md": "044e6f2dcdba6205c691943e37eb2d8b99b8881d8fd4d6108c14bccefeb6388f",
-      "出图/第3集/prompt/01_分镜出图.md": "be8461ebc398023896966d01848038ba9f2fc8239b9255383a7dfe5f98c8d4fd",
-      "出视频/第3集/prompt/00_总览.md": "c2973820e7cc2494d6b9affd4b28a54afb020eae151af064a41a65b4ad5aea67",
-      "出视频/第3集/prompt/01_clips.md": "8e46f245c6c2c9e7b9de31374389f89e3728fc9228faf8723d589170003397f1",
-      "出视频/第3集/prompt/video_model_routes.json": "1d1f523ad1d0e068775897fa873e68c5182daf2f82246c6c27e6286f1b9da135"
+      "出图/共享/asset_registry.json": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9",
+      "出图/第3集/prompt/00_总览.md": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f",
+      "出图/第3集/prompt/01_分镜出图.md": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "出视频/第3集/prompt/00_总览.md": "44dce34649d5b3da0c3427372b4dc59dadcba356e27b77d7ceace589c3cff63f",
+      "出视频/第3集/prompt/01_clips.md": "671fd4eb563cb394d370b663a9b26b505dc8e853533a755a699a97bc56475a83",
+      "出视频/第3集/prompt/video_model_routes.json": "c258d71ef2005707630c9cb9d3390f193c50b22738fd28994655f2ad6ea1e5c6"
     },
-    "sha": "a13ae266d1f8d015901355f5ab6b1bf031834ec54e145ca845497dc6af44f9b4"
+    "sha": "e9b847c795e605e5eea6bf9addd931cf371aca2aa96046f38c1ed18fd596284c"
   }
 }

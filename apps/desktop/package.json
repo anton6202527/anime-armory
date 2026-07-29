@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Electron + React desktop IDE for Creation Armory, the anime-armory creative production factory.",
+  "description": "Electron + React desktop IDE for the LabuTV creative production platform.",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "node scripts/prepare-dev-brand.cjs && electron-vite dev",

@@ -1,7 +1,849 @@
 {
   "schema_version": 2,
   "kind": "comic_identity_registry",
-  "assets": {},
+  "assets": {
+    "STYLE_JINPINGMEI_MING_URBAN": {
+      "id": "STYLE_JINPINGMEI_MING_URBAN",
+      "type": "style",
+      "display_name": "明代版画节奏·北宋市井风格锚",
+      "description": "纤细墨线、低饱和矿物色、纸绢纹理、长卷式纵向空间；只借明代版画构图节奏，服饰器物保持宋代依据。",
+      "notes": "原始候选：出图/共享/style_anchor/candidates/STYLE_JINPINGMEI_MING_URBAN_v1.png；统一交付规格候选：出图/共享/style_anchor/candidates/STYLE_JINPINGMEI_MING_URBAN_v1_1440x1920.png；视觉研究合同：设定库/visual_research.json",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+          "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/STYLE_JINPINGMEI_MING_URBAN/anchor/20260729_user_confirmed/candidate_01_native.png",
+            "candidate_sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "确认画面并按最高规格合同改采后端原生PNG master，禁止采纳插值放大版本",
+            "reviewed_at": "2026-07-29T14:48:18",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "archived_previous_path": "出图/共享/candidates/STYLE_JINPINGMEI_MING_URBAN/anchor/20260729T144818595051__7302efaa81c6.png"
+          },
+          "updated_at": "2026-07-29T14:48:18"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-29T14:48:18",
+      "anchor_path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+      "primary_path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+      "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70"
+    },
+    "CHAR_WUSONG": {
+      "id": "CHAR_WUSONG",
+      "type": "character",
+      "display_name": "武松",
+      "description": "成年男性，约二十八岁；第1话动作主角与伦理支点。",
+      "notes": "原创成年面孔，不参照影视演员；史料边界见设定库/visual_research.json。",
+      "character_dna": "长方脸、浓直眉、深眼、硬朗鼻梁；束发素巾；肩背宽、腰胯稳、手掌有茧。",
+      "variant_policy": "不同服装与伤势下仍保留脸型、眉眼、束发和宽肩体态。",
+      "forbidden_inheritance": "不得继承风格锚点中匿名路人的脸；哨棒属剧情道具，不写入永久DNA。",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "不同服装与伤势下仍保留脸型、眉眼、束发和宽肩体态。",
+          "forbidden": "不得继承风格锚点中匿名路人的脸；哨棒属剧情道具，不写入永久DNA。",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+              "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WUSONG"
+              },
+              "updated_at": "2026-07-29T14:48:18"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUSONG/front/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户明确确认；采用内置imagegen原生PNG而非放大派生图",
+            "reviewed_at": "2026-07-29T14:48:18",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__front.png",
+            "source_sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T14:48:18"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUSONG/three_quarter/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok并要求继续；45度视图确认通过",
+            "reviewed_at": "2026-07-29T18:18:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+            "source_sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T18:18:00+08:00"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "side",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUSONG/side/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认侧面并要求继续",
+            "reviewed_at": "2026-07-29T18:35:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__side.png",
+            "source_sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T18:35:00+08:00"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "back",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUSONG/back/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户明确确认背面视图",
+            "reviewed_at": "2026-07-29T18:50:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__back.png",
+            "source_sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+            "crop_box": []
+          },
+          "canvas": {"width": 1086, "height": 1448},
+          "updated_at": "2026-07-29T18:50:00+08:00"
+        }
+      ],
+      "status": "partial",
+      "updated_at": "2026-07-29T14:48:18",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WUSONG__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_WUSONG__side.png",
+        "back": "出图/共享/图片/CHAR_WUSONG__back.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back"
+        ],
+        "missing": [
+          "face"
+        ],
+        "complete": false
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "ddb0a7a8b38860f7b3144a164f83042625d627b30ac319049127498d95ad21f1",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-29T10:33:30+00:00"
+      }
+    },
+    "MON_TIGER": {
+      "id": "MON_TIGER",
+      "type": "monster",
+      "display_name": "景阳冈猛虎",
+      "description": "成年华南虎比例；第1话明虎与全作暗虎母题起点。",
+      "notes": "不得幻想兽化或拟人化。",
+      "character_dna": "头宽、前肢厚重、橙赭毛色配墨黑条纹；左眉上方短缺口。",
+      "variant_policy": "所有动作姿态保留主条纹结构、左眉缺口与成年体型。",
+      "forbidden_inheritance": "不得继承其他猫科花纹或巨兽尺度。",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "所有动作姿态保留主条纹结构、左眉缺口与成年体型。",
+          "forbidden": "不得继承其他猫科花纹或巨兽尺度。",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/MON_TIGER/anchor/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户明确确认；采用内置imagegen原生PNG而非放大派生图",
+            "reviewed_at": "2026-07-29T14:48:29",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-29T14:48:29"
+        }
+      ],
+      "status": "partial",
+      "updated_at": "2026-07-29T14:48:29",
+      "anchor_path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "primary_path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "1f140fad62b261ad36fd1109adf80d8da7e664fe149faddb7341240420f8b1e2",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-29T10:18:21+00:00"
+      }
+    },
+    "CHAR_WUDA": {
+      "id": "CHAR_WUDA",
+      "type": "character",
+      "display_name": "武大",
+      "description": "成年男性，约三十五岁；炊饼小贩、家庭脆弱性的承载者。",
+      "notes": "不丑化、不儿童化。",
+      "character_dna": "圆宽脸、温厚眉眼、短颈、矮小但为成年四肢比例；粗布短褐与白围腰。",
+      "variant_policy": "换装仍保持成年比例、圆宽脸、短颈与劳动者手部。",
+      "forbidden_inheritance": "炊饼担是常用道具，不得把挑担姿态固化为永久体态。",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "换装仍保持成年比例、圆宽脸、短颈与劳动者手部。",
+          "forbidden": "炊饼担是常用道具，不得把挑担姿态固化为永久体态。",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WUDA__front.png",
+              "sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WUDA"
+              },
+              "updated_at": "2026-07-29T16:04:41"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUDA/front/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户明确确认；采用内置imagegen原生PNG master，符合统一最高规格合同",
+            "reviewed_at": "2026-07-29T16:04:41",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUDA__front.png",
+            "source_sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T16:04:41"
+        }
+      ],
+      "status": "partial",
+      "updated_at": "2026-07-29T16:04:41",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WUDA__front.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front"
+        ],
+        "missing": [
+          "three_quarter",
+          "face"
+        ],
+        "complete": false
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "f7a004d7fd53191cdefcfeecddf31979902eba43e35b5b5b5897a683bf60f55b",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-29T08:04:41+00:00"
+      }
+    },
+    "CHAR_PANJINLIAN": {
+      "id": "CHAR_PANJINLIAN",
+      "type": "character",
+      "display_name": "潘金莲",
+      "description": "成年女性，约二十四岁；家庭秩序与个人欲望冲突核心。",
+      "notes": "原创成年面孔；克制、非性感凝视。",
+      "character_dna": "窄鹅蛋脸、细长眉、内敛眼神、薄唇；高髻、木簪、素银小饰；修长而非幼态。",
+      "variant_policy": "情绪和服饰变化下保留脸型、眉眼、高髻结构与成年比例。",
+      "forbidden_inheritance": "不得继承影视演员脸、暴露服装、幼态比例或风格锚点匿名路人脸。",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "情绪和服饰变化下保留脸型、眉眼、高髻结构与成年比例。",
+          "forbidden": "不得继承影视演员脸、暴露服装、幼态比例或风格锚点匿名路人脸。",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+              "sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_PANJINLIAN"
+              },
+              "updated_at": "2026-07-29T16:04:40"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+          "sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_PANJINLIAN/front/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户明确确认；采用内置imagegen原生PNG master，符合统一最高规格合同",
+            "reviewed_at": "2026-07-29T16:04:40",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+            "source_sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T16:04:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+          "sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_PANJINLIAN/three_quarter/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok并要求继续；45度视图确认通过",
+            "reviewed_at": "2026-07-29T18:18:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+            "source_sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T18:18:00+08:00"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+          "sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "side",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_PANJINLIAN/side/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认侧面并要求继续",
+            "reviewed_at": "2026-07-29T18:35:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+            "source_sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-29T18:35:00+08:00"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+          "sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "back",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_PANJINLIAN/back/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户明确确认背面视图",
+            "reviewed_at": "2026-07-29T18:50:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+            "source_sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+            "crop_box": []
+          },
+          "canvas": {"width": 1086, "height": 1448},
+          "updated_at": "2026-07-29T18:50:00+08:00"
+        }
+      ],
+      "status": "partial",
+      "updated_at": "2026-07-29T16:04:40",
+      "views": {
+        "front": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+        "back": "出图/共享/图片/CHAR_PANJINLIAN__back.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back"
+        ],
+        "missing": [
+          "face"
+        ],
+        "complete": false
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "bc7cc18beeabe0317d46af685dfad4728255eaeb3a10be3cb7f6000a6b8b270d",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-29T10:28:20+00:00"
+      }
+    },
+    "CHAR_XIMENQING": {
+      "id": "CHAR_XIMENQING",
+      "type": "character",
+      "display_name": "西门庆",
+      "description": "成年男性，约三十二岁；地方权势与欲望的放大器。",
+      "notes": "第3话前只作轮廓伏笔。",
+      "character_dna": "瘦长脸、眉眼带笑而审视、修整短须；体态松弛自信；衣料高于平民。",
+      "variant_policy": "换装时保留瘦长脸、短须与松弛占空间的体态。",
+      "forbidden_inheritance": "不得继承帝王规格、影视演员脸或街景匿名富户脸。",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "换装时保留瘦长脸、短须与松弛占空间的体态。",
+          "forbidden": "不得继承帝王规格、影视演员脸或街景匿名富户脸。",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-29T04:31:07+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "caa6a951622fde4fc141e49880124fff8e27893be1a50db3480f7db15e5680a9",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-29T10:18:21+00:00"
+      }
+    },
+    "LOC_JINGYANG_RIDGE": {
+      "id": "LOC_JINGYANG_RIDGE",
+      "type": "location",
+      "display_name": "景阳冈",
+      "description": "冷青灰山冈，乱树、坡石、枯枝与大留白形成可见危险。",
+      "notes": "第1话动作主场；3:4母版。",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-29T04:31:07+00:00"
+    },
+    "LOC_QINGHE_MARKET": {
+      "id": "LOC_QINGHE_MARKET",
+      "type": "location",
+      "display_name": "清河县街巷",
+      "description": "暖赭市井，招幌、挑担、车马、店面与纵深人流形成密集世情空间。",
+      "notes": "参考视觉研究PRIMARY_001；不复刻具体构图。",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-29T04:31:07+00:00"
+    },
+    "PROP_WUSONG_STAFF": {
+      "id": "PROP_WUSONG_STAFF",
+      "type": "prop",
+      "display_name": "武松哨棒",
+      "description": "直木行旅防身棒；P009折断，此后不得恢复完整。",
+      "notes": "道具连续性硬约束。",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-29T04:31:07+00:00"
+    },
+    "PROP_CONSTABLE_BADGE": {
+      "id": "PROP_CONSTABLE_BADGE",
+      "type": "prop",
+      "display_name": "都头腰牌",
+      "description": "县衙授予武松的身份道具，P015首次出现。",
+      "notes": "文字后期嵌入，不在生图阶段生成乱码。",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-29T04:31:07+00:00"
+    }
+  },
   "schema_meta": {
     "initialized_at": "2026-07-28",
     "initialized_by": "comic init_project bootstrap"

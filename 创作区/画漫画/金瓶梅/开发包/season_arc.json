@@ -1,28 +1,28 @@
 {
   "kind": "comic_season_arc",
   "version": 2,
-  "status": "draft",
+  "status": "confirmed",
   "chapters": [
     {
       "chapter": "第1话",
-      "core_conflict": "待补",
-      "ending_mode": "待补",
-      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
-      "promise_refs": []
+      "core_conflict": "武松执意过冈，与猛虎正面相搏；英雄声名初成，但真正危险将从山林转入人群。",
+      "ending_mode": "closure_with_new_promise",
+      "ending_intent": "完整兑现打虎动作爽点，并以武大、潘金莲所在的清河县街巷揭示‘暗虎在人间’。",
+      "promise_refs": ["PRM_001"]
     },
     {
       "chapter": "第2话",
-      "core_conflict": "待补",
-      "ending_mode": "待补",
-      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
-      "promise_refs": []
+      "core_conflict": "武松与兄嫂重逢，潘金莲试探越界，武松以兄弟伦理拒绝。",
+      "ending_mode": "decision",
+      "ending_intent": "武松的拒绝形成明确选择，也使潘金莲的屈辱与怨意获得新的方向。",
+      "promise_refs": ["PRM_001", "FSH_001"]
     },
     {
       "chapter": "第3话",
-      "core_conflict": "待补",
-      "ending_mode": "待补",
-      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
-      "promise_refs": []
+      "core_conflict": "潘金莲的叉竿失手落街，西门庆由偶遇生欲，王婆嗅到可交易的机会。",
+      "ending_mode": "reveal",
+      "ending_intent": "揭示偶遇背后的欲望与利益同盟，让‘暗虎’第一次拥有清晰的人形轮廓。",
+      "promise_refs": ["PRM_001", "FSH_001"]
     }
   ]
 }

@@ -6,7 +6,7 @@ import { createServices, registerIpc } from './ipc'
 
 const ui = new AppUiState()
 const services = createServices(ui)
-const productName = 'AnimeArmory'
+const productName = 'LabuTV'
 
 // Electron uses its own name and icon while running an unpackaged build.
 // Set both explicitly so local development looks like the shipped product.
@@ -169,7 +169,7 @@ function createWindow(): BrowserWindow {
   return win
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   const icon = developmentIconPath()
   if (process.platform === 'darwin' && icon) app.dock?.setIcon(icon)
 
@@ -177,6 +177,11 @@ app.whenReady().then(() => {
   session.defaultSession.setPermissionRequestHandler((_wc, _permission, cb) => cb(false))
 
   registerIpc(services)
+  try {
+    await services.bridge.start()
+  } catch (error) {
+    console.warn('[local-bridge] unavailable:', error)
+  }
   createWindow()
 
   app.on('activate', () => {
@@ -189,6 +194,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('before-quit', () => {
+  services.bridge.stop()
   services.pty.disposeAll()
   services.media.dispose()
   void services.watch.disposeAll()

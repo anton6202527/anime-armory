@@ -41,7 +41,7 @@ Usage:
 
 Default behaviour (no flags):
   Snapshot the local checkout, build the Electron macOS Apple Silicon DMG
-  (AnimeArmory_electron_macos_arm64.dmg) with the bundled skills repo and R2
+  (LabuTV_electron_macos_arm64.dmg) with the bundled skills repo and R2
   Demo catalog fallback, write SHA256SUMS.txt, and keep all artifacts local.
   README download links are NOT touched and the release is NOT marked latest
   automatically.
@@ -66,8 +66,8 @@ Options:
   -h, --help                      Show this help.
 
 Release artifact names:
-  AnimeArmory_electron_macos_arm64.dmg
-  AnimeArmory_electron_windows.exe (--win)
+  LabuTV_electron_macos_arm64.dmg
+  LabuTV_electron_windows.exe (--win)
   anime-armory.vsix (--vscode or --all)
 
 Environment:
@@ -241,10 +241,10 @@ validate_macos_dmg() {
   hdiutil verify "$dmg"
   hdiutil attach "$dmg" -mountpoint "$mount_dir" -nobrowse -readonly >/dev/null
   local ok=1
-  if [[ ! -d "$mount_dir/AnimeArmory.app" ]]; then
-    echo "DMG validation failed: AnimeArmory.app not found" >&2
+  if [[ ! -d "$mount_dir/LabuTV.app" ]]; then
+    echo "DMG validation failed: LabuTV.app not found" >&2
     ok=0
-  elif [[ ! -f "$mount_dir/AnimeArmory.app/Contents/Resources/resources/demo_catalog.json" ]]; then
+  elif [[ ! -f "$mount_dir/LabuTV.app/Contents/Resources/resources/demo_catalog.json" ]]; then
     echo "DMG validation failed: bundled resources/demo_catalog.json not found" >&2
     ok=0
   fi
@@ -294,7 +294,7 @@ smoke_test_macos_app() {
   # Keep the signed app alive for five seconds with an isolated Electron
   # profile; an immediate exit is a release-blocking failure with its log.
   local app_path="$1"
-  local executable="$app_path/Contents/MacOS/AnimeArmory"
+  local executable="$app_path/Contents/MacOS/LabuTV"
   local smoke_dir smoke_log pid status attempt
   smoke_dir="$(mktemp -d "${TMPDIR:-/tmp}/e2a-app-smoke.XXXXXX")"
   smoke_log="$smoke_dir/launch.log"
@@ -329,10 +329,10 @@ make_macos_dmg() {
   # dmgbuild bundle at build time, which is flaky on restricted networks.
   local app_path="$1" dmg_out="$2" stage
   stage="$(mktemp -d "${TMPDIR:-/tmp}/e2a-dmg-stage.XXXXXX")"
-  ditto "$app_path" "$stage/AnimeArmory.app"
+  ditto "$app_path" "$stage/LabuTV.app"
   ln -s /Applications "$stage/Applications"
   rm -f "$dmg_out"
-  hdiutil create -volname "AnimeArmory" -srcfolder "$stage" -format UDZO -ov "$dmg_out"
+  hdiutil create -volname "LabuTV" -srcfolder "$stage" -format UDZO -ov "$dmg_out"
   rm -rf "$stage"
 }
 
@@ -362,12 +362,12 @@ build_electron_macos() {
     CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac --arm64 --dir
   )
 
-  local app_src="$SOURCE_DIR/apps/desktop/release/mac-arm64/AnimeArmory.app"
+  local app_src="$SOURCE_DIR/apps/desktop/release/mac-arm64/LabuTV.app"
   if [[ ! -d "$app_src" ]]; then
     echo "Could not locate built Electron app bundle: $app_src" >&2
     exit 1
   fi
-  local artifact_dmg="$ARTIFACT_DIR/AnimeArmory_electron_macos_arm64.dmg"
+  local artifact_dmg="$ARTIFACT_DIR/LabuTV_electron_macos_arm64.dmg"
   sign_macos_app "$app_src"
   smoke_test_macos_app "$app_src"
   make_macos_dmg "$app_src" "$artifact_dmg"
@@ -385,12 +385,12 @@ build_electron_windows() {
     CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --win nsis --x64
   )
 
-  local exe_src="$SOURCE_DIR/apps/desktop/release/AnimeArmory_electron_windows.exe"
+  local exe_src="$SOURCE_DIR/apps/desktop/release/LabuTV_electron_windows.exe"
   if [[ ! -f "$exe_src" ]]; then
     echo "Could not locate built Windows installer: $exe_src" >&2
     exit 1
   fi
-  local artifact_exe="$ARTIFACT_DIR/AnimeArmory_electron_windows.exe"
+  local artifact_exe="$ARTIFACT_DIR/LabuTV_electron_windows.exe"
   mv "$exe_src" "$artifact_exe"
   if [[ ! -s "$artifact_exe" || "$(head -c 2 "$artifact_exe")" != "MZ" ]]; then
     echo "Windows installer failed validation (empty or not a PE executable)" >&2
@@ -491,7 +491,7 @@ NODE
 release_notes() {
   local notes="$OUT_DIR/RELEASE_NOTES.md"
   {
-    echo "# AnimeArmory (Electron) ${TAG}"
+    echo "# LabuTV (Electron) ${TAG}"
     echo
     if [[ "$UPLOAD" == "1" ]]; then
       echo "Built locally with tools/e2a and uploaded as GitHub Release assets."
@@ -585,7 +585,7 @@ upload_release() {
   if gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
     if [[ "$REFRESH_NOTES" == "1" ]]; then
       gh release edit "$TAG" --repo "$TARGET_REPO" \
-        --title "AnimeArmory (Electron) ${TAG}" --notes-file "$notes"
+        --title "LabuTV (Electron) ${TAG}" --notes-file "$notes"
     else
       # Incremental uploads (for example --win --no-mac) must not
       # shrink the notes to just this run's asset subset
@@ -593,7 +593,7 @@ upload_release() {
     fi
   else
     gh release create "$TAG" --repo "$TARGET_REPO" \
-      --title "AnimeArmory (Electron) ${TAG}" --notes-file "$notes" --latest=false
+      --title "LabuTV (Electron) ${TAG}" --notes-file "$notes" --latest=false
   fi
   local asset
   for asset in "${ASSETS[@]}"; do

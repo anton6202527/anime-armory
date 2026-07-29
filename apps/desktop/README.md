@@ -1,6 +1,6 @@
-# AnimeArmory Desktop (Electron)
+# LabuTV Desktop (Electron)
 
-Creation Armory(创作兵工厂)桌面 IDE 的 **Electron 版**(自原 Tauri 版重构而来,
+LabuTV 桌面创作 IDE 的 **Electron 版**(自原 Tauri 版重构而来,
 Tauri 版已于 2026-07 退役删除)。长期重度使用定位:类 VSCode 的多进程结构、类型化
 IPC 契约、worker 化媒体解码、虚拟化文件树、按 chunk 拆分的懒加载面板。
 
@@ -16,8 +16,14 @@ npm run dist         # electron-builder 产出安装包(release/)
 
 技能仓库解析顺序:显式 `VITE_ANIME_ARMORY_REPO` → `ANIME_ARMORY_REPO` 环境变量 →
 从 cwd 向上查找含 `skills/README.md` 的目录 → 打包内置 `resources/`。
-作品工作区默认为 `~/AnimeArmory`(可经菜单"切换工作区…"更换,与技能仓库互斥隔离)。
+新作品工作区默认为 `~/LabuTV`（若机器上已有旧版 `~/AnimeArmory` 且尚无 `~/LabuTV`，会继续沿用旧目录，避免迁移时丢失作品）。可经菜单“切换工作区…”更换，与技能仓库互斥隔离。
 自动化调试可用 `ANIME_ARMORY_WORKSPACE` 指向临时工作区。
+
+### Web 本地 Agent 桥接
+
+Electron 启动后会在 `127.0.0.1:43117` 提供仅回环可见的 Web 桥接。浏览器第一次提交本地任务时，桌面端会显示原生确认弹窗；允许后签发 12 小时内存会话令牌。桥接只接受结构化作品、附件与 Prompt，不接受网页提供的 Shell 命令或文件系统路径。附件与 Agent 输出被限制在当前 LabuTV 作品工作区的 `创作区/<系列>/<作品>--web-<id>/`。
+
+本地开发默认只允许 Web 端的 `localhost:4174` 与 `127.0.0.1:4174`。正式 Web 域名需通过逗号分隔的 `ANIME_ARMORY_WEB_ORIGINS` 显式加入允许列表。当前支持 Codex CLI、Claude Code 与 OpenCode，默认优先 Codex。
 
 ### 匿名 Demo 下载与本地作品
 
@@ -51,6 +57,7 @@ src/
 │       ├── watch      chokidar,限定生产子树,300ms 防抖 fs-changed
 │       ├── media      localhost HTTP Range 媒体服务器(视频拖动必需)
 │       ├── agents     登录 shell 探测 claude/codex/opencode/gemini/kimi
+│       ├── localBridge 受控的 Web 配对、附件传输与本地 Agent 任务
 │       ├── pipeline   skills/n2d/run.py next --json 桥(30s 超时)
 │       └── demos      演示包下载/sha256 校验/解压安装
 ├── preload/           contextBridge 暴露 window.armory(invoke/on/platform/getPathForFile)

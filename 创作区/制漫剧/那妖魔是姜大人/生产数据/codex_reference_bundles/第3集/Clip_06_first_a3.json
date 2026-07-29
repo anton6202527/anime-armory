@@ -1,0 +1,240 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 5,
+  "cli_image_input_limit": 5,
+  "cli_image_input_truncated": true,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip06_first_a2.png",
+      "bytes": 2904837,
+      "owner": "Clip_06",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第3集/Clip06_first_a2__93e3b5c367e6_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3691117,
+      "prepared_rel_path": "生产数据/reference_enhanced/第3集/Clip06_first_a2__93e3b5c367e6_941x1672_to_1024x1819.png",
+      "prepared_sha256": "acd45468e317c22adfd51b7158539cc94dc6e1de3d68f5fcb93c68c272f35b42",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/第3集/图片/Clip06_first_a2.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "93e3b5c367e607d9d280d3efe480bb5687b36cc2f5bacacdb0e2511d7f6652cd",
+      "source": "same_clip_previous_frame",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip06_first_a2.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+      "bytes": 2068371,
+      "owner": "CHAR_01/镇魔司制服态",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1254,
+        "original_long_edge": 1254,
+        "original_short_edge": 1254,
+        "original_width": 1254,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "b40ec5a8ab2b4c50cf403e441ab1d87e555b307076fd140b69f34fb77ce44b63",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+      "bytes": 2552872,
+      "owner": "CHAR_03/常态",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第3集/定妆_CHAR_03__常态_脸部特写_脸锚裁切__4d2c76382efc_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3194266,
+      "prepared_rel_path": "生产数据/reference_enhanced/第3集/定妆_CHAR_03__常态_脸部特写_脸锚裁切__4d2c76382efc_941x1672_to_1024x1819.png",
+      "prepared_sha256": "df1d57c8fd42b69c8ce55010d193a75ebe843a0e23ae8a9d8e8381fcfc5a2f61",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 14,
+      "sha256": "4d2c76382efca7376cc44f9ef2c2af0e81040f382312ca557f5ccf76a2fae331",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_LOC_02.png",
+      "bytes": 2815829,
+      "owner": "LOC_02",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第3集/定妆_场景_LOC_02__9ddb8fd7f716_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3552604,
+      "prepared_rel_path": "生产数据/reference_enhanced/第3集/定妆_场景_LOC_02__9ddb8fd7f716_941x1672_to_1024x1819.png",
+      "prepared_sha256": "5539026f129b8b712f3a6f245a0ec75f1514f65b5f323ff4d7f04eef2463887c",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_场景_LOC_02.png",
+      "role": "asset",
+      "sequence": 18,
+      "sha256": "9ddb8fd7f716bf39ad9aa860c495b3274e800af3fe75db9a8b3c492b7f98fd6d",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_LOC_02.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
+      "bytes": 1827758,
+      "owner": "WEAPON_01",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第3集/定妆_武器_横刀__03eb48c39aa7_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2083211,
+      "prepared_rel_path": "生产数据/reference_enhanced/第3集/定妆_武器_横刀__03eb48c39aa7_941x1672_to_1024x1819.png",
+      "prepared_sha256": "7e86b3e0fa4679d4b0e2701cb5f5e77a0319551da5717328ad4557622c93e3e9",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_武器_横刀.png",
+      "role": "asset",
+      "sequence": 19,
+      "sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png"
+    }
+  ],
+  "episode": "第3集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "镇魔司制服态",
+      "id": "CHAR_01",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+        "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png"
+      ]
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_03",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_03__常态.png",
+        "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+        "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_03__常态_侧.png",
+        "出图/共享/图片/定妆_CHAR_03__常态_背.png"
+      ]
+    },
+    {
+      "id": "LOC_02",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_LOC_02.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "WEAPON_01",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_武器_横刀.png",
+        "出图/共享/图片/定妆_武器_横刀_比例.png",
+        "出图/共享/图片/定妆_武器_横刀_手持.png"
+      ],
+      "type": "weapon"
+    },
+    {
+      "id": "WEAPON_横刀",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_武器_横刀.png",
+        "出图/共享/图片/定妆_武器_横刀_比例.png",
+        "出图/共享/图片/定妆_武器_横刀_手持.png"
+      ],
+      "type": "weapon"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_06_first_a3",
+  "target": "出图/第3集/图片/Clip06_first_a3.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

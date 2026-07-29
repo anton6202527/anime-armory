@@ -1,0 +1,487 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "episode_graph",
+      "doctor",
+      "production_breakdown",
+      "reference_slot_gate",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第3集",
+  "files": [
+    {
+      "bytes": 3586,
+      "exists": true,
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=auto_recommended\n- 生视频渠道: 即梦/Dreamina  # source=auto_recommended\n- 视频模型路由: 自动按镜头路由  # source=auto_recommended\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 跳过  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n- 主线剪枝: 突出主线  # source=auto_recommended\n- 片段经济: 紧凑  # source=auto_recommended\n\nraw audit history omitted: records_seen=24, corrections_included=0/3",
+      "preview_policy": "settings_region_plus_bounded_corrections",
+      "relpath": "_设置.md",
+      "sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0"
+    },
+    {
+      "bytes": 4366,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | 8/8 | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 24/24 | ✅ | 8/8 | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ✅ | 54/73 | ✅ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 返修记录\n- 2026-07-27：第3集视频 prompt 已通过 `video_prompt_preflight`（0 block），整集按真实后端兼容性准备为 3 个批次、10 个物理视频段（Clip01–05、Clip06、Clip07–08 接力拆段）。已用本机即梦官方 CLI 实时核验 Seedance 2.0 VIP 能力、登录与 7981 credits 余额，并为 4 个多人调度镜登记 `degrade_only` 保真实现分解；正式提交仍由 `video_preflight` 拦截旧首帧生成配方证据、Clip04/06 超 15 秒拆段及 edit-cut 边界帧缺口，未绕过闸门烧预算。\n- 2026-07-27：第3集已按整集粒度完成 17/17 张 GPT Image 2 / Codex 分镜图；执行者已逐张查看当前像素，并完成脸部、发型、服装与道具形状复核。当前进入生成配方回执、身份形态映射与视频前检收尾。\n- 2026-07-27：已按 n2d/n2d-script/n2d-review 更新影响计划，完成第3集 `script_stage1 → script_stage2` 最小重制。导演分镜、故事板、18 条文本估时、剧本质量合同、锚帧计划、timed animatic 与 P-3 制片交接包均已刷新；script quality 0 block，animatic 5/5 pass，P-3 9/9 pass。当前时长为 `text_estimate_no_audio`，正式合成前仍须用 final voice 刷新。\n- 2026-07-24：第2集指定的 6 个视频片段已全部完成 Dreamina / Seedance 2.0 VIP 提交与验收：Clip05 part2、Clip06、Clip07 part1、Clip07 part2、Clip08 part1、Clip08 part2；累计消耗 756 credits（含 Clip07 part2 两次拒收重试）。Clip08 part2 已按 8fps 全时段 32 帧接触表复核并通过，纸上墨虎未离开谱页、无伪文字、姜月初身份/发型/服装稳定。合成阶段仍按项目设置默认跳过。视频列暂保持 provisional，待旧批次的后验一致性与配方证据闸门销账后再标 8/8，禁止强写完成。\n- 2026-07-24：视频预检发现 3 张旧图参考输入证据不可审计，已真实重抽 `EP02_CLIP01_start_a1.png`、`EP02_CLIP01_start_a3.png`、`EP02_CLIP04_start.png`，并为每次调用登记实际参考路径、prompt/reference/artifact SHA-256。另修复 `EP02_CLIP06_start.png` 山脊活虎乱入。全量 full image_qc 结果：脸/发型/服装各 26/26 ok，人物参考覆盖 21/21，prop pending=0，hard_blocks=0；`video_preflight`\n...",
+      "relpath": "_进度.md",
+      "sha256": "eb499c40d5cbf1d5c116616e36a1b2a1e807c5b91682ab0771d523242dde23d4"
+    },
+    {
+      "bytes": 298555,
+      "exists": true,
+      "preview": "# 第3集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第3集.json`；content_hash=66e8195a106b5750\n- 核心看点：audience_payoff=观众看她如何用沉默唬住整支马队，又在百十条人命的重压下被迫接下必死任务，收获误认反转的爽点与集尾悬念。；category=假身份反差 + 误认反转 + 道德夹逼；why_watch=刚埋掉恩人尸体、偷穿镇魔司制服求生的姜月初，被十几骑武人当场跪求出手救村——假身份第一次兑现，就把她架上狼妖死局。\n- 首屏钩子：content_promise=她将如何背着假身份接下这场救村死局？；content_proposition=这些刀客为什么跪求一个假货救命？；expected_metric=primary=retention_3s；target=0.8；hook_type=反差/悬念；muted_readable=True；muted_safe=True；muted_safe_proof=群跪、叩首、黑衣赤纹与女子僵住的手构成无需文字的身份反差冲突。；onscreen_duration_sec=2.2…\n  - Pacing: primary=100% compressed=0%；主时长=EP03_CLIP01,EP03_CLIP02,EP03_CLIP03,EP03_CLIP04,EP03_CLIP05,EP03_CLIP06,EP03_CLIP07,EP03_CLIP08；primary_runtime_focus=EP03_CLIP01；EP03_CLIP02；EP03_CLIP03；EP03_CLIP04；EP03_CLIP05；EP03_CLIP06；EP03_CLIP07；EP03_CLIP08；strategy=冷开群跪反差、马队急停、误认反转、人命压身与集尾死局吃主时长…\n  - R01: hook_id=OPEN_01；hook_type=反差；opened_at=EP03_CLIP01；payoff_clip=EP03_CLIP07；payoff_due=EP03_CLIP07；payoff_evidence=时间线追上冷开场：黑衣赤纹被误认成镇魔司、狼妖屠村求援无门，众人把唯一希望压在她身上。；payoff_status=paid；promise=这些人为何把姜月初当成唯一救命者；promise_type=opening_hook\n  - R02: hook_id=MID_01；hook_type=危机；opened_at=EP03_CLIP03；payoff_clip=EP03_CLIP06；payoff_due=EP03_CLIP06；payoff_evidence=陈青源降姿态执礼，假身份第一次唬住马队；但『把我架到狼窝门口』的预言同集应验，长线穿帮风险移交后续集。；payoff_status=paid；promise=偷穿制服究竟是护身符还是催命符；promise_type=identity_risk\n  - R03: delayed_payoff_ep=第4集；hook_id=TAIL_01；hook_type=死局悬念；opened_at=EP03_CLIP08；payoff_due=第4集；payoff_status=open；promise=顶着假身份去上盘村剿狼妖，她能活着回来吗；promise_type=cliffhanger\n  - Q01: expected_next_handling=本集兑现/推进；question_context=唬人成功 → 上盘村惨案与唯一希望反噬 → 被迫接下狼妖任务悬断 # 节拍点：0-3s 众人跪求倒叙钩；约15s 黑；question_id=Q01；signal=任务；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=纹制服是唯一高饱和制度符号；全集不出现百妖谱金光、妖化或系统面板。 | Clip | 时间 | 镜头与机位 | 动；question_id=Q02；signal=系统；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=何用沉默唬住整支马队，又在百十条人命的重压下被迫接下必死任务，收获误认反转的爽点与集尾悬念。 visual_hook；question_id=Q03；signal=任务；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=/悬念 content_proposition 这些刀客为什么跪求一个假货救命？ onscreen_text 他们跪求；question_id=Q04；signal=为什么；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=opened_at EP03_CLIP01 promise 这些人为何把姜月初当成唯一救命者 payoff_due EP03_CLIP07；question_id=Q05；signal=为何；status=paid_or_progressed\n  - Q06: expected_next_hand\n...",
+      "relpath": "出图/第3集/prompt/01_分镜出图.md",
+      "sha256": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463"
+    },
+    {
+      "bytes": 183392,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08"
+    },
+    {
+      "bytes": 28500,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第3集.json"
+    },
+    {
+      "bytes": 11233,
+      "exists": true,
+      "preview": {
+        "episode": "第3集",
+        "graph_hash": "0a704758d39d6884e3b869b843bd20cc5ac754ebaf035ec5a5b3805c3b19cefd",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 26,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 27,
+          "routes": 8,
+          "story_clips": 8,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第3集.json",
+      "sha256": "a4c429f6946352187d4c23dcdf1b7f6da18af09e10096681a171d3b79a9d0d04"
+    }
+  ],
+  "genre_pack_context": {
+    "activation": {
+      "reason": "storyboard 中已有镜头命中题材高风险场景。",
+      "state": "scene_archetypes_triggered",
+      "storyboard_clip_count": 8,
+      "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+      "storyboard_state": "ready",
+      "triggered": true
+    },
+    "active_scene_archetypes": [
+      {
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "insert_coverage": {
+          "note": "现代物品/关键道具建议给物件 insert 特写，别永远只在人物手里带过",
+          "required": true,
+          "subject": "prop",
+          "tier": "warn"
+        },
+        "label": "现代物品/知识落地",
+        "matched_clips": [
+          "EP03_CLIP01",
+          "EP03_CLIP02",
+          "EP03_CLIP03",
+          "EP03_CLIP04"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP03_CLIP01",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP03_CLIP02",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP03_CLIP03",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP03_CLIP04",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          }
+        ],
+        "production_risks": [
+          "道具形态漂移",
+          "古今材质冲突",
+          "手持关系错"
+        ],
+        "required_contract_fields": [
+          "mount_contact",
+          "harness_lock",
+          "screen_direction"
+        ],
+        "scene_id": "anachronism_prop",
+        "style_binding": "现代道具登记为 PROP，交互镜必须有 contact/possession 说明",
+        "style_bindings": [
+          "现代道具登记为 PROP，交互镜必须有 contact/possession 说明"
+        ]
+      }
+    ],
+    "episode": "第3集",
+    "generated_at": "2026-07-29T12:05:21+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "matched_genre_keys": [
+        "chuanyue"
+      ],
+      "matched_labels": [
+        "穿越"
+      ],
+      "matches": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 0,
+          "matched_term": "系统流",
+          "priority": 1
+        }
+      ],
+      "raw": "系统流"
+    },
+    "issues": [
+      {
+        "clip": "EP03_CLIP01",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP03_CLIP02",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP03_CLIP03",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP03_CLIP04",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      }
+    ],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形"
+      ],
+      "genre_keys": [
+        "chuanyue"
+      ],
+      "labels": [
+        "穿越"
+      ],
+      "matched_packs": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 0,
+          "matched_term": "系统流",
+          "priority": 1
+        }
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "by_genre": [
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "chuanyue",
+            "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+          }
+        ],
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+      }
+    },
+    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+    "stage_key": "image",
+    "status": "warn",
+    "summary": {
+      "activation_state": "scene_archetypes_triggered",
+      "active_scenes": 1,
+      "issues": 4,
+      "matched_clips": 4,
+      "matched_genre_keys": [
+        "chuanyue"
+      ],
+      "matched_packs": 1,
+      "storyboard_clip_count": 8,
+      "storyboard_state": "ready"
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第3集.json"
+  ],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "settings_context": {
+    "authority": {
+      "audit_records": "provenance_only_non_authoritative",
+      "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+      "records_can_override_effective_settings": false
+    },
+    "effective_settings": {
+      "主线剪枝": {
+        "source": "auto_recommended",
+        "value": "突出主线"
+      },
+      "制作模式": {
+        "source": "explicit_user",
+        "value": "混合自动路由"
+      },
+      "发行地区": {
+        "source": "explicit_user",
+        "value": "中国大陆"
+      },
+      "合成阶段": {
+        "source": "explicit_user",
+        "value": "跳过"
+      },
+      "合规用途": {
+        "source": "explicit_user",
+        "value": "internal_only"
+      },
+      "图片验收模式": {
+        "source": "explicit_user",
+        "value": "逐张机器QC+实际目视"
+      },
+      "基础视觉风格": {
+        "source": "explicit_user",
+        "value": "冷灰写实3D国风漫剧"
+      },
+      "字幕语言": {
+        "source": "explicit_user",
+        "value": "中文"
+      },
+      "执行者实际像素目视": {
+        "source": "explicit_user",
+        "value": "授权"
+      },
+      "母题增强": {
+        "source": "explicit_user",
+        "value": "开启"
+      },
+      "片段经济": {
+        "source": "auto_recommended",
+        "value": "紧凑"
+      },
+      "生图AI": {
+        "source": "explicit_user",
+        "value": "Codex CLI"
+      },
+      "生图模型": {
+        "source": "explicit_user",
+        "value": "GPT Image 2"
+      },
+      "生成优先序": {
+        "source": "explicit_user",
+        "value": "关键镜优先"
+      },
+      "生成粒度": {
+        "source": "explicit_user",
+        "value": "整集"
+      },
+      "生视频模型": {
+        "source": "auto_recommended",
+        "value": "Seedance 2.0"
+      },
+      "生视频渠道": {
+        "source": "auto_recommended",
+        "value": "即梦/Dreamina"
+      },
+      "画幅": {
+        "source": "explicit_user",
+        "value": "9:16"
+      },
+      "目标平台": {
+        "source": "explicit_user",
+        "value": "红果"
+      },
+      "脚本批次": {
+        "source": "explicit_user",
+        "value": "逐集"
+      },
+      "视频模型路由": {
+        "source": "auto_recommended",
+        "value": "自动按镜头路由"
+      },
+      "重抽预算策略": {
+        "source": "explicit_user",
+        "value": "预算充足"
+      },
+      "项目规模": {
+        "source": "explicit_user",
+        "value": "长篇量产"
+      },
+      "题材": {
+        "source": "explicit_user",
+        "value": "系统流"
+      },
+      "首切范围": {
+        "source": "explicit_user",
+        "value": "部分先切"
+      }
+    },
+    "kind": "n2d_settings_context",
+    "recent_corrections": [],
+    "record_summary": {
+      "corrections_included": 0,
+      "corrections_seen": 0,
+      "format": "record_section",
+      "full_history_omitted": true,
+      "limit": 3,
+      "records_seen": 24
+    },
+    "source_path": "_设置.md",
+    "source_sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0",
+    "status": "ok",
+    "version": 1
+  },
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第3集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json",
+      "生产数据/episode_graph_第3集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

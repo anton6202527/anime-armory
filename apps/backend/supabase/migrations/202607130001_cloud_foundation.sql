@@ -1,4 +1,4 @@
--- Anime Armory cloud foundation.
+-- LabuTV cloud foundation.
 -- Large binary content lives in object storage; Postgres stores identity,
 -- authorization, metadata, and resumable-upload state only.
 

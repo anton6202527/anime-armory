@@ -1,7 +1,7 @@
 {
   "name": "anime-armory",
-  "displayName": "Creation Armory",
-  "description": "VS Code panel for organizing Creation Armory creative production workflows.",
+  "displayName": "LabuTV",
+  "description": "VS Code panel for organizing LabuTV creative production workflows.",
   "version": "0.9.43",
   "publisher": "armory",
   "private": true,
@@ -27,7 +27,7 @@
       "activitybar": [
         {
           "id": "animeArmory",
-          "title": "Creation Armory",
+          "title": "LabuTV",
           "icon": "media/icon.svg"
         }
       ]
@@ -36,7 +36,7 @@
       "animeArmory": [
         {
           "id": "animeArmoryView",
-          "name": "Creation Armory",
+          "name": "LabuTV",
           "icon": "media/icon.svg"
         }
       ]
@@ -44,12 +44,12 @@
     "commands": [
       {
         "command": "animeArmory.refresh",
-        "title": "创作兵工厂: 刷新",
+        "title": "LabuTV: 刷新",
         "icon": "$(refresh)"
       },
       {
         "command": "animeArmory.selectRepo",
-        "title": "创作兵工厂: 选择仓库目录",
+        "title": "LabuTV: 选择仓库目录",
         "icon": "$(folder-opened)"
       },
       {
@@ -118,7 +118,7 @@
       }
     ],
     "configuration": {
-      "title": "Creation Armory",
+      "title": "LabuTV",
       "properties": {
         "animeArmory.repoRoot": {
           "type": "string",
@@ -128,12 +128,12 @@
         "animeArmory.useExternalWorks": {
           "type": "boolean",
           "default": false,
-          "description": "使用外部作品目录，而不是扩展内置的独立样例工程。通过“创作兵工厂: 选择仓库目录”会自动开启。"
+          "description": "使用外部作品目录，而不是扩展内置的独立样例工程。通过“LabuTV: 选择仓库目录”会自动开启。"
         },
         "animeArmory.openTerminalOnReveal": {
           "type": "boolean",
           "default": true,
-          "description": "第一次点开 Creation Armory 面板时自动打开一个集成终端（方便直接跑 skills 脚本）。"
+          "description": "第一次点开 LabuTV 面板时自动打开一个集成终端（方便直接跑 skills 脚本）。"
         },
         "animeArmory.showSkills": {
           "type": "boolean",

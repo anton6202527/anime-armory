@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-29T14:48:18",
+  "ref_id": "STYLE_JINPINGMEI_MING_URBAN",
+  "candidate_path": "出图/共享/candidates/STYLE_JINPINGMEI_MING_URBAN/anchor/20260729_user_confirmed/candidate_01_native.png",
+  "candidate_sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70",
+  "adopted_path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+  "adopted_sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "确认画面并按最高规格合同改采后端原生PNG master，禁止采纳插值放大版本",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

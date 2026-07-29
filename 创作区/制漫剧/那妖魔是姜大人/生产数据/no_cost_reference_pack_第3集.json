@@ -1,0 +1,623 @@
+{
+  "clip_count": 8,
+  "episode": "第3集",
+  "kind": "n2d_no_cost_reference_pack",
+  "multi_subject_clips": [
+    "EP03_CLIP01",
+    "EP03_CLIP03",
+    "EP03_CLIP05",
+    "EP03_CLIP06",
+    "EP03_CLIP07",
+    "EP03_CLIP08"
+  ],
+  "notes": [],
+  "summary": {
+    "asset_targets": 14,
+    "character_targets": 47,
+    "multi_subject_targets": 12,
+    "planned": 27,
+    "ready": 46,
+    "total": 73
+  },
+  "targets": [
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "rear_three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+      "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
+      "scope": "character",
+      "slot": "turnaround",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+      "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/“囚途残损态”",
+      "path": "出图/共享/图片/定妆_CHAR_01_“囚途残损态”_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_侧.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_后45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "rear_three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_背.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_三视图.png",
+      "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
+      "scope": "character",
+      "slot": "turnaround",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_脸部特写.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01__镇魔司制服态_表情_六联表.png",
+      "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_01/镇魔司制服态",
+      "path": "出图/共享/图片/定妆_CHAR_01_镇魔司制服态_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_侧.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_后45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "rear_three_quarter",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_背.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03__常态_脸部特写_脸锚裁切.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_03/常态",
+      "path": "出图/共享/图片/定妆_CHAR_03_常态_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "rear_three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_02/“濒死重伤态”",
+      "path": "出图/共享/图片/定妆_CHAR_02_“濒死重伤态”_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "rear_three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png",
+      "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "BEAST_01/“穿心复生态”",
+      "path": "出图/共享/图片/定妆_BEAST_01_“穿心复生态”_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "LOC_02",
+      "path": "出图/共享/图片/定妆_场景_LOC_02.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_02",
+      "path": "出图/共享/图片/定妆_场景_LOC_02.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_02",
+      "path": "出图/共享/图片/定妆_LOC_02_empty_plate.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "LOC_02",
+      "path": "出图/共享/图片/定妆_LOC_02_lighting_plate.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "WEAPON_横刀",
+      "path": "出图/共享/图片/定妆_武器_横刀.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "WEAPON_横刀",
+      "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "WEAPON_横刀",
+      "path": "出图/共享/图片/定妆_WEAPON_横刀_detail_closeup.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "planned"
+    },
+    {
+      "owner": "LOC_01",
+      "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_01",
+      "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_01",
+      "path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "LOC_01",
+      "path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "PROP_镇魔司制服",
+      "path": "出图/共享/图片/定妆_道具_镇魔司制服.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_镇魔司制服",
+      "path": "出图/共享/图片/定妆_道具_镇魔司制服_比例.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_镇魔司制服",
+      "path": "出图/共享/图片/定妆_PROP_镇魔司制服_detail_closeup.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP01",
+      "path": "出图/第3集/区域构建/EP03_CLIP01/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP01",
+      "path": "出图/第3集/区域构建/EP03_CLIP01/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP03",
+      "path": "出图/第3集/区域构建/EP03_CLIP03/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP03",
+      "path": "出图/第3集/区域构建/EP03_CLIP03/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP05",
+      "path": "出图/第3集/区域构建/EP03_CLIP05/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP05",
+      "path": "出图/第3集/区域构建/EP03_CLIP05/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP06",
+      "path": "出图/第3集/区域构建/EP03_CLIP06/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP06",
+      "path": "出图/第3集/区域构建/EP03_CLIP06/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP07",
+      "path": "出图/第3集/区域构建/EP03_CLIP07/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP07",
+      "path": "出图/第3集/区域构建/EP03_CLIP07/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP08",
+      "path": "出图/第3集/区域构建/EP03_CLIP08/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP03_CLIP08",
+      "path": "出图/第3集/区域构建/EP03_CLIP08/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    }
+  ],
+  "used_assets": [
+    "LOC_01",
+    "LOC_02",
+    "PROP_镇魔司制服",
+    "WEAPON_横刀"
+  ],
+  "used_characters": [
+    "BEAST_01",
+    "CHAR_01",
+    "CHAR_01/“囚途残损态”",
+    "CHAR_01/镇魔司制服态",
+    "CHAR_02",
+    "CHAR_03",
+    "CHAR_03/风尘劲装态"
+  ]
+}

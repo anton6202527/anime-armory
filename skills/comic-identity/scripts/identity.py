@@ -2746,7 +2746,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
     submitted_ratio = dreamina_submitted_ratio(requested_ratio) if backend == "dreamina" else requested_ratio
     poll_sec = int(getattr(args, "poll_sec", 180) or 180)
     model_version = str(getattr(args, "model_version", "5.0") or "5.0")
-    resolution_type = str(getattr(args, "resolution_type", "2k") or "2k")
+    resolution_type = str(getattr(args, "resolution_type", "4k") or "4k")
     channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
     model = f"Dreamina {model_version}" if backend == "dreamina" else CODEX_MODEL
     candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
@@ -4380,7 +4380,7 @@ def main() -> int:
     p_anchors.add_argument("--timeout-sec", type=int, default=600)
     p_anchors.add_argument("--poll-sec", type=int, default=180, help="Dreamina 轮询秒数")
     p_anchors.add_argument("--model-version", default="5.0", help="Dreamina 具体模型版本")
-    p_anchors.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
+    p_anchors.add_argument("--resolution-type", default="4k", help="Dreamina 输出规格；默认请求当前已核验最高原生档")
     p_anchors.set_defaults(func=generate_anchors)
 
     p_adopt_anchor = sub.add_parser("adopt-anchor", help="采纳已人工选中的共享锚或角色 front 候选")
@@ -4405,7 +4405,7 @@ def main() -> int:
     p_outfits.add_argument("--timeout-sec", type=int, default=600)
     p_outfits.add_argument("--poll-sec", type=int, default=180, help="Dreamina 轮询秒数")
     p_outfits.add_argument("--model-version", default="5.0", help="Dreamina image2image 模型版本")
-    p_outfits.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
+    p_outfits.add_argument("--resolution-type", default="4k", help="Dreamina 输出规格；默认请求当前已核验最高原生档")
     p_outfits.set_defaults(func=generate_outfit_references)
 
     p_expressions = sub.add_parser("expressions", help="基于已采纳 face/front 生成结构化表情锚")
@@ -4423,7 +4423,7 @@ def main() -> int:
     p_expressions.add_argument("--timeout-sec", type=int, default=600)
     p_expressions.add_argument("--poll-sec", type=int, default=600, help="Dreamina 轮询秒数")
     p_expressions.add_argument("--model-version", default="5.0", help="Dreamina image2image 模型版本")
-    p_expressions.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
+    p_expressions.add_argument("--resolution-type", default="4k", help="Dreamina 输出规格；默认请求当前已核验最高原生档")
     p_expressions.set_defaults(func=generate_expression_references)
 
     p_views = sub.add_parser("views", help="生成/登记常驻角色专门定妆多视图")
@@ -4446,7 +4446,7 @@ def main() -> int:
     p_views.add_argument("--timeout-sec", type=int, default=240)
     p_views.add_argument("--poll-sec", type=int, default=180, help="Dreamina 轮询秒数")
     p_views.add_argument("--model-version", default="5.0", help="Dreamina image2image 模型版本")
-    p_views.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
+    p_views.add_argument("--resolution-type", default="4k", help="Dreamina 输出规格；默认请求当前已核验最高原生档")
     p_views.add_argument("--ratio", default="3:4", help="Dreamina 全身视图画幅")
     p_views.add_argument("--face-ratio", default="1:1", help="Dreamina 头像视图画幅")
     p_views.add_argument(

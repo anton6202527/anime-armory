@@ -1,5 +1,5 @@
 appId: com.animearmory.desktop
-productName: AnimeArmory
+productName: LabuTV
 directories:
   output: release
 # Native deps are handled outside electron-builder: postinstall runs
@@ -32,14 +32,14 @@ mac:
   category: public.app-category.productivity
   # electron-builder converts the 1024px source into the required ICNS set.
   icon: assets/app-icon/icon.png
-  artifactName: AnimeArmory_electron_macos_${arch}.${ext}
+  artifactName: LabuTV_electron_macos_${arch}.${ext}
   target:
     - target: dmg
       arch:
         - arm64
 win:
   icon: assets/app-icon/icon.ico
-  artifactName: AnimeArmory_electron_windows.${ext}
+  artifactName: LabuTV_electron_windows.${ext}
   target:
     - target: nsis
       arch:

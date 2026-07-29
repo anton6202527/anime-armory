@@ -10,7 +10,7 @@
             └─ demos/v1/<line>/<work-id>/<sha256>.zip
 
 公开 Electron 客户端（匿名）
-  └─ 读取 catalog → 点击下载 → 校验 size/SHA-256 → 解压到 ~/AnimeArmory
+  └─ 读取 catalog → 点击下载 → 校验 size/SHA-256 → 解压到 ~/LabuTV（旧版目录继续兼容）
 
 用户自己的作品
   └─ 只保存在本地工作区，不登录、不上传、不云同步
@@ -58,7 +58,7 @@ https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev
 
 ## 发布 Demo
 
-配置文件：`infrastructure/r2/demos.json`。默认从 `~/AnimeArmory` 读取配置的
+配置文件：`infrastructure/r2/demos.json`。默认从 `~/LabuTV`（或已存在的旧版 `~/AnimeArmory`）读取配置的
 六个作品。
 
 ```bash

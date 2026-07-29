@@ -13,7 +13,7 @@ const zh = {
   "language.en": "En",
   "source.title": "下载最新App",
 
-  "app.name": "创作兵工厂",
+  "app.name": "LabuTV",
   "app.initWorkspace": "初始化工作区…",
   "app.workspaceBlockedTitle": "无法选择该工作区",
   "app.workspaceBlockedMessage": "该目录与项目仓库重叠，已拒绝。\n请选择仓库之外的目录作为作品工作区（作品与项目仓库需完全隔离）。",
@@ -448,7 +448,7 @@ const en: Record<I18nKey, string> = {
   "language.en": "En",
   "source.title": "Download latest app",
 
-  "app.name": "Creation Armory",
+  "app.name": "LabuTV",
   "app.initWorkspace": "Initializing workspace…",
   "app.workspaceBlockedTitle": "Workspace Not Allowed",
   "app.workspaceBlockedMessage": "That directory overlaps the project repository and was rejected.\nChoose a workspace outside the repository so works and the project stay fully isolated.",

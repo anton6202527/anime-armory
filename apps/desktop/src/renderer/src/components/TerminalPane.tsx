@@ -8,7 +8,7 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
-import { Terminal } from "@xterm/xterm";
+import { Terminal, type IDecoration, type IMarker } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { WebglAddon } from "@xterm/addon-webgl";
 import { onAppEvent } from "../platform/bridge";
@@ -217,7 +217,13 @@ function TerminalSessionView({
       fontFamily: "Menlo, Monaco, monospace",
       cursorBlink: true,
       scrollback: 300,
-      theme: { background: "#1f1f1f", foreground: "#cccccc" },
+      theme: {
+        background: "#1f1f1f",
+        foreground: "#cccccc",
+        cursor: "#918cff",
+        cursorAccent: "#1f1f1f",
+        selectionBackground: "#5d58ad66",
+      },
     });
     termRef.current = term;
     const fit = new FitAddon();
@@ -249,6 +255,9 @@ function TerminalSessionView({
     let disposed = false;
     let runSeq = 0;
     let frameId: number | null = null;
+    let inputHighlightFrame: number | null = null;
+    let inputDecoration: IDecoration | undefined;
+    let inputMarker: IMarker | undefined;
     const fitTimers: number[] = [];
     const unlisten: Array<() => void> = [];
     const disposables: Array<{ dispose: () => void }> = [];
@@ -279,6 +288,39 @@ function TerminalSessionView({
       }
     };
     scheduleRefitRef.current = scheduleRefit;
+
+    const clearInputHighlight = () => {
+      inputDecoration?.dispose();
+      inputMarker?.dispose();
+      inputDecoration = undefined;
+      inputMarker = undefined;
+    };
+
+    const refreshInputHighlight = () => {
+      if (inputHighlightFrame != null) window.cancelAnimationFrame(inputHighlightFrame);
+      inputHighlightFrame = window.requestAnimationFrame(() => {
+        inputHighlightFrame = null;
+        clearInputHighlight();
+        if (disposed || !activeRef.current || !hostRef.current?.contains(document.activeElement)) return;
+        const marker = term.registerMarker(0);
+        if (!marker) return;
+        inputMarker = marker;
+        inputDecoration = term.registerDecoration({
+          marker,
+          x: 0,
+          width: Math.max(1, term.cols),
+          height: 1,
+          backgroundColor: "#3B3354",
+          layer: "bottom",
+        });
+        inputDecoration?.onRender((element) => element.classList.add("terminal-input-line-highlight"));
+      });
+    };
+
+    const handleTerminalFocus = () => refreshInputHighlight();
+    const handleTerminalBlur = () => window.setTimeout(refreshInputHighlight, 0);
+    hostRef.current.addEventListener("focusin", handleTerminalFocus);
+    hostRef.current.addEventListener("focusout", handleTerminalBlur);
 
     function publishRuntime(bytes: Uint8Array) {
       const text = cleanTerminalText(decoderRef.current.decode(bytes));
@@ -367,10 +409,12 @@ function TerminalSessionView({
         if (id != null) ptyWrite(id, d).catch(() => {});
       }),
     );
+    disposables.push(term.onCursorMove(refreshInputHighlight));
     disposables.push(
       term.onResize(({ rows, cols }) => {
         const id = ptyIdRef.current;
         if (id != null) ptyResize(id, rows, cols).catch(() => {});
+        refreshInputHighlight();
       }),
     );
 
@@ -388,8 +432,12 @@ function TerminalSessionView({
       switchCommandRef.current = () => {};
       scheduleRefitRef.current = () => {};
       window.removeEventListener("resize", refit);
+      hostRef.current?.removeEventListener("focusin", handleTerminalFocus);
+      hostRef.current?.removeEventListener("focusout", handleTerminalBlur);
       if (webglTimer != null) window.clearTimeout(webglTimer);
       if (frameId != null) window.cancelAnimationFrame(frameId);
+      if (inputHighlightFrame != null) window.cancelAnimationFrame(inputHighlightFrame);
+      clearInputHighlight();
       fitTimers.forEach((timer) => window.clearTimeout(timer));
       ro.disconnect();
       unlisten.forEach((fn) => fn());

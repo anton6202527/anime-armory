@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1535 | 目录文本总行数 49367
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1546 | 目录文本总行数 49378
 
 # comic — 画漫画生产线总调度
 
@@ -97,6 +97,7 @@ python3 skills/comic-identity/scripts/model_pack.py "创作区/画漫画/作品�
 - 新项目由 `init_project.py` 先写入无伪造资产/无伪造 ready 状态的合法空 v2 registry；角色定名后再由 `comic-identity` upsert 稳定 ID 与结构化形态/服装/表情/状态。
 - 多视图按 `library_tier` 验收：`core_full` 为 front / three_quarter / side / back / face，`recurring_standard` 为 front / three_quarter / face，`named_minimal` 为 front / face。角色 DNA 和禁漂移项不因档位降低。
 - “文件齐”不等于“可生产”。确定性技术检查通过后，仍要由人并排确认同一角色、视图标签、比例基线、服装标志和中性姿态；签收绑定全部必需视图 SHA，任一视图变化即 stale。
+- 所有风格锚、人物/生物定妆、多视图、场景/道具锚、候选图、封面和逐格 master 必须统一消费 `_设置.md` 的模型/渠道/格式/画幅/分辨率合同：执行时核验并使用该后端当前最高质量正式模型与最高可用原生分辨率档，同类资产保持相同 PNG/sRGB 画布；原始 master 无损保留。低分图插值放大只能是显式 derivative，不能冒充正式 master 或身份锚；完整规则由 `comic-identity` 和 `comic-image` 分别执行。
 
 ### 5. 缩略分镜/name board 与排版的 draft → review → approved
 
@@ -127,7 +128,7 @@ python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作�
 - `finishing_plan.json` 必须消费已签收 name/layout，并同序覆盖全部 panel/page；传统原稿流程开启时，空计划或上游 SHA 过期会阻断。
 - reference plan 先公平保留每个具名角色身份锚，再保留 LOC 和常驻 PROP；缺绑定、未知状态、关键真实参考缺失或超过后端附件上限时必须返工或拆格，不能静默删约束。
 - `panel_jobs.json` 必须记录 reference plan、选中图片 SHA、`execution_input_sha256` 和 `consumed_contracts`；`--check` 证明落盘 job 与当前合同一致。
-- 漫画出图默认执行 `_设置.md` 的 `生图分辨率策略=后端最高可达`：每格独立请求当前后端最高原生档并保留 master，排版只可向下采样。整页/整话低宽图裁格后放大、丢失原始 master、或用放大后的像素尺寸冒充高清，均不得通过 image QC。
+- 漫画出图默认执行 `_设置.md` 的 `生图分辨率策略=后端最高可达`：每格独立请求当前后端最高质量正式模型及最高原生档并保留 master，排版只可向下采样。整页/整话低宽图裁格后放大、丢失原始 master、或用放大后的像素尺寸冒充高清，均不得通过 image QC。
 
 ### 7. 阶段 gate、出图、合成和审查
 

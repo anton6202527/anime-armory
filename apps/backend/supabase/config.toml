@@ -19,9 +19,16 @@ port = 54323
 [auth]
 enabled = true
 site_url = "http://localhost:5173"
-additional_redirect_urls = ["http://localhost:5173/**"]
+additional_redirect_urls = [
+  "http://localhost:5173/**",
+  "http://127.0.0.1:5173/**",
+  "http://localhost:4173/**",
+  "http://127.0.0.1:4173/**",
+  "http://localhost:4174/**",
+  "http://127.0.0.1:4174/**",
+]
 jwt_expiry = 3600
-enable_signup = false
+enable_signup = true
 
 # Keep the hosted project's existing security posture explicit so config push
 # does not replace it with looser CLI defaults.

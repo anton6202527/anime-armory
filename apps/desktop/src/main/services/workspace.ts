@@ -55,7 +55,13 @@ const LINE_LABELS: Record<LineKey, string> = {
 export class WorkspaceService {
   async defaultWorkspace(): Promise<string> {
     const override = process.env.ANIME_ARMORY_WORKSPACE?.trim()
-    const dir = override ? path.resolve(override) : path.join(os.homedir(), 'AnimeArmory')
+    const legacyDir = path.join(os.homedir(), 'AnimeArmory')
+    const preferredDir = path.join(os.homedir(), 'LabuTV')
+    const dir = override
+      ? path.resolve(override)
+      : existsSync(legacyDir) && !existsSync(preferredDir)
+        ? legacyDir
+        : preferredDir
     await fs.mkdir(dir, { recursive: true })
     return dir
   }

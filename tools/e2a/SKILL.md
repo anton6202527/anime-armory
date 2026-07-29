@@ -34,8 +34,8 @@ Contract:
   repository maintenance tools, creation manuals, and a last-known R2 catalog
   fallback into `apps/desktop/resources/`. Full Demo payloads are never bundled.
 - GitHub Release artifacts are limited to
-  `AnimeArmory_electron_macos_arm64.dmg`,
-  `AnimeArmory_electron_windows.exe`, `anime-armory.vsix`, and
+  `LabuTV_electron_macos_arm64.dmg`,
+  `LabuTV_electron_windows.exe`, `anime-armory.vsix`, and
   `SHA256SUMS.txt`.
 - `--win` cross-builds an unsigned Windows x64 NSIS installer on macOS.
   `npmRebuild` stays disabled and the packaged node-pty NAPI prebuild is

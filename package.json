@@ -2,19 +2,22 @@
   "name": "anime-armory-workspace",
   "private": true,
   "version": "0.0.0",
-  "description": "Anime Armory application monorepo and shared cloud foundation.",
+  "description": "LabuTV application monorepo and shared cloud foundation.",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
     "dev:desktop": "npm run dev --workspace @anime-armory/desktop",
+    "dev:web": "npm run dev --workspace @anime-armory/web",
     "build:desktop": "npm run build --workspace @anime-armory/desktop && npm run verify:desktop-bundle",
+    "build:web": "npm run build --workspace @anime-armory/web",
     "check:vscode": "npm run check --workspace apps/vscode-extension",
     "sync:vscode": "npm run sync-assets --workspace apps/vscode-extension",
     "package:vscode": "npm run package --workspace apps/vscode-extension",
     "verify:desktop-bundle": "node scripts/verify_renderer_dependencies.mjs",
     "typecheck:desktop": "npm run typecheck --workspace @anime-armory/desktop",
+    "typecheck:web": "npm run typecheck --workspace @anime-armory/web",
     "typecheck:cloud": "npm run typecheck --workspace @anime-armory/contracts --workspace @anime-armory/cloud-client --workspace @anime-armory/data-access --workspace @anime-armory/object-store",
     "typecheck:edge": "npm run typecheck --workspace @anime-armory/backend",
     "typecheck:cloud-e2e": "tsc -p scripts/tsconfig.cloud.json",

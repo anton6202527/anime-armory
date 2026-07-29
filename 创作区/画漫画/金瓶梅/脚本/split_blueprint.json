@@ -1,7 +1,7 @@
 {
   "kind": "comic_split_blueprint",
   "version": 2,
-  "status": "draft",
+  "status": "confirmed",
   "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。",
   "chapters": [
     {
@@ -11,41 +11,56 @@
       "source_mode": "adapted",
       "source_spans": [
         {
-          "source_path": "源本/待补.txt",
-          "start": "第1章",
-          "end": "第1章"
+          "source_path": "源本/第1话_景阳冈源文选段.txt",
+          "whole_file": true
         }
       ],
-      "reader_promise": "待补：本话向读者承诺什么体验/答案",
-      "core_conflict": "待补：谁想要什么、什么在阻止",
-      "turning_point": "待补：选择、反转或认知变化",
-      "payoff": "待补：本话兑现的爽点/情绪/信息",
-      "ending_mode": "cliffhanger",
+      "reader_promise": "先兑现武松打虎的高强度动作奇观，再揭示本作真正要追索的是人间欲望这只暗虎。",
+      "core_conflict": "武松要在天黑前独自越过景阳冈，猛虎与酒意共同逼迫他在退避和迎战之间选择。",
+      "turning_point": "哨棒折断后，武松失去武器，反而贴身按住虎头，以赤手完成生死逆转。",
+      "payoff": "猛虎伏地、猎户见证、武松获任都头；胜利后镜头转入清河县武大家门，英雄故事被更危险的世情故事接管。",
+      "ending_mode": "closure_with_new_promise",
       "budget": {
         "unit": "panels",
-        "target": 36,
+        "target": 16,
         "soft_range": [
-          24,
-          48
+          14,
+          18
         ]
       },
       "entry_state": {
-        "story": "待补：本话进入时的剧情状态"
+        "story": "武松尚是归乡旅人，清河县无人知道他将成为打虎英雄；叙事焦点仍停在山野的可见危险。"
       },
       "continuity_delta": [
         {
-          "entity_id": "CHAR_MAIN",
-          "field": "story_state",
-          "from": "待补：进入状态",
-          "to": "待补：不可逆新状态",
-          "panel_id": "P001",
-          "reason": "待补：哪个可见事件造成变化"
+          "entity_id": "CHAR_WUSONG",
+          "field": "public_reputation",
+          "from": "unknown_traveler",
+          "to": "tiger_slayer",
+          "panel_id": "P014",
+          "reason": "猎户亲见死虎并拥护武松下冈，英雄声名获得公共见证。"
+        },
+        {
+          "entity_id": "CHAR_WUSONG",
+          "field": "office_status",
+          "from": "civilian_traveler",
+          "to": "qinghe_constable",
+          "panel_id": "P015",
+          "reason": "知县赏识打虎功绩，任武松为都头。"
+        },
+        {
+          "entity_id": "STORY_MAIN",
+          "field": "narrative_focus",
+          "from": "visible_tiger_on_ridge",
+          "to": "hidden_desire_in_town",
+          "panel_id": "P016",
+          "reason": "转场武大家门与街市窥视目光，建立明虎已死、暗虎初现的主题接力。"
         }
       ],
       "exit_state": {
-        "story": "待补：下话必须继承的退出状态"
+        "story": "武松已成清河县都头并将与兄嫂重逢；武大、潘金莲的家庭关系进入叙事中心，‘暗虎’长线承诺开启。"
       },
-      "status": "draft"
+      "status": "confirmed"
     }
   ]
 }

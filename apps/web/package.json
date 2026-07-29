@@ -1,6 +1,28 @@
 {
   "name": "@anime-armory/web",
   "private": true,
-  "version": "0.0.0",
-  "description": "Reserved workspace for the future Anime Armory web client."
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Browser client for the LabuTV Skill Hub and creative canvas.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anime-armory/cloud-client": "0.1.0",
+    "@supabase/supabase-js": "2.110.2",
+    "@xyflow/react": "^12.3.5",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.6.3",
+    "vite": "^7.3.4"
+  }
 }

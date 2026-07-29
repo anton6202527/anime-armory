@@ -85,99 +85,99 @@
   "capability_assertions": {
     "auto_runnable": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": true
     },
     "channel": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": true
     },
     "exact_model_id": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": ""
     },
     "max_reference_images": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": 24
     },
     "model": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "model_precision": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "normalized_family"
     },
     "negative_strategy": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "inline_constraints"
     },
     "official": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": true
     },
     "output": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": false
     },
     "prompt_language": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "zh"
     },
     "prompt_profile": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": [
         "aspect_ratio",
@@ -187,43 +187,43 @@
     },
     "reference_mode": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
       "evidence_kind": "official_cli",
-      "observed_text": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
-      "source": "本机 Codex CLI 官方发行版与当前 imagegen 工具实测",
+      "observed_text": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
+      "source": "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help",
       "source_url": "",
       "value": true
     }
@@ -236,10 +236,10 @@
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
     "precision": "normalized_family"
   },
-  "note": "已确认当前 Codex CLI 可接收多张图像参考；正式生图通过 imagegen 工具逐张生成，身份策略采用真实参考图链。",
+  "note": "2026-07-29 实测：image_generation=stable,true；codex exec 支持重复 --image 多参考附件与 JSONL 事件输出；本 CLI 未暴露服务端持久主体 ID、mask 参数、固定 seed、价格或额度 schema，继续按 GPT Image 2 多参考/image2image reference chain、seed_effective=false 与现有预算策略执行。",
   "source_urls": [],
   "sources": [
-    "本机 Codex CLI 官方发行版与当前 imagegen 工具实测"
+    "local official Codex CLI 0.145.0: codex --version; codex features list; codex exec --help"
   ],
-  "verified_at": "2026-07-28"
+  "verified_at": "2026-07-29"
 }

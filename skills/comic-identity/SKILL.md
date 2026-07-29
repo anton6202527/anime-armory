@@ -34,6 +34,16 @@ description: 画漫画角色/场景/服装/饰品/道具一致性流程。Use wh
 - `设定库/wardrobe_prop_contract.json`：服饰道的证据、形制、状态与生产版本机器合同；除用户明确覆盖外采用推荐路线。
 - `生产数据/comic_wardrobe_prop_apply.json`：合同同步到 registry 的 SHA 回执。
 
+## 全图像最高规格合同
+
+本 skill 生成或采纳的每一张风格锚、角色/生物定妆、视图、表情、服装、场景、道具、候选图和封面参考，都必须继承项目 `_设置.md` 的同一生成配方。开始任何图片前先锁定并记录：具体生成模型及版本、访问渠道、输出格式、目标画幅、色彩模式、当前后端最高可用原生分辨率档；同一作品、同一资产类别和同一画幅的图片必须使用完全一致的格式与像素画布，不得逐张漂移。
+
+- 模型优先级：使用所选后端当前已核验的最高质量正式模型，不把渠道名或 agent 名当模型名。模型清单会变化，执行前按本机 CLI `--help`、后端能力接口或官方文档核验；把 `model/version` 与核验时间写入生成 manifest，禁止把旧候选快照永久写死成“最高模型”。
+- 分辨率优先级：`生图分辨率策略=后端最高可达` 时，每张都请求该模型/渠道可实际返回的最高原生档，并无损保存服务端原始 master、原始格式、`native_size/native_sha256/requested_resolution_tier/maximum_verified`。后端没有显式档位时仍要求最高质量输出，但必须记 `maximum_verified=false`，不能宣称已核验最高档。
+- 统一格式与画布：共享定妆默认使用 PNG、sRGB、3:4 全身母版；face/表情可用项目统一的 1:1 子规格。项目改用其它格式或尺寸必须经 `comic-settings` 落档，并使旧 model-pack/signoff stale。后端不支持目标画幅时，只允许从最高原生 master 做 `contain_and_pad_no_crop` 或向下采样派生；不得拉伸、裁掉身份部位或逐张采用不同补边规则。
+- 禁止伪高清：不得先用低档/低分辨率生成，再用插值放大、超分或重编码后的像素尺寸冒充最高原生 master；若为排版兼容需要上采样，只能保存为明确标注的 derivative，且不得采纳为正式身份锚、不得覆盖原始 master、不得把 `maximum_verified` 写为 true。
+- 单张双闸：生成前验证上述配方及真实参考输入，生成后立即验证文件可解码、格式、色彩模式、原生尺寸、画幅、SHA 和视觉一致性。任一张不符合统一合同就停在候选/待修状态，不得继续用它派生下一视图。
+
 ## 快速命令
 
 涉及人物服装、佩饰或关键道具时，先建立并严格检查服饰道合同。完整字段、证据等级与权威入口见 [服饰道知识库索引](references/服饰道知识库索引.md)；只在处理服饰道时加载该参考：
@@ -161,7 +171,7 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 ```bash
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
   --backend dreamina --characters CHAR_JYC --views front,three_quarter,side,back,face \
-  --allow-text-anchor --model-version 5.0 --resolution-type 2k
+  --allow-text-anchor --model-version 5.0 --resolution-type 4k
 ```
 
 生成妖物、场景、道具等非人物共享锚点：
@@ -175,7 +185,7 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 
 ```bash
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
-  --backend dreamina --model-version 5.0 --resolution-type 2k \
+  --backend dreamina --model-version 5.0 --resolution-type 4k \
   --refs STYLE_CLASSIC_V1 --candidate-count 2 --ratio 4:5 --max-attempts 2
 ```
 
@@ -220,7 +230,7 @@ Codex 图像通道不可用或需要真实图生图后端时，可显式走即�
 ```bash
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
   --backend dreamina --characters CHAR_JYC,CHAR_PEI --views front,three_quarter,side,back,face \
-  --model-version 5.0 --resolution-type 2k
+  --model-version 5.0 --resolution-type 4k
 ```
 
 报告里的 `rerun_targets` 交给 `comic-image` 重抽：

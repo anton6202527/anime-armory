@@ -6,12 +6,12 @@
     {
       "png": "Clip01_first.png",
       "scene": "场景_LOC_02.png",
-      "luma": 96.0,
-      "warmth": 0.037,
+      "luma": 74.5,
+      "warmth": 0.023,
       "daypart": "day",
-      "light_cx": 0.743,
+      "light_cx": 0.688,
       "light_az": "right",
-      "light_cy": 0.212,
+      "light_cy": 0.165,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
@@ -21,12 +21,12 @@
     {
       "png": "Clip02_first.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 80.3,
-      "warmth": -0.011,
-      "daypart": "day",
-      "light_cx": 0.321,
-      "light_az": "left",
-      "light_cy": 0.144,
+      "luma": 54.0,
+      "warmth": 0.01,
+      "daypart": "night",
+      "light_cx": 0.518,
+      "light_az": "center",
+      "light_cy": 0.129,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
@@ -36,12 +36,12 @@
     {
       "png": "Clip03_first.png",
       "scene": "场景_尸骸荒野.png",
-      "luma": 60.9,
-      "warmth": -0.004,
+      "luma": 62.5,
+      "warmth": -0.012,
       "daypart": "night",
-      "light_cx": 0.447,
-      "light_az": "center",
-      "light_cy": 0.096,
+      "light_cx": 0.348,
+      "light_az": "left",
+      "light_cy": 0.118,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
@@ -49,14 +49,29 @@
       "time_transition": false
     },
     {
-      "png": "Clip03_end.png",
-      "scene": "场景_尸骸荒野.png",
-      "luma": 70.5,
-      "warmth": -0.015,
+      "png": "Clip04_first.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 82.3,
+      "warmth": 0.051,
       "daypart": "day",
-      "light_cx": 0.309,
-      "light_az": "left",
-      "light_cy": 0.122,
+      "light_cx": 0.705,
+      "light_az": "right",
+      "light_cy": 0.187,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip04_end.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 76.1,
+      "warmth": 0.052,
+      "daypart": "day",
+      "light_cx": 0.555,
+      "light_az": "center",
+      "light_cy": 0.11,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -64,29 +79,14 @@
       "time_transition": false
     },
     {
-      "png": "Clip04_first.png",
-      "scene": "场景_LOC_02.png",
-      "luma": 91.0,
-      "warmth": 0.038,
-      "daypart": "day",
-      "light_cx": 0.671,
-      "light_az": "right",
-      "light_cy": 0.191,
-      "light_elev": "top",
-      "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
-      "weather": "fog",
-      "season": null,
-      "time_transition": false
-    },
-    {
       "png": "Clip05_first.png",
       "scene": "场景_LOC_02.png",
-      "luma": 86.4,
-      "warmth": 0.046,
+      "luma": 75.9,
+      "warmth": 0.044,
       "daypart": "day",
-      "light_cx": 0.733,
+      "light_cx": 0.659,
       "light_az": "right",
-      "light_cy": 0.158,
+      "light_cy": 0.142,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
@@ -96,12 +96,12 @@
     {
       "png": "Clip06_first.png",
       "scene": "场景_LOC_02.png",
-      "luma": 77.5,
-      "warmth": 0.018,
+      "luma": 84.6,
+      "warmth": 0.053,
       "daypart": "day",
-      "light_cx": 0.541,
+      "light_cx": 0.609,
       "light_az": "center",
-      "light_cy": 0.15,
+      "light_cy": 0.14,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
@@ -109,12 +109,27 @@
       "time_transition": false
     },
     {
+      "png": "Clip06_end.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 79.3,
+      "warmth": 0.036,
+      "daypart": "day",
+      "light_cx": 0.568,
+      "light_az": "center",
+      "light_cy": 0.16,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
       "png": "Clip07_first.png",
       "scene": "场景_LOC_02.png",
-      "luma": 69.8,
-      "warmth": 0.027,
-      "daypart": "night",
-      "light_cx": 0.632,
+      "luma": 76.5,
+      "warmth": 0.042,
+      "daypart": "day",
+      "light_cx": 0.663,
       "light_az": "right",
       "light_cy": 0.139,
       "light_elev": "top",
@@ -124,29 +139,14 @@
       "time_transition": false
     },
     {
-      "png": "Clip07_end.png",
-      "scene": "场景_LOC_02.png",
-      "luma": 85.6,
-      "warmth": 0.008,
-      "daypart": "day",
-      "light_cx": 0.488,
-      "light_az": "center",
-      "light_cy": 0.294,
-      "light_elev": "top",
-      "declared_light": "",
-      "weather": null,
-      "season": null,
-      "time_transition": false
-    },
-    {
       "png": "Clip08_first.png",
       "scene": "场景_LOC_02.png",
-      "luma": 82.9,
-      "warmth": 0.004,
-      "daypart": "day",
-      "light_cx": 0.394,
+      "luma": 69.4,
+      "warmth": 0.013,
+      "daypart": "night",
+      "light_cx": 0.541,
       "light_az": "center",
-      "light_cy": 0.281,
+      "light_cy": 0.207,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
@@ -154,27 +154,12 @@
       "time_transition": false
     },
     {
-      "png": "Clip08_end.png",
+      "png": "Clip01_first_a1.png",
       "scene": "场景_LOC_02.png",
-      "luma": 65.7,
-      "warmth": 0.02,
+      "luma": 57.9,
+      "warmth": 0.021,
       "daypart": "night",
-      "light_cx": 0.601,
-      "light_az": "center",
-      "light_cy": 0.168,
-      "light_elev": "top",
-      "declared_light": "",
-      "weather": null,
-      "season": null,
-      "time_transition": false
-    },
-    {
-      "png": "EP03_CLIP03_a1.png",
-      "scene": "场景_尸骸荒野.png",
-      "luma": 70.3,
-      "warmth": -0.005,
-      "daypart": "day",
-      "light_cx": 0.41,
+      "light_cx": 0.569,
       "light_az": "center",
       "light_cy": 0.108,
       "light_elev": "top",
@@ -184,14 +169,29 @@
       "time_transition": false
     },
     {
-      "png": "EP03_CLIP06_a1.png",
+      "png": "Clip04_first_a1.png",
       "scene": "场景_LOC_02.png",
-      "luma": 91.8,
-      "warmth": 0.027,
+      "luma": 78.7,
+      "warmth": 0.051,
       "daypart": "day",
-      "light_cx": 0.623,
+      "light_cx": 0.608,
+      "light_az": "center",
+      "light_cy": 0.161,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip05_first_a1.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 71.3,
+      "warmth": 0.047,
+      "daypart": "day",
+      "light_cx": 0.656,
       "light_az": "right",
-      "light_cy": 0.137,
+      "light_cy": 0.174,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -199,14 +199,14 @@
       "time_transition": false
     },
     {
-      "png": "EP03_CLIP06_a2.png",
+      "png": "Clip06_first_a1.png",
       "scene": "场景_LOC_02.png",
-      "luma": 84.4,
-      "warmth": 0.012,
+      "luma": 83.0,
+      "warmth": 0.051,
       "daypart": "day",
-      "light_cx": 0.517,
+      "light_cx": 0.608,
       "light_az": "center",
-      "light_cy": 0.126,
+      "light_cy": 0.142,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -214,14 +214,59 @@
       "time_transition": false
     },
     {
-      "png": "EP03_CLIP06_a3.png",
+      "png": "Clip06_first_a2.png",
       "scene": "场景_LOC_02.png",
-      "luma": 60.6,
-      "warmth": 0.018,
-      "daypart": "night",
-      "light_cx": 0.434,
+      "luma": 81.7,
+      "warmth": 0.049,
+      "daypart": "day",
+      "light_cx": 0.609,
       "light_az": "center",
-      "light_cy": 0.249,
+      "light_cy": 0.144,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip06_first_a3.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 80.4,
+      "warmth": 0.049,
+      "daypart": "day",
+      "light_cx": 0.608,
+      "light_az": "center",
+      "light_cy": 0.144,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip07_first_a1.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 76.9,
+      "warmth": 0.043,
+      "daypart": "day",
+      "light_cx": 0.663,
+      "light_az": "right",
+      "light_cy": 0.14,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP03_CLIP03_a1.png",
+      "scene": "场景_尸骸荒野.png",
+      "luma": 61.7,
+      "warmth": -0.013,
+      "daypart": "night",
+      "light_cx": 0.364,
+      "light_az": "left",
+      "light_cy": 0.142,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -231,12 +276,12 @@
     {
       "png": "EP03_CLIP07_a1.png",
       "scene": "场景_LOC_02.png",
-      "luma": 96.0,
-      "warmth": 0.037,
+      "luma": 77.0,
+      "warmth": 0.039,
       "daypart": "day",
-      "light_cx": 0.743,
+      "light_cx": 0.656,
       "light_az": "right",
-      "light_cy": 0.212,
+      "light_cy": 0.152,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -246,12 +291,12 @@
     {
       "png": "EP03_CLIP08_a1.png",
       "scene": "场景_LOC_02.png",
-      "luma": 83.7,
-      "warmth": 0.001,
+      "luma": 75.6,
+      "warmth": 0.018,
       "daypart": "day",
-      "light_cx": 0.409,
+      "light_cx": 0.557,
       "light_az": "center",
-      "light_cy": 0.259,
+      "light_cy": 0.189,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -264,28 +309,32 @@
       "shots": [
         "Clip01_first.png",
         "Clip04_first.png",
+        "Clip04_end.png",
         "Clip05_first.png",
         "Clip06_first.png",
+        "Clip06_end.png",
         "Clip07_first.png",
-        "Clip07_end.png",
         "Clip08_first.png",
-        "Clip08_end.png",
-        "EP03_CLIP06_a1.png",
-        "EP03_CLIP06_a2.png",
-        "EP03_CLIP06_a3.png",
+        "Clip01_first_a1.png",
+        "Clip04_first_a1.png",
+        "Clip05_first_a1.png",
+        "Clip06_first_a1.png",
+        "Clip06_first_a2.png",
+        "Clip06_first_a3.png",
+        "Clip07_first_a1.png",
         "EP03_CLIP07_a1.png",
         "EP03_CLIP08_a1.png"
       ],
       "dayparts": {
-        "day": 10,
-        "night": 3
+        "day": 15,
+        "night": 2
       },
       "light_azimuths": {
-        "right": 6,
-        "center": 7
+        "right": 7,
+        "center": 10
       },
       "light_elevations": {
-        "top": 13
+        "top": 17
       },
       "weathers": {
         "fog": 6
@@ -294,37 +343,13 @@
       "findings": [
         {
           "metric": "daypart",
-          "png": "Clip07_first.png",
+          "png": "Clip08_first.png",
           "verdict": "warn",
           "message": ""
         },
         {
           "metric": "daypart",
-          "png": "Clip07_end.png",
-          "verdict": "block",
-          "message": ""
-        },
-        {
-          "metric": "daypart",
-          "png": "Clip08_end.png",
-          "verdict": "block",
-          "message": ""
-        },
-        {
-          "metric": "daypart",
-          "png": "EP03_CLIP06_a1.png",
-          "verdict": "block",
-          "message": ""
-        },
-        {
-          "metric": "daypart",
-          "png": "EP03_CLIP06_a3.png",
-          "verdict": "block",
-          "message": ""
-        },
-        {
-          "metric": "daypart",
-          "png": "EP03_CLIP07_a1.png",
+          "png": "Clip04_first_a1.png",
           "verdict": "block",
           "message": ""
         }
@@ -334,19 +359,17 @@
       "shots": [
         "Clip02_first.png",
         "Clip03_first.png",
-        "Clip03_end.png",
         "EP03_CLIP03_a1.png"
       ],
       "dayparts": {
-        "day": 3,
-        "night": 1
+        "night": 3
       },
       "light_azimuths": {
-        "left": 2,
-        "center": 2
+        "center": 1,
+        "left": 2
       },
       "light_elevations": {
-        "top": 4
+        "top": 3
       },
       "weathers": {
         "fog": 2
@@ -355,30 +378,18 @@
       "findings": [
         {
           "metric": "light_anchor",
-          "png": "Clip02_first.png",
+          "png": "Clip03_first.png",
           "verdict": "warn",
           "message": "光位锚声明主光在「right」，实测最亮区却偏「left」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。"
-        },
-        {
-          "metric": "daypart",
-          "png": "Clip03_first.png",
-          "verdict": "block",
-          "message": ""
-        },
-        {
-          "metric": "daypart",
-          "png": "Clip03_end.png",
-          "verdict": "warn",
-          "message": ""
         }
       ]
     }
   },
   "summary": {
     "scene_count": 2,
-    "finding_count": 9,
-    "block_count": 6,
-    "warn_count": 3
+    "finding_count": 3,
+    "block_count": 1,
+    "warn_count": 2
   },
   "source": "n2d-review/world_continuity"
 }

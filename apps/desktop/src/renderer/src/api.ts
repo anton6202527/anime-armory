@@ -281,7 +281,7 @@ export async function createWork(dir: string, repoRoot: string, name: string): P
   return invoke("workspace.createWork", { dir, repoRoot, name });
 }
 
-/** Resolve (and create) the app's dedicated works workspace (~/AnimeArmory). */
+/** Resolve (and create) the app's dedicated LabuTV works workspace. */
 export async function defaultWorkspace(): Promise<string> {
   return invoke("workspace.default", undefined);
 }

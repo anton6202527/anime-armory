@@ -1,26 +1,29 @@
 {
   "kind": "comic_adaptation_strategy",
   "version": 2,
-  "status": "draft",
-  "adaptation_boundary": "待补：哪些内容不改编/如何镜外化（露骨/敏感/超纲情节的处理边界）",
+  "status": "confirmed",
+  "adaptation_boundary": "保留原著的因果、世情讽喻与人物选择，不以猎奇替代叙事。所有主要人物均按成年人设计；性内容只用门帘、灯影、物件和事后状态含蓄表达，不呈现露骨性行为或裸体特写；暴力强调动作因果与后果，不渲染血腥；不复刻任何影视演员肖像、剧照构图或整套服饰组合。",
   "promise_ledger": [
     {
       "promise_id": "PRM_001",
-      "promise": "待补：向读者立的第一个核心悬念/欲望承诺",
+      "promise": "武松能打死山中明虎，却未必能阻止清河县中由欲望、金钱与权势养出的暗虎。",
       "opened_chapter": "第1话",
-      "payoff_chapter": "待补",
+      "payoff_chapter": "长线兑现",
       "status": "open"
     }
   ],
   "causality_spine": [
-    "待补：全书因果链主干（事件A→导致B→逼出选择C…，改编时不可断的链）"
+    "武松打虎成名并回到清河县→武家人物关系被重新排列→潘金莲的欲望与挫败外溢",
+    "叉竿偶遇西门庆→王婆以利益搭桥→私情越过伦理边界→武大受害",
+    "武松追索真相并复仇→西门庆权势与家宅继续扩张→欲望网络吞噬更多人物",
+    "财富、权势与情欲互相放大→家宅表面繁盛、内部失序→因果反噬完成世情悲剧"
   ],
   "foreshadowing_ledger": [
     {
       "setup_id": "FSH_001",
-      "setup": "待补：伏笔内容",
+      "setup": "景阳冈以一只可见猛虎建立‘明虎’意象；转场清河县时以门帘、街市目光与金钱交换建立‘暗虎’意象。",
       "planted_chapter": "第1话",
-      "payoff_chapter": "待补",
+      "payoff_chapter": "第3话起持续回收",
       "status": "planted"
     }
   ]

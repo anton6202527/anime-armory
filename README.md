@@ -1,4 +1,4 @@
-# 创作兵工厂（anime-armory）
+# LabuTV（anime-armory）
 
 **Language / 语言**：中文（默认） | [English](#en)
 
@@ -6,9 +6,9 @@
 
 ## 中文
 
-**创作兵工厂**是一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、漫画、AI 音乐 MV 或商业广告片。
+**LabuTV** 是一套面向 AI 内容生产的本地与 Web 创作平台：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、漫画、AI 音乐 MV 或商业广告片。
 
-`anime-armory` 是仓库名、安装包与兼容性代号；顶层中文产品名统一为 **创作兵工厂**。其中 n2d 这条“小说文本 -> AI 漫剧 / 短剧”生产线统一称为 **制漫剧**。
+`anime-armory` 保留为仓库名与兼容性代号；对外产品名统一为 **LabuTV**。其中 n2d 这条“小说文本 -> AI 漫剧 / 短剧”生产线统一称为 **制漫剧**。
 
 仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成六条彼此独立、可单独分发的生产线：
 
@@ -30,8 +30,8 @@
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_electron_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/download/electron-v0.1.0/AnimeArmory_electron_macos_arm64.dmg) |
-| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**LabuTV_electron_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**LabuTV_electron_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_windows.exe) |
 | 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
 - **桌面端 App**：macOS Apple Silicon（M 系列）下载 `.dmg` 拖入 `/Applications`；Windows 下载 `.exe` 安装程序。打开即用，内置全部 skill。macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
@@ -41,14 +41,14 @@
 
 ## 桌面端 App 能做什么
 
-桌面端 App 是创作兵工厂的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`画漫画`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
+桌面端 App 是 LabuTV 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`画漫画`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
 
 进入项目后，App 会把左侧文件树、分镜画布 / 生产看板、右侧下一步提示和 AI agent 终端放在同一个工作台里。用户可以一边查看脚本、定妆图、分镜图、质检报告和生产数据，一边按右侧建议直接进入 Claude Code / Codex CLI / Gemini CLI 继续执行 `n2d-image`、`n2d-video`、`n2d-compose` 等阶段任务。
 
 <table>
   <tr>
     <td width="50%">
-      <img src="docs/app-screenshots/app-home.png" alt="创作兵工厂桌面端首页，展示生产线和作品数量" />
+      <img src="docs/app-screenshots/app-home.png" alt="LabuTV 桌面端首页，展示生产线和作品数量" />
       <br />
       <strong>生产线首页</strong><br />
       统一展示已接入桌面端的创作线，点击即可进入对应作品区。
@@ -309,9 +309,9 @@ anime-armory/
 
 [中文（默认）](#zh-cn) | English
 
-Creation Armory (`anime-armory`) is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, comics, music videos, or commercial ads.
+LabuTV (`anime-armory`) is a local and Web production platform for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, comics, music videos, or commercial ads.
 
-`anime-armory` remains the repository name and compatibility codename. The top-level product name is Creation Armory / 创作兵工厂; the n2d line is 制漫剧.
+`anime-armory` remains the repository name and compatibility codename. The public product name is LabuTV; the n2d line is 制漫剧.
 
 The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into six independent production lines:
 
@@ -333,8 +333,8 @@ Ready-to-use packages are available from the latest release:
 
 | Package | Platform | Download |
 |---|---|---|
-| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg) |
-| Desktop App | Windows (`.exe` installer) | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
+| Desktop App | macOS Apple Silicon (`.dmg`) | [**LabuTV_electron_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_macos_arm64.dmg) |
+| Desktop App | Windows (`.exe` installer) | [**LabuTV_electron_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_windows.exe) |
 | VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
 - **Desktop App**: download the macOS Apple Silicon `.dmg` for drag-to-Applications install, or the Windows `.exe` installer. The app includes all current skills. macOS privacy permissions are not pre-granted during installation; the system asks when a protected folder is actually accessed.
@@ -426,8 +426,8 @@ Both destinations are generated snapshots and are gitignored. The VS Code seed `
 
 Uploaded assets use these stable filenames:
 
-- `AnimeArmory_electron_macos_arm64.dmg`
-- `AnimeArmory_electron_windows.exe`
+- `LabuTV_electron_macos_arm64.dmg`
+- `LabuTV_electron_windows.exe`
 - `anime-armory.vsix`
 
 Manual packaging without `e2a`:

@@ -6,9 +6,43 @@
   "contract_sha256": "c1583b45004fff7614de591e0a8dfe40af8c9087442da13c197bb8159848db8d",
   "episode": "第3集",
   "kind": "n2d_script_contract_application",
-  "reviewed_at": "2026-07-28T07:28:44+00:00",
-  "reviewer": "Codex n2d-image prompt pack",
+  "reviewed_at": "2026-07-29T12:43:03+00:00",
+  "reviewer": "n2d-video prompt author",
   "scopes": [
+    {
+      "applied_clip_ids": [
+        "EP03_CLIP01",
+        "EP03_CLIP02",
+        "EP03_CLIP03",
+        "EP03_CLIP04",
+        "EP03_CLIP05",
+        "EP03_CLIP06",
+        "EP03_CLIP07",
+        "EP03_CLIP08"
+      ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "pacing_allocation",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "66e8195a106b5750",
+      "contract_file_sha256": "c1583b45004fff7614de591e0a8dfe40af8c9087442da13c197bb8159848db8d",
+      "contract_path": "生产数据/script_quality_contract_第3集.json",
+      "contract_sha256": "c1583b45004fff7614de591e0a8dfe40af8c9087442da13c197bb8159848db8d",
+      "evidence": [
+        "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、时长分配、观众问题账本。",
+        "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
+        "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
+      ],
+      "prompt_path": "出图/第3集/prompt/01_分镜出图.md",
+      "prompt_sha256": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "reviewed_at": "2026-07-28T07:28:44+00:00",
+      "scope": "出图"
+    },
     {
       "applied_clip_ids": [
         "EP03_CLIP01",
@@ -38,43 +72,9 @@
         "逐 Clip prompt 已承接 dramatic_function/audience_effect/pacing_allocation，运动、表演和时长重心不改写剧本承诺。"
       ],
       "prompt_path": "出视频/第3集/prompt/01_clips.md",
-      "prompt_sha256": "686ff3462647534bea4366978e66e24e8841f6a0f85c040ecb7d6c69f39dd0ef",
-      "reviewed_at": "2026-07-27T11:42:39+00:00",
+      "prompt_sha256": "671fd4eb563cb394d370b663a9b26b505dc8e853533a755a699a97bc56475a83",
+      "reviewed_at": "2026-07-29T12:43:03+00:00",
       "scope": "出视频"
-    },
-    {
-      "scope": "出图",
-      "prompt_path": "出图/第3集/prompt/01_分镜出图.md",
-      "prompt_sha256": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
-      "contract_path": "生产数据/script_quality_contract_第3集.json",
-      "contract_content_hash": "66e8195a106b5750",
-      "contract_file_sha256": "c1583b45004fff7614de591e0a8dfe40af8c9087442da13c197bb8159848db8d",
-      "contract_sha256": "c1583b45004fff7614de591e0a8dfe40af8c9087442da13c197bb8159848db8d",
-      "consumed_fields": [
-        "core_attraction",
-        "first_3s_visual_hook",
-        "retention_promise_ledger",
-        "pacing_allocation",
-        "clip_dramatic_function",
-        "audience_question_ledger",
-        "performance_cues"
-      ],
-      "applied_clip_ids": [
-        "EP03_CLIP01",
-        "EP03_CLIP02",
-        "EP03_CLIP03",
-        "EP03_CLIP04",
-        "EP03_CLIP05",
-        "EP03_CLIP06",
-        "EP03_CLIP07",
-        "EP03_CLIP08"
-      ],
-      "evidence": [
-        "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、时长分配、观众问题账本。",
-        "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
-        "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
-      ],
-      "reviewed_at": "2026-07-28T07:28:44+00:00"
     }
   ]
 }

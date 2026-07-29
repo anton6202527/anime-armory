@@ -16,7 +16,7 @@ import { createDemoZip } from './demo_zip.mjs'
 
 test('demo asset names remain stable and ASCII-only', () => {
   const rel = '创作区/制漫剧/那妖魔是姜大人'
-  assert.equal(demoAssetName(rel), 'AnimeArmory_demo_n2d_23fcd23e.zip')
+  assert.equal(demoAssetName(rel), 'LabuTV_demo_n2d_23fcd23e.zip')
   assert.match(demoAssetName(rel), /^[A-Za-z0-9._-]+$/)
   assert.notEqual(demoAssetName(rel), demoAssetName('创作区/制漫剧/万妖图魔录'))
 })

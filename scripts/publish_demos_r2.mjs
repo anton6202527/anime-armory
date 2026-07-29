@@ -43,7 +43,7 @@ Build safe Demo ZIP files and an integrity-checked R2 catalog.
 Options:
   --publish              Upload immutable ZIP files and publish the catalog last
   --publish-existing     Upload the already-built output/catalog without rebuilding
-  --workspace <path>     Product workspace (default: ANIME_ARMORY_WORKSPACE or ~/AnimeArmory)
+  --workspace <path>     Product workspace (default: ANIME_ARMORY_WORKSPACE or ~/LabuTV)
   --config <path>        Demo config (default: infrastructure/r2/demos.json)
   --output <path>        Local artifact directory (default: dist/r2-demos)
   --only <line|rel>      Build one configured Demo (repeatable)
@@ -301,7 +301,10 @@ async function main() {
   }
   const configFile = path.resolve(args.config ?? DEFAULT_CONFIG)
   const config = await readConfig(configFile)
-  const workspace = path.resolve(args.workspace ?? process.env.ANIME_ARMORY_WORKSPACE ?? path.join(os.homedir(), 'AnimeArmory'))
+  const legacyWorkspace = path.join(os.homedir(), 'AnimeArmory')
+  const preferredWorkspace = path.join(os.homedir(), 'LabuTV')
+  const defaultWorkspace = fs.existsSync(legacyWorkspace) && !fs.existsSync(preferredWorkspace) ? legacyWorkspace : preferredWorkspace
+  const workspace = path.resolve(args.workspace ?? process.env.ANIME_ARMORY_WORKSPACE ?? defaultWorkspace)
   const output = path.resolve(args.output ?? DEFAULT_OUTPUT)
   const works = config.works.filter((entry) => selected(entry, args.only))
   if (works.length === 0) throw new Error('No configured Demo matched --only')

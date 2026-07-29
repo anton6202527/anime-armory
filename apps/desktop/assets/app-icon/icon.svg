@@ -1,20 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
   <defs>
-    <linearGradient id="tile" x1="164" y1="112" x2="868" y2="912" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#9B96FF"/>
-      <stop offset="0.48" stop-color="#8881FF"/>
-      <stop offset="1" stop-color="#716AF0"/>
+    <linearGradient id="tile" x1="176" y1="128" x2="854" y2="904" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9B8CFF"/>
+      <stop offset="0.52" stop-color="#736DFF"/>
+      <stop offset="1" stop-color="#536DF6"/>
     </linearGradient>
-    <filter id="shadow" x="24" y="28" width="976" height="988" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="28" stdDeviation="30" flood-color="#090621" flood-opacity="0.46"/>
+    <filter id="shadow" x="24" y="32" width="976" height="976" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#090621" flood-opacity="0.42"/>
     </filter>
   </defs>
-
   <g filter="url(#shadow)">
-    <g transform="translate(32 24) scale(20)">
-      <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#tile)" stroke="#F5F5F8" stroke-width="1.8"/>
-      <path d="M12 18h24v18H12zM12 18l5-7 6 7 6-7 7 7" stroke="#F5F5F8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="m22 23 9 5-9 5z" fill="#F5F5F8"/>
-    </g>
+    <rect x="80" y="72" width="864" height="864" rx="252" fill="url(#tile)"/>
+    <path d="M344 292v350c0 47 37 84 84 84h214" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="m506 370 236 142-236 142V370Z" fill="#FFFFFF"/>
   </g>
 </svg>

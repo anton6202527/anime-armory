@@ -2224,7 +2224,7 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-28T10:27:58+00:00",
+  "generated_at": "2026-07-29T11:19:19+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9",
@@ -2302,10 +2302,23 @@
       "出图/第3集/prompt": null,
       "出图/第3集/prompt/00_总览.md": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f",
       "出图/第3集/prompt/01_分镜出图.md": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "出图/第3集/图片/Clip01_first.png": "8421097323eadf58ae01fb0f128e716fcc146eef5fe79ed485caaa4b4dbe308a",
+      "出图/第3集/图片/Clip02_first.png": "94672945bfb257340da1c483dacc3d66293c5ea970cd67efd1225476ba844f2d",
+      "出图/第3集/图片/Clip03_first.png": "0077fb376ce44ee38c3a25c0dc7d4f4c04a52642b552c58114da24462458f48c",
+      "出图/第3集/图片/Clip04_end.png": "dc2ef5b98035a77f60e2ff199a08e339e1988f7f63cbce18e627f83bfeac9c5c",
+      "出图/第3集/图片/Clip04_first.png": "15036ea088be7eb7cb8ff7ad74b0d85369df8afc6cdeb09410b8a498080b4784",
+      "出图/第3集/图片/Clip04_first_a1.png": "12bfe7410a75d1e95b2960ab212cd3b30b60d1eb5a3284b465dec75a036a34ea",
+      "出图/第3集/图片/Clip05_first.png": "00b2b04dc8416bd3ba7332e1175a2140e8de528829285588f2bb647d40f6ea80",
+      "出图/第3集/图片/Clip05_first_a1.png": "fb78f3c757bf1d36328656c81dae6fc818e3f72a22fef5ea9f56930480d3a8dc",
+      "出图/第3集/图片/Clip06_end.png": "1cbeaa40267155a8dcc1df5f6a6cfc8f5d590aeace62ca43bf611390d7bfadec",
       "出图/第3集/图片/Clip06_first.png": "efad3259e2760e5f0fde8a44d499dcb27a05fb6e03288646c3c441c7cf1644fb",
+      "出图/第3集/图片/Clip06_first_a1.png": "4e68a34053d0bcf64ee39c84f4a7d38480184cb89227e89dd5e37d52dfcf5e1c",
+      "出图/第3集/图片/Clip06_first_a2.png": "93e3b5c367e607d9d280d3efe480bb5687b36cc2f5bacacdb0e2511d7f6652cd",
+      "出图/第3集/图片/Clip06_first_a3.png": "1679851141774d1da9359b24b1caa9db1b0b167619973ea39872810d183348da",
       "出图/第3集/图片/Clip07_first.png": "fe9e0eacb000fa08a72102c05750d34e2237d85d71923ccb7922ad82e89acf95",
       "出图/第3集/图片/Clip07_first_a1.png": "a849db2b3eb286f0714cfe57f794e9159b05f3ed4cd15175a5e72e6d02c7aefd",
       "出图/第3集/图片/Clip08_first.png": "bdc06b57f21a76ea5aabfc502fd488bc0addc38a6ea8cde30c32ceaead74251f",
+      "出图/第3集/图片/EP03_CLIP03_a1.png": "f017d921cdbceae2d41152c6ee17f99f384b80cc7e94c80c6b7d09aee4a484be",
       "出图/第3集/图片/EP03_CLIP07_a1.png": "cf8585d08847bd52fb011ff3883ab192830d5db593c94d0ccbf2683af79bfe6a",
       "出图/第3集/图片/EP03_CLIP08_a1.png": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
       "出视频/第3集/prompt": null,
@@ -2315,7 +2328,7 @@
       "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
       "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
     },
-    "sha": "ed8830dfa3777e8d1576722f8eb3423c115cd46dd9de565d3c168ccf26a27b3c"
+    "sha": "41ff630470c04908d4ca939deb92b26e329fd8c3e07db25e26b7e0c88fbce8d0"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",

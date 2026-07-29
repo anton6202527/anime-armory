@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-29T14:48:29",
+  "ref_id": "MON_TIGER",
+  "candidate_path": "出图/共享/candidates/MON_TIGER/anchor/20260729_batch01/candidate_01_native.png",
+  "candidate_sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+  "adopted_path": "出图/共享/图片/MON_TIGER__anchor.png",
+  "adopted_sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户明确确认；采用内置imagegen原生PNG而非放大派生图",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

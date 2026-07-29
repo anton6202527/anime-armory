@@ -43,7 +43,7 @@ export function workRel(entry) {
 export function demoAssetName(rel) {
   const work = parseWorkRel(rel)
   const id = crypto.createHash('sha256').update(work.rel).digest('hex').slice(0, 8)
-  return `AnimeArmory_demo_${work.lineKey}_${id}.zip`
+  return `LabuTV_demo_${work.lineKey}_${id}.zip`
 }
 
 export function demoObjectKey(rel, sha256) {

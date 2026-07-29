@@ -237,7 +237,7 @@
       "path": "出图/第3集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "6feac79bfa47efbd0f56be8256787491378d4249f14af49194eedf07ec1e48b8"
+      "sha256": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463"
     },
     {
       "stage": "image",
@@ -251,21 +251,21 @@
       "path": "出图/第3集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 2
+      "file_count": 20
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第3集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "ad401f431daf2453c463b46e6cc5f649f0aa1d7ff6aeb07dccec7f12c5c657cb"
+      "sha256": "44dce34649d5b3da0c3427372b4dc59dadcba356e27b77d7ceace589c3cff63f"
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第3集/prompt/01_clips.md",
       "exists": true,
       "kind": "file",
-      "sha256": "00b3fa8ffa7d0e27ba6ea727f5fe550ecfeaf93c4b66dc78027433c5c7b109dd"
+      "sha256": "671fd4eb563cb394d370b663a9b26b505dc8e853533a755a699a97bc56475a83"
     },
     {
       "stage": "video",
@@ -296,7 +296,7 @@
       "path": "生产数据/consistency_ledger_第3集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "429d9a96b9f71c42053641c6bd5862d9a9707f01dae2a12d05d001b1f64e4a7d"
+      "sha256": "b20078b5bf84f492f5cc4965fd93c22bd501406498d7b85e3f84d37aad0c8a72"
     },
     {
       "stage": "review",
@@ -324,6 +324,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "54/73",
-  "last_progress_state": "partial"
+  "last_progress_value": "73/73",
+  "last_progress_state": "done"
 }

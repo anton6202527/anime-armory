@@ -114,7 +114,7 @@ function normalizeCatalogEntry(entry: CatalogEntry, catalogUrl: string): Catalog
   const derivedKey = LINE_KEY_BY_NAME[parts[1]]
   const key = String(entry.line_key ?? derivedKey ?? '') as LineKey
   if (!LINE_KEYS.has(key) || !derivedKey || key !== derivedKey) return null
-  const assetName = String(entry.asset_name ?? `AnimeArmory_demo_${key}.zip`)
+  const assetName = String(entry.asset_name ?? `LabuTV_demo_${key}.zip`)
   if (!assetName || path.basename(assetName) !== assetName || !assetName.endsWith('.zip')) return null
   const objectKey = safeObjectKey(entry.object_key)
   const base = String(entry.download_url ?? (objectKey ? new URL(objectKey, `${R2_PUBLIC_BASE}/`).toString() : ''))
@@ -169,7 +169,7 @@ async function fetchCatalog(url: string): Promise<CatalogEntry[]> {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'AnimeArmory Desktop' },
+      headers: { 'User-Agent': 'LabuTV Desktop' },
     })
     if (!response.ok) return []
     return catalogEntries(await response.json())
@@ -238,7 +238,7 @@ export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDown
       line_key: key as LineKey,
       name: entry.name ?? key,
       rel,
-      asset_name: entry.asset_name ?? `AnimeArmory_demo_${key}.zip`,
+      asset_name: entry.asset_name ?? `LabuTV_demo_${key}.zip`,
       download_url: entry.download_url ?? '',
       sha256: entry.sha256 ?? null,
       size: entry.size ?? null,
@@ -255,7 +255,7 @@ async function download(url: string, dest: string): Promise<void> {
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'AnimeArmory Desktop' },
+      headers: { 'User-Agent': 'LabuTV Desktop' },
     })
     if (!res.ok || !res.body) throw new Error(`下载失败:HTTP ${res.status}`)
     await pipeline(

@@ -1,6 +1,6 @@
 # Backend
 
-Supabase is the development backend for Anime Armory. Database migrations, RLS policies, and Edge Functions live in `supabase/` inside this workspace.
+Supabase is the development backend for LabuTV. Database migrations, RLS policies, and Edge Functions live in `supabase/` inside this workspace.
 
 Run backend commands from the repository root:
 
@@ -17,5 +17,7 @@ The `assets` Edge Function remains a reserved authenticated/private-asset bounda
 - list the current ready asset for each relative work path;
 - issue signed upload/download requests after project-role checks;
 - replace same-path objects only after the new upload is verified.
+
+The Web client uses this boundary when its public Supabase and Edge Function endpoints are configured. Supabase stores accounts, project authorization, jobs, and asset metadata; Cloudflare R2 stores the actual source and generated work bytes. R2 credentials and Supabase service-role keys are server-only.
 
 It is not wired into the public desktop app. Public desktop users have no login or upload IPC, and their works remain local. Local absolute paths and Supabase/R2 secrets are never accepted from clients.

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-29T14:48:18",
+  "ref_id": "CHAR_WUSONG",
+  "candidate_path": "出图/共享/candidates/CHAR_WUSONG/front/20260729_batch01/candidate_01_native.png",
+  "candidate_sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+  "adopted_path": "出图/共享/图片/CHAR_WUSONG__front.png",
+  "adopted_sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户明确确认；采用内置imagegen原生PNG而非放大派生图",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

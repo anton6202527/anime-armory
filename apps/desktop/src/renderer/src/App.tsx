@@ -23,9 +23,69 @@ import type { LineInfo, WorkRoot } from "./types";
 type HomeRoute = { kind: "home" } | { kind: "line"; line: LineInfo };
 const MAX_RECENT_WORKS = 4;
 const RECENT_WORKS_STORAGE_KEY = "aa.recentWorks";
+const NOVEL_ATTACHMENT_EXTENSIONS = new Set(["txt", "md", "markdown", "mdx", "docx", "pdf"]);
 const SkillsModal = lazy(() =>
   import("./components/SkillsModal").then((mod) => ({ default: mod.SkillsModal })),
 );
+
+function localFileName(path: string): string {
+  return path.split(/[\\/]/).filter(Boolean).pop() ?? "";
+}
+
+function cleanWorkName(value: string): string {
+  return value
+    .replace(/[\\/:*?"<>|]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/[. ]+$/g, "")
+    .slice(0, 40);
+}
+
+function novelTitleFromAttachments(attachments: string[]): string {
+  for (const path of attachments) {
+    const name = localFileName(path);
+    const dot = name.lastIndexOf(".");
+    if (dot <= 0) continue;
+    const extension = name.slice(dot + 1).toLowerCase();
+    if (!NOVEL_ATTACHMENT_EXTENSIONS.has(extension)) continue;
+    const title = cleanWorkName(name.slice(0, dot));
+    if (title) return title;
+  }
+  return "";
+}
+
+function workNameFromPrompt(prompt: string): string {
+  const cleanPrompt = prompt.trim();
+  if (!cleanPrompt) return "";
+
+  const bookTitle = cleanPrompt.match(/[《「『“]([^》」』”\n]{1,40})[》」』”]/)?.[1];
+  if (bookTitle) return cleanWorkName(bookTitle);
+  const quotedTitle = cleanPrompt.match(/["']([^"'\n]{1,40})["']/)?.[1];
+  if (quotedTitle) return cleanWorkName(quotedTitle);
+
+  const firstLine = cleanPrompt.split(/\r?\n/).map((line) => line.trim()).find(Boolean) ?? "";
+  const firstSentence = firstLine.split(/[。！？!?]/, 1)[0]?.trim() ?? "";
+  const adaptationSource = firstSentence.match(/^(.{1,30}?)(?:制作|改编|做|画)成(?:一部|一个)?/)?.[1]
+    ?.replace(/^(?:请|麻烦|帮我|帮忙|开始)/, "")
+    .trim();
+  if (adaptationSource) return cleanWorkName(adaptationSource);
+
+  return cleanWorkName(
+    firstSentence
+      .replace(/^(?:请|麻烦|帮我|帮忙)/, "")
+      .replace(/^开始/, "")
+      .trim(),
+  );
+}
+
+function hubWorkBaseName(prompt: string, attachments: string[]): string {
+  return novelTitleFromAttachments(attachments) || workNameFromPrompt(prompt) || "unnamed";
+}
+
+function isDuplicateWorkError(error: unknown): boolean {
+  const message = String(error).toLowerCase();
+  return message.includes("同名作品已存在") || message.includes("already exists") || message.includes("eexist");
+}
 
 /** True if two paths are equal or one contains the other (string-level guard;
  *  the Rust side does the symlink-resolving authoritative check). */
@@ -104,7 +164,7 @@ export function App() {
   // else the bundled copy shipped inside the installed app. Separate from the works
   // workspace. Falls back to DEFAULT_REPO until resolve_repo answers.
   const [repoRoot, setRepoRoot] = useState<string>(DEFAULT_REPO);
-  // works workspace (~/AnimeArmory) — app creates/deletes works here only
+  // Dedicated LabuTV works workspace — app creates/deletes works here only.
   const [workspaceRoot, setWorkspaceRoot] = useState<string>("");
   // non-tab navigation (line picker ↔ a line's works list)
   const [homeRoute, setHomeRoute] = useState<HomeRoute>({ kind: "home" });
@@ -238,36 +298,25 @@ export function App() {
   async function startFromHub(line: LineInfo, prompt: string, attachments: string[]) {
     const cleanPrompt = prompt.trim();
     if (!cleanPrompt && attachments.length === 0) return;
-    const recent = recentWorksRef.current.find((work) =>
-      work.line.line === line.line && line.roots.some((root) => root.path === work.root.path),
-    );
-    let root = recent
-      ? line.roots.find((item) => item.path === recent.root.path) ?? recent.root
-      : line.roots[0];
-    if (!root) {
-      const firstAttachmentName = attachments[0]?.split(/[\\/]/).filter(Boolean).pop() ?? "";
-      const stem = (cleanPrompt || firstAttachmentName)
-        .split(/\r?\n/, 1)[0]
-        .replace(/[\\/:*?"<>|]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim()
-        .slice(0, 22) || plainLineLabel(lineLabel(line));
-      const stamp = new Date().toLocaleString("zh-CN", {
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }).replace(/[\s/:]/g, "");
-      try {
-        const name = `${stem}-${stamp}`;
-        const path = await createWork(line.dir, repoRoot, name);
-        root = { name, path, has_progress: false, is_demo: false };
-      } catch (error) {
-        console.error("hub create work failed", error);
-        setHomeRoute({ kind: "line", line });
-        return;
+    const baseName = hubWorkBaseName(cleanPrompt, attachments);
+    let root: WorkRoot | null = null;
+    try {
+      for (let index = 1; index <= 999; index += 1) {
+        const name = index === 1 ? baseName : `${baseName} (${index})`;
+        try {
+          const path = await createWork(line.dir, repoRoot, name);
+          root = { name, path, has_progress: false, is_demo: false };
+          break;
+        } catch (error) {
+          if (isDuplicateWorkError(error)) continue;
+          throw error;
+        }
       }
+      if (!root) throw new Error("无法生成不重复的作品名称");
+    } catch (error) {
+      console.error("hub create work failed", error);
+      setHomeRoute({ kind: "line", line });
+      return;
     }
     const routedPrompt = [
       `请使用 ${line.line} 处理当前作品中的以下需求。`,

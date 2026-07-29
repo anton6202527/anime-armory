@@ -1,0 +1,50 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第3集",
+  "accepted": [
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "shot": "Clip_04",
+      "reviewer": "项目视觉执行席-01",
+      "reason": "已逐帧复核 Clip04_first/first_a1/end：均为同一阴天午后冷灰官道，云层、山脊、车辙和光向连续；亮度变化来自景别与画面占比，不是时辰/天气跳变。",
+      "expires_at": "2026-08-29"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "41b886550599",
+      "reviewer": "项目视觉执行席-01",
+      "reason": "Clip04 情绪从内心苦笑/短暂松弛到马蹄声触发的骤然警觉，事件触发点已由远处尘头与回身按刀尾帧呈现。",
+      "expires_at": "2026-08-29"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "664525d32b4c",
+      "reviewer": "项目视觉执行席-01",
+      "reason": "Clip07 从被跪求的短暂错愇/虚假松动转为听见求救真相后的沉重，对白事件构成明确过渡依据。",
+      "expires_at": "2026-08-29"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "c76eae33eb10",
+      "reviewer": "项目视觉执行席-01",
+      "reason": "Clip07 陈青源从马上警觉到跪地陈述灾情的悲痛，下马、跪拜和求救对白是可见的情绪过渡事件。",
+      "expires_at": "2026-08-29"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "f030d62c74e0",
+      "reviewer": "项目视觉执行席-01",
+      "reason": "EP03_CLIP01-04 文本长镜已拆为多个物理关键帧和子镜头，实际剪辑由群跪钩子、埋尸、换装与官道警觉四个动作单元构成，不是连续静态长镜。",
+      "expires_at": "2026-08-29"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "bc075160a4e9",
+      "reviewer": "项目视觉执行席-01",
+      "reason": "EP03_CLIP06-08 已按超 15 秒及剪辑边界拆为多段物理镜头，马队逼近、下马齐跪、请求救三个节拍有独立关键帧与动作接力。",
+      "expires_at": "2026-08-29"
+    }
+  ]
+}

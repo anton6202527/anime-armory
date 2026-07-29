@@ -1,58 +1,68 @@
 {
   "schema_version": 1,
   "kind": "comic_visual_research",
-  "status": "draft",
-  "scope": "待填：时代、地域、章节与主要角色/场景",
+  "status": "complete",
+  "scope": "第1—3话；北宋清河县、景阳冈及市井家宅；武松、武大、潘金莲、西门庆的服制、阶层、场景与叙事功能。画面叙事时代按北宋处理，图像语法可吸收明代版画的秩序感，但不得混用服饰年代。",
   "project_style_anchor_id": "STYLE_JINPINGMEI_MING_URBAN",
   "sources": [
     {
       "source_id": "FILM_001",
-      "title": "待填：官方/版权方影视条目",
-      "url": "",
-      "provider": "",
-      "accessed_at": "2026-07-28",
+      "title": "《水浒传》第15集 景阳冈",
+      "url": "https://tv.cctv.com/2010/06/11/VIDE1354368397821738.shtml",
+      "provider": "央视网",
+      "accessed_at": "2026-07-29",
       "type": "film_tv_narrative",
       "usage_boundary": "research_only",
-      "findings": []
+      "findings": [
+        "官方剧情梗概确认：饮酒过冈、三碗不过冈警示、打虎、获任都头、与武大潘金莲重逢构成连续叙事链。",
+        "仅用于核对叙事功能与段落次序，不保存剧照，不沿用演员脸、镜头或服装组合。"
+      ]
     },
     {
       "source_id": "PRIMARY_001",
-      "title": "待填：博物馆/权威机构一手参考",
-      "url": "",
-      "provider": "",
-      "accessed_at": "2026-07-28",
+      "title": "张择端《清明上河图》卷",
+      "url": "https://www.dpm.org.cn/collection/paint/228226.html",
+      "provider": "故宫博物院",
+      "accessed_at": "2026-07-29",
       "type": "museum_primary",
       "usage_boundary": "research_only",
-      "findings": []
+      "findings": [
+        "北宋汴京城郊、市肆、车马、舟桥、店铺与多阶层人物可作为市井密度和职业差异的一手图像证据。",
+        "散点透视、长卷中有序而繁密的组织方式适合转译为纵向条漫的空间推进。",
+        "兼工带写、设色淡雅支持纤细线描与低饱和石青、朱砂、赭石的综合色彩方案。"
+      ]
     },
     {
       "source_id": "PRIMARY_002",
-      "title": "待填：第二项博物馆/权威机构一手参考",
-      "url": "",
-      "provider": "",
-      "accessed_at": "2026-07-28",
+      "title": "打开八百年前的南宋衣橱：赵伯澐墓出土服饰",
+      "url": "https://www.chinasilkmuseum.com/jz/info_15.aspx?itemid=27809",
+      "provider": "中国丝绸博物馆",
+      "accessed_at": "2026-07-29",
       "type": "institution_primary",
       "usage_boundary": "research_only",
-      "findings": []
+      "findings": [
+        "出土丝织服饰可为宋代衣料层次、领缘、袍衫结构和织物垂坠提供材料证据。",
+        "该材料属于南宋士族墓葬，不得直接等同于北宋清河县平民；仅采用结构与材质信息，并按人物阶层降级。"
+      ]
     }
   ],
   "derived_style": {
-    "summary": "",
+    "summary": "北宋市井实物与绘画证据决定人物、器物和空间；明代版画只贡献构图秩序与装饰节奏。整体采用纤细稳定墨线、淡设色、纸绢颗粒和纵向散点推进，保持成年人世情讽喻的克制感。",
     "decisions": [
       {
         "dimension": "character",
-        "decision": "",
-        "evidence_source_ids": []
+        "decision": "角色按身份拉开衣料、束发、体态与劳动痕迹：武松强健利落，武大矮小劳作，潘金莲端整而受困；均为原创成年面孔，不使用演员相貌。",
+        "evidence_source_ids": ["PRIMARY_001", "PRIMARY_002"]
       },
       {
         "dimension": "environment",
-        "decision": "",
-        "evidence_source_ids": []
+        "decision": "景阳冈用留白与斜坡形成压迫，清河县以招幌、挑担、车马、店面和纵深人流形成密集反差；纵向条漫采用长卷式逐段展开。",
+        "evidence_source_ids": ["PRIMARY_001", "FILM_001"]
       },
       {
         "dimension": "palette",
-        "decision": "",
-        "evidence_source_ids": []
+        "decision": "低饱和石青、朱砂、赭石与烟墨为主，山冈冷青灰、县城暖赭红；肤色自然，不用艳俗霓虹或影视调色。",
+        "evidence_source_ids": ["PRIMARY_001", "PRIMARY_002"]
       }
     ],
     "do_not_copy": [

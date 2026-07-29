@@ -1,0 +1,214 @@
+{
+  "schema_version": 2,
+  "kind": "comic_source_semantics",
+  "chapter": "第1话",
+  "status": "pass",
+  "created_at": "2026-07-29T12:24:36",
+  "chapter_contract": {
+    "enforced": true,
+    "sha256": "9eb8cc9562c7dd1d787a7a2198c9243044cb637113db1def18419ee2cc5d0417",
+    "source_mode": "adapted",
+    "format_profile": "vertical_serial",
+    "load_status": "loaded"
+  },
+  "source_language": "zh-Hans",
+  "target_text_language": "zh-Hans",
+  "target_text_metadata": {
+    "lang": "zh-Hans",
+    "dir": "ltr",
+    "script": "unknown",
+    "line_break": "unknown"
+  },
+  "requires_normalization": true,
+  "normalization_reason": [
+    "manual_source_language"
+  ],
+  "source_files": [
+    {
+      "path": "源本/第1话_景阳冈源文选段.txt",
+      "status": "read",
+      "chars": 406,
+      "format": "txt",
+      "sha256": "e62d462b3640e7686c6ee289365ccb1b51b21df78982f779b136555f90193e84"
+    }
+  ],
+  "source_slice": {
+    "chapter": "第1话",
+    "chars": 406,
+    "strategy": "split_blueprint.source_spans",
+    "selections": [
+      {
+        "span_id": "SPAN_001",
+        "source_path": "源本/第1话_景阳冈源文选段.txt",
+        "requested": {
+          "start": null,
+          "end": null,
+          "whole_file": true
+        },
+        "status": "read",
+        "chars": 406,
+        "source_unit_refs": [
+          "whole_file"
+        ]
+      }
+    ]
+  },
+  "glossary_reviewed": true,
+  "ambiguity_reviewed": true,
+  "proper_noun_glossary": [
+    {
+      "term": "大虫",
+      "meaning_zh": "虎",
+      "text_target": "虎"
+    },
+    {
+      "term": "哨棒",
+      "meaning_zh": "行旅防身木棒",
+      "text_target": "哨棒"
+    },
+    {
+      "term": "都头",
+      "meaning_zh": "县衙武职差役头目",
+      "text_target": "都头"
+    }
+  ],
+  "segments": [
+    {
+      "segment_id": "S001",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "《金瓶梅》第一回相关源文工作摘录（用于第1话语义对齐）",
+      "meaning_zh": "工作摘录标题，不属于故事事件。",
+      "text_target": "不进入画内文字。",
+      "ambiguities": [],
+      "adaptation_decision": "删除",
+      "adaptation_note": "仅作来源标识；由P001元数据覆盖，不作为剧情台词。"
+    },
+    {
+      "segment_id": "S002",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "武松归乡，行至阳谷县地面，在酒店饮酒。店家以“三碗不过冈”相劝，又说明景阳冈近来有大虫伤人，官府已有禁令。武松疑其留客图利，执意独自上冈。",
+      "meaning_zh": "武松酒后无视警示，坚持独自越过有虎伤人的景阳冈。",
+      "text_target": "三碗不过冈。冈上有虎。——我偏要过。",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "压缩为回闪三格，保留警示、误解店家、主动上冈三项因果。"
+    },
+    {
+      "segment_id": "S003",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "酒力发作，武松在乱树旁大青石上歇息。忽有一阵狂风，吊睛白额大虫从树后扑出。那虎先扑、再掀、又以铁棒似的虎尾倒竖一剪，武松接连闪过。",
+      "meaning_zh": "酒意中猛虎突袭，并以扑、掀、剪连续攻击，武松靠闪避活下。",
+      "text_target": "风起。虎扑、掀、剪，三势连发。",
+      "ambiguities": [],
+      "adaptation_decision": "成画面",
+      "adaptation_note": "动作顺序必须保持；开场可先展示虎扑，再用回闪补上饮酒过冈。"
+    },
+    {
+      "segment_id": "S004",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "武松举哨棒劈打，误中枯树，哨棒折作两截。危急间，他丢开断棒，揪住大虫顶花皮，以脚压住，以拳猛打，直至大虫伏地不动。",
+      "meaning_zh": "哨棒折断使武松失去武器，他贴身控制虎头并以拳脚完成逆转。",
+      "text_target": "喀嚓！棒断。退无可退。",
+      "ambiguities": [],
+      "adaptation_decision": "成画面",
+      "adaptation_note": "作为本话动作高潮；避免血腥特写，以体重、抓握和呼吸表现艰险。"
+    },
+    {
+      "segment_id": "S005",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "猎户赶到，起初不信一人能打死猛虎；亲见死虎后，众人拥武松下冈。阳谷知县赏识其勇力，赏赐并任其为都头。",
+      "meaning_zh": "公共见证把个人搏杀转化为英雄名声，并带来都头身份。",
+      "text_target": "真是他一人打死的！／知县令：任武松为都头。",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "用猎户围观与县衙告示两格完成社会身份跃迁。"
+    },
+    {
+      "segment_id": "S006",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "叙事随后转入武大家事：武松与兄长武大及嫂嫂潘金莲相逢。山冈上可见的猛虎已死，清河县的人情、欲望与利害由此进入故事中心。",
+      "meaning_zh": "叙事从山野英雄转入武家与清河县世情，建立人欲比猛虎更难对付的主题。",
+      "text_target": "虎死冈上，欲入人间。",
+      "ambiguities": [],
+      "adaptation_decision": "成旁白",
+      "adaptation_note": "保留武家转场，增加不改变事件的主题旁白桥，服务全作核心承诺。"
+    },
+    {
+      "segment_id": "S007",
+      "source_path": "源本/第1话_景阳冈源文选段.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "whole_file"
+      ],
+      "source_excerpt": "说明：本文件是对项目源本对应段落的工作摘录与语义归纳；正式台词和旁白仍须回看《源本/金瓶梅.docx》，不得把本摘录当作新增剧情依据。",
+      "meaning_zh": "制作说明，要求正式改编继续以DOCX源本为最终依据。",
+      "text_target": "不进入画内文字。",
+      "ambiguities": [],
+      "adaptation_decision": "删除",
+      "adaptation_note": "由P016元数据覆盖，仅保留为制作约束。"
+    }
+  ],
+  "segment_policy": {
+    "coverage": "full",
+    "max_segments_legacy_ignored": 12,
+    "note": "不截断源文本；长段按 1200 字符拆块，所有源段都必须有改编决策。"
+  },
+  "adaptation_ledger": [],
+  "panel_script_contract": {
+    "required_panel_fields_when_normalized": [
+      "source_excerpt",
+      "meaning_zh",
+      "text_target",
+      "adaptation_note",
+      "source_segment_refs"
+    ],
+    "panel_script_path": "脚本/第1话/panel_script.json"
+  },
+  "panel_coverage": {
+    "status": "pass",
+    "required_segment_ids": [
+      "S002",
+      "S003",
+      "S004",
+      "S005",
+      "S006"
+    ],
+    "used_segment_ids": [
+      "S001",
+      "S002",
+      "S003",
+      "S004",
+      "S005",
+      "S006",
+      "S007"
+    ],
+    "missing_segment_ids": []
+  },
+  "checked_at": "2026-07-29T13:07:05",
+  "issues": [],
+  "stale_reasons": []
+}

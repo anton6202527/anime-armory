@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "kind": "comic_development_pack_signoff",
+  "decision": "《金瓶梅》第1话开发方向、16格脚本方向与共享风格锚候选通过用户确认",
+  "reviewer": "用户",
+  "role": "出品人",
+  "time": "2026-07-29T12:59:23+08:00",
+  "reason": "用户在逐阶段审核点明确回复‘确认’；同意景阳冈明虎闭合、清河县暗虎长线及1440×1920统一风格锚。",
+  "file_sha256": {
+    "adaptation_strategy": "674f67a7f5a7d37bb437d51a5d77a98b03a6e332c2e9a1b68ad6fafa4c1f872a",
+    "season_arc": "d65c98f75830a16b03557477c532fe53cb8ca9100051b21dbebd069aae90b4ae",
+    "split_blueprint": "b000a5f1edb5dd85e151860a70cbf803dee9df93a4422dc7255e60dddd0e245c"
+  },
+  "status": "approved"
+}
