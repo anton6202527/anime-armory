@@ -2158,7 +2158,7 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-29T12:51:50+00:00",
+  "generated_at": "2026-07-29T13:06:28+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9",
@@ -2236,6 +2236,7 @@
       "出图/第3集/prompt": null,
       "出图/第3集/prompt/00_总览.md": "1221cfcc1e79ae9fa05a0830e6faba3d44c5544ee041766fc61bab96078ccdb3",
       "出图/第3集/prompt/01_分镜出图.md": "be21fbb7c6c085ffa275b804c41127b44680bd9f0a0a28f9813f9cf069aae043",
+      "出图/第3集/图片/Clip01_end.png": "bad856a66d14aec96efb06581857e0a52cdcc364dfac19edc27489ff28e8df6d",
       "出图/第3集/图片/Clip01_first.png": "8421097323eadf58ae01fb0f128e716fcc146eef5fe79ed485caaa4b4dbe308a",
       "出图/第3集/图片/Clip01_first_a1.png": "7d6e0c59574c92e2a2b6d03542addfa891fe0bb77a7004454b3c2f7f4ed53dcb",
       "出图/第3集/图片/Clip02_first.png": "94672945bfb257340da1c483dacc3d66293c5ea970cd67efd1225476ba844f2d",
@@ -2263,7 +2264,7 @@
       "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
       "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
     },
-    "sha": "8c7673fcd5863b68938bad23ae6ccf87a0acffab23b564cbf0557b968b9961ad"
+    "sha": "551a4957262e60a2877a0e67e3ae2bc77a482e8981eb273dce19681186bc0b94"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",

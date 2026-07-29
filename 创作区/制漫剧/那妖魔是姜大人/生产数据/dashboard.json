@@ -694,7 +694,7 @@
       "warnings_per_attempt": 0.7652
     },
     {
-      "blockers_per_attempt": 0.3673,
+      "blockers_per_attempt": 0.36,
       "completion_rate": null,
       "consistency_blockers": 2,
       "consistency_ledger": {
@@ -806,15 +806,15 @@
       "duration_sec": 27992.584,
       "elapsed_per_finished_min_sec": 18906.882,
       "episode": "第3集",
-      "event_count": 342,
+      "event_count": 344,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 98,
+      "generation_attempts": 100,
       "generation_fails": 4,
-      "generation_pass_rate": 0.9574,
-      "generation_passes": 90,
+      "generation_pass_rate": 0.9583,
+      "generation_passes": 92,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
@@ -840,14 +840,14 @@
         }
       ],
       "one_pass_count": 33,
-      "one_pass_rate": 0.3367,
+      "one_pass_rate": 0.33,
       "progress_next_skill": "n2d-video",
       "progress_next_stage": "图生视频",
       "qa_blockers": 36,
       "qa_blockers_historical": 31,
       "qa_gate_passes": 2,
       "qa_gate_runs": 5,
-      "qa_infos": 62,
+      "qa_infos": 63,
       "qa_warnings": 171,
       "qa_warnings_historical": 171,
       "recent_blockers": [
@@ -904,15 +904,16 @@
       "redraw_categories": {
         "other": 27,
         "outfit_consistency": 1,
-        "prop_structure": 2,
+        "prop_structure": 3,
         "temporal": 1
       },
-      "redraw_count": 31,
-      "redraw_rate": 0.3163,
+      "redraw_count": 32,
+      "redraw_rate": 0.32,
       "redraw_reasons": {
         "Clip05 a1 漏签名横刀；以当前帧+横刀母版做精确物体编辑，恢复左腰单把入鞘横刀与左手按柄。": 1,
         "Codex CLI 三次超时后，使用 Codex 内置 image_gen 按同一源帧与参考包完成接力动作帧。": 1,
         "runner 两版均漏掉签名装备；基于当前帧和横刀母版局部编辑，补正确左髋单刀挂载。": 1,
+        "移除陈青源手边误生横刀，保留身份、构图与群跪状态。": 1,
         "纠正同 Clip 接力中姜月初从制服错误跳回囚服；恢复未来片段制服束发态，保留心虚表情与群跪背景。": 1,
         "纠正首版误画跪姿与过早清晰马队；恢复驻足回身、按住唯一入鞘横刀、远处仅尘头。": 1,
         "补录中段锚帧动作推进自检签收；当前像素不变。": 4,
@@ -937,14 +938,14 @@
       "stages": {
         "image": {
           "duration_sec": 27392.584,
-          "generation_attempts": 96,
+          "generation_attempts": 98,
           "generation_fails": 4,
-          "generation_passes": 88,
+          "generation_passes": 90,
           "missing_deliverables": 3,
           "qa_blockers": 3,
-          "qa_infos": 34,
+          "qa_infos": 35,
           "qa_warnings": 81,
-          "redraw_count": 31
+          "redraw_count": 32
         },
         "image_preflight": {
           "duration_sec": 0.0,
@@ -1015,7 +1016,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.7449
+      "warnings_per_attempt": 1.71
     },
     {
       "blockers_per_attempt": null,
@@ -1404,7 +1405,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-29T12:57:45+00:00",
+  "generated_at": "2026-07-29T13:06:28+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1882,7 +1883,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.6062,
+    "blockers_per_attempt": 0.6041,
     "consistency_blockers": 27,
     "consistency_ledger_counts": {
       "block": 25,
@@ -1901,7 +1902,7 @@
     "duration_sec": 62436.983,
     "elapsed_per_finished_min_sec": 15723.239,
     "episode_count": 10,
-    "event_count": 1748,
+    "event_count": 1750,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
@@ -1914,15 +1915,15 @@
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 579,
+    "generation_attempts": 581,
     "generation_fails": 44,
-    "generation_pass_rate": 0.9235,
-    "generation_passes": 531,
+    "generation_pass_rate": 0.9237,
+    "generation_passes": 533,
     "one_pass_count": 332,
-    "one_pass_rate": 0.5734,
+    "one_pass_rate": 0.5714,
     "qa_blockers": 351,
     "qa_blockers_historical": 356,
-    "qa_infos": 195,
+    "qa_infos": 196,
     "qa_warnings": 661,
     "qa_warnings_historical": 661,
     "recoup_ratio": {},
@@ -1930,12 +1931,12 @@
       "face_consistency": 5,
       "other": 51,
       "outfit_consistency": 1,
-      "prop_structure": 7,
+      "prop_structure": 8,
       "reference_crop": 4,
       "temporal": 8
     },
-    "redraw_count": 76,
-    "redraw_rate": 0.1313,
+    "redraw_count": 77,
+    "redraw_rate": 0.1325,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1943,7 +1944,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m58s",
     "runtime_sec": 238.26,
-    "warnings_per_attempt": 1.1416
+    "warnings_per_attempt": 1.1377
   },
   "version": 1
 }
