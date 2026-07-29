@@ -76,7 +76,7 @@
           "raw_intra_floor": null
         },
         "CHAR_01__囚途残损态": {
-          "ep_mean_score": 0.4992,
+          "ep_mean_score": 0.4821,
           "ep_n_shots": 4,
           "floor": 0.5,
           "floor_calibrated": true,
@@ -104,7 +104,7 @@
           "raw_intra_floor": 0.6624
         },
         "CHAR_03__常态": {
-          "ep_mean_score": 0.5981,
+          "ep_mean_score": 0.5954,
           "ep_n_shots": 13,
           "floor": 0.6407,
           "floor_calibrated": true,
@@ -139,17 +139,17 @@
               {
                 "char": "CHAR_01__囚途残损态",
                 "face_idx": 0,
-                "score": 0.4461
+                "score": 0.3959
               },
               {
                 "char": "CHAR_03__常态",
                 "face_idx": 1,
-                "score": 0.7291
+                "score": 0.6717
               },
               {
                 "char": "CHAR_01__囚途残损态",
                 "face_idx": 2,
-                "score": 0.0579
+                "score": 0.1012
               }
             ],
             "duplicate_chars": [
@@ -161,9 +161,9 @@
           "floor": 0.5,
           "floor_calibrated": true,
           "png": "图片/Clip01_end.png",
-          "score": 0.4461,
-          "score_vs_main": 0.4424,
-          "verdict": "warn"
+          "score": 0.3959,
+          "score_vs_main": 0.374,
+          "verdict": "block"
         },
         {
           "anchor": "best_of_variants",
@@ -960,7 +960,7 @@
           "floor": 0.9817,
           "hair_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "png": "图片/Clip01_end.png",
-          "score": 0.9341,
+          "score": 0.9386,
           "verdict": "ok"
         },
         {
@@ -1294,7 +1294,7 @@
           "costume_change_expected": "囚服残损沾土→埋尸后拍去手上浮土→换上黑底赤纹制服束发佩刀→全程维持制服态；面对马队时手不离刀柄；不出现妖化。",
           "floor": 0.9839,
           "png": "图片/Clip01_end.png",
-          "score": 0.9786,
+          "score": 0.9673,
           "verdict": "ok"
         },
         {
@@ -1513,7 +1513,7 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 22.2,
+          "median_dist": 21.6,
           "registered_id": "LOC_02",
           "shots": 18
         },
@@ -1566,9 +1566,9 @@
       "notes": [],
       "seams": [
         {
-          "action_shift": 0.046,
+          "action_shift": 0.045,
           "action_verdict": null,
-          "color_dist": 0.246,
+          "color_dist": 0.2022,
           "color_verdict": "warn",
           "cross_face_cos": null,
           "dist": 33,
@@ -1755,22 +1755,9 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 20,
+    "covered": 21,
     "face_mode": "insightface",
-    "missing": [
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/“囚途残损态”",
-          "CHAR_03/常态"
-        ],
-        "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
-        "png": "图片/Clip01_end.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_01"
-      }
-    ],
+    "missing": [],
     "notes": [],
     "pending": [
       {
@@ -1788,7 +1775,7 @@
     "required": 21,
     "skipped": [],
     "unclassified": [],
-    "verdict": "block"
+    "verdict": "ok"
   },
   "hair_manual_confirmations": {
     "applied": 2,
@@ -1830,7 +1817,7 @@
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
       "出图/第3集/prompt/00_总览.md": "1221cfcc1e79ae9fa05a0830e6faba3d44c5544ee041766fc61bab96078ccdb3",
       "出图/第3集/prompt/01_分镜出图.md": "be21fbb7c6c085ffa275b804c41127b44680bd9f0a0a28f9813f9cf069aae043",
-      "出图/第3集/图片/Clip01_end.png": "b8db068c4873a579c466128e512cdae9f2d069c75f49b519573e5ab4f2217113",
+      "出图/第3集/图片/Clip01_end.png": "bad856a66d14aec96efb06581857e0a52cdcc364dfac19edc27489ff28e8df6d",
       "出图/第3集/图片/Clip01_first.png": "8421097323eadf58ae01fb0f128e716fcc146eef5fe79ed485caaa4b4dbe308a",
       "出图/第3集/图片/Clip01_first_a1.png": "7d6e0c59574c92e2a2b6d03542addfa891fe0bb77a7004454b3c2f7f4ed53dcb",
       "出图/第3集/图片/Clip02_first.png": "94672945bfb257340da1c483dacc3d66293c5ea970cd67efd1225476ba844f2d",
@@ -1858,7 +1845,7 @@
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": "656ac8e239a4b6b2e35ac3d63a9a00c7c3dd33a3c784fa194f7fecc682b32bf7",
       "脚本/第3集/storyboard.json": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
     },
-    "sha": "a851a2acd09bdb90c53fe86c43027571a6c8522a62c4894386fea0202c9cb6ae"
+    "sha": "678e45dacb5f4ce25d5f57964f445e221ef7a0f62bcfce0c3977d87566101d17"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -4929,7 +4916,7 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.38 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -5069,7 +5056,7 @@
     "distance": 0.509,
     "episode_fingerprint": {
       "contrast": 131.7,
-      "edge": 26.3,
+      "edge": 26.5,
       "sat": 45.0
     },
     "findings": [],
@@ -5093,7 +5080,7 @@
     }
   },
   "summary": {
-    "advisory": 27,
+    "advisory": 26,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -5102,12 +5089,6 @@
         "warn": 0
       },
       "face": {
-        "block": 0,
-        "noface": 0,
-        "ok": 20,
-        "warn": 1
-      },
-      "face_reference_coverage": {
         "block": 1,
         "noface": 0,
         "ok": 20,

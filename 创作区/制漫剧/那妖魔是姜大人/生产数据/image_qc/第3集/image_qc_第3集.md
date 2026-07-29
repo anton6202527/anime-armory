@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第3集
-- 总判定: **block** · 硬阻断 3（必须修） · 非阻断初筛 27 · 视觉降级 0
+- 总判定: **block** · 硬阻断 3（必须修） · 非阻断初筛 26 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -12,7 +12,7 @@
 - 🟢 active rejects 0 · review `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json`
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🟡 block 0 · warn 1
+- 崩脸 G1: 🔴 block 1 · warn 0
 - 发型 H1: 🟢 block 0 · warn 0
 - 服装 N1: 🟢 block 0 · warn 0
 - 场景 O2: 🟢 block 0 · warn 0
@@ -22,8 +22,7 @@
 - 锚点门 N3: 🟢 block 0 · warn 0
 
 ## 角色脸定妆比对覆盖（硬闸）
-- 🔴 已落档角色图 required 21 · covered 20 · missing 1 · pending 1 · precision full
-  - 🔴 镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking） 图片/Clip01_end.png：face_verdict_warn
+- 🟢 已落档角色图 required 21 · covered 21 · missing 0 · pending 1 · precision full
 - 人工脸部确认: applied 12 · 确认文件 `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json`
 
 ## 核心角色五角 turnaround（逐视图 hash 收据硬闸）
