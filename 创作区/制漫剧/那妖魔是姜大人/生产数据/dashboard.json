@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 351 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 357 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 351
+      "value": 357
     },
     {
       "kind": "unverified_progress",
@@ -41,10 +41,10 @@
       "episode": "第3集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第3集 QA 阻断 36 项",
+      "message": "第3集 QA 阻断 42 项",
       "scope": "第3集",
       "threshold": 0,
-      "value": 36
+      "value": 42
     }
   ],
   "episodes": [
@@ -280,7 +280,7 @@
       "retention_3s": null,
       "runtime_hms": "1m18s",
       "runtime_sec": 77.5,
-      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
       "stages": {
         "compose": {
           "duration_sec": 0.0,
@@ -507,7 +507,7 @@
       "missing_deliverables": [
         {
           "asset": "出图/第2集/图片/EP02_CLIP04_detail.png",
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/EP02_CLIP04_detail.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/EP02_CLIP04_detail.png",
           "provider": "codex",
           "stage": "image",
           "ts": "2026-07-22T12:54:32+00:00"
@@ -598,7 +598,7 @@
       "retention_3s": null,
       "runtime_hms": "1m12s",
       "runtime_sec": 71.927,
-      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 22768.588,
@@ -694,7 +694,7 @@
       "warnings_per_attempt": 0.7652
     },
     {
-      "blockers_per_attempt": 0.375,
+      "blockers_per_attempt": 0.433,
       "completion_rate": null,
       "consistency_blockers": 2,
       "consistency_ledger": {
@@ -806,50 +806,50 @@
       "duration_sec": 27639.054,
       "elapsed_per_finished_min_sec": 18668.099,
       "episode": "第3集",
-      "event_count": 341,
+      "event_count": 347,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 96,
+      "generation_attempts": 97,
       "generation_fails": 4,
-      "generation_pass_rate": 0.9565,
-      "generation_passes": 88,
+      "generation_pass_rate": 0.957,
+      "generation_passes": 89,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
           "asset": "出图/第3集/图片/EP03_CLIP06_a1.png",
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a1.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a1.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-29T11:56:19+00:00"
         },
         {
           "asset": "出图/第3集/图片/EP03_CLIP06_a2.png",
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a2.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a2.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-29T11:56:19+00:00"
         },
         {
           "asset": "出图/第3集/图片/EP03_CLIP06_a3.png",
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a3.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/EP03_CLIP06_a3.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-29T11:56:19+00:00"
         }
       ],
       "one_pass_count": 32,
-      "one_pass_rate": 0.3333,
+      "one_pass_rate": 0.3299,
       "progress_next_skill": "n2d-video",
       "progress_next_stage": "图生视频",
-      "qa_blockers": 36,
-      "qa_blockers_historical": 31,
-      "qa_gate_passes": 2,
+      "qa_blockers": 42,
+      "qa_blockers_historical": 37,
+      "qa_gate_passes": 1,
       "qa_gate_runs": 5,
       "qa_infos": 62,
-      "qa_warnings": 172,
-      "qa_warnings_historical": 172,
+      "qa_warnings": 171,
+      "qa_warnings_historical": 171,
       "recent_blockers": [
         {
           "dim": "脸漂实测",
@@ -908,7 +908,7 @@
         "temporal": 1
       },
       "redraw_count": 31,
-      "redraw_rate": 0.3229,
+      "redraw_rate": 0.3196,
       "redraw_reasons": {
         "Clip05 a1 漏签名横刀；以当前帧+横刀母版做精确物体编辑，恢复左腰单把入鞘横刀与左手按柄。": 1,
         "Codex CLI 三次超时后，使用 Codex 内置 image_gen 按同一源帧与参考包完成接力动作帧。": 1,
@@ -933,13 +933,13 @@
       "retention_3s": null,
       "runtime_hms": "1m29s",
       "runtime_sec": 88.833,
-      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 27039.054,
-          "generation_attempts": 94,
+          "generation_attempts": 95,
           "generation_fails": 4,
-          "generation_passes": 86,
+          "generation_passes": 87,
           "missing_deliverables": 3,
           "qa_blockers": 3,
           "qa_infos": 34,
@@ -952,9 +952,9 @@
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 0,
+          "qa_blockers": 6,
           "qa_infos": 11,
-          "qa_warnings": 43,
+          "qa_warnings": 42,
           "redraw_count": 0
         },
         "image_prompt_preflight": {
@@ -1015,7 +1015,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.7917
+      "warnings_per_attempt": 1.7629
     },
     {
       "blockers_per_attempt": null,
@@ -1403,8 +1403,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-29T12:43:12+00:00",
+  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-29T12:46:41+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1880,9 +1880,9 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.6083,
+    "blockers_per_attempt": 0.6176,
     "consistency_blockers": 27,
     "consistency_ledger_counts": {
       "block": 25,
@@ -1901,30 +1901,30 @@
     "duration_sec": 62083.453,
     "elapsed_per_finished_min_sec": 15634.211,
     "episode_count": 10,
-    "event_count": 1747,
+    "event_count": 1753,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
-      "gates_passed": 6,
-      "gates_passed_per_day": 0.748,
+      "gates_passed": 5,
+      "gates_passed_per_day": 0.623,
       "measurement_start": "2026-07-21T12:15:15+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 577,
+    "generation_attempts": 578,
     "generation_fails": 44,
-    "generation_pass_rate": 0.9232,
-    "generation_passes": 529,
+    "generation_pass_rate": 0.9233,
+    "generation_passes": 530,
     "one_pass_count": 331,
-    "one_pass_rate": 0.5737,
-    "qa_blockers": 351,
-    "qa_blockers_historical": 356,
+    "one_pass_rate": 0.5727,
+    "qa_blockers": 357,
+    "qa_blockers_historical": 362,
     "qa_infos": 195,
-    "qa_warnings": 662,
-    "qa_warnings_historical": 662,
+    "qa_warnings": 661,
+    "qa_warnings_historical": 661,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 5,
@@ -1935,7 +1935,7 @@
       "temporal": 8
     },
     "redraw_count": 76,
-    "redraw_rate": 0.1317,
+    "redraw_rate": 0.1315,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1943,7 +1943,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m58s",
     "runtime_sec": 238.26,
-    "warnings_per_attempt": 1.1473
+    "warnings_per_attempt": 1.1436
   },
   "version": 1
 }

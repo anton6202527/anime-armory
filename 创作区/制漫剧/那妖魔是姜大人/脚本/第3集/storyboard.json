@@ -150,8 +150,9 @@
   },
   "clips": [
     {
-      "id": "EP03_CLIP01",
-      "firstframe_png": "出图/第3集/图片/Clip01_first.png",
+  "id": "EP03_CLIP01",
+  "firstframe_png": "出图/第3集/图片/Clip01_first.png",
+  "endframe_png": "出图/第3集/图片/Clip01_end.png",
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",
@@ -324,12 +325,12 @@
           "handoff_type": "intentional_discontinuity",
           "reason": "长线摉影进阶承诺延后处理；本集先承接杀裴的现实后果和身份代价。"
         },
-        "need_endframe": false,
+    "need_endframe": false,
         "entry_exit": "只交代群跪、制服、心虚三要素；不出现浅坟与囚服。；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：CHAR_02、PROP_镇魔司制服；出画/画外保留：CHAR_03、GROUP_01；入画/现身：PROP_镇魔司制服",
         "shot_size": "ELS→CU",
         "eyeline": "众人向画右前叩首；姜月初视线低垂向画左下。",
         "expression_span": "中",
-        "end_anchor_required": false,
+    "end_anchor_required": true,
         "anchors": [
           {
             "anchor_png": "出图/第3集/图片/Clip01_first_a1.png",
@@ -754,8 +755,9 @@
       "end_sec": 45.099
     },
     {
-      "id": "EP03_CLIP05",
-      "firstframe_png": "出图/第3集/图片/Clip05_first.png",
+  "id": "EP03_CLIP05",
+  "firstframe_png": "出图/第3集/图片/Clip05_first.png",
+  "endframe_png": "出图/第3集/图片/Clip05_end.png",
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",
@@ -903,12 +905,12 @@
         "seam_evidence": {
           "editorial_intent": "马队急停的空间压迫落地后，硬切陈青源下马抱拳，把武力冲突转成身份试探。"
         },
-        "need_endframe": false,
+    "need_endframe": false,
         "entry_exit": "陈青源与飞鹰门马队正式入画。；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01；入画/现身：CHAR_03、GROUP_01",
         "shot_size": "LS→MS",
         "eyeline": "陈青源自马上俯向画右前；她侧首回望向画左后。",
         "expression_span": "中",
-        "end_anchor_required": false,
+    "end_anchor_required": true,
         "previous_start_state_note": "马队自尘头冲至眼前。",
         "anchors": [
           {

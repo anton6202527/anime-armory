@@ -86,45 +86,35 @@
     },
     {
       "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
+        "['脚本/第3集/storyboard.json']"
       ],
       "affected_shots": [],
       "dimensions": [
-        "关键镜候选"
+        "生产锁版账"
       ],
       "findings": [
         {
           "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
+            "['脚本/第3集/storyboard.json']"
           ],
           "affected_shots": [],
-          "dim": "关键镜候选",
-          "dim_key": "关键镜候选",
-          "dimension": "关键镜候选",
+          "dim": "生产锁版账",
+          "dim_key": "生产锁版账",
+          "dimension": "生产锁版账",
           "episode": "第3集",
           "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第3集.json",
-          "message": "检测到 6 个关键镜，但缺 keyshot_candidate_plan_第3集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
-          "msg": "检测到 6 个关键镜，但缺 keyshot_candidate_plan_第3集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_image_preflight_第3集.json",
+          "message": "image_preflight 前置锁版账未通过：storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
+          "msg": "image_preflight 前置锁版账未通过：storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
+          "return_to_stage": "script_stage2",
+          "sev": "block",
+          "severity": "block",
           "source": "n2d-dashboard/gate"
         }
       ],
-      "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：['脚本/第3集/storyboard.json']"
     },
     {
       "affected_artifacts": [
@@ -186,6 +176,90 @@
           "return_to_stage": "image",
           "sev": "warn",
           "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "脸漂报告新鲜度",
+          "dim_key": "character_consistency",
+          "dimension": "脸漂报告新鲜度",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "第3集",
+          "message": "脸漂实测报告空账：available=true 且覆盖集齐（['第1集', '第2集', '第3集']），但 characters 为空——逐角色跨集漂移一条没实测（常见根因：历史集缺 per-episode 脸均值，如 face_ep_means 只有部分集）。measured-drift 环会据空账误判『无漂移』放行。重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`（insightface 环境）回填各历史集脸均值后再出图。",
+          "msg": "脸漂实测报告空账：available=true 且覆盖集齐（['第1集', '第2集', '第3集']），但 characters 为空——逐角色跨集漂移一条没实测（常见根因：历史集缺 per-episode 脸均值，如 face_ep_means 只有部分集）。measured-drift 环会据空账误判『无漂移』放行。重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`（insightface 环境）回填各历史集脸均值后再出图。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "跨集记忆锚落实"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "跨集记忆锚落实",
+          "dim_key": "跨集记忆锚落实",
+          "dimension": "跨集记忆锚落实",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/memory_anchor_plan_第3集.json",
+          "message": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+          "msg": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
           "source": "n2d-dashboard/gate"
         }
       ],
@@ -335,6 +409,72 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "scene_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "接缝分类",
+          "dim_key": "scene_consistency",
+          "dimension": "接缝分类",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#1",
+          "message": "need_endframe 与 seam_mode=intentional_discontinuity 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+          "msg": "need_endframe 与 seam_mode=intentional_discontinuity 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "接缝分类",
+          "dim_key": "scene_consistency",
+          "dimension": "接缝分类",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#5",
+          "message": "need_endframe 与 seam_mode=hard_cut 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+          "msg": "need_endframe 与 seam_mode=hard_cut 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "剧情经济性"
       ],
       "findings": [
@@ -365,6 +505,40 @@
       ],
       "return_to_stage": "script_stage2",
       "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "脚本/第3集/production_handoff_pack.json",
+        "脚本/第3集/production_handoff_signoff.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "P-3制片交接包"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "脚本/第3集/production_handoff_pack.json",
+            "脚本/第3集/production_handoff_signoff.json"
+          ],
+          "affected_shots": [],
+          "dim": "P-3制片交接包",
+          "dim_key": "P-3制片交接包",
+          "dimension": "P-3制片交接包",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第3集.json",
+          "message": "P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第3集/production_handoff_pack.json: inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff；脚本/第3集/production_handoff_signoff.json: input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[codex-script-supervisor:script_supervisor] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
+          "msg": "P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第3集/production_handoff_pack.json: inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff；脚本/第3集/production_handoff_signoff.json: input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[codex-script-supervisor:script_supervisor] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：脚本/第3集/production_handoff_pack.json、脚本/第3集/production_handoff_signoff.json"
     },
     {
       "affected_artifacts": [
@@ -987,26 +1161,21 @@
     },
     {
       "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
+        "['脚本/第3集/storyboard.json']"
       ],
       "affected_shots": [],
-      "dim": "关键镜候选",
-      "dim_key": "关键镜候选",
-      "dimension": "关键镜候选",
+      "dim": "生产锁版账",
+      "dim_key": "生产锁版账",
+      "dimension": "生产锁版账",
       "episode": "第3集",
       "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第3集.json",
-      "message": "检测到 6 个关键镜，但缺 keyshot_candidate_plan_第3集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
-      "msg": "检测到 6 个关键镜，但缺 keyshot_candidate_plan_第3集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_image_preflight_第3集.json",
+      "message": "image_preflight 前置锁版账未通过：storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
+      "msg": "image_preflight 前置锁版账未通过：storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
+      "return_to_stage": "script_stage2",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1211,6 +1380,54 @@
         "出图/第3集/prompt"
       ],
       "affected_shots": [],
+      "dim": "脸漂报告新鲜度",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂报告新鲜度",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "第3集",
+      "message": "脸漂实测报告空账：available=true 且覆盖集齐（['第1集', '第2集', '第3集']），但 characters 为空——逐角色跨集漂移一条没实测（常见根因：历史集缺 per-episode 脸均值，如 face_ep_means 只有部分集）。measured-drift 环会据空账误判『无漂移』放行。重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`（insightface 环境）回填各历史集脸均值后再出图。",
+      "msg": "脸漂实测报告空账：available=true 且覆盖集齐（['第1集', '第2集', '第3集']），但 characters 为空——逐角色跨集漂移一条没实测（常见根因：历史集缺 per-episode 脸均值，如 face_ep_means 只有部分集）。measured-drift 环会据空账误判『无漂移』放行。重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`（insightface 环境）回填各历史集脸均值后再出图。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "跨集记忆锚落实",
+      "dim_key": "跨集记忆锚落实",
+      "dimension": "跨集记忆锚落实",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/memory_anchor_plan_第3集.json",
+      "message": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+      "msg": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "参考规划落实",
       "dim_key": "参考规划落实",
       "dimension": "参考规划落实",
@@ -1379,6 +1596,54 @@
         "出图/第3集/prompt"
       ],
       "affected_shots": [],
+      "dim": "接缝分类",
+      "dim_key": "scene_consistency",
+      "dimension": "接缝分类",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#1",
+      "message": "need_endframe 与 seam_mode=intentional_discontinuity 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+      "msg": "need_endframe 与 seam_mode=intentional_discontinuity 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "接缝分类",
+      "dim_key": "scene_consistency",
+      "dimension": "接缝分类",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#5",
+      "message": "need_endframe 与 seam_mode=hard_cut 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+      "msg": "need_endframe 与 seam_mode=hard_cut 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "剧本可看性合同",
       "dim_key": "剧本可看性合同",
       "dimension": "剧本可看性合同",
@@ -1415,6 +1680,26 @@
       "return_to_stage": "script_stage2",
       "sev": "warn",
       "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "脚本/第3集/production_handoff_pack.json",
+        "脚本/第3集/production_handoff_signoff.json"
+      ],
+      "affected_shots": [],
+      "dim": "P-3制片交接包",
+      "dim_key": "P-3制片交接包",
+      "dimension": "P-3制片交接包",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第3集.json",
+      "message": "P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第3集/production_handoff_pack.json: inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff；脚本/第3集/production_handoff_signoff.json: input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[codex-script-supervisor:script_supervisor] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
+      "msg": "P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第3集/production_handoff_pack.json: inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff；脚本/第3集/production_handoff_signoff.json: input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[codex-script-supervisor:script_supervisor] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image_preflight --write-missing`。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2224,9 +2509,10 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-29T11:19:19+00:00",
+  "generated_at": "2026-07-29T12:46:41+00:00",
   "inputs_fingerprint": {
     "files": {
+      "['脚本/第3集/storyboard.json']": null,
       "出图/共享/asset_registry.json": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9",
       "出图/共享/identity_registry.json": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08",
       "出图/共享/prompt": null,
@@ -2300,9 +2586,10 @@
       "出图/共享/图片/定妆_道具_镇魔司制服_比例.png": "82e12e60bd1ac1e70f4ae7280bae417e7d029394cf2b9b6fd66173c61600cb3a",
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
       "出图/第3集/prompt": null,
-      "出图/第3集/prompt/00_总览.md": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f",
-      "出图/第3集/prompt/01_分镜出图.md": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "出图/第3集/prompt/00_总览.md": "1221cfcc1e79ae9fa05a0830e6faba3d44c5544ee041766fc61bab96078ccdb3",
+      "出图/第3集/prompt/01_分镜出图.md": "be21fbb7c6c085ffa275b804c41127b44680bd9f0a0a28f9813f9cf069aae043",
       "出图/第3集/图片/Clip01_first.png": "8421097323eadf58ae01fb0f128e716fcc146eef5fe79ed485caaa4b4dbe308a",
+      "出图/第3集/图片/Clip01_first_a1.png": "7d6e0c59574c92e2a2b6d03542addfa891fe0bb77a7004454b3c2f7f4ed53dcb",
       "出图/第3集/图片/Clip02_first.png": "94672945bfb257340da1c483dacc3d66293c5ea970cd67efd1225476ba844f2d",
       "出图/第3集/图片/Clip03_first.png": "0077fb376ce44ee38c3a25c0dc7d4f4c04a52642b552c58114da24462458f48c",
       "出图/第3集/图片/Clip04_end.png": "dc2ef5b98035a77f60e2ff199a08e339e1988f7f63cbce18e627f83bfeac9c5c",
@@ -2323,12 +2610,14 @@
       "出图/第3集/图片/EP03_CLIP08_a1.png": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
       "出视频/第3集/prompt": null,
       "合规/compliance_manifest.json": "2fb173c90b1216c820c470394bb1144e26ad7f7831a73c0917b2866cd02da49b",
-      "脚本/第3集/storyboard.json": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4",
+      "脚本/第3集/production_handoff_pack.json": "7fc33ba1165ee790a55d4c3efdc63eb90b3aaa68cc663ec9d26aefb7e2bbc730",
+      "脚本/第3集/production_handoff_signoff.json": "d70f987fbcefdd4ecb0d43e4aa0058418250c7907d7d6a0aa214a9ea99e06599",
+      "脚本/第3集/storyboard.json": "0d77443dce734ca8e42018bdb775cbdc5e66fc2cd94933036de424687dfa44d9",
       "设定库/characters/姜月初.md": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e",
       "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
       "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
     },
-    "sha": "41ff630470c04908d4ca939deb92b26e329fd8c3e07db25e26b7e0c88fbce8d0"
+    "sha": "e0f13e9a7a1f4c40b19e49b9d936c00a13d7d96ddfebc0467571520efb1dffe2"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
@@ -2338,15 +2627,15 @@
   },
   "summary": {
     "by_dim": {
+      "P-3制片交接包": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "image prompt compiler": {
         "block": 0,
         "info": 0,
         "warn": 24
-      },
-      "关键镜候选": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
       },
       "剧情经济性": {
         "block": 0,
@@ -2383,6 +2672,11 @@
         "info": 2,
         "warn": 0
       },
+      "接缝分类": {
+        "block": 2,
+        "info": 0,
+        "warn": 0
+      },
       "时间基准": {
         "block": 0,
         "info": 0,
@@ -2408,15 +2702,30 @@
         "info": 0,
         "warn": 1
       },
+      "生产锁版账": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "生图后端适配": {
         "block": 0,
         "info": 0,
         "warn": 2
       },
+      "脸漂报告新鲜度": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "语义谱系(P0)": {
         "block": 0,
         "info": 0,
         "warn": 7
+      },
+      "跨集记忆锚落实": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
       },
       "风格化脸机检": {
         "block": 0,
@@ -2425,11 +2734,11 @@
       }
     },
     "severity": {
-      "block": 0,
+      "block": 6,
       "info": 11,
-      "warn": 43
+      "warn": 42
     },
-    "total": 54
+    "total": 59
   },
   "version": 1
 }

@@ -220,6 +220,33 @@
           },
           "canvas": {"width": 1086, "height": 1448},
           "updated_at": "2026-07-29T18:50:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "face",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUSONG/face/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认脸部身份锚并要求继续",
+            "reviewed_at": "2026-07-29T19:05:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__face.png",
+            "source_sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+            "crop_box": []
+          },
+          "canvas": {"width": 1086, "height": 1448},
+          "updated_at": "2026-07-29T19:05:00+08:00"
         }
       ],
       "status": "partial",
@@ -228,7 +255,8 @@
         "front": "出图/共享/图片/CHAR_WUSONG__front.png",
         "three_quarter": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
         "side": "出图/共享/图片/CHAR_WUSONG__side.png",
-        "back": "出图/共享/图片/CHAR_WUSONG__back.png"
+        "back": "出图/共享/图片/CHAR_WUSONG__back.png",
+        "face": "出图/共享/图片/CHAR_WUSONG__face.png"
       },
       "view_readiness": {
         "required": [
@@ -243,12 +271,11 @@
           "front",
           "three_quarter",
           "side",
-          "back"
-        ],
-        "missing": [
+          "back",
           "face"
         ],
-        "complete": false
+        "missing": [],
+        "complete": true
       },
       "model_pack": {
         "kind": "comic_character_model_pack",
@@ -681,6 +708,33 @@
           },
           "canvas": {"width": 1086, "height": 1448},
           "updated_at": "2026-07-29T18:50:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
+          "sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "face",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_PANJINLIAN/face/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认脸部身份锚并要求继续",
+            "reviewed_at": "2026-07-29T19:05:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
+            "source_sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+            "crop_box": []
+          },
+          "canvas": {"width": 1086, "height": 1448},
+          "updated_at": "2026-07-29T19:05:00+08:00"
         }
       ],
       "status": "partial",
@@ -689,7 +743,8 @@
         "front": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
         "three_quarter": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
         "side": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
-        "back": "出图/共享/图片/CHAR_PANJINLIAN__back.png"
+        "back": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+        "face": "出图/共享/图片/CHAR_PANJINLIAN__face.png"
       },
       "view_readiness": {
         "required": [
@@ -704,12 +759,11 @@
           "front",
           "three_quarter",
           "side",
-          "back"
-        ],
-        "missing": [
+          "back",
           "face"
         ],
-        "complete": false
+        "missing": [],
+        "complete": true
       },
       "model_pack": {
         "kind": "comic_character_model_pack",
