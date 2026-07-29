@@ -1,11 +1,10 @@
 {
   "episode": "第3集",
-  "generated_at": "2026-07-28T02:23:56+00:00",
+  "generated_at": "2026-07-29T12:47:14+00:00",
   "kind": "n2d_repair_preflight",
   "next_when_blocked": [
     "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 check --json --write-missing",
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 check --write-missing --write-check --stage image_preflight --json",
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 --stage image_preflight --json --write --write-missing"
+    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 check --write-missing --write-check --stage image_preflight --json"
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "stage": "image_preflight",
@@ -13,37 +12,27 @@
   "steps": [
     {
       "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 --write-plan --json",
-      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [\n    \"skills/n2d-review/scripts/gate.py\",\n    \"skills/n2d-review/scripts/gate_core.py\",\n    \"skills/n2d/SKILL.md\"\n  ],\n  \"changed_skills\": [\n    \"n2d\",\n    \"n2d-review\"\n  ],\n  \"commands\": [\n    \"python3 skills/n2d-dashboard/scripts/dashboard.py gate \\\"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\\\" 第3集 --stage video\",\n    \"python3 skills/n2d-review/scripts/consistency_audit.py \\\"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\\\" 第3集  # 刷新 review findings；不重制产物\"\n  ],\n  \"contract_inheritance\": {\n    \"asset_blocks\": 0,\n    \"field_blocks\": 0,\n    \"field_warns\": 0,\n    \"freshness\": \"stale\",\n    \"generated_at\": \"2026-07-27T11:41:57Z\",\n    \"identity_blocks\": 0,\n    \"inherited\": true,\n    \"report_json\": \"/Users/wesley/learn/anime-armory/创作",
+      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [],\n  \"changed_skills\": [],\n  \"commands\": [],\n  \"contract_inheritance\": {\n    \"asset_blocks\": 0,\n    \"field_blocks\": 0,\n    \"field_warns\": 0,\n    \"freshness\": \"stale\",\n    \"generated_at\": \"2026-07-29T12:43:03Z\",\n    \"identity_blocks\": 0,\n    \"inherited\": true,\n    \"report_json\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.json\",\n    \"report_md\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.md\",\n    \"samples\": [],\n    \"status\": \"ok\",\n    \"verdict\": \"warn\"\n  },\n  \"created_at\": \"2026-07-29T12:47:14+00:00\",\n  \"current_stage\": \"video\",\n  \"current_todo\": {\n    \"column\": \"视频\",\n    \"command\": \"n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集\",\n    \"label\": \"图生",
       "payload": {
         "baseline_bootstrapped": false,
-        "changed_files": [
-          "skills/n2d-review/scripts/gate.py",
-          "skills/n2d-review/scripts/gate_core.py",
-          "skills/n2d/SKILL.md"
-        ],
-        "changed_skills": [
-          "n2d",
-          "n2d-review"
-        ],
-        "commands": [
-          "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage video",
-          "python3 skills/n2d-review/scripts/consistency_audit.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集  # 刷新 review findings；不重制产物"
-        ],
+        "changed_files": [],
+        "changed_skills": [],
+        "commands": [],
         "contract_inheritance": {
           "asset_blocks": 0,
           "field_blocks": 0,
           "field_warns": 0,
           "freshness": "stale",
-          "generated_at": "2026-07-27T11:41:57Z",
+          "generated_at": "2026-07-29T12:43:03Z",
           "identity_blocks": 0,
           "inherited": true,
           "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.json",
           "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.md",
           "samples": [],
           "status": "ok",
-          "verdict": "pass"
+          "verdict": "warn"
         },
-        "created_at": "2026-07-28T02:23:56+00:00",
+        "created_at": "2026-07-29T12:47:14+00:00",
         "current_stage": "video",
         "current_todo": {
           "column": "视频",
@@ -55,22 +44,11 @@
           "status": "⬜"
         },
         "episode": "第3集",
-        "execution_steps": [
-          {
-            "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage video",
-            "role": "refresh_gate",
-            "type": "command"
-          },
-          {
-            "command": "python3 skills/n2d-review/scripts/consistency_audit.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集  # 刷新 review findings；不重制产物",
-            "role": "refresh_review_findings",
-            "type": "command"
-          }
-        ],
+        "execution_steps": [],
         "gate_refresh_needed": false,
         "gate_refresh_stages": [],
         "image_consistency": {
-          "advisory": 16,
+          "advisory": 25,
           "consistent": true,
           "degraded": false,
           "freshness": "stale",
@@ -78,18 +56,18 @@
           "precision_level": "full",
           "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.md",
           "samples": [
-            "风格(S1): Clip05_first.png",
-            "天气时辰(W1): Clip07_end.png"
+            "风格(S1): EP03_CLIP03_a1.png",
+            "天气时辰(W1): Clip04_first_a1.png"
           ],
           "status": "ok",
           "verdict": "review"
         },
         "image_qc_environment": {
-          "advisory": 16,
+          "advisory": 25,
           "degraded": false,
           "finding_samples": [
-            "风格(S1): Clip05_first.png",
-            "天气时辰(W1): Clip07_end.png"
+            "风格(S1): EP03_CLIP03_a1.png",
+            "天气时辰(W1): Clip04_first_a1.png"
           ],
           "freshness": "stale",
           "hard_blocks": 0,
@@ -108,8 +86,6 @@
         "needs_record": false,
         "newly_relevant_skills": [],
         "notes": [
-          "变动集中在 n2d/_lib/review/dashboard/batch/n2d 等横切层，或只涉及该集尚未到达的阶段文件；先重跑 gate/审查/计划，不默认重抽图。",
-          "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 10 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第3集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第3集/图片/Clip01_first_a1.png, 出图/第3集/图片/EP03_CLIP03_a1.png, 出图/第3集/图片/Clip04_first_a1.png, 出图/第3集/图片/Clip05_first_a1.png",
           "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第3集` 再据此判断。",
           "契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第3集` 再判。"
         ],
@@ -135,73 +111,18 @@
         "shared_lock_changed_files": [],
         "shared_lock_reuse": false,
         "smart_suggestions": [],
-        "snapshot_changed_files": [
-          "skills/n2d-review/scripts/gate.py",
-          "skills/n2d-review/scripts/gate_core.py",
-          "skills/n2d/SKILL.md"
-        ],
+        "snapshot_changed_files": [],
         "source_drift": {
           "status": "clean"
         },
         "strict_image_refresh": false,
         "three_frame_compliance": {
           "backend": null,
-          "compliant": false,
+          "compliant": true,
           "enforced": true,
           "exempt_clips": 0,
           "missing_endframe_clips": [],
-          "missing_frame_files": [
-            {
-              "clip_id": "EP03_CLIP01",
-              "path": "出图/第3集/图片/Clip01_first_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP03",
-              "path": "出图/第3集/图片/EP03_CLIP03_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP04",
-              "path": "出图/第3集/图片/Clip04_first_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP05",
-              "path": "出图/第3集/图片/Clip05_first_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP06",
-              "path": "出图/第3集/图片/Clip06_first_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP06",
-              "path": "出图/第3集/图片/Clip06_first_a2.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP06",
-              "path": "出图/第3集/图片/Clip06_first_a3.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP07",
-              "path": "出图/第3集/图片/Clip07_first_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP07",
-              "path": "出图/第3集/图片/EP03_CLIP07_a1.png",
-              "role": "midframe"
-            },
-            {
-              "clip_id": "EP03_CLIP08",
-              "path": "出图/第3集/图片/EP03_CLIP08_a1.png",
-              "role": "midframe"
-            }
-          ],
+          "missing_frame_files": [],
           "policy_mode": "risk_only",
           "required_anchor_clips": [
             "EP03_CLIP01",
@@ -222,7 +143,7 @@
     },
     {
       "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 check --json --write-missing",
-      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-28T02:23:56+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"episode\": \"第3集\",\n  \"status\": \"block\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 7,\n    \"block\": 2\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第3集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issue",
+      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-29T12:47:14+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"episode\": \"第3集\",\n  \"status\": \"block\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 7,\n    \"block\": 2\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第3集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第3集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issue",
       "payload": {
         "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第3集.json",
         "episode": "第3集",
@@ -279,7 +200,7 @@
             "status": "block"
           }
         ],
-        "generated_at": "2026-07-28T02:23:56+00:00",
+        "generated_at": "2026-07-29T12:47:14+00:00",
         "kind": "n2d_production_handoff_pack_check",
         "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
         "overview_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_handoff_pack_第3集.md",
@@ -299,7 +220,7 @@
     },
     {
       "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 check --write-missing --write-check --stage image_preflight --json",
-      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第3集\",\n  \"stage\": \"image\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\"\n  ],\n  \"status\": \"block\",\n  \"generated_at\": \"2026-07-28T02:23:56+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第3集.json\",\n  \"summary\": {\n    \"block\": 2,\n    \"locks\": 4,\n    \"required_locks\": 4\n  },\n  \"findings\": [\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_artifact_stale\",\n      \"lock_id\": \"storyboard_lock\",\n      \"message\": \"storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json\",\n      \"artifacts\": [\n        \"脚本/第3集/storyboard.json\"\n      ]\n    },\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_artifact_stale\",\n      \"lock_id\": \"style_identity_lock\",\n      \"message\": \"style_",
+      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第3集\",\n  \"stage\": \"image\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\"\n  ],\n  \"status\": \"block\",\n  \"generated_at\": \"2026-07-29T12:47:14+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第3集.json\",\n  \"summary\": {\n    \"block\": 1,\n    \"locks\": 4,\n    \"required_locks\": 4\n  },\n  \"findings\": [\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_artifact_stale\",\n      \"lock_id\": \"storyboard_lock\",\n      \"message\": \"storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json\",\n      \"artifacts\": [\n        \"脚本/第3集/storyboard.json\"\n      ]\n    }\n  ],\n  \"check_path\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_image_第3集.json\"\n}",
       "payload": {
         "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_image_第3集.json",
         "checked_lock_ids": [
@@ -318,24 +239,15 @@
             "lock_id": "storyboard_lock",
             "message": "storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json",
             "severity": "block"
-          },
-          {
-            "artifacts": [
-              "出图/共享/identity_registry.json"
-            ],
-            "code": "lock_artifact_stale",
-            "lock_id": "style_identity_lock",
-            "message": "style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json",
-            "severity": "block"
           }
         ],
-        "generated_at": "2026-07-28T02:23:56+00:00",
+        "generated_at": "2026-07-29T12:47:14+00:00",
         "kind": "n2d_production_locks_check",
         "lock_path": "生产数据/production_locks_第3集.json",
         "stage": "image",
         "status": "block",
         "summary": {
-          "block": 2,
+          "block": 1,
           "locks": 4,
           "required_locks": 4
         },
@@ -347,26 +259,15 @@
     },
     {
       "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集 --stage image_preflight --json --write --write-missing",
-      "detail": "{\n  \"contract_path\": \"脚本/第3集/preventive_contracts.json\",\n  \"episode\": \"第3集\",\n  \"findings\": [\n    {\n      \"gate\": \"reference_slot_gate\",\n      \"loc\": \"PROP_镇魔司制服\",\n      \"message\": \"道具/场景 PROP_镇魔司制服 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_镇魔司制服_比例.png 不存在；出图/共享/图片/定妆_道具_镇魔司制服_手持.png 不存在\",\n      \"minimal_rerun_scope\": \"回 production_breakdown/identity/asset registry 补引用槽位与锁定策略\",\n      \"owner\": \"制片主任/场记\",\n      \"return_to_stage\": \"image_prompt\",\n      \"root_cause_layer\": \"production_breakdown\",\n      \"severity\": \"block\"\n    }\n  ],\n  \"gates\": [\n    \"reference_slot_gate\"\n  ],\n  \"generated_at\": \"2026-07-28T02:23:56+00:00\",\n  \"kind\": \"n2d_preventive_contract_report\",\n  \"outputs\": {\n    \"json\": \"生产数据/preventive_contracts_image_preflight_第3集.json\",\n    \"markdown\": \"生产数据/preventive_contracts_image_preflight_第3集.m",
+      "detail": "{\n  \"contract_path\": \"脚本/第3集/preventive_contracts.json\",\n  \"episode\": \"第3集\",\n  \"findings\": [],\n  \"gates\": [\n    \"reference_slot_gate\"\n  ],\n  \"generated_at\": \"2026-07-29T12:47:14+00:00\",\n  \"kind\": \"n2d_preventive_contract_report\",\n  \"outputs\": {\n    \"json\": \"生产数据/preventive_contracts_image_preflight_第3集.json\",\n    \"markdown\": \"生产数据/preventive_contracts_image_preflight_第3集.md\"\n  },\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"scaffolded\": false,\n  \"stage\": \"image_preflight\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"block\": 0,\n    \"info\": 0,\n    \"warn\": 0\n  },\n  \"version\": 1\n}",
       "payload": {
         "contract_path": "脚本/第3集/preventive_contracts.json",
         "episode": "第3集",
-        "findings": [
-          {
-            "gate": "reference_slot_gate",
-            "loc": "PROP_镇魔司制服",
-            "message": "道具/场景 PROP_镇魔司制服 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_镇魔司制服_比例.png 不存在；出图/共享/图片/定妆_道具_镇魔司制服_手持.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          }
-        ],
+        "findings": [],
         "gates": [
           "reference_slot_gate"
         ],
-        "generated_at": "2026-07-28T02:23:56+00:00",
+        "generated_at": "2026-07-29T12:47:14+00:00",
         "kind": "n2d_preventive_contract_report",
         "outputs": {
           "json": "生产数据/preventive_contracts_image_preflight_第3集.json",
@@ -375,22 +276,22 @@
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "scaffolded": false,
         "stage": "image_preflight",
-        "status": "blocked",
+        "status": "pass",
         "summary": {
-          "block": 1,
+          "block": 0,
           "info": 0,
           "warn": 0
         },
         "version": 1
       },
-      "returncode": 2,
-      "status": "block",
+      "returncode": 0,
+      "status": "pass",
       "step": "preventive_contracts"
     }
   ],
   "summary": {
-    "block": 3,
-    "pass": 1,
+    "block": 2,
+    "pass": 2,
     "skip": 0,
     "steps": 4,
     "warn": 0

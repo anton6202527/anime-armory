@@ -6,14 +6,24 @@
     "style_identity_lock"
   ],
   "episode": "第3集",
-  "findings": [],
-  "generated_at": "2026-07-28T07:28:55+00:00",
+  "findings": [
+    {
+      "artifacts": [
+        "脚本/第3集/storyboard.json"
+      ],
+      "code": "lock_artifact_stale",
+      "lock_id": "storyboard_lock",
+      "message": "storyboard_lock 锁定后文件已变化：脚本/第3集/storyboard.json",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-29T12:47:14+00:00",
   "kind": "n2d_production_locks_check",
   "lock_path": "生产数据/production_locks_第3集.json",
   "stage": "image",
-  "status": "pass",
+  "status": "block",
   "summary": {
-    "block": 0,
+    "block": 1,
     "locks": 4,
     "required_locks": 4
   },

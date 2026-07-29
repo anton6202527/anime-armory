@@ -1,16 +1,15 @@
 # skill 更新重制计划 — 第3集
 
 - 作品根：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人`
-- 当前阶段：`video_prompt`
-- 建议动作：`只重跑 gate/review` · `gate/review` → `video_prompt`
+- 当前阶段：`video`
+- 建议动作：`只重跑 gate/review` · `gate/review` → `video`
 - 需要重制：否
 - 重制策略：`最小`
 
 ## 当前生产缺口
-- 当前待办：`出图`（出图 = `54/73`）
-- 建议 skill：`n2d-image`
-- 建议命令：`n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集`
-- 说明：更新影响上界仍按最远已开始产物 `video_prompt` 计算；当前待办按进度表首个未完成阶段 `image` 计算。
+- 当前待办：`图生视频`（视频 = `⬜`）
+- 建议 skill：`n2d-video`
+- 建议命令：`n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集`
 
 ## 图片质检环境与阶段跳转
 - 机检能力：`full`
@@ -25,7 +24,8 @@
 - **源小说**：✅ 源未变动
 - **帧策略合同**：✅ 达标（需执行锚 7 Clip；普通镜模式=risk_only）
 - **图片一致性**：✅ 无硬阻断（verdict=`review`，精度 `full`）
-- **契约继承**：✅ 已继承（verdict=`pass`）
+- **契约继承**：✅ 已继承（verdict=`warn`）
 
 ## 备注
+- 图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第3集` 再据此判断。
 - 契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第3集` 再判。

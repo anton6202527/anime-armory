@@ -8,25 +8,25 @@
     "field_blocks": 0,
     "field_warns": 0,
     "freshness": "stale",
-    "generated_at": "2026-07-27T11:41:57Z",
+    "generated_at": "2026-07-29T12:43:03Z",
     "identity_blocks": 0,
     "inherited": true,
     "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.json",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.md",
     "samples": [],
     "status": "ok",
-    "verdict": "pass"
+    "verdict": "warn"
   },
-  "created_at": "2026-07-29T12:05:20+00:00",
-  "current_stage": "video_prompt",
+  "created_at": "2026-07-29T12:47:14+00:00",
+  "current_stage": "video",
   "current_todo": {
-    "column": "出图",
-    "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
-    "label": "出图",
+    "column": "视频",
+    "command": "n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
+    "label": "图生视频",
     "note": "",
-    "skill": "n2d-image",
-    "stage_key": "image",
-    "status": "54/73"
+    "skill": "n2d-video",
+    "stage_key": "video",
+    "status": "⬜"
   },
   "episode": "第3集",
   "execution_steps": [],
@@ -36,7 +36,7 @@
     "advisory": 25,
     "consistent": true,
     "degraded": false,
-    "freshness": "fresh",
+    "freshness": "stale",
     "hard_blocks": 0,
     "precision_level": "full",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.md",
@@ -54,7 +54,7 @@
       "风格(S1): EP03_CLIP03_a1.png",
       "天气时辰(W1): Clip04_first_a1.png"
     ],
-    "freshness": "fresh",
+    "freshness": "stale",
     "hard_blocks": 0,
     "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
     "jump_to_stage": "video",
@@ -71,6 +71,7 @@
   "needs_record": false,
   "newly_relevant_skills": [],
   "notes": [
+    "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第3集` 再据此判断。",
     "契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第3集` 再判。"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.json",
@@ -90,7 +91,7 @@
     "n2d-voice"
   ],
   "rerun_from": null,
-  "rerun_until": "video_prompt",
+  "rerun_until": "video",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,
