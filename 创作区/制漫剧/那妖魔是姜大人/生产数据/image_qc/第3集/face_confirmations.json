@@ -2,6 +2,24 @@
   "confirmations": [
     {
       "char": "CHAR_01__囚途残损态",
+      "confirmed_at": "2026-07-29T13:04:38+00:00",
+      "floor": 0.5,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/Clip01_end.png",
+      "png_sha256": "bad856a66d14aec96efb06581857e0a52cdcc364dfac19edc27489ff28e8df6d",
+      "reason": "已并排实际查看 Clip01_first_a1 与当前 Clip01_end 原像素：姜月初脸型、眼距、鼻梁、下颌、高马尾与制服态一致；机器低分由侧俯角度与情绪幅度引起，无换脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "项目视觉执行席-01",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.3959,
+      "score_vs_main": 0.374,
+      "shot": "Clip_01",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__囚途残损态",
       "confirmed_at": "2026-07-29T11:14:51+00:00",
       "floor": 0.5,
       "human_signoff": false,
@@ -446,6 +464,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-07-29T11:36:26+00:00",
+  "updated_at": "2026-07-29T13:04:38+00:00",
   "version": 1
 }

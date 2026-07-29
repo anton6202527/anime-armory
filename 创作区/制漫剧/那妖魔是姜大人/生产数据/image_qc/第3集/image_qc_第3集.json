@@ -160,10 +160,16 @@
           },
           "floor": 0.5,
           "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-29T13:04:38+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已并排实际查看 Clip01_first_a1 与当前 Clip01_end 原像素：姜月初脸型、眼距、鼻梁、下颌、高马尾与制服态一致；机器低分由侧俯角度与情绪幅度引起，无换脸。",
+          "manual_reviewer": "项目视觉执行席-01",
           "png": "图片/Clip01_end.png",
           "score": 0.3959,
           "score_vs_main": 0.374,
-          "verdict": "block"
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -1650,11 +1656,19 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 12,
+    "applied": 13,
     "available": true,
-    "configured": 13,
+    "configured": 14,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
     "rows": [
+      {
+        "char": "CHAR_01__囚途残损态",
+        "original_verdict": "block",
+        "png": "图片/Clip01_end.png",
+        "reason": "已并排实际查看 Clip01_first_a1 与当前 Clip01_end 原像素：姜月初脸型、眼距、鼻梁、下颌、高马尾与制服态一致；机器低分由侧俯角度与情绪幅度引起，无换脸。",
+        "reviewer": "项目视觉执行席-01",
+        "score": 0.3959
+      },
       {
         "char": "CHAR_01__囚途残损态",
         "original_verdict": "warn",
@@ -1838,14 +1852,14 @@
       "出图/第3集/图片/EP03_CLIP03_a1.png": "f017d921cdbceae2d41152c6ee17f99f384b80cc7e94c80c6b7d09aee4a484be",
       "出图/第3集/图片/EP03_CLIP07_a1.png": "cf8585d08847bd52fb011ff3883ab192830d5db593c94d0ccbf2683af79bfe6a",
       "出图/第3集/图片/EP03_CLIP08_a1.png": "5c628b25aedb3bd438ecb68f46a36a6dba8c9f5ec3703dd71c2012f5b106d755",
-      "生产数据/image_qc/第3集/face_confirmations.json": "c0f53fd89e7b8fbde323b4b5d4723530cfa32ed89c410d85ec15048c14820e24",
+      "生产数据/image_qc/第3集/face_confirmations.json": "d6680ca15b8519cfbdfa83a6fa7b16421066dc66de1f370147ced3b7b08ea136",
       "生产数据/image_qc/第3集/hair_confirmations.json": "5b044443541bd8b6e6951f8bf60086de806dddab5b8d0e5ca4dd367e2c71af1a",
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/outfit_confirmations.json": "9dc4fcd25a4b5f3bd50061e185ddf03497d7b2d5e03e7912d8c5c076e2a94b84",
-      "生产数据/image_qc/第3集/prop_shape_confirmations.json": "656ac8e239a4b6b2e35ac3d63a9a00c7c3dd33a3c784fa194f7fecc682b32bf7",
+      "生产数据/image_qc/第3集/prop_shape_confirmations.json": "9bf1b2210734f46c507fbcf4925e7b354de5d39b1e78a1ed401dbdd261cbb6f7",
       "脚本/第3集/storyboard.json": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
     },
-    "sha": "678e45dacb5f4ce25d5f57964f445e221ef7a0f62bcfce0c3977d87566101d17"
+    "sha": "24d5edeb5bdca68c34ee978a894793d785b45c3275434326dc99ba4f49e0e7d3"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2144,8 +2158,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-    "confirmed": 46,
-    "pending": 2,
+    "confirmed": 48,
+    "pending": 0,
     "targets": [
       {
         "asset": "PROP_镇魔司制服",
@@ -2299,7 +2313,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
         "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
         "must_not_have": [
@@ -2500,7 +2514,7 @@
         "asset_name": "横刀",
         "asset_type": "weapon",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
         "label": "镜头 1（`EP03_CLIP01` · 众人跪求的假大人 · ensemble_blocking）",
         "must_not_have": [
@@ -4900,13 +4914,13 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-    "jump_to_stage": "image",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
@@ -5089,9 +5103,9 @@
         "warn": 0
       },
       "face": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
-        "ok": 20,
+        "ok": 21,
         "warn": 0
       },
       "hair": {
@@ -5130,12 +5144,6 @@
         "ok": 0,
         "warn": 0
       },
-      "prop_shape_review": {
-        "block": 2,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
       "scene": {
         "block": 0,
         "noface": 0,
@@ -5162,9 +5170,9 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 3,
+    "hard_blocks": 0,
     "unavailable_visual_checks": [],
-    "verdict": "block"
+    "verdict": "review"
   },
   "tone_light_contract": {
     "available": true,

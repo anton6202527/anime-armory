@@ -1,9 +1,9 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第3集
-- 总判定: **block** · 硬阻断 3（必须修） · 非阻断初筛 26 · 视觉降级 0
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 26 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
-- 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
+- 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
 ## 本集图片命名空间（硬闸）
 - 🟢 当前 prompt 声明目标 22 张；未声明 live Clip PNG 0 张
@@ -12,7 +12,7 @@
 - 🟢 active rejects 0 · review `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json`
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🔴 block 1 · warn 0
+- 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🟢 block 0 · warn 0
 - 服装 N1: 🟢 block 0 · warn 0
 - 场景 O2: 🟢 block 0 · warn 0
@@ -23,7 +23,7 @@
 
 ## 角色脸定妆比对覆盖（硬闸）
 - 🟢 已落档角色图 required 21 · covered 21 · missing 0 · pending 1 · precision full
-- 人工脸部确认: applied 12 · 确认文件 `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json`
+- 人工脸部确认: applied 13 · 确认文件 `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json`
 
 ## 核心角色五角 turnaround（逐视图 hash 收据硬闸）
 - 🟢 checked forms 6 · pending/stale receipts 0 · contract `front/three_quarter/side/rear_three_quarter/back`
@@ -47,15 +47,15 @@
   - 🟡 VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 48 · pending 2 · confirmed 46
+- total 48 · pending 0 · confirmed 48
 - 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json`
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_镇魔司制服.png（PROP_镇魔司制服 镇魔司制服） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司制服_shared_primary_定妆_道具_镇魔司制服_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_武器_横刀.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_shared_primary_定妆_武器_横刀_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_武器_横刀.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_shared_primary_定妆_武器_横刀_compare.png
-  - 🔴 Clip_01 图片/Clip01_end.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_end_compare.png
+  - 🟢 Clip_01 图片/Clip01_end.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_end_compare.png
   - 🟢 Clip_01 图片/Clip01_first.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_compare.png
   - 🟢 Clip_01 图片/Clip01_first_a1.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_a1_compare.png
-  - 🔴 Clip_01 图片/Clip01_end.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_end_compare.png
+  - 🟢 Clip_01 图片/Clip01_end.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_end_compare.png
   - 🟢 Clip_01 图片/Clip01_first.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_first_compare.png
   - 🟢 Clip_01 图片/Clip01_first_a1.png（WEAPON_横刀 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_first_a1_compare.png
   - 🟢 Clip_02 图片/Clip02_first.png（PROP_镇魔司制服 镇魔司制服） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司制服_Clip_02_Clip02_first_compare.png
