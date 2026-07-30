@@ -1,0 +1,93 @@
+{
+  "batch": "01_01",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_01_part2",
+      "clip_index": 1,
+      "duration_sec": 6.016667,
+      "file": "Clip_01_众人跪求的假大人_part2.mp4",
+      "file_clip": "Clip_01",
+      "fps": 24.1,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_01_part2_530a2a60_80fa1fcebef7_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_01_part2_530a2a60_80fa1fcebef7_02_mid.jpg",
+          "time_sec": 3.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_01_part2_530a2a60_80fa1fcebef7_03_end.jpg",
+          "time_sec": 5.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第3集/视频/Clip_01_众人跪求的假大人_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第3集/01_01/contact_sheet_01_01.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "1080x1920"
+  },
+  "episode": "第3集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第3集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第3集/_frames",
+  "intra_clips": [
+    {
+      "clip": "Clip_01_part2",
+      "double_frame": false,
+      "file": "Clip_01_众人跪求的假大人_part2.mp4",
+      "file_clip": "Clip_01",
+      "lens": "",
+      "max_dist": 32,
+      "pairs": [
+        {
+          "color_dist": 0.0105,
+          "dist": 32
+        },
+        {
+          "color_dist": 0.0029,
+          "dist": 21
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 1,
+    "seam_blocks": 0,
+    "seam_info": 0,
+    "seam_warns": 0,
+    "seams_checked": 0
+  },
+  "root": ".",
+  "seams": [],
+  "version": 1
+}

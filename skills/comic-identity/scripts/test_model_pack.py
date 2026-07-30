@@ -186,6 +186,7 @@ def test_monster_default_managed_all_tiers_with_opt_out(tmp_path: Path) -> None:
     registry["assets"]["MON_TIGER"] = {"id": "MON_TIGER", "type": "monster", "library_tier": "recurring_standard"}
     registry["assets"]["MON_BG"] = {"id": "MON_BG", "type": "monster", "library_tier": "named_minimal"}
     registry["assets"]["MON_OPTOUT"] = {"id": "MON_OPTOUT", "type": "monster", "library_tier": "core_full", "model_pack_required": False}
+    registry["assets"]["CHAR_OPTOUT"] = {"id": "CHAR_OPTOUT", "type": "character", "library_tier": "core_full", "model_pack_required": False}
     registry_file = tmp_path / "出图" / "共享" / "identity_registry.json"
     registry_file.parent.mkdir(parents=True, exist_ok=True)
     registry_file.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")

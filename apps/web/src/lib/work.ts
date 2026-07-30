@@ -85,6 +85,12 @@ export function loadWork(id: string): WebWork | null {
   }
 }
 
+export function removeWork(id: string) {
+  const key = workKey(id);
+  localStorage.removeItem(key);
+  sessionStorage.removeItem(key);
+}
+
 export function workStorageKey(id: string) {
   return workKey(id);
 }

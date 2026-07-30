@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-30T13:18:30",
+  "ref_id": "LOC_JINGYANG_RIDGE",
+  "candidate_path": "出图/共享/candidates/LOC_JINGYANG_RIDGE/anchor/20260730_batch02/candidate_01_native.png",
+  "candidate_sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f",
+  "adopted_path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+  "adopted_sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户确认修复候选；原生PNG RGB 1086×1448，空间锚与风格合同通过",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

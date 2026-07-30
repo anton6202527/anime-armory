@@ -189,7 +189,7 @@
       "path": "脚本/第3集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+      "sha256": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
     },
     {
       "stage": "script_stage2",
@@ -230,14 +230,14 @@
       "path": "出图/第3集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f"
+      "sha256": "1221cfcc1e79ae9fa05a0830e6faba3d44c5544ee041766fc61bab96078ccdb3"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第3集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463"
+      "sha256": "be21fbb7c6c085ffa275b804c41127b44680bd9f0a0a28f9813f9cf069aae043"
     },
     {
       "stage": "image",
@@ -251,27 +251,28 @@
       "path": "出图/第3集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 20
+      "file_count": 22
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第3集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "44dce34649d5b3da0c3427372b4dc59dadcba356e27b77d7ceace589c3cff63f"
+      "sha256": "c94896b3942664c339456059e25b13087dd5ab19dc43626a31ebd4d1b8a54838"
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第3集/prompt/01_clips.md",
       "exists": true,
       "kind": "file",
-      "sha256": "671fd4eb563cb394d370b663a9b26b505dc8e853533a755a699a97bc56475a83"
+      "sha256": "5523c54db40ef7ad2dd84c3721af793025e308dea98afee25c94aa2524bb55af"
     },
     {
       "stage": "video",
       "path": "出视频/第3集/视频",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 7
     },
     {
       "stage": "compose",
@@ -296,7 +297,7 @@
       "path": "生产数据/consistency_ledger_第3集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "b20078b5bf84f492f5cc4965fd93c22bd501406498d7b85e3f84d37aad0c8a72"
+      "sha256": "1b5c9e9ba257de7b729c4c384a8a711b5e2ea0df460a7323d2cc62352962082c"
     },
     {
       "stage": "review",
@@ -323,7 +324,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "出图",
-  "last_progress_value": "73/73",
-  "last_progress_state": "done"
+  "last_progress_column": "视频",
+  "last_progress_value": "2/8",
+  "last_progress_state": "partial"
 }

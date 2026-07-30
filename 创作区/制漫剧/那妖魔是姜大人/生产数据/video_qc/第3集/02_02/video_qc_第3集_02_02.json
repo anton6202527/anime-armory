@@ -1,0 +1,87 @@
+{
+  "batch": "02_02",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_02",
+      "clip_index": 2,
+      "duration_sec": 8.016016,
+      "file": "Clip_02_荒坡埋尸告别.mp4",
+      "file_clip": "Clip_02",
+      "fps": 24.075,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_02_61d2b04c_6f5dcedd40e0_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_02_61d2b04c_6f5dcedd40e0_02_mid.jpg",
+          "time_sec": 4.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_02_61d2b04c_6f5dcedd40e0_03_end.jpg",
+          "time_sec": 7.816
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第3集/视频/Clip_02_荒坡埋尸告别.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第3集/02_02/contact_sheet_02_02.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "1080x1920"
+  },
+  "episode": "第3集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第3集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第3集/_frames",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.2249,
+      "color_verdict": "warn",
+      "dist": 27,
+      "from_clip": "Clip_01",
+      "seam_mode": "intentional_discontinuity",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_02",
+      "transition": "时间回切至埋尸。",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    }
+  ],
+  "version": 1
+}

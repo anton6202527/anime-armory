@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-30T16:47:09",
+  "ref_id": "LOC_QINGHE_MARKET",
+  "candidate_path": "出图/共享/candidates/LOC_QINGHE_MARKET/anchor/20260730_batch01/candidate_01_native.png",
+  "candidate_sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e",
+  "adopted_path": "出图/共享/图片/LOC_QINGHE_MARKET__anchor.png",
+  "adopted_sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户确认清河街市场景锚；原生PNG RGB 1086×1448，街巷纵深、门帘、空白招幌与暖赭光合同通过",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

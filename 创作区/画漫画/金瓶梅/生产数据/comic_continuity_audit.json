@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "comic_continuity_audit",
+  "created_at": "2026-07-30T12:12:37+00:00",
+  "project_root": ".",
+  "through_chapter": "第1话",
+  "summary": {
+    "chapters": 1,
+    "block": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "panel_script_path": "脚本/第1话/panel_script.json",
+      "panel_script_sha256": "e85117482c137aa1c649069ede249078671fcdea331a98491ff5fbfc42e3a596",
+      "state": {
+        "entry": {
+          "CHAR_WUSONG": {
+            "public_reputation": "unknown_traveler",
+            "office_status": "civilian_traveler"
+          },
+          "STORY_MAIN": {
+            "narrative_focus": "visible_tiger_on_ridge"
+          }
+        },
+        "computed_exit": {
+          "CHAR_WUSONG": {
+            "public_reputation": "tiger_slayer",
+            "office_status": "qinghe_constable"
+          },
+          "STORY_MAIN": {
+            "narrative_focus": "hidden_desire_in_town"
+          }
+        },
+        "declared_exit": {
+          "CHAR_WUSONG": {
+            "public_reputation": "tiger_slayer",
+            "office_status": "qinghe_constable"
+          },
+          "STORY_MAIN": {
+            "narrative_focus": "hidden_desire_in_town"
+          }
+        }
+      }
+    }
+  ],
+  "findings": [],
+  "verdict": "pass"
+}

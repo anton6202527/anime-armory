@@ -220,9 +220,9 @@ function TerminalSessionView({
       theme: {
         background: "#1f1f1f",
         foreground: "#cccccc",
-        cursor: "#918cff",
+        cursor: "#ececf0",
         cursorAccent: "#1f1f1f",
-        selectionBackground: "#5d58ad66",
+        selectionBackground: "#6c6c7466",
       },
     });
     termRef.current = term;
@@ -310,7 +310,7 @@ function TerminalSessionView({
           x: 0,
           width: Math.max(1, term.cols),
           height: 1,
-          backgroundColor: "#3B3354",
+          backgroundColor: "#343438",
           layer: "bottom",
         });
         inputDecoration?.onRender((element) => element.classList.add("terminal-input-line-highlight"));

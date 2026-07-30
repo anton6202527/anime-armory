@@ -7,12 +7,12 @@
   "cli_image_inputs": [
     {
       "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first_a1.png",
-      "bytes": 2621665,
+      "bytes": 2528184,
       "owner": "Clip_05",
-      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第3集/Clip05_first_a1__fb78f3c757bf_941x1672_to_1024x1819.png",
-      "prepared_bytes": 3299399,
-      "prepared_rel_path": "生产数据/reference_enhanced/第3集/Clip05_first_a1__fb78f3c757bf_941x1672_to_1024x1819.png",
-      "prepared_sha256": "0288e8b83e951b86351fd7e07fa41b7474f9ad83b8c74da30d72c33492d6ac85",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第3集/Clip05_first_a1__d399412c58c5_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3182151,
+      "prepared_rel_path": "生产数据/reference_enhanced/第3集/Clip05_first_a1__d399412c58c5_941x1672_to_1024x1819.png",
+      "prepared_sha256": "cc0cc7562d1f7ff05b257715ef971c40e3734216ccaf594247265ab2cb5deb30",
       "priority": 0,
       "reference_quality": {
         "enabled": true,
@@ -34,7 +34,7 @@
       "rel_path": "出图/第3集/图片/Clip05_first_a1.png",
       "role": "source_frame",
       "sequence": 1,
-      "sha256": "fb78f3c757bf1d36328656c81dae6fc818e3f72a22fef5ea9f56930480d3a8dc",
+      "sha256": "d399412c58c5b9ea83e872ee6598b731cac79abcdac54a67ca304a55f1015462",
       "source": "same_clip_anchor",
       "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first_a1.png"
     },

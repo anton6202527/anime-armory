@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-30T15:22:35",
+  "ref_id": "PROP_WUSONG_STAFF",
+  "candidate_path": "出图/共享/candidates/PROP_WUSONG_STAFF/anchor/20260730_batch03/candidate_01_native.png",
+  "candidate_sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7",
+  "adopted_path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+  "adopted_sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户确认哨棒修复候选；原生PNG RGB 1086×1448，形制与连续性合同通过",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

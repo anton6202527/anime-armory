@@ -163,6 +163,24 @@
     },
     {
       "char": "CHAR_01__镇魔司制服态",
+      "confirmed_at": "2026-07-30T02:12:14+00:00",
+      "floor": 0.5,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/Clip05_end.png",
+      "png_sha256": "d399412c58c5b9ea83e872ee6598b731cac79abcdac54a67ca304a55f1015462",
+      "reason": "本尾帧为已验收 Clip05_first_a1 的同像素保真定格；姜月初与陈青源身份像素逐点相同，无换脸或串脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "项目视觉执行席-01",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.4589,
+      "score_vs_main": 0.3633,
+      "shot": "Clip_05",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__镇魔司制服态",
       "confirmed_at": "2026-07-29T01:49:38+00:00",
       "floor": 0.5,
       "human_signoff": false,
@@ -181,18 +199,18 @@
     },
     {
       "char": "CHAR_01__镇魔司制服态",
-      "confirmed_at": "2026-07-29T05:11:48+00:00",
+      "confirmed_at": "2026-07-29T21:10:27+00:00",
       "floor": 0.5,
       "human_signoff": false,
       "original_verdict": "warn",
       "png": "图片/Clip05_first_a1.png",
-      "png_sha256": "fb78f3c757bf1d36328656c81dae6fc818e3f72a22fef5ea9f56930480d3a8dc",
-      "reason": "已查看精确编辑后的 Clip05 a1：姜月初与陈青源脸、束发、年龄感和服装与编辑前及首帧连续；局部武器编辑未造成换脸或串脸。",
+      "png_sha256": "d399412c58c5b9ea83e872ee6598b731cac79abcdac54a67ca304a55f1015462",
+      "reason": "已实际并排查看定妆与当前原像素：姜月初脸型、眼距、鼻梁、下颌与高马尾连续；陈青源方脸、顶髻、短须与年龄感正确，无串脸。",
       "review_kind": "executor_visual",
       "reviewer": "项目视觉执行席-01",
       "reviewer_role": "ai_visual_executor",
-      "score": 0.477,
-      "score_vs_main": 0.4538,
+      "score": 0.4589,
+      "score_vs_main": 0.3633,
       "shot": "Clip_05",
       "source": "image_qc:executor_visual_face_confirm",
       "verdict": "ok"
@@ -464,6 +482,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-07-29T13:04:38+00:00",
+  "updated_at": "2026-07-30T02:12:14+00:00",
   "version": 1
 }

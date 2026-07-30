@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="486" viewBox="0 0 1012 486">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">全宽大格。冷青灰山林中，成年华南虎从右上岩坡扑下；武松在左下翻…</text>
+<rect x="57" y="140" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="155">P002</text>
+<text class="note" x="62" y="170">暖赭酒肆。粗陶碗前景，店家伸手拦酒，武松侧目。</text>
+<rect x="57" y="194" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="209">P003</text>
+<text class="note" x="62" y="224">武松放下铜钱、提棒出门；门外暮色山路斜向上。</text>
+<rect x="46" y="248" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="263">P004</text>
+<text class="note" x="51" y="278">虎腹掠过近景，武松仰身滑过爪下；断枝和落叶标出轨迹。</text>
+<rect x="57" y="326" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="341">P005</text>
+<text class="note" x="62" y="356">虎以前掌横掀，武松贴地侧滚，哨棒横护胸前。</text>
+<rect x="57" y="381" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="396">P006</text>
+<text class="note" x="62" y="411">虎尾如鞭扫断细枝；武松后跃，脚跟踩上湿石。</text>
+<text class="note" x="38" y="448">hook: P006 attack_three</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="374" y="62" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="77">P007</text>
+<text class="note" x="379" y="92">极窄近景对切：武松眼睛与虎眼，中间留一道黑色树干。</text>
+<rect x="385" y="131" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="146">P008</text>
+<text class="note" x="390" y="161">武松双手举棒，自上而下猛劈；虎压低前身。</text>
+<rect x="374" y="179" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="194">P009</text>
+<text class="note" x="379" y="209">全宽冲击格。哨棒砸中枯树中央断裂，木屑飞散；虎从画面下方重新逼…</text>
+<rect x="385" y="248" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="263">P010</text>
+<text class="note" x="390" y="278">断棒落地近景；武松沉肩张手，虎影覆盖他半身。</text>
+<rect x="374" y="297" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="312">P011</text>
+<text class="note" x="379" y="327">武松左手揪颈背皮毛、右臂压头，膝与脚形成三角支点；虎前爪抓地。</text>
+<rect x="374" y="366" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="381">P012</text>
+<text class="note" x="379" y="396">最大竖格。俯斜视角，武松一拳落下，尘土与松针向外震开；虎势已衰…</text>
+<text class="note" x="366" y="448">hook: P012 climax</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="713" y="62" width="242" height="70" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="77">P013</text>
+<text class="note" x="718" y="92">武松倚树喘息，断棒在脚边；三名猎户持叉停在远处，目光越过他看向…</text>
+<rect x="702" y="138" width="264" height="104" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="153">P014</text>
+<text class="note" x="707" y="168">长纵景。猎户和乡民抬虎下冈，武松被簇拥在队伍中央；山路蜿蜒进入…</text>
+<rect x="713" y="248" width="242" height="70" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="263">P015</text>
+<text class="note" x="718" y="278">朱砂点色的县衙告示与都头腰牌近景；武松双手接牌，围观者虚化。</text>
+<rect x="702" y="324" width="264" height="105" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="339">P016</text>
+<text class="note" x="707" y="354">超长收束格。锣鼓声化为清河县叫卖声；武大挑炊饼担穿过暖赭街巷，…</text>
+<text class="note" x="694" y="448">hook: P016 theme_handoff</text>
+</svg>

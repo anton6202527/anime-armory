@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 351 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 352 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 351
+      "value": 352
     },
     {
       "kind": "unverified_progress",
@@ -41,10 +41,10 @@
       "episode": "第3集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第3集 QA 阻断 36 项",
+      "message": "第3集 QA 阻断 37 项",
       "scope": "第3集",
       "threshold": 0,
-      "value": 36
+      "value": 37
     }
   ],
   "episodes": [
@@ -694,9 +694,9 @@
       "warnings_per_attempt": 0.7652
     },
     {
-      "blockers_per_attempt": 0.36,
+      "blockers_per_attempt": 0.3217,
       "completion_rate": null,
-      "consistency_blockers": 2,
+      "consistency_blockers": 3,
       "consistency_ledger": {
         "counts": {
           "block": 6,
@@ -797,24 +797,30 @@
           }
         ]
       },
-      "consistency_warnings": 92,
-      "cost_by_provider": {},
-      "cost_per_finished_min": {},
-      "cost_totals": {},
+      "consistency_warnings": 94,
+      "cost_by_provider": {
+        "dreamina:credits": 1432.0
+      },
+      "cost_per_finished_min": {
+        "credits": 967.208132
+      },
+      "cost_totals": {
+        "credits": 1432.0
+      },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "7h46m33s",
-      "duration_sec": 27992.584,
-      "elapsed_per_finished_min_sec": 18906.882,
+      "duration_hms": "8h28m44s",
+      "duration_sec": 30523.609,
+      "elapsed_per_finished_min_sec": 20616.399,
       "episode": "第3集",
-      "event_count": 344,
+      "event_count": 364,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 100,
-      "generation_fails": 4,
-      "generation_pass_rate": 0.9583,
-      "generation_passes": 92,
+      "generation_attempts": 115,
+      "generation_fails": 5,
+      "generation_pass_rate": 0.955,
+      "generation_passes": 106,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
@@ -839,17 +845,17 @@
           "ts": "2026-07-29T11:56:19+00:00"
         }
       ],
-      "one_pass_count": 33,
-      "one_pass_rate": 0.33,
+      "one_pass_count": 41,
+      "one_pass_rate": 0.3565,
       "progress_next_skill": "n2d-video",
       "progress_next_stage": "图生视频",
-      "qa_blockers": 36,
+      "qa_blockers": 37,
       "qa_blockers_historical": 31,
-      "qa_gate_passes": 2,
+      "qa_gate_passes": 3,
       "qa_gate_runs": 5,
-      "qa_infos": 63,
-      "qa_warnings": 171,
-      "qa_warnings_historical": 171,
+      "qa_infos": 64,
+      "qa_warnings": 173,
+      "qa_warnings_historical": 173,
       "recent_blockers": [
         {
           "dim": "脸漂实测",
@@ -902,18 +908,19 @@
       ],
       "recoup_ratio": {},
       "redraw_categories": {
-        "other": 27,
+        "other": 30,
         "outfit_consistency": 1,
         "prop_structure": 3,
-        "temporal": 1
+        "temporal": 2
       },
-      "redraw_count": 32,
-      "redraw_rate": 0.32,
+      "redraw_count": 36,
+      "redraw_rate": 0.313,
       "redraw_reasons": {
         "Clip05 a1 漏签名横刀；以当前帧+横刀母版做精确物体编辑，恢复左腰单把入鞘横刀与左手按柄。": 1,
         "Codex CLI 三次超时后，使用 Codex 内置 image_gen 按同一源帧与参考包完成接力动作帧。": 1,
         "runner 两版均漏掉签名装备；基于当前帧和横刀母版局部编辑，补正确左髋单刀挂载。": 1,
         "移除陈青源手边误生横刀，保留身份、构图与群跪状态。": 1,
+        "纠正 S05B 切点：陈青源保持马上抱拳，群骑不下马，横刀短比例入鞘。": 1,
         "纠正同 Clip 接力中姜月初从制服错误跳回囚服；恢复未来片段制服束发态，保留心虚表情与群跪背景。": 1,
         "纠正首版误画跪姿与过早清晰马队；恢复驻足回身、按住唯一入鞘横刀、远处仅尘头。": 1,
         "补录中段锚帧动作推进自检签收；当前像素不变。": 4,
@@ -922,6 +929,7 @@
         "补录完整强配方；当前像素对应现存 Clip06_first_a3.png，像素不变。": 1,
         "补录当前像素的完整强配方 schema 与不可用 seed 降级证据；像素不变。": 8,
         "补录精确物体编辑完整配方证据；当前像素不变。": 1,
+        "补齐当前最终像素的 RCP2 input_fingerprint 与 qc_version；像素不变。": 3,
         "补齐正式媒体实际图像输入清单；当前像素不变。": 5,
         "补齐正式媒体生成证据必填字段；当前像素不变。": 5
       },
@@ -937,15 +945,15 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 27392.584,
-          "generation_attempts": 98,
-          "generation_fails": 4,
-          "generation_passes": 90,
+          "duration_sec": 29905.992,
+          "generation_attempts": 107,
+          "generation_fails": 5,
+          "generation_passes": 98,
           "missing_deliverables": 3,
           "qa_blockers": 3,
-          "qa_infos": 35,
-          "qa_warnings": 81,
-          "redraw_count": 32
+          "qa_infos": 36,
+          "qa_warnings": 83,
+          "redraw_count": 36
         },
         "image_preflight": {
           "duration_sec": 0.0,
@@ -970,14 +978,14 @@
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 2,
-          "consistency_warnings": 92,
+          "consistency_blockers": 3,
+          "consistency_warnings": 94,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 2,
+          "qa_blockers": 3,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -993,13 +1001,24 @@
           "qa_warnings": 0,
           "redraw_count": 0
         },
+        "video": {
+          "duration_sec": 17.617,
+          "generation_attempts": 6,
+          "generation_fails": 0,
+          "generation_passes": 6,
+          "missing_deliverables": 0,
+          "qa_blockers": 2,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        },
         "video_preflight": {
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 2,
+          "qa_blockers": 0,
           "qa_infos": 5,
           "qa_warnings": 27,
           "redraw_count": 0
@@ -1016,7 +1035,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.71
+      "warnings_per_attempt": 1.5043
     },
     {
       "blockers_per_attempt": null,
@@ -1405,7 +1424,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-29T13:06:28+00:00",
+  "generated_at": "2026-07-30T07:25:34+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1883,60 +1902,60 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.6041,
-    "consistency_blockers": 27,
+    "blockers_per_attempt": 0.5906,
+    "consistency_blockers": 28,
     "consistency_ledger_counts": {
       "block": 25,
       "high": 0,
       "medium": 26
     },
-    "consistency_warnings": 311,
+    "consistency_warnings": 313,
     "cost_per_finished_min": {
-      "credits": 975.069252
+      "credits": 1335.683707
     },
     "cost_totals": {
-      "credits": 3872.0
+      "credits": 5304.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "17h20m37s",
-    "duration_sec": 62436.983,
-    "elapsed_per_finished_min_sec": 15723.239,
+    "duration_hms": "18h02m48s",
+    "duration_sec": 64968.008,
+    "elapsed_per_finished_min_sec": 16360.616,
     "episode_count": 10,
-    "event_count": 1750,
+    "event_count": 1770,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
-      "gates_passed": 6,
-      "gates_passed_per_day": 0.747,
+      "gates_passed": 7,
+      "gates_passed_per_day": 0.796,
       "measurement_start": "2026-07-21T12:15:15+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 581,
-    "generation_fails": 44,
-    "generation_pass_rate": 0.9237,
-    "generation_passes": 533,
-    "one_pass_count": 332,
-    "one_pass_rate": 0.5714,
-    "qa_blockers": 351,
+    "generation_attempts": 596,
+    "generation_fails": 45,
+    "generation_pass_rate": 0.924,
+    "generation_passes": 547,
+    "one_pass_count": 340,
+    "one_pass_rate": 0.5705,
+    "qa_blockers": 352,
     "qa_blockers_historical": 356,
-    "qa_infos": 196,
-    "qa_warnings": 661,
-    "qa_warnings_historical": 661,
+    "qa_infos": 197,
+    "qa_warnings": 663,
+    "qa_warnings_historical": 663,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 5,
-      "other": 51,
+      "other": 54,
       "outfit_consistency": 1,
       "prop_structure": 8,
       "reference_crop": 4,
-      "temporal": 8
+      "temporal": 9
     },
-    "redraw_count": 77,
-    "redraw_rate": 0.1325,
+    "redraw_count": 81,
+    "redraw_rate": 0.1359,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1944,7 +1963,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m58s",
     "runtime_sec": 238.26,
-    "warnings_per_attempt": 1.1377
+    "warnings_per_attempt": 1.1124
   },
   "version": 1
 }

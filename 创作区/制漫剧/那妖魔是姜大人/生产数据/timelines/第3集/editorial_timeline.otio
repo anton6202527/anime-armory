@@ -4,9 +4,9 @@
   "metadata": {
     "n2d": {
       "episode": "第3集",
-      "generated_at": "2026-07-27T02:26:37+00:00",
+      "generated_at": "2026-07-30T05:20:06+00:00",
       "kind": "n2d_editorial_timeline",
-      "phase": "animatic",
+      "phase": "assembly",
       "planned_audio_slots": 18,
       "seams": [
         {
@@ -246,31 +246,47 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 180.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第3集/视频/Clip_01_众人跪求的假大人_part1.mp4",
+                    "sha256": "a2dc4fc91597fdc959ea307499033a883287355e1c879a0146993ad3c76d689d"
+                  }
+                },
+                "name": "Clip_01_众人跪求的假大人_part1.mp4",
+                "target_url": "出视频/第3集/视频/Clip_01_众人跪求的假大人_part1.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_01"
               }
             },
-            "name": "Clip_01",
+            "name": "Clip_01_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 315.6
+                "value": 157.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -287,21 +303,94 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 180.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第3集/视频/Clip_01_众人跪求的假大人_part2.mp4",
+                    "sha256": "775b59a9211aa282610790a1ac53420800cd617af6cb13ed0a2a19a6a1da22a9"
+                  }
+                },
+                "name": "Clip_01_众人跪求的假大人_part2.mp4",
+                "target_url": "出视频/第3集/视频/Clip_01_众人跪求的假大人_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_01"
+              }
+            },
+            "name": "Clip_01_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 157.8
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 240.48048
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第3集/视频/Clip_02_荒坡埋尸告别.mp4",
+                    "sha256": "9fc875f2880c5f7f7e5c0fd69cef4e90250361319598c0d539eafe041950a3f6"
+                  }
+                },
+                "name": "Clip_02_荒坡埋尸告别.mp4",
+                "target_url": "出视频/第3集/视频/Clip_02_荒坡埋尸告别.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_02"
               }
             },
@@ -328,21 +417,37 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 360.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第3集/视频/Clip_03_黑衣赤纹换装.mp4",
+                    "sha256": "7dcb987ddb2166766972ca2620cfb9892bbcd5a44373aacdb281ebeae3f92318"
+                  }
+                },
+                "name": "Clip_03_黑衣赤纹换装.mp4",
+                "target_url": "出视频/第3集/视频/Clip_03_黑衣赤纹换装.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "post_dub",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_03"
               }
             },
@@ -369,31 +474,47 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 240.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第3集/视频/Clip_04_贱籍死局与马蹄_part1.mp4",
+                    "sha256": "58848993e6dbf9c7f04e178cb61eacbd1d24244d57cac63f08c18ad5bc703cd6"
+                  }
+                },
+                "name": "Clip_04_贱籍死局与马蹄_part1.mp4",
+                "target_url": "出视频/第3集/视频/Clip_04_贱籍死局与马蹄_part1.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "post_dub",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_04"
               }
             },
-            "name": "Clip_04",
+            "name": "Clip_04_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 461.49
+                "value": 230.7
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -410,21 +531,92 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 240.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第3集/视频/Clip_04_贱籍死局与马蹄_part2.mp4",
+                    "sha256": "014123d5f28f65ffd21a7cf86251d29e3fe6968f2137d997d94e7233aedb1e72"
+                  }
+                },
+                "name": "Clip_04_贱籍死局与马蹄_part2.mp4",
+                "target_url": "出视频/第3集/视频/Clip_04_贱籍死局与马蹄_part2.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "post_dub",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_04"
+              }
+            },
+            "name": "Clip_04_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 230.79
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 132.84
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第3集/图片/Clip05_first.png",
+                    "sha256": "00b2b04dc8416bd3ba7332e1175a2140e8de528829285588f2bb647d40f6ea80"
+                  }
+                },
+                "name": "Clip05_first.png",
+                "target_url": "出图/第3集/图片/Clip05_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_05"
               }
             },
@@ -451,21 +643,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 466.53
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第3集/图片/Clip06_first.png",
+                    "sha256": "efad3259e2760e5f0fde8a44d499dcb27a05fb6e03288646c3c441c7cf1644fb"
+                  }
+                },
+                "name": "Clip06_first.png",
+                "target_url": "出图/第3集/图片/Clip06_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_06"
               }
             },
@@ -492,21 +698,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 366.63
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第3集/图片/Clip07_first.png",
+                    "sha256": "fe9e0eacb000fa08a72102c05750d34e2237d85d71923ccb7922ad82e89acf95"
+                  }
+                },
+                "name": "Clip07_first.png",
+                "target_url": "出图/第3集/图片/Clip07_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_07"
               }
             },
@@ -533,21 +753,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 346.02
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第3集/图片/Clip08_first.png",
+                    "sha256": "bdc06b57f21a76ea5aabfc502fd488bc0addc38a6ea8cde30c32ceaead74251f"
+                  }
+                },
+                "name": "Clip08_first.png",
+                "target_url": "出图/第3集/图片/Clip08_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_08"
               }
             },

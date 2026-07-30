@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P001",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+      "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+      "role": "three_quarter",
+      "required": true
+    },
+    {
+      "id": "MON_TIGER",
+      "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+      "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+      "role": "three_quarter",
+      "required": true
+    },
+    {
+      "id": "STYLE_JINPINGMEI_MING_URBAN",
+      "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+      "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_JINGYANG_RIDGE",
+      "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+      "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+      "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+      "role": "front",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-30T20:12:39"
+}

@@ -26,6 +26,20 @@ The intended production flow is:
 3. The backend authorizes the member, reserves tokens, invokes the configured multimodal model, records usage, and publishes generated assets.
 4. The canvas polls or subscribes to job and asset updates.
 
+Canvas pages use a stable, shareable URL shape:
+
+```text
+/canvas?guideSource=skill&spaceId=<account-or-team-space>&projectId=<stable-client-project-key>
+```
+
+The Web client still accepts legacy `/work/<projectId>` links and replaces them
+with the canonical canvas URL. Canvas nodes, edges, viewport, display settings,
+activity, and Agent run history are stored locally first and then upserted to
+`project_canvases` after the cloud project is ready. Apply
+`202607300001_web_canvas_documents.sql` before enabling this sync in production.
+Large source and generated files are not embedded in the canvas JSON; they keep
+using authenticated asset metadata in Supabase and signed object transfer to R2.
+
 Supabase remains the authority for identity, project membership, jobs, asset metadata, and the future membership/token ledger. R2 remains the authority for source documents and generated image, audio, video, export, and manifest bytes.
 
 ## Local AI Agent bridge

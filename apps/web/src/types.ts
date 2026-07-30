@@ -45,6 +45,60 @@ export interface WebWork {
   cloudError?: string;
 }
 
+export interface CanvasNodeSnapshot {
+  id: string;
+  type?: string;
+  position: { x: number; y: number };
+  data: Record<string, unknown>;
+}
+
+export interface CanvasEdgeSnapshot {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+  type?: string;
+  animated?: boolean;
+}
+
+export interface CanvasActivitySnapshot {
+  id: string;
+  label: string;
+  time: string;
+}
+
+export interface CanvasRunSnapshot {
+  id: string;
+  prompt: string;
+  state: AgentJobState;
+  message: string;
+  output?: string;
+  time: string;
+}
+
+export interface CanvasDocument {
+  schemaVersion: 1;
+  work: WebWork;
+  nodes: CanvasNodeSnapshot[];
+  edges: CanvasEdgeSnapshot[];
+  viewport: { x: number; y: number; zoom: number };
+  preferences: {
+    view: "workflow" | "storyboard";
+    gridVisible: boolean;
+    snapToGrid?: boolean;
+    edgesVisible: boolean;
+    miniMapVisible: boolean;
+    panelOpen: boolean;
+    includeCanvasContext: boolean;
+    followLatestRun: boolean;
+  };
+  activeSkill: string | null;
+  activity: CanvasActivitySnapshot[];
+  runHistory: CanvasRunSnapshot[];
+  updatedAt: string;
+}
+
 export type AgentJobState = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
 export interface AgentJob {

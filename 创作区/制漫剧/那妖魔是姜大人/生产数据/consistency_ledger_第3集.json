@@ -28,9 +28,9 @@
     "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第3集.json",
     "summary": {
       "clips": 8,
-      "edges": 87,
-      "images": 20,
-      "nodes": 54,
+      "edges": 89,
+      "images": 22,
+      "nodes": 56,
       "videos": 0
     }
   },
@@ -118,7 +118,7 @@
     },
     {
       "counts": {
-        "block": 5,
+        "block": 4,
         "high": 0,
         "medium": 62
       },
@@ -194,7 +194,7 @@
     },
     {
       "counts": {
-        "block": 7,
+        "block": 3,
         "high": 0,
         "medium": 18
       },
@@ -272,7 +272,7 @@
       "counts": {
         "block": 1,
         "high": 0,
-        "medium": 75
+        "medium": 80
       },
       "findings": [
         {
@@ -292,7 +292,14 @@
         {
           "dimension": "景深一致(DOF1)",
           "loc": "",
-          "message": " 景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.377 vs 场景中位 0.758）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "message": " 景深一致(DOF1)   图片/Clip01_end.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.364 vs 场景中位 0.764）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "景深一致(DOF1)",
+          "loc": "",
+          "message": " 景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.377 vs 场景中位 0.764）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -320,14 +327,7 @@
         {
           "dimension": "multimodal_continuity",
           "loc": "",
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "",
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -346,7 +346,7 @@
     },
     {
       "counts": {
-        "block": 8,
+        "block": 4,
         "high": 0,
         "medium": 28
       },
@@ -507,9 +507,9 @@
     },
     {
       "counts": {
-        "block": 40,
+        "block": 25,
         "high": 0,
-        "medium": 64
+        "medium": 63
       },
       "findings": [
         {
@@ -557,15 +557,15 @@
         {
           "dimension": "天气时辰(W1)",
           "loc": "",
-          "message": " 天气时辰(W1)   光位锚声明主光在「right」，实测最亮区却偏「left」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+          "message": " 天气时辰(W1)    ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "物理事件图(PHY)",
+          "dimension": "天气时辰(W1)",
           "loc": "",
-          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
-          "severity": "warn",
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
           "source": "detect"
         }
       ],
@@ -602,48 +602,6 @@
   },
   "kind": "n2d_consistency_ledger",
   "root_causes": [
-    {
-      "anchor": "motion_control_manifest.json",
-      "dimensions": [
-        "Motion Control"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "Motion Control",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_01/motion_control_manifest.json",
-          "message": "Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "Motion Control",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_05/motion_control_manifest.json",
-          "message": "Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "Motion Control",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_07/motion_control_manifest.json",
-          "message": "Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "Motion Control",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_08/motion_control_manifest.json",
-          "message": "Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
     {
       "anchor": "storyboard.json clip#6",
       "dimensions": [
@@ -744,18 +702,18 @@
           "source": "gate:video_preflight"
         },
         {
-          "dimension": "生视频后端适配",
+          "dimension": "后期表演通道",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
-          "message": "生视频后端适配 生视频后端「seedance」（渠道 即梦/Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 3 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价",
-          "severity": "block",
-          "source": "gate:video_preflight"
+          "message": "后期表演通道 Clip_01 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
         },
         {
-          "dimension": "生视频后端适配",
+          "dimension": "后期表演通道",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
-          "message": "生视频后端适配 生视频后端「dreamina」（渠道 即梦/Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 3 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价",
-          "severity": "block",
-          "source": "gate:video_preflight"
+          "message": "后期表演通道 Clip_02 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
         }
       ]
     },
@@ -954,18 +912,10 @@
       "domain": "character",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "后端跨集锁",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
-          "message": "后端跨集锁 1 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；高风险/含角色镜头的路由漂移必须写结构化 baseline_override（accepted/reviewer/reason/expires_at/affected_routes）或刷新基线",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "后端跨集锁",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
@@ -1005,35 +955,6 @@
       ]
     },
     {
-      "anchor": "01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）",
-      "dimensions": [
-        "帧策略",
-        "prompt compiler"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "帧策略",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）",
-          "message": "帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "prompt compiler",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）",
-          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12",
-          "severity": "warn",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
       "anchor": "01_clips.md ## Clip 05（时长 4.428s · EP03_CLIP05 · 马队急停试探）",
       "dimensions": [
         "帧策略",
@@ -1056,64 +977,6 @@
         {
           "dimension": "prompt compiler",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 05（时长 4.428s · EP03_CLIP05 · 马队急停试探）",
-          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:22>12",
-          "severity": "warn",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_clips.md ## Clip 06（时长 15.551s · EP03_CLIP06 · 陈情与硬装）",
-      "dimensions": [
-        "帧策略",
-        "prompt compiler"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "帧策略",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 06（时长 15.551s · EP03_CLIP06 · 陈情与硬装）",
-          "message": "帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "prompt compiler",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 06（时长 15.551s · EP03_CLIP06 · 陈情与硬装）",
-          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:19>12",
-          "severity": "warn",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_clips.md ## Clip 07（时长 12.221s · EP03_CLIP07 · 百十条人命压身）",
-      "dimensions": [
-        "帧策略",
-        "prompt compiler"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "帧策略",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 07（时长 12.221s · EP03_CLIP07 · 百十条人命压身）",
-          "message": "帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "prompt compiler",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 07（时长 12.221s · EP03_CLIP07 · 百十条人命压身）",
           "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:22>12",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -1182,15 +1045,15 @@
         {
           "dimension": "天气时辰(W1)",
           "loc": null,
-          "message": " 天气时辰(W1)   光位锚声明主光在「right」，实测最亮区却偏「left」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+          "message": " 天气时辰(W1)    ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "物理事件图(PHY)",
+          "dimension": "天气时辰(W1)",
           "loc": null,
-          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
-          "severity": "warn",
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
           "source": "detect"
         }
       ]
@@ -1198,71 +1061,72 @@
     {
       "anchor": "production_events.jsonl",
       "dimensions": [
+        "强配方Schema(RCP2)",
         "生成配方证据"
       ],
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
+        "gate:image",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 出图/第3集/图片/Clip01_end.png 强配方 schema 缺字段：input_fingerprint, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signof",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 出图/第3集/图片/Clip05_first_a1.png 强配方 schema 缺字段：input_fingerprint, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_s",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 出图/第3集/图片/Clip05_end.png 强配方 schema 缺字段：input_fingerprint, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signof",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
           "message": "生成配方证据 出图/第3集/图片/Clip01_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
           "severity": "block",
-          "source": "gate:video_preflight"
+          "source": "gate:video_prompt_preflight"
         },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
           "message": "生成配方证据 出图/第3集/图片/Clip02_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
           "severity": "block",
-          "source": "gate:video_preflight"
+          "source": "gate:video_prompt_preflight"
         },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
           "message": "生成配方证据 出图/第3集/图片/Clip03_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
           "severity": "block",
-          "source": "gate:video_preflight"
+          "source": "gate:video_prompt_preflight"
         },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
           "message": "生成配方证据 出图/第3集/图片/Clip04_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
           "severity": "block",
-          "source": "gate:video_preflight"
+          "source": "gate:video_prompt_preflight"
         },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
           "message": "生成配方证据 出图/第3集/图片/Clip05_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
           "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-          "message": "生成配方证据 出图/第3集/图片/Clip06_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-          "message": "生成配方证据 出图/第3集/图片/Clip07_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-          "message": "生成配方证据 出图/第3集/图片/Clip08_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_h",
-          "severity": "block",
-          "source": "gate:video_preflight"
+          "source": "gate:video_prompt_preflight"
         }
       ]
     },
@@ -1274,18 +1138,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1705",
-          "message": "生成配方证据 出图/第3集/图片/EP03_CLIP03_a1.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_ti",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1705",
@@ -1303,18 +1159,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1706",
-          "message": "生成配方证据 出图/第3集/图片/EP03_CLIP06_a1.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_ti",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1706",
@@ -1332,18 +1180,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1707",
-          "message": "生成配方证据 出图/第3集/图片/EP03_CLIP06_a2.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_ti",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1707",
@@ -1361,18 +1201,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1708",
-          "message": "生成配方证据 出图/第3集/图片/EP03_CLIP06_a3.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_ti",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1708",
@@ -1390,18 +1222,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1709",
-          "message": "生成配方证据 出图/第3集/图片/EP03_CLIP07_a1.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_ti",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1709",
@@ -1419,18 +1243,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1710",
-          "message": "生成配方证据 出图/第3集/图片/EP03_CLIP08_a1.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_ti",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "生成配方证据",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl:line 1710",
@@ -1469,25 +1285,10 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:video_preflight",
         "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "模型路由",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
-          "message": "模型路由 Clip_04 缺字段：fallback_backends",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "模型路由",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
-          "message": "模型路由 Clip_06 缺字段：fallback_backends",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
         {
           "dimension": "模型路由",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json",
@@ -2621,6 +2422,69 @@
       ]
     },
     {
+      "anchor": "01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 06（时长 15.551s · EP03_CLIP06 · 陈情与硬装）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 06（时长 15.551s · EP03_CLIP06 · 陈情与硬装）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:19>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 07（时长 12.221s · EP03_CLIP07 · 百十条人命压身）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 07（时长 12.221s · EP03_CLIP07 · 百十条人命压身）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:22>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
       "anchor": "01_clips.md ## Clip 08（时长 11.534s · EP03_CLIP08 · 被迫接局·集尾）",
       "dimensions": [
         "prompt compiler"
@@ -2727,36 +2591,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第3集.json",
-          "message": "一致性总审 另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "keyshot_candidate_plan_第3集.json",
-      "dimensions": [
-        "关键镜候选"
-      ],
-      "domain": "ops",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "关键镜候选",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第3集.json",
-          "message": "关键镜候选 检测到 6 个关键镜，但缺 keyshot_candidate_plan_第3集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "关键镜候选",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第3集.json",
-          "message": "关键镜候选 检测到 6 个关键镜，但缺 keyshot_candidate_plan_第3集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"创作区/制漫剧/那妖魔是姜大人\" 第3集 --write` 固化 best-of-N 计划",
+          "message": "一致性总审 另有 32 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3211,27 +3046,6 @@
       ]
     },
     {
-      "anchor": "asset_registry.json",
-      "dimensions": [
-        "跨集场景漂移(SCNX)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "跨集场景漂移(SCNX)",
-          "loc": "出图/共享/asset_registry.json",
-          "message": "跨集场景漂移(SCNX) 场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4515（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
       "anchor": "shot",
       "dimensions": [
         "跨集场景漂移(SCNX)",
@@ -3266,7 +3080,14 @@
         {
           "dimension": "景深一致(DOF1)",
           "loc": null,
-          "message": " 景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.377 vs 场景中位 0.758）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "message": " 景深一致(DOF1)   图片/Clip01_end.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.364 vs 场景中位 0.764）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "景深一致(DOF1)",
+          "loc": null,
+          "message": " 景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.377 vs 场景中位 0.764）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -3274,6 +3095,13 @@
           "dimension": "视频证据完整性(EVID)",
           "loc": null,
           "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": null,
+          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -3288,20 +3116,6 @@
           "dimension": "multimodal_continuity",
           "loc": null,
           "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -3324,6 +3138,13 @@
           "dimension": "风格(S1)",
           "loc": "出图/第3集/图片",
           "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "出图/第3集/图片",
+          "message": "天气时辰(W1) [有意不连续已签收·consistency_advisory_signoff] 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -3820,7 +3641,10 @@
     "[warn]  风格(S1)    ",
     "[block]  风格(S1)    ",
     "[warn]  风格(S1)    ",
+    "[warn]  景深一致(DOF1)   图片/Clip01_end.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.364 v",
     "[warn]  景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.",
+    "[warn]  天气时辰(W1)    ",
+    "[block]  天气时辰(W1)    ",
     "[warn]  天气时辰(W1)    ",
     "[block]  天气时辰(W1)    ",
     "[warn]  天气时辰(W1)   光位锚声明主光在「right」，实测最亮区却偏「left」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",

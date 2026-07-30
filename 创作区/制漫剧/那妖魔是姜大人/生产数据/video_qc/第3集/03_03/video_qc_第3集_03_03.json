@@ -1,0 +1,114 @@
+{
+  "anchor_checks": [],
+  "batch": "03_03",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_03",
+      "clip_index": 3,
+      "duration_sec": 12.016667,
+      "file": "Clip_03_黑衣赤纹换装.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.05,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_03_bd8145e2_fb00de58350b_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_03_bd8145e2_fb00de58350b_02_mid.jpg",
+          "time_sec": 6.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第3集/_frames/Clip_03_bd8145e2_fb00de58350b_03_end.jpg",
+          "time_sec": 11.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第3集/视频/Clip_03_黑衣赤纹换装.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第3集/03_03/contact_sheet_03_03.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "1080x1920"
+  },
+  "episode": "第3集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第3集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第3集/_frames",
+  "intra_clips": [
+    {
+      "clip": "Clip_03",
+      "double_frame": false,
+      "file": "Clip_03_黑衣赤纹换装.mp4",
+      "file_clip": "Clip_03",
+      "lens": "",
+      "max_dist": 32,
+      "pairs": [
+        {
+          "color_dist": 0.1891,
+          "dist": 32
+        },
+        {
+          "color_dist": 0.0003,
+          "dist": 0
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。",
+    "部分中段锚帧离 start/mid/end 三采样点太远或 PNG 缺失，锚帧消费对账跳过；必要时加密抽帧复核。"
+  ],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 0,
+    "anchor_skipped": 1,
+    "anchor_warns": 0,
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 1,
+    "seam_blocks": 0,
+    "seam_info": 0,
+    "seam_warns": 1,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.435,
+      "color_verdict": "block",
+      "dist": 33,
+      "from_clip": "Clip_02",
+      "same_scene_color_jump": true,
+      "seam_mode": "hard_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_03",
+      "transition": "同场景接换装。",
+      "verdict": "warn",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

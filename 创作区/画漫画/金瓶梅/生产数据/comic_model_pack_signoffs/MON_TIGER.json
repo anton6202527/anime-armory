@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "MON_TIGER",
+  "tier": "recurring_standard",
+  "model_pack_fingerprint": "07e3b1053507b7fff1c407dc1ee3abcc91239278f3429854aec2ede2bd3f1518",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/MON_TIGER__front.png",
+      "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "front",
+      "derivation": {}
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+      "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "three_quarter",
+      "derivation": {}
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/MON_TIGER__face.png",
+      "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "face",
+      "derivation": {}
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "用户",
+  "reason": "用户逐张确认正面、45度与脸部身份锚；并排复核为同一猛虎，成年比例、条纹拓扑、左眉缺口及中性姿态通过",
+  "approved_at": "2026-07-30T02:40:59+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

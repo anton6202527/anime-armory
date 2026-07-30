@@ -35,6 +35,12 @@ export async function getSupabaseClient(): Promise<SupabaseClient | null> {
         autoRefreshToken: true,
         detectSessionInUrl: true,
       },
+      // Some browser/extension environments expose a receiver-sensitive fetch.
+      // Supabase stores the supplied function before invoking it, so hand it a
+      // closure that always calls fetch through the Window/global receiver.
+      global: {
+        fetch: (...args) => globalThis.fetch(...args),
+      },
     }),
   );
   return supabaseClientPromise;

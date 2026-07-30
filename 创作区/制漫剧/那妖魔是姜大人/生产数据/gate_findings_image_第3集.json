@@ -785,8 +785,8 @@
           "episode": "第3集",
           "gate_stage": "image",
           "loc": "",
-          "message": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。",
-          "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。",
+          "message": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 22 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.13 ≥ 0.10）——渲染与契约暖冷相反，人判。",
+          "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 22 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.13 ≥ 0.10）——渲染与契约暖冷相反，人判。",
           "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "warn",
@@ -795,13 +795,13 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。；色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。；定位镜头：Clip_03；定位产物：出图/第3集/图片、出图/第3集/图片/EP03_CLIP03_a1.png"
+      "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。；色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 22 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.13 ≥ 0.10）——渲染与契约暖冷相反，人判。；定位镜头：Clip_03；定位产物：出图/第3集/图片、出图/第3集/图片/EP03_CLIP03_a1.png"
     },
     {
       "affected_artifacts": [
         "出图/第3集/图片",
-        "出图/第3集/图片/Clip04_first_a1.png",
-        "出图/共享/asset_registry.json"
+        "出图/第3集/图片/Clip04_first.png",
+        "出图/第3集/图片/Clip04_first_a1.png"
       ],
       "affected_shots": [
         "Clip_04"
@@ -810,6 +810,28 @@
         "scene_consistency"
       ],
       "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第3集/图片",
+            "出图/第3集/图片/Clip04_first.png"
+          ],
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dim": "天气时辰(W1)",
+          "dim_key": "scene_consistency",
+          "dimension": "天气时辰(W1)",
+          "episode": "第3集",
+          "gate_stage": "image",
+          "loc": "出图/第3集/图片",
+          "message": "[有意不连续已签收·consistency_advisory_signoff] 一致性审计发现问题",
+          "msg": "[有意不连续已签收·consistency_advisory_signoff] 一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
         {
           "affected_artifacts": [
             "出图/第3集/图片",
@@ -831,30 +853,10 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/共享/asset_registry.json",
-            "出图/第3集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "跨集场景漂移(SCNX)",
-          "dim_key": "scene_consistency",
-          "dimension": "跨集场景漂移(SCNX)",
-          "episode": "第3集",
-          "gate_stage": "image",
-          "loc": "出图/共享/asset_registry.json",
-          "message": "场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4515（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
-          "msg": "场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4515（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_04；定位产物：出图/第3集/图片、出图/第3集/图片/Clip04_first_a1.png、出图/共享/asset_registry.json"
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_04；定位产物：出图/第3集/图片、出图/第3集/图片/Clip04_first.png、出图/第3集/图片/Clip04_first_a1.png"
     },
     {
       "affected_artifacts": [
@@ -1251,8 +1253,8 @@
           "episode": "第3集",
           "gate_stage": "image",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第3集.json",
-          "message": "另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
-          "msg": "另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
+          "message": "另有 32 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
+          "msg": "另有 32 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -1270,6 +1272,23 @@
         "multimodal_continuity"
       ],
       "findings": [
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第3集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
         {
           "affected_artifacts": [],
           "affected_shots": [],
@@ -1364,6 +1383,23 @@
           "episode": "第3集",
           "gate_stage": "image",
           "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_end.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_end.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第3集",
+          "gate_stage": "image",
+          "loc": "",
           "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
           "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
           "rerun_scope": "",
@@ -1381,8 +1417,8 @@
           "episode": "第3集",
           "gate_stage": "image",
           "loc": "",
-          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
-          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
           "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "warn",
@@ -1439,44 +1475,10 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "multimodal_continuity",
-          "dim_key": "multimodal_continuity",
-          "dimension": "multimodal_continuity",
-          "episode": "第3集",
-          "gate_stage": "image",
-          "loc": "",
-          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
-          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "multimodal_continuity",
-          "dim_key": "multimodal_continuity",
-          "dimension": "multimodal_continuity",
-          "episode": "第3集",
-          "gate_stage": "image",
-          "loc": "",
-          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a3.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
-          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a3.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image",
-      "scope": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip04_first_a1.png DINO/CLIP cosine=0.46 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_end.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a1.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a3.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.36 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first_a1.png DINO/CLIP cosine=0.35 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP07_a1.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      "scope": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip04_first_a1.png DINO/CLIP cosine=0.46 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_end.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_end.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a1.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip06_first_a3.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.36 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip07_first_a1.png DINO/CLIP cosine=0.35 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/EP03_CLIP07_a1.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
     },
     {
       "affected_artifacts": [],
@@ -2746,6 +2748,28 @@
     {
       "affected_artifacts": [
         "出图/第3集/图片",
+        "出图/第3集/图片/Clip04_first.png"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "天气时辰(W1)",
+      "dim_key": "scene_consistency",
+      "dimension": "天气时辰(W1)",
+      "episode": "第3集",
+      "gate_stage": "image",
+      "loc": "出图/第3集/图片",
+      "message": "[有意不连续已签收·consistency_advisory_signoff] 一致性审计发现问题",
+      "msg": "[有意不连续已签收·consistency_advisory_signoff] 一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第3集/图片",
         "出图/第3集/图片/Clip04_first_a1.png"
       ],
       "affected_shots": [
@@ -2960,26 +2984,6 @@
     },
     {
       "affected_artifacts": [
-        "出图/共享/asset_registry.json",
-        "出图/第3集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "跨集场景漂移(SCNX)",
-      "dim_key": "scene_consistency",
-      "dimension": "跨集场景漂移(SCNX)",
-      "episode": "第3集",
-      "gate_stage": "image",
-      "loc": "出图/共享/asset_registry.json",
-      "message": "场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4515（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
-      "msg": "场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4515（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第3集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -2994,8 +2998,8 @@
       "episode": "第3集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第3集.json",
-      "message": "3 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_03(4维/3族/6条·最坏warn)；Clip_04(2维/2族/2条·最坏warn)；Clip_07(2维/2族/3条·最坏warn)",
-      "msg": "3 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_03(4维/3族/6条·最坏warn)；Clip_04(2维/2族/2条·最坏warn)；Clip_07(2维/2族/3条·最坏warn)",
+      "message": "3 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_03(4维/3族/6条·最坏warn)；Clip_04(2维/2族/3条·最坏warn)；Clip_07(2维/2族/3条·最坏warn)",
+      "msg": "3 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_03(4维/3族/6条·最坏warn)；Clip_04(2维/2族/3条·最坏warn)；Clip_07(2维/2族/3条·最坏warn)",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "info",
@@ -3066,10 +3070,27 @@
       "episode": "第3集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第3集.json",
-      "message": "另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
-      "msg": "另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
+      "message": "另有 32 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
+      "msg": "另有 32 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第3集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
       "sev": "warn",
       "severity": "warn",
       "source": "n2d-dashboard/gate"
@@ -3168,6 +3189,23 @@
       "episode": "第3集",
       "gate_stage": "image",
       "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_end.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_end.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第3集",
+      "gate_stage": "image",
+      "loc": "",
       "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
       "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
       "rerun_scope": "",
@@ -3185,8 +3223,8 @@
       "episode": "第3集",
       "gate_stage": "image",
       "loc": "",
-      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
-      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司制服态」↔ 本镜 图片/Clip05_first_a1.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "warn",
@@ -3372,8 +3410,8 @@
       "episode": "第3集",
       "gate_stage": "image",
       "loc": "",
-      "message": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。",
-      "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 20 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.14 ≥ 0.10）——渲染与契约暖冷相反，人判。",
+      "message": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 22 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.13 ≥ 0.10）——渲染与契约暖冷相反，人判。",
+      "msg": "色调像素兜底：契约基调=冷（冷灰、土褐、墨黑；镇魔司制服黑底赤纹是全集唯一的高饱和色块；不出现百妖谱金光。），但本集 22 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.13 ≥ 0.10）——渲染与契约暖冷相反，人判。",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "warn",
@@ -3603,10 +3641,9 @@
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-07-29T12:06:21+00:00",
+  "generated_at": "2026-07-30T02:16:16+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "ad5e29d4935004e6071d3fdf7cdfc1475b1dd7791e4ade708bbd91cdd4a6dce9",
       "出图/共享/identity_registry.json": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08",
       "出图/共享/prompt": null,
       "出图/共享/prompt/00_索引.md": "a56420c19b2dae3b6785d0428c3ea8050324aacc88c4a17bfb7878f89dad6883",
@@ -3679,9 +3716,10 @@
       "出图/共享/图片/定妆_道具_镇魔司制服_比例.png": "82e12e60bd1ac1e70f4ae7280bae417e7d029394cf2b9b6fd66173c61600cb3a",
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
       "出图/第3集/prompt": null,
-      "出图/第3集/prompt/00_总览.md": "cb59bfe51a5fa536f8f24d74f6b44be52e849eccf3353bb3d404758c5811e07f",
-      "出图/第3集/prompt/01_分镜出图.md": "d74950ee26bd4da65fc9580b099654f4320c5e7ab3cb02cbfaf2115c4582b463",
+      "出图/第3集/prompt/00_总览.md": "1221cfcc1e79ae9fa05a0830e6faba3d44c5544ee041766fc61bab96078ccdb3",
+      "出图/第3集/prompt/01_分镜出图.md": "be21fbb7c6c085ffa275b804c41127b44680bd9f0a0a28f9813f9cf069aae043",
       "出图/第3集/图片": null,
+      "出图/第3集/图片/Clip01_end.png": "bad856a66d14aec96efb06581857e0a52cdcc364dfac19edc27489ff28e8df6d",
       "出图/第3集/图片/Clip01_first.png": "8421097323eadf58ae01fb0f128e716fcc146eef5fe79ed485caaa4b4dbe308a",
       "出图/第3集/图片/Clip01_first_a1.png": "7d6e0c59574c92e2a2b6d03542addfa891fe0bb77a7004454b3c2f7f4ed53dcb",
       "出图/第3集/图片/Clip02_first.png": "94672945bfb257340da1c483dacc3d66293c5ea970cd67efd1225476ba844f2d",
@@ -3689,8 +3727,9 @@
       "出图/第3集/图片/Clip04_end.png": "dc2ef5b98035a77f60e2ff199a08e339e1988f7f63cbce18e627f83bfeac9c5c",
       "出图/第3集/图片/Clip04_first.png": "15036ea088be7eb7cb8ff7ad74b0d85369df8afc6cdeb09410b8a498080b4784",
       "出图/第3集/图片/Clip04_first_a1.png": "12bfe7410a75d1e95b2960ab212cd3b30b60d1eb5a3284b465dec75a036a34ea",
+      "出图/第3集/图片/Clip05_end.png": "d399412c58c5b9ea83e872ee6598b731cac79abcdac54a67ca304a55f1015462",
       "出图/第3集/图片/Clip05_first.png": "00b2b04dc8416bd3ba7332e1175a2140e8de528829285588f2bb647d40f6ea80",
-      "出图/第3集/图片/Clip05_first_a1.png": "fb78f3c757bf1d36328656c81dae6fc818e3f72a22fef5ea9f56930480d3a8dc",
+      "出图/第3集/图片/Clip05_first_a1.png": "d399412c58c5b9ea83e872ee6598b731cac79abcdac54a67ca304a55f1015462",
       "出图/第3集/图片/Clip06_end.png": "1cbeaa40267155a8dcc1df5f6a6cfc8f5d590aeace62ca43bf611390d7bfadec",
       "出图/第3集/图片/Clip06_first.png": "efad3259e2760e5f0fde8a44d499dcb27a05fb6e03288646c3c441c7cf1644fb",
       "出图/第3集/图片/Clip06_first_a1.png": "4e68a34053d0bcf64ee39c84f4a7d38480184cb89227e89dd5e37d52dfcf5e1c",
@@ -3706,13 +3745,13 @@
       "合成/第3集/配音/voice_zh.wav": null,
       "合规/compliance_manifest.json": "2fb173c90b1216c820c470394bb1144e26ad7f7831a73c0917b2866cd02da49b",
       "生产数据/expression_第3集.json": null,
-      "脚本/第3集/storyboard.json": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4",
+      "脚本/第3集/storyboard.json": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66",
       "设定库/characters/姜月初.md": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e",
       "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
       "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26",
       "设定库/voicemap.json": "e740546e65ad72a7e476c69c0dc1f6191ddb89186efe40f70ea5fde85b9c8ea8"
     },
-    "sha": "653500b5852a78807c258aacf7f275de9be2e1fae8c664f3c53462487900dbca"
+    "sha": "6b2f76a944acbb0d77f36fc151730bd0e0399b89f0ecef58fbc2e418bfaf1f47"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -3745,7 +3784,7 @@
       "multimodal_continuity": {
         "block": 0,
         "info": 1,
-        "warn": 16
+        "warn": 18
       },
       "state_continuity": {
         "block": 0,
@@ -3785,7 +3824,7 @@
       "天气时辰(W1)": {
         "block": 0,
         "info": 0,
-        "warn": 1
+        "warn": 2
       },
       "定妆对账": {
         "block": 0,
@@ -3837,11 +3876,6 @@
         "info": 0,
         "warn": 7
       },
-      "跨集场景漂移(SCNX)": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
       "逐镜仲裁": {
         "block": 0,
         "info": 1,
@@ -3861,9 +3895,9 @@
     "severity": {
       "block": 0,
       "info": 12,
-      "warn": 81
+      "warn": 83
     },
-    "total": 93
+    "total": 95
   },
   "version": 1
 }

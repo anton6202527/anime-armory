@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-30T12:06:20",
+  "ref_id": "LOC_ROADSIDE_INN",
+  "candidate_path": "出图/共享/candidates/LOC_ROADSIDE_INN/anchor/20260730_batch01/candidate_01_native.png",
+  "candidate_sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7",
+  "adopted_path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+  "adopted_sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户确认酒肆场景锚；原生PNG RGB 1086×1448符合统一最高规格合同",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

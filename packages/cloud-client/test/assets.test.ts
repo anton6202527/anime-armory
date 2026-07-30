@@ -45,6 +45,28 @@ test('requires a login before calling the cloud API', async () => {
   )
 })
 
+test('binds the ambient browser fetch receiver', async () => {
+  const originalFetch = globalThis.fetch
+  let receiver: unknown
+  try {
+    globalThis.fetch = (function (this: unknown) {
+      receiver = this
+      return Promise.resolve(Response.json({ action: 'list-projects', projects: [] }))
+    }) as typeof fetch
+    const client = new AssetApiClient({
+      endpoint: 'https://api.test/assets',
+      getAccessToken: async () => 'token',
+    })
+
+    const result = await client.listProjects()
+
+    assert.equal(receiver, globalThis)
+    assert.deepEqual(result.projects, [])
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
 test('uploads and completes a single object', async () => {
   const requests: string[] = []
   const fetcher: typeof fetch = async (input, init) => {

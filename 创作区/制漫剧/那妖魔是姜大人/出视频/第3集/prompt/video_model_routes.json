@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-29T12:33:23+00:00",
+  "generated_at": "2026-07-30T02:17:16+00:00",
   "production_sound_route": {
     "status": "aligned",
     "kind": "n2d_production_mode_route",
@@ -203,18 +203,18 @@
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
         "anchor_count": 1,
-        "need_end": false,
+        "need_end": true,
         "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
         "consumes_mid_anchors_natively": true,
-        "consumes_endframe": false,
+        "consumes_endframe": true,
         "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "submit first/mid frames in one native multi-keyframe request; no storyboard endframe is submitted"
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
       "quality_tier": "high",
       "motion_reference": {
@@ -232,7 +232,7 @@
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-          "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
+          "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
         ],
         "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
         "applies_to": "ensemble_blocking"
@@ -245,10 +245,10 @@
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
-          "last_frame": false,
+          "last_frame": true,
           "mid_anchors": 1,
           "consumption_mode": "native_multiframe",
-          "native_timeline_frames": 2,
+          "native_timeline_frames": 3,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -291,7 +291,7 @@
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-              "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
+              "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
             ],
             "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
             "applies_to": "ensemble_blocking"
@@ -1942,18 +1942,18 @@
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
         "anchor_count": 1,
-        "need_end": false,
+        "need_end": true,
         "consumption_mode": "native_multiframe",
         "frame_strategy": "legacy_auto",
         "consumes_mid_anchors_natively": true,
-        "consumes_endframe": false,
+        "consumes_endframe": true,
         "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "submit first/mid frames in one native multi-keyframe request; no storyboard endframe is submitted"
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
       "quality_tier": "high",
       "motion_reference": {
@@ -1971,7 +1971,7 @@
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-          "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
+          "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
         ],
         "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
         "applies_to": "ensemble_blocking"
@@ -1984,10 +1984,10 @@
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
-          "last_frame": false,
+          "last_frame": true,
           "mid_anchors": 1,
           "consumption_mode": "native_multiframe",
-          "native_timeline_frames": 2,
+          "native_timeline_frames": 3,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -2030,7 +2030,7 @@
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-              "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
+              "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
             ],
             "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
             "applies_to": "ensemble_blocking"

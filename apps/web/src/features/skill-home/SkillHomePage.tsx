@@ -3,13 +3,14 @@ import {
   Bell,
   Bot,
   Box,
+  Check,
   CircleHelp,
+  ClipboardPenLine,
   Clock3,
   Cloud,
   FileCode2,
-  Layers3,
+  Hand,
   LoaderCircle,
-  LogIn,
   LogOut,
   Moon,
   Paperclip,
@@ -21,6 +22,7 @@ import {
   Sun,
   Trash2,
   UserRound,
+  Wrench,
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -53,7 +55,15 @@ const MODALITY_LABELS: Record<ModelModality, string> = {
 const MARKET_CATEGORIES = ["推荐", "写小说", "制漫剧", "画漫画", "拍广告", "制 MV", "写歌"] as const;
 const MEDIA_LABELS: Record<SkillDefinition["mediaType"], string> = { text: "文字", image: "图片", video: "视频", audio: "音频", mixed: "全模态" };
 const SKILL_CATEGORIES = new Set<SkillCategory>(["故事与文本", "剧本与分镜", "视觉生成", "音频与音乐", "商业创意", "后期与交付", "评审与优化"]);
-const LINE_ACCENTS: Record<CreationLine, string> = { novel: "#8b7cff", n2d: "#6f8cff", comic: "#41c99b", ad: "#f3a54a", mv: "#38c9d6", song: "#ef72aa" };
+const LINE_ACCENTS: Record<CreationLine, string> = { novel: "#8b8d96", n2d: "#8b8d96", comic: "#8b8d96", ad: "#8b8d96", mv: "#8b8d96", song: "#8b8d96" };
+const LINE_COVERS: Record<CreationLine, string> = {
+  novel: "/skill-covers/novel.jpg",
+  n2d: "/skill-covers/n2d.jpg",
+  comic: "/skill-covers/comic.jpg",
+  ad: "/skill-covers/ad.jpg",
+  mv: "/skill-covers/mv.jpg",
+  song: "/skill-covers/song.jpg",
+};
 
 function matchesMarketCategory(skill: SkillDefinition, marketCategory: string) {
   if (marketCategory === "推荐") return !skill.id.startsWith("user:");
@@ -153,7 +163,7 @@ export function SkillHomePage({
   }));
   const [selectedSkillId, setSelectedSkillId] = useState(SKILLS[0]?.id ?? "");
   const [generationMode, setGenerationMode] = useState<"manual" | "auto">("auto");
-  const [skillTab, setSkillTab] = useState<SkillTab>("all");
+  const [skillTab, setSkillTab] = useState<SkillTab>("common");
   const [skillPickerQuery, setSkillPickerQuery] = useState("");
   const [pageTab, setPageTab] = useState<"skills" | "favorite" | "mine">("skills");
   const [category, setCategory] = useState("推荐");
@@ -201,7 +211,7 @@ export function SkillHomePage({
     () => activeSourceGroup?.files.find((file) => file.id === activeSourceFileId) ?? activeSourceGroup?.files[0],
     [activeSourceFileId, activeSourceGroup],
   );
-  const ready = Boolean(prompt.trim() || attachments.length) && Boolean(selectedSkill && selectedModel);
+  const ready = Boolean(prompt.trim() || attachments.length || selectedSkill || selectedModel);
 
   const visibleSkills = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
@@ -324,11 +334,11 @@ export function SkillHomePage({
     toggleFavorite(skillId);
   }
 
-  function useSkill(skill: SkillDefinition) {
+  function useSkill(skill: SkillDefinition, notify = true) {
     setSelectedSkillId(skill.id);
     setDetailSkill(null);
     setOpenMenu(null);
-    setToast(`已添加「${skill.title}」`);
+    if (notify) setToast(`已添加「${skill.title}」`);
     window.setTimeout(() => promptRef.current?.focus(), 0);
   }
 
@@ -345,13 +355,16 @@ export function SkillHomePage({
   }
 
   function submit() {
-    if (!ready || !selectedSkill || !selectedModel) return;
-    const customRecord = userSkillRecords.find((skill) => `user:${skill.id}` === selectedSkill.id);
-    const work = createWebWork(selectedSkill.line, prompt, attachments, {
-      skillId: selectedSkill.id,
-      ...(customRecord ? { skillDefinition: { title: selectedSkill.title, description: selectedSkill.description, guide: selectedSkill.guide, steps: selectedSkill.steps, useCases: selectedSkill.useCases } } : {}),
+    if (!ready) return;
+    const effectiveSkill = selectedSkill ?? allSkills[0] ?? SKILLS[0];
+    const effectiveModel = selectedModel ?? MODEL_GROUPS[modality][0];
+    if (!effectiveSkill || !effectiveModel) return;
+    const customRecord = userSkillRecords.find((skill) => `user:${skill.id}` === effectiveSkill.id);
+    const work = createWebWork(effectiveSkill.line, prompt, attachments, {
+      skillId: effectiveSkill.id,
+      ...(customRecord ? { skillDefinition: { title: effectiveSkill.title, description: effectiveSkill.description, guide: effectiveSkill.guide, steps: effectiveSkill.steps, useCases: effectiveSkill.useCases } } : {}),
       generationMode,
-      model: { modality, modelId: selectedModel.id },
+      model: { modality, modelId: effectiveModel.id },
     });
     saveWork(work);
     onCreate(work, attachments);
@@ -443,7 +456,12 @@ export function SkillHomePage({
           <span><BrandIcon /></span><strong>LabuTV</strong>
         </a>
         <nav>
-          <div className="account-menu-wrap" onClick={(event) => event.stopPropagation()}>
+          <div
+            className="account-menu-wrap"
+            onClick={(event) => event.stopPropagation()}
+            onMouseEnter={() => { if (authUser) setAccountOpen(true); }}
+            onMouseLeave={() => { if (authUser) setAccountOpen(false); }}
+          >
             {!authReady ? (
               <button className="auth-entry loading" type="button" aria-label="正在读取账号"><LoaderCircle className="spinning" size={17} /></button>
             ) : authUser ? (
@@ -457,28 +475,46 @@ export function SkillHomePage({
                 {(authUser.email?.[0] ?? "创").toLocaleUpperCase()}
               </button>
             ) : (
-              <button className="auth-entry" type="button" onClick={openAuth}><LogIn size={16} />登录</button>
+              <button className="auth-entry" type="button" onClick={openAuth}>注册/登录</button>
             )}
 
             {accountOpen && authUser && (
               <div className="account-popover">
                 <div className="account-card">
                   <span className="account-avatar"><UserRound size={19} /></span>
-                  <span><b>{authUser.email?.split("@")[0] || "创作者"}</b><small>{authUser.email}</small></span>
+                  <span>
+                    <b>{String(authUser.user_metadata?.display_name || authUser.email?.split("@")[0] || "创作者")}</b>
+                    <small>{authUser.email}</small>
+                    <em>ID {authUser.id.slice(0, 8)}</em>
+                  </span>
                 </div>
-                <div className="account-sync"><Cloud size={13} /><span>账号设置与我的 Skill 已云端同步</span></div>
-                <div className="account-menu-section">
-                  <button className="account-menu-item" type="button" onClick={() => { setPageTab("mine"); setCategory("推荐"); setAccountOpen(false); document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }); }}><Bot size={16} /><span>我的 Skill</span><b>{userSkillRecords.length}</b></button>
-                  <button className="account-menu-item" type="button" onClick={() => { setPageTab("favorite"); setAccountOpen(false); document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }); }}><Star size={16} /><span>我的收藏</span><b>{favorites.size}</b></button>
+
+                <div className="account-plan-card">
+                  <span><b>免费用户</b><small>基础创作账户</small></span>
+                  <button type="button" onClick={() => setToast("会员系统正在准备中")}>开通会员</button>
                 </div>
-                <div className="account-theme-row">
-                  <span>外观</span>
-                  <div className="account-theme-switch" role="group" aria-label="外观主题">
-                    <button className={theme === "dark" ? "active" : ""} type="button" onClick={() => changeTheme("dark")}><Moon size={14} />深色</button>
-                    <button className={theme === "light" ? "active" : ""} type="button" onClick={() => changeTheme("light")}><Sun size={14} />浅色</button>
+
+                <div className="account-stats-card">
+                  <div className="account-stats-heading"><b>个人空间</b><span><Cloud size={12} />已云端同步</span></div>
+                  <div>
+                    <button type="button" onClick={() => { setPageTab("favorite"); setAccountOpen(false); document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }); }}><strong>{favorites.size}</strong><span>收藏 Skill</span></button>
+                    <button type="button" onClick={() => { setPageTab("mine"); setCategory("推荐"); setAccountOpen(false); document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }); }}><strong>{userSkillRecords.length}</strong><span>我的 Skill</span></button>
                   </div>
                 </div>
-                <button className="account-signout" type="button" onClick={() => { void signOut().then(() => { setAccountOpen(false); setToast("已退出登录"); }).catch((reason) => setToast(reason instanceof Error ? reason.message : "退出失败")); }}><LogOut size={15} />退出登录</button>
+
+                <div className="account-menu-section">
+                  <button className="account-menu-item" type="button" onClick={() => { setPageTab("mine"); setCategory("推荐"); setAccountOpen(false); document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }); }}><Bot size={17} /><span>我的 Skill</span><b>{userSkillRecords.length}</b></button>
+                  <button className="account-menu-item" type="button" onClick={() => { setPageTab("favorite"); setAccountOpen(false); document.querySelector(".skill-market")?.scrollIntoView({ behavior: "smooth" }); }}><Star size={17} /><span>我的收藏</span><b>{favorites.size}</b></button>
+                  <div className="account-theme-row">
+                    <span><Moon size={17} />模式切换</span>
+                    <div className="account-theme-switch" role="group" aria-label="外观主题">
+                      <button className={theme === "light" ? "active" : ""} type="button" aria-label="浅色模式" title="浅色模式" onClick={() => changeTheme("light")}><Sun size={14} /></button>
+                      <button className={theme === "dark" ? "active" : ""} type="button" aria-label="深色模式" title="深色模式" onClick={() => changeTheme("dark")}><Moon size={14} /></button>
+                    </div>
+                  </div>
+                  <button className="account-menu-item" type="button" onClick={() => setToast("账号设置与 Skill 已同步到云端")}><Cloud size={17} /><span>账号与同步</span></button>
+                  <button className="account-signout" type="button" onClick={() => { void signOut().then(() => { setAccountOpen(false); setToast("已退出登录"); }).catch((reason) => setToast(reason instanceof Error ? reason.message : "退出失败")); }}><LogOut size={17} />退出登录</button>
+                </div>
               </div>
             )}
           </div>
@@ -513,7 +549,7 @@ export function SkillHomePage({
                 ref={promptRef}
                 value={prompt}
                 aria-label="创作需求"
-                placeholder={selectedSkill ? `使用「${selectedSkill.title}」：${selectedSkill.description}` : "描述你想创作的内容…"}
+                placeholder={prompt || selectedSkill || selectedModel ? "" : "请输入你的创作灵感，或从下方挑选一个 Skill 开始"}
                 onChange={(event) => setPrompt(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Backspace" && !prompt) {
@@ -531,29 +567,29 @@ export function SkillHomePage({
             </div>
 
             <div className="composer-inline-choices" aria-label="创作设置">
-              <div className="composer-menu-wrap">
+              <div className="composer-menu-wrap model-menu-wrap">
                 <button className={openMenu === "model" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择模型" aria-label="选择模型" aria-expanded={openMenu === "model"} onClick={() => setOpenMenu(openMenu === "model" ? null : "model")}>
-                  <Box size={17} />
+                  <Box size={18} strokeWidth={1.6} />
                 </button>
                 {openMenu === "model" && (
                   <div className="floating-panel model-picker" role="dialog" aria-label="选择模型">
-                    <div className="floating-panel-title"><strong>选择模型</strong><small>按创作任务切换模态</small></div>
+                    <div className="floating-panel-title"><strong>选择模型</strong></div>
                     <div className="segmented-tabs" role="tablist">
                       {(Object.keys(MODALITY_LABELS) as ModelModality[]).map((item) => (
                         <button key={item} className={modality === item ? "active" : ""} type="button" role="tab" aria-selected={modality === item} onClick={() => setModality(item)}>{MODALITY_LABELS[item]}</button>
                       ))}
                     </div>
+                    <div className="model-section-label">{MODALITY_LABELS[modality]}</div>
                     <div className="model-list">
                       {MODEL_GROUPS[modality].map((model) => (
                         <button
                           key={model.id}
-                          className={selectedModels[modality] === model.id ? "model-row selected" : "model-row"}
+                          className="model-row"
                           type="button"
                           onClick={() => { setSelectedModels((current) => ({ ...current, [modality]: model.id })); setOpenMenu(null); }}
                         >
                           <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{modelMark(model)}</span>
                           <span className="model-copy"><b>{model.name}</b><small>{model.description}</small></span>
-                          <span className={`availability ${model.availability}`}>{model.availability === "api" ? "API" : model.availability === "preview" ? "预览" : "平台"}</span>
                           <Plus size={16} />
                         </button>
                       ))}
@@ -562,27 +598,38 @@ export function SkillHomePage({
                 )}
               </div>
 
-              <div className="composer-menu-wrap">
+              <div className="composer-menu-wrap skill-menu-wrap">
                 <button className={openMenu === "skill" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择 Skill" aria-label="选择 Skill" aria-expanded={openMenu === "skill"} onClick={() => setOpenMenu(openMenu === "skill" ? null : "skill")}>
-                  <Bot size={17} />
+                  <ClipboardPenLine size={18} strokeWidth={1.6} />
                 </button>
                 {openMenu === "skill" && (
                   <div className="floating-panel skill-picker" role="dialog" aria-label="选择 Skill">
-                    <div className="skill-picker-heading"><strong>Skill</strong></div>
-                    <div className="skill-picker-tabs">
-                      {([['all', '全部'], ['common', '常用'], ['favorite', '收藏'], ['mine', '我的']] as const).map(([key, label]) => (
-                        <button key={key} className={skillTab === key ? "active" : ""} type="button" onClick={() => selectSkillPickerTab(key)}>{label}</button>
-                      ))}
+                    <div className="skill-picker-heading">
+                      <strong>Skill</strong>
+                      <div className="skill-picker-heading-actions">
+                        <button type="button" onClick={openCreateSkill}><Plus size={14} />创建</button>
+                        <button className={skillTab === "all" ? "active" : ""} type="button" onClick={() => { setSkillTab("all"); setSkillPickerQuery(""); }}>全部</button>
+                      </div>
                     </div>
-                    <label className="panel-search"><Search size={15} /><input value={skillPickerQuery} onChange={(event) => setSkillPickerQuery(event.target.value)} placeholder="搜索 Skill" /></label>
+                    <div className="skill-picker-toolbar">
+                      <div className="skill-picker-tabs">
+                        {([['common', '通用'], ['favorite', '收藏'], ['mine', '我的']] as const).map(([key, label]) => (
+                          <button key={key} className={skillTab === key ? "active" : ""} type="button" onClick={() => selectSkillPickerTab(key)}>{label}</button>
+                        ))}
+                      </div>
+                      <label className="panel-search"><Search size={15} /><input value={skillPickerQuery} onChange={(event) => setSkillPickerQuery(event.target.value)} placeholder="搜索 Skill" /></label>
+                    </div>
                     <div className="skill-picker-list">
                       {pickerSkills.map((skill) => (
-                        <div className={selectedSkillId === skill.id ? "skill-picker-row selected" : "skill-picker-row"} key={skill.id}>
+                        <div className="skill-picker-row" key={skill.id}>
                           <button type="button" className="skill-picker-main" onClick={() => useSkill(skill)}>
-                            <span className="picker-skill-icon"><LineIcon line={skill.line} /></span>
-                            <span><b>{skill.title}</b><small>{customSkillIds.has(skill.id) ? "我的 Skill" : `/${skill.skill}`}</small><em>{skill.description}</em></span>
+                            <span className="picker-skill-icon"><Wrench size={15} /></span>
+                            <span className="skill-picker-copy">
+                              <span className="skill-picker-name"><b>{skill.title}</b><small>{customSkillIds.has(skill.id) ? "我的 Skill" : `/${skill.skill}`}</small></span>
+                              <em>{skill.description}</em>
+                            </span>
                           </button>
-                          <button type="button" className="detail-link" onClick={() => setDetailSkill(skill)}>详情</button>
+                          <button type="button" className="skill-picker-detail" onClick={() => { setOpenMenu(null); setDetailSkill(skill); }}>详情</button>
                         </div>
                       ))}
                       {!pickerSkills.length && <div className="picker-empty">{skillTab === "mine" && !authUser ? "登录后查看我的 Skill" : "没有匹配的 Skill"}</div>}
@@ -591,15 +638,15 @@ export function SkillHomePage({
                 )}
               </div>
 
-              <div className="composer-menu-wrap compact">
+              <div className="composer-menu-wrap compact mode-menu-wrap">
                 <button className={openMenu === "mode" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title={generationMode === "auto" ? "自动模式" : "手动模式"} aria-label={generationMode === "auto" ? "自动模式" : "手动模式"} aria-expanded={openMenu === "mode"} onClick={() => setOpenMenu(openMenu === "mode" ? null : "mode")}>
-                  <Layers3 size={17} />
+                  <Hand size={18} strokeWidth={1.6} />
                 </button>
                 {openMenu === "mode" && (
                   <div className="floating-panel mode-picker" role="dialog" aria-label="生成模式">
                     <strong>生成模式</strong>
-                    <button className={generationMode === "manual" ? "selected" : ""} type="button" onClick={() => { setGenerationMode("manual"); setOpenMenu(null); }}><span><b>手动模式</b><small>Agent 在每次生成前询问</small></span><i /></button>
-                    <button className={generationMode === "auto" ? "selected" : ""} type="button" onClick={() => { setGenerationMode("auto"); setOpenMenu(null); }}><span><b>自动模式</b><small>Agent 按工作流连续推进</small></span><i /></button>
+                    <button className={generationMode === "manual" ? "selected" : ""} type="button" onClick={() => { setGenerationMode("manual"); setOpenMenu(null); }}><span className="mode-option-copy"><b>手动模式</b><small>Agent 在每次生成前询问</small></span><span className="mode-selection-mark" aria-hidden="true">{generationMode === "manual" && <Check size={15} />}</span></button>
+                    <button className={generationMode === "auto" ? "selected" : ""} type="button" onClick={() => { setGenerationMode("auto"); setOpenMenu(null); }}><span className="mode-option-copy"><b>自动模式</b><small>Agent 按工作流连续推进</small></span><span className="mode-selection-mark" aria-hidden="true">{generationMode === "auto" && <Check size={15} />}</span></button>
                   </div>
                 )}
               </div>
@@ -625,7 +672,7 @@ export function SkillHomePage({
               }}
             />
             <div className="skill-composer-toolbar">
-              <button className="composer-icon-button" type="button" title="添加文件" aria-label="添加文件" onClick={() => fileInputRef.current?.click()}><Plus size={21} /></button>
+              <button className="composer-icon-button" type="button" title="添加文件" aria-label="添加文件" onClick={() => fileInputRef.current?.click()}><Plus size={20} strokeWidth={1.6} /></button>
               <span className="composer-toolbar-hint">回车开始 · Shift + 回车换行</span>
               <span className="composer-grow" />
               <button className="composer-submit" type="button" disabled={!ready} onClick={submit} aria-label="开始创作"><ArrowUp size={21} /></button>
@@ -663,23 +710,21 @@ export function SkillHomePage({
             <div className="empty-skills"><LoaderCircle className="spinning" size={28} /><strong>正在加载我的 Skill</strong><span>从云端同步你的个人工作流</span></div>
           ) : visibleSkills.length ? (
             <div className="skill-grid">
-              {visibleSkills.map((skill, index) => (
+              {visibleSkills.map((skill) => (
                 <article className="skill-card" key={skill.id} onClick={() => setDetailSkill(skill)}>
-                  <div className="skill-cover" style={{ "--skill-accent": skill.accent } as CSSProperties}>
-                    <span className="skill-media-badge"><Play size={11} fill="currentColor" />{MEDIA_LABELS[skill.mediaType]}</span>
-                    <span className="cover-orbit orbit-one" /><span className="cover-orbit orbit-two" />
-                    <LineIcon line={skill.line} />
-                    <small>{String(index + 1).padStart(2, "0")}</small>
+                  <div className={`skill-cover skill-cover-${skill.line}`}>
+                    <img src={LINE_COVERS[skill.line]} alt="" loading="lazy" draggable={false} />
+                    <span className="skill-media-badge">{MEDIA_LABELS[skill.mediaType]}</span>
                   </div>
                   <div className="skill-card-copy">
-                    <div className="skill-card-title"><h3>{skill.title}</h3><span className="verified">◆</span></div>
+                    <div className="skill-card-title"><h3>{skill.title}</h3></div>
                     <p>{skill.description}</p>
-                    <footer><span>{skill.creator}</span><span className="card-metric"><Play size={12} />{skill.views > 0 ? compactNumber(skill.views) : "已实现"}</span></footer>
+                    <footer><span className="card-metric"><Star size={11} fill="currentColor" />{compactNumber(skill.favorites + (favorites.has(skill.id) ? 1 : 0))}</span></footer>
                   </div>
                   <div className="skill-card-actions">
                     <button type="button" title={favorites.has(skill.id) ? "取消收藏" : "收藏"} aria-label={favorites.has(skill.id) ? "取消收藏" : "收藏"} className={favorites.has(skill.id) ? "favorite active" : "favorite"} onClick={(event) => { event.stopPropagation(); requestFavorite(skill.id); }}><Star size={17} fill={favorites.has(skill.id) ? "currentColor" : "none"} /></button>
                     {customSkillIds.has(skill.id) && <button type="button" className="skill-delete-button" title="删除 Skill" aria-label={`删除 ${skill.title}`} onClick={(event) => { event.stopPropagation(); void removeUserSkill(skill).catch((reason) => setToast(reason instanceof Error ? reason.message : "删除失败")); }}><Trash2 size={15} /></button>}
-                    <button type="button" className="use-skill-button" onClick={(event) => { event.stopPropagation(); useSkill(skill); }}>使用</button>
+                    <button type="button" className="use-skill-button" onClick={(event) => { event.stopPropagation(); useSkill(skill, false); }}>使用</button>
                   </div>
                 </article>
               ))}
@@ -779,8 +824,8 @@ export function SkillHomePage({
         onClose={() => setAuthOpen(false)}
         onContinue={async (email, password) => {
           const result = await signInOrSignUpWithEmail({ email, password, emailRedirectTo: window.location.origin });
-          if (result.confirmationRequired) return { message: "首次登录已自动创建账号。验证邮件已发送，请完成邮箱验证后继续。" };
-          setToast(result.action === "signed-up" ? "账号已创建并登录" : "登录成功");
+          if (!result.session) throw new Error("登录服务配置尚未生效，请稍后重试。");
+          setToast("登录成功");
           return {};
         }}
       />

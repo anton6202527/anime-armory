@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-30T16:05:13",
+  "ref_id": "LOC_YANGGU_YAMEN",
+  "candidate_path": "出图/共享/candidates/LOC_YANGGU_YAMEN/anchor/20260730_batch02/candidate_01_native.png",
+  "candidate_sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055",
+  "adopted_path": "出图/共享/图片/LOC_YANGGU_YAMEN__anchor.png",
+  "adopted_sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055",
+  "reviewer": "用户",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "用户确认阳谷县衙修复候选；原生PNG RGB 1086×1448，空间与无字合同通过",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

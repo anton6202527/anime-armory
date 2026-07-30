@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "comic_image_master_spec",
   "status": "active",
-  "updated_at": "2026-07-29T13:20:00+08:00",
+  "updated_at": "2026-07-30T00:00:00+08:00",
   "model": "GPT Image 2",
   "channel": "内置 imagegen",
   "resolution_policy": "后端最高可达",
@@ -106,16 +106,119 @@
     {
       "asset_id": "CHAR_WUDA",
       "variant": "three_quarter",
-      "status": "candidate",
-      "path": "出图/共享/candidates/CHAR_WUDA/three_quarter/20260729_batch01/candidate_01_native.png",
+      "status": "adopted",
+      "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
       "native_sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98"
     },
     {
       "asset_id": "MON_TIGER",
       "variant": "front",
-      "status": "candidate",
-      "path": "出图/共享/candidates/MON_TIGER/front/20260729_batch02/candidate_02_native.png",
+      "status": "adopted",
+      "path": "出图/共享/图片/MON_TIGER__front.png",
       "native_sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+    },
+    {
+      "asset_id": "MON_TIGER",
+      "variant": "three_quarter",
+      "status": "adopted",
+      "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+      "native_sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f"
+    },
+    {
+      "asset_id": "CHAR_WUDA",
+      "variant": "face",
+      "status": "adopted",
+      "path": "出图/共享/图片/CHAR_WUDA__face.png",
+      "native_sha256": "6d94ea46e0c7fd59a2313558b63df7e42f66062801ed5cad54a42227dda9088f"
+    },
+    {
+      "asset_id": "MON_TIGER",
+      "variant": "face",
+      "status": "adopted",
+      "path": "出图/共享/图片/MON_TIGER__face.png",
+      "native_sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+    },
+    {
+      "asset_id": "LOC_ROADSIDE_INN",
+      "variant": "anchor",
+      "status": "adopted",
+      "path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+      "native_sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7"
+    },
+    {
+      "asset_id": "LOC_JINGYANG_RIDGE",
+      "variant": "anchor",
+      "status": "rejected_spec_mismatch",
+      "path": "出图/共享/candidates/LOC_JINGYANG_RIDGE/anchor/20260730_batch01/candidate_01_native.png",
+      "native_sha256": "bbe97adc327f7d1156cb92c260f2aff278dfb31ed160def5c1e4c918a91b90e3",
+      "rejection_reason": "原生画布1086×1449，与项目统一1086×1448母版不一致；不得采纳或以裁切/插值冒充master。"
+    },
+    {
+      "asset_id": "PROP_WUSONG_STAFF",
+      "variant": "anchor",
+      "status": "rejected_spec_mismatch",
+      "path": "出图/共享/candidates/PROP_WUSONG_STAFF/anchor/20260730_batch01/candidate_01_native.png",
+      "native_sha256": "218d7fcd2d6d1d3c6e332046ff8b4a43dfaa1768fe9511f6ac262ce44f60ccbe",
+      "rejection_reason": "原生画布1086×1449，与项目统一1086×1448母版不一致；不得采纳或以裁切/插值冒充master。"
+    },
+    {
+      "asset_id": "LOC_JINGYANG_RIDGE",
+      "variant": "anchor_retry",
+      "status": "adopted",
+      "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+      "native_sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+    },
+    {
+      "asset_id": "PROP_WUSONG_STAFF",
+      "variant": "anchor_retry",
+      "status": "rejected_spec_mismatch",
+      "path": "出图/共享/candidates/PROP_WUSONG_STAFF/anchor/20260730_batch02/candidate_01_native.png",
+      "native_sha256": "6405188fdafd6e618506833c0c0c50b2b4fd1bbf0149225999f47431aeb858ae",
+      "rejection_reason": "第二次原生生成仍为1086×1449，与统一母版不一致。"
+    },
+    {
+      "asset_id": "PROP_CONSTABLE_BADGE",
+      "variant": "anchor",
+      "status": "rejected_spec_mismatch",
+      "path": "出图/共享/candidates/PROP_CONSTABLE_BADGE/anchor/20260730_batch01/candidate_01_native.png",
+      "native_sha256": "562ab99cc073abb5ad434508da94c37b40b21efbc7a6db1803baed6ba2eb7c70",
+      "rejection_reason": "原生画布1086×1449，与项目统一1086×1448母版不一致。"
+    },
+    {
+      "asset_id": "PROP_WUSONG_STAFF",
+      "variant": "anchor_retry_2",
+      "status": "adopted",
+      "path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+      "native_sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7"
+    },
+    {
+      "asset_id": "PROP_CONSTABLE_BADGE",
+      "variant": "anchor_retry",
+      "status": "adopted",
+      "path": "出图/共享/图片/PROP_CONSTABLE_BADGE__anchor.png",
+      "native_sha256": "927451e739450ac0aac229c8296571eaa126dcf2a4d3500fbb1bf9138d6b993d"
+    },
+    {
+      "asset_id": "LOC_YANGGU_YAMEN",
+      "variant": "anchor",
+      "status": "rejected_spec_mismatch",
+      "path": "出图/共享/candidates/LOC_YANGGU_YAMEN/anchor/20260730_batch01/candidate_01_native.png",
+      "native_sha256": "c2f3052dd8ac9179df54ca6032ee9f8e3c09aceb602731ee411f982d840fb68b",
+      "rejection_reason": "原生画布1086×1449，与项目统一1086×1448母版不一致。"
+    },
+    {
+      "asset_id": "LOC_YANGGU_YAMEN",
+      "variant": "anchor_retry",
+      "status": "adopted",
+      "path": "出图/共享/图片/LOC_YANGGU_YAMEN__anchor.png",
+      "native_sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055"
+    },
+    {
+      "asset_id": "LOC_QINGHE_MARKET",
+      "variant": "anchor",
+      "status": "adopted",
+      "path": "出图/共享/图片/LOC_QINGHE_MARKET__anchor.png",
+      "native_sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e"
     }
   ]
 }

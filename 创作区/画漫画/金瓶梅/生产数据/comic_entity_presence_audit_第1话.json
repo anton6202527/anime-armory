@@ -1,0 +1,98 @@
+{
+  "kind": "comic_entity_presence_audit",
+  "version": 1,
+  "generated_at": "2026-07-30T12:12:39+00:00",
+  "chapter": "第1话",
+  "summary": {
+    "panels": 16,
+    "registry_entities": 11,
+    "panels_with_schedule": 0,
+    "must": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "findings": [],
+  "derived_schedule": {
+    "P001": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P002": [
+      "CHAR_WUSONG",
+      "LOC_ROADSIDE_INN"
+    ],
+    "P003": [
+      "CHAR_WUSONG",
+      "LOC_ROADSIDE_INN"
+    ],
+    "P004": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P005": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P006": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P007": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P008": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER",
+      "PROP_WUSONG_STAFF"
+    ],
+    "P009": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER",
+      "PROP_WUSONG_STAFF"
+    ],
+    "P010": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P011": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P012": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P013": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER"
+    ],
+    "P014": [
+      "CHAR_WUSONG",
+      "LOC_JINGYANG_RIDGE",
+      "MON_TIGER",
+      "PRIMARY_001"
+    ],
+    "P015": [
+      "CHAR_WUSONG",
+      "LOC_YANGGU_YAMEN",
+      "PROP_CONSTABLE_BADGE"
+    ],
+    "P016": [
+      "CHAR_PANJINLIAN",
+      "CHAR_WUDA",
+      "LOC_QINGHE_MARKET"
+    ]
+  }
+}

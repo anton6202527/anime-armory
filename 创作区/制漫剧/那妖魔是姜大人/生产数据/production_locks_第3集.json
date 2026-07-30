@@ -2,13 +2,14 @@
   "episode": "第3集",
   "generated_at": "2026-07-27T06:10:59+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-29T12:47:51+00:00",
-  "last_confirmed_by": "codex-script-supervisor",
+  "last_confirmed_at": "2026-07-30T04:07:04+00:00",
+  "last_confirmed_by": "项目视觉执行席-01（按用户明确720p变更重签）",
   "last_confirmed_lock_ids": [
     "source_lock",
     "script_lock",
     "storyboard_lock",
-    "style_identity_lock"
+    "style_identity_lock",
+    "voice_timing_lock"
   ],
   "locks": [
     {
@@ -18,8 +19,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-29T12:47:51+00:00",
-      "approver": "codex-script-supervisor",
+      "approved_at": "2026-07-30T04:07:04+00:00",
+      "approver": "项目视觉执行席-01（按用户明确720p变更重签）",
       "artifact_count": 2,
       "artifacts": [
         {
@@ -59,8 +60,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-29T12:47:51+00:00",
-      "approver": "codex-script-supervisor",
+      "approved_at": "2026-07-30T04:07:04+00:00",
+      "approver": "项目视觉执行席-01（按用户明确720p变更重签）",
       "artifact_count": 3,
       "artifacts": [
         {
@@ -107,8 +108,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-29T12:47:51+00:00",
-      "approver": "codex-script-supervisor",
+      "approved_at": "2026-07-30T04:07:04+00:00",
+      "approver": "项目视觉执行席-01（按用户明确720p变更重签）",
       "artifact_count": 3,
       "artifacts": [
         {
@@ -155,15 +156,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-29T12:47:51+00:00",
-      "approver": "codex-script-supervisor",
+      "approved_at": "2026-07-30T04:07:04+00:00",
+      "approver": "项目视觉执行席-01（按用户明确720p变更重签）",
       "artifact_count": 4,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-24T01:47:46+00:00",
+          "mtime": "2026-07-30T03:10:12+00:00",
           "path": "_设置.md",
-          "sha256": "1d33173600868e07bf73852a0afbae4d0aa89992698a6adf9625aafb054e10a0"
+          "sha256": "10fc54f1d7f015a9e2f8d5a08fcbab417e5abff36b243ff8f6b9782386be7cf6"
         },
         {
           "exists": true,
@@ -173,7 +174,7 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-29T12:45:06+00:00",
+          "mtime": "2026-07-29T12:51:03+00:00",
           "path": "出图/共享/identity_registry.json",
           "sha256": "79d71aac5ce570969990f8ac870826015a6175d69f37b79b2f9e3c6e928f6f08"
         },
@@ -208,8 +209,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-27T11:47:36+00:00",
-      "approver": "automation:codex refreshed identity adapter matrix",
+      "approved_at": "2026-07-30T04:07:04+00:00",
+      "approver": "项目视觉执行席-01（按用户明确720p变更重签）",
       "artifact_count": 0,
       "artifacts": [
         {
@@ -450,6 +451,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-29T12:47:51+00:00",
+  "updated_at": "2026-07-30T04:07:04+00:00",
   "version": 1
 }

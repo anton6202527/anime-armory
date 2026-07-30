@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_receipt",
+  "receipt_id": "075a183504a0ebc13c1d8740fa42cd345783402966d9a83e70ec28315cec92d1",
+  "chapter": "第1话",
+  "stage": "script",
+  "created_at": "2026-07-30T12:05:58",
+  "verdict": "pass",
+  "execution_authorized": true,
+  "inputs_fingerprint_sha256": "4f45f4c09edf7a81c4d02239cee9c941d63c1def8d486bf9d40e95437c119d75",
+  "panel_jobs_sha256": "",
+  "artifacts": {
+    "panel_jobs_path": "出图/第1话/prompt/panel_jobs.json",
+    "panel_jobs_sha256": ""
+  },
+  "report_path": "生产数据/comic_gate_script_第1话.json",
+  "report_sha256": "d7e5255eb1a714241fbef75ceaf8e3bd003b0c65ec4907dea3857a57bccdb1db"
+}

@@ -26,16 +26,35 @@ import {
 } from "@xyflow/react";
 import { BrandIcon } from "../../components/BrandIcon";
 import { LineIcon } from "../../components/LineIcon";
+import { MODEL_GROUPS, getModelById } from "../../catalog/models";
+import type { ModelModality } from "../../catalog/types";
 import { SKILLS } from "../../catalog/skills";
 import { createAgentGateway, type AgentGateway } from "../../lib/agent";
+import {
+  loadLocalCanvasDocument,
+  saveCloudCanvasDocument,
+  saveLocalCanvasDocument,
+} from "../../lib/canvasState";
+import { isCloudConfigured, persistWorkToCloud } from "../../lib/cloud";
+import { registerLocalFiles } from "../../lib/localFiles";
 import { saveWork } from "../../lib/work";
-import type { AgentJob, CreationLine, DraftAttachment, WebWork } from "../../types";
+import type {
+  AgentJob,
+  CanvasDocument,
+  CloudWorkState,
+  CreationLine,
+  DraftAttachment,
+  PendingAttachment,
+  WebWork,
+  WorkCreationConfig,
+} from "../../types";
 
 type CanvasView = "workflow" | "storyboard";
 type CanvasTool = "select" | "pan";
-type DrawerKind = "add" | "tools" | "assets" | "characters" | "history";
+type DrawerKind = "add" | "tools" | "assets" | "characters" | "history" | "overview";
 type AgentPanelTab = "skills" | "history" | "settings";
-type OverlayKind = "shortcuts" | "tutorial";
+type OverlayKind = "shortcuts" | "tutorial" | "share" | "clear-data";
+type ComposerMenuKind = "model" | "mode" | null;
 type WorkflowNodeKind = "text" | "script" | "image" | "audio" | "video" | "compose";
 type WorkflowNodeStatus = "idle" | "ready" | "running" | "done" | "failed";
 
@@ -79,7 +98,10 @@ type IconName =
   | "character"
   | "close"
   | "compose"
+  | "copy"
+  | "download"
   | "edge"
+  | "fullscreen"
   | "grid"
   | "history"
   | "image"
@@ -87,11 +109,15 @@ type IconName =
   | "move"
   | "panel"
   | "script"
+  | "share"
   | "send"
   | "sparkle"
   | "text"
   | "tools"
   | "tutorial"
+  | "redo"
+  | "undo"
+  | "upload"
   | "video"
   | "workflow"
   | "zoom-in"
@@ -165,14 +191,21 @@ function Icon({ name }: { name: IconName }) {
     case "audio": content = <><path d="M9 18V6l9-2v12" /><circle cx="6" cy="18" r="3" /><circle cx="15" cy="16" r="3" /></>; break;
     case "video": content = <><rect x="3" y="5" width="14" height="14" rx="2" /><path d="m17 10 4-2v8l-4-2ZM9 9l4 3-4 3z" /></>; break;
     case "compose": content = <><rect x="4" y="4" width="11" height="11" rx="2" /><path d="M9 9h11v11H9z" /></>; break;
+    case "copy": content = <><rect x="8" y="8" width="11" height="11" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></>; break;
+    case "download": content = <><path d="M12 4v11m0 0 4-4m-4 4-4-4" /><path d="M5 18v2h14v-2" /></>; break;
     case "map": content = <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15" /></>; break;
     case "edge": content = <><circle cx="5" cy="17" r="2" /><circle cx="19" cy="7" r="2" /><path d="M7 16c4-1 4-7 10-8" /></>; break;
     case "grid": content = <><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16M15 4v16" /></>; break;
     case "zoom-in": content = <><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5M10 7v6M7 10h6" /></>; break;
     case "zoom-out": content = <><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5M7 10h6" /></>; break;
+    case "undo": content = <><path d="M9 7 4 12l5 5" /><path d="M5 12h8a6 6 0 0 1 6 6" /></>; break;
+    case "redo": content = <><path d="m15 7 5 5-5 5" /><path d="M19 12h-8a6 6 0 0 0-6 6" /></>; break;
+    case "fullscreen": content = <><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" /></>; break;
+    case "upload": content = <><path d="M12 16V4m0 0L7 9m5-5 5 5" /><path d="M5 14v5h14v-5" /></>; break;
     case "panel": content = <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M15 4v16M18 9h.01M18 13h.01" /></>; break;
     case "sparkle": content = <><path d="m12 3 1.4 4.2L18 9l-4.6 1.8L12 15l-1.4-4.2L6 9l4.6-1.8zM19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z" /></>; break;
     case "send": content = <><path d="m5 12 14-7-4 14-3-6zM12 13l7-8" /></>; break;
+    case "share": content = <><circle cx="18" cy="5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="19" r="2.5" /><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5" /></>; break;
     case "close": content = <><path d="m6 6 12 12M18 6 6 18" /></>; break;
   }
   return <svg className={`canvas-icon canvas-icon-${name}`} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{content}</svg>;
@@ -287,42 +320,100 @@ function WorkflowNodeCard({ data, selected }: NodeProps<WorkflowNode>) {
 
 const NODE_TYPES = { "workflow-node": WorkflowNodeCard };
 
+function StoryboardView({
+  nodes,
+  onOpenNode,
+}: {
+  nodes: WorkflowNode[];
+  onOpenNode: (nodeId: string) => void;
+}) {
+  const lanes: Array<{ key: string; title: string; icon: IconName; nodes: WorkflowNode[] }> = [
+    { key: "text", title: "文本", icon: "script", nodes: nodes.filter((node) => node.data.kind === "text" || node.data.kind === "script") },
+    { key: "image", title: "图片", icon: "image", nodes: nodes.filter((node) => node.data.kind === "image") },
+    { key: "media", title: "音视频", icon: "video", nodes: nodes.filter((node) => node.data.kind === "audio" || node.data.kind === "video" || node.data.kind === "compose") },
+  ];
+  return (
+    <div className="canvas-storyboard" aria-label="故事板">
+      {lanes.map((lane) => (
+        <section key={lane.key} className={`canvas-storyboard-lane lane-${lane.key}`}>
+          <header><span><Icon name={lane.icon} /></span><strong>{lane.title}</strong><small>{lane.nodes.length}</small></header>
+          <div>
+            {lane.nodes.map((node) => (
+              <button key={node.id} type="button" className={`canvas-storyboard-card kind-${node.data.kind}`} onClick={() => onOpenNode(node.id)}>
+                {(node.data.kind === "image" || node.data.kind === "video") && <span className="canvas-storyboard-preview"><i /><i /><i />{node.data.kind === "video" && <b><Icon name="video" /></b>}</span>}
+                {node.data.kind === "audio" && <span className="canvas-storyboard-audio">{[9, 18, 12, 25, 15, 21, 10, 17, 13].map((height, index) => <i key={`${height}-${index}`} style={{ height }} />)}</span>}
+                <span className="canvas-storyboard-copy"><small>{node.data.eyebrow}</small><strong>{node.data.title}</strong><p>{node.data.description}</p>{node.data.assetName && <em>{node.data.assetName}</em>}</span>
+                <i className={`canvas-storyboard-status status-${node.data.status}`}>{node.data.status === "done" ? "已完成" : node.data.status === "running" ? "生成中" : node.data.status === "failed" ? "失败" : node.data.status === "ready" ? "可执行" : "待处理"}</i>
+              </button>
+            ))}
+            {!lane.nodes.length && <div className="canvas-storyboard-empty"><Icon name={lane.icon} /><span>暂无{lane.title}节点</span></div>}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 function BottomCanvasControls({
   attachments,
   zoom,
   miniMapVisible,
   edgesVisible,
-  gridVisible,
-  onOpenAssets,
-  onOrganize,
+  snapToGridEnabled,
+  onOpenOverview,
   onToggleMiniMap,
   onToggleEdges,
-  onToggleGrid,
+  onToggleSnap,
 }: {
   attachments: number;
   zoom: number;
   miniMapVisible: boolean;
   edgesVisible: boolean;
-  gridVisible: boolean;
-  onOpenAssets: () => void;
-  onOrganize: () => void;
+  snapToGridEnabled: boolean;
+  onOpenOverview: () => void;
   onToggleMiniMap: () => void;
   onToggleEdges: () => void;
-  onToggleGrid: () => void;
+  onToggleSnap: () => void;
 }) {
   const flow = useReactFlow<WorkflowNode, Edge>();
+  const [zoomMenuOpen, setZoomMenuOpen] = useState(false);
+  const [zoomInput, setZoomInput] = useState(() => String(Math.round(zoom * 100)));
+
+  useEffect(() => {
+    if (!zoomMenuOpen) setZoomInput(String(Math.round(zoom * 100)));
+  }, [zoom, zoomMenuOpen]);
+
+  const applyZoom = (percent: number) => {
+    const normalized = Math.min(800, Math.max(10, percent));
+    setZoomInput(String(Math.round(normalized)));
+    void flow.zoomTo(normalized / 100, { duration: 180 });
+    setZoomMenuOpen(false);
+  };
+
   return (
-    <Panel position="bottom-center" className="canvas-bottom-controls">
-      <button type="button" onClick={onOpenAssets} title="打开素材库"><Icon name="assets" /><span>资产</span>{attachments > 0 && <b>{attachments}</b>}</button>
-      <button type="button" onClick={() => { onOrganize(); window.setTimeout(() => void flow.fitView({ padding: 0.2, duration: 240 }), 30); }} title="自动整理节点"><Icon name="tools" /><span>整理</span></button>
+    <Panel position="bottom-left" className="canvas-bottom-controls">
+      <button type="button" onClick={onOpenOverview} title="资产管理"><Icon name="assets" /><span>资产管理</span>{attachments > 0 && <b>{attachments}</b>}</button>
       <span className="canvas-control-divider" />
       <button type="button" className={miniMapVisible ? "is-active" : ""} onClick={onToggleMiniMap} title="显示或隐藏小地图"><Icon name="map" /></button>
       <button type="button" className={edgesVisible ? "is-active" : ""} onClick={onToggleEdges} title="显示或隐藏连线"><Icon name="edge" /></button>
-      <button type="button" className={gridVisible ? "is-active" : ""} onClick={onToggleGrid} title="显示或隐藏网格"><Icon name="grid" /></button>
+      <button type="button" className={snapToGridEnabled ? "is-active" : ""} onClick={onToggleSnap} title="网格吸附" aria-pressed={snapToGridEnabled}><Icon name="grid" /></button>
       <span className="canvas-control-divider" />
       <button type="button" onClick={() => void flow.zoomOut({ duration: 160 })} title="缩小"><Icon name="zoom-out" /></button>
-      <button type="button" className="canvas-zoom-value" onClick={() => void flow.fitView({ padding: 0.2, duration: 240 })} title="适应画布">{Math.round(zoom * 100)}%</button>
+      <span className="canvas-zoom-menu-wrap">
+        <button type="button" className="canvas-zoom-value" onClick={() => setZoomMenuOpen((open) => !open)} aria-label="缩放选项" aria-haspopup="menu" aria-expanded={zoomMenuOpen}>{Math.round(zoom * 100)}%</button>
+        {zoomMenuOpen && <div className="canvas-zoom-menu" role="menu" aria-label="缩放选项">
+          <label><input aria-label="缩放比例" inputMode="numeric" value={zoomInput} onChange={(event) => setZoomInput(event.target.value.replace(/\D/g, "").slice(0, 3))} onKeyDown={(event) => { if (event.key === "Enter") applyZoom(Number(zoomInput) || 100); }} /><span>%</span></label>
+          <button type="button" role="menuitem" onClick={() => void flow.zoomIn({ duration: 160 })}><span>放大</span><kbd>⌘ +</kbd></button>
+          <button type="button" role="menuitem" onClick={() => void flow.zoomOut({ duration: 160 })}><span>缩小</span><kbd>⌘ −</kbd></button>
+          <button type="button" role="menuitem" onClick={() => { void flow.fitView({ padding: 0.2, duration: 240 }); setZoomMenuOpen(false); }}><span>适合屏幕</span><kbd>⌘ 0</kbd></button>
+          {[10, 50, 100, 800].map((percent) => <button key={percent} type="button" role="menuitem" onClick={() => applyZoom(percent)}><span>缩放至 {percent}%</span></button>)}
+        </div>}
+      </span>
       <button type="button" onClick={() => void flow.zoomIn({ duration: 160 })} title="放大"><Icon name="zoom-in" /></button>
+      <button type="button" onClick={() => {
+        if (document.fullscreenElement) void document.exitFullscreen();
+        else void document.documentElement.requestFullscreen();
+      }} title="切换全屏"><Icon name="fullscreen" /></button>
     </Panel>
   );
 }
@@ -338,44 +429,128 @@ function timestamp() {
   return new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
 }
 
-export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void }) {
-  const graph = useMemo(() => initialGraph(work), [work.id, work.line]);
+interface GraphHistoryEntry {
+  nodes: WorkflowNode[];
+  edges: Edge[];
+}
+
+function cloneGraph(nodes: WorkflowNode[], edges: Edge[]): GraphHistoryEntry {
+  return {
+    nodes: nodes.map((node) => ({
+      ...node,
+      position: { ...node.position },
+      data: { ...node.data },
+    })),
+    edges: edges.map((edge) => ({ ...edge })),
+  };
+}
+
+function graphSignature(nodes: WorkflowNode[], edges: Edge[]) {
+  return JSON.stringify({
+    nodes: nodes.map((node) => ({ id: node.id, position: node.position, data: node.data })),
+    edges: edges.map((edge) => ({ id: edge.id, source: edge.source, target: edge.target })),
+  });
+}
+
+function defaultCreationConfig(work: WebWork): WorkCreationConfig {
+  if (work.creationConfig) return work.creationConfig;
+  const fallback = MODEL_GROUPS.text[0];
+  return {
+    generationMode: "auto",
+    model: {
+      modality: "text",
+      modelId: fallback?.id ?? "",
+    },
+  };
+}
+
+export function CanvasPage({
+  work,
+  onHome,
+  onClearLocalData,
+}: {
+  work: WebWork;
+  onHome: () => void;
+  onClearLocalData: (attachmentIds: string[]) => void;
+}) {
+  const storedDocument = useMemo(() => loadLocalCanvasDocument(work.id), [work.id]);
+  const graph = useMemo(() => {
+    if (!storedDocument?.nodes.length) return initialGraph(work);
+    const storedNodes = storedDocument.nodes.map((node) => ({
+      ...node,
+      type: "workflow-node" as const,
+      data: node.data as WorkflowNodeData,
+    }));
+    const storedEdges = storedDocument.edges.map((edge) => ({
+      ...edge,
+      type: edge.type ?? "smoothstep",
+      markerEnd: { type: MarkerType.ArrowClosed },
+      className: "workflow-edge",
+    }));
+    return { nodes: storedNodes, edges: storedEdges };
+  }, [storedDocument, work.id, work.line]);
   const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowNode>(graph.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(graph.edges);
-  const [workName, setWorkName] = useState(work.name);
-  const [view, setView] = useState<CanvasView>("workflow");
+  const [workName, setWorkName] = useState(storedDocument?.work.name ?? work.name);
+  const [view, setView] = useState<CanvasView>(storedDocument?.preferences.view ?? "workflow");
   const [tool, setTool] = useState<CanvasTool>("select");
   const [drawer, setDrawer] = useState<DrawerKind | null>(null);
   const [overlay, setOverlay] = useState<OverlayKind | null>(null);
   const [notice, setNotice] = useState("");
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [gridVisible, setGridVisible] = useState(true);
-  const [edgesVisible, setEdgesVisible] = useState(true);
-  const [miniMapVisible, setMiniMapVisible] = useState(true);
-  const [zoom, setZoom] = useState(1);
+  const [editingNodeId, setEditingNodeId] = useState<string | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; nodeId: string } | null>(null);
+  const [gridVisible, setGridVisible] = useState(storedDocument?.preferences.gridVisible ?? true);
+  const [snapToGridEnabled, setSnapToGridEnabled] = useState(storedDocument?.preferences.snapToGrid ?? false);
+  const [edgesVisible, setEdgesVisible] = useState(storedDocument?.preferences.edgesVisible ?? true);
+  const [miniMapVisible, setMiniMapVisible] = useState(storedDocument?.preferences.miniMapVisible ?? true);
+  const [viewport, setViewport] = useState(storedDocument?.viewport ?? { x: 0, y: 0, zoom: 1 });
+  const [zoom, setZoom] = useState(storedDocument?.viewport.zoom ?? 1);
   const [gateway, setGateway] = useState<AgentGateway | null>(null);
   const [prompt, setPrompt] = useState(work.prompt);
   const [activeJob, setActiveJob] = useState<AgentJob | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(storedDocument?.preferences.panelOpen ?? true);
   const [panelTab, setPanelTab] = useState<AgentPanelTab>("skills");
-  const [runHistory, setRunHistory] = useState<RunRecord[]>([]);
-  const [activity, setActivity] = useState<ActivityItem[]>([
+  const [runHistory, setRunHistory] = useState<RunRecord[]>(storedDocument?.runHistory ?? []);
+  const [activity, setActivity] = useState<ActivityItem[]>(storedDocument?.activity ?? [
     { id: crypto.randomUUID(), label: "创建作品并初始化工作流", time: timestamp() },
   ]);
-  const [includeCanvasContext, setIncludeCanvasContext] = useState(true);
-  const [followLatestRun, setFollowLatestRun] = useState(true);
-  const [activeSkill, setActiveSkill] = useState<string | null>(work.creationConfig?.skillId ?? null);
+  const [includeCanvasContext, setIncludeCanvasContext] = useState(storedDocument?.preferences.includeCanvasContext ?? true);
+  const [followLatestRun, setFollowLatestRun] = useState(storedDocument?.preferences.followLatestRun ?? true);
+  const [activeSkill, setActiveSkill] = useState<string | null>(storedDocument?.activeSkill ?? work.creationConfig?.skillId ?? null);
+  const [creationConfig, setCreationConfig] = useState<WorkCreationConfig>(() => defaultCreationConfig(storedDocument?.work ?? work));
+  const [composerMenu, setComposerMenu] = useState<ComposerMenuKind>(null);
+  const [modelModality, setModelModality] = useState<ModelModality>(creationConfig.model.modality);
+  const [overviewTab, setOverviewTab] = useState<"canvas" | "assets">("canvas");
+  const [overviewQuery, setOverviewQuery] = useState("");
+  const [syncState, setSyncState] = useState<CloudWorkState>(work.cloudState);
+  const [attachments, setAttachments] = useState<DraftAttachment[]>(storedDocument?.work.attachments ?? work.attachments);
+  const [cloudProjectId, setCloudProjectId] = useState(work.cloudProjectId ?? storedDocument?.work.cloudProjectId);
   const mountedRef = useRef(true);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const historyRef = useRef<GraphHistoryEntry[]>([cloneGraph(graph.nodes, graph.edges)]);
+  const historyIndexRef = useRef(0);
+  const restoringHistoryRef = useRef(false);
+  const clipboardRef = useRef<GraphHistoryEntry | null>(null);
+  const pasteCountRef = useRef(0);
+  const [historyAvailability, setHistoryAvailability] = useState({ canUndo: false, canRedo: false });
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
-  const cloudLabel = work.cloudState === "synced"
+  const editingNode = editingNodeId ? nodes.find((node) => node.id === editingNodeId) ?? null : null;
+  const selectedModel = getModelById(creationConfig.model.modelId);
+  const overviewNodes = useMemo(() => {
+    const query = overviewQuery.trim().toLocaleLowerCase();
+    if (!query) return nodes;
+    return nodes.filter((node) => `${node.data.title} ${node.data.description} ${node.data.assetName ?? ""}`.toLocaleLowerCase().includes(query));
+  }, [nodes, overviewQuery]);
+  const cloudLabel = syncState === "synced"
     ? "R2 已同步"
-    : work.cloudState === "syncing"
+    : syncState === "syncing"
       ? "正在同步…"
-      : work.cloudState === "auth-required"
+      : syncState === "auth-required"
         ? "登录后云同步"
-        : work.cloudState === "failed"
+        : syncState === "failed"
           ? "同步失败"
           : "本地草稿";
 
@@ -386,10 +561,27 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
   useEffect(() => {
     setNodes(graph.nodes);
     setEdges(graph.edges);
+    historyRef.current = [cloneGraph(graph.nodes, graph.edges)];
+    historyIndexRef.current = 0;
+    setHistoryAvailability({ canUndo: false, canRedo: false });
     setSelectedNodeId(null);
-    setWorkName(work.name);
-    setPrompt(work.prompt);
-  }, [graph, setEdges, setNodes, work.name, work.prompt]);
+    setWorkName(storedDocument?.work.name ?? work.name);
+    setPrompt(storedDocument?.work.prompt ?? work.prompt);
+    const nextConfig = defaultCreationConfig(storedDocument?.work ?? work);
+    setCreationConfig(nextConfig);
+    setModelModality(nextConfig.model.modality);
+  }, [graph, setEdges, setNodes, storedDocument, work.name, work.prompt]);
+
+  useEffect(() => setSyncState(work.cloudState), [work.cloudState]);
+
+  useEffect(() => {
+    if (work.cloudProjectId) setCloudProjectId(work.cloudProjectId);
+    setAttachments((current) => {
+      const merged = new Map(current.map((attachment) => [attachment.id, attachment]));
+      work.attachments.forEach((attachment) => merged.set(attachment.id, attachment));
+      return [...merged.values()];
+    });
+  }, [work.attachments, work.cloudProjectId]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -419,36 +611,236 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
   }, [notice]);
 
   useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const updatedAt = new Date().toISOString();
+      const nextWork: WebWork = {
+        ...work,
+        name: workName.trim() || "unnamed",
+        creationConfig,
+        attachments,
+        ...(cloudProjectId ? { cloudProjectId } : {}),
+        cloudState: cloudProjectId ? "syncing" : work.cloudState,
+      };
+      const document: CanvasDocument = {
+        schemaVersion: 1,
+        work: nextWork,
+        nodes: nodes.map((node) => ({
+          id: node.id,
+          type: node.type,
+          position: node.position,
+          data: node.data,
+        })),
+        edges: edges.map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          sourceHandle: edge.sourceHandle,
+          targetHandle: edge.targetHandle,
+          type: edge.type,
+          animated: edge.animated,
+        })),
+        viewport,
+        preferences: {
+          view,
+          gridVisible,
+          snapToGrid: snapToGridEnabled,
+          edgesVisible,
+          miniMapVisible,
+          panelOpen,
+          includeCanvasContext,
+          followLatestRun,
+        },
+        activeSkill,
+        activity,
+        runHistory,
+        updatedAt,
+      };
+
+      saveLocalCanvasDocument(document);
+      saveWork(nextWork);
+      if (!cloudProjectId) return;
+      setSyncState("syncing");
+      void saveCloudCanvasDocument(cloudProjectId, document)
+        .then(() => {
+          if (!mountedRef.current) return;
+          setSyncState("synced");
+          saveWork({ ...nextWork, cloudState: "synced", cloudError: undefined });
+        })
+        .catch((error) => {
+          if (!mountedRef.current) return;
+          const message = error instanceof Error ? error.message : String(error);
+          setSyncState("failed");
+          saveWork({ ...nextWork, cloudState: "failed", cloudError: message });
+        });
+    }, 650);
+    return () => window.clearTimeout(timer);
+  }, [
+    activeSkill,
+    activity,
+    attachments,
+    cloudProjectId,
+    creationConfig,
+    edges,
+    edgesVisible,
+    followLatestRun,
+    gridVisible,
+    includeCanvasContext,
+    miniMapVisible,
+    nodes,
+    panelOpen,
+    runHistory,
+    snapToGridEnabled,
+    view,
+    viewport,
+    work,
+    workName,
+  ]);
+
+  useEffect(() => {
+    if (restoringHistoryRef.current) {
+      restoringHistoryRef.current = false;
+      return undefined;
+    }
+    const timer = window.setTimeout(() => {
+      const current = historyRef.current[historyIndexRef.current];
+      if (current && graphSignature(current.nodes, current.edges) === graphSignature(nodes, edges)) return;
+      const nextHistory = historyRef.current.slice(0, historyIndexRef.current + 1);
+      nextHistory.push(cloneGraph(nodes, edges));
+      historyRef.current = nextHistory.slice(-60);
+      historyIndexRef.current = historyRef.current.length - 1;
+      setHistoryAvailability({ canUndo: historyIndexRef.current > 0, canRedo: false });
+    }, 260);
+    return () => window.clearTimeout(timer);
+  }, [edges, nodes]);
+
+  const restoreHistory = useCallback((nextIndex: number) => {
+    const entry = historyRef.current[nextIndex];
+    if (!entry) return;
+    restoringHistoryRef.current = true;
+    historyIndexRef.current = nextIndex;
+    const graphCopy = cloneGraph(entry.nodes, entry.edges);
+    setNodes(graphCopy.nodes);
+    setEdges(graphCopy.edges);
+    setSelectedNodeId(null);
+    setHistoryAvailability({
+      canUndo: nextIndex > 0,
+      canRedo: nextIndex < historyRef.current.length - 1,
+    });
+  }, [setEdges, setNodes]);
+
+  const undoGraph = useCallback(() => {
+    if (historyIndexRef.current <= 0) return;
+    restoreHistory(historyIndexRef.current - 1);
+    addActivity("撤销画布操作");
+  }, [addActivity, restoreHistory]);
+
+  const redoGraph = useCallback(() => {
+    if (historyIndexRef.current >= historyRef.current.length - 1) return;
+    restoreHistory(historyIndexRef.current + 1);
+    addActivity("重做画布操作");
+  }, [addActivity, restoreHistory]);
+
+  const copySelectedNodes = useCallback(() => {
+    const selected = nodes.filter((node) => node.selected || node.id === selectedNodeId);
+    if (!selected.length) return false;
+    const selectedIds = new Set(selected.map((node) => node.id));
+    clipboardRef.current = cloneGraph(
+      selected,
+      edges.filter((edge) => selectedIds.has(edge.source) && selectedIds.has(edge.target)),
+    );
+    pasteCountRef.current = 0;
+    setNotice(`已复制 ${selected.length} 个节点`);
+    return true;
+  }, [edges, nodes, selectedNodeId]);
+
+  const pasteNodes = useCallback(() => {
+    const source = clipboardRef.current;
+    if (!source?.nodes.length) return;
+    pasteCountRef.current += 1;
+    const offset = 28 * pasteCountRef.current;
+    const idMap = new Map(source.nodes.map((node) => [node.id, `${node.data.kind ?? "node"}-${crypto.randomUUID()}`]));
+    const pastedNodes = source.nodes.map((node) => ({
+      ...node,
+      id: idMap.get(node.id)!,
+      selected: true,
+      position: { x: node.position.x + offset, y: node.position.y + offset },
+      data: { ...node.data },
+    }));
+    const pastedEdges = source.edges.flatMap((edge) => {
+      const nextSource = idMap.get(edge.source);
+      const nextTarget = idMap.get(edge.target);
+      return nextSource && nextTarget ? [{
+        ...edge,
+        id: `edge-${crypto.randomUUID()}`,
+        source: nextSource,
+        target: nextTarget,
+      }] : [];
+    });
+    setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), ...pastedNodes]);
+    setEdges((items) => [...items, ...pastedEdges]);
+    setSelectedNodeId(pastedNodes[0]?.id ?? null);
+    addActivity(`粘贴 ${pastedNodes.length} 个节点`);
+  }, [addActivity, setEdges, setNodes]);
+
+  const duplicateSelectedNodes = useCallback(() => {
+    if (copySelectedNodes()) pasteNodes();
+  }, [copySelectedNodes, pasteNodes]);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
       if (target?.matches("input, textarea, [contenteditable='true']")) {
         if (event.key === "Escape") target.blur();
         return;
       }
-      if (event.key === "Escape") {
+      const command = event.metaKey || event.ctrlKey;
+      const key = event.key.toLowerCase();
+      if (command && key === "z") {
+        event.preventDefault();
+        if (event.shiftKey) redoGraph();
+        else undoGraph();
+      } else if (command && key === "c") {
+        if (copySelectedNodes()) event.preventDefault();
+      } else if (command && key === "v") {
+        if (clipboardRef.current) {
+          event.preventDefault();
+          pasteNodes();
+        }
+      } else if (command && key === "d") {
+        event.preventDefault();
+        duplicateSelectedNodes();
+      } else if (command && key === "a") {
+        event.preventDefault();
+        setNodes((items) => items.map((node) => ({ ...node, selected: true })));
+      } else if (event.key === "Backspace" || event.key === "Delete") {
+        event.preventDefault();
+        deleteSelectedNode();
+      } else if (event.key === "Escape") {
         setDrawer(null);
         setOverlay(null);
-      } else if (event.key.toLowerCase() === "a") {
+        setComposerMenu(null);
+        setContextMenu(null);
+      } else if (key === "a") {
         setDrawer("add");
-      } else if (event.key.toLowerCase() === "v") {
+      } else if (key === "v") {
         setTool("select");
-      } else if (event.key.toLowerCase() === "h") {
+      } else if (key === "h") {
         setTool("pan");
-      } else if (event.key.toLowerCase() === "g") {
-        setGridVisible((visible) => !visible);
+      } else if (key === "g") {
+        setSnapToGridEnabled((enabled) => !enabled);
       } else if (event.key === "?") {
         setOverlay("shortcuts");
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [copySelectedNodes, duplicateSelectedNodes, pasteNodes, redoGraph, setNodes, undoGraph]);
 
   function persistName() {
     const name = workName.trim() || "unnamed";
     setWorkName(name);
     if (name !== work.name) {
-      saveWork({ ...work, name });
+      saveWork({ ...work, name, creationConfig, attachments, ...(cloudProjectId ? { cloudProjectId } : {}) });
       addActivity(`作品重命名为「${name}」`);
     }
   }
@@ -456,6 +848,25 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
   function openDrawer(kind: DrawerKind) {
     setDrawer((current) => current === kind ? null : kind);
     setOverlay(null);
+    setContextMenu(null);
+    setComposerMenu(null);
+  }
+
+  function updateNodeData(nodeId: string, patch: Partial<WorkflowNodeData>) {
+    setNodes((items) => items.map((node) => node.id === nodeId
+      ? { ...node, data: { ...node.data, ...patch } }
+      : node));
+  }
+
+  function askAgentForNode(nodeId: string) {
+    const node = nodes.find((item) => item.id === nodeId);
+    if (!node) return;
+    setPrompt(`请处理画布节点「${node.data.title}」。\n\n目标：${node.data.description}${node.data.assetName ? `\n关联资产：${node.data.assetName}` : ""}`);
+    setPanelOpen(true);
+    setPanelTab("skills");
+    setComposerMenu(null);
+    setContextMenu(null);
+    addActivity(`为节点「${node.data.title}」准备 Agent 指令`);
   }
 
   function addWorkflowNode(kind: WorkflowNodeKind, options?: { title?: string; assetName?: string }) {
@@ -495,6 +906,56 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
     addWorkflowNode(kind, { title: attachment.name, assetName: `${Math.max(1, Math.round(attachment.size / 1024))} KB` });
   }
 
+  async function importAssets(fileList: FileList | null) {
+    const files = [...(fileList ? Array.from(fileList) : [])];
+    if (!files.length) return;
+    const pending: PendingAttachment[] = files.map((file) => ({
+      id: crypto.randomUUID(),
+      name: file.name,
+      size: file.size,
+      type: file.type || "application/octet-stream",
+      file,
+    }));
+    registerLocalFiles(pending);
+    const nextAttachments: DraftAttachment[] = [
+      ...attachments,
+      ...pending.map(({ id, name, size, type }) => ({ id, name, size, type })),
+    ];
+    setAttachments(nextAttachments);
+    const nextWork: WebWork = {
+      ...work,
+      name: workName.trim() || "unnamed",
+      creationConfig,
+      attachments: nextAttachments,
+      ...(cloudProjectId ? { cloudProjectId } : {}),
+      cloudState: isCloudConfigured() ? "syncing" : "local",
+    };
+    saveWork(nextWork);
+    addActivity(`导入 ${pending.length} 个素材`);
+    setDrawer("assets");
+
+    if (!isCloudConfigured()) {
+      setNotice(`已导入 ${pending.length} 个本地素材`);
+      return;
+    }
+    setSyncState("syncing");
+    try {
+      const result = await persistWorkToCloud(nextWork, pending);
+      if (!mountedRef.current) return;
+      setAttachments(result.work.attachments);
+      if (result.work.cloudProjectId) setCloudProjectId(result.work.cloudProjectId);
+      setSyncState(result.work.cloudState);
+      saveWork(result.work);
+      setNotice(`已上传 ${pending.length} 个素材`);
+    } catch (error) {
+      if (!mountedRef.current) return;
+      const message = error instanceof Error ? error.message : String(error);
+      setSyncState("failed");
+      saveWork({ ...nextWork, cloudState: "failed", cloudError: message });
+      setNotice(`素材保留在本地，云上传失败：${message}`);
+    }
+  }
+
   function organizeNodes() {
     const columns: Record<WorkflowNodeKind, number> = { text: 0, script: 1, image: 2, audio: 2, video: 3, compose: 4 };
     const rows = new Map<number, number>();
@@ -508,14 +969,17 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
   }
 
   function deleteSelectedNode() {
-    if (!selectedNodeId) {
+    const selectedIds = new Set(nodes
+      .filter((node) => node.selected || node.id === selectedNodeId)
+      .map((node) => node.id));
+    if (!selectedIds.size) {
       setNotice("请先选择一个节点");
       return;
     }
-    setNodes((items) => items.filter((node) => node.id !== selectedNodeId));
-    setEdges((items) => items.filter((edge) => edge.source !== selectedNodeId && edge.target !== selectedNodeId));
+    setNodes((items) => items.filter((node) => !selectedIds.has(node.id)));
+    setEdges((items) => items.filter((edge) => !selectedIds.has(edge.source) && !selectedIds.has(edge.target)));
     setSelectedNodeId(null);
-    addActivity("删除选中节点");
+    addActivity(`删除 ${selectedIds.size} 个节点`);
   }
 
   function resetWorkflow() {
@@ -556,7 +1020,13 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
     setPanelOpen(true);
     if (followLatestRun) setPanelTab("history");
     if (stageNode) setNodes((items) => items.map((node) => node.id === stageNode.id ? { ...node, data: { ...node.data, status: "running" } } : node));
-    const effectiveWork = { ...work, name: workName.trim() || "unnamed" };
+    const effectiveWork = {
+      ...work,
+      name: workName.trim() || "unnamed",
+      creationConfig,
+      attachments,
+      ...(cloudProjectId ? { cloudProjectId } : {}),
+    };
     saveWork(effectiveWork);
     try {
       const taskPrompt = includeCanvasContext
@@ -605,29 +1075,69 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
     addActivity("连接两个工作流节点");
   }, [addActivity, setEdges]);
 
+  async function copyShareLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setNotice("画布链接已复制");
+      setOverlay(null);
+    } catch {
+      setNotice("浏览器未允许复制，请从地址栏复制链接");
+    }
+  }
+
+  function exportCanvasDocument() {
+    const document = loadLocalCanvasDocument(work.id);
+    if (!document) {
+      setNotice("画布正在保存，请稍后再试");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(document, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = window.document.createElement("a");
+    link.href = url;
+    link.download = `${(workName.trim() || "canvas").replace(/[\\/:*?\"<>|]/g, "_")}.canvas.json`;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    setNotice("画布 JSON 已导出");
+    setOverlay(null);
+  }
+
   return (
     <main className={`creation-canvas-shell tool-${tool}${panelOpen ? " has-agent-panel" : ""}`}>
+      <input
+        ref={fileInputRef}
+        className="canvas-file-input"
+        type="file"
+        multiple
+        aria-label="上传画布素材"
+        onChange={(event) => {
+          void importAssets(event.currentTarget.files);
+          event.currentTarget.value = "";
+        }}
+      />
       <header className="creation-canvas-header">
-        <button type="button" className="creation-canvas-brand" onClick={onHome} aria-label="返回首页"><BrandIcon /></button>
-        <span className="creation-canvas-crumb">/</span>
-        <span className="creation-canvas-line"><LineIcon line={work.line} />{LINE_LABELS[work.line]}</span>
-        <span className="creation-canvas-crumb">/</span>
-        <input
-          className="creation-canvas-name"
-          value={workName}
-          aria-label="作品名称"
-          onChange={(event) => setWorkName(event.target.value)}
-          onBlur={persistName}
-          onKeyDown={(event) => { if (event.key === "Enter") event.currentTarget.blur(); }}
-        />
+        <div className="creation-canvas-project-cluster">
+          <button type="button" className="creation-canvas-brand" onClick={onHome} aria-label="返回首页"><BrandIcon /><span>⌄</span></button>
+          <label className="creation-canvas-project-name"><LineIcon line={work.line} /><input
+            className="creation-canvas-name"
+            value={workName}
+            aria-label="作品名称"
+            onChange={(event) => setWorkName(event.target.value)}
+            onBlur={persistName}
+            onKeyDown={(event) => { if (event.key === "Enter") event.currentTarget.blur(); }}
+          /></label>
+          <button type="button" className="canvas-board-label" onClick={() => setView((current) => current === "workflow" ? "storyboard" : "workflow")} title="切换画布视图">画布 1 <span>⌄</span></button>
+        </div>
         <div className="canvas-view-switch" role="tablist" aria-label="画布视图">
-          <button type="button" role="tab" aria-selected={view === "workflow"} className={view === "workflow" ? "is-active" : ""} onClick={() => setView("workflow")}><Icon name="workflow" />工作流</button>
-          <button type="button" role="tab" aria-selected={view === "storyboard"} className={view === "storyboard" ? "is-active" : ""} onClick={() => { setView("storyboard"); setNotice("故事板即将开放"); }}>故事板<small>即将开放</small></button>
+          <button type="button" role="tab" aria-label="工作流" aria-selected={view === "workflow"} className={view === "workflow" ? "is-active" : ""} onClick={() => setView("workflow")}><Icon name="workflow" /></button>
+          <button type="button" role="tab" aria-label="故事板" aria-selected={view === "storyboard"} className={view === "storyboard" ? "is-active" : ""} onClick={() => setView("storyboard")}><Icon name="panel" /></button>
         </div>
         <span className="creation-canvas-header-spacer" />
-        <span className={work.cloudState === "synced" ? "canvas-sync-state is-synced" : "canvas-sync-state"} title={work.cloudError}>{cloudLabel}</span>
-        <button type="button" className="canvas-token-button" title="会员与 Token 计费将在服务端接入">Token —</button>
-        <button type="button" className={panelOpen ? "canvas-panel-toggle is-active" : "canvas-panel-toggle"} onClick={() => setPanelOpen((open) => !open)} aria-label="切换 Agent 面板"><Icon name="panel" /></button>
+        <div className="canvas-top-actions">
+          <span className={`canvas-sync-state state-${syncState}${syncState === "synced" ? " is-synced" : ""}`} title={work.cloudError || cloudLabel} aria-label={cloudLabel}>{cloudLabel}</span>
+          <button type="button" className="canvas-header-action" onClick={() => setOverlay("share")} aria-label="发布与分享" title="发布与分享"><Icon name="share" /></button>
+          <button type="button" className={panelOpen ? "canvas-panel-toggle is-active" : "canvas-panel-toggle"} onClick={() => setPanelOpen((open) => !open)} aria-label="切换 Agent 面板"><Icon name="panel" /></button>
+        </div>
       </header>
 
       <aside className="creation-canvas-rail" aria-label="画布工具">
@@ -651,68 +1161,102 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onNodeClick={(_, node) => setSelectedNodeId(node.id)}
-            onPaneClick={() => setSelectedNodeId(null)}
-            onMove={(_, viewport) => setZoom(viewport.zoom)}
+            onNodeClick={(_, node) => { setSelectedNodeId(node.id); setContextMenu(null); }}
+            onNodeDoubleClick={(_, node) => { setEditingNodeId(node.id); setContextMenu(null); }}
+            onNodeContextMenu={(event, node) => {
+              event.preventDefault();
+              setNodes((items) => items.map((item) => ({ ...item, selected: item.id === node.id })));
+              setSelectedNodeId(node.id);
+              setContextMenu({
+                x: Math.min(event.clientX, window.innerWidth - 190),
+                y: Math.min(event.clientY, window.innerHeight - 190),
+                nodeId: node.id,
+              });
+            }}
+            onSelectionChange={({ nodes: selectedNodes }) => setSelectedNodeId(selectedNodes.at(-1)?.id ?? null)}
+            onPaneClick={() => { setSelectedNodeId(null); setContextMenu(null); }}
+            onMove={(_, nextViewport) => setZoom(nextViewport.zoom)}
+            onMoveEnd={(_, nextViewport) => setViewport(nextViewport)}
+            snapToGrid={snapToGridEnabled}
+            snapGrid={[20, 20]}
             nodesDraggable={tool === "select"}
             nodesConnectable={tool === "select" && edgesVisible}
             elementsSelectable={tool === "select"}
             panOnDrag={tool === "pan" ? true : [1, 2]}
             selectionOnDrag={tool === "select"}
-            fitView
+            fitView={!storedDocument}
+            defaultViewport={storedDocument?.viewport}
             fitViewOptions={{ padding: 0.18 }}
-            minZoom={0.25}
-            maxZoom={2}
+            minZoom={0.1}
+            maxZoom={8}
             defaultEdgeOptions={{ type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }}
           >
             {gridVisible && <Background variant={BackgroundVariant.Dots} gap={20} size={1.1} color="rgba(133,137,151,.28)" />}
             {miniMapVisible && <MiniMap className="creation-canvas-minimap" pannable zoomable nodeColor={(node) => {
               const typedNode = node as WorkflowNode;
-              if (typedNode.data.kind === "image") return "#795cff";
-              if (typedNode.data.kind === "audio") return "#de7bff";
-              if (typedNode.data.kind === "video") return "#5aa8ff";
-              if (typedNode.data.kind === "compose") return "#48c9a5";
+              if (typedNode.data.kind === "image") return "#777984";
+              if (typedNode.data.kind === "audio") return "#92949d";
+              if (typedNode.data.kind === "video") return "#686a74";
+              if (typedNode.data.kind === "compose") return "#92949d";
               return "#585b67";
             }} />}
             <BottomCanvasControls
-              attachments={work.attachments.length}
+              attachments={attachments.length}
               zoom={zoom}
               miniMapVisible={miniMapVisible}
               edgesVisible={edgesVisible}
-              gridVisible={gridVisible}
-              onOpenAssets={() => openDrawer("assets")}
-              onOrganize={organizeNodes}
+              snapToGridEnabled={snapToGridEnabled}
+              onOpenOverview={() => openDrawer("overview")}
               onToggleMiniMap={() => setMiniMapVisible((visible) => !visible)}
               onToggleEdges={() => setEdgesVisible((visible) => !visible)}
-              onToggleGrid={() => setGridVisible((visible) => !visible)}
+              onToggleSnap={() => setSnapToGridEnabled((enabled) => !enabled)}
             />
           </ReactFlow>
         ) : (
-          <div className="canvas-storyboard-coming-soon">
-            <span><Icon name="image" /></span>
-            <small>STORYBOARD</small>
-            <h2>故事板即将开放</h2>
-            <p>后续可在这里按镜头审阅首尾帧、对白、运镜和生成版本。</p>
-            <button type="button" onClick={() => setView("workflow")}>返回工作流</button>
-          </div>
+          <StoryboardView nodes={nodes} onOpenNode={(nodeId) => setEditingNodeId(nodeId)} />
         )}
       </section>
 
       {drawer && (
         <aside className={`canvas-drawer canvas-drawer-${drawer}`} aria-label="画布抽屉">
-          <header><div><small>CANVAS</small><strong>{drawer === "add" ? "添加节点" : drawer === "tools" ? "工具箱" : drawer === "assets" ? "素材库" : drawer === "characters" ? "角色库" : "操作历史"}</strong></div><button type="button" onClick={() => setDrawer(null)} aria-label="关闭抽屉"><Icon name="close" /></button></header>
+          <header><div><small>CANVAS</small><strong>{drawer === "add" ? "添加节点" : drawer === "tools" ? "工具箱" : drawer === "assets" ? "素材库" : drawer === "characters" ? "角色库" : drawer === "overview" ? "资产管理" : "操作历史"}</strong></div><button type="button" onClick={() => setDrawer(null)} aria-label="关闭抽屉"><Icon name="close" /></button></header>
+          {drawer === "overview" && <div className="canvas-overview">
+            <nav role="tablist" aria-label="资产管理视图">
+              <button type="button" role="tab" aria-selected={overviewTab === "canvas"} className={overviewTab === "canvas" ? "is-active" : ""} onClick={() => setOverviewTab("canvas")}>画布</button>
+              <button type="button" role="tab" aria-selected={overviewTab === "assets"} className={overviewTab === "assets" ? "is-active" : ""} onClick={() => setOverviewTab("assets")}>资产</button>
+            </nav>
+            {overviewTab === "canvas" ? <section className="canvas-overview-nodes">
+              <label><Icon name="workflow" /><input aria-label="搜索节点" value={overviewQuery} onChange={(event) => setOverviewQuery(event.target.value)} placeholder="搜索节点" /></label>
+              <small>画布元素 · 共 {nodes.length} 节点</small>
+              <div>{overviewNodes.map((node) => <button key={node.id} type="button" onClick={() => {
+                setView("workflow");
+                setNodes((items) => items.map((item) => ({ ...item, selected: item.id === node.id })));
+                setSelectedNodeId(node.id);
+                setDrawer(null);
+              }}><span><Icon name={node.data.kind} /></span><span><b>{node.data.title}</b><small>{node.data.eyebrow} · {node.data.status === "done" ? "已完成" : node.data.status === "ready" ? "可执行" : node.data.status === "running" ? "执行中" : node.data.status === "failed" ? "失败" : "待处理"}</small></span><i>定位</i></button>)}</div>
+              {!overviewNodes.length && <div className="canvas-drawer-empty"><Icon name="workflow" /><b>没有匹配的节点</b></div>}
+            </section> : <section className="canvas-overview-assets">
+              <div className="canvas-asset-actions"><button type="button" onClick={() => fileInputRef.current?.click()}><Icon name="upload" />上传素材</button></div>
+              {attachments.map((attachment) => <button key={attachment.id} type="button" onClick={() => addAttachmentNode(attachment)}><span><Icon name={attachmentKind(attachment)} /></span><span><b>{attachment.name}</b><small>{attachment.type || "文件"} · {Math.max(1, Math.round(attachment.size / 1024))} KB</small></span><i>添加到画布</i></button>)}
+              {!attachments.length && <div className="canvas-drawer-empty"><Icon name="assets" /><b>暂时没有素材</b><p>上传后可从这里添加到工作流。</p></div>}
+            </section>}
+          </div>}
           {drawer === "add" && <div className="canvas-drawer-grid">{NODE_LIBRARY.map((item) => {
             const disabled = work.line === "comic" && item.kind === "video";
             return <button key={item.kind} type="button" disabled={disabled} onClick={() => addWorkflowNode(item.kind)}><span><Icon name={item.kind} /></span><b>{item.label}</b><small>{disabled ? "漫画工作流不使用视频节点" : item.description}</small></button>;
           })}</div>}
           {drawer === "tools" && <div className="canvas-tool-list">
+            <button type="button" onClick={undoGraph} disabled={!historyAvailability.canUndo}><Icon name="undo" /><span><b>撤销</b><small>恢复到上一次画布状态</small></span></button>
+            <button type="button" onClick={redoGraph} disabled={!historyAvailability.canRedo}><Icon name="redo" /><span><b>重做</b><small>重新应用被撤销的操作</small></span></button>
+            <button type="button" onClick={duplicateSelectedNodes}><Icon name="copy" /><span><b>创建副本</b><small>复制当前选中的节点和内部连线</small></span></button>
             <button type="button" onClick={organizeNodes}><Icon name="tools" /><span><b>自动整理</b><small>按工作流阶段重新排列节点</small></span></button>
             <button type="button" onClick={() => setNodes((items) => items.map((node) => ({ ...node, selected: true })))}><Icon name="workflow" /><span><b>选择全部</b><small>选中画布上的所有节点</small></span></button>
             <button type="button" onClick={() => setGridVisible((visible) => !visible)}><Icon name="grid" /><span><b>{gridVisible ? "隐藏网格" : "显示网格"}</b><small>切换画布辅助点阵</small></span></button>
             <button type="button" className="is-danger" onClick={deleteSelectedNode}><Icon name="close" /><span><b>删除选中节点</b><small>同时移除与它关联的连线</small></span></button>
           </div>}
           {drawer === "assets" && <div className="canvas-asset-list">
-            {work.attachments.length ? work.attachments.map((attachment) => <button key={attachment.id} type="button" onClick={() => addAttachmentNode(attachment)}><span><Icon name={attachmentKind(attachment)} /></span><span><b>{attachment.name}</b><small>{attachment.type || "文件"} · {Math.max(1, Math.round(attachment.size / 1024))} KB</small></span><i>添加到画布</i></button>) : <div className="canvas-drawer-empty"><Icon name="assets" /><b>暂时没有素材</b><p>可返回首页重新创建作品并添加源文件。</p></div>}
+            <div className="canvas-asset-actions"><button type="button" onClick={() => fileInputRef.current?.click()}><Icon name="upload" />上传素材</button></div>
+            {attachments.length ? attachments.map((attachment) => <button key={attachment.id} type="button" onClick={() => addAttachmentNode(attachment)}><span><Icon name={attachmentKind(attachment)} /></span><span><b>{attachment.name}</b><small>{attachment.type || "文件"} · {Math.max(1, Math.round(attachment.size / 1024))} KB</small></span><i>添加到画布</i></button>) : <div className="canvas-drawer-empty"><Icon name="assets" /><b>暂时没有素材</b><p>可在这里上传文本、图片、音频或视频。</p></div>}
           </div>}
           {drawer === "characters" && <div className="canvas-character-list">
             {CHARACTER_PRESETS.map((character, index) => <button key={character.id} type="button" onClick={() => addWorkflowNode("text", { title: character.name, assetName: `角色 ${index + 1}` })}><span className="canvas-character-avatar">{character.name.slice(0, 1)}</span><span><b>{character.name}</b><small>{character.detail}</small></span><i>＋</i></button>)}
@@ -724,9 +1268,34 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
         </aside>
       )}
 
+      {contextMenu && (
+        <div className="canvas-node-context-menu" style={{ left: contextMenu.x, top: contextMenu.y }} role="menu" aria-label="节点操作">
+          <button type="button" role="menuitem" onClick={() => { setEditingNodeId(contextMenu.nodeId); setContextMenu(null); }}><Icon name="text" />编辑详情</button>
+          <button type="button" role="menuitem" onClick={() => { duplicateSelectedNodes(); setContextMenu(null); }}><Icon name="copy" />创建副本</button>
+          <button type="button" role="menuitem" onClick={() => askAgentForNode(contextMenu.nodeId)}><Icon name="sparkle" />让 Agent 处理</button>
+          <span />
+          <button type="button" role="menuitem" className="is-danger" onClick={() => { deleteSelectedNode(); setContextMenu(null); }}><Icon name="close" />删除节点</button>
+        </div>
+      )}
+
+      {editingNode && (
+        <div className="canvas-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditingNodeId(null); }}>
+          <section className="canvas-modal canvas-node-editor" role="dialog" aria-modal="true" aria-label="编辑节点">
+            <header><div><small>{editingNode.data.eyebrow}</small><strong>编辑节点</strong></div><button type="button" onClick={() => setEditingNodeId(null)} aria-label="关闭"><Icon name="close" /></button></header>
+            <div className="canvas-node-editor-body">
+              <label><span>标题</span><input value={editingNode.data.title} onChange={(event) => updateNodeData(editingNode.id, { title: event.target.value })} /></label>
+              <label><span>说明</span><textarea value={editingNode.data.description} onChange={(event) => updateNodeData(editingNode.id, { description: event.target.value })} /></label>
+              <label><span>关联资产</span><input value={editingNode.data.assetName ?? ""} placeholder="可选" onChange={(event) => updateNodeData(editingNode.id, { assetName: event.target.value || undefined })} /></label>
+              <label><span>状态</span><select value={editingNode.data.status} onChange={(event) => updateNodeData(editingNode.id, { status: event.target.value as WorkflowNodeStatus })}><option value="idle">待处理</option><option value="ready">可执行</option><option value="running">执行中</option><option value="done">已完成</option><option value="failed">失败</option></select></label>
+            </div>
+            <footer><button type="button" onClick={() => setEditingNodeId(null)}>完成</button></footer>
+          </section>
+        </div>
+      )}
+
       {panelOpen && (
         <aside className="canvas-agent-panel">
-          <header className="canvas-agent-panel-header"><div><small>CREATION AGENT</small><strong>{LINE_LABELS[work.line]}助手</strong></div><span className={gateway && gateway.mode !== "demo" ? "agent-status-dot is-live" : "agent-status-dot"} title={gateway?.label ?? "正在检测 Agent"} /><button type="button" onClick={() => setPanelOpen(false)} aria-label="关闭 Agent 面板"><Icon name="close" /></button></header>
+          <header className="canvas-agent-panel-header"><div><small>{LINE_LABELS[work.line]} · CREATION AGENT</small><strong>新对话</strong></div><span className={gateway && gateway.mode !== "demo" ? "agent-status-dot is-live" : "agent-status-dot"} title={gateway?.label ?? "正在检测 Agent"} /><nav aria-label="对话操作"><button type="button" onClick={() => { setPrompt(""); setActiveJob(null); setPanelTab("skills"); }} aria-label="新建对话" title="新建对话"><Icon name="add" /></button><button type="button" onClick={() => setPanelTab("history")} aria-label="历史对话" title="历史对话"><Icon name="history" /></button><button type="button" onClick={() => setOverlay("share")} aria-label="分享" title="分享"><Icon name="share" /></button><button type="button" onClick={() => setPanelTab("settings")} aria-label="Agent 设置" title="Agent 设置"><Icon name="tools" /></button></nav><button type="button" onClick={() => setPanelOpen(false)} aria-label="关闭 Agent 面板"><Icon name="close" /></button></header>
           <nav className="canvas-agent-tabs" role="tablist" aria-label="Agent 面板">
             <button type="button" role="tab" aria-selected={panelTab === "skills"} className={panelTab === "skills" ? "is-active" : ""} onClick={() => setPanelTab("skills")}>建议 Skill</button>
             <button type="button" role="tab" aria-selected={panelTab === "history"} className={panelTab === "history" ? "is-active" : ""} onClick={() => setPanelTab("history")}>历史{runHistory.length > 0 && <b>{runHistory.length}</b>}</button>
@@ -734,8 +1303,8 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
           </nav>
           <div className="canvas-agent-panel-body">
             {panelTab === "skills" && <section className="canvas-skill-suggestions">
-              <div className="canvas-agent-context"><small>当前作品</small><strong>{workName || "unnamed"}</strong><p>{work.attachments.length ? `已关联 ${work.attachments.length} 个源文件` : "从文字需求开始创作"}</p></div>
-              <h3><Icon name="sparkle" />下一步建议</h3>
+              <div className="canvas-agent-context"><small>当前作品</small><strong>{workName || "unnamed"}</strong><p>{attachments.length ? `已关联 ${attachments.length} 个源文件` : "从文字需求开始创作"}</p></div>
+              <h3><Icon name="sparkle" />Skill 全开，故事走起</h3>
               {suggestedSkills.map((skill) => <button key={skill.id} type="button" className={activeSkill === skill.id ? "is-active" : ""} onClick={() => useSuggestedSkill(skill)}><span><b>{skill.title}</b><small>{skill.description}</small></span><i>使用</i></button>)}
             </section>}
             {panelTab === "history" && <section className="canvas-run-history">
@@ -747,6 +1316,7 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
               <label><span><b>附带画布上下文</b><small>发送节点数和连线信息，帮助 Agent 理解当前进度</small></span><input type="checkbox" checked={includeCanvasContext} onChange={(event) => setIncludeCanvasContext(event.target.checked)} /></label>
               <label><span><b>自动查看最新任务</b><small>提交后自动切换到历史与实时输出</small></span><input type="checkbox" checked={followLatestRun} onChange={(event) => setFollowLatestRun(event.target.checked)} /></label>
               <div className="canvas-agent-security"><b>{gateway?.mode === "local" ? "本地桥接已隔离" : "密钥只保存在服务端"}</b><p>{gateway?.mode === "local" ? "任务只在授权后发送到受控作品目录。" : "浏览器不会接触模型 API Key。"}</p></div>
+              <button type="button" className="canvas-clear-data-button" onClick={() => setOverlay("clear-data")}><Icon name="close" /><span><b>清除本机作品数据</b><small>删除当前作品、画布快照和本机素材</small></span></button>
             </section>}
           </div>
         </aside>
@@ -767,19 +1337,40 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
         />
         <footer>
           <button type="button" className="canvas-composer-asset" title="选择素材" onClick={() => openDrawer("assets")}><Icon name="assets" /></button>
-          <span>{gateway?.label ?? "正在检测本地 Agent…"}</span>
+          <button type="button" className={composerMenu === "model" ? "canvas-composer-config is-active" : "canvas-composer-config"} aria-label="选择模型" title="选择模型" aria-expanded={composerMenu === "model"} onClick={() => setComposerMenu((current) => current === "model" ? null : "model")}><Icon name="image" /><span>{selectedModel?.name ?? "选择模型"}</span></button>
+          <button type="button" className="canvas-composer-config" aria-label="Skill" title="Skill" onClick={() => { setPanelOpen(true); setPanelTab("skills"); setComposerMenu(null); }}><Icon name="sparkle" /><span>Skill</span></button>
+          <button type="button" className={composerMenu === "mode" ? "canvas-composer-config is-active" : "canvas-composer-config"} aria-label="生成模式" title="生成模式" aria-expanded={composerMenu === "mode"} onClick={() => setComposerMenu((current) => current === "mode" ? null : "mode")}><Icon name="move" /><span>{creationConfig.generationMode === "auto" ? "自动" : "手动"}</span></button>
+          <span className="canvas-gateway-label">{gateway?.label ?? "正在检测本地 Agent…"}</span>
           {activeSkill && <button type="button" className="canvas-active-skill" onClick={() => { setActiveSkill(null); setPrompt(""); }}>Skill · {suggestedSkills.find((skill) => skill.id === activeSkill)?.title}<i>×</i></button>}
           <span className="canvas-composer-spacer" />
           <small>Enter 发送 · Shift+Enter 换行</small>
           <button type="button" className="canvas-composer-send" disabled={!gateway || !prompt.trim() || submitting} onClick={() => void submit()} aria-label="发送 Agent 指令">{submitting ? <span className="canvas-submit-spinner">•••</span> : <Icon name="send" />}</button>
         </footer>
+        {composerMenu === "model" && <div className="canvas-composer-popover canvas-model-picker" role="dialog" aria-label="选择模型">
+          <header><strong>选择模型</strong><button type="button" onClick={() => setComposerMenu(null)} aria-label="关闭"><Icon name="close" /></button></header>
+          <nav role="tablist" aria-label="模型类型">{(["text", "image", "video", "audio"] as const).map((modality) => <button key={modality} type="button" role="tab" aria-selected={modelModality === modality} className={modelModality === modality ? "is-active" : ""} onClick={() => setModelModality(modality)}>{modality === "text" ? "文本" : modality === "image" ? "图片" : modality === "video" ? "视频" : "音频"}</button>)}</nav>
+          <div>{MODEL_GROUPS[modelModality].map((model) => <button key={model.id} type="button" className={creationConfig.model.modelId === model.id ? "is-selected" : ""} onClick={() => {
+            setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.id } }));
+            setModelModality(model.modality);
+            setComposerMenu(null);
+            setNotice(`已选择 ${model.name}`);
+          }}><span><b>{model.name}</b><small>{model.provider} · {model.description}</small></span>{model.recommended && <i>推荐</i>}</button>)}</div>
+        </div>}
+        {composerMenu === "mode" && <div className="canvas-composer-popover canvas-mode-picker" role="dialog" aria-label="生成模式">
+          <header><strong>生成模式</strong><button type="button" onClick={() => setComposerMenu(null)} aria-label="关闭"><Icon name="close" /></button></header>
+          <button type="button" aria-pressed={creationConfig.generationMode === "manual"} className={creationConfig.generationMode === "manual" ? "is-selected" : ""} onClick={() => { setCreationConfig((current) => ({ ...current, generationMode: "manual" })); setComposerMenu(null); }}><span><b>手动模式</b><small>Agent 在每次生成前询问</small></span><i>{creationConfig.generationMode === "manual" ? "✓" : ""}</i></button>
+          <button type="button" aria-pressed={creationConfig.generationMode === "auto"} className={creationConfig.generationMode === "auto" ? "is-selected" : ""} onClick={() => { setCreationConfig((current) => ({ ...current, generationMode: "auto" })); setComposerMenu(null); }}><span><b>自动模式</b><small>Agent 按工作流连续推进</small></span><i>{creationConfig.generationMode === "auto" ? "✓" : ""}</i></button>
+        </div>}
       </section>
 
       {overlay && (
         <div className="canvas-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setOverlay(null); }}>
-          <section className={`canvas-modal canvas-modal-${overlay}`} role="dialog" aria-modal="true" aria-label={overlay === "shortcuts" ? "快捷键" : "画布教程"}>
-            <header><div><small>CANVAS GUIDE</small><strong>{overlay === "shortcuts" ? "快捷键" : "快速上手"}</strong></div><button type="button" onClick={() => setOverlay(null)} aria-label="关闭"><Icon name="close" /></button></header>
-            {overlay === "shortcuts" ? <div className="canvas-shortcut-list"><span><kbd>A</kbd><b>打开添加节点</b></span><span><kbd>V</kbd><b>选择工具</b></span><span><kbd>H</kbd><b>移动画布</b></span><span><kbd>G</kbd><b>显示或隐藏网格</b></span><span><kbd>?</kbd><b>查看快捷键</b></span><span><kbd>Esc</kbd><b>关闭弹层</b></span></div> : <ol className="canvas-tutorial-list"><li><i>1</i><span><b>选择或添加节点</b><small>从左侧添加文本、图片、音频等工作流节点。</small></span></li><li><i>2</i><span><b>连接并整理流程</b><small>拖动节点连接点建立依赖，再用底部整理按钮排列。</small></span></li><li><i>3</i><span><b>让 Agent 执行</b><small>选择右侧建议 Skill，或在底部直接输入下一步任务。</small></span></li></ol>}
+          <section className={`canvas-modal canvas-modal-${overlay}`} role="dialog" aria-modal="true" aria-label={overlay === "shortcuts" ? "快捷键" : overlay === "tutorial" ? "画布教程" : overlay === "share" ? "发布与分享" : "清除本机作品数据"}>
+            <header><div><small>{overlay === "share" ? "CANVAS" : overlay === "clear-data" ? "LOCAL DATA" : "CANVAS GUIDE"}</small><strong>{overlay === "shortcuts" ? "快捷键" : overlay === "tutorial" ? "快速上手" : overlay === "share" ? "发布与分享" : "清除本机作品数据"}</strong></div><button type="button" onClick={() => setOverlay(null)} aria-label="关闭"><Icon name="close" /></button></header>
+            {overlay === "shortcuts" ? <div className="canvas-shortcut-list"><span><kbd>⌘ Z</kbd><b>撤销</b></span><span><kbd>⇧⌘ Z</kbd><b>重做</b></span><span><kbd>⌘ C</kbd><b>复制节点</b></span><span><kbd>⌘ V</kbd><b>粘贴节点</b></span><span><kbd>⌘ D</kbd><b>创建副本</b></span><span><kbd>⌫</kbd><b>删除节点</b></span><span><kbd>A</kbd><b>打开添加节点</b></span><span><kbd>V</kbd><b>选择工具</b></span><span><kbd>H</kbd><b>移动画布</b></span><span><kbd>G</kbd><b>切换网格吸附</b></span><span><kbd>?</kbd><b>查看快捷键</b></span><span><kbd>Esc</kbd><b>关闭弹层</b></span></div> : overlay === "tutorial" ? <ol className="canvas-tutorial-list"><li><i>1</i><span><b>选择或添加节点</b><small>从左侧添加文本、图片、音频等工作流节点。</small></span></li><li><i>2</i><span><b>连接并整理流程</b><small>拖动节点连接点建立依赖，再用底部整理按钮排列。</small></span></li><li><i>3</i><span><b>让 Agent 执行</b><small>选择右侧建议 Skill，或在底部直接输入下一步任务。</small></span></li></ol> : overlay === "share" ? <div className="canvas-share-actions">
+              <button type="button" onClick={() => void copyShareLink()}><span><Icon name="share" /></span><span><b>复制分享链接</b><small>使用当前稳定画布 URL；云端同步后可跨设备恢复。</small></span></button>
+              <button type="button" onClick={exportCanvasDocument}><span><Icon name="download" /></span><span><b>导出画布 JSON</b><small>下载节点、连线、视图与 Agent 运行记录的便携副本。</small></span></button>
+            </div> : <div className="canvas-clear-data-body"><p>将从这台设备删除当前作品记录、画布快照和关联的本机素材。登录、主题、收藏、其他作品及云端项目不会受影响。</p><div><button type="button" onClick={() => setOverlay(null)}>取消</button><button type="button" className="is-danger" onClick={() => onClearLocalData(attachments.map((attachment) => attachment.id))}>清除本地数据</button></div></div>}
           </section>
         </div>
       )}

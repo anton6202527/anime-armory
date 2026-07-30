@@ -1,0 +1,1416 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 attack_three",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:instant impact；P002:flashback；P003:decision；P004:speed；P005:compression；P006:third beat",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "bleed",
+          "gutter_intent": "instant impact",
+          "camera_hint": "全宽大格。冷青灰山林中，成年华南虎从右上岩坡扑下；武松在左下翻身避开，虎爪与衣角形成对角线。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P001_S1",
+              "type": "sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 137,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 88,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "吼——！"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 424,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "flashback",
+          "camera_hint": "暖赭酒肆。粗陶碗前景，店家伸手拦酒，武松侧目。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P002_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "店家",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "店家"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 467,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 185,
+                "y": 434,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 434,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 668,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "decision",
+          "camera_hint": "武松放下铜钱、提棒出门；门外暮色山路斜向上。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "武松",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "武松"
+              }
+            },
+            {
+              "balloon_id": "P003_S1",
+              "type": "sfx",
+              "content_ref": "panel:P003.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 711,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 678,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 678,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "笃"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 912,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "bleed",
+          "gutter_intent": "speed",
+          "camera_hint": "虎腹掠过近景，武松仰身滑过爪下；断枝和落叶标出轨迹。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P004_S1",
+              "type": "sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 977,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 928,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 928,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "呼——"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1264,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "compression",
+          "camera_hint": "虎以前掌横掀，武松贴地侧滚，哨棒横护胸前。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P005_S1",
+              "type": "sfx",
+              "content_ref": "panel:P005.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1307,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 1274,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 1274,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "唰！"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1508,
+            "w": 1188,
+            "h": 220
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "third beat",
+          "camera_hint": "虎尾如鞭扫断细枝；武松后跃，脚跟踩上湿石。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P006_S1",
+              "type": "sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1552,
+                "w": 712,
+                "h": 154
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 185,
+                "y": 1519,
+                "w": 475,
+                "h": 73
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 1519,
+                "w": 475,
+                "h": 73
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "啪——！"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "attack_three"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 climax",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:held breath；P008:counter；P009:shock；P010:commit；P011:grapple；P012:climax",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "strip",
+          "border_style": "standard",
+          "gutter_intent": "held breath",
+          "camera_hint": "极窄近景对切：武松眼睛与虎眼，中间留一道黑色树干。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P007_S1",
+              "type": "sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 129,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 86,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "呼……"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 384,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "counter",
+          "camera_hint": "武松双手举棒，自上而下猛劈；虎压低前身。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P008.dialogue:1",
+              "speaker": "武松",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "武松"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 422,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 393,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 601,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "burst",
+          "gutter_intent": "shock",
+          "camera_hint": "全宽冲击格。哨棒砸中枯树中央断裂，木屑飞散；虎从画面下方重新逼近。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P009_S1",
+              "type": "sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 658,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 615,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "喀嚓！"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 913,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "commit",
+          "camera_hint": "断棒落地近景；武松沉肩张手，虎影覆盖他半身。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P010_N1",
+              "type": "narration",
+              "content_ref": "panel:P010.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P010_S1",
+              "type": "sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 951,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.narration",
+              "rect": {
+                "x": 185,
+                "y": 922,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 922,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "当"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1130,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "bleed",
+          "gutter_intent": "grapple",
+          "camera_hint": "武松左手揪颈背皮毛、右臂压头，膝与脚形成三角支点；虎前爪抓地。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P011_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "武松",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "武松"
+              }
+            },
+            {
+              "balloon_id": "P011_S1",
+              "type": "sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1187,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1144,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1144,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "轰"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1442,
+            "w": 1296,
+            "h": 286
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width_tall",
+          "border_style": "bleed",
+          "gutter_intent": "climax",
+          "camera_hint": "最大竖格。俯斜视角，武松一拳落下，尘土与松针向外震开；虎势已衰，远山留白。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P012_S1",
+              "type": "sfx",
+              "content_ref": "panel:P012.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            },
+            {
+              "balloon_id": "P012_S2",
+              "type": "sfx",
+              "content_ref": "panel:P012.sfx:2",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1499,
+                "w": 777,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.sfx:2",
+              "rect": {
+                "x": 784,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "咚！；咚！"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "climax"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P016 theme_handoff",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P016",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016"
+        ]
+      },
+      "gutter_intent": "P013:release；P014:public acclaim；P015:status seal；P016:new promise",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 315
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "release",
+          "camera_hint": "武松倚树喘息，断棒在脚边；三名猎户持叉停在远处，目光越过他看向伏虎。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P013_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "猎户",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "猎户"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 135,
+                "w": 712,
+                "h": 220
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 87,
+                "w": 475,
+                "h": 105
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 414,
+            "w": 1296,
+            "h": 472
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width_tall",
+          "border_style": "standard",
+          "gutter_intent": "public acclaim",
+          "camera_hint": "长纵景。猎户和乡民抬虎下冈，武松被簇拥在队伍中央；山路蜿蜒进入暖色县城方向。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_N1",
+              "type": "narration",
+              "content_ref": "panel:P014.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P014_S1",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 508,
+                "w": 777,
+                "h": 330
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.narration",
+              "rect": {
+                "x": 136,
+                "y": 437,
+                "w": 518,
+                "h": 157
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 437,
+                "w": 518,
+                "h": 157
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "打虎英雄！"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 913,
+            "w": 1188,
+            "h": 315
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "status seal",
+          "camera_hint": "朱砂点色的县衙告示与都头腰牌近景；武松双手接牌，围观者虚化。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P015_S1",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 976,
+                "w": 712,
+                "h": 220
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 185,
+                "y": 928,
+                "w": 475,
+                "h": 105
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 928,
+                "w": 475,
+                "h": 105
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "锵"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1255,
+            "w": 1296,
+            "h": 473
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width_tall",
+          "border_style": "bleed",
+          "gutter_intent": "new promise",
+          "camera_hint": "超长收束格。锣鼓声化为清河县叫卖声；武大挑炊饼担穿过暖赭街巷，画面上方武大家门帘微动，成年潘金莲只露克制侧影与注视街面的眼神。街角一抹华服背影作为未来欲望网络的非具名伏笔。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P016_S1",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1349,
+                "w": 777,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 1278,
+                "w": 518,
+                "h": 157
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1278,
+                "w": 518,
+                "h": 157
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "炊饼——"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P016",
+          "story_function": "theme_handoff"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "panel_script_sha256": "e85117482c137aa1c649069ede249078671fcdea331a98491ff5fbfc42e3a596",
+    "settings": "_设置.md",
+    "settings_sha256": "fea6ac6c98a05549bd797ae115663aea6e950693336680667f15979b02ec95b1",
+    "settings_geometry_sha256": "1ff70387ddd9007fed9216b7e5180bcabfbaba6233a74eef7a6d0cc8f2aa96fa"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "用户",
+    "reviewed_at": "2026-07-30T04:06:20.318293+00:00",
+    "note": "",
+    "subject_sha256": "def992f11ff82be72f2c2680cf8ab23d68f14b8fa9d219b5cfde0cb50bc1935c",
+    "panel_script_sha256": "e85117482c137aa1c649069ede249078671fcdea331a98491ff5fbfc42e3a596",
+    "settings_sha256": "fea6ac6c98a05549bd797ae115663aea6e950693336680667f15979b02ec95b1",
+    "settings_geometry_sha256": "1ff70387ddd9007fed9216b7e5180bcabfbaba6233a74eef7a6d0cc8f2aa96fa"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

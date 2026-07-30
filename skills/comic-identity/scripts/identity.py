@@ -2412,7 +2412,16 @@ def report(args: argparse.Namespace) -> int:
     registry_assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     # 2026-07-17 实证修正：一致性审计不再只看 CHAR_。第1话 P015 虎妖被画成四足普通虎，
     # 就是因为 MON_ 不进视图完整性/model-pack/rerun 审计，registry 有定妆也没人核对出图。
-    char_ids = sorted(rid for rid in refs_seen | set(registry_assets.keys()) if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")))
+    char_ids = sorted(
+        rid
+        for rid in refs_seen | set(registry_assets.keys())
+        if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_"))
+        and not (
+            isinstance(registry_assets.get(rid), dict)
+            and registry_assets[rid].get("model_pack_required") is False
+            and rid not in refs_seen
+        )
+    )
     missing_character_views: dict[str, list[str]] = {}
     character_views: dict[str, dict[str, str]] = {}
     for rid in char_ids:

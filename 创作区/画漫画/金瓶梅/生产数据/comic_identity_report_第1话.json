@@ -1,0 +1,1082 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_report",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/金瓶梅",
+  "chapter": "第1话",
+  "created_at": "2026-07-30T20:12:38",
+  "write_back": true,
+  "job_reference_paths_updated": 0,
+  "summary": {
+    "reference_count": 11,
+    "panel_count": 16,
+    "missing_ref_count": 0,
+    "rerun_target_count": 0,
+    "outfit_gap_count": 0
+  },
+  "outfit_gaps": {},
+  "registry_validation": {
+    "kind": "comic_identity_registry_validation",
+    "schema_version": 2,
+    "valid": true,
+    "summary": {
+      "assets": 12,
+      "identity_assets": 5,
+      "characters": 4,
+      "monsters": 1,
+      "block": 0,
+      "warn": 0
+    },
+    "issues": []
+  },
+  "model_pack_reports": {
+    "CHAR_PANJINLIAN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_PANJINLIAN",
+      "asset_type": "character",
+      "tier": "core_full",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "side",
+        "back",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+          "sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+            "source_sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+          "sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+            "source_sha256": "4030e16183367283e512593441b7d50efc629b14f34e0742248c3a986f8e901e",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+          "sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "side",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+            "source_sha256": "7048ac79088f6ba551b8cb7767bc07a884a9268c5ae9d78c163e231b5bb9d033",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+          "sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "back",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+            "source_sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
+          "sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_PANJINLIAN__face.png",
+            "source_sha256": "33b794b1dbfa3dcc4335632144f7fbb29697aeac4207db8890f262fba3cb5c2d",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "d7ac4214fe5eba611f6a39f6f347bef62c97a1d0217f587c81bb5e24d5eecdb2",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_PANJINLIAN.json",
+        "status": "current",
+        "approved_at": "2026-07-29T12:54:33+00:00",
+        "reviewer": "用户"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        }
+      ]
+    },
+    "CHAR_WUDA": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WUDA",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUDA__front.png",
+            "source_sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+            "source_sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "sha256": "6d94ea46e0c7fd59a2313558b63df7e42f66062801ed5cad54a42227dda9088f",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUDA__face.png",
+            "source_sha256": "6d94ea46e0c7fd59a2313558b63df7e42f66062801ed5cad54a42227dda9088f",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "c979c826dbddfa2aa27f33071ef74bd52bc45c7a0652959d74ba8f9c2185d5cf",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WUDA.json",
+        "status": "current",
+        "approved_at": "2026-07-30T02:40:58+00:00",
+        "reviewer": "用户"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        }
+      ]
+    },
+    "CHAR_WUSONG": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WUSONG",
+      "asset_type": "character",
+      "tier": "core_full",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "side",
+        "back",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__front.png",
+            "source_sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+            "source_sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "side",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__side.png",
+            "source_sha256": "3140debb9e1389e479b18c376e33ca1f6e8c425bc1fec85e24c7f40c73654ad6",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "back",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__back.png",
+            "source_sha256": "803ba8ce8564dd5a0b3ce00141a80b7003e9de3165a09d87f98be5a4c426eb48",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUSONG__face.png",
+            "source_sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "b53fc3aed667be7fc965ddf1bc8b24325bd9dfb9315f2acf620d819f3da5a20e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WUSONG.json",
+        "status": "current",
+        "approved_at": "2026-07-29T12:54:33+00:00",
+        "reviewer": "用户"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        },
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔back 低分辨率色彩代理差异较大 (0.582)；请并排人审，不能据此自动判定换人",
+          "metric": 0.582031
+        }
+      ]
+    },
+    "MON_TIGER": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_TIGER",
+      "asset_type": "monster",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+          "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "07e3b1053507b7fff1c407dc1ee3abcc91239278f3429854aec2ede2bd3f1518",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_TIGER.json",
+        "status": "current",
+        "approved_at": "2026-07-30T02:40:59+00:00",
+        "reviewer": "用户"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "three_quarter",
+          "message": "three_quarter 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "face",
+          "message": "face 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔three_quarter 低分辨率色彩代理差异较大 (0.691)；请并排人审，不能据此自动判定换人",
+          "metric": 0.691406
+        }
+      ]
+    }
+  },
+  "model_pack_gaps": {},
+  "missing_refs": {},
+  "required_character_views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "tier_required_views": {
+    "core_full": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ],
+    "recurring_standard": [
+      "front",
+      "three_quarter",
+      "face"
+    ],
+    "named_minimal": [
+      "front",
+      "face"
+    ],
+    "restricted_partial": [
+      "front"
+    ]
+  },
+  "character_views": {
+    "CHAR_PANJINLIAN": {
+      "front": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_PANJINLIAN__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_PANJINLIAN__side.png",
+      "back": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+      "face": "出图/共享/图片/CHAR_PANJINLIAN__face.png"
+    },
+    "CHAR_WUDA": {
+      "front": "出图/共享/图片/CHAR_WUDA__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+      "face": "出图/共享/图片/CHAR_WUDA__face.png"
+    },
+    "CHAR_WUSONG": {
+      "front": "出图/共享/图片/CHAR_WUSONG__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_WUSONG__side.png",
+      "back": "出图/共享/图片/CHAR_WUSONG__back.png",
+      "face": "出图/共享/图片/CHAR_WUSONG__face.png"
+    },
+    "MON_TIGER": {
+      "front": "出图/共享/图片/MON_TIGER__front.png",
+      "three_quarter": "出图/共享/图片/MON_TIGER__three_quarter.png",
+      "face": "出图/共享/图片/MON_TIGER__face.png"
+    }
+  },
+  "missing_character_views": {},
+  "rerun_targets": [],
+  "panels": [
+    {
+      "panel_id": "P001",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+          "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f"
+        },
+        {
+          "id": "STYLE_JINPINGMEI_MING_URBAN",
+          "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+          "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P002",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "STYLE_JINPINGMEI_MING_URBAN",
+          "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+          "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70"
+        },
+        {
+          "id": "LOC_ROADSIDE_INN",
+          "path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+          "sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P003",
+      "status": "planned",
+      "valid_reference_count": 4,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "LOC_ROADSIDE_INN",
+          "path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+          "sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P004",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P005",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P006",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P007",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P008",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+          "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f"
+        },
+        {
+          "id": "PROP_WUSONG_STAFF",
+          "path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+          "sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P009",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+          "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f"
+        },
+        {
+          "id": "PROP_WUSONG_STAFF",
+          "path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+          "sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P010",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P011",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P012",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "STYLE_JINPINGMEI_MING_URBAN",
+          "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+          "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P013",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P014",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27"
+        },
+        {
+          "id": "STYLE_JINPINGMEI_MING_URBAN",
+          "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+          "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70"
+        },
+        {
+          "id": "LOC_JINGYANG_RIDGE",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P015",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "sha256": "78da5da406a8641cfd105affd0d63d60d66aeeaa84576628d00a8d05b062a8b3"
+        },
+        {
+          "id": "PROP_CONSTABLE_BADGE",
+          "path": "出图/共享/图片/PROP_CONSTABLE_BADGE__anchor.png",
+          "sha256": "927451e739450ac0aac229c8296571eaa126dcf2a4d3500fbb1bf9138d6b993d"
+        },
+        {
+          "id": "LOC_YANGGU_YAMEN",
+          "path": "出图/共享/图片/LOC_YANGGU_YAMEN__anchor.png",
+          "sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "sha256": "6610f81e1841ee97c1cc08f6314b02f931b515ce5166efd1ce92d9b211388ddb"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "sha256": "c2d7ef59659918083545b51640786371e5104347201ee66f5bc683a15af71216"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P016",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "sha256": "2dd1305f42be25aae4a007f6de1cece9198b30c3397c0901fa367a2ec59e2ded"
+        },
+        {
+          "id": "CHAR_PANJINLIAN",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__front.png",
+          "sha256": "636d35f9656259d355835ea3260cfe2a818472f85bac320f8c66debc7314cc5f"
+        },
+        {
+          "id": "CHAR_PANJINLIAN",
+          "path": "出图/共享/图片/CHAR_PANJINLIAN__back.png",
+          "sha256": "5fdf13694fff65c4f33a8d4905bd475a73711e9bae1935c21ece160d5e0753fc"
+        },
+        {
+          "id": "LOC_QINGHE_MARKET",
+          "path": "出图/共享/图片/LOC_QINGHE_MARKET__anchor.png",
+          "sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e"
+        },
+        {
+          "id": "STYLE_JINPINGMEI_MING_URBAN",
+          "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
+          "sha256": "629b08a59d2d0ff573d7bf742f272b3611e58bfb305db4f1d842118ad4644c70"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    }
+  ]
+}

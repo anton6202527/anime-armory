@@ -5,7 +5,7 @@
 - production_mode: 混合自动路由 (av_mode=hybrid)
 - default_backend: seedance
 - execution_adapter_v2: {'automated_ready': 8}
-- generated_at: 2026-07-29T12:33:23+00:00
+- generated_at: 2026-07-30T02:17:16+00:00
 
 ## 本集模型路由表
 
@@ -32,7 +32,7 @@
 - quality_tier: high
 - execution_adapter_v2: state=automated_ready adapter=dreamina_cli_v2 automated=True
 - identity: character_id_or_reference_group
-- frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=False)
+- frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=True)
 - motion_control: required (manifest=出视频/第3集/control/Clip_01/motion_control_manifest.json)
 - motion_control_required_inputs: pose_sequence, depth_sequence, instance_masks
 - execution_recipe: execution=dreamina; frames=native_multiframe anchors=1; refs_max=0; control_manifest=出视频/第3集/control/Clip_01/motion_control_manifest.json
@@ -138,7 +138,7 @@
 - quality_tier: high
 - execution_adapter_v2: state=automated_ready adapter=dreamina_cli_v2 automated=True
 - identity: character_id_or_reference_group
-- frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=False)
+- frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=True)
 - motion_control: required (manifest=出视频/第3集/control/Clip_05/motion_control_manifest.json)
 - motion_control_required_inputs: pose_sequence, depth_sequence, instance_masks
 - execution_recipe: execution=dreamina; frames=native_multiframe anchors=1; refs_max=0; control_manifest=出视频/第3集/control/Clip_05/motion_control_manifest.json

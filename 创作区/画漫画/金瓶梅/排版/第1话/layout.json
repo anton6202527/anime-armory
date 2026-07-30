@@ -1,0 +1,1636 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第1话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 6196,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "bleed",
+          "gutter_intent": "instant impact",
+          "bubble_first": "none",
+          "effects_hint": "吼——！",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 attack_three",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "attack_three"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 236,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001S1",
+              "type": "sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P002",
+          "x": 126,
+          "y": 1096,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "flashback",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 attack_three",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "attack_three"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1278,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 185,
+                "y": 1138,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 1138,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1144,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B002D2",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "店家",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "店家"
+              },
+              "x": 652,
+              "y": 1144,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 2044,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "decision",
+          "bubble_first": "top",
+          "effects_hint": "笃",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 attack_three",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "attack_three"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2226,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2086,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 2086,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B003D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "武松",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "武松"
+              },
+              "x": 174,
+              "y": 2092,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B003S2",
+              "type": "sfx",
+              "content_ref": "panel:P003.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2766,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 72,
+          "y": 2992,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "bleed",
+          "gutter_intent": "speed",
+          "bubble_first": "top",
+          "effects_hint": "呼——",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 attack_three",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "attack_three"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3216,
+                "w": 777,
+                "h": 782
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 3047,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 3047,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 3040,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B004S2",
+              "type": "sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3914,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P005",
+          "x": 126,
+          "y": 4140,
+          "w": 1188,
+          "h": 1000,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "compression",
+          "bubble_first": "top",
+          "effects_hint": "唰！",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 attack_three",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "attack_three"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4338,
+                "w": 712,
+                "h": 695
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 4186,
+                "w": 475,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 4186,
+                "w": 475,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4188,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B005S2",
+              "type": "sfx",
+              "content_ref": "panel:P005.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4942,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 5168,
+          "w": 1188,
+          "h": 1000,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "third beat",
+          "bubble_first": "top",
+          "effects_hint": "啪——！",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 attack_three",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "attack_three"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5368,
+                "w": 712,
+                "h": 700
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 185,
+                "y": 5218,
+                "w": 475,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 5218,
+                "w": 475,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 5216,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B006S2",
+              "type": "sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5970,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 6024,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 840,
+          "layout_weight": "heavy",
+          "panel_shape": "strip",
+          "border_style": "standard",
+          "gutter_intent": "held breath",
+          "bubble_first": "none",
+          "effects_hint": "呼……",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 climax",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "climax"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 196,
+                "w": 777,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 69,
+                "w": 518,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B007S1",
+              "type": "sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 672,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P008",
+          "x": 126,
+          "y": 924,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "counter",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 climax",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "climax"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1092,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 963,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B008D1",
+              "type": "dialogue",
+              "content_ref": "panel:P008.dialogue:1",
+              "speaker": "武松",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "武松"
+              },
+              "x": 172,
+              "y": 970,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 72,
+          "y": 1792,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "burst",
+          "gutter_intent": "shock",
+          "bubble_first": "none",
+          "effects_hint": "喀嚓！",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 climax",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "climax"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2000,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1843,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009S1",
+              "type": "sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2634,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 126,
+          "y": 2860,
+          "w": 1188,
+          "h": 1000,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "commit",
+          "bubble_first": "top",
+          "effects_hint": "当",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 climax",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "climax"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3060,
+                "w": 712,
+                "h": 700
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.narration",
+              "rect": {
+                "x": 185,
+                "y": 2907,
+                "w": 475,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 2907,
+                "w": 475,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B010N1",
+              "type": "narration",
+              "content_ref": "panel:P010.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 2908,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B010S2",
+              "type": "sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3662,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 72,
+          "y": 3888,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "bleed",
+          "gutter_intent": "grapple",
+          "bubble_first": "top",
+          "effects_hint": "轰",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 climax",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "climax"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4096,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3939,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 3939,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "武松",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "武松"
+              },
+              "x": 120,
+              "y": 3936,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B011S2",
+              "type": "sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4730,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P012",
+          "x": 72,
+          "y": 4956,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width_tall",
+          "border_style": "bleed",
+          "gutter_intent": "climax",
+          "bubble_first": "none",
+          "effects_hint": "咚！；咚！",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 climax",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "climax"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5163,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 5006,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.sfx:2",
+              "rect": {
+                "x": 784,
+                "y": 5006,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012S1",
+              "type": "sfx",
+              "content_ref": "panel:P012.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5798,
+              "w": 360,
+              "h": 150
+            },
+            {
+              "slot_id": "B012S2",
+              "type": "sfx",
+              "content_ref": "panel:P012.sfx:2",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5640,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 4376,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "release",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 theme_handoff",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "theme_handoff"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 196,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 68,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "猎户",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "猎户"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P014",
+          "x": 72,
+          "y": 896,
+          "w": 1296,
+          "h": 1197,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width_tall",
+          "border_style": "standard",
+          "gutter_intent": "public acclaim",
+          "bubble_first": "top",
+          "effects_hint": "打虎英雄！",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 theme_handoff",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "theme_handoff"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1134,
+                "w": 777,
+                "h": 836
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.narration",
+              "rect": {
+                "x": 136,
+                "y": 954,
+                "w": 518,
+                "h": 398
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 954,
+                "w": 518,
+                "h": 398
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014N1",
+              "type": "narration",
+              "content_ref": "panel:P014.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 944,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B014S2",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1895,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 126,
+          "y": 2121,
+          "w": 1188,
+          "h": 1000,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "status seal",
+          "bubble_first": "top",
+          "effects_hint": "锵",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 theme_handoff",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "theme_handoff"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2321,
+                "w": 712,
+                "h": 698
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 185,
+                "y": 2168,
+                "w": 475,
+                "h": 333
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 2168,
+                "w": 475,
+                "h": 333
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 2169,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B015S2",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2923,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 3149,
+          "w": 1296,
+          "h": 1199,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width_tall",
+          "border_style": "bleed",
+          "gutter_intent": "new promise",
+          "bubble_first": "top",
+          "effects_hint": "炊饼——",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 theme_handoff",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "theme_handoff"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3387,
+                "w": 777,
+                "h": 839
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 3207,
+                "w": 518,
+                "h": 397
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 3207,
+                "w": 518,
+                "h": 397
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 3197,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B016S2",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4150,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "panel_script_sha256": "e85117482c137aa1c649069ede249078671fcdea331a98491ff5fbfc42e3a596",
+    "name_board": "排版/第1话/name_board.json",
+    "name_board_sha256": "96e679ef94083848bde4bee23d262e8bf4d4535fe44158e1cf9e9c7e02680a54",
+    "name_approval_subject_sha256": "def992f11ff82be72f2c2680cf8ab23d68f14b8fa9d219b5cfde0cb50bc1935c",
+    "settings": "_设置.md",
+    "settings_sha256": "fea6ac6c98a05549bd797ae115663aea6e950693336680667f15979b02ec95b1",
+    "settings_geometry_sha256": "cef4ecc2ba29f4747cdfc193a1c2d6f62341d6668288e8f201a97052289d156e",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "用户",
+    "reviewed_at": "2026-07-30T04:33:41.810287+00:00",
+    "note": "",
+    "subject_sha256": "90823c1137ba12946ccc9cd37e44525f3080ee9c9f6847fd22d8999d68915676",
+    "panel_script_sha256": "e85117482c137aa1c649069ede249078671fcdea331a98491ff5fbfc42e3a596",
+    "name_board_sha256": "96e679ef94083848bde4bee23d262e8bf4d4535fe44158e1cf9e9c7e02680a54",
+    "settings_sha256": "fea6ac6c98a05549bd797ae115663aea6e950693336680667f15979b02ec95b1",
+    "settings_geometry_sha256": "cef4ecc2ba29f4747cdfc193a1c2d6f62341d6668288e8f201a97052289d156e"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

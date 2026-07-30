@@ -1,0 +1,53 @@
+{
+  "kind": "comic_redundancy_audit",
+  "version": 1,
+  "chapter": "第1话",
+  "generated_at": "2026-07-30T12:12:39+00:00",
+  "thresholds": {
+    "pair_sim_warn": 0.6,
+    "strict_sim": 0.75,
+    "narration_ratio_warn": 0.5,
+    "provenance": "internal-heuristic·confidence=low·2026-07，误报校准后再议升硬闸"
+  },
+  "summary": {
+    "panels": 16,
+    "text_rows": 13,
+    "redundant_pairs": 0,
+    "repeated_fact_phrases": 0,
+    "repeated_composition_groups": 1,
+    "narration_only_panels": 7,
+    "texty_panels": 12,
+    "narration_ratio": 0.583,
+    "block": 0,
+    "warn": 2
+  },
+  "redundant_pairs": [],
+  "repeated_fact_mentions": [],
+  "repeated_compositions": [
+    {
+      "panels": [
+        "P004",
+        "P007",
+        "P010"
+      ],
+      "scene": "LOC_JINGYANG_RIDGE",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "lens": "近景"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "narration_heavy_chapter",
+      "message": "本话 7/12 个有文本格是纯旁白（58%>50%）——信息压缩靠旁白硬转=没画面化的流水账；条漫铁律是能画不说：把交代改成画面/对白/道具特写，旁白只留画面外增量。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P004、P007、P010 计划了相同的 (场景=LOC_JINGYANG_RIDGE, 角色=CHAR_WUSONG/MON_TIGER, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    }
+  ]
+}

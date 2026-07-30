@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第1话",
+  "panel_id": "P001",
+  "created_at": "2026-07-30T20:12:39",
+  "verdict": "block",
+  "path": "出图/第1话/panels/P001.png",
+  "size": {
+    "width": 1296,
+    "height": 1040
+  },
+  "expected_size": {
+    "width": 1296,
+    "height": 1040
+  },
+  "resolution_policy": "后端最高可达",
+  "resolution_provenance": {},
+  "declared_reference_count": 5,
+  "declared_reference_binding_count": 5,
+  "reference_input_count": 5,
+  "attached_equivalent_count": 5,
+  "composite_attachment_count": 0,
+  "omitted_attachment_count": 0,
+  "omitted_attachment_ids": [],
+  "blank_region_candidates": [],
+  "large_edge_blank_band_candidates": [],
+  "issues": [
+    {
+      "severity": "block",
+      "category": "resolution_lineage",
+      "reason": "最高分辨率策略缺少独立原生 master 路径或 SHA，不能证明该格不是低分图/整话图裁切放大"
+    }
+  ],
+  "manual_review_required": true
+}

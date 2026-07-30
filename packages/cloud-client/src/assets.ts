@@ -114,7 +114,12 @@ export class AssetApiClient {
     this.endpoint = options.endpoint.replace(/\/+$/, '')
     if (!this.endpoint) throw new CloudApiError('Asset API endpoint is required', { code: 'invalid_config' })
     this.getAccessToken = options.getAccessToken
-    this.fetcher = options.fetch ?? globalThis.fetch
+    // Browser-native fetch validates its receiver. Keeping `window.fetch` as an
+    // object field and later invoking `this.fetcher(...)` otherwise supplies the
+    // AssetApiClient instance as `this`, which Chrome rejects as an illegal
+    // invocation. A caller-provided fetch is already an explicit callable;
+    // bind only the ambient implementation that we capture ourselves.
+    this.fetcher = options.fetch ?? globalThis.fetch.bind(globalThis)
     this.multipartConcurrency = Math.max(1, Math.min(options.multipartConcurrency ?? 3, 8))
     this.signedPartBatchSize = Math.max(1, Math.min(options.signedPartBatchSize ?? 50, 100))
   }

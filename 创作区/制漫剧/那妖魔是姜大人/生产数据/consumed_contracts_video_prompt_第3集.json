@@ -6,13 +6,13 @@
   "accepted": true,
   "reviewer": "Codex n2d-video prompt pack",
   "generated_by": "skills/n2d-video/scripts/prompt_pack.py",
-  "generated_at": "2026-07-29T12:43:03+00:00",
+  "generated_at": "2026-07-30T02:17:16+00:00",
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第3集/storyboard.json",
       "exists": true,
-      "sha256": "2f5b68e53a5c8f99bebb641a7ddf7890ca584fd899262272ede33f496ecde2b4"
+      "sha256": "f14b178c3de02cae4d415a836d5fbe9835307d26f70fae5ffaf9c3cc2b944a66"
     },
     {
       "name": "continuity_chain",
@@ -42,19 +42,19 @@
       "name": "reference_plan",
       "path": "生产数据/reference_plan_第3集.json",
       "exists": true,
-      "sha256": "50f52c6821b404e5aa7777184d0bb6641bdade94bab1d822d79cb6779f337906"
+      "sha256": "7661325068509827118a29708838eae3ecc353b5ef36d171989270c274e93137"
     }
   ],
   "prompt_files": [
     {
       "path": "出视频/第3集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "44dce34649d5b3da0c3427372b4dc59dadcba356e27b77d7ceace589c3cff63f"
+      "sha256": "c94896b3942664c339456059e25b13087dd5ab19dc43626a31ebd4d1b8a54838"
     },
     {
       "path": "出视频/第3集/prompt/01_clips.md",
       "exists": true,
-      "sha256": "671fd4eb563cb394d370b663a9b26b505dc8e853533a755a699a97bc56475a83"
+      "sha256": "5523c54db40ef7ad2dd84c3721af793025e308dea98afee25c94aa2524bb55af"
     }
   ]
 }

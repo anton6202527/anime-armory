@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="16756" viewBox="0 0 1440 16756">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="6196" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_001</tspan></text>
+<rect x="72" y="28" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  opening_hook</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">全宽大格。冷青灰山林中，成年华南虎从右上岩坡扑下；武松在左下翻身避开，虎爪与衣角形成对角线。</tspan></text>
+<text x="100" y="908" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：吼——！</tspan></text>
+<rect x="540" y="870" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="904" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B001S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="1096" width="1188" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="1144" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P002  flashback_warning</tspan></text>
+<text x="154" y="1194" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">暖赭酒肆。粗陶碗前景，店家伸手拦酒，武松侧目。</tspan></text>
+<text x="154" y="1856" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：一刻前。 | 店家：三碗不过冈。客官，莫再饮了。</tspan></text>
+<rect x="174" y="1144" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="1178" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B002N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="652" y="1144" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="668" y="1178" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="668" dy="0">B002D2</tspan><tspan x="668" dy="27">dialogue</tspan></text>
+<rect x="126" y="2044" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="2092" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P003  choice</tspan></text>
+<text x="154" y="2142" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">武松放下铜钱、提棒出门；门外暮色山路斜向上。</tspan></text>
+<text x="154" y="2804" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">武松：酒钱照付，冈也照过。 | SFX：笃</tspan></text>
+<rect x="174" y="2092" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="2126" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B003D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="2766" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2800" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B003S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="2992" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3040" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P004  return_to_attack</tspan></text>
+<text x="100" y="3090" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">虎腹掠过近景，武松仰身滑过爪下；断枝和落叶标出轨迹。</tspan></text>
+<text x="100" y="3952" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：一扑。 | SFX：呼——</tspan></text>
+<rect x="120" y="3040" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="3074" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B004N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="3914" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="3948" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B004S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="4140" width="1188" height="1000" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="4188" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P005  attack_two</tspan></text>
+<text x="154" y="4238" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">虎以前掌横掀，武松贴地侧滚，哨棒横护胸前。</tspan></text>
+<text x="154" y="4980" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：一掀。 | SFX：唰！</tspan></text>
+<rect x="174" y="4188" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="4222" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B005N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="540" y="4942" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="4976" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B005S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="5168" width="1188" height="1000" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="5216" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P006  attack_three</tspan></text>
+<text x="154" y="5266" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">虎尾如鞭扫断细枝；武松后跃，脚跟踩上湿石。</tspan></text>
+<text x="154" y="6008" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：一剪。 | SFX：啪——！</tspan></text>
+<rect x="174" y="5216" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="5250" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B006N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="540" y="5970" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6004" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B006S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="6276" width="1440" height="6024" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="6320" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_002</tspan></text>
+<rect x="72" y="6304" width="1296" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6352" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  breath</tspan></text>
+<text x="100" y="6402" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">极窄近景对切：武松眼睛与虎眼，中间留一道黑色树干。</tspan></text>
+<text x="100" y="6984" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：呼……</tspan></text>
+<rect x="540" y="6948" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6982" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="7200" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="7248" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P008  counterattack</tspan></text>
+<text x="154" y="7298" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">武松双手举棒，自上而下猛劈；虎压低前身。</tspan></text>
+<text x="154" y="7880" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">武松：着！</tspan></text>
+<rect x="172" y="7246" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="7280" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B008D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="8068" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="8116" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P009  reversal</tspan></text>
+<text x="100" y="8166" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">全宽冲击格。哨棒砸中枯树中央断裂，木屑飞散；虎从画面下方重新逼近。</tspan></text>
+<text x="100" y="8948" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：喀嚓！</tspan></text>
+<rect x="540" y="8910" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="8944" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B009S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="9136" width="1188" height="1000" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="9184" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P010  commitment</tspan></text>
+<text x="154" y="9234" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">断棒落地近景；武松沉肩张手，虎影覆盖他半身。</tspan></text>
+<text x="154" y="9976" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：退无可退。 | SFX：当</tspan></text>
+<rect x="174" y="9184" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="9218" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B010N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="540" y="9938" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="9972" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B010S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="10164" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10212" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  grapple</tspan></text>
+<text x="100" y="10262" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">武松左手揪颈背皮毛、右臂压头，膝与脚形成三角支点；虎前爪抓地。</tspan></text>
+<text x="100" y="11044" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">武松：喝！ | SFX：轰</tspan></text>
+<rect x="120" y="10212" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="10246" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B011D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="11006" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="11040" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B011S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="11232" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11280" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  climax</tspan></text>
+<text x="100" y="11330" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">最大竖格。俯斜视角，武松一拳落下，尘土与松针向外震开；虎势已衰，远山留白。</tspan></text>
+<text x="100" y="12112" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：咚！ / 咚！</tspan></text>
+<rect x="540" y="12074" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="12108" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="11916" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="11950" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="12380" width="1440" height="4376" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="12424" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_003</tspan></text>
+<rect x="126" y="12408" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="12456" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P013  aftermath</tspan></text>
+<text x="154" y="12506" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">武松倚树喘息，断棒在脚边；三名猎户持叉停在远处，目光越过他看向伏虎。</tspan></text>
+<text x="154" y="13088" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">猎户：真……真是你一人打死的？</tspan></text>
+<rect x="172" y="12454" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="12488" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B013D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="13276" width="1296" height="1197" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13324" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  public_payoff</tspan></text>
+<text x="100" y="13374" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">长纵景。猎户和乡民抬虎下冈，武松被簇拥在队伍中央；山路蜿蜒进入暖色县城方向。</tspan></text>
+<text x="100" y="14313" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：众人拥他下冈。 | SFX：打虎英雄！</tspan></text>
+<rect x="120" y="13324" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="13358" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B014N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="14275" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="14309" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B014S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="14501" width="1188" height="1000" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="14549" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P015  status_change</tspan></text>
+<text x="154" y="14599" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">朱砂点色的县衙告示与都头腰牌近景；武松双手接牌，围观者虚化。</tspan></text>
+<text x="154" y="15341" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：阳谷知县：任武松为都头。 | SFX：锵</tspan></text>
+<rect x="174" y="14549" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="14583" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B015N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="540" y="15303" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="15337" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="15529" width="1296" height="1199" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="15577" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P016  theme_handoff</tspan></text>
+<text x="100" y="15627" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">超长收束格。锣鼓声化为清河县叫卖声；武大挑炊饼担穿过暖赭街巷，画面上方武大家门帘微动，成年潘金莲只露克制侧影与注视街面的眼神。街角一抹华服背影作为未来欲望网络的非具名伏笔。</tspan></text>
+<text x="100" y="16568" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：虎死冈上，欲入人间。 | SFX：炊饼——</tspan></text>
+<rect x="120" y="15577" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="15611" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B016N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="16530" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="16564" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B016S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+</svg>

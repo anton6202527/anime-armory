@@ -6,7 +6,7 @@
   "status": "confirmed",
   "chapter_contract": {
     "path": "脚本/split_blueprint.json",
-    "chapter_contract_sha256": "9eb8cc9562c7dd1d787a7a2198c9243044cb637113db1def18419ee2cc5d0417",
+    "chapter_contract_sha256": "8f37ec72021aebf7617ec42cd93327521b2ecf0bc77dd3905bce66b1dc4d705a",
     "status": "confirmed"
   },
   "source_semantics": {
@@ -14,25 +14,1026 @@
     "requires_normalization": true,
     "source_language": "zh-Hans",
     "target_text_language": "zh-Hans",
-    "target_text_metadata": {"lang": "zh-Hans", "dir": "ltr", "script": "Hans", "line_break": "manual"},
+    "target_text_metadata": {
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "manual"
+    },
     "status": "pass"
   },
   "panels": [
-    {"panel_id":"P001","story_function":"opening_hook","source_excerpt":"《金瓶梅》第一回相关源文工作摘录；猛虎从树后扑出。","meaning_zh":"先用猛虎扑击建立即时危险。","text_target":"吼——！","adaptation_note":"冷开场后回闪；S001仅作来源标识。","description":"全宽大格。冷青灰山林中，成年华南虎从右上岩坡扑下；武松在左下翻身避开，虎爪与衣角形成对角线。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S001","S003"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"","sfx":["吼——！"],"art_notes":"3:4母版；最大动作格；不见血。","layout_weight":"heavy","panel_shape":"full_width","border_style":"bleed","gutter_intent":"instant impact","references":["STYLE_JINPINGMEI_MING_URBAN","LOC_JINGYANG_RIDGE"]},
-    {"panel_id":"P002","story_function":"flashback_warning","source_excerpt":"店家以‘三碗不过冈’相劝。","meaning_zh":"店家明确警告酒烈与虎患。","text_target":"三碗不过冈。客官，莫再饮了。","adaptation_note":"回闪压缩警示。","description":"暖赭酒肆。粗陶碗前景，店家伸手拦酒，武松侧目。","characters":["CHAR_WUSONG"],"character_bindings":["CHAR_WUSONG"],"source_segment_refs":["S002"],"location":"LOC_ROADSIDE_INN","dialogue":[{"speaker":"店家","text":"三碗不过冈。客官，莫再饮了。"}],"narration":"一刻前。","sfx":[],"art_notes":"碗与手清楚；留顶部旁白区。","layout_weight":"medium","panel_shape":"wide","border_style":"standard","gutter_intent":"flashback","references":["STYLE_JINPINGMEI_MING_URBAN"]},
-    {"panel_id":"P003","story_function":"choice","source_excerpt":"武松疑其留客图利，执意独自上冈。","meaning_zh":"武松主动选择过冈。","text_target":"酒钱照付，冈也照过。","adaptation_note":"保留主动选择因果。","description":"武松放下铜钱、提棒出门；门外暮色山路斜向上。","characters":["CHAR_WUSONG"],"character_bindings":["CHAR_WUSONG"],"source_segment_refs":["S002"],"location":"LOC_ROADSIDE_INN","dialogue":[{"speaker":"武松","text":"酒钱照付，冈也照过。"}],"narration":"","sfx":["笃"],"art_notes":"面部坚决而非醉态滑稽。","layout_weight":"medium","panel_shape":"tall","border_style":"standard","gutter_intent":"decision","references":["CHAR_WUSONG"]},
-    {"panel_id":"P004","story_function":"return_to_attack","source_excerpt":"大虫从树后扑出，武松闪过。","meaning_zh":"回到冷开场，武松完成第一次闪避。","text_target":"呼——","adaptation_note":"与P001连续。","description":"虎腹掠过近景，武松仰身滑过爪下；断枝和落叶标出轨迹。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S003"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"一扑。","sfx":["呼——"],"art_notes":"肢体解剖清楚，禁止多余肢体。","layout_weight":"heavy","panel_shape":"tall","border_style":"bleed","gutter_intent":"speed","references":["CHAR_WUSONG","MON_TIGER"]},
-    {"panel_id":"P005","story_function":"attack_two","source_excerpt":"那虎再掀，武松闪过。","meaning_zh":"猛虎第二势以前爪掀击。","text_target":"唰！","adaptation_note":"保持原动作顺序。","description":"虎以前掌横掀，武松贴地侧滚，哨棒横护胸前。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S003"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"一掀。","sfx":["唰！"],"art_notes":"横向运动线与纵向阅读方向相抗，制造窒息。","layout_weight":"medium","panel_shape":"wide","border_style":"standard","gutter_intent":"compression","references":["CHAR_WUSONG","MON_TIGER"]},
-    {"panel_id":"P006","story_function":"attack_three","source_excerpt":"虎尾倒竖一剪，武松接连闪过。","meaning_zh":"猛虎第三势以尾扫完成连击。","text_target":"啪——！","adaptation_note":"保持原动作顺序。","description":"虎尾如鞭扫断细枝；武松后跃，脚跟踩上湿石。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S003"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"一剪。","sfx":["啪——！"],"art_notes":"尾部运动逻辑清楚。","layout_weight":"medium","panel_shape":"wide","border_style":"standard","gutter_intent":"third beat","references":["MON_TIGER"]},
-    {"panel_id":"P007","story_function":"breath","source_excerpt":"武松接连闪过。","meaning_zh":"三势后人虎短暂对峙。","text_target":"呼……呼……","adaptation_note":"从源动作自然拆出的呼吸格。","description":"极窄近景对切：武松眼睛与虎眼，中间留一道黑色树干。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S003"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"","sfx":["呼……"],"art_notes":"眼神一致；左眉缺口可见。","layout_weight":"light","panel_shape":"strip","border_style":"standard","gutter_intent":"held breath","references":["CHAR_WUSONG","MON_TIGER"]},
-    {"panel_id":"P008","story_function":"counterattack","source_excerpt":"武松举哨棒劈打。","meaning_zh":"武松抓住虎势已尽的空档反击。","text_target":"着！","adaptation_note":"进入反击。","description":"武松双手举棒，自上而下猛劈；虎压低前身。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S004"],"location":"LOC_JINGYANG_RIDGE","dialogue":[{"speaker":"武松","text":"着！"}],"narration":"","sfx":[],"art_notes":"哨棒长度和握位统一。","layout_weight":"medium","panel_shape":"tall","border_style":"standard","gutter_intent":"counter","references":["CHAR_WUSONG","PROP_WUSONG_STAFF"]},
-    {"panel_id":"P009","story_function":"reversal","source_excerpt":"误中枯树，哨棒折作两截。","meaning_zh":"武器意外折断，胜算骤降。","text_target":"喀嚓！","adaptation_note":"本话关键转折，必须清晰可读。","description":"全宽冲击格。哨棒砸中枯树中央断裂，木屑飞散；虎从画面下方重新逼近。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S004"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"","sfx":["喀嚓！"],"art_notes":"断点唯一且可追踪，下一格不再出现完整哨棒。","layout_weight":"heavy","panel_shape":"full_width","border_style":"burst","gutter_intent":"shock","references":["PROP_WUSONG_STAFF"]},
-    {"panel_id":"P010","story_function":"commitment","source_excerpt":"危急间，他丢开断棒。","meaning_zh":"失去武器后，武松决定贴身迎战。","text_target":"退无可退。","adaptation_note":"内心句是对可见选择的简短提炼。","description":"断棒落地近景；武松沉肩张手，虎影覆盖他半身。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S004"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"退无可退。","sfx":["当"],"art_notes":"双手五指清楚。","layout_weight":"medium","panel_shape":"tall","border_style":"standard","gutter_intent":"commit","references":["CHAR_WUSONG"]},
-    {"panel_id":"P011","story_function":"grapple","source_excerpt":"揪住大虫顶花皮，以脚压住。","meaning_zh":"武松控制虎头并以身体重量压制。","text_target":"喝！","adaptation_note":"以可信摔跤受力表现，不做超能力。","description":"武松左手揪颈背皮毛、右臂压头，膝与脚形成三角支点；虎前爪抓地。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S004"],"location":"LOC_JINGYANG_RIDGE","dialogue":[{"speaker":"武松","text":"喝！"}],"narration":"","sfx":["轰"],"art_notes":"避免错误骑乘姿势，受力点清楚。","layout_weight":"heavy","panel_shape":"tall","border_style":"bleed","gutter_intent":"grapple","references":["CHAR_WUSONG","MON_TIGER"]},
-    {"panel_id":"P012","story_function":"climax","source_excerpt":"以拳猛打，直至大虫伏地不动。","meaning_zh":"赤手伏虎完成动作高潮。","text_target":"咚！咚！","adaptation_note":"用尘土与拳势表达，不画血肉。","description":"最大竖格。俯斜视角，武松一拳落下，尘土与松针向外震开；虎势已衰，远山留白。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S004"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"","sfx":["咚！","咚！"],"art_notes":"不见血；拳头、虎头比例稳定。","layout_weight":"heavy","panel_shape":"full_width_tall","border_style":"bleed","gutter_intent":"climax","references":["CHAR_WUSONG","MON_TIGER","STYLE_JINPINGMEI_MING_URBAN"]},
-    {"panel_id":"P013","story_function":"aftermath","source_excerpt":"猎户赶到，起初不信一人能打死猛虎。","meaning_zh":"猎户到场，个人战斗进入公共见证。","text_target":"真……真是你一人打死的？","adaptation_note":"保留由怀疑到确认。","description":"武松倚树喘息，断棒在脚边；三名猎户持叉停在远处，目光越过他看向伏虎。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S005"],"location":"LOC_JINGYANG_RIDGE","dialogue":[{"speaker":"猎户","text":"真……真是你一人打死的？"}],"narration":"","sfx":[],"art_notes":"群像简洁，避免猎户抢脸。","layout_weight":"medium","panel_shape":"wide","border_style":"standard","gutter_intent":"release","references":["CHAR_WUSONG","MON_TIGER"]},
-    {"panel_id":"P014","story_function":"public_payoff","source_excerpt":"亲见死虎后，众人拥武松下冈。","meaning_zh":"打虎者身份获得公共确认。","text_target":"打虎英雄！","adaptation_note":"兑现public_reputation状态变化。","description":"长纵景。猎户和乡民抬虎下冈，武松被簇拥在队伍中央；山路蜿蜒进入暖色县城方向。","characters":["CHAR_WUSONG","MON_TIGER"],"character_bindings":["CHAR_WUSONG","MON_TIGER"],"source_segment_refs":["S005"],"location":"LOC_JINGYANG_RIDGE","dialogue":[],"narration":"众人拥他下冈。","sfx":["打虎英雄！"],"art_notes":"虎体不血腥；用散点长卷组织队伍。","layout_weight":"heavy","panel_shape":"full_width_tall","border_style":"standard","gutter_intent":"public acclaim","references":["PRIMARY_001","STYLE_JINPINGMEI_MING_URBAN"]},
-    {"panel_id":"P015","story_function":"status_change","source_excerpt":"知县赏识其勇力，赏赐并任其为都头。","meaning_zh":"武松由旅人获得县衙武职身份。","text_target":"任武松为都头。","adaptation_note":"以告示、腰牌和手部特写压缩县衙段。","description":"朱砂点色的县衙告示与都头腰牌近景；武松双手接牌，围观者虚化。","characters":["CHAR_WUSONG"],"character_bindings":["CHAR_WUSONG"],"source_segment_refs":["S005"],"location":"LOC_YANGGU_YAMEN","dialogue":[],"narration":"阳谷知县：任武松为都头。","sfx":["锵"],"art_notes":"文字后期嵌入，画面只留告示安全区。","layout_weight":"medium","panel_shape":"wide","border_style":"standard","gutter_intent":"status seal","references":["CHAR_WUSONG","PROP_CONSTABLE_BADGE"]},
-    {"panel_id":"P016","story_function":"theme_handoff","source_excerpt":"叙事随后转入武大家事；制作说明要求回看DOCX源本。","meaning_zh":"打虎闭合后转入武家，开启人欲暗虎主线。","text_target":"虎死冈上，欲入人间。","adaptation_note":"不新增事件的原创主题桥；S007仅作制作约束覆盖。","adaptation_origin":"original_bridge","description":"超长收束格。锣鼓声化为清河县叫卖声；武大挑炊饼担穿过暖赭街巷，画面上方武大家门帘微动，成年潘金莲只露克制侧影与注视街面的眼神。街角一抹华服背影作为未来欲望网络的非具名伏笔。","characters":["CHAR_WUDA","CHAR_PANJINLIAN"],"character_bindings":["CHAR_WUDA","CHAR_PANJINLIAN"],"source_segment_refs":["S006","S007"],"location":"LOC_QINGHE_MARKET","dialogue":[],"narration":"虎死冈上，欲入人间。","sfx":["炊饼——"],"art_notes":"不性感凝视；门帘、招幌、人流做纵向层次；底部留黑转场。","layout_weight":"heavy","panel_shape":"full_width_tall","border_style":"bleed","gutter_intent":"new promise","references":["CHAR_WUDA","CHAR_PANJINLIAN","LOC_QINGHE_MARKET","STYLE_JINPINGMEI_MING_URBAN"]}
-  ]
+    {
+      "panel_id": "P001",
+      "story_function": "opening_hook",
+      "source_excerpt": "《金瓶梅》第一回相关源文工作摘录；猛虎从树后扑出。",
+      "meaning_zh": "先用猛虎扑击建立即时危险。",
+      "text_target": "吼——！",
+      "adaptation_note": "冷开场后回闪；S001仅作来源标识。",
+      "description": "全宽大格。冷青灰山林中，成年华南虎从右上岩坡扑下；武松在左下翻身避开，虎爪与衣角形成对角线。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S001",
+        "S003"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "吼——！"
+      ],
+      "art_notes": "3:4母版；最大动作格；不见血。",
+      "layout_weight": "heavy",
+      "panel_shape": "full_width",
+      "border_style": "bleed",
+      "gutter_intent": "instant impact",
+      "references": [
+        "STYLE_JINPINGMEI_MING_URBAN",
+        "LOC_JINGYANG_RIDGE",
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看猛虎前爪落点；猛虎盯武松躯干",
+      "eyeline_direction": "武松画右上，猛虎画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "none",
+      "spatial_relationships": "武松在左下前景翻身，猛虎自右上扑下，虎爪与衣角是唯一近接触点。"
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "flashback_warning",
+      "source_excerpt": "店家以‘三碗不过冈’相劝。",
+      "meaning_zh": "店家明确警告酒烈与虎患。",
+      "text_target": "三碗不过冈。客官，莫再饮了。",
+      "adaptation_note": "回闪压缩警示。",
+      "description": "暖赭酒肆。粗陶碗前景，店家伸手拦酒，武松侧目。",
+      "characters": [
+        "CHAR_WUSONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S002"
+      ],
+      "location": "LOC_ROADSIDE_INN",
+      "dialogue": [
+        {
+          "speaker": "店家",
+          "text": "三碗不过冈。客官，莫再饮了。"
+        }
+      ],
+      "narration": "一刻前。",
+      "sfx": [],
+      "art_notes": "碗与手清楚；留顶部旁白区。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "flashback",
+      "references": [
+        "STYLE_JINPINGMEI_MING_URBAN",
+        "LOC_ROADSIDE_INN",
+        "CHAR_WUSONG"
+      ],
+      "scene_anchor_id": "LOC_ROADSIDE_INN",
+      "spatial_layout": "酒肆入口在画面右后方通向上冈山路，木桌与粗陶碗在画面左前景，柜台在左后方。",
+      "lighting_anchor": "室内暖赭灯火由画面左上照入，门外暮色为冷青灰反差。",
+      "axis_eyeline": "店家位于画左看画右的武松；武松离店时由画左向右后方门口运动。",
+      "gaze_target": "武松看店家拦酒的手",
+      "eyeline_direction": "武松画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P001",
+      "spatial_relationships": "粗陶碗在左前景，店家手从画左伸入，武松在画右中景。"
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "choice",
+      "source_excerpt": "武松疑其留客图利，执意独自上冈。",
+      "meaning_zh": "武松主动选择过冈。",
+      "text_target": "酒钱照付，冈也照过。",
+      "adaptation_note": "保留主动选择因果。",
+      "description": "武松放下铜钱、提棒出门；门外暮色山路斜向上。",
+      "characters": [
+        "CHAR_WUSONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S002"
+      ],
+      "location": "LOC_ROADSIDE_INN",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "酒钱照付，冈也照过。"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "笃"
+      ],
+      "art_notes": "面部坚决而非醉态滑稽。",
+      "layout_weight": "medium",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "decision",
+      "references": [
+        "CHAR_WUSONG",
+        "LOC_ROADSIDE_INN"
+      ],
+      "scene_anchor_id": "LOC_ROADSIDE_INN",
+      "spatial_layout": "酒肆入口在画面右后方通向上冈山路，木桌与粗陶碗在画面左前景，柜台在左后方。",
+      "lighting_anchor": "室内暖赭灯火由画面左上照入，门外暮色为冷青灰反差。",
+      "axis_eyeline": "店家位于画左看画右的武松；武松离店时由画左向右后方门口运动。",
+      "gaze_target": "武松看门外上冈山路",
+      "eyeline_direction": "画右上",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P002",
+      "spatial_relationships": "铜钱与桌沿在左前景，武松由中景走向右后方门口。"
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "return_to_attack",
+      "source_excerpt": "大虫从树后扑出，武松闪过。",
+      "meaning_zh": "回到冷开场，武松完成第一次闪避。",
+      "text_target": "呼——",
+      "adaptation_note": "与P001连续。",
+      "description": "虎腹掠过近景，武松仰身滑过爪下；断枝和落叶标出轨迹。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S003"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "一扑。",
+      "sfx": [
+        "呼——"
+      ],
+      "art_notes": "肢体解剖清楚，禁止多余肢体。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "bleed",
+      "gutter_intent": "speed",
+      "references": [
+        "CHAR_WUSONG",
+        "MON_TIGER",
+        "LOC_JINGYANG_RIDGE"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看掠过头顶的虎腹与前爪；猛虎盯武松落点",
+      "eyeline_direction": "武松画右上，猛虎画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P003",
+      "spatial_relationships": "虎腹占上方近景，武松在下方滑过，断枝沿对角线飞散。"
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "attack_two",
+      "source_excerpt": "那虎再掀，武松闪过。",
+      "meaning_zh": "猛虎第二势以前爪掀击。",
+      "text_target": "唰！",
+      "adaptation_note": "保持原动作顺序。",
+      "description": "虎以前掌横掀，武松贴地侧滚，哨棒横护胸前。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S003"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "一掀。",
+      "sfx": [
+        "唰！"
+      ],
+      "art_notes": "横向运动线与纵向阅读方向相抗，制造窒息。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "compression",
+      "references": [
+        "CHAR_WUSONG",
+        "MON_TIGER",
+        "LOC_JINGYANG_RIDGE"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看横掀虎掌；猛虎盯武松胸前",
+      "eyeline_direction": "武松画右上，猛虎画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P004",
+      "spatial_relationships": "猛虎在画右中景横掀，武松在画左下贴地侧滚，哨棒横护胸前。"
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "attack_three",
+      "source_excerpt": "虎尾倒竖一剪，武松接连闪过。",
+      "meaning_zh": "猛虎第三势以尾扫完成连击。",
+      "text_target": "啪——！",
+      "adaptation_note": "保持原动作顺序。",
+      "description": "虎尾如鞭扫断细枝；武松后跃，脚跟踩上湿石。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S003"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "一剪。",
+      "sfx": [
+        "啪——！"
+      ],
+      "art_notes": "尾部运动逻辑清楚。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "third beat",
+      "references": [
+        "MON_TIGER",
+        "LOC_JINGYANG_RIDGE",
+        "CHAR_WUSONG"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看扫来的虎尾；猛虎回看武松后跃落点",
+      "eyeline_direction": "武松画右，猛虎回看画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P005",
+      "spatial_relationships": "虎尾自画右扫向画左，武松向右后跃，右脚跟落在湿石。"
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "breath",
+      "source_excerpt": "武松接连闪过。",
+      "meaning_zh": "三势后人虎短暂对峙。",
+      "text_target": "呼……呼……",
+      "adaptation_note": "从源动作自然拆出的呼吸格。",
+      "description": "极窄近景对切：武松眼睛与虎眼，中间留一道黑色树干。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S003"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "呼……"
+      ],
+      "art_notes": "眼神一致；左眉缺口可见。",
+      "layout_weight": "light",
+      "panel_shape": "strip",
+      "border_style": "standard",
+      "gutter_intent": "held breath",
+      "references": [
+        "CHAR_WUSONG",
+        "MON_TIGER",
+        "LOC_JINGYANG_RIDGE"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松与猛虎隔树互相对视",
+      "eyeline_direction": "武松画右，猛虎画左",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P006",
+      "spatial_relationships": "武松眼在画左、虎眼在画右，中间黑树干分隔。"
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "counterattack",
+      "source_excerpt": "武松举哨棒劈打。",
+      "meaning_zh": "武松抓住虎势已尽的空档反击。",
+      "text_target": "着！",
+      "adaptation_note": "进入反击。",
+      "description": "武松双手举棒，自上而下猛劈；虎压低前身。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S004"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "着！"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "哨棒长度和握位统一。",
+      "layout_weight": "medium",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "counter",
+      "references": [
+        "CHAR_WUSONG",
+        "PROP_WUSONG_STAFF",
+        "LOC_JINGYANG_RIDGE",
+        "MON_TIGER"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看哨棒将落的虎头；猛虎盯武松双手",
+      "eyeline_direction": "武松向画面下方，猛虎向画面上方",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P007",
+      "spatial_relationships": "武松在上方举棒，猛虎在下方压身；双手—哨棒—虎头构成垂直动作链。"
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "reversal",
+      "source_excerpt": "误中枯树，哨棒折作两截。",
+      "meaning_zh": "武器意外折断，胜算骤降。",
+      "text_target": "喀嚓！",
+      "adaptation_note": "本话关键转折，必须清晰可读。",
+      "description": "全宽冲击格。哨棒砸中枯树中央断裂，木屑飞散；虎从画面下方重新逼近。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S004"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "喀嚓！"
+      ],
+      "art_notes": "断点唯一且可追踪，下一格不再出现完整哨棒。",
+      "layout_weight": "heavy",
+      "panel_shape": "full_width",
+      "border_style": "burst",
+      "gutter_intent": "shock",
+      "references": [
+        "PROP_WUSONG_STAFF",
+        "LOC_JINGYANG_RIDGE",
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看哨棒击中枯树的断点；猛虎盯武松空档",
+      "eyeline_direction": "武松画右中，猛虎画左上",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P008",
+      "spatial_relationships": "枯树居中，哨棒断点唯一；武松在画左，猛虎从下方逼近。"
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "commitment",
+      "source_excerpt": "危急间，他丢开断棒。",
+      "meaning_zh": "失去武器后，武松决定贴身迎战。",
+      "text_target": "退无可退。",
+      "adaptation_note": "内心句是对可见选择的简短提炼。",
+      "description": "断棒落地近景；武松沉肩张手，虎影覆盖他半身。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S004"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "退无可退。",
+      "sfx": [
+        "当"
+      ],
+      "art_notes": "双手五指清楚。",
+      "layout_weight": "medium",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "commit",
+      "references": [
+        "CHAR_WUSONG",
+        "LOC_JINGYANG_RIDGE",
+        "MON_TIGER"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看逼近的猛虎眼睛；猛虎盯武松张开的双手",
+      "eyeline_direction": "武松画右上，猛虎画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P009",
+      "spatial_relationships": "断棒在左下前景，武松居中沉肩张手，猛虎影从右上覆盖半身。"
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "grapple",
+      "source_excerpt": "揪住大虫顶花皮，以脚压住。",
+      "meaning_zh": "武松控制虎头并以身体重量压制。",
+      "text_target": "喝！",
+      "adaptation_note": "以可信摔跤受力表现，不做超能力。",
+      "description": "武松左手揪颈背皮毛、右臂压头，膝与脚形成三角支点；虎前爪抓地。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S004"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "喝！"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "轰"
+      ],
+      "art_notes": "避免错误骑乘姿势，受力点清楚。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "bleed",
+      "gutter_intent": "grapple",
+      "references": [
+        "CHAR_WUSONG",
+        "MON_TIGER",
+        "LOC_JINGYANG_RIDGE"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看虎头压制点；猛虎看前爪抓地位置",
+      "eyeline_direction": "武松向画面下方，猛虎向地面",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P010",
+      "spatial_relationships": "武松在虎背左上方，左手揪颈背、右臂压头，膝脚与虎前爪接地关系清楚。"
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "climax",
+      "source_excerpt": "以拳猛打，直至大虫伏地不动。",
+      "meaning_zh": "赤手伏虎完成动作高潮。",
+      "text_target": "咚！咚！",
+      "adaptation_note": "用尘土与拳势表达，不画血肉。",
+      "description": "最大竖格。俯斜视角，武松一拳落下，尘土与松针向外震开；虎势已衰，远山留白。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S004"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "咚！",
+        "咚！"
+      ],
+      "art_notes": "不见血；拳头、虎头比例稳定。",
+      "layout_weight": "heavy",
+      "panel_shape": "full_width_tall",
+      "border_style": "bleed",
+      "gutter_intent": "climax",
+      "references": [
+        "CHAR_WUSONG",
+        "MON_TIGER",
+        "STYLE_JINPINGMEI_MING_URBAN",
+        "LOC_JINGYANG_RIDGE"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看拳头落点；猛虎视线低垂",
+      "eyeline_direction": "武松向画面下方，猛虎低垂",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P011",
+      "spatial_relationships": "武松位于上方俯压，拳头落点居中，猛虎伏于下方，尘土向外扩散。"
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "aftermath",
+      "source_excerpt": "猎户赶到，起初不信一人能打死猛虎。",
+      "meaning_zh": "猎户到场，个人战斗进入公共见证。",
+      "text_target": "真……真是你一人打死的？",
+      "adaptation_note": "保留由怀疑到确认。",
+      "description": "武松倚树喘息，断棒在脚边；三名猎户持叉停在远处，目光越过他看向伏虎。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S005"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [
+        {
+          "speaker": "猎户",
+          "text": "真……真是你一人打死的？"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "群像简洁，避免猎户抢脸。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "release",
+      "references": [
+        "CHAR_WUSONG",
+        "MON_TIGER",
+        "LOC_JINGYANG_RIDGE"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看远处猎户；猛虎伏地无主动视线",
+      "eyeline_direction": "武松画右后方",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P012",
+      "spatial_relationships": "武松倚树在左中景，伏虎与断棒在前景，三名猎户在右后景。"
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "public_payoff",
+      "source_excerpt": "亲见死虎后，众人拥武松下冈。",
+      "meaning_zh": "打虎者身份获得公共确认。",
+      "text_target": "打虎英雄！",
+      "adaptation_note": "兑现public_reputation状态变化。",
+      "description": "长纵景。猎户和乡民抬虎下冈，武松被簇拥在队伍中央；山路蜿蜒进入暖色县城方向。",
+      "characters": [
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S005"
+      ],
+      "location": "LOC_JINGYANG_RIDGE",
+      "dialogue": [],
+      "narration": "众人拥他下冈。",
+      "sfx": [
+        "打虎英雄！"
+      ],
+      "art_notes": "虎体不血腥；用散点长卷组织队伍。",
+      "layout_weight": "heavy",
+      "panel_shape": "full_width_tall",
+      "border_style": "standard",
+      "gutter_intent": "public acclaim",
+      "references": [
+        "PRIMARY_001",
+        "STYLE_JINPINGMEI_MING_URBAN",
+        "LOC_JINGYANG_RIDGE",
+        "CHAR_WUSONG",
+        "MON_TIGER"
+      ],
+      "scene_anchor_id": "LOC_JINGYANG_RIDGE",
+      "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+      "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+      "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+      "gaze_target": "武松看下冈方向；猛虎伏于抬架",
+      "eyeline_direction": "画面下方山路",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P013",
+      "spatial_relationships": "抬虎队伍沿山路纵深向下，武松在队伍中央，县城暖色位于远景。"
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "status_change",
+      "source_excerpt": "知县赏识其勇力，赏赐并任其为都头。",
+      "meaning_zh": "武松由旅人获得县衙武职身份。",
+      "text_target": "任武松为都头。",
+      "adaptation_note": "以告示、腰牌和手部特写压缩县衙段。",
+      "description": "朱砂点色的县衙告示与都头腰牌近景；武松双手接牌，围观者虚化。",
+      "characters": [
+        "CHAR_WUSONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUSONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S005"
+      ],
+      "location": "LOC_YANGGU_YAMEN",
+      "dialogue": [],
+      "narration": "阳谷知县：任武松为都头。",
+      "sfx": [
+        "锵"
+      ],
+      "art_notes": "文字后期嵌入，画面只留告示安全区。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "status seal",
+      "references": [
+        "CHAR_WUSONG",
+        "PROP_CONSTABLE_BADGE",
+        "LOC_YANGGU_YAMEN"
+      ],
+      "scene_anchor_id": "LOC_YANGGU_YAMEN",
+      "spatial_layout": "朱砂告示居画面上方，授牌手部居中，围观者虚化在后景，县衙木构只作轮廓。",
+      "lighting_anchor": "正午暖中性天光从画面左上照入，朱砂为唯一高饱和点。",
+      "axis_eyeline": "授予者在画右外，武松在画左下双手接牌；视线聚焦腰牌。",
+      "gaze_target": "武松看双手所接都头腰牌",
+      "eyeline_direction": "画面中央下方",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P014",
+      "spatial_relationships": "武松双手在画面下中接牌，腰牌居中，告示在上方，授予者只露画右手臂。"
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "theme_handoff",
+      "source_excerpt": "叙事随后转入武大家事；制作说明要求回看DOCX源本。",
+      "meaning_zh": "打虎闭合后转入武家，开启人欲暗虎主线。",
+      "text_target": "虎死冈上，欲入人间。",
+      "adaptation_note": "不新增事件的原创主题桥；S007仅作制作约束覆盖。",
+      "adaptation_origin": "original_bridge",
+      "description": "超长收束格。锣鼓声化为清河县叫卖声；武大挑炊饼担穿过暖赭街巷，画面上方武大家门帘微动，成年潘金莲只露克制侧影与注视街面的眼神。街角一抹华服背影作为未来欲望网络的非具名伏笔。",
+      "characters": [
+        "CHAR_WUDA",
+        "CHAR_PANJINLIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WUDA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_PANJINLIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S006",
+        "S007"
+      ],
+      "location": "LOC_QINGHE_MARKET",
+      "dialogue": [],
+      "narration": "虎死冈上，欲入人间。",
+      "sfx": [
+        "炊饼——"
+      ],
+      "art_notes": "不性感凝视；门帘、招幌、人流做纵向层次；底部留黑转场。",
+      "layout_weight": "heavy",
+      "panel_shape": "full_width_tall",
+      "border_style": "bleed",
+      "gutter_intent": "new promise",
+      "references": [
+        "CHAR_WUDA",
+        "CHAR_PANJINLIAN",
+        "LOC_QINGHE_MARKET",
+        "STYLE_JINPINGMEI_MING_URBAN"
+      ],
+      "scene_anchor_id": "LOC_QINGHE_MARKET",
+      "spatial_layout": "纵深街巷自下向上收窄；武大沿中轴偏左挑担前行，武家门帘在画面右上，招幌和人流分列两侧。",
+      "lighting_anchor": "暖赭午后斜光从画面左上进入，檐下为柔暗，门帘后潘金莲保持克制半影。",
+      "axis_eyeline": "武大沿街巷向画面上方；潘金莲从右上门帘后看向画面左下街面。",
+      "gaze_target": "武大看前方街路；潘金莲看画面左下街面的武大",
+      "eyeline_direction": "武大画面上方，潘金莲画左下",
+      "character_integrity": "继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。",
+      "continuity_from": "P015",
+      "spatial_relationships": "武大沿中轴偏左前行，潘金莲在右上门帘后，非具名华服背影只在左下街角。"
+    }
+  ],
+  "visual_contract": {
+    "style_baseline": "明代版画构图节奏与北宋市井物质依据结合：纤细墨线、低饱和矿物色、纸绢纹理；景阳冈冷青灰，酒肆与县衙暖赭，清河街巷暖赭而密集；全话保持同一人物与猛虎身份锚。",
+    "character_integrity_policy": "所有具名角色与猛虎继承正式身份锚的脸型、眉眼、发式/头巾、服装主色、成年比例、条纹拓扑与标志缺口；动作格必须保留头脸、手脚、哨棒或接触点完整可读，不得多肢、串脸或拟人化猛虎。",
+    "scene_anchors": {
+      "LOC_JINGYANG_RIDGE": {
+        "spatial_layout": "斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。",
+        "lighting_anchor": "冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。",
+        "axis_eyeline": "人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。",
+        "resident_assets": [
+          "右上岩坡",
+          "中景枯树",
+          "前景湿石与松针"
+        ],
+        "forbidden_drift": [
+          "不得变成热带密林或雪山",
+          "不得随机镜像人虎轴线",
+          "枯树和坡石不得跨格消失"
+        ]
+      },
+      "LOC_ROADSIDE_INN": {
+        "spatial_layout": "酒肆入口在画面右后方通向上冈山路，木桌与粗陶碗在画面左前景，柜台在左后方。",
+        "lighting_anchor": "室内暖赭灯火由画面左上照入，门外暮色为冷青灰反差。",
+        "axis_eyeline": "店家位于画左看画右的武松；武松离店时由画左向右后方门口运动。",
+        "resident_assets": [
+          "木桌",
+          "粗陶碗",
+          "通往山路的门口"
+        ],
+        "forbidden_drift": [
+          "不得现代酒馆化",
+          "门口与桌位不得镜像跳变"
+        ]
+      },
+      "LOC_YANGGU_YAMEN": {
+        "spatial_layout": "朱砂告示居画面上方，授牌手部居中，围观者虚化在后景，县衙木构只作轮廓。",
+        "lighting_anchor": "正午暖中性天光从画面左上照入，朱砂为唯一高饱和点。",
+        "axis_eyeline": "授予者在画右外，武松在画左下双手接牌；视线聚焦腰牌。",
+        "resident_assets": [
+          "朱砂告示",
+          "县衙木构",
+          "授牌案面"
+        ],
+        "forbidden_drift": [
+          "不得生成可读乱码文字",
+          "不得变成宫殿或现代机关"
+        ]
+      },
+      "LOC_QINGHE_MARKET": {
+        "spatial_layout": "纵深街巷自下向上收窄；武大沿中轴偏左挑担前行，武家门帘在画面右上，招幌和人流分列两侧。",
+        "lighting_anchor": "暖赭午后斜光从画面左上进入，檐下为柔暗，门帘后潘金莲保持克制半影。",
+        "axis_eyeline": "武大沿街巷向画面上方；潘金莲从右上门帘后看向画面左下街面。",
+        "resident_assets": [
+          "武家门帘",
+          "招幌",
+          "炊饼担",
+          "纵深人流"
+        ],
+        "forbidden_drift": [
+          "不得现代商业街化",
+          "不得性感凝视潘金莲",
+          "不得把非具名华服背影画成清晰具名角色"
+        ]
+      }
+    },
+    "character_state_timeline": {
+      "CHAR_WUSONG": [
+        {
+          "from_panel": "P001",
+          "state": "行旅装与完整哨棒；P009后哨棒折断，P010起不得恢复完整"
+        },
+        {
+          "from_panel": "P013",
+          "state": "战后疲惫但无血腥重伤"
+        }
+      ],
+      "MON_TIGER": [
+        {
+          "from_panel": "P001",
+          "state": "成年华南虎，左眉缺口与条纹拓扑全程保持；P012后伏地不动"
+        }
+      ],
+      "CHAR_WUDA": [
+        {
+          "from_panel": "P016",
+          "state": "基础粗布短褐、白围腰与炊饼担"
+        }
+      ],
+      "CHAR_PANJINLIAN": [
+        {
+          "from_panel": "P016",
+          "state": "基础形态，门帘后克制侧影"
+        }
+      ]
+    }
+  }
 }

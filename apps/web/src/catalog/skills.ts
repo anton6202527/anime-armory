@@ -34,14 +34,14 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
 ];
 
 export const SKILL_COVER_GRADIENTS: Readonly<Record<SkillCoverGradient, string>> = {
-  "violet-grid": "linear-gradient(135deg, #241d4f 0%, #6d5dfc 52%, #c7bfff 100%)",
-  "indigo-stage": "linear-gradient(145deg, #12172f 0%, #3348a8 55%, #8296ff 100%)",
-  "cyan-film": "linear-gradient(140deg, #09242c 0%, #087b8c 52%, #63e1df 100%)",
-  "emerald-page": "linear-gradient(145deg, #10251d 0%, #24785d 52%, #8dd7b6 100%)",
-  "amber-studio": "linear-gradient(140deg, #2d1d0e 0%, #a7651f 52%, #ffd08a 100%)",
-  "rose-sound": "linear-gradient(145deg, #321323 0%, #ad376a 52%, #ffa2c7 100%)",
-  blueprint: "linear-gradient(145deg, #101b2b 0%, #275a8f 55%, #74b7ec 100%)",
-  "midnight-neon": "linear-gradient(135deg, #12131a 0%, #452666 48%, #de5dff 100%)",
+  "violet-grid": "linear-gradient(135deg, #202126 0%, #555761 52%, #a9abb3 100%)",
+  "indigo-stage": "linear-gradient(145deg, #17181c 0%, #484a53 55%, #92949d 100%)",
+  "cyan-film": "linear-gradient(140deg, #16171b 0%, #4e5058 52%, #a6a8af 100%)",
+  "emerald-page": "linear-gradient(145deg, #1a1b1f 0%, #55575f 52%, #b1b2b8 100%)",
+  "amber-studio": "linear-gradient(140deg, #1d1e22 0%, #5d5f66 52%, #bcbec4 100%)",
+  "rose-sound": "linear-gradient(145deg, #18191d 0%, #50525a 52%, #aaacb4 100%)",
+  blueprint: "linear-gradient(145deg, #17181c 0%, #454750 55%, #989aa3 100%)",
+  "midnight-neon": "linear-gradient(135deg, #121318 0%, #41434a 48%, #8f9199 100%)",
 };
 
 const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
@@ -57,7 +57,7 @@ const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
     guide: "写下题材、主角和核心冲突；novel 会先建立设定与大纲，再逐步推进正文。",
     mediaType: "text",
     cover: { kind: "gradient", key: "violet-grid" },
-    accent: "#8b7cff",
+    accent: "#8b8d96",
   },
   {
     id: "n2d",
@@ -71,7 +71,7 @@ const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
     guide: "输入小说、故事或短剧构想；n2d 会从剧本与分镜开始，推进配音、出图、视频和合成。",
     mediaType: "mixed",
     cover: { kind: "gradient", key: "indigo-stage" },
-    accent: "#6f8cff",
+    accent: "#8b8d96",
   },
   {
     id: "comic",
@@ -85,7 +85,7 @@ const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
     guide: "描述漫画题材、角色和页漫或条漫形式；comic 会从分格脚本与页面排版开始。",
     mediaType: "image",
     cover: { kind: "gradient", key: "emerald-page" },
-    accent: "#41c99b",
+    accent: "#8b8d96",
   },
   {
     id: "ad",
@@ -99,7 +99,7 @@ const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
     guide: "说明产品、受众、平台和转化目标；ad 会从广告概念与脚本开始制作。",
     mediaType: "mixed",
     cover: { kind: "gradient", key: "amber-studio" },
-    accent: "#f3a54a",
+    accent: "#8b8d96",
   },
   {
     id: "mv",
@@ -113,7 +113,7 @@ const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
     guide: "描述歌曲、视觉风格和发布平台；mv 会从节拍分析与视觉脚本开始制作。",
     mediaType: "mixed",
     cover: { kind: "gradient", key: "cyan-film" },
-    accent: "#38c9d6",
+    accent: "#8b8d96",
   },
   {
     id: "song",
@@ -127,7 +127,7 @@ const PRODUCT_SKILLS: readonly ProductSkillSeed[] = [
     guide: "写下主题、情绪、曲风和想表达的故事；song 会从歌词与作曲方向开始。",
     mediaType: "audio",
     cover: { kind: "gradient", key: "rose-sound" },
-    accent: "#ef72aa",
+    accent: "#8b8d96",
   },
 ];
 

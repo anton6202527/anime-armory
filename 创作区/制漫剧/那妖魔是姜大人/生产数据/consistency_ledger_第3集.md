@@ -8,13 +8,13 @@
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
 | 剧情 | ⛔ block | 1 | 0 | 42 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 角色 | ⛔ block | 5 | 0 | 62 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 资产 | ⛔ block | 7 | 0 | 18 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 镜头 | ⛔ block | 1 | 0 | 75 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
-| 音频 | ⛔ block | 8 | 0 | 28 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
+| 角色 | ⛔ block | 4 | 0 | 62 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
+| 资产 | ⛔ block | 3 | 0 | 18 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
+| 镜头 | ⛔ block | 1 | 0 | 80 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
+| 音频 | ⛔ block | 4 | 0 | 28 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight |
 | 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
 | 合规 | 🟡 warn | 0 | 0 | 6 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, compliance |
-| 生产操作 | ⛔ block | 40 | 0 | 64 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, score, expression_state_consistency |
+| 生产操作 | ⛔ block | 25 | 0 | 63 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, score, expression_state_consistency |
 
 ### 剧情问题
 - warn [detect] 语义谱系(P0):  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。
@@ -49,12 +49,12 @@
 ### 镜头问题
 - warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集色调/光位漂移 L1=0.4515（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
 - warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集结构漂移 dHash 汉明=24（vs 前 2 集结构原型，阈 warn=18·core block=26）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。
-- warn [detect] 景深一致(DOF1):  景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.377 vs 场景中位 0.758）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。
+- warn [detect] 景深一致(DOF1):  景深一致(DOF1)   图片/Clip01_end.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.364 vs 场景中位 0.764）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。
+- warn [detect] 景深一致(DOF1):  景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.377 vs 场景中位 0.764）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。
 - warn [detect] 实体记忆(EMB):  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/“囚途残损态”, CHAR_01/镇魔司制服态, CHAR_01__, CHAR_01__囚途残损态, CHAR_01__镇魔司制服态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。
 - warn [detect] 视频证据完整性(EVID):  视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。
 - warn [detect] 场景平面(FP1):  场景平面(FP1)   场景 LOC_02 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。
-- warn [detect] multimodal_continuity: multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。
-- warn [detect] multimodal_continuity: multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。
+- warn [detect] multimodal_continuity: multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。
 
 ### 音频问题
 - warn [detect] 配音情绪弧(VEA):  配音情绪弧(VEA)   镜头2·姜月初：台词含强情绪但配音标注「错愕心虚」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。
@@ -84,15 +84,11 @@
 - warn [detect] 风格(S1):  风格(S1)
 - warn [detect] 天气时辰(W1):  天气时辰(W1)
 - block [detect] 天气时辰(W1):  天气时辰(W1)
-- warn [detect] 天气时辰(W1):  天气时辰(W1)   光位锚声明主光在「right」，实测最亮区却偏「left」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。
-- warn [detect] 物理事件图(PHY):  物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。
+- warn [detect] 天气时辰(W1):  天气时辰(W1)
+- block [detect] 天气时辰(W1):  天气时辰(W1)
 
 ## 根因聚合
 
-- block · asset:motion_control_manifest.json · Motion Control
-  - block [gate:video_preflight] Motion Control @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_01/motion_control_manifest.json: Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest
-  - block [gate:video_preflight] Motion Control @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_05/motion_control_manifest.json: Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest
-  - block [gate:video_preflight] Motion Control @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_07/motion_control_manifest.json: Motion Control 缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest
 - block · asset:storyboard.json clip#6 · 实体排程
   - block [gate:image_prompt_preflight] 实体排程 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#6: 实体排程 同一实体同时被登记为可见/必须出现和 offscreen_presence：GROUP_01。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。
 - block · asset:storyboard.json clip#8 · 实体排程
@@ -114,21 +110,25 @@
 - block · character:storyboard.json clip#3 · 表情一致性
   - block [gate:image_prompt_preflight] 表情一致性 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#3: 表情一致性 continuity.expression_span='小' 非法；必须是 微/中/大 之一。
 - block · character:video_model_routes.json · 后端跨集锁
-  - block [gate:video_preflight] 后端跨集锁 @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json: 后端跨集锁 1 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；高风险/含角色镜头的路由漂移必须写结构化 baseline_override（accepted/reviewer/reason/expires_at/affected_routes）或刷新基线
   - block [gate:video_prompt_preflight] 后端跨集锁 @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/video_model_routes.json: 后端跨集锁 1 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；高风险/含角色镜头的路由漂移必须写结构化 baseline_override（accepted/reviewer/reason/expires_at/affected_routes）或刷新基线
 - block · ops:01_clips.md ## Clip 01（时长 10.520s · EP03_CLIP01 · 众人跪求的假大人） · 帧策略 / prompt compiler
   - block [gate:video_preflight] 帧策略 @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 01（时长 10.520s · EP03_CLIP01 · 众人跪求的假大人）: 帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成
   - warn [gate:video_preflight] prompt compiler @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 01（时长 10.520s · EP03_CLIP01 · 众人跪求的假大人）: prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:21>12
-- block · ops:01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄） · 帧策略 / prompt compiler
-  - block [gate:video_preflight] 帧策略 @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）: 帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成
-  - warn [gate:video_preflight] prompt compiler @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 04（时长 15.383s · EP03_CLIP04 · 贱籍死局与马蹄）: prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12
 - block · ops:01_clips.md ## Clip 05（时长 4.428s · EP03_CLIP05 · 马队急停试探） · 帧策略 / prompt compiler
   - block [gate:video_preflight] 帧策略 @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 05（时长 4.428s · EP03_CLIP05 · 马队急停试探）: 帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成
   - warn [gate:video_preflight] prompt compiler @ 创作区/制漫剧/那妖魔是姜大人/出视频/第3集/prompt/01_clips.md ## Clip 05（时长 4.428s · EP03_CLIP05 · 马队急停试探）: prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:22>12
+- block · ops:ops · 风格(S1) / 天气时辰(W1) / 物理事件图(PHY) / 成本路由(K1) / 人审校准集(CAL) / 一致性探针包(PROBE)
+  - warn [detect] 风格(S1):  风格(S1)
+  - warn [detect] 风格(S1):  风格(S1)
+  - block [detect] 风格(S1):  风格(S1)
+- block · ops:production_events.jsonl · 强配方Schema(RCP2) / 生成配方证据
+  - block [gate:image] 强配方Schema(RCP2) @ 生产数据/production_events.jsonl: 强配方Schema(RCP2) [production一致性升级:重复同维度] 出图/第3集/图片/Clip01_end.png 强配方 schema 缺字段：input_fingerprint, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signof
+  - block [gate:image] 强配方Schema(RCP2) @ 生产数据/production_events.jsonl: 强配方Schema(RCP2) [production一致性升级:重复同维度] 出图/第3集/图片/Clip05_first_a1.png 强配方 schema 缺字段：input_fingerprint, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_s
+  - block [gate:image] 强配方Schema(RCP2) @ 生产数据/production_events.jsonl: 强配方Schema(RCP2) [production一致性升级:重复同维度] 出图/第3集/图片/Clip05_end.png 强配方 schema 缺字段：input_fingerprint, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signof
 
 ## 依赖传播
 
-- nodes=54 · edges=87 · clips=8 · images=20 · videos=0
+- nodes=56 · edges=89 · clips=8 · images=22 · videos=0
 - graph: `创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第3集.json`
 
 ## 合法不连续签收
@@ -193,9 +193,9 @@
 - [warn]  风格(S1)
 - [block]  风格(S1)
 - [warn]  风格(S1)
+- [warn]  景深一致(DOF1)   图片/Clip01_end.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.364 v
 - [warn]  景深一致(DOF1)   图片/Clip01_first_a1.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.
 - [warn]  天气时辰(W1)
 - [block]  天气时辰(W1)
-- [warn]  天气时辰(W1)   光位锚声明主光在「right」，实测最亮区却偏「left」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。
 
 说明：本表是验收交付面。`counts.block/high` 未清零时不得回写 `验收=✅`；medium 可由人工复核决定是否签收。

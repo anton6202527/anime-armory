@@ -143,7 +143,7 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
           maxZoom={1.5}
         >
           <Background variant={BackgroundVariant.Dots} gap={20} size={1.15} color="rgba(120,126,145,.3)" />
-          <MiniMap pannable zoomable nodeColor={(node) => node.id === "source" ? "#8d83ff" : node.id === "visual" ? "#356884" : "#383b45"} />
+          <MiniMap pannable zoomable nodeColor={(node) => node.id === "source" ? "#8d8f99" : node.id === "visual" ? "#656873" : "#383b45"} />
           <Controls showInteractive={false} />
         </ReactFlow>
       </section>

@@ -3,25 +3,25 @@
   "kind": "comic_source_semantics",
   "chapter": "第1话",
   "status": "pass",
-  "created_at": "2026-07-29T12:24:36",
+  "created_at": "2026-07-30T12:05:17",
   "chapter_contract": {
     "enforced": true,
-    "sha256": "9eb8cc9562c7dd1d787a7a2198c9243044cb637113db1def18419ee2cc5d0417",
+    "sha256": "8f37ec72021aebf7617ec42cd93327521b2ecf0bc77dd3905bce66b1dc4d705a",
     "source_mode": "adapted",
     "format_profile": "vertical_serial",
     "load_status": "loaded"
   },
-  "source_language": "zh-Hans",
-  "target_text_language": "zh-Hans",
+  "source_language": "现代中文",
+  "target_text_language": "中文",
   "target_text_metadata": {
     "lang": "zh-Hans",
     "dir": "ltr",
-    "script": "unknown",
-    "line_break": "unknown"
+    "script": "Hans",
+    "line_break": "cjk"
   },
-  "requires_normalization": true,
+  "requires_normalization": false,
   "normalization_reason": [
-    "manual_source_language"
+    "cjk_modern_or_mixed"
   ],
   "source_files": [
     {
@@ -208,7 +208,7 @@
     ],
     "missing_segment_ids": []
   },
-  "checked_at": "2026-07-29T13:07:05",
+  "checked_at": "2026-07-30T20:12:37",
   "issues": [],
   "stale_reasons": []
 }

@@ -313,6 +313,11 @@
     {
       "from": "clip:Clip_01",
       "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip01_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip01_first.png"
     },
     {
@@ -344,6 +349,11 @@
       "from": "clip:Clip_04",
       "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip04_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip05_end.png"
     },
     {
       "from": "clip:Clip_05",
@@ -608,6 +618,12 @@
       "path": "生产数据/motion_grammar_consistency_第3集.json"
     },
     {
+      "id": "image:出图/第3集/图片/Clip01_end.png",
+      "kind": "image",
+      "label": "Clip01_end.png",
+      "path": "出图/第3集/图片/Clip01_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip01_first.png",
       "kind": "image",
       "label": "Clip01_first.png",
@@ -648,6 +664,12 @@
       "kind": "image",
       "label": "Clip04_first_a1.png",
       "path": "出图/第3集/图片/Clip04_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip05_end.png",
+      "kind": "image",
+      "label": "Clip05_end.png",
+      "path": "出图/第3集/图片/Clip05_end.png"
     },
     {
       "id": "image:出图/第3集/图片/Clip05_first.png",
@@ -732,7 +754,7 @@
       "kind": "route",
       "label": "Clip_01",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -740,7 +762,7 @@
       "kind": "route",
       "label": "Clip_02",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -748,7 +770,7 @@
       "kind": "route",
       "label": "Clip_03",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -764,7 +786,7 @@
       "kind": "route",
       "label": "Clip_05",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -772,7 +794,7 @@
       "kind": "route",
       "label": "Clip_06",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "frame_anchor_required",
       "primary_backend": "seedance"
     },
     {
@@ -780,7 +802,7 @@
       "kind": "route",
       "label": "Clip_07",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -788,16 +810,16 @@
       "kind": "route",
       "label": "Clip_08",
       "path": "出视频/第3集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     }
   ],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 8,
-    "edges": 87,
-    "images": 20,
-    "nodes": 54,
+    "edges": 89,
+    "images": 22,
+    "nodes": 56,
     "videos": 0
   },
   "version": 1

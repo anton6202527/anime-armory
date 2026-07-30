@@ -375,25 +375,115 @@
             "model": "GPT Image 2"
           },
           "updated_at": "2026-07-29T14:48:29"
+        },
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_TIGER__front.png",
+          "sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/MON_TIGER/front/20260729_batch02/candidate_02_native.png",
+            "candidate_sha256": "9a1ed4867f061235305a2718e2bb7f075595342ecacce97712747d33adb2de27",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认猛虎正面修复版并要求继续",
+            "reviewed_at": "2026-07-30T00:00:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-30T00:00:00+08:00"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_TIGER__three_quarter.png",
+          "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+          "source": {
+            "kind": "adopted_approved_anchor_as_view",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "source_path": "出图/共享/图片/MON_TIGER__anchor.png",
+            "reviewer": "用户",
+            "decision": "approved",
+            "reason": "已确认的原定妆锚本身为猛虎45度标准视图",
+            "reviewed_at": "2026-07-30T00:00:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-30T00:00:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_TIGER__face.png",
+          "sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "face",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/MON_TIGER/face/20260730_batch01/candidate_01_native.png",
+            "candidate_sha256": "6b6e6e7297120e48c01f61348452555ed199d427c789b2a874bc8a4e254c1d28",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认猛虎脸部身份锚并要求继续",
+            "reviewed_at": "2026-07-30T00:00:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-30T00:00:00+08:00"
         }
       ],
-      "status": "partial",
-      "updated_at": "2026-07-29T14:48:29",
+      "status": "ready",
+      "updated_at": "2026-07-30T00:00:00+08:00",
       "anchor_path": "出图/共享/图片/MON_TIGER__anchor.png",
       "primary_path": "出图/共享/图片/MON_TIGER__anchor.png",
       "sha256": "f6e162d9cecbb48b1411ed38bb82c3e7bf4301a09205eb420797c5208b68700f",
+      "views": {
+        "front": "出图/共享/图片/MON_TIGER__front.png",
+        "three_quarter": "出图/共享/图片/MON_TIGER__three_quarter.png",
+        "face": "出图/共享/图片/MON_TIGER__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "1f140fad62b261ad36fd1109adf80d8da7e664fe149faddb7341240420f8b1e2",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "07e3b1053507b7fff1c407dc1ee3abcc91239278f3429854aec2ede2bd3f1518",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
           "face"
         ],
-        "updated_at": "2026-07-29T10:18:21+00:00"
+        "updated_at": "2026-07-30T02:40:59+00:00"
       }
     },
     "CHAR_WUDA": {
@@ -493,12 +583,74 @@
             "height": 1448
           },
           "updated_at": "2026-07-29T16:04:41"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUDA/three_quarter/20260729_batch01/candidate_01_native.png",
+            "candidate_sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认武大45度定妆并要求继续",
+            "reviewed_at": "2026-07-30T00:00:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+            "source_sha256": "ba5662764d841e2ef084a4ed5680060c6a0d9ba7dc52c32da50d892e228f8d98",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-30T00:00:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "sha256": "6d94ea46e0c7fd59a2313558b63df7e42f66062801ed5cad54a42227dda9088f",
+          "source": {
+            "kind": "human_selected_character_view",
+            "view": "face",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WUDA/face/20260730_batch01/candidate_01_native.png",
+            "candidate_sha256": "6d94ea46e0c7fd59a2313558b63df7e42f66062801ed5cad54a42227dda9088f",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户回复ok确认武大脸部身份锚并要求继续",
+            "reviewed_at": "2026-07-30T00:00:00+08:00",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WUDA__face.png",
+            "source_sha256": "6d94ea46e0c7fd59a2313558b63df7e42f66062801ed5cad54a42227dda9088f",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-30T00:00:00+08:00"
         }
       ],
-      "status": "partial",
-      "updated_at": "2026-07-29T16:04:41",
+      "status": "ready",
+      "updated_at": "2026-07-30T00:00:00+08:00",
       "views": {
-        "front": "出图/共享/图片/CHAR_WUDA__front.png"
+        "front": "出图/共享/图片/CHAR_WUDA__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_WUDA__face.png"
       },
       "view_readiness": {
         "required": [
@@ -508,26 +660,25 @@
         ],
         "tier": "recurring_standard",
         "ready": [
-          "front"
-        ],
-        "missing": [
+          "front",
           "three_quarter",
           "face"
         ],
-        "complete": false
+        "missing": [],
+        "complete": true
       },
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "f7a004d7fd53191cdefcfeecddf31979902eba43e35b5b5b5897a683bf60f55b",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "c979c826dbddfa2aa27f33071ef74bd52bc45c7a0652959d74ba8f9c2185d5cf",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
           "face"
         ],
-        "updated_at": "2026-07-29T08:04:41+00:00"
+        "updated_at": "2026-07-30T02:40:58+00:00"
       }
     },
     "CHAR_PANJINLIAN": {
@@ -803,6 +954,8 @@
       "variant_policy": "换装时保留瘦长脸、短须与松弛占空间的体态。",
       "forbidden_inheritance": "不得继承帝王规格、影视演员脸或街景匿名富户脸。",
       "library_tier": "core_full",
+      "model_pack_required": false,
+      "model_pack_deferred_reason": "第1话仅有非具名华服背影伏笔，CHAR_XIMENQING不出场；首次具名出场前恢复model_pack_required并完成core_full五视图签收。",
       "forms": {
         "FORM_BASE": {
           "id": "FORM_BASE",
@@ -875,9 +1028,32 @@
       "display_name": "景阳冈",
       "description": "冷青灰山冈，乱树、坡石、枯枝与大留白形成可见危险。",
       "notes": "第1话动作主场；3:4母版。",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-29T04:31:07+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+          "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/LOC_JINGYANG_RIDGE/anchor/20260730_batch02/candidate_01_native.png",
+            "candidate_sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户确认修复候选；原生PNG RGB 1086×1448，空间锚与风格合同通过",
+            "reviewed_at": "2026-07-30T13:18:30",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-30T13:18:30"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-30T13:18:30",
+      "anchor_path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+      "sha256": "c1bc297599ccb6dfd5e4aa62aa4154177ab5b03ec68ab388c0d540e09dcd925f"
     },
     "LOC_QINGHE_MARKET": {
       "id": "LOC_QINGHE_MARKET",
@@ -885,9 +1061,32 @@
       "display_name": "清河县街巷",
       "description": "暖赭市井，招幌、挑担、车马、店面与纵深人流形成密集世情空间。",
       "notes": "参考视觉研究PRIMARY_001；不复刻具体构图。",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-29T04:31:07+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_QINGHE_MARKET__anchor.png",
+          "sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/LOC_QINGHE_MARKET/anchor/20260730_batch01/candidate_01_native.png",
+            "candidate_sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户确认清河街市场景锚；原生PNG RGB 1086×1448，街巷纵深、门帘、空白招幌与暖赭光合同通过",
+            "reviewed_at": "2026-07-30T16:47:09",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-30T16:47:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-30T16:47:09",
+      "anchor_path": "出图/共享/图片/LOC_QINGHE_MARKET__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_QINGHE_MARKET__anchor.png",
+      "sha256": "25f249eb53d85a1ed0b0e64446aedafd2125500b99612b37ea4670824796569e"
     },
     "PROP_WUSONG_STAFF": {
       "id": "PROP_WUSONG_STAFF",
@@ -895,9 +1094,32 @@
       "display_name": "武松哨棒",
       "description": "直木行旅防身棒；P009折断，此后不得恢复完整。",
       "notes": "道具连续性硬约束。",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-29T04:31:07+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+          "sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/PROP_WUSONG_STAFF/anchor/20260730_batch03/candidate_01_native.png",
+            "candidate_sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户确认哨棒修复候选；原生PNG RGB 1086×1448，形制与连续性合同通过",
+            "reviewed_at": "2026-07-30T15:22:35",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-30T15:22:35"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-30T15:22:35",
+      "anchor_path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_WUSONG_STAFF__anchor.png",
+      "sha256": "d6f1d546f5d5c7e1a78a0e8c4938b6c505d4c30659acf419b04296c67b377dc7"
     },
     "PROP_CONSTABLE_BADGE": {
       "id": "PROP_CONSTABLE_BADGE",
@@ -905,9 +1127,96 @@
       "display_name": "都头腰牌",
       "description": "县衙授予武松的身份道具，P015首次出现。",
       "notes": "文字后期嵌入，不在生图阶段生成乱码。",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-29T04:31:07+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_CONSTABLE_BADGE__anchor.png",
+          "sha256": "927451e739450ac0aac229c8296571eaa126dcf2a4d3500fbb1bf9138d6b993d",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/PROP_CONSTABLE_BADGE/anchor/20260730_batch02/candidate_01_native.png",
+            "candidate_sha256": "927451e739450ac0aac229c8296571eaa126dcf2a4d3500fbb1bf9138d6b993d",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户确认都头腰牌修复候选；原生PNG RGB 1086×1448，无伪文字合同通过",
+            "reviewed_at": "2026-07-30T15:22:35",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-30T15:22:35"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-30T15:22:35",
+      "anchor_path": "出图/共享/图片/PROP_CONSTABLE_BADGE__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_CONSTABLE_BADGE__anchor.png",
+      "sha256": "927451e739450ac0aac229c8296571eaa126dcf2a4d3500fbb1bf9138d6b993d"
+    },
+    "LOC_ROADSIDE_INN": {
+      "id": "LOC_ROADSIDE_INN",
+      "type": "location",
+      "display_name": "三碗不过冈酒肆",
+      "description": "北宋山道旁木构酒肆；粗陶碗、木桌、柜台与通往景阳冈的门口形成固定空间。",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+          "sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/LOC_ROADSIDE_INN/anchor/20260730_batch01/candidate_01_native.png",
+            "candidate_sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户确认酒肆场景锚；原生PNG RGB 1086×1448符合统一最高规格合同",
+            "reviewed_at": "2026-07-30T12:06:20",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-30T12:06:20"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-30T12:06:20",
+      "anchor_path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_ROADSIDE_INN__anchor.png",
+      "sha256": "b7963cf6182b4d75188e1950cb58425e5d82554a0a7137f1199289636ad8ffa7"
+    },
+    "LOC_YANGGU_YAMEN": {
+      "id": "LOC_YANGGU_YAMEN",
+      "type": "location",
+      "display_name": "阳谷县衙",
+      "description": "北宋县衙授职空间；朱砂告示、木构案面与授牌位置形成固定视觉关系。",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_YANGGU_YAMEN__anchor.png",
+          "sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/LOC_YANGGU_YAMEN/anchor/20260730_batch02/candidate_01_native.png",
+            "candidate_sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055",
+            "reviewer": "用户",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "用户确认阳谷县衙修复候选；原生PNG RGB 1086×1448，空间与无字合同通过",
+            "reviewed_at": "2026-07-30T16:05:13",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-30T16:05:13"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-30T16:05:13",
+      "anchor_path": "出图/共享/图片/LOC_YANGGU_YAMEN__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_YANGGU_YAMEN__anchor.png",
+      "sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055"
     }
   },
   "schema_meta": {

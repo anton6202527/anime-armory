@@ -19,6 +19,21 @@
       "time_transition": false
     },
     {
+      "png": "Clip01_end.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 58.1,
+      "warmth": 0.023,
+      "daypart": "night",
+      "light_cx": 0.569,
+      "light_az": "center",
+      "light_cy": 0.109,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
       "png": "Clip02_first.png",
       "scene": "场景_尸骸荒野.png",
       "luma": 54.0,
@@ -90,6 +105,21 @@
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；与第1-2集同锚不漂移。\", \"LOC_02\": \"阴天午后偏侧光，主光从画面右上进入压出车辙长影；官道尘土色偏暖于荒野，但整体仍冷灰基调。\"}",
       "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip05_end.png",
+      "scene": "场景_LOC_02.png",
+      "luma": 75.1,
+      "warmth": 0.037,
+      "daypart": "day",
+      "light_cx": 0.617,
+      "light_az": "center",
+      "light_cy": 0.164,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
       "season": null,
       "time_transition": false
     },
@@ -186,12 +216,12 @@
     {
       "png": "Clip05_first_a1.png",
       "scene": "场景_LOC_02.png",
-      "luma": 71.3,
-      "warmth": 0.047,
+      "luma": 75.1,
+      "warmth": 0.037,
       "daypart": "day",
-      "light_cx": 0.656,
-      "light_az": "right",
-      "light_cy": 0.174,
+      "light_cx": 0.617,
+      "light_az": "center",
+      "light_cy": 0.164,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -308,9 +338,11 @@
     "场景_LOC_02.png": {
       "shots": [
         "Clip01_first.png",
+        "Clip01_end.png",
         "Clip04_first.png",
         "Clip04_end.png",
         "Clip05_first.png",
+        "Clip05_end.png",
         "Clip06_first.png",
         "Clip06_end.png",
         "Clip07_first.png",
@@ -326,21 +358,33 @@
         "EP03_CLIP08_a1.png"
       ],
       "dayparts": {
-        "day": 15,
-        "night": 2
+        "day": 16,
+        "night": 3
       },
       "light_azimuths": {
-        "right": 7,
-        "center": 10
+        "right": 6,
+        "center": 13
       },
       "light_elevations": {
-        "top": 17
+        "top": 19
       },
       "weathers": {
         "fog": 6
       },
       "seasons": {},
       "findings": [
+        {
+          "metric": "daypart",
+          "png": "Clip01_end.png",
+          "verdict": "warn",
+          "message": ""
+        },
+        {
+          "metric": "daypart",
+          "png": "Clip04_first.png",
+          "verdict": "block",
+          "message": ""
+        },
         {
           "metric": "daypart",
           "png": "Clip08_first.png",
@@ -387,9 +431,9 @@
   },
   "summary": {
     "scene_count": 2,
-    "finding_count": 3,
-    "block_count": 1,
-    "warn_count": 2
+    "finding_count": 5,
+    "block_count": 2,
+    "warn_count": 3
   },
   "source": "n2d-review/world_continuity"
 }

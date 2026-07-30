@@ -103,10 +103,10 @@ function installDarkPlusTheme(): void {
     colors: {
       ...activeSkin.monacoTheme.colors,
       "editorBracketHighlight.foreground1": "#ffd700",
-      "editorBracketHighlight.foreground2": "#da70d6",
+      "editorBracketHighlight.foreground2": "#b9bac0",
       "editorBracketHighlight.foreground3": "#179fff",
       "editorBracketHighlight.foreground4": "#4ec9b0",
-      "editorBracketHighlight.foreground5": "#c586c0",
+      "editorBracketHighlight.foreground5": "#8f8f98",
       "editorBracketHighlight.foreground6": "#ce9178",
       "editorUnicodeHighlight.border": "#00000000",
       "editorUnicodeHighlight.background": "#00000000",

@@ -35,7 +35,9 @@ enable_signup = true
 [auth.email]
 enable_signup = true
 double_confirm_changes = true
-enable_confirmations = true
+# Temporary product policy: first-time email access creates an active session
+# immediately. Re-enable this when verified-email onboarding is restored.
+enable_confirmations = false
 secure_password_change = false
 max_frequency = "1m"
 otp_length = 8

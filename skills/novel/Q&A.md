@@ -411,8 +411,8 @@ novel-supervisor critic-loop / qa_gate 演进规划。
 - **章末软着陆位置几何**（张力峰值偏移 <85% 且末段收束词）：需**章内** beat 位置数据，
   emotional_progression 只有章级张力分；hook_endings 的 weak_chapter_ending 词面打分已覆盖
   尾段平淡主形态，增量不干净。
-- **章字数带宽**：mechanical_check 字数维度已有；平台完读率/留存硬指标（番茄章均完读 >35%
-  等）是平台侧数据非文本机检，价值在回灌目标函数，留给 novel-promote/feedback 真实数据接入。
+- **章字数带宽**：mechanical_check 字数维度已有；平台完读率/留存硬指标的具体数值只取项目
+  `评分/market_baseline_*.json` 或 `资料/research_sources.json`，作为平台侧数据留给 novel-promote/feedback 回灌。
 - **read-aloud 拗口代理**（同音连缀等）：假阳性高，判不可行；若未来接 TTS 有声化，停顿
   异常可当免费信号（机会主义储备）。
 - **笙箫夹鼓张力交替**（连续高张力无间歇）：logic_sentry tension_fatigue 已覆盖主形态。
@@ -423,7 +423,7 @@ novel-supervisor critic-loop / qa_gate 演进规划。
 
 ### 生产实锤复核清单（本轮判据的事实依据）
 
-王敦外传（`git show 5a609465^:...`）：第 01 章工艺扎实 vs 第 20 章滑向短剧碎句体——
+王敦外传（已归档生产样本，版本快照 5a609465 的前一版）：第 01 章工艺扎实 vs 第 20 章滑向短剧碎句体——
 ①大量单句成段（"一声。/又一声。"）→ fragmented_paragraph_run 判据来源；②3-5 轮无标签
 问答靠上下文辨认说话人 → untagged_dialogue_run 阈值参照（生产 3-5 轮尚可追踪，阈取 8 保守）；
 ③屏风偷听场大段纯对白+内心、靠两处物件锚定救场 → talking_heads_run 的 beat 判据（物件

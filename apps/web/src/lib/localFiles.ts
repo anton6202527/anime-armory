@@ -49,3 +49,19 @@ export async function localFile(id: string): Promise<File | undefined> {
   if (file) files.set(id, file);
   return file;
 }
+
+export async function removeLocalFiles(ids: string[]) {
+  if (!ids.length) return;
+  ids.forEach((id) => files.delete(id));
+  const db = await database();
+  if (!db) return;
+  await new Promise<void>((resolve) => {
+    const transaction = db.transaction(STORE_NAME, "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    ids.forEach((id) => store.delete(id));
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => resolve();
+    transaction.onabort = () => resolve();
+  });
+  db.close();
+}

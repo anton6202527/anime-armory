@@ -29,7 +29,13 @@
         ]
       },
       "entry_state": {
-        "story": "武松尚是归乡旅人，清河县无人知道他将成为打虎英雄；叙事焦点仍停在山野的可见危险。"
+        "CHAR_WUSONG": {
+          "public_reputation": "unknown_traveler",
+          "office_status": "civilian_traveler"
+        },
+        "STORY_MAIN": {
+          "narrative_focus": "visible_tiger_on_ridge"
+        }
       },
       "continuity_delta": [
         {
@@ -58,7 +64,13 @@
         }
       ],
       "exit_state": {
-        "story": "武松已成清河县都头并将与兄嫂重逢；武大、潘金莲的家庭关系进入叙事中心，‘暗虎’长线承诺开启。"
+        "CHAR_WUSONG": {
+          "public_reputation": "tiger_slayer",
+          "office_status": "qinghe_constable"
+        },
+        "STORY_MAIN": {
+          "narrative_focus": "hidden_desire_in_town"
+        }
       },
       "status": "confirmed"
     }

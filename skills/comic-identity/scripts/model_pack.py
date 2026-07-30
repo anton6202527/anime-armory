@@ -147,6 +147,7 @@ def default_selected_assets(assets: Mapping[str, Any]) -> list[str]:
     return sorted(
         aid for aid, asset in assets.items()
         if isinstance(asset, Mapping)
+        and asset.get("model_pack_required") is not False
         and (
             str(asset.get("type")) == "character"
             or (str(asset.get("type")) in creature_types and creature_managed(asset))
