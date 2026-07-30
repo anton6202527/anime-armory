@@ -1,6 +1,6 @@
 # 漫画一致性报告 — 第1话
 
-- 生成时间：2026-07-30T20:12:38
+- 生成时间：2026-07-30T20:17:02
 - reference 总数：11
 - 缺失 reference：0
 - 需要重抽格：0
@@ -11,7 +11,7 @@
 
 | panel | status | refs | missing | generated_with_refs |
 |---|---|---:|---|---:|
-| P001 | planned | 5 | - | 0 |
+| P001 | qc_block | 5 | - | 5 |
 | P002 | planned | 5 | - | 0 |
 | P003 | planned | 4 | - | 0 |
 | P004 | planned | 5 | - | 0 |

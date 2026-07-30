@@ -4,15 +4,26 @@
   "project_root": ".",
   "chapter": "第1话",
   "stage": "image_preflight",
-  "created_at": "2026-07-30T20:12:39",
-  "verdict": "warn",
+  "created_at": "2026-07-30T20:17:02",
+  "verdict": "block",
   "summary": {
-    "finding_count": 9,
-    "block_count": 0,
+    "finding_count": 10,
+    "block_count": 1,
     "warn_count": 9,
     "info_count": 0
   },
   "findings": [
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "generation_recipe_mixed",
+      "artifact": "出图/第1话/prompt/panel_jobs.json",
+      "reason": "同一话记录了多个生图模型/渠道：GPT Image 2/Codex CLI；GPT Image 2/内置 imagegen",
+      "return_to_stage": "image",
+      "suggested_fix": "统一模型和渠道后重建 job 包并重抽受影响格。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
     {
       "severity": "warn",
       "dimension": "comic_gate",
@@ -181,7 +192,7 @@
       {
         "path": "脚本/第1话/source_semantics.json",
         "exists": true,
-        "sha256": "5c25973b4d5cb37204242b932537516e247b2ebab035ebf3a0142fee727cfcb3",
+        "sha256": "7245dc3434edc1e2961a0e4ca8965f40e918fb396de7fc278de29ee01f7c900a",
         "size": 7790
       },
       {
@@ -251,8 +262,8 @@
       {
         "path": "出图/第1话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "d1de4f50b54e6eee3fbd600236c7113c4d805ae8448e296a32b2c19b550f7095",
-        "size": 382861
+        "sha256": "069c057aa8c43a1b71957d5e5db5ffd751665d1c556c34d9af1d9b9801728d21",
+        "size": 384333
       },
       {
         "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
@@ -541,9 +552,21 @@
         "exists": true,
         "sha256": "75e27187c1c933e51c0ffc726a488a3626210981b73c04d03ad9b1a2fffd4055",
         "size": 2943907
+      },
+      {
+        "path": "出图/第1话/masters/P001.png",
+        "exists": true,
+        "sha256": "29474e9ed9cb3df418ac032f7327b0dc684466a199c1dac5ab7253e2668f090e",
+        "size": 3029149
+      },
+      {
+        "path": "出图/第1话/panels/P001.png",
+        "exists": true,
+        "sha256": "b5223e3c3b2c2945552565650c958b5545a7d1032189c404133fb0086d3d2fd0",
+        "size": 2450261
       }
     ],
-    "sha256": "f7d90bdfdd6b8183367f45cc2430127ac3ef54886ca01424cd1909961d227035"
+    "sha256": "e63b466823f0635b1c616609352c11bc98e2b99351abc58a9186e038c8187186"
   },
-  "receipt_id": "5c1c60c551e47e9a36e5d9d73527d5765846cc05bf7ecb2b397d497b4165efa0"
+  "receipt_id": "eb5f1b4bc421df4a4e8a15ca1a6ffb3caa6a72a551b4f6570f4e10592ba12846"
 }

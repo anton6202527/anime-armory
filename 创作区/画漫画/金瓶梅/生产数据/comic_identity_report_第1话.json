@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/金瓶梅",
   "chapter": "第1话",
-  "created_at": "2026-07-30T20:12:38",
+  "created_at": "2026-07-30T20:17:02",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -461,7 +461,7 @@
   "panels": [
     {
       "panel_id": "P001",
-      "status": "planned",
+      "status": "qc_block",
       "valid_reference_count": 5,
       "valid_references": [
         {
@@ -491,8 +491,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",

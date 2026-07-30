@@ -36,6 +36,23 @@
         "height": 1040
       },
       "resolution_policy": "后端最高可达",
+      "master_path": "出图/第1话/masters/P001.png",
+      "resolution_provenance": {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": true,
+        "native_size": {
+          "width": 1400,
+          "height": 1123
+        },
+        "native_sha256": "29474e9ed9cb3df418ac032f7327b0dc684466a199c1dac5ab7253e2668f090e",
+        "master_path": "出图/第1话/masters/P001.png",
+        "derivative_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "normalization_scale": 0.926091,
+        "upscaled": false
+      },
       "production_contract_prompt": "无字漫画分格画面，自定义(明代市井工笔重彩条漫；纤细稳定墨线；低饱和石青朱砂赭石；纸绢纹理；真实宋代市井器物与明代版画式构图；克制成人社会讽喻；非影视复刻；不露骨)；画面事实：全宽大格。冷青灰山林中，成年华南虎从右上岩坡扑下；武松在左下翻身避开，虎爪与衣角形成对角线。；角色：CHAR_WUSONG、MON_TIGER；场景：LOC_JINGYANG_RIDGE；场景一致性契约：场景锚:LOC_JINGYANG_RIDGE；空间布局:斜坡自画面右上降至左下；乱树与枯树形成中景门框，湿石和松针在前景，远山留白在左上。；光位/光色:冷青灰暮光从画面左上方漫射，右后方山脊有微弱暖边光；除P014向县城方向转暖外不随机改光。；轴线/视线:人虎对峙轴沿左下—右上对角线；武松多在画左或下方，猛虎多在画右或上方，反打保持方向。；常驻物件:右上岩坡；中景枯树；前景湿石与松针；承接上一格:none；人物站位/前后景:武松在左下前景翻身，猛虎自右上扑下，虎爪与衣角是唯一近接触点。；视线/眼神契约：目标=武松看猛虎前爪落点；猛虎盯武松躯干；方向=武松画右上，猛虎画左下；人物完整性契约：继承本格全部具名角色/猛虎正式身份锚的脸型、眼型、发式或条纹、服装主色与成年比例；头脸、手脚、尾部、关键道具和动作接触点完整可读。；构图与表演：3:4母版；最大动作格；不见血。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable；黑场计划:assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features；网点/灰阶计划:风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast；黑白灰可读性:three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale；效果线/漫符计划:剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props；拟声词画法:mode:drawn_sfx；text_hint:吼——！；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:长方脸、浓直眉、深眼、硬朗鼻梁；束发素巾；肩背宽、腰胯稳、手掌有茧。；年龄/形态继承:不同服装与伤势下仍保留脸型、眉眼、束发和宽肩体态。；禁继承:不得继承风格锚点中匿名路人的脸；哨棒属剧情道具，不写入永久DNA。；备注:原创成年面孔，不参照影视演员；史料边界见设定库/visual_research.json。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER=景阳冈猛虎；角色DNA:头宽、前肢厚重、橙赭毛色配墨黑条纹；左眉上方短缺口。；年龄/形态继承:所有动作姿态保留主条纹结构、左眉缺口与成年体型。；禁继承:不得继承其他猫科花纹或巨兽尺度。；备注:不得幻想兽化或拟人化。 || STYLE_JINPINGMEI_MING_URBAN=明代版画节奏·北宋市井风格锚；备注:原始候选：出图/共享/style_anchor/candidates/STYLE_JINPINGMEI_MING_URBAN_v1.png；统一交付规格候选：出图/共享/style_anchor/candidates/STYLE_JINPINGMEI_MING_URBAN_v1_1440x1920.png；视觉研究合同：设定库/visual_researc… || LOC_JINGYANG_RIDGE=景阳冈；备注:第1话动作主场；3:4母版。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_WUSONG：form=基础形态(不同服装与伤势下仍保留脸型、眉眼、束发和宽肩体态。)；不得:不得继承风格锚点中匿名路人的脸；哨棒属剧情道具，不写入永久DNA。；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_TIGER：form=基础形态(所有动作姿态保留主条纹结构、左眉缺口与成年体型。)；不得:不得继承其他猫科花纹或巨兽尺度。；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",

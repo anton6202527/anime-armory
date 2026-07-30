@@ -1,8 +1,8 @@
 # 漫画 Gate — image_preflight — 第1话
 
-- 生成时间：2026-07-30T20:12:39
-- 结论：warn
-- block/warn/info：0 / 9 / 0
+- 生成时间：2026-07-30T20:17:02
+- 结论：block
+- block/warn/info：1 / 9 / 0
 
 ## 记录
 
@@ -28,6 +28,7 @@
 
 | severity | code | artifact | reason | return_to | suggested_fix |
 |---|---|---|---|---|---|
+| block | generation_recipe_mixed | 出图/第1话/prompt/panel_jobs.json | 同一话记录了多个生图模型/渠道：GPT Image 2/Codex CLI；GPT Image 2/内置 imagegen | image | 统一模型和渠道后重建 job 包并重抽受影响格。 |
 | warn | ending_mode_mismatch | 生产数据/comic_chapter_beat_audit_第1话.json | 合同 ending_mode=closure_with_new_promise，末格 story_function=theme_handoff；期望候选为 ['hook', 'new_promise', 'resolution']。这是编辑复核提示，不是硬闸。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | narration_heavy_chapter | 生产数据/comic_redundancy_audit_第1话.json | 本话 7/12 个有文本格是纯旁白（58%>50%）——信息压缩靠旁白硬转=没画面化的流水账；条漫铁律是能画不说：把交代改成画面/对白/道具特写，旁白只留画面外增量。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | repeated_composition_plan | 生产数据/comic_redundancy_audit_第1话.json | P004、P007、P010 计划了相同的 (场景=LOC_JINGYANG_RIDGE, 角色=CHAR_WUSONG/MON_TIGER, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
