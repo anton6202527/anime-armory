@@ -42,11 +42,17 @@ from image_backend_adapter import resolve_capabilities  # noqa: E402
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
+BUILTIN_CHANNEL = "内置 imagegen"
 SKILLS_ROOT = Path(__file__).resolve().parents[2]
 # 实机附件上限的唯一真值在 comic/_lib/image_backend_adapter；此处只解引用，不再双写数字。
 CODEX_IMAGE_GENERATION_REFERENCE_LIMIT = resolve_capabilities(
     CODEX_MODEL, CODEX_CHANNEL
 ).executable_attachment_limit
+
+
+def recorded_channel(*, adopt_builtin: bool) -> str:
+    """Return the truthful recipe channel written into jobs/provenance."""
+    return BUILTIN_CHANNEL if adopt_builtin else CODEX_CHANNEL
 
 
 def run_preflight_gate(root: Path, chapter: str) -> int:
@@ -1074,7 +1080,7 @@ def main() -> int:
             return rc
     data = load_json(jobs_path)
     data["model"] = CODEX_MODEL
-    data["channel"] = CODEX_CHANNEL
+    data["channel"] = recorded_channel(adopt_builtin=args.adopt_builtin)
     targets = {item.strip() for item in args.targets.split(",") if item.strip()}
     max_attempts = max(1, args.max_attempts)
     reference_limit = max(1, min(CODEX_IMAGE_GENERATION_REFERENCE_LIMIT, int(args.reference_limit)))
@@ -1159,7 +1165,7 @@ def main() -> int:
             job["reference_manifest"] = rel_to_root(root, reference_manifest)
             if args.adopt_builtin:
                 job.update({
-                    "source": CODEX_CHANNEL,
+                    "source": recorded_channel(adopt_builtin=True),
                     "model": CODEX_MODEL,
                     "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
                     "generated_at": dt.datetime.now().isoformat(timespec="seconds"),

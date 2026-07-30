@@ -3,7 +3,7 @@
   "kind": "comic_panel_jobs",
   "chapter": "第1话",
   "model": "GPT Image 2",
-  "channel": "Codex CLI",
+  "channel": "内置 imagegen",
   "backend_capabilities": {
     "adapter_id": "openai_gpt_image_project_memory",
     "model": "GPT Image 2",
@@ -30,7 +30,7 @@
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "qc_block",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -332,12 +332,12 @@
         "executable_attachment_limit": 5
       },
       "result_path": "出图/第1话/panels/P001.png",
-      "source": "Codex CLI",
-      "post_qc": "block",
+      "source": "内置 imagegen",
+      "post_qc": "pass",
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
       "model": "GPT Image 2",
       "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
-      "generated_at": "2026-07-30T20:12:39",
+      "generated_at": "2026-07-30T20:18:49",
       "artifact_sha256": "b5223e3c3b2c2945552565650c958b5545a7d1032189c404133fb0086d3d2fd0",
       "reference_input_mode": "builtin_image_generation_referenced_image_paths",
       "reference_input_count": 5,

@@ -4,26 +4,15 @@
   "project_root": ".",
   "chapter": "第1话",
   "stage": "image_preflight",
-  "created_at": "2026-07-30T20:17:02",
-  "verdict": "block",
+  "created_at": "2026-07-30T20:18:49",
+  "verdict": "warn",
   "summary": {
-    "finding_count": 10,
-    "block_count": 1,
+    "finding_count": 9,
+    "block_count": 0,
     "warn_count": 9,
     "info_count": 0
   },
   "findings": [
-    {
-      "severity": "block",
-      "dimension": "comic_gate",
-      "code": "generation_recipe_mixed",
-      "artifact": "出图/第1话/prompt/panel_jobs.json",
-      "reason": "同一话记录了多个生图模型/渠道：GPT Image 2/Codex CLI；GPT Image 2/内置 imagegen",
-      "return_to_stage": "image",
-      "suggested_fix": "统一模型和渠道后重建 job 包并重抽受影响格。",
-      "evidence_family": "deterministic",
-      "confidence": "deterministic"
-    },
     {
       "severity": "warn",
       "dimension": "comic_gate",
@@ -192,7 +181,7 @@
       {
         "path": "脚本/第1话/source_semantics.json",
         "exists": true,
-        "sha256": "7245dc3434edc1e2961a0e4ca8965f40e918fb396de7fc278de29ee01f7c900a",
+        "sha256": "0964a2f5437ca6a87c13f3191dcab75b728859433c3a8b01ca7a83b37b608320",
         "size": 7790
       },
       {
@@ -262,8 +251,8 @@
       {
         "path": "出图/第1话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "069c057aa8c43a1b71957d5e5db5ffd751665d1c556c34d9af1d9b9801728d21",
-        "size": 384333
+        "sha256": "8d32abafac669070be5e578660741c997e0df6d52288b8858679ebea5076b7c3",
+        "size": 384345
       },
       {
         "path": "出图/共享/图片/STYLE_JINPINGMEI_MING_URBAN__anchor.png",
@@ -566,7 +555,7 @@
         "size": 2450261
       }
     ],
-    "sha256": "e63b466823f0635b1c616609352c11bc98e2b99351abc58a9186e038c8187186"
+    "sha256": "7266743eb31e3ca8914b95e5d85e0b8a49e30f480b890550fecb85c59123821f"
   },
-  "receipt_id": "eb5f1b4bc421df4a4e8a15ca1a6ffb3caa6a72a551b4f6570f4e10592ba12846"
+  "receipt_id": "c3db0652bdaf83b37996f5a08f7150f0bf2d5153afbe3343873578e90e9b3d1f"
 }

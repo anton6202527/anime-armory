@@ -10,6 +10,11 @@ runner = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(runner)
 
 
+def test_adopt_builtin_records_builtin_channel_without_mixing_recipe() -> None:
+    assert runner.recorded_channel(adopt_builtin=True) == "内置 imagegen"
+    assert runner.recorded_channel(adopt_builtin=False) == "Codex CLI"
+
+
 def write_current_gate_receipt(root: Path, jobs: Path, *, verdict: str = "pass") -> Path:
     chapter = "第1话"
     report = root / "生产数据" / f"comic_gate_image_preflight_{chapter}.json"
