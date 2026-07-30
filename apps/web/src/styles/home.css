@@ -645,18 +645,22 @@
 .auth-entry:hover { color: #090a0c !important; background: #fff !important; }
 .auth-entry.loading { width: 36px; padding: 0 !important; color: #a9abb3 !important; background: #25262b !important; }
 .account-menu-wrap .avatar-button {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   justify-content: center;
-  border: 2px solid #e7e8eb;
+  border: 1px solid #e7e8eb;
   border-radius: 50%;
   color: #222329;
   background: #f5f5f6;
+  font-size: 11px;
   font-weight: 650;
-  box-shadow: 0 0 0 2px rgba(255,255,255,.07);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.08);
 }
-.account-menu-wrap .avatar-button:hover,
+.account-menu-wrap .avatar-button:hover {
+  color: #222329;
+  background: #f5f5f6;
+}
 .account-menu-wrap .avatar-button.active { color: #08090b; background: #fff; }
 .account-popover {
   position: absolute;
@@ -1196,7 +1200,7 @@
 /* LabuTV / LibTV-style home proportions ----------------------------------- */
 .site-header {
   width: 100%;
-  padding-inline: clamp(18px, 2.2vw, 38px);
+  padding-inline: 16px;
 }
 
 .site-logo { gap: 4px; }
