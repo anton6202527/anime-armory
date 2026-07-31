@@ -15,8 +15,14 @@ export interface ModelDefinition {
   availability: ModelAvailability;
   tags: readonly string[];
   modelId?: string;
+  /** Provider/model spec accepted by the server-side API-key adapter. */
+  providerSpec?: string;
+  /** Environment variable names expected by the server. Values are never exposed to Web. */
+  apiKeyEnv?: readonly string[];
   audioGroup?: AudioModelGroup;
   recommended?: boolean;
+  premium?: boolean;
+  points?: number;
 }
 
 /** Backwards-compatible name for consumers that render a single model card. */

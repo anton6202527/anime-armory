@@ -46,6 +46,10 @@ interface JobRequest {
   line: LineKey
   prompt: string
   agentId?: string
+  creationConfig?: {
+    generationMode: 'manual' | 'auto'
+    model: { modality: string; modelId: string; providerSpec?: string }
+  }
 }
 
 interface FileHeaders {
@@ -120,7 +124,25 @@ function parseJobRequest(value: unknown): JobRequest {
   if (!prompt || prompt.length > MAX_PROMPT_CHARS) throw new BridgeHttpError(400, 'Prompt 为空或过长')
   const agentId = typeof input.agentId === 'string' && input.agentId.trim() ? input.agentId.trim() : undefined
   if (agentId && !SUPPORTED_AGENTS.has(agentId)) throw new BridgeHttpError(400, '不支持的 Agent')
-  return { workId, workName, line, prompt, ...(agentId ? { agentId } : {}) }
+  let creationConfig: JobRequest['creationConfig']
+  if (input.creationConfig && typeof input.creationConfig === 'object' && !Array.isArray(input.creationConfig)) {
+    const rawConfig = input.creationConfig as Record<string, unknown>
+    const rawModel = rawConfig.model && typeof rawConfig.model === 'object' && !Array.isArray(rawConfig.model)
+      ? rawConfig.model as Record<string, unknown>
+      : null
+    const generationMode = rawConfig.generationMode === 'manual' ? 'manual' : 'auto'
+    const rawModality = typeof rawModel?.modality === 'string' ? rawModel.modality.trim() : ''
+    const modality = ['text', 'image', 'video', 'audio'].includes(rawModality) ? rawModality : ''
+    const rawModelId = typeof rawModel?.modelId === 'string' ? rawModel.modelId.trim() : ''
+    const modelId = /^[a-zA-Z0-9._/-]{1,160}$/.test(rawModelId) ? rawModelId : ''
+    const rawProviderSpec = typeof rawModel?.providerSpec === 'string' ? rawModel.providerSpec.trim() : ''
+    const providerSpec = /^(?:deepseek|gemini)\/[a-zA-Z0-9._/-]{1,180}$/.test(rawProviderSpec) ? rawProviderSpec : ''
+    if (modality && modelId) creationConfig = {
+      generationMode,
+      model: { modality, modelId, ...(providerSpec ? { providerSpec } : {}) },
+    }
+  }
+  return { workId, workName, line, prompt, ...(agentId ? { agentId } : {}), ...(creationConfig ? { creationConfig } : {}) }
 }
 
 function invocation(agent: AgentInfo, prompt: string): { args: string[]; stdin?: string } {
@@ -297,6 +319,11 @@ export class LocalBridgeService {
       `你正在 LabuTV 的 ${request.line} 作品目录中工作。`,
       `作品目录：${workDir}`,
       repoRoot ? `技能仓库：${repoRoot}` : '',
+      request.creationConfig?.model.providerSpec
+        ? `用户选择的模型路由：${request.creationConfig.model.providerSpec}（服务端 API Key；不要向前端或产物输出密钥）`
+        : request.creationConfig?.model.modelId
+          ? `用户选择的模型：${request.creationConfig.model.modelId}`
+          : '',
       '只修改当前作品目录；如需创作流程说明，先读取技能仓库 skills/README.md 并使用对应系列 skill。',
       '',
       '用户需求：',
@@ -309,6 +336,7 @@ export class LocalBridgeService {
       client_key: request.workId,
       name: request.workName,
       line: request.line,
+      ...(request.creationConfig ? { creation_config: request.creationConfig } : {}),
       updated_at: new Date().toISOString(),
     }, null, 2), 'utf8')
 

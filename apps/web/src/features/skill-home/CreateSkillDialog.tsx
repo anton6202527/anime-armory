@@ -1,6 +1,7 @@
 import { Bot, Check, LoaderCircle, Plus, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { SkillCategory, SkillMediaType } from "../../catalog/types";
+import { SelectMenu } from "../../components/SelectMenu";
 import type { CreationLine } from "../../types";
 
 export interface CreateSkillFormValues {
@@ -83,11 +84,11 @@ export function CreateSkillDialog({ open, ownerEmail, onClose, onCreate }: Creat
           <div className="create-skill-owner"><Bot size={16} /><span>创建者</span><b>{ownerEmail}</b></div>
           <div className="form-two-columns">
             <label><span>Skill 名称</span><input autoFocus value={title} maxLength={60} onChange={(event) => setTitle(event.target.value)} placeholder="例如：古风漫画分镜导演" /></label>
-            <label><span>所属创作线</span><select value={line} onChange={(event) => setLine(event.target.value as CreationLine)}>{LINES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <div className="form-field"><span>所属创作线</span><SelectMenu ariaLabel="所属创作线" value={line} options={LINES.map(([value, label]) => ({ value, label }))} onChange={setLine} /></div>
           </div>
           <label><span>一句话介绍</span><input value={description} maxLength={180} onChange={(event) => setDescription(event.target.value)} placeholder="说明这个 Skill 能帮创作者完成什么" /><small>{description.length}/180</small></label>
           <div className="form-two-columns">
-            <label><span>分类</span><select value={category} onChange={(event) => setCategory(event.target.value as SkillCategory)}>{CATEGORIES.map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+            <div className="form-field"><span>分类</span><SelectMenu ariaLabel="分类" value={category} options={CATEGORIES.map((value) => ({ value, label: value }))} onChange={setCategory} /></div>
             <fieldset><legend>输出类型</legend><div className="media-choice">{MEDIA.map(([value, label]) => <button key={value} type="button" className={mediaType === value ? "active" : ""} onClick={() => setMediaType(value)}>{label}</button>)}</div></fieldset>
           </div>
           <label><span>Skill 指令</span><textarea value={guide} maxLength={3000} onChange={(event) => setGuide(event.target.value)} placeholder="告诉 Agent 角色、目标、约束、执行方式与交付标准。" /><small>{guide.length}/3000</small></label>

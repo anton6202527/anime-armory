@@ -41,7 +41,7 @@
 .creation-canvas-line svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; }
 .creation-canvas-name { width: min(220px, 20vw); height: 28px; padding: 0 7px; border: 1px solid transparent; border-radius: 7px; outline: 0; color: #d7d7dc; background: transparent; font-size: 12px; font-weight: 650; }
 .creation-canvas-name:hover { border-color: #393b43; background: #212227; }
-.creation-canvas-name:focus { border-color: #747680; background: #25262c; box-shadow: 0 0 0 2px rgba(255,255,255,.07); }
+.creation-canvas-name:focus { border-color: #747680; background: #25262c; box-shadow: none; }
 .canvas-view-switch { height: 31px; display: flex; gap: 3px; margin-left: 10px; padding: 3px; border-radius: 9px; background: #222329; }
 .canvas-view-switch button { height: 25px; display: flex; align-items: center; gap: 5px; padding: 0 9px; border: 0; border-radius: 6px; color: #777a85; background: transparent; cursor: pointer; font-size: 10px; }
 .canvas-view-switch button:hover { color: #c7c8cf; }
@@ -405,7 +405,7 @@
   transition: left .2s ease, border-color .15s ease, box-shadow .15s ease;
 }
 .canvas-agent-composer.with-panel { left: calc((100vw - var(--canvas-panel-width) + var(--canvas-rail-width)) / 2); width: min(650px, calc(100vw - var(--canvas-panel-width) - 150px)); }
-.canvas-agent-composer:focus-within { border-color: #747680; box-shadow: 5px 6px 0 rgba(0,0,0,.52), 0 0 0 2px rgba(255,255,255,.07), 0 20px 55px rgba(0,0,0,.4); }
+.canvas-agent-composer:focus-within { border-color: #747680; box-shadow: 0 20px 55px rgba(0,0,0,.4); }
 .canvas-agent-composer > textarea { width: 100%; min-height: 67px; flex: 1; resize: none; padding: 13px 15px 5px; border: 0; outline: 0; color: #e5e5e9; background: transparent; font-size: 10px; line-height: 1.5; }
 .canvas-agent-composer > textarea::placeholder { color: #70727d; }
 .canvas-agent-composer > footer { min-height: 37px; display: flex; align-items: center; gap: 7px; padding: 3px 6px 6px 10px; color: #767884; font-size: 8px; }
@@ -448,9 +448,14 @@
 .canvas-mode-picker > button > span { min-width: 0; display: flex; flex: 1; flex-direction: column; gap: 4px; }
 .canvas-model-picker b,
 .canvas-mode-picker b { font-size: 10px; }
+.canvas-model-picker b { display: flex; align-items: center; gap: 3px; }
 .canvas-model-picker small,
 .canvas-mode-picker small { overflow: hidden; color: #777984; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
 .canvas-model-picker button > i { padding: 3px 6px; border-radius: 5px; color: #c7c8cf; background: rgba(255,255,255,.08); font-size: 7px; font-style: normal; }
+.canvas-membership-mark { width: 12px; height: 12px; display: grid; place-items: center; flex: none; color: #e5b54f; cursor: pointer; }
+.canvas-membership-mark svg { width: 11px; height: 9px; display: block; }
+.canvas-membership-mark:hover { color: #f2c667; }
+.canvas-membership-mark:focus-visible { border-radius: 2px; outline: 1px solid rgba(242,198,103,.65); outline-offset: 1px; }
 .canvas-mode-picker { width: min(340px, calc(100vw - 32px)); }
 .canvas-mode-picker > button > i { color: #d7d8df; font-size: 13px; font-style: normal; }
 
@@ -470,7 +475,8 @@
 .canvas-modal > header strong { font-size: 12px; }
 .canvas-node-editor { width: min(440px, calc(100vw - 32px)); }
 .canvas-node-editor-body { display: flex; flex-direction: column; gap: 13px; padding: 16px; }
-.canvas-node-editor-body label { display: flex; flex-direction: column; gap: 6px; color: #8c8e98; font-size: 9px; }
+.canvas-node-editor-body label,
+.canvas-node-editor-field { display: flex; flex-direction: column; gap: 6px; color: #8c8e98; font-size: 9px; }
 .canvas-node-editor-body input,
 .canvas-node-editor-body textarea,
 .canvas-node-editor-body select { width: 100%; border: 1px solid #41434c; border-radius: 8px; outline: 0; color: #dedee3; background: #1e1f24; font-size: 11px; }
@@ -480,6 +486,9 @@
 .canvas-node-editor-body input:focus,
 .canvas-node-editor-body textarea:focus,
 .canvas-node-editor-body select:focus { border-color: #696b75; }
+.canvas-node-editor { overflow: visible; }
+.canvas-node-editor-field .app-select-trigger { height: 34px; border-radius: 8px; font-size: 11px; }
+.canvas-node-editor-field .app-select-menu { max-height: 190px; }
 .canvas-node-editor > footer { display: flex; justify-content: flex-end; padding: 0 16px 15px; }
 .canvas-node-editor > footer button { height: 32px; padding: 0 15px; border: 0; border-radius: 8px; color: #1d1e22; background: #ececf0; cursor: pointer; font-size: 10px; }
 .canvas-shortcut-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; padding: 12px; }
@@ -607,10 +616,15 @@
 .canvas-toast { font-size: 11px; }
 
 .creation-canvas-shell button:focus-visible,
-.creation-canvas-shell input:focus-visible,
-.creation-canvas-shell textarea:focus-visible {
+.creation-canvas-shell a:focus-visible {
   outline: 1px solid var(--canvas-accent);
   outline-offset: 2px;
+}
+
+.creation-canvas-shell .app-select-trigger:focus-visible,
+.creation-canvas-shell .app-select-option:focus-visible {
+  outline: 0;
+  outline-offset: 0;
 }
 
 /* The light palette deliberately preserves node-kind accents while moving the
@@ -641,7 +655,7 @@
 [data-theme="light"] .creation-canvas-crumb { color: #b0b2bc; }
 [data-theme="light"] .creation-canvas-name { color: #33343a; }
 [data-theme="light"] .creation-canvas-name:hover { border-color: #d1d2d9; background: #f5f5f7; }
-[data-theme="light"] .creation-canvas-name:focus { border-color: #777984; background: #fff; box-shadow: 0 0 0 2px rgba(20, 21, 25, .07); }
+[data-theme="light"] .creation-canvas-name:focus { border-color: #777984; background: #fff; box-shadow: none; }
 [data-theme="light"] .canvas-view-switch { background: #f0f0f3; }
 [data-theme="light"] .canvas-view-switch button { color: #7b7d87; }
 [data-theme="light"] .canvas-view-switch button:hover { color: #36373d; }
@@ -764,7 +778,7 @@
   box-shadow: 0 18px 44px rgba(44, 45, 54, .14);
 }
 [data-theme="light"] .canvas-agent-composer:hover { border-color: #a5a7b2; }
-[data-theme="light"] .canvas-agent-composer:focus-within { border-color: #777984; box-shadow: 5px 6px 0 #d5d6dc, 0 0 0 2px rgba(20,21,25,.07), 0 20px 48px rgba(44,45,54,.14); }
+[data-theme="light"] .canvas-agent-composer:focus-within { border-color: #777984; box-shadow: 0 20px 48px rgba(44,45,54,.14); }
 [data-theme="light"] .canvas-agent-composer > textarea { color: #292a30; }
 [data-theme="light"] .canvas-agent-composer > textarea::placeholder,
 [data-theme="light"] .canvas-agent-composer > footer,

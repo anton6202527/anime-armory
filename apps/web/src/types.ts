@@ -15,6 +15,7 @@ export interface WorkCreationConfig {
   model: {
     modality: CreationModality;
     modelId: string;
+    providerSpec?: string;
   };
 }
 

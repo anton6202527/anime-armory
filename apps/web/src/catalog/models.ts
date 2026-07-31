@@ -84,6 +84,8 @@ export const TEXT_MODELS = [
     availability: "api",
     tags: ["多模态", "快速", "Agent"],
     modelId: "gemini-3.6-flash",
+    providerSpec: "gemini/gemini-3.6-flash",
+    apiKeyEnv: ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
     recommended: true,
   },
   {
@@ -105,6 +107,10 @@ export const TEXT_MODELS = [
     availability: "preview",
     tags: ["Pro", "复杂推理", "预览"],
     modelId: "gemini-3.1-pro-preview",
+    providerSpec: "gemini/gemini-3.1-pro-preview",
+    apiKeyEnv: ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
+    premium: true,
+    points: 8,
   },
   {
     id: "deepseek-v4-pro",
@@ -115,6 +121,10 @@ export const TEXT_MODELS = [
     availability: "api",
     tags: ["1M 上下文", "思考模式", "Agent"],
     modelId: "deepseek-v4-pro",
+    providerSpec: "deepseek/deepseek-v4-pro",
+    apiKeyEnv: ["DEEPSEEK_API_KEY"],
+    premium: true,
+    points: 6,
   },
   {
     id: "deepseek-v4-flash",
@@ -125,6 +135,9 @@ export const TEXT_MODELS = [
     availability: "api",
     tags: ["高性价比", "快速", "1M 上下文"],
     modelId: "deepseek-v4-flash",
+    providerSpec: "deepseek/deepseek-v4-flash",
+    apiKeyEnv: ["DEEPSEEK_API_KEY"],
+    recommended: true,
   },
   {
     id: "alibaba-qwen-3-7-max",
@@ -227,6 +240,8 @@ export const IMAGE_MODELS = [
     availability: "platform",
     tags: ["图片编辑", "一致性", "平台模型"],
     recommended: true,
+    premium: true,
+    points: 20,
   },
   {
     id: "liblib-image",
@@ -245,6 +260,8 @@ export const IMAGE_MODELS = [
     description: "支持多图融合、参考控制和交互式编辑的高质量档。",
     availability: "api",
     tags: ["多图参考", "编辑", "高质量"],
+    premium: true,
+    points: 20,
   },
   {
     id: "liblib-youchuan-v8-1",
@@ -254,6 +271,8 @@ export const IMAGE_MODELS = [
     description: "生图更连贯、细节更丰富，美学水准大幅提升。",
     availability: "platform",
     tags: ["美学", "细节", "平台模型"],
+    premium: true,
+    points: 20,
   },
   {
     id: "openai-gpt-image-2",
@@ -276,6 +295,8 @@ export const IMAGE_MODELS = [
     tags: ["4K", "文字渲染", "专业设计"],
     modelId: "gemini-3-pro-image",
     recommended: true,
+    premium: true,
+    points: 20,
   },
   {
     id: "google-nano-banana-2",
@@ -472,6 +493,8 @@ export const VIDEO_MODELS = [
     tags: ["音画同出", "多模态参考", "导演控制"],
     modelId: "seedance2",
     recommended: true,
+    premium: true,
+    points: 60,
   },
   {
     id: "bytedance-seedance-2-fast",
@@ -503,6 +526,8 @@ export const VIDEO_MODELS = [
     tags: ["4K", "原生音频", "首尾帧"],
     modelId: "veo-3.1-generate-preview",
     recommended: true,
+    premium: true,
+    points: 80,
   },
   {
     id: "google-veo-3-1-fast",
@@ -553,6 +578,8 @@ export const VIDEO_MODELS = [
     tags: ["原生音频", "多镜头", "15 秒"],
     modelId: "kling-v3",
     recommended: true,
+    premium: true,
+    points: 60,
   },
   {
     id: "kling-video-3-omni",
@@ -573,6 +600,8 @@ export const VIDEO_MODELS = [
     availability: "api",
     tags: ["音画同步", "多镜头", "参考视频"],
     modelId: "wan2.7-t2v",
+    premium: true,
+    points: 50,
   },
   {
     id: "alibaba-happyhorse-1-1",
@@ -641,6 +670,8 @@ export const AUDIO_MODELS = [
     tags: ["情感配音", "多角色", "70+ 语言"],
     modelId: "eleven_v3",
     recommended: true,
+    premium: true,
+    points: 8,
   },
   {
     id: "elevenlabs-flash-v2-5",
@@ -708,6 +739,8 @@ export const AUDIO_MODELS = [
     tags: ["音色设计", "音色克隆", "中文方言"],
     modelId: "cosyvoice-v3.5-plus",
     recommended: true,
+    premium: true,
+    points: 6,
   },
   {
     id: "minimax-speech-2-8-hd",
@@ -752,6 +785,8 @@ export const AUDIO_MODELS = [
     tags: ["完整歌曲", "歌词", "44.1kHz"],
     modelId: "lyria-3-pro-preview",
     recommended: true,
+    premium: true,
+    points: 16,
   },
   {
     id: "google-lyria-3-clip",
@@ -785,6 +820,8 @@ export const AUDIO_MODELS = [
     availability: "api",
     tags: ["歌曲", "翻唱", "低频表现"],
     modelId: "Music-2.6",
+    premium: true,
+    points: 16,
   },
   {
     id: "suno-v5-5",
@@ -808,12 +845,28 @@ export const AUDIO_MODELS = [
   },
 ] satisfies ModelDefinition[];
 
-export const MODEL_GROUPS: Record<ModelModality, ModelDefinition[]> = {
+const PRIMARY_MODEL_IDS: Record<ModelModality, readonly string[]> = {
+  text: ["deepseek-v4-flash", "deepseek-v4-pro", "google-gemini-3-6-flash", "google-gemini-3-1-pro"],
+  image: ["bytedance-seedream-5-pro", "liblib-youchuan-v8-1", "liblib-general-image-pro", "google-nano-banana-pro"],
+  video: ["bytedance-seedance-2", "google-veo-3-1", "kling-video-3", "alibaba-wan-2-7"],
+  audio: ["elevenlabs-eleven-v3", "alibaba-cosyvoice-3-5-plus", "google-lyria-3-pro", "minimax-music-2-6"],
+};
+
+const FULL_MODEL_GROUPS: Record<ModelModality, ModelDefinition[]> = {
   text: TEXT_MODELS,
   image: IMAGE_MODELS,
   video: VIDEO_MODELS,
   audio: AUDIO_MODELS,
 };
+
+export const MODEL_GROUPS: Record<ModelModality, ModelDefinition[]> = Object.fromEntries(
+  (Object.keys(PRIMARY_MODEL_IDS) as ModelModality[]).map((modality) => [
+    modality,
+    PRIMARY_MODEL_IDS[modality]
+      .map((id) => FULL_MODEL_GROUPS[modality].find((model) => model.id === id))
+      .filter((model): model is ModelDefinition => Boolean(model)),
+  ]),
+) as Record<ModelModality, ModelDefinition[]>;
 
 export const MODEL_CATALOG = MODEL_GROUPS;
 
@@ -822,5 +875,5 @@ export function getModelsByProvider(provider: string): readonly ModelCatalogItem
 }
 
 export function getModelById(id: string): ModelCatalogItem | undefined {
-  return Object.values(MODEL_GROUPS).flat().find((model) => model.id === id);
+  return Object.values(FULL_MODEL_GROUPS).flat().find((model) => model.id === id);
 }

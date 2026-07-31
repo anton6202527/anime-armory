@@ -26,8 +26,11 @@ import {
 } from "@xyflow/react";
 import { BrandIcon } from "../../components/BrandIcon";
 import { LineIcon } from "../../components/LineIcon";
+import { MembershipMark } from "../../components/MembershipMark";
+import { SelectMenu } from "../../components/SelectMenu";
 import { MODEL_GROUPS, getModelById } from "../../catalog/models";
 import type { ModelModality } from "../../catalog/types";
+import { MembershipDialog } from "../account/MembershipDialog";
 import { SKILLS } from "../../catalog/skills";
 import { createAgentGateway, type AgentGateway } from "../../lib/agent";
 import {
@@ -57,6 +60,14 @@ type OverlayKind = "shortcuts" | "tutorial" | "share" | "clear-data";
 type ComposerMenuKind = "model" | "mode" | null;
 type WorkflowNodeKind = "text" | "script" | "image" | "audio" | "video" | "compose";
 type WorkflowNodeStatus = "idle" | "ready" | "running" | "done" | "failed";
+
+const WORKFLOW_STATUS_OPTIONS: Array<{ value: WorkflowNodeStatus; label: string }> = [
+  { value: "idle", label: "待处理" },
+  { value: "ready", label: "可执行" },
+  { value: "running", label: "执行中" },
+  { value: "done", label: "已完成" },
+  { value: "failed", label: "失败" },
+];
 
 type WorkflowNodeData = {
   kind: WorkflowNodeKind;
@@ -460,6 +471,7 @@ function defaultCreationConfig(work: WebWork): WorkCreationConfig {
     model: {
       modality: "text",
       modelId: fallback?.id ?? "",
+      ...(fallback?.providerSpec ? { providerSpec: fallback.providerSpec } : {}),
     },
   };
 }
@@ -521,6 +533,7 @@ export function CanvasPage({
   const [activeSkill, setActiveSkill] = useState<string | null>(storedDocument?.activeSkill ?? work.creationConfig?.skillId ?? null);
   const [creationConfig, setCreationConfig] = useState<WorkCreationConfig>(() => defaultCreationConfig(storedDocument?.work ?? work));
   const [composerMenu, setComposerMenu] = useState<ComposerMenuKind>(null);
+  const [membershipOpen, setMembershipOpen] = useState(false);
   const [modelModality, setModelModality] = useState<ModelModality>(creationConfig.model.modality);
   const [overviewTab, setOverviewTab] = useState<"canvas" | "assets">("canvas");
   const [overviewQuery, setOverviewQuery] = useState("");
@@ -1286,7 +1299,7 @@ export function CanvasPage({
               <label><span>标题</span><input value={editingNode.data.title} onChange={(event) => updateNodeData(editingNode.id, { title: event.target.value })} /></label>
               <label><span>说明</span><textarea value={editingNode.data.description} onChange={(event) => updateNodeData(editingNode.id, { description: event.target.value })} /></label>
               <label><span>关联资产</span><input value={editingNode.data.assetName ?? ""} placeholder="可选" onChange={(event) => updateNodeData(editingNode.id, { assetName: event.target.value || undefined })} /></label>
-              <label><span>状态</span><select value={editingNode.data.status} onChange={(event) => updateNodeData(editingNode.id, { status: event.target.value as WorkflowNodeStatus })}><option value="idle">待处理</option><option value="ready">可执行</option><option value="running">执行中</option><option value="done">已完成</option><option value="failed">失败</option></select></label>
+              <div className="canvas-node-editor-field"><span>状态</span><SelectMenu ariaLabel="节点状态" value={editingNode.data.status} options={WORKFLOW_STATUS_OPTIONS} onChange={(status) => updateNodeData(editingNode.id, { status })} /></div>
             </div>
             <footer><button type="button" onClick={() => setEditingNodeId(null)}>完成</button></footer>
           </section>
@@ -1350,11 +1363,11 @@ export function CanvasPage({
           <header><strong>选择模型</strong><button type="button" onClick={() => setComposerMenu(null)} aria-label="关闭"><Icon name="close" /></button></header>
           <nav role="tablist" aria-label="模型类型">{(["text", "image", "video", "audio"] as const).map((modality) => <button key={modality} type="button" role="tab" aria-selected={modelModality === modality} className={modelModality === modality ? "is-active" : ""} onClick={() => setModelModality(modality)}>{modality === "text" ? "文本" : modality === "image" ? "图片" : modality === "video" ? "视频" : "音频"}</button>)}</nav>
           <div>{MODEL_GROUPS[modelModality].map((model) => <button key={model.id} type="button" className={creationConfig.model.modelId === model.id ? "is-selected" : ""} onClick={() => {
-            setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.id } }));
+            setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.id, ...(model.providerSpec ? { providerSpec: model.providerSpec } : {}) } }));
             setModelModality(model.modality);
             setComposerMenu(null);
             setNotice(`已选择 ${model.name}`);
-          }}><span><b>{model.name}</b><small>{model.provider} · {model.description}</small></span>{model.recommended && <i>推荐</i>}</button>)}</div>
+          }}><span><b>{model.name}{model.premium && <span className="canvas-membership-mark" role="button" tabIndex={0} aria-label={`查看 ${model.name} 的会员积分方案`} onClick={(event) => { event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); } }}><MembershipMark /></span>}</b><small>{model.providerSpec ? `API Key · ${model.provider}` : `${model.provider} · ${model.description}`}</small></span>{model.recommended && !model.premium && <i>推荐</i>}</button>)}</div>
         </div>}
         {composerMenu === "mode" && <div className="canvas-composer-popover canvas-mode-picker" role="dialog" aria-label="生成模式">
           <header><strong>生成模式</strong><button type="button" onClick={() => setComposerMenu(null)} aria-label="关闭"><Icon name="close" /></button></header>
@@ -1374,6 +1387,8 @@ export function CanvasPage({
           </section>
         </div>
       )}
+
+      <MembershipDialog open={membershipOpen} onClose={() => setMembershipOpen(false)} onPurchase={(label) => { setMembershipOpen(false); setNotice(`已选择${label}，支付服务接入后即可购买`); }} />
 
       {notice && <div className="canvas-toast" role="status">{notice}</div>}
     </main>

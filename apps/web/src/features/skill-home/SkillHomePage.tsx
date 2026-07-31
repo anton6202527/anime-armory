@@ -4,6 +4,7 @@ import {
   Bot,
   Box,
   Check,
+  ChevronRight,
   CircleHelp,
   ClipboardPenLine,
   Clock3,
@@ -25,9 +26,10 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BrandIcon } from "../../components/BrandIcon";
 import { LineIcon } from "../../components/LineIcon";
+import { MembershipMark } from "../../components/MembershipMark";
 import { MODEL_GROUPS } from "../../catalog/models";
 import {
   listSkillSourceGroups,
@@ -43,6 +45,7 @@ import { createUserSkill, deleteUserSkill, listUserSkills, type UserSkillRecord 
 import { createWebWork, saveWork } from "../../lib/work";
 import type { CreationLine, PendingAttachment, WebWork } from "../../types";
 import { AuthDialog } from "../account/AuthDialog";
+import { MembershipDialog } from "../account/MembershipDialog";
 import { CreateSkillDialog, type CreateSkillFormValues } from "./CreateSkillDialog";
 
 const MODALITY_LABELS: Record<ModelModality, string> = {
@@ -79,7 +82,8 @@ function matchesMarketCategory(skill: SkillDefinition, marketCategory: string) {
 }
 
 type OpenMenu = "model" | "skill" | "mode" | null;
-type SkillTab = "all" | "common" | "favorite" | "mine";
+type SkillTab = "common" | "favorite" | "mine";
+type SkillLibraryTab = "skills" | "favorite" | "mine";
 
 function toAttachment(file: File): PendingAttachment {
   return {
@@ -165,11 +169,15 @@ export function SkillHomePage({
   const [generationMode, setGenerationMode] = useState<"manual" | "auto">("auto");
   const [skillTab, setSkillTab] = useState<SkillTab>("common");
   const [skillPickerQuery, setSkillPickerQuery] = useState("");
-  const [pageTab, setPageTab] = useState<"skills" | "favorite" | "mine">("skills");
+  const [pageTab, setPageTab] = useState<SkillLibraryTab>("skills");
   const [category, setCategory] = useState("推荐");
   const [query, setQuery] = useState("");
   const [favorites, setFavorites] = useState<Set<string>>(readFavorites);
   const [detailSkill, setDetailSkill] = useState<SkillDefinition | null>(null);
+  const [allSkillsOpen, setAllSkillsOpen] = useState(false);
+  const [catalogTab, setCatalogTab] = useState<SkillLibraryTab>("skills");
+  const [catalogCategory, setCatalogCategory] = useState("推荐");
+  const [catalogQuery, setCatalogQuery] = useState("");
   const [failedPreviewSkillId, setFailedPreviewSkillId] = useState<string | null>(null);
   const [detailSkillSourceGroups, setDetailSkillSourceGroups] = useState<SkillSourceGroup[]>([]);
   const [activeSourceGroupId, setActiveSourceGroupId] = useState("");
@@ -181,6 +189,7 @@ export function SkillHomePage({
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [membershipOpen, setMembershipOpen] = useState(false);
   const [pageAfterAuth, setPageAfterAuth] = useState<"favorite" | "mine" | null>(null);
   const [accountOpen, setAccountOpen] = useState(false);
   const [createSkillOpen, setCreateSkillOpen] = useState(false);
@@ -234,6 +243,17 @@ export function SkillHomePage({
     });
   }, [allSkills, customSkillIds, favorites, skillPickerQuery, skillTab]);
 
+  const catalogSkills = useMemo(() => {
+    const normalizedQuery = catalogQuery.trim().toLocaleLowerCase();
+    return allSkills.filter((skill) => {
+      if (catalogTab === "favorite" && !favorites.has(skill.id)) return false;
+      if (catalogTab === "mine" && !customSkillIds.has(skill.id)) return false;
+      if (catalogTab === "skills" && !matchesMarketCategory(skill, catalogCategory)) return false;
+      if (!normalizedQuery) return true;
+      return `${skill.title} ${skill.description} ${skill.creator}`.toLocaleLowerCase().includes(normalizedQuery);
+    });
+  }, [allSkills, catalogCategory, catalogQuery, catalogTab, customSkillIds, favorites]);
+
   useEffect(() => subscribeAuth((user) => { setAuthUser(user); setAuthReady(true); }), []);
 
   useEffect(() => {
@@ -268,12 +288,13 @@ export function SkillHomePage({
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       if (detailSkill) setDetailSkill(null);
+      else if (allSkillsOpen) setAllSkillsOpen(false);
       else if (accountOpen) setAccountOpen(false);
       else setOpenMenu(null);
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [accountOpen, detailSkill]);
+  }, [accountOpen, allSkillsOpen, detailSkill]);
 
   useEffect(() => {
     if (!toast) return;
@@ -337,6 +358,7 @@ export function SkillHomePage({
   function useSkill(skill: SkillDefinition, notify = true) {
     setSelectedSkillId(skill.id);
     setDetailSkill(null);
+    setAllSkillsOpen(false);
     setOpenMenu(null);
     if (notify) setToast(`已添加「${skill.title}」`);
     window.setTimeout(() => promptRef.current?.focus(), 0);
@@ -364,7 +386,11 @@ export function SkillHomePage({
       skillId: effectiveSkill.id,
       ...(customRecord ? { skillDefinition: { title: effectiveSkill.title, description: effectiveSkill.description, guide: effectiveSkill.guide, steps: effectiveSkill.steps, useCases: effectiveSkill.useCases } } : {}),
       generationMode,
-      model: { modality, modelId: effectiveModel.id },
+      model: {
+        modality,
+        modelId: effectiveModel.id,
+        ...(effectiveModel.providerSpec ? { providerSpec: effectiveModel.providerSpec } : {}),
+      },
     });
     saveWork(work);
     onCreate(work, attachments);
@@ -403,6 +429,25 @@ export function SkillHomePage({
       return;
     }
     setSkillTab(nextTab);
+  }
+
+  function openAllSkills() {
+    setOpenMenu(null);
+    setCatalogTab("skills");
+    setCatalogCategory("推荐");
+    setCatalogQuery("");
+    setAllSkillsOpen(true);
+  }
+
+  function selectCatalogTab(nextTab: SkillLibraryTab) {
+    if ((nextTab === "favorite" || nextTab === "mine") && !authUser) {
+      setAllSkillsOpen(false);
+      setPageAfterAuth(nextTab);
+      openAuth();
+      return;
+    }
+    setCatalogTab(nextTab);
+    setCatalogQuery("");
   }
 
   function openCreateSkill() {
@@ -491,7 +536,7 @@ export function SkillHomePage({
 
                 <div className="account-plan-card">
                   <span><b>免费用户</b><small>基础创作账户</small></span>
-                  <button type="button" onClick={() => setToast("会员系统正在准备中")}>开通会员</button>
+                  <button type="button" onClick={() => { setAccountOpen(false); setMembershipOpen(true); }}>开通会员</button>
                 </div>
 
                 <div className="account-stats-card">
@@ -582,16 +627,19 @@ export function SkillHomePage({
                     <div className="model-section-label">{MODALITY_LABELS[modality]}</div>
                     <div className="model-list">
                       {MODEL_GROUPS[modality].map((model) => (
-                        <button
-                          key={model.id}
-                          className="model-row"
-                          type="button"
-                          onClick={() => { setSelectedModels((current) => ({ ...current, [modality]: model.id })); setOpenMenu(null); }}
-                        >
-                          <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{modelMark(model)}</span>
-                          <span className="model-copy"><b>{model.name}</b><small>{model.description}</small></span>
-                          <Plus size={16} />
-                        </button>
+                        <div key={model.id} className="model-row">
+                          <button className="model-row-main" type="button" onClick={() => { setSelectedModels((current) => ({ ...current, [modality]: model.id })); setOpenMenu(null); }}>
+                            <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{modelMark(model)}</span>
+                            <span className="model-copy">
+                              <span className="model-name">
+                                <b>{model.name}</b>
+                                {model.premium && <span className="model-membership-mark" role="button" tabIndex={0} aria-label={`查看 ${model.name} 的会员积分方案`} onClick={(event) => { event.stopPropagation(); setOpenMenu(null); setMembershipOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setOpenMenu(null); setMembershipOpen(true); } }}><MembershipMark /></span>}
+                              </span>
+                              <small>{model.description}</small>
+                            </span>
+                            <Plus size={16} />
+                          </button>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -608,7 +656,7 @@ export function SkillHomePage({
                       <strong>Skill</strong>
                       <div className="skill-picker-heading-actions">
                         <button type="button" onClick={openCreateSkill}><Plus size={14} />创建</button>
-                        <button className={skillTab === "all" ? "active" : ""} type="button" onClick={() => { setSkillTab("all"); setSkillPickerQuery(""); }}>全部</button>
+                        <button type="button" onClick={openAllSkills}>全部</button>
                       </div>
                     </div>
                     <div className="skill-picker-toolbar">
@@ -633,6 +681,9 @@ export function SkillHomePage({
                         </div>
                       ))}
                       {!pickerSkills.length && <div className="picker-empty">{skillTab === "mine" && !authUser ? "登录后查看我的 Skill" : "没有匹配的 Skill"}</div>}
+                      {skillTab === "common" && !skillPickerQuery.trim() && (
+                        <button className="skill-picker-view-all" type="button" onClick={openAllSkills}>没找到合适的？查看全部 Skill <ChevronRight size={14} /></button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -740,79 +791,144 @@ export function SkillHomePage({
         </section>
       </div>
 
-      {detailSkill && (
-        <div className="modal-backdrop" role="presentation" onMouseDown={() => setDetailSkill(null)}>
-          <section className="skill-detail-modal" role="dialog" aria-modal="true" aria-label={detailSkill.title} onMouseDown={(event) => event.stopPropagation()}>
-            <button className="modal-close" type="button" aria-label="关闭" onClick={() => setDetailSkill(null)}><X size={20} /></button>
-            {detailPreview && failedPreviewSkillId !== detailSkill.id ? (
-              <div className="skill-detail-preview media-mode" style={{ "--skill-accent": detailSkill.accent } as CSSProperties}>
-                {detailPreview.kind === "image" ? (
-                  <img src={detailPreview.src} alt={detailPreview.alt} onError={() => setFailedPreviewSkillId(detailSkill.id)} />
-                ) : (
-                  <video src={detailPreview.src} poster={detailPreview.poster} controls preload="metadata" onError={() => setFailedPreviewSkillId(detailSkill.id)} />
-                )}
-              </div>
-            ) : (
-              <div className="skill-detail-preview source-mode">
-                <div className="skill-source-tabs" role="tablist" aria-label={`${detailSkill.title}系列 Skill`}>
-                  {detailSkillSourceGroups.length ? detailSkillSourceGroups.map((group) => (
-                    <button
-                      className={activeSourceGroup?.id === group.id ? "active" : ""}
-                      type="button"
-                      role="tab"
-                      aria-selected={activeSourceGroup?.id === group.id}
-                      title={`${group.path} · ${group.files.length} 个文件`}
-                      key={group.id}
-                      onClick={() => {
-                        setActiveSourceGroupId(group.id);
-                        setActiveSourceFileId(group.files[0]?.id ?? "");
-                      }}
-                    >
-                      <FileCode2 size={14} /><span>{group.name}</span>
-                    </button>
-                  )) : <span className="skill-source-loading"><LoaderCircle className="spinning" size={14} />正在读取 Skill 文件…</span>}
-                </div>
-                <div className="skill-source-workspace">
-                  <aside className="skill-source-files" aria-label={`${activeSourceGroup?.name ?? "Skill"}文件列表`}>
-                    <header><span>{activeSourceGroup?.name ?? "Skill"}</span><small>{activeSourceGroup?.files.length ?? 0}</small></header>
-                    <div>
-                      {activeSourceGroup?.files.map((file) => {
-                        const parentPath = file.relativePath.includes("/") ? file.relativePath.slice(0, file.relativePath.lastIndexOf("/")) : "";
-                        return (
-                          <button
-                            className={activeSourceFile?.id === file.id ? "active" : ""}
-                            type="button"
-                            title={file.path}
-                            key={file.id}
-                            onClick={() => setActiveSourceFileId(file.id)}
-                          >
-                            <FileCode2 size={13} />
-                            <span><b>{file.name}</b>{parentPath && <small>{parentPath}</small>}</span>
-                          </button>
-                        );
-                      })}
+      {allSkillsOpen && (
+        <div className="modal-backdrop skill-catalog-backdrop" role="presentation" onMouseDown={() => setAllSkillsOpen(false)}>
+          <section className="skill-catalog-modal" role="dialog" aria-modal="true" aria-label="全部 Skill" onMouseDown={(event) => event.stopPropagation()}>
+            <button className="skill-catalog-close" type="button" aria-label="关闭全部 Skill" onClick={() => setAllSkillsOpen(false)}><X size={14} /></button>
+            <div className="skill-catalog-scroll">
+              <header className="skill-catalog-header">
+                <nav className="skill-catalog-tabs" aria-label="Skill 分类">
+                  {([['skills', 'Skill'], ['favorite', '收藏'], ['mine', '我的']] as const).map(([key, label]) => (
+                    <button key={key} className={catalogTab === key ? "active" : ""} type="button" onClick={() => selectCatalogTab(key)}>{label}</button>
+                  ))}
+                </nav>
+                {catalogTab === "skills" && (
+                  <div className="skill-catalog-toolbar">
+                    <div className="skill-catalog-categories">
+                      {MARKET_CATEGORIES.map((item) => <button key={item} className={catalogCategory === item ? "active" : ""} type="button" onClick={() => setCatalogCategory(item)}>{item}</button>)}
                     </div>
-                  </aside>
-                  <pre key={activeSourceFile?.id ?? "loading"}><code>{sourceLoading ? "正在读取文件…" : activeSourceText || "请选择一个文件"}</code></pre>
+                    <label className="skill-catalog-search"><Search size={14} /><input value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)} placeholder="搜索 Skill" /></label>
+                  </div>
+                )}
+              </header>
+              {userSkillsLoading && catalogTab === "mine" ? (
+                <div className="skill-catalog-empty"><LoaderCircle className="spinning" size={26} /><strong>正在加载我的 Skill</strong></div>
+              ) : catalogSkills.length ? (
+                <div className="skill-catalog-grid">
+                  {catalogSkills.map((skill) => (
+                    <article className="skill-catalog-card" key={skill.id} onClick={() => setDetailSkill(skill)}>
+                      <div className={`skill-catalog-cover skill-cover-${skill.line}`}>
+                        <img src={LINE_COVERS[skill.line]} alt="" loading="lazy" draggable={false} />
+                        <span>{MEDIA_LABELS[skill.mediaType]}</span>
+                      </div>
+                      <div className="skill-catalog-copy">
+                        <h3>{skill.title}</h3>
+                        <p>{skill.description}</p>
+                        <footer><span>{skill.creator}</span><i aria-hidden="true" /><span><UserRound size={12} />{compactNumber(skill.views)}</span></footer>
+                      </div>
+                      <div className="skill-catalog-actions">
+                        <button type="button" title={favorites.has(skill.id) ? "取消收藏" : "收藏"} aria-label={favorites.has(skill.id) ? "取消收藏" : "收藏"} className={favorites.has(skill.id) ? "active" : ""} onClick={(event) => { event.stopPropagation(); requestFavorite(skill.id); }}><Star size={14} fill={favorites.has(skill.id) ? "currentColor" : "none"} /></button>
+                        <button type="button" className="use" onClick={(event) => { event.stopPropagation(); useSkill(skill, false); }}>使用</button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="skill-catalog-empty"><Search size={28} /><strong>没有找到相关 Skill</strong><span>换个分类或关键词试试</span></div>
+              )}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {detailSkill && (
+        <div className="modal-backdrop skill-detail-backdrop" role="presentation" onMouseDown={() => setDetailSkill(null)}>
+          <section className="skill-detail-modal" role="dialog" aria-modal="true" aria-label={detailSkill.title} onMouseDown={(event) => event.stopPropagation()}>
+            <button className="modal-close" type="button" aria-label="关闭" onClick={() => setDetailSkill(null)}><X size={12} /></button>
+            <header className="libtv-detail-header">
+              <div className="libtv-detail-heading">
+                <h2>{detailSkill.title}</h2>
+                <div className="libtv-detail-meta">
+                  <span className="detail-author-avatar">{detailSkill.creator.slice(0, 1).toUpperCase()}</span>
+                  <span>{detailSkill.creator}</span><i aria-hidden="true" />
+                  <span>{detailSkill.category}</span><i aria-hidden="true" />
+                  <span><UserRound size={13} />{compactNumber(detailSkill.views)}</span><i aria-hidden="true" />
+                  <span><Star size={13} />{compactNumber(detailSkill.favorites + (favorites.has(detailSkill.id) ? 1 : 0))}</span>
                 </div>
               </div>
-            )}
-            <div className="skill-detail-copy">
-              <span className="detail-eyebrow">{detailSkill.category}</span>
-              <h2>{detailSkill.title}</h2>
-              <p className="detail-creator">by {detailSkill.creator} · <Play size={12} />{compactNumber(detailSkill.views)} 次使用</p>
-              <div className="detail-actions">
-                <button type="button" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setToast("页面链接已复制"); }}><Share2 size={15} />分享</button>
-                <button className={favorites.has(detailSkill.id) ? "active favorite-detail" : "favorite-detail"} type="button" onClick={() => requestFavorite(detailSkill.id)}><Star size={15} fill={favorites.has(detailSkill.id) ? "currentColor" : "none"} />收藏</button>
-                {customSkillIds.has(detailSkill.id) && <button className="danger" type="button" onClick={() => { void removeUserSkill(detailSkill).catch((reason) => setToast(reason instanceof Error ? reason.message : "删除失败")); }}><Trash2 size={15} />删除</button>}
-                <button className="primary" type="button" onClick={() => useSkill(detailSkill)}><Plus size={16} />添加 Skill</button>
+              <div className="libtv-detail-actions">
+                <button type="button" aria-label="分享" title="分享" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setToast("页面链接已复制"); }}><Share2 size={16} /></button>
+                <button className={favorites.has(detailSkill.id) ? "active" : ""} type="button" aria-label={favorites.has(detailSkill.id) ? "取消收藏" : "收藏"} title={favorites.has(detailSkill.id) ? "取消收藏" : "收藏"} onClick={() => requestFavorite(detailSkill.id)}><Star size={16} fill={favorites.has(detailSkill.id) ? "currentColor" : "none"} /></button>
+                {customSkillIds.has(detailSkill.id) && <button className="danger" type="button" aria-label="删除" title="删除" onClick={() => { void removeUserSkill(detailSkill).catch((reason) => setToast(reason instanceof Error ? reason.message : "删除失败")); }}><Trash2 size={15} /></button>}
+                <button className="primary" type="button" onClick={() => useSkill(detailSkill)}>添加 Skill</button>
               </div>
-              <div className="detail-scroll">
-                <h3>简介</h3><p>{detailSkill.description}</p>
-                <h3>使用场景</h3><ul>{detailSkill.useCases.map((item) => <li key={item}>{item}</li>)}</ul>
-                <h3>工作流</h3><ol>{detailSkill.steps.map((item) => <li key={item}>{item}</li>)}</ol>
-                <h3>如何使用</h3><p>{detailSkill.guide}</p>
-              </div>
+            </header>
+            <div className="libtv-detail-body">
+              {detailPreview && failedPreviewSkillId !== detailSkill.id && (
+                <section className="libtv-detail-case">
+                  <h3>精选案例</h3>
+                  <div>
+                    {detailPreview.kind === "image" ? (
+                      <img src={detailPreview.src} alt={detailPreview.alt} onError={() => setFailedPreviewSkillId(detailSkill.id)} />
+                    ) : (
+                      <video src={detailPreview.src} poster={detailPreview.poster} controls preload="metadata" onError={() => setFailedPreviewSkillId(detailSkill.id)} />
+                    )}
+                  </div>
+                </section>
+              )}
+              <section className="libtv-detail-info">
+                <h3>简介</h3>
+                <dl>
+                  <div><dt>介绍</dt><dd>{detailSkill.description}</dd></div>
+                  <div><dt>使用场景</dt><dd>{detailSkill.useCases.join("、")}</dd></div>
+                  <div><dt>工作流</dt><dd>{detailSkill.steps.join(" → ")}</dd></div>
+                  <div><dt>如何使用</dt><dd>{detailSkill.guide}</dd></div>
+                  <div><dt>输出内容</dt><dd>{MEDIA_LABELS[detailSkill.mediaType]}</dd></div>
+                </dl>
+              </section>
+              <section className="libtv-detail-source">
+                <h3>Skill</h3>
+                {detailSkillSourceGroups.length ? (
+                  <div className="libtv-source-browser">
+                    <div className="skill-source-tabs" role="tablist" aria-label={`${detailSkill.title}系列 Skill`}>
+                      {detailSkillSourceGroups.map((group) => (
+                        <button
+                          className={activeSourceGroup?.id === group.id ? "active" : ""}
+                          type="button"
+                          role="tab"
+                          aria-selected={activeSourceGroup?.id === group.id}
+                          title={`${group.path} · ${group.files.length} 个文件`}
+                          key={group.id}
+                          onClick={() => {
+                            setActiveSourceGroupId(group.id);
+                            setActiveSourceFileId(group.files[0]?.id ?? "");
+                          }}
+                        >
+                          <FileCode2 size={14} /><span>{group.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="skill-source-workspace">
+                      <aside className="skill-source-files" aria-label={`${activeSourceGroup?.name ?? "Skill"}文件列表`}>
+                        <header><span>{activeSourceGroup?.name ?? "Skill"}</span><small>{activeSourceGroup?.files.length ?? 0}</small></header>
+                        <div>
+                          {activeSourceGroup?.files.map((file) => {
+                            const parentPath = file.relativePath.includes("/") ? file.relativePath.slice(0, file.relativePath.lastIndexOf("/")) : "";
+                            return (
+                              <button className={activeSourceFile?.id === file.id ? "active" : ""} type="button" title={file.path} key={file.id} onClick={() => setActiveSourceFileId(file.id)}>
+                                <FileCode2 size={13} /><span><b>{file.name}</b>{parentPath && <small>{parentPath}</small>}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </aside>
+                      <pre key={activeSourceFile?.id ?? "loading"}><code>{sourceLoading ? "正在读取文件…" : activeSourceText || "请选择一个文件"}</code></pre>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="libtv-workflow-preview">{detailSkill.steps.map((step, index) => <span key={step}><b>{index + 1}</b>{step}</span>)}</div>
+                )}
+              </section>
             </div>
           </section>
         </div>
@@ -828,6 +944,11 @@ export function SkillHomePage({
           setToast("登录成功");
           return {};
         }}
+      />
+      <MembershipDialog
+        open={membershipOpen}
+        onClose={() => setMembershipOpen(false)}
+        onPurchase={(label) => { setMembershipOpen(false); setToast(`已选择${label}，支付服务接入后即可购买`); }}
       />
       <CreateSkillDialog open={createSkillOpen} ownerEmail={authUser?.email ?? ""} onClose={() => setCreateSkillOpen(false)} onCreate={handleCreateSkill} />
       {toast && <div className="home-toast"><Bell size={15} />{toast}</div>}
