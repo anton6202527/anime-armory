@@ -21,7 +21,7 @@
       标 unavailable，梯子封顶在「指定参考图」档——这是 ad 线默认路线的真实天花板。
 
 档位口径：
-    梯子四档与用户可见契约 `skills/ad-craft/references/选择点与偏好.md` 的选择点
+    梯子四档与用户可见契约 `skills/ad/ad-craft/references/选择点与偏好.md` 的选择点
     `一致性增强`（共享定妆+锚点 | 指定参考图 | 后端主体库 | +LoRA）**一一对齐**，不另造档名。
     - 未知后端 → 保守 profile（只有 reference、参考预算 1）+ `known=False`。**绝不假装支持**。
     - 参考预算是**内部启发式上限**（`provenance` 字段标注），不是厂商 API 文档承诺；真实上限
@@ -66,7 +66,7 @@ CAP_UNKNOWN = "unknown"
 CAP_UNAVAILABLE = "unavailable"
 
 # ── 一致性梯子档位（**必须与用户可见的既有契约对齐，不另造档名**） ─────────────────
-# 单一真值源：`skills/ad-craft/references/选择点与偏好.md` 的选择点
+# 单一真值源：`skills/ad/ad-craft/references/选择点与偏好.md` 的选择点
 #   `一致性增强`: 共享定妆+锚点 | 指定参考图 | 后端主体库 | +LoRA（默认 共享定妆+锚点）
 # 与 `ad-image/SKILL.md`「一致性梯子」的 ①参考图派生 → ②后端原生主体ID → ③LoRA 是同一把梯子：
 #   ① = 共享定妆+锚点 / 指定参考图（两档都属"参考图派生"，后者是逐镜精选、更强）

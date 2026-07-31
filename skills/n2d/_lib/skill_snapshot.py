@@ -38,14 +38,34 @@ def file_sha256(path: str) -> str:
             h.update(chunk)
     return h.hexdigest()
 
+
+def skill_dir(skills_dir: str, skill: str) -> str:
+    """Resolve both the current nested layout and legacy flat test fixtures."""
+    line = skill.split("-", 1)[0]
+    candidates = [
+        os.path.join(skills_dir, skill),
+        os.path.join(skills_dir, line, skill),
+    ]
+    if os.path.basename(os.path.normpath(skills_dir)) == line and skill == line:
+        candidates.insert(0, skills_dir)
+    for candidate in candidates:
+        if os.path.isfile(os.path.join(candidate, "SKILL.md")):
+            return candidate
+    return candidates[0]
+
 def iter_skill_files(skills_dir: str, skill: str) -> Iterable[str]:
     """Iterate through all trackable text files in a specific skill directory."""
-    base = os.path.join(skills_dir, skill)
+    base = skill_dir(skills_dir, skill)
     if not os.path.isdir(base):
         return []
     files: List[str] = []
     for root, dirs, names in os.walk(base):
-        dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")]
+        dirs[:] = [
+            d for d in dirs
+            if d not in SKIP_DIRS
+            and not d.startswith(".")
+            and not (skill == skill.split("-", 1)[0] and os.path.isfile(os.path.join(root, d, "SKILL.md")))
+        ]
         for name in names:
             if name.startswith(".") or name.endswith(".pyc") or name.endswith(".vsix"):
                 continue

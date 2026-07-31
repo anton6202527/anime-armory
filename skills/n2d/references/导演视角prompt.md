@@ -92,7 +92,7 @@
 阶段2 `storyboard.json` 定稿后先跑：
 
 ```bash
-python3 skills/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write
+python3 skills/n2d/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write
 ```
 
 它会生成 `生产数据/director_camera_plan_第N集.json/md`，逐 Clip 输出三类内容：

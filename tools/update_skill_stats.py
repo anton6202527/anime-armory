@@ -27,12 +27,14 @@ STAT_RE = re.compile(
 README_DATE_RE = re.compile(r"> 统计时间：\d{4}-\d{2}-\d{2}。")
 README_ROW_RE = {
     line: re.compile(
-        rf"\| {line} \| `{line}` \+ `{line}-\*` \| \d+ \| \d+ \| \d+ \|"
+        rf"\| {line} \| `(?:{line}` \+ `{line}-\*|skills/{line}/\*\*/SKILL\.md)` "
+        rf"\| \d+ \| \d+ \| \d+ \|"
     )
     for line in SERIES
 }
 README_TOTAL_RE = re.compile(
-    r"\| \*\*合计\*\* \| `skills/\*/SKILL\.md` \| \*\*\d+\*\* \| \d+ \| \d+ \|"
+    r"\| \*\*合计\*\* \| `skills/(?:\*/SKILL|<line>/\*\*/SKILL)\.md` "
+    r"\| \*\*\d+\*\* \| \d+ \| \d+ \|"
 )
 
 
@@ -81,11 +83,29 @@ def normalized_line_count(path: Path) -> int:
 
 
 def skill_dirs_for(line: str) -> list[Path]:
-    return sorted(
+    line_dir = SKILLS / line
+    if not (line_dir / "SKILL.md").is_file():
+        return []
+    children = sorted(
         d
-        for d in SKILLS.iterdir()
-        if d.is_dir() and (d.name == line or d.name.startswith(f"{line}-"))
+        for d in line_dir.iterdir()
+        if d.is_dir()
+        and d.name.startswith(f"{line}-")
+        and (d / "SKILL.md").is_file()
     )
+    return [line_dir, *children]
+
+
+def iter_owned_text_files(skill_dir: Path, child_skill_dirs: set[Path]):
+    """Yield files owned by one skill without double-counting nested children."""
+    for path in skill_dir.rglob("*"):
+        if not path.is_file() or path.suffix not in TEXT_SUFFIXES:
+            continue
+        if "__pycache__" in path.parts:
+            continue
+        if any(child in path.parents for child in child_skill_dirs):
+            continue
+        yield path
 
 
 def get_stats() -> dict[str, SkillStats]:
@@ -95,15 +115,13 @@ def get_stats() -> dict[str, SkillStats]:
         skill_count = len(skill_dirs)
         skill_md_lines = 0
         total_lines = 0
+        child_skill_dirs = set(skill_dirs[1:])
         for skill_dir in skill_dirs:
             skill_md = skill_dir / "SKILL.md"
             if skill_md.is_file():
                 skill_md_lines += normalized_line_count(skill_md)
-            for path in skill_dir.rglob("*"):
-                if not path.is_file() or path.suffix not in TEXT_SUFFIXES:
-                    continue
-                if "__pycache__" in path.parts:
-                    continue
+            nested_children = child_skill_dirs if skill_dir == SKILLS / line else set()
+            for path in iter_owned_text_files(skill_dir, nested_children):
                 total_lines += normalized_line_count(path)
         stats[line] = SkillStats(skill_count, skill_md_lines, total_lines)
     return stats
@@ -156,14 +174,14 @@ def render_readme(stats: dict[str, SkillStats]) -> str:
     for line in SERIES:
         item = stats[line]
         replacement = (
-            f"| {line} | `{line}` + `{line}-*` | "
+            f"| {line} | `skills/{line}/**/SKILL.md` | "
             f"{item.skills} | {item.skill_md_lines} | {item.total_lines} |"
         )
         content = README_ROW_RE[line].sub(replacement, content)
 
     total = total_stats(stats)
     total_replacement = (
-        f"| **合计** | `skills/*/SKILL.md` | **{total.skills}** | "
+        f"| **合计** | `skills/<line>/**/SKILL.md` | **{total.skills}** | "
         f"{total.skill_md_lines} | {total.total_lines} |"
     )
     content = README_TOTAL_RE.sub(total_replacement, content)
@@ -196,7 +214,7 @@ def validate_stats(stats: dict[str, SkillStats]) -> list[str]:
     for line in SERIES:
         item = stats[line]
         expected_row = (
-            f"| {line} | `{line}` + `{line}-*` | "
+            f"| {line} | `skills/{line}/**/SKILL.md` | "
             f"{item.skills} | {item.skill_md_lines} | {item.total_lines} |"
         )
         if expected_row not in readme:
@@ -224,7 +242,7 @@ def validate_stats(stats: dict[str, SkillStats]) -> list[str]:
 
     total = total_stats(stats)
     expected_total = (
-        f"| **合计** | `skills/*/SKILL.md` | **{total.skills}** | "
+        f"| **合计** | `skills/<line>/**/SKILL.md` | **{total.skills}** | "
         f"{total.skill_md_lines} | {total.total_lines} |"
     )
     if expected_total not in readme:

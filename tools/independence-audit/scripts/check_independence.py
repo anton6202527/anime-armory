@@ -120,19 +120,23 @@ def discover_series_skill_names(root: Path) -> dict[str, tuple[str, ...]]:
     skills_dir = root / "skills"
     if not skills_dir.is_dir():
         return {series: () for series in SERIES}
-    for path in skills_dir.iterdir():
-        if not path.is_dir():
+    for series in SERIES:
+        line_dir = skills_dir / series
+        if not line_dir.is_dir():
             continue
-        top = path.name
-        for series in SERIES:
-            if top == series or top.startswith(series + "-"):
-                # Bare "song"/"novel"/"ad"/"mv" are also domain nouns, file
-                # fields, variable names, or shell commands. Treat the bare
-                # dispatcher name as a cross-series token only for n2d, whose
-                # spelling is not a normal production noun in this repo.
-                if top != series or series == "n2d":
-                    names[series].append(top)
-                break
+        candidates = [line_dir, *sorted(line_dir.iterdir())]
+        for path in candidates:
+            if not path.is_dir() or not (path / "SKILL.md").is_file():
+                continue
+            name = path.name
+            if name != series and not name.startswith(series + "-"):
+                continue
+            # Bare "song"/"novel"/"ad"/"mv" are also domain nouns, file
+            # fields, variable names, or shell commands. Treat the bare
+            # dispatcher name as a cross-series token only for n2d, whose
+            # spelling is not a normal production noun in this repo.
+            if name != series or series == "n2d":
+                names[series].append(name)
     return {series: tuple(sorted(items, key=len, reverse=True)) for series, items in names.items()}
 
 

@@ -31,12 +31,12 @@ def test_owner_scope_excludes_downstream_and_observe_only():
 
 
 def test_material_classification():
-    assert sf.is_material_affecting("skills/n2d-image/SKILL.md") is True
-    assert sf.is_material_affecting("skills/n2d-lora/SKILL.md") is True
+    assert sf.is_material_affecting("skills/n2d/n2d-image/SKILL.md") is True
+    assert sf.is_material_affecting("skills/n2d/n2d-lora/SKILL.md") is True
     assert sf.is_material_affecting("skills/n2d/_lib/n2d_const.py") is True
     # 观测层 / gate-only / 加速基建：改了不让物料过期
-    assert sf.is_material_affecting("skills/n2d-review/scripts/gate.py") is False
-    assert sf.is_material_affecting("skills/n2d-image/scripts/image_qc.py") is False
+    assert sf.is_material_affecting("skills/n2d/n2d-review/scripts/gate.py") is False
+    assert sf.is_material_affecting("skills/n2d/n2d-image/scripts/image_qc.py") is False
     assert sf.is_material_affecting("skills/n2d/_lib/n2d_friction.py") is False
     assert sf.is_material_affecting("skills/n2d/_lib/skill_freshness.py") is False
 
@@ -61,13 +61,13 @@ def test_assess_statuses():
         assert sf.assess(td, "image")["status"] == "fresh"
 
     with tempfile.TemporaryDirectory() as td:
-        _baseline(td, mutate="skills/n2d-image/SKILL.md")
+        _baseline(td, mutate="skills/n2d/n2d-image/SKILL.md")
         res = sf.assess(td, "image")
         assert res["status"] == "drift"
         assert "n2d-image" in res["material_skills"]
 
     with tempfile.TemporaryDirectory() as td:
-        _baseline(td, mutate="skills/n2d-image/scripts/image_qc.py")
+        _baseline(td, mutate="skills/n2d/n2d-image/scripts/image_qc.py")
         res = sf.assess(td, "image")
         assert res["status"] == "drift"
         assert res["material_skills"] == []  # gate-only：有改动但不影响物料

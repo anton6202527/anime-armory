@@ -19,9 +19,9 @@ VALID_EVENTS = (
 
 
 def _dashboard_script() -> str:
-    """绝对路径定位 dashboard.py（本文件已迁到 skills/n2d/_lib/，上溯两级到 skills/）。"""
+    """从 n2d 系列根目录绝对定位同系列的 dashboard.py。"""
     lib_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.abspath(os.path.join(lib_dir, "..", "..", "n2d-dashboard", "scripts", "dashboard.py"))
+    return os.path.abspath(os.path.join(lib_dir, "..", "n2d-dashboard", "scripts", "dashboard.py"))
 
 
 def record_event(

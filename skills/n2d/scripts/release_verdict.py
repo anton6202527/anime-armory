@@ -81,7 +81,7 @@ progress_mod = _load_progress_module()
 
 
 def _load_compliance_module():
-    path = N2D_DIR.parent / "n2d-compliance" / "scripts" / "compliance.py"
+    path = N2D_DIR / "n2d-compliance" / "scripts" / "compliance.py"
     if not path.is_file():
         return None
     spec = importlib.util.spec_from_file_location("n2d_compliance_for_release_verdict", path)
@@ -653,7 +653,7 @@ def check_identity_drift(root: Path, episode: str, profile: str) -> Dict[str, An
             "identity_drift",
             "warn" if strict else "pass",
             "缺 identity_drift_report.json——跨集身份漂移未核过；"
-            "strict 发布前跑 python3 skills/n2d-identity/scripts/identity.py <作品根> --write（不带 --skip-face）。"
+            "strict 发布前跑 python3 skills/n2d/n2d-identity/scripts/identity.py <作品根> --write（不带 --skip-face）。"
             if strict else "identity_drift_report 未生成（demo/单集可接受）。",
             path=relpath(root, path),
         )

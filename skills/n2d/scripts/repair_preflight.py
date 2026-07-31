@@ -198,7 +198,7 @@ def image_qc_status(root: Path, ep: str, *, repair_qc: bool) -> Dict[str, Any]:
             "step": "image_qc",
             "status": "block",
             "detail": f"缺 image_qc 报告：{path}",
-            "command": f"python3 skills/n2d-image/scripts/image_qc.py \"{root}\" {ep} --json",
+            "command": f"python3 skills/n2d/n2d-image/scripts/image_qc.py \"{root}\" {ep} --json",
         }
     fresh: Optional[bool] = None
     if fingerprint_is_fresh is not None:
@@ -213,7 +213,7 @@ def image_qc_status(root: Path, ep: str, *, repair_qc: bool) -> Dict[str, Any]:
             "status": "block",
             "detail": f"image_qc 新鲜度={state}：旧报告不能证明当前图片一致",
             "path": str(path),
-            "command": f"python3 skills/n2d-image/scripts/image_qc.py \"{root}\" {ep} --json",
+            "command": f"python3 skills/n2d/n2d-image/scripts/image_qc.py \"{root}\" {ep} --json",
         }
     env = data.get("qc_environment") if isinstance(data.get("qc_environment"), Mapping) else {}
     summary = data.get("summary") if isinstance(data.get("summary"), Mapping) else {}

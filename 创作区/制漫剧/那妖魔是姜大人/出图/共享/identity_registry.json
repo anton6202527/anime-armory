@@ -1914,7 +1914,7 @@
                   941,
                   936
                 ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                 "generated_at": "2026-07-27T11:51:04+00:00"
               },
               "human_review": {
@@ -1938,7 +1938,7 @@
                     587,
                     309
                   ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:51:05+00:00"
                 },
                 "human_review": {
@@ -2007,7 +2007,7 @@
                   1024,
                   1819
                 ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
                 "generated_at": "2026-07-28T05:45:07+00:00",
                 "reference_input_mode": "codex_exec_image_flags",
                 "reference_inputs": [
@@ -2099,7 +2099,7 @@
                   1024,
                   1819
                 ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
                 "generated_at": "2026-07-28T07:21:34+00:00",
                 "reference_input_mode": "codex_exec_image_flags",
                 "reference_inputs": [
@@ -2205,7 +2205,7 @@
                     1024,
                     1819
                   ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
                   "generated_at": "2026-07-28T05:45:07+00:00",
                   "reference_input_mode": "codex_exec_image_flags",
                   "reference_inputs": [
@@ -2297,7 +2297,7 @@
                     1024,
                     1819
                   ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
                   "generated_at": "2026-07-28T07:21:34+00:00",
                   "reference_input_mode": "codex_exec_image_flags",
                   "reference_inputs": [
@@ -2368,7 +2368,7 @@
                     941,
                     936
                   ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:51:04+00:00"
                 },
                 "human_review": {
@@ -2393,7 +2393,7 @@
                     587,
                     309
                   ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:51:05+00:00"
                 },
                 "human_review": {
@@ -2963,7 +2963,7 @@
                   941,
                   936
                 ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                 "generated_at": "2026-07-27T11:42:38+00:00"
               },
               "human_review": {
@@ -2987,7 +2987,7 @@
                     587,
                     309
                   ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:42:39+00:00"
                 },
                 "human_review": {
@@ -3217,7 +3217,7 @@
                     941,
                     936
                   ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:42:38+00:00"
                 },
                 "human_review": {
@@ -3242,7 +3242,7 @@
                     587,
                     309
                   ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_by": "skills/n2d/n2d-image/scripts/derive_makeup_pack.py",
                   "generated_at": "2026-07-27T11:42:39+00:00"
                 },
                 "human_review": {

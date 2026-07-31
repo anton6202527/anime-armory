@@ -1,0 +1,431 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""M0 review for ad delivery: deterministic manifest checks before publishing."""
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+_COMPOSE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-compose"))
+if _COMPOSE not in sys.path:
+    sys.path.insert(0, _COMPOSE)
+import deliver  # noqa: E402
+
+# 阶段表与 _进度.md 表格解析复用本线单一真值（ad-craft contract + ad/_lib progress_md），
+# 用于「✅ 阶段行 ↔ stage_acceptance 凭证」对账。
+_CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-craft", "scripts"))
+_AD_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "_lib"))
+for _p in (_CRAFT, _AD_LIB):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+import contract as craft_contract  # noqa: E402
+import progress_md  # noqa: E402
+
+# 逐阶段验收凭证的新鲜度参照物（相对路径）：凭证早于这些核心产物 = 验收后又动过料，
+# 只作 warn（凭证在、结论旧），与缺凭证/有 block 的硬拦分档。
+STAGE_ACCEPTANCE_SOURCES = {
+    "brief": ["需求/brief.json"],
+    "concept": ["创意/concept.md", "创意/创意脚本.md"],
+    "script": ["脚本/广告脚本.md", "脚本/voiceover.txt", "脚本/时间轴.json", "脚本/广告法机检报告.json"],
+    "voice": ["配音/时长清单.json", "配音/vo.wav", "配音/voice_qc.json", "设定库/voicemap.json"],
+    "storyboard": ["脚本/storyboard.json", "脚本/镜头时长.json"],
+    "image": ["出图/分镜", "出图/共享/asset_registry.json", "设定库/asset_registry.json"],
+    "video": ["出视频/分镜"],
+    "compose": ["合成"],
+    "handoff": ["合规/ai_usage.json", "合规/compliance_manifest.json",
+                "合规/release_variant_manifest.json", "合规/locale_matrix_validation.json"],
+    "review": ["合规/ad_review_m0.json", "合规/human_signoff.json"],
+    "feedback": ["投放反馈"],
+}
+
+
+def load_json(path, default=None):
+    if not os.path.isfile(path):
+        return default
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def finding(severity, code, msg, path=None):
+    out = {"severity": severity, "code": code, "msg": msg}
+    if path:
+        out["path"] = path
+    return out
+
+
+_PENDING_TOKENS = {"", "未记录", "待补", "待填写", "tbd", "未填", "未定"}
+
+
+def _pending(value):
+    return str(value or "").strip().lower() in _PENDING_TOKENS
+
+
+def _filled(value):
+    """brief 字段是否「填了真实内容」（非空且非占位）。"""
+    if isinstance(value, str):
+        return not _pending(value)
+    if isinstance(value, (list, tuple)):
+        return any(_filled(v) for v in value)
+    if isinstance(value, dict):
+        return any(_filled(v) for v in value.values())
+    return value is not None
+
+
+def _right_used(value):
+    if isinstance(value, dict):
+        return str(value.get("status") or "").lower() != "not_used"
+    if isinstance(value, list):
+        return any(_right_used(v) for v in value)
+    return _filled(value)
+
+
+def _summary_block(report):
+    """读报告 summary.block 整数；格式异常返回 None。"""
+    summary = report.get("summary")
+    if not isinstance(summary, dict):
+        return None, None
+    try:
+        return int(summary.get("block") or 0), int(summary.get("warn") or 0)
+    except (TypeError, ValueError):
+        return None, None
+
+
+def _newest_mtime(paths):
+    newest = 0.0
+    for raw in paths:
+        path = Path(raw)
+        if path.is_dir():
+            for child in path.rglob("*"):
+                if child.is_file():
+                    newest = max(newest, child.stat().st_mtime)
+        elif path.is_file():
+            newest = max(newest, path.stat().st_mtime)
+    return newest
+
+
+def stale_finding(report_path, sources, code, label):
+    if not os.path.isfile(report_path):
+        return None
+    newest = _newest_mtime(sources)
+    if newest and os.path.getmtime(report_path) + 1e-6 < newest:
+        return finding("block", code, f"{label} 早于其输入产物，旧报告不能证明当前交付通过", report_path)
+    return None
+
+
+def stage_acceptance_findings(root, progress_text, progress_path):
+    """M0 的假 ✅ 对账：每个标 ✅ 的阶段行必须有当前有效的 stage_acceptance 凭证。
+
+    与 ad-progress/scan.py 同口径（那边只读报告，这边硬拦）：
+      · 凭证缺失/不可读 → block「✅ 无验收凭证」；
+      · 凭证 summary.block>0 → block（验收没过却标了 ✅）；
+      · 凭证存在且干净、但早于该阶段核心产物 → warn（凭证 stale，结论可能过期）。
+    """
+    out = []
+    rows = progress_md.parse_stage_rows(
+        progress_text, section_keywords=("阶段进度",), min_cols=2, label_col=0, status_col=1)
+    stage_by_label = {str(s.get("label", "")): s for s in craft_contract.stage_table()}
+    for row in rows:
+        if "✅" not in row.get("status", ""):
+            continue
+        key = str((stage_by_label.get(row["label"]) or {}).get("key") or "")
+        if not key:
+            continue
+        rel = os.path.join("生产数据", "stage_acceptance", f"{key}.json")
+        path = os.path.join(root, rel)
+        payload = load_json(path)
+        if not isinstance(payload, dict):
+            out.append(finding("block", "stage_acceptance_evidence_missing",
+                               f"阶段「{row['label']}」标 ✅ 但无验收凭证（缺 {rel}）；"
+                               "疑似手改 _进度.md，请重跑 stage_acceptance", progress_path))
+            continue
+        blocks, _ = _summary_block(payload)
+        if blocks is None:
+            out.append(finding("block", "stage_acceptance_evidence_missing",
+                               f"阶段「{row['label']}」的验收凭证 {rel} 缺 summary.block（格式异常）", path))
+            continue
+        if blocks:
+            out.append(finding("block", "stage_acceptance_evidence_block",
+                               f"阶段「{row['label']}」标 ✅ 但验收凭证仍有 block={blocks}（假完成）", path))
+            continue
+        sources = [os.path.join(root, src) for src in STAGE_ACCEPTANCE_SOURCES.get(key, [])]
+        newest = _newest_mtime(sources)
+        if newest and os.path.getmtime(path) + 1e-6 < newest:
+            out.append(finding("warn", "stage_acceptance_evidence_stale",
+                               f"阶段「{row['label']}」的验收凭证早于该阶段核心产物，结论可能过期；"
+                               "建议重跑 stage_acceptance 刷新", path))
+    return out
+
+
+def review(root):
+    root = os.path.abspath(root)
+    findings = []
+
+    master = os.path.join(root, "合成", "成片_主片.mp4")
+    if not os.path.isfile(master):
+        findings.append(finding("block", "master_missing", "缺主片 合成/成片_主片.mp4", master))
+
+    ad_law = os.path.join(root, "脚本", "广告法机检报告.json")
+    report = load_json(ad_law)
+    if report is None:
+        findings.append(finding("block", "ad_law_missing", "缺广告法机检报告", ad_law))
+    elif report.get("disabled"):
+        findings.append(finding("warn", "ad_law_disabled",
+                                f"广告法机检已关闭（region={report.get('region', '?')}）；仅限非中国大陆投放，需人工确认", ad_law))
+    else:
+        blocks, warns = _summary_block(report)
+        if blocks is None:
+            findings.append(finding("block", "ad_law_malformed", "广告法机检报告缺 summary.block 整数字段（格式异常）", ad_law))
+        else:
+            if blocks:
+                findings.append(finding("block", "ad_law_block", f"广告法机检仍有 block={blocks}", ad_law))
+            if warns:
+                findings.append(finding("warn", "ad_law_warn", f"广告法机检 warn={warns}，需人工确认依据", ad_law))
+
+    voice = os.path.join(root, "配音", "时长清单.json")
+    voice_manifest = load_json(voice)
+    if voice_manifest is None:
+        findings.append(finding("block", "voice_missing", "缺配音时长清单", voice))
+    elif voice_manifest.get("has_placeholder"):
+        findings.append(finding("block", "voice_placeholder", "VO 仍是占位，不能作为正式投放成片", voice))
+
+    video_qc = os.path.join(root, "出视频", "分镜", "video_qc.json")
+    vq = load_json(video_qc)
+    if vq is None:
+        findings.append(finding("block", "video_qc_missing", "缺出视频落档 QC 报告", video_qc))
+    else:
+        blocks, warns = _summary_block(vq)
+        if blocks is None:
+            findings.append(finding("block", "video_qc_malformed", "出视频 QC 报告缺 summary.block 整数字段（格式异常）", video_qc))
+        else:
+            if blocks:
+                findings.append(finding("block", "video_qc_block", f"出视频落档 QC 仍有 block={blocks}", video_qc))
+            if warns:
+                findings.append(finding("warn", "video_qc_warn", f"出视频落档 QC warn={warns}，需人工确认", video_qc))
+        stale = stale_finding(video_qc, [os.path.join(root, "出视频", "分镜", "视频")],
+                              "video_qc_stale", "video_qc")
+        if stale:
+            findings.append(stale)
+
+    consistency = os.path.join(root, "生产数据", "consistency_findings.json")
+    cr = load_json(consistency)
+    if cr is None:
+        findings.append(finding("block", "consistency_findings_missing",
+                                "缺统一一致性总账；先跑 consistency_findings.py --write", consistency))
+    else:
+        blocks, warns = _summary_block(cr)
+        if blocks is None:
+            findings.append(finding("block", "consistency_findings_malformed",
+                                    "一致性总账缺 summary.block/warn", consistency))
+        elif blocks:
+            findings.append(finding("block", "consistency_findings_block", f"一致性总账仍有 block={blocks}", consistency))
+        if warns:
+            findings.append(finding("warn", "consistency_findings_warn", f"一致性总账有 warn={warns}，需签收", consistency))
+        stale = stale_finding(consistency, [
+            os.path.join(root, "出图", "分镜", "product_qc.json"),
+            os.path.join(root, "出视频", "分镜", "video_qc.json"),
+            os.path.join(root, "配音", "时长清单.json"),
+            os.path.join(root, "生产数据", "final_media_consistency.json"),
+        ], "consistency_findings_stale", "consistency_findings")
+        if stale:
+            findings.append(stale)
+
+    # AI 使用/授权披露：不仅查文件存在，还要查内容与 brief 授权信息不矛盾（空壳披露应拦）。
+    ai_usage = os.path.join(root, "合规", "ai_usage.json")
+    usage = load_json(ai_usage)
+    if usage is None:
+        findings.append(finding("block", "ai_usage_missing", "缺 AI 使用/授权披露", ai_usage))
+    else:
+        brief = load_json(os.path.join(root, "需求", "brief.json"), {}) or {}
+        rights = brief.get("rights") if isinstance(brief.get("rights"), dict) else {}
+        # 用了真人/代言人但披露里 talent_status 仍占位或写「未使用真人」= 矛盾，block。
+        if _right_used(rights.get("talent")):
+            ts = usage.get("talent_status")
+            if _pending(ts) or "未使用" in str(ts):
+                findings.append(finding("block", "ai_usage_talent_unrecorded",
+                                        f"brief 标注使用真人/代言人，但 AI 披露 talent_status={ts!r} 未留授权痕迹", ai_usage))
+        if _right_used(rights.get("music")):
+            if _pending(usage.get("music_status")):
+                findings.append(finding("block", "ai_usage_music_unrecorded",
+                                        "brief 标注音乐授权，但 AI 披露 music_status 未记录", ai_usage))
+        for fld, key in (("fonts", "asset_status"), ("assets", "asset_status")):
+            if _right_used(rights.get(fld)) and _pending(usage.get(key)):
+                findings.append(finding("warn", "ai_usage_asset_unrecorded",
+                                        f"brief 标注 {fld} 授权，但 AI 披露 {key} 未记录", ai_usage))
+                break
+        # 全空披露兜底：各项均占位且 brief 无任何授权信息 → 提示确认确无真人/授权素材。
+        if not any(_right_used(rights.get(k)) for k in ("talent", "music", "fonts", "assets")) and all(
+            _pending(usage.get(k)) for k in ("talent_status", "music_status", "voice_status", "asset_status")
+        ):
+            findings.append(finding("warn", "ai_usage_all_unrecorded",
+                                    "AI 披露各授权项均未记录，请确认确无真人/授权音乐/字体/素材", ai_usage))
+
+    compliance = os.path.join(root, "合规", "compliance_manifest.json")
+    cm = load_json(compliance)
+    if not isinstance(cm, dict):
+        findings.append(finding("block", "compliance_manifest_missing",
+                                "缺发布合规 manifest；母版完成不等于平台发布就绪", compliance))
+    else:
+        blocks, _ = _summary_block(cm)
+        if blocks is None:
+            findings.append(finding("block", "compliance_manifest_malformed",
+                                    "发布合规 manifest 缺 summary.block/warn", compliance))
+        elif blocks or not bool((cm.get("summary") or {}).get("release_ready")):
+            findings.append(finding("block", "compliance_manifest_block",
+                                    "AI/平台声明、版位安全区或元数据责任尚未闭合，不能标记发布就绪", compliance))
+        else:
+            stale = stale_finding(compliance, [
+                ai_usage, os.path.join(root, "需求", "brief.json"),
+                os.path.join(root, "脚本", "广告脚本.md"), os.path.join(root, "脚本", "storyboard.json"),
+                master, os.path.join(root, "合成", "delivery_plan.json"),
+            ],
+                                  "compliance_manifest_stale", "compliance_manifest")
+            if stale:
+                findings.append(stale)
+
+    delivery_qc = os.path.join(root, "合成", "delivery_qc.json")
+    dq = load_json(delivery_qc)
+    if not isinstance(dq, dict):
+        findings.append(finding("block", "delivery_qc_missing", "缺逐交付件技术 QC", delivery_qc))
+    else:
+        blocks, warns = _summary_block(dq)
+        if blocks is None:
+            findings.append(finding("block", "delivery_qc_malformed",
+                                    "交付件技术 QC 缺 summary.block/warn", delivery_qc))
+        elif blocks:
+            findings.append(finding("block", "delivery_qc_block", f"交付件技术 QC block={blocks}", delivery_qc))
+        if warns:
+            findings.append(finding("warn", "delivery_qc_warn", f"交付件技术 QC warn={warns}", delivery_qc))
+        stale = stale_finding(delivery_qc, [master, os.path.join(root, "合成", "cutdown"),
+                                            os.path.join(root, "合成", "多比例")],
+                              "delivery_qc_stale", "delivery_qc")
+        if stale:
+            findings.append(stale)
+
+    for rel, code, label, sources in (
+        ("合成/color_preflight.json", "color_preflight", "色彩源预检", [os.path.join(root, "出视频", "分镜", "视频")]),
+        ("合成/accessibility_qc.json", "accessibility_qc", "字幕/闪烁无障碍 QC", [
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+            os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
+        ]),
+        ("合成/rendered_text_qc.json", "rendered_text_qc", "最终像素文字/OCR/对比度/遮挡 QC", [
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+            os.path.join(root, "合规", "rendered_text_plan.json"),
+        ]),
+        ("合成/asr_consistency.json", "asr_consistency", "VO/字幕/最终音轨 ASR 一致性", [
+            master, os.path.join(root, "配音", "vo.wav"), os.path.join(root, "脚本", "voiceover.txt"),
+            os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
+        ]),
+        ("合规/provenance_qc.json", "provenance_qc", "最终文件 AI 元数据/C2PA 探测", [
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"), ai_usage,
+        ]),
+        ("合规/locale_matrix_validation.json", "locale_matrix_validation", "多语言 locale matrix 验证", [
+            os.path.join(root, "合规", "locale_matrix.json"), os.path.join(root, "脚本", "voiceover.txt"),
+            os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
+        ]),
+        ("合规/release_variant_manifest.json", "release_variant_manifest", "逐交付版本发布清单", [
+            os.path.join(root, "合成", "delivery_plan.json"), os.path.join(root, "合规", "locale_matrix.json"),
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+        ]),
+        ("生产数据/final_media_consistency.json", "final_media_consistency", "最终媒体逐资产 contact sheet", [
+            master, os.path.join(root, "出视频", "分镜", "视频"),
+            os.path.join(root, "合成", "delivery_plan.json"),
+        ]),
+    ):
+        path = os.path.join(root, rel)
+        report = load_json(path)
+        if not isinstance(report, dict):
+            findings.append(finding("block", f"{code}_missing", f"缺{label}", path))
+            continue
+        blocks, warns = _summary_block(report)
+        if blocks is None:
+            findings.append(finding("block", f"{code}_malformed", f"{label}缺 summary.block/warn", path))
+        elif blocks:
+            findings.append(finding("block", f"{code}_block", f"{label} block={blocks}", path))
+        if warns:
+            findings.append(finding("warn", f"{code}_warn", f"{label} warn={warns}，须在具名审片中闭合", path))
+        stale = stale_finding(path, sources, f"{code}_stale", label)
+        if stale:
+            findings.append(stale)
+
+    progress = os.path.join(root, "_进度.md")
+    if not os.path.isfile(progress):
+        findings.append(finding("block", "progress_missing", "缺 _进度.md", progress))
+    else:
+        with open(progress, encoding="utf-8") as f:
+            progress_text = f.read()
+        # ✅ 阶段行 ↔ 验收凭证对账：手改 _进度.md 绕过 progress_set 的假 ✅ 在此硬拦。
+        # 凭证缺失/不可读或仍有 block → block；凭证在但早于该阶段核心产物 → warn（结论过期）。
+        findings.extend(stage_acceptance_findings(root, progress_text, progress))
+        rows = deliver.parse_deliverables(progress_text)
+        master_rows = [r for r in rows if r["kind"] == "master"]
+        if not master_rows:
+            findings.append(finding("warn", "master_matrix_missing", "交付矩阵缺主片行", progress))
+        # 逐行核验交付矩阵：①标 ✅ 但文件缺失/路径空 = 假完成 block；②未产出的交付件 = warn。
+        for row in rows:
+            done = "✅" in row["status"]
+            rel = (row.get("path") or "").strip()
+            abspath = rel if os.path.isabs(rel) else os.path.join(root, rel)
+            label = row.get("label") or row.get("deliverable_id") or row.get("kind")
+            if done:
+                if not rel or not os.path.isfile(abspath):
+                    findings.append(finding("block", "deliverable_claimed_missing",
+                                            f"交付件「{label}」标记完成但文件缺失/路径为空：{rel or '(空)'}", progress))
+            else:
+                findings.append(finding("warn", "deliverable_unrendered",
+                                        f"交付件「{label}」尚未产出/回写（投放前需补齐或显式取消）", progress))
+
+    findings.extend([
+        finding("info", "human_product_check", "人工复核：产品包装/logo/品牌色是否跨镜漂移"),
+        finding("info", "human_subtitle_av_check", "人工复核：字幕、VO、音乐床、画面节奏是否同步"),
+        finding("info", "human_safe_area_check", "人工复核：竖版/方版安全框内 logo/CTA/产品未被裁切"),
+    ])
+    summary = {
+        "block": sum(1 for f in findings if f["severity"] == "block"),
+        "warn": sum(1 for f in findings if f["severity"] == "warn"),
+        "info": sum(1 for f in findings if f["severity"] == "info"),
+    }
+    return {"schema_version": 1, "kind": "ad_review_m0", "project_root": root,
+            "human_signoff_required": True,
+            "summary": summary, "findings": findings}
+
+
+def write_markdown(path, payload):
+    lines = [
+        "# ad-review M0",
+        "",
+        f"- block: {payload['summary']['block']}",
+        f"- warn: {payload['summary']['warn']}",
+        f"- info: {payload['summary']['info']}",
+        "",
+        "## Findings",
+    ]
+    for item in payload["findings"]:
+        lines.append(f"- {item['severity'].upper()} [{item['code']}] {item['msg']}")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+def main():
+    ap = argparse.ArgumentParser(description="拍广告 M0 质检/自审")
+    ap.add_argument("project_root")
+    ap.add_argument("--json", default=None)
+    args = ap.parse_args()
+    payload = review(args.project_root)
+    root = payload["project_root"]
+    json_path = args.json or os.path.join(root, "合规", "ad_review_m0.json")
+    md_path = os.path.splitext(json_path)[0] + ".md"
+    os.makedirs(os.path.dirname(json_path), exist_ok=True)
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    write_markdown(md_path, payload)
+    print(f"# ad-review M0  block={payload['summary']['block']}  warn={payload['summary']['warn']}")
+    for item in payload["findings"]:
+        icon = "🔴" if item["severity"] == "block" else ("🟡" if item["severity"] == "warn" else "ℹ️")
+        print(f"{icon} [{item['code']}] {item['msg']}")
+    print(f"[ok] {json_path}")
+    sys.exit(1 if payload["summary"]["block"] else 0)
+
+
+if __name__ == "__main__":
+    main()

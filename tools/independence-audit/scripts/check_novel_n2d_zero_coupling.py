@@ -103,7 +103,16 @@ def line_hits(path: Path, forbidden: tuple[str, ...]):
     except UnicodeDecodeError:
         return
     for lineno, line in enumerate(text.splitlines(), 1):
-        hits = [token for token in forbidden if token in line]
+        hits = []
+        for token in forbidden:
+            # `n2d-adapt` 曾是耦合交接名；不要把合法的 adapter/adaptation
+            # 文档或实现按子串误判成它。
+            if token == "n2d-adapt":
+                matched = re.search(r"(?<![\w-])n2d-adapt(?![\w-])", line) is not None
+            else:
+                matched = token in line
+            if matched:
+                hits.append(token)
         if hits:
             yield lineno, hits, line.strip()
 
@@ -154,9 +163,11 @@ def check_no_cross_line_coload(repo: Path) -> list[str]:
 
 
 def roots_for(prefix: str) -> list[Path]:
-    roots: list[Path] = []
     skills = REPO / "skills"
-    roots.append(skills / prefix)
+    line_root = skills / prefix
+    roots = [line_root]
+    # line_root 会递归覆盖当前嵌套子技能；保留旧扁平发现仅用于迁移期审计，
+    # 避免尚未迁完的目录逃过零耦合检查。
     roots.extend(sorted(p for p in skills.glob(f"{prefix}-*") if p.is_dir()))
     return roots
 

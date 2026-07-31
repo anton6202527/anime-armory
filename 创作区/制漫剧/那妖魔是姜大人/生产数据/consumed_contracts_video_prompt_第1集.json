@@ -5,7 +5,7 @@
   "scope": "video_prompt",
   "accepted": true,
   "reviewer": "Codex n2d-video prompt pack",
-  "generated_by": "skills/n2d-video/scripts/prompt_pack.py",
+  "generated_by": "skills/n2d/n2d-video/scripts/prompt_pack.py",
   "generated_at": "2026-07-22T02:56:32+00:00",
   "contracts": [
     {

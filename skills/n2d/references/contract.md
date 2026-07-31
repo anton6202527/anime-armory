@@ -106,8 +106,8 @@ manifest 是产物快照，不负责生成媒体。阶段脚本收尾时可以�
 高风险阶段统一走：
 
 ```bash
-python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review
-python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage video --json  # 调试/机器消费入口
+python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review
+python3 skills/n2d/n2d-review/scripts/gate.py <作品根> 第N集 --stage video --json  # 调试/机器消费入口
 ```
 
 默认调用顺序：正式生图前跑 `image_preflight`，生图落档后跑 `image`；正式出视频前跑 `video_preflight`，MP4 落档后跑 `video`。preflight 与对应阶段复用同一套结构/合规/继承检查，但 findings、事件日志和 `gate_findings_<stage>_第N集.json` 分开落盘，便于定位“花钱前拦截”还是“生成后回验”。

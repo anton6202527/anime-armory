@@ -1859,8 +1859,8 @@
           "episode": "第1集",
           "gate_stage": "image",
           "loc": "",
-          "message": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
-          "msg": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
+          "message": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
+          "msg": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
           "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "warn",
@@ -1869,7 +1869,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。"
+      "scope": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。"
     }
   ],
   "episode": "第1集",
@@ -4989,8 +4989,8 @@
       "episode": "第1集",
       "gate_stage": "image",
       "loc": "",
-      "message": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
-      "msg": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
+      "message": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
+      "msg": "状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "warn",

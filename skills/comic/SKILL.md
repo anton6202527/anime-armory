@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1546 | 目录文本总行数 49400
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1546 | 目录文本总行数 49412
 
 # comic — 画漫画生产线总调度
 
@@ -21,8 +21,8 @@ comic 负责定位作品根、先读 `_进度.md` / `_设置.md`、解释当前�
 ```bash
 python3 skills/comic/doctor.py "创作区/画漫画/作品名" --write
 # 生产档位按项目定，从 短篇验证 / 连载标准 / 连载高一致性 里选一个（别照抄；连载类长线角一致性优先选 连载高一致性）
-python3 skills/comic-settings/scripts/settings_cli.py set "创作区/画漫画/作品名" 生产档位 <生产档位>
-python3 skills/comic-settings/scripts/settings_cli.py audit "创作区/画漫画/作品名"
+python3 skills/comic/comic-settings/scripts/settings_cli.py set "创作区/画漫画/作品名" 生产档位 <生产档位>
+python3 skills/comic/comic-settings/scripts/settings_cli.py audit "创作区/画漫画/作品名"
 ```
 
 - `doctor` 只披露本机可执行能力和项目缺件，不替代签收；缺视觉模型时可以继续做合同，但公开交付仍需当前 SHA 的人审证据。
@@ -40,10 +40,10 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 ### 2. 开发包、章节合同和源追溯
 
 ```bash
-python3 skills/comic-script/scripts/development_pack.py "创作区/画漫画/作品名" scaffold --write
-python3 skills/comic-script/scripts/development_pack.py "创作区/画漫画/作品名" check --strict --json
-python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫画/作品名" --chapter 第1话
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage script
+python3 skills/comic/comic-script/scripts/development_pack.py "创作区/画漫画/作品名" scaffold --write
+python3 skills/comic/comic-script/scripts/development_pack.py "创作区/画漫画/作品名" check --strict --json
+python3 skills/comic/comic-script/scripts/source_semantics_gate.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage script
 ```
 
 - 历史题材、公版名著或有多个影视版本的项目，在首张文字定妆前先落可追溯视觉研究合同：
@@ -78,18 +78,18 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 跨话状态可单独审计：
 
 ```bash
-python3 skills/comic-review/scripts/continuity_audit.py "创作区/画漫画/作品名" --through-chapter 第1话 --write --strict
+python3 skills/comic/comic-review/scripts/continuity_audit.py "创作区/画漫画/作品名" --through-chapter 第1话 --write --strict
 ```
 
 ### 4. 身份注册、多视图技术齐套和人审签收
 
 ```bash
-python3 skills/comic-identity/scripts/registry_v2.py "创作区/画漫画/作品名" migrate --json
-python3 skills/comic-identity/scripts/registry_v2.py "创作区/画漫画/作品名" migrate --write --json
-python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
+python3 skills/comic/comic-identity/scripts/registry_v2.py "创作区/画漫画/作品名" migrate --json
+python3 skills/comic/comic-identity/scripts/registry_v2.py "创作区/画漫画/作品名" migrate --write --json
+python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
   --backend auto --characters CHAR_A --views front,three_quarter,side,back,face
-python3 skills/comic-identity/scripts/model_pack.py "创作区/画漫画/作品名" check --write --json
-python3 skills/comic-identity/scripts/model_pack.py "创作区/画漫画/作品名" signoff \
+python3 skills/comic/comic-identity/scripts/model_pack.py "创作区/画漫画/作品名" check --write --json
+python3 skills/comic/comic-identity/scripts/model_pack.py "创作区/画漫画/作品名" signoff \
   --characters CHAR_A --confirm-all --reviewer "责任编辑" --reason "并排复核通过" --json
 ```
 
@@ -102,15 +102,15 @@ python3 skills/comic-identity/scripts/model_pack.py "创作区/画漫画/作品�
 ### 5. 缩略分镜/name board 与排版的 draft → review → approved
 
 ```bash
-python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话
-python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --submit-review
-python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --approve --reviewed-by "责任编辑"
-python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --check
+python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --submit-review
+python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --approve --reviewed-by "责任编辑"
+python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --check
 
-python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话
-python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --submit-review
-python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --approve --reviewed-by "责任编辑"
-python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --check
+python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --submit-review
+python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --approve --reviewed-by "责任编辑"
+python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --check
 ```
 
 首次运行只生成 draft。由人工或用户明确授权的制作代理审阅页流、翻页钩子、格子轻重、阅读方向、气泡占位、关键动作和安全框后才能提交并批准；批准收据绑定产物主体及上游 SHA。代理审阅必须有项目内授权文件，且不得跳过确定性阻断。任何主体或上游变化都会使批准失效，必须重建或重新签收。
@@ -118,11 +118,11 @@ python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品�
 ### 6. 原稿收尾、逐格参考处方和出图 job
 
 ```bash
-python3 skills/comic-finishing/scripts/build_finishing_plan.py "创作区/画漫画/作品名" --chapter 第1话
-python3 skills/comic-finishing/scripts/build_finishing_plan.py "创作区/画漫画/作品名" --chapter 第1话 --check
-python3 skills/comic-image/scripts/reference_planner.py "创作区/画漫画/作品名" 第1话 --write
-python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作品名" --chapter 第1话
-python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作品名" --chapter 第1话 --check
+python3 skills/comic/comic-finishing/scripts/build_finishing_plan.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-finishing/scripts/build_finishing_plan.py "创作区/画漫画/作品名" --chapter 第1话 --check
+python3 skills/comic/comic-image/scripts/reference_planner.py "创作区/画漫画/作品名" 第1话 --write
+python3 skills/comic/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作品名" --chapter 第1话 --check
 ```
 
 - `finishing_plan.json` 必须消费已签收 name/layout，并同序覆盖全部 panel/page；传统原稿流程开启时，空计划或上游 SHA 过期会阻断。
@@ -133,15 +133,15 @@ python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作�
 ### 7. 阶段 gate、出图、合成和审查
 
 ```bash
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image_preflight
-python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P001 --limit 1
+python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image_preflight
+python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P001 --limit 1
 # 项目选择 Dreamina/即梦官方 CLI 时：
-python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --max-attempts 2
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image
-python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render --qc-slots
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage compose
-python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage review
+python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --max-attempts 2
+python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image
+python3 skills/comic/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render --qc-slots
+python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage compose
+python3 skills/comic/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage review
 ```
 
 每次 gate 都会写 `生产数据/gate_receipts/<stage>_第N话.json`，其中有 `inputs_fingerprint_sha256`、verdict、报告 SHA 和当前 `panel_jobs` SHA。receipt 只能证明“这次判定对应这些输入”；上游或产物变化后必须重跑，不能复制旧 receipt。

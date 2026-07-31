@@ -19,7 +19,7 @@ import re
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
 _LIB = os.path.abspath(os.path.join(_HERE, "..", "_lib"))
-_CRAFT = os.path.abspath(os.path.join(_HERE, "..", "..", "novel-craft", "scripts"))
+_CRAFT = os.path.abspath(os.path.join(_HERE, "..", "novel-craft", "scripts"))
 for _p in (_LIB, _CRAFT):
     if _p not in sys.path:
         sys.path.insert(0, _p)
@@ -108,17 +108,17 @@ def main():
 
     # 1. 读者契约逐章硬闸：防止长篇只推进事件、不推进题旨/承诺/文学质感。
     print(f"🔄 正在运行读者契约自检...")
-    rc_script = os.path.join(_HERE, "..", "..", "novel-review", "scripts", "reader_contract_sentry.py")
+    rc_script = os.path.join(_HERE, "..", "novel-review", "scripts", "reader_contract_sentry.py")
     run_step("读者契约自检", [sys.executable, rc_script, root, "--chapter", str(ch_num)])
 
     # 2. 状态账本对账 (Audit)
     print(f"🔄 正在运行状态账本对账 (Audit)...")
-    reconcile_script = os.path.join(_HERE, "..", "..", "novel-craft", "scripts", "reconcile_ledger.py")
+    reconcile_script = os.path.join(_HERE, "..", "novel-craft", "scripts", "reconcile_ledger.py")
     run_step("状态账本对账", [sys.executable, reconcile_script, root, "--chapter", str(ch_num), "--audit"])
 
     # 3. 增量更新百科
     print(f"🔄 正在提取百科事实...")
-    wiki_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "wiki_builder.py")
+    wiki_script = os.path.join(_HERE, "..", "novel-wiki", "scripts", "wiki_builder.py")
     run_step("百科事实提取", [sys.executable, wiki_script, root, "--chapter", str(ch_num)])
 
     # 3b. 情绪/张力实测回填（advisory·绝不阻断）：logic_sentry 的"连续 N 章张力塌陷"节奏预警
@@ -126,12 +126,12 @@ def main():
     #     无自动触发点 → 检测长期休眠（已知回填断点的换皮复现）。写后闭环是每章必经路径，
     #     在逻辑哨兵之前回填，让它拿到含本章在内的最新张力曲线。失败不阻断。
     print("🔄 正在回填逐章情绪/张力实测（emotional_progression）...")
-    tone_script = os.path.join(_HERE, "..", "..", "novel-review", "scripts", "tone_check.py")
+    tone_script = os.path.join(_HERE, "..", "novel-review", "scripts", "tone_check.py")
     subprocess.run([sys.executable, tone_script, root, "--write-progression"], check=False)
 
     # 4. 逻辑哨兵
     print(f"🔄 正在运行逻辑哨兵...")
-    sentry_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "logic_sentry.py")
+    sentry_script = os.path.join(_HERE, "..", "novel-wiki", "scripts", "logic_sentry.py")
     run_step("逻辑哨兵", [sys.executable, sentry_script, root, "--chapter", str(ch_num)])
 
     # 5. 力量体系自检（穿越/系统流/修仙：等级·成长值·战力逐章一致性）
@@ -140,7 +140,7 @@ def main():
     ps_mode = str(settings.get("力量体系自检", "开启") or "开启")
     if "关闭" not in ps_mode:
         print(f"🔄 正在运行力量体系自检（等级/成长值/战力一致性）...")
-        ps_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "power_system.py")
+        ps_script = os.path.join(_HERE, "..", "novel-wiki", "scripts", "power_system.py")
         ps_cmd = [sys.executable, ps_script, root]
         if "仅建议" in ps_mode:
             ps_cmd.append("--advisory")
@@ -149,13 +149,13 @@ def main():
         # 5b. 反派/威胁战力 scaling 自检（反向战力崩坏：威胁缺位/反派突兀膨胀）——advisory（exit 恒 0，不硬挡）。
         #     无 registry / 无反派标注时引擎自身优雅跳过，非力量题材零成本。
         print("🔄 正在运行反派战力 scaling 自检（威胁缺位/反派突兀膨胀）...")
-        as_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "antagonist_scaling.py")
+        as_script = os.path.join(_HERE, "..", "novel-wiki", "scripts", "antagonist_scaling.py")
         subprocess.run([sys.executable, as_script, root], check=False)
 
     # 5c. 时间线/事件顺序校验（年份倒流=建议级；设定/timeline.json 事件乱序=阻断级硬挡）。
     #     无 timeline.json 时只做保守的时间倒流提示（exit 0）；有台账且乱序才非零退出硬挡。
     print("🔄 正在运行时间线/事件顺序校验...")
-    tl_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "timeline_check.py")
+    tl_script = os.path.join(_HERE, "..", "novel-wiki", "scripts", "timeline_check.py")
     run_step("时间线/事件顺序校验", [sys.executable, tl_script, root])
 
     # 6. 状态账本合并：给了对账结论就在标进度前自动合并，让「进度✅」与「账本已合并」同生共死。

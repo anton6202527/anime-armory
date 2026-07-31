@@ -15,6 +15,6 @@
 ## 接入点
 
 - 机器真值：`skills/mv/references/运镜/manifest.json`
-- 规划阶段：`skills/mv-plan/scripts/plan_clips.py`
-- 视频 prompt：`skills/mv-video/references/prompt_format.md`
-- 动作库：`skills/mv-video/references/action_knowledge.md`
+- 规划阶段：`skills/mv/mv-plan/scripts/plan_clips.py`
+- 视频 prompt：`skills/mv/mv-video/references/prompt_format.md`
+- 动作库：`skills/mv/mv-video/references/action_knowledge.md`

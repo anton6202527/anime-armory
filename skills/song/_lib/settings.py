@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Shared per-project settings helpers.
 
-The user-facing convention lives in `skills/song-craft/references/选择点与偏好.md`. This module only
+The user-facing convention lives in `skills/song/song-craft/references/选择点与偏好.md`. This module only
 implements deterministic read/write helpers for `_设置.md`; it does not ask
 questions or infer preferences.
 """
@@ -55,7 +55,7 @@ FAMILY_MARKERS = {
 class SettingSpec:
     """Machine-readable preference contract for settings management.
 
-    The prose source of truth remains `skills/song-craft/references/选择点与偏好.md`; this compact schema
+    The prose source of truth remains `skills/song/song-craft/references/选择点与偏好.md`; this compact schema
     is only the executable subset needed for safe patching, audit, and sync.
     """
 
@@ -252,7 +252,7 @@ def load_settings(work_root: str) -> Dict[str, str]:
 
 def write_settings(work_root: str, fields: Dict[str, str], *, note: Optional[str] = None, bold_keys: bool = False):
     """Write `<作品根>/_设置.md` for per-work private choices."""
-    lines = ["# 设置 — 本作私有选择点（skills/song-craft/references/选择点与偏好.md）", ""]
+    lines = ["# 设置 — 本作私有选择点（skills/song/song-craft/references/选择点与偏好.md）", ""]
     if note:
         lines += [f"> {note}", ""]
 
@@ -307,7 +307,7 @@ def append_record(work_root: str, message: str, *, date: Optional[str] = None) -
     path = os.path.join(work_root.rstrip("/"), "_设置.md")
     content = _read_text(path)
     if not content:
-        content = "# 设置 — 本作私有选择点（skills/song-craft/references/选择点与偏好.md）\n"
+        content = "# 设置 — 本作私有选择点（skills/song/song-craft/references/选择点与偏好.md）\n"
     lines = content.splitlines()
     entry = f"- {date or time.strftime('%Y-%m-%d')} {message}"
     idx = _record_index(lines)
@@ -354,7 +354,7 @@ def set_project_setting(
     path = os.path.join(work_root, "_设置.md")
     content = _read_text(path)
     if not content:
-        content = "# 设置 — 本作私有选择点（skills/song-craft/references/选择点与偏好.md）\n\n"
+        content = "# 设置 — 本作私有选择点（skills/song/song-craft/references/选择点与偏好.md）\n\n"
     lines = content.splitlines()
     old_val: Optional[str] = None
     stop = _record_index(lines)

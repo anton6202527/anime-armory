@@ -1426,7 +1426,7 @@
         {
           "dimension": "脸漂报告新鲜度",
           "loc": "第2集",
-          "message": "脸漂报告新鲜度 脸漂实测报告内容级陈旧：历史集 ['第1集(指纹不符)'] 的当前 PNG 像素与报告记录的指纹不一致——图在报告生成后重出过，集级覆盖看着没问题、报告其实基于旧像素，measured-drift 环会误判『全绿』。重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --writ",
+          "message": "脸漂报告新鲜度 脸漂实测报告内容级陈旧：历史集 ['第1集(指纹不符)'] 的当前 PNG 像素与报告记录的指纹不一致——图在报告生成后重出过，集级覆盖看着没问题、报告其实基于旧像素，measured-drift 环会误判『全绿』。重跑 `python3 skills/n2d/n2d-identity/scripts/identity.py <作品根> --writ",
           "severity": "block",
           "source": "gate:image_prompt_preflight"
         }
@@ -2360,14 +2360,14 @@
         {
           "dimension": "物料新鲜度",
           "loc": "第2集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫",
+          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫",
           "severity": "block",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物料新鲜度",
           "loc": "第2集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；",
+          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；",
           "severity": "block",
           "source": "gate:image_prompt_preflight"
         },
@@ -4369,14 +4369,14 @@
         {
           "dimension": "关键镜候选",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第2集.json",
-          "message": "关键镜候选 检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是",
+          "message": "关键镜候选 检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "关键镜候选",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第2集.json",
-          "message": "关键镜候选 检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划",
+          "message": "关键镜候选 检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d/n2d-image/scripts/keyshot_candidates.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划",
           "severity": "warn",
           "source": "gate:image"
         }

@@ -2,7 +2,7 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（目标/KPI→创意→脚本→VO→分镜→产品/角色/场景定妆→AI出图→AI视频→剪辑交付→发布合规→质检→投放反馈）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + cutdown + 多比例）。**不拆集**、**自包含**。读 _进度.md 路由到 ad-progress / ad-update / ad-craft / ad-concept / ad-script / ad-voice / ad-image / ad-video / ad-compose / ad-review / ad-feedback。Use when given a 客户需求/brief（哪怕只有一句话）, a product/brand to advertise, an existing 拍广告 project, or asked 拍广告 / 广告创意 / TVC / 信息流广告 / 产品demo / 带货视频 / 投放复盘. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, 投放复盘, ad.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1209 | 目录文本总行数 48069
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1209 | 目录文本总行数 48081
 
 # ad — 拍广告生产线 · 总调度
 
@@ -20,7 +20,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-按 `../skills/ad-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目沉默沿用。合规/不可逆/花钱多的点（`广告法地区`、`音乐来源`、出图/出视频/合成）每次仍确认。
+按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目沉默沿用。合规/不可逆/花钱多的点（`广告法地区`、`音乐来源`、出图/出视频/合成）每次仍确认。
 
 涉及选择点：`广告类型`、`创意路线`、`基础视觉风格`、`主片时长`、`交付比例`、`cutdown版本`、`生图模型`、`生图渠道`、`一致性增强`、`生视频模型`、`生视频渠道`、`视频模型路由`、`出视频规格`、`视频分辨率`、`配音后端`、`音乐来源`、`品牌包装模板`、`字幕语言`、`AI视觉使用披露`、`广告法地区`、`交付规格`、`生成粒度`、`目标平台`、`发行地区`。模型是具体版本，渠道只是 CLI/API/网页入口；旧 `生图AI` 不再作为正式选择点。
 
@@ -103,7 +103,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 - 代言人肖像/真人声音/授权音乐/商业字体需可追溯授权；未授权不投放。AI 生成合成内容需保留元数据、声明/标识责任与平台回执；平台侧动作由发布者执行，证据必须回写产线。
 
 ## 持续改进
-工艺/翻车 → 写进对应 ad-* skill 的 `references/`。**新增/改 ad-* skill 后同步更新 `skills/README.md` + `AGENTS.md`/`GEMINI.md` 路由表 + `skills/ad-craft/references/选择点与偏好.md` 选择点目录。**
+工艺/翻车 → 写进对应 ad-* skill 的 `references/`。**新增/改 ad-* skill 后同步更新 `skills/README.md` + `AGENTS.md`/`GEMINI.md` 路由表 + `skills/ad/ad-craft/references/选择点与偏好.md` 选择点目录。**
 
 ## 常见错误
 

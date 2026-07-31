@@ -99,7 +99,7 @@
         {
           "dimension": "state_continuity",
           "loc": "",
-          "message": "state_continuity  None 状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。 ",
+          "message": "state_continuity  None 状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -3045,7 +3045,7 @@
         {
           "dimension": "进度凭据对账",
           "loc": "第1集/出图",
-          "message": "进度凭据对账 进度「出图」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：image 仍有 61 个 block 级问题（见 gate_findings_image_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫",
+          "message": "进度凭据对账 进度「出图」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：image 仍有 61 个 block 级问题（见 gate_findings_image_第1集.json）。修掉 block 后重跑 → python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫",
           "severity": "block",
           "source": "gate:compose"
         }
@@ -3646,7 +3646,7 @@
         {
           "dimension": "物料新鲜度",
           "loc": "第1集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d-image, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第1集` 评估哪些物料",
+          "message": "物料新鲜度 前期物料可能已过期：n2d-image, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第1集` 评估哪些物料",
           "severity": "block",
           "source": "gate:video_preflight"
         }
@@ -3667,7 +3667,7 @@
         {
           "dimension": "进度凭据对账",
           "loc": "第1集/视频",
-          "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 26 个 block 级问题（见 gate_findings_video_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫",
+          "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 26 个 block 级问题（见 gate_findings_video_第1集.json）。修掉 block 后重跑 → python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫",
           "severity": "block",
           "source": "gate:compose"
         }
@@ -5862,7 +5862,7 @@
         {
           "dimension": "现实覆盖",
           "loc": "生产数据/resident_presence_第1集.json",
-          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重",
+          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重",
           "severity": "warn",
           "source": "gate:compose"
         }
@@ -5883,7 +5883,7 @@
         {
           "dimension": "现实覆盖",
           "loc": "生产数据/scene_embed_第1集.json",
-          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env",
+          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env",
           "severity": "warn",
           "source": "gate:compose"
         }
@@ -5959,7 +5959,7 @@
         {
           "dimension": "state_continuity",
           "loc": null,
-          "message": "state_continuity  None 状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。 ",
+          "message": "state_continuity  None 状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。 ",
           "severity": "warn",
           "source": "detect"
         }

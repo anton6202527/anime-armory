@@ -53,7 +53,7 @@ CATALOG_VERIFIED = {
     "profile_catalog": PROFILE_VERIFIED,
 }
 SKILLS_DIR = Path(__file__).resolve().parents[1]
-CLI_SNAPSHOT_ROOT = SKILLS_DIR.parent / "n2d-video" / "references" / "cli_snapshots"
+CLI_SNAPSHOT_ROOT = SKILLS_DIR / "n2d-video" / "references" / "cli_snapshots"
 
 OFF_OR_MANUAL_VALUES = {
     "",

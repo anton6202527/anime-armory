@@ -13,7 +13,7 @@ import subprocess
 import importlib.util
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_SKILLS = os.path.abspath(os.path.join(_HERE, ".."))
 _LIB = os.path.abspath(os.path.join(_HERE, "..", "_lib"))
 if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
@@ -118,7 +118,7 @@ def revision_plan_hint(root):
         reason = "统一修订计划早于最新审稿/评分/反馈信号"
     else:
         return ""
-    return f"{reason}：python3 skills/novel-craft/scripts/revision_planner.py \"{root}\""
+    return f"{reason}：python3 skills/novel/novel-craft/scripts/revision_planner.py \"{root}\""
 
 
 def is_stage_checklist(root):
@@ -176,7 +176,7 @@ def main():
         active = next((step for step in author_flow.get("steps", []) if step.get("key") == author_flow.get("current_step")), None)
         if active and active.get("blockers"):
             print(f"   作者流程阻断：{'；'.join(str(item) for item in active.get('blockers') or [])}")
-    print(f"🧭 刷新作者成书状态：python3 skills/novel-craft/scripts/author_workflow.py \"{root}\" --write")
+    print(f"🧭 刷新作者成书状态：python3 skills/novel/novel-craft/scripts/author_workflow.py \"{root}\" --write")
     
     # 状态哨兵
     advice = []
@@ -208,7 +208,7 @@ def main():
             c_key = f"chapter_{ch_num:02d}"
             if c_key not in ledger.get("chapter_deltas", {}):
                 blockers.append(f"🟡 状态增量尚未合并入 Master Ledger")
-                advice.append(f"运行对账并合并：python3 skills/novel-craft/scripts/reconcile_ledger.py \"{root}\" --chapter {ch_num} --merge --verified <结论.json>")
+                advice.append(f"运行对账并合并：python3 skills/novel/novel-craft/scripts/reconcile_ledger.py \"{root}\" --chapter {ch_num} --merge --verified <结论.json>")
 
     # 3. 任务包检查 (如果是正文初稿阶段)
     if stage_label == "正文初稿":
@@ -218,11 +218,11 @@ def main():
             if not os.path.exists(arc_plan):
                 advice.append(
                     f"长篇弧段包：先生成第 {start:02d}-{end:02d} 章弧段计划："
-                    f"python3 skills/novel-craft/scripts/arc_packets.py \"{root}\" --arc {start}-{end}"
+                    f"python3 skills/novel/novel-craft/scripts/arc_packets.py \"{root}\" --arc {start}-{end}"
                 )
         packets = get_task_packets(root, ch_num)
         if not packets:
-            advice.append(f"生成写作任务包：python3 skills/novel-craft/scripts/draft_packets.py \"{root}\" --chapter {ch_num}")
+            advice.append(f"生成写作任务包：python3 skills/novel/novel-craft/scripts/draft_packets.py \"{root}\" --chapter {ch_num}")
         else:
             advice.append(f"检测到现有任务包：{', '.join(packets)}。请按任务包要求完成写作。")
             if live_check:
@@ -238,7 +238,7 @@ def main():
                 start, end = window
                 advice.append(
                     f"小批回扫：跑第 {start:02d}-{end:02d} 章 review（中段防守/节奏/钩子/人设集中修正）："
-                    f"python3 skills/novel-review/scripts/mechanical_check.py \"{root}\" "
+                    f"python3 skills/novel/novel-review/scripts/mechanical_check.py \"{root}\" "
                     f"--range {start}-{end} --json-out \"{root}/审稿/batch_mechanical_第{start:02d}-{end:02d}章.json\""
                 )
             elif window:
@@ -252,7 +252,7 @@ def main():
             if not os.path.exists(arc_report):
                 advice.append(
                     f"长篇弧段 gate：本窗口到第 {end:02d} 章，建议跑 "
-                    f"python3 skills/novel-review/scripts/arc_gate.py \"{root}\" --arc {start}-{end}"
+                    f"python3 skills/novel/novel-review/scripts/arc_gate.py \"{root}\" --arc {start}-{end}"
                 )
 
     revision_hint = revision_plan_hint(root)

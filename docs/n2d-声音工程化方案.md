@@ -25,15 +25,15 @@ n2d 的历史问题曾是**声音分裂**；2026-07-11 后，以下内容作为�
 
 | 环节 | 配音(已做到) | BGM(缺) | 证据 |
 |---|---|---|---|
-| 脚本阶段产出 | `voiceover.txt` 四层标注 `[镜头·角色·情绪·语速] 台词 ‖气口 ⚡钩子`，驱动下游 | `bgm.txt` 只有"整体情绪曲线+分段风格文字+音效点"，**无机器可读结构**，无人读取 | `skills/n2d-script/references/formats.md:167`；`制漫剧/本宫才是这皇宫最大的妖/脚本/第1集/bgm.txt` |
-| 生成后端 | `render_voice.py` 多后端(CosyVoice/FishSpeech/MiniMax/火山/say) | **无**。手工 Suno / 程序化正弦波占位 | `skills/n2d-voice/render_voice.py:22`；`skills/n2d-compose/compose.sh:45-51` |
+| 脚本阶段产出 | `voiceover.txt` 四层标注 `[镜头·角色·情绪·语速] 台词 ‖气口 ⚡钩子`，驱动下游 | `bgm.txt` 只有"整体情绪曲线+分段风格文字+音效点"，**无机器可读结构**，无人读取 | `skills/n2d/n2d-script/references/formats.md:167`；`制漫剧/本宫才是这皇宫最大的妖/脚本/第1集/bgm.txt` |
+| 生成后端 | `render_voice.py` 多后端(CosyVoice/FishSpeech/MiniMax/火山/say) | **无**。手工 Suno / 程序化正弦波占位 | `skills/n2d/n2d-voice/render_voice.py:22`；`skills/n2d/n2d-compose/compose.sh:45-51` |
 | 表演/情绪驱动 | 每句情绪→emotion 参数、语速→atempo、钩子→留拍 | bgm.txt 情绪曲线**与 compose 完全脱钩**，不进任何参数 | `render_voice.py:27-50,184` |
 | 时长对齐 | `时长清单.json` 逐句实测时长 | 无。BGM 不知道每段该多长 | `render_voice.py:244-254` |
 | 卡点 | — | 只有 `BGM_OFFSET` 平移整条 BGM，**多爽点只能对齐第一个** | `compose.sh:11,42-44` |
 | 混音 | sidechain ducking，配音永远压过 BGM，参数可调 | ✅ 这一环 BGM 已被照顾 | `compose.sh:83-92` |
 | 进度门禁 | "配音占位未精修"会被质检拦 | `_设置.md: BGM来源: 占位` 可一路占位到成片，无拦截 | `制漫剧/.../_设置.md:10` |
-| 质检 | 专项：占位未精修、双人声打架 | 仅一条"drop 对齐爽点时间戳" | `skills/n2d-review/references/checklist.md:50-59` |
-| SFX | — | bgm.txt 列点=纯文档，零实装；clip 原生音默认丢弃 | `compose.sh:53-70`；`skills/n2d-compose/SKILL.md:35` |
+| 质检 | 专项：占位未精修、双人声打架 | 仅一条"drop 对齐爽点时间戳" | `skills/n2d/n2d-review/references/checklist.md:50-59` |
+| SFX | — | bgm.txt 列点=纯文档，零实装；clip 原生音默认丢弃 | `compose.sh:53-70`；`skills/n2d/n2d-compose/SKILL.md:35` |
 
 ## 2. 设计原则（对称于配音）
 
@@ -50,7 +50,7 @@ n2d 的历史问题曾是**声音分裂**；2026-07-11 后，以下内容作为�
 **做什么**：让 n2d-compose 在 BGM 缺失时，不再只会程序化正弦波，而是能调用 `song` 线的 `song-compose`(ACE-Step 本地 / Suno 云) 生成**纯器乐** BGM。
 
 **落点**：
-- 新增 `skills/n2d-compose/gen_bgm.py`（或 `references/bgm生成.md` 指南）。输入：结构化 `bgm.json`(见落点②) + 目标总时长(来自 `时长清单.json` 末句 end + 集尾留拍)。输出：`出视频/<EP>/配音/bgm.wav` 或 `脚本/<EP>/bgm.wav`。
+- 新增 `skills/n2d/n2d-compose/gen_bgm.py`（或 `references/bgm生成.md` 指南）。输入：结构化 `bgm.json`(见落点②) + 目标总时长(来自 `时长清单.json` 末句 end + 集尾留拍)。输出：`出视频/<EP>/配音/bgm.wav` 或 `脚本/<EP>/bgm.wav`。
 - 后端优先级仿 render_voice.py：`ACE-Step(本地，Mac 可跑) > Suno(云) > DiffRhythm > 程序化占位`。env 可覆盖。
 - `compose.sh:41` 的 `if [ -n "$BGMFILE" ]` 分支前，加一层：若无 BGMFILE 但存在 `bgm.json`，先调 gen_bgm.py 产出再走真实 BGM 路径；都没有才退回正弦波占位。
 - **合规**：ACE-Step/Suno 生成的器乐属合成音乐，无需授权；但若用户要"翻唱某歌当 BGM"走 song-cover 的合规闸门。纯器乐 BGM 不带 AI-ident 问题（无人声克隆）。
@@ -62,7 +62,7 @@ n2d 的历史问题曾是**声音分裂**；2026-07-11 后，以下内容作为�
 **做什么**：让 `n2d-script` 像产 voiceover 一样产**机器可读**的 BGM 规格，且分两遍——改编阶段先出情绪意图(粗)，**配音定稿后回跑**用实测总时长切准段落(细)。
 
 **落点**：
-- `skills/n2d-script/references/formats.md` 在 bgm 段(167 行附近)旁，新增 `bgm.json` 格式：
+- `skills/n2d/n2d-script/references/formats.md` 在 bgm 段(167 行附近)旁，新增 `bgm.json` 格式：
   ```json
   {
     "ep": "第1集",
@@ -89,7 +89,7 @@ n2d 的历史问题曾是**声音分裂**；2026-07-11 后，以下内容作为�
 
 **落点**：
 - `compose.sh` 当前 BGM 是"整条循环+首尾 fade"(42-44 行)。改为：按 `segments` 拼接/增益——在 `hit:true` 段用 `volume` 包络抬一个重音，或在该时间点混入一条 drop 采样。
-- 新增 SFX 层：读 `bgm.json.sfx[]`，从音效库(新增 `skills/n2d-compose/assets/sfx/` 或检索后端)取对应音效，用 `adelay` 放到 `t` 时间点，混进现有第 3 路 `[2:a]sfx`(compose.sh:89)。当前 sfx 路是空 anullsrc(69 行)，这里正好填实。
+- 新增 SFX 层：读 `bgm.json.sfx[]`，从音效库(新增 `skills/n2d/n2d-compose/assets/sfx/` 或检索后端)取对应音效，用 `adelay` 放到 `t` 时间点，混进现有第 3 路 `[2:a]sfx`(compose.sh:89)。当前 sfx 路是空 anullsrc(69 行)，这里正好填实。
 - 降级：`bgm.json` 缺 `hit`/`sfx` 时，行为完全等同今天（不回归）。
 
 ### ④ 进度门禁 + 质检补齐
@@ -99,7 +99,7 @@ n2d 的历史问题曾是**声音分裂**；2026-07-11 后，以下内容作为�
 **落点**：
 - `_进度.md` 模板：把单列 `bgm` 拆成三态或加备注——`规划✅ / 生成✅ / 卡点✅`。占位时成片步骤打 ⚠️ 警告(不阻断，但留痕)。
 - `_设置.md`：`BGM来源` 字段记录实际来源(ACE-Step / Suno-ID / 文件路径 / 占位)，而非现在的笼统"占位"。新增 `音效库` 字段。
-- `skills/n2d-review/references/checklist.md:50-59` 音频段新增三条机/判检查：
+- `skills/n2d/n2d-review/references/checklist.md:50-59` 音频段新增三条机/判检查：
   - 🟡 BGM 是否仍为占位（查 bgm.wav 是否程序化正弦/`_设置.md` 标占位）——机检
   - 🟡 BGM 情绪是否匹配 `bgm.json.mood_curve`/脚本曲线——人判
   - 🟢 关键 SFX 是否到位（`bgm.json.sfx[]` 有定义但成片无对应音）——人判
@@ -116,7 +116,7 @@ n2d 的历史问题曾是**声音分裂**；2026-07-11 后，以下内容作为�
 | ③ 多爽点/SFX | n2d-compose（compose.sh + sfx 资产） | — |
 | ④ 门禁质检 | n2d-review + n2d-script(_进度模板) + _偏好约定(_设置字段) | **`skills/README.md` 索引必须同步**（CLAUDE.md 硬约定）；n2d-review description 更新 |
 
-**测试**：n2d-compose 无现成 pytest；①③ 改动建议加一个 `skills/n2d-compose/test_gen_bgm.py`（按 CLAUDE.md 约定从脚本自身目录跑）。②的 bgm.json 解析若进 finalize_storyboard 路径，复用 `skills/n2d-script/test_finalize_storyboard.py` 同款 fixture。
+**测试**：n2d-compose 无现成 pytest；①③ 改动建议加一个 `skills/n2d/n2d-compose/test_gen_bgm.py`（按 CLAUDE.md 约定从脚本自身目录跑）。②的 bgm.json 解析若进 finalize_storyboard 路径，复用 `skills/n2d/n2d-script/test_finalize_storyboard.py` 同款 fixture。
 
 ## 5. 不做什么（边界）
 

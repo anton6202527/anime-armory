@@ -17,6 +17,6 @@
 ## 接入点
 
 - 机器真值：`skills/comic/references/运镜/manifest.json`
-- 分格脚本：`skills/comic-script/SKILL.md`
-- 出图任务 schema：`skills/comic-image/references/prompt_job_schema.md`
-- 排版：`skills/comic-layout/SKILL.md`
+- 分格脚本：`skills/comic/comic-script/SKILL.md`
+- 出图任务 schema：`skills/comic/comic-image/references/prompt_job_schema.md`
+- 排版：`skills/comic/comic-layout/SKILL.md`

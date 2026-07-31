@@ -3,8 +3,8 @@
   "generated_at": "2026-07-22T12:41:48+00:00",
   "kind": "n2d_repair_preflight",
   "next_when_blocked": [
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 --write-plan --json",
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --json --write-missing",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 --write-plan --json",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --json --write-missing",
     "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --write-missing --write-check --stage image --json"
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
@@ -12,20 +12,20 @@
   "status": "block",
   "steps": [
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 --write-plan --json",
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 --write-plan --json",
       "detail": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.md",
       "payload": {
         "baseline_bootstrapped": false,
         "changed_files": [
-          "skills/n2d-image/scripts/image_qc.py",
-          "skills/n2d-review/scripts/temporal_consistency.py",
-          "skills/n2d-script/SKILL.md",
-          "skills/n2d-script/references/分镜语法.md",
-          "skills/n2d-script/scripts/anchor_planner.py",
-          "skills/n2d-script/scripts/clip_economy_planner.py",
-          "skills/n2d-script/scripts/director_camera_plan.py",
-          "skills/n2d-script/scripts/shot_split_decision.py",
-          "skills/n2d-script/scripts/story_quality_pack.py",
+          "skills/n2d/n2d-image/scripts/image_qc.py",
+          "skills/n2d/n2d-review/scripts/temporal_consistency.py",
+          "skills/n2d/n2d-script/SKILL.md",
+          "skills/n2d/n2d-script/references/分镜语法.md",
+          "skills/n2d/n2d-script/scripts/anchor_planner.py",
+          "skills/n2d/n2d-script/scripts/clip_economy_planner.py",
+          "skills/n2d/n2d-script/scripts/director_camera_plan.py",
+          "skills/n2d/n2d-script/scripts/shot_split_decision.py",
+          "skills/n2d/n2d-script/scripts/story_quality_pack.py",
           "skills/n2d/SKILL.md",
           "skills/n2d/_lib/n2d_platform_profiles.py",
           "skills/n2d/_lib/video_prompt_compiler.py",
@@ -39,8 +39,8 @@
           "n2d-script"
         ],
         "commands": [
-          "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from script_stage1 --scope \"skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
-          "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image  # 重出图后验像素一致性（含 image_qc）"
+          "python3 skills/n2d/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from script_stage1 --scope \"skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
+          "python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image  # 重出图后验像素一致性（含 image_qc）"
         ],
         "contract_inheritance": null,
         "created_at": "2026-07-22T12:41:47+00:00",
@@ -57,7 +57,7 @@
         "episode": "第2集",
         "execution_steps": [
           {
-            "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from script_stage1 --scope \"skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
+            "command": "python3 skills/n2d/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from script_stage1 --scope \"skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
             "role": "queue_bounded_rerun",
             "type": "command"
           },
@@ -67,7 +67,7 @@
             "type": "agent_step"
           },
           {
-            "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image  # 重出图后验像素一致性（含 image_qc）",
+            "command": "python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image  # 重出图后验像素一致性（含 image_qc）",
             "role": "verify_after_image_regen",
             "run_when": "仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
             "type": "command"
@@ -144,15 +144,15 @@
         "shared_lock_reuse": true,
         "smart_suggestions": [],
         "snapshot_changed_files": [
-          "skills/n2d-image/scripts/image_qc.py",
-          "skills/n2d-review/scripts/temporal_consistency.py",
-          "skills/n2d-script/SKILL.md",
-          "skills/n2d-script/references/分镜语法.md",
-          "skills/n2d-script/scripts/anchor_planner.py",
-          "skills/n2d-script/scripts/clip_economy_planner.py",
-          "skills/n2d-script/scripts/director_camera_plan.py",
-          "skills/n2d-script/scripts/shot_split_decision.py",
-          "skills/n2d-script/scripts/story_quality_pack.py",
+          "skills/n2d/n2d-image/scripts/image_qc.py",
+          "skills/n2d/n2d-review/scripts/temporal_consistency.py",
+          "skills/n2d/n2d-script/SKILL.md",
+          "skills/n2d/n2d-script/references/分镜语法.md",
+          "skills/n2d/n2d-script/scripts/anchor_planner.py",
+          "skills/n2d/n2d-script/scripts/clip_economy_planner.py",
+          "skills/n2d/n2d-script/scripts/director_camera_plan.py",
+          "skills/n2d/n2d-script/scripts/shot_split_decision.py",
+          "skills/n2d/n2d-script/scripts/story_quality_pack.py",
           "skills/n2d/SKILL.md",
           "skills/n2d/_lib/n2d_platform_profiles.py",
           "skills/n2d/_lib/video_prompt_compiler.py",
@@ -189,7 +189,7 @@
       "step": "update_plan"
     },
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --json --write-missing",
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --json --write-missing",
       "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-22T12:41:47+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"episode\": \"第2集\",\n  \"status\": \"block\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 7,\n    \"block\": 2\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第2集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issue",
       "payload": {
         "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第2集.json",
@@ -252,7 +252,7 @@
         "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
         "overview_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_handoff_pack_第2集.md",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-        "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 scaffold --write",
+        "scaffold_command": "python3 skills/n2d/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 scaffold --write",
         "status": "block",
         "summary": {
           "block": 2,

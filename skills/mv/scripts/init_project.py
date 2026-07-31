@@ -27,7 +27,7 @@ from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py")
+CONTRACT_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "contract.py")
 
 
 def load_contract():

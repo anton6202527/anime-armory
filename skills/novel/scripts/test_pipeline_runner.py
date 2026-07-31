@@ -8,7 +8,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LIB = os.path.abspath(os.path.join(HERE, "..", "_lib"))
-CRAFT = os.path.abspath(os.path.join(HERE, "..", "..", "novel-craft", "scripts"))
+CRAFT = os.path.abspath(os.path.join(HERE, "..", "novel-craft", "scripts"))
 for path in (LIB, CRAFT, HERE):
     if path not in sys.path:
         sys.path.insert(0, path)

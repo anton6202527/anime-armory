@@ -35,9 +35,9 @@ def test_neutral_file_coloading_both_lines_is_flagged(tmp_path: Path) -> None:
 
 def test_single_line_syspath_is_clean(tmp_path: Path) -> None:
     # 只加一条线 = 正常自包含，不报
-    _mk(tmp_path, "skills/n2d-update/scripts/u.py",
+    _mk(tmp_path, "skills/n2d/n2d-update/scripts/u.py",
         "import sys\nsys.path.insert(0, 'skills/n2d/_lib')\nimport settings\n")
-    _mk(tmp_path, "skills/novel-create/scripts/c.py",
+    _mk(tmp_path, "skills/novel/novel-create/scripts/c.py",
         "import sys\nsys.path.insert(0, 'skills/novel/_lib')\nimport settings\n")
     assert zc.check_no_cross_line_coload(tmp_path) == []
 

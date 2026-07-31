@@ -18,7 +18,7 @@ from typing import Any
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _LIB = os.path.abspath(os.path.join(_HERE, "..", "_lib"))
-_CRAFT = os.path.abspath(os.path.join(_HERE, "..", "..", "novel-craft", "scripts"))
+_CRAFT = os.path.abspath(os.path.join(_HERE, "..", "novel-craft", "scripts"))
 for _path in (_LIB, _CRAFT):
     if _path not in sys.path:
         sys.path.insert(0, _path)

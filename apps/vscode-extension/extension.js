@@ -593,8 +593,8 @@ async function pickEpisode(root) {
 function sendRefreshEpisodeData(extensionRoot, root, episode) {
   const qroot = shellQuote(root);
   const cmd = episode
-    ? `python3 skills/n2d-review-ui/scripts/episode_app.py ${qroot} --episode ${shellQuote(episode)} --write --index && python3 skills/n2d-review-ui/scripts/board.py ${qroot} --write --markdown`
-    : `python3 skills/n2d-review-ui/scripts/episode_app.py ${qroot} --all --write && python3 skills/n2d-review-ui/scripts/board.py ${qroot} --write --markdown`;
+    ? `python3 skills/n2d/n2d-review-ui/scripts/episode_app.py ${qroot} --episode ${shellQuote(episode)} --write --index && python3 skills/n2d/n2d-review-ui/scripts/board.py ${qroot} --write --markdown`
+    : `python3 skills/n2d/n2d-review-ui/scripts/episode_app.py ${qroot} --all --write && python3 skills/n2d/n2d-review-ui/scripts/board.py ${qroot} --write --markdown`;
   const term = openArmoryTerminal(extensionRoot, '', true);
   term.sendText(cmd, true);
 }

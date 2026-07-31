@@ -3,7 +3,7 @@
 """候选项新鲜度检查（本线 · 纯标准库 · 无网络/模型调用）。
 
 实现「候选项快照 + 适配层 + 手输兜底 + 新鲜度标注」原则里**可机检的那一半**：
-`skills/ad-craft/references/选择点与偏好.md` 要求所有易变候选清单（模型/平台/价格/规格/法规…）都带采集日期，
+`skills/ad/ad-craft/references/选择点与偏好.md` 要求所有易变候选清单（模型/平台/价格/规格/法规…）都带采集日期，
 正式花钱/不可逆/合规步骤前必须按需要核验刷新。本模块只回答一个问题——
 **「这些候选快照各自多久没核验了，哪些该刷新了？」**，把散落的 prose 约定变成
 review 流程自审可以一键跑的机检。
@@ -46,7 +46,7 @@ _STAMP_RE = re.compile(r"采集日期\s*[:：]\s*(\d{4}-\d{2}-\d{2})")
 CANDIDATE_SOURCES: List[Dict[str, object]] = [
     {
         "id": "ad-image-backends",
-        "path": "skills/ad-craft/scripts/contract.py",
+        "path": "skills/ad/ad-craft/scripts/contract.py",
         "choice_points": ["生图模型", "生图渠道"],
         "max_age_days": 45,
         "stamp_label": "生图候选采集日期",
@@ -54,7 +54,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     },
     {
         "id": "ad-video-backends",
-        "path": "skills/ad-craft/scripts/contract.py",
+        "path": "skills/ad/ad-craft/scripts/contract.py",
         "choice_points": ["生视频模型", "生视频渠道"],
         "max_age_days": 30,
         "stamp_label": "生视频候选采集日期",
@@ -63,7 +63,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     },
     {
         "id": "ad-platform-placements",
-        "path": "skills/ad-craft/scripts/platform_pack.py",
+        "path": "skills/ad/ad-craft/scripts/platform_pack.py",
         "choice_points": ["目标平台", "brief.placements"],
         "max_age_days": 30,
         "stamp_label": "平台规格采集日期",

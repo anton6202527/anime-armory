@@ -15,7 +15,7 @@
   "mode_source": "_设置.md:主线剪枝=突出主线",
   "next_when_blocked": "补齐 story_spine.json：提炼主线 spine，登记每条支线的 class/decision，所有 compress/fold/cut 线程写 connectivity(payoff_reroute + no_orphan_proof + downstream_mainline_deps 引用 SRC_CAUSE_*/SPINE_* 声明它喂给主线的依赖)，修正不合理点写 no_contradiction_proof，把 status 改为 confirmed，再重跑 check。只对已确认的 因果链/伏笔账 操作，禁止臆造 id；被主线 depends_on 的 must_keep 因果被裁必须 reroute。",
   "root": ".",
-  "scaffold_command": "python3 skills/n2d-script/scripts/story_spine.py . scaffold --write",
+  "scaffold_command": "python3 skills/n2d/n2d-script/scripts/story_spine.py . scaffold --write",
   "status": "pass",
   "summary": {
     "block": 0,

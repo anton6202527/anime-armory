@@ -10,12 +10,30 @@ type RawSkillFileLoader = () => Promise<string>;
 
 type ParsedSkillPath = {
   skillName: string;
+  directoryPath: string;
   relativePath: string;
 };
 
 function parseSkillPath(path: string): ParsedSkillPath | null {
-  const match = path.match(/\/skills\/([^/]+)\/(.+)$/);
-  return match ? { skillName: match[1], relativePath: match[2] } : null;
+  const match = path.match(/\/skills\/(.+)$/);
+  if (!match) return null;
+
+  const [line, possibleChild, ...rest] = match[1].split("/");
+  if (!line || !possibleChild || !BUILTIN_SERIES_IDS.has(line)) return null;
+
+  if (possibleChild.startsWith(`${line}-`) && rest.length) {
+    return {
+      skillName: possibleChild,
+      directoryPath: `skills/${line}/${possibleChild}`,
+      relativePath: rest.join("/"),
+    };
+  }
+
+  return {
+    skillName: line,
+    directoryPath: `skills/${line}`,
+    relativePath: [possibleChild, ...rest].join("/"),
+  };
 }
 
 function seriesSkillNames(skill: SkillDefinition) {
@@ -113,9 +131,9 @@ export function listSkillSourceGroups(skill: SkillDefinition): SkillSourceGroup[
       const parsed = parseSkillPath(path);
       if (!parsed || parsed.skillName !== skillName) return [];
       return [{
-        id: `skills/${skillName}/${parsed.relativePath}`,
+        id: `${parsed.directoryPath}/${parsed.relativePath}`,
         name: parsed.relativePath.split("/").at(-1) ?? parsed.relativePath,
-        path: `skills/${skillName}/${parsed.relativePath}`,
+        path: `${parsed.directoryPath}/${parsed.relativePath}`,
         relativePath: parsed.relativePath,
         load,
       } satisfies SkillSourceFile];
@@ -124,7 +142,7 @@ export function listSkillSourceGroups(skill: SkillDefinition): SkillSourceGroup[
     return {
       id: skillName,
       name: skillName,
-      path: `skills/${skillName}`,
+      path: skillName === skill.line ? `skills/${skill.line}` : `skills/${skill.line}/${skillName}`,
       files,
     };
   });

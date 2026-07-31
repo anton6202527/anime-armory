@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4767 | 目录文本总行数 302995
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4767 | 目录文本总行数 303028
 
 # n2d — 主状态机调度器
 
@@ -26,7 +26,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 - **作品内非角色视觉资产**：场景、道具、武器、服装、VFX 仍由 `出图/共享/asset_registry.json` + `出图/共享/图片/` 管理；稳定、审过且授权清楚后，才显式导出。
 - **系列根 `创作区/制漫剧/_资产库/`**：只供制漫剧系列不同作品复用，不是仓库公共层。其它五条生产线各有自己的 `_资产库/`，任何生产线不得运行时 import 或回读另一条线的目录。
 - **跨系列 / 跨仓库 / 跨机器**：只显式交付所需的单个自包含 asset pack。目标侧复制或 fork 后自行适配；包必须 `requires_source_library=false`，不要求顺带打包整个系列库。
-- **旧目录迁移**：运行 `python3 skills/n2d-image/scripts/migrate_character_library.py <作品根>` 先 dry-run，确认后加 `--apply`。发现旧、新两套同时存在时脚本拒绝自动合并，避免双真值长期并存。
+- **旧目录迁移**：运行 `python3 skills/n2d/n2d-image/scripts/migrate_character_library.py <作品根>` 先 dry-run，确认后加 `--apply`。发现旧、新两套同时存在时脚本拒绝自动合并，避免双真值长期并存。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -94,7 +94,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > 完整职责、输入/产物、命令示例见 [`references/横切skill地图.md`](references/横切skill地图.md)；底部「子 skill 速查」表含各自产物路径。
 
-> **声音选角先行，最终配音后置**：混合默认先跑 `python3 skills/n2d-voice/voice_preflight.py prepare <作品根> 第N集`，只写 `设定库/voice_casting.json` 与 `合成/第N集/配音/timing_estimate.json`，不生成 WAV。试听通过后用 `voice_preflight.py lock` 锁 backend/model/voice_id/canonical sample/审批人；只有锁定后才允许 `render_voice.py` 批量渲染。macOS `say` 只保留给显式旧模式/冒烟测试，不再是新项目估时默认。
+> **声音选角先行，最终配音后置**：混合默认先跑 `python3 skills/n2d/n2d-voice/voice_preflight.py prepare <作品根> 第N集`，只写 `设定库/voice_casting.json` 与 `合成/第N集/配音/timing_estimate.json`，不生成 WAV。试听通过后用 `voice_preflight.py lock` 锁 backend/model/voice_id/canonical sample/审批人；只有锁定后才允许 `render_voice.py` 批量渲染。macOS `say` 只保留给显式旧模式/冒烟测试，不再是新项目估时默认。
 
 ## 制作模式与视频路由（调度摘要）
 
@@ -117,31 +117,31 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 → 推荐 `n2d-script <小说路径>`（先落 P-1 开发包草稿 + 首批粗切，再进 Stage 1）。**首跑时先按上面摘要把制作模式菜单念给用户选一次**，再按 `n2d/references/visual_styles.md` 选择 `基础视觉风格`；生视频后端不在开局选择，除非用户主动固定某后端/账号硬约束，否则延后到 `n2d-video` 出视频前由 router/probe 决策。选后统一落 `_设置.md`。
 > **P-1 开发包 gate（拆集/写词前的制片开发层）**：新作品会在 `<作品根>/开发包/` 生成 `series_bible.md`、`adaptation_strategy.json`、`season_arc.json`、`production_feasibility.json`、`pilot_greenlight.md`。`run.py next/enter` 在 `script_stage1` 前自动跑 `development_pack.py check --write-missing`；`status=confirmed` 只代表内容填完，另需 `开发包/signoff.json` 绑定当前源输入、五件套 SHA、明确 reviewer/role/time/risk，由创意与制片两组签收。任一内容或 signoff 缺失/过期都会阻断正式写词。
 ```bash
-python3 skills/n2d-script/scripts/development_pack.py <作品根> scaffold --write
-python3 skills/n2d-script/scripts/development_pack.py <作品根> check --json --write-missing
+python3 skills/n2d/n2d-script/scripts/development_pack.py <作品根> scaffold --write
+python3 skills/n2d/n2d-script/scripts/development_pack.py <作品根> check --json --write-missing
 ```
 > **低成本围读 gate（导演排戏前的编剧室/演员围读层）**：每集完成 voiceover/时长脚手架后先生成 `table_read_packet.json/md`。内容 `status=confirmed` 只表示可审；director/head_writer 还须在 `table_read_signoff.json` 对当前输入与围读包哈希签收。这样先发现“台词不活、信息太满、角色声线不清”，又不允许生成器自称已围读。
 ```bash
-python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind table_read
-python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind table_read --json --write-missing
+python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind table_read
+python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind table_read --json --write-missing
 ```
 > **P-2 导演排戏包 gate（分镜前的导演排戏层）**：围读确认后，`run.py next/enter` 在 `script_stage2` 前继续自动跑 `director_blocking_pack.py check --write-missing`。脚本可从旧 storyboard 预填内容，但永远保持 draft，不自我签收；六件套内容 confirmed 后，还要由导演 + 制片/剪辑在 `director_blocking_signoff.json` 对当前哈希双角色签收。
 ```bash
-python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
-python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
+python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
+python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
 ```
-> **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右或 9:16 纵深高低位、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，先跑 `python3 skills/n2d-script/scripts/shot_reverse_contract.py <作品根> 第N集 --write --sync-axis-map` 物化 `脚本/第N集/shot_reverse_contract.json` 并回填 `shot_reverse_patterns[]`；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，出图/出视频 prompt 收据也会记录该合同 SHA。无理由越轴、左右互换、看镜头替代看戏内对象、OTS 没有前景肩部，视为连续性硬伤，不靠后期补救。
+> **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右或 9:16 纵深高低位、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，先跑 `python3 skills/n2d/n2d-script/scripts/shot_reverse_contract.py <作品根> 第N集 --write --sync-axis-map` 物化 `脚本/第N集/shot_reverse_contract.json` 并回填 `shot_reverse_patterns[]`；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，出图/出视频 prompt 收据也会记录该合同 SHA。无理由越轴、左右互换、看镜头替代看戏内对象、OTS 没有前景肩部，视为连续性硬伤，不靠后期补救。
 > **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：从 storyboard + 镜头时长物化 timed preview、working `editorial_timeline.otio` 与不可变 `animatic_timeline.otio` 签收快照。放行要同时满足预览可生成、packet 内容 confirmed，以及导演 + 剪辑/制片在 `animatic_signoff.json` 对当前输入、preview 与快照哈希签收；后续镜头替换只更新 working OTIO。
 ```bash
-python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic
-python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind animatic --json --write-missing
+python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic
+python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind animatic --json --write-missing
 ```
 > **P-3 制片拆解包 gate（出图 prompt 前的一副导演/场记/制片交接层）**：Animatic 签收后自动生成六件套；内容 confirmed 后，还要由制片/副导演/场记在 `production_handoff_signoff.json` 对当前 storyboard、P-2 签收、animatic 签收与交付文件哈希签收。
 > **接缝分类硬合同**：P-2 为每条 seam 显式写 `continuous_take_relay / match_on_action / graphic_match / eyeline_cut / reaction_cut / insert_cutaway / j_cut / l_cut / dissolve / hard_cut / intentional_discontinuity` 之一及模式证据。只有 relay 绑定同一边界帧 SHA；动作匹配看相位/方向，graphic match 看匹配元素/构图，视线/J-L/反应/插入/溶解各看自身证据。迁移脚本只生成待审候选。
 ```bash
-python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
-python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
-python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-shooting-schedule <作品根>/生产数据/ai_shooting_schedule_batch_seed_第1集.json
+python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
+python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
+python3 skills/n2d/n2d-batch/scripts/queue.py plan <作品根> --from-shooting-schedule <作品根>/生产数据/ai_shooting_schedule_batch_seed_第1集.json
 ```
 P-3 还会生成 `生产数据/ai_shooting_schedule_batch_seed_第N集.json/md`，把排期翻译成可导入 batch queue 的 image/video 任务草案。人确认 P-3 后再导入队列，队列仍走现有 stage command、gate 和 output verify，不绕过 `n2d-image` / `n2d-video`。
 > **预防式合同 gate（不是更多检测器，而是下游开工条件）**：`run.py next/enter` 会按阶段自动跑 `skills/n2d/scripts/preventive_contracts.py`。`script_stage2` 前要求本集承诺/兑现/阻碍/集尾钩；`image_prompt` 前要求每个 Clip 有戏剧功能和剪辑意图；`image` 前要求核心角色/道具/场景有引用槽位、多视角/身份锁策略；`video_prompt`/`video` 前要求持物、接触、打斗、多人同框、法术特效有物理/动作分解；`video_prompt`/`video`/`compose` 前要求对白近景、原生音画、后配音的口型/字幕/声纹/时长策略；`review/release` 前第1集必须有 pilot acceptance。`status=confirmed` 现在不是空口签收：相关合同段不能含 TODO/待补，Clip id 必须能反查 `storyboard.json`，引用槽位必须指向真实文件 path/hash，pilot acceptance 必须带 reviewer、risk_selection、代表 clip 的 artifact path/hash 和 QC 报告。源理解里的 `SRC_*` trace id 必须进入 episode/shot/prompt/产物链路，`contract_trace.py` 在 release 前会审。缺口会写 `生产数据/preventive_contracts_<stage>_第N集.*` 并阻断，先补 `脚本/第N集/preventive_contracts.json` 到 `status=confirmed`。
@@ -152,16 +152,16 @@ python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage v
 ```
 > **源理解合同 gate（拆集前最上游）**：不能只切章节。`run.py next` 在 `script_stage1` 会先跑 `source_language.py`，只要 `小说/*.txt` 存在，就要求 `设定库/source_comprehension.json` 为 `status=confirmed`，且 `understanding_contract` 补齐现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、改编边界和设定/战力规则；文言文/外文只影响脚手架模板，不再是唯一阻断条件。处理命令：
 ```bash
-python3 skills/n2d-script/scripts/source_language.py <作品根> --scaffold
-python3 skills/n2d-script/scripts/source_language.py <作品根> --json
+python3 skills/n2d/n2d-script/scripts/source_language.py <作品根> --scaffold
+python3 skills/n2d/n2d-script/scripts/source_language.py <作品根> --json
 ```
 > 放行后流程口径是：**小说 → 源理解合同 → P-1 开发包 → 每集承诺合同 → 围读 → P-2 导演排戏 → 分镜意图合同 → executable animatic → P-3 制片拆解/场记链/场记 bible/排期/队列种子 → 引用/动作/音频合同 → AI shooting schedule 入 batch → 生成后场记日志 → 粗剪 timeline/preview → rough cut lock → picture lock → 重大变更决策账 → pilot / mini-pilot 风险抽样 → 小批量 stop-loss → release verdict profile → creative governance → 失败归因与预防规则回写**。这条链条的目标是预防错误理解、错删伏笔、镜头无功能、引用不真实、相邻/跨集镜头裸断、复杂动作崩坏、音频后置救火、锁版漂移、发布证据不全和“制作没错但没人想追”，而不是等人审发现后再局部重抽。
 
 **情境 A2 — 用户明确要从中间章节/中间集开始制作**：
 → 先让 `n2d-script` 创建并补齐中段开工前情资产包，再拆目标窗口；不要只截目标章节直接写词。
 ```bash
-python3 skills/n2d-script/scripts/midstart_context.py <作品根> scaffold --target "第48章" --window "第45-52章"
-python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
+python3 skills/n2d/n2d-script/scripts/midstart_context.py <作品根> scaffold --target "第48章" --window "第45-52章"
+python3 skills/n2d/n2d-script/scripts/midstart_context.py <作品根> check
 ```
 必补：主角常态/当前形态、形象生命周期、前情摘要、关键角色/场景/道具卡、目标章节前后窗口。`check` 通过后再跑 `split_novel.py` 或精修目标集；`run.py next` 在 `script_stage1` 前若发现该资产包未补齐会阻断。
 
@@ -174,44 +174,44 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 **情境 D — 用户要批量推进多集 / 并发 / 失败重试 / 预算上限 / 只重跑受影响镜头**：
 → 推荐 `n2d-batch`，先生成队列而不是直接开跑：
 ```bash
-python3 skills/n2d-batch/scripts/queue.py plan <作品根> --episodes 1-10 --max-concurrency 2 --max-retries 1 --budget <预算>
-python3 skills/n2d-batch/scripts/queue.py claim <作品根> --limit 2
-python3 skills/n2d-batch/scripts/queue.py mark <作品根> <task_id> --status pass
-python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --timeout-sec 3600
+python3 skills/n2d/n2d-batch/scripts/queue.py plan <作品根> --episodes 1-10 --max-concurrency 2 --max-retries 1 --budget <预算>
+python3 skills/n2d/n2d-batch/scripts/queue.py claim <作品根> --limit 2
+python3 skills/n2d/n2d-batch/scripts/queue.py mark <作品根> <task_id> --status pass
+python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --timeout-sec 3600
 ```
 定向返工：
 ```bash
-python3 skills/n2d-batch/scripts/queue.py plan <作品根> --episodes 2 --rerun-from image --affected-shot Clip_03 --scope "只重跑定妆更新影响的 Clip_03"
+python3 skills/n2d/n2d-batch/scripts/queue.py plan <作品根> --episodes 2 --rerun-from image --affected-shot Clip_03 --scope "只重跑定妆更新影响的 Clip_03"
 ```
 
 **情境 E — 用户要合规前置 / 版权前置 / 角色授权 / 声音克隆授权 / 平台审核 / 出海本地化**：
 → 推荐 `n2d-compliance`。先初始化合规包，人工补齐 evidence/profile 后再进付费 gate：
 ```bash
-python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --init
-python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --check
-python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --stage image_preflight
+python3 skills/n2d/n2d-compliance/scripts/compliance.py <作品根> 第1集 --init
+python3 skills/n2d/n2d-compliance/scripts/compliance.py <作品根> 第1集 --check
+python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --stage image_preflight
 ```
 
 **情境 F — 用户要自动审片评分 / 机器分 / 低于阈值回流**：
 → 推荐 `n2d-score`。先跑审片机检再评分；需要自动返工就加 `--enqueue-low`：
 ```bash
-python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85
-python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85 --enqueue-low --max-concurrency 1 --max-retries 1
+python3 skills/n2d/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85
+python3 skills/n2d/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85 --enqueue-low --max-concurrency 1 --max-retries 1
 ```
 
 **情境 G — 用户要人审 UI / 无限画布 / 可视化审片**：
 → 推荐 `n2d-review-ui`。先跑 `n2d-score --run-checks` 确保机器分、visual checks 和 QA flag 齐，再生成静态画布：
 ```bash
-python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85
-python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第1集 --write --markdown
+python3 skills/n2d/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85
+python3 skills/n2d/n2d-review-ui/scripts/review_ui.py <作品根> 第1集 --write --markdown
 ```
 
 **情境 H — 用户要投放数据回灌 / 留存追更分析 / 更新导演节奏 / 同集 A/B / ROI 回收**：
 → 推荐 `n2d-feedback`。先准备平台指标；导演标签默认从 `storyboard.json` 自动抽取，低置信再用手工 `--features` 覆盖。同集 A/B 时，每个变体一行，至少写 `episode/platform/ab_test_id/variant_id`，并按测试对象补 `opening_variant/cover_variant/cliffhanger_cut_variant/title_variant`：
 ```bash
-python3 skills/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指标.csv>
-python3 skills/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指标.csv> --write-features --update-guide
-python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
+python3 skills/n2d/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指标.csv>
+python3 skills/n2d/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指标.csv> --write-features --update-guide
+python3 skills/n2d/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 ```
 `platform_metrics.*` 里如果有 `revenue/distribution_spend/currency/duration_sec`，dashboard 会同时生成 ROI：每分钟成本、投放净回收、回收/生产成本。
 
@@ -219,7 +219,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 
 ```bash
 python3 skills/n2d/source_check.py <作品根>
-python3 skills/n2d-update/scripts/update_plan.py check <作品根> 第N集 --write-plan
+python3 skills/n2d/n2d-update/scripts/update_plan.py check <作品根> 第N集 --write-plan
 ```
 
 - `source_check` 比对源小说指纹；无基线时首切定稿后才 `--record`，clean 静默，drift 必须报告变动章、受影响集及 raw-only/已生产范围。禁止自动重切；局部漂移只重切受影响窗口，触及已生产集时逐集评估返工。
@@ -249,7 +249,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> 第N集 --wri
 > **每集收尾自动包**：`run.py next <作品根> 第N集` 进入 `review/验收` 前沿时会自动跑以下确定性命令；任一 required 步失败会停在 `blocked_by_review_acceptance`，不会建议回写 `验收=✅`。手工排查时可单跑：
 > ```bash
 > python3 skills/n2d/progress.py audit-dag <作品根> --json
-> python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第N集 check --json
+> python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第N集 check --json
 > python3 skills/n2d/scripts/contract_trace.py <作品根> 第N集 --write
 > python3 skills/n2d/scripts/pilot_risk_sampler.py <作品根> 第N集 --write --write-missing
 > python3 skills/n2d/scripts/audience_experience.py <作品根> 第N集 --write
@@ -278,7 +278,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> 第N集 --wri
    - 混合模式 `配音=⏳rough`、`分镜设计` ⬜ → 先确认 P-2 导演排戏包，再回跑阶段2；finalize 读取 `timing_estimate.json` 并把 provisional timing 写入 OTIO。项目级配音先行仍要求 `✅`，原生音画可选。
      - ⚠️ **时间基准检查**：校验 `timing_estimate.json.source_fingerprint` 与当前 voiceover 一致。旧 `占位:true` 只作兼容，不能冒充 final voice；新混合流程不要求它存在。
    - `分镜设计` ✅、`出图prompt`/`出图` 未满 → 先确认 P-3 制片拆解包，再进 n2d-image
-   - `出图` 满、`视频` 未满 → 先确认 `生产数据/image_qc/<ep>/image_qc_<ep>.json` 存在、`qc_environment.precision_level=full` 且 `summary.hard_blocks=0`，再跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → n2d-video。缺报告、低精度或 hard block 都回 `n2d-image` / image_qc setup，不允许直接进视频。
+   - `出图` 满、`视频` 未满 → 先确认 `生产数据/image_qc/<ep>/image_qc_<ep>.json` 存在、`qc_environment.precision_level=full` 且 `summary.hard_blocks=0`，再跑 `python3 skills/n2d/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → n2d-video。缺报告、低精度或 hard block 都回 `n2d-image` / image_qc setup，不允许直接进视频。
    - `视频` 满、`合成阶段=跳过` 且本集未开始 `成片/验收` → `clip_delivery_complete`；如用户要母带/BGM/烧字幕/发布包，先设 `合成阶段=启用` 或直接运行 n2d-compose
    - `视频` 满、`合成阶段=启用` 或本集已开始 `成片/验收`、`成片` ⬜ → n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
    - `成片` ✅、`验收` ⬜ → n2d-review 验收包（review gate + score + consistency ledger + review-ui）；证据通过后停在 `needs_acceptance_signoff`，人工确认后回写 `验收=✅`

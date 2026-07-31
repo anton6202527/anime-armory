@@ -1,0 +1,2159 @@
+#!/usr/bin/env python3
+"""gates/contract.py — 视觉契约/分镜契约/跨集契约族：出图→出视频契约继承、storyboard 契约、跨集风格/角色定义契约
+
+按证据族从 gate.py 拆出的 check_ 闸（增量3）。从 gate_core 取共享基座(add/常量/无状态助手)，
+避免与 gate.py 循环导入。gate.py `from gates.contract import *` 回灌，run()/按名自省助手照常解析。
+本族成员经校验为 call-graph-free（不调用其它 check_、也不被其它 check_ 调用），可独立迁移。
+"""
+from gate_core import *  # noqa: F401,F403  共享基座（add/findings/常量/无状态助手）
+from gate_core import (  # import* 默认漏的下划线私有助手，按需显式带上（保守全量）
+    _ce_core_scene_names,
+    _ce_episode_number,
+    _ce_overview_rel,
+    _ce_prior_episode,
+    _ce_scene_names,
+    _check_midframe_generation_self_check,
+    _clip_blob,
+    _clip_is_closeup,
+    _cross_episode_diff,
+    _earliest_storyboard_ep,
+    _field_is_missing,
+    _file_sha256,
+    _first_template_keyword_hit,
+    _possession_ledger_exists,
+    _possession_mentions_core_asset,
+    _reference_plan_application_status,
+    _reference_plan_requirement,
+    _director_plan_application_status,
+    _route_allows_no_firstframe,
+    _safe_sha256,
+    _tone_base,
+)
+import os
+import re
+import sys
+from pathlib import Path
+from typing import Dict, List, Mapping, Optional
+import json
+from seam_contract import (
+    missing_evidence as seam_missing_evidence,
+    needs_end_anchor,
+    normalize_seam_mode,
+    requires_boundary_frame,
+)
+
+ACTION_HANDOFF_DIM = "跨集动作接力"
+ACTION_HANDOFF_TEMPLATES = {
+    "fight_exchange",
+    "action_chase",
+    "magic_burst",
+    "public_confrontation",
+    "relationship_turn",
+    "multi_character_same_frame",
+    "ensemble_blocking",
+}
+ACTION_HANDOFF_IMMEDIATE_RE = re.compile(
+    r"(?:第[一二三四五六七八九十\d]+集|上集|前集|尾声|集尾|上一集).{0,24}(?:立即|接|承接|接续)|"
+    r"(?:立即接|直接接|无时间跳|match_action|match-action|continuous_action|动作接力|接战|硬断后)",
+    re.I,
+)
+ACTION_HANDOFF_NEAR_ACTION_RE = re.compile(
+    r"(?:近景|前景|近距离|贴近|对峙|逼近|已进入|已经|出手|亮爪|弹爪|扑杀|扑近|接战|开战|第一击|攻击|命中|刀|爪|拳|剑|战斗)",
+    re.I,
+)
+ACTION_HANDOFF_RESET_RE = re.compile(
+    r"(?:从(?:远处|远景|深景|后景|村道深处|画面深处|远方).{0,16}(?:入画|走来|走近|冲来|扑来|出现)|"
+    r"(?:重新|再次).{0,8}(?:入画|登场|出现)|"
+    r"(?:只作|仅作).{0,8}(?:远景|深景|后景|压迫)|"
+    r"(?:退到|拉回到).{0,8}(?:远景|深景|后景)|"
+    r"(?:远景|深景|后景).{0,8}(?:压迫|观望|站定))"
+)
+ACTION_HANDOFF_NEGATED_RESET_CONTEXT_RE = re.compile(
+    r"(?:不|不得|禁止|避免|不能|不可|禁|no_reset|forbid_reset|negative|no reset|not\s+reset)",
+    re.I,
+)
+
+
+def _storyboard_episode_with_number(root: str, number: int) -> str:
+    label = f"第{number}集"
+    path = storyboard_path(root, label)
+    return label if os.path.isfile(path) else ""
+
+
+def _previous_storyboard_episode(root: str, ep: str) -> str:
+    current = _ce_episode_number(ep)
+    if current is not None and current > 1:
+        exact = _storyboard_episode_with_number(root, current - 1)
+        if exact:
+            return exact
+    base = os.path.join(root, "脚本")
+    candidates = []
+    if os.path.isdir(base):
+        for name in os.listdir(base):
+            num = _ce_episode_number(name)
+            if num is None or current is not None and num >= current:
+                continue
+            if os.path.isfile(storyboard_path(root, name)):
+                candidates.append((num, name))
+    return max(candidates)[1] if candidates else ""
+
+
+def _storyboard_clip_text(clip: Mapping[str, object]) -> str:
+    try:
+        return json.dumps(clip, ensure_ascii=False)
+    except Exception:
+        return str(clip)
+
+
+def _last_storyboard_clip(data: Mapping[str, object]) -> Optional[Mapping[str, object]]:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for clip in reversed(clips):
+        if isinstance(clip, Mapping):
+            return clip
+    return None
+
+
+def _first_storyboard_clip(data: Mapping[str, object]) -> Optional[Mapping[str, object]]:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for clip in clips:
+        if isinstance(clip, Mapping):
+            return clip
+    return None
+
+
+def _episode_clip_index(data: Mapping[str, object], clip: Mapping[str, object]) -> int:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for idx, item in enumerate(clips, start=1):
+        if item is clip:
+            return idx
+    return 1
+
+
+def _clip_id_for_index(clip: Mapping[str, object], idx: int) -> str:
+    raw = str(clip.get("id") or clip.get("clip_id") or clip.get("shot_id") or "").strip()
+    return raw or f"Clip_{idx:02d}"
+
+
+def _default_tail_frame(ep: str, idx: int) -> str:
+    return f"出图/{ep}/图片/Clip{idx:02d}_end.png"
+
+
+def _clip_frame_path(clip: Mapping[str, object], ep: str, idx: int, kind: str) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    if kind == "end":
+        return str(clip.get("endframe_png") or cont.get("endframe_png") or _default_tail_frame(ep, idx)).strip()
+    return str(clip.get("firstframe_png") or cont.get("firstframe_png") or f"出图/{ep}/图片/Clip{idx:02d}_first.png").strip()
+
+
+def _cross_episode_handoff_dict(clip: Mapping[str, object]) -> Mapping[str, object]:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    handoff = cont.get("cross_episode_handoff")
+    return handoff if isinstance(handoff, Mapping) else {}
+
+
+def _boolish(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    return str(value or "").strip().lower() in {"1", "true", "yes", "y", "是", "对", "confirmed", "ok"}
+
+
+def _path_exists_under_root(root: str, rel: str) -> bool:
+    text = str(rel or "").strip()
+    if not text:
+        return False
+    path = Path(text)
+    if path.is_absolute():
+        return path.is_file()
+    return (Path(root) / text).is_file()
+
+
+def _latest_firstframe_bundle_has_source(root: str, ep: str, expected_rel: str) -> bool:
+    bundle_dir = Path(root) / "生产数据" / "codex_reference_bundles" / ep
+    if not bundle_dir.is_dir():
+        return False
+    candidates = sorted(
+        [p for p in bundle_dir.glob("Clip_01*.json") if p.is_file()],
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    expected = str(expected_rel or "").strip()
+    for path in candidates:
+        data = load_json(str(path))
+        if not isinstance(data, Mapping):
+            continue
+        inputs = data.get("cli_image_inputs") or data.get("reference_inputs") or []
+        for item in inputs:
+            if not isinstance(item, Mapping):
+                continue
+            if str(item.get("role") or "") != "source_frame":
+                continue
+            rel = str(item.get("rel_path") or item.get("prepared_rel_path") or "").strip()
+            if rel == expected:
+                return True
+    return False
+
+
+def _first_unguarded_reset_match(text: str) -> Optional[re.Match[str]]:
+    for match in ACTION_HANDOFF_RESET_RE.finditer(str(text or "")):
+        prefix = str(text or "")[max(0, match.start() - 32):match.start()]
+        if ACTION_HANDOFF_NEGATED_RESET_CONTEXT_RE.search(prefix):
+            continue
+        return match
+    return None
+
+def check_contract_inheritance(root: str, ep: str) -> None:
+    """像素层视觉契约 出图→出视频 继承 Diff，逐字段机检（光位锚/轴线视线漂移=BLOCK）。
+
+    这是唯一能抓「人工誊抄改写轴线/光位」的机检；此前只存在于 inherit_contract.py 的裸命令、
+    游离在 gate 退出码之外，导致 `dashboard.py gate --stage video` 通过 ≠ 契约继承成立。
+    接进 video_preflight/video gate 后，视频侧改写/丢失像素层五字段会被硬拦，并消费 contract_inheritance 维度的回退坐标。
+    """
+    img_p = os.path.join(root, "出图", ep, "prompt", "00_总览.md")
+    vid_p = os.path.join(root, "出视频", ep, "prompt", "00_总览.md")
+    if not os.path.isfile(img_p):
+        return  # 出图总览缺：上游问题，image_preflight/image gate 负责，不在此重复 BLOCK
+    if not os.path.isfile(vid_p):
+        return  # 视频总览缺：check_video_prompt_overview 已 BLOCK，避免重复报
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    for r in diff_contracts(open(img_p, encoding="utf-8").read(), open(vid_p, encoding="utf-8").read()):
+        if r["severity"] == "block":
+            add(
+                BLOCK,
+                "契约继承",
+                vid_p,
+                f"视觉契约继承漂移[{r['field']}]：{r['note']}（出图侧原文：{r['image_text'] or '缺'}）",
+                return_to_stage=dim["return_to_stage"],
+                rerun_scope=dim["scope"],
+                affected_artifacts=[f"出视频/{ep}/prompt/00_总览.md"],
+            )
+        elif r["status"] == "warn_drift":
+            add(WARN, "契约继承", vid_p, f"视觉契约继承提示[{r['field']}]：{r['note']}（出图侧：{r['image_text'] or '缺'}）")
+
+def check_storyboard_image_contract_inheritance(root: str, ep: str) -> None:
+    """script→image 接缝：storyboard.json.visual_contract 种子 → 出图 00_总览 逐字段继承 Diff。
+
+    此前这道接缝只做「字段在不在」的在场校验（check_storyboard_visual_contract / 出图总览），
+    **没有跨接缝的内容 diff**：出图 00_总览 一旦把 storyboard 的光位/轴线种子誊抄改写，就成了下游
+    出图→出视频→合成全部忠实继承的"错误权威源"，却无人拦。本检查与 出图→出视频 的 check_contract_inheritance
+    对称，补上最漏的这道缝：只对**焊进首帧像素**的 场景光位锚/场景轴线视线 改写判 BLOCK，其余 warn。
+    角色状态演进在出图侧常按"以 storyboard 分段状态为上游契约"的指针式承接（不逐字誊抄以免提前泄露后镜状态），
+    故不在本接缝硬拦，只提示。跑在出图 prompt 生成后、烧图/下游继承前。"""
+    sb_p = os.path.join(root, "脚本", ep, "storyboard.json")
+    img_p = os.path.join(root, "出图", ep, "prompt", "00_总览.md")
+    if not os.path.isfile(sb_p) or not os.path.isfile(img_p):
+        return  # storyboard/出图总览缺：各自的在场校验负责，不在此重复
+    sb = load_json(sb_p)
+    vc = sb.get("visual_contract") if isinstance(sb, dict) else None
+    if not isinstance(vc, dict):
+        return  # visual_contract 缺：check_storyboard_visual_contract 已 BLOCK
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    _pointer_re = re.compile(r"(以\s*storyboard|上游契约|分段状态|逐镜\s*prompt|按本镜)")
+    for r in diff_storyboard_image_contract(vc, open(img_p, encoding="utf-8").read()):
+        if r.get("seam_block"):
+            add(
+                BLOCK,
+                "契约继承",
+                img_p,
+                f"分镜→出图契约继承漂移[{r['field']}]：{r['note']}（storyboard 种子：{r['image_text'] or '缺'}）",
+                return_to_stage="script_stage2",
+                rerun_scope=dim["scope"],
+                affected_artifacts=[f"出图/{ep}/prompt/00_总览.md", f"脚本/{ep}/storyboard.json"],
+            )
+        elif r["status"] in {"warn_drift", "block_drift"} and r.get("image_text"):
+            # 角色状态演进走"以 storyboard 分段状态为上游契约"的指针式承接是合规写法，不逐字誊抄，
+            # 不当漂移噪音报（真改写=既不匹配也不指针引用，仍会 warn）。
+            if r["field"] == "角色状态演进" and _pointer_re.search(str(r.get("video_text") or "")):
+                continue
+            add(WARN, "契约继承", img_p,
+                f"分镜→出图契约继承提示[{r['field']}]：{r['note']}（storyboard 种子：{r['image_text'] or '缺'}）")
+
+def check_asset_handoff_inheritance(root: str, ep: str) -> None:
+    """逐镜物料约束 出图→出视频 继承（LOC/PROP/WEAPON/OUTFIT/VFX）：出图绑定的资产在出视频对应镜
+    丢失=block/warn。视觉契约五字段管 episode 级光位/轴线，本检查补**逐镜**资产锚。
+
+    此前只在 inherit_contract.py 裸命令里跑，游离在 gate 退出码之外——`dashboard.py gate --stage video`
+    通过 ≠ 资产逐镜交接成立。接进 video gate 后，出图逐镜 prompt 绑的道具/特效在视频侧被丢会被收口。
+    （身份交接逐镜锁则由 check_route_identity_readiness / 近景身份锁负责，不在此重复报。）
+    """
+    res = check_asset_handoff(root, ep)
+    if not res.get("available"):
+        return  # 上游逐镜 prompt 未到位：image/video 各自 stage gate 负责，不在此重复 BLOCK
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    vid_rel = res.get("video_clips_file", os.path.join("出视频", ep, "prompt", "01_clips.md"))
+    vid_p = os.path.join(root, vid_rel)
+    for f in res.get("findings", []):
+        if f.get("severity") == "block":
+            add(
+                BLOCK,
+                "契约继承",
+                vid_p,
+                f"资产逐镜交接[{f.get('code')}]：{f.get('note')}",
+                return_to_stage=dim["return_to_stage"],
+                rerun_scope=dim["scope"],
+                affected_artifacts=[vid_rel],
+            )
+        else:
+            add(WARN, "契约继承", vid_p, f"资产逐镜交接[{f.get('code')}]：{f.get('note')}")
+
+def check_reference_plan_applied(root: str, ep: str) -> None:
+    """逐镜参考规划（reference_planner.py）→ 落实对账。
+
+    跨集脸漂的处方在 `生产数据/reference_plan_第N集.json`（无持久主体 ID 后端按每镜变化量该补哪些参考/控制网/升档）。
+    本检查在 image_preflight 把该 plan 的**行动项**surfaced 到付费闸门，提醒人审落进 01_分镜出图.md，
+    避免"规划了却忘了补"。核心长线角色缺 plan 直接 BLOCK；普通角色镜缺 plan 只 WARN。
+    与 image_qc 的 no_expression_lib_ref 互补：前者 pre-gen 选参考，后者 post-gen 验落档。
+    """
+    # 铁律（2026-06-27 用户裁决）：BLOCK 不随 profile 降级，demo 与 production 同标准。
+    # 8f2e4c3f/c9d37df5 把它降成 production-only 已恢复（见 docs/skill-design-principles.md B11 + consistency_charter）。
+    plan_path = os.path.join(root, "生产数据", f"reference_plan_{ep}.json")
+    plan = load_json(plan_path)
+    if not isinstance(plan, dict) or plan.get("kind") != "n2d_reference_plan":
+        sev, reason = _reference_plan_requirement(root, ep)
+        if sev:
+            add(
+                sev,
+                "参考规划落实",
+                plan_path,
+                f"缺逐镜参考规划 reference_plan_{ep}.json（{reason}）。"
+                f"{'付费出图前必须先跑' if sev == BLOCK else '建议先跑'} "
+                f"`python3 skills/n2d/n2d-image/scripts/reference_planner.py <作品根> {ep}`，"
+                "把每镜该喂的脸锚/表情/侧背/服装/场景/道具/控制网/升档建议落实到 "
+                f"`出图/{ep}/prompt/01_分镜出图.md`；否则很容易只写了规则但实际未传对参考。",
+                return_to_stage="image",
+            )
+        return
+    summary = plan.get("summary") or {}
+    memory = summary.get("memory_anchor_contract") if isinstance(summary, Mapping) else None
+    plan_requirement, _plan_reason = _reference_plan_requirement(root, ep)
+    if plan_requirement == BLOCK:
+        if not isinstance(memory, Mapping):
+            add(
+                BLOCK,
+                "跨集记忆锚落实",
+                plan_path,
+                "核心/长线角色的 reference_plan 缺 memory_anchor_contract 消费证据；"
+                "请先运行 n2d-identity memory_anchor.py，再重建 reference_plan。",
+                return_to_stage="image",
+            )
+        else:
+            memory_status = str(memory.get("status") or "").strip()
+            memory_errors = [str(x) for x in (memory.get("errors") or []) if str(x)]
+            if memory_status != "ready" or memory_errors:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    f"memory_anchor_contract 不可用：status={memory_status or 'missing'}"
+                    f"{f'; errors={','.join(memory_errors)}' if memory_errors else ''}。"
+                    "缺失/陈旧记忆锚计划不得被下游参考规划默默忽略。",
+                    return_to_stage="image",
+                )
+            missing_memory_refs = [
+                str(x) for x in (memory.get("missing_reference_rows") or []) if str(x)
+            ]
+            if missing_memory_refs:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "需重注入的核心角色缺 ready 记忆锚：" + "、".join(missing_memory_refs[:8])
+                    + "。先补齐并验收最早定妆锚，不能用空 rows 假装已重注入。",
+                    return_to_stage="image",
+                )
+            memory_rel = str(memory.get("path") or "").strip()
+            memory_sha = str(memory.get("sha256") or "").strip()
+            memory_path = memory_rel if os.path.isabs(memory_rel) else os.path.join(root, memory_rel)
+            if not memory_rel or not memory_sha or not os.path.isfile(memory_path) or _file_sha256(memory_path) != memory_sha:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "reference_plan 登记的 memory_anchor_plan 路径/哈希与当前文件不一致；"
+                    "记忆计划改动后必须重建 reference_plan。",
+                    return_to_stage="image",
+                )
+            memory_plan = load_json(memory_path) if os.path.isfile(memory_path) else None
+            required_from_plan: List[str] = []
+            if not isinstance(memory_plan, Mapping):
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "memory_anchor_plan 当前内容无法解析；reference_plan 内的聚合计数不能替代逐行验收。",
+                    return_to_stage="image",
+                )
+            else:
+                try:
+                    memory_version = int(memory_plan.get("version") or 0)
+                except (TypeError, ValueError):
+                    memory_version = 0
+                if (
+                    memory_plan.get("kind") != "n2d_memory_anchor_plan"
+                    or memory_version < 3
+                    or str(memory_plan.get("status") or "").strip().lower() != "ready"
+                    or memory_plan.get("available") is not True
+                    or str(memory_plan.get("episode") or "") != ep
+                ):
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        memory_path,
+                        "memory_anchor_plan 的 kind/version/status/available/episode 合同无效；"
+                        "旧版计划必须重建为稳定 character_id/form 的 v3。",
+                        return_to_stage="image",
+                    )
+                seen_required_keys = set()
+                validated_refs_from_plan: Dict[str, Dict[str, str]] = {}
+                raw_memory_rows = memory_plan.get("rows")
+                if not isinstance(raw_memory_rows, list):
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        memory_path,
+                        "memory_anchor_plan.rows 必须是结构化数组。",
+                        return_to_stage="image",
+                    )
+                    raw_memory_rows = []
+                for row in raw_memory_rows:
+                    if not isinstance(row, Mapping) or row.get("reinject") is not True:
+                        continue
+                    key = str(row.get("char") or "").strip()
+                    if key:
+                        required_from_plan.append(key)
+                        if key in seen_required_keys:
+                            add(
+                                BLOCK,
+                                "跨集记忆锚落实",
+                                memory_path,
+                                f"memory_anchor_plan 存在重复角色键：{key}；不得靠重复行伪造 required_rows。",
+                                return_to_stage="image",
+                            )
+                        seen_required_keys.add(key)
+                    else:
+                        add(
+                            BLOCK,
+                            "跨集记忆锚落实",
+                            memory_path,
+                            "memory_anchor_plan 的 reinject 行缺稳定 character_id/form 键。",
+                            return_to_stage="image",
+                        )
+                    raw_refs = row.get("memory_anchor_refs")
+                    if not isinstance(raw_refs, list) or not raw_refs:
+                        add(
+                            BLOCK,
+                            "跨集记忆锚落实",
+                            memory_path,
+                            f"{key or '(unknown)'} 的 memory_anchor_refs 必须是非空数组。",
+                            return_to_stage="image",
+                        )
+                        raw_refs = []
+                    for rel_ref in raw_refs:
+                        ref_path = str(rel_ref or "").strip()
+                        full_ref = ref_path if os.path.isabs(ref_path) else os.path.join(root, ref_path)
+                        if not ref_path or not os.path.isfile(full_ref):
+                            add(
+                                BLOCK,
+                                "跨集记忆锚落实",
+                                memory_path,
+                                f"{key or '(unknown)'} 的 memory_anchor_ref 不存在：{ref_path or '(empty)'}。",
+                                return_to_stage="image",
+                            )
+                        elif key:
+                            validated_refs_from_plan.setdefault(key, {})[ref_path] = _file_sha256(full_ref)
+                source = memory_plan.get("source_fingerprint") if isinstance(memory_plan.get("source_fingerprint"), Mapping) else {}
+                current_sources = {
+                    "identity_registry_sha256": _file_sha256(os.path.join(root, "出图", "共享", "identity_registry.json")),
+                    "identity_drift_report_sha256": _file_sha256(os.path.join(root, "生产数据", "identity_drift_report.json")),
+                    "storyboard_sha256": _file_sha256(os.path.join(root, "脚本", ep, "storyboard.json")),
+                }
+                if any(not sha or str(source.get(key) or "") != sha for key, sha in current_sources.items()):
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        memory_path,
+                        "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+                        return_to_stage="image",
+                    )
+
+                declared_validated_refs = memory.get("validated_reference_sha256_by_char")
+                if not isinstance(declared_validated_refs, Mapping):
+                    declared_validated_refs = {}
+                normalized_declared_refs = {
+                    str(key): {
+                        str(path): str(sha)
+                        for path, sha in value.items()
+                        if str(path) and str(sha)
+                    }
+                    for key, value in declared_validated_refs.items()
+                    if isinstance(value, Mapping)
+                }
+                normalized_current_refs = {
+                    key: dict(sorted(value.items()))
+                    for key, value in sorted(validated_refs_from_plan.items())
+                }
+                if normalized_declared_refs != normalized_current_refs:
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        plan_path,
+                        "memory_anchor reference 的逐文件 SHA 与当前图片不一致；"
+                        "参考图被替换后必须重建 reference_plan。",
+                        return_to_stage="image",
+                    )
+
+            required_from_plan = sorted(set(required_from_plan))
+            declared_required = sorted(
+                str(x) for x in (memory.get("required_char_keys") or []) if str(x)
+            )
+            summary_required = sorted(
+                str(x) for x in (summary.get("required_char_keys") or []) if str(x)
+            )
+            consumed_from_clips: Dict[str, List[str]] = {}
+            for clip in plan.get("clips") or []:
+                if not isinstance(clip, Mapping):
+                    continue
+                clip_id = str(clip.get("clip_id") or clip.get("id") or "").strip()
+                for char_plan in clip.get("characters") or []:
+                    if not isinstance(char_plan, Mapping) or not char_plan.get("memory_anchor_refs_consumed"):
+                        continue
+                    key = str(char_plan.get("memory_anchor_char_key") or "").strip()
+                    if key:
+                        consumed_from_clips.setdefault(key, [])
+                        if clip_id and clip_id not in consumed_from_clips[key]:
+                            consumed_from_clips[key].append(clip_id)
+            consumed_keys = sorted(consumed_from_clips)
+            declared_consumed = sorted(
+                str(x) for x in (memory.get("consumed_char_keys") or []) if str(x)
+            )
+            summary_consumed = sorted(
+                str(x) for x in (summary.get("consumed_char_keys") or []) if str(x)
+            )
+            declared_clip_map = memory.get("consumed_clip_ids_by_char")
+            if not isinstance(declared_clip_map, Mapping):
+                declared_clip_map = {}
+            normalized_declared_clip_map = {
+                str(key): sorted(str(x) for x in value if str(x))
+                for key, value in declared_clip_map.items()
+                if isinstance(value, list)
+            }
+            normalized_actual_clip_map = {
+                key: sorted(values) for key, values in sorted(consumed_from_clips.items())
+            }
+            summary_clip_map = summary.get("consumed_clip_ids_by_char")
+            if not isinstance(summary_clip_map, Mapping):
+                summary_clip_map = {}
+            normalized_summary_clip_map = {
+                str(key): sorted(str(x) for x in value if str(x))
+                for key, value in summary_clip_map.items()
+                if isinstance(value, list)
+            }
+            if (
+                required_from_plan != declared_required
+                or required_from_plan != summary_required
+                or consumed_keys != declared_consumed
+                or consumed_keys != summary_consumed
+                or normalized_declared_clip_map != normalized_actual_clip_map
+                or normalized_summary_clip_map != normalized_actual_clip_map
+                or int(memory.get("required_rows") or 0) != len(required_from_plan)
+            ):
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "memory_anchor 的 required/consumed/clip 映射与当前 plan 逐行重算不一致；"
+                    "不得靠聚合数字或手改 summary 放行。",
+                    return_to_stage="image",
+                )
+            unconsumed = sorted(set(required_from_plan) - set(consumed_keys))
+            if unconsumed:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "memory_anchor_plan 有角色尚未在任何真实镜头消费：" + "、".join(unconsumed[:8])
+                    + "。请修正角色/形态映射后重建计划。",
+                    return_to_stage="image",
+                )
+    actions = summary.get("action_required") or []
+    if not actions:
+        return
+    applied_ok, applied_path, applied_reason = _reference_plan_application_status(root, ep, plan_path, len(actions))
+    if applied_ok:
+        add(
+            INFO,
+            "参考规划落实",
+            applied_path,
+            f"reference_plan_{ep}.json 的 {len(actions)} 条行动项已有结构化落实证据，且 plan/prompt SHA 与当前文件一致。",
+            return_to_stage="image",
+        )
+        return
+    weak = summary.get("weak_backend_large_delta_clips") or 0
+    reg = summary.get("chars_need_native_registration") or []
+    lora = summary.get("chars_need_lora") or []
+    clips = sorted({str(a.get("clip")) for a in actions if a.get("clip")})
+    shown = "、".join(clips[:8]) + ("…" if len(clips) > 8 else "")
+    tail = ""
+    if reg:
+        tail += f" 待注册原生主体：{'、'.join(reg)}。"
+    if lora:
+        tail += f" 建议升 LoRA：{'、'.join(lora)}。"
+    sev = BLOCK if (weak or reg or lora) else WARN  # 铁律：不随 profile 降级，demo 同标准
+    add(
+        sev,
+        "参考规划落实",
+        plan_path,
+        f"逐镜参考规划有 {len(actions)} 条行动项未确认落实（无持久主体 ID 后端×大变化镜 {weak} 镜）："
+        f"镜头 {shown}。请按 reference_plan_{ep}.md 把补拍/多样参考/控制网/升档落进 "
+        f"出图/{ep}/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。"
+        f"若已完成人审落实，请写结构化 `{os.path.relpath(applied_path, root)}`（kind={REFERENCE_PLAN_APPLICATION_KIND}, "
+        "accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。"
+        f"当前落实证据状态：{applied_reason}。{tail}",
+        return_to_stage="image",
+    )
+
+DIRECTOR_CAMERA_PLAN_KIND = "n2d_director_camera_plan"
+_DIRECTOR_IMAGE_VOCAB = ("起幅", "运动余量", "构图防呆", "导演意图", "镜头/机位")
+_DIRECTOR_VIDEO_VOCAB = ("起幅", "落幅", "镜头运动", "运动精修", "动态细节", "导演意图")
+
+
+def _director_plan_peak_clips(clips: Sequence[Any]) -> List[str]:
+    """director_camera_plan clips 里命中 KEY_SCENE_MARKERS（高潮/关键/钩子/反转/爆点）的镜 id。
+
+    复用 gate 的 KEY_SCENE_MARKERS（与其它「核心场景→BLOCK」闸同源），不另立 PEAK 词表避免漂离。"""
+    peak: List[str] = []
+    for c in clips:
+        if not isinstance(c, dict):
+            continue
+        blob = " ".join(str(c.get(k) or "") for k in ("clip_id", "rhythm", "template", "shot_size"))
+        rec = c.get("recommended")
+        if isinstance(rec, dict):
+            blob += " " + str(rec.get("reason") or "")
+        if any(str(m).lower() in blob.lower() for m in KEY_SCENE_MARKERS):
+            peak.append(str(c.get("clip_id") or ""))
+    return peak
+
+
+def check_director_camera_plan_consumption(root: str, ep: str) -> None:
+    """导演运镜计划（director_camera_plan.py）→ 落实对账（消费收据）。
+
+    sidecar `生产数据/director_camera_plan_<ep>.json` 把每镜运镜意图拆成可注入的 image/video_prompt_injection；
+    但此前靠「下游约定消费」无强制——规划好却没落进 prompt，那一镜就回平光摆拍/运动失焦
+    （memory「规划好却没落成片」反模式·与 combat-punch 渲染教训同根）。本检查在出图/出视频付费前，
+    核对 prompt 包是否出现导演运镜词汇证据：含高潮/关键镜(KEY_SCENE_MARKERS)且零证据=BLOCK，普通镜=WARN，
+    有证据=INFO。sidecar 缺省（没跑 director_camera_plan）则不强制，与 check_reference_plan_applied 一致。
+
+    两档收据（Tier A 精确优先·Tier B 烟雾回退）：
+      - Tier A 逐镜精确：存在 SHA 绑定 plan+prompt 的结构化签收档 `director_camera_plan_applied_<ep>.json`
+        （fresh）时，按 `scopes[].applied_clip_ids` 逐镜判落实——未签收镜里高潮/关键镜=BLOCK、普通镜=WARN。
+        plan 或 prompt 变更→SHA 不符→该 scope 回退 Tier B，stale 签收不能蒙混放行。
+      - Tier B 文档级烟雾：无签收档时核对整包是否出现导演运镜词汇（flat MD 无法可靠按 clip 切分），
+        含高潮/关键镜且零词汇=BLOCK、普通镜=WARN，并提示落结构化签收档升精确归属。
+    """
+    sidecar = os.path.join(root, "生产数据", f"director_camera_plan_{ep}.json")
+    plan = load_json(sidecar)
+    if not isinstance(plan, dict) or plan.get("kind") != DIRECTOR_CAMERA_PLAN_KIND:
+        return
+    clips = plan.get("clips") or []
+    if not clips:
+        return
+    all_ids = [str((c or {}).get("clip_id") or "") for c in clips if isinstance(c, dict)]
+    peak_clips = [c for c in _director_plan_peak_clips(clips) if c]
+    peak_set = set(peak_clips)
+    # Tier A 逐镜精确签收（升级版）：SHA 绑定 plan + 每 scope prompt 的结构化 applied 档；fresh 才采信。
+    application = _director_plan_application_status(root, ep, sidecar)
+
+    def _precise_check(scope: str, prompt_path: str, stage: str, applied_ids: set) -> None:
+        missing = [cid for cid in all_ids if cid and cid not in applied_ids]
+        if not missing:
+            add(INFO, "导演运镜落实", prompt_path,
+                f"director_camera_plan_{ep}.json（{len(all_ids)} 镜）的{scope}运镜注入已逐镜签收落实"
+                f"（director_camera_plan_applied_{ep}.json·SHA 绑定 plan+prompt）。",
+                return_to_stage=stage)
+            return
+        peak_missing = [cid for cid in missing if cid in peak_set]
+        sev = BLOCK if peak_missing else WARN
+        shown = "、".join(missing[:8]) + ("…" if len(missing) > 8 else "")
+        tail = (f"；其中高潮/关键镜 {'、'.join(peak_missing[:8])} → 付费前 BLOCK" if peak_missing else "（均普通镜 WARN）")
+        add(sev, "导演运镜落实", prompt_path,
+            f"逐镜签收档显示 {len(missing)} 镜的{scope}运镜注入未落实：{shown}{tail}。"
+            f"请把 director_camera_plan_{ep}.md 对应镜的 {scope}_prompt_injection 抄进 prompt，"
+            f"并把镜号补进 director_camera_plan_applied_{ep}.json 的 {scope} scope.applied_clip_ids（plan/prompt 变更需重签）。",
+            return_to_stage=stage)
+
+    def _smoke_check(prompt_path: str, prompt_rel: str, vocab: Sequence[str], scope: str, stage: str) -> None:
+        try:
+            text = open(prompt_path, encoding="utf-8").read()
+        except OSError:
+            return
+        hits = [v for v in vocab if v in text]
+        if hits:
+            add(INFO, "导演运镜落实", prompt_path,
+                f"director_camera_plan_{ep}.json（{len(all_ids)} 镜）的{scope}运镜词汇已现身 prompt 包"
+                f"（命中 {len(hits)}/{len(vocab)}：{'、'.join(hits)}）——文档级已消费。"
+                f"要逐镜精确归属请落 director_camera_plan_applied_{ep}.json（结构化签收）。",
+                return_to_stage=stage)
+            return
+        sev = BLOCK if peak_clips else WARN
+        shown = ("、".join(peak_clips[:8]) + ("…" if len(peak_clips) > 8 else "")) if peak_clips else ""
+        tail = (f"；含高潮/关键镜 {shown} → 付费前 BLOCK" if peak_clips else "（普通镜 WARN）")
+        add(sev, "导演运镜落实", prompt_path,
+            f"导演运镜计划 director_camera_plan_{ep}.json 有 {len(all_ids)} 镜，但 {prompt_rel} 里找不到任何"
+            f"{scope}运镜注入词汇（{'、'.join(vocab)}）——规划好却没落进 prompt，那些镜会回到平光摆拍/运动失焦。"
+            f"请按 director_camera_plan_{ep}.md 把 {scope} prompt 注入（{scope}_prompt_injection）抄进 {prompt_rel}{tail}。"
+            "（文档级烟雾收据·不做逐镜精确归属；逐镜精确请落结构化签收档。）",
+            return_to_stage=stage)
+
+    def _consume_check(prompt_rel: str, vocab: Sequence[str], scope: str) -> None:
+        prompt_path = os.path.join(root, prompt_rel)
+        stage = "image" if scope == "出图" else "video"
+        if not os.path.isfile(prompt_path):
+            return  # 该 prompt 包还没产出：上游阶段负责，不在此 BLOCK
+        scope_app = application.get("scopes", {}).get(scope) if application.get("accepted") else None
+        if isinstance(scope_app, dict) and scope_app.get("fresh"):
+            _precise_check(scope, prompt_path, stage, scope_app.get("applied_ids") or set())  # Tier A 精确
+            return
+        _smoke_check(prompt_path, prompt_rel, vocab, scope, stage)  # Tier B 烟雾回退
+
+    _consume_check(os.path.join("出图", ep, "prompt", "01_分镜出图.md"), _DIRECTOR_IMAGE_VOCAB, "出图")
+    _consume_check(os.path.join("出视频", ep, "prompt", "01_clips.md"), _DIRECTOR_VIDEO_VOCAB, "出视频")
+
+
+SCRIPT_QUALITY_CONTRACT_KIND = "n2d_script_quality_contract"
+SCRIPT_CONTRACT_APPLICATION_KIND = "n2d_script_contract_application"
+SCRIPT_CONTRACT_REQUIRED_FIELDS = {
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "pacing_allocation",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues",
+}
+
+
+def _script_quality_contract_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"script_quality_contract_{ep}.json")
+
+
+def _script_contract_application_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"script_contract_applied_{ep}.json")
+
+
+def _script_contract_prompt_rel(ep: str, scope: str) -> str:
+    if scope == "出图":
+        return os.path.join("出图", ep, "prompt", "01_分镜出图.md")
+    return os.path.join("出视频", ep, "prompt", "01_clips.md")
+
+
+def _script_contract_content_hash(path: str) -> str:
+    contract = load_json(path)
+    if not isinstance(contract, dict):
+        return ""
+    return str(contract.get("content_hash") or contract.get("contract_hash") or "").strip()
+
+
+def _verify_script_contract_scope(root: str, ep: str, scope: str) -> Dict[str, Any]:
+    try:
+        scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        import script_contract_verify  # type: ignore
+
+        return script_contract_verify.verify_scope(Path(root), ep, scope)
+    except Exception as exc:
+        return {
+            "status": "block",
+            "summary": {"status": "block", "blocks": 1, "warnings": 0},
+            "findings": [
+                {
+                    "severity": "block",
+                    "scope": scope,
+                    "code": "script_contract_verify_error",
+                    "message": f"script_contract_verify.py 执行失败：{exc}",
+                }
+            ],
+        }
+
+
+def _script_contract_application_status(root: str, ep: str, contract_path: str) -> Dict[str, Any]:
+    app_path = _script_contract_application_path(root, ep)
+    app = load_json(app_path)
+    out: Dict[str, Any] = {"accepted": False, "reason": "", "app_path": app_path, "scopes": {}}
+    if not isinstance(app, dict):
+        out["reason"] = "缺 script_contract_applied 结构化消费收据"
+        return out
+    if app.get("kind") != SCRIPT_CONTRACT_APPLICATION_KIND:
+        out["reason"] = f"kind 必须是 {SCRIPT_CONTRACT_APPLICATION_KIND}"
+        return out
+    if app.get("accepted") is not True:
+        out["reason"] = "accepted 必须为 true"
+        return out
+    if not str(app.get("reviewer") or "").strip():
+        out["reason"] = "reviewer 不能为空"
+        return out
+    contract_file_sha = _safe_sha256(contract_path)
+    contract_content_hash = _script_contract_content_hash(contract_path)
+    if not contract_file_sha:
+        out["reason"] = "script_quality_contract 不存在或不可读"
+        return out
+    scopes: Dict[str, Any] = {}
+    for entry in app.get("scopes") or []:
+        if not isinstance(entry, dict):
+            continue
+        scope = str(entry.get("scope") or "").strip()
+        if scope not in {"出图", "出视频"}:
+            continue
+        prompt_rel = str(entry.get("prompt_path") or _script_contract_prompt_rel(ep, scope)).strip()
+        prompt_path = prompt_rel if os.path.isabs(prompt_rel) else os.path.join(root, prompt_rel)
+        prompt_sha = _safe_sha256(prompt_path)
+        scope_contract_hash = str(entry.get("contract_content_hash") or app.get("contract_content_hash") or "").strip()
+        scope_contract_file_sha = str(
+            entry.get("contract_file_sha256") or entry.get("contract_sha256") or app.get("contract_file_sha256") or app.get("contract_sha256") or ""
+        ).strip()
+        if contract_content_hash and scope_contract_hash:
+            contract_fresh = scope_contract_hash == contract_content_hash
+        else:
+            contract_fresh = scope_contract_file_sha == contract_file_sha
+        fresh = bool(prompt_sha) and prompt_sha == str(entry.get("prompt_sha256") or "").strip() and contract_fresh
+        fields = {str(x).strip() for x in (entry.get("consumed_fields") or []) if str(x).strip()}
+        scopes[scope] = {
+            "fresh": fresh,
+            "prompt_path": prompt_path,
+            "prompt_sha": prompt_sha,
+            "contract_content_hash": scope_contract_hash,
+            "contract_file_sha": scope_contract_file_sha,
+            "fields": fields,
+            "applied_ids": {str(x).strip() for x in (entry.get("applied_clip_ids") or []) if str(x).strip()},
+        }
+    out["accepted"] = True
+    out["reason"] = "ok"
+    out["scopes"] = scopes
+    return out
+
+
+def check_script_quality_contract(root: str, ep: str) -> None:
+    """n2d-script 的上游创作合同：把"好看"拆成可签收字段后才能交给下游。"""
+    path = _script_quality_contract_path(root, ep)
+    contract = load_json(path)
+    if not isinstance(contract, dict):
+        if not os.path.isfile(os.path.join(root, "脚本", ep, "storyboard.json")):
+            return  # storyboard 缺失由 storyboard gate 负责；这里不重复报上游合同缺失
+        add(
+            BLOCK,
+            "剧本可看性合同",
+            path,
+            "缺 script_quality_contract；先跑 `python3 skills/n2d/n2d-script/scripts/script_quality_gate.py <作品根> "
+            f"{ep} --strict --write`，把核心看点、首屏钩、留存账本、逐镜戏剧功能、观众问题账本落成制片交接合同。",
+            return_to_stage="script_stage2",
+        )
+        return
+    if contract.get("kind") != SCRIPT_QUALITY_CONTRACT_KIND:
+        add(BLOCK, "剧本可看性合同", path, f"kind 必须是 {SCRIPT_QUALITY_CONTRACT_KIND}", return_to_stage="script_stage2")
+        return
+    summary = contract.get("summary") if isinstance(contract.get("summary"), dict) else {}
+    blocks = int(summary.get("blocks") or 0)
+    status = str(contract.get("status") or summary.get("status") or "")
+    if blocks or status == "block":
+        codes = [
+            str(f.get("code"))
+            for f in contract.get("findings") or []
+            if isinstance(f, dict) and f.get("severity") == "block"
+        ]
+        shown = "、".join(codes[:8]) + ("…" if len(codes) > 8 else "")
+        add(
+            BLOCK,
+            "剧本可看性合同",
+            path,
+            f"script_quality_contract 未通过（blocks={blocks}；{shown or '见 findings'}）。"
+            "先回 n2d-script 补可签收字段，不把无明确看点/无戏剧功能的分镜交给 image/video。",
+            return_to_stage="script_stage2",
+        )
+        return
+    add(INFO, "剧本可看性合同", path, "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。", return_to_stage="script_stage2")
+
+
+def check_script_contract_consumption(root: str, ep: str, scopes: Sequence[str]) -> None:
+    """image/video prompt 已存在时，必须有 SHA 绑定的 script_contract_applied 消费收据。"""
+    contract_path = _script_quality_contract_path(root, ep)
+    contract = load_json(contract_path)
+    if not isinstance(contract, dict) or contract.get("kind") != SCRIPT_QUALITY_CONTRACT_KIND:
+        return
+    required = set(contract.get("required_consumption_fields") or SCRIPT_CONTRACT_REQUIRED_FIELDS)
+    application = _script_contract_application_status(root, ep, contract_path)
+    for scope in scopes:
+        prompt_rel = _script_contract_prompt_rel(ep, scope)
+        prompt_path = os.path.join(root, prompt_rel)
+        if not os.path.isfile(prompt_path):
+            continue  # prompt 本身缺失由对应 prompt gate 报，不在这里重复
+        scope_app = application.get("scopes", {}).get(scope) if application.get("accepted") else None
+        if not isinstance(scope_app, dict):
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} prompt 已存在，但缺 script_contract_applied_{ep}.json 的 `{scope}` scope。"
+                "下游必须证明已消费 core_attraction/first_3s_visual_hook/retention ledger/clip dramatic_function 等字段。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        if not scope_app.get("fresh"):
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；"
+                "重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        missing = sorted(required - set(scope_app.get("fields") or set()))
+        if missing:
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} 消费收据缺字段：{', '.join(missing)}。prompt 必须消费完整 script_quality_contract，而不是只引用文件名。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        verification = _verify_script_contract_scope(root, ep, scope)
+        vsummary = verification.get("summary") if isinstance(verification.get("summary"), dict) else {}
+        vblocks = int(vsummary.get("blocks") or 0)
+        if vblocks or str(verification.get("status") or vsummary.get("status") or "") == "block":
+            codes = [
+                str(f.get("code"))
+                for f in verification.get("findings") or []
+                if isinstance(f, dict) and f.get("severity") == "block"
+            ]
+            shown = "、".join(codes[:6]) + ("…" if len(codes) > 6 else "")
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} prompt 未通过逐 Clip 合同验证（blocks={vblocks}；{shown or '见 script_contract_verify'}）。"
+                "必须把 dramatic_function/audience_effect/retention promise/audience question 的合同文本写进实际 prompt，不能只靠自签收据。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        add(INFO, "剧本可看性消费", prompt_path, f"{scope} prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。")
+
+
+_PRESENCE_ENTITY_KEYS = (
+    "characters", "character_ids", "roles", "cast", "subjects", "人物", "角色", "在场角色",
+    "objects", "object_ids", "props", "weapons", "道具", "物件",
+)
+_PRESENCE_REQUIRED_KEYS = ("required_presence", "must_present", "必须出现")
+_PRESENCE_OFFSCREEN_KEYS = ("offscreen_presence", "offscreen_characters", "画外在场", "画外角色")
+_PRESENCE_FORBIDDEN_KEYS = ("forbidden_presence", "forbidden_characters", "禁止出现", "禁止角色")
+_PRESENCE_ENTRY_EXIT_KEYS = (
+    "entry_exit", "entry_exit_plan", "character_handoff", "人物出入场", "出入画", "出入场",
+)
+_PRESENCE_ID_KEYS = ("id", "asset_id", "character_id", "object_id", "prop_id", "name", "label")
+_PRESENCE_SPLIT_RE = re.compile(r"[,，、;；]\s*")
+_PRESENCE_EMPTY_TOKENS = {
+    "", "无", "none", "null", "n/a", "na", "nil", "未定", "按首帧", "按首帧画面",
+    "按storyboard", "按 storyboard", "无人物", "无角色", "无道具", "无资产", "无地点",
+}
+_PRESENCE_EXIT_MARKERS = (
+    "出画", "离开", "离场", "退场", "退出", "走出", "消失", "转为画外", "画外",
+    "不在画面", "镜头切到", "反打", "过肩", "ots", "offscreen", "out of frame",
+    "exit", "exits", "leave", "leaves", "left frame",
+)
+_PRESENCE_ENTER_MARKERS = (
+    "入画", "进入", "进场", "走入", "推门", "现身", "出现", "回到画内", "赶到",
+    "enter", "enters", "arrive", "arrives", "appear", "appears",
+)
+_PRESENCE_DISCONTINUITY_MARKERS = (
+    "换场", "转场到", "切到另一", "时间跳", "时间大跳", "次日", "翌日", "三天后",
+    "空镜", "明确不连续", "另一个地点", "scene change", "time jump", "cutaway",
+    "establishing shot", "establishing",
+)
+
+
+def _presence_clean(tokens: Iterable[str]) -> set[str]:
+    out: set[str] = set()
+    for token in tokens:
+        t = str(token or "").strip()
+        if not t:
+            continue
+        if t.lower() in _PRESENCE_EMPTY_TOKENS or t in _PRESENCE_EMPTY_TOKENS:
+            continue
+        out.add(t)
+    return out
+
+
+def _presence_token(value: Any) -> str:
+    if isinstance(value, Mapping):
+        for key in _PRESENCE_ID_KEYS:
+            token = str(value.get(key) or "").strip()
+            if token:
+                return token
+        return ""
+    return str(value or "").strip()
+
+
+def _presence_entity_key(token: str) -> str:
+    token = str(token or "").strip()
+    if not token:
+        return ""
+    # 形态后缀（CHAR_A/常态）不应该让"同一个人仍在场"误报为出入场。
+    return token.split("/", 1)[0].strip()
+
+
+def _presence_tokens(value: Any) -> set[str]:
+    if value is None:
+        return set()
+    if isinstance(value, Mapping):
+        direct = _presence_token(value)
+        if direct:
+            return {_presence_entity_key(direct)}
+        out: set[str] = set()
+        for key, item in value.items():
+            key_s = str(key or "").strip()
+            if key_s and key_s not in _PRESENCE_ID_KEYS:
+                out.add(_presence_entity_key(key_s))
+            out |= _presence_tokens(item)
+        return _presence_clean(out)
+    if isinstance(value, (list, tuple, set)):
+        out: set[str] = set()
+        for item in value:
+            out |= _presence_tokens(item)
+        return out
+    text = str(value or "").strip()
+    if not text:
+        return set()
+    return _presence_clean(_presence_entity_key(part.strip()) for part in _PRESENCE_SPLIT_RE.split(text) if part.strip())
+
+
+def _presence_collect(section: Any, keys: Sequence[str]) -> set[str]:
+    if not isinstance(section, Mapping):
+        return set()
+    out: set[str] = set()
+    for key in keys:
+        out |= _presence_tokens(section.get(key))
+    return out
+
+
+def _presence_contract(clip: Mapping[str, Any]) -> dict:
+    schedule = clip.get("entity_schedule") or clip.get("实体排程")
+    if not isinstance(schedule, Mapping):
+        schedule = {}
+    cont = clip.get("continuity")
+    if not isinstance(cont, Mapping):
+        cont = {}
+    visible = _presence_collect(clip, _PRESENCE_ENTITY_KEYS) | _presence_collect(schedule, _PRESENCE_ENTITY_KEYS)
+    required = _presence_collect(clip, _PRESENCE_REQUIRED_KEYS) | _presence_collect(schedule, _PRESENCE_REQUIRED_KEYS) | _presence_collect(cont, _PRESENCE_REQUIRED_KEYS)
+    offscreen = _presence_collect(clip, _PRESENCE_OFFSCREEN_KEYS) | _presence_collect(schedule, _PRESENCE_OFFSCREEN_KEYS) | _presence_collect(cont, _PRESENCE_OFFSCREEN_KEYS)
+    forbidden = _presence_collect(clip, _PRESENCE_FORBIDDEN_KEYS) | _presence_collect(schedule, _PRESENCE_FORBIDDEN_KEYS) | _presence_collect(cont, _PRESENCE_FORBIDDEN_KEYS)
+    visible |= required
+    has_contract = bool(schedule or required or offscreen or forbidden)
+    return {
+        "visible": _presence_clean(visible),
+        "offscreen": _presence_clean(offscreen),
+        "forbidden": _presence_clean(forbidden),
+        "has_contract": has_contract,
+    }
+
+
+_SCHEDULE_CHAR_KEYS = ("characters", "character_ids", "roles", "cast", "subjects", "人物", "角色", "在场角色")
+_SCHEDULE_OBJECT_KEYS = ("objects", "object_ids", "props", "prop_ids", "weapons", "weapon_ids", "道具", "物件")
+_SCHEDULE_LOCATION_KEYS = ("locations", "location_ids", "location_id", "scene_id", "loc_id", "地点", "场地")
+_SCHEDULE_REQUIRED_KEYS = _PRESENCE_REQUIRED_KEYS
+_SCHEDULE_OFFSCREEN_KEYS = _PRESENCE_OFFSCREEN_KEYS
+_SCHEDULE_FORBIDDEN_KEYS = _PRESENCE_FORBIDDEN_KEYS
+
+
+def _schedule_expected_entities(clip: Mapping[str, Any]) -> dict[str, set[str]]:
+    """Explicit top-level/shot IDs that must be mirrored in entity_schedule."""
+    expected = {"characters": set(), "objects": set(), "locations": set()}
+    sections: List[Any] = [clip]
+    shots = clip.get("shots")
+    if isinstance(shots, list):
+        sections.extend(s for s in shots if isinstance(s, Mapping))
+    for section in sections:
+        if not isinstance(section, Mapping):
+            continue
+        expected["characters"] |= _presence_collect(section, _SCHEDULE_CHAR_KEYS)
+        expected["objects"] |= _presence_collect(section, _SCHEDULE_OBJECT_KEYS)
+        expected["locations"] |= _presence_collect(section, _SCHEDULE_LOCATION_KEYS)
+    return {k: _presence_clean(v) for k, v in expected.items()}
+
+
+def _schedule_declared_entities(schedule: Mapping[str, Any]) -> dict[str, set[str]]:
+    return {
+        "characters": _presence_collect(schedule, _SCHEDULE_CHAR_KEYS),
+        "objects": _presence_collect(schedule, _SCHEDULE_OBJECT_KEYS),
+        "locations": _presence_collect(schedule, _SCHEDULE_LOCATION_KEYS),
+        "required": _presence_collect(schedule, _SCHEDULE_REQUIRED_KEYS),
+        "offscreen": _presence_collect(schedule, _SCHEDULE_OFFSCREEN_KEYS),
+        "forbidden": _presence_collect(schedule, _SCHEDULE_FORBIDDEN_KEYS),
+    }
+
+
+def _check_storyboard_entity_schedule_integrity(
+    root: str,
+    ep: str,
+    clips: Sequence[Any],
+    require_frame_assets: bool,
+) -> None:
+    """Clip-level entity_schedule must be a hard pre-video truth table, not a note."""
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        loc = f"{storyboard_path(root, ep)} clip#{idx}"
+        expected = _schedule_expected_entities(clip)
+        expected_all = expected["characters"] | expected["objects"] | expected["locations"]
+        schedule = clip.get("entity_schedule") or clip.get("实体排程")
+        if not isinstance(schedule, Mapping) or not schedule:
+            if expected_all:
+                sev = BLOCK if require_frame_assets else WARN
+                add(
+                    sev,
+                    "实体排程",
+                    loc,
+                    "Clip 已声明角色/物件/地点 ID，但缺 entity_schedule；视频模型会把“谁必须在场、谁只能画外、谁禁止出现”"
+                    "留给 prompt 猜，容易生成重复 clip、陌生人/陌生物乱入或人物槽位互换。"
+                    "请在 script_stage2 补 entity_schedule.characters/objects/locations/required_presence/offscreen_presence/forbidden_presence，"
+                    "旧项目可先跑 storyboard_contract_backfill.py 再人工复核。",
+                    return_to_stage="script_stage2",
+                )
+            continue
+        declared = _schedule_declared_entities(schedule)
+        missing_chars = sorted(expected["characters"] - declared["characters"])
+        missing_objects = sorted(expected["objects"] - declared["objects"])
+        missing_locations = sorted(expected["locations"] - declared["locations"])
+        if missing_chars or missing_objects or missing_locations:
+            bits: List[str] = []
+            if missing_chars:
+                bits.append("角色 " + "、".join(missing_chars[:8]))
+            if missing_objects:
+                bits.append("物件 " + "、".join(missing_objects[:8]))
+            if missing_locations:
+                bits.append("地点 " + "、".join(missing_locations[:4]))
+            sev = BLOCK if require_frame_assets else WARN
+            add(
+                sev,
+                "实体排程",
+                loc,
+                "entity_schedule 漏登记已在 clip/shots 字段出现的" + "；".join(bits) + "。"
+                "执行端只消费 entity_schedule 真值表；漏登记会让 prompt 只写“不要新增”却没有正向槽位，容易乱入或串脸。",
+                return_to_stage="script_stage2",
+            )
+        declared_visible = declared["characters"] | declared["objects"] | declared["locations"] | expected_all
+        required_unbound = sorted(declared["required"] - declared_visible)
+        if required_unbound:
+            sev = BLOCK if require_frame_assets else WARN
+            add(
+                sev,
+                "实体排程",
+                loc,
+                "required_presence 指向未在 characters/objects/locations 或 clip 显式字段登记的实体："
+                + "、".join(required_unbound[:8])
+                + "。必须先登记实体槽位，再要求它在场。",
+                return_to_stage="script_stage2",
+            )
+        offscreen_conflict = sorted((declared_visible | declared["required"]) & declared["offscreen"])
+        if offscreen_conflict:
+            add(
+                BLOCK,
+                "实体排程",
+                loc,
+                "同一实体同时被登记为可见/必须出现和 offscreen_presence："
+                + "、".join(offscreen_conflict[:8])
+                + "。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
+                return_to_stage="script_stage2",
+            )
+        forbidden_conflict = sorted((declared_visible | declared["required"]) & declared["forbidden"])
+        if forbidden_conflict:
+            add(
+                BLOCK,
+                "实体排程",
+                loc,
+                "同一实体同时被登记为可见/必须出现和 forbidden_presence："
+                + "、".join(forbidden_conflict[:8])
+                + "。先修分镜真值，不要把矛盾交给视频模型随机解释。",
+                return_to_stage="script_stage2",
+            )
+
+
+def _presence_text_blob(*sections: Any) -> str:
+    bits: List[str] = []
+    for section in sections:
+        if isinstance(section, Mapping):
+            for key in (
+                "id", "clip_id", "scene", "场景", "description", "text", "summary", "action",
+                "visual", "画面", "镜头", "transition", "hook_bridge", "degrade_plan",
+                *_PRESENCE_ENTRY_EXIT_KEYS,
+            ):
+                value = section.get(key)
+                if value not in (None, ""):
+                    bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+            cont = section.get("continuity")
+            if isinstance(cont, Mapping):
+                for key in (
+                    "start_state", "end_state", "transition", "endframe_exempt_reason",
+                    "midframe_exempt_reason", *_PRESENCE_ENTRY_EXIT_KEYS,
+                    *_PRESENCE_OFFSCREEN_KEYS,
+                ):
+                    value = cont.get(key)
+                    if value not in (None, ""):
+                        bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    return " ".join(bits).lower()
+
+
+def _presence_has_any(blob: str, markers: Sequence[str]) -> bool:
+    lower = str(blob or "").lower()
+    return any(str(marker).lower() in lower for marker in markers)
+
+
+def _presence_continuous_pair(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    prev_cont = prev_clip.get("continuity") if isinstance(prev_clip.get("continuity"), Mapping) else {}
+    next_cont = next_clip.get("continuity") if isinstance(next_clip.get("continuity"), Mapping) else {}
+    blob = _presence_text_blob(prev_clip, next_clip)
+    if _presence_has_any(blob, _PRESENCE_DISCONTINUITY_MARKERS):
+        return False
+    prev_scene = str(prev_clip.get("scene") or prev_clip.get("场景") or "").strip()
+    next_scene = str(next_clip.get("scene") or next_clip.get("场景") or "").strip()
+    if prev_scene and next_scene and prev_scene != next_scene:
+        return False
+    mode = normalize_seam_mode(
+        prev_cont.get("seam_mode"), prev_cont.get("transition"),
+        need_endframe=bool(prev_cont.get("need_endframe")),
+    ).get("mode")
+    return bool(mode and mode != "intentional_discontinuity" or next_cont.get("start_state") == prev_cont.get("end_state"))
+
+
+_DUPLICATE_TEXT_KEYS = (
+    "label", "template", "shot_type", "description", "desc", "summary", "action", "prompt",
+    "visual", "画面", "镜头", "dramatic_function", "audience_effect", "rhythm", "beat",
+)
+_DUPLICATE_ALLOW_KEYS = (
+    "intentional_repeat_reason", "duplicate_intent_reason", "repetition_purpose",
+    "repeat_reason", "复现理由", "重复意图", "重复理由",
+)
+_DUPLICATE_ALLOW_MARKERS = (
+    "故意重复", "有意重复", "重复用于", "回放", "闪回", "梦魇", "对照", "复现",
+    "拆段", "接力", "延续同一动作", "第二段", "part2", "part 2", "split",
+    "relay", "continuation", "intentional repeat", "flashback",
+)
+_DUPLICATE_STOPWORDS = {
+    "clip", "shot", "scene", "none", "null", "start", "end", "state", "action",
+    "the", "and", "with", "into", "from", "this", "that", "only",
+    "镜头", "本镜", "画面", "动作", "人物", "保持", "承接", "结尾", "开始",
+}
+
+
+def _duplicate_blob(clip: Mapping[str, Any]) -> str:
+    bits: List[str] = []
+    for key in _DUPLICATE_TEXT_KEYS:
+        value = clip.get(key)
+        if value not in (None, ""):
+            bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    for key in ("action", "start_state", "end_state", "transition", "entry_exit", "handoff_mode"):
+        value = cont.get(key)
+        if value not in (None, ""):
+            bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    for key in ("beats", "blocking", "camera_rule", "continuity_must"):
+        value = contract.get(key)
+        if value not in (None, ""):
+            bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    return " ".join(bits).lower()
+
+
+def _duplicate_tokens(text: str) -> set[str]:
+    text = re.sub(r"\bclip[_\s-]?\d+\b", " ", str(text or "").lower())
+    text = re.sub(r"\bep\d+[_\s-]?clip\d+\b", " ", text)
+    tokens = set()
+    for word in re.findall(r"[a-z0-9_]{3,}", text):
+        if word not in _DUPLICATE_STOPWORDS:
+            tokens.add(word)
+    for seq in re.findall(r"[\u4e00-\u9fff]{2,}", text):
+        if seq in _DUPLICATE_STOPWORDS:
+            continue
+        if len(seq) <= 4:
+            tokens.add(seq)
+        else:
+            tokens.update(seq[i:i + 2] for i in range(0, len(seq) - 1))
+    return {t for t in tokens if t and t not in _DUPLICATE_STOPWORDS}
+
+
+def _clip_action_norm(clip: Mapping[str, Any]) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    text = str(cont.get("action") or clip.get("action") or clip.get("description") or clip.get("desc") or "").lower()
+    text = re.sub(r"\bclip[_\s-]?\d+\b", " ", text)
+    text = re.sub(r"\s+", "", text)
+    return text.strip()
+
+
+def _clip_repeat_allowed(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    for clip in (prev_clip, next_clip):
+        for key in _DUPLICATE_ALLOW_KEYS:
+            if str(clip.get(key) or "").strip():
+                return True
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+        for key in _DUPLICATE_ALLOW_KEYS:
+            if str(cont.get(key) or "").strip():
+                return True
+    blob = _presence_text_blob(prev_clip, next_clip) + " " + _duplicate_blob(prev_clip) + " " + _duplicate_blob(next_clip)
+    return _presence_has_any(blob, _DUPLICATE_ALLOW_MARKERS)
+
+
+def _check_storyboard_adjacent_clip_distinctness(
+    root: str,
+    ep: str,
+    clips: Sequence[Any],
+    require_frame_assets: bool,
+) -> None:
+    """Catch adjacent clips that are likely duplicate generations before spending video budget."""
+    production = consistency_release_profile(root, "video_preflight", ep) == "production"
+    for (idx, prev_clip), (next_idx, next_clip) in zip(enumerate(clips, 1), enumerate(clips[1:], 2)):
+        if not isinstance(prev_clip, Mapping) or not isinstance(next_clip, Mapping):
+            continue
+        if _clip_repeat_allowed(prev_clip, next_clip):
+            continue
+        prev_contract = _presence_contract(prev_clip)
+        next_contract = _presence_contract(next_clip)
+        prev_visible = prev_contract["visible"]
+        next_visible = next_contract["visible"]
+        same_visible = bool(prev_visible and prev_visible == next_visible)
+        prev_scene = str(prev_clip.get("scene") or prev_clip.get("场景") or prev_clip.get("location_id") or "").strip()
+        next_scene = str(next_clip.get("scene") or next_clip.get("场景") or next_clip.get("location_id") or "").strip()
+        same_scene = bool(prev_scene and next_scene and prev_scene == next_scene)
+        prev_template = str(prev_clip.get("template") or prev_clip.get("shot_type") or "").strip()
+        next_template = str(next_clip.get("template") or next_clip.get("shot_type") or "").strip()
+        same_template = bool(prev_template and next_template and prev_template == next_template)
+        if not (same_scene or same_visible or same_template):
+            continue
+        prev_tokens = _duplicate_tokens(_duplicate_blob(prev_clip))
+        next_tokens = _duplicate_tokens(_duplicate_blob(next_clip))
+        if len(prev_tokens | next_tokens) < 8:
+            action_dup = bool(_clip_action_norm(prev_clip) and _clip_action_norm(prev_clip) == _clip_action_norm(next_clip))
+            if not action_dup:
+                continue
+            similarity = 1.0
+        else:
+            similarity = len(prev_tokens & next_tokens) / max(1, len(prev_tokens | next_tokens))
+        if similarity < 0.82:
+            continue
+        sev = BLOCK if (production and require_frame_assets) else WARN
+        loc = f"{storyboard_path(root, ep)} clip#{idx}→clip#{next_idx}"
+        add(
+            sev,
+            "Clip 去重",
+            loc,
+            f"相邻 Clip 的场景/实体/模板/动作语义高度相似（similarity={similarity:.2f}），且没有写 duplicate_intent_reason/"
+            "intentional_repeat_reason/拆段接力理由。视频生成会很容易得到重复 clip。请合并、改景别/动作/信息增量，"
+            "或明确写这是回放/闪回/故意复现/同动作拆段接力。",
+            return_to_stage="script_stage2",
+        )
+
+
+_EXACT_STATE_HANDOFF_MARKERS = (
+    "exact", "same_frame", "same-frame", "match_tailframe", "tailframe_match",
+    "endframe_to_firstframe", "尾帧=下一首帧", "原样继承", "无缝接力", "同帧接力",
+)
+
+
+def _state_handoff_blob(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> str:
+    parts: List[str] = []
+    for clip in (prev_clip, next_clip):
+        if not isinstance(clip, Mapping):
+            continue
+        for key in ("handoff_mode", "state_handoff", "tailframe_handoff", "transition", "entry_exit"):
+            value = clip.get(key)
+            if value not in (None, ""):
+                parts.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+        for key in ("handoff_mode", "state_handoff", "tailframe_handoff", "transition", "entry_exit"):
+            value = cont.get(key)
+            if value not in (None, ""):
+                parts.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    return " ".join(parts).lower()
+
+
+def _requires_exact_state_handoff(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    prev_cont = prev_clip.get("continuity") if isinstance(prev_clip.get("continuity"), Mapping) else {}
+    explicit_mode = prev_clip.get("seam_mode") or prev_cont.get("seam_mode")
+    if str(explicit_mode or "").strip():
+        mode = normalize_seam_mode(explicit_mode).get("mode")
+        return requires_boundary_frame(mode)
+    blob = _state_handoff_blob(prev_clip, next_clip)
+    return any(marker.lower() in blob for marker in _EXACT_STATE_HANDOFF_MARKERS)
+
+
+def _check_storyboard_presence_chain(root: str, ep: str, clips: Sequence[Any]) -> None:
+    """相邻 clip 的实体在场链：有 schedule 时，人物/物件不能凭空出现或消失。"""
+    if not isinstance(clips, Sequence):
+        return
+    contracts: List[tuple[int, Mapping[str, Any], dict]] = []
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        contract = _presence_contract(clip)
+        visible = contract["visible"]
+        forbidden = contract["forbidden"]
+        bad_forbidden = sorted(visible & forbidden)
+        loc = f"{storyboard_path(root, ep)} clip#{idx}"
+        if bad_forbidden:
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"entity_schedule/continuity 同时要求出现又禁止出现：{'、'.join(bad_forbidden[:8])}。"
+                "先修分镜真值，不要把矛盾交给视频模型随机解释。",
+                return_to_stage="script_stage2",
+            )
+        contracts.append((idx, clip, contract))
+
+    for (idx, prev_clip, prev), (next_idx, next_clip, nxt) in zip(contracts, contracts[1:]):
+        if not (prev["has_contract"] and nxt["has_contract"]):
+            continue
+        prev_visible = set(prev["visible"])
+        next_visible = set(nxt["visible"])
+        if not prev_visible and not next_visible:
+            continue
+        blob = _presence_text_blob(prev_clip, next_clip)
+        continuous = _presence_continuous_pair(prev_clip, next_clip)
+        loc = f"{storyboard_path(root, ep)} clip#{idx}→clip#{next_idx}"
+        disappeared = sorted(prev_visible - next_visible - set(nxt["offscreen"]))
+        appeared = sorted(next_visible - prev_visible - set(prev["offscreen"]))
+        if disappeared and continuous and not _presence_has_any(blob, _PRESENCE_EXIT_MARKERS):
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：{'、'.join(disappeared[:8])}。"
+                "请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+                return_to_stage="script_stage2",
+            )
+        elif disappeared and not _presence_has_any(blob, _PRESENCE_EXIT_MARKERS + _PRESENCE_DISCONTINUITY_MARKERS):
+            add(
+                WARN,
+                "人物在场链",
+                loc,
+                f"实体从上一 Clip 消失但缺出画/画外/换场解释：{'、'.join(disappeared[:8])}。若是有意不连续，请把转场写清楚。",
+                return_to_stage="script_stage2",
+            )
+        if appeared and continuous and not _presence_has_any(blob, _PRESENCE_ENTER_MARKERS):
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：{'、'.join(appeared[:8])}。"
+                "请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
+                return_to_stage="script_stage2",
+            )
+        elif appeared and not _presence_has_any(blob, _PRESENCE_ENTER_MARKERS + _PRESENCE_DISCONTINUITY_MARKERS):
+            add(
+                WARN,
+                "人物在场链",
+                loc,
+                f"实体在下一 Clip 出现但缺入画/换场解释：{'、'.join(appeared[:8])}。若是新入场，请把 entry_exit 写成机器真值。",
+                return_to_stage="script_stage2",
+            )
+
+
+def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = True) -> Optional[dict]:
+    data = load_storyboard(root, ep)
+    if not data:
+        return None
+    clips = data["clips"]
+    policy = data.get("policy")
+    if not isinstance(policy, dict):
+        policy = {}
+    prev_end = None
+    prev_clip = None
+    routes_file = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    routes_map = {}
+    if os.path.exists(routes_file):
+        try:
+            with open(routes_file, encoding="utf-8") as f:
+                r_data = json.load(f)
+                if isinstance(r_data.get("routes"), list):
+                    for item in r_data["routes"]:
+                        if not isinstance(item, Mapping):
+                            continue
+                        for key in (item.get("id"), item.get("clip_id")):
+                            if key:
+                                routes_map[str(key)] = item
+        except Exception:
+            pass
+
+    for i, clip in enumerate(clips, 1):
+        loc = f"{storyboard_path(root, ep)} clip#{i}"
+        cid = clip.get("id", f"EP{data.get('episode', '01')}_CLIP{i:02d}")
+        route = routes_map.get(str(cid)) or routes_map.get(f"Clip_{i:02d}") or {}
+        allows_no_firstframe = _route_allows_no_firstframe(route)
+
+        first_png = clip.get("firstframe_png")
+        if require_frame_assets and not first_png and not allows_no_firstframe:
+            add(BLOCK, "首帧", loc, "缺 firstframe_png")
+        elif first_png and require_frame_assets:
+            first_full = first_png if os.path.isabs(first_png) else os.path.join(root, first_png)
+            if not os.path.exists(first_full):
+                add(BLOCK, "首帧", first_full, "firstframe_png 不存在")
+        cont = clip.get("continuity")
+        if not isinstance(cont, dict):
+            add(BLOCK, "故事板", loc, "缺 continuity 块")
+            continue
+        for key in ("start_state", "end_state", "transition"):
+            if key not in cont:
+                add(BLOCK, "故事板", loc, f"continuity 缺字段：{key}")
+        if i < len(clips):
+            mode_info = normalize_seam_mode(
+                cont.get("seam_mode"), cont.get("transition"),
+                need_endframe=bool(cont.get("need_endframe")),
+            )
+            seam_mode = str(mode_info.get("mode") or "")
+            if mode_info.get("source") != "explicit":
+                add(BLOCK, "接缝分类", loc,
+                    "非末镜必须显式选择 continuity.seam_mode；旧 transition/need_endframe 只能用于迁移提示，不能代替导演剪辑决定。",
+                    return_to_stage="script_stage2")
+            else:
+                evidence = cont.get("seam_evidence") if isinstance(cont.get("seam_evidence"), Mapping) else {}
+                missing = list(seam_missing_evidence(seam_mode, evidence))
+                if seam_mode == "continuous_take_relay":
+                    missing = [field for field in missing if field not in {"boundary_frame", "end_state", "start_state"}]
+                if missing:
+                    add(BLOCK, "接缝分类", loc,
+                        f"{seam_mode} 缺可执行 seam_evidence：{', '.join(missing)}。",
+                        return_to_stage="script_stage2")
+                expected_relay = requires_boundary_frame(seam_mode)
+                if bool(cont.get("need_endframe")) != expected_relay:
+                    add(BLOCK, "接缝分类", loc,
+                        f"need_endframe 与 seam_mode={seam_mode} 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+                        return_to_stage="script_stage2")
+        if prev_end and cont.get("start_state") != prev_end:
+            if isinstance(prev_clip, Mapping) and _requires_exact_state_handoff(prev_clip, clip):
+                add(BLOCK, "故事板", loc, "start_state 未原样继承上一 Clip 的 end_state")
+            else:
+                add(
+                    WARN,
+                    "故事板",
+                    loc,
+                    "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，"
+                    "请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+                )
+        prev_end = cont.get("end_state")
+        prev_clip = clip
+        
+        # --- 新增：工业级专项镜头增强模板契约验证 ---
+        template_contract = clip.get("template_contract")
+        if isinstance(template_contract, dict):
+            if template_contract.get("pose_reference_required"):
+                pose_path = clip.get("pose_image_path")
+                if not pose_path:
+                    add(BLOCK, "空间硬控", loc, f"该 {clip.get('template')} 模板具有 pose_reference_required: true 约束，必须配置 pose_image_path。")
+                elif require_frame_assets:
+                    pose_full = pose_path if os.path.isabs(pose_path) else os.path.join(root, pose_path)
+                    if not os.path.exists(pose_full):
+                        add(BLOCK, "空间硬控", pose_full, "配置的 pose_image_path 骨架/深度参考图文件不存在。")
+            
+            if template_contract.get("regional_construct_required"):
+                # Ensure multiple subjects are defined properly or split_composite is flagged
+                chars = clip.get("character_ids", [])
+                if isinstance(chars, list) and len(chars) > 1:
+                    # The production schema already carries the same decision in
+                    # `multi_subject_strategy`; some template authors keep the
+                    # detailed recipe inside `template_contract`. Treat these as
+                    # co-equal truth sources instead of emitting a false BLOCK
+                    # merely because the spelling lives in another canonical
+                    # field.
+                    exec_strategy = json.dumps(
+                        [
+                            clip.get("execution_strategy", ""),
+                            clip.get("multi_subject_strategy", ""),
+                            template_contract.get("execution_strategy", ""),
+                        ],
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    )
+                    if "regional_construct" not in exec_strategy and "split_composite" not in exec_strategy and "native_subject_slots" not in exec_strategy:
+                        add(BLOCK, "分区合成", loc, f"该 {clip.get('template')} 模板具有 regional_construct_required: true 约束，检测到同框多角色，请在 execution_strategy / multi_subject_strategy / template_contract.execution_strategy 中明确保底合成策略以防串脸。")
+
+            if template_contract.get("impact_frame_sync"):
+                # Only check if midframe is properly prepared as an impact frame anchor
+                anchors = cont.get("anchors", [])
+                if "mid_impact" not in anchors and not cont.get("midframe"):
+                    add(WARN, "击中帧验证", loc, f"该 {clip.get('template')} 模板包含 impact_frame_sync，但未在 continuity 规划中段光效爆发帧 (mid_impact / midframe)。")
+        # ---------------------------------------------
+        
+        # 近景/特写/反打镜必须声明 expression_span——把「跨情绪近景首尾双帧」闸门从 opt-in 收成强制。
+        # 没标 span 的大表情近景正是脸被表情带着重画的头号根因；不能靠作者记得打标签，否则双帧保护
+        # 恰好在最该保护的未标镜上静默 no-op。远景/空镜由 _clip_is_closeup 收口、不误伤。
+        if _clip_is_closeup(clip):
+            span = cont.get("expression_span")
+            if span in (None, ""):
+                add(BLOCK, "表情一致性", loc,
+                    "近景/特写/反打镜必须声明 continuity.expression_span（微/中/大）——跨情绪近景是脸随表情"
+                    f"漂移的头号根因，不可 opt-in。按起止情绪（{cont.get('start_state')!r}→{cont.get('end_state')!r}）"
+                    "补标；大表情(大)须配镜内首尾双帧 end_anchor_required=true。",
+                    return_to_stage="script_stage2")
+            elif span not in EXPRESSION_SPAN_VALUES:
+                add(BLOCK, "表情一致性", loc,
+                    f"continuity.expression_span={span!r} 非法；必须是 {'/'.join(EXPRESSION_SPAN_VALUES)} 之一。",
+                    return_to_stage="script_stage2")
+        is_high_motion = str(clip.get("template") or "") in HIGH_MOTION_TEMPLATES
+        # 高速运动镜仍要镜内尾锚，但这与跨镜同帧接力是两个独立合同。
+        if is_high_motion and not needs_end_anchor(clip):
+            add(BLOCK, "尾帧", loc,
+                f"高速运动镜(template={clip.get('template')})必须 end_anchor_required=true——"
+                "快速运动靠镜内首+尾锚钉住两端；这不会把 outgoing seam 误判为 continuous_take_relay，末镜同样要求。",
+                return_to_stage="script_stage2")
+        if needs_end_anchor(clip) and require_frame_assets:
+            # n2d-script 早期/部分产物把 endframe_png 落在 clip 顶层；
+            # continuity.endframe_png 是规范位置，但 gate 不能把等价旧字段误报成“未填写”。
+            end_png = (cont.get("endframe_png") or clip.get("endframe_png")
+                       or clip.get("last_frame") or clip.get("end_frame_png"))
+            if not end_png:
+                add(BLOCK, "尾帧", loc, "镜头需要尾锚但未填写 endframe_png")
+            else:
+                full = end_png if os.path.isabs(end_png) else os.path.join(root, end_png)
+                if not os.path.exists(full):
+                    add(BLOCK, "尾帧", full, "镜头需要尾锚但尾帧 PNG 不存在")
+        # 中段锚帧：声明了 midframe/anchors 就必须是完整可执行契约。
+        # 执行成本由后端能力决定（native multiframe / split relay / qc reference），但锚帧 PNG、
+        # 时间点和理由缺一不放行，避免生成了 `_mid` 却在视频阶段被静默忽略。
+        # midframe = 单锚帧手写糖（_mid）；anchors = 通用 N 锚帧链（_a1.._aN，anchor_planner 写）。
+        mid = cont.get("midframe")
+        anchors = cont.get("anchors")
+        # 普通镜不再按“至少三帧”收费：只有显式 opt-in 且后端能在一次请求中原生消费中帧时才强制。
+        # 高运动镜仍走原有动作锚帧硬保护；首尾帧后端的 split relay 不冒充原生三帧能力。
+        if mid is None and anchors is None and not cont.get("midframe_exempt_reason"):
+            explicit_mid_opt_in = bool(
+                (policy or {}).get("midframe_default") is True
+                and (policy or {}).get("midframe_default_mode") == "explicit_opt_in"
+            )
+            mid_consumable = backend_supports_three_plus_frames((policy or {}).get("video_backend"))
+            production = consistency_release_profile(root, "video_preflight", ep) == "production"
+            production_action_block = production and is_high_motion
+            if explicit_mid_opt_in and mid_consumable:
+                add(BLOCK, "中段锚帧", loc,
+                    "项目已显式开启普通镜原生中段锚帧，且路由后端可在一次请求中消费；"
+                    "请补 continuity.midframe/anchors，或关闭该 opt-in 后重建故事板策略。")
+            elif production_action_block:
+                add(BLOCK, "中段锚帧", loc,
+                    "production 高运动镜必须补 continuity.anchors[]；动作镜没有中段姿态/命中锚，"
+                    "肢体、受击点和道具轨迹会跨帧漂移。")
+        if mid is not None and anchors is not None:
+            add(BLOCK, "中段锚帧", loc, "continuity.midframe 与 continuity.anchors 不能同时声明（语义歧义）；单锚帧用 midframe 或一项 anchors，二选一")
+            continue
+        if mid is not None:
+            if not isinstance(mid, dict):
+                add(BLOCK, "中段锚帧", loc, "continuity.midframe 必须是 object（midframe_png/split_at_sec/reason）")
+                continue
+            anchors = [{**mid, "_fields": ("midframe_png", "split_at_sec", "reason")}]
+        if anchors is not None:
+            if not isinstance(anchors, list) or not anchors:
+                add(BLOCK, "中段锚帧", loc, "continuity.anchors 必须是非空 list（每项 anchor_png/at_sec/reason）")
+                continue
+            duration = clip.get("duration")
+            prev_at = 0.0
+            for k, a in enumerate(anchors, 1):
+                if not isinstance(a, dict):
+                    add(BLOCK, "中段锚帧", loc, f"anchors[{k}] 必须是 object（anchor_png/at_sec/reason）")
+                    continue
+                png_key, at_key, reason_key = a.get("_fields", ("anchor_png", "at_sec", "reason"))
+                for label, key in (("锚帧 PNG", png_key), ("锚点秒数", at_key), ("锚帧理由", reason_key)):
+                    if a.get(key) in (None, ""):
+                        add(BLOCK, "中段锚帧", loc, f"锚帧 {k} 缺字段：{key}（中段锚帧契约必须写明{label}；执行时会按后端能力走原生多帧、拆段接力或 QC/reference）")
+                at = a.get(at_key)
+                if at not in (None, ""):
+                    if isinstance(at, bool) or not isinstance(at, (int, float)):
+                        add(BLOCK, "中段锚帧", loc, f"锚帧 {k} 的 {at_key} 必须是数字：{at!r}")
+                    else:
+                        if isinstance(duration, (int, float)) and not (0 < at < duration):
+                            add(BLOCK, "中段锚帧", loc, f"锚帧 {k} 的 {at_key}={at} 必须落在 (0, duration={duration}) 内，各段还须 ≥ 目标后端最短时长")
+                        if at <= prev_at:
+                            add(BLOCK, "中段锚帧", loc, f"锚帧 {k} 的 {at_key}={at} 必须严格递增（前一锚点 {prev_at}）")
+                        prev_at = at if at > prev_at else prev_at
+                png = a.get(png_key)
+                if png and require_frame_assets:
+                    full = png if os.path.isabs(png) else os.path.join(root, png)
+                    if not os.path.exists(full):
+                        add(BLOCK, "中段锚帧", full, f"声明了锚帧 {k} 但锚帧 PNG 不存在")
+                    else:
+                        _check_midframe_generation_self_check(root, ep, str(png), loc, k)
+    _check_storyboard_entity_schedule_integrity(root, ep, clips, require_frame_assets)
+    _check_storyboard_presence_chain(root, ep, clips)
+    _check_storyboard_adjacent_clip_distinctness(root, ep, clips, require_frame_assets)
+    return data
+
+def check_storyboard_visual_contract(root: str, ep: str) -> None:
+    """storyboard.json must seed the visual contract at the script stage.
+
+    Axis/eyeline, scene light position, character-state progression and the
+    shot-size ladder are director decisions made when the storyboard is cut.
+    They must live in storyboard.json's `visual_contract` so n2d-image inherits
+    them instead of re-inventing them — the single upstream source of truth for
+    everything later baked into first-frame pixels.
+    """
+    p = storyboard_path(root, ep)
+    data = load_json(p)
+    if not isinstance(data, dict):
+        return  # storyboard 缺失/损坏由 check_storyboard_contract 报，避免重复
+    vc = data.get("visual_contract")
+    if not isinstance(vc, dict):
+        add(BLOCK, "契约继承", p, "storyboard.json 缺 visual_contract 种子块；轴线/光位/状态/景别是分镜设计阶段的导演决策，须在此写死供出图继承（回 n2d-script 补 visual_contract）")
+        return
+    for key in VISUAL_CONTRACT_FIELDS:
+        if key not in vc:
+            add(BLOCK, "契约继承", p, f"storyboard.json visual_contract 缺字段：{key}")
+
+def check_storyboard_style_contract(root: str, ep: str) -> None:
+    """storyboard.json must seed the chosen base visual style contract.
+
+    The style choice belongs in user settings/global_style, not in skill code.
+    The contract turns that choice into repeatable constraints so image/video
+    prompts inherit one source instead of appending generic style adjectives.
+    """
+    p = storyboard_path(root, ep)
+    data = load_json(p)
+    if not isinstance(data, dict):
+        return
+    sc = data.get("style_contract")
+    legacy = False
+    fields = STYLE_CONTRACT_FIELDS
+    if not isinstance(sc, dict):
+        sc = data.get("cinematic_contract")
+        legacy = isinstance(sc, dict)
+        fields = CINEMATIC_CONTRACT_FIELDS
+    if not isinstance(sc, dict):
+        add(BLOCK, "基础视觉风格契约", p, "storyboard.json 缺 style_contract 种子块；基础视觉风格必须来自 `_设置.md`/global_style，并在分镜设计阶段写成结构化契约供出图/出视频继承")
+        return
+    key_name = "cinematic_contract" if legacy else "style_contract"
+    for key in fields:
+        if key not in sc:
+            add(BLOCK, "基础视觉风格契约", p, f"storyboard.json {key_name} 缺字段：{key}")
+    # ⑥ 软校验：风格名 应与选择点「基础视觉风格」同源（项目选二次元、契约却写写实=矛盾，gate 只查在场会漏）
+    if not legacy:
+        raw_anchor = sc.get("style_anchor") or sc.get("风格锚") or sc.get("anchors")
+        anchors = [raw_anchor] if isinstance(raw_anchor, str) else (raw_anchor if isinstance(raw_anchor, list) else [])
+        anchors = [str(a or "").strip() for a in anchors if str(a or "").strip()]
+        if not anchors:
+            add(BLOCK, "基础视觉风格契约", p,
+                "storyboard.json style_contract 缺 style_anchor；必须先在分镜阶段登记 1-2 张风格锚图路径（如 `出图/共享/图片/风格锚_*.png`），"
+                "供 n2d-image 生成/登记并让 image_qc 做风格归属机检。", return_to_stage="script_stage2")
+        for anchor in anchors:
+            if Path(anchor).suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+                add(BLOCK, "基础视觉风格契约", p,
+                    f"style_contract.style_anchor 必须是图片路径，当前为 `{anchor}`。", return_to_stage="script_stage2")
+        chosen = str(get_setting(root, "基础视觉风格", "")).strip()
+        # `风格名` may be a project/episode art-direction label (for example
+        # "黑赤镇魔·水墨妖谱"), while the actual settings choice is the base
+        # rendering family. Prefer an explicit base-style field when present.
+        contract_base = str(sc.get("基础视觉风格") or sc.get("风格名", "")).strip()
+        if chosen and contract_base and chosen not in contract_base and contract_base not in chosen:
+            add(WARN, "风格一致性", p,
+                f"style_contract 基础视觉风格「{contract_base}」与 _设置.md 基础视觉风格「{chosen}」不一致——风格真值应同源；核对是否选错风格或契约写偏")
+
+def check_storyboard_possession_gate(root: str, ep: str) -> None:
+    """Storyboard 前置 POS：检测到关键道具持有/交接时，要求账本前移到分镜层。"""
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict):
+        return
+    clips = data.get("clips") or data.get("shots") or []
+    if not isinstance(clips, list):
+        return
+    mentions: List[str] = []
+    transfer_mentions: List[str] = []
+    for idx, clip in enumerate(clips, start=1):
+        if not isinstance(clip, Mapping):
+            continue
+        text = json.dumps(clip, ensure_ascii=False)
+        props = PROP_ID_ANY_RE.findall(text)
+        if not props:
+            continue
+        if any(w.lower() in text.lower() for w in POSSESSION_WORDS + POSSESSION_TRANSFER_WORDS):
+            label = str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}")
+            shown = f"{label}:{'/'.join(sorted(set(props)))}"
+            mentions.append(shown)
+            if any(w.lower() in text.lower() for w in POSSESSION_TRANSFER_WORDS):
+                transfer_mentions.append(shown)
+            elif _possession_mentions_core_asset(text, props):
+                transfer_mentions.append(shown)
+    if not mentions or _possession_ledger_exists(root, ep):
+        return
+    target = os.path.join(root, "生产数据", f"possession_ledger_{ep}.json")
+    shown = "、".join((transfer_mentions or mentions)[:8]) + ("…" if len(transfer_mentions or mentions) > 8 else "")
+    if transfer_mentions:
+        add(
+            BLOCK,
+            "持有账本(POS)",
+            storyboard_path(root, ep),
+            f"storyboard 已出现核心道具/武器/证物/法宝的持有、交接、丢失或拾取（{shown}），但缺 possession_ledger；"
+            f"请先在 {target} 记录 clip、asset、holder、action，避免道具跨镜瞬移。",
+            return_to_stage="script_stage2",
+        )
+    else:
+        add(
+            WARN,
+            "持有账本(POS)",
+            storyboard_path(root, ep),
+            f"storyboard 已出现关键道具持有关系（{shown}），建议前置 possession_ledger 到分镜 gate；跨镜持有、破损、丢失别只靠 prompt 文本记忆。",
+            return_to_stage="script_stage2",
+        )
+
+def check_storyboard_special_templates(root: str, ep: str) -> None:
+    """Complex shots must be declared through reusable storyboard templates.
+
+    The expensive image/video stages should inherit a structured action/blocking
+    contract instead of asking the model to invent fights, chases, reverse shots
+    or crowd staging from prose every time.
+    """
+    generic_fields = ("template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative")
+    p = storyboard_path(root, ep)
+    data = load_json(p)
+    if not isinstance(data, dict):
+        return
+    clips = data.get("clips")
+    if not isinstance(clips, list):
+        return
+    for i, clip in enumerate(clips, 1):
+        if not isinstance(clip, dict):
+            continue
+        loc = f"{p} clip#{i}"
+        template_id = str(clip.get("template", "")).strip()
+        contract = clip.get("template_contract")
+        blob = _clip_blob(clip)
+        keyword_template = _first_template_keyword_hit(blob)
+
+        if not template_id:
+            if keyword_template:
+                add(
+                    BLOCK,
+                    "专项镜头模板",
+                    loc,
+                    f"复杂镜头疑似「{keyword_template}」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+                )
+            elif isinstance(contract, dict):
+                add(BLOCK, "专项镜头模板", loc, "有 template_contract 但缺 template；两者必须成对出现")
+            continue
+
+        if template_id.lower() in GENERIC_TEMPLATE_VALUES:
+            if not isinstance(contract, dict):
+                add(BLOCK, "专项镜头模板", loc, "template=generic 但缺 template_contract 基础结构块")
+                continue
+            if str(contract.get("template_id", "")).strip().lower() not in GENERIC_TEMPLATE_VALUES:
+                add(BLOCK, "专项镜头模板", loc, "generic template_contract.template_id 必须同为 generic/普通镜头")
+            for key in generic_fields:
+                if _field_is_missing(contract, key):
+                    add(BLOCK, "专项镜头模板", loc, f"template=generic 的 template_contract 缺基础字段：{key}")
+            if keyword_template:
+                add(
+                    WARN,
+                    "专项镜头模板",
+                    loc,
+                    f"通用模板镜头含疑似专项元素「{keyword_template}」；可先出图，但正式视频前建议回 n2d-script 升级为专项模板。",
+                )
+            continue
+
+        if template_id not in SPECIAL_SHOT_TEMPLATE_FIELDS:
+            add(
+                BLOCK,
+                "专项镜头模板",
+                loc,
+                f"未知 template「{template_id}」；只能使用 {', '.join(SPECIAL_SHOT_TEMPLATE_FIELDS.keys())}",
+            )
+            continue
+        if not isinstance(contract, dict):
+            add(BLOCK, "专项镜头模板", loc, f"template={template_id} 但缺 template_contract 结构块")
+            continue
+        if str(contract.get("template_id", "")).strip() != template_id:
+            add(BLOCK, "专项镜头模板", loc, f"template_contract.template_id 必须等于 template「{template_id}」")
+        for key in SPECIAL_SHOT_TEMPLATE_FIELDS[template_id]:
+            if _field_is_missing(contract, key):
+                add(BLOCK, "专项镜头模板", loc, f"template={template_id} 的 template_contract 缺字段：{key}")
+
+def check_cross_episode_style(root: str, ep: str) -> None:
+    """跨集色调/风格基线：以打样集为基准比对本集 色调基线基调 + 风格名。
+
+    集级 visual_contract/style_contract 各自自洽、inherit 各自 pass，整部却可能画风跳（第5集冷青灰、第6集暖橙）。
+    色调基线允许逐集细化，但其【基调首句】应跨集恒定；风格名应完全一致。漂移→WARN（以打样集为准或确认有意改）。
+    """
+    base_ep = _earliest_storyboard_ep(root)
+    if not base_ep or base_ep == ep:
+        return
+    # 直接读 JSON（只需契约块，不触发 load_storyboard 的 clips[] 硬校验与副作用 BLOCK）
+    base, cur = load_json(storyboard_path(root, base_ep)), load_json(storyboard_path(root, ep))
+    if not isinstance(base, dict) or not isinstance(cur, dict):
+        return
+    p = storyboard_path(root, ep)
+    base_tone = _tone_base((base.get("visual_contract") or {}).get("色调基线"))
+    cur_tone = _tone_base((cur.get("visual_contract") or {}).get("色调基线"))
+    if base_tone and cur_tone and base_tone != cur_tone:
+        add(WARN, "跨集色调", p,
+            f"本集色调基线基调「{cur_tone}」与打样集 {base_ep}「{base_tone}」不一致——色调可逐集细化但基调应跨集恒定；"
+            f"以打样集为准或确认有意改（防整部画风跳）", return_to_stage="script_stage2")
+    base_name = str((base.get("style_contract") or {}).get("风格名", "")).strip()
+    cur_name = str((cur.get("style_contract") or {}).get("风格名", "")).strip()
+    if base_name and cur_name and base_name != cur_name:
+        add(WARN, "跨集风格", p,
+            f"本集风格名「{cur_name}」与打样集 {base_ep}「{base_name}」不一致——基础视觉风格应跨集统一；核对是否选错风格",
+            return_to_stage="script_stage2")
+
+def check_cross_episode_character_definition(root: str, ep: str) -> None:
+    """跨集「角色文字定义」漂移信号（advisory·WARN）：本集是否在悄悄重新派生角色而非复用定妆锚。
+
+    identity_registry 是跨集共享的单一真值源（一部一份），但**每集的出图总览/prompt 文字**是手/AI
+    现写的，可能把已建卡角色重描成与锚定相矛盾的样子（换发色/换装/换配饰）——这类文字漂移在出图前
+    此前零机检（只有渲染后人脸 embedding 可能抓到，且发型/服装人脸检测看不见）。
+
+    本检查保守取信号、不误伤：对 registry 里每个有 `forms[].anchor_phrase`（锚定相）的角色，若其名字/别名
+    或 CHAR_id 在本集出图总览里**被引用**，却**一个锚定相描述符都没出现**（凤眼薄唇/乌黑.../月白粗布旧宫装…
+    按 `·` 切的 token 全缺）→ WARN：可能跨集重新派生，请核对发型/瞳色/服装/配饰与定妆库一致。只要总览引用了
+    锚定相里任一描述符即放行（低误报）。纯 WARN 不 BLOCK——文字矛盾判定本身模糊，先把"零信号"补成"有信号"。
+    """
+    data = load_json(identity_registry_path(root))
+    if not isinstance(data, dict):
+        return  # 定妆库未建（如出图前早期）——跳过
+    chars = data.get("characters")
+    if isinstance(chars, dict):
+        chars = list(chars.values())
+    if not isinstance(chars, list) or not chars:
+        return
+    overview_path = os.path.join(root, _ce_overview_rel(ep))
+    if not os.path.isfile(overview_path):
+        return  # 本集出图总览未生成——跳过，不误报
+    try:
+        overview = open(overview_path, encoding="utf-8").read()
+    except OSError:
+        return
+    for c in chars:
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        names = [n.strip() for n in str(c.get("name") or "").replace("／", "/").split("/") if n.strip()]
+        referenced = (cid and cid in overview) or any(n in overview for n in names)
+        if not referenced:
+            continue
+        forms = c.get("forms") if isinstance(c.get("forms"), list) else []
+        anchor = str((forms[0] if forms else {}).get("anchor_phrase") or "").strip()
+        if not anchor:
+            continue  # 无锚定相可比
+        tokens = [t.strip() for t in anchor.replace("，", "·").replace(",", "·").split("·") if len(t.strip()) >= ANCHOR_TOKEN_MIN_CHARS]
+        if tokens and not any(t in overview for t in tokens):
+            label = names[0] if names else cid
+            add(WARN, "跨集角色定义", overview_path,
+                f"本集出图总览引用了角色「{label}」({cid})，却未出现其 identity_registry 锚定相任一描述符"
+                f"（{anchor}）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，"
+                "并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+                return_to_stage="image")
+
+def check_cross_episode_contract(root: str, ep: str) -> None:
+    """跨集视觉契约方向反转（advisory·WARN）：同一地点跨集光位左右/轴线走向翻 = 越轴/光跳穿帮。
+
+    `check_contract_inheritance` 管**同集内**出图↔出视频逐字一致；`check_cross_episode_style` 管整部色调/
+    风格名恒定。本检查补第三类跨集穿帮——读本集与**前一可比集**的 `出图/第N集/prompt/00_总览.md` 视觉契约，
+    只在 asset_registry 的 LOC 地点**两集都出现且方向反转**时报（地点共现门控压噪音）。纯启发式，**只 WARN
+    不 BLOCK**（同 cross_episode_contract.py 设计）；过去靠人手动跑那个脚本→几乎没人跑，现在并进 gate 自动落地。
+    """
+    cur_rel = _ce_overview_rel(ep)
+    cur_path = os.path.join(root, cur_rel)
+    if not os.path.isfile(cur_path):
+        return  # 本集出图总览未生成（如 image_preflight 早于出图）——跳过，不误报
+    prev_ep = _ce_prior_episode(root, ep)
+    if not prev_ep:
+        return  # 首集无前集可比
+    # 乱序/跳集生产：prior_episode 取的是"最近一个有出图总览的前集"，可能跨过缺总览的中间集。
+    # 跨过缺口的对比会让"已覆盖"悄悄变成"跨集没逐集比过"——留个 WARN 信号，别静默跳。
+    cur_n = _ce_episode_number(ep)
+    prev_n = _ce_episode_number(prev_ep)
+    if cur_n is not None and prev_n is not None and prev_n < cur_n - 1:
+        add(WARN, "跨集契约", cur_path,
+            f"跨集视觉契约对比跨过了缺失的中间集：本集（{ep}）只与 {prev_ep} 比对，"
+            f"第 {prev_n + 1}–{cur_n - 1} 集 的出图总览缺失、未参与逐集核对。"
+            "按集顺序补齐中间集总览后再核对跨集光位/轴线一致性。")
+    prev_path = os.path.join(root, _ce_overview_rel(prev_ep))
+    if not os.path.isfile(prev_path):
+        return  # 防御：prior_episode 已保证存在
+    try:
+        prev_text = open(prev_path, encoding="utf-8").read()
+        cur_text = open(cur_path, encoding="utf-8").read()
+    except OSError:
+        return
+    diff = _cross_episode_diff(prev_text, cur_text, _ce_scene_names(root), prev_ep=prev_ep, cur_ep=ep,
+                               core_scenes=_ce_core_scene_names(root))
+    for w in diff.get("warnings", []):
+        # P2b：核心主场景（asset_registry 显式标 core）跨集光位/轴线反转升 BLOCK；其余仍 WARN（启发式·人判）。
+        sev = BLOCK if w.get("level") == "block" else WARN
+        add(sev, "跨集光位轴线", f"{cur_path}（vs {prev_ep}）", w.get("note", ""),
+            return_to_stage="image", scene=w.get("scene", ""), kind=w.get("kind", ""),
+            rerun_scope="同地点跨集光位/轴线翻=越轴/光跳穿帮；确认是否有意（反打/换机位），否则回 n2d-image 对齐前集 00_总览 视觉契约。",
+            affected_artifacts=[cur_rel, _ce_overview_rel(prev_ep), "出图/共享/asset_registry.json"])
+
+def check_cross_episode_action_handoff(root: str, ep: str) -> None:
+    """跨集动作/几何接力：上一集已进入近距行动，下一集首镜不得重置成远景重新登场。
+
+    `beat_audit --series` 能发现冷开场有没有接住同一根叙事线，但它不看图像几何：上一集尾帧青面郎君
+    已在前景亮爪，下集首镜却让他“只作远景压迫”，语义仍算接住，画面却断了。这里用 storyboard 的
+    continuity + 生成证据补上这道付费前/出图后闸门。
+    """
+    cur_path = storyboard_path(root, ep)
+    cur_story = load_json(cur_path)
+    if not isinstance(cur_story, Mapping):
+        return
+    first = _first_storyboard_clip(cur_story)
+    if not isinstance(first, Mapping):
+        return
+    prev_ep = _previous_storyboard_episode(root, ep)
+    if not prev_ep:
+        return
+    prev_path = storyboard_path(root, prev_ep)
+    prev_story = load_json(prev_path)
+    if not isinstance(prev_story, Mapping):
+        return
+    prev_last = _last_storyboard_clip(prev_story)
+    if not isinstance(prev_last, Mapping):
+        return
+
+    first_text = _storyboard_clip_text(first)
+    prev_text = _storyboard_clip_text(prev_last)
+    first_cont = first.get("continuity") if isinstance(first.get("continuity"), Mapping) else {}
+    prev_cont = prev_last.get("continuity") if isinstance(prev_last.get("continuity"), Mapping) else {}
+    first_transition = str(first_cont.get("transition") or "")
+    immediate = bool(
+        ACTION_HANDOFF_IMMEDIATE_RE.search(first_text)
+        or str(first_transition).strip() in {"match_action_cut", "match action cut", "hard_cut", "hard cut", "impact_cut"}
+    )
+    prev_action = bool(
+        str(prev_last.get("template") or "") in ACTION_HANDOFF_TEMPLATES
+        or ACTION_HANDOFF_NEAR_ACTION_RE.search(prev_text)
+    )
+    first_action = bool(
+        str(first.get("template") or "") in ACTION_HANDOFF_TEMPLATES
+        or ACTION_HANDOFF_NEAR_ACTION_RE.search(first_text)
+    )
+    if not (immediate and prev_action and first_action):
+        return
+
+    prev_idx = _episode_clip_index(prev_story, prev_last)
+    prev_clip_id = _clip_id_for_index(prev_last, prev_idx)
+    prev_tail = _clip_frame_path(prev_last, prev_ep, prev_idx, "end")
+    handoff = _cross_episode_handoff_dict(first)
+    loc = f"{cur_path}:clips[0].continuity.cross_episode_handoff"
+    intentional_jump = _boolish(handoff.get("intentional_time_jump") or handoff.get("waive_reset"))
+    waiver = str(handoff.get("reset_waiver_reason") or handoff.get("waiver_reason") or "").strip()
+
+    if not handoff and not intentional_jump:
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            loc,
+            f"{prev_ep} 末镜 `{prev_clip_id}` 已进入动作/战斗近距状态，{ep} 首镜声明立即承接，但缺 "
+            "`continuity.cross_episode_handoff`。必须写 from_episode/from_clip/prev_tail_frame/handoff_type/"
+            "must_inherit/no_reset/source_frame_required，并让第5集首帧以第4集尾帧作为 source_frame 派生；"
+            "否则会把已开战画面重置成新的远景建制。",
+            return_to_stage="script_stage2",
+            rerun_scope="回 n2d-script 修首镜接力合同，再重跑 n2d-image prompt 和受影响首帧/锚帧。",
+            affected_artifacts=[cur_path, prev_path, prev_tail],
+            code="cross_episode_handoff_missing",
+        )
+        return
+
+    if intentional_jump and waiver:
+        add(
+            INFO,
+            ACTION_HANDOFF_DIM,
+            loc,
+            f"首镜声明跨集时间/空间跳切豁免：{waiver}",
+            return_to_stage="script_stage2",
+        )
+        return
+
+    missing = []
+    expected = {
+        "from_episode": prev_ep,
+        "from_clip": prev_clip_id,
+        "prev_tail_frame": prev_tail,
+    }
+    for key, expected_value in expected.items():
+        value = str(handoff.get(key) or "").strip()
+        if value != expected_value:
+            missing.append(f"{key}={expected_value}")
+    if not str(handoff.get("handoff_type") or "").strip():
+        missing.append("handoff_type")
+    must_inherit = handoff.get("must_inherit")
+    if not isinstance(must_inherit, list) or len([x for x in must_inherit if str(x).strip()]) < 3:
+        missing.append("must_inherit>=3")
+    no_reset = handoff.get("no_reset") or handoff.get("forbid_reset")
+    if not isinstance(no_reset, list) or not any(str(x).strip() for x in no_reset):
+        missing.append("no_reset")
+    if handoff.get("source_frame_required") is False:
+        missing.append("source_frame_required=true")
+    if missing:
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            loc,
+            "跨集动作接力字段不完整或未对准前集尾镜：" + "、".join(missing) +
+            "。下集首帧必须继承上一集尾帧的角色站位、距离、朝向、武器/爪势、光位和轴线。",
+            return_to_stage="script_stage2",
+            rerun_scope="补齐 cross_episode_handoff 后重跑 image_prompt / image_preflight。",
+            affected_artifacts=[cur_path, prev_path, prev_tail],
+            code="cross_episode_handoff_incomplete",
+        )
+
+    if not _path_exists_under_root(root, prev_tail):
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            prev_tail,
+            "跨集接力要求的前集尾帧不存在；先补前集尾帧，或明确改成非连续跳切并写 reset_waiver_reason。",
+            return_to_stage="image",
+            affected_artifacts=[prev_tail],
+            code="cross_episode_handoff_source_missing",
+        )
+
+    reset_match = _first_unguarded_reset_match(first_text)
+    if reset_match and not waiver:
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            loc,
+            f"首镜立即承接上一集动作，却出现重置远景/重新登场语义「{reset_match.group(0)}」。"
+            "这会让上一集已开战的青面郎君/狼妖群退回远处重新走位；应改成沿第4集尾帧爪势直接扑杀/拔刀接招，"
+            "或明确声明时间/空间跳切豁免。",
+            return_to_stage="script_stage2",
+            rerun_scope="修第5集首镜 start_state/entry_exit/shots/prompt，移除远景重置，再重出首帧及其派生锚帧。",
+            affected_artifacts=[cur_path, prev_path],
+            code="cross_episode_handoff_reset",
+        )
+
+    first_idx = _episode_clip_index(cur_story, first)
+    first_frame = _clip_frame_path(first, ep, first_idx, "first")
+    if _path_exists_under_root(root, first_frame) and not _latest_firstframe_bundle_has_source(root, ep, prev_tail):
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            first_frame,
+            f"首帧已落盘，但最近的 Codex reference bundle 未把 `{prev_tail}` 作为 source_frame。"
+            "这是纯参考/文字重抽，不是跨集几何接力；必须归档当前首帧和其 a1/a2/aK 派生帧，"
+            "用前集尾帧作为 source_frame 重出。",
+            return_to_stage="image",
+            rerun_scope="重出本集 Clip_01 首帧及所有由旧首帧派生的中段锚帧/尾帧。",
+            affected_artifacts=[first_frame, prev_tail, f"生产数据/codex_reference_bundles/{ep}/Clip_01.json"],
+            code="cross_episode_handoff_source_not_used",
+        )
+
+__all__ = [
+    'check_contract_inheritance',
+    'check_storyboard_image_contract_inheritance',
+    'check_asset_handoff_inheritance',
+    'check_reference_plan_applied',
+    'check_director_camera_plan_consumption',
+    'check_script_quality_contract',
+    'check_script_contract_consumption',
+    'check_storyboard_contract',
+    '_check_storyboard_adjacent_clip_distinctness',
+    'check_storyboard_visual_contract',
+    'check_storyboard_style_contract',
+    'check_storyboard_possession_gate',
+    'check_storyboard_special_templates',
+    'check_cross_episode_style',
+    'check_cross_episode_character_definition',
+    'check_cross_episode_contract',
+    'check_cross_episode_action_handoff',
+]

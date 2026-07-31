@@ -15,6 +15,6 @@
 ## 接入点
 
 - 机器真值：`skills/ad/references/运镜/manifest.json`
-- 视频阶段：`skills/ad-video/SKILL.md`
-- 视频路由：`skills/ad-video/scripts/route.py`
-- 视频 prompt：`skills/ad-video/scripts/plan_prompts.py`
+- 视频阶段：`skills/ad/ad-video/SKILL.md`
+- 视频路由：`skills/ad/ad-video/scripts/route.py`
+- 视频 prompt：`skills/ad/ad-video/scripts/plan_prompts.py`

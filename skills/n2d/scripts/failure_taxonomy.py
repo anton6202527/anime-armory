@@ -48,7 +48,7 @@ _CATEGORY_ACTIONS = {
         "owner": "编剧/故事编辑",
         "fix": "回到剧本改编、voiceover、伏笔/状态账本，先修动机、因果、台词、信息回报和集尾钩。",
         "rerun": [
-            "python3 skills/n2d-review/scripts/gate.py {root} {episode} review --json",
+            "python3 skills/n2d/n2d-review/scripts/gate.py {root} {episode} review --json",
             "python3 skills/n2d/scripts/failure_taxonomy.py {root} {episode} --json",
         ],
     },
@@ -56,15 +56,15 @@ _CATEGORY_ACTIONS = {
         "owner": "导演/分镜",
         "fix": "回到导演排戏包、轴线图、景别进程和 seam_mode 证据，先修可拍性与剪辑连续性。",
         "rerun": [
-            "python3 skills/n2d-script/scripts/director_blocking_pack.py {root} {episode} check --json",
-            "python3 skills/n2d-review/scripts/gate.py {root} {episode} image --json",
+            "python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py {root} {episode} check --json",
+            "python3 skills/n2d/n2d-review/scripts/gate.py {root} {episode} image --json",
         ],
     },
     "production_breakdown": {
         "owner": "制片主任/场记",
         "fix": "回到 production_breakdown、continuity_breakdown、ai_call_sheet、identity/asset registry 和 production_events。",
         "rerun": [
-            "python3 skills/n2d-script/scripts/production_breakdown.py {root} {episode} check --json",
+            "python3 skills/n2d/n2d-script/scripts/production_breakdown.py {root} {episode} check --json",
             "python3 skills/n2d/scripts/release_verdict.py {root} {episode} --json",
         ],
     },
@@ -72,15 +72,15 @@ _CATEGORY_ACTIONS = {
         "owner": "出图提示/美术资产",
         "fix": "回到参考包、定妆、场景 atlas、逐镜 prompt 和 image_qc，禁止只靠文字外貌描述补救。",
         "rerun": [
-            "python3 skills/n2d-image/scripts/image_qc.py {root} {episode} --prop-shape-report",
-            "python3 skills/n2d-review/scripts/gate.py {root} {episode} image --json",
+            "python3 skills/n2d/n2d-image/scripts/image_qc.py {root} {episode} --prop-shape-report",
+            "python3 skills/n2d/n2d-review/scripts/gate.py {root} {episode} image --json",
         ],
     },
     "backend": {
         "owner": "模型路由/后端适配",
         "fix": "回到模型路由、能力证据、seed/参考输入、口型/原生音画策略和失败降级方案。",
         "rerun": [
-            "python3 skills/n2d-model-router/scripts/router.py {root} {episode} --json",
+            "python3 skills/n2d/n2d-model-router/scripts/router.py {root} {episode} --json",
             "python3 skills/n2d/scripts/release_verdict.py {root} {episode} --json",
         ],
     },
@@ -88,8 +88,8 @@ _CATEGORY_ACTIONS = {
         "owner": "QC/验收",
         "fix": "重跑过期 QC、score、ledger、review-ui 和校准集，确认报告指纹对应当前产物。",
         "rerun": [
-            "python3 skills/n2d-review/scripts/consistency_ledger.py {root} {episode}",
-            "python3 skills/n2d-review-ui/scripts/review_ui.py {root} {episode} --write --export-findings --markdown",
+            "python3 skills/n2d/n2d-review/scripts/consistency_ledger.py {root} {episode}",
+            "python3 skills/n2d/n2d-review-ui/scripts/review_ui.py {root} {episode} --write --export-findings --markdown",
             "python3 skills/n2d/scripts/release_verdict.py {root} {episode} --json",
         ],
     },

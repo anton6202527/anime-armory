@@ -277,7 +277,7 @@ def main():
                 results["blockers"].append(
                     f"Wiki: {wiki_status['reason']}（滞后 {lag} 章 ≥ 阈值；"
                     "动态百科是 review/score 的一致性引擎，先跑 "
-                    "python3 skills/novel-wiki/scripts/wiki_builder.py 再审）"
+                    "python3 skills/novel/novel-wiki/scripts/wiki_builder.py 再审）"
                 )
             else:
                 results["warnings"].append(f"Wiki: {wiki_status['reason']}（滞后 {lag} 章，未达阻断阈值）")

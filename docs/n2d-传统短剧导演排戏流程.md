@@ -49,10 +49,10 @@
 
 n2d 已有基础：
 
-- `skills/n2d-script/references/分镜语法.md`：景别、轴线、30 度规则、视线方向、转场、运镜克制。
+- `skills/n2d/n2d-script/references/分镜语法.md`：景别、轴线、30 度规则、视线方向、转场、运镜克制。
 - `skills/n2d/references/导演节奏.md`：黄金 3 秒、前 15 秒立钩、中段钩子、集尾 cliffhanger。
-- `skills/n2d-script/scripts/director_camera_plan.py`：storyboard 定稿后生成运镜建议和 prompt 注入。
-- `skills/n2d-script/scripts/shot_grammar_audit.py`：审查连续同景别、缺定场、爆点不近景、转场单调等问题。
+- `skills/n2d/n2d-script/scripts/director_camera_plan.py`：storyboard 定稿后生成运镜建议和 prompt 注入。
+- `skills/n2d/n2d-script/scripts/shot_grammar_audit.py`：审查连续同景别、缺定场、爆点不近景、转场单调等问题。
 - `n2d-review` gate 已有导演一致性、轴线视线、运镜消费收据等后置审查。
 
 主要缺口：
@@ -79,8 +79,8 @@ P-2 放在 Stage 1 台词之后、Stage 2 分镜之前：
 脚本：
 
 ```bash
-python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
-python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
+python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
+python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
 ```
 
 必填文件：
@@ -113,8 +113,8 @@ P-2 导演排戏包
 脚本：
 
 ```bash
-python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
-python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
+python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
+python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
 ```
 
 必填文件：

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import json
 import sys
-sys.path.insert(0, str(Path('skills/n2d-review/scripts').resolve()))
+sys.path.insert(0, str(Path('skills/n2d/n2d-review/scripts').resolve()))
 import production_consistency as pc
 import test_identity_eval_pack as tip
 

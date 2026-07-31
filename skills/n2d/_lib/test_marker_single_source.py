@@ -30,8 +30,8 @@ CANONICAL_NAMES = (
     "MULTI_SUBJECT_ACCEPTING_MARKERS",
 )
 
-# skills/ 根（本文件在 skills/n2d/_lib/）
-_SKILLS_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# n2d 系列根（本文件在 skills/n2d/_lib/）
+_SKILLS_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CONSUMER_FILES = (
     os.path.join(_SKILLS_ROOT, "n2d-image", "scripts", "image_qc.py"),
     os.path.join(_SKILLS_ROOT, "n2d-image", "scripts", "face_drift_risk.py"),

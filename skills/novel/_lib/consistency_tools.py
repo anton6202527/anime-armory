@@ -9,7 +9,7 @@ from contextlib import contextmanager
 
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_SKILLS = os.path.abspath(os.path.join(_HERE, ".."))
 
 
 @contextmanager

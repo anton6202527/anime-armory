@@ -14,8 +14,8 @@ import hashlib
 from datetime import date
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
-_COMMON = os.path.join(_SKILLS, "novel", "_lib")
+_SKILLS = os.path.abspath(os.path.join(_HERE, ".."))
+_COMMON = os.path.join(_SKILLS, "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import load_project_settings  # noqa: E402

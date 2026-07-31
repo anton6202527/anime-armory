@@ -95,10 +95,13 @@ GATE_ONLY_TOKENS = (
 
 
 def skill_name_for_rel(rel_path: str) -> Optional[str]:
-    """skills/<name>/... → <name>。"""
+    """Resolve a skill name from the nested layout or a legacy flat snapshot."""
     parts = str(rel_path).replace(os.sep, "/").split("/")
     if len(parts) >= 2 and parts[0] == "skills":
-        return parts[1]
+        line = parts[1]
+        if len(parts) >= 3 and parts[2].startswith(f"{line}-"):
+            return parts[2]
+        return line
     return None
 
 
@@ -181,23 +184,23 @@ def load_baseline(root: str) -> Optional[Dict[str, Any]]:
     return data if isinstance(data, dict) else None
 
 
-def _scoped(files: Dict[str, Any], prefixes: tuple) -> Dict[str, Any]:
+def _scoped(files: Dict[str, Any], relevant_skills: set[str]) -> Dict[str, Any]:
     return {
         k: v
         for k, v in files.items()
-        if str(k).startswith(prefixes) and not is_test_path(k)
+        if skill_name_for_rel(k) in relevant_skills and not is_test_path(k)
     }
 
 
 def scoped_changed(
     baseline: Dict[str, Any], new: Dict[str, Any], relevant_skills: Iterable[str]
 ) -> List[str]:
-    """只在相关 skill 前缀的交集内 diff 内容快照（范围差异不算变更）。"""
-    prefixes = tuple(f"skills/{s}/" for s in sorted(set(relevant_skills)))
-    if not prefixes:
+    """只在相关 skill 的交集内 diff 内容快照（范围差异不算变更）。"""
+    relevant = set(relevant_skills)
+    if not relevant:
         return []
-    before = _scoped(baseline.get("files") or {}, prefixes)
-    after = _scoped(new.get("files") or {}, prefixes)
+    before = _scoped(baseline.get("files") or {}, relevant)
+    after = _scoped(new.get("files") or {}, relevant)
     return changed_files_since({"files": before}, {"files": after})
 
 

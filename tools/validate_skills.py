@@ -11,7 +11,7 @@
   - N1  novel runtime 不得裸 import contract：避免 shim 被 sys.path 顺序误解析。
   - N2  novel 易变市场断言必须绑定 market baseline / research sources。
   - T1  测试文件不得硬编码引用真实 `创作区/**` 作品路径；需要样例应使用 tmp_path 或 tests/fixtures。
-  - F1  改了 skill 集合必须同步 skills/README.md 索引：每个 skills/<name>/ 都要在 README 出现。
+  - F1  改了 skill 集合必须同步 skills/README.md 索引：每个系列入口与嵌套子 skill 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
   - F7  系列规模统计同步：skills/README.md 与六个总领 skill 第一行统计不得过期。
 
@@ -51,7 +51,7 @@ GIT_RE = re.compile(
     r"stash|init|branch|tag|ls-files|describe|reset|restore)\b"
 )
 
-# B2: 斜杠命令式引用 /n2d-image —— slash 前不接 word/./- 以排除路径(skills/n2d-image)。
+# B2: 斜杠命令式引用 /n2d-image —— slash 前不接 word/./- 以排除路径(skills/n2d/n2d-image)。
 SLASH_RE = re.compile(
     r"(?<![\w./-])/(?:" + "|".join(LINE_PREFIXES) + r")(?:-[a-z]+)*\b"
 )
@@ -90,8 +90,8 @@ ENTRY_FORBIDDEN = {
 }
 
 NOVEL_MARKET_ALLOWED_FILES = {
-    "novel-score/references/market-claims.md",
-    "novel-score/scripts/collect_market_baseline.py",
+    "novel/novel-score/references/market-claims.md",
+    "novel/novel-score/scripts/collect_market_baseline.py",
 }
 NOVEL_MARKET_ALLOWED_PATH_PARTS = (
     "/test_",
@@ -144,7 +144,7 @@ B7_REQUIRED_SNIPPETS = {
         "不得生成 Clip 分镜图",
         "enforce_shared_first_interlock",
     ),
-    "skills/n2d-image/SKILL.md": (
+    "skills/n2d/n2d-image/SKILL.md": (
         "角色定妆基础包铁律（分档生产",
         "Clip 图前分档资产基础包铁律",
         "core_full",
@@ -163,31 +163,31 @@ B7_REQUIRED_SNIPPETS = {
         "共享库先行顺序不可被",
         "enforce_shared_first_interlock",
     ),
-    "skills/n2d-image/references/prompt_format.md": (
+    "skills/n2d/n2d-image/references/prompt_format.md": (
         "Clip 图前分档资产基础包铁律",
         "library_tier",
         "不得进入 `出图/第N集/图片/` 分镜生成",
         "`asset_registry` ID",
         "`weapon_profile`",
     ),
-    "skills/n2d-image/references/角色一致性checklist.md": (
+    "skills/n2d/n2d-image/references/角色一致性checklist.md": (
         "Clip 图前分档资产基础包",
         "named_minimal",
         "不许先生成 `Clip_*` / `镜头*` 分镜 PNG",
     ),
-    "skills/n2d-image/QUICKSTART.md": (
+    "skills/n2d/n2d-image/QUICKSTART.md": (
         "Shared reference assets must satisfy each character's `library_tier` plus the actual shot needs",
         "named_minimal",
         "shared-first order is non-waivable",
         "post-generation self-check",
         "preflight block",
     ),
-    "skills/n2d-image/scripts/derive_makeup_pack.py": (
+    "skills/n2d/n2d-image/scripts/derive_makeup_pack.py": (
         "turnaround_split",
         "front_crop",
         "source_sha256",
     ),
-    "skills/n2d-image/scripts/codex_image_runner.py": (
+    "skills/n2d/n2d-image/scripts/codex_image_runner.py": (
         "requires_human_review_before_ready",
         "review_pending",
         "N2D_HUMAN_REVIEWED_SHARED",
@@ -195,20 +195,20 @@ B7_REQUIRED_SNIPPETS = {
         "enforce_shared_first_interlock",
         "cannot bypass shared-first",
     ),
-    "skills/n2d-image/scripts/dreamina_image_runner.py": (
+    "skills/n2d/n2d-image/scripts/dreamina_image_runner.py": (
         "enforce_shared_first_interlock",
         "--skip-preflight",
     ),
-    "skills/n2d-image/scripts/test_codex_image_runner.py": (
+    "skills/n2d/n2d-image/scripts/test_codex_image_runner.py": (
         "test_shared_first_interlock_blocks_incomplete_character_pack",
         "test_main_skip_preflight_cannot_bypass_shared_first_interlock",
     ),
-    "skills/n2d-image/scripts/test_derive_makeup_pack.py": (
+    "skills/n2d/n2d-image/scripts/test_derive_makeup_pack.py": (
         "test_derive_project_splits_turnaround_and_front_crops",
         "turnaround_split",
         "front_crop",
     ),
-    "skills/n2d-review/scripts/gate.py": (
+    "skills/n2d/n2d-review/scripts/gate.py": (
         "REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS",
         "REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS",
         "_required_character_makeup_views",
@@ -220,7 +220,7 @@ B7_REQUIRED_SNIPPETS = {
         "derivation.method/source_path/source_sha256/crop_box",
         "三视图人审拼版不能替代正/45°/侧/背等拆分参考",
     ),
-    "skills/n2d-review/scripts/test_gate.py": (
+    "skills/n2d/n2d-review/scripts/test_gate.py": (
         "test_identity_registry_missing_three_quarter_is_blocked",
         "test_identity_registry_planned_makeup_reference_is_blocked",
         "test_identity_registry_ready_split_reference_requires_same_source_derivation",
@@ -260,7 +260,7 @@ B9_REQUIRED_SNIPPETS = {
         "no_persistent_subject_id",
         "multi_image_flags",
     ),
-    "skills/n2d-image/scripts/codex_image_runner.py": (
+    "skills/n2d/n2d-image/scripts/codex_image_runner.py": (
         "n2d_codex_reference_bundle",
         "true_image_reference_support",
         "reference_input_mode",
@@ -269,7 +269,7 @@ B9_REQUIRED_SNIPPETS = {
         "cli_image_input_count",
         "missing_ready_refs",
     ),
-    "skills/n2d-image/scripts/face_drift_risk.py": (
+    "skills/n2d/n2d-image/scripts/face_drift_risk.py": (
         "PROJECT_MEMORY_BACKENDS",
         "backend_can_use_project_memory",
         "project_memory_mitigation",
@@ -279,7 +279,7 @@ B9_REQUIRED_SNIPPETS = {
         "missing_ready_refs",
         "当前后端仍无持久主体 ID，但不再因这一点自动阻断",
     ),
-    "skills/n2d-image/scripts/test_face_drift_risk.py": (
+    "skills/n2d/n2d-image/scripts/test_face_drift_risk.py": (
         "test_analyze_core_high_risk_project_memory_mitigates_predicted_block",
         "project_memory_reference_bundle",
         "split_composite_required",
@@ -327,15 +327,30 @@ def check_bare_skill_refs() -> list[str]:
 
 
 def check_readme_index() -> list[str]:
-    """F1: 每个 skills/<name>/SKILL.md 的 name 必须在 README 以 `name` 形式出现。"""
+    """F1: every dispatcher/nested skill must match its folder and appear in README."""
     text = README.read_text("utf-8", "ignore")
     bad: list[str] = []
-    for d in sorted(SKILLS.iterdir()):
-        if not (d / "SKILL.md").is_file():
+    for skill_md in sorted(SKILLS.rglob("SKILL.md")):
+        d = skill_md.parent
+        rel_dir = d.relative_to(SKILLS)
+        if len(rel_dir.parts) not in (1, 2):
+            bad.append(f"{_rel(skill_md)}: skill 只能位于 skills/<line>/ 或 skills/<line>/<name>/（F1）")
             continue
+        if rel_dir.parts[0] not in update_skill_stats.SERIES:
+            bad.append(f"{_rel(skill_md)}: 顶层目录不是已登记系列（F1）")
+            continue
+
         name = d.name
+        frontmatter = skill_md.read_text("utf-8", "ignore").split("---", 2)
+        name_match = re.search(r"(?m)^name:\s*([^\s#]+)\s*$", frontmatter[1] if len(frontmatter) > 2 else "")
+        declared_name = name_match.group(1).strip("'\"") if name_match else ""
+        if declared_name != name:
+            bad.append(
+                f"{_rel(skill_md)}: frontmatter name={declared_name or '<missing>'!r} "
+                f"与目录名 {name!r} 不一致（F1）"
+            )
         if f"`{name}`" not in text and f"`{name}/" not in text:
-            bad.append(f"skills/{name}/ 未在 skills/README.md 索引中登记（F1）")
+            bad.append(f"{rel_dir.as_posix()}/ 未在 skills/README.md 索引中登记（F1）")
     return bad
 
 
@@ -446,9 +461,8 @@ def check_novel_market_claims() -> list[str]:
     dedicated collector and policy doc are allowed to describe the rule itself.
     """
     bad: list[str] = []
-    for root in sorted(SKILLS.glob("novel*")):
-        if not root.is_dir():
-            continue
+    root = SKILLS / "novel"
+    if root.is_dir():
         for p in root.rglob("*"):
             if p.suffix not in (".md", ".py") or not p.is_file():
                 continue

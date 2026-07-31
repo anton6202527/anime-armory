@@ -27,12 +27,12 @@ if [[ -z "$RANGE" ]]; then
   exit 2
 fi
 
-python3 "$REPO_DIR/skills/n2d-identity/scripts/identity.py" "$ROOT" --write
-python3 "$REPO_DIR/skills/n2d-model-router/scripts/router.py" "$ROOT" "$EP" --write
-python3 "$REPO_DIR/skills/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage video
+python3 "$REPO_DIR/skills/n2d/n2d-identity/scripts/identity.py" "$ROOT" --write
+python3 "$REPO_DIR/skills/n2d/n2d-model-router/scripts/router.py" "$ROOT" "$EP" --write
+python3 "$REPO_DIR/skills/n2d/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage video
 
 MANIFEST="$(
-  python3 "$REPO_DIR/skills/n2d-video/scripts/video_runner.py" prepare "$ROOT" "$EP" \
+  python3 "$REPO_DIR/skills/n2d/n2d-video/scripts/video_runner.py" prepare "$ROOT" "$EP" \
     --range "$RANGE" \
     --backend "$BACKEND" \
     --resolution "$RESOLUTION" \
@@ -54,7 +54,7 @@ data = json.loads(Path(manifest).read_text(encoding="utf-8"))
 for item in data.get("items", []):
     subprocess.run([
         sys.executable,
-        str(Path(repo_dir) / "skills/n2d-video/scripts/video_runner.py"),
+        str(Path(repo_dir) / "skills/n2d/n2d-video/scripts/video_runner.py"),
         "submit",
         root,
         manifest,
@@ -63,7 +63,7 @@ for item in data.get("items", []):
     ], check=True)
 PY
 elif [[ -n "${N2D_VIDEO_SUBMIT_ONE:-}" ]]; then
-  python3 "$REPO_DIR/skills/n2d-video/scripts/video_runner.py" submit "$ROOT" "$MANIFEST" --clip "$N2D_VIDEO_SUBMIT_ONE"
+  python3 "$REPO_DIR/skills/n2d/n2d-video/scripts/video_runner.py" submit "$ROOT" "$MANIFEST" --clip "$N2D_VIDEO_SUBMIT_ONE"
 else
   echo "Prepared only. Set N2D_VIDEO_AUTO_SUBMIT=1 or N2D_VIDEO_SUBMIT_ONE=Clip_XX to spend credits."
 fi

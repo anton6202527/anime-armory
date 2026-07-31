@@ -5,7 +5,7 @@
 单一定义源：爽点 / 冲突 / 钩子 / 情感 / 信息（套路）关键词都在这里定义一次，
 novel-balance / novel-simulate / novel-promote 共同 import，避免逐脚本复制后漂移。
 
-口径说明见 `skills/novel-balance/references/heatmap-method.md`（pacing 确定性信号），
+口径说明见 `skills/novel/novel-balance/references/heatmap-method.md`（pacing 确定性信号），
 本模块是其代码侧的落地：referencE 文档讲口径，本文件是被三个脚本共用的实际词表。
 
 附带一个轻量的「目标平台 → 评判档」分类器 `classify_platform`，让 balance/simulate/promote

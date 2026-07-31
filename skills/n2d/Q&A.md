@@ -910,7 +910,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 1. 从作品内 `角色库/`、`identity_registry.json` 或 `asset_registry.json` 选择稳定、审过、授权清楚的资产。
 2. 用 `n2d-asset-market` 显式 export 到 `创作区/制漫剧/_资产库/<type>/<slug>/`；不要自动把生产废稿全部外溢。
-3. 运行 `python3 skills/n2d-asset-market/scripts/market.py verify-pack <包目录>`，确认文件不越出包目录、全部存在、SHA256 一致且不依赖源系列库。
+3. 运行 `python3 skills/n2d/n2d-asset-market/scripts/market.py verify-pack <包目录>`，确认文件不越出包目录、全部存在、SHA256 一致且不依赖源系列库。
 4. 同系列新作品用 import fork；角色默认重置 Character ID / Face Lock / LoRA ready / voice id，再重建 adapter 与 QC。
 5. 跨系列/仓库/机器只交付这个包。目标侧读取通用字段与文件，显式适配或忽略 n2d 专用 registry fragment；不得把 n2d 与 novel 建成自动数据耦合。
 
@@ -929,7 +929,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 5. gate 分开检查完整合同与提交 prompt：合同缺项仍 BLOCK；提交 prompt 缺主动作/运镜、后端/模式/音频不匹配才 BLOCK，长度偏长只 WARN。
 6. compiler v2 还编译 `frame_strategy` 与 `story_span/edit_target/backend_request` 三套时钟；缺边界图、需改路由或请求时长不足未拆段时，在付费前 BLOCK。
 
-规范、官方来源、schema 和 profile 详见 `skills/n2d-video/references/行业通用视频Prompt规范.md`。
+规范、官方来源、schema 和 profile 详见 `skills/n2d/n2d-video/references/行业通用视频Prompt规范.md`。
 
 ---
 

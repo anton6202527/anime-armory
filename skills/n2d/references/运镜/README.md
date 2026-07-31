@@ -59,5 +59,5 @@ python3 skills/n2d/scripts/camera_reference.py self-check
 - 机器真值：`skills/n2d/references/运镜/manifest.json`。
 - 活词典：`skills/n2d/_lib/n2d_const.py` 的 `CAMERA_MOVE_LEXICON`，启动时从 manifest 合并别名、新词条和媒体引用。
 - 归一化：`skills/n2d/_lib/n2d_logic.py::normalize_camera_move()`。
-- sidecar：`skills/n2d-script/scripts/director_camera_plan.py`。
-- 视频 prompt 包：`skills/n2d-video/scripts/prompt_pack.py`。
+- sidecar：`skills/n2d/n2d-script/scripts/director_camera_plan.py`。
+- 视频 prompt 包：`skills/n2d/n2d-video/scripts/prompt_pack.py`。

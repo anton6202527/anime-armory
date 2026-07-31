@@ -1,0 +1,1165 @@
+#!/usr/bin/env python3
+"""Identity closure reports for n2d.
+
+Outputs:
+  生产数据/identity_adapter_matrix.{json,md}
+  生产数据/identity_drift_report.{json,md}
+
+The script is intentionally mostly standard-library.  If insightface/cv2 are
+available, it reuses n2d-review face_consistency for cross-episode metrics; if
+not, it still produces the adapter matrix and an explicit skipped drift report.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import glob
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import sys
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源（与 gate / n2d-lora 共用）
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+    IDENTITY_ADAPTER_FALLBACK_STATUSES,
+    IDENTITY_ADAPTER_IN_PROGRESS_STATUSES,
+    IDENTITY_ADAPTER_KNOWN_STATUSES,
+    IDENTITY_ADAPTER_MATRIX_KIND,
+    IDENTITY_ADAPTER_PASSIVE_STATUSES,
+    IDENTITY_ADAPTER_READY_STATUSES,
+    IDENTITY_DRIFT_REPORT_KIND,
+    IDENTITY_HANDLE_FIELDS,
+    IDENTITY_IMAGE_ADAPTERS,
+    IDENTITY_REFERENCE_KEYS,
+    IDENTITY_REGISTRY_KIND,
+    IDENTITY_VIDEO_ADAPTERS,
+    identity_allowed_modes,
+    character_library_tier_for_record,
+    identity_registry_path,
+    lora_registry_ready_blocks,
+    required_character_reference_group_fields,
+)
+from n2d_route import episode_number as route_episode_number, normalize_episode as route_normalize_episode  # noqa: E402
+from n2d_registry import episode_png_fingerprint  # noqa: E402  内容级新鲜度指纹（与 gate 共用单一真值源）
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import voice_consistency  # noqa: E402  同目录：音色跨集漂移对账（--write 时顺带跑）
+import voice_print_consistency  # noqa: E402  同目录：声纹机检（speaker embedding，量真实音色相似度）
+
+
+REGISTRY_KIND = IDENTITY_REGISTRY_KIND
+MATRIX_KIND = IDENTITY_ADAPTER_MATRIX_KIND
+DRIFT_KIND = IDENTITY_DRIFT_REPORT_KIND
+VERSION = 1
+
+# adapter status 集合：契约单一真值源的本地别名（行为与历史一致，勿在此扩状态——去契约改）
+READY_STATUSES = IDENTITY_ADAPTER_READY_STATUSES
+FALLBACK_STATUSES = IDENTITY_ADAPTER_FALLBACK_STATUSES
+PASSIVE_STATUSES = IDENTITY_ADAPTER_PASSIVE_STATUSES
+IN_PROGRESS_STATUSES = IDENTITY_ADAPTER_IN_PROGRESS_STATUSES
+KNOWN_STATUSES = IDENTITY_ADAPTER_KNOWN_STATUSES
+# LoRA 升档判定：status 已在这些值时不再建议升档（ready=已上 LoRA；training=已在路上）
+LORA_UPGRADE_EXEMPT_STATUSES = frozenset({"ready", "training"})
+# 主动升档阈值：核心长线角色跨 ≥ 这么多集 × 无原生主体锁 → 在烧穿多集积分前就建议升档（不等漂移坐实）
+PROACTIVE_EPISODE_THRESHOLD = 3
+# 复现间隔阈值：角色相邻两次出场之间缺席 ≥ 这么多集 = 长间隔再登场（EntityBench 2026：一致性随复现间隔急剧衰退）
+RECURRENCE_GAP_THRESHOLD = 2
+HANDLE_FIELDS = IDENTITY_HANDLE_FIELDS
+REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
+PARTIAL_REFERENCE_FIELDS = ("silhouette", "outfit")
+
+# 后端→允许 mode 表从契约派生（与 gate 校验、market 重置同源）
+ALLOWED_IMAGE_MODES = identity_allowed_modes(IDENTITY_IMAGE_ADAPTERS)
+ALLOWED_VIDEO_MODES = identity_allowed_modes(IDENTITY_VIDEO_ADAPTERS)
+
+
+def now_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+
+
+def load_json(path: Path) -> Any:
+    if not path.is_file():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def atomic_write_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
+_GENERATED_AT_MD_RE = re.compile(r"generated_at[:：].*")
+
+
+def _semantic_text(suffix: str, text: str) -> str:
+    """比较用归一：剔除 generated_at 时间戳噪声，其余内容逐字比较。"""
+    if suffix == ".json":
+        try:
+            data = json.loads(text)
+        except Exception:
+            return text
+
+        def scrub(obj: Any) -> Any:
+            if isinstance(obj, dict):
+                return {k: scrub(v) for k, v in obj.items() if k != "generated_at"}
+            if isinstance(obj, list):
+                return [scrub(v) for v in obj]
+            return obj
+
+        return json.dumps(scrub(data), ensure_ascii=False, sort_keys=True)
+    return _GENERATED_AT_MD_RE.sub("generated_at: <scrubbed>", text)
+
+
+def write_report_if_changed(path: Path, text: str) -> bool:
+    """write-if-semantically-changed：除 generated_at 外内容一致就不重写（保留旧文件与旧时间戳）。
+
+    run.py 每轮 next 都自动刷新 identity 报表；无脑重写会把 prework 输入指纹每轮打脏，
+    缓存命中率归零（G12）。语义没变就不动盘——「输出被删必须重跑」语义不受影响，
+    PreworkCache 的 sidecar 存在性检查仍然生效。返回是否真的写盘。
+    """
+    if path.is_file():
+        try:
+            old = path.read_text(encoding="utf-8")
+        except OSError:
+            old = None
+        if old is not None and _semantic_text(path.suffix, old) == _semantic_text(path.suffix, text):
+            return False
+    atomic_write_text(path, text)
+    return True
+
+
+def registry_path(root: Path) -> Path:
+    return Path(identity_registry_path(str(root)))
+
+
+def load_registry(root: Path) -> Dict[str, Any]:
+    data = load_json(registry_path(root))
+    if not isinstance(data, dict):
+        return {
+            "kind": REGISTRY_KIND,
+            "version": VERSION,
+            "characters": [],
+            "available": False,
+            "missing_registry": str(registry_path(root)),
+        }
+    return data
+
+
+def handle_value(cfg: Mapping[str, Any]) -> str:
+    for key in HANDLE_FIELDS:
+        value = str(cfg.get(key, "")).strip()
+        if value:
+            return value
+    return ""
+
+
+def path_exists(root: Path, rel: str) -> bool:
+    if not rel:
+        return False
+    p = Path(rel)
+    return p.exists() if p.is_absolute() else (root / p).exists()
+
+
+def resolve_path(root: Path, rel: str) -> Path:
+    p = Path(rel)
+    return p if p.is_absolute() else root / p
+
+
+def reference_item_path(item: Any) -> str:
+    """Return a reference path from legacy string or structured {path, status} item."""
+    if isinstance(item, str):
+        return item.strip()
+    if isinstance(item, Mapping):
+        return str(item.get("path", "")).strip()
+    return ""
+
+
+def reference_group_status(root: Path, reference_group: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
+    out: Dict[str, Dict[str, Any]] = {}
+    keys: List[str] = list(REFERENCE_FIELDS)
+    for key in reference_group:
+        if key not in keys:
+            keys.append(str(key))
+    for key in keys:
+        item = reference_group.get(key, "")
+        rel = reference_item_path(item)
+        declared_status = str(item.get("status") or "").strip() if isinstance(item, Mapping) else "legacy"
+        usable = not isinstance(item, Mapping) or declared_status in {"ready", "registered"}
+        out[key] = {
+            "path": rel,
+            "status": declared_status,
+            "exists": bool(usable and path_exists(root, rel)),
+        }
+    extras = {k: v for k, v in reference_group.items() if k not in REFERENCE_FIELDS}
+    if extras:
+        out["_extra"] = {"value": extras, "exists": True}
+    return out
+
+
+def form_is_restricted_partial(form: Mapping[str, Any]) -> bool:
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    return bool(
+        form.get("restricted_partial")
+        or form.get("no_full_face")
+        or atlas.get("no_full_face")
+        or str(atlas.get("build_tier") or "") == "restricted_partial"
+    )
+
+
+def character_form_library_tier(char: Mapping[str, Any], form: Mapping[str, Any]) -> str:
+    combined = dict(char)
+    for key in (
+        "library_tier",
+        "tier",
+        "face_policy",
+        "restricted_partial",
+        "restricted_partial_contract",
+        "planned_episode_count",
+        "episode_count",
+    ):
+        if key in form:
+            combined[key] = form.get(key)
+    return character_library_tier_for_record(combined)
+
+
+def reference_fields_for_form(
+    form: Mapping[str, Any],
+    char: Optional[Mapping[str, Any]] = None,
+) -> tuple[str, ...]:
+    """Use the canonical B7 tier contract; partial keeps its silhouette pack."""
+    if char is None:
+        return PARTIAL_REFERENCE_FIELDS if form_is_restricted_partial(form) else tuple(REFERENCE_FIELDS)
+    tier = character_form_library_tier(char, form)
+    if tier == CHARACTER_LIBRARY_TIER_PARTIAL:
+        return PARTIAL_REFERENCE_FIELDS
+    return tuple(required_character_reference_group_fields(tier))
+
+
+def reference_group_ready(ref_status: Mapping[str, Mapping[str, Any]], required_fields: Optional[Sequence[str]] = None) -> bool:
+    fields = tuple(required_fields or REFERENCE_FIELDS)
+    return all(bool(ref_status.get(k, {}).get("exists")) for k in fields)
+
+
+# reference_group 兜底（含 unregistered/in-progress 时的 "fallback_reference_group"）不是原生主体锁。
+# 统计/建议「原生就绪」时这两个串都要排掉——只判 != "reference_group" 会漏掉 "fallback_reference_group"，
+# 把仅靠参考图兜底的形态谎报成已有 Character ID/Face Lock，给跨集一致性虚假信心。
+NON_NATIVE_BINDINGS = frozenset({"reference_group", "fallback_reference_group"})
+IMAGE2IMAGE_REFERENCE_LOCK_MODES = frozenset(
+    {
+        "image2image_reference_chain",
+        "controlled_multiref_generation",
+        "project_memory_reference_bundle",
+        "true_image_reference_chain",
+    }
+)
+
+
+def binding_is_native_ready(binding: Mapping[str, Any]) -> bool:
+    """该 adapter binding 是否「原生主体已就绪」：ready 且 binding 不是 reference_group 兜底。纯函数·可测。"""
+    return bool(binding.get("ready")) and str(binding.get("binding", "")) not in NON_NATIVE_BINDINGS
+
+
+def allowed_modes(stage: str, backend: str) -> Optional[set[str]]:
+    table = ALLOWED_IMAGE_MODES if stage == "image" else ALLOWED_VIDEO_MODES
+    return table.get(backend)
+
+
+def image2image_reference_lock_ready(cfg: Mapping[str, Any]) -> bool:
+    """image2image/多图参考链用真实图片输入和完整 QC 作为 ready 证据，不强求持久 handle。"""
+    status = str(cfg.get("status") or "").strip()
+    mode = str(cfg.get("mode") or cfg.get("method") or "").strip()
+    if status not in READY_STATUSES or mode not in IMAGE2IMAGE_REFERENCE_LOCK_MODES:
+        return False
+    actual_refs = (
+        cfg.get("actual_image_input_required") is True
+        or cfg.get("reference_manifest_required") is True
+        or bool(str(cfg.get("reference_input_mode") or "").strip())
+    )
+    full_qc = (
+        cfg.get("full_qc_required") is True
+        or str(cfg.get("qc_policy") or "").strip().lower() in {"full", "full_image_qc", "full_qc"}
+    )
+    return actual_refs and full_qc
+
+
+def adapter_binding(
+    *,
+    stage: str,
+    backend: str,
+    cfg: Mapping[str, Any],
+    ref_ready: bool,
+) -> Dict[str, Any]:
+    mode = str(cfg.get("mode", "")).strip()
+    status = str(cfg.get("status", "")).strip()
+    handle = handle_value(cfg)
+    allowed = allowed_modes(stage, backend)
+    gaps: List[str] = []
+    recommendations: List[str] = []
+    binding = "none"
+    ready = False
+    needs_action = ""
+
+    if not mode:
+        gaps.append("missing_mode")
+    if not status:
+        gaps.append("missing_status")
+    elif status not in KNOWN_STATUSES:
+        gaps.append(f"unknown_status:{status}")
+    if allowed is not None and mode and mode not in allowed:
+        gaps.append(f"invalid_mode:{backend}.{mode}")
+    if status in READY_STATUSES:
+        if handle:
+            binding = mode
+            ready = True
+        elif stage == "image" and image2image_reference_lock_ready(cfg):
+            binding = mode
+            ready = True
+        else:
+            gaps.append("ready_without_handle")
+            binding = "fallback_reference_group"
+            ready = ref_ready
+            needs_action = f"fill_{mode}_handle"
+    elif status in FALLBACK_STATUSES:
+        binding = "fallback_reference_group" if status == "unregistered" else "reference_group"
+        ready = ref_ready
+        if not ref_ready:
+            gaps.append("reference_group_assets_missing")
+    elif status in IN_PROGRESS_STATUSES:
+        binding = "fallback_reference_group"
+        ready = ref_ready
+        needs_action = f"register_{mode or backend}"
+        recommendations.append(f"{backend}: register {mode or 'identity adapter'} for high-risk/core shots")
+    elif status in PASSIVE_STATUSES:
+        binding = "unsupported" if status == "unsupported" else "not_needed"
+        ready = False
+
+    out = {
+        "mode": mode,
+        "status": status,
+        "ready": ready,
+        "binding": binding,
+        "handle": handle,
+        "needs_action": needs_action,
+        "gaps": gaps,
+        "recommendations": recommendations,
+    }
+    return out
+
+
+def lora_binding(root: Path, cfg: Mapping[str, Any]) -> Dict[str, Any]:
+    status = str(cfg.get("status", "")).strip()
+    gaps: List[str] = []
+    ready = False
+    if not status:
+        gaps.append("missing_status")
+    elif status not in KNOWN_STATUSES:
+        gaps.append(f"unknown_status:{status}")
+    if status == "ready":
+        # ready 缺口判定收口到契约（与 n2d-lora register / review gate 三方同源）；
+        # 本地只补磁盘层检查：model_path 文件是否真实存在（契约层不碰文件系统）。
+        validation_report = str(cfg.get("validation_report", "")).strip()
+        report: Optional[Mapping[str, Any]] = None
+        if validation_report:
+            loaded = load_json(resolve_path(root, validation_report))
+            report = loaded if isinstance(loaded, Mapping) else None
+        gaps.extend(lora_registry_ready_blocks(cfg, report))
+        model_path = str(cfg.get("model_path", "")).strip()
+        if model_path and not path_exists(root, model_path):
+            gaps.append("ready_model_path_missing")
+        ready = not gaps
+    return {
+        "status": status,
+        "ready": ready,
+        "base_model": str(cfg.get("base_model", "")).strip(),
+        "model_path": str(cfg.get("model_path", "")).strip(),
+        "trigger": str(cfg.get("trigger", "")).strip(),
+        "dataset": str(cfg.get("dataset", "")).strip(),
+        "model_hash": str(cfg.get("model_hash", "")).strip(),
+        "validation_report": str(cfg.get("validation_report", "")).strip(),
+        "train_job": str(cfg.get("train_job", "")).strip(),
+        "card": str(cfg.get("card", "")).strip(),
+        "gaps": gaps,
+    }
+
+
+def _drift_char_significant(info: Mapping[str, Any]) -> Tuple[bool, List[str], str]:
+    """单角色跨集漂移是否显著：warn/block 出现的集数 ≥2，或存在 first_bad_episode（出过 block）。
+
+    返回 (significant, bad_episodes, first_bad_episode)。
+    """
+    episodes = info.get("episodes") if isinstance(info.get("episodes"), Mapping) else {}
+    bad_episodes = sorted(
+        (ep for ep, counts in episodes.items()
+         if isinstance(counts, Mapping) and (counts.get("warn", 0) or 0) + (counts.get("block", 0) or 0) > 0),
+        key=episode_sort_key,
+    )
+    first_bad = str(info.get("first_bad_episode") or "").strip()
+    return (len(bad_episodes) >= 2 or bool(first_bad), bad_episodes, first_bad)
+
+
+def _episode_gap(prev: str, cur: str, all_eps: Sequence[str]) -> int:
+    """相邻两次出场之间「缺席的集数」。优先用集号差 num(cur)-num(prev)-1；
+    集号不可解析时退化为 all_eps 有序列表里的位差-1。纯函数·可测。"""
+    np_ = route_episode_number(prev)
+    nc = route_episode_number(cur)
+    if np_ is not None and nc is not None:
+        return max(nc - np_ - 1, 0)
+    ordered_all = sorted({str(e).strip() for e in all_eps if str(e).strip()}, key=episode_sort_key)
+    try:
+        return max(ordered_all.index(cur) - ordered_all.index(prev) - 1, 0)
+    except ValueError:
+        return 0
+
+
+def compute_recurrence(appearance_eps: Sequence[str], all_eps: Sequence[str]) -> Dict[str, Any]:
+    """角色跨集复现间隔分析（EntityBench 2026：跨镜一致性随复现间隔急剧衰退，长间隔再登场最易崩）。
+
+    appearance_eps：该角色实际出场的集；all_eps：本次机检的全部集（定序/退化基准）。
+    返回 {max_gap, long_gap_reentries:[{at, prev, gap}], high_risk}。
+    只 1 次出场 / 无可解析集 → max_gap=0、high_risk=False（不假报）。纯函数·可测。"""
+    ordered = sorted({str(e).strip() for e in appearance_eps if str(e).strip()}, key=episode_sort_key)
+    reentries: List[Dict[str, Any]] = []
+    max_gap = 0
+    for prev, cur in zip(ordered, ordered[1:]):
+        gap = _episode_gap(prev, cur, all_eps)
+        if gap > max_gap:
+            max_gap = gap
+        if gap >= RECURRENCE_GAP_THRESHOLD:
+            reentries.append({"at": cur, "prev": prev, "gap": gap})
+    return {"max_gap": max_gap, "long_gap_reentries": reentries, "high_risk": bool(reentries)}
+
+
+def _match_registry_character(registry: Mapping[str, Any], drift_char: str) -> Optional[Tuple[Mapping[str, Any], Mapping[str, Any]]]:
+    """把 drift report 的角色键（face 检测里的 char 名）对回 registry 的 (character, form)。
+
+    匹配顺序：form.asset_key 精确命中 > character.name 精确命中（取首个 form）。匹配不到返回 None。
+    """
+    fallback: Optional[Tuple[Mapping[str, Any], Mapping[str, Any]]] = None
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        forms = [f for f in char.get("forms", []) or [] if isinstance(f, Mapping)]
+        for form in forms:
+            if str(form.get("asset_key", "")).strip() == drift_char:
+                return char, form
+        if fallback is None and str(char.get("name", "")).strip() == drift_char and forms:
+            fallback = (char, forms[0])
+    return fallback
+
+
+def _form_has_native_image_subject(form: Mapping[str, Any]) -> bool:
+    """form 是否在某出图后端已登记原生主体锁（Character ID / 主体库 / cameo，已 registered/ready）。
+    全是 reference_group 兜底 = 无原生锁 = 跨集靠参考图硬撑（弱后端结构性风险）。纯函数·可测。"""
+    adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+    image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+    for key, cfg in image.items():
+        if key == "face_embedding":  # 脸嵌入锁是中间档，不是后端原生主体锁——别误判成原生
+            continue
+        if not isinstance(cfg, Mapping):
+            continue
+        mode = str(cfg.get("mode", "")).strip()
+        status = str(cfg.get("status", "")).strip()
+        if mode and mode not in NON_NATIVE_BINDINGS and status in ("registered", "ready"):
+            return True
+    return False
+
+
+def _form_has_face_embedding(form: Mapping[str, Any]) -> bool:
+    """form 是否已挂 ready 的脸嵌入锁（IP-Adapter FaceID 等·`identity_adapters.image.face_embedding`）。
+    reference-group↔LoRA 间的免训练中间档；纯函数·可测。"""
+    adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+    image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+    fe = image.get("face_embedding")
+    status = str(fe.get("status") if isinstance(fe, Mapping) else fe or "").strip()
+    return status in ("registered", "ready")
+
+
+def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """LoRA 升档自动建议（drift report recommendations / matrix summary 同判定）。
+
+    三类触发，任一即建议（角色须在 registry 对上号、lora status 不在 ready/training）：
+      ① 跨集漂移显著（_drift_char_significant：≥2 集 warn/block 或出过 block）；
+      ② 跨集 embedding 质心漂移 high（P1-a：每集各自过 floor 但整体逐集偏离锚点）；
+      ③ **主动**：核心长线角色跨 ≥PROACTIVE_EPISODE_THRESHOLD 集 × 无原生主体锁——在烧穿多集积分前就建议升档。
+    数据不足（无 registry / drift 不可用）一律返回空列表，不瞎编。
+    """
+    if not isinstance(registry, Mapping) or not isinstance(drift, Mapping):
+        return []
+    if not drift.get("available"):
+        return []
+    out: List[Dict[str, Any]] = []
+    root_str = str(drift.get("root") or registry.get("root") or "<作品根>")
+    emb_map = drift.get("embedding_drift") if isinstance(drift.get("embedding_drift"), Mapping) else {}
+    for drift_char, info in sorted((drift.get("characters") or {}).items()):
+        if not isinstance(info, Mapping):
+            continue
+        significant, bad_episodes, first_bad = _drift_char_significant(info)
+        emb_entries = emb_map.get(drift_char) or []
+        emb_high = [e for e in emb_entries if isinstance(e, Mapping) and e.get("severity") == "high"]
+        episodes = info.get("episodes") if isinstance(info.get("episodes"), Mapping) else {}
+        ep_count = len(episodes)
+        matched = _match_registry_character(registry, drift_char)
+        if matched is None:
+            continue  # registry 对不上号 → 无法判 lora status，也给不出可执行命令，不输出半截建议
+        char, form = matched
+        adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+        lora_cfg = adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {}
+        lora_status = str(lora_cfg.get("status", "")).strip()
+        if lora_status in LORA_UPGRADE_EXEMPT_STATUSES:
+            continue
+        native_subject = _form_has_native_image_subject(form)
+        has_face_embedding = _form_has_face_embedding(form)
+        proactive = (not significant and not emb_high
+                     and ep_count >= PROACTIVE_EPISODE_THRESHOLD and not native_subject)
+        if not (significant or emb_high or proactive):
+            continue
+        character_id = str(char.get("id", "")).strip()
+        form_name = str(form.get("form", "")).strip() or "常态"
+        reason_bits = []
+        if len(bad_episodes) >= 2:
+            reason_bits.append(f"{len(bad_episodes)} 集脸部相似度低于阈值（{','.join(bad_episodes)}）")
+        if first_bad:
+            reason_bits.append(f"first_bad_episode={first_bad}（出现过 block 级漂移）")
+        if emb_high:
+            spans = "，".join(f"{e.get('episode_from')}→{e.get('episode_to')}(掉{e.get('drop')})" for e in emb_high)
+            reason_bits.append(f"跨集 embedding 质心漂移 {len(emb_high)} 段（{spans}）")
+        if proactive:
+            reason_bits.append(
+                f"核心长线角色跨 {ep_count} 集 × 无原生主体锁（reference_group 兜底）——"
+                "弱后端逐镜重画脸，集数越多越易跨集漂；建议在烧穿多集积分前升档 LoRA/原生主体")
+        else:
+            reason_bits.append(f"LoRA status={lora_status or 'absent'}，reference_group/原生主体未压住跨集漂移")
+        # P2a 中间档：还没挂 face_embedding 且非原生主体后端 → 先建议免训练的脸嵌入锁（IP-Adapter FaceID），
+        # 比直接训 LoRA 快/省，仍漂再升 LoRA。已挂 face_embedding/原生主体的角色不再提（避免噪声）。
+        suggest_face_embedding = not has_face_embedding and not native_subject
+        if suggest_face_embedding:
+            reason_bits.append(
+                "中间档建议：先挂 face_embedding（IP-Adapter FaceID 等免训练脸嵌入锁，比 LoRA 快/省），仍漂再升 LoRA")
+        out.append({
+            "type": "lora_upgrade",
+            "character": drift_char,
+            "character_id": character_id,
+            "character_name": str(char.get("name", "")).strip(),
+            "form": form_name,
+            "lora_status": lora_status,
+            "bad_episodes": bad_episodes,
+            "first_bad_episode": first_bad,
+            "embedding_drift_high": len(emb_high),
+            "episode_count": ep_count,
+            "proactive": proactive,
+            "has_face_embedding": has_face_embedding,
+            "intermediate_rung": "face_embedding" if suggest_face_embedding else None,
+            "reason": "；".join(reason_bits),
+            "next_command": (
+                f"python3 skills/n2d/n2d-lora/scripts/lora.py init '{root_str}' "
+                f"--character-id {character_id} --form '{form_name}'"
+            ),
+        })
+    return out
+
+
+def registry_anchor_fingerprint(registry: Mapping[str, Any]) -> str:
+    """跨集锚点版本快照：把每个 form 的「锚点身份」（asset_key + anchor_sha + 表情锚 sha）摘成一个
+    稳定 sha256。回灌进 adapter_matrix 后，**每次生成 matrix 都留下「当时锁的是哪个锚点版本」的留痕**——
+    front 定妆图被悄改 → anchor_sha 变 → fingerprint 变 → git/diff 里立刻看得见，治"共享 registry 只有
+    updated_at、改了锚点无版本可追"的审计盲区。纯函数（仅 hashlib，可测）；anchor_sha 为空的 form 仍计入
+    （以空串占位），避免"没钉死"和"钉了空"指纹相同。"""
+    items: List[List[str]] = []
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        cid = str(char.get("id", "")).strip()
+        for form in char.get("forms", []) or []:
+            if not isinstance(form, Mapping):
+                continue
+            exprs = []
+            for a in form.get("expression_anchors", []) or []:
+                if isinstance(a, Mapping):
+                    exprs.append([str(a.get("emotion", "")).strip(), str(a.get("anchor_sha", "")).strip()])
+            exprs.sort()
+            items.append([
+                cid,
+                str(form.get("form", "")).strip(),
+                str(form.get("asset_key", "")).strip(),
+                str(form.get("anchor_sha", "")).strip(),
+                json.dumps(exprs, ensure_ascii=False, sort_keys=True),
+            ])
+    items.sort()
+    blob = json.dumps(items, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def count_pinned_anchors(registry: Mapping[str, Any]) -> int:
+    """已钉死 anchor_sha 的 form 数（审计/进度可见性用）。纯函数·可测。"""
+    n = 0
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        for form in char.get("forms", []) or []:
+            if isinstance(form, Mapping) and str(form.get("anchor_sha", "")).strip():
+                n += 1
+    return n
+
+
+def build_adapter_matrix(
+    root: Path,
+    registry: Mapping[str, Any],
+    generated_at: Optional[str] = None,
+    drift_report: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    forms_out: List[Dict[str, Any]] = []
+    notes: List[str] = []
+    if registry.get("kind") != REGISTRY_KIND:
+        notes.append(f"registry kind should be {REGISTRY_KIND}")
+
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        for form in char.get("forms", []) or []:
+            if not isinstance(form, Mapping):
+                continue
+            reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+            ref_status = reference_group_status(root, reference_group)
+            library_tier = character_form_library_tier(char, form)
+            required_reference_fields = reference_fields_for_form(form, char)
+            ref_ready = reference_group_ready(ref_status, required_reference_fields)
+            adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+            image_cfg = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+            video_cfg = adapters.get("video") if isinstance(adapters.get("video"), Mapping) else {}
+
+            image_bindings = {
+                backend: adapter_binding(stage="image", backend=str(backend), cfg=cfg if isinstance(cfg, Mapping) else {}, ref_ready=ref_ready)
+                for backend, cfg in image_cfg.items()
+            }
+            video_bindings = {
+                backend: adapter_binding(stage="video", backend=str(backend), cfg=cfg if isinstance(cfg, Mapping) else {}, ref_ready=ref_ready)
+                for backend, cfg in video_cfg.items()
+            }
+            lora = lora_binding(root, adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {})
+
+            gaps: List[str] = []
+            recommendations: List[str] = []
+            for key, value in ref_status.items():
+                if key.startswith("_") or key not in required_reference_fields:
+                    continue
+                if not value.get("exists"):
+                    gaps.append(f"missing_reference:{key}")
+            for stage_name, bindings in (("image", image_bindings), ("video", video_bindings)):
+                for backend, binding in bindings.items():
+                    gaps.extend(f"{stage_name}.{backend}:{g}" for g in binding.get("gaps", []))
+                    recommendations.extend(binding.get("recommendations", []))
+            gaps.extend(f"lora:{g}" for g in lora.get("gaps", []))
+            if image_bindings and not any(binding_is_native_ready(b) for b in image_bindings.values()):
+                recommendations.append("image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect")
+            if not any(binding_is_native_ready(b) for b in video_bindings.values()):
+                recommendations.append("video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls")
+            if not lora.get("ready") and str(char.get("scope", "")).strip() in ("全篇", "长线", "核心"):
+                recommendations.append("lora: core long-running character; consider LoRA only if reference_group/native adapters still drift")
+
+            forms_out.append({
+                "character_id": str(char.get("id", "")).strip(),
+                "character_name": str(char.get("name", "")).strip(),
+                "scope": str(char.get("scope", "")).strip(),
+                "library_tier": library_tier,
+                "form": str(form.get("form", "")).strip(),
+                "asset_key": str(form.get("asset_key", "")).strip(),
+                "anchor_phrase": str(form.get("anchor_phrase", "")).strip(),
+                "reference_group": ref_status,
+                "required_reference_fields": list(required_reference_fields),
+                "reference_group_ready": ref_ready,
+                "image_bindings": image_bindings,
+                "video_bindings": video_bindings,
+                "lora_binding": lora,
+                "angle_policy": form.get("angle_policy", {}),
+                "drift_forbidden": form.get("drift_forbidden", []),
+                "gaps": sorted(set(gaps)),
+                "recommendations": sorted(set(recommendations)),
+            })
+
+    summary = {
+        "forms": len(forms_out),
+        "forms_with_reference_group_ready": sum(1 for f in forms_out if f.get("reference_group_ready")),
+        "forms_with_native_image_ready": sum(1 for f in forms_out if any(binding_is_native_ready(b) for b in f.get("image_bindings", {}).values())),
+        "forms_with_native_video_ready": sum(1 for f in forms_out if any(binding_is_native_ready(b) for b in f.get("video_bindings", {}).values())),
+        "forms_with_lora_ready": sum(1 for f in forms_out if f.get("lora_binding", {}).get("ready")),
+        "forms_with_gaps": sum(1 for f in forms_out if f.get("gaps")),
+        # 跨集锚点版本快照：matrix 留痕「本次锁的是哪个锚点版本」；锚点被悄改 → 指纹变 → diff 里可见
+        "anchor_fingerprint": registry_anchor_fingerprint(registry),
+        "forms_with_anchor_pinned": count_pinned_anchors(registry),
+        # 与 drift report recommendations 同判定（lora_upgrade_candidates）；无 drift 数据时为空列表
+        "characters_needing_lora_upgrade": sorted({
+            c["character_id"] for c in lora_upgrade_candidates(registry, drift_report) if c.get("character_id")
+        }),
+    }
+    return {
+        "kind": MATRIX_KIND,
+        "version": VERSION,
+        "root": str(root),
+        "generated_at": generated_at or now_iso(),
+        "summary": summary,
+        "forms": forms_out,
+        "notes": notes,
+    }
+
+
+def discover_episodes(root: Path) -> List[str]:
+    names = set()
+    for pattern in (root / "出图" / "第*集" / "图片", root / "出图" / "第*集" / "prompt"):
+        for p in glob.glob(str(pattern)):
+            names.add(Path(p).parent.name)
+    return sorted(names, key=episode_sort_key)
+
+
+def episode_sort_key(ep: str) -> Tuple[int, str]:
+    n = route_episode_number(ep)
+    return (n if n is not None else 10**9, ep)
+
+
+def parse_episodes(value: str, available: List[str]) -> List[str]:
+    if not value:
+        return available
+    out: List[str] = []
+    by_num = {str(n): ep for ep in available for n in [route_episode_number(ep)] if n is not None}
+    for part in re.split(r"[,，\s]+", value.strip()):
+        if not part:
+            continue
+        range_sep = next((sep for sep in ("-", "–", "—", "~", "～", "至") if sep in part), None)
+        if range_sep:
+            start_s, end_s = part.split(range_sep, 1)
+            a, b = route_episode_number(start_s), route_episode_number(end_s)
+            if a is None or b is None:
+                ep = route_normalize_episode(part)
+                if ep not in out:
+                    out.append(ep)
+                continue
+            for n in range(min(a, b), max(a, b) + 1):
+                ep = by_num.get(str(n), f"第{n}集")
+                if ep not in out:
+                    out.append(ep)
+            continue
+        n = route_episode_number(part)
+        ep = by_num.get(str(n), f"第{n}集") if n is not None else route_normalize_episode(part)
+        if ep not in out:
+            out.append(ep)
+    return out
+
+
+def load_face_consistency():
+    here = Path(__file__).resolve()
+    review_scripts = here.parents[2] / "n2d-review" / "scripts"
+    script = review_scripts / "face_consistency.py"
+    spec = importlib.util.spec_from_file_location("n2d_identity_face_consistency", script)
+    if spec is None or spec.loader is None:
+        return None
+    mod = importlib.util.module_from_spec(spec)
+    # face_consistency.py 会 `import state_continuity` 等本目录兄弟模块。它不在本进程 sys.path 上时，
+    # 动态 exec 会 ModuleNotFoundError——此前只因别的 n2d-review 测试先把该目录塞进 sys.path 才偶然能跑
+    # （收集顺序一变就崩）。这里临时把 n2d-review/scripts 放上 sys.path 再 exec，保证加载自洽。
+    review_path = str(review_scripts)
+    added = review_path not in sys.path
+    if added:
+        sys.path.insert(0, review_path)
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        if added:
+            try:
+                sys.path.remove(review_path)
+            except ValueError:
+                pass
+    return mod
+
+
+def summarize_face_results(root: Path, episodes: List[str], face_results: Mapping[str, Mapping[str, Any]], generated_at: Optional[str] = None) -> Dict[str, Any]:
+    chars: Dict[str, Dict[str, Any]] = {}
+    available = True
+    notes: List[str] = []
+    for ep in episodes:
+        res = face_results.get(ep, {})
+        confirmations: Dict[Tuple[str, str], Mapping[str, Any]] = {}
+        confirmation_path = root / "生产数据" / "image_qc" / ep / "face_confirmations.json"
+        if confirmation_path.is_file():
+            try:
+                confirmation_doc = json.loads(confirmation_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                confirmation_doc = {}
+            for row in confirmation_doc.get("confirmations", []) if isinstance(confirmation_doc, Mapping) else []:
+                if not isinstance(row, Mapping):
+                    continue
+                char_key = str(row.get("char") or "").strip()
+                png_key = str(row.get("png") or "").strip().replace("\\", "/")
+                verdict_key = str(row.get("verdict") or "").strip().lower()
+                expected_sha = str(row.get("png_sha256") or "").strip()
+                png_path = root / "出图" / ep / png_key
+                if not (char_key and png_key and expected_sha and verdict_key in {"ok", "pass", "confirmed", "通过", "合格"} and png_path.is_file()):
+                    continue
+                if hashlib.sha256(png_path.read_bytes()).hexdigest() == expected_sha:
+                    confirmations[(char_key, png_key)] = row
+        if not res.get("available", False):
+            available = False
+            notes.extend(res.get("notes", []))
+        for shot in res.get("shots", []) or []:
+            char = str(shot.get("char", "")).strip()
+            if not char:
+                continue
+            verdict = str(shot.get("verdict", "noface"))
+            png_key = str(shot.get("png") or "").strip().replace("\\", "/")
+            if verdict in {"warn", "block"} and (char, png_key) in confirmations:
+                verdict = "ok"
+            c = chars.setdefault(char, {"episodes": {}, "total_warn": 0, "total_block": 0, "first_bad_episode": ""})
+            e = c["episodes"].setdefault(ep, {"ok": 0, "warn": 0, "block": 0, "noface": 0, "worst_score": None, "floor": None})
+            if verdict not in e:
+                verdict = "noface"
+            e[verdict] += 1
+            if verdict == "warn":
+                c["total_warn"] += 1
+            if verdict == "block":
+                c["total_block"] += 1
+                if not c["first_bad_episode"]:
+                    c["first_bad_episode"] = ep
+            if shot.get("score") is not None:
+                score = float(shot["score"])
+                if e["worst_score"] is None or score < e["worst_score"]:
+                    e["worst_score"] = score
+            if shot.get("floor") is not None:
+                e["floor"] = shot.get("floor")
+        # 每角色本集质心相对锚点的接近度（face_consistency 在 result["characters"] 里给的 ep_mean_score）
+        for char, crec in (res.get("characters") or {}).items():
+            if not isinstance(crec, dict) or crec.get("ep_mean_score") is None:
+                continue
+            char = str(char).strip()
+            if not char:
+                continue
+            c = chars.setdefault(char, {"episodes": {}, "total_warn": 0, "total_block": 0, "first_bad_episode": ""})
+            e = c["episodes"].setdefault(ep, {"ok": 0, "warn": 0, "block": 0, "noface": 0, "worst_score": None, "floor": None})
+            e["mean_score"] = crec.get("ep_mean_score")
+            e["n_shots"] = crec.get("ep_n_shots")
+    # 每角色复现间隔（EntityBench 2026：长间隔再登场是跨镜崩脸主因）——供 face_drift_risk 出图前重锚。
+    for crec in chars.values():
+        crec["recurrence"] = compute_recurrence(list(crec.get("episodes", {}).keys()), episodes)
+    return {
+        "kind": DRIFT_KIND,
+        "version": VERSION,
+        "root": str(root),
+        "generated_at": generated_at or now_iso(),
+        "available": available,
+        "episodes": episodes,
+        "characters": chars,
+        "notes": sorted(set(notes)),
+    }
+
+
+def build_drift_report(
+    root: Path,
+    episodes: List[str],
+    *,
+    skip_face: bool = False,
+    generated_at: Optional[str] = None,
+    registry: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    if skip_face:
+        return {
+            "kind": DRIFT_KIND,
+            "version": VERSION,
+            "root": str(root),
+            "generated_at": generated_at or now_iso(),
+            "available": False,
+            "episodes": episodes,
+            "characters": {},
+            "recommendations": [],
+            "notes": ["face consistency run skipped by --skip-face"],
+        }
+    fc = load_face_consistency()
+    if fc is None:
+        return {
+            "kind": DRIFT_KIND,
+            "version": VERSION,
+            "root": str(root),
+            "generated_at": generated_at or now_iso(),
+            "available": False,
+            "episodes": episodes,
+            "characters": {},
+            "recommendations": [],
+            "notes": ["face_consistency.py not loadable"],
+        }
+    results = {ep: fc.analyze(str(root), ep) for ep in episodes}
+    report = summarize_face_results(root, episodes, results, generated_at=generated_at)
+    # 内容级新鲜度：记下「本报告是基于哪一版 PNG 像素算的」。消费端 gate 据此判定报告是否陈旧
+    # （集级覆盖看着没问题、但图重出过 → 指纹变 → 报告其实已过期）。单一真值源在 n2d_registry。
+    report["png_fingerprints"] = {
+        ep: fp for ep in episodes
+        for fp in [episode_png_fingerprint(str(root), ep)] if fp is not None
+    }
+    # 跨集 embedding 漂移：逐角色按集质心 vs 锚点接近度，揪"每集各自过 floor 但整体逐集偏离"的系统性漂移
+    # （registry 传入做 P1 tier 感知标注：升档角色的偏移可能是换分布而非崩脸）
+    report["embedding_drift"] = build_embedding_drift(fc, report, registry)
+    # LoRA 升档自动建议：漂移显著 + registry 对得上号 + lora 未 ready/training 才输出；数据不足为空
+    report["recommendations"] = lora_upgrade_candidates(registry, report)
+    return report
+
+
+def calibrated_abs_low(floors: Iterable[Optional[float]]) -> Optional[float]:
+    """⑤ 跨集 embedding 漂移的「绝对地板」按项目/角色**标定**，不再用全局硬 0.45。
+
+    floors 是该角色各集的 calibrate_floor 值（定妆组内部同人余弦下限，face_consistency 逐镜已算）。取
+    中位数做该角色的同人地板：风格化漫剧脸同人余弦常 <0.45，全局 0.45 会系统性误报 high；写实/3D 同人
+    可达 0.6+，0.45 又太松会漏报。用标定地板让"本集均值 < 同人线 = 硬漂移"对每种画风都成立。
+    无可用 floor（pillow 降级 / 单张定妆无内部对）→ None，调用方回退 cross_episode_drift 的默认 0.45。
+    纯函数·可测。"""
+    vals = sorted(float(f) for f in floors if f is not None)
+    if not vals:
+        return None
+    n = len(vals)
+    mid = n // 2
+    return round((vals[mid] if n % 2 else (vals[mid - 1] + vals[mid]) / 2), 4)
+
+
+def character_current_tier(registry: Optional[Mapping[str, Any]], drift_char: str) -> str:
+    """drift report 的角色 → registry 当前出图锁脸档：'lora' / 'native_subject' / 'reference_group' / ''(对不上号)。
+    纯函数·可测。P1：lora/native_subject 是相对 reference_group 兜底的**升档**，会移动 embedding 分布。"""
+    matched = _match_registry_character(registry or {}, drift_char)
+    if matched is None:
+        return ""
+    _char, form = matched
+    lora = form.get("identity_adapters", {}) if isinstance(form.get("identity_adapters"), Mapping) else {}
+    lora = lora.get("lora") if isinstance(lora.get("lora"), Mapping) else {}
+    if str(lora.get("status", "")).strip() == "ready":
+        return "lora"
+    if _form_has_native_image_subject(form):
+        return "native_subject"
+    return "reference_group"
+
+
+def build_embedding_drift(fc: Any, report: Mapping[str, Any],
+                          registry: Optional[Mapping[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+    """逐角色把按集质心均值序列喂给 face_consistency.cross_episode_drift，产 episode_from/to 漂移条目。
+    无 cross_episode_drift（旧版 fc）或无 mean_score 数据 → 空。⑤ abs_low 用该角色标定地板（无则默认）。
+
+    **P1 tier 感知标注**：跨集 embedding 锚点基线建在「建立集」（多为 reference_group 兜底）。若该角色现已
+    **升档**（lora / 原生主体），其后期集的脸由不同分布的后端所出，质心相对早期锚点偏移**可能是升档所致而非脸崩**。
+    给这类角色的漂移条目打 `tier_confound`，提示"以升档集为新基线重测"，不误判升档为崩脸。
+    （注：n2d 出图为外部/手动执行，事件不记逐集后端 provenance；这里用 registry **当前**档位做诚实标注，
+    不假装能还原逐集后端历史。）"""
+    fn = getattr(fc, "cross_episode_drift", None)
+    if fn is None:
+        return {}
+    episodes = report.get("episodes") or []
+    out: Dict[str, List[Dict[str, Any]]] = {}
+    for char, info in (report.get("characters") or {}).items():
+        eps = info.get("episodes") or {}
+        seq = [(ep, eps.get(ep, {}).get("mean_score")) for ep in episodes if ep in eps]
+        if sum(1 for _, m in seq if m is not None) < 2:
+            continue
+        abs_low = calibrated_abs_low(eps.get(ep, {}).get("floor") for ep in episodes if ep in eps)
+        entries = fn(seq, abs_low=abs_low) if abs_low is not None else fn(seq)
+        if not entries:
+            continue
+        tier = character_current_tier(registry, char)
+        if tier in ("lora", "native_subject"):
+            for e in entries:
+                e["tier_confound"] = tier
+                e["tier_confound_note"] = (
+                    f"该角色现处 {tier} 档（早期集多为 reference_group 兜底所出）：跨集质心偏移可能是升档"
+                    "换分布所致而非脸崩——建议以升档集为新基线重测，勿径直判崩脸。")
+        out[char] = entries
+    return out
+
+
+def render_matrix_md(matrix: Mapping[str, Any]) -> str:
+    lines = [
+        "# 角色身份 Adapter Matrix",
+        "",
+        f"- root: {matrix.get('root')}",
+        f"- generated_at: {matrix.get('generated_at')}",
+        f"- anchor_fingerprint: `{str(matrix.get('summary', {}).get('anchor_fingerprint', ''))[:16]}…`"
+        f"（锚点版本快照·{matrix.get('summary', {}).get('forms_with_anchor_pinned', 0)} form 已钉死；指纹变=锚点被改，跨集继承换脸风险）",
+        "",
+        "| 角色 | 形态 | reference_group | image native ready | video native ready | LoRA | gaps |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for form in matrix.get("forms", []):
+        image_ready = [
+            f"{backend}:{binding.get('binding')}"
+            for backend, binding in form.get("image_bindings", {}).items()
+            if binding.get("ready") and binding.get("binding") != "reference_group"
+        ]
+        video_ready = [
+            f"{backend}:{binding.get('binding')}"
+            for backend, binding in form.get("video_bindings", {}).items()
+            if binding.get("ready") and binding.get("binding") != "reference_group"
+        ]
+        gaps = ", ".join(form.get("gaps", [])) or "-"
+        lines.append(
+            "| {char} | {form} | {ref} | {image} | {video} | {lora} | {gaps} |".format(
+                char=form.get("character_name") or form.get("character_id"),
+                form=form.get("form", ""),
+                ref="ready" if form.get("reference_group_ready") else "missing",
+                image=", ".join(image_ready) or "-",
+                video=", ".join(video_ready) or "-",
+                lora="ready" if form.get("lora_binding", {}).get("ready") else form.get("lora_binding", {}).get("status", "-"),
+                gaps=gaps.replace("|", "/"),
+            )
+        )
+    lines.extend(["", "## Recommendations", ""])
+    for form in matrix.get("forms", []):
+        recs = form.get("recommendations", [])
+        if not recs:
+            continue
+        lines.append(f"### {form.get('character_name') or form.get('character_id')} / {form.get('form')}")
+        for rec in recs:
+            lines.append(f"- {rec}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def render_drift_md(report: Mapping[str, Any]) -> str:
+    lines = [
+        "# 跨集角色漂移报表",
+        "",
+        f"- root: {report.get('root')}",
+        f"- generated_at: {report.get('generated_at')}",
+        f"- available: {report.get('available')}",
+        "",
+    ]
+    for note in report.get("notes", []):
+        lines.append(f"- note: {note}")
+    lines.extend(["", "| 角色 | first_bad_episode | total_warn | total_block | episodes |", "|---|---|---|---|---|"])
+    for char, info in sorted((report.get("characters") or {}).items()):
+        ep_bits = []
+        for ep, counts in info.get("episodes", {}).items():
+            ep_bits.append(f"{ep}: ok {counts.get('ok',0)} / warn {counts.get('warn',0)} / block {counts.get('block',0)}")
+        lines.append(
+            f"| {char} | {info.get('first_bad_episode') or '-'} | {info.get('total_warn', 0)} | {info.get('total_block', 0)} | {'; '.join(ep_bits)} |"
+        )
+    if not report.get("characters"):
+        lines.append("| - | - | 0 | 0 | 无可机检角色或机检跳过 |")
+    emb = report.get("embedding_drift") or {}
+    if emb:
+        lines.extend([
+            "",
+            "## 跨集 embedding 漂移（质心 vs 锚点，逐集偏离）",
+            "",
+            "> 即使每集各自过 floor，整体相对建立集的脸质心若逐集下滑也是跨集漂移；high=掉幅≥0.15 或本集均值<0.45。",
+            "",
+            "| 角色 | 从 | 到 | from_mean | to_mean | 掉幅 | 严重度 |",
+            "|---|---|---|---|---|---|---|",
+        ])
+        for char, entries in sorted(emb.items()):
+            for d in entries:
+                sev = d.get("severity")
+                if d.get("tier_confound"):
+                    sev = f"{sev}·{d['tier_confound']}升档?"
+                lines.append(
+                    f"| {char} | {d.get('episode_from')} | {d.get('episode_to')} | {d.get('from_mean')} | "
+                    f"{d.get('to_mean')} | {d.get('drop')} | {sev} |"
+                )
+        confound = [(c, d) for c, ents in emb.items() for d in ents if d.get("tier_confound")]
+        if confound:
+            lines.append("")
+            for c, d in confound:
+                lines.append(f"> ⚠️ {c}：{d.get('tier_confound_note')}")
+    recs = report.get("recommendations") or []
+    if recs:
+        lines.extend(["", "## LoRA 升档建议", ""])
+        for rec in recs:
+            lines.append(f"- **{rec.get('character_name') or rec.get('character_id')}**（{rec.get('character_id')} / {rec.get('form')}）：{rec.get('reason')}")
+            lines.append(f"  - next: `{rec.get('next_command')}`")
+    return "\n".join(lines)
+
+
+def write_outputs(
+    root: Path,
+    matrix: Mapping[str, Any],
+    drift: Mapping[str, Any],
+    *,
+    write_drift: bool = True,
+) -> Dict[str, Path]:
+    out_dir = root / "生产数据"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    paths = {
+        "matrix_json": out_dir / "identity_adapter_matrix.json",
+        "matrix_md": out_dir / "identity_adapter_matrix.md",
+        "drift_json": out_dir / "identity_drift_report.json",
+        "drift_md": out_dir / "identity_drift_report.md",
+    }
+    write_report_if_changed(paths["matrix_json"], json.dumps(matrix, ensure_ascii=False, indent=2) + "\n")
+    write_report_if_changed(paths["matrix_md"], render_matrix_md(matrix) + "\n")
+    if write_drift:
+        write_report_if_changed(paths["drift_json"], json.dumps(drift, ensure_ascii=False, indent=2) + "\n")
+        write_report_if_changed(paths["drift_md"], render_drift_md(drift) + "\n")
+    return paths
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Build n2d identity adapter matrix and cross-episode drift report.")
+    ap.add_argument("root")
+    ap.add_argument("--episodes", default="", help="episode list/range, e.g. 1-10 or 第1集,第3集; default discovers all")
+    ap.add_argument("--write", action="store_true", help="write reports under 生产数据/")
+    ap.add_argument("--skip-face", action="store_true", help="skip face_consistency metrics and only write adapter matrix")
+    ap.add_argument("--json", action="store_true", help="print combined JSON")
+    ns = ap.parse_args()
+
+    root = Path(ns.root)
+    registry = load_registry(root)
+    available = discover_episodes(root)
+    episodes = parse_episodes(ns.episodes, available) if ns.episodes else available
+    generated_at = now_iso()
+    # --skip-face 是“只刷新矩阵”，不是“清空上一轮视觉测量”。若已有 drift，原字节保留；
+    # 否则才落一个 unavailable 骨架，避免日常 next 把跨集记忆输入擦成 characters={}。
+    prior_drift = load_json(root / "生产数据" / "identity_drift_report.json") if ns.skip_face else None
+    preserve_prior_drift = ns.skip_face and isinstance(prior_drift, Mapping)
+    drift = (
+        dict(prior_drift)
+        if preserve_prior_drift
+        else build_drift_report(root, episodes, skip_face=ns.skip_face, generated_at=generated_at, registry=registry)
+    )
+    matrix = build_adapter_matrix(root, registry, generated_at=generated_at, drift_report=drift)
+    if ns.write:
+        paths = write_outputs(root, matrix, drift, write_drift=not preserve_prior_drift)
+        for key, p in paths.items():
+            if preserve_prior_drift and key.startswith("drift_"):
+                print(f"preserved {p}")
+            else:
+                print(f"wrote {p}")
+        # 配音 manifest 存在时顺带做音色跨集对账（import 调用，不 subprocess）
+        if voice_consistency.discover_episodes(root):
+            voice_report = voice_consistency.build_report(root, generated_at=generated_at)
+            voice_paths = voice_consistency.write_outputs(root, voice_report)
+            vs = voice_report.get("summary", {})
+            print(
+                f"voice consistency: {vs.get('drifts', 0)} drift / {vs.get('voicemap_mismatches', 0)} voicemap mismatch"
+                f" / {vs.get('placeholder_revoice', 0)} 占位待重配 / {vs.get('episodes_insufficient', 0)} 集数据不足"
+                f" -> {voice_paths['json']}"
+            )
+            # 声纹机检（speaker embedding）：逐集量真实音色相似度，补"只比 voice_key 字符串"的盲区。
+            # 缺声纹后端则优雅降级（available=False / insufficient_precision），交还人判，不假报。
+            for ep in voice_consistency.discover_episodes(root):
+                vp_report = voice_print_consistency.analyze(root, ep)
+                voice_print_consistency.run(root, ep)  # 落 identity_voice_print_第N集.json
+                if vp_report.get("available"):
+                    print(f"voice print {ep}: mode={vp_report.get('mode')} 音色漂移句数={vp_report.get('total_drift', 0)}")
+                else:
+                    print(f"voice print {ep}: {vp_report.get('mode')}（{vp_report.get('precision')}）→ 交还人判")
+    elif ns.json:
+        print(json.dumps({"matrix": matrix, "drift": drift}, ensure_ascii=False, indent=2))
+    else:
+        print(render_matrix_md(matrix))
+        print()
+        print(render_drift_md(drift))
+    return 1 if matrix.get("summary", {}).get("forms_with_gaps", 0) or any(c.get("total_block", 0) for c in (drift.get("characters") or {}).values()) else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

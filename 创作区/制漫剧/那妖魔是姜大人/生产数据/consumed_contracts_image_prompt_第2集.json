@@ -5,7 +5,7 @@
   "scope": "image_prompt",
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
-  "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
+  "generated_by": "skills/n2d/n2d-image/scripts/image_prompt_pack.py",
   "generated_at": "2026-07-24T05:21:59+00:00",
   "contracts": [
     {

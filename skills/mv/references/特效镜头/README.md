@@ -12,7 +12,7 @@ MV 最常用：`hero_glamour`（巨星名场面）、`action_impact`（升格KO/
 ## 与代码的接线（主动接入）
 
 - 检测模块：`skills/mv/_lib/signature_effects.py`——启动时从本 manifest 构建 `SIGNATURE_EFFECT_LEXICON` 与 `HIGH_IDENTITY_RISK_EFFECTS`，提供 `signature_effect_directive(text)`。
-- 视频落地：`skills/mv-video/scripts/video_jobs.py::prompt_bundle_for_take`——每个镜头若在运镜/动作/转场母题里点名某特效，自动在视频任务里暴露该核心 prompt，并对 `identity_risk=high` 的特效（名场面/换脸/近脸升格KO/双人对打等）**自动把该特效 negatives + 身份锁负向词并入 `negative_elements`**（进而进入编译后的 `negative_prompt`）。
+- 视频落地：`skills/mv/mv-video/scripts/video_jobs.py::prompt_bundle_for_take`——每个镜头若在运镜/动作/转场母题里点名某特效，自动在视频任务里暴露该核心 prompt，并对 `identity_risk=high` 的特效（名场面/换脸/近脸升格KO/双人对打等）**自动把该特效 negatives + 身份锁负向词并入 `negative_elements`**（进而进入编译后的 `negative_prompt`）。
 - 也可在 clip 对象上显式写 `signature_effect` 字段点名。
 
 ```bash

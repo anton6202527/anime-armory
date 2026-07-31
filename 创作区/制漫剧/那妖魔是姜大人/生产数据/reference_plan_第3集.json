@@ -81,7 +81,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -362,7 +362,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -443,7 +443,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -524,7 +524,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -602,7 +602,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -878,7 +878,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -1169,7 +1169,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -1466,7 +1466,7 @@
           },
           "missing_references": [],
           "native_subject_action": null,
-          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+          "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
           "needs_action": true,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
@@ -1804,7 +1804,7 @@
         "char_id": "CHAR_01",
         "form": "镇魔司制服态",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
         "native_subject_action": null
       },
       {
@@ -1852,7 +1852,7 @@
         "char_id": "CHAR_01",
         "form": "“囚途残损态”",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
         "native_subject_action": null
       },
       {
@@ -1860,7 +1860,7 @@
         "char_id": "CHAR_01",
         "form": "“囚途残损态”",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '“囚途残损态”'`",
         "native_subject_action": null
       },
       {
@@ -1868,7 +1868,7 @@
         "char_id": "CHAR_01",
         "form": "镇魔司制服态",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
         "native_subject_action": null
       },
       {
@@ -1876,7 +1876,7 @@
         "char_id": "CHAR_01",
         "form": "镇魔司制服态",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
         "native_subject_action": null
       },
       {
@@ -1923,7 +1923,7 @@
         "char_id": "CHAR_01",
         "form": "镇魔司制服态",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
         "native_subject_action": null
       },
       {
@@ -1971,7 +1971,7 @@
         "char_id": "CHAR_01",
         "form": "镇魔司制服态",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
         "native_subject_action": null
       },
       {
@@ -2029,7 +2029,7 @@
         "char_id": "CHAR_01",
         "form": "镇魔司制服态",
         "missing": [],
-        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
+        "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_01 --form '镇魔司制服态'`",
         "native_subject_action": null
       },
       {

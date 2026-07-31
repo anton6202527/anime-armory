@@ -25,7 +25,7 @@
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-voice",
   "repair_commands": [
-    "python3 skills/n2d-voice/voice_preflight.py prepare 创作区/制漫剧/那妖魔是姜大人 第3集"
+    "python3 skills/n2d/n2d-voice/voice_preflight.py prepare 创作区/制漫剧/那妖魔是姜大人 第3集"
   ],
   "stage_key": "voice",
   "stop_reason": "needs_stage_execution",

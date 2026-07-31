@@ -32,8 +32,8 @@ from xml.etree import ElementTree as ET
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.dirname(SCRIPT_DIR)
-SKILLS_DIR = os.path.dirname(SKILL_DIR)
-REPO_ROOT = os.path.dirname(SKILLS_DIR)
+SKILLS_DIR = SKILL_DIR
+REPO_ROOT = os.path.dirname(os.path.dirname(SKILLS_DIR))
 
 def load_script_module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)

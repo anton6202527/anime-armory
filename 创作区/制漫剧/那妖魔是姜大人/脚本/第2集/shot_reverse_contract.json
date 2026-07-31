@@ -4,7 +4,7 @@
   "episode": "第2集",
   "status": "pass",
   "generated_at": "2026-07-22T06:55:27+00:00",
-  "generated_by": "skills/n2d-script/scripts/shot_reverse_contract.py",
+  "generated_by": "skills/n2d/n2d-script/scripts/shot_reverse_contract.py",
   "sources": [
     {
       "name": "storyboard",
@@ -26,7 +26,7 @@
     },
     {
       "name": "cinematic_coverage_grammar",
-      "path": "/Users/wesley/learn/anime-armory/skills/n2d-script/references/cinematic_coverage_grammar.json",
+      "path": "/Users/wesley/learn/anime-armory/skills/n2d/n2d-script/references/cinematic_coverage_grammar.json",
       "exists": true,
       "sha256": "1ed90ee789b7cc755324be108394358c17a060eb5ed83a52c0f8a799ae79213b"
     }
@@ -274,7 +274,7 @@
       ]
     }
   ],
-  "cinematic_grammar_library": "skills/n2d-script/references/cinematic_coverage_grammar.json",
+  "cinematic_grammar_library": "skills/n2d/n2d-script/references/cinematic_coverage_grammar.json",
   "vertical_9x16_global_rules": {
     "avoid": "不要频繁横向多人并排；清晰近景不要同时塞多张脸。",
     "prefer": "前景肩部 + 背景脸、纵深站位、道具插入、反应近景、建立/重建空间镜。",

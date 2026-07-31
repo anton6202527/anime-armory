@@ -86,7 +86,7 @@ except Exception:  # pragma: no cover - degrade to serial if cache module unavai
     _episode_input_fingerprint = None
     _run_cached_parallel = None
 
-SKILLS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SKILLS_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 def _prework_run(steps, run_one, *, cache=None, should_cache=None):
@@ -313,7 +313,7 @@ def _missing_progress_action(root: str, ep: Optional[str] = None) -> Dict[str, A
                 "先确认源小说并用 n2d-script 粗切/恢复项目骨架，再重新进入 `run.py next`。"
             ),
             "block_reason": "missing_progress",
-            "recovery_command": f"python3 skills/n2d-script/scripts/split_novel.py <小说路径> --out '{root}' --limit 10",
+            "recovery_command": f"python3 skills/n2d/n2d-script/scripts/split_novel.py <小说路径> --out '{root}' --limit 10",
         },
         "gate": None,
         "auto_continue": False,
@@ -411,7 +411,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
         return na("blocked_by_image_qc", {
             "headline": f"{ep} {frontier['label']}：image_qc 未放行",
             "to_user": f"{probes.image_qc_block} 先回 n2d-image 修复/确认受影响图，再重跑 image_qc。",
-            "exact_command": f"python3 skills/n2d-image/scripts/image_qc.py {root} {ep} --prop-shape-report",
+            "exact_command": f"python3 skills/n2d/n2d-image/scripts/image_qc.py {root} {ep} --prop-shape-report",
         })
 
     # 2. gate 阻断 —— 透传 gate.py 结构化字段，指向最小返工
@@ -437,7 +437,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
         return na("needs_compliance", {
             "headline": f"{ep} {frontier['label']}：合规缺口未补齐（花钱前阻断）",
             "to_user": "跑 n2d-compliance --check 补齐 evidence/profile 后再进付费 gate。绝不放行。",
-            "exact_command": f"python3 skills/n2d-compliance/scripts/compliance.py {root} {ep} --check",
+            "exact_command": f"python3 skills/n2d/n2d-compliance/scripts/compliance.py {root} {ep} --check",
         })
 
     # 4. 首跑必给但尚未显式选过的选择点（制作模式/基础视觉风格）
@@ -471,7 +471,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
                 f"本作品制作模式={mode}；当前生成 voice_casting.json 与 timing_estimate.json，"
                 "不生成整集占位/静音 WAV。音色试听签收后才批量渲染最终配音；可见口型镜按逐镜路由使用表演轨或后期表演 pass。"
             ),
-            "exact_command": f"python3 skills/n2d-voice/voice_preflight.py prepare {root} {ep}",
+            "exact_command": f"python3 skills/n2d/n2d-voice/voice_preflight.py prepare {root} {ep}",
             "writeback_after": f"python3 skills/n2d/progress.py set {root} {ep} 配音 ⏳rough",
             "expected_writeback": "配音=⏳rough",
             "recommended_backend": "纯文本估时（不调用 TTS）",
@@ -607,20 +607,20 @@ def _writeback_hint(root: str, ep: str, spec: Dict[str, Any]) -> str:
 def _post_qc_bundle(root: str, ep: str, scope: str = "post_compose") -> Dict[str, Any]:
     """Post-video/post-compose review command bundle shown in action cards."""
     commands = [
-        f"python3 skills/n2d-review/scripts/spectacle_video_qc.py {root} {ep} --write --write-sidecars",
-        f"python3 skills/n2d-review/scripts/motion_reference_library.py {root} {ep} --write",
-        f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage review",
-        f"python3 skills/n2d-score/scripts/score.py {root} {ep} --run-checks --threshold 85",
-        f"python3 skills/n2d-review/scripts/consistency_ledger.py {root} {ep}",
-        f"python3 skills/n2d-review-ui/scripts/review_ui.py {root} {ep} --write --export-findings --markdown",
-        f"python3 skills/n2d-review-ui/scripts/episode_app.py {root} --episode {ep} --write --index",
-        f"python3 skills/n2d-review-ui/scripts/board.py {root} --write --markdown",
+        f"python3 skills/n2d/n2d-review/scripts/spectacle_video_qc.py {root} {ep} --write --write-sidecars",
+        f"python3 skills/n2d/n2d-review/scripts/motion_reference_library.py {root} {ep} --write",
+        f"python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage review",
+        f"python3 skills/n2d/n2d-score/scripts/score.py {root} {ep} --run-checks --threshold 85",
+        f"python3 skills/n2d/n2d-review/scripts/consistency_ledger.py {root} {ep}",
+        f"python3 skills/n2d/n2d-review-ui/scripts/review_ui.py {root} {ep} --write --export-findings --markdown",
+        f"python3 skills/n2d/n2d-review-ui/scripts/episode_app.py {root} --episode {ep} --write --index",
+        f"python3 skills/n2d/n2d-review-ui/scripts/board.py {root} --write --markdown",
     ]
     if scope in {"review_acceptance", "post_compose_review", "episode_closeout"}:
         commands.extend([
             f"python3 skills/n2d/progress.py audit-dag {root} --json",
-            f"python3 skills/n2d-script/scripts/production_breakdown.py {root} {ep} check --json",
-            f"python3 skills/n2d-compose/scripts/final_timeline_probe.py {root} {ep} --write --json",
+            f"python3 skills/n2d/n2d-script/scripts/production_breakdown.py {root} {ep} check --json",
+            f"python3 skills/n2d/n2d-compose/scripts/final_timeline_probe.py {root} {ep} --write --json",
             f"python3 skills/n2d/scripts/script_supervisor_log.py {root} {ep} check --write-missing --json",
             f"python3 skills/n2d/scripts/failure_taxonomy.py {root} {ep} --write",
             f"python3 skills/n2d/scripts/release_verdict.py {root} {ep} --write",
@@ -878,7 +878,7 @@ def _review_acceptance_issue(root: str, ep: str) -> Optional[str]:
 def _run_review_evidence_pre_gate(root: str, ep: str, p: Probes) -> None:
     for step, script, args in (
         ("final_timeline_probe", os.path.join(SKILLS_DIR, "n2d-compose", "scripts", "final_timeline_probe.py"), [root, ep, "--write", "--json"]),
-        ("script_supervisor_log", os.path.join(SKILLS_DIR, "n2d", "scripts", "script_supervisor_log.py"), [root, ep, "check", "--write-missing", "--json"]),
+        ("script_supervisor_log", os.path.join(SKILLS_DIR, "scripts", "script_supervisor_log.py"), [root, ep, "check", "--write-missing", "--json"]),
     ):
         if not os.path.exists(script):
             p.prework.append({"step": step, "status": "skip", "detail": "script missing"})
@@ -918,19 +918,19 @@ def _run_review_acceptance_outputs(root: str, ep: str, p: Probes) -> None:
     if governance_required:
         creative_args.extend(["--require-decision", "--reason", "production/review acceptance"])
     commands = (
-        ("progress_dag", os.path.join(SKILLS_DIR, "n2d", "progress.py"), ["audit-dag", root, "--json"], True),
+        ("progress_dag", os.path.join(SKILLS_DIR, "progress.py"), ["audit-dag", root, "--json"], True),
         ("production_breakdown", os.path.join(SKILLS_DIR, "n2d-script", "scripts", "production_breakdown.py"), [root, ep, "check", "--json"], True),
         ("final_timeline_probe", os.path.join(SKILLS_DIR, "n2d-compose", "scripts", "final_timeline_probe.py"), [root, ep, "--write", "--json"], True),
-        ("script_supervisor_log", os.path.join(SKILLS_DIR, "n2d", "scripts", "script_supervisor_log.py"), [root, ep, "check", "--write-missing", "--json"], True),
-        ("production_locks", os.path.join(SKILLS_DIR, "n2d", "scripts", "production_locks.py"), [root, ep, "check", "--stage", "review", "--write-missing", "--json"], True),
-        ("creative_governance", os.path.join(SKILLS_DIR, "n2d", "scripts", "creative_governance.py"), creative_args, True),
+        ("script_supervisor_log", os.path.join(SKILLS_DIR, "scripts", "script_supervisor_log.py"), [root, ep, "check", "--write-missing", "--json"], True),
+        ("production_locks", os.path.join(SKILLS_DIR, "scripts", "production_locks.py"), [root, ep, "check", "--stage", "review", "--write-missing", "--json"], True),
+        ("creative_governance", os.path.join(SKILLS_DIR, "scripts", "creative_governance.py"), creative_args, True),
         ("score", os.path.join(SKILLS_DIR, "n2d-score", "scripts", "score.py"), [root, ep, "--run-checks", "--threshold", "85"], True),
         ("consistency_ledger", os.path.join(SKILLS_DIR, "n2d-review", "scripts", "consistency_ledger.py"), [root, ep], True),
         ("review_ui", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "review_ui.py"), [root, ep, "--write", "--export-findings", "--markdown"], True),
         ("episode_app", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "episode_app.py"), [root, "--episode", ep, "--write", "--index"], False),
         ("n2d_board", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "board.py"), [root, "--write", "--markdown"], False),
-        ("failure_taxonomy", os.path.join(SKILLS_DIR, "n2d", "scripts", "failure_taxonomy.py"), [root, ep, "--write"], True),
-        ("release_verdict", os.path.join(SKILLS_DIR, "n2d", "scripts", "release_verdict.py"), [root, ep, "--write"], True),
+        ("failure_taxonomy", os.path.join(SKILLS_DIR, "scripts", "failure_taxonomy.py"), [root, ep, "--write"], True),
+        ("release_verdict", os.path.join(SKILLS_DIR, "scripts", "release_verdict.py"), [root, ep, "--write"], True),
     )
     for step, script, args, required in commands:
         if not os.path.exists(script):
@@ -1406,7 +1406,7 @@ def _run_story_acceptance_prework(p: Probes, root: str, ep: str, packet_kind: st
 
 def _run_production_mode_router_prework(p: Probes, root: str, ep: str) -> None:
     """Write an advisory mode route without mutating the user's setting."""
-    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "production_mode_router.py")
+    script = os.path.join(SKILLS_DIR, "scripts", "production_mode_router.py")
     if not os.path.exists(script):
         return
     try:
@@ -1428,7 +1428,7 @@ def _run_production_mode_router_prework(p: Probes, root: str, ep: str) -> None:
 
 def _run_preventive_contract_prework(p: Probes, root: str, ep: str, stage_name: str) -> None:
     """Run preventive production contracts before expensive or irreversible stages."""
-    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "preventive_contracts.py")
+    script = os.path.join(SKILLS_DIR, "scripts", "preventive_contracts.py")
     if not os.path.exists(script):
         detail = "缺 skills/n2d/scripts/preventive_contracts.py，预防式合同 gate 无法运行（fail-closed）"
         _record_prework_block(p, "preventive_contracts", detail)
@@ -1467,7 +1467,7 @@ def _run_preventive_contract_prework(p: Probes, root: str, ep: str, stage_name: 
             )
             if shared_bootstrap_only:
                 bootstrap_cmd = (
-                    f"python3 skills/n2d-image/scripts/codex_image_runner.py \"{root}\" {ep} "
+                    f"python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"{root}\" {ep} "
                     "--shared-targets all --max-shared-targets 1"
                 )
                 entry["block_type"] = "shared_asset_bootstrap_required"
@@ -1517,7 +1517,7 @@ def _run_production_locks_prework(p: Probes, root: str, ep: str, stage_key: str,
         return
     if not write_missing and not (_production_governance_required(root) or _production_lock_ledger_exists(root, ep)):
         return
-    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "production_locks.py")
+    script = os.path.join(SKILLS_DIR, "scripts", "production_locks.py")
     if not os.path.exists(script):
         detail = "缺 skills/n2d/scripts/production_locks.py，生产锁版账无法核验（fail-closed）"
         _record_prework_block(p, "production_locks", detail)
@@ -1551,7 +1551,7 @@ def _run_repair_preflight_prework(p: Probes, root: str, ep: str, stage_key: str)
     """Run the unified repair/preflight once when entry checks detect drift."""
     if stage_key not in ENTRY_GATED_STAGES:
         return ""
-    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "repair_preflight.py")
+    script = os.path.join(SKILLS_DIR, "scripts", "repair_preflight.py")
     if not os.path.exists(script):
         detail = "缺 skills/n2d/scripts/repair_preflight.py，无法自动清理 stale QC/缺 lock/断裂引用"
         _record_prework_block(p, "repair_preflight", detail)
@@ -1732,7 +1732,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
         ):
             if step == "creative_loop" and stage_key not in AGENT_GEN_STAGES:
                 continue
-            script = os.path.join(SKILLS_DIR, "n2d", "scripts", script_name)
+            script = os.path.join(SKILLS_DIR, "scripts", script_name)
             if not os.path.exists(script):
                 p.prework.append({"step": step, "status": "skip", "detail": "script missing"})
                 continue
@@ -1745,7 +1745,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 })
             except Exception as e:  # pragma: no cover
                 p.prework.append({"step": step, "status": "skip", "detail": str(e)[:160]})
-        genre_script = os.path.join(SKILLS_DIR, "n2d", "scripts", "genre_packs.py")
+        genre_script = os.path.join(SKILLS_DIR, "scripts", "genre_packs.py")
         if os.path.exists(genre_script):
             try:
                 r = _run([sys.executable, genre_script, "context", root, ep, stage_key, "--write", "--json"])
@@ -1790,7 +1790,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                         f"源理解合同未确认或不完整（register={reg}）：{issue_text}。"
                         "小说不能只切章节；要先把现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、"
                         "设定/战力规则变成可审计输入。先跑 "
-                        f"python3 skills/n2d-script/scripts/source_language.py {root} --scaffold，"
+                        f"python3 skills/n2d/n2d-script/scripts/source_language.py {root} --scaffold，"
                         "补全 设定库/source_comprehension.md 与 "
                         "source_comprehension.json.understanding_contract，并把 status 置 confirmed，再从理解层拆集。"))
                     p.prework.append({"step": "source_comprehension_gate", "status": "block",
@@ -1850,7 +1850,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                         detail = _finding_detail(rr.stdout, rr.stderr)
                         _record_prework_block(p, "boundary_audit", (
                             "boundary_audit 标出高风险粗胚边界；先运行 "
-                            f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
+                            f"python3 skills/n2d/n2d-script/scripts/boundary_review.py draft {root} --write，"
                             f"在人审文件 {review_json} 按 blocker 填写 decision/notes/semantic_evidence；"
                             "改边界类决策还必须附绑定改动前合同、新左右 raw SHA 和 source_mapping 的 applied_receipt，再复跑 check。"
                         ))
@@ -2245,7 +2245,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 n_clips = int(summary.get("spectacle_clips") or 0) if isinstance(summary, dict) else 0
                 covered = bool(seq.get("sequences")) if isinstance(seq, dict) else False
                 mark = "✅" if (n_clips > 0 and covered) else "—"
-                prog = os.path.join(SKILLS_DIR, "n2d", "progress.py")
+                prog = os.path.join(SKILLS_DIR, "progress.py")
                 if os.path.exists(prog):
                     _run([sys.executable, prog, "ensure-col", root, "奇观连续性", "—"])
                     _run([sys.executable, prog, "set", root, ep, "奇观连续性", mark])
@@ -2474,7 +2474,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
 
     # 多集/发布项目的剧级字幕、人名、语域、响度合同：先建骨架，再由 gate 严格消费。
     if ep and stage_key in ENTRY_GATED_STAGES:
-        series_script = os.path.join(SKILLS_DIR, "n2d", "scripts", "series_consistency.py")
+        series_script = os.path.join(SKILLS_DIR, "scripts", "series_consistency.py")
         phase = "full" if stage_key in {"compose", "review"} else "script"
         if os.path.exists(series_script):
             try:
@@ -2518,7 +2518,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             # 缺 dashboard.py = 一致性闸门跑不起来。受闸阶段绝不能因工具缺失静默放行
             # （「缺脚本=skip=pass」正是声明≠现实的逃逸口）。fail-closed：缺脚本即 block，
             # 并指明补什么。这是损坏的安装，不是 C4 那种可优雅降级的可选重型依赖。
-            detail = "缺 skills/n2d-dashboard/scripts/dashboard.py，一致性闸门无法运行（fail-closed，先修复安装再继续）"
+            detail = "缺 skills/n2d/n2d-dashboard/scripts/dashboard.py，一致性闸门无法运行（fail-closed，先修复安装再继续）"
             p.gate = {"stage": gate_stage, "blocked": True, "findings_path": None,
                       "return_to_stage": stage_key, "affected_artifacts": [], "rerun_scope": detail}
             p.prework.append({"step": "gate", "stage": gate_stage, "status": "block", "detail": detail})
@@ -2540,7 +2540,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             # 付费档绝不静默放行 → fail-closed 记 gap（同样是损坏安装，非可降级依赖）。
             p.compliance_gap = True
             p.prework.append({"step": "compliance", "status": "gap",
-                              "detail": "缺 skills/n2d-compliance/scripts/compliance.py，合规前置无法核验（fail-closed）"})
+                              "detail": "缺 skills/n2d/n2d-compliance/scripts/compliance.py，合规前置无法核验（fail-closed）"})
 
     if stage_key == "review" and ep and not (p.gate and p.gate.get("blocked")) and not p.prework_block:
         _run_review_acceptance_outputs(root, ep, p)
@@ -2647,7 +2647,7 @@ def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] =
     batch and single-episode runs share the same preflight.
     """
     checks: List[Dict[str, Any]] = []
-    source = os.path.join(SKILLS_DIR, "n2d", "source_check.py")
+    source = os.path.join(SKILLS_DIR, "source_check.py")
     if os.path.exists(source):
         try:
             r = _run([sys.executable, source, root, "--quiet"])
@@ -2741,9 +2741,9 @@ def pilot_action(root: str, ep: Optional[str] = None) -> Dict[str, Any]:
             "pilot_clips": candidates,
             "commands": [
                 f"python3 skills/n2d/run.py next {root} {ep}",
-                f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage image_prompt_preflight",
-                f"python3 skills/n2d-script/scripts/shot_risk_audit.py {root} {ep}",
-                f"python3 skills/n2d-script/scripts/spectacle_probe_pack.py {root} {ep} --write",
+                f"python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage image_prompt_preflight",
+                f"python3 skills/n2d/n2d-script/scripts/shot_risk_audit.py {root} {ep}",
+                f"python3 skills/n2d/n2d-script/scripts/spectacle_probe_pack.py {root} {ep} --write",
             ],
         },
         "gate": None,

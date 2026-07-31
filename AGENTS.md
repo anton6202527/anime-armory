@@ -6,15 +6,15 @@
 
 ## 怎么用这些 skill（任何 agent 通用）
 
-1. **发现**：读 [`skills/README.md`](skills/README.md)（分类总览）和每个 `skills/<name>/SKILL.md`。
+1. **发现**：先读 [`skills/README.md`](skills/README.md)（分类总览）和六个总入口 `skills/<line>/SKILL.md`；子 skill 位于 `skills/<line>/<skill-name>/SKILL.md`。
    - SKILL.md 的 frontmatter `description` + 正文 `Triggers`/`Use when` **就是路由依据**：用户意图命中哪个，就用哪个。
-2. **执行**：照 SKILL.md 的步骤做事；需要算力的步骤跑 `skills/<name>/scripts/` 下的脚本。
+2. **执行**：照 SKILL.md 的步骤做事；总入口脚本在 `skills/<line>/scripts/`，子 skill 脚本在 `skills/<line>/<skill-name>/scripts/`。
 3. **脚本是通用的**：纯 Python / bash，只调通用工具（`ffmpeg` / `librosa` / `whisper` / `yt-dlp` / 生图生视频 CLI 等），**无任何某家 AI 的专有 API**，谁都能直接执行。引用路径用中立的 `skills/...`。
 4. **写法**：对用户输出“下一步”或推荐调用某个 skill 时，一律写裸 skill 名（如 `n2d-image`），**不要**写成 `/n2d-image`。有些 AI agent 会把 `/...` 当内置斜杠命令并报 `Unrecognized command`。
 
 仓库级维护工具不放在 `skills/`，统一放 `tools/`；例如清理工具见 `tools/shared-cleanup/SKILL.md`，作品资产索引/doctor/渐进迁移见 `tools/artifact-catalog/SKILL.md`。
 
-> Claude Code 用户：`.claude/skills → ../skills` 是软链，会自动发现并按触发词路由，无需手动指。其他工具：把用户意图对照下表/各 SKILL.md 的 Triggers 自行选 skill。
+> Claude Code 用户：`.claude/skills → ../skills` 是软链；先由六个系列总入口发现并分诊到同目录内的子 skill。其他工具：把用户意图对照下表/各 SKILL.md 的 Triggers 自行选 skill。
 
 ## 选哪个 skill（按意图）
 

@@ -1,5 +1,5 @@
 {
-  "batch_queue_command": "python3 skills/n2d-batch/scripts/queue.py plan 创作区/制漫剧/那妖魔是姜大人 --from-shooting-schedule 生产数据/ai_shooting_schedule_batch_seed_第1集.json",
+  "batch_queue_command": "python3 skills/n2d/n2d-batch/scripts/queue.py plan 创作区/制漫剧/那妖魔是姜大人 --from-shooting-schedule 生产数据/ai_shooting_schedule_batch_seed_第1集.json",
   "batch_tasks": [
     {
       "affected_artifacts": [],

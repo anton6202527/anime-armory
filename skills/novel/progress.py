@@ -188,7 +188,7 @@ def main():
     if "error" in res:
         if _is_stage_checklist(root):
             print("[redirect] 本项目是『同构阶段清单型』进度，请用：")
-            print(f"    python3 skills/novel-craft/scripts/progress.py {root!r}")
+            print(f"    python3 skills/novel/novel-craft/scripts/progress.py {root!r}")
             return
         print(f"错误: {res['error']}"); sys.exit(1)
 

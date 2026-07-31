@@ -27,7 +27,7 @@ THRESHOLDS_FILE = "alert_thresholds.json"
 # 只能信 score 文件里已写的 threshold（fallback 还是第三个数 80）——commercial 发布可以放行
 # 一个按 demo(75) 档生成的 score 文件。收拢到这里让 score 与 release_verdict 同口径。
 # 数值属内部启发式（confidence=low·无外部可辩护基准），待 n2d-feedback 第一方数据校准；
-# 出处与校准路径登记见 skills/n2d-score/SKILL.md「阈值出处」。
+# 出处与校准路径登记见 skills/n2d/n2d-score/SKILL.md「阈值出处」。
 SCORE_PROFILE_THRESHOLDS: Dict[str, int] = {"demo": 75, "standard": 85, "production": 90, "overseas": 88}
 
 
@@ -72,8 +72,8 @@ ENV_MAP = {
 
 BENCHMARK_FILE = "industry_benchmark.json"
 BENCHMARK_REFERENCE_FILE = os.path.abspath(
-    # 本文件已迁到 skills/n2d/_lib/，到 skills/ 需上溯两级（③ name-accuracy）。
-    os.path.join(os.path.dirname(__file__), "..", "..", "n2d-dashboard", "references", BENCHMARK_FILE)
+    # 从 n2d 系列根目录定位同系列 dashboard 的基准文件。
+    os.path.join(os.path.dirname(__file__), "..", "n2d-dashboard", "references", BENCHMARK_FILE)
 )
 
 # 行业基准参照（**只读·非闸门**）的 fallback。默认值从

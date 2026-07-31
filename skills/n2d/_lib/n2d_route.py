@@ -420,7 +420,7 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "skill": "n2d-video",
                 "redirect_stage_key": "video",
                 "redirect_reason": "post_lipsync_required",
-                "cmd": "python3 skills/n2d-video/scripts/lipsync_pass.py {root} {ep} --apply",
+                "cmd": "python3 skills/n2d/n2d-video/scripts/lipsync_pass.py {root} {ep} --apply",
                 "note": "仍有 neutral-mouth base plate 未升级为最终说话镜：" + "、".join(pending_lipsync),
             }
         return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}

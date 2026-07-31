@@ -3,7 +3,7 @@
   "generated_at": "2026-07-21T19:55:41+00:00",
   "kind": "n2d_repair_preflight",
   "next_when_blocked": [
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 check --json --write-missing",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 check --json --write-missing",
     "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 check --write-missing --write-check --stage image --json"
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
@@ -11,7 +11,7 @@
   "status": "block",
   "steps": [
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 --write-plan --json",
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 --write-plan --json",
       "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [],\n  \"changed_skills\": [],\n  \"commands\": [],\n  \"contract_inheritance\": null,\n  \"created_at\": \"2026-07-21T19:55:41+00:00\",\n  \"current_stage\": \"image\",\n  \"current_todo\": {\n    \"column\": \"出图prompt\",\n    \"command\": \"n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集\",\n    \"label\": \"出图prompt\",\n    \"note\": \"\",\n    \"skill\": \"n2d-image\",\n    \"stage_key\": \"image_prompt\",\n    \"status\": \"⬜\"\n  },\n  \"episode\": \"第1集\",\n  \"execution_steps\": [],\n  \"gate_refresh_needed\": false,\n  \"gate_refresh_stages\": [],\n  \"image_consistency\": {\n    \"advisory\": 39,\n    \"consistent\": true,\n    \"degraded\": false,\n    \"freshness\": \"fresh\",\n    \"hard_blocks\": 0,\n    \"precision_level\": \"full\",\n    \"report_md\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/",
       "payload": {
         "baseline_bootstrapped": false,
@@ -126,7 +126,7 @@
       "step": "update_plan"
     },
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 check --json --write-missing",
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 check --json --write-missing",
       "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-21T19:55:41+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"episode\": \"第1集\",\n  \"status\": \"block\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 7,\n    \"block\": 2\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第1集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issue",
       "payload": {
         "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第1集.json",
@@ -189,7 +189,7 @@
         "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
         "overview_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_handoff_pack_第1集.md",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-        "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 scaffold --write",
+        "scaffold_command": "python3 skills/n2d/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集 scaffold --write",
         "status": "block",
         "summary": {
           "block": 2,

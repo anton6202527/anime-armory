@@ -23,7 +23,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SKILLS = os.path.abspath(os.path.join(HERE, ".."))
+SKILLS = HERE
 CRAFT_SCRIPTS = os.path.join(SKILLS, "mv-craft", "scripts")
 
 
@@ -59,27 +59,27 @@ STAGE_ACTIONS = {
     "setup": ("ready_to_run", 'python3 skills/mv/scripts/init_project.py "{root}"', False),
     "song_ingest": ("needs_user_files", "", False),
     "beat": ("ready_to_run",
-             'conda run -n cosyvoice python skills/mv-beat/scripts/beat_detect.py "{root}" '
+             'conda run -n cosyvoice python skills/mv/mv-beat/scripts/beat_detect.py "{root}" '
              '--confirm-timing --reviewer <name>', False),
     "lyric_sync": ("ready_to_run",
-                   'conda run -n cosyvoice python skills/mv-lyric-sync/scripts/align.py "{root}"', False),
+                   'conda run -n cosyvoice python skills/mv/mv-lyric-sync/scripts/align.py "{root}"', False),
     "script": ("needs_agent_generation", "mv-script", False),
     "script_review": ("needs_agent_generation", "mv-script", False),
-    "plan": ("ready_to_run", 'python3 skills/mv-plan/scripts/plan_clips.py "{root}" && '
-                             'python3 skills/mv-plan/scripts/compose_prompts.py "{root}"', False),
-    "pacing_check": ("ready_to_run", 'python3 skills/mv-score/scripts/score_pacing.py "{root}"', False),
+    "plan": ("ready_to_run", 'python3 skills/mv/mv-plan/scripts/plan_clips.py "{root}" && '
+                             'python3 skills/mv/mv-plan/scripts/compose_prompts.py "{root}"', False),
+    "pacing_check": ("ready_to_run", 'python3 skills/mv/mv-score/scripts/score_pacing.py "{root}"', False),
     "image": ("needs_agent_generation", "mv-image", True),
     "picture_lock": ("needs_human_signoff",
-                     'python3 skills/mv-craft/scripts/production_pack.py "{root}" && '
-                     'python3 skills/mv-craft/scripts/render_animatic.py "{root}" && '
-                     'python3 skills/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>', False),
-    "video_jobs": ("ready_to_run", 'python3 skills/mv-video/scripts/video_jobs.py "{root}"', True),
+                     'python3 skills/mv/mv-craft/scripts/production_pack.py "{root}" && '
+                     'python3 skills/mv/mv-craft/scripts/render_animatic.py "{root}" && '
+                     'python3 skills/mv/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>', False),
+    "video_jobs": ("ready_to_run", 'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}"', True),
     "video": ("needs_human_signoff",
-              'python3 skills/mv-video/scripts/video_jobs.py "{root}" --register <文件> --clip <N> --take <N> '
+              'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --register <文件> --clip <N> --take <N> '
               '[--seed <seed>] → --score … --reviewer <name> → --select …', True),
-    "compose": ("ready_to_run", 'bash skills/mv-compose/mv_compose.sh "{root}"', True),
-    "review": ("ready_to_run", 'python3 skills/mv-review/scripts/mv_check.py "{root}"', False),
-    "handoff": ("needs_human_signoff", 'python3 skills/mv-craft/scripts/ai_usage.py "{root}"', False),
+    "compose": ("ready_to_run", 'bash skills/mv/mv-compose/mv_compose.sh "{root}"', True),
+    "review": ("ready_to_run", 'python3 skills/mv/mv-review/scripts/mv_check.py "{root}"', False),
+    "handoff": ("needs_human_signoff", 'python3 skills/mv/mv-craft/scripts/ai_usage.py "{root}"', False),
 }
 
 # 已 done 也要巡检收据健康度的付费阶段（假 done 主动现形，而非等下次付费 gate 被动报错）。
@@ -168,7 +168,7 @@ def build_next_action(root):
             "receipt_health": receipt_health(root, states, None),
             "action_card": {
                 "headline": "全部阶段完成",
-                "exact_command": 'python3 skills/mv-review/scripts/mv_check.py "{root}"'.format(root=root),
+                "exact_command": 'python3 skills/mv/mv-review/scripts/mv_check.py "{root}"'.format(root=root),
                 "to_user": "可跑 mv-review 总审，或按发行目标平台走发布流程。",
                 "paid_or_irreversible": False,
             },
@@ -186,7 +186,7 @@ def build_next_action(root):
     # song_ingest：歌已在库则只剩回写进度，不再是等文件。
     if key == "song_ingest" and mv_utils.find_song(root):
         stop = "ready_to_run"
-        command = 'python3 skills/mv-craft/scripts/progress_set.py "{root}" song_ingest'
+        command = 'python3 skills/mv/mv-craft/scripts/progress_set.py "{root}" song_ingest'
     health = receipt_health(root, states, key)
     if stop not in ("blocked_by_gate",) and health:
         stop = "stale_receipts"
@@ -251,41 +251,41 @@ def build_impact(root, clip_id, change):
     if change == "edit":
         # 剪辑决定（切点/时长/接缝/顺序）变化 → clip_plan/编辑合同 hash 全链失效。
         add("plan", f"重跑 mv-plan（{clip_id} 的切点/时长/接缝属于编辑合同，改动会换 clip_plan hash）",
-            f'python3 skills/mv-plan/scripts/plan_clips.py "{root}"')
-        add("plan", "重注入语义分镜并刷新收据", f'python3 skills/mv-plan/scripts/compose_prompts.py "{root}"')
-        add("pacing_check", "重跑节奏预检（绑定新 plan）", f'python3 skills/mv-score/scripts/score_pacing.py "{root}"')
+            f'python3 skills/mv/mv-plan/scripts/plan_clips.py "{root}"')
+        add("plan", "重注入语义分镜并刷新收据", f'python3 skills/mv/mv-plan/scripts/compose_prompts.py "{root}"')
+        add("pacing_check", "重跑节奏预检（绑定新 plan）", f'python3 skills/mv/mv-score/scripts/score_pacing.py "{root}"')
         change = "image"  # 编辑变化后按图级级联继续
         add("image", f"检查 {clip_id} 首/尾帧是否仍符合新切点；需要则重出该 clip 图")
     if change == "prompt":
         add("plan", f"改 {clip_id} 的 prompt 后重注入语义收据（semantic_prompts 绑定 clip_plan hash）",
-            f'python3 skills/mv-plan/scripts/compose_prompts.py "{root}"')
+            f'python3 skills/mv/mv-plan/scripts/compose_prompts.py "{root}"')
         add("image", f"用新 prompt 重出 {clip_id} 首帧（及 need_end_frame 时的尾帧）")
         change = "image"
     elif change == "image":
         add("image", f"重出 {clip_id} 首帧（及 need_end_frame 时的尾帧），并登记生成收据",
-            f'python3 skills/mv-image/scripts/record_generation.py "{root}" --asset {clip.get("image_path")} '
+            f'python3 skills/mv/mv-image/scripts/record_generation.py "{root}" --asset {clip.get("image_path")} '
             "--model <模型> --channel <渠道> --prompt <prompt文件> [--reference …]")
     add("image", "重跑 image_qc（assets_sha256 收据换新，旧报告即过期）",
-        f'python3 skills/mv-image/scripts/image_qc.py "{root}"')
+        f'python3 skills/mv/mv-image/scripts/image_qc.py "{root}"')
     if has_lock:
         add("picture_lock", "picture lock 绑定了该图 hash，已失效：重渲 animatic 并重新具名签收",
-            f'python3 skills/mv-craft/scripts/render_animatic.py "{root}" && '
-            f'python3 skills/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>')
+            f'python3 skills/mv/mv-craft/scripts/render_animatic.py "{root}" && '
+            f'python3 skills/mv/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>')
     if job:
         registered = [t for t in job.get("takes") or [] if t.get("video_sha256")]
         if registered:
             add("video", f"{clip_id} 已登记 take 的首帧绑定（first_frame_sha256）将失效：重出该 clip 视频并重新 --register",
-                f'python3 skills/mv-video/scripts/video_jobs.py "{root}" --register <新视频> --clip {clip_id} --take <N>')
+                f'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --register <新视频> --clip {clip_id} --take <N>')
             add("video", "重新具名评分并挑版（重登记会自动作废旧 selected）",
-                f'python3 skills/mv-video/scripts/video_jobs.py "{root}" --score {clip_id} --take <N> … --reviewer <name> '
-                f'&& python3 skills/mv-video/scripts/video_jobs.py "{root}" --select {clip_id} --take <N>')
+                f'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --score {clip_id} --take <N> … --reviewer <name> '
+                f'&& python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --select {clip_id} --take <N>')
             add("video", "重跑 inherit_contract + video_qc（含逐缝复核；语义签收绑定视频 hash，需重签）",
-                f'python3 skills/mv-video/scripts/inherit_contract.py "{root}" && '
-                f'python3 skills/mv-video/scripts/video_qc.py "{root}" --accept-semantic --reviewer <name>')
+                f'python3 skills/mv/mv-video/scripts/inherit_contract.py "{root}" && '
+                f'python3 skills/mv/mv-video/scripts/video_qc.py "{root}" --accept-semantic --reviewer <name>')
     if has_master:
         add("compose", "重合成母版/交付版并重跑 delivery QC + provenance",
-            f'bash skills/mv-compose/mv_compose.sh "{root}"')
-        add("review", "重跑总审对账", f'python3 skills/mv-review/scripts/mv_check.py "{root}"')
+            f'bash skills/mv/mv-compose/mv_compose.sh "{root}"')
+        add("review", "重跑总审对账", f'python3 skills/mv/mv-review/scripts/mv_check.py "{root}"')
     return {
         "kind": "mv_clip_impact",
         "schema_version": 1,

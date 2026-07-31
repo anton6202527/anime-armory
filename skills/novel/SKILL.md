@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3237 | 目录文本总行数 76615
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3237 | 目录文本总行数 76638
 
 # novel — 小说工坊调度入口
 
@@ -14,7 +14,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 **当前默认口径保持不变**：`写小说` 默认进入 novel 纯文本小说生产线，但不默认等于“专门制作漫剧的小说”。新建原创项目时先定 `小说用途`，且该选择点**无默认值**；用户可选 `传统小说 / 漫剧源书 / 微短剧源书 / 短读/短篇 / 出海译制底稿 / 自定义`。只有用户明确选择 `漫剧源书` 或 `微短剧源书`，才启用对应的短章、强钩子、市场基准和后续转制检查；否则按普通小说/网文项目推进。
 
-**默认成书工作流**：已有作品根时，优先跑 `python3 skills/novel-craft/scripts/author_workflow.py "<作品根>" --write`。它会按作者视角检查“入口设置 → 作者意图/蓝图/读者契约 → 资料/观察/审美与事实落场景 → 设定/场景卡/结构地图 → Demo 双闸门 → 分章写作 → review/score → 真实读者验证 → 分层编辑与 editor query → AI/合规/发布元数据 → release manifest”，输出当前步骤、真实 blocker/warning 和下一步命令；`flow.py`、`pipeline_runner.py`、`novel-dashboard` 都以这套默认流程作为可落地的导航层。
+**默认成书工作流**：已有作品根时，优先跑 `python3 skills/novel/novel-craft/scripts/author_workflow.py "<作品根>" --write`。它会按作者视角检查“入口设置 → 作者意图/蓝图/读者契约 → 资料/观察/审美与事实落场景 → 设定/场景卡/结构地图 → Demo 双闸门 → 分章写作 → review/score → 真实读者验证 → 分层编辑与 editor query → AI/合规/发布元数据 → release manifest”，输出当前步骤、真实 blocker/warning 和下一步命令；`flow.py`、`pipeline_runner.py`、`novel-dashboard` 都以这套默认流程作为可落地的导航层。
 
 **Prompt 分层裁决（2026-07）**：小说线不新增“把完整写作合同压成短 prompt”的 provider compiler。蓝图、设定圣经、状态账本、读者契约、章纲、场景卡、上一章窗口与修订项本来就是正文生成所需上下文，擅自精简会造成设定/人物/伏笔漂移。正确边界由 `draft_packets.py` 的逐章/逐 pass 任务包、static/dynamic context、检索命中、source/state hash、语义任务绑定和 `prompt_cache_metrics.py` 提供；只有某个实际文本后端出现独立结构字段时，才在小说线 `_lib` 内新增对应 adapter，不能为了与其它媒介形式统一而强造 compiler。
 
@@ -22,7 +22,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `../skills/novel/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`权利辖区`、`发行地区`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。
 
@@ -54,7 +54,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 要把生产线跑成**无人值守的全自动代理闭环 / 自愈修稿（QA gate findings 自动回流重写）/ 派发 writer·reviewer·researcher specialist** | `novel-supervisor`（上层 agent 编排，消费 pipeline_runner 计划，不绕过蓝图/设定圣经等人工审批） |
 | 已有在建项目，要看**生产控制台 / gate blockers / 修订任务 / 语义任务 / 队列状态 / release readiness** | `novel-dashboard`（只读聚合面板，写 `生产数据/novel_dashboard.*`，不改正文/进度） |
 | 要把**多章节审稿、评分、dashboard 刷新、修订任务**排队给多个 worker 并发处理 | `novel-batch`（本地 flock 队列，claim/lease/reclaim/dead-letter，不直接执行模型） |
-| 已有成品或准成品小说，准备交给视觉生产线前要**检查文本、权利、审稿、评分、AI 披露、改编潜力是否齐** | `python3 skills/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"` |
+| 已有成品或准成品小说，准备交给视觉生产线前要**检查文本、权利、审稿、评分、AI 披露、改编潜力是否齐** | `python3 skills/novel/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
 | 已有审稿/评分/读者反馈后，要做**专业编辑 / 发展性编辑 / 行文编辑 / 拷贝编辑 / 校样 / 主编轮次 / 投稿前精修计划** | `novel-edit`（分层编辑计划：editorial assessment → developmental edit → line edit → copyedit/proofread） |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
@@ -101,13 +101,13 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 ## 决策树
 
 0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `创作区/写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
-   - **默认成书工作流**：先跑 `python3 skills/novel-craft/scripts/author_workflow.py "<作品根>" --write`，拿到作者视角当前步骤、阻断项、警告和下一步命令；它不写正文、不改 `_进度.md`。
+   - **默认成书工作流**：先跑 `python3 skills/novel/novel-craft/scripts/author_workflow.py "<作品根>" --write`，拿到作者视角当前步骤、阻断项、警告和下一步命令；它不写正文、不改 `_进度.md`。
    - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
    - **操作指挥 (Flow)**：若对下一步命令有疑虑、或想检查状态对账/就绪度，跑 `python3 skills/novel/scripts/flow.py "<作品根>"` 获取精准下一步指令。
-   - **生产控制台 (Dashboard)**：若想汇总 pipeline/gate/语义任务/修订/队列/release 状态，跑 `python3 skills/novel-dashboard/scripts/dashboard.py "<作品根>" --write --html`。
+   - **生产控制台 (Dashboard)**：若想汇总 pipeline/gate/语义任务/修订/队列/release 状态，跑 `python3 skills/novel/novel-dashboard/scripts/dashboard.py "<作品根>" --write --html`。
    - **确定性 Workflow runner**：若要让薄 agent 编排长流程，先跑 `python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan`。它只读 registry、查输入/输出/gate、写 `生产数据/novel_pipeline_plan.{json,md}` 和 provenance；不写正文、不调用模型。需要恢复/追踪执行态时用 `--start-run` 创建 `生产数据/pipeline_runs/<run_id>.json`，再用 `--claim-stage` / `--complete-stage` / `--fail-stage` / `--block-stage` 更新阶段。agent 只应依据该 plan/run 选择下一步，并把开放判断交给 `语义任务/` 或 specialist agent；handoff 前可跑 `--handoff <stage>` 生成边界契约。
-   - **批量队列 (Batch)**：若要多 worker 并发处理多章节 review/score 等任务，先用 `python3 skills/novel-batch/scripts/queue.py plan "<作品根>" --kind review --chapters 1-10`，worker 再 `claim`，失败用 `reclaim`/`dead-letter` 处理。
-   - **转制就绪**：若用户表示要继续做视觉生产/短剧/漫剧成片，先跑 `python3 skills/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"`；只检查小说侧条件，不替视觉生产线生成资产或镜头结构。
+   - **批量队列 (Batch)**：若要多 worker 并发处理多章节 review/score 等任务，先用 `python3 skills/novel/novel-batch/scripts/queue.py plan "<作品根>" --kind review --chapters 1-10`，worker 再 `claim`，失败用 `reclaim`/`dead-letter` 处理。
+   - **转制就绪**：若用户表示要继续做视觉生产/短剧/漫剧成片，先跑 `python3 skills/novel/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"`；只检查小说侧条件，不替视觉生产线生成资产或镜头结构。
    - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`，且动态百科分级新鲜度达标（滞后 ≥3 章、或整个缺失且正文已 ≥5 章 → 阻断；轻度滞后仅提醒——百科是审稿的一致性引擎，不能拿过期事实索引审新章）；`export` 覆盖 rights/research/review/score/state closure/AI usage/compliance profile，并在商业/平台/出海/KDP/中国公开发布等目标要求 AI 使用披露、专业资料包和平台/辖区清单闭环。
    - **文本主创模式**：投稿/发布前 gate 会读取 `_设置.md` 的 `文本主创模式` 与 `合规/ai_usage.json`。晋江/起点/番茄/红果等中文网文平台目标下，`AI生成` 正文会阻断，除非补 `合规/platform_ai_evidence.json`（当日平台规则证据）并写入作用域匹配的 `ai_generated_text_platform_exception` 豁免；推荐走 `人类主创` 或 `AI辅助`。
    - **写后自动化**：每写完一章，先填 `审稿/state_delta_第NN章.json` 和对账结论 `审稿/state_verify_第NN章.json`，再跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第NN章 --conclusion <作品根>/审稿/state_verify_第NN章.json`；该入口会先过状态对账/百科/逻辑/力量体系机检，全部硬闸通过并合并状态账本后才自动勾选进度。若 `_设置.md` 选 `小说生成工作流：边写边自检`，`draft_packets.py` 会把这套闭环自动写进每章任务包，`flow.py` 也会把执行命令作为下一步提示；同时按 `小批回扫间隔`（默认 5 章，可改 3 章/关闭）保留 novel-review 的文风、节奏、钩子、人设、读者承诺集中修正；全书 40-60% 进度带自动按半间隔加密回扫（**中段防守**：长篇一致性实证的矛盾高发区；due 点单一真值源 `novel/_lib/sweep_schedule.py`）。逐章情绪/张力实测（`设定/emotional_progression.json`）由 `post_write.py` 在逻辑哨兵前自动回填（tone_check --write-progression，advisory 不阻断）——`logic_sentry` 的"连续 N 章张力塌陷"节奏预警因此每章都有最新曲线可用；回扫窗口无需再手跑，除非项目未走 post_write 闭环。

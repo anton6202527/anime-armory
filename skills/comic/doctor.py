@@ -85,7 +85,7 @@ def diagnose(root: Path | None = None) -> dict[str, Any]:
     # 不再要求当前解释器自身装得动 dghs-imgutils。
     ccip_mode = "unavailable"
     try:
-        bridge_dir = repo_root / "skills" / "comic-review" / "scripts"
+        bridge_dir = repo_root / "skills" / "comic" / "comic-review" / "scripts"
         if str(bridge_dir) not in sys.path:
             sys.path.insert(0, str(bridge_dir))
         import ccip_bridge
@@ -95,12 +95,12 @@ def diagnose(root: Path | None = None) -> dict[str, Any]:
         ccip_mode = "inprocess" if module_available("imgutils") else "unavailable"
     imgutils = ccip_mode != "unavailable"
     validators = [
-        repo_root / "skills" / "comic-script" / "scripts" / "development_pack.py",
-        repo_root / "skills" / "comic-name" / "scripts" / "build_name_board.py",
-        repo_root / "skills" / "comic-layout" / "scripts" / "build_layout.py",
-        repo_root / "skills" / "comic-finishing" / "scripts" / "build_finishing_plan.py",
-        repo_root / "skills" / "comic-identity" / "scripts" / "model_pack.py",
-        repo_root / "skills" / "comic-review" / "scripts" / "gate.py",
+        repo_root / "skills" / "comic" / "comic-script" / "scripts" / "development_pack.py",
+        repo_root / "skills" / "comic" / "comic-name" / "scripts" / "build_name_board.py",
+        repo_root / "skills" / "comic" / "comic-layout" / "scripts" / "build_layout.py",
+        repo_root / "skills" / "comic" / "comic-finishing" / "scripts" / "build_finishing_plan.py",
+        repo_root / "skills" / "comic" / "comic-identity" / "scripts" / "model_pack.py",
+        repo_root / "skills" / "comic" / "comic-review" / "scripts" / "gate.py",
     ]
     contract_ready = all(path.is_file() for path in validators)
     capabilities = [

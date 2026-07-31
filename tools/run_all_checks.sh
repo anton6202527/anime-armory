@@ -110,7 +110,7 @@ case "$MODE" in
 esac
 
 run_step "validate_skills" "$PYTHON" tools/validate_skills.py
-run_step "novel-self-audit" "$PYTHON" skills/novel-review/scripts/self_audit.py --fail-on-block
+run_step "novel-self-audit" "$PYTHON" skills/novel/novel-review/scripts/self_audit.py --fail-on-block
 run_step "independence-audit" "$PYTHON" tools/independence-audit/scripts/check_independence.py
 run_step "state-files-lint" "$PYTHON" tools/validate_state_files.py
 

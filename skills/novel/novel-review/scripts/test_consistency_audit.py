@@ -1,0 +1,254 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Tests for consistency_audit.py — deterministic wiring exercised offline.
+
+We exercise run_logic() directly (offline, no subprocess): it builds the wiki
+via wiki_builder and runs logic_sentry per chapter, then writes the documented
+summaries. main()'s mechanical step shells out, so we don't drive it here.
+
+Run from this directory:
+    cd skills/novel/novel-review/scripts && python3 -m pytest test_consistency_audit.py
+"""
+import os
+import json
+import tempfile
+
+import consistency_audit
+
+
+def _make_project(char_card, chapters):
+    """char_card: text for 设定/角色卡.md. chapters: {filename: text}."""
+    root = tempfile.mkdtemp()
+    sdir = os.path.join(root, "设定")
+    cdir = os.path.join(root, "章节")
+    os.makedirs(sdir)
+    os.makedirs(cdir)
+    # In the real runner, run_mechanical() creates 审稿/ before run_logic() writes
+    # its summary there; replicate that precondition when calling run_logic directly.
+    os.makedirs(os.path.join(root, "审稿"))
+    with open(os.path.join(sdir, "角色卡.md"), "w", encoding="utf-8") as f:
+        f.write(char_card)
+    for name, text in chapters.items():
+        with open(os.path.join(cdir, name), "w", encoding="utf-8") as f:
+            f.write(text)
+    return root
+
+
+def test_run_logic_skips_without_character_card():
+    root = tempfile.mkdtemp()
+    os.makedirs(os.path.join(root, "章节"))
+    res = consistency_audit.run_logic(root)
+    assert res["ran"] is False
+    assert "skipped" in res
+
+
+def test_run_logic_flags_deceased_reactivation():
+    # Chapter 1: 李锦云 dies (death keyword immediately after name).
+    # Chapter 3: dead character acts again, non-flashback.
+    # B10：死人复活靠关键词扫正文=脆弱启发式 → 仍被检出为候选，但降为建议级（不硬阻断 post_write）。
+    card = "## 李锦云\n\n姓名：李锦云\n身份：女主\n"
+    chapters = {
+        "第1章.md": "战场之上，李锦云身亡，全场震动，再无人能挡住敌军的攻势了。",
+        "第2章.md": "众人收拾残局，悲痛欲绝，缓缓离开了这片焦土。",
+        "第3章.md": "李锦云缓步走入大殿，冷冷开口下令，所有人都跪伏在地。",
+    }
+    root = _make_project(card, chapters)
+    res = consistency_audit.run_logic(root)
+
+    assert res["ran"] is True
+    assert res["alerts"] >= 1
+    assert res["blocking"] == 0                 # 脆弱启发式不再硬阻断
+    assert res["heuristic_downgraded"] >= 1     # 降级账可见
+
+    # documented summary file exists with documented shape
+    summary_path = os.path.join(root, "审稿", "logic_alerts_summary.json")
+    assert os.path.exists(summary_path)
+    assert summary_path == res["json"]
+    with open(summary_path, encoding="utf-8") as f:
+        summary = json.load(f)
+    assert set(["blocking", "total", "alerts", "heuristic_downgraded"]).issubset(summary.keys())
+    react = [a for a in summary["alerts"] if a["type"] == "deceased_reactivation"]
+    assert react and react[0]["severity"] == "建议级" and react[0]["confidence"] == "heuristic"
+
+    # wiki was written by run_logic
+    wiki_path = os.path.join(root, "设定", "动态百科.json")
+    assert os.path.exists(wiki_path)
+    with open(wiki_path, encoding="utf-8") as f:
+        wiki = json.load(f)
+    assert wiki["李锦云"]["status"] == "deceased"
+    assert wiki["李锦云"]["death_chapter"] == 1
+
+
+def test_run_logic_clean_when_no_conflict():
+    card = "## 李锦云\n\n姓名：李锦云\n"
+    chapters = {
+        "第1章.md": "李锦云走进庭院，看着满园花开，心情很好。",
+        "第2章.md": "李锦云与友人对弈，谈笑风生，一切如常。",
+    }
+    root = _make_project(card, chapters)
+    res = consistency_audit.run_logic(root)
+    assert res["ran"] is True
+    assert res["blocking"] == 0
+
+    summary_path = os.path.join(root, "审稿", "logic_alerts_summary.json")
+    with open(summary_path, encoding="utf-8") as f:
+        summary = json.load(f)
+    assert summary["blocking"] == 0
+
+
+def test_run_reader_contract_flags_missing_delta_fields():
+    root = _make_project(
+        "## 李锦云\n\n姓名：李锦云\n",
+        {"第1章.md": "李锦云走进庭院，看着满园花开。"},
+    )
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    with open(os.path.join(root, "审稿", "state_delta_第01章.json"), "w", encoding="utf-8") as f:
+        json.dump({"schema_version": 1, "kind": "novel_state_delta", "chapter": 1}, f, ensure_ascii=False)
+    res = consistency_audit.run_reader_contract(root)
+    assert res["ran"] is True
+    assert res["blocking"] >= 1
+    out = os.path.join(root, "审稿", "reader_contract_sentry_summary.json")
+    assert os.path.exists(out)
+    with open(out, encoding="utf-8") as f:
+        summary = json.load(f)
+    types = {item["type"] for item in summary["findings"]}
+    assert "reader_contract_progress_missing" in types
+
+
+def test_run_style_skips_without_anchor():
+    root = tempfile.mkdtemp()
+    os.makedirs(os.path.join(root, "章节"))
+    res = consistency_audit.run_style(root, anchor=None)
+    assert res["ran"] is False
+    assert "skipped" in res
+
+
+def test_run_power_system_skips_without_registry():
+    root = tempfile.mkdtemp()
+    os.makedirs(os.path.join(root, "章节"))
+    res = consistency_audit.run_power_system(root)
+    assert res["ran"] is False
+
+
+def test_run_power_system_flags_tier_regress():
+    root = tempfile.mkdtemp()
+    sdir = os.path.join(root, "设定")
+    os.makedirs(sdir)
+    reg = {
+        "kind": "novel_power_system_registry", "version": 1, "system_type": "修仙",
+        "tiers": {"sequence": ["练气", "筑基"], "subtiers": ["初期", "中期", "后期", "大圆满"]},
+        "progression": [
+            {"chapter": 5, "character": "主角", "tier": "筑基初期"},
+            {"chapter": 8, "character": "主角", "tier": "练气后期"},
+        ],
+    }
+    with open(os.path.join(sdir, "power_system_registry.json"), "w", encoding="utf-8") as f:
+        json.dump(reg, f, ensure_ascii=False)
+    res = consistency_audit.run_power_system(root)
+    assert res["ran"] is True
+    assert res["blocking"] >= 1
+    out = os.path.join(root, "审稿", "power_system_findings.json")
+    assert os.path.exists(out)
+
+
+def test_run_power_system_disabled_by_setting():
+    root = tempfile.mkdtemp()
+    sdir = os.path.join(root, "设定")
+    os.makedirs(sdir)
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("# 设置\n\n- 力量体系自检：关闭\n")
+    with open(os.path.join(sdir, "power_system_registry.json"), "w", encoding="utf-8") as f:
+        json.dump({"kind": "novel_power_system_registry", "tiers": {}, "progression": []}, f, ensure_ascii=False)
+    res = consistency_audit.run_power_system(root)
+    assert res["ran"] is False
+    assert "关闭" in res.get("skipped", "")
+
+
+def test_run_research_fact_support_flags_unbacked_medical_scene():
+    root = tempfile.mkdtemp()
+    os.makedirs(os.path.join(root, "章节"))
+    with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+        f.write("# 第1章 急诊\n医生在医院急诊抢救并决定用药。\n")
+
+    res = consistency_audit.run_research_fact_support(root)
+    assert res["ran"] is True
+    assert res["blocking"] >= 1
+    out = os.path.join(root, "审稿", "research_fact_support.json")
+    assert os.path.exists(out)
+    with open(out, encoding="utf-8") as f:
+        payload = json.load(f)
+    assert any(item["type"] == "missing_research_pack" for item in payload["alerts"])
+
+
+def test_chapters_helper_sorts_by_index():
+    card = "## 李锦云\n"
+    chapters = {
+        "第10章.md": "十",
+        "第2章.md": "二",
+        "第1章.md": "一",
+    }
+    root = _make_project(card, chapters)
+    chs = consistency_audit._chapters(root)
+    indices = [idx for idx, _ in chs]
+    assert indices == [1, 2, 10]
+
+
+def test_run_style_reuses_chapter_fingerprint_cache(monkeypatch):
+    root = _make_project(
+        "## 李锦云\n",
+        {
+            "第1章.md": "李锦云走进庭院。她看见春光明亮，语句舒展而平稳。",
+            "第2章.md": "李锦云在雨声里写信。她慢慢解释旧日误会。",
+        },
+    )
+    anchor_path = os.path.join(root, "设定", "风格指纹.json")
+    anchor_fp = consistency_audit.extract_style.fingerprint(
+        "李锦云走进庭院。她看见春光明亮，语句舒展而平稳。",
+        source="anchor",
+    )
+    with open(anchor_path, "w", encoding="utf-8") as f:
+        json.dump(anchor_fp, f, ensure_ascii=False)
+
+    cache = {}
+    first = consistency_audit.run_style(root, anchor_path, cache=cache)
+    assert first["ran"] is True
+    assert first["cache_misses"] == 2
+
+    def fail_if_recomputed(*_args, **_kwargs):
+        raise AssertionError("cached chapter fingerprints should be reused")
+
+    monkeypatch.setattr(consistency_audit.extract_style, "fingerprint", fail_if_recomputed)
+    second = consistency_audit.run_style(root, anchor_path, cache=cache)
+    assert second["ran"] is True
+    assert second["cache_hits"] == 2
+    assert second["cache_misses"] == 0
+
+
+# ── ConStory 五类 taxonomy 覆盖体检 ──────────────────────────────────────────
+def test_taxonomy_all_categories_present():
+    cov = consistency_audit.taxonomy_coverage({})
+    assert set(cov) == set(consistency_audit.CONSTORY_TAXONOMY)
+
+
+def test_taxonomy_covered_when_detector_ran():
+    result = {"timeline": {"ran": True}, "style_drift": {"ran": True},
+              "logic_sentry": {"ran": True}, "research_fact_support": {"ran": True},
+              "power_system": {"ran": True}, "tone_curve": {"ran": True},
+              "mechanical": {"ran": True}}
+    cov = consistency_audit.taxonomy_coverage(result)
+    assert all(c["status"] == "covered" for c in cov.values())
+
+
+def test_taxonomy_degraded_when_all_skipped():
+    # 叙事与文风的 mapped 检测器全 skipped → degraded（mapped 但没跑），不是 covered
+    result = {"style_drift": {"ran": False, "skipped": "无锚点"},
+              "tone_curve": {"ran": False}, "mechanical": {"ran": False}}
+    cov = consistency_audit.taxonomy_coverage(result)
+    assert cov["叙事与文风"]["status"] == "degraded"
+
+
+def test_taxonomy_gap_when_no_detector_present():
+    # result 里完全没有某类的任何检测器键 → gap（该类一致性根本没接入）
+    cov = consistency_audit.taxonomy_coverage({"style_drift": {"ran": True}})
+    assert cov["时间线与情节逻辑"]["status"] == "gap"
+    assert cov["叙事与文风"]["status"] == "covered"

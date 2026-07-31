@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional, Sequence
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-SKILLS_DIR = SCRIPT_DIR.parents[1]
+SKILLS_DIR = SCRIPT_DIR.parent
 LIB = SCRIPT_DIR.parents[0] / "_lib"
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
@@ -92,7 +92,7 @@ def status_from_exit(code: int) -> str:
 def run_next_action(root: Path, episode: str, *, skip: bool = False) -> Dict[str, Any]:
     if skip:
         return check("next_action", "skip", "skipped by --skip-next-action")
-    cmd = [sys.executable, str(SKILLS_DIR / "n2d" / "run.py"), "next", str(root), episode, "--json"]
+    cmd = [sys.executable, str(SKILLS_DIR / "run.py"), "next", str(root), episode, "--json"]
     proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     payload: Any = None
     try:

@@ -11,7 +11,7 @@
 
 - 活词典：`skills/n2d/_lib/n2d_const.py::SIGNATURE_EFFECT_LEXICON`，启动时从本 manifest 构建；`HIGH_IDENTITY_RISK_EFFECTS` 汇总高身份风险特效。
 - 归一化：`skills/n2d/_lib/n2d_logic.py::normalize_signature_effect()`——把分镜/运镜自由文本里出现的特效名归一到本库。
-- 视频落地：`skills/n2d-video/scripts/prompt_pack.py::signature_effect_directive()`——每个 Clip 若在运镜/描述里点名某特效，自动在 Clip 块暴露该特效的可粘贴核心 prompt，并对 `identity_risk=high` 的特效（换装/换脸/名场面/近脸升格/对打/化鸟）**自动把该特效 negatives + 身份锁负向词并入本镜提交负向 prompt**。
+- 视频落地：`skills/n2d/n2d-video/scripts/prompt_pack.py::signature_effect_directive()`——每个 Clip 若在运镜/描述里点名某特效，自动在 Clip 块暴露该特效的可粘贴核心 prompt，并对 `identity_risk=high` 的特效（换装/换脸/名场面/近脸升格/对打/化鸟）**自动把该特效 negatives + 身份锁负向词并入本镜提交负向 prompt**。
 
 ```bash
 python3 skills/n2d/scripts/effect_reference.py list

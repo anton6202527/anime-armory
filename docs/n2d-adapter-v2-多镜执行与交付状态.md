@@ -60,9 +60,9 @@ AI 标识、备案、本地化、平台审核可以阻断相应 `publish_ready_*
 ```bash
 python3 skills/n2d/_lib/flow_telemetry.py <作品根> --json
 python3 skills/n2d/scripts/episode_graph.py <作品根> 第N集 --write --json
-python3 skills/n2d-compose/scripts/post_video_proxy.py <作品根> 第N集 --render --json
-python3 skills/n2d-video/scripts/multishot_plan.py <作品根> 第N集 --write --json
-python3 skills/n2d-review/scripts/calibrate_thresholds.py <作品根> --calibrate --write --registry --json
-python3 skills/n2d-feedback/scripts/experiments.py audit <作品根> --metrics <平台指标.csv> --write --json
+python3 skills/n2d/n2d-compose/scripts/post_video_proxy.py <作品根> 第N集 --render --json
+python3 skills/n2d/n2d-video/scripts/multishot_plan.py <作品根> 第N集 --write --json
+python3 skills/n2d/n2d-review/scripts/calibrate_thresholds.py <作品根> --calibrate --write --registry --json
+python3 skills/n2d/n2d-feedback/scripts/experiments.py audit <作品根> --metrics <平台指标.csv> --write --json
 python3 skills/n2d/scripts/release_verdict.py <作品根> 第N集 --profile cn_public --write --json
 ```

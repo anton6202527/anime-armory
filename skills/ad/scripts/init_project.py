@@ -15,7 +15,7 @@ import uuid
 from datetime import date
 from pathlib import Path
 
-_CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-craft", "scripts"))
+_CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "ad-craft", "scripts"))
 if _CRAFT not in sys.path:
     sys.path.insert(0, _CRAFT)
 import contract  # noqa: E402

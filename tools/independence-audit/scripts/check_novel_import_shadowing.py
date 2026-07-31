@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Detect high-risk bare imports in novel runtime scripts.
 
-The novel family keeps `skills/novel-craft/scripts/contract.py` as a compatibility
+The novel family keeps `skills/novel/novel-craft/scripts/contract.py` as a compatibility
 shim, but runtime code should import the unique implementation module
 `novel_contract` from `skills/novel/_lib`.  Bare `import contract` can resolve to
 the wrong module when another skill injects its scripts directory into sys.path.

@@ -24,7 +24,7 @@
 - warn [detect] 物理因果链(CG1):  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 
 - warn [detect] 视线状态回读(X2):  视线状态回读(X2)   8 个视线/状态高风险镜当前 image_qc 精度为 degraded；需要 full QC 或人审签收，不能把降级绿灯当作像素一致已验证。 
 - warn [detect] 状态转场视频证据(ST1):  状态转场视频证据(ST1)   检测到 8 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 
-- warn [detect] state_continuity: state_continuity  None 状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。 
+- warn [detect] state_continuity: state_continuity  None 状态演进声明了累积状态（血迹）但本集出图 prompt 未注入——runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。跑 `python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。
 
 ### 角色问题
 - warn [detect] 服装配色(N1): CHAR_01__囚途残损态 服装配色(N1)    

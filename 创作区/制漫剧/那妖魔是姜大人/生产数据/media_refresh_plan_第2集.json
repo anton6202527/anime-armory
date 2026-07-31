@@ -1,11 +1,11 @@
 {
   "agent_steps": [
-    "只在 video gate/QC/n2d-review findings 或显式人工输入确认这些视频 target 不符合最新 prompt/QC/review 标准时，才执行：`python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from video --affected-shot \"Clip_01\" --affected-shot \"Clip_04\" --affected-shot \"Clip_06\" --scope \"媒体刷新·证据确认后重出视频\" --max-concurrency 1 --max-retries 1`；没有证据时保留为待复核，不排队。",
-    "如果上一步已经排队并由 n2d-batch/对应 stage skill 实际完成视频重出，再执行验收：`python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video`；若只是生成队列计划，不能把这一步当成已验收。"
+    "只在 video gate/QC/n2d-review findings 或显式人工输入确认这些视频 target 不符合最新 prompt/QC/review 标准时，才执行：`python3 skills/n2d/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from video --affected-shot \"Clip_01\" --affected-shot \"Clip_04\" --affected-shot \"Clip_06\" --scope \"媒体刷新·证据确认后重出视频\" --max-concurrency 1 --max-retries 1`；没有证据时保留为待复核，不排队。",
+    "如果上一步已经排队并由 n2d-batch/对应 stage skill 实际完成视频重出，再执行验收：`python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video`；若只是生成队列计划，不能把这一步当成已验收。"
   ],
   "commands": [
-    "python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write-plan --regen-mode 严审刷新",
-    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video  # 预检：收集现有视频 gate/QC 证据"
+    "python3 skills/n2d/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write-plan --regen-mode 严审刷新",
+    "python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video  # 预检：收集现有视频 gate/QC 证据"
   ],
   "created_at": "2026-07-24T06:05:15+00:00",
   "decision_boundary": {
@@ -57,19 +57,19 @@
   },
   "execution_steps": [
     {
-      "command": "python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write-plan --regen-mode 严审刷新",
+      "command": "python3 skills/n2d/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write-plan --regen-mode 严审刷新",
       "type": "command"
     },
     {
-      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video  # 预检：收集现有视频 gate/QC 证据",
+      "command": "python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video  # 预检：收集现有视频 gate/QC 证据",
       "type": "command"
     },
     {
-      "instruction": "只在 video gate/QC/n2d-review findings 或显式人工输入确认这些视频 target 不符合最新 prompt/QC/review 标准时，才执行：`python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from video --affected-shot \"Clip_01\" --affected-shot \"Clip_04\" --affected-shot \"Clip_06\" --scope \"媒体刷新·证据确认后重出视频\" --max-concurrency 1 --max-retries 1`；没有证据时保留为待复核，不排队。",
+      "instruction": "只在 video gate/QC/n2d-review findings 或显式人工输入确认这些视频 target 不符合最新 prompt/QC/review 标准时，才执行：`python3 skills/n2d/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 2 --rerun-from video --affected-shot \"Clip_01\" --affected-shot \"Clip_04\" --affected-shot \"Clip_06\" --scope \"媒体刷新·证据确认后重出视频\" --max-concurrency 1 --max-retries 1`；没有证据时保留为待复核，不排队。",
       "type": "agent_step"
     },
     {
-      "instruction": "如果上一步已经排队并由 n2d-batch/对应 stage skill 实际完成视频重出，再执行验收：`python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video`；若只是生成队列计划，不能把这一步当成已验收。",
+      "instruction": "如果上一步已经排队并由 n2d-batch/对应 stage skill 实际完成视频重出，再执行验收：`python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video`；若只是生成队列计划，不能把这一步当成已验收。",
       "type": "agent_step"
     }
   ],

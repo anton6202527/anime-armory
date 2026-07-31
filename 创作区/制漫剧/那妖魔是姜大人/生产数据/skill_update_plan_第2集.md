@@ -36,14 +36,14 @@
 ## 执行步骤
 1. `refresh_gate`
 ```bash
-python3 skills/n2d-dashboard/scripts/dashboard.py gate "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人" 第2集 --stage video
+python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人" 第2集 --stage video
 ```
 2. `refresh_review_findings`
 ```bash
-python3 skills/n2d-review/scripts/consistency_audit.py "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人" 第2集  # 刷新 review findings；不重制产物
+python3 skills/n2d/n2d-review/scripts/consistency_audit.py "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人" 第2集  # 刷新 review findings；不重制产物
 ```
 
 ## 备注
 - 变动集中在 n2d/_lib/review/dashboard/batch/n2d 等横切层，或只涉及该集尚未到达的阶段文件；先重跑 gate/审查/计划，不默认重抽图。
-- 图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第2集` 再据此判断。
-- 契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第2集` 再判。
+- 图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d/n2d-image/scripts/image_qc.py <作品根> 第2集` 再据此判断。
+- 契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d/n2d-video/scripts/inherit_contract.py <作品根> 第2集` 再判。

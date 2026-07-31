@@ -104,7 +104,7 @@ def _block_count(payload: Dict[str, Any]) -> int:
 
 def _gate_cmd(root: str, ep: str, stage: str) -> str:
     return (
-        f'python3 skills/n2d-dashboard/scripts/dashboard.py gate "{root}" {normalize_episode(ep)} '
+        f'python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate "{root}" {normalize_episode(ep)} '
         f"--stage {stage}"
     )
 
