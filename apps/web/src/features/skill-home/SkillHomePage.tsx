@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BrandIcon } from "../../components/BrandIcon";
+import { ComposerAssetPicker } from "../../components/ComposerAssetPicker";
 import { LineIcon } from "../../components/LineIcon";
 import { MembershipMark } from "../../components/MembershipMark";
 import { MODEL_GROUPS } from "../../catalog/models";
@@ -81,7 +82,7 @@ function matchesMarketCategory(skill: SkillDefinition, marketCategory: string) {
   return skill.line === lineByCategory[marketCategory];
 }
 
-type OpenMenu = "model" | "skill" | "mode" | null;
+type OpenMenu = "assets" | "model" | "skill" | "mode" | null;
 type SkillTab = "common" | "favorite" | "mine";
 type SkillLibraryTab = "skills" | "favorite" | "mine";
 
@@ -153,10 +154,10 @@ export function SkillHomePage({
   theme: ThemeMode;
   onThemeChange: (theme: ThemeMode) => void;
 }) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const [prompt, setPrompt] = useState("");
-  const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
+  const [localAssets, setLocalAssets] = useState<PendingAttachment[]>([]);
+  const [composerAttachmentIds, setComposerAttachmentIds] = useState<string[]>([]);
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const [modality, setModality] = useState<ModelModality>("image");
   const [selectedModels, setSelectedModels] = useState<Record<ModelModality, string>>(() => ({
@@ -219,6 +220,10 @@ export function SkillHomePage({
   const activeSourceFile = useMemo(
     () => activeSourceGroup?.files.find((file) => file.id === activeSourceFileId) ?? activeSourceGroup?.files[0],
     [activeSourceFileId, activeSourceGroup],
+  );
+  const attachments = useMemo(
+    () => localAssets.filter((asset) => composerAttachmentIds.includes(asset.id)),
+    [composerAttachmentIds, localAssets],
   );
   const ready = Boolean(prompt.trim() || attachments.length || selectedSkill || selectedModel);
 
@@ -374,6 +379,14 @@ export function SkillHomePage({
     setSelectedModels((current) => ({ ...current, [modality]: "" }));
     setOpenMenu(null);
     window.setTimeout(() => promptRef.current?.focus(), 0);
+  }
+
+  function uploadComposerAssets(files: File[]) {
+    const next = files.map(toAttachment);
+    if (!next.length) return [];
+    setLocalAssets((items) => [...items, ...next]);
+    setComposerAttachmentIds((ids) => [...new Set([...ids, ...next.map((asset) => asset.id)])]);
+    return next.map((asset) => asset.id);
   }
 
   function submit() {
@@ -705,25 +718,21 @@ export function SkillHomePage({
             {attachments.length > 0 && (
               <div className="composer-attachments">
                 {attachments.map((attachment) => (
-                  <button key={attachment.id} type="button" onClick={() => setAttachments((items) => items.filter((item) => item.id !== attachment.id))}>
+                  <button key={attachment.id} type="button" onClick={() => setComposerAttachmentIds((ids) => ids.filter((id) => id !== attachment.id))}>
                     <Paperclip size={14} /><span>{attachment.name}</span><X size={13} />
                   </button>
                 ))}
               </div>
             )}
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              hidden
-              onChange={(event) => {
-                const next = Array.from(event.target.files ?? []).map(toAttachment);
-                setAttachments((items) => [...items, ...next]);
-                event.target.value = "";
-              }}
-            />
             <div className="skill-composer-toolbar">
-              <button className="composer-icon-button" type="button" title="添加文件" aria-label="添加文件" onClick={() => fileInputRef.current?.click()}><Plus size={20} strokeWidth={1.6} /></button>
+              <ComposerAssetPicker
+                assets={localAssets}
+                selectedIds={composerAttachmentIds}
+                menuOpen={openMenu === "assets"}
+                onMenuOpenChange={(open) => setOpenMenu(open ? "assets" : null)}
+                onUpload={uploadComposerAssets}
+                onSelectionChange={setComposerAttachmentIds}
+              />
               <span className="composer-toolbar-hint">回车开始 · Shift + 回车换行</span>
               <span className="composer-grow" />
               <button className="composer-submit" type="button" disabled={!ready} onClick={submit} aria-label="开始创作"><ArrowUp size={21} /></button>
