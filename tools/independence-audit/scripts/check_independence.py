@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Audit skill series independence.
+"""Audit skill-series and top-level standalone-skill independence.
 
-This is a static check. It blocks active references to the removed shared layer
-and code-level coupling between skill series, and — by default — also blocks
+This is a static check. It blocks active references to the removed shared layer,
+code-level coupling between skill series, and standalone-to-series executable
+coupling. By default it also blocks
 cross-series prose inside per-series docs (strict-docs). Pass --lenient-docs to
 drop the prose gate and only enforce code-level independence.
 """
@@ -83,7 +84,7 @@ def rel(path: Path, root: Path) -> str:
     return path.relative_to(root).as_posix()
 
 
-def series_for_path(path: Path, root: Path) -> str | None:
+def owner_for_path(path: Path, root: Path) -> str | None:
     try:
         parts = path.relative_to(root).parts
     except ValueError:
@@ -91,9 +92,10 @@ def series_for_path(path: Path, root: Path) -> str | None:
     if len(parts) < 2 or parts[0] != "skills":
         return None
     top = parts[1]
-    for series in SERIES:
-        if top == series or top.startswith(series + "-"):
-            return series
+    if top in SERIES:
+        return top
+    if (root / "skills" / top / "SKILL.md").is_file():
+        return f"standalone:{top}"
     return None
 
 
@@ -169,7 +171,7 @@ def check_file(path: Path, root: Path, strict_docs: bool) -> list[Issue]:
     issues: list[Issue] = []
     if not SERIES_SKILL_NAMES:
         SERIES_SKILL_NAMES.update(discover_series_skill_names(root))
-    owner = series_for_path(path, root)
+    owner = owner_for_path(path, root)
     relative = rel(path, root)
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
@@ -201,7 +203,9 @@ def check_file(path: Path, root: Path, strict_docs: bool) -> list[Issue]:
                         Issue(relative, line_no, "cross-series-code", f"{owner} code references {other}", stripped)
                     )
 
-        if strict_docs and owner and path.suffix == ".md":
+        # Standalone skills may document concepts learned from a series, but
+        # their executable files are still forbidden from coupling to it.
+        if strict_docs and owner in SERIES and path.suffix == ".md":
             for other in SERIES:
                 if other == owner:
                     continue

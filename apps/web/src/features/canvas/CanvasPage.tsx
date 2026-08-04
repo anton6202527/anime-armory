@@ -30,10 +30,14 @@ import {
   type ReactFlowInstance,
 } from "@xyflow/react";
 import {
+  ArrowLeft,
+  ArrowRight,
   ArrowUp,
   ArrowUpDown,
   Blocks,
+  BookOpen,
   Box,
+  BriefcaseBusiness,
   Camera,
   Check,
   ChevronDown,
@@ -44,16 +48,26 @@ import {
   Coins,
   Download,
   ExternalLink,
+  Film,
   Filter,
   Folder,
+  GripVertical,
   Hand,
+  Headphones,
+  ImagePlay,
+  Info,
+  Link2,
   Maximize2,
   Mic2,
   Minimize2,
   MoreHorizontal,
+  MousePointer2,
+  Music2,
   Paperclip,
+  PencilLine,
   Play,
   Plus,
+  QrCode,
   RotateCcw,
   Search,
   Settings2,
@@ -65,7 +79,6 @@ import {
   Upload,
   UserRound,
   WandSparkles,
-  Wrench,
   X,
 } from "lucide-react";
 import { BrandIcon } from "../../components/BrandIcon";
@@ -76,6 +89,17 @@ import { SelectMenu } from "../../components/SelectMenu";
 import { MODEL_GROUPS, getModelById } from "../../catalog/models";
 import type { ModelModality } from "../../catalog/types";
 import { MembershipDialog } from "../account/MembershipDialog";
+import {
+  StandaloneSkillWorkflowOverlay,
+  type StandaloneWorkflowKind,
+  type StandaloneWorkflowResult,
+} from "./StandaloneSkillWorkflows";
+import {
+  TOOLBOX_CLASSICS,
+  TOOLBOX_TEMPLATES,
+  type ToolboxClassic,
+  type ToolboxTemplate,
+} from "./toolboxTemplates";
 import { CreateSkillDialog, type CreateSkillFormValues } from "../skill-home/CreateSkillDialog";
 import { SKILLS } from "../../catalog/skills";
 import { createAgentGateway, type AgentGateway } from "../../lib/agent";
@@ -103,11 +127,16 @@ type CanvasTool = "select" | "pan";
 type DrawerKind = "add" | "tools" | "assets" | "characters" | "history" | "overview";
 type AgentPanelTab = "conversation" | "skills" | "history" | "settings";
 type OverlayKind = "shortcuts" | "tutorial" | "share" | "clear-data" | "style-library" | "effect-library";
+type RailMenuKind = "move" | "help" | null;
+type HelpPanelKind = "customer" | "sales" | "official" | null;
+type SharePanelKind = "choices" | "link" | "publish";
 type ComposerMenuKind = "assets" | "model" | "skill" | "mode" | null;
 type HeaderMenuKind = "board" | "credits" | "profile" | null;
 type AgentHeaderPopover = "history" | "share" | null;
 type AssetSource = "personal" | "agent";
 type AssetTag = "其它" | "人物" | "场景" | "物品" | "风格" | "音效";
+type AssetManagerSource = "personal" | "kling";
+type AssetManagerCategory = "全部" | AssetTag;
 type CanvasSkillTab = "common" | "favorite" | "mine";
 type CanvasSkillCatalogTab = "skills" | "favorite" | "mine";
 type CanvasInsertSubmenu = "script" | "assets" | null;
@@ -137,6 +166,7 @@ type CanvasLibrarySkill = {
   title: string;
   slug: string;
   description: string;
+  line?: CreationLine;
   creator?: string;
   category?: string;
   guide?: string;
@@ -145,7 +175,7 @@ type CanvasLibrarySkill = {
 };
 type WorkflowNodeKind = "text" | "script" | "image" | "audio" | "video" | "compose";
 type WorkflowNodeStatus = "idle" | "ready" | "running" | "done" | "failed";
-type WorkflowNodeVariant = "default" | "director" | "script-new" | "script-legacy";
+type WorkflowNodeVariant = "default" | "director" | "script-new" | "script-legacy" | "script-workflow" | "character-workflow" | "first-frame-video-workflow" | "audio-video-workflow";
 type OverviewKindFilter = "all" | WorkflowNodeKind | "director" | "legacy-script";
 
 const OVERVIEW_FILTER_OPTIONS: Array<{ value: OverviewKindFilter; label: string }> = [
@@ -199,11 +229,28 @@ type WorkflowNodeData = {
 
 type WorkflowNode = Node<WorkflowNodeData, "workflow-node">;
 
+type CanvasStarterPreset = {
+  id: "story-script" | "character-turnaround" | "first-frame-video" | "audio-video";
+  title: string;
+  skill: string;
+  skillPath: string;
+  cover: string;
+  nodes: Array<{
+    kind: WorkflowNodeKind;
+    title: string;
+    description: string;
+    variant?: WorkflowNodeVariant;
+    data?: Partial<WorkflowNodeData>;
+  }>;
+};
+
 type CanvasNodeActions = {
   update: (nodeId: string, patch: Partial<WorkflowNodeData>) => void;
   run: (nodeId: string) => void;
   quickAction: (nodeId: string, action: string) => void;
   openDirector: (nodeId: string) => void;
+  openScript: (nodeId: string) => void;
+  openStandalone: (nodeId: string, workflow: StandaloneWorkflowKind) => void;
 };
 
 type PresetDefinition = {
@@ -242,6 +289,7 @@ interface RunRecord {
 type IconName =
   | "add"
   | "assets"
+  | "asset-manager"
   | "audio"
   | "character"
   | "close"
@@ -254,14 +302,18 @@ type IconName =
   | "history"
   | "image"
   | "map"
+  | "minimap"
   | "move"
   | "panel"
   | "script"
   | "share"
   | "send"
   | "sparkle"
+  | "shortcut"
+  | "snap"
   | "text"
   | "tools"
+  | "tidy"
   | "tutorial"
   | "redo"
   | "undo"
@@ -308,50 +360,153 @@ const ADD_NODE_OPTIONS: Array<{
   { id: "library", kind: "image", label: "素材库", badge: "NEW" },
 ];
 
-const TOOLBOX_TEMPLATES = [
-  "左弧滑行",
-  "电商手机弹出效果",
-  "咖啡杯出场",
-  "360° 旋转展示",
-  "机械臂视角",
-  "Live 2D",
-  "瞳孔拉近",
-  "飞鸟解体",
-  "破盒而出",
-  "商品震撼登场",
-  "反重力漂浮",
-  "大师分镜九宫格",
-];
+const CANVAS_SHORTCUT_GROUPS = [
+  { title: "创作", items: [["成组", "G"], ["合并分镜组", "⌥ G"], ["解组", "⇧ G"], ["连线", "L"], ["复制节点和连线", "D"], ["生成", "Enter"], ["新建节点", "Tab"], ["节点复制", "Option + 拖动节点"], ["创建副本", "Option + 拖动"]] },
+  { title: "缩放", items: [["放大", "⌘ +"], ["缩小", "⌘ −"], ["适应画布", "0"], ["触控板", "双指缩放"], ["鼠标", "滚轮"]] },
+  { title: "移动画布", items: [["键盘", "Space"], ["触控板", "双指移动"], ["鼠标", "中键拖动"], ["移动", "V"], ["抓手工具", "H"], ["整理画布", "⌥ ⇧ F"]] },
+  { title: "其他", items: [["撤销", "⌘ Z"], ["重做", "⇧ ⌘ Z"], ["删除", "⌫"]] },
+] as const;
 
+const stylePreset = (name: string, author: string, uses: string, category = "推荐", model = "Lib Image", commercial = true): PresetDefinition => ({ name, author, uses, category, model, commercial });
+const effectPreset = (name: string, author: string, uses: string): PresetDefinition => ({ name, author, uses, category: "推荐", model: "Lib Video 2.0", commercial: true });
+
+// Snapshot of the public catalog cards visible in LibTV on 2026-08-04. Keeping
+// the metadata local avoids coupling the canvas to another product's login.
 const STYLE_PRESETS: PresetDefinition[] = [
-  { name: "复古马卡龙", author: "AI搬砖侠", category: "推荐", uses: "359", model: "Lib Image", commercial: true },
-  { name: "新中式", author: "AI搬砖侠", category: "推荐", uses: "444", model: "Lib Image", commercial: true },
-  { name: "岁月港风", author: "消息免打扰", category: "摄影写真", uses: "354", model: "Lib Image", commercial: true },
-  { name: "新国韵", author: "AI萨大法官", category: "动漫游戏", uses: "464", model: "Lib Image", commercial: true },
-  { name: "清风竹林", author: "消息免打扰", category: "风格插画", uses: "107", model: "Lib Image", commercial: true },
-  { name: "小岛微风", author: "捏捏AI", category: "摄影写真", uses: "870", model: "Midjourney V7", commercial: true },
-  { name: "慢门胶片", author: "vibe fckuing", category: "摄影写真", uses: "273", model: "Lib Image", commercial: true },
-  { name: "曜黑幻境", author: "鱿鱼chill", category: "动漫游戏", uses: "788", model: "Midjourney Niji 7", commercial: true },
-  { name: "霸王戏梦", author: "大葱同学", category: "新中式", uses: "170", model: "Lib Image", commercial: true },
-  { name: "莫奈花园", author: "可可大王", category: "风格插画", uses: "241", model: "Lib Image", commercial: true },
-  { name: "毛绒织梦", author: "孤雌的白日梦", category: "创意玩法", uses: "99", model: "Midjourney V7", commercial: true },
-  { name: "梦核赛博", author: "AI搬砖侠", category: "动漫游戏", uses: "300", model: "Lib Image", commercial: true },
+  stylePreset("复古马卡龙", "AI搬砖侠", "359"),
+  stylePreset("新中式", "AI搬砖侠", "445", "风格插画"),
+  stylePreset("岁月港风", "消息免打扰", "367", "摄影写真"),
+  stylePreset("新国韵", "AI萨大法官", "465", "动漫游戏"),
+  stylePreset("清风竹林", "消息免打扰", "108", "风格插画"),
+  stylePreset("小岛微风", "捏捏AI", "872", "摄影写真", "Midjourney V7"),
+  stylePreset("慢门胶片", "vibe fckuing", "274", "摄影写真"),
+  stylePreset("曜黑幻境", "鱿鱼chill", "799", "动漫游戏", "Midjourney Niji 7"),
+  stylePreset("霸王戏梦", "大葱同学", "171", "风格插画"),
+  stylePreset("双重梦境", "孤雌的白日梦", "140", "创意玩法"),
+  stylePreset("古风侠影", "管夯工作台", "439", "动漫游戏"),
+  stylePreset("莫奈花园", "可可大王", "251", "风格插画"),
+  stylePreset("富士之夏", "可可大王", "550", "风格插画"),
+  stylePreset("云海", "AI萨大法官", "262", "风格插画", "Midjourney Niji 7"),
+  stylePreset("曼岛日落", "大葱同学", "206", "摄影写真"),
+  stylePreset("虹光柔映", "江户川阿伟", "116", "风格插画"),
+  stylePreset("复古港风", "江户川阿伟", "170", "摄影写真"),
+  stylePreset("江湖旧梦", "大葱同学", "574", "动漫游戏"),
+  stylePreset("潜梦迷离", "鱿鱼chill", "95", "风格插画"),
+  stylePreset("青山", "江户川阿伟", "202", "摄影写真"),
+  stylePreset("毛绒织梦", "孤雌的白日梦", "99", "创意玩法", "Midjourney V7"),
+  stylePreset("梦核赛博", "AI搬砖侠", "300", "动漫游戏"),
+  stylePreset("35MM", "没有工作的天", "346", "摄影写真"),
+  stylePreset("赛博蝉鸣", "捏捏AI", "91", "动漫游戏", "Midjourney Niji 7"),
+  stylePreset("尼斯的海", "汪往旺", "308", "摄影写真"),
+  stylePreset("落日蓝调", "AI萨大法官", "298", "摄影写真"),
+  stylePreset("美式卡通", "消息免打扰", "449", "动漫游戏"),
+  stylePreset("午夜柔光", "管夯工作台", "118", "摄影写真"),
+  stylePreset("银翼梦境", "AI搬砖侠", "273", "动漫游戏"),
+  stylePreset("加州旷野", "孤雌的白日梦", "230", "摄影写真"),
+  stylePreset("暮紫流年", "凌晨四点实验室", "142", "摄影写真"),
+  stylePreset("苍翠低语", "鱿鱼chill", "246", "摄影写真"),
+  stylePreset("琉璃幻梦", "omom", "123", "风格插画"),
+  stylePreset("寂色朱砂", "可可大王", "72", "摄影写真"),
+  stylePreset("90s Film", "苏打绿豆", "79", "摄影写真"),
+  stylePreset("粉雾幻境", "vibe fckuing", "166", "摄影写真"),
+  stylePreset("墨染幽玄", "消息免打扰", "76", "风格插画"),
+  stylePreset("幽梦绮章", "管夯工作台", "148", "风格插画"),
+  stylePreset("霓虹小怪兽", "没有工作的天", "77", "动漫游戏"),
+  stylePreset("英姿墨彩", "消息免打扰", "136", "风格插画"),
+  stylePreset("睡莲晨曦", "大葱同学", "61", "风格插画"),
+  stylePreset("麦田黄昏", "苏打绿豆", "41", "摄影写真"),
+  stylePreset("黑白极境", "omom", "90", "摄影写真"),
+  stylePreset("霓虹残影", "汪往旺", "51", "动漫游戏", "Midjourney Niji 7"),
+  stylePreset("怪诞漫画", "vibe fckuing", "118", "动漫游戏"),
+  stylePreset("糖衣奇点", "管夯工作台", "67", "创意玩法"),
+  stylePreset("8bit", "凌晨四点实验室", "19", "动漫游戏"),
+  stylePreset("濑户晴空", "苏打绿豆", "43", "摄影写真"),
+  stylePreset("粘土动画", "捏捏AI", "78", "创意玩法"),
+  stylePreset("毛毡风", "AI萨大法官", "76", "创意玩法"),
+  stylePreset("城市巨人", "vibe fckuing", "542", "创意玩法"),
+  stylePreset("巨物奇观", "管夯工作台", "167", "创意玩法"),
+  stylePreset("暗光产品", "江户川阿伟", "827", "电商营销"),
+  stylePreset("亮调产品", "没有工作的天", "623", "电商营销"),
+  stylePreset("原生相机", "孤雌的白日梦", "1500", "摄影写真"),
+  stylePreset("CCD风", "AI搬砖侠", "319", "摄影写真"),
+  stylePreset("古早dv风", "大葱同学", "150", "摄影写真"),
+  stylePreset("J_漫剧素材三视图+大头表情+姿势图", "JM32", "3700", "动漫游戏"),
+  stylePreset("Qwen-Image手写文艺艺术字体", "万俊平", "7900", "平面设计", "Qwen Image"),
+  stylePreset("漫剧仿真人配角大全【三视图展示】AI短片素人群像", "斑斓和绿荫", "8000", "动漫游戏", "Qwen Image"),
+  stylePreset("【摸鱼】3D电商渲染级KV海报_创意视觉表达", "大摸鱼家_Xr", "21.1w", "电商营销", "Qwen Image"),
+  stylePreset("东方玄幻武侠修仙世界", "重楼IP视觉", "13.1w", "动漫游戏", "Qwen Image"),
+  stylePreset("【摸鱼】创意电商场景_电商产品场景", "大摸鱼家_Xr", "22.4w", "电商营销", "Qwen Image"),
+  stylePreset("一键电商产品详情页长图全案｜高转化策划案", "Dave", "1.1w", "电商营销"),
+  stylePreset("1912.5D写实人像", "191", "6.6w", "摄影写真"),
+  stylePreset("Qwen-Image-Lightning-8steps-V1.1-bf16.safetensors", "87", "59.5w", "创意玩法", "Qwen Image", false),
+  stylePreset("Qwen-暗黑哥特风格情侣头像插画", "sonnet", "5.1w", "动漫游戏", "Qwen Image"),
+  stylePreset("Qwen-Image-Lightning-8steps-V2.0", "87", "30.4w", "创意玩法", "Qwen Image", false),
+  stylePreset("XT日系半厚涂", "夏不吃兔", "3.2w", "风格插画", "Qwen Image", false),
+  stylePreset("分镜脚本故事版分镜", "YOUS", "1200", "小说推文"),
+  stylePreset("ZOZ_厚涂插画", "之O周", "9.0w", "风格插画", "Qwen Image"),
+  stylePreset("【Dave】清新文艺手写字体｜专辑｜影视｜音乐｜综艺｜Logo等海报标题（♥中文控制）书法艺术创意字", "Dave", "13.1w", "平面设计", "Qwen Image"),
+  stylePreset("XT古风插画奇幻少女", "夏不吃兔", "6.8w", "风格插画", "Qwen Image"),
+  stylePreset("CG动漫角色-Qwen", "尘恢", "10.4w", "动漫游戏", "Qwen Image"),
+  stylePreset("破界.玄光极速版 Z-image +qwen", "刀忑", "4.8w", "创意玩法"),
+  stylePreset("一键生成人物多视图", "像素农夫DESIGN", "5700", "动漫游戏"),
+  stylePreset("豪华公寓.", "奇幻设计", "9.8w", "建筑及室内设计", "Qwen Image"),
+  stylePreset("03_Ai艺画室_都市写实Z-image-lora", "长青诗", "5.0w", "摄影写真", "Z Image"),
+  stylePreset("Qwen-image-南音浅浅-小红书爆女生立绘02", "南音浅浅", "6.0w", "动漫游戏", "Qwen Image"),
+  stylePreset("Qwen-Image字体设计宋体字体设计", "万俊平", "4.2w", "平面设计", "Qwen Image"),
 ];
 const EFFECT_PRESETS: PresetDefinition[] = [
-  { name: "小蜜蜂运镜", author: "vibe fckuing", category: "推荐", uses: "1900", model: "Lib Video 2.0", commercial: true },
-  { name: "穿云而入", author: "管夯工作台", category: "推荐", uses: "946", model: "Lib Video 2.0", commercial: true },
-  { name: "飞跃地平线", author: "vibe fckuing", category: "推荐", uses: "1600", model: "Lib Video 2.0", commercial: true },
-  { name: "逆转引力", author: "omom", category: "推荐", uses: "340", model: "Lib Video 2.0", commercial: true },
-  { name: "地球缩放", author: "孤雌的白日梦", category: "创意玩法", uses: "296", model: "Lib Video 2.0", commercial: true },
-  { name: "瞳孔推镜", author: "消息免打扰", category: "摄影写真", uses: "668", model: "Lib Video 2.0", commercial: true },
-  { name: "产品扫光", author: "鱿鱼chill", category: "电商营销", uses: "1600", model: "Lib Video 2.0", commercial: true },
-  { name: "水下慢镜头", author: "AI萨大法官", category: "摄影写真", uses: "396", model: "Lib Video 2.0", commercial: true },
-  { name: "微距推镜", author: "可可大王", category: "电商营销", uses: "429", model: "Lib Video 2.0", commercial: true },
-  { name: "子弹时间", author: "汪往旺", category: "动漫游戏", uses: "449", model: "Lib Video 2.0", commercial: true },
-  { name: "星尘降临", author: "管夯工作台", category: "创意玩法", uses: "219", model: "Lib Video 2.0", commercial: true },
-  { name: "机甲变身", author: "凌晨四点实验室", category: "动漫游戏", uses: "185", model: "Lib Video 2.0", commercial: true },
+  effectPreset("小蜜蜂运镜", "vibe fckuing", "1900"),
+  effectPreset("穿云而入", "管夯工作台", "952"),
+  effectPreset("飞跃地平线", "vibe fckuing", "1600"),
+  effectPreset("逆转引力", "omom", "341"),
+  effectPreset("地球缩放", "孤雌的白日梦", "298"),
+  effectPreset("环球缩放", "苏打绿豆", "313"),
+  effectPreset("瞳孔推镜", "消息免打扰", "668"),
+  effectPreset("俯冲地球", "没有工作的天", "429"),
+  effectPreset("产品扫光", "鱿鱼chill", "1600"),
+  effectPreset("普拉达换装", "omom", "91"),
+  effectPreset("多角度定点", "AI萨大法官", "955"),
+  effectPreset("水下慢镜头", "AI萨大法官", "396"),
+  effectPreset("试妆特写", "捏捏AI", "131"),
+  effectPreset("悬浮缓入", "捏捏AI", "273"),
+  effectPreset("微距推镜", "可可大王", "430"),
+  effectPreset("直升机揭幕", "汪往旺", "114"),
+  effectPreset("山路追击", "AI萨大法官", "303"),
+  effectPreset("雪地赛车", "可可大王", "191"),
+  effectPreset("City Drive", "捏捏AI", "136"),
+  effectPreset("3D解构", "大葱同学", "511"),
+  effectPreset("面部环拍", "苏打绿豆", "299"),
+  effectPreset("Showroom", "可可大王", "104"),
+  effectPreset("饰品特写", "江户川阿伟", "87"),
+  effectPreset("巨人俯瞰", "大葱同学", "152"),
+  effectPreset("Runway", "AI搬砖侠", "110"),
+  effectPreset("AI 编舞", "苏打绿豆", "669"),
+  effectPreset("机械姬", "汪往旺", "201"),
+  effectPreset("巨星名场面", "管夯工作台", "121"),
+  effectPreset("镜面分身", "vibe fckuing", "82"),
+  effectPreset("瞳孔异变", "孤雌的白日梦", "76"),
+  effectPreset("红毯闪光灯", "汪往旺", "124"),
+  effectPreset("赛博化妆师", "AI搬砖侠", "32"),
+  effectPreset("星云漩涡", "没有工作的天", "258"),
+  effectPreset("控雨术", "AI搬砖侠", "73"),
+  effectPreset("燃烧开场", "大葱同学", "92"),
+  effectPreset("全景相机", "消息免打扰", "56"),
+  effectPreset("星尘降临", "管夯工作台", "220"),
+  effectPreset("涡轮运镜", "江户川阿伟", "182"),
+  effectPreset("流光展翼", "vibe fckuing", "53"),
+  effectPreset("机甲变身", "凌晨四点实验室", "186"),
+  effectPreset("升格爆炸", "孤雌的白日梦", "191"),
+  effectPreset("子弹时间", "汪往旺", "452"),
+  effectPreset("反派登场", "江户川阿伟", "267"),
+  effectPreset("双人对打", "AI萨大法官", "540"),
+  effectPreset("升格KO", "管夯工作台", "201"),
+  effectPreset("驯龙高手", "鱿鱼chill", "158"),
+  effectPreset("深海巨兽", "AI搬砖侠", "105"),
+  effectPreset("飞鸟解体", "没有工作的天", "207"),
 ];
 const PRESET_CATEGORIES = ["推荐", "Midjourney", "摄影写真", "电商营销", "动漫游戏", "风格插画", "平面设计", "建筑及室内设计", "创意玩法", "文创周边", "小说推文"];
+const STYLE_MODEL_FILTERS = ["全部", "Lib Image", "Midjourney V7", "Midjourney Niji 7", "Midjourney V8.1", "General image Pro", "General image V2", "Qwen Image", "Qwen Image Edit", "Z Image", "Seedream 4.5", "Seedream 5.0"];
+const EFFECT_MODEL_FILTERS = ["全部", "Lib Video 2.0"];
 
 function nodeRuntimeDefaults(kind: WorkflowNodeKind, variant: WorkflowNodeVariant = "default"): Partial<WorkflowNodeData> {
   if (kind === "image") return { prompt: "", model: "Lib Image", imageMode: "文生图", aspectRatio: "16:9", quality: "标准画质", resolution: "2K", outputCount: 1 };
@@ -374,20 +529,18 @@ const CANVAS_HISTORY_MEDIA: Array<{ id: CanvasHistoryMedia; label: string }> = [
   { id: "audio", label: "音频" },
 ];
 
-const AGENT_SKILL_LIBRARY: CanvasLibrarySkill[] = [
-  { id: "pixar", title: "皮克斯动画广告", slug: "/pixar-animated-ad-creator", category: "商业广告", description: "从角色立绘、分镜草图到最终合成带广告歌的完整成片" },
-  { id: "viral", title: "爆款拉片复刻", slug: "/viral-video-replicator", category: "商业广告", description: "AI 拆解爆款视频，一键复刻同款" },
-  { id: "neo-chinese", title: "新中式美学TVC", slug: "/neo-chinese-aesthetic-tvc", category: "商业广告", description: "从妆造、布景到广告成片的一站式视觉方案" },
-  { id: "wuxia", title: "古典武侠电影全流程导演", slug: "/hujinquanwuxia", category: "视觉风格", description: "把模糊的武侠主题转化为视频生产方案" },
-  { id: "gameplay", title: "游戏实机PV", slug: "/gameplay-pv-builder", category: "商业广告", description: "UI 像素锚定不形变，打造 3A 级游戏效果" },
-  { id: "female-drama", title: "精品女频短剧一键成片", slug: "/xingrannvpin", category: "剧情短片", description: "精品短剧工业化全流程一键出片" },
-  { id: "koreeda", title: "是枝裕和电影美学", slug: "/koreeda-film-aesthetic", category: "视觉风格", description: "用日常写实的生活肌理包裹克制轻盈的情感" },
-  { id: "wes", title: "韦斯安德森电影美学", slug: "/wes-anderson-aesthetics", category: "视觉风格", description: "深度还原对称构图与标志性视听语言" },
-  { id: "narrative", title: "剧情TVC广告片", slug: "/narrative-tvc-creator", category: "商业广告", description: "创作剧情化商品、品牌与服务类 TVC" },
-  { id: "western", title: "伊斯特伍德西部片", slug: "/eastwood-western-style", category: "剧情短片", description: "极静对峙后瞬间爆发的枪战大片" },
-  { id: "car", title: "一键爽感轰炸流汽车TVC", slug: "/high-impact-car-tvc", category: "商业广告", description: "上传图片或文字即可打造高冲击汽车广告" },
-  { id: "travel", title: "旅拍大师", slug: "/cinematic-travel-vlog-maker", category: "剧情短片", description: "把地点、人物参考和文案做成电影感旅拍短片" },
-];
+const AGENT_SKILL_LIBRARY: CanvasLibrarySkill[] = SKILLS.map((skill) => ({
+  id: skill.id,
+  title: skill.title,
+  slug: `/${skill.skill}`,
+  description: skill.description,
+  line: skill.line,
+  creator: skill.creator,
+  category: skill.category,
+  guide: skill.guide,
+  steps: skill.steps,
+  useCases: skill.useCases,
+}));
 
 const CANVAS_MODALITY_LABELS: Record<ModelModality, string> = {
   text: "文字",
@@ -404,11 +557,13 @@ function loadCanvasFavoriteSkills() {
   }
 }
 
-const AGENT_SKILL_BATCHES = [
-  AGENT_SKILL_LIBRARY.slice(0, 4),
-  AGENT_SKILL_LIBRARY.slice(4, 8),
-  AGENT_SKILL_LIBRARY.slice(8, 12),
-];
+const AGENT_SKILL_BATCHES = Array.from(
+  { length: Math.max(1, Math.ceil(AGENT_SKILL_LIBRARY.length / 4)) },
+  (_, batchIndex) => Array.from(
+    { length: Math.min(4, AGENT_SKILL_LIBRARY.length) },
+    (_, itemIndex) => AGENT_SKILL_LIBRARY[(batchIndex * 4 + itemIndex) % AGENT_SKILL_LIBRARY.length],
+  ),
+);
 
 function suggestedSkillsFor(work: WebWork): SuggestedSkill[] {
   const catalogSkills = SKILLS
@@ -433,30 +588,40 @@ function suggestedSkillsFor(work: WebWork): SuggestedSkill[] {
 }
 
 const CHARACTER_PRESETS = [
-  { id: "fresh-girl", name: "甜妹 / 清新少女", detail: "女主 · 现代 · 青年 · 温柔" },
-  { id: "ceo", name: "霸总 / 精英大佬", detail: "男主 · 现代 · 冷峻 · 精英" },
-  { id: "gentleman", name: "温柔熟男 / 理想男友", detail: "男主 · 现代 · 温柔 · 成熟" },
-  { id: "heiress", name: "清冷千金 / 白切黑女主", detail: "女主 · 现代 · 清冷 · 反差" },
+  { id: "fresh-girl", name: "甜妹/清新少女", detail: "女主 · 女 · 现代 · 青年 · 温柔" },
+  { id: "ceo", name: "霸总/精英大佬", detail: "男主 · 男 · 现代 · 青年 · 冷峻" },
+  { id: "gentleman", name: "温柔熟男/理想男友", detail: "男主 · 男 · 现代 · 成熟 · 温柔" },
+  { id: "heiress", name: "清冷千金/白切黑女主", detail: "女主 · 女 · 现代 · 青年 · 清冷" },
   { id: "ancient-man", name: "古风男主", detail: "男主 · 古风 · 青年 · 英气" },
   { id: "ancient-woman", name: "古风女主", detail: "女主 · 古风 · 青年 · 清雅" },
-  { id: "villainess", name: "恶毒女配 / 白莲花", detail: "女配 · 现代 · 反派 · 明艳" },
-  { id: "father", name: "正派长辈 / 父", detail: "长辈 · 现代 · 稳重 · 正派" },
-  { id: "mother", name: "正派长辈 / 母", detail: "长辈 · 现代 · 温和 · 正派" },
-  { id: "relative", name: "反派长辈 / 势利亲戚", detail: "长辈 · 现代 · 反派 · 强势" },
+  { id: "villainess", name: "恶毒女配/白莲花", detail: "女配 · 女 · 现代 · 反派 · 明艳" },
+  { id: "father", name: "正派长辈/父", detail: "长辈 · 男 · 现代 · 稳重 · 正派" },
+  { id: "mother", name: "正派长辈/母", detail: "长辈 · 女 · 现代 · 温和 · 正派" },
+  { id: "relative", name: "反派长辈/势利亲戚", detail: "长辈 · 现代 · 反派 · 强势" },
   { id: "ordinary", name: "生活方式普通人", detail: "配角 · 现代 · 自然 · 生活感" },
-  { id: "fashion", name: "时尚感亚洲青年", detail: "主角 · 现代 · 时尚 · 都市" },
+  { id: "asian-man", name: "时尚感亚洲男生", detail: "男 · 现代 · 青年 · 时尚 · 都市" },
+  { id: "asian-woman", name: "时尚感亚洲女生", detail: "女 · 现代 · 青年 · 时尚 · 都市" },
+  { id: "western-man", name: "时尚感欧美男生", detail: "男 · 欧美 · 青年 · 时尚 · 都市" },
+  { id: "western-woman", name: "时尚感欧美女生", detail: "女 · 欧美 · 青年 · 时尚 · 都市" },
+  { id: "boy", name: "小男孩", detail: "男 · 现代 · 儿童 · 活泼 · 自然" },
+  { id: "girl", name: "小女孩", detail: "女 · 现代 · 儿童 · 灵动 · 自然" },
+  { id: "asian-woman-cool", name: "时尚感亚洲女生", detail: "女 · 现代 · 青年 · 清冷 · 高级" },
+  { id: "asian-man-casual", name: "时尚感亚洲男生", detail: "男 · 现代 · 青年 · 休闲 · 阳光" },
+  { id: "western-woman-editorial", name: "时尚感欧美女生", detail: "女 · 欧美 · 青年 · 编辑感 · 高级" },
 ];
 
 function Icon({ name }: { name: IconName }) {
   let content: ReactNode;
+  let viewBox = "0 0 24 24";
   switch (name) {
-    case "add": content = <><path d="M12 5v14M5 12h14" /></>; break;
-    case "move": content = <><path d="M12 3v18M3 12h18M12 3l-3 3m3-3 3 3M12 21l-3-3m3 3 3-3M3 12l3-3m-3 3 3 3m15-3-3-3m3 3-3 3" /></>; break;
-    case "tools": content = <><path d="M4 7h10M4 17h16M14 7l2-2v4l-2-2ZM10 17l-2-2v4l2-2Z" /></>; break;
-    case "assets": content = <><rect x="3.5" y="5" width="17" height="14" rx="2" /><path d="m5 16 4-4 3 3 2-2 5 5M8 9h.01" /></>; break;
-    case "character": content = <><circle cx="12" cy="8" r="3" /><path d="M5.5 20c.8-4 3-6 6.5-6s5.7 2 6.5 6" /></>; break;
-    case "history": content = <><path d="M4 8V4m0 0h4M4 4l3 3a8 8 0 1 1-2 8" /><path d="M12 8v5l3 2" /></>; break;
-    case "tutorial": content = <><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z" /><path d="M8 4v13a3 3 0 0 0 3 3M11 8h5M11 12h4" /></>; break;
+    case "add": viewBox = "0 0 17 17"; content = <path d="M8.5 0c.5 0 .9.48.9 1.06V7.6h6.54c.58 0 1.06.4 1.06.9s-.48.9-1.06.9H9.4v6.54c0 .58-.4 1.06-.9 1.06s-.9-.48-.9-1.06V9.4H1.06C.48 9.4 0 9 0 8.5s.48-.9 1.06-.9H7.6V1.06C7.6.48 8 0 8.5 0" fill="currentColor" stroke="none" />; break;
+    case "move": viewBox = "0 0 16 16"; content = <g transform="translate(.39 .395)"><path d="M.09 1.94A1.45 1.45 0 0 1 1.94.09l12.3 4.4c1.25.45 1.31 2.19.1 2.71l-.21.1a13 13 0 0 0-6.84 6.83l-.09.2a1.46 1.46 0 0 1-2.7-.08zm1.41-.63a.15.15 0 0 0-.19.2l4.4 12.3c.05.14.24.14.3.01l.1-.2a14.4 14.4 0 0 1 7.5-7.52l.21-.09a.16.16 0 0 0 0-.3z" fill="currentColor" stroke="none" /></g>; break;
+    case "tools": viewBox = "0 0 17.97 17.97"; content = <path d="M15.65 0a2.3 2.3 0 0 1 2.32 2.32v1.66a2.3 2.3 0 0 1-2.32 2.32h-1.67a2.3 2.3 0 0 1-2.23-1.72l-.27.05H9.82q-.14.01-.15.04-.02 0-.04.15v8.33q.01.14.04.14 0 .03.15.04h1.66q.15 0 .27.06a2.3 2.3 0 0 1 2.23-1.72h1.67a2.3 2.3 0 0 1 2.32 2.31v1.67a2.3 2.3 0 0 1-2.32 2.32h-1.67a2.3 2.3 0 0 1-2.31-2.32V14.6l-.19.03H9.82q-.62 0-1.07-.42a1.5 1.5 0 0 1-.42-1.06V9.63H6.48L6.3 9.6v.22a2.3 2.3 0 0 1-2.32 2.31H2.32A2.3 2.3 0 0 1 0 9.82V8.15a2.3 2.3 0 0 1 2.32-2.32h1.66A2.3 2.3 0 0 1 6.3 8.15v.21l.18-.03h1.85V4.82q0-.62.42-1.07.45-.42 1.07-.42h1.66q.1 0 .19.03V2.32A2.3 2.3 0 0 1 13.98 0zm-1.67 12.97a1 1 0 0 0-1.01 1.01v1.67c0 .56.45 1.02 1.01 1.02h1.67c.56 0 1.02-.46 1.02-1.02v-1.67c0-.56-.46-1.01-1.02-1.01zM2.32 7.13c-.56 0-1.02.46-1.02 1.02v1.67c0 .56.46 1.01 1.02 1.01h1.66c.56 0 1.02-.45 1.02-1.01V8.15c0-.56-.46-1.02-1.02-1.02zM13.98 1.3c-.56 0-1.01.46-1.01 1.02v1.66c0 .56.45 1.02 1.01 1.02h1.67c.56 0 1.02-.46 1.02-1.02V2.32c0-.56-.46-1.02-1.02-1.02z" fill="currentColor" stroke="none" />; break;
+    case "assets": viewBox = "0 0 16.61 16.36"; content = <path d="M8.97.75c.55-.8 1.64-1 2.43-.43l4.5 3.24c.73.54.93 1.55.44 2.32l-3 4.7-.1.14 2.14 4.71c.2.44-.12.93-.6.93h-9.1a.65.65 0 0 1-.6-.92l.9-1.98a4.74 4.74 0 1 1-1.22-9.34q.92 0 1.72.32l.07-.13zM6.68 15.06h7.1l-3.55-7.81zM4.76 5.42a3.45 3.45 0 1 0 2.03 6.25l1.42-3.13v-.02a3.46 3.46 0 0 0-3.45-3.1m5.88-4.04a.4.4 0 0 0-.6.1l-2.4 3.57-.02.01q.9.67 1.42 1.69l.6-1.34.05-.08a.65.65 0 0 1 1.14.08l1.78 3.92 2.64-4.15a.4.4 0 0 0-.1-.56z" fill="currentColor" stroke="none" />; break;
+    case "character": viewBox = "0 0 18.17 16.5"; content = <path d="M13.25 10A3.25 3.25 0 1 1 10 13.25a.92.92 0 0 0-1.83 0v.17a3.25 3.25 0 1 1-.6-2.05 2.4 2.4 0 0 1 3.03 0A3.3 3.3 0 0 1 13.25 10m-8.33 1.5a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5m8.33 0c-.9 0-1.65.69-1.74 1.57v.36a1.75 1.75 0 1 0 1.74-1.93M11.52 0a2.4 2.4 0 0 1 2.3 1.5l.05.12v.02l1.6 5.03h1.95a.75.75 0 0 1 0 1.5H.75a.75.75 0 1 1 0-1.5h1.93l1.16-4.08A2.4 2.4 0 0 1 6.17.83h2.91q.21 0 .4-.09l1.06-.5q.46-.22.98-.24m.04 1.5a1 1 0 0 0-.37.09l-1.06.5q-.44.21-.91.24H6.17a.9.9 0 0 0-.88.67L4.23 6.67h9.65l-1.44-4.55-.04-.1a.9.9 0 0 0-.85-.52" fill="currentColor" stroke="none" />; break;
+    case "history": viewBox = "0 0 17 17"; content = <path d="M8.5 0a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17m0 1.32a7.18 7.18 0 1 0 0 14.37 7.18 7.18 0 0 0 0-14.37M8.2 4.1c.36 0 .65.3.65.66v3.42q0 .2.15.48.13.21.26.32l.08.06 2.59 1.54a.66.66 0 0 1-.68 1.14l-2.58-1.54a2.4 2.4 0 0 1-.81-.86 2.4 2.4 0 0 1-.33-1.14V4.76c0-.37.3-.66.66-.66" fill="currentColor" stroke="none" />; break;
+    case "shortcut": viewBox = "0 0 16 16"; content = <g transform="translate(0 1.4706) scale(.880572)"><path d="M15.75 0a2.4 2.4 0 0 1 2.42 2.42v10a2.4 2.4 0 0 1-2.42 2.41H2.42A2.4 2.4 0 0 1 0 12.42v-10A2.4 2.4 0 0 1 2.42 0zM2.42 1.5c-.5 0-.92.41-.92.92v10c0 .5.41.91.92.91h13.33c.5 0 .92-.4.92-.91v-10c0-.5-.41-.92-.92-.92zM13.25 10a.75.75 0 0 1 0 1.5H4.92a.75.75 0 0 1 0-1.5zm-7.5-3.33a.75.75 0 0 1 0 1.5.75.75 0 1 1 0-1.5m3.34 0a.75.75 0 1 1 0 1.5.75.75 0 1 1 0-1.5m3.34 0a.75.75 0 0 1 0 1.5h-.01a.75.75 0 0 1 0-1.5M4.09 3.33a.75.75 0 0 1 0 1.5.75.75 0 0 1 0-1.5m3.34 0a.75.75 0 0 1 0 1.5h-.01a.75.75 0 0 1 0-1.5m3.33 0a.75.75 0 0 1 0 1.5.75.75 0 0 1 0-1.5m3.33 0a.75.75 0 0 1 0 1.5.75.75 0 0 1 0-1.5" fill="currentColor" stroke="none" /></g>; break;
+    case "tutorial": viewBox = "0 0 17 17"; content = <path d="M8.5 0a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17m0 1.3a7.2 7.2 0 1 0 0 14.4 7.2 7.2 0 0 0 0-14.4m.97 12.22h-1.3v-1.3h1.3zM8.6 3.6c.91 0 1.6.35 2.14.85.57.52.84 1.24.84 2.07q-.01.97-.56 1.7l-.01.02-.01.01q-.24.28-.98.94H10q-.3.27-.39.45v.02q-.18.28-.17.5v1.1h-1.3v-1.1c0-.45.16-.85.34-1.16q.24-.42.67-.79.71-.64.83-.78.29-.37.29-.91-.02-.78-.42-1.12c-.34-.31-.72-.5-1.26-.5-.63 0-1.13.25-1.46.6v.01c-.32.33-.5.79-.5 1.46h-1.3q-.01-1.3.74-2.23l.11-.12A3.2 3.2 0 0 1 8.6 3.61" fill="currentColor" stroke="none" />; break;
     case "workflow": content = <><rect x="3" y="4" width="6" height="5" rx="1" /><rect x="15" y="15" width="6" height="5" rx="1" /><path d="M9 6.5h4a4 4 0 0 1 4 4V15" /></>; break;
     case "text": content = <><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M8.5 8h7M8.5 12h7M8.5 16h5" /></>; break;
     case "script": content = <><path d="M6 3h9l3 3v15H6zM15 3v4h4M9 11h6M9 15h6" /></>; break;
@@ -466,8 +631,12 @@ function Icon({ name }: { name: IconName }) {
     case "compose": content = <><rect x="4" y="4" width="11" height="11" rx="2" /><path d="M9 9h11v11H9z" /></>; break;
     case "copy": content = <><rect x="8" y="8" width="11" height="11" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></>; break;
     case "download": content = <><path d="M12 4v11m0 0 4-4m-4 4-4-4" /><path d="M5 18v2h14v-2" /></>; break;
+    case "asset-manager": content = <path d="M12 5v16m8.001-2A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2a5 5 0 0 1 4-2z" />; break;
+    case "tidy": viewBox = "0 0 16 16"; content = <g transform="translate(1 1)"><path d="M5.13 8.34c.87 0 1.58.7 1.58 1.57v1.58c0 .87-.7 1.57-1.58 1.57H2.51c-.87 0-1.58-.7-1.58-1.57V9.9c0-.87.7-1.57 1.58-1.57zm6.36-2.1c.87 0 1.58.7 1.58 1.57v3.68c0 .87-.7 1.57-1.58 1.57H8.87c-.87 0-1.58-.7-1.58-1.57V7.8c0-.87.7-1.57 1.58-1.57zM2.46 9.39a.53.53 0 0 0-.48.52v1.58c0 .27.21.5.48.52h2.73a.5.5 0 0 0 .47-.52V9.9c0-.27-.2-.5-.47-.52zm6.4-2.1a.5.5 0 0 0-.52.52v3.73c.03.25.23.45.47.47h2.74a.5.5 0 0 0 .46-.47V7.81a.53.53 0 0 0-.52-.52zM5.14.93c.87 0 1.58.7 1.58 1.57v3.68c0 .87-.7 1.57-1.58 1.57H2.51c-.87 0-1.58-.7-1.58-1.57V2.5c0-.86.7-1.57 1.58-1.57zM2.46 1.98a.53.53 0 0 0-.48.52v3.73c.03.25.23.45.48.47h2.73a.5.5 0 0 0 .47-.47V2.5c0-.27-.2-.5-.47-.52zM11.49.93c.87 0 1.58.7 1.58 1.57v1.58c0 .87-.7 1.57-1.58 1.57H8.87c-.87 0-1.58-.7-1.58-1.57V2.5c0-.86.7-1.57 1.58-1.57zM8.87 1.98a.53.53 0 0 0-.53.52v1.63c.03.27.26.47.53.47h2.62c.27 0 .5-.2.52-.47V2.5a.53.53 0 0 0-.52-.52z" fill="currentColor" stroke="none" /></g>; break;
+    case "minimap": viewBox = "0 0 21.8 21.8"; content = <path d="M10.9 0a6.9 6.9 0 0 1 6.9 6.9l-.01.4a10 10 0 0 1-1.82 4.7h1.93a1.9 1.9 0 0 1 1.8 1.3l2 6 .06.22a1.9 1.9 0 0 1-1.64 2.27l-.22.01h-18a1.9 1.9 0 0 1-1.8-2.5l2-6 .06-.14A1.9 1.9 0 0 1 3.9 12h1.93A10 10 0 0 1 4 7.3v-.4A6.9 6.9 0 0 1 10.9 0M3.87 13.8l-.02.02-.04.05-2 6a.1.1 0 0 0 0 .09l.04.03.05.01h18a.1.1 0 0 0 .08-.04l.02-.05v-.04l-2-6-.04-.05-.06-.02h-3.3a27 27 0 0 1-2.55 2.61 1.9 1.9 0 0 1-2.36-.04c-.6-.54-1.54-1.44-2.5-2.57zm7.03-12a5.1 5.1 0 0 0-5.1 5.1c0 1.51.83 3.18 1.95 4.7A24 24 0 0 0 10.9 15l.05-.01a24 24 0 0 0 3.1-3.38C15.17 10.08 16 8.4 16 6.9a5.1 5.1 0 0 0-5.1-5.1m0 2.2a2.9 2.9 0 1 1 0 5.8 2.9 2.9 0 0 1 0-5.8m0 1.8a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2" fill="currentColor" stroke="none" />; break;
+    case "edge": viewBox = "0 0 16 16"; content = <g transform="translate(2.225 1.64)"><path d="M9.28 0a2.28 2.28 0 1 1-2.22 2.8h-4.5a1.52 1.52 0 1 0 0 3.03h6.42a2.57 2.57 0 0 1 0 5.14h-4.5a2.28 2.28 0 1 1 0-1.05h4.5a1.52 1.52 0 0 0 0-3.04H2.57a2.57 2.57 0 0 1 0-5.13h4.5C7.3.75 8.2 0 9.26 0m-7 9.22a1.23 1.23 0 1 0 0 2.45 1.23 1.23 0 0 0 0-2.45m7-8.17a1.22 1.22 0 1 0 0 2.45 1.22 1.22 0 0 0 0-2.45" fill="currentColor" stroke="none" /></g>; break;
+    case "snap": content = <path d="m12 15 4 4M2.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l6.029-6.029a1 1 0 1 1 3 3l-6.029 6.029a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l6.365-6.367A1 1 0 0 0 8.716 4.282zM5 8l4 4" />; break;
     case "map": content = <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15" /></>; break;
-    case "edge": content = <><circle cx="5" cy="17" r="2" /><circle cx="19" cy="7" r="2" /><path d="M7 16c4-1 4-7 10-8" /></>; break;
     case "grid": content = <><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16M15 4v16" /></>; break;
     case "undo": content = <><path d="M9 7 4 12l5 5" /><path d="M5 12h8a6 6 0 0 1 6 6" /></>; break;
     case "redo": content = <><path d="m15 7 5 5-5 5" /><path d="M19 12h-8a6 6 0 0 0-6 6" /></>; break;
@@ -479,7 +648,7 @@ function Icon({ name }: { name: IconName }) {
     case "close": content = <><path d="m6 6 12 12M18 6 6 18" /></>; break;
     case "collapse-panel": content = <><path d="M6 4v16M10 12h9M15 8l4 4-4 4" /></>; break;
   }
-  return <svg className={`canvas-icon canvas-icon-${name}`} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{content}</svg>;
+  return <svg className={`canvas-icon canvas-icon-${name}`} viewBox={viewBox} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{content}</svg>;
 }
 
 function nodeDefinition(kind: WorkflowNodeKind) {
@@ -544,7 +713,80 @@ const WORKFLOW_STAGES: Record<CreationLine, readonly WorkflowStagePreset[]> = {
   ],
 };
 
+const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
+  {
+    id: "story-script",
+    title: "故事脚本生成",
+    skill: "n2d-script-workbench",
+    skillPath: "skills/n2d-script-workbench/SKILL.md",
+    cover: "/skill-covers/n2d.jpg",
+    nodes: [
+      {
+        kind: "text",
+        title: "故事脚本",
+        description: "《我在盛唐写天下》· 古风 / 穿越 / 爽文漫剧",
+        data: { prompt: "《我在盛唐写天下》\n类型：古风 / 穿越 / 爽文漫剧\n时长建议：60–90秒\n基调：热血 × 盛唐史诗感 × 爽点节奏\n\n【序幕】现代深夜办公室，沈昭昭加班昏倒。\n【第一幕】她在盛唐金銮殿醒来，被命当殿作诗。\n【第二幕】她吟出惊世诗篇，满殿震动。\n【第三幕】镜头推远，盛唐山河展开。" },
+      },
+      {
+        kind: "script",
+        title: "脚本生成器",
+        description: "描述故事、剧情片段或创作目标，生成可继续编辑的分镜脚本",
+        variant: "script-new",
+        data: { prompt: "请把以下故事构想生成可执行的分镜脚本：" },
+      },
+    ],
+  },
+  {
+    id: "character-turnaround",
+    title: "角色三视图",
+    skill: "n2d-character-turnaround",
+    skillPath: "skills/n2d-character-turnaround/SKILL.md",
+    cover: "/skill-covers/song.jpg",
+    nodes: [
+      { kind: "image", title: "角色图", description: "上传、选择或生成角色主参考图", data: { imageMode: "图片输入" } },
+      {
+        kind: "image",
+        title: "角色三视图",
+        description: "依据角色主参考生成正面、侧面与背面的一致性角色图",
+        variant: "character-workflow",
+        data: { imageMode: "角色三视图", aspectRatio: "16:9", prompt: "同一角色，正面、侧面、背面三视图，比例与服装细节保持一致" },
+      },
+    ],
+  },
+  {
+    id: "first-frame-video",
+    title: "首帧图生视频",
+    skill: "n2d-first-frame-video",
+    skillPath: "skills/n2d-first-frame-video/SKILL.md",
+    cover: "/skill-covers/mv.jpg",
+    nodes: [
+      { kind: "image", title: "首帧图片", description: "上传、选择或生成视频的首帧画面", data: { imageMode: "图片输入" } },
+      { kind: "video", title: "首帧图生视频", description: "基于首帧延展动作、镜头和环境变化", variant: "first-frame-video-workflow", data: { videoMode: "首帧生成视频", prompt: "基于首帧自然延展动作与运镜，保持主体和场景连续" } },
+    ],
+  },
+  {
+    id: "audio-video",
+    title: "音频生视频",
+    skill: "n2d-audio-video",
+    skillPath: "skills/n2d-audio-video/SKILL.md",
+    cover: "/skill-covers/comic.jpg",
+    nodes: [
+      { kind: "audio", title: "音频输入", description: "上传或选择成品音频，提取节拍、段落和能量变化", data: { model: "音频分析" } },
+      { kind: "image", title: "图片", description: "上传、选择或生成音频视频的视觉首帧", data: { imageMode: "图片输入" } },
+      { kind: "video", title: "音频生视频", description: "根据节拍与段落生成卡点视频镜头", variant: "audio-video-workflow", data: { videoMode: "音频生视频", prompt: "根据音频节拍、段落与能量变化生成连续卡点画面" } },
+    ],
+  },
+];
+
+function CanvasStarterPresetIcon({ id }: { id: CanvasStarterPreset["id"] }) {
+  if (id === "story-script") return <Film size={21} strokeWidth={2} />;
+  if (id === "character-turnaround") return <UserRound size={21} strokeWidth={2} />;
+  if (id === "first-frame-video") return <ImagePlay size={21} strokeWidth={2} />;
+  return <Music2 size={21} strokeWidth={2} />;
+}
+
 function initialGraph(work: WebWork): { nodes: WorkflowNode[]; edges: Edge[] } {
+  if (!work.prompt.trim() && work.attachments.length === 0) return { nodes: [], edges: [] };
   const sourceName = work.attachments[0]?.name || (work.prompt ? "创作需求" : "未命名灵感");
   const nodes: WorkflowNode[] = [{
     id: "text-source",
@@ -683,6 +925,43 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     </div>
   );
 
+  const renderScriptWorkflowNode = () => (
+    <div className="workflow-script-result nodrag" onPointerDown={stopPointer}>
+      <div className="workflow-script-result-actions">
+        <button type="button" onClick={() => actions?.run(id)}><RotateCcw size={13} />重新生成</button>
+        <button type="button" disabled>批量生成分镜</button>
+        <button type="button" disabled>批量生视频</button>
+        <button type="button" aria-label="下载" disabled><Download size={13} /></button>
+      </div>
+      <strong>我在盛唐写天下</strong>
+      <div className="workflow-script-result-steps">
+        <span className="is-done"><i><Check size={11} /></i><b>确认镜头</b></span>
+        <span><i>2</i><b>准备资产</b></span>
+        <span><i>3</i><b>合成提示词</b></span>
+      </div>
+      <button type="button" className="workflow-script-open" onClick={() => actions?.openScript(id)}>打开脚本节点 <ArrowRight size={13} /></button>
+    </div>
+  );
+
+  const renderStandaloneWorkflowNode = () => {
+    const workflow: StandaloneWorkflowKind = variant === "character-workflow"
+      ? "character-turnaround"
+      : variant === "first-frame-video-workflow"
+        ? "first-frame-video"
+        : "audio-video";
+    const meta = workflow === "character-turnaround"
+      ? { title: "角色三视图", steps: ["选择角色图", "完善角色设定", "生成三视图"], icon: <UserRound size={25} /> }
+      : workflow === "first-frame-video"
+        ? { title: "首帧图生视频", steps: ["选择首帧", "设计运动", "生成视频"], icon: <ImagePlay size={25} /> }
+        : { title: "音频生视频", steps: ["导入音频", "节拍与画面", "生成视频"], icon: <Music2 size={25} /> };
+    return <div className="workflow-standalone-result nodrag" onPointerDown={stopPointer}>
+      <div className="workflow-standalone-visual"><span>{meta.icon}</span><i /><i /><i /></div>
+      <strong>{meta.title}</strong>
+      <div className="workflow-standalone-steps">{meta.steps.map((label, index) => <span key={label}><i>{index + 1}</i><b>{label}</b></span>)}</div>
+      <button type="button" onClick={() => actions?.openStandalone(id, workflow)}>打开工作台 <ArrowRight size={13} /></button>
+    </div>;
+  };
+
   return (
     <article className={`workflow-node-card kind-${data.kind} variant-${variant} status-${data.status}${selected ? " is-selected is-expanded" : ""}`}>
       <Handle type="target" position={Position.Left} className="workflow-handle workflow-handle-target" />
@@ -695,7 +974,9 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
         <div className={`workflow-node-preview preview-${data.kind}`}><span /><span /><span />{data.kind === "video" && <i><Icon name="video" /></i>}</div>
       )}
       {!selected && data.kind === "audio" && <div className="workflow-node-waveform" aria-hidden="true">{[8, 15, 10, 23, 18, 27, 12, 21, 9, 18, 13, 25, 16, 9].map((height, index) => <i key={`${height}-${index}`} style={{ height }} />)}</div>}
-      {selected && variant === "director" ? <div className="workflow-director-node nodrag" onPointerDown={stopPointer}><div><Camera size={26} /><span><i /><i /><i /></span></div><p>在3D空间中搭建场景并进行多视角截图</p><button type="button" onClick={() => actions?.openDirector(id)}><Maximize2 size={14} />打开导演台</button></div>
+      {variant === "script-workflow" ? renderScriptWorkflowNode()
+        : (variant === "character-workflow" || variant === "first-frame-video-workflow" || variant === "audio-video-workflow") ? renderStandaloneWorkflowNode()
+        : selected && variant === "director" ? <div className="workflow-director-node nodrag" onPointerDown={stopPointer}><div><Camera size={26} /><span><i /><i /><i /></span></div><p>在3D空间中搭建场景并进行多视角截图</p><button type="button" onClick={() => actions?.openDirector(id)}><Maximize2 size={14} />打开导演台</button></div>
         : selected && data.kind === "compose" ? <div className="workflow-compose-node nodrag" onPointerDown={stopPointer}>{incomingVideoCount ? <><div className="workflow-compose-preview"><Play size={24} /></div><div className="workflow-compose-timeline">{Array.from({ length: incomingVideoCount }).map((_, index) => <span key={index}><i />片段 {index + 1}<small>{String(index * 5).padStart(2, "0")}:00</small></span>)}</div><button type="button" onClick={() => actions?.run(id)}><Icon name="compose" />合成并导出</button></> : <><Icon name="compose" /><strong>空空如也</strong><span>请连接视频节点后操作</span><button type="button" onClick={() => quick("添加视频片段")}><Plus size={14} />添加视频片段</button></>}</div>
           : selected ? renderPromptNode() : <>
             <p>{data.description}</p>
@@ -799,11 +1080,11 @@ function BottomCanvasControls({
 
   return (
     <Panel position="bottom-left" className="canvas-bottom-controls">
-      {overviewOpen ? <button type="button" onClick={onOrganize} title="整理画布（⌥ ⇧ F）" aria-label="整理画布"><Icon name="tools" /></button> : <button type="button" onClick={onOpenOverview} title="资产管理"><Icon name="assets" /><span>资产管理</span></button>}
+      {overviewOpen ? <button type="button" onClick={onOrganize} title="整理画布（⌥ ⇧ F）" aria-label="整理画布"><Icon name="tidy" /></button> : <button type="button" onClick={onOpenOverview} title="资产管理"><Icon name="asset-manager" /><span>资产管理</span></button>}
       <span className="canvas-control-divider" />
-      <button type="button" className={miniMapVisible ? "is-active" : ""} onClick={onToggleMiniMap} title="切换小地图" aria-label="切换小地图"><Icon name="map" /></button>
+      <button type="button" className={miniMapVisible ? "is-active" : ""} onClick={onToggleMiniMap} title="切换小地图" aria-label="切换小地图"><Icon name="minimap" /></button>
       <button type="button" className={edgesVisible ? "is-active" : ""} onClick={onToggleEdges} title="隐藏节点连线" aria-label="隐藏节点连线"><Icon name="edge" /></button>
-      <button type="button" className={snapToGridEnabled ? "is-active" : ""} onClick={onToggleSnap} title="网格吸附" aria-pressed={snapToGridEnabled}><Icon name="grid" /></button>
+      <button type="button" className={snapToGridEnabled ? "is-active" : ""} onClick={onToggleSnap} title="网格吸附" aria-pressed={snapToGridEnabled}><Icon name="snap" /></button>
       <span className="canvas-control-divider" />
       <span className="canvas-zoom-menu-wrap">
         <button type="button" className="canvas-zoom-value" onClick={() => setZoomMenuOpen((open) => !open)} aria-label="缩放选项" aria-haspopup="menu" aria-expanded={zoomMenuOpen}>{Math.round(zoom * 100)}%</button>
@@ -824,6 +1105,16 @@ function attachmentKind(attachment: DraftAttachment): WorkflowNodeKind {
   if (attachment.type.startsWith("audio/")) return "audio";
   if (attachment.type.startsWith("video/")) return "video";
   return "text";
+}
+
+function attachmentAssetTag(attachment: DraftAttachment): AssetTag {
+  const searchable = `${attachment.name} ${attachment.type}`.toLocaleLowerCase();
+  if (attachment.type.startsWith("audio/") || /音效|音乐|配音|audio|sound/.test(searchable)) return "音效";
+  if (/人物|角色|人像|character|portrait/.test(searchable)) return "人物";
+  if (/场景|背景|环境|scene|background/.test(searchable)) return "场景";
+  if (/风格|style|lora/.test(searchable)) return "风格";
+  if (/物品|道具|产品|object|product|prop/.test(searchable)) return "物品";
+  return "其它";
 }
 
 function timestamp() {
@@ -853,6 +1144,304 @@ function graphSignature(nodes: WorkflowNode[], edges: Edge[]) {
   });
 }
 
+type ScriptWorkflowStep = 1 | 2 | 3;
+type ScriptShotField = "visual" | "lighting" | "dialogue" | "sound" | "camera";
+type ScriptAssetKind = "character" | "scene" | "prop";
+type ScriptImageOptionKey = "model" | "quality" | "resolution" | "ratio";
+type ScriptImageOptionScope = "asset" | "batch";
+
+type ScriptShot = {
+  id: string;
+  duration: number;
+  visual: string;
+  scale: string;
+  lighting: string;
+  dialogue: string;
+  sound: string;
+  camera: string;
+  finalPrompt: string;
+  color: "red" | "yellow" | "green" | "blue" | "gray" | "";
+};
+
+type ScriptAsset = {
+  id: string;
+  kind: ScriptAssetKind;
+  name: string;
+  description: string;
+  prompt: string;
+  generated: boolean;
+};
+
+const SCRIPT_GLOBAL_STYLE = "唐代古风·电影级写实CG，盛唐金红暖调为主，辅以高饱和朱红与玄色对比，强逆光剪影与丁达尔效应，高清电影感，3D写实渲染。";
+
+const SCRIPT_SHOTS: ScriptShot[] = [
+  { id: "shot-1", duration: 8, visual: "画面从黑暗中亮起，微弱刺眼的蓝光照亮现代沈昭昭苍白疲惫的侧脸。她坐在昏暗的办公室里伏案敲击键盘，手机在桌面不断闪烁。突然，她停下动作，呼吸急促，瞳孔失焦，头部重重砸向桌面，画面瞬间切入纯黑。", scale: "近景", lighting: "深夜冷蓝光，局域光照明，极度压抑疲惫，持续轻微闪烁", dialogue: "", sound: "急促机械键盘敲击声、连续的手机叮叮提示音，沉重的倒桌声", camera: "手持微晃，缓慢向人物脸部推进", finalPrompt: "", color: "" },
+  { id: "shot-2", duration: 5, visual: "主观镜头从极度黑暗中骤然睁眼，视线由模糊迅速转为清晰。强烈阳光带着金色丁达尔光柱从前方直射而来，晨鼓声中，视线快速扫过雕梁画栋、排列整齐的群臣和高耸殿门。", scale: "全景", lighting: "强烈晨曦逆光，丁达尔效应，金碧辉煌，极具震撼与压迫感", dialogue: "", sound: "震天彻地的古代朝堂巨鼓声，带着回音", camera: "第一视角主观摇镜，带有苏醒时的视线晃动感", finalPrompt: "", color: "" },
+  { id: "shot-3", duration: 8, visual: "镜头切至客观全景，交代危机场面。古代沈昭昭身穿官服跪在金銮殿中央，两名高大威猛的金甲侍卫左右夹击，反扭着她的双手。紫服大臣站在画面前方，神情严厉地斥责她。", scale: "全景", lighting: "肃穆阴沉的朝堂光影，冷暖对比强烈，主角处于光影交界处", dialogue: "", sound: "甲胄摩擦的金属声、脚步声、肃静的环境底噪", camera: "高机位俯拍，缓慢顺时针环绕，凸显主角孤立无援", finalPrompt: "", color: "" },
+  { id: "shot-4", duration: 7, visual: "一名身穿紫色官服的大臣气势汹汹地从朝班中跨出一步，手中笏板直指跪在地上的古代沈昭昭，吹胡子瞪眼，厉声斥责。古代沈昭昭被喝问得一脸茫然，微微抬头环顾四周。", scale: "中近景", lighting: "光线硬朗，阴影加深，强化冲突氛围", dialogue: "大臣：大逆不道！假称诗才惊世，欺君罔上，当斩！\n古代沈昭昭：这是……唐朝？", sound: "怒喝声回荡，主角急促的呼吸声", camera: "过肩镜头，从大臣背侧拍向主角，随后快速推至主角面部特写", finalPrompt: "", color: "" },
+  { id: "shot-5", duration: 6, visual: "镜头上摇越过长长的朝阶，聚焦在龙椅之上的皇帝。他眼神阴沉冷酷，不怒自威，微微前倾身体，满座群臣屏息肃立。", scale: "中景", lighting: "皇帝背后带有微弱金色轮廓光，面部处于半明半暗的冷峻光影中", dialogue: "皇帝：既言才华盖世，当殿作诗。若不能——斩。", sound: "寂静中只有皇帝低沉浑厚的嗓音，带有大殿回声", camera: "超低机位仰拍，缓慢向前推进，权力感最大化", finalPrompt: "", color: "" },
+  { id: "shot-6", duration: 5, visual: "随着皇帝一声斩字落地，一旁侍卫猛然抽出腰间的大刀。大刀雪白的刀刃在半空中划过一道刺眼寒光，镜头极速推进至古代沈昭昭的眼睛大特写，清晰看到锋利刀刃反射在她颤抖的棕色瞳孔之中。", scale: "大特写", lighting: "极高对比度，锐利的金属反光刺破暗部，极致紧张", dialogue: "", sound: "极其清脆刺耳的金属拔刀声，心跳声猛烈放大", camera: "快速推拉，直逼眼球特写", finalPrompt: "", color: "" },
+  { id: "shot-7", duration: 10, visual: "在死亡威胁下，古代沈昭昭身体突然停止颤抖。她双唇发白却猛地睁开双眼，眼神由恐惧转为坚毅。她深吸一口气，微微侧头望向打开的殿门，门外万里无云，阳光灿烂的长安城如画卷般延伸。", scale: "全身景", lighting: "从殿内阴暗逐渐过渡到阳光普照的希望感，光影象征心境转变", dialogue: "", sound: "衣服摩擦声、沉重而深长的呼吸声，背景音乐开始铺陈激昂鼓点", camera: "机位随着主角站起同步缓慢上升，从俯视转为平视，镜头底端平移", finalPrompt: "", color: "" },
+  { id: "shot-8", duration: 8, visual: "古代沈昭昭彻底站定，身躯笔直如松。她迎着刺眼的殿门阳光，嘴角勾起一抹自信弧度，目光灼灼，用极其清晰且带着煽动力的语气低声自语。", scale: "半身景", lighting: "高光打在面部，背景逐渐虚化变暗，视觉中心高度集中", dialogue: "古代沈昭昭：既来盛唐……便与盛唐争一争。", sound: "低沉的自语声，衣袍挥舞带起的烈风声", camera: "正面跟推，镜头随着她手臂抬起产生轻微震颤", finalPrompt: "", color: "" },
+  { id: "shot-9", duration: 10, visual: "古代沈昭昭仰起头，胸腔挺起，对着空旷高耸的穹顶高声吟诵。声音清越激昂，如惊雷滚滚在大殿内回荡。伴随着她的怒吼，仿佛看无形的气浪以她为中心向四周层层扩散，整个殿堂震颤，群臣震惊。", scale: "近景", lighting: "顶光仿佛神谕般降临，微尘在光柱中狂舞，极致热血爆发", dialogue: "古代沈昭昭：君不见黄河之水天上来——", sound: "极具震撼的女声怒音咆哮，带有史诗感的BGM瞬间推向最高点", camera: "360度快速环绕拍摄，慢动作交叉剪辑，最终特写拉近嘴部", finalPrompt: "", color: "" },
+  { id: "shot-10", duration: 5, visual: "诗句的余音宛如惊雷劈入人群。画面快速切过群臣的反应：刚才还咄咄逼人的大臣瞪大双眼，嘴巴微张，惊得手中笏板滑落。周围群臣也纷纷倒吸一口凉气，身体僵硬，满脸写着不可思议。", scale: "中远景", lighting: "自然光效，氛围由威严转为集体震撼失语", dialogue: "", sound: "木质笏板掉落在地上的清脆响声、群臣倒吸凉气的惊叹声", camera: "水平快速横移扫视，捕捉不同官员的震惊丑态", finalPrompt: "", color: "" },
+  { id: "shot-11", duration: 6, visual: "高高在上的皇帝眼孔剧烈收缩，原本稳坐如山的躯体猛然一震。他双手死死抓住龙椅扶手，上半身前倾，不受控制地缓缓站立起来，华贵的龙袍微微发抖。他眼中不再有高傲的杀意，取而代之的是面对千古绝唱时难以掩饰的狂热与折服。", scale: "近景", lighting: "皇帝面部阴影被高光驱散，表情里的狂热被强化", dialogue: "皇帝：此诗……当传万世。", sound: "龙椅摩擦的沉闷声，沉重的心跳声，皇帝气息不稳的台词", camera: "正面仰拍慢推，配合皇帝站起的动作，镜头产生膜拜感", finalPrompt: "", color: "" },
+  { id: "shot-12", duration: 10, visual: "镜头从大殿门框内向外快速穿越，猛然升空。视角升至半空，俯视阳光万里、繁华无际的长安城。城墙楼宇巍峨，华灯未歇的长安街市铺展至地平线。前景隐约叠化出古代沈昭昭背着手、站在高高城楼上的坚定身影。", scale: "大远景", lighting: "极其明亮壮阔的白昼，万里晴空，史诗感爆发的终幕画面", dialogue: "[旁白]既然来了……那便写尽三万里长安！", sound: "风声呼啸，盛世长街的繁华白噪音，大气磅礴的交响乐收尾", camera: "航拍视角由低到高升镜并后拉，画面极限开阔宏大", finalPrompt: "", color: "" },
+];
+
+const SCRIPT_ASSETS: ScriptAsset[] = [
+  { id: "asset-modern", kind: "character", name: "现代沈昭昭", description: "现代都市白领，女，28岁，身高165厘米，偏瘦，披肩中长发，黑眼圈明显，面容疲惫。", prompt: "现代职场女性，28岁，披肩黑发，苍白肤色，白色衬衫与黑色西装长裤，四视图角色设定，纯白背景，面部清晰，服装一致，空手。", generated: false },
+  { id: "asset-ancient", kind: "character", name: "古代沈昭昭", description: "唐代低阶女官，女扮男装，28岁，红色圆领袍，黑色幞头，眼神逐渐坚毅。", prompt: "唐代女扮男装低阶女官，红色圆领袍、黑色幞头与革带，清秀英气，四视图角色设定，纯白背景，保持人物一致性。", generated: false },
+  { id: "asset-emperor", kind: "character", name: "皇帝", description: "唐代君主，男，45岁，身材高大魁梧，黑金龙袍，威严冷峻。", prompt: "唐代帝王，45岁，魁梧，黑金龙袍与冕旒，深邃黑瞳，威严八字胡，四视图角色设定，纯白背景。", generated: false },
+  { id: "asset-minister", kind: "character", name: "大臣", description: "唐代朝堂高官，男，60岁，微胖，紫色官袍，面相刻薄严厉。", prompt: "唐代朝廷高官，60岁，紫色圆领官袍，黑色幞头，法令纹深，面相严厉，四视图角色设定，纯白背景。", generated: false },
+  { id: "asset-guard", kind: "character", name: "侍卫", description: "唐代金甲禁军，男，30岁，身材强壮，黑发束起，方脸，神情冷峻。", prompt: "唐代金甲侍卫，30岁，强壮，黑发束起，方脸冷峻，银黑甲胄，四视图角色设定，纯白背景。", generated: false },
+  { id: "asset-crowd", kind: "character", name: "群臣", description: "唐代百官群像，男性为主，年龄30至70岁不等，官服品级丰富。", prompt: "唐代文武百官群像角色设定，红紫青绿官袍，年龄体型各异，队列清晰，纯白背景，无文字水印。", generated: false },
+  { id: "asset-palace", kind: "scene", name: "金銮殿", description: "唐代皇宫正殿内部，室内，宏观尺度，金柱、龙椅、红毯与开阔朝堂。", prompt: "盛唐金銮殿空场景，恢弘对称构图，巨大龙椅和盘龙金柱，红毯与大理石地面，四个大全景视角，无人物。", generated: false },
+  { id: "asset-changan", kind: "scene", name: "长安城", description: "大唐都城，室外，宏观尺度，坊市屋顶、宽阔街道与远山云霞。", prompt: "盛唐长安城空场景，万里晴空，整齐坊市与宽阔朱雀大街，远山云霞，四个大全景视角，无人物。", generated: false },
+  { id: "asset-sword", kind: "prop", name: "大刀", description: "唐代禁军横刀，长直刃，银色精钢材质，黑色刀柄与黄铜护手。", prompt: "唐代禁军横刀，长直刃，银色精钢，黑色刀柄，黄铜护手，专业产品影棚六视图，纯白背景，无文字水印。", generated: false },
+];
+
+const SCRIPT_ASSET_LABELS: Record<ScriptAssetKind, { title: string; generate: string; singular: string }> = {
+  character: { title: "角色", generate: "生成或上传角色图", singular: "角色" },
+  scene: { title: "场景", generate: "生成或上传场景图", singular: "场景" },
+  prop: { title: "道具", generate: "生成或上传道具图", singular: "道具" },
+};
+
+const SCRIPT_IMAGE_OPTION_VALUES: Record<ScriptImageOptionKey, readonly string[]> = {
+  model: ["Lib Image", "Seedream 5.0 Pro"],
+  quality: ["标准画质", "高清画质"],
+  resolution: ["2K", "4K"],
+  ratio: ["2:1", "16:9", "9:16", "1:1"],
+};
+
+function ScriptWorkflowOverlay({
+  open,
+  nodeId,
+  onClose,
+  onBatchVideo,
+}: {
+  open: boolean;
+  nodeId: string | null;
+  onClose: () => void;
+  onBatchVideo: (nodeId: string, shots: ScriptShot[]) => void;
+}) {
+  const [step, setStep] = useState<ScriptWorkflowStep>(1);
+  const [shots, setShots] = useState<ScriptShot[]>(() => SCRIPT_SHOTS.map((shot) => ({ ...shot })));
+  const [assets, setAssets] = useState<ScriptAsset[]>(() => SCRIPT_ASSETS.map((asset) => ({ ...asset })));
+  const [style, setStyle] = useState(SCRIPT_GLOBAL_STYLE);
+  const [styleDraft, setStyleDraft] = useState(SCRIPT_GLOBAL_STYLE);
+  const [editingCell, setEditingCell] = useState<{ id: string; field: ScriptShotField } | null>(null);
+  const [rowMenuId, setRowMenuId] = useState<string | null>(null);
+  const [assetMenuId, setAssetMenuId] = useState<string | null>(null);
+  const [assetDialogId, setAssetDialogId] = useState<string | null>(null);
+  const [assetDialogTab, setAssetDialogTab] = useState<"generate" | "canvas" | "upload">("generate");
+  const [batchOpen, setBatchOpen] = useState(false);
+  const [batchSelection, setBatchSelection] = useState<string[]>(() => SCRIPT_ASSETS.map((asset) => asset.id));
+  const [newAssetKind, setNewAssetKind] = useState<ScriptAssetKind | null>(null);
+  const [newAssetName, setNewAssetName] = useState("");
+  const [newAssetDescription, setNewAssetDescription] = useState("");
+  const [styleEditing, setStyleEditing] = useState(false);
+  const [promptDialogShotId, setPromptDialogShotId] = useState<string | null>(null);
+  const [assetGenerating, setAssetGenerating] = useState(false);
+  const [composing, setComposing] = useState(false);
+  const [imageModel, setImageModel] = useState("Lib Image");
+  const [imageQuality, setImageQuality] = useState("标准画质");
+  const [imageResolution, setImageResolution] = useState("2K");
+  const [imageRatio, setImageRatio] = useState("2:1");
+  const [imageOptionMenu, setImageOptionMenu] = useState<{ scope: ScriptImageOptionScope; key: ScriptImageOptionKey } | null>(null);
+  const workflowSessionRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!nodeId || workflowSessionRef.current === nodeId) return;
+    workflowSessionRef.current = nodeId;
+    setStep(1);
+    setShots(SCRIPT_SHOTS.map((shot) => ({ ...shot })));
+    setAssets(SCRIPT_ASSETS.map((asset) => ({ ...asset })));
+    setBatchSelection(SCRIPT_ASSETS.map((asset) => asset.id));
+    setStyle(SCRIPT_GLOBAL_STYLE);
+    setStyleDraft(SCRIPT_GLOBAL_STYLE);
+  }, [nodeId]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (imageOptionMenu) setImageOptionMenu(null);
+      else if (batchOpen) setBatchOpen(false);
+      else if (assetDialogId) setAssetDialogId(null);
+      else if (promptDialogShotId) setPromptDialogShotId(null);
+      else if (newAssetKind) { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); }
+      else if (styleEditing) setStyleEditing(false);
+      else onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [assetDialogId, batchOpen, imageOptionMenu, newAssetKind, onClose, open, promptDialogShotId, styleEditing]);
+
+  if (!open || !nodeId) return null;
+
+  const generatedCount = assets.filter((asset) => asset.generated).length;
+  const composedCount = shots.filter((shot) => shot.finalPrompt).length;
+  const allAssetsReady = assets.length > 0 && generatedCount === assets.length;
+  const allPromptsReady = shots.length > 0 && composedCount === shots.length;
+  const completedStages = 1 + Number(allAssetsReady) + Number(allPromptsReady);
+  const activeAsset = assets.find((asset) => asset.id === assetDialogId) ?? null;
+  const generatedAssets = assets.filter((asset) => asset.generated);
+  const activePromptShot = shots.find((shot) => shot.id === promptDialogShotId) ?? null;
+
+  const updateShot = (id: string, patch: Partial<ScriptShot>) => {
+    setShots((items) => items.map((shot) => shot.id === id ? { ...shot, ...patch, finalPrompt: patch.finalPrompt ?? (Object.keys(patch).some((key) => key !== "color") ? "" : shot.finalPrompt) } : shot));
+  };
+  const updateAsset = (id: string, patch: Partial<ScriptAsset>) => setAssets((items) => items.map((asset) => asset.id === id ? { ...asset, ...patch } : asset));
+  const composePrompt = (shot: ScriptShot) => `${style} ${shot.scale}，${shot.visual} 光影氛围：${shot.lighting}。${shot.dialogue ? `对白：${shot.dialogue}。` : ""}音效：${shot.sound}。运镜：${shot.camera}。主体一致，细节清晰，电影级构图。`;
+  const composeAll = () => {
+    if (composing) return;
+    setComposing(true);
+    const queue = shots.map((shot) => ({ ...shot }));
+    queue.forEach((shot, index) => {
+      window.setTimeout(() => {
+        setShots((items) => items.map((item) => item.id === shot.id ? { ...item, finalPrompt: composePrompt(item) } : item));
+        if (index === queue.length - 1) setComposing(false);
+      }, 120 + index * 120);
+    });
+  };
+  const generateAssets = (ids: string[], closeWhenDone: boolean) => {
+    if (!ids.length || assetGenerating) return;
+    setAssetGenerating(true);
+    ids.forEach((id, index) => {
+      window.setTimeout(() => {
+        updateAsset(id, { generated: true });
+        if (index === ids.length - 1) {
+          setAssetGenerating(false);
+          if (closeWhenDone) setBatchOpen(false);
+        }
+      }, 180 + index * 150);
+    });
+  };
+  const addShot = () => {
+    const index = shots.length + 1;
+    setShots((items) => [...items, { id: `shot-${crypto.randomUUID()}`, duration: 5, visual: "点击补充新镜头画面描述", scale: "中景", lighting: "自然光，电影感", dialogue: "", sound: "环境底噪", camera: "固定机位", finalPrompt: "", color: "" }]);
+    window.setTimeout(() => document.querySelector(`[data-script-shot-index="${index}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" }), 0);
+  };
+  const addAsset = () => {
+    if (!newAssetKind || !newAssetName.trim()) return;
+    const id = `asset-${crypto.randomUUID()}`;
+    const description = newAssetDescription.trim() || `新增${SCRIPT_ASSET_LABELS[newAssetKind].singular}，等待补充详细设定。`;
+    setAssets((items) => [...items, { id, kind: newAssetKind, name: newAssetName.trim(), description, prompt: `${newAssetName.trim()}，${description}，${style}`, generated: false }]);
+    setBatchSelection((items) => [...items, id]);
+    setNewAssetKind(null);
+    setNewAssetName("");
+    setNewAssetDescription("");
+  };
+
+  const imageOptionValue = (key: ScriptImageOptionKey) => ({
+    model: imageModel,
+    quality: imageQuality,
+    resolution: imageResolution,
+    ratio: imageRatio,
+  })[key];
+  const selectImageOption = (key: ScriptImageOptionKey, value: string) => {
+    if (key === "model") setImageModel(value);
+    if (key === "quality") setImageQuality(value);
+    if (key === "resolution") setImageResolution(value);
+    if (key === "ratio") setImageRatio(value);
+    setImageOptionMenu(null);
+  };
+  const renderImageOption = (scope: ScriptImageOptionScope, key: ScriptImageOptionKey) => {
+    const currentValue = imageOptionValue(key);
+    const isOpen = imageOptionMenu?.scope === scope && imageOptionMenu.key === key;
+    return <span className="script-option-control" key={`${scope}-${key}`}>
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        onClick={(event) => {
+          event.stopPropagation();
+          setImageOptionMenu((current) => current?.scope === scope && current.key === key ? null : { scope, key });
+        }}
+      >{currentValue}<ChevronDown size={12} /></button>
+      {isOpen && <div className="script-option-popover" role="menu" aria-label={`${currentValue}选项`} onClick={(event) => event.stopPropagation()}>
+        {SCRIPT_IMAGE_OPTION_VALUES[key].map((value) => <button type="button" role="menuitemradio" aria-checked={value === currentValue} className={value === currentValue ? "is-selected" : ""} key={value} onClick={() => selectImageOption(key, value)}><span>{value}</span>{value === currentValue && <Check size={13} />}</button>)}
+      </div>}
+    </span>;
+  };
+
+  const renderEditableCell = (shot: ScriptShot, field: ScriptShotField, emptyLabel = "+") => {
+    const value = shot[field];
+    const isEditing = editingCell?.id === shot.id && editingCell.field === field;
+    return isEditing ? <textarea
+      autoFocus
+      aria-label={`编辑${field}`}
+      value={value}
+      onChange={(event) => updateShot(shot.id, { [field]: event.target.value } as Partial<ScriptShot>)}
+      onBlur={() => setEditingCell(null)}
+      onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === "Enter") setEditingCell(null); if (event.key === "Escape") setEditingCell(null); }}
+    /> : <button type="button" className={!value ? "is-empty" : ""} onClick={() => setEditingCell({ id: shot.id, field })}>{value || emptyLabel}</button>;
+  };
+
+  const renderShotTable = () => <div className="script-workflow-table-scroll">
+    <table className="script-workflow-table">
+      <colgroup><col className="col-number" /><col className="col-duration" /><col className="col-visual" /><col className="col-scale" /><col className="col-light" /><col className="col-dialogue" /><col className="col-sound" /><col className="col-camera" /><col className="col-final" /><col className="col-action" /></colgroup>
+      <thead><tr>{["镜号", "时长", "画面描述", "景别", "光影氛围", "对白·旁白", "音效", "运镜", "最终提示词", "操作"].map((label) => <th key={label}>{label}</th>)}</tr></thead>
+      <tbody>{shots.map((shot, index) => <tr key={shot.id} data-script-shot-index={index + 1} className={shot.color ? `is-${shot.color}` : ""}>
+        <td><span className="script-shot-number" title="拖拽行"><GripVertical size={13} />{index + 1}</span></td>
+        <td><button type="button" onClick={() => updateShot(shot.id, { duration: [5, 6, 7, 8, 10, 12, 15][([5, 6, 7, 8, 10, 12, 15].indexOf(shot.duration) + 1) % 7] })}>{shot.duration}s</button></td>
+        <td>{renderEditableCell(shot, "visual")}</td>
+        <td><SelectMenu ariaLabel={`镜头${index + 1}景别`} value={shot.scale} options={["大远景", "全景", "中远景", "中景", "中近景", "近景", "半身景", "头肩景", "特写", "大特写"].map((item) => ({ value: item, label: item }))} onChange={(scale) => updateShot(shot.id, { scale })} /></td>
+        <td>{renderEditableCell(shot, "lighting")}</td>
+        <td>{renderEditableCell(shot, "dialogue")}</td>
+        <td>{renderEditableCell(shot, "sound")}</td>
+        <td>{renderEditableCell(shot, "camera")}</td>
+        <td><button type="button" className={`script-final-prompt${shot.finalPrompt ? " is-ready" : ""}`} onClick={() => { if (!shot.finalPrompt) updateShot(shot.id, { finalPrompt: composePrompt(shot) }); else setPromptDialogShotId(shot.id); }}>{composing && !shot.finalPrompt ? <><span className="script-spinner" />合成中</> : shot.finalPrompt ? "查看提示词" : "待生成提示词"}</button></td>
+        <td className="script-shot-action"><button type="button" aria-label={`镜头${index + 1}行操作`} aria-expanded={rowMenuId === shot.id} onClick={() => setRowMenuId((current) => current === shot.id ? null : shot.id)}><MoreHorizontal size={16} /></button>{rowMenuId === shot.id && <div className="script-shot-menu" role="menu"><small>请选择颜色</small><div><button type="button" aria-label="清除颜色" className="clear" onClick={() => { updateShot(shot.id, { color: "" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为红色" className="red" onClick={() => { updateShot(shot.id, { color: "red" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为黄色" className="yellow" onClick={() => { updateShot(shot.id, { color: "yellow" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为绿色" className="green" onClick={() => { updateShot(shot.id, { color: "green" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为蓝色" className="blue" onClick={() => { updateShot(shot.id, { color: "blue" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为灰色" className="gray" onClick={() => { updateShot(shot.id, { color: "gray" }); setRowMenuId(null); }} /></div><button type="button" className="delete" onClick={() => { setShots((items) => items.filter((item) => item.id !== shot.id)); setRowMenuId(null); }}><Trash2 size={13} />删除该行</button></div>}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>;
+
+  return <section className="script-workflow-overlay" role="dialog" aria-modal="true" aria-label="脚本生成工作台" onClick={(event) => { const target = event.target as HTMLElement; if (!target.closest(".script-shot-action")) setRowMenuId(null); if (!target.closest(".script-asset-card")) setAssetMenuId(null); if (!target.closest(".script-option-control")) setImageOptionMenu(null); }}>
+    <header className="script-workflow-topbar">
+      <nav aria-label="脚本生成步骤">
+        <button type="button" className={step === 1 ? "is-active is-done" : "is-done"} onClick={() => setStep(1)}><i>{step === 1 ? 1 : <Check size={13} />}</i><span><b>确认镜头</b><small>{shots.length}个镜头已就绪</small></span></button>
+        <em />
+        <button type="button" className={`${step === 2 ? "is-active" : ""}${allAssetsReady ? " is-done" : ""}`} onClick={() => setStep(2)}><i>{allAssetsReady ? <Check size={13} /> : 2}</i><span><b>准备资产</b><small>{generatedCount}/{assets.length} 已生成、还差 {assets.length - generatedCount} 个</small></span></button>
+        <em />
+        <button type="button" className={`${step === 3 ? "is-active" : ""}${allPromptsReady ? " is-done" : ""}`} onClick={() => setStep(3)}><i>{allPromptsReady ? <Check size={13} /> : 3}</i><span><b>合成提示词</b><small>{composedCount}/{shots.length} 已合成</small></span></button>
+      </nav>
+      <div><button type="button" className="script-batch-video" disabled={completedStages < 3} onClick={() => onBatchVideo(nodeId, shots)}>{completedStages}/3 {completedStages === 3 ? "批量生视频" : "完成后可批量生视频"}</button><button type="button" className="script-workflow-close" aria-label="关闭脚本工作台" title="关闭 (ESC)" onClick={onClose}><X size={17} /></button></div>
+    </header>
+
+    {step === 1 && <main className="script-workflow-shot-step">{renderShotTable()}<footer><button type="button" onClick={addShot}><Plus size={15} />添加镜头</button><button type="button" className="primary" onClick={() => setStep(2)}>→ 下一步：准备资产</button></footer></main>}
+
+    {step === 2 && <main className="script-workflow-assets-step">
+      <div className="script-workflow-assets-scroll">
+        <button type="button" className="script-global-style" onClick={() => { setStyleDraft(style); setStyleEditing(true); }}><span>全局风格</span><p>{style}</p><i><PencilLine size={13} /></i></button>
+        {(["character", "scene", "prop"] as ScriptAssetKind[]).map((kind) => <section className={`script-asset-section kind-${kind}`} key={kind}>
+          <h3>{SCRIPT_ASSET_LABELS[kind].title}</h3>
+          <div>{assets.filter((asset) => asset.kind === kind).map((asset, assetIndex) => <article className={`script-asset-card${asset.generated ? " is-generated" : ""}`} key={asset.id}>
+            <button type="button" className="script-asset-preview" aria-label={`${asset.name}${asset.generated ? "设定图" : SCRIPT_ASSET_LABELS[kind].generate}`} onClick={() => { setAssetDialogId(asset.id); setAssetDialogTab(asset.generated ? "canvas" : "generate"); }}><span>{asset.generated ? <><Sparkles size={21} /><b>资产已生成</b></> : SCRIPT_ASSET_LABELS[kind].generate}</span><i className={`asset-tone-${assetIndex % 5}`} /></button>
+            <button type="button" className="script-asset-more" aria-label={`${asset.name}资产卡操作菜单`} aria-expanded={assetMenuId === asset.id} onClick={(event) => { event.stopPropagation(); setAssetMenuId((current) => current === asset.id ? null : asset.id); }}><MoreHorizontal size={15} /></button>
+            {assetMenuId === asset.id && <div className="script-asset-menu" role="menu" onClick={(event) => event.stopPropagation()}><button type="button" role="menuitem" onClick={() => { setAssetDialogId(asset.id); setAssetDialogTab("canvas"); setAssetMenuId(null); }}>选择图片</button><button type="button" role="menuitem" onClick={() => { setAssetDialogId(asset.id); setAssetDialogTab("generate"); setAssetMenuId(null); }}>AI 生{SCRIPT_ASSET_LABELS[kind].singular}</button><button type="button" role="menuitem" disabled={!asset.generated}>跳转至节点</button><button type="button" role="menuitem" onClick={() => { updateAsset(asset.id, { generated: false }); setAssetMenuId(null); }}>清除图片</button><button type="button" role="menuitem" className="danger" onClick={() => { setAssets((items) => items.filter((item) => item.id !== asset.id)); setBatchSelection((items) => items.filter((id) => id !== asset.id)); setAssetMenuId(null); }}>删除</button></div>}
+            <strong>{asset.name}</strong><p>{asset.description}</p>
+          </article>)}<button type="button" className="script-asset-add" aria-label={`新增${SCRIPT_ASSET_LABELS[kind].singular}`} onClick={() => { setNewAssetName(""); setNewAssetDescription(""); setNewAssetKind(kind); }}><Plus size={20} /><span>新增</span></button></div>
+        </section>)}
+      </div>
+      <footer><span>检测到有 {assets.filter((asset) => !asset.generated && asset.kind === "character").length} 个人物角色和 {assets.filter((asset) => !asset.generated && asset.kind === "scene").length} 个场景和 {assets.filter((asset) => !asset.generated && asset.kind === "prop").length} 个道具没有设定图，您可以手动上传或 AI 批量生成</span><div><button type="button" onClick={() => setBatchOpen(true)}><Sparkles size={14} />一键生成所有资产</button><button type="button" className="primary" onClick={() => setStep(3)}>→ 下一步：合成提示词</button></div></footer>
+    </main>}
+
+    {step === 3 && <main className="script-workflow-shot-step is-compose">{renderShotTable()}<footer><button type="button" onClick={() => setStep(2)}><ArrowLeft size={14} />返回准备资产</button><button type="button" className="primary" disabled={composing || allPromptsReady} onClick={composeAll}>{composing ? <><span className="script-spinner" />合成中 {composedCount}/{shots.length}</> : allPromptsReady ? <><Check size={14} />提示词已全部合成</> : <><Sparkles size={14} />一键合成全部提示词</>}</button></footer></main>}
+
+    {styleEditing && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setStyleEditing(false); }}><section className="script-style-modal" role="dialog" aria-label="编辑全局风格"><header><strong>编辑全局风格</strong><button type="button" aria-label="关闭" onClick={() => setStyleEditing(false)}><X size={15} /></button></header><textarea value={styleDraft} aria-label="全局美术风格" onChange={(event) => setStyleDraft(event.target.value)} /><p>全局美术风格首次合成后即锁定，后续不可再修改。</p><footer><button type="button" onClick={() => setStyleEditing(false)}>取消</button><button type="button" className="primary" onClick={() => { setStyle(styleDraft.trim() || SCRIPT_GLOBAL_STYLE); setStyleEditing(false); }}>确认</button></footer></section></div>}
+
+    {activePromptShot && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setPromptDialogShotId(null); }}><section className="script-prompt-modal" role="dialog" aria-label={`镜头提示词 ${shots.findIndex((shot) => shot.id === activePromptShot.id) + 1}`}><header><strong>最终提示词 · 镜头 {shots.findIndex((shot) => shot.id === activePromptShot.id) + 1}</strong><button type="button" aria-label="关闭" onClick={() => setPromptDialogShotId(null)}><X size={15} /></button></header><textarea value={activePromptShot.finalPrompt} aria-label="最终提示词" onChange={(event) => setShots((items) => items.map((shot) => shot.id === activePromptShot.id ? { ...shot, finalPrompt: event.target.value } : shot))} /><footer><button type="button" onClick={() => updateShot(activePromptShot.id, { finalPrompt: composePrompt(activePromptShot) })}><RotateCcw size={13} />重新合成</button><button type="button" onClick={() => { void navigator.clipboard?.writeText(activePromptShot.finalPrompt); }}>复制提示词</button><button type="button" className="primary" onClick={() => setPromptDialogShotId(null)}>完成</button></footer></section></div>}
+
+    {newAssetKind && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); } }}><section className="script-new-asset-modal" role="dialog" aria-label={`新增${SCRIPT_ASSET_LABELS[newAssetKind].singular}`}><header><strong>新增{SCRIPT_ASSET_LABELS[newAssetKind].singular}</strong><button type="button" aria-label="关闭" onClick={() => { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); }}><X size={15} /></button></header><label>名称<input autoFocus value={newAssetName} onChange={(event) => setNewAssetName(event.target.value)} placeholder={`请输入${SCRIPT_ASSET_LABELS[newAssetKind].singular}名称`} /></label><label>描述<textarea value={newAssetDescription} onChange={(event) => setNewAssetDescription(event.target.value)} placeholder="补充外观、服装、环境或材质信息" /></label><footer><button type="button" onClick={() => { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); }}>取消</button><button type="button" disabled={!newAssetName.trim()} onClick={addAsset}>新增</button></footer></section></div>}
+
+    {activeAsset && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) { setImageOptionMenu(null); setAssetDialogId(null); } }}><section className="script-asset-dialog" role="dialog" aria-label={`选择图片（${activeAsset.name}）`}><header><strong>选择图片（{activeAsset.name}）</strong><button type="button" aria-label="关闭" onClick={() => { setImageOptionMenu(null); setAssetDialogId(null); }}><X size={16} /></button></header><nav><button type="button" className={assetDialogTab === "generate" ? "is-active" : ""} onClick={() => { setImageOptionMenu(null); setAssetDialogTab("generate"); }}>AI生成</button><button type="button" className={assetDialogTab === "canvas" ? "is-active" : ""} onClick={() => { setImageOptionMenu(null); setAssetDialogTab("canvas"); }}>从当前画布选择</button><button type="button" className={assetDialogTab === "upload" ? "is-active" : ""} onClick={() => { setImageOptionMenu(null); setAssetDialogTab("upload"); }}>本地上传</button></nav>{assetDialogTab === "generate" ? <><textarea aria-label="开始你的设计" value={activeAsset.prompt} onChange={(event) => updateAsset(activeAsset.id, { prompt: event.target.value })} /><footer><div>{(["model", "quality", "resolution", "ratio"] as ScriptImageOptionKey[]).map((key) => renderImageOption("asset", key))}</div><span><Sparkles size={13} />18</span><button type="button" className="primary" disabled={assetGenerating} onClick={() => { setImageOptionMenu(null); generateAssets([activeAsset.id], false); window.setTimeout(() => setAssetDialogId(null), 420); }}>{assetGenerating ? "生成中" : "确认生成"}</button></footer></> : assetDialogTab === "canvas" ? <div className="script-asset-source">{generatedAssets.length ? <div className="script-asset-source-grid">{generatedAssets.map((candidate, index) => <button type="button" key={candidate.id} aria-label={`使用${candidate.name}设定图`} onClick={() => { updateAsset(activeAsset.id, { generated: true }); setAssetDialogId(null); }}><i className={`asset-tone-${index % 5}`} /><span>{candidate.name} 设定图</span>{candidate.id === activeAsset.id && <Check size={15} />}</button>)}</div> : <span><ImagePlay size={25} /><b>当前画布暂无可选图片</b><small>生成或上传图片后可在这里选择</small></span>}</div> : <label className="script-asset-upload"><Upload size={28} /><strong>拖拽图片到这里，或点击上传</strong><small>支持 PNG、JPG、WEBP</small><input type="file" accept="image/*" onChange={(event) => { if (event.target.files?.length) { updateAsset(activeAsset.id, { generated: true }); setAssetDialogId(null); } }} /></label>}</section></div>}
+
+    {batchOpen && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) { setImageOptionMenu(null); setBatchOpen(false); } }}><section className="script-batch-modal" role="dialog" aria-label="一键生成所有资产"><header><strong>一键生成所有资产</strong><button type="button" aria-label="关闭" onClick={() => { setImageOptionMenu(null); setBatchOpen(false); }}><X size={17} /></button></header><div className="script-batch-list">{(["character", "scene", "prop"] as ScriptAssetKind[]).map((kind) => { const items = assets.filter((asset) => asset.kind === kind); return items.length ? <section key={kind}><h4>{SCRIPT_ASSET_LABELS[kind].title} ({items.length})</h4>{items.map((asset) => <label key={asset.id}><input type="checkbox" checked={batchSelection.includes(asset.id)} onChange={(event) => setBatchSelection((selected) => event.target.checked ? [...selected, asset.id] : selected.filter((id) => id !== asset.id))} /><span><strong>{asset.name}<i>{SCRIPT_ASSET_LABELS[kind].singular}</i></strong><textarea value={asset.prompt} onChange={(event) => updateAsset(asset.id, { prompt: event.target.value })} /></span></label>)}</section> : null; })}</div><footer><label><input type="checkbox" checked={batchSelection.length === assets.length && assets.length > 0} onChange={(event) => setBatchSelection(event.target.checked ? assets.map((asset) => asset.id) : [])} /><span>已选 {batchSelection.length}/{assets.length}</span></label><div className="script-batch-options">{(["model", "quality", "resolution", "ratio"] as ScriptImageOptionKey[]).map((key) => renderImageOption("batch", key))}</div><span className="script-batch-cost"><Sparkles size={13} />{batchSelection.length * 18}</span><button type="button" className="primary" disabled={!batchSelection.length || assetGenerating} onClick={() => { setImageOptionMenu(null); generateAssets(batchSelection, true); }}>{assetGenerating ? "生成中…" : `生成(${batchSelection.length})`}</button></footer></section></div>}
+  </section>;
+}
+
 function defaultCreationConfig(work: WebWork): WorkCreationConfig {
   if (work.creationConfig) return work.creationConfig;
   const fallback = MODEL_GROUPS.text[0];
@@ -877,12 +1466,31 @@ export function CanvasPage({
 }) {
   const storedDocument = useMemo(() => loadLocalCanvasDocument(work.id), [work.id]);
   const graph = useMemo(() => {
-    if (!storedDocument?.nodes.length) return initialGraph(work);
-    const storedNodes = storedDocument.nodes.map((node) => ({
-      ...node,
-      type: "workflow-node" as const,
-      data: node.data as WorkflowNodeData,
-    }));
+    if (!storedDocument) return initialGraph(work);
+    if (!storedDocument.nodes.length) return { nodes: [], edges: [] };
+    const storedNodes = storedDocument.nodes.map((node) => {
+      const storedData = node.data as WorkflowNodeData;
+      let data = storedData;
+      if (storedData.skillId === "n2d-script") {
+        data = {
+          ...storedData,
+          assetName: storedData.assetName === "Skill · n2d-script" ? "Skill · n2d-script-workbench" : storedData.assetName,
+          skillId: "n2d-script-workbench",
+          skillPath: "skills/n2d-script-workbench/SKILL.md",
+        };
+      } else if (storedData.skillId === "comic-identity" && ["角色图", "角色三视图"].includes(storedData.title)) {
+        data = { ...storedData, ...(storedData.title === "角色三视图" ? { variant: "character-workflow" as const } : {}), assetName: "Skill · n2d-character-turnaround", skillId: "n2d-character-turnaround", skillPath: "skills/n2d-character-turnaround/SKILL.md" };
+      } else if (storedData.skillId === "n2d-video" && ["首帧图片", "首帧图生视频"].includes(storedData.title)) {
+        data = { ...storedData, ...(storedData.title === "首帧图生视频" ? { variant: "first-frame-video-workflow" as const } : {}), assetName: "Skill · n2d-first-frame-video", skillId: "n2d-first-frame-video", skillPath: "skills/n2d-first-frame-video/SKILL.md" };
+      } else if (storedData.skillId === "mv" && ["音频输入", "图片", "音频生视频"].includes(storedData.title)) {
+        data = { ...storedData, ...(storedData.title === "音频生视频" ? { variant: "audio-video-workflow" as const } : {}), assetName: "Skill · n2d-audio-video", skillId: "n2d-audio-video", skillPath: "skills/n2d-audio-video/SKILL.md" };
+      }
+      return {
+        ...node,
+        type: "workflow-node" as const,
+        data,
+      };
+    });
     const storedEdges = storedDocument.edges.map((edge) => ({
       ...edge,
       type: edge.type ?? "smoothstep",
@@ -896,8 +1504,20 @@ export function CanvasPage({
   const [workName, setWorkName] = useState(storedDocument?.work.name ?? work.name);
   const [view, setView] = useState<CanvasView>(storedDocument?.preferences.view ?? "workflow");
   const [tool, setTool] = useState<CanvasTool>("select");
-  const [drawer, setDrawer] = useState<DrawerKind | null>("overview");
+  const [drawer, setDrawer] = useState<DrawerKind | null>(null);
+  const [toolboxTab, setToolboxTab] = useState<"mine" | "classic">("mine");
+  const [toolboxGuideOpen, setToolboxGuideOpen] = useState(false);
+  const [toolboxDetail, setToolboxDetail] = useState<ToolboxTemplate | null>(null);
+  const [toolboxClassicDetail, setToolboxClassicDetail] = useState<ToolboxClassic | null>(null);
   const [overlay, setOverlay] = useState<OverlayKind | null>(null);
+  const [railMenu, setRailMenu] = useState<RailMenuKind>(null);
+  const [helpPanel, setHelpPanel] = useState<HelpPanelKind>(null);
+  const [helpMessage, setHelpMessage] = useState("");
+  const [helpMessages, setHelpMessages] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "您好，请问有什么可以帮助您？" },
+  ]);
+  const [sharePanel, setSharePanel] = useState<SharePanelKind>("choices");
+  const [addDrawerSubmenu, setAddDrawerSubmenu] = useState<"script" | null>(null);
   const [canvasInsertMenu, setCanvasInsertMenu] = useState<CanvasInsertMenuState | null>(null);
   const [canvasHistoryPickerOpen, setCanvasHistoryPickerOpen] = useState(false);
   const [canvasHistorySource, setCanvasHistorySource] = useState<CanvasHistorySource>("libtv");
@@ -907,6 +1527,8 @@ export function CanvasPage({
   const [pendingUploadPoint, setPendingUploadPoint] = useState<{ x: number; y: number } | null>(null);
   const [libraryInsertPoint, setLibraryInsertPoint] = useState<{ x: number; y: number } | null>(null);
   const [directorStudioNodeId, setDirectorStudioNodeId] = useState<string | null>(null);
+  const [scriptWorkflowNodeId, setScriptWorkflowNodeId] = useState<string | null>(null);
+  const [standaloneWorkflow, setStandaloneWorkflow] = useState<{ nodeId: string; workflow: StandaloneWorkflowKind } | null>(null);
   const [directorCameraPreset, setDirectorCameraPreset] = useState("正面机位");
   const [directorShotCount, setDirectorShotCount] = useState(0);
   const [libraryTab, setLibraryTab] = useState<"square" | "favorite" | "recent">("square");
@@ -917,6 +1539,8 @@ export function CanvasPage({
   const [libraryRecent, setLibraryRecent] = useState<string[]>([]);
   const [libraryDetail, setLibraryDetail] = useState<PresetDefinition | null>(null);
   const [libraryMinimized, setLibraryMinimized] = useState(false);
+  const [libraryModelFilter, setLibraryModelFilter] = useState("全部");
+  const [libraryModelMenuOpen, setLibraryModelMenuOpen] = useState(false);
   const [headerMenu, setHeaderMenu] = useState<HeaderMenuKind>(null);
   const [overviewBoardMenu, setOverviewBoardMenu] = useState(false);
   const [overviewBoardMoreOpen, setOverviewBoardMoreOpen] = useState(false);
@@ -934,7 +1558,7 @@ export function CanvasPage({
   const [prompt, setPrompt] = useState(work.prompt);
   const [activeJob, setActiveJob] = useState<AgentJob | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(storedDocument?.preferences.panelOpen ?? true);
+  const [panelOpen, setPanelOpen] = useState(storedDocument?.preferences.panelOpen ?? false);
   const [panelTab, setPanelTab] = useState<AgentPanelTab>("conversation");
   const [isNewConversation, setIsNewConversation] = useState(false);
   const [agentHeaderPopover, setAgentHeaderPopover] = useState<AgentHeaderPopover>(null);
@@ -981,21 +1605,32 @@ export function CanvasPage({
   const [overviewAssetGroupMenuOpen, setOverviewAssetGroupMenuOpen] = useState(false);
   const [overviewAssetGroupName, setOverviewAssetGroupName] = useState("待分类资产");
   const [renamingAssetGroup, setRenamingAssetGroup] = useState(false);
+  const [assetManagerOpen, setAssetManagerOpen] = useState(false);
+  const [assetManagerSource, setAssetManagerSource] = useState<AssetManagerSource>("personal");
+  const [assetManagerQuery, setAssetManagerQuery] = useState("");
+  const [assetManagerCategory, setAssetManagerCategory] = useState<AssetManagerCategory>("全部");
+  const [assetManagerBatchMode, setAssetManagerBatchMode] = useState(false);
+  const [assetManagerSelectedIds, setAssetManagerSelectedIds] = useState<string[]>([]);
+  const [assetManagerNewMenuOpen, setAssetManagerNewMenuOpen] = useState(false);
   const [leftSidebarWidth, setLeftSidebarWidth] = useState(280);
   const [agentPanelWidth, setAgentPanelWidth] = useState(448);
   const [selectedCharacterId, setSelectedCharacterId] = useState(CHARACTER_PRESETS[0].id);
+  const [characterRecentOnly, setCharacterRecentOnly] = useState(false);
+  const [recentCharacterIds, setRecentCharacterIds] = useState<string[]>([CHARACTER_PRESETS[0].id]);
   const [historyMediaKind, setHistoryMediaKind] = useState<"image" | "video" | "audio">("image");
   const [, setSyncState] = useState<CloudWorkState>(work.cloudState);
   const [attachments, setAttachments] = useState<DraftAttachment[]>(storedDocument?.work.attachments ?? work.attachments);
   const [cloudProjectId, setCloudProjectId] = useState(work.cloudProjectId ?? storedDocument?.work.cloudProjectId);
   const mountedRef = useRef(true);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const promptRef = useRef<HTMLTextAreaElement | null>(null);
   const historyRef = useRef<GraphHistoryEntry[]>([cloneGraph(graph.nodes, graph.edges)]);
   const historyIndexRef = useRef(0);
   const restoringHistoryRef = useRef(false);
   const clipboardRef = useRef<GraphHistoryEntry | null>(null);
   const pasteCountRef = useRef(0);
   const flowInstanceRef = useRef<ReactFlowInstance<WorkflowNode, Edge> | null>(null);
+  const characterCarouselRef = useRef<HTMLDivElement | null>(null);
   const [historyAvailability, setHistoryAvailability] = useState({ canUndo: false, canRedo: false });
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
@@ -1011,6 +1646,9 @@ export function CanvasPage({
         : b.data.title.localeCompare(a.data.title, "zh-CN"));
   }, [nodes, overviewFilter, overviewQuery, overviewSortAscending]);
   const selectedCharacter = CHARACTER_PRESETS.find((character) => character.id === selectedCharacterId) ?? CHARACTER_PRESETS[0];
+  const visibleCharacterPresets = characterRecentOnly
+    ? CHARACTER_PRESETS.filter((character) => recentCharacterIds.includes(character.id))
+    : CHARACTER_PRESETS;
   const canvasSkillLibrary = useMemo(() => [...AGENT_SKILL_LIBRARY, ...canvasCustomSkills], [canvasCustomSkills]);
   const selectedSkillDetail = canvasSkillLibrary.find((skill) => skill.id === skillDetailId) ?? null;
   const activeLibrarySkill = canvasSkillLibrary.find((skill) => skill.id === activeSkill) ?? null;
@@ -1040,6 +1678,13 @@ export function CanvasPage({
     const query = overviewAssetQuery.trim().toLocaleLowerCase();
     return attachments.filter((attachment) => !query || `${attachment.name} ${attachment.type}`.toLocaleLowerCase().includes(query));
   }, [attachments, overviewAssetQuery]);
+  const visibleManagedAssets = useMemo(() => {
+    const query = assetManagerQuery.trim().toLocaleLowerCase();
+    return attachments.filter((attachment) => {
+      if (assetManagerCategory !== "全部" && attachmentAssetTag(attachment) !== assetManagerCategory) return false;
+      return !query || `${attachment.name} ${attachment.type}`.toLocaleLowerCase().includes(query);
+    });
+  }, [assetManagerCategory, assetManagerQuery, attachments]);
   const historyAssets = useMemo(() => nodes.filter((node) => {
     if (historyMediaKind === "image") return node.data.kind === "image" || node.data.kind === "text" || node.data.kind === "script";
     return node.data.kind === historyMediaKind;
@@ -1075,15 +1720,17 @@ export function CanvasPage({
       if (libraryTab === "favorite" && !libraryFavorites.has(preset.name)) return false;
       if (libraryTab === "recent" && !libraryRecent.includes(preset.name)) return false;
       if (libraryCategory !== "推荐" && preset.category !== libraryCategory) return false;
+      if (libraryModelFilter !== "全部" && preset.model !== libraryModelFilter) return false;
       if (libraryCommercialOnly && !preset.commercial) return false;
       return !query || `${preset.name} ${preset.author} ${preset.model}`.toLocaleLowerCase().includes(query);
     });
-  }, [activePresetLibrary, libraryCategory, libraryCommercialOnly, libraryFavorites, libraryQuery, libraryRecent, libraryTab]);
+  }, [activePresetLibrary, libraryCategory, libraryCommercialOnly, libraryFavorites, libraryModelFilter, libraryQuery, libraryRecent, libraryTab]);
   const composerAttachments = useMemo(
     () => attachments.filter((attachment) => composerAttachmentIds.includes(attachment.id)),
     [attachments, composerAttachmentIds],
   );
   const composerReady = Boolean(prompt.trim() || composerAttachments.length || activeSkill || selectedModel);
+  const showAgentStarter = isNewConversation || !activeJob;
   const addActivity = useCallback((label: string) => {
     setActivity((items) => [{ id: crypto.randomUUID(), label, time: timestamp() }, ...items].slice(0, 30));
   }, []);
@@ -1346,8 +1993,17 @@ export function CanvasPage({
         event.preventDefault();
         deleteSelectedNode();
       } else if (event.key === "Escape") {
+        if (assetManagerOpen) {
+          setAssetManagerOpen(false);
+          setAssetManagerNewMenuOpen(false);
+          setAssetManagerSelectedIds([]);
+          return;
+        }
         setDrawer(null);
         setOverlay(null);
+        setRailMenu(null);
+        setHelpPanel(null);
+        setAddDrawerSubmenu(null);
         setLibraryInsertPoint(null);
         setLibraryDetail(null);
         setDirectorStudioNodeId(null);
@@ -1372,7 +2028,7 @@ export function CanvasPage({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [copySelectedNodes, duplicateSelectedNodes, pasteNodes, redoGraph, setNodes, undoGraph]);
+  }, [assetManagerOpen, copySelectedNodes, duplicateSelectedNodes, pasteNodes, redoGraph, setNodes, undoGraph]);
 
   function persistName() {
     const name = workName.trim() || "unnamed";
@@ -1385,11 +2041,62 @@ export function CanvasPage({
 
   function openDrawer(kind: DrawerKind) {
     setDrawer((current) => current === kind ? null : kind);
+    if (kind !== "tools") {
+      setToolboxGuideOpen(false);
+      setToolboxDetail(null);
+      setToolboxClassicDetail(null);
+    }
+    setAddDrawerSubmenu(null);
     setOverlay(null);
+    setRailMenu(null);
+    setHelpPanel(null);
     setContextMenu(null);
     setOverviewNodeMenu(null);
     setOverviewFilterOpen(false);
     setComposerMenu(null);
+  }
+
+  function selectCharacter(characterId: string) {
+    setSelectedCharacterId(characterId);
+    setRecentCharacterIds((ids) => [characterId, ...ids.filter((id) => id !== characterId)].slice(0, 12));
+  }
+
+  function scrollCharacterCarousel(direction: -1 | 1) {
+    characterCarouselRef.current?.scrollBy({ left: direction * 560, behavior: "smooth" });
+  }
+
+  function openAssetManager() {
+    setAssetManagerOpen(true);
+    setAssetManagerSource("personal");
+    setAssetManagerQuery("");
+    setAssetManagerCategory("全部");
+    setAssetManagerBatchMode(false);
+    setAssetManagerSelectedIds([]);
+    setAssetManagerNewMenuOpen(false);
+    setOverviewNodeMenu(null);
+    setOverviewFilterOpen(false);
+  }
+
+  function toggleManagedAsset(assetId: string) {
+    setAssetManagerSelectedIds((selected) => selected.includes(assetId)
+      ? selected.filter((id) => id !== assetId)
+      : [...selected, assetId]);
+  }
+
+  function sendManagedAssetsToCanvas() {
+    const folderSelected = assetManagerSelectedIds.includes("folder:unclassified");
+    const selectedAssets = folderSelected
+      ? visibleManagedAssets
+      : visibleManagedAssets.filter((attachment) => assetManagerSelectedIds.includes(attachment.id));
+    if (!selectedAssets.length) {
+      setNotice(folderSelected ? "待分类资产中暂无可发送素材" : "请先选择要发送的资产");
+      return;
+    }
+    selectedAssets.forEach(addAttachmentNode);
+    setDrawer("overview");
+    setAssetManagerOpen(false);
+    setAssetManagerSelectedIds([]);
+    setNotice(`已发送 ${selectedAssets.length} 个资产到画布`);
   }
 
   function updateNodeData(nodeId: string, patch: Partial<WorkflowNodeData>) {
@@ -1503,6 +2210,65 @@ export function CanvasPage({
   function runWorkflowNode(nodeId: string) {
     const node = nodes.find((item) => item.id === nodeId);
     if (!node || node.data.status === "running") return;
+    if (node.data.variant === "character-workflow" || node.data.variant === "first-frame-video-workflow" || node.data.variant === "audio-video-workflow") {
+      setStandaloneWorkflow({
+        nodeId,
+        workflow: node.data.variant === "character-workflow" ? "character-turnaround" : node.data.variant === "first-frame-video-workflow" ? "first-frame-video" : "audio-video",
+      });
+      return;
+    }
+    if (node.data.variant === "script-workflow") {
+      setScriptWorkflowNodeId(nodeId);
+      return;
+    }
+    if (node.data.kind === "script" && node.data.variant === "script-new") {
+      const existingResult = nodes.find((item) => item.data.variant === "script-workflow" && item.data.sourceNodeId === nodeId);
+      if (existingResult) {
+        setNodes((items) => items.map((item) => ({ ...item, selected: item.id === existingResult.id })));
+        setSelectedNodeId(existingResult.id);
+        setNotice("脚本已生成，打开结果节点继续");
+        return;
+      }
+      const resultId = `script-workflow-${crypto.randomUUID()}`;
+      updateNodeData(nodeId, {
+        status: "running",
+        generationProgress: 2,
+        skillId: "n2d-script-workbench",
+        skillPath: "skills/n2d-script-workbench/SKILL.md",
+      });
+      addActivity(`开始执行「${node.data.title}」`);
+      setNotice("脚本生成中 2%…");
+      window.setTimeout(() => { updateNodeData(nodeId, { generationProgress: 36 }); setNotice("脚本生成中 36%…"); }, 260);
+      window.setTimeout(() => { updateNodeData(nodeId, { generationProgress: 78 }); setNotice("脚本生成中 78%…"); }, 620);
+      window.setTimeout(() => {
+        const resultNode: WorkflowNode = {
+          id: resultId,
+          type: "workflow-node",
+          position: { x: node.position.x + 390, y: node.position.y - 18 },
+          selected: true,
+          data: {
+            ...nodeRuntimeDefaults("script", "script-workflow"),
+            kind: "script",
+            title: "我在盛唐写天下",
+            description: "12个镜头已就绪 · 准备资产 · 合成提示词",
+            status: "done",
+            eyebrow: "脚本",
+            variant: "script-workflow",
+            skillId: "n2d-script-workbench",
+            skillPath: "skills/n2d-script-workbench/SKILL.md",
+            sourceNodeId: nodeId,
+            assetName: "12个镜头",
+          },
+        };
+        setNodes((items) => [...items.map((item) => item.id === nodeId ? { ...item, selected: false, data: { ...item.data, status: "done" as const, generationProgress: 100, assetName: "生成历史/我在盛唐写天下.script.json" } } : { ...item, selected: false }), resultNode]);
+        setEdges((items) => [...items, makeEdge(`edge-${crypto.randomUUID()}`, nodeId, resultId, true)]);
+        setSelectedNodeId(resultId);
+        addActivity("完成「我在盛唐写天下」脚本拆镜");
+        setNotice("脚本已生成，打开结果节点继续");
+        window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: nodeId }, { id: resultId }], padding: .38, maxZoom: 1, duration: 300 }));
+      }, 1050);
+      return;
+    }
     updateNodeData(nodeId, { status: "running" });
     addActivity(`开始执行「${node.data.title}」`);
     setNotice(`${node.data.title} 正在生成…`);
@@ -1512,6 +2278,78 @@ export function CanvasPage({
       addActivity(`完成「${node.data.title}」`);
       setNotice(`${node.data.title} 已完成`);
     }, 900);
+  }
+
+  function createBatchVideoNodes(scriptNodeId: string, shots: ScriptShot[]) {
+    const scriptNode = nodes.find((node) => node.id === scriptNodeId);
+    if (!scriptNode) return;
+    const existingIds = new Set(nodes.filter((node) => node.data.scriptSourceNodeId === scriptNodeId).map((node) => String(node.data.scriptShotId)));
+    const createdNodes = shots.filter((shot) => !existingIds.has(shot.id)).map((shot, index): WorkflowNode => ({
+      id: `script-video-${crypto.randomUUID()}`,
+      type: "workflow-node",
+      position: { x: scriptNode.position.x + 420 + (index % 4) * 300, y: scriptNode.position.y - 170 + Math.floor(index / 4) * 250 },
+      data: {
+        ...nodeRuntimeDefaults("video"),
+        kind: "video",
+        title: `镜头 ${String(index + 1).padStart(2, "0")}`,
+        description: `${shot.duration}s · ${shot.scale} · ${shot.visual.slice(0, 54)}…`,
+        prompt: shot.finalPrompt || shot.visual,
+        status: "ready",
+        eyebrow: "视频镜头",
+        videoMode: "首帧生成视频",
+        duration: shot.duration,
+        scriptSourceNodeId: scriptNodeId,
+        scriptShotId: shot.id,
+      },
+    }));
+    if (createdNodes.length) {
+      setNodes((items) => [...items.map((item) => ({ ...item, selected: false })), ...createdNodes]);
+      setEdges((items) => [...items, ...createdNodes.map((node) => makeEdge(`edge-${crypto.randomUUID()}`, scriptNodeId, node.id))]);
+      setSelectedNodeId(createdNodes[0].id);
+      addActivity(`已为 ${createdNodes.length} 个镜头创建视频生成节点`);
+      setNotice(`已创建 ${createdNodes.length} 个批量视频节点`);
+    } else {
+      setNotice("批量视频节点已存在");
+    }
+    setScriptWorkflowNodeId(null);
+    window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ padding: .18, maxZoom: .85, duration: 360 }));
+  }
+
+  function completeStandaloneWorkflow(nodeId: string, workflow: StandaloneWorkflowKind, result: StandaloneWorkflowResult) {
+    const sourceNode = nodes.find((node) => node.id === nodeId);
+    if (!sourceNode) return;
+    const skill = workflow === "character-turnaround" ? "n2d-character-turnaround" : workflow === "first-frame-video" ? "n2d-first-frame-video" : "n2d-audio-video";
+    const resultId = `${workflow}-result-${crypto.randomUUID()}`;
+    const resultNode: WorkflowNode = {
+      id: resultId,
+      type: "workflow-node",
+      position: { x: sourceNode.position.x + 390, y: sourceNode.position.y + 10 },
+      selected: true,
+      data: {
+        ...nodeRuntimeDefaults(result.nodeKind),
+        kind: result.nodeKind,
+        title: result.title,
+        description: result.description,
+        prompt: result.prompt,
+        status: "done",
+        eyebrow: result.nodeKind === "image" ? "角色设定" : "视频结果",
+        assetName: result.assetName,
+        model: result.model,
+        aspectRatio: result.aspectRatio,
+        resolution: result.resolution,
+        ...(result.duration ? { duration: result.duration } : {}),
+        skillId: skill,
+        skillPath: `skills/${skill}/SKILL.md`,
+        sourceNodeId: nodeId,
+      },
+    };
+    setNodes((items) => [...items.map((item) => item.id === nodeId ? { ...item, selected: false, data: { ...item.data, status: "done" as const, assetName: `Skill · ${skill}` } } : { ...item, selected: false }), resultNode]);
+    setEdges((items) => [...items, makeEdge(`edge-${crypto.randomUUID()}`, nodeId, resultId, true)]);
+    setSelectedNodeId(resultId);
+    setStandaloneWorkflow(null);
+    addActivity(`完成「${result.title}」并发送到画布`);
+    setNotice(`${result.title} 已发送到画布`);
+    window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: nodeId }, { id: resultId }], padding: .38, maxZoom: 1, duration: 300 }));
   }
 
   function locateOverviewNode(node: WorkflowNode) {
@@ -1608,6 +2446,159 @@ export function CanvasPage({
     addActivity(`添加${options?.title ?? definition.label}节点`);
   }
 
+  function applyToolboxTemplate(template: ToolboxTemplate) {
+    const stageBounds = document.querySelector<HTMLElement>(".creation-canvas-stage .react-flow")?.getBoundingClientRect();
+    const screenCenter = stageBounds
+      ? { x: stageBounds.left + stageBounds.width / 2, y: stageBounds.top + stageBounds.height / 2 }
+      : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const flowCenter = flowInstanceRef.current?.screenToFlowPosition(screenCenter) ?? screenCenter;
+    const origin = { x: flowCenter.x - 445, y: flowCenter.y - (template.recipe === "storyboard" ? 315 : 150) };
+    const batchId = `${template.id}-${crypto.randomUUID()}`;
+
+    const makeTemplateNode = (
+      part: string,
+      kind: WorkflowNodeKind,
+      position: { x: number; y: number },
+      title: string,
+      description: string,
+      status: WorkflowNodeStatus,
+      patch: Partial<WorkflowNodeData> = {},
+    ): WorkflowNode => {
+      const definition = nodeDefinition(kind);
+      return {
+        id: `toolbox-${batchId}-${part}`,
+        type: "workflow-node",
+        position,
+        selected: false,
+        data: {
+          ...nodeRuntimeDefaults(kind),
+          kind,
+          title,
+          description,
+          status,
+          eyebrow: definition.eyebrow,
+          variant: "default",
+          assetName: `工具箱 · ${template.title}`,
+          toolboxTemplateId: template.id,
+          toolboxTemplateTitle: template.title,
+          ...patch,
+        },
+      };
+    };
+
+    let createdNodes: WorkflowNode[];
+    let createdEdges: Edge[];
+
+    if (template.recipe === "storyboard") {
+      const brief = makeTemplateNode("brief", "text", { x: origin.x, y: origin.y + 70 }, template.inputLabel, "输入故事梗概、人物关系与希望强调的情节。", "ready", { prompt: "故事简述：" });
+      const roleA = makeTemplateNode("role-a", "image", { x: origin.x, y: origin.y + 300 }, "上传角色图", "可选：上传主要角色参考，锁定人物身份与服装。", "ready", { imageMode: "图片输入" });
+      const roleB = makeTemplateNode("role-b", "image", { x: origin.x, y: origin.y + 530 }, "上传角色图", "可选：上传第二角色参考，用于双人镜头连续性。", "ready", { imageMode: "图片输入" });
+      const promptNode = makeTemplateNode("prompt", "script", { x: origin.x + 345, y: origin.y + 180 }, "九宫格分镜生成器", template.description, "ready", { prompt: template.prompt });
+      const result = makeTemplateNode("result", "image", { x: origin.x + 690, y: origin.y + 180 }, template.resultLabel, "生成后可继续拆分宫格、编辑单镜头并发送到视频节点。", "idle", { prompt: template.prompt, imageMode: "文生图", aspectRatio: "16:9", resolution: "2K" });
+      createdNodes = [brief, roleA, roleB, promptNode, { ...result, selected: true }];
+      createdEdges = [
+        makeEdge(`edge-${crypto.randomUUID()}`, brief.id, promptNode.id),
+        makeEdge(`edge-${crypto.randomUUID()}`, roleA.id, promptNode.id),
+        makeEdge(`edge-${crypto.randomUUID()}`, roleB.id, promptNode.id),
+        makeEdge(`edge-${crypto.randomUUID()}`, promptNode.id, result.id, true),
+      ];
+    } else if (template.recipe === "interior") {
+      const input = makeTemplateNode("input", "image", { x: origin.x, y: origin.y + 80 }, template.inputLabel, "上传需要改造的真实空间照片，保留原始视角和结构。", "ready", { imageMode: "图片输入" });
+      const promptNode = makeTemplateNode("prompt", "text", { x: origin.x + 340, y: origin.y }, "装修要求", template.description, "ready", { prompt: template.prompt });
+      const result = makeTemplateNode("result", "image", { x: origin.x + 680, y: origin.y + 80 }, template.resultLabel, "根据原空间结构与装修要求生成可继续编辑的效果图。", "idle", { prompt: template.prompt, imageMode: "参考图生图", aspectRatio: "16:9", resolution: "2K" });
+      createdNodes = [input, promptNode, { ...result, selected: true }];
+      createdEdges = [
+        makeEdge(`edge-${crypto.randomUUID()}`, input.id, result.id),
+        makeEdge(`edge-${crypto.randomUUID()}`, promptNode.id, result.id, true),
+      ];
+    } else {
+      const input = makeTemplateNode("input", "image", { x: origin.x, y: origin.y + 95 }, template.inputLabel, "上传或从当前画布选择要应用模板的主参考图。", "ready", { imageMode: "图片输入" });
+      const promptNode = makeTemplateNode("prompt", "text", { x: origin.x + 335, y: origin.y }, "提示词（勿修改）", template.description, "ready", { prompt: template.prompt });
+      const result = makeTemplateNode("result", "video", { x: origin.x + 670, y: origin.y + 95 }, template.resultLabel, "参考图与模板提示词均连接后即可生成视频。", "idle", { prompt: template.prompt, videoMode: "首帧生成视频", model: "Lib Video 2.0", aspectRatio: "16:9", resolution: "720P", outputCount: 2, duration: 5 });
+      createdNodes = [input, promptNode, { ...result, selected: true }];
+      createdEdges = [
+        makeEdge(`edge-${crypto.randomUUID()}`, input.id, result.id),
+        makeEdge(`edge-${crypto.randomUUID()}`, promptNode.id, result.id, true),
+      ];
+    }
+
+    const resultNode = createdNodes[createdNodes.length - 1];
+    setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), ...createdNodes]);
+    setEdges((items) => [...items, ...createdEdges]);
+    setSelectedNodeId(resultNode.id);
+    setDrawer(null);
+    setToolboxGuideOpen(false);
+    setToolboxDetail(null);
+    setToolboxClassicDetail(null);
+    addActivity(`使用工具箱模板「${template.title}」创建 ${createdNodes.length} 个节点`);
+    setNotice(`已使用「${template.title}」模板`);
+    window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: createdNodes.map((node) => ({ id: node.id })), padding: .28, maxZoom: .92, duration: 360 }));
+  }
+
+  function applyToolboxClassic(template: ToolboxClassic) {
+    applyToolboxTemplate({
+      id: `classic-${template.id}`,
+      title: template.title,
+      description: template.description,
+      cover: template.cover,
+      category: "分镜",
+      recipe: "video",
+      inputLabel: "上传替换素材",
+      resultLabel: "视频生成结果",
+      prompt: `分析「${template.title}」的场面调度、景别变化、动作节奏与人物反应关系，使用用户上传的新角色和新场景重构同类叙事节奏；保留喜剧或戏剧结构，不复刻原片人物外貌、台词和受版权保护画面。`,
+    });
+  }
+
+  function applyCanvasStarterPreset(preset: CanvasStarterPreset) {
+    const stageBounds = document.querySelector<HTMLElement>(".creation-canvas-stage .react-flow")?.getBoundingClientRect();
+    const screenCenter = stageBounds
+      ? { x: stageBounds.left + stageBounds.width / 2, y: stageBounds.top + stageBounds.height / 2 }
+      : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const flowCenter = flowInstanceRef.current?.screenToFlowPosition(screenCenter) ?? screenCenter;
+    const recipeWidth = 248 + Math.max(0, preset.nodes.length - 1) * 330;
+    const originX = flowCenter.x - recipeWidth / 2;
+    const originY = flowCenter.y - 94;
+    const createdNodes = preset.nodes.map((item, index): WorkflowNode => {
+      const definition = nodeDefinition(item.kind);
+      const id = `${preset.id}-${crypto.randomUUID()}`;
+      return {
+        id,
+        type: "workflow-node",
+        position: { x: originX + index * 330, y: originY },
+        selected: index === preset.nodes.length - 1,
+        data: {
+          ...nodeRuntimeDefaults(item.kind, item.variant),
+          ...item.data,
+          kind: item.kind,
+          title: item.title,
+          description: item.description,
+          status: index === 0 ? "ready" : "idle",
+          eyebrow: definition.eyebrow,
+          variant: item.variant ?? "default",
+          assetName: `Skill · ${preset.skill}`,
+          skillId: preset.skill,
+          skillPath: preset.skillPath,
+        },
+      };
+    });
+    const createdEdges = createdNodes.slice(1).map((node, index) => makeEdge(
+      `starter-edge-${crypto.randomUUID()}`,
+      createdNodes[index].id,
+      node.id,
+      index === 0,
+    ));
+    setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), ...createdNodes]);
+    setEdges((items) => [...items, ...createdEdges]);
+    setSelectedNodeId(createdNodes.at(-1)?.id ?? null);
+    setDrawer(null);
+    setView("workflow");
+    addActivity(`使用「${preset.title}」快捷工作流（${preset.skill}）`);
+    setNotice(`已添加「${preset.title}」工作流`);
+    window.requestAnimationFrame(() => {
+      void flowInstanceRef.current?.fitView({ nodes: createdNodes.map((node) => ({ id: node.id })), padding: .5, maxZoom: 1, duration: 280 });
+    });
+  }
+
   function addAttachmentNode(attachment: DraftAttachment) {
     const kind = attachmentKind(attachment);
     if (kind === "video" && work.line === "comic") {
@@ -1637,6 +2628,16 @@ export function CanvasPage({
     setCanvasHistorySelection([]);
     setCanvasHistoryPickerOpen(true);
     setCanvasInsertMenu(null);
+  }
+
+  function openDrawerHistoryPicker() {
+    setHistoryInsertPoint(null);
+    setCanvasHistorySource("libtv");
+    setCanvasHistoryMedia("image");
+    setCanvasHistorySelection([]);
+    setCanvasHistoryPickerOpen(true);
+    setDrawer(null);
+    setAddDrawerSubmenu(null);
   }
 
   function toggleCanvasHistoryItem(itemId: string) {
@@ -1780,6 +2781,16 @@ export function CanvasPage({
     setPanelOpen(true);
     setPanelTab("skills");
     addActivity(`选择建议 Skill：${skill.title}`);
+    focusComposer();
+  }
+
+  function focusComposer() {
+    window.requestAnimationFrame(() => {
+      const input = promptRef.current;
+      if (!input) return;
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+    });
   }
 
   function useLibrarySkill(skill: CanvasLibrarySkill) {
@@ -1791,6 +2802,7 @@ export function CanvasPage({
     setAllCanvasSkillsOpen(false);
     setNotice(`已添加「${skill.title}」`);
     addActivity(`选择 Skill：${skill.title}`);
+    focusComposer();
   }
 
   function toggleCanvasSkillFavorite(skillId: string) {
@@ -1809,6 +2821,7 @@ export function CanvasPage({
       title: values.title,
       slug: `/${values.title.trim().toLocaleLowerCase().replace(/\s+/g, "-")}`,
       description: values.description,
+      line: work.line,
       creator: "我的 Skill",
       category: values.category,
       guide: values.guide,
@@ -1916,10 +2929,20 @@ export function CanvasPage({
     try {
       await navigator.clipboard.writeText(window.location.href);
       setNotice("画布链接已复制");
-      setOverlay(null);
     } catch {
       setNotice("浏览器未允许复制，请从地址栏复制链接");
     }
+  }
+
+  function sendHelpMessage(message = helpMessage) {
+    const cleanMessage = message.trim();
+    if (!cleanMessage) return;
+    setHelpMessages((items) => [
+      ...items,
+      { sender: "user", text: cleanMessage },
+      { sender: "bot", text: "已收到，我们会尽快为您处理。也可以继续补充问题细节。" },
+    ]);
+    setHelpMessage("");
   }
 
   function exportCanvasDocument() {
@@ -1955,7 +2978,7 @@ export function CanvasPage({
   }
 
   return (
-    <main style={{ "--canvas-panel-width": `${agentPanelWidth}px`, "--canvas-asset-drawer-width": `${leftSidebarWidth}px` } as CSSProperties} className={`creation-canvas-shell tool-${tool}${panelOpen ? " has-agent-panel" : ""}${view === "workflow" && miniMapVisible ? " has-minimap" : ""}${drawer === "overview" ? " has-asset-drawer has-overview-drawer" : ""}`} onClick={(event) => { if (headerMenu) setHeaderMenu(null); const target = event.target as HTMLElement; if (canvasInsertMenu && !target.closest(".canvas-insert-menu")) setCanvasInsertMenu(null); if (composerMenu && !target.closest(".canvas-home-composer")) setComposerMenu(null); if (overviewNodeMenu && !target.closest(".canvas-overview-node-menu") && !target.closest(".canvas-overview-node-more")) setOverviewNodeMenu(null); }}>
+    <main style={{ "--canvas-panel-width": `${agentPanelWidth}px`, "--canvas-asset-drawer-width": `${leftSidebarWidth}px` } as CSSProperties} className={`creation-canvas-shell tool-${tool}${panelOpen ? " has-agent-panel" : ""}${view === "workflow" && miniMapVisible ? " has-minimap" : ""}${drawer === "overview" ? " has-asset-drawer has-overview-drawer" : ""}`} onClick={(event) => { if (headerMenu) setHeaderMenu(null); const target = event.target as HTMLElement; if (railMenu && !target.closest(".canvas-rail-popover") && !target.closest(".creation-canvas-rail") && !target.closest(".canvas-help-contact")) { setRailMenu(null); if (railMenu === "help") setHelpPanel(null); } if (canvasInsertMenu && !target.closest(".canvas-insert-menu")) setCanvasInsertMenu(null); if (composerMenu && !target.closest(".canvas-home-composer")) setComposerMenu(null); if (overviewNodeMenu && !target.closest(".canvas-overview-node-menu") && !target.closest(".canvas-overview-node-more")) setOverviewNodeMenu(null); }}>
       <input
         ref={fileInputRef}
         className="canvas-file-input"
@@ -1979,7 +3002,8 @@ export function CanvasPage({
             });
             setNotice(`已上传并添加 ${files.length} 个节点`);
           } else {
-            void importAssets(event.currentTarget.files);
+            if (assetManagerOpen) void importAssetFiles(files, false);
+            else void importAssets(event.currentTarget.files);
           }
           setPendingUploadPoint(null);
           event.currentTarget.value = "";
@@ -2003,7 +3027,7 @@ export function CanvasPage({
           <button type="button" role="tab" aria-label="故事板" aria-selected={view === "storyboard"} className={view === "storyboard" ? "is-active" : ""} onClick={() => setView("storyboard")}><Icon name="panel" /></button>
         </div>
         <nav className="creation-canvas-header-actions" aria-label="项目操作">
-          <button type="button" onClick={() => setOverlay("share")}><Share2 size={16} /><span>发布与分享</span></button>
+          <button type="button" aria-label="发布与分享" aria-expanded={overlay === "share"} onClick={() => { setSharePanel("choices"); setOverlay("share"); setRailMenu(null); setHelpPanel(null); }}><Share2 size={16} /><span>发布与分享</span></button>
           <button type="button" aria-label="积分" aria-expanded={headerMenu === "credits"} onClick={(event) => { event.stopPropagation(); setHeaderMenu((current) => current === "credits" ? null : "credits"); }}><Coins size={16} /><span>6</span></button>
           <button type="button" className="canvas-profile-button" aria-label="账户" aria-expanded={headerMenu === "profile"} onClick={(event) => { event.stopPropagation(); setHeaderMenu((current) => current === "profile" ? null : "profile"); }}><UserRound size={16} /></button>
           {!panelOpen && <button type="button" onClick={() => setPanelOpen(true)} aria-label="打开 Agent"><Sparkles size={16} /><span>Agent</span></button>}
@@ -2019,15 +3043,41 @@ export function CanvasPage({
 
       <aside className="creation-canvas-rail" aria-label="画布工具">
         <button type="button" className={drawer === "add" ? "is-active" : ""} aria-label="添加节点" title="添加节点（A）" onClick={() => openDrawer("add")}><Icon name="add" /><span>添加节点</span></button>
-        <button type="button" className={tool === "pan" ? "is-active" : ""} aria-label="移动" title="移动画布（H）" onClick={() => { setTool((current) => current === "pan" ? "select" : "pan"); setDrawer(null); }}><Icon name="move" /><span>移动</span></button>
+        <button type="button" className={railMenu === "move" ? "is-active" : ""} aria-label="移动" aria-expanded={railMenu === "move"} title="移动工具" onClick={() => { setRailMenu((current) => current === "move" ? null : "move"); setDrawer(null); setOverlay(null); setHelpPanel(null); }}><Icon name="move" /><span>移动</span></button>
         <button type="button" className={drawer === "tools" ? "is-active" : ""} aria-label="打开工具箱" title="打开工具箱" onClick={() => openDrawer("tools")}><Icon name="tools" /><span>打开工具箱</span></button>
         <button type="button" className={drawer === "assets" ? "is-active" : ""} aria-label="素材库" title="素材库" onClick={() => openDrawer("assets")}><Icon name="assets" /><span>素材库</span></button>
         <button type="button" className={drawer === "characters" ? "is-active" : ""} aria-label="角色库" title="角色库" onClick={() => openDrawer("characters")}><Icon name="character" /><span>角色库</span></button>
         <button type="button" className={drawer === "history" ? "is-active" : ""} aria-label="历史记录" title="历史记录" onClick={() => openDrawer("history")}><Icon name="history" /><span>历史记录</span></button>
         <span className="creation-canvas-rail-spacer" />
-        <button type="button" aria-label="快捷键" title="快捷键（?）" onClick={() => setOverlay("shortcuts")}><span className="shortcut-glyph">⌘</span><span>快捷键</span></button>
-        <button type="button" aria-label="教程" title="画布教程" onClick={() => setOverlay("tutorial")}><Icon name="tutorial" /><span>教程</span></button>
+        <button type="button" className={overlay === "shortcuts" ? "is-active" : ""} aria-label="快捷键" aria-pressed={overlay === "shortcuts"} title="快捷键（?）" onClick={() => { setOverlay((current) => current === "shortcuts" ? null : "shortcuts"); setRailMenu(null); setHelpPanel(null); }}><Icon name="shortcut" /><span>快捷键</span></button>
+        <button type="button" className={railMenu === "help" ? "is-active" : ""} aria-label="教程" aria-expanded={railMenu === "help"} title="帮助与教程" onClick={() => { if (railMenu === "help") { setRailMenu(null); setHelpPanel(null); } else { setRailMenu("help"); } setDrawer(null); setOverlay(null); }}><Icon name="tutorial" /><span>教程</span></button>
       </aside>
+
+      {railMenu === "move" && <div className="canvas-rail-popover canvas-move-menu" role="menu" aria-label="移动工具">
+        <button type="button" role="menuitemradio" aria-checked={tool === "select"} className={tool === "select" ? "is-active" : ""} onClick={() => { setTool("select"); setRailMenu(null); }}><Icon name="move" /><span>移动</span><kbd>V</kbd></button>
+        <button type="button" role="menuitemradio" aria-checked={tool === "pan"} className={tool === "pan" ? "is-active" : ""} onClick={() => { setTool("pan"); setRailMenu(null); }}><Hand size={15} /><span>抓手工具</span><kbd>H</kbd></button>
+      </div>}
+
+      {railMenu === "help" && <div className="canvas-rail-popover canvas-help-menu" role="menu" aria-label="帮助与教程">
+        <button type="button" role="menuitem" onClick={() => { setRailMenu(null); setHelpPanel(null); setOverlay("tutorial"); }}><BookOpen size={15} /><span>使用教程</span></button>
+        <button type="button" role="menuitem" aria-pressed={helpPanel === "customer"} className={helpPanel === "customer" ? "is-active" : ""} onClick={() => setHelpPanel((current) => current === "customer" ? null : "customer")}><Headphones size={15} /><span>联系客服</span></button>
+        <button type="button" role="menuitem" aria-pressed={helpPanel === "sales"} className={helpPanel === "sales" ? "is-active" : ""} onClick={() => setHelpPanel((current) => current === "sales" ? null : "sales")}><BriefcaseBusiness size={15} /><span>联系销售</span></button>
+        <button type="button" role="menuitem" aria-pressed={helpPanel === "official"} className={helpPanel === "official" ? "is-active" : ""} onClick={() => setHelpPanel((current) => current === "official" ? null : "official")}><QrCode size={15} /><span>关注公众号</span></button>
+      </div>}
+
+      {helpPanel === "customer" && <section className="canvas-help-contact canvas-help-customer" role="dialog" aria-label="联系客服">
+        <header><span><i><Headphones size={16} /></i><b>机器人 为您服务</b></span><button type="button" aria-label="关闭客服" onClick={() => setHelpPanel(null)}><X size={16} /></button></header>
+        <div className="canvas-help-chat-log">
+          {helpMessages.map((message, index) => <p key={`${message.sender}-${index}`} className={message.sender === "user" ? "is-user" : "is-bot"}>{message.text}</p>)}
+          <section><span>热门问题</span>{["如何开发票？", "你们有客户端吗？", "如何取消续订？", "积分有效期规则", "人工客服工作时间"].map((question) => <button type="button" key={question} onClick={() => sendHelpMessage(question)}>{question}</button>)}</section>
+        </div>
+        <form onSubmit={(event) => { event.preventDefault(); sendHelpMessage(); }}><input value={helpMessage} onChange={(event) => setHelpMessage(event.target.value)} aria-label="输入客服消息" placeholder="输入消息..." /><button type="submit" disabled={!helpMessage.trim()} aria-label="发送客服消息"><ArrowUp size={15} /></button></form>
+        <small>客服工作时间 09:00–22:00</small>
+      </section>}
+
+      {(helpPanel === "sales" || helpPanel === "official") && <section className="canvas-help-contact canvas-help-qr" role="dialog" aria-label={helpPanel === "sales" ? "联系销售二维码" : "关注公众号二维码"}>
+        <span title={helpPanel === "sales" ? "微信扫码联系销售" : "微信扫码关注公众号"}><QrCode size={124} strokeWidth={1.2} /></span>
+      </section>}
 
       <section
         className="creation-canvas-stage"
@@ -2050,7 +3100,7 @@ export function CanvasPage({
         }}
       >
         {view === "workflow" ? (
-          <CanvasNodeActionsContext.Provider value={{ update: updateNodeData, run: runWorkflowNode, quickAction: handleNodeQuickAction, openDirector: setDirectorStudioNodeId }}>
+          <CanvasNodeActionsContext.Provider value={{ update: updateNodeData, run: runWorkflowNode, quickAction: handleNodeQuickAction, openDirector: setDirectorStudioNodeId, openScript: setScriptWorkflowNodeId, openStandalone: (nodeId, workflow) => setStandaloneWorkflow({ nodeId, workflow }) }}>
           <ReactFlow<WorkflowNode, Edge>
             nodes={nodes}
             edges={edgesVisible ? edges : []}
@@ -2098,6 +3148,28 @@ export function CanvasPage({
               if (typedNode.data.kind === "compose") return "#92949d";
               return "#585b67";
             }} />}
+            {nodes.length === 0 && (
+              <Panel position="top-center" className="canvas-empty-start" aria-label="画布快速开始">
+                <p><MousePointer2 size={20} fill="currentColor" />双击画布 自由生成节点</p>
+                <div>
+                  {CANVAS_STARTER_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      className={`canvas-empty-preset preset-${preset.id}`}
+                      style={{ "--canvas-starter-cover": `url("${preset.cover}")` } as CSSProperties}
+                      aria-label={`使用${preset.title}，对应 Skill ${preset.skill}`}
+                      title={`对应项目 Skill：${preset.skill}`}
+                      onClick={() => applyCanvasStarterPreset(preset)}
+                    >
+                      <CanvasStarterPresetIcon id={preset.id} />
+                      <span>{preset.title}</span>
+                      <em>去生成</em>
+                    </button>
+                  ))}
+                </div>
+              </Panel>
+            )}
             <BottomCanvasControls
               zoom={zoom}
               miniMapVisible={miniMapVisible}
@@ -2143,8 +3215,8 @@ export function CanvasPage({
           <div className="canvas-insert-menu-item">
             <button type="button" className={canvasInsertMenu.submenu === "assets" ? "is-active" : ""} aria-expanded={canvasInsertMenu.submenu === "assets"} onClick={() => setCanvasInsertMenu((current) => current ? { ...current, submenu: current.submenu === "assets" ? null : "assets" } : current)}><Icon name="assets" /><span>素材库</span><i className="canvas-insert-badge is-new">NEW</i><ChevronRight size={14} /></button>
             {canvasInsertMenu.submenu === "assets" && <div className="canvas-insert-submenu" role="menu" aria-label="素材库类型">
-              <button type="button" role="menuitem" onClick={() => { setLibraryInsertPoint({ x: canvasInsertMenu.flowX, y: canvasInsertMenu.flowY }); setCanvasInsertMenu(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryMinimized(false); setOverlay("style-library"); }}><span>风格库</span></button>
-              <button type="button" role="menuitem" onClick={() => { setLibraryInsertPoint({ x: canvasInsertMenu.flowX, y: canvasInsertMenu.flowY }); setCanvasInsertMenu(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryMinimized(false); setOverlay("effect-library"); }}><span>特效库</span></button>
+              <button type="button" role="menuitem" onClick={() => { setLibraryInsertPoint({ x: canvasInsertMenu.flowX, y: canvasInsertMenu.flowY }); setCanvasInsertMenu(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryModelFilter("全部"); setLibraryModelMenuOpen(false); setLibraryMinimized(false); setOverlay("style-library"); }}><span>风格库</span></button>
+              <button type="button" role="menuitem" onClick={() => { setLibraryInsertPoint({ x: canvasInsertMenu.flowX, y: canvasInsertMenu.flowY }); setCanvasInsertMenu(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryModelFilter("全部"); setLibraryModelMenuOpen(false); setLibraryMinimized(false); setOverlay("effect-library"); }}><span>特效库</span></button>
             </div>}
           </div>
           <h4>添加资源</h4>
@@ -2164,7 +3236,7 @@ export function CanvasPage({
             <nav role="tablist" aria-label="资产管理视图">
               <button type="button" role="tab" aria-selected={overviewTab === "canvas"} className={overviewTab === "canvas" ? "is-active" : ""} onClick={() => setOverviewTab("canvas")}>画布</button>
               <button type="button" role="tab" aria-selected={overviewTab === "assets"} className={overviewTab === "assets" ? "is-active" : ""} onClick={() => setOverviewTab("assets")}>资产</button>
-              <button type="button" className="canvas-overview-collapse" aria-label="收起资产管理" title="收起资产管理" onClick={() => { setDrawer(null); setOverviewNodeMenu(null); setOverviewFilterOpen(false); }}><Icon name="map" /></button>
+              <button type="button" className="canvas-overview-collapse" aria-label="资产管理" title="资产管理" aria-haspopup="dialog" aria-expanded={assetManagerOpen} onClick={openAssetManager}><Icon name="asset-manager" /></button>
             </nav>
             {overviewTab === "canvas" ? <section className="canvas-overview-nodes">
               <header className="canvas-overview-list-toolbar">
@@ -2194,23 +3266,62 @@ export function CanvasPage({
           </div>}
           {drawer === "add" && <div className="canvas-add-menu">
             <small>添加节点</small>
-            <div>{ADD_NODE_OPTIONS.map((item) => <button key={item.id} type="button" onClick={() => { if (item.id === "library") { setDrawer("assets"); return; } addWorkflowNode(item.kind, { title: item.label }); }}><span><Icon name={item.kind} /></span><b>{item.label}</b>{item.badge && <i>{item.badge}</i>}</button>)}</div>
+            <div>{ADD_NODE_OPTIONS.map((item) => <button key={item.id} type="button" className={item.id === "script" && addDrawerSubmenu === "script" ? "is-active" : ""} aria-expanded={item.id === "script" ? addDrawerSubmenu === "script" : undefined} onClick={() => { if (item.id === "script") { setAddDrawerSubmenu((current) => current === "script" ? null : "script"); return; } if (item.id === "library") { setDrawer("assets"); return; } addWorkflowNode(item.kind, { title: item.label, ...(item.id === "director" ? { description: "在3D空间中搭建场景并进行多视角截图", variant: "director" as const } : {}) }); }}><span><Icon name={item.id === "director" ? "workflow" : item.kind} /></span><b>{item.label}</b>{item.badge && <i>{item.badge}</i>}{(item.id === "script" || item.id === "library") && <ChevronRight size={14} />}</button>)}</div>
+            {addDrawerSubmenu === "script" && <div className="canvas-add-script-submenu" role="menu" aria-label="脚本类型"><button type="button" role="menuitem" onClick={() => addWorkflowNode("script", { title: "脚本生成器", description: "描述剧情片段、故事，为你生成分镜脚本", variant: "script-new" })}><span>脚本</span><i>NEW</i></button><button type="button" role="menuitem" onClick={() => addWorkflowNode("script", { title: "脚本生成器", description: "描述剧情或添加角色参考、视频参考等，为你生成分镜脚本", variant: "script-legacy" })}><span>脚本（旧版）</span><i>Beta</i></button></div>}
             <small>添加资源</small>
             <button type="button" className="canvas-add-resource" onClick={() => { setPendingUploadPoint(null); fileInputRef.current?.click(); }}><Upload size={16} /><b>上传</b></button>
-            <button type="button" className="canvas-add-resource" onClick={() => setDrawer("history")}><Icon name="history" /><b>从生成历史选择</b></button>
+            <button type="button" className="canvas-add-resource" onClick={openDrawerHistoryPicker}><Icon name="history" /><b>从生成历史选择</b></button>
           </div>}
           {drawer === "tools" && <div className="canvas-toolbox-gallery">
-            <nav><button type="button" className="is-active">我的工具箱</button><button type="button" onClick={() => setNotice("模板会自动生成一组可编辑节点")}>工具箱模板说明</button><button type="button" onClick={() => setNotice("已切换至周星驰经典名场面模板")}>周星驰经典名场面</button></nav>
-            <div>{TOOLBOX_TEMPLATES.map((name, index) => <article key={name}><span className={`canvas-toolbox-preview preview-${index % 6}`}><WandSparkles size={21} /><em>{String(index + 1).padStart(2, "0")}</em></span><footer><b>{name}</b><button type="button" onClick={() => { addWorkflowNode(index === TOOLBOX_TEMPLATES.length - 1 ? "script" : "video", { title: name, description: "由工具箱模板创建，可继续修改输入与参数" }); setNotice(`已使用「${name}」模板`); }}>使用</button></footer></article>)}</div>
+            <nav role="tablist" aria-label="工具箱分类">
+              <button type="button" role="tab" aria-selected={toolboxTab === "mine"} className={toolboxTab === "mine" ? "is-active" : ""} onClick={() => { setToolboxTab("mine"); setToolboxGuideOpen(false); setToolboxClassicDetail(null); }}>我的工具箱</button>
+              <button type="button" className={toolboxGuideOpen ? "is-active" : ""} aria-haspopup="dialog" aria-expanded={toolboxGuideOpen} onClick={() => { setToolboxGuideOpen((open) => !open); setToolboxDetail(null); setToolboxClassicDetail(null); }}><Info size={12} />工具箱模板说明</button>
+              <button type="button" role="tab" aria-selected={toolboxTab === "classic"} className={toolboxTab === "classic" ? "is-active" : ""} onClick={() => { setToolboxTab("classic"); setToolboxGuideOpen(false); setToolboxDetail(null); }}>周星驰经典名场面</button>
+            </nav>
+
+            {toolboxGuideOpen && <section className="canvas-toolbox-guide-popover" role="dialog" aria-label="工具箱模板说明">
+              <button type="button" aria-label="关闭工具箱模板说明" onClick={() => setToolboxGuideOpen(false)}><X size={14} /></button>
+              <Info size={18} />
+              <div><strong>工具箱模板说明</strong><p>使用工具箱模板加速创作，快速构建你的专属工具箱。点击封面可查看用途、输入和生成节点，点击“使用”会把整套可编辑节点发送到当前画布。</p><a href="https://liblibai.feishu.cn/wiki/Loxfw6XHziYRk0kKzdjcFfp9nhb#share-EGsydYnauomw6rxz7SAc313Bnfh" target="_blank" rel="noreferrer">查看详细教程 <ExternalLink size={12} /></a></div>
+            </section>}
+
+            {toolboxTab === "mine" ? <div className="canvas-toolbox-grid">
+              {TOOLBOX_TEMPLATES.map((template, index) => <article key={template.id} className="canvas-toolbox-card" title={template.description}>
+                <div className="canvas-toolbox-preview">
+                  <img src={template.cover} alt={`【预设】${template.title}`} loading="lazy" />
+                  <em>{String(index + 1).padStart(2, "0")}</em>
+                  <button type="button" className="canvas-toolbox-preview-use" onClick={() => applyToolboxTemplate(template)}><WandSparkles size={14} />使用</button>
+                </div>
+                <footer><button type="button" className="canvas-toolbox-title" onClick={() => { setToolboxDetail(template); setToolboxGuideOpen(false); }}><b>{template.title}</b></button><button type="button" onClick={() => applyToolboxTemplate(template)}>使用</button></footer>
+              </article>)}
+            </div> : <section className="canvas-toolbox-classics" aria-label="周星驰经典名场面">
+              <header><div><strong>周星驰经典名场面</strong><small>选择场面后会创建可替换角色、场景和提示词的参考工作流</small></div><span>{TOOLBOX_CLASSICS.length} 个模板</span></header>
+              <div>{TOOLBOX_CLASSICS.map((template) => <article key={template.id}>
+                <button type="button" className="canvas-toolbox-classic-cover" onClick={() => { setToolboxClassicDetail(template); setToolboxGuideOpen(false); }}><img src={template.cover} alt={template.title} loading="lazy" /><span><Info size={14} />查看详情</span></button>
+                <footer><button type="button" onClick={() => setToolboxClassicDetail(template)}><b>{template.title}</b><small>{template.description}</small></button><button type="button" onClick={() => applyToolboxClassic(template)}>使用</button></footer>
+              </article>)}</div>
+            </section>}
+
+            {toolboxDetail && <section className="canvas-toolbox-detail" role="dialog" aria-modal="true" aria-label={`${toolboxDetail.title}详情`}>
+              <button type="button" className="canvas-toolbox-detail-close" aria-label="关闭工具详情" onClick={() => setToolboxDetail(null)}><X size={16} /></button>
+              <figure><img src={toolboxDetail.cover} alt={toolboxDetail.title} /><span>{toolboxDetail.category}</span></figure>
+              <div><small>TOOLBOX PRESET</small><h3>{toolboxDetail.title}</h3><p>{toolboxDetail.description}</p><dl><div><dt>输入</dt><dd>{toolboxDetail.inputLabel}</dd></div><div><dt>输出</dt><dd>{toolboxDetail.resultLabel}</dd></div><div><dt>节点</dt><dd>{toolboxDetail.recipe === "storyboard" ? "故事 + 角色参考 + 分镜 + 结果" : "参考素材 + 模板提示词 + 生成结果"}</dd></div></dl><blockquote>{toolboxDetail.prompt}</blockquote><footer><button type="button" onClick={() => setToolboxDetail(null)}>返回</button><button type="button" onClick={() => applyToolboxTemplate(toolboxDetail)}><WandSparkles size={14} />使用模板</button></footer></div>
+            </section>}
+
+            {toolboxClassicDetail && <section className="canvas-toolbox-detail" role="dialog" aria-modal="true" aria-label={`${toolboxClassicDetail.title}详情`}>
+              <button type="button" className="canvas-toolbox-detail-close" aria-label="关闭经典名场面详情" onClick={() => setToolboxClassicDetail(null)}><X size={16} /></button>
+              <figure><img src={toolboxClassicDetail.cover} alt={toolboxClassicDetail.title} /><span>经典场面</span></figure>
+              <div><small>SCENE REFERENCE</small><h3>{toolboxClassicDetail.title}</h3><p>{toolboxClassicDetail.description}</p><dl><div><dt>输入</dt><dd>替换角色或场景素材</dd></div><div><dt>输出</dt><dd>可编辑的视频模板节点</dd></div><div><dt>处理</dt><dd>提取调度与节奏，不复制原片台词和人物外貌</dd></div></dl><footer><button type="button" onClick={() => setToolboxClassicDetail(null)}>返回</button><button type="button" onClick={() => applyToolboxClassic(toolboxClassicDetail)}><WandSparkles size={14} />使用模板</button></footer></div>
+            </section>}
           </div>}
           {drawer === "assets" && <div className="canvas-library-menu">
-            <button type="button" onClick={() => { setDrawer(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryMinimized(false); setOverlay("style-library"); }}><span><Sparkles size={19} /></span><span><b>风格库</b><small>新增风格节点 <i>NEW</i></small></span><ChevronDown size={15} /></button>
-            <button type="button" onClick={() => { setDrawer(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryMinimized(false); setOverlay("effect-library"); }}><span><WandSparkles size={19} /></span><span><b>特效库</b><small>新增特效节点 <i>NEW</i></small></span><ChevronDown size={15} /></button>
+            <button type="button" onClick={() => { setDrawer(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryModelFilter("全部"); setLibraryModelMenuOpen(false); setLibraryMinimized(false); setOverlay("style-library"); }}><span><Sparkles size={19} /></span><span><b>风格库</b><small>新增风格节点 <i>NEW</i></small></span><ChevronDown size={15} /></button>
+            <button type="button" onClick={() => { setDrawer(null); setLibraryTab("square"); setLibraryCategory("推荐"); setLibraryQuery(""); setLibraryModelFilter("全部"); setLibraryModelMenuOpen(false); setLibraryMinimized(false); setOverlay("effect-library"); }}><span><WandSparkles size={19} /></span><span><b>特效库</b><small>新增特效节点 <i>NEW</i></small></span><ChevronDown size={15} /></button>
           </div>}
           {drawer === "characters" && <div className="canvas-character-library">
             <section className="canvas-character-feature"><div className="canvas-character-copy"><small>当前角色</small><h2>{selectedCharacter.name}</h2><p>{selectedCharacter.detail}</p><p>保持人物外貌、气质与服装在后续镜头中的连续一致，可随时在节点中继续调整。</p><button type="button" onClick={() => { addWorkflowNode("text", { title: selectedCharacter.name, description: selectedCharacter.detail, assetName: "角色参考" }); setNotice(`已将「${selectedCharacter.name}」应用至画布`); }}>应用至画布</button></div><div className="canvas-character-previews">{["立绘", "脸部近景", "表情参考", "三视图"].map((label, index) => <span key={label} className={`character-preview-${index}`}><UserRound size={38} /><b>{label}</b></span>)}</div></section>
-            <header><strong>角色筛选</strong><label><input type="checkbox" /> 仅看最近使用</label></header>
-            <div className="canvas-character-carousel">{CHARACTER_PRESETS.map((character) => <button key={character.id} type="button" className={selectedCharacterId === character.id ? "is-selected" : ""} onClick={() => setSelectedCharacterId(character.id)}><span><UserRound size={25} /></span><b>{character.name}</b><small>{character.detail}</small></button>)}</div>
+            <header><strong>角色筛选</strong><label><input type="checkbox" checked={characterRecentOnly} onChange={(event) => setCharacterRecentOnly(event.target.checked)} /> 最近使用</label></header>
+            <div className="canvas-character-carousel-shell"><button type="button" className="canvas-character-carousel-arrow is-prev" aria-label="prev" onClick={() => scrollCharacterCarousel(-1)}><ChevronRight size={17} /></button><div ref={characterCarouselRef} className="canvas-character-carousel">{visibleCharacterPresets.map((character) => <button key={character.id} type="button" className={selectedCharacterId === character.id ? "is-selected" : ""} onClick={() => selectCharacter(character.id)}><span><UserRound size={25} /></span><b>{character.name}</b><small>{character.detail}</small></button>)}</div><button type="button" className="canvas-character-carousel-arrow is-next" aria-label="next" onClick={() => scrollCharacterCarousel(1)}><ChevronRight size={17} /></button></div>
           </div>}
           {drawer === "history" && <div className="canvas-history-library">
             <nav role="tablist" aria-label="历史资产类型">{(["image", "video", "audio"] as const).map((kind) => <button key={kind} type="button" role="tab" aria-selected={historyMediaKind === kind} className={historyMediaKind === kind ? "is-active" : ""} onClick={() => setHistoryMediaKind(kind)}>{kind === "image" ? "图片历史" : kind === "video" ? "视频历史" : "音频历史"}<i>{nodes.filter((node) => kind === "image" ? ["image", "text", "script"].includes(node.data.kind) : node.data.kind === kind).length}</i></button>)}</nav>
@@ -2251,6 +3362,42 @@ export function CanvasPage({
               <div className="canvas-node-editor-field"><span>状态</span><SelectMenu ariaLabel="节点状态" value={editingNode.data.status} options={WORKFLOW_STATUS_OPTIONS} onChange={(status) => updateNodeData(editingNode.id, { status })} /></div>
             </div>
             <footer><button type="button" onClick={() => setEditingNodeId(null)}>完成</button></footer>
+          </section>
+        </div>
+      )}
+
+      {assetManagerOpen && (
+        <div className="canvas-asset-manager-backdrop" role="presentation" onMouseDown={(event) => {
+          if (event.target !== event.currentTarget) return;
+          setAssetManagerOpen(false);
+          setAssetManagerNewMenuOpen(false);
+          setAssetManagerSelectedIds([]);
+        }}>
+          <section className="canvas-asset-manager-modal" role="dialog" aria-modal="true" aria-label="资产管理" onMouseDown={(event) => event.stopPropagation()}>
+            <header><strong>资产管理</strong><button type="button" aria-label="关闭资产管理" onClick={() => { setAssetManagerOpen(false); setAssetManagerNewMenuOpen(false); setAssetManagerSelectedIds([]); }}><X size={17} /></button></header>
+            <div className="canvas-asset-manager-body">
+              <aside aria-label="资产库">
+                <button type="button" className={assetManagerSource === "personal" ? "is-active" : ""} onClick={() => { setAssetManagerSource("personal"); setAssetManagerSelectedIds([]); setAssetManagerNewMenuOpen(false); }}><Folder size={15} />个人资产库</button>
+                <button type="button" className={assetManagerSource === "kling" ? "is-active" : ""} onClick={() => { setAssetManagerSource("kling"); setAssetManagerSelectedIds([]); setAssetManagerNewMenuOpen(false); }}><UserRound size={15} />可灵主体库</button>
+              </aside>
+              <main>
+                <h3>{assetManagerSource === "personal" ? "个人资产库" : "可灵主体库"}</h3>
+                {assetManagerSource === "personal" ? <>
+                  <div className="canvas-asset-manager-toolbar">
+                    <label><input autoFocus aria-label="搜索个人资产库" placeholder="请输入搜索内容" value={assetManagerQuery} onChange={(event) => setAssetManagerQuery(event.target.value)} /><Search size={15} /></label>
+                    <button type="button" className={assetManagerBatchMode ? "is-active" : ""} onClick={() => { setAssetManagerBatchMode((enabled) => !enabled); setAssetManagerSelectedIds([]); }}>{assetManagerBatchMode ? "退出批量" : "批量操作"}</button>
+                    <span className="canvas-asset-manager-new-wrap"><button type="button" className="is-primary" aria-expanded={assetManagerNewMenuOpen} onClick={() => setAssetManagerNewMenuOpen((open) => !open)}><Plus size={15} />新建</button>{assetManagerNewMenuOpen && <span className="canvas-asset-manager-new-menu" role="menu"><button type="button" role="menuitem" onClick={() => { setPendingUploadPoint(null); setAssetManagerNewMenuOpen(false); fileInputRef.current?.click(); }}><Upload size={14} />上传素材</button><button type="button" role="menuitem" onClick={() => { setOverviewAssetGroupName("新建文件夹"); setAssetManagerNewMenuOpen(false); setNotice("已新建资产文件夹"); }}><Folder size={14} />新建文件夹</button></span>}</span>
+                  </div>
+                  <nav className="canvas-asset-manager-categories" aria-label="资产分类">{(["全部", "其它", "人物", "场景", "物品", "风格", "音效"] as AssetManagerCategory[]).map((category) => <button key={category} type="button" className={assetManagerCategory === category ? "is-active" : ""} onClick={() => { setAssetManagerCategory(category); setAssetManagerSelectedIds([]); setAssetManagerNewMenuOpen(false); }}>{category}</button>)}</nav>
+                  <div className="canvas-asset-manager-grid">
+                    {(assetManagerCategory === "全部" || assetManagerCategory === "其它") && (!assetManagerQuery.trim() || overviewAssetGroupName.toLocaleLowerCase().includes(assetManagerQuery.trim().toLocaleLowerCase())) && <button type="button" className={assetManagerSelectedIds.includes("folder:unclassified") ? "canvas-managed-folder is-selected" : "canvas-managed-folder"} onClick={() => toggleManagedAsset("folder:unclassified")}><span><Folder size={40} />{assetManagerSelectedIds.includes("folder:unclassified") && <i><Check size={13} /></i>}</span><b>{overviewAssetGroupName}</b><small>2026-08-03</small></button>}
+                    {visibleManagedAssets.map((attachment) => <button key={attachment.id} type="button" className={assetManagerSelectedIds.includes(attachment.id) ? "canvas-managed-asset is-selected" : "canvas-managed-asset"} onClick={() => toggleManagedAsset(attachment.id)}><span><Icon name={attachmentKind(attachment)} />{assetManagerSelectedIds.includes(attachment.id) && <i><Check size={13} /></i>}</span><b>{attachment.name}</b><small>{attachmentAssetTag(attachment)} · {Math.max(1, Math.round(attachment.size / 1024))} KB</small></button>)}
+                    {!visibleManagedAssets.length && !((assetManagerCategory === "全部" || assetManagerCategory === "其它") && (!assetManagerQuery.trim() || overviewAssetGroupName.toLocaleLowerCase().includes(assetManagerQuery.trim().toLocaleLowerCase()))) && <div className="canvas-asset-manager-empty"><Folder size={28} /><strong>没有找到相关资产</strong><span>换个分类或关键词试试</span></div>}
+                  </div>
+                  <footer><button type="button" className="canvas-asset-manager-send" disabled={!assetManagerSelectedIds.length} onClick={sendManagedAssetsToCanvas}>发送到画布</button><span /><button type="button" disabled aria-label="上一页"><ChevronRight size={13} /></button><button type="button" className="is-current">1</button><button type="button" disabled aria-label="下一页"><ChevronRight size={13} /></button><button type="button">20条/页 <ChevronDown size={12} /></button></footer>
+                </> : <div className="canvas-asset-manager-kling-empty"><UserRound size={32} /><strong>暂无可灵主体</strong><span>创建的主体会集中显示在这里</span><button type="button" onClick={() => setNotice("可灵主体创建入口已打开")}>创建主体</button></div>}
+              </main>
+            </div>
           </section>
         </div>
       )}
@@ -2302,7 +3449,7 @@ export function CanvasPage({
             <button type="button" role="tab" aria-selected={panelTab === "settings"} className={panelTab === "settings" ? "is-active" : ""} onClick={() => setPanelTab("settings")}>设置</button>
           </nav>
           <div className="canvas-agent-panel-body">
-            {panelTab === "conversation" && (isNewConversation ? <section className="canvas-agent-starter"><header><p>说个想法。或者，选个 Skill</p><button type="button" onClick={() => setSkillBatchIndex((index) => (index + 1) % AGENT_SKILL_BATCHES.length)}>换一批</button></header><div>{AGENT_SKILL_BATCHES[skillBatchIndex].map((skill) => <button key={skill.id} type="button" onClick={() => useLibrarySkill(skill)}><span><Sparkles size={16} /></span><span><b>{skill.title}</b><small>{skill.slug}</small></span></button>)}</div></section> : <section className="canvas-agent-conversation-blank" aria-label="当前对话" />)}
+            {panelTab === "conversation" && (showAgentStarter ? <section className="canvas-agent-starter"><header><p><Sparkles size={14} />用 Skill，开启今天的故事</p><button type="button" onClick={() => setSkillBatchIndex((index) => (index + 1) % AGENT_SKILL_BATCHES.length)}><RotateCcw size={12} />换一批</button></header><div>{AGENT_SKILL_BATCHES[skillBatchIndex % AGENT_SKILL_BATCHES.length].map((skill) => <button key={skill.id} type="button" aria-label={`使用 Skill ${skill.title}`} onClick={() => useLibrarySkill(skill)}><span className={`canvas-agent-starter-cover line-${skill.line ?? work.line}`}><LineIcon line={skill.line ?? work.line} /></span><span><b>{skill.title}</b><small>{skill.slug}</small></span></button>)}</div></section> : <section className="canvas-agent-conversation-blank" aria-label="当前对话" />)}
             {panelTab === "skills" && <section className="canvas-skill-suggestions">
               <div className="canvas-agent-context"><small>当前作品</small><strong>{workName || "unnamed"}</strong><p>{attachments.length ? `已关联 ${attachments.length} 个源文件` : "从文字需求开始创作"}</p></div>
               <h3><Icon name="sparkle" />Skill 全开，故事走起</h3>
@@ -2326,27 +3473,28 @@ export function CanvasPage({
 
       {panelOpen ? (
         <section className="skill-composer canvas-home-composer" onClick={(event) => event.stopPropagation()}>
-          <div className="composer-prompt-row">
-            {activeSkill && activeSkillTitle && (
-              <div className="composer-selected-token">
-                <button className="token-main" type="button" title="更换 Skill" onClick={() => setComposerMenu(composerMenu === "skill" ? null : "skill")}>
-                  <LineIcon line={work.line} /><span>{activeSkillTitle}</span>
-                </button>
-                <button className="token-remove" type="button" title="移除 Skill" aria-label={`移除 ${activeSkillTitle}`} onClick={() => setActiveSkill(null)}><X size={12} /></button>
-              </div>
-            )}
+          <div className={`composer-prompt-row${activeSkill || selectedModel ? " has-selection" : ""}`}>
             {selectedModel && (
               <div className="composer-selected-token">
                 <button className="token-main" type="button" title="更换模型" onClick={() => setComposerMenu(composerMenu === "model" ? null : "model")}>
                   <Box size={15} /><span>{selectedModel.name}</span>
                 </button>
-                <button className="token-remove" type="button" title="移除模型" aria-label={`移除 ${selectedModel.name}`} onClick={() => setCreationConfig((current) => ({ ...current, model: { ...current.model, modelId: "" } }))}><X size={12} /></button>
+                <button className="token-remove" type="button" title="移除模型" aria-label={`移除 ${selectedModel.name}`} onClick={() => { setCreationConfig((current) => ({ ...current, model: { ...current.model, modelId: "" } })); focusComposer(); }}><X size={12} /></button>
+              </div>
+            )}
+            {activeSkill && activeSkillTitle && (
+              <div className="composer-selected-token">
+                <button className="token-main" type="button" title="更换 Skill" onClick={() => setComposerMenu(composerMenu === "skill" ? null : "skill")}>
+                  <ClipboardPenLine size={15} /><span>{activeSkillTitle}</span>
+                </button>
+                <button className="token-remove" type="button" title="移除 Skill" aria-label={`移除 ${activeSkillTitle}`} onClick={() => { setActiveSkill(null); focusComposer(); }}><X size={12} /></button>
               </div>
             )}
             <textarea
+              ref={promptRef}
               value={prompt}
               aria-label="创作需求"
-              placeholder={prompt || activeSkill || selectedModel ? "" : "请输入你的创作灵感，或从下方挑选一个 Skill 开始"}
+              placeholder={prompt || activeSkill || selectedModel ? "" : "开始你的创作，或者 @ 引用工作流/节点/资源"}
               onChange={(event) => setPrompt(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
@@ -2355,8 +3503,8 @@ export function CanvasPage({
                 }
                 if (event.key === "Backspace" && !prompt) {
                   event.preventDefault();
-                  if (selectedModel) setCreationConfig((current) => ({ ...current, model: { ...current.model, modelId: "" } }));
-                  else if (activeSkill) setActiveSkill(null);
+                  if (activeSkill) setActiveSkill(null);
+                  else if (selectedModel) setCreationConfig((current) => ({ ...current, model: { ...current.model, modelId: "" } }));
                   return;
                 }
                 if (event.key === "Enter" && !event.shiftKey) {
@@ -2389,6 +3537,7 @@ export function CanvasPage({
                           setModelModality(model.modality);
                           setComposerMenu(null);
                           setNotice(`已选择 ${model.name}`);
+                          focusComposer();
                         }}>
                           <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{model.name.slice(0, 1)}</span>
                           <span className="model-copy">
@@ -2429,7 +3578,7 @@ export function CanvasPage({
                     {visibleSkillLibrary.map((skill) => (
                       <div className="skill-picker-row" key={skill.id}>
                         <button type="button" className="skill-picker-main" onClick={() => useLibrarySkill(skill)}>
-                          <span className="picker-skill-icon"><Wrench size={15} /></span>
+                          <span className="picker-skill-icon"><LineIcon line={skill.line ?? work.line} /></span>
                           <span className="skill-picker-copy">
                             <span className="skill-picker-name"><b>{skill.title}</b><small>{skill.id.startsWith("user:") ? "我的 Skill" : skill.slug}</small></span>
                             <em>{skill.description}</em>
@@ -2449,7 +3598,7 @@ export function CanvasPage({
 
             <div className="composer-menu-wrap compact mode-menu-wrap">
               <button className={composerMenu === "mode" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title={creationConfig.generationMode === "auto" ? "自动模式" : "手动模式"} aria-label={creationConfig.generationMode === "auto" ? "自动模式" : "手动模式"} aria-expanded={composerMenu === "mode"} onClick={() => setComposerMenu(composerMenu === "mode" ? null : "mode")}>
-                <Hand size={18} strokeWidth={1.6} />
+                <RotateCcw size={18} strokeWidth={1.6} />
               </button>
               {composerMenu === "mode" && (
                 <div className="floating-panel mode-picker" role="dialog" aria-label="生成模式">
@@ -2622,21 +3771,35 @@ export function CanvasPage({
       />
 
       {overlay && (
-        <div className="canvas-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) { setOverlay(null); setLibraryInsertPoint(null); setLibraryDetail(null); } }}>
-          <section className={`canvas-modal canvas-modal-${overlay}${libraryMinimized && (overlay === "style-library" || overlay === "effect-library") ? " is-minimized" : ""}`} role="dialog" aria-modal="true" aria-label={overlay === "shortcuts" ? "快捷键" : overlay === "tutorial" ? "画布教程" : overlay === "share" ? "发布与分享" : overlay === "style-library" ? "风格库" : overlay === "effect-library" ? "特效库" : "清除本机作品数据"}>
-            <header><div><small>{overlay === "share" ? "CANVAS" : overlay === "clear-data" ? "LOCAL DATA" : overlay === "style-library" || overlay === "effect-library" ? "ASSET LIBRARY" : "CANVAS GUIDE"}</small><strong>{overlay === "shortcuts" ? "快捷键" : overlay === "tutorial" ? "快速上手" : overlay === "share" ? "发布与分享" : overlay === "style-library" ? "风格库" : overlay === "effect-library" ? "特效库" : "清除本机作品数据"}</strong></div>{(overlay === "style-library" || overlay === "effect-library") && <button type="button" onClick={() => setLibraryMinimized((minimized) => !minimized)} aria-label={libraryMinimized ? "展开素材库" : "最小化素材库"}>{libraryMinimized ? <Maximize2 size={15} /> : <Minimize2 size={15} />}</button>}<button type="button" onClick={() => { setOverlay(null); setLibraryInsertPoint(null); setLibraryDetail(null); }} aria-label="关闭"><Icon name="close" /></button></header>
-            {overlay === "shortcuts" ? <div className="canvas-shortcut-list"><span><kbd>⌘ Z</kbd><b>撤销</b></span><span><kbd>⇧⌘ Z</kbd><b>重做</b></span><span><kbd>⌘ C</kbd><b>复制节点</b></span><span><kbd>⌘ V</kbd><b>粘贴节点</b></span><span><kbd>⌘ D</kbd><b>创建副本</b></span><span><kbd>⌫</kbd><b>删除节点</b></span><span><kbd>A</kbd><b>打开添加节点</b></span><span><kbd>V</kbd><b>选择工具</b></span><span><kbd>H</kbd><b>移动画布</b></span><span><kbd>G</kbd><b>切换网格吸附</b></span><span><kbd>?</kbd><b>查看快捷键</b></span><span><kbd>Esc</kbd><b>关闭弹层</b></span></div> : overlay === "tutorial" ? <ol className="canvas-tutorial-list"><li><i>1</i><span><b>选择或添加节点</b><small>从左侧添加文本、图片、音频等工作流节点。</small></span></li><li><i>2</i><span><b>连接并整理流程</b><small>拖动节点连接点建立依赖，再用底部整理按钮排列。</small></span></li><li><i>3</i><span><b>让 Agent 执行</b><small>选择右侧建议 Skill，或在底部直接输入下一步任务。</small></span></li></ol> : overlay === "share" ? <div className="canvas-share-actions">
-              <button type="button" onClick={() => void copyShareLink()}><span><Icon name="share" /></span><span><b>复制分享链接</b><small>使用当前稳定画布 URL；云端同步后可跨设备恢复。</small></span></button>
-              <button type="button" onClick={exportCanvasDocument}><span><Icon name="download" /></span><span><b>导出画布 JSON</b><small>下载节点、连线、视图与 Agent 运行记录的便携副本。</small></span></button>
-            </div> : overlay === "style-library" || overlay === "effect-library" ? <div className="canvas-preset-library">
+        <div className="canvas-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) { setOverlay(null); setSharePanel("choices"); setLibraryInsertPoint(null); setLibraryDetail(null); setLibraryModelMenuOpen(false); } }}>
+          <section className={`canvas-modal canvas-modal-${overlay}${overlay === "share" ? ` share-${sharePanel}` : ""}${libraryMinimized && (overlay === "style-library" || overlay === "effect-library") ? " is-minimized" : ""}`} role="dialog" aria-modal="true" aria-label={overlay === "shortcuts" ? "快捷键" : overlay === "tutorial" ? "画布教程" : overlay === "share" ? sharePanel === "link" ? "分享链接" : sharePanel === "publish" ? "发布作品到LibTV" : "发布与分享" : overlay === "style-library" ? "风格库" : overlay === "effect-library" ? "特效库" : "清除本机作品数据"}>
+            <header><div><small>{overlay === "share" ? "CANVAS" : overlay === "clear-data" ? "LOCAL DATA" : overlay === "style-library" || overlay === "effect-library" ? "ASSET LIBRARY" : "CANVAS GUIDE"}</small><strong>{overlay === "shortcuts" ? "快捷键" : overlay === "tutorial" ? "快速上手" : overlay === "share" ? sharePanel === "link" ? "分享链接" : sharePanel === "publish" ? "发布作品到LibTV" : "发布与分享" : overlay === "style-library" ? "风格库" : overlay === "effect-library" ? "特效库" : "清除本机作品数据"}</strong></div>{overlay === "share" && sharePanel !== "choices" && <button type="button" onClick={() => setSharePanel("choices")} aria-label="返回发布与分享"><ArrowLeft size={14} /></button>}{(overlay === "style-library" || overlay === "effect-library") && <button type="button" onClick={() => setLibraryMinimized((minimized) => !minimized)} aria-label={libraryMinimized ? "展开素材库" : "最小化素材库"}>{libraryMinimized ? <Maximize2 size={15} /> : <Minimize2 size={15} />}</button>}<button type="button" onClick={() => { setOverlay(null); setSharePanel("choices"); setLibraryInsertPoint(null); setLibraryDetail(null); setLibraryModelMenuOpen(false); }} aria-label="关闭"><Icon name="close" /></button></header>
+            {overlay === "shortcuts" ? <div className="canvas-shortcut-list">{CANVAS_SHORTCUT_GROUPS.map((group) => <section key={group.title}><h3>{group.title}</h3>{group.items.map(([label, keys]) => <span key={`${group.title}-${label}`}><b>{label}</b><kbd>{keys}</kbd></span>)}</section>)}</div> : overlay === "tutorial" ? <ol className="canvas-tutorial-list"><li><i>1</i><span><b>选择或添加节点</b><small>从左侧添加文本、图片、音频等工作流节点。</small></span></li><li><i>2</i><span><b>连接并整理流程</b><small>拖动节点连接点建立依赖，再用底部整理按钮排列。</small></span></li><li><i>3</i><span><b>让 Agent 执行</b><small>选择右侧建议 Skill，或在底部直接输入下一步任务。</small></span></li></ol> : overlay === "share" && sharePanel === "choices" ? <div className="canvas-share-actions">
+              <button type="button" onClick={() => setSharePanel("publish")}><span><Upload size={17} /></span><span><b>在LibTV上发布</b><small>发布你的作品和创作过程，让更多创作者看到。</small></span></button>
+              <button type="button" onClick={() => setSharePanel("link")}><span><Link2 size={17} /></span><span><b>分享链接</b><small>拥有此链接的人可以查看并复制你的画布。</small></span></button>
+            </div> : overlay === "share" && sharePanel === "link" ? <div className="canvas-share-link-panel">
+              <label><span>画布链接</span><div><Link2 size={15} /><code>{window.location.href}</code><button type="button" onClick={() => void copyShareLink()}>复制链接</button></div></label>
+              <section><strong>访问权限设置</strong><span>选择范围</span><button type="button" onClick={() => setNotice("当前画布仅自己可见")}>仅自己可见 <ChevronDown size={14} /></button></section>
+            </div> : overlay === "share" ? <form className="canvas-publish-form" onSubmit={(event) => { event.preventDefault(); setNotice("发布信息已保存；正式投稿服务暂未接入"); setOverlay(null); setSharePanel("choices"); }}>
+              <div className="canvas-publish-intro"><strong>发布作品到LibTV</strong><p>您的作品将展示到LibTV Show，方便大家交流使用</p></div>
+              <div className="canvas-publish-media"><button type="button" onClick={() => fileInputRef.current?.click()}><Play size={20} /><span>选择视频</span></button><button type="button" onClick={() => fileInputRef.current?.click()}><Upload size={20} /><span>选择封面<small>建议上传横版图片</small></span></button><span><Icon name="workflow" /><b>当前画布</b><small>画布 1</small></span></div>
+              <label><span>作品名称 *</span><input required aria-label="请输入作品名称" defaultValue={workName.trim() || "画布 1"} /></label>
+              <label><span>作品描述 *</span><textarea required aria-label="请输入作品描述" /></label>
+              <label><span>活动标签</span><input aria-label="不参与" defaultValue="不参与" /></label>
+              <label><span>参赛赛道</span><input aria-label="请选择参赛单元" disabled placeholder="请选择参赛单元" /></label>
+              <label><span>社媒链接</span><input aria-label="请添加您在社媒发布该作品的链接" placeholder="请添加您在社媒发布该作品的链接" /></label>
+              <div className="canvas-publish-switches"><label><span>公开画布</span><input type="checkbox" role="switch" defaultChecked /></label><label><span>公开 Agent 对话</span><input type="checkbox" role="switch" defaultChecked /></label></div>
+              <label className="canvas-publish-agreement"><input type="checkbox" defaultChecked />点击发布即代表同意《LibTV创作许可服务协议》</label>
+              <button type="submit" className="canvas-publish-submit">发布并投稿</button>
+            </form> : overlay === "style-library" || overlay === "effect-library" ? <div className="canvas-preset-library">
               <nav role="tablist" aria-label="素材库分类">
                 <button type="button" role="tab" aria-selected={libraryTab === "square"} className={libraryTab === "square" ? "is-active" : ""} onClick={() => setLibraryTab("square")}>{overlay === "style-library" ? "风格广场" : "特效广场"}</button>
                 <button type="button" role="tab" aria-selected={libraryTab === "favorite"} className={libraryTab === "favorite" ? "is-active" : ""} onClick={() => setLibraryTab("favorite")}>我的收藏</button>
                 <button type="button" role="tab" aria-selected={libraryTab === "recent"} className={libraryTab === "recent" ? "is-active" : ""} onClick={() => setLibraryTab("recent")}>最近使用</button>
-                <label><Search size={15} /><input aria-label="搜索素材" value={libraryQuery} onChange={(event) => setLibraryQuery(event.target.value)} placeholder={overlay === "style-library" ? "搜索风格名称、作者" : "搜索特效名称、作者"} /></label>
+                <label><Search size={15} /><input aria-label={overlay === "style-library" ? "搜索风格名称、作者" : "搜索特效名称、作者"} value={libraryQuery} onChange={(event) => setLibraryQuery(event.target.value)} placeholder={overlay === "style-library" ? "搜索风格名称、作者" : "搜索特效名称、作者"} /></label>
               </nav>
               <aside>{(overlay === "effect-library" ? ["推荐"] : PRESET_CATEGORIES).map((category) => <button key={category} type="button" className={libraryCategory === category ? "is-active" : ""} onClick={() => setLibraryCategory(category)}>{category}</button>)}</aside>
-              <section><header><label><input type="checkbox" checked={libraryCommercialOnly} onChange={(event) => setLibraryCommercialOnly(event.target.checked)} /> 仅看可商用</label><button type="button">全部 <ChevronDown size={13} /></button></header>
+              <section><header><label><input type="checkbox" checked={libraryCommercialOnly} onChange={(event) => setLibraryCommercialOnly(event.target.checked)} /> 仅看可商用</label><div className="canvas-preset-model-filter"><button type="button" aria-expanded={libraryModelMenuOpen} onClick={() => setLibraryModelMenuOpen((open) => !open)}>{libraryModelFilter} <ChevronDown size={13} /></button>{libraryModelMenuOpen && <div role="menu" aria-label="模型筛选">{(overlay === "style-library" ? STYLE_MODEL_FILTERS : EFFECT_MODEL_FILTERS).map((model) => <button key={model} type="button" role="menuitem" className={libraryModelFilter === model ? "is-active" : ""} onClick={() => { setLibraryModelFilter(model); setLibraryModelMenuOpen(false); }}>{model}</button>)}</div>}</div></header>
                 {visibleLibraryPresets.length ? <div>{visibleLibraryPresets.map((preset, index) => <article key={preset.name} className="canvas-preset-card" onClick={() => {
                   addWorkflowNode(overlay === "style-library" ? "image" : "video", { title: preset.name, description: overlay === "style-library" ? `应用「${preset.name}」风格生成画面` : `应用「${preset.name}」视频特效`, prompt: preset.name, position: libraryInsertPoint ?? undefined, connectToAnchor: !libraryInsertPoint });
                   setLibraryRecent((items) => [preset.name, ...items.filter((item) => item !== preset.name)].slice(0, 20));
@@ -2644,7 +3807,7 @@ export function CanvasPage({
                   setOverlay(null);
                   setNotice(`已添加「${preset.name}」节点`);
                 }}>
-                  <span className={`canvas-preset-preview preview-${index % 6}`}><Sparkles size={25} /><i>{preset.model}</i><div><button type="button" aria-label={libraryFavorites.has(preset.name) ? `取消收藏${preset.name}` : `收藏${preset.name}`} className={libraryFavorites.has(preset.name) ? "is-active" : ""} onClick={(event) => { event.stopPropagation(); setLibraryFavorites((items) => { const next = new Set(items); if (next.has(preset.name)) next.delete(preset.name); else next.add(preset.name); return next; }); }}><Star size={14} fill={libraryFavorites.has(preset.name) ? "currentColor" : "none"} /></button><button type="button" onClick={(event) => { event.stopPropagation(); setLibraryDetail(preset); }}>详情</button></div></span>
+                  <span className={`canvas-preset-preview preview-${index % 6}`}><Sparkles size={25} /><i>{preset.model}</i><div><button type="button" aria-label={libraryFavorites.has(preset.name) ? `取消收藏${preset.name}` : `收藏${preset.name}`} className={libraryFavorites.has(preset.name) ? "is-active" : ""} onClick={(event) => { event.stopPropagation(); setLibraryFavorites((items) => { const next = new Set(items); if (next.has(preset.name)) next.delete(preset.name); else next.add(preset.name); return next; }); }}><Star size={14} fill={libraryFavorites.has(preset.name) ? "currentColor" : "none"} /></button><button type="button" aria-label={`${preset.name}详情`} onClick={(event) => { event.stopPropagation(); setLibraryDetail(preset); }}><Info size={14} /></button></div></span>
                   <b>{preset.name}</b><small><span>{preset.commercial ? "商用" : "非商用"}</span>{preset.author}<i />{preset.uses}</small>
                 </article>)}</div> : <div className="canvas-preset-empty"><Search size={24} /><strong>没有找到相关素材</strong><span>换个分类或关键词试试</span></div>}
               </section>
@@ -2653,6 +3816,21 @@ export function CanvasPage({
           </section>
         </div>
       )}
+
+      <ScriptWorkflowOverlay
+        open={Boolean(scriptWorkflowNodeId)}
+        nodeId={scriptWorkflowNodeId}
+        onClose={() => setScriptWorkflowNodeId(null)}
+        onBatchVideo={createBatchVideoNodes}
+      />
+
+      <StandaloneSkillWorkflowOverlay
+        open={Boolean(standaloneWorkflow)}
+        nodeId={standaloneWorkflow?.nodeId ?? null}
+        workflow={standaloneWorkflow?.workflow ?? null}
+        onClose={() => setStandaloneWorkflow(null)}
+        onComplete={completeStandaloneWorkflow}
+      />
 
       <MembershipDialog open={membershipOpen} onClose={() => setMembershipOpen(false)} onPurchase={(label) => { setMembershipOpen(false); setNotice(`已选择${label}，支付服务接入后即可购买`); }} />
 

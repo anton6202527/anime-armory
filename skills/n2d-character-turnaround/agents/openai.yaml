@@ -1,0 +1,4 @@
+interface:
+  display_name: "角色三视图"
+  short_description: "从单张角色参考生成身份一致的正面、侧面与背面角色设定图"
+  default_prompt: "Use $n2d-character-turnaround to prepare a consistent three-view character sheet from one reference image."

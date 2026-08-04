@@ -11,9 +11,9 @@
   - N1  novel runtime 不得裸 import contract：避免 shim 被 sys.path 顺序误解析。
   - N2  novel 易变市场断言必须绑定 market baseline / research sources。
   - T1  测试文件不得硬编码引用真实 `创作区/**` 作品路径；需要样例应使用 tmp_path 或 tests/fixtures。
-  - F1  改了 skill 集合必须同步 skills/README.md 索引：每个系列入口与嵌套子 skill 都要在 README 出现。
+  - F1  改了 skill 集合必须同步 skills/README.md 索引：系列入口、既有嵌套子 skill 与顶层独立 skill 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
-  - F7  系列规模统计同步：skills/README.md 与六个总领 skill 第一行统计不得过期。
+  - F7  skill 规模统计同步：skills/README.md 与六个总领 skill 第一行统计不得过期。
 
 零依赖、纯标准库，从仓库根跑：
     python3 tools/validate_skills.py            # 全检，违规 exit 1
@@ -327,17 +327,17 @@ def check_bare_skill_refs() -> list[str]:
 
 
 def check_readme_index() -> list[str]:
-    """F1: every dispatcher/nested skill must match its folder and appear in README."""
+    """F1: every series or top-level standalone skill must match its folder and be indexed."""
     text = README.read_text("utf-8", "ignore")
     bad: list[str] = []
     for skill_md in sorted(SKILLS.rglob("SKILL.md")):
         d = skill_md.parent
         rel_dir = d.relative_to(SKILLS)
         if len(rel_dir.parts) not in (1, 2):
-            bad.append(f"{_rel(skill_md)}: skill 只能位于 skills/<line>/ 或 skills/<line>/<name>/（F1）")
+            bad.append(f"{_rel(skill_md)}: skill 只能位于 skills/<name>/ 或既有 skills/<line>/<name>/（F1）")
             continue
-        if rel_dir.parts[0] not in update_skill_stats.SERIES:
-            bad.append(f"{_rel(skill_md)}: 顶层目录不是已登记系列（F1）")
+        if len(rel_dir.parts) == 2 and rel_dir.parts[0] not in update_skill_stats.SERIES:
+            bad.append(f"{_rel(skill_md)}: 非系列 skill 必须直接放在 skills/<name>/，不能嵌套（F1）")
             continue
 
         name = d.name
@@ -355,7 +355,7 @@ def check_readme_index() -> list[str]:
 
 
 def check_skill_stats_sync() -> list[str]:
-    """F7: README scale table and top-level dispatcher stat lines must be fresh."""
+    """F7: README series/standalone scale table and dispatcher stat lines must be fresh."""
     return update_skill_stats.validate_stats(update_skill_stats.get_stats())
 
 
@@ -563,7 +563,7 @@ CHECKS = {
     "T1": ("测试不得引用真实创作区作品路径", check_tests_do_not_reference_real_workspace_projects),
     "F1": ("skills/README.md 索引同步", check_readme_index),
     "F3": ("入口文档同步", check_entry_docs_sync),
-    "F7": ("系列规模统计同步", check_skill_stats_sync),
+    "F7": ("skill 规模统计同步", check_skill_stats_sync),
 }
 
 

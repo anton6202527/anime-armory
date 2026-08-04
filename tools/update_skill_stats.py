@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Update and validate per-line skill size statistics.
+"""Update and validate series and top-level standalone skill size statistics.
 
 This keeps two surfaces in sync:
   1. skills/README.md scale table.
@@ -19,6 +19,8 @@ REPO = Path(__file__).resolve().parent.parent
 SKILLS = REPO / "skills"
 README = SKILLS / "README.md"
 SERIES = ("n2d", "novel", "comic", "song", "mv", "ad")
+STANDALONE = "standalone"
+GROUPS = (*SERIES, STANDALONE)
 TEXT_SUFFIXES = {".md", ".py", ".sh", ".json", ".html"}
 
 STAT_RE = re.compile(
@@ -32,8 +34,11 @@ README_ROW_RE = {
     )
     for line in SERIES
 }
+README_ROW_RE[STANDALONE] = re.compile(
+    r"\| 独立 skill \| `skills/<skill-name>/SKILL\.md` \| \d+ \| \d+ \| \d+ \|"
+)
 README_TOTAL_RE = re.compile(
-    r"\| \*\*合计\*\* \| `skills/(?:\*/SKILL|<line>/\*\*/SKILL)\.md` "
+    r"\| \*\*合计\*\* \| `skills/(?:\*\*/SKILL|\*/SKILL|<line>/\*\*/SKILL)\.md` "
     r"\| \*\*\d+\*\* \| \d+ \| \d+ \|"
 )
 
@@ -83,6 +88,14 @@ def normalized_line_count(path: Path) -> int:
 
 
 def skill_dirs_for(line: str) -> list[Path]:
+    if line == STANDALONE:
+        return sorted(
+            d
+            for d in SKILLS.iterdir()
+            if d.is_dir()
+            and d.name not in SERIES
+            and (d / "SKILL.md").is_file()
+        )
     line_dir = SKILLS / line
     if not (line_dir / "SKILL.md").is_file():
         return []
@@ -110,17 +123,17 @@ def iter_owned_text_files(skill_dir: Path, child_skill_dirs: set[Path]):
 
 def get_stats() -> dict[str, SkillStats]:
     stats: dict[str, SkillStats] = {}
-    for line in SERIES:
+    for line in GROUPS:
         skill_dirs = skill_dirs_for(line)
         skill_count = len(skill_dirs)
         skill_md_lines = 0
         total_lines = 0
-        child_skill_dirs = set(skill_dirs[1:])
+        child_skill_dirs = set(skill_dirs[1:]) if line in SERIES else set()
         for skill_dir in skill_dirs:
             skill_md = skill_dir / "SKILL.md"
             if skill_md.is_file():
                 skill_md_lines += normalized_line_count(skill_md)
-            nested_children = child_skill_dirs if skill_dir == SKILLS / line else set()
+            nested_children = child_skill_dirs if line in SERIES and skill_dir == SKILLS / line else set()
             for path in iter_owned_text_files(skill_dir, nested_children):
                 total_lines += normalized_line_count(path)
         stats[line] = SkillStats(skill_count, skill_md_lines, total_lines)
@@ -179,9 +192,16 @@ def render_readme(stats: dict[str, SkillStats]) -> str:
         )
         content = README_ROW_RE[line].sub(replacement, content)
 
+    standalone = stats[STANDALONE]
+    content = README_ROW_RE[STANDALONE].sub(
+        f"| 独立 skill | `skills/<skill-name>/SKILL.md` | "
+        f"{standalone.skills} | {standalone.skill_md_lines} | {standalone.total_lines} |",
+        content,
+    )
+
     total = total_stats(stats)
     total_replacement = (
-        f"| **合计** | `skills/<line>/**/SKILL.md` | **{total.skills}** | "
+        f"| **合计** | `skills/**/SKILL.md` | **{total.skills}** | "
         f"{total.skill_md_lines} | {total.total_lines} |"
     )
     content = README_TOTAL_RE.sub(total_replacement, content)
@@ -240,9 +260,17 @@ def validate_stats(stats: dict[str, SkillStats]) -> list[str]:
                 f"当前行号：{extra_stats}"
             )
 
+    standalone = stats[STANDALONE]
+    expected_standalone = (
+        f"| 独立 skill | `skills/<skill-name>/SKILL.md` | "
+        f"{standalone.skills} | {standalone.skill_md_lines} | {standalone.total_lines} |"
+    )
+    if expected_standalone not in readme:
+        bad.append(f"skills/README.md: 独立 skill 规模统计过期，应为：{expected_standalone}")
+
     total = total_stats(stats)
     expected_total = (
-        f"| **合计** | `skills/<line>/**/SKILL.md` | **{total.skills}** | "
+        f"| **合计** | `skills/**/SKILL.md` | **{total.skills}** | "
         f"{total.skill_md_lines} | {total.total_lines} |"
     )
     if expected_total not in readme:
@@ -267,7 +295,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     changed = update_files(stats)
-    for line in SERIES:
+    for line in GROUPS:
         item = stats[line]
         print(
             f"{line}: skills={item.skills}, "

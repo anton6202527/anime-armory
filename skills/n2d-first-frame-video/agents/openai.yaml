@@ -1,0 +1,4 @@
+interface:
+  display_name: "首帧图生视频"
+  short_description: "从首帧设计主体动作、镜头运动并生成可续跑的视频任务包"
+  default_prompt: "Use $n2d-first-frame-video to turn a first-frame image into a motion-directed video job."

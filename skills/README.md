@@ -1,13 +1,14 @@
 # Skills 索引
 
-本项目包含 **novel（写小说 / 源书孵化）**、**n2d（小说 → AI 漫剧/短剧）**、**comic（画漫画 / 条漫页漫）**、**song（写歌）**、**mv（制 MV）**、**ad（拍广告）** 六条并列生产线。每条线都必须**自包含、可单独分发、零公共层**：脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。novel 与 n2d 不设任何文件/数据交接；其它跨线交付只能是用户显式选择的成品文件交接。**目录按系列两级收纳**：`skills/<line>/SKILL.md` 是总入口，子 skill 位于 `skills/<line>/<line>-*/SKILL.md`；总入口负责发现和分诊同线子 skill。
-skill 之间用 `<skills>/<line>/<skill-name>/...` 互相引用；目录名必须与 SKILL.md frontmatter `name` 一致，不再新增根级 `<line>-*` 目录或第三级 skill。
+本项目包含 **novel（写小说 / 源书孵化）**、**n2d（小说 → AI 漫剧/短剧）**、**comic（画漫画 / 条漫页漫）**、**song（写歌）**、**mv（制 MV）**、**ad（拍广告）** 六条并列生产线。每条线都必须**自包含、可单独分发、零公共层**：脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。novel 与 n2d 不设任何文件/数据交接；其它跨线交付只能是用户显式选择的成品文件交接。现有系列继续保留 `skills/<line>/SKILL.md` 总入口和 `skills/<line>/<line>-*/SKILL.md` 子 skill 两级结构。
+
+**从现在起，新建 skill 默认放在 `skills/<skill-name>/SKILL.md`，与 `n2d`、`novel` 等系列目录同层。** 顶层独立 skill 可以参考各系列 skill 的流程、契约和设计经验，但必须拥有自己的入口、脚本、schema 与状态，不默认 import、调用或依赖系列实现。目录名必须与 SKILL.md frontmatter `name` 一致；不再新增第三级 skill。
 仓库级维护工具不属于 workflow skill，放在根目录 `tools/`。
 本文件仅作分类说明。
 
 > **工具中立 / 跨 AI 使用**：真身在仓库根 `skills/`，**不绑定任何特定 AI**。
-> - **Claude Code** 经软链 `.claude/skills → ../skills` 读取六个系列总入口，再由总入口按触发词分诊同目录的子 skill。
-> - **其他 AI agent / 人**：先读 `skills/<line>/SKILL.md`；命中子 skill 后读 `skills/<line>/<skill-name>/SKILL.md`，需要时跑同目录 `scripts/` 下的脚本。
+> - **Claude Code** 经软链 `.claude/skills → ../skills` 同时发现顶层独立 skill 与六个系列总入口；系列内旧子 skill 仍由总入口分诊。
+> - **其他 AI agent / 人**：先按 frontmatter `description` 匹配 `skills/<skill-name>/SKILL.md` 顶层独立 skill；系列生产任务再读 `skills/<line>/SKILL.md` 并分诊既有子 skill。
 > - **脚本是通用的**：纯 Python/bash，只调通用工具（ffmpeg / librosa / whisper / yt-dlp / 生图生视频 CLI 等），**无任何 Claude 专有 API**，谁都能执行。引用一律走中立路径 `skills/...`（旧 `.claude/skills/...` 经软链仍兼容）。
 > - **skill 名写法**：下一步建议、路由表和用户提示里一律写裸名（如 `n2d-image`、`n2d-compose`），不要加 `/`。`/n2d-image` 这类写法会被部分 AI agent 当成斜杠命令，导致 `Unrecognized command`。
 
@@ -17,9 +18,18 @@ skill 之间用 `<skills>/<line>/<skill-name>/...` 互相引用；目录名必�
 
 > **AI 交互节点（Interactive Flow）约定**：凡遇到**「机器可自动计算，但需要结合文学/语义理解才能高质量完成」**的连贯流程（如算好卡点时间线后，需要给每个镜头写包含动作和运镜的 Prompt），**不要让用户手动去复制粘贴脚本命令**。应该在工作流 SKILL.md 中设置明确的**【AI 代理交互节点】**：让 AI 主动用人类语言向用户提问提供选项（如：“是否需要我启动语义引擎为你补全提示词？”），在用户做出「决定」后，由 AI 代理在后台全自动完成「跑脚本 → 读提示 → 调 LLM 生成 → JSON 落档并回写」的脏活累活。**原则：把枯燥的脚本命令藏在背后，让用户只做决策。**
 
+## 顶层独立 skills
+
+| Skill | 职责 |
+|---|---|
+| `n2d-script-workbench` | 画布故事脚本的独立三步工作流：确认镜头 → 准备角色/场景/道具资产 → 合成最终提示词并创建视频任务；使用自己的 `*.script-workbench.json`、脚本与 schema，可参考 n2d 的设计经验，但不经过 `n2d` 分诊，也不 import、调用或依赖 `n2d-script`。 |
+| `n2d-character-turnaround` | 画布角色三视图的独立三步工作流：选择真实角色参考 → 锁定可见身份事实 → 生成并验收正面/侧面/背面设定图；使用自己的 `*.character-turnaround.json` 与脚本，不经过任何系列分诊。 |
+| `n2d-first-frame-video` | 画布首帧图生视频的独立三步工作流：绑定真实首帧及 SHA → 分层设计主体/镜头/环境运动 → 生成并验收视频；使用自己的 `*.first-frame-video.json` 与 job，不调用系列视频 runner。 |
+| `n2d-audio-video` | 画布音频生视频的独立三步工作流：导入并绑定音频 → 建立节拍/段落/视觉连续性计划 → 生成并验收卡点视频；使用自己的 `*.audio-video.json`、时间线与 job，不调用 MV 或歌曲生产线。 |
+
 ## Skills 规模统计
 
-> 统计时间：2026-07-31。`SKILL.md 总行数` 统计 `skills/<line>/**/SKILL.md` 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-08-04。`SKILL.md 总行数` 统计六个系列及 `skills/<skill-name>/` 顶层独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
@@ -29,7 +39,8 @@ skill 之间用 `<skills>/<line>/<skill-name>/...` 互相引用；目录名必�
 | song | `skills/song/**/SKILL.md` | 11 | 660 | 9911 |
 | mv | `skills/mv/**/SKILL.md` | 14 | 1149 | 28813 |
 | ad | `skills/ad/**/SKILL.md` | 14 | 1209 | 48081 |
-| **合计** | `skills/<line>/**/SKILL.md` | **102** | 12568 | 515883 |
+| 独立 skill | `skills/<skill-name>/SKILL.md` | 4 | 232 | 1098 |
+| **合计** | `skills/**/SKILL.md` | **106** | 12800 | 516981 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 

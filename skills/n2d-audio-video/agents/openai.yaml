@@ -1,0 +1,4 @@
+interface:
+  display_name: "音频生视频"
+  short_description: "分析音频节拍和段落并生成卡点视频任务与连续画面规划包"
+  default_prompt: "Use $n2d-audio-video to analyze an audio track and build a beat-synced video workflow."
