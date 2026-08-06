@@ -1871,7 +1871,6 @@
 .canvas-agent-starter b { font-size: 12px; font-weight: 550; }
 .canvas-agent-starter small { color: #777982; font-size: 12px; }
 
-.canvas-agent-collapsed-hint { position: fixed; z-index: 62; right: 16px; bottom: 17px; max-width: 340px; height: 38px; padding: 0 14px; border: 1px solid #35363d; border-radius: 11px; color: #767882; background: rgba(30,31,35,.95); cursor: pointer; font-size: 12px; }
 
 .canvas-skill-picker { right: 0; bottom: 48px; width: min(430px, calc(var(--canvas-panel-width) - 24px)) !important; max-height: min(650px, calc(100vh - 190px)); display: flex; flex-direction: column; }
 .canvas-skill-picker-toolbar { display: grid; grid-template-columns: auto 1fr; gap: 8px; padding: 9px; border-bottom: 1px solid #37383f; }
@@ -2380,6 +2379,7 @@
 .canvas-agent-starter > header { margin-bottom: 10px; }
 .canvas-agent-starter > header p,
 .canvas-agent-starter > header button { display: flex; align-items: center; gap: 5px; }
+.canvas-agent-starter > header button[hidden] { display: none; }
 .canvas-agent-starter > header p { color: #dedede; }
 .canvas-agent-starter > header p > svg { width: 14px; height: 14px; color: #b8b8b8; }
 .canvas-agent-starter > header button { padding: 4px 2px; color: #8d8d8d; }

@@ -3449,7 +3449,7 @@ export function CanvasPage({
             <button type="button" role="tab" aria-selected={panelTab === "settings"} className={panelTab === "settings" ? "is-active" : ""} onClick={() => setPanelTab("settings")}>设置</button>
           </nav>
           <div className="canvas-agent-panel-body">
-            {panelTab === "conversation" && (showAgentStarter ? <section className="canvas-agent-starter"><header><p><Sparkles size={14} />用 Skill，开启今天的故事</p><button type="button" onClick={() => setSkillBatchIndex((index) => (index + 1) % AGENT_SKILL_BATCHES.length)}><RotateCcw size={12} />换一批</button></header><div>{AGENT_SKILL_BATCHES[skillBatchIndex % AGENT_SKILL_BATCHES.length].map((skill) => <button key={skill.id} type="button" aria-label={`使用 Skill ${skill.title}`} onClick={() => useLibrarySkill(skill)}><span className={`canvas-agent-starter-cover line-${skill.line ?? work.line}`}><LineIcon line={skill.line ?? work.line} /></span><span><b>{skill.title}</b><small>{skill.slug}</small></span></button>)}</div></section> : <section className="canvas-agent-conversation-blank" aria-label="当前对话" />)}
+            {panelTab === "conversation" && (showAgentStarter ? <section className="canvas-agent-starter"><header><p><Sparkles size={14} />用 Skill，开启今天的故事</p><button type="button" hidden aria-hidden="true" tabIndex={-1} onClick={() => setSkillBatchIndex((index) => (index + 1) % AGENT_SKILL_BATCHES.length)}><RotateCcw size={12} />换一批</button></header><div>{AGENT_SKILL_BATCHES[skillBatchIndex % AGENT_SKILL_BATCHES.length].map((skill) => <button key={skill.id} type="button" aria-label={`使用 Skill ${skill.title}`} onClick={() => useLibrarySkill(skill)}><span className={`canvas-agent-starter-cover line-${skill.line ?? work.line}`}><LineIcon line={skill.line ?? work.line} /></span><span><b>{skill.title}</b><small>{skill.slug}</small></span></button>)}</div></section> : <section className="canvas-agent-conversation-blank" aria-label="当前对话" />)}
             {panelTab === "skills" && <section className="canvas-skill-suggestions">
               <div className="canvas-agent-context"><small>当前作品</small><strong>{workName || "unnamed"}</strong><p>{attachments.length ? `已关联 ${attachments.length} 个源文件` : "从文字需求开始创作"}</p></div>
               <h3><Icon name="sparkle" />Skill 全开，故事走起</h3>
@@ -3634,7 +3634,7 @@ export function CanvasPage({
             <button className="composer-submit" type="button" disabled={!gateway || !composerReady || submitting} onClick={() => void submit()} aria-label="开始创作">{submitting ? <span className="canvas-submit-spinner">•••</span> : <ArrowUp size={21} />}</button>
           </div>
         </section>
-      ) : <button type="button" className="canvas-agent-collapsed-hint" onClick={() => setPanelOpen(true)}>开始你的创作，或者 @ 引用工作流/节点/资源</button>}
+      ) : null}
 
       {canvasHistoryPickerOpen && (
         <div className="canvas-modal-backdrop canvas-history-picker-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) { setCanvasHistoryPickerOpen(false); setCanvasHistorySelection([]); setHistoryInsertPoint(null); } }}>
