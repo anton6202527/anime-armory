@@ -53,8 +53,8 @@ python3 skills/novel/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>
 - `审稿/storyworld_pressure_test_<YYYY-MM-DD>.md`
 
 检查 7 个轴：`character_agency`、`world_rules`、`geography_and_factions`、`timeline_causality`、`outline_pressure`、`reader_contract`、`power_progression`。判定是**结构化实质检查**（`check_depth: structural`）——逐角色核对目标、规则词多样性、时间线事件数、契约必备信号（题旨/承诺/禁偏至少两类）、章纲冲突覆盖率 ≥30%，塞关键词的空壳设定过不了；但语义自洽（规则互斥、目标是否挤压出冲突、承诺可否兑现、有无想象力支点）判不了——加 `--register-semantic-job` 登记 `语义任务/storyworld_semantic_review` 交 LLM 复核，报告的 `semantic_followup` 也会列出建议人判轴。结论：
-- `block_pre_draft`：至少 3 个 risk，先回 `novel-craft`/`novel-create` 补设定，不进入批量写章。
-- `revise_setting`：少量 risk，先补对应设定再写。
+- `block_pre_draft`：本项目类型契约要求的必要结构文件缺失，先回 `novel-craft`/`novel-create` 补齐；`condense` 不把其契约外的 `世界观.md` 当硬前置。
+- `revise_setting`：一个或多个低置信结构代理命中 risk，先人工复核并按需补设定；关键词/阈值风险本身不硬阻断。
 - `pass_with_review`：只剩 review 轴，允许写但后续重点盯。
 - `pass`：可进入任务包生成。
 

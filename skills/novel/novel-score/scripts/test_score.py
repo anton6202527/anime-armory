@@ -111,6 +111,8 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(report["tier"], "爆款潜力")
         self.assertEqual(report["verdict"], "过")
         self.assertEqual(report["production_decision"]["decision"], "go")
+        self.assertEqual(report["production_decision"]["authority"], "advisory")
+        self.assertEqual(report["score_weight_profile"], "均衡向")
         self.assertEqual(report["score_task_id"], task["score_task_id"])
         self.assertEqual(report["source_snapshot"]["kind"], "novel_text_snapshot")
         self.assertEqual(len(report["source_snapshot"]["files"]), 1)
@@ -217,13 +219,17 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(report["total_score"], 88.0)
         self.assertTrue(any("真实完读率" in item for item in report["reader_feedback_adjustment"]["reasons"]))
 
-    def test_reader_feedback_adjustment_uses_panel_and_ab_with_cap(self):
+    def test_synthetic_panel_and_raw_ab_are_context_only(self):
         adjustment = score.compute_reader_feedback_adjustment(
             reader_panel={"retention_prior": 0.35, "cliche_density_per_kchar": 4.5},
             ab_take_results={"winner": "B", "completion_uplift": -0.12, "confidence": "high"},
         )
-        self.assertEqual(adjustment["raw_points"], -6.0)
-        self.assertEqual(adjustment["points"], -6.0)
+        self.assertEqual(adjustment["raw_points"], 0.0)
+        self.assertEqual(adjustment["points"], 0.0)
+        self.assertEqual(
+            {item["source"] for item in adjustment["context_only"]},
+            {score.READER_PANEL_REL_PATH, score.AB_TAKE_RESULTS_REL_PATH},
+        )
         self.assertEqual(adjustment["ab_take_results_summary"]["winner"], "B")
 
     def test_repetition_prior_feeds_reader_feedback_adjustment(self):
@@ -344,6 +350,20 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(score.get_tier_verdict(75), ("合格偏上", "小改", "high"))
         self.assertEqual(score.get_tier_verdict(60), ("及格线下", "大改", "medium"))
         self.assertEqual(score.get_tier_verdict(40), ("不及格", "弃稿重立", "low"))
+
+    def test_unspecified_or_unknown_platform_uses_neutral_weights(self):
+        self.assertEqual(score._resolve_platform_mode(""), "均衡向")
+        self.assertEqual(score._resolve_platform_mode("未定"), "均衡向")
+        self.assertEqual(score._resolve_platform_mode("自定义海外小众平台"), "均衡向")
+        self.assertEqual(score._resolve_platform_mode("番茄"), "商业爽文向")
+        self.assertEqual(score._resolve_platform_mode("晋江"), "品质向")
+        self.assertEqual(sum(score.WEIGHTS["均衡向"].values()), 100)
+
+    def test_low_score_production_decision_is_advisory(self):
+        decision = score.build_production_decision("弃稿重立", 40, {}, {})
+        self.assertEqual(decision["decision"], "kill")  # compatibility vocabulary
+        self.assertEqual(decision["authority"], "advisory")
+        self.assertTrue(decision["requires_human_confirmation"])
 
     def test_minor_next_actions_are_not_hard_rewrite_routes(self):
         processed = [

@@ -28,6 +28,7 @@ from novel_pipeline import (  # noqa: E402
     artifact_graph,
     dry_run_plan,
     handoff_contract,
+    record_human_stage_approval,
     registry_payload,
 )
 try:
@@ -249,23 +250,31 @@ def _update_run_stage_locked(
         stage["attempts"] = int(stage.get("attempts") or 0) + 1
         stage["started_at"] = stage.get("started_at") or now()
         stage["blocked_reason"] = ""
-    elif action == "completed":
+    elif action in {"completed", "force_completed"}:
+        plan = dry_run_plan(root)
+        disk = next((s for s in plan.get("stages") or [] if s.get("key") == stage_key), None)
+        disk_status = disk.get("status") if disk else None
+        if action == "completed" and disk_status != "done":
+            detail = "; ".join((disk or {}).get("gate_blockers") or (disk or {}).get("missing_inputs") or [])
+            raise ValueError(
+                f"stage {stage_key} cannot complete: artifact view is {disk_status or 'unknown'}"
+                + (f" ({detail})" if detail else "")
+            )
+        if action == "force_completed" and not reason.strip():
+            raise ValueError("force_completed requires --reason for an explicit waiver trail")
         stage["status"] = "completed"
         stage["completed_at"] = now()
         stage["blocked_reason"] = ""
-        # 防 run 文件单方面宣称完成：用 artifact 视图复核该阶段，disk 不支持就记 completion_warning
-        # （可见、不静默；不硬拒，避免误伤产物非 glob 可检的阶段）。
-        try:
-            plan = dry_run_plan(root)
-            disk = next((s for s in plan.get("stages") or [] if s.get("key") == stage_key), None)
-            disk_status = disk.get("status") if disk else None
-            if disk_status and disk_status != "done":
-                stage["completion_warning"] = (
-                    f"run 标记 completed，但 artifact 视图判 {stage_key}={disk_status}（产物未达完成）；请核对 _进度.md / 产物。")
-            else:
-                stage.pop("completion_warning", None)
-        except Exception:
-            pass
+        stage.pop("completion_warning", None)
+        if action == "force_completed":
+            stage["completion_waiver"] = {
+                "reason": reason.strip(),
+                "actor": actor,
+                "artifact_status": disk_status or "unknown",
+                "recorded_at": now(),
+            }
+        else:
+            stage.pop("completion_waiver", None)
     elif action == "failed":
         stage["status"] = "failed"
         stage["blocked_reason"] = reason or "failed"
@@ -326,6 +335,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--registry-only", action="store_true", help="只打印 pipeline registry")
     parser.add_argument("--artifact-graph", action="store_true", help="打印 artifact graph 与 stale 检测")
     parser.add_argument("--handoff", metavar="STAGE", help="打印指定阶段的 specialist handoff contract")
+    parser.add_argument("--approve-stage", metavar="STAGE", help="人工复核后批准 blueprint/setting；需 --agent 与 --reason")
     parser.add_argument("--json", action="store_true", help="打印 JSON")
     parser.add_argument("--write-plan", action="store_true", help="写 生产数据/novel_pipeline_plan.{json,md}")
     parser.add_argument("--start-run", action="store_true", help="创建可恢复 pipeline run 状态文件")
@@ -333,6 +343,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--show-run", action="store_true", help="展示 pipeline run 状态")
     parser.add_argument("--claim-stage", metavar="STAGE", help="把阶段置为 running，并记录 claimed_by/attempt")
     parser.add_argument("--complete-stage", metavar="STAGE", help="把阶段置为 completed")
+    parser.add_argument("--force-complete-stage", metavar="STAGE", help="显式豁免产物检查后置为 completed；必须给 --reason")
     parser.add_argument("--fail-stage", metavar="STAGE", help="把阶段置为 failed")
     parser.add_argument("--block-stage", metavar="STAGE", help="把阶段置为 blocked")
     parser.add_argument("--skip-stage", metavar="STAGE", help="把阶段置为 skipped")
@@ -362,6 +373,31 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
+    if args.approve_stage:
+        try:
+            approval_path, record = record_human_stage_approval(
+                root, args.approve_stage, approved_by=args.agent, note=args.reason
+            )
+        except (OSError, ValueError, KeyError) as exc:
+            print(f"[err] {exc}", file=sys.stderr)
+            return 2
+        if append_event:
+            append_event(
+                root,
+                event_type="pipeline_stage_human_approved",
+                tool="novel/scripts/pipeline_runner.py",
+                outputs=[approval_path],
+                metadata={
+                    "stage_key": args.approve_stage,
+                    "approved_by": record.get("approved_by"),
+                    "note": record.get("note"),
+                },
+            )
+        print(
+            json.dumps(record, ensure_ascii=False, indent=2)
+            if args.json else f"[ok] {args.approve_stage} 人工批准 → {approval_path}"
+        )
+        return 0
     if args.start_run:
         run = create_run(root, actor=args.agent)
         print(json.dumps(run, ensure_ascii=False, indent=2) if args.json else render_run_markdown(run))
@@ -377,6 +413,7 @@ def main(argv: list[str] | None = None) -> int:
     stage_actions = [
         ("claimed", args.claim_stage),
         ("completed", args.complete_stage),
+        ("force_completed", args.force_complete_stage),
         ("failed", args.fail_stage),
         ("blocked", args.block_stage),
         ("skipped", args.skip_stage),
@@ -406,9 +443,12 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(plan, ensure_ascii=False, indent=2))
     else:
         print(render_markdown(plan))
-    if any(stage["status"] == "blocked" for stage in plan["stages"]):
-        return 1
-    return 0
+    # Future stages are naturally blocked while their upstream artifacts do not
+    # yet exist.  A dry-run is successful when the *current* next stage is
+    # executable; only an immediate impasse should produce a failure exit code.
+    next_key = plan.get("next_stage")
+    next_stage = next((stage for stage in plan["stages"] if stage["key"] == next_key), None)
+    return 1 if next_stage and next_stage.get("status") == "blocked" else 0
 
 
 if __name__ == "__main__":

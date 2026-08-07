@@ -34,12 +34,13 @@ REGULATORY_SOURCES = [
         "notes": ["片名提升思想/文化/审美内涵", "不渲染极端对立、复仇、暴戾、焦虑"],
     },
     {
-        "title": "广电总局 AI 漫剧/微短剧备案新规：先备案后上线·投资额三级分层审核",
+        "title": "行业媒体关于 AI 漫剧/微短剧治理的报道（发布前须回查主管部门原文）",
         "date": "2026-04-01",
         "url": "https://www.21jingji.com/article/20260410/herald/055ad9a327c3eed4dc4a0aa93f0863f2.html",
+        "reliability": "secondary_unverified",
         "notes": ["先备案后上线，未备案存量下架", "投资额三级审核（≥300万/100-300万/<100万）",
                   "严禁颠覆性魔改经典作品与英雄/历史人物", "未授权真人肖像禁用",
-                  "AI生成内容片头/显著位置标识"],
+                  "AI生成内容片头/显著位置标识", "这些主张不得在未找到主管部门原文时作为硬闸"],
     },
 ]
 
@@ -50,13 +51,13 @@ TITLE_RISK_PATTERNS = [
 ]
 
 CONTENT_RISK_PATTERNS = [
-    ("sexual_low", r"床戏|肉欲|露骨|下药|强奸|迷奸|裸露|色情|卖身", "色情低俗/性侵高风险表达。", "block"),
-    ("bloody_violence", r"虐杀|碎尸|血肉模糊|剁碎|活埋|凌迟|酷刑", "血腥暴力高风险表达。", "block"),
+    ("sexual_low", r"床戏|肉欲|露骨|下药|强奸|迷奸|裸露|色情|卖身", "色情低俗/性侵高风险表达。", "warn"),
+    ("bloody_violence", r"虐杀|碎尸|血肉模糊|剁碎|活埋|凌迟|酷刑", "血腥暴力高风险表达。", "warn"),
     ("extreme_revenge", r"让.{0,12}生不如死|灭.{0,6}满门|血债血偿|杀光|复仇到底", "极端复仇/暴戾表达。", "warn"),
     ("money_worship", r"炫富|黑卡|千亿|百亿彩礼|拜金|物价贬值.*亿", "炫富拜金/浮躁悬浮风险。", "warn"),
     ("harmful_aesthetics", r"畸形审美|整容上瘾|以瘦为美|颜值即正义", "畸形审美或价值导向风险。", "warn"),
-    ("minor_sensitive", r"未成年.{0,12}(恋爱|怀孕|性|包养)|学生.{0,8}包养", "未成年人敏感情节风险。", "block"),
-    ("political_security", r"历史虚无|分裂国家|颠覆|恐怖主义|邪教", "政治安全/社会稳定/邪教风险。", "block"),
+    ("minor_sensitive", r"未成年.{0,12}(恋爱|怀孕|性|包养)|学生.{0,8}包养", "未成年人敏感情节风险。", "warn"),
+    ("political_security", r"历史虚无|分裂国家|颠覆|恐怖主义|邪教", "政治安全/社会稳定/邪教风险。", "warn"),
 ]
 
 
@@ -106,7 +107,8 @@ def _snippet(text, start, end, radius=28):
     return text[left:right].replace("\n", " ")
 
 
-def finding(code, severity, field, message, snippet="", route="novel-review"):
+def finding(code, severity, field, message, snippet="", route="novel-review",
+            confidence="deterministic", evidence_kind="structured"):
     return {
         "code": code,
         "severity": severity,
@@ -114,6 +116,8 @@ def finding(code, severity, field, message, snippet="", route="novel-review"):
         "message": message,
         "snippet": snippet,
         "recommended_skill": route,
+        "confidence": confidence,
+        "evidence_kind": evidence_kind,
     }
 
 
@@ -121,7 +125,10 @@ def scan_title(title):
     findings = []
     for code, pattern, message in TITLE_RISK_PATTERNS:
         if re.search(pattern, title or ""):
-            findings.append(finding(code, "warn", "title", message, title, route="novel-title"))
+            findings.append(finding(
+                code, "warn", "title", message, title, route="novel-title",
+                confidence="heuristic", evidence_kind="keyword_candidate",
+            ))
     return findings
 
 
@@ -129,7 +136,10 @@ def scan_content(text):
     findings = []
     for code, pattern, message, severity in CONTENT_RISK_PATTERNS:
         for match in re.finditer(pattern, text or ""):
-            findings.append(finding(code, severity, "content", message, _snippet(text, match.start(), match.end())))
+            findings.append(finding(
+                code, severity, "content", message, _snippet(text, match.start(), match.end()),
+                confidence="heuristic", evidence_kind="keyword_candidate",
+            ))
             break
     return findings
 
@@ -157,7 +167,7 @@ def metadata_findings(meta, settings_text, microdrama):
 
 
 def classic_ip_findings(meta, microdrama):
-    """广电2026-04新规：严禁'颠覆性魔改经典作品与英雄/历史人物'+真人肖像须授权。
+    """Secondary-source candidate: classic/history adaptation and likeness review.
 
     只读 _meta 的**结构化字段**（不扫正文，符合 B10）：rights_status=='public-domain'（作者声明
     公版来源，强信号=老作品/经典/历史题材）或显式 _meta.classic_ip_adaptation 标记 → 该源书一旦
@@ -173,9 +183,8 @@ def classic_ip_findings(meta, microdrama):
             "classic_ip_alteration_review",
             "warn",
             "metadata",
-            "源书为公版/经典 IP 改编：改编成漫剧/微短剧前须按广电2026-04新规复核——不得颠覆性魔改"
-            "经典作品或英雄/历史人物形象；涉真人肖像须取得授权；按投资额三级备案审核；AI生成内容"
-            "片头/显著位置标识。小说侧先记录为发布前待办，并随交付契约把 classic_ip 标记传给改编环节。",
+            "源书为公版/经典 IP 改编：二手行业报道提示需复核经典/历史人物改编、真人肖像、备案与 AI 标识。"
+            "发布前必须回查主管部门原文和目标平台当日规则；当前仅作为待核验事项，不作法律结论。",
         ))
     return findings
 
@@ -210,7 +219,7 @@ def check(root):
         "warning_count": len(warnings),
         "findings": findings,
         "regulatory_sources": REGULATORY_SOURCES,
-        "note": "确定性关键词预检只定位风险，不替代平台审核、法律意见或成片报审。",
+        "note": "关键词命中仅是低置信候选（heuristic），只能提醒人工看上下文，不替代平台审核、法律意见或成片报审，也不单独阻断。",
     }
 
 

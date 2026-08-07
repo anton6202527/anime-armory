@@ -28,13 +28,16 @@ def test_microdrama_title_and_license_warn():
         assert report["verdict"] == "review"
 
 
-def test_content_hard_risk_blocks():
+def test_content_keyword_risk_requires_context_review_not_block():
     with tempfile.TemporaryDirectory() as root:
         _write(os.path.join(root, "_meta.json"), json.dumps({"title": "测试", "purpose": "漫剧源书"}, ensure_ascii=False))
         _write(os.path.join(root, "章节", "第01章.md"), "# 第1章\n反派施以酷刑，血肉模糊。")
         report = pc.check(root)
-        assert report["verdict"] == "block"
-        assert any(item["code"] == "bloody_violence" for item in report["findings"])
+        assert report["verdict"] == "review"
+        hit = next(item for item in report["findings"] if item["code"] == "bloody_violence")
+        assert hit["severity"] == "warn"
+        assert hit["confidence"] == "heuristic"
+        assert hit["evidence_kind"] == "keyword_candidate"
 
 
 def test_public_domain_microdrama_flags_classic_ip_review():
@@ -49,8 +52,9 @@ def test_public_domain_microdrama_flags_classic_ip_review():
         codes = [item["code"] for item in report["findings"]]
         assert "classic_ip_alteration_review" in codes
         assert report["verdict"] == "review"  # warn 级，不硬阻断
-        # 新规来源已登记
-        assert any(s["date"] == "2026-04-01" for s in report["regulatory_sources"])
+        # 二手来源只登记为待核验，不能伪装成主管部门硬规则。
+        source = next(s for s in report["regulatory_sources"] if s["date"] == "2026-04-01")
+        assert source["reliability"] == "secondary_unverified"
 
 
 def test_explicit_classic_ip_flag_flags_even_when_rights_owned():

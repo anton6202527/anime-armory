@@ -365,7 +365,7 @@ def aggregate_experiments(records, *, min_sample=20):
             "flags": flags,
         })
     out.sort(key=lambda item: (item["ab_test_id"], item["variant_id"]))
-    winners = []
+    leaders = []
     for ab_id in sorted({item["ab_test_id"] for item in out}):
         candidates = [item for item in out if item["ab_test_id"] == ab_id]
         candidates.sort(key=lambda item: (
@@ -374,15 +374,27 @@ def aggregate_experiments(records, *, min_sample=20):
             item["variant_id"],
         ), reverse=True)
         if candidates:
-            winners.append({
+            leaders.append({
                 "ab_test_id": ab_id,
+                "status": "descriptive_leader",
+                "decision": "inconclusive",
+                "decision_authority": "context_only",
+                "leader_variant_id": candidates[0]["variant_id"],
+                # v1 compatibility: older consumers read variant_id from best_by_ab_test.
                 "variant_id": candidates[0]["variant_id"],
                 "completion_rate": candidates[0]["completion_rate"],
                 "drop_rate": candidates[0]["drop_rate"],
                 "take_ids": candidates[0]["take_ids"],
                 "caveat": "low_sample" if "low_sample" in candidates[0]["flags"] else "",
+                "reason": "raw rate ranking only; no statistical winner is declared",
             })
-    return {"groups": out, "best_by_ab_test": winners}
+    return {
+        "groups": out,
+        "leaders_by_ab_test": leaders,
+        "best_by_ab_test": leaders,
+        "compatibility_note": "best_by_ab_test is a deprecated alias; entries are descriptive leaders, not winners",
+        "decision_authority": "context_only",
+    }
 
 
 def build_summary(records, *, platform, source_name, min_sample, low_completion, high_drop):
@@ -452,15 +464,21 @@ def apply_reader_test_plan(root, summary):
                     break
         if match:
             group["planned_hypothesis"] = match.get("hypothesis") or ""
-    for winner in summary.get("experiments", {}).get("best_by_ab_test") or []:
-        groups = [g for g in summary["experiments"]["groups"] if g["ab_test_id"] == winner["ab_test_id"]]
+    for leader in summary.get("experiments", {}).get("leaders_by_ab_test") or []:
+        groups = [g for g in summary["experiments"]["groups"] if g["ab_test_id"] == leader["ab_test_id"]]
         rates = sorted([g.get("completion_rate") for g in groups if g.get("completion_rate") is not None], reverse=True)
         if len(rates) >= 2 and rates[0] - rates[1] < min_delta:
-            winner["interpretation"] = "inconclusive_delta_too_small"
-        elif winner.get("caveat") == "low_sample":
-            winner["interpretation"] = "directional_low_sample"
+            leader["interpretation"] = "inconclusive_delta_too_small"
+        elif leader.get("caveat") == "low_sample":
+            leader["interpretation"] = "directional_low_sample"
         else:
-            winner["interpretation"] = "provisional_winner"
+            leader["interpretation"] = "descriptive_leader_only"
+        leader["decision"] = "inconclusive"
+        leader["decision_authority"] = "context_only"
+        leader["reason"] = (
+            "reader_test_plan lacks a complete statistical decision protocol for allocation balance, "
+            "cohort/window comparability, confidence intervals, and stopping rules"
+        )
     summary["reader_test_plan"] = {
         "present": True,
         "path": plan_path,
@@ -509,12 +527,13 @@ def write_artifacts(root, records, summary):
                     f"{item.get('planned_hypothesis', '')} | {item['starts']} | {item['completion_rate']} | "
                     f"{item['drop_rate']} | {', '.join(item['flags'])} |\n"
                 )
-            if summary["experiments"].get("best_by_ab_test"):
-                f.write("\n### 判读\n\n")
-                for item in summary["experiments"]["best_by_ab_test"]:
+            if summary["experiments"].get("leaders_by_ab_test"):
+                f.write("\n### 描述性领先版本（不判胜负）\n\n")
+                for item in summary["experiments"]["leaders_by_ab_test"]:
                     f.write(
-                        f"- {item['ab_test_id']}：暂定 {item['variant_id']}，interpretation="
-                        f"{item.get('interpretation', 'provisional_winner')}，caveat={item.get('caveat', '')}\n"
+                        f"- {item['ab_test_id']}：leader={item['leader_variant_id']}，interpretation="
+                        f"{item.get('interpretation', 'descriptive_leader_only')}，decision=inconclusive，"
+                        f"caveat={item.get('caveat', '')}\n"
                     )
         f.write("\n## 章节明细\n\n")
         f.write("| 章节 | 开读 | 完读 | 弃读 | 完读率 | 弃读率 | 负评 | flags |\n")

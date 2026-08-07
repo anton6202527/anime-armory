@@ -20,6 +20,7 @@ import disclosure  # noqa: E402
 
 
 ALLOWED_MODES = ("AI-generated", "AI-assisted", "未使用AI文本")
+TRANSLATION_MODES = ("AI-generated", "AI-assisted", "未使用AI翻译", "不适用")
 TEXT_DIRECTNESS_MODES = (
     "direct_generation",
     "outline_to_draft",
@@ -126,6 +127,8 @@ def main():
     ap.add_argument("--text-mode", required=True, choices=ALLOWED_MODES)
     ap.add_argument("--image-mode", default="未使用AI图片",
                     choices=("AI-generated", "AI-assisted", "未使用AI图片"))
+    ap.add_argument("--translation-mode", default="不适用", choices=TRANSLATION_MODES,
+                    help="译文是否由 AI 生成/辅助；KDP 把 AI-generated 译文纳入披露范围")
     ap.add_argument("--publish-target", default="未定")
     ap.add_argument("--text-authorship-mode", choices=("人类主创", "AI辅助", "AI生成"),
                     help="正文主创责任模式；缺省按 --text-mode 推断")
@@ -159,6 +162,7 @@ def main():
         "text_mode": args.text_mode,
         "text_authorship_mode": args.text_authorship_mode or default_authorship_mode(args.text_mode),
         "image_mode": args.image_mode,
+        "translation_mode": args.translation_mode,
         "disclosure_detail": {
             "text_directness": args.text_directness or default_directness(args.text_mode),
             "human_steering": args.human_steering or args.human_contribution,
@@ -176,6 +180,7 @@ def main():
         f"- 文本使用类型：{payload['text_mode']}",
         f"- 正文主创模式：{payload['text_authorship_mode']}",
         f"- 图片/封面使用类型：{payload['image_mode']}",
+        f"- 翻译使用类型：{payload['translation_mode']}",
         f"- 发布平台/用途：{payload['publish_target']}",
         f"- 权利来源：{payload['rights_status']}",
         f"- AI 介入直接程度：{payload['disclosure_detail']['text_directness']}",

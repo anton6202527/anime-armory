@@ -280,7 +280,7 @@ def write_ai_usage(root, text_mode="AI-generated", human_contribution="人工完
 
 
 class QAGateTest(unittest.TestCase):
-    def test_blocks_review_and_score_reports(self):
+    def test_review_blocks_but_subjective_score_verdict_only_warns(self):
         with tempfile.TemporaryDirectory() as tmp:
             os.makedirs(os.path.join(tmp, "审稿"), exist_ok=True)
             os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
@@ -303,7 +303,9 @@ class QAGateTest(unittest.TestCase):
                 }]), f, ensure_ascii=False)
             status = qa_gate.collect_gate_status(tmp)
             self.assertTrue(status["blocking"])
-            self.assertEqual(len(status["blockers"]), 2)
+            self.assertEqual(len(status["blockers"]), 1)
+            score_warning = next(w for w in status["warnings"] if w["id"] == "SCORE-VERDICT")
+            self.assertEqual(score_warning["confidence"], "heuristic")
             text = qa_gate.format_gate_status(status)
             self.assertIn("不能直接进入 export", text)
             self.assertIn("REV-001", text)
@@ -559,6 +561,15 @@ class QAGateTest(unittest.TestCase):
             status = qa_gate.collect_gate_status(tmp)
             self.assertFalse(any(b["id"].startswith("AI-") for b in status["blockers"]))
             self.assertTrue(any(w["id"] == "AI-ASSISTED-TEXT-PLATFORM-REVIEW" for w in status["warnings"]))
+
+    def test_unverified_platform_ai_policy_warns_instead_of_inventing_universal_ban(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, target_platform="起点")
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- **目标平台**：起点\n- **文本主创模式**：AI生成\n")
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertFalse(any(b["id"] == "AI-GENERATED-TEXT-PLATFORM-RISK" for b in status["blockers"]))
+            self.assertTrue(any(w["id"] == "AI-GENERATED-TEXT-POLICY-UNRESOLVED" for w in status["warnings"]))
 
     def test_target_language_alone_does_not_trip_chinese_platform_strict_gate(self):
         """🟡C：目标语言是语言、不是投放渠道。AI生成 + 仅出海语言（无中文平台）不应触发

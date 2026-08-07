@@ -71,8 +71,8 @@ REPETITION_PRIOR_SOURCE = "机检/跨章重复(确定性)"
 DIMENSIONS = [
     ("topic_heat", "题材热度匹配"),
     ("opening_hook", "开篇黄金三章钩子"),
-    ("payoff_density", "爽点密度与情绪节奏"),
-    ("character_power", "人设与金手指"),
+    ("payoff_density", "情绪兑现与阅读动力"),
+    ("character_power", "人物塑造与核心机制"),
     ("plot_structure", "剧情结构与主线张力"),
     ("prose", "文学性 / 文笔"),
     ("retention", "完读 / 留存潜力"),
@@ -109,6 +109,9 @@ ADAPTATION_CHECK_DIMENSIONS = [
 ADAPTATION_LOW_THRESHOLD = 15
 
 WEIGHTS = {
+    # 未指定平台时使用完全等权的中性档，避免把传统/文学小说静默套进
+    # 短视频商业爽文权重。平台明确后才切到下列专用档。
+    "均衡向": {dimension: 12.5 for dimension, _label in DIMENSIONS},
     "商业爽文向": {
         "topic_heat": 18,
         "opening_hook": 16,
@@ -132,7 +135,7 @@ WEIGHTS = {
 }
 
 # 平台 → 评分模式映射：品质导向平台用品质权重（prose 16/novelty 12/topic_heat 10），
-# 商业爽文平台用商业权重（topic_heat 18/prose 8/novelty 8）。不在此表的平台按子串匹配兜底。
+# 商业爽文平台用商业权重（topic_heat 18/prose 8/novelty 8）。未知/未定平台保持均衡向。
 PLATFORM_WEIGHT_MODE = {
     "晋江": "品质向",
     "起点": "品质向",
@@ -155,18 +158,23 @@ PLATFORM_WEIGHT_MODE = {
 def _resolve_platform_mode(raw):
     """从平台名/设置字符串解析评分模式。
 
-    优先级：1) PLATFORM_WEIGHT_MODE 精确匹配 2) 子串含'品质'→品质向 3) 子串匹配映射表键
-    4) 默认商业爽文向。"""
-    if not raw or raw in {"商业爽文向", "品质向"}:
-        return raw or "商业爽文向"
-    raw_lower = raw.lower()
+    优先级：1) 显式权重档 2) 平台映射 3) 档位关键词 4) 未定/未知→均衡向。"""
+    value = str(raw or "").strip()
+    if value in {"商业爽文向", "品质向", "均衡向"}:
+        return value
+    if not value or value in {"未定", "未知", "自定义"}:
+        return "均衡向"
     # 精确匹配优先
     for key, mode in PLATFORM_WEIGHT_MODE.items():
-        if key in raw:
+        if key in value:
             return mode
-    if "品质" in raw:
+    if "商业" in value or "爽文" in value:
+        return "商业爽文向"
+    if "品质" in value or "文学" in value:
         return "品质向"
-    return "商业爽文向"
+    if "均衡" in value:
+        return "均衡向"
+    return "均衡向"
 
 
 SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
@@ -697,10 +705,10 @@ AB_TAKE_RESULTS_REL_PATH = os.path.join("评分", "ab_take_results.json")
 
 
 def load_reader_panel_signals(root):
-    """读 novel-simulate 产的 评分/reader_panel_signals.json（模拟读者留存先验）。
+    """读 novel-simulate 产的 评分/reader_panel_signals.json（合成叙事探针）。
 
-    缺文件正常退化为 None（纯公榜 + 战绩库）。字段名与 simulate_panel.py 输出对齐：
-    retention_prior / hook_strength / cliche_density_per_kchar。
+    缺文件正常退化为 None。retention_prior 是 schema v1 兼容字段，语义仅为 retention_proxy；
+    该文件不得作为真实读者证据或进入自动数值调分。
     """
     path = os.path.join(root, READER_PANEL_REL_PATH)
     if not os.path.isfile(path):
@@ -780,6 +788,7 @@ def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None,
     components = []
     reasons = []
     sources = []
+    context_only = []
 
     def add(points, reason, source):
         if not points:
@@ -809,31 +818,17 @@ def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None,
                 add(2, f"真实弃读率 {drop:.2f} 较低", READER_TELEMETRY_REL_PATH)
 
     if reader_panel:
-        retention = _num(reader_panel.get("retention_prior"))
-        cliche = _num(reader_panel.get("cliche_density_per_kchar"))
-        if retention is not None:
-            if retention >= 0.70:
-                add(2, f"模拟读者 retention_prior {retention:.2f} 偏强", READER_PANEL_REL_PATH)
-            elif retention <= 0.40:
-                add(-2, f"模拟读者 retention_prior {retention:.2f} 偏弱", READER_PANEL_REL_PATH)
-        if cliche is not None:
-            if cliche >= 4.0:
-                add(-2, f"模拟读者套路密度 {cliche:.2f}/千字过高", READER_PANEL_REL_PATH)
-            elif cliche >= 2.5:
-                add(-1, f"模拟读者套路密度 {cliche:.2f}/千字偏高", READER_PANEL_REL_PATH)
+        context_only.append({
+            "source": READER_PANEL_REL_PATH,
+            "reason": "合成叙事探针只提出人工复核假设，不代表真实读者或统计留存，不参与数值调分",
+        })
 
     ab_summary = summarize_ab_take_results(ab_take_results)
-    if ab_summary and ab_summary.get("uplift") is not None:
-        uplift = float(ab_summary["uplift"])
-        metric = ab_summary.get("metric") or "completion_rate"
-        if uplift >= 0.08:
-            add(2, f"A/B take {metric} uplift {uplift:.2f} 明显为正", AB_TAKE_RESULTS_REL_PATH)
-        elif uplift >= 0.03:
-            add(1, f"A/B take {metric} uplift {uplift:.2f} 小幅为正", AB_TAKE_RESULTS_REL_PATH)
-        elif uplift <= -0.08:
-            add(-2, f"A/B take {metric} uplift {uplift:.2f} 明显为负", AB_TAKE_RESULTS_REL_PATH)
-        elif uplift <= -0.03:
-            add(-1, f"A/B take {metric} uplift {uplift:.2f} 小幅为负", AB_TAKE_RESULTS_REL_PATH)
+    if ab_summary:
+        context_only.append({
+            "source": AB_TAKE_RESULTS_REL_PATH,
+            "reason": "A/B 摘要缺少统一实验设计与统计有效性协议，仅展示结果，不按裸 uplift 自动调分",
+        })
 
     # 跨章重复率/机械文风先验（确定性机检）：retention 维度负向先验，prior 自身已封顶 -3。
     if repetition_prior:
@@ -852,6 +847,7 @@ def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None,
         "sources": sources,
         "reasons": reasons,
         "components": components,
+        "context_only": context_only,
         "ab_take_results_summary": ab_summary,
     }
 
@@ -859,7 +855,7 @@ def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None,
 def reader_telemetry_text(summary):
     if not summary:
         return ("无（尚无真实读者反馈回灌；可用 novel-feedback 导入平台后台 CSV/JSONL，"
-                "真实完读/弃读/评论权重高于虚拟试读）")
+                "真实经验数据与合成叙事探针必须分栏呈现）")
     agg = summary.get("aggregate") or {}
     weakest = summary.get("weakest_chapters") or []
     chapter_bits = []
@@ -880,8 +876,8 @@ def reader_telemetry_text(summary):
         f"记录 {summary.get('records_ingested')} 条，总开读 {agg.get('total_starts')}，"
         f"总完读率 {agg.get('completion_rate')}，总弃读率 {agg.get('drop_rate')}，"
         f"评论 {agg.get('total_comments')} 条；优先复核：{weak_text}。"
-        "（权重序：真实读者反馈 > 自有投放战绩 > novel-simulate 虚拟试读 > 公榜泛化。"
-        "若真实反馈与模拟反馈冲突，retention 维度以真实反馈为准，并把模拟反馈只当原因假设。）"
+        "（真实读者反馈属于经验数据；novel-simulate 属于 synthetic/context-only 假设。"
+        "两者冲突时不得用合成输出覆盖真实数据。）"
     )
 
 
@@ -909,20 +905,19 @@ def reference_distribution_text(distribution):
 
 def reader_panel_text(signals):
     if not signals:
-        return ("无（尚无模拟读者信号；可先跑 novel-simulate 产 评分/reader_panel_signals.json，"
-                "作为发布前虚拟试读的留存先验）")
-    rp = signals.get("retention_prior")
+        return ("无（尚无合成叙事探针；可跑 novel-simulate 产 评分/reader_panel_signals.json，"
+                "仅用于提出人工复核假设）")
+    rp = signals.get("retention_proxy", signals.get("retention_prior"))
     hook = signals.get("hook_strength")
     cliche = signals.get("cliche_density_per_kchar")
     chs = signals.get("chapters_read") or signals.get("scope") or "?"
     mode = "signal-only" if signals.get("signal_only", True) else "qualitative-completed"
     qualitative = "已补全定性反馈" if signals.get("qualitative_completed") else "未补全定性反馈"
     return (
-        f"模拟读者留存先验（novel-simulate 虚拟试读，范围 {chs}，{mode}，{qualitative}）："
-        f"retention_prior {rp}、钩子强度 {hook}、套路密度 {cliche}/千字。"
-        "（权重序：真实投放战绩 > 本模拟信号 > 公榜泛化；仅作 retention 维度先验，不单独定生死。"
-        "signal-only 状态只能低权重参考，不能等同完整读者面板。"
-        "若 retention_prior 明显偏低且套路密度高，retention 维度下调并点明开篇疑似劝退/套路堆叠。）"
+        f"合成叙事探针（novel-simulate，范围 {chs}，{mode}，{qualitative}）："
+        f"retention_proxy {rp}、钩子标记代理 {hook}、套路关键词密度 {cliche}/千字。"
+        "（这是未经外部验证的表面代理，只能提出复核问题；不得当作真实读者、真实留存或统计证据，"
+        "不得自动上调/下调分数。即使补完人格心声，证据类型仍为 synthetic/context-only。）"
     )
 
 
@@ -936,7 +931,8 @@ def ab_take_results_text(results):
         f"A/B take 结果：winner={summary.get('winner') or '未定'}，metric={summary.get('metric')}，"
         f"uplift={uplift_s}，confidence={summary.get('confidence') or '未填'}，"
         f"sample_size={summary.get('sample_size') or '未填'}。"
-        "（只作为读端反馈调整的低权重补充；真实完读/弃读优先。）"
+        "（裸 uplift 不足以证明因果或统计有效性；仅展示上下文，不自动调分。需另行复核随机分流、"
+        "样本量、置信区间/显著性、主指标预注册和停止规则。）"
     )
 
 
@@ -1302,25 +1298,28 @@ def build_production_decision(verdict, total_score, meta, settings):
     if verdict == "弃稿重立":
         decision = "kill"
         route = "novel-create"
-        reason = "题材/主线或市场匹配度不足，继续改写 ROI 低"
+        reason = "当前样本与量规提示题材/主线或市场匹配度偏低，建议由作者复核是否重立"
     elif verdict == "大改":
         decision = "revise"
         route = "novel-rewrite"
-        reason = "结构级问题仍需先修，不进入批量生产"
+        reason = "当前样本提示结构级问题，建议批量生产前先复核或修订"
     elif verdict == "小改":
         decision = "revise"
         route = "novel-review"
-        reason = "具备潜力，但投产前应先按低分维度小修"
+        reason = "具备潜力，建议按低分维度小修"
     else:
         decision = "go"
         route = "novel-review"
-        reason = "评分达标，可进入后续质检/导出"
+        reason = "评分样本达到当前量规档位，可进入后续质检/导出复核"
     return {
         "decision": decision,
         "route": route,
         "reason": reason,
         "score": round(float(total_score), 1),
         "verdict": verdict,
+        "authority": "advisory",
+        "requires_human_confirmation": decision in {"revise", "kill"},
+        "note": "LLM/量规分数是低置信决策辅助，不得单独阻断写作、导出或发布。",
     }
 
 
@@ -1418,7 +1417,7 @@ def presentation_bias_advisory(samples):
 def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None,
                  reader_panel=None, reader_telemetry=None, reference_distribution=None, title_collision=None,
                  ab_take_results=None, task_id="__SCORE_TASK_ID__", expect_adaptation=False,
-                 repetition_prior=None):
+                 repetition_prior=None, platform_label=None):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
@@ -1491,7 +1490,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 ## 项目背景
 - 标题：{meta.get('title') or '未定'}
 - 题材：{meta.get('genre') or '未定'}
-- 目标平台：{settings.get('目标平台') or '红果/抖音 商业爽文向'}
+- 目标平台：{platform_label or settings.get('目标平台') or meta.get('target_platform') or '未指定（均衡向）'}
 - 评分权重档：{platform_mode}
 
 ## 市场基准（当前热榜信号 · 外部公榜）
@@ -1503,10 +1502,10 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 ## 真实读者反馈（novel-feedback 回灌 · retention 维度最高优先级读端证据）
 {reader_telemetry_text(reader_telemetry)}
 
-## 模拟读者留存信号（novel-simulate 虚拟试读 · retention 维度先验）
+## 合成叙事探针（novel-simulate · context-only，不参与自动调分）
 {reader_panel_text(reader_panel)}
 
-## A/B take 结果（小流量分流 · 读端反馈低权重补充）
+## A/B take 结果（小流量分流 · 仅展示；裸 uplift 不自动调分）
 {ab_take_results_text(ab_take_results)}
 
 ## 跨章重复率/机械文风（确定性机检 · retention 维度负向先验）
@@ -1735,7 +1734,7 @@ def main():
     ap.add_argument("project_root")
     ap.add_argument("--file", help="指定要评分的单文件路径（如某个 take）")
     ap.add_argument("--chapter", type=int, help="指定章节号（用于定位 baseline 和 samples）")
-    ap.add_argument("--platform", default=None, help="商业爽文向 | 品质向")
+    ap.add_argument("--platform", default=None, help="目标平台，或评分权重档：均衡向 | 商业爽文向 | 品质向")
     ap.add_argument("--scope", default="opening", choices=["full", "opening", "arc"])
     ap.add_argument("--mock-assessment", help="提供模拟评估 JSON 的路径，用于测试或手动注入")
     ap.add_argument("--task", default=None,
@@ -1774,10 +1773,10 @@ def main():
     title_collision = load_title_collision(root, book_title)
     short_drama_target = is_short_drama_target(settings, meta)
 
-    raw_platform = args.platform or settings.get("目标平台") or ""
+    raw_platform = args.platform or settings.get("目标平台") or meta.get("target_platform") or ""
     platform_mode = _resolve_platform_mode(raw_platform)
 
-    weights = WEIGHTS.get(platform_mode, WEIGHTS["商业爽文向"])
+    weights = WEIGHTS.get(platform_mode, WEIGHTS["均衡向"])
 
     # Sample chapters
     samples = []
@@ -1835,6 +1834,7 @@ def main():
         task_id="__SCORE_TASK_ID__",
         expect_adaptation=short_drama_target,
         repetition_prior=repetition_prior,
+        platform_label=raw_platform or "未指定（均衡向）",
     )
     expected_task = build_score_task(
         root,
@@ -2037,7 +2037,8 @@ def main():
         "kind": "novel_score_report",
         "project_root": root,
         "generated_at": date.today().isoformat(),
-        "target_platform": platform_mode,
+        "target_platform": raw_platform or "未指定",
+        "score_weight_profile": platform_mode,
         "score_task_id": task.get("score_task_id"),
         "score_task_path": rel_path(root, task_path),
         "assessment_prompt_hash": task.get("assessment_prompt_hash"),

@@ -11,7 +11,7 @@ LIB = os.path.abspath(os.path.join(HERE, "..", "_lib"))
 if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
-from novel_pipeline import dry_run_plan  # noqa: E402
+from novel_pipeline import dry_run_plan, record_human_stage_approval  # noqa: E402
 
 
 CASES = os.path.join(HERE, "tests", "golden_pipeline_cases.json")
@@ -35,6 +35,14 @@ def test_golden_pipeline_cases_keep_next_stage_contract():
         with tempfile.TemporaryDirectory() as root:
             for rel_path, value in case["files"].items():
                 _write_fixture(root, rel_path, value)
+            for stage_key in ("blueprint", "setting"):
+                if stage_key in case["expected_done"]:
+                    record_human_stage_approval(
+                        root,
+                        stage_key,
+                        approved_by="golden-fixture-author",
+                        note=f"golden case {case['name']}",
+                    )
 
             plan = dry_run_plan(root)
             assert plan["next_stage"] == case["expected_next_stage"], case["name"]

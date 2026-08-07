@@ -6,7 +6,7 @@ simulate_panel.py — 多代理人「模拟读者」试读（确定性信号 + L
 诚实分工（同家族 mechanical/script 哲学）：
   - 脚本算**确定性信号**：各人格关心的关键词密度、章末钩子强度、词汇多样性、套路命中。
   - 真正的"读者心声/弃书点"由 LLM 在交互节点按人格 prompt 读文本补全（报告里留占位）。
-  - 另产一份机读 `评分/reader_panel_signals.json`（含 retention_prior），供 novel-score 当第一方留存先验。
+  - 另产一份机读 `评分/reader_panel_signals.json`，作为合成叙事探针供人工复核；不得冒充读者数据或自动改分。
 
   python3 simulate_panel.py <作品根> [--scope opening|chapter] [--chapter N] [--personas rookie,logic,emote,critic]
 
@@ -113,7 +113,8 @@ def analyze(project, scope, chapter, personas, profile="商业爽文向"):
     diversity = _lexical_diversity(text)
     cliche = _density(text, CLICHE_KW)
 
-    # 留存先验：归一到 0-1。爽文向以爽点密度为主驱动；品质/情感向不把爽点稀薄当劝退，
+    # 留存代理：归一到 0-1。它只是关键词/章末标记/文本多样性的表面代理，不是留存率预测。
+    # 爽文向以爽点密度为主驱动；品质/情感向不把爽点稀薄当劝退，
     # 改以情感张力 + 钩子 + 文笔多样性为主驱动（套路堆叠仍为负项）。
     shuang = _density(text, PAYOFF_KW)
     emote = _density(text, EMOTION_KW)
@@ -127,6 +128,12 @@ def analyze(project, scope, chapter, personas, profile="商业爽文向"):
             - 0.10 * min(cliche / 5, 1), 3)))
 
     return {
+        "schema_version": 2,
+        "kind": "novel_synthetic_reader_probe",
+        "evidence_type": "synthetic_probe",
+        "validation_status": "unvalidated",
+        "decision_authority": "context_only",
+        "numeric_score_eligible": False,
         "analysis_mode": "signal_only",
         "signal_only": True,
         "qualitative_completed": False,
@@ -140,8 +147,10 @@ def analyze(project, scope, chapter, personas, profile="商业爽文向"):
         "hook_strength": round(hook, 3),
         "lexical_diversity": diversity,
         "cliche_density_per_kchar": cliche,
+        "retention_proxy": retention_prior,
+        # 兼容既有消费者；语义已由 schema v2 明确降级为 proxy，不能作真实留存先验。
         "retention_prior": retention_prior,
-        "note": "信号为确定性近似；弃书点/爽点捕获的定性判断由 LLM 按人格读文本补全",
+        "note": "合成探针仅生成可复核假设；不代表真实读者、真实留存或统计证据，不参与自动评分",
     }
 
 
@@ -150,7 +159,7 @@ def write_report(project, sig, personas):
     rdir = os.path.join(project, "评分")
     os.makedirs(rdir, exist_ok=True)
 
-    # 机读信号（供 novel-score 读）
+    # 机读合成探针（供 score/revision 展示上下文，不参与自动改分）
     sig_path = os.path.join(rdir, "reader_panel_signals.json")
     with open(sig_path, "w", encoding="utf-8") as f:
         json.dump({"date": date, **sig}, f, ensure_ascii=False, indent=2)
@@ -162,10 +171,11 @@ def write_report(project, sig, personas):
         "",
         f"- 范围：{sig['scope']}（第 {sig['chapters_read']} 章）",
         f"- 完成状态：{sig.get('analysis_mode', 'signal_only')}；定性补全：{sig.get('qualitative_completed', False)}",
-        f"- 留存先验（确定性近似）：**{sig['retention_prior']}** ｜ 钩子强度 {sig['hook_strength']} ｜ "
+        f"- 留存代理（合成探针，非预测值）：**{sig['retention_prior']}** ｜ 钩子强度 {sig['hook_strength']} ｜ "
         f"词汇多样性 {sig['lexical_diversity']} ｜ 套路密度 {sig['cliche_density_per_kchar']}/千字",
         "",
-        "> 下表「确定性信号」由脚本算出；「人格心声 / 弃书点」需 AI 代理按人格 prompt 读文本后补全（占位待填）。",
+        "> 下表是基于关键词和表面结构的合成探针，只用于提出人工复核假设；不得当作真实读者反馈、留存预测或自动评分依据。",
+        "> 「人格心声 / 弃书点」需 AI 代理按人格 prompt 读文本后补全（占位待填），补全后仍属于合成证据。",
         "",
     ]
     for pid in personas:
@@ -191,7 +201,7 @@ def write_report(project, sig, personas):
 
 
 def main():
-    p = argparse.ArgumentParser(description="模拟读者试读（确定性信号 + LLM 定性骨架）")
+    p = argparse.ArgumentParser(description="合成叙事探针（确定性表面代理 + LLM 定性假设）")
     p.add_argument("project_path")
     p.add_argument("--scope", default="opening", choices=["opening", "chapter"])
     p.add_argument("--chapter", type=int, default=1)
@@ -212,12 +222,12 @@ def main():
         print(f"Error: {args.project_path}/章节 下没有可读章节")
         return
     md_path, sig_path = write_report(args.project_path, sig, personas)
-    print(f"评判档：{profile}（按目标平台定默认人格与留存先验）")
-    print(f"模拟读者面板：{', '.join(PERSONAS[p]['name'] for p in personas)}")
-    print(f"  留存先验 {sig['retention_prior']} · 钩子 {sig['hook_strength']} · 套路 {sig['cliche_density_per_kchar']}/千字")
+    print(f"评判档：{profile}（按目标平台定默认视角与代理公式）")
+    print(f"合成叙事探针视角：{', '.join(PERSONAS[p]['name'] for p in personas)}")
+    print(f"  留存代理 {sig['retention_proxy']} · 钩子标记 {sig['hook_strength']} · 套路关键词 {sig['cliche_density_per_kchar']}/千字")
     print(f"  报告骨架 → {md_path}")
-    print(f"  机读信号 → {sig_path}（novel-score 读作第一方留存先验）")
-    print("  ⚠️ 定性反馈待 AI 代理按人格读文本补全报告里的【AI 代理填写】项")
+    print(f"  机读探针 → {sig_path}（synthetic/context-only，不参与自动调分）")
+    print("  ⚠️ 定性假设待 AI 代理补全；补全后仍需正文/真人反馈验证")
 
 
 if __name__ == "__main__":

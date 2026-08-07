@@ -92,18 +92,18 @@ def review_is_clean(payload: Any) -> tuple[bool, str]:
     return True, "review 无阻断项"
 
 
-def score_is_usable(payload: Any, *, require_adaptation: bool) -> tuple[bool, str]:
+def score_readiness(payload: Any, *, require_adaptation: bool) -> tuple[str, str]:
     if not isinstance(payload, dict):
-        return False, "缺少或无法读取 score_report.json"
-    verdict = str(payload.get("verdict") or "")
-    if verdict in {"大改", "弃稿重立"}:
-        return False, f"评分结论为 {verdict}，不适合直接进入转制"
+        return "block", "缺少或无法读取 score_report.json"
     adaptation = payload.get("adaptation_check")
     if require_adaptation and not isinstance(adaptation, dict):
-        return False, "目标命中短剧/漫剧，但缺少 adaptation_check"
+        return "block", "目标命中短剧/漫剧，但缺少 adaptation_check"
+    verdict = str(payload.get("verdict") or "")
+    if verdict in {"大改", "弃稿重立"}:
+        return "warn", f"评分建议为 {verdict}；由编辑复核改编方向，不以主观分数自动阻断转制"
     if isinstance(adaptation, dict) and adaptation.get("low_potential"):
-        return False, "短剧/漫剧改编潜力偏低，先用 novel-condense 或 rewrite 调整结构"
-    return True, f"评分结论可用：{verdict or '未写 verdict'}"
+        return "warn", "短剧/漫剧改编潜力启发式评分偏低；建议先用 novel-condense 或 rewrite 复核结构"
+    return "pass", f"评分结论可用：{verdict or '未写 verdict'}"
 
 
 def collect(root: str) -> dict[str, Any]:
@@ -151,11 +151,11 @@ def collect(root: str) -> dict[str, Any]:
         next_action="" if review_ok else "跑 novel-review/build_review_report.py 并清掉阻断项。")
 
     require_adaptation = has_short_drama_target(meta, settings)
-    score_ok, score_msg = score_is_usable(load_json(os.path.join(root, "评分", "score_report.json")),
-                                          require_adaptation=require_adaptation)
-    add(checks, "SCORE", "pass" if score_ok else "block", score_msg,
+    score_status, score_msg = score_readiness(load_json(os.path.join(root, "评分", "score_report.json")),
+                                              require_adaptation=require_adaptation)
+    add(checks, "SCORE", score_status, score_msg,
         path="评分/score_report.json",
-        next_action="" if score_ok else "补 novel-score；短剧/漫剧目标必须含 adaptation_check。")
+        next_action="" if score_status == "pass" else "补/复核 novel-score；短剧/漫剧目标必须含 adaptation_check。")
 
     if require_adaptation:
         baselines = glob.glob(os.path.join(root, "评分", "market_baseline_*.json"))

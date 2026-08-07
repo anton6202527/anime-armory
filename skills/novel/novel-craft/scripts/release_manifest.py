@@ -69,20 +69,34 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
     "platform_publish": {
         "label": "Platform publish",
         "require_exports": True,
-        "mandatory_evidence": ("review_report", "score_report", "ai_usage", "compliance_profile", "reader_test_plan", "metadata_pack"),
+        "mandatory_evidence": ("review_report", "ai_usage", "compliance_profile", "metadata_pack"),
         "snapshot_block": ("review_report", "score_report"),
         "snapshot_warn": (),
         "ai_usage_block": True,
         "compliance_fingerprint_block": True,
         "qa_gate": {"require_review_report": True, "require_score_report": True, "require_state_closure": True},
         "research_missing": "warn",
-        "reader_plan_required": True,
-        "reader_telemetry_missing": "block",
+        "reader_plan_required": False,
+        "reader_telemetry_missing": "warn",
     },
     "kdp_publish": {
         "label": "Amazon KDP publish",
         "require_exports": True,
-        "mandatory_evidence": ("review_report", "score_report", "ai_usage", "compliance_profile", "reader_test_plan", "metadata_pack"),
+        "mandatory_evidence": ("review_report", "ai_usage", "compliance_profile", "metadata_pack"),
+        "snapshot_block": ("review_report",),
+        "snapshot_warn": ("score_report",),
+        "ai_usage_block": True,
+        "compliance_fingerprint_block": True,
+        "qa_gate": {"require_review_report": True, "require_score_report": False, "require_state_closure": True},
+        "research_missing": "warn",
+        "reader_plan_required": False,
+        "reader_telemetry_missing": "warn",
+        "kdp": True,
+    },
+    "data_validated_launch": {
+        "label": "Data-validated platform launch",
+        "require_exports": True,
+        "mandatory_evidence": ("review_report", "ai_usage", "compliance_profile", "reader_test_plan", "metadata_pack"),
         "snapshot_block": ("review_report", "score_report"),
         "snapshot_warn": (),
         "ai_usage_block": True,
@@ -91,7 +105,6 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "warn",
         "reader_plan_required": True,
         "reader_telemetry_missing": "block",
-        "kdp": True,
     },
     "archive": {
         "label": "Archive snapshot",
@@ -525,7 +538,10 @@ def release_readiness(
         check = reader_telemetry_check(root)
         checks.append(check)
         if not check["passed"]:
-            warn("RELEASE-READER-TELEMETRY-QUALITY", check["message"], path=check["path"])
+            if config.get("reader_telemetry_missing") == "block":
+                block("RELEASE-READER-TELEMETRY-QUALITY", check["message"], path=check["path"])
+            else:
+                warn("RELEASE-READER-TELEMETRY-QUALITY", check["message"], path=check["path"])
     else:
         telemetry_policy = config.get("reader_telemetry_missing")
         if telemetry_policy in {"warn", "block"}:
@@ -538,20 +554,20 @@ def release_readiness(
             elif telemetry_policy == "block":
                 block(
                     "RELEASE-READER-TELEMETRY-NOT-DECLARED",
-                    "no reader_telemetry_summary.json found; platform/KDP publish requires real reader data or a scoped reader-data waiver",
+                    "data_validated_launch requires real reader telemetry or a scoped reader-data waiver",
                     path="评分/reader_telemetry_summary.json",
                 )
             else:
                 warn(
                     "RELEASE-READER-TELEMETRY-NOT-DECLARED",
-                    "no reader_telemetry_summary.json found; publish decision should record a reader-data waiver or run novel-feedback after test reading",
+                    "no reader_telemetry_summary.json found; this is market-validation evidence, not a publication-compliance prerequisite",
                     path="评分/reader_telemetry_summary.json",
                 )
 
     if (evidence.get("metadata_pack") or {}).get("exists"):
         check = metadata_pack_check(root)
         checks.append(check)
-        if not check["passed"] and release_profile in {"platform_publish", "kdp_publish"}:
+        if not check["passed"] and release_profile in {"platform_publish", "kdp_publish", "data_validated_launch"}:
             block("RELEASE-METADATA-PACK-QUALITY", check["message"], path=check["path"])
         elif not check["passed"]:
             warn("RELEASE-METADATA-PACK-QUALITY", check["message"], path=check["path"])

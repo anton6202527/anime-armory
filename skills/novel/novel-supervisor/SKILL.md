@@ -17,7 +17,7 @@ description: Read-only next-action recommender (上层 agent 编排层) for nove
 2. **动态派发**：基于 `novel/scripts/pipeline_runner.py` 的 dry-run plan，选择 `workflow_orchestrator` / `specialist_writer` / `specialist_reviewer` / `specialist_score`。
 3. **语义任务优先**：若 `语义任务/*.json` 仍 open，先提示领取/完成语义任务，保证 report/score/ledger 都绑定 source snapshot。
 4. **batch 安全**：若 `novel-batch` 出现 dead-letter，先阻断并要求查死信，不继续自动派发后续阶段。
-5. **人类边界**：不会绕过 `blueprint`、`setting`、`demo` 或带 human gate 的阶段。
+5. **人类边界**：不会绕过 `blueprint`、`setting`、`demo` 或带 human gate 的阶段；前两者需由人审后用 `pipeline_runner.py --approve-stage ... --agent ... --reason ...` 记录与当前产物 hash 绑定的批准，初始化骨架文件不算通过。
 6. **双层熔断（须接执行遥测才生效）**：`record-execution` 按 `stage + run_id + finding_hash` 精确记录；同时维护 `stage + finding_hash` rolling breaker，跨 run 同一问题连续失败会进入 60 分钟冷却并要求人工介入。**诚实边界**：熔断器是被动账本——**只有执行方在每次 started/failed/succeeded 后调用 `record-execution` 喂遥测，它才有数据可判**；从不有人回报时它处于 inert（永不触发，不会凭空保护流程）。`next` 输出的 `circuit_breaker.armed` 字段显式标明当前是否接到遥测（`false`=未接·静默不保护），避免把空账熔断器误读成"已在守护"。
 
 ## 典型工作流

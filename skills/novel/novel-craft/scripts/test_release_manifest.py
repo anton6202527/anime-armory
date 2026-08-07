@@ -201,13 +201,22 @@ def test_release_manifest_ready_when_required_evidence_is_current():
         assert manifest["chapter_source_snapshot"]["aggregate_hash"] == manifest["chapter_aggregate_hash"]
 
 
-def test_platform_publish_requires_reader_telemetry_or_scoped_waiver():
+def test_reader_telemetry_is_optional_for_publish_and_required_only_for_data_validated_launch():
     with tempfile.TemporaryDirectory() as root:
         make_project(root)
         write_ready_evidence(root)
         os.remove(os.path.join(root, "评分", "reader_telemetry_summary.json"))
 
-        blocked = release_manifest.build_manifest(root, release_name="v1")
+        publish = release_manifest.build_manifest(root, release_name="v1")
+        blocker_ids = [item["id"] for item in publish["release_readiness"]["blockers"]]
+        warning_ids = [item["id"] for item in publish["release_readiness"]["warnings"]]
+        assert "RELEASE-READER-TELEMETRY-NOT-DECLARED" not in blocker_ids
+        assert "RELEASE-READER-TELEMETRY-NOT-DECLARED" in warning_ids
+        assert publish["release_ready"] is True, publish["release_readiness"]
+
+        blocked = release_manifest.build_manifest(
+            root, release_name="validated", release_profile="data_validated_launch"
+        )
         blocker_ids = [item["id"] for item in blocked["release_readiness"]["blockers"]]
         assert "RELEASE-READER-TELEMETRY-NOT-DECLARED" in blocker_ids
         assert blocked["release_ready"] is False
@@ -219,15 +228,36 @@ def test_platform_publish_requires_reader_telemetry_or_scoped_waiver():
                 "reason": "封闭评审项目，无公开平台读者数据。",
                 "affected_gate": "release_manifest",
                 "source": "human",
-                "scope": {"release_profile": "platform_publish"},
+                "scope": {"release_profile": "data_validated_launch"},
             }, ensure_ascii=False) + "\n")
 
-        waived = release_manifest.build_manifest(root, release_name="v1")
+        waived = release_manifest.build_manifest(
+            root, release_name="validated", release_profile="data_validated_launch"
+        )
         waived_ids = [item["id"] for item in waived["release_readiness"]["blockers"]]
         warning_ids = [item["id"] for item in waived["release_readiness"]["warnings"]]
         assert "RELEASE-READER-TELEMETRY-NOT-DECLARED" not in waived_ids
         assert "RELEASE-READER-TELEMETRY-WAIVED" in warning_ids
         assert waived["release_ready"] is True, waived["release_readiness"]
+
+
+def test_data_validated_launch_blocks_present_but_invalid_reader_telemetry():
+    with tempfile.TemporaryDirectory() as root:
+        make_project(root)
+        write_ready_evidence(root)
+        write_json(os.path.join(root, "评分", "reader_telemetry_summary.json"), {})
+
+        publish = release_manifest.build_manifest(root, release_name="publish")
+        publish_warning_ids = [item["id"] for item in publish["release_readiness"]["warnings"]]
+        assert "RELEASE-READER-TELEMETRY-QUALITY" in publish_warning_ids
+        assert publish["release_ready"] is True
+
+        validated = release_manifest.build_manifest(
+            root, release_name="validated", release_profile="data_validated_launch"
+        )
+        blocker_ids = [item["id"] for item in validated["release_readiness"]["blockers"]]
+        assert "RELEASE-READER-TELEMETRY-QUALITY" in blocker_ids
+        assert validated["release_ready"] is False
 
 
 def test_release_manifest_builds_evidence_index_for_release_audit():

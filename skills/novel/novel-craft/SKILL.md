@@ -16,13 +16,13 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **Demo gate 留痕 schema** | `references/demo-gate.md` | Demo 章过审后；批量写章、review 查文风漂移、score 复盘前都要读 |
 | **读者契约 / 题旨契约** | `references/reader-contract.md` | 蓝图/spec/章纲通过后固化 `设定/读者契约.md`；Demo gate 同步 `reader_contract`；每章任务包用它防止偏题、承诺遗忘和文学质感变薄 |
 | **作者成书通用流程** | `references/author-workflow.md` + `scripts/author_workflow.py` | 从构思到定稿的引导式工作流：检查作者意图、资料/观察/审美、结构地图、Demo、读者测试、编辑、AI/合规和发布元数据证据，给下一步命令并写 `生产数据/author_workflow.json` / `作者成书流程.md` |
-| **设定圣经 schema（统一·单一真值源）** | `references/setting-bible.md` | 建设定/角色卡/世界观时——create 从零建、spinoff/rewrite/continue 从原作抽改，**都用这一套字段**（含金手指必有代价 + 首现章/复用范围一致性三列） |
+| **设定圣经 schema（统一·单一真值源）** | `references/setting-bible.md` | 建设定/角色卡/世界观时——create 从零建、spinoff/rewrite/continue 从原作抽改，**都用这一套字段**（高杠杆机制按需登记边界与后果 + 首现章/复用范围一致性三列） |
 | **批量写章闭环** | `references/draft-pipeline.md` | Demo 过审后进入 draft；需要任务包、状态增量、章节生成粒度、写章回扫时 |
 | **生活观察素材库** | `novel-observe` + `素材/观察札记.jsonl` | 人物悬浮、场景缺生活感、职业/地域/日常质感不足时；写章包自动读取 `写作任务/观察素材_第NN章.md`，没有精选包时提示先 select |
 | **正向审美样本库** | `novel-aesthetic` + `设定/aesthetic_bank.json` | Demo 高光、授权/公版样本、项目审美标尺；写章包、line edit 和 score 可引用“为什么有效/可迁移规则” |
 | **专业资料包注入** | `novel-research` + `资料/research_sources.json` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景；`draft_packets.py` 自动把适用章节的 `资料/专业资料包_<主题>.md` 加进必读源文件 |
 | **合规 profile / 平台辖区清单** | `scripts/compliance_profile.py` | KDP/中国公开发布/欧盟/出海/微短剧等目标命中时，生成 `合规/compliance_profile.json` 并在 QA gate 中提示/阻断 |
-| **Workflow registry / runner** | `../novel/_lib/novel_pipeline.py` + `../novel/scripts/pipeline_runner.py` | 长流程恢复、薄 agent 编排、dry-run 下一阶段、创建 `pipeline_runs/<run_id>.json`、阶段 claim/complete/fail/block/skip、生成 handoff contract；只查输入/输出/gate 和并行/语义标记，不直接写正文或调用模型 |
+| **Workflow registry / runner** | `../novel/_lib/novel_pipeline.py` + `../novel/scripts/pipeline_runner.py` | 长流程恢复、薄 agent 编排、dry-run 下一阶段、创建 `pipeline_runs/<run_id>.json`、阶段 claim/complete/fail/block/skip、生成 handoff contract；blueprint/setting 另用 `--approve-stage` 记录与阶段输入、产物 hash 同时绑定的人工批准，输入不全或任一侧变更都不能越过 human gate；runner 不直接写正文或调用模型 |
 | **生产控制台** | `novel-dashboard` + `../novel-dashboard/scripts/dashboard.py` | 汇总 pipeline、stale artifacts、语义任务、review/score blockers、revision、batch、release readiness、review board、prompt cache metrics，写 `生产数据/novel_dashboard.*` |
 | **批量任务队列** | `novel-batch` + `../novel-batch/scripts/queue.py` | 多章节审稿/评分/dashboard 刷新等任务的本地 flock 队列；支持 claim/lease/renew/reclaim/dead-letter，不直接执行模型 |
 | **统一修订计划** | `scripts/revision_planner.py` | review/score/balance/feedback/simulate 都跑过后，合并成 `修订/revision_plan.json` + `修订/修订计划.md` |
@@ -75,7 +75,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/store.py` | 跨脚本加锁与原子写：`file_lock`、`atomic_write_text/json` | progress / draft_queue / draft_packets / reconcile_ledger |
 | `scripts/waivers.py` | 统一生成 / 读取 `审稿/waiver_log.jsonl`，所有 gate 绕过都要留同构痕迹 | export / draft_packets / score / report_gate |
 | `scripts/report_snapshot.py` | 给 review/score 报告记录正文文件 hash 与 aggregate hash；QA gate 用它判断报告是否仍绑定当前正文 | novel-review / novel-score / qa_gate |
-| `../novel/scripts/pipeline_runner.py` | 读取 `novel_pipeline.py` registry，生成 `生产数据/novel_pipeline_plan.{json,md}`，声明每阶段 owner/input/output/gate/cost/semantic/parallel/agent_role；可创建 `pipeline_runs/<run_id>.json` 并对阶段 claim/complete/fail/block/skip；`--artifact-graph` 查产物依赖和 stale，`--handoff <stage>` 生成 specialist agent 边界契约 | 长流程 dry-run、恢复、agent 编排前置 |
+| `../novel/scripts/pipeline_runner.py` | 读取 `novel_pipeline.py` registry，生成 `生产数据/novel_pipeline_plan.{json,md}`，声明每阶段 owner/input/output/gate/cost/semantic/parallel/agent_role；可创建 `pipeline_runs/<run_id>.json` 并对阶段 claim/complete/fail/block/skip；`--artifact-graph` 查产物依赖和 stale，`--handoff <stage>` 生成 specialist agent 边界契约，`--approve-stage blueprint|setting --agent ... --reason ...` 记录 hash-bound 人工批准 | 长流程 dry-run、恢复、agent 编排前置 |
 | `scripts/qa_gate.py`（薄转发，真值源在 `novel/_lib/qa_gate.py`）/ `scripts/report_gate.py` | 读取 rights / research / review / score / **arc 弧段** / state closure / AI usage / compliance profile / simulate signal-only；缺 review、报告 schema 不合规、报告 hash 过期、阻断 finding、阻断 score verdict、baseline freshness、required 专业资料包缺失、**已跑的 arc_gate 仍含阻断**、写后状态未合并、商业/平台导出缺 AI 披露或平台/辖区合规缺口都会进入 gate；长篇从未跑 arc_gate 会 warning；`drafting` 不因缺 score 阻断，`--waive-missing-score` 只豁免带作用域的缺评分 | progress / export / novel 续跑 |
 | `scripts/export.py` | 章节/第NN章.md 合并 → txt / docx / 大纲；默认执行 export QA gate，缺 review 或阻断未清不能导出；`--ignore-qa-gate` 会写带章节 hash / blocker ids / formats 的 waiver log；`--combine` 走续写合本 | create / spinoff / rewrite / expand / condense / continue **共用同一份** |
 | `scripts/progress.py` | 扫描 `<作品根>/_进度.md`，输出第一条未完成项 + stage owner/gate/on_fail + QA 阻断；`set <stage> done|todo` 通过 `_进度.lock` 加锁原子更新机器阶段 | 所有会写 `_进度.md` 的 novel-* 项目 |
@@ -92,15 +92,15 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/semantic_job.py` | 创建/展示/领取/阻塞/拒收/重开/完成/审核批准绑定 prompt 的语义任务；任务含 schema_ref、source_snapshot、response_contract、assigned_role、attempts、provider/model、cost_estimate、human_required、review_required，完成时按 `semantic_schemas.py` 校验 JSON 并写 provenance 后复制到目标产物 | 需要 AI/人工判断但必须可追踪、可续跑的步骤 |
 | `scripts/provenance.py` | 追加写 `生产数据/provenance.jsonl`；记录输入/输出文件 sha256、工具、事件类型与元数据；支持 `lineage` / `artifact-events` / `openlineage` 查询 | runner、semantic job、后续关键 workflow 脚本 |
 | `scripts/propose_state_delta.py` | 为单章生成 `审稿/state_delta_第NN章.suggested.json` 草案，含章节 hash、候选实体和待填槽位；确认后再另存正式 delta 并 merge | 写完章节后，减少从空白 JSON 开始写 state_delta 的摩擦 |
-| `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，记录 AI-generated / AI-assisted / 未使用 AI 文本、人工贡献、AI 介入直接程度、人类 steering、可替代性、直接纳入程度、复核步骤和逐章 `chapter_usage` | 发布、导出、交平台前 |
+| `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，分别记录文本、图片/封面、译文的 AI-generated / AI-assisted / 未使用状态，以及人工贡献、AI 介入直接程度、人类 steering、可替代性、直接纳入程度、复核步骤和逐章 `chapter_usage` | 发布、导出、交平台前 |
 | `scripts/compliance_profile.py` | 写 `合规/compliance_profile.json` + `.md`；支持 `--confirm <requirement_id>` 留痕平台侧披露/备案/权利确认 | 发布、出海、KDP/中国/欧盟/微短剧等目标 |
 | `scripts/metadata_pack.py` | 写 `导出/metadata_pack.json` + `.md`，整理标题、副标题、系列信息、短简介、长简介、关键词、分类、年龄/内容提示、平台目标、权利摘要和 AI/合规披露摘要 | 投稿、平台发布、KDP/self-pub 前；release manifest 发布 profile 会检查 |
-| `scripts/revision_planner.py` | 合并 `review_report`、`score_report`、balance/heatmap、真实读者反馈、模拟读者信号、市场证据任务为统一修订计划 `修订/revision_plan.json`；**该计划会回流**——`draft_packets.py` 把命中本章的修订任务注入写章包「本章待处理修订项」，`arc_packets.py` 注入弧段窗内任务，不再是无人读的终端报告。2026-07 增 **macro-before-micro 修订纪律**（传统编辑共识：结构未锁前不做行文修补，否则移场景/并章时行文功夫白费）：每个任务自动归 structure/scene/line 三层（`tier` 字段），同优先级内结构级先行；存在未决结构级 P0/P1 时行文级任务打 `deferred_until_structure` 缓办标记（不删任务，只排序+标记，Markdown 表有 tier 列） | 大改/小改前，避免各报告各说各话 |
+| `scripts/revision_planner.py` | 合并 `review_report`、`score_report`、balance/heatmap、真实读者反馈、合成叙事探针（仅 P2 人工复核假设）、市场证据任务为统一修订计划 `修订/revision_plan.json`；**该计划会回流**——`draft_packets.py` 把命中本章的修订任务注入写章包「本章待处理修订项」，`arc_packets.py` 注入弧段窗内任务，不再是无人读的终端报告。2026-07 增 **macro-before-micro 修订纪律**（传统编辑共识：结构未锁前不做行文修补，否则移场景/并章时行文功夫白费）：每个任务自动归 structure/scene/line 三层（`tier` 字段），同优先级内结构级先行；存在未决结构级 P0/P1 时行文级任务打 `deferred_until_structure` 缓办标记（不删任务，只排序+标记，Markdown 表有 tier 列） | 大改/小改前，避免各报告各说各话 |
 | `scripts/character_arc_audit.py` | 人物弧线推进机检（advisory）：scene_cards 人物引擎字段（Weiland Lie/Want/Need 内构）的跨章对账——want==need 逐字相同（内外目标塌缩）、misbelief 连续 ≥6 章不付 choice_cost（谎言从不逼选择=弧线停摆）、引擎填充率前紧后松（计划纪律衰减）；引擎字段从未启用则优雅跳过。已接进 `consistency_audit`（键 `character_arc`）与 review_report | 中长篇每次 review；弧段收口前 |
-| `scripts/screen_adaptation_ready.py` | 检查导出文本/章节、权利声明、核心设定、审稿、评分、AI 使用披露、短剧/漫剧目标的改编潜力与市场基准，写 `导出/转制就绪检查.md` + JSON；有 blocker 时退出 1 | 小说成品准备进入视觉生产线前的小说侧准入 |
+| `scripts/screen_adaptation_ready.py` | 检查导出文本/章节、权利声明、核心设定、审稿、评分、AI 使用披露、短剧/漫剧目标的改编潜力与市场基准，写 `导出/转制就绪检查.md` + JSON；缺必要结构/权利/报告可阻断，主观评分与改编潜力阈值只 warning | 小说成品准备进入视觉生产线前的小说侧准入 |
 | `scripts/manage_takes.py` | 登记、列出、选择同一章节多版 take；可配合 `novel-score` 对 take 独立评分并同步 manifest | A/B、开篇多版、章节多版挑选 |
 | `scripts/story_vcs.py` | VCS-free 文件级分支：branch manifest 记录 base hash，merge dry-run 检冲突/缺分支文件/legacy 无 base hash，正式 merge 先备份并写 audit/provenance，可 rollback；`migrate` 迁移旧分支，`health` 汇总分支健康；旧分支无 base hash 必须显式 `--accept-legacy-no-base` 或可信迁移 `--trust-current-main` | 多版设定/百科/进度试写，避免 A/B 分支静默覆盖主线 |
-| `scripts/release_manifest.py` | 固化导出物、章节、review/score、AI 使用、合规 profile、research、revision、reader test、metadata pack、waiver 的 hash，写 `导出/release_manifest.{json,md}`，并按 `--release-profile internal_draft|beta_read|platform_publish|kdp_publish|archive` 计算 `release_ready`；默认 `platform_publish`，会阻断 stale review/score、AI-assisted/generated 缺逐章记录、缺 `reader_test_plan.json` 的 beta/发布版本、platform/KDP 缺真实读者 telemetry 且无 scoped reader-data waiver、发布/KDP 缺元数据包；未就绪返回非零，只有显式 `--allow-not-ready` 才允许只落报告不放行 | 导出/投稿/交付前，证明各报告绑定同一版文本 |
+| `scripts/release_manifest.py` | 固化导出物、章节、review/score、AI 使用、合规 profile、research、revision、reader test、metadata pack、waiver 的 hash，写 `导出/release_manifest.{json,md}`，并按 `--release-profile internal_draft|beta_read|platform_publish|kdp_publish|data_validated_launch|archive` 计算 `release_ready`；普通 platform/KDP 发布把缺 reader telemetry 记为市场验证 warning，只有显式 `data_validated_launch` 才把 reader plan + 真实 telemetry 设为硬前置 | 导出/投稿/交付前，证明各报告绑定同一版文本 |
 | `../novel/scripts/vector_store_eval.py` | 读取 `生产数据/retrieval_golden.json`，从保存 index 或 `章节/` 构建检索库，按 Recall@K/MRR 阈值写 `生产数据/vector_store_eval.{json,md}` 并作为回归闸门 | 长篇记忆/RAG/别名与时间线检索质量回归 |
 
 ## 工业化生产线（批量写章闭环）
@@ -118,7 +118,7 @@ python3 skills/novel/novel-craft/scripts/export.py "<作品根>" --formats txt,d
 ```
 
 - `--formats` 缺省读 `_meta.json.outputs`；书名缺省按 `_meta.json` 的 `kind` 推导（spinoff=「原作-配角外传」、expand=「原作-扩写」、condense=「原作-精简」、continue=「原作-续写」、rewrite=「原作-改写」、create=`title`）。
-- 导出前默认要求 `审稿/review_report.json` 存在，并读取 `评分/score_report.json`、写后状态闭环、AI 使用披露、专业资料包和合规 profile；报告必须符合 `qa-report-schema.md` 且带 `source_snapshot` 绑定当前 `章节/` 正文 hash，正文新增、删除或改动后旧报告会阻断。商业连载/漫剧源书或目标平台含红果/番茄/抖音/漫剧时，缺 score 也阻断；`state_delta` 未合并进 `state_ledger` 会阻断；商业/平台/出海导出缺 `合规/ai_usage.json` 或缺人工贡献记录会阻断；required 专业资料包缺失、高风险资料包过期、KDP/中国公开发布/欧盟/微短剧等目标的合规缺口会阻断或 warning。beta/发布版 release manifest 要有 `评分/reader_test_plan.json`；`beta_read` 缺真实 `reader_telemetry_summary.json` 只 warning，`platform_publish` / `kdp_publish` 缺真实数据会阻断，除非 `审稿/waiver_log.jsonl` 有匹配 `scope.release_profile` 的 `reader_data_missing` / `reader_telemetry_missing` waiver。确需跳过评分，用 `report_gate.py --waive-missing-score --reason "<原因>"` 写带章节 hash 的豁免；只有用户明确要求强制导出时才加 `--ignore-qa-gate`，并自动写带作用域的 `审稿/waiver_log.jsonl`。
+- 导出前默认要求 `审稿/review_report.json` 存在，并读取适用的 `评分/score_report.json`、写后状态闭环、AI 使用披露、专业资料包和合规 profile；报告必须符合 schema 且用 `source_snapshot` 绑定当前正文。缺适用报告、schema/snapshot/freshness 损坏可阻断；主观 score verdict 只 warning。普通 `platform_publish` / `kdp_publish` 不要求先有真实读者历史数据；缺 telemetry 只提示市场验证不足，显式 `data_validated_launch` 才要求 reader plan + telemetry 或 scoped waiver。确需跳过确定性 gate 时必须显式留痕。
 - 若未传 `--formats` 且 `_meta.json.outputs` 缺失 / 为空，导出器会直接报错，不再“成功但无产物”。
 - 依赖：`python-docx`（仅 docx 格式时）。
 
@@ -142,6 +142,7 @@ python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan
 python3 skills/novel/scripts/pipeline_runner.py --registry-only
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --artifact-graph --json
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --handoff blueprint
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage blueprint --agent "<复核人>" --reason "<批准说明>"
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --start-run --agent orchestrator
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --run-id run_YYYYMMDD_HHMMSS --claim-stage blueprint --agent writer-agent
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --run-id run_YYYYMMDD_HHMMSS --complete-stage blueprint

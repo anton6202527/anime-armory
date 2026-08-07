@@ -22,7 +22,9 @@ PIPELINE_REGISTRY_KIND = "novel_pipeline_registry"
 PIPELINE_PLAN_KIND = "novel_pipeline_dry_run_plan"
 ARTIFACT_GRAPH_KIND = "novel_artifact_graph"
 HANDOFF_CONTRACT_KIND = "novel_specialist_handoff_contract"
-PIPELINE_REGISTRY_VERSION = 1
+PIPELINE_REGISTRY_VERSION = 2
+HUMAN_APPROVAL_STAGE_KEYS = {"blueprint", "setting"}
+STAGE_APPROVAL_REL_PATH = os.path.join("审稿", "stage_approvals.json")
 
 
 PIPELINE_REGISTRY: list[dict[str, Any]] = [
@@ -47,6 +49,7 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "inputs": ["原作.txt", "小说/source_manifest.json"],
         "input_policy": "any",
         "outputs": ["原作.txt", "小说/source_manifest.json"],
+        "output_policy": "any",
         "gate": "rights",
         "cost_level": "free",
         "semantic_required": False,
@@ -85,8 +88,15 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "label": "蓝图/方向规格",
         "owner": "novel-create / novel-rewrite / derive skill",
         "inputs": ["_meta.json", "设定/author_intent.json"],
-        "outputs": ["设定/蓝图.md", "设定/改动spec.md", "设定/方向spec.md"],
-        "output_policy": "any",
+        "outputs": ["设定/创作蓝图.md"],
+        "kind_contracts": {
+            "create": {"outputs": ["设定/创作蓝图.md"]},
+            "rewrite": {"outputs": ["设定/改动spec.md"]},
+            "continue": {"outputs": ["设定/续写方向.md", "设定/末章状态.md"]},
+            "expand": {"outputs": ["设定/事件骨架.json", "设定/章节映射.md"]},
+            "condense": {"outputs": ["设定/主线骨架.json", "设定/章节映射.md"]},
+            "spinoff": {"outputs": ["设定/锚点表.json"]},
+        },
         "gate": "human-choice",
         "cost_level": "semantic",
         "semantic_required": True,
@@ -98,9 +108,34 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "key": "setting",
         "label": "设定圣经",
         "owner": "novel-create / novel-craft",
-        "inputs": ["设定/蓝图.md", "设定/改动spec.md", "设定/方向spec.md"],
-        "input_policy": "any",
-        "outputs": ["设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md"],
+        "inputs": ["设定/创作蓝图.md"],
+        "outputs": ["设定/设定圣经.md", "设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md"],
+        "kind_contracts": {
+            "create": {
+                "inputs": ["设定/创作蓝图.md"],
+                "outputs": ["设定/设定圣经.md", "设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md"],
+            },
+            "rewrite": {
+                "inputs": ["设定/改动spec.md"],
+                "outputs": ["设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md"],
+            },
+            "continue": {
+                "inputs": ["设定/续写方向.md", "设定/末章状态.md"],
+                "outputs": ["设定/人物.md", "设定/世界观.md", "设定/读者契约.md"],
+            },
+            "expand": {
+                "inputs": ["设定/事件骨架.json", "设定/章节映射.md"],
+                "outputs": ["设定/人物.md", "设定/世界观.md", "设定/读者契约.md"],
+            },
+            "condense": {
+                "inputs": ["设定/主线骨架.json", "设定/章节映射.md"],
+                "outputs": ["设定/人物.md", "设定/读者契约.md"],
+            },
+            "spinoff": {
+                "inputs": ["设定/锚点表.json"],
+                "outputs": ["设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md"],
+            },
+        },
         "gate": "deterministic + semantic review",
         "cost_level": "semantic",
         "semantic_required": True,
@@ -115,6 +150,14 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "inputs": ["设定/角色卡.md", "设定/读者契约.md"],
         "outputs": ["设定/章纲.md", "设定/scene_cards.json"],
         "output_policy": "any",
+        "kind_contracts": {
+            "create": {"inputs": ["设定/角色卡.md", "设定/读者契约.md"]},
+            "rewrite": {"inputs": ["设定/角色卡.md", "设定/读者契约.md"]},
+            "continue": {"inputs": ["设定/人物.md", "设定/读者契约.md"]},
+            "expand": {"inputs": ["设定/人物.md", "设定/读者契约.md"]},
+            "condense": {"inputs": ["设定/人物.md", "设定/读者契约.md"]},
+            "spinoff": {"inputs": ["设定/角色卡.md", "设定/读者契约.md"]},
+        },
         "gate": "deterministic",
         "cost_level": "free",
         "semantic_required": False,
@@ -130,6 +173,7 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "input_policy": "any",
         "outputs": ["资料/research_jobs.json", "资料/research_sources.json", "资料/research_scene_usage.json", "素材/观察素材库.md", "设定/aesthetic_bank.json"],
         "output_policy": "any",
+        "optional_unless_requested": True,
         "gate": "research/observation/aesthetic readiness",
         "cost_level": "search+free",
         "semantic_required": False,
@@ -428,8 +472,10 @@ def registry_payload() -> dict[str, Any]:
     }
 
 
-def stage_by_key(key: str) -> dict[str, Any] | None:
-    for stage in PIPELINE_REGISTRY:
+def stage_by_key(key: str, *, meta: dict[str, Any] | None = None,
+                 root: str | None = None) -> dict[str, Any] | None:
+    stages = applicable_stages(meta, root) if (meta is not None or root is not None) else PIPELINE_REGISTRY
+    for stage in stages:
         if stage["key"] == key:
             return deepcopy(stage)
     return None
@@ -470,8 +516,56 @@ def applicable_stages(meta: dict[str, Any] | None = None, root: str | None = Non
         allowed = stage.get("applicable_kinds")
         if allowed and kind not in allowed:
             continue
-        out.append(deepcopy(stage))
+        resolved = deepcopy(stage)
+        contract = (resolved.get("kind_contracts") or {}).get(kind)
+        if isinstance(contract, dict):
+            resolved.update(deepcopy(contract))
+        resolved.pop("kind_contracts", None)
+        out.append(resolved)
     return out
+
+
+SEMANTIC_JOB_TERMINAL_STATUSES = {
+    "completed", "approved", "rejected", "cancelled", "canceled", "superseded",
+}
+
+
+def semantic_job_is_open(path: str) -> bool:
+    """Return whether a semantic-job file still needs attention.
+
+    Unreadable/non-job JSON is not silently advertised as an open semantic job;
+    the owning producer remains responsible for surfacing its own schema error.
+    """
+    try:
+        payload = load_json(path, {}) or {}
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(payload, dict) or payload.get("kind") != "novel_semantic_job":
+        return False
+    status = str(payload.get("status") or payload.get("state") or "open").strip().lower()
+    return status not in SEMANTIC_JOB_TERMINAL_STATUSES
+
+
+def _evidence_stage_requested(root: str) -> bool:
+    """Evidence prep is mandatory only when a project has explicit open needs."""
+    needs = load_json(os.path.join(root, "资料", "research_needs.json"), {}) or {}
+    if isinstance(needs, dict):
+        candidates = needs.get("needs") or needs.get("items") or needs.get("tasks") or []
+        if any(
+            isinstance(item, dict)
+            and str(item.get("status") or "open").lower() not in SEMANTIC_JOB_TERMINAL_STATUSES | {"done", "verified", "waived"}
+            for item in candidates
+        ):
+            return True
+    jobs = load_json(os.path.join(root, "资料", "research_jobs.json"), {}) or {}
+    return bool(
+        isinstance(jobs, dict)
+        and any(
+            isinstance(job, dict)
+            and str(job.get("status") or "open").lower() not in {"done", "verified", "waived", "completed", "rejected"}
+            for job in jobs.get("jobs") or []
+        )
+    )
 
 
 def _matches(root: str, patterns: list[str]) -> dict[str, list[str]]:
@@ -480,6 +574,101 @@ def _matches(root: str, patterns: list[str]) -> dict[str, list[str]]:
         hits = sorted(glob.glob(os.path.join(root, pattern)))
         out[pattern] = [rel(root, item) for item in hits]
     return out
+
+
+def _stage_artifact_snapshot(
+    root: str,
+    stage: dict[str, Any],
+    artifact_key: str,
+) -> list[dict[str, str]]:
+    matches = _matches(root, list(stage.get(artifact_key) or []))
+    paths = sorted({path for hits in matches.values() for path in hits})
+    return [
+        {"path": path, "sha256": sha256_file(os.path.join(root, path))}
+        for path in paths
+        if os.path.isfile(os.path.join(root, path))
+    ]
+
+
+def human_stage_approval_status(root: str, stage: dict[str, Any]) -> tuple[bool, str, dict[str, Any]]:
+    """Validate an explicit human approval against current stage inputs and outputs."""
+    stage_key = str(stage.get("key") or "")
+    if stage_key not in HUMAN_APPROVAL_STAGE_KEYS:
+        return True, "not_required", {}
+    path = os.path.join(root, STAGE_APPROVAL_REL_PATH)
+    payload = load_json(path, {}) or {}
+    approvals = payload.get("approvals") if isinstance(payload, dict) else {}
+    record = approvals.get(stage_key) if isinstance(approvals, dict) else None
+    if not isinstance(record, dict) or record.get("approved") is not True:
+        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 尚未记录人工批准", {}
+    input_matches = _matches(root, list(stage.get("inputs") or []))
+    inputs_ok = _satisfied(input_matches, str(stage.get("input_policy") or "all"))
+    current_inputs = _stage_artifact_snapshot(root, stage, "inputs")
+    recorded_inputs = record.get("input_snapshot") if isinstance(record.get("input_snapshot"), list) else []
+    if not inputs_ok or current_inputs != recorded_inputs:
+        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 批准后输入已变化，需重新人工复核", record
+    current_outputs = _stage_artifact_snapshot(root, stage, "outputs")
+    recorded_outputs = record.get("output_snapshot") if isinstance(record.get("output_snapshot"), list) else []
+    if not current_outputs or current_outputs != recorded_outputs:
+        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 批准后产物已变化，需重新人工复核", record
+    return True, "approved", record
+
+
+def record_human_stage_approval(
+    root: str,
+    stage_key: str,
+    *,
+    approved_by: str,
+    note: str,
+) -> tuple[str, dict[str, Any]]:
+    """Record a human review decision bound to current input and output hashes."""
+    root = os.path.abspath(root)
+    if stage_key not in HUMAN_APPROVAL_STAGE_KEYS:
+        raise ValueError(f"stage {stage_key} does not use stage approvals; allowed={sorted(HUMAN_APPROVAL_STAGE_KEYS)}")
+    if not approved_by.strip() or not note.strip():
+        raise ValueError("human approval requires non-empty approved_by and note")
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    stage = stage_by_key(stage_key, meta=meta, root=root)
+    if not stage:
+        raise KeyError(f"unknown pipeline stage: {stage_key}")
+    input_matches = _matches(root, list(stage.get("inputs") or []))
+    if not _satisfied(input_matches, str(stage.get("input_policy") or "all")):
+        missing = [pattern for pattern, hits in input_matches.items() if not hits]
+        raise ValueError(f"stage {stage_key} inputs are incomplete: {', '.join(missing)}")
+    output_matches = _matches(root, list(stage.get("outputs") or []))
+    if not _satisfied(output_matches, str(stage.get("output_policy") or "all")):
+        missing = [pattern for pattern, hits in output_matches.items() if not hits]
+        raise ValueError(f"stage {stage_key} outputs are incomplete: {', '.join(missing)}")
+    input_snapshot = _stage_artifact_snapshot(root, stage, "inputs")
+    output_snapshot = _stage_artifact_snapshot(root, stage, "outputs")
+    path = os.path.join(root, STAGE_APPROVAL_REL_PATH)
+    payload = load_json(path, {}) or {}
+    if not isinstance(payload, dict) or payload.get("kind") not in {None, "novel_stage_approvals"}:
+        raise ValueError(f"invalid stage approval file: {path}")
+    approvals = payload.get("approvals") if isinstance(payload.get("approvals"), dict) else {}
+    record = {
+        "approved": True,
+        "stage_key": stage_key,
+        "approved_by": approved_by.strip(),
+        "approved_at": datetime.now().isoformat(timespec="seconds"),
+        "note": note.strip(),
+        "input_snapshot": input_snapshot,
+        "output_snapshot": output_snapshot,
+    }
+    approvals[stage_key] = record
+    payload.update({
+        "schema_version": 2,
+        "kind": "novel_stage_approvals",
+        "project_root": root,
+        "approvals": approvals,
+    })
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = f"{path}.tmp.{os.getpid()}"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    os.replace(tmp, path)
+    return path, record
 
 
 def _artifact_patterns(stages: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -566,6 +755,21 @@ def evaluate_stage(root: str, stage: dict[str, Any],
     status = "done" if outputs_ok else ("ready" if inputs_ok else "blocked")
     missing_inputs = [pat for pat, hits in input_matches.items() if not hits]
     gate_blockers: list[str] = []
+    human_approval: dict[str, Any] | None = None
+    if stage.get("key") in HUMAN_APPROVAL_STAGE_KEYS and outputs_ok:
+        approved, approval_message, approval_record = human_stage_approval_status(root, stage)
+        human_approval = {
+            "required": True,
+            "approved": approved,
+            "message": approval_message,
+            "record": approval_record,
+        }
+        if not approved:
+            status = "ready" if inputs_ok else "blocked"
+            gate_blockers.append(approval_message)
+    if stage.get("optional_unless_requested") and not outputs_ok and not _evidence_stage_requested(root):
+        status = "done"
+        gate_blockers.append("未声明专业资料/观察/审美需求；本阶段按可选项跳过")
     if stage.get("key") == "release_manifest" and outputs_ok:
         manifest = load_json(os.path.join(root, "导出", "release_manifest.json"), {}) or {}
         if manifest.get("release_ready") is not True:
@@ -660,6 +864,7 @@ def evaluate_stage(root: str, stage: dict[str, Any],
         "output_policy": output_policy,
         "missing_inputs": missing_inputs,
         "gate_blockers": gate_blockers,
+        "human_approval": human_approval,
         "stale_inputs": stale_inputs,
         "inputs": input_matches,
         "outputs": output_matches,
@@ -704,7 +909,8 @@ def artifact_graph(root: str) -> dict[str, Any]:
 
 def handoff_contract(root: str, stage_key: str) -> dict[str, Any]:
     root = os.path.abspath(root)
-    stage = stage_by_key(stage_key)
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    stage = stage_by_key(stage_key, meta=meta, root=root)
     if not stage:
         raise KeyError(f"unknown pipeline stage: {stage_key}")
     evaluated = evaluate_stage(root, stage, _latest_recorded_outputs(root))
@@ -778,7 +984,10 @@ def dry_run_plan(root: str) -> dict[str, Any]:
     recorded = _latest_recorded_outputs(root)
     stages = [evaluate_stage(root, stage, recorded) for stage in applicable_stages(meta, root)]
     graph = artifact_graph(root)
-    open_semantic_jobs = sorted(glob.glob(os.path.join(root, "语义任务", "*.json")))
+    open_semantic_jobs = [
+        path for path in sorted(glob.glob(os.path.join(root, "语义任务", "*.json")))
+        if semantic_job_is_open(path)
+    ]
     market_jobs = os.path.join(root, "评分", "market_evidence_jobs.json")
     next_stage = next((stage for stage in stages if stage["status"] != "done"), None)
     progress_reconciliation = _reconcile_progress(root, stages, next_stage["key"] if next_stage else None)
@@ -790,6 +999,7 @@ def dry_run_plan(root: str) -> dict[str, Any]:
         "title": meta.get("title") or meta.get("source_title") or os.path.basename(root),
         "project_kind": project_kind,
         "next_stage": next_stage["key"] if next_stage else None,
+        "ready_stages": [stage["key"] for stage in stages if stage["status"] == "ready"],
         "stages": stages,
         "artifact_graph_summary": {
             "artifact_count": len(graph.get("artifacts") or []),

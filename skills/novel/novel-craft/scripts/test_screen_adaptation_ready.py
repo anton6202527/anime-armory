@@ -81,3 +81,16 @@ def test_short_drama_target_requires_adaptation_check():
         score = next(item for item in report["checks"] if item["id"] == "SCORE")
         assert score["status"] == "block"
         assert "adaptation_check" in score["message"]
+
+
+def test_low_adaptation_score_is_advisory_not_structural_block():
+    with tempfile.TemporaryDirectory() as root:
+        make_ready_project(root)
+        write_json(os.path.join(root, "评分", "score_report.json"), {
+            "verdict": "弃稿重立",
+            "adaptation_check": {"low_potential": True},
+        })
+        report = sar.collect(root)
+        score = next(item for item in report["checks"] if item["id"] == "SCORE")
+        assert score["status"] == "warn"
+        assert report["counts"]["block"] == 0

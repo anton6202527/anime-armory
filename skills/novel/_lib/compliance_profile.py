@@ -26,50 +26,58 @@ PROFILE_MD_REL = os.path.join("合规", "compliance_profile.md")
 
 SOURCE_PROVENANCE = [
     {
-        "id": "SRC-KDP-AI-20260623",
+        "id": "SRC-KDP-AI-20260806",
         "title": "Amazon KDP Content Guidelines - AI content",
         "url": "https://kdp.amazon.com/help/topic/G200672390",
-        "accessed_at": "2026-06-23",
+        "accessed_at": "2026-08-06",
         "reliability": "official",
         "notes": "KDP requires disclosure of AI-generated text, images, or translations; AI-assisted content is not required to be disclosed.",
     },
     {
-        "id": "SRC-KDP-IP-20260623",
+        "id": "SRC-KDP-IP-20260806",
         "title": "Amazon KDP Intellectual Property Rights FAQ",
         "url": "https://kdp.amazon.com/help/topic/G200672400",
-        "accessed_at": "2026-06-23",
+        "accessed_at": "2026-08-06",
         "reliability": "official",
         "notes": "KDP requires the publisher to hold publishing rights for uploaded content.",
     },
     {
-        "id": "SRC-CN-AI-LABEL-20260623",
+        "id": "SRC-CN-AI-LABEL-20260806",
         "title": "人工智能生成合成内容标识办法",
         "url": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm",
-        "accessed_at": "2026-06-23",
+        "accessed_at": "2026-08-06",
         "reliability": "official",
         "notes": "AI-generated/synthetic content labeling rules implemented in 2025.",
     },
     {
-        "id": "SRC-GB45438-20260623",
+        "id": "SRC-GB45438-20260806",
         "title": "GB 45438-2025 网络安全技术 人工智能生成合成内容标识方法",
         "url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=F32EA2A561F1886CD8D606513512D547",
-        "accessed_at": "2026-06-23",
+        "accessed_at": "2026-08-06",
         "reliability": "official",
         "notes": "Mandatory national standard, published 2025-02-28 and implemented 2025-09-01.",
     },
     {
-        "id": "SRC-EU-AI-ACT-20260623",
-        "title": "EU Code of Practice on Transparency of AI-Generated Content",
-        "url": "https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content",
-        "accessed_at": "2026-06-23",
+        "id": "SRC-EU-AI-ACT-GUIDELINES-20260806",
+        "title": "European Commission Guidelines on Article 50 transparency obligations",
+        "url": "https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems",
+        "accessed_at": "2026-08-06",
         "reliability": "official",
-        "notes": "Supports AI Act Article 50 transparency obligations, applicable from 2026-08-02.",
+        "notes": "Article 50 applies from 2026-08-02; the deployer text duty concerns publications informing the public on matters of public interest, with a human-review/editorial-responsibility exception.",
     },
     {
-        "id": "SRC-NRTA-MICRODRAMA-20260623",
+        "id": "SRC-EU-AI-ACT-LAW-20260806",
+        "title": "Regulation (EU) 2024/1689, Article 50",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32024R1689",
+        "accessed_at": "2026-08-06",
+        "reliability": "official_law",
+        "notes": "Primary legal text for Article 50 transparency duties and exceptions.",
+    },
+    {
+        "id": "SRC-NRTA-MICRODRAMA-20260806",
         "title": "国家广播电视总局办公厅关于进一步统筹发展和安全促进网络微短剧行业健康繁荣发展的通知",
         "url": "https://www.nrta.gov.cn/art/2025/2/5/art_113_70148.html",
-        "accessed_at": "2026-06-23",
+        "accessed_at": "2026-08-06",
         "reliability": "official",
         "notes": "Microdrama classified review, permit/record and platform responsibility requirements.",
     },
@@ -252,6 +260,7 @@ def ai_summary(root: str) -> dict[str, Any]:
         "exists": bool(payload),
         "text_mode": payload.get("text_mode") or "unknown",
         "image_mode": payload.get("image_mode") or "unknown",
+        "translation_mode": payload.get("translation_mode") or payload.get("localized_text_mode") or "unknown",
         "publish_target": payload.get("publish_target") or "",
         "human_contribution_present": bool(str(payload.get("human_contribution") or "").strip()),
         "disclosure_detail": payload.get("disclosure_detail") if isinstance(payload.get("disclosure_detail"), dict) else {},
@@ -322,7 +331,7 @@ def build_profile(root: str) -> dict[str, Any]:
                 "blocking",
                 "missing",
                 "KDP 上传前必须确认拥有发布权；当前 rights_status 未明确。",
-                ["SRC-KDP-IP-20260623"],
+                ["SRC-KDP-IP-20260806"],
                 confirmations,
             ))
         else:
@@ -332,39 +341,50 @@ def build_profile(root: str) -> dict[str, Any]:
                 "blocking",
                 "ok",
                 f"rights_status={rights_status}",
-                ["SRC-KDP-IP-20260623"],
+                ["SRC-KDP-IP-20260806"],
                 confirmations,
             ))
-        if ai["text_mode"] == "AI-generated":
+        ai_modes = {ai["text_mode"], ai["image_mode"], ai["translation_mode"]}
+        if "AI-generated" in ai_modes:
             requirements.append(_req(
                 "kdp_ai_generated_disclosure",
                 "KDP AI-generated disclosure",
                 "blocking",
                 "action_required",
                 "KDP 发布/重发时须在 KDP UI 披露 AI-generated 文本/图片/翻译；本地 profile 只能提示，不能替你完成平台勾选。",
-                ["SRC-KDP-AI-20260623"],
+                ["SRC-KDP-AI-20260806"],
                 confirmations,
             ))
-        elif ai["text_mode"] == "AI-assisted":
+        elif "AI-assisted" in ai_modes:
             requirements.append(_req(
                 "kdp_ai_assisted_note",
                 "KDP AI-assisted note",
                 "info",
                 "ok",
                 "KDP 当前不要求披露 AI-assisted 内容，但仍需确保权利和内容合规。",
-                ["SRC-KDP-AI-20260623"],
+                ["SRC-KDP-AI-20260806"],
                 confirmations,
             ))
 
     if axes["china_public"]:
-        if ai["text_mode"] in {"AI-generated", "AI-assisted"} or ai["image_mode"] in {"AI-generated", "AI-assisted"}:
+        if ai["text_mode"] == "AI-generated" or ai["image_mode"] == "AI-generated":
             requirements.append(_req(
                 "cn_ai_labeling_plan",
                 "China AI content labeling plan",
                 "blocking",
                 "action_required",
-                "面向中国公开发布的 AI 生成/辅助内容需准备显式标识、隐式元数据标识和留痕方案。",
-                ["SRC-CN-AI-LABEL-20260623", "SRC-GB45438-20260623"],
+                "面向中国在线公开发布 AI 生成合成内容时，应主动声明并使用平台标识功能，保留显式/隐式标识与来源记录。",
+                ["SRC-CN-AI-LABEL-20260806", "SRC-GB45438-20260806"],
+                confirmations,
+            ))
+        elif ai["text_mode"] == "AI-assisted" or ai["image_mode"] == "AI-assisted":
+            requirements.append(_req(
+                "cn_ai_assisted_scope_review",
+                "China AI-assisted scope review",
+                "warning",
+                "action_required",
+                "AI-assisted 不自动等于最终内容属于 AI 生成合成内容。发布前按实际产物复核：若最终公开文本/图片含 AI 直接生成内容，走标识计划；若人类创作最终内容、AI 仅润色/纠错/构思，记录依据即可。",
+                ["SRC-CN-AI-LABEL-20260806", "SRC-GB45438-20260806"],
                 confirmations,
             ))
         else:
@@ -374,21 +394,50 @@ def build_profile(root: str) -> dict[str, Any]:
                 "info",
                 "not_applicable",
                 "未检测到 AI-generated/AI-assisted 使用声明。",
-                ["SRC-CN-AI-LABEL-20260623", "SRC-GB45438-20260623"],
+                ["SRC-CN-AI-LABEL-20260806", "SRC-GB45438-20260806"],
                 confirmations,
             ))
 
     if axes["eu"]:
-        status = "upcoming" if today() < "2026-08-02" else "action_required"
-        requirements.append(_req(
-            "eu_ai_act_article_50",
-            "EU AI Act Article 50 transparency",
-            "warning" if status == "upcoming" else "blocking",
-            status,
-            "EU AI Act Article 50 透明度义务在 2026-08-02 起适用；面向欧盟受众的 AI 生成/操纵文本需按场景准备标识。",
-            ["SRC-EU-AI-ACT-20260623"],
-            confirmations,
-        ))
+        explicit_public_interest = (
+            meta.get("public_interest_publication") is True
+            or str(settings.get("公共利益信息文本") or "").strip().lower() in {"是", "true", "yes", "1"}
+        )
+        editorial_control = (
+            meta.get("human_editorial_responsibility") is True
+            or ai.get("human_contribution_present")
+            or bool((ai.get("disclosure_detail") or {}).get("review_steps"))
+        )
+        if ai["text_mode"] == "AI-generated" and explicit_public_interest and not editorial_control:
+            requirements.append(_req(
+                "eu_ai_act_article_50_public_interest_text",
+                "EU AI Act Article 50 public-interest text review",
+                "warning",
+                "action_required",
+                "项目显式声明为面向公众提供公共利益事项信息，且尚无人工审核/编辑责任记录；Article 50(4) 的文本披露义务可能适用，发布前需按最终场景确认标识。",
+                ["SRC-EU-AI-ACT-GUIDELINES-20260806", "SRC-EU-AI-ACT-LAW-20260806"],
+                confirmations,
+            ))
+        elif ai["text_mode"] == "AI-generated":
+            requirements.append(_req(
+                "eu_ai_act_article_50_scope_note",
+                "EU AI Act Article 50 scope note",
+                "info",
+                "scope_review",
+                "面向欧盟的 AI 生成小说并不因“AI 生成文本”这一点自动触发 deployer 的公共利益文本披露条款；该条针对旨在向公众提供公共利益事项信息的文本，并有人工审核/编辑责任例外。若发行形态改变，需重新判断。",
+                ["SRC-EU-AI-ACT-GUIDELINES-20260806", "SRC-EU-AI-ACT-LAW-20260806"],
+                confirmations,
+            ))
+        else:
+            requirements.append(_req(
+                "eu_ai_act_article_50_scope_note",
+                "EU AI Act Article 50 scope note",
+                "info",
+                "not_applicable",
+                "未检测到 AI-generated 文本；不为普通人类创作/AI-assisted 小说自动创建 Article 50 deployer 文本披露阻断。",
+                ["SRC-EU-AI-ACT-GUIDELINES-20260806", "SRC-EU-AI-ACT-LAW-20260806"],
+                confirmations,
+            ))
 
     if axes["microdrama_cn"]:
         requirements.append(_req(
@@ -397,7 +446,7 @@ def build_profile(root: str) -> dict[str, Any]:
             "warning",
             "action_required",
             "小说侧只能预检；成片上线/引流前需按网络微短剧分层分类审核取得许可证或完成上线备案/登记并标注编号。",
-            ["SRC-NRTA-MICRODRAMA-20260623"],
+            ["SRC-NRTA-MICRODRAMA-20260806"],
             confirmations,
         ))
 
@@ -411,7 +460,7 @@ def build_profile(root: str) -> dict[str, Any]:
                 "warning",
                 "missing",
                 "出海/本地化项目应写 出海/manifest.json，记录语言、平台、目标辖区、权利、AI 标识和署名元数据。",
-                ["SRC-KDP-IP-20260623", "SRC-KDP-AI-20260623"],
+                ["SRC-KDP-IP-20260806", "SRC-KDP-AI-20260806"],
                 confirmations,
             ))
         else:
@@ -421,7 +470,7 @@ def build_profile(root: str) -> dict[str, Any]:
                 "warning",
                 "ok",
                 "已检测到 出海/manifest.json。",
-                ["SRC-KDP-IP-20260623", "SRC-KDP-AI-20260623"],
+                ["SRC-KDP-IP-20260806", "SRC-KDP-AI-20260806"],
                 confirmations,
             ))
 

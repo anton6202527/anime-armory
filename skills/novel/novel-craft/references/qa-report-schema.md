@@ -93,7 +93,7 @@
 | `total_score` | number | 是 | 百分制总分 |
 | `tier` | string | 是 | `爆款潜力/合格偏上/及格线下/不及格` |
 | `verdict` | string | 是 | `过/小改/大改/弃稿重立` |
-| `production_decision` | object | 是 | `decision/route/reason/score/verdict`，其中 `decision` 为 `go/revise/kill` |
+| `production_decision` | object | 是 | `decision/route/reason/score/verdict/authority/requires_human_confirmation`；兼容 `decision=go/revise/kill`，但 `authority=advisory` |
 | `rewrite_roi` | string | 是 | `high/medium/low` |
 | `waivers` | list[object] | 是 | 评分阶段显式豁免；没有豁免时为空数组 |
 | `next_actions` | list[object] | 是 | 推荐下一步 |
@@ -151,7 +151,7 @@
 | `skipped_samples` | list[object] | 因权利状态未知或缺分数被跳过的样本 |
 | `rights_policy` | string | 仅纳入公版/自有/原创/已授权/许可样本 |
 
-`reader_telemetry_summary` 由 `novel-feedback/scripts/ingest_reader_events.py` 生成；真实读者反馈权重高于 `reader_panel_signals.json`。若同时存在真实反馈和模拟反馈，score 维度说明必须以真实反馈为主，模拟反馈只作为原因假设。
+`reader_telemetry_summary` 由 `novel-feedback/scripts/ingest_reader_events.py` 生成，属于经验数据；`reader_panel_signals.json` 是 synthetic/context-only 合成探针，不属于较低权重的真实反馈，也不进入自动数值调分。若两者同时存在，合成输出只能作为待验证的原因假设。
 
 `source_snapshot` 由 `novel-craft/scripts/report_snapshot.py` 生成。`review_report` 应对当前 `章节/` 全量快照负责；`score_report` 应对本次评分样本负责。`score:full` 与 review 一样会校验当前章节全集，新增/删除章节后旧 full score 失效；`score:opening` 只绑定前 3 章样本。正文变更后旧 report/task 失效，必须重审/重评。`qa_gate.py` 会先校验 `review_report` / `score_report` 必填字段和基础类型；schema 缺字段、`kind/schema_version` 不匹配、缺 `score_task_id/assessment_prompt_hash` 等旧报告在 export gate 下阻断。
 
@@ -178,7 +178,7 @@
 
 ## 回流约定
 
-- `blocking=true` 或 `verdict=大改/弃稿重立` 时，上层调度器不能直接进入 `export`。
+- 只有有可复算证据的 `blocking=true`、报告 schema/snapshot/freshness 等确定性缺口才阻断 `export`；`verdict=大改/弃稿重立` 是编辑建议，必须由作者/编辑确认，不自动挡导出。
 - `dimension=theme/reader_promise/prose` 的阻断或建议项应对照 `设定/读者契约.md` 与 `审稿/demo_gate.json.reader_contract`，分别回流 `outline/demo/draft`，不要只做表层润色。
 - `return_to_stage` 必须使用 `contract.py` 里的稳定 stage key。
 - `recommended_skill` 必须是 `novel` 路由表中存在的 skill，或明确写 `manual`。

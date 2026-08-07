@@ -11,7 +11,7 @@ description: Ingest real reader telemetry and comments for an in-progress novel 
 
 - 有 CSV/JSONL：章节阅读、开始阅读、完读、弃读、平均阅读时长、点赞、追更、评论。
 - 有测试读者表单：每章是否读完、哪里弃书、评论文本。
-- 想让 `novel-score` 在留存维度优先参考真实反馈，而不是只看公榜或虚拟试读。
+- 想让 `novel-score` 在留存维度接入真实经验数据，而不是只看市场语境或合成叙事探针。
 
 ## 工作流
 
@@ -38,7 +38,7 @@ python3 skills/novel/novel-feedback/scripts/reader_test_plan.py "<作品根>" \
 - `评分/reader_test_plan.json`
 - `评分/读者测试计划.md`
 
-计划只规定怎么测，不替代真实数据。每个版本必须写清假设、最小样本量和最小效果差；正式计划还应写 `cohorts`、`experiment_design`、`data_collection_fields`、`privacy_note`，后续 CSV/JSONL 导入必须尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。改稿后必须同范围复测或说明不可比，否则只做方向性解释。`novel-craft/scripts/release_manifest.py --release-profile beta_read|platform_publish|kdp_publish` 会要求 `reader_test_plan.json` 存在；`beta_read` 缺真实 `reader_telemetry_summary.json` 只 warning，`platform_publish` / `kdp_publish` 缺真实数据会阻断，除非 `审稿/waiver_log.jsonl` 有 `type=reader_data_missing` 或 `reader_telemetry_missing` 且 `scope.release_profile` 匹配的显式 waiver。
+计划只规定怎么测，不替代真实数据。每个版本必须写清假设、最小样本量和最小效果差；正式计划还应写 `cohorts`、`experiment_design`、`data_collection_fields`、`privacy_note`，后续 CSV/JSONL 导入必须尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。改稿后必须同范围复测或说明不可比，否则只做方向性解释。真实读者 telemetry 属于**市场验证**，不是 KDP/普通平台发布合规前置条件：`platform_publish` / `kdp_publish` 缺数据只 warning；只有用户显式选择 `--release-profile data_validated_launch` 时才要求 `reader_test_plan.json` + 真实 telemetry（或作用域匹配的显式 waiver）。
 
 ### 1. 导入真实反馈
 
@@ -52,7 +52,7 @@ python3 skills/novel/novel-feedback/scripts/ingest_reader_events.py "<作品根>
 产物：
 
 - `评分/reader_telemetry.jsonl`：规范化后的逐条事件。
-- `评分/reader_telemetry_summary.json`：章节级聚合，含完读率、弃读率、评论情绪线索、风险旗标；若输入含 `ab_test_id` / `variant_id` / `take_id`，会生成 `experiments.groups` 与 `best_by_ab_test`。
+- `评分/reader_telemetry_summary.json`：章节级聚合，含完读率、弃读率、评论情绪线索、风险旗标；若输入含 `ab_test_id` / `variant_id` / `take_id`，会生成 `experiments.groups` 与 `leaders_by_ab_test`。兼容字段 `best_by_ab_test` 仍保留，但条目明确是描述性 leader，不是 winner。当前流程未完整实现随机分配、cohort/窗口可比性、置信区间与停止规则协议，因此恒为 `decision=inconclusive` / `context_only`，不得据裸 uplift 宣布胜负。
 - `评分/真实读者反馈_<YYYY-MM-DD>.md`：给人读的掉点/优先修订清单。
 
 ## 字段兼容
@@ -75,7 +75,7 @@ python3 skills/novel/novel-feedback/scripts/ingest_reader_events.py "<作品根>
 
 - 先有测试计划，再导入反馈；没有计划时也能导入，但报告只能做事后解释，A/B 归因可信度更低。
 - 测试计划要写清 cohort 来源/纳入标准、A/B 分配方式和隐私说明；不要把混合人群的小样本当作全平台结论。
-- 权重序：真实读者反馈 > 自有投放战绩 > `novel-simulate` 虚拟试读 > 外部公榜泛化。
+- 证据分层：真实读者反馈与经审计的自有投放数据是经验数据；`novel-simulate` 是 synthetic/context-only 假设生成器；外部公榜只作市场语境。
 - 单章低完读、弃读高、负面评论集中，只说明“这一章读端有伤口”，不自动证明设定或文学性错误；需要回 `novel-review` / `novel-balance` 定因。
 - 样本量低时报告会标 `low_sample`，不得把小样本波动当硬结论。
 - A/B 只在同一 `ab_test_id` 内比较；`take_id` 用来把结果归因到具体章节稿/开头版本/投放素材，不要混到全书评价里。

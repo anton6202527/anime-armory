@@ -121,6 +121,8 @@ def axis(name, status, evidence, recommendation):
         "status": status,
         "evidence": evidence,
         "recommendation": recommendation,
+        "confidence": "heuristic",
+        "evidence_kind": "surface_proxy",
     }
 
 
@@ -133,6 +135,8 @@ def pressure_test(root):
     contract = read_text(paths["reader_contract"])
     timeline = read_text(paths["timeline_md"]) or json.dumps(load_json(paths["timeline_json"]) or {}, ensure_ascii=False)
     power = load_json(paths["power"])
+    meta = load_json(os.path.join(root, "_meta.json")) or {}
+    project_kind = str(meta.get("kind") or "create").strip().lower()
 
     chapters = chapter_count(outline)
     axes = []
@@ -192,8 +196,17 @@ def pressure_test(root):
 
     risk_axes = [item["axis"] for item in axes if item["status"] == "risk"]
     review_axes = [item["axis"] for item in axes if item["status"] == "review"]
+    required_paths = {
+        "characters": paths["characters"],
+        "outline": paths["outline"],
+        "reader_contract": paths["reader_contract"],
+    }
+    # condense 的正式阶段契约不产 世界观.md；该文件缺失只能产生语义复核提示，不能制造假硬阻断。
+    if project_kind != "condense":
+        required_paths["world"] = paths["world"]
+    missing_required = [name for name, path in required_paths.items() if not os.path.isfile(path)]
     verdict = "pass"
-    if len(risk_axes) >= 3:
+    if missing_required:
         verdict = "block_pre_draft"
     elif risk_axes:
         verdict = "revise_setting"
@@ -205,13 +218,15 @@ def pressure_test(root):
         "kind": "novel_storyworld_pressure_test",
         "generated_at": date.today().isoformat(),
         "project_root": os.path.abspath(root),
-        "check_depth": "structural",  # 结构化实质检查；语义自洽仍需 LLM 人判（见 semantic_followup）
+        "check_depth": "structural_proxy",
+        "missing_required_artifacts": missing_required,
+        "blocking_basis": "missing_required_artifacts" if missing_required else None,
         "verdict": verdict,
         "risk_axes": risk_axes,
         "review_axes": review_axes,
         "axes": axes,
         "semantic_followup": {
-            "note": "本报告只证明设定的结构成立；『规则是否自洽、目标是否互相挤压出戏、设定有没有想象力支点』需 LLM 复核。",
+            "note": "关键词和阈值只产生低置信表层候选，不能证明设定成立或失败；『规则是否自洽、目标是否互相挤压出戏、设定有没有想象力支点』需人工/语义复核。",
             "register_command": "python3 skills/novel/novel-wiki/scripts/storyworld_pressure_test.py <作品根> --register-semantic-job",
             "axes_needing_semantic_review": [
                 "world_rules（规则之间是否互相矛盾/有无代价闭环）",

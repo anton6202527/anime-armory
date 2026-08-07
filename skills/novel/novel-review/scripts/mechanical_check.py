@@ -14,8 +14,8 @@
   4. 章号连续性：与 章节/ 目录里其他章是否有缺号/重号；与 设定/章纲.md 标题是否一致
   5. 术语出现统计：自动从 设定/ 抽术语，也可用 --terms 追加（供人工看漂移）
   6. 原文照搬：24 字滑窗与 原作.txt 比对，命中即报（续写/外传用；--no-plagiarism 关闭）
-  7. AI 腔/同质化：议论文式连接词出现在叙事=🟡、万能金句套话密度=🟢、句长过于均匀(burstiness 低·CV<0.35)=🟡
-     （advisory·线索非定论，人判结合语境；治 2026 平台 AI 双重质检/perplexity·burst 检测·AI 检测率<60% 风险；--no-ai-tell 关闭）
+  7. 模板化行文候选（兼容维度名 AI腔）：议论文连接词=🟡、万能套话密度=🟢、句长过于均匀=🟡
+     （advisory；不得用来判断作者身份、平台审核结论或真实读者反应；--no-ai-tell 关闭）
 
 输出：人类可读清单 + 末尾机器可读 JSON（FINDINGS=[...]）。
 """
@@ -94,8 +94,8 @@ def body_of(md):
     return "\n".join(body).strip()
 
 
-# ── AI 腔 / 同质化启发式（advisory·治"平台 AI 双重质检·AI检测率<60%"风险，2026）──
-# 议论文式连接词出现在叙事正文里基本是 AI 腔/出戏；万能金句套话按密度。绝不 🔴（容错铁律）。
+# ── 模板化行文 / 同质化启发式（兼容 API 名 ai_tell_scan；advisory）──
+# 这些信号只定位可能出戏、套话或节奏单调的文本，绝不用于作者身份归因或模拟平台检测器。
 # 写时由 trio-pipeline 的 Senior Editor「去AI味」滤网兜，这里是 QA 侧确定性兜底，把主观项降成可机检线索。
 # 2026-06-25 扩展至 15 类检测（P2-⑩），对标 ProseForge ANTI-SLOP / autonovel 行业基准。
 AI_EXPOSITORY = ("综上所述", "总而言之", "总的来说", "归根结底", "众所周知", "不可否认",
@@ -126,9 +126,8 @@ def sentence_lengths(text):
 def sentence_burstiness(text, min_sentences=8):
     """句长突变度（burstiness）的可机检代理。返回 (cv, n)。
 
-    人类叙事长短句交错、句长方差大（burstiness 高）；AI 生成正文句长偏均匀、
-    方差小。2026 平台正用 perplexity + burst 分析识别 AI 正文，CV（变异系数=
-    句长标准差/均值）是其低成本机检代理。句数不足 `min_sentences` 时返回 (None, n)。"""
+    CV（句长标准差/均值）只衡量当前样本的句长变化，不是写作质量、作者身份或平台算法代理。
+    句数不足 `min_sentences` 时返回 (None, n)。"""
     lens = sentence_lengths(text)
     n = len(lens)
     if n < min_sentences:
@@ -151,7 +150,7 @@ def _per_k(count, cjk_chars):
 
 
 def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
-    """AI 腔/同质化启发式（纯函数·可测·advisory）。返回 [(severity, msg, evidence)]。
+    """模板化行文/同质化启发式（兼容旧函数名；纯函数·advisory）。
 
     扩展至 15 类检测（2026-06-25 P2-⑩）：
     ① 议论文式连接词 → 🟡  ② 万能金句/套话密度 → 🟢
@@ -170,7 +169,7 @@ def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
     # ① 议论文式连接词
     expo = [w for w in AI_EXPOSITORY if w in text]
     if expo:
-        out.append(("🟡", f"叙事中出现议论文式连接词（AI 腔高发）：{'、'.join(expo[:5])}", "、".join(expo[:5])))
+        out.append(("🟡", f"叙事中出现议论文式连接词，复核是否出戏：{'、'.join(expo[:5])}", "、".join(expo[:5])))
 
     # ② 万能金句/套话密度
     n = _count_cjk_words(text, AI_CLICHE)
@@ -187,18 +186,18 @@ def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
     weak_n = _count_cjk_words(text, AI_WEAK_ADVERBS)
     if _per_k(weak_n, cc) > 8:
         top = sorted({w for w in AI_WEAK_ADVERBS if w in text}, key=lambda w: -text.count(w))[:5]
-        out.append(("🟢", f"弱化副词过多（{_per_k(weak_n, cc):.1f}/千字，平台 AI 感强）：{'、'.join(top)}。建议用具体动作替代副词修饰", "、".join(top)))
+        out.append(("🟢", f"弱化副词过多（{_per_k(weak_n, cc):.1f}/千字）：{'、'.join(top)}。建议复核是否可用具体动作替代", "、".join(top)))
 
-    # ⑤ "不是X而是Y" 句式（高信号 AI 腔——AI 习惯性二元对比）
+    # ⑤ "不是X而是Y" 句式（高频时容易形成机械化二元对比）
     if AI_X_NOT_X[0] in text and AI_X_NOT_X[1] in text:
         count = min(text.count(AI_X_NOT_X[0]), text.count(AI_X_NOT_X[1]))
         if _per_k(count, cc) > 1.5:
-            out.append(("🟡", f"「不是…而是…」二元对比句式偏多（{count} 处），AI 习惯性对比结构——替换为单侧重/并置/动作展开", f"{count}处"))
+            out.append(("🟡", f"「不是…而是…」二元对比句式偏多（{count} 处）；复核是否改为单侧重、并置或动作展开", f"{count}处"))
 
     # ⑥ 破折号滥用（每千字 > 5 个）
     em_count = text.count(AI_EMDASH)
     if _per_k(em_count, cc) > 5:
-        out.append(("🟢", f"破折号「——」过多（{_per_k(em_count, cc):.1f}/千字），AI 习惯用破折号代替逗号/句号——每段限 1-2 个", f"{em_count}个"))
+        out.append(("🟢", f"破折号「——」密度偏高（{_per_k(em_count, cc):.1f}/千字）；复核是否有万能停顿或补充语过载", f"{em_count}个"))
 
     # ⑦ 感官三连（一段内出现 3+ 感官词密集堆砌）
     para_sensory = 0
@@ -206,15 +205,15 @@ def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
         if sum(1 for s in AI_SENSORY_TRICOLON if s in para) >= 3:
             para_sensory += 1
     if para_sensory > 0:
-        out.append(("🟢", f"感官堆砌三连——段落内同时出现 3+ 感官词（视觉/听觉/触觉/嗅觉/味觉），AI 习惯性「多感官描写」套路（{para_sensory} 段）", f"{para_sensory}段"))
+        out.append(("🟢", f"感官标签堆叠候选——段落内同时出现 3+ 感官词（{para_sensory} 段）；回正文判断是否具体有效", f"{para_sensory}段"))
 
-    # ⑧ 过滤词密度（每千字 > 5 个）—— AI 习惯用"看到/听到/感到"代替直接描写
+    # ⑧ 过滤词密度（每千字 > 5 个）——提示是否可把感知结果直接写出
     filter_n = _count_cjk_words(text, AI_FILTER_WORDS)
     if _per_k(filter_n, cc) > 5:
         top = sorted({w for w in AI_FILTER_WORDS if w in text}, key=lambda w: -text.count(w))[:5]
-        out.append(("🟡", f"过滤词密度偏高（{_per_k(filter_n, cc):.1f}/千字）：{'、'.join(top)}。AI 习惯用感知动词代替直接描写——删掉过滤词，把感知结果直接写出", "、".join(top)))
+        out.append(("🟡", f"过滤词密度偏高（{_per_k(filter_n, cc):.1f}/千字）：{'、'.join(top)}。复核是否删滤镜、直接写感知结果", "、".join(top)))
 
-    # ⑨ "不禁/仿佛/映入眼帘" 类——高信号 AI 腔
+    # ⑨ "不禁/仿佛/映入眼帘" 类——高频套语候选
     bujin_hits = [w for w in AI_BUJIN if w in text]
     if _per_k(len(bujin_hits), cc) > 2:
         out.append(("🟡", f"「不禁/仿佛/映入眼帘」类 AI 高频腔（{len(bujin_hits)} 种词）：{'、'.join(bujin_hits[:5])}。替换为身体微反应/环境映衬", "、".join(bujin_hits[:5])))
@@ -241,13 +240,13 @@ def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
             # 简单代理：一段内顿号 ≥ 2 + 段落足够长 → 疑似三连排比
             triad_paras += 1
     if triad_paras > 3:
-        out.append(("🟢", f"排比三连段落偏多（{triad_paras} 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比", f"{triad_paras}段"))
+        out.append(("🟢", f"排比三连段落偏多（{triad_paras} 段疑似）；精简装饰性排比，保留有节奏功能的修辞", f"{triad_paras}段"))
 
     # ⑭ 总结式收尾——章节末段出现 AI 总结口吻
     last_para = text.split("\n")[-1] if text else ""
     summary_hits = [w for w in AI_SUMMARY_ENDING if w in last_para]
     if summary_hits:
-        out.append(("🟡", f"章节末段总结式收尾：{'、'.join(summary_hits)}。AI 习惯章节结束时总结——改为行动/钩子/情绪余韵收尾", "、".join(summary_hits)))
+        out.append(("🟡", f"章节末段总结式收尾：{'、'.join(summary_hits)}。复核是否改为行动、钩子或情绪余韵", "、".join(summary_hits)))
 
     # ⑮ "在那一刻/此时此刻" 模式——AI 情绪高点万能模板
     moment_hits = [w for w in AI_IN_THAT_MOMENT if w in text]
@@ -465,7 +464,7 @@ def main():
                     help="不从 设定/ 自动抽取术语，只使用 --terms")
     ap.add_argument("--no-plagiarism", action="store_true")
     ap.add_argument("--no-ai-tell", action="store_true",
-                    help="关闭 AI 腔/同质化启发式（默认开；advisory，治平台 AI 双重质检风险）")
+                    help="关闭模板化行文/同质化启发式（兼容名 AI腔；默认开，advisory）")
     ap.add_argument("--no-repetition", action="store_true",
                     help="关闭跨章重复率/机械文风机检（默认开；advisory，治平台连续章节重复率检测）")
     ap.add_argument("--json-out", default=None,
@@ -571,7 +570,7 @@ def main():
                     break
             if hit:
                 add(ch, "🔴", "原文照搬", "发现与原作连续雷同片段（≥24字）", hit)
-        # 7 AI 腔/同质化（advisory·机检线索，人判结合语境；治平台 AI 检测率<60% 双重质检风险）
+        # 7 模板化行文/同质化（兼容维度名 AI腔；advisory，不能做作者身份归因）
         if not args.no_ai_tell:
             for sev, msg, ev in ai_tell_scan(body):
                 add(ch, sev, "AI腔", msg, ev)

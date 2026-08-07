@@ -41,7 +41,7 @@ except Exception:  # pragma: no cover - optional gate degrades defensively
     _compliance_profile = None
 
 
-BLOCKING_SCORE_VERDICTS = {"大改", "弃稿重立"}
+ADVISORY_SCORE_VERDICTS = {"大改", "弃稿重立"}
 COMMERCIAL_SCORE_MODES = {"商业连载", "漫剧源书"}
 COMMERCIAL_SCORE_TARGETS = ("红果", "番茄", "抖音", "漫剧", "短剧", "微短剧")
 RIGHTS_REGION_EXPORT_FORMATS = {"combine"}
@@ -51,7 +51,10 @@ AI_USAGE_REQUIRED_TARGETS = (
     "出海", "海外", "KDP", "Kindle", "Amazon", "YouTube", "TikTok",
 )
 STRICT_AI_TEXT_TARGETS = (
-    "晋江", "起点", "番茄", "红果", "七猫", "纵横", "抖音", "中文网文平台",
+    "晋江", "晋江文学城",
+)
+RUNTIME_AI_POLICY_REVIEW_TARGETS = (
+    "起点", "番茄", "七猫", "纵横", "中文网文平台", "红果", "抖音",
 )
 TEXT_AUTHORSHIP_MODES = {"人类主创", "AI辅助", "AI生成"}
 PLATFORM_AI_EVIDENCE_REL = os.path.join("合规", "platform_ai_evidence.json")
@@ -465,7 +468,7 @@ def _reader_panel_gate(project_root):
             "SIMULATE-SIGNAL-ONLY",
             "score",
             "novel-simulate",
-            "reader_panel_signals.json 是 signal-only 机读留存先验，不能当完整读者试读证据；score/revision 只能低权重使用，优先真实反馈。",
+            "reader_panel_signals.json 是合成叙事探针，不能当真实读者或留存证据；score 不得据此自动调分，revision 只能把它当人工复核假设。",
         ))
     if payload.get("qualitative_completed") is False:
         report["next_actions"].append({
@@ -817,6 +820,7 @@ def _platform_ai_gate(project_root, *, global_waivers=None):
     mode = setting_mode or usage_mode or ""
     target = _target_text(project_root)
     strict_target = any(key in target for key in STRICT_AI_TEXT_TARGETS)
+    runtime_review_target = any(key in target for key in RUNTIME_AI_POLICY_REVIEW_TARGETS)
     report = {
         "kind": "platform_ai_text",
         "path": os.path.join(project_root, "_设置.md"),
@@ -846,7 +850,7 @@ def _platform_ai_gate(project_root, *, global_waivers=None):
             "AI-AUTHORSHIP-MISSING",
             "compliance",
             "novel-craft",
-            "目标平台属于中文网文/短剧投稿高风险场景，但缺少 文本主创模式；建议在 _设置.md 明确 人类主创 或 AI辅助。",
+            "晋江投稿缺少 文本主创模式；发布前须明确 人类主创 / AI辅助 / AI生成，并按当前原创写作规范核对 AI 使用层级。",
         ))
     elif strict_target and mode == "AI生成":
         exception_ok, exception_notes = _platform_ai_exception(project_root, target, mode, global_waivers)
@@ -862,7 +866,7 @@ def _platform_ai_gate(project_root, *, global_waivers=None):
                 "AI-GENERATED-TEXT-PLATFORM-RISK",
                 "compliance",
                 "novel-craft",
-                "目标平台属于中文网文/短剧投稿高风险场景，当前为 AI生成 正文；请改走 人类主创/AI辅助 流程，"
+                "晋江当前公开原创写作规范只允许校对级，以及创意环节的要素级/粗纲级 AI 使用；当前为 AI生成 正文。请改走合规的人类主创/限定 AI辅助流程，"
                 "或补目标平台当日接受 AI 正文投稿的正式证据与 scoped waiver 留痕。"
                 " 例外缺口：" + "；".join(exception_notes[:4]),
             ))
@@ -871,7 +875,28 @@ def _platform_ai_gate(project_root, *, global_waivers=None):
             "AI-ASSISTED-TEXT-PLATFORM-REVIEW",
             "compliance",
             "novel-craft",
-            "目标平台属于中文网文/短剧投稿高风险场景，AI辅助 应限制在大纲、检查、润色、资料整理等工具性环节；最终正文需人工主创并在 ai_usage 中记录 human_steering/review_steps。",
+            "晋江目标下，AI辅助应限制在当前公开规范允许的校对级、要素级与粗纲级；描写、细纲、叙事级用途不应提交。保存 AI 前原稿、对话过程、首次输出及人工复核记录。",
+        ))
+    elif runtime_review_target and not mode:
+        report["warnings"].append(_warning(
+            "AI-AUTHORSHIP-MISSING",
+            "compliance",
+            "novel-craft",
+            "目标平台的公开 AI 正文许可边界未统一核验；发布前明确文本主创模式，并检查作者后台、签约合同、活动规则或编辑通知。",
+        ))
+    elif runtime_review_target and mode == "AI生成":
+        report["warnings"].append(_warning(
+            "AI-GENERATED-TEXT-POLICY-UNRESOLVED",
+            "compliance",
+            "novel-craft",
+            "未找到足以支持该平台“全稿 AI 正文可发布”的通用现行公开规则。平台提供 AI 工具或要求标识都不等于允许全稿投稿；发布前运行时核验作者后台/合同/活动规则。",
+        ))
+    elif runtime_review_target and mode == "AI辅助":
+        report["warnings"].append(_warning(
+            "AI-ASSISTED-TEXT-PLATFORM-REVIEW",
+            "compliance",
+            "novel-craft",
+            "AI辅助范围与目标平台规则需运行时核验；记录 human_steering、review_steps、AI 前稿与最终人工修改，不把“平台提供 AI 工具”外推成全稿许可。",
         ))
     if report["blockers"]:
         report["next_actions"].append({
@@ -1094,12 +1119,16 @@ def _score_gate(project_root, *, require_report=None, global_waivers=None):
         else:
             report["warnings"].append(item)
     verdict = payload.get("verdict")
-    if verdict in BLOCKING_SCORE_VERDICTS:
-        report["blockers"].append({
+    if verdict in ADVISORY_SCORE_VERDICTS:
+        report["warnings"].append({
             "id": "SCORE-VERDICT",
             "stage": _first_return_stage(payload) or "demo",
             "skill": _first_recommended_skill(payload) or "novel-score",
-            "reason": f"score_report verdict={verdict}",
+            "reason": (
+                f"score_report verdict={verdict}；该结论来自主观量规/模型判断，仅作编辑建议，"
+                "不得单独阻断写作、导出或发布。"
+            ),
+            "confidence": "heuristic",
         })
     report_waivers = payload.get("waivers") or []
     for waiver in report_waivers:

@@ -40,6 +40,6 @@ python3 skills/novel/novel-progress/scan.py <作品根>         # 只看指定�
 
 - `novel-wiki`：伏笔台账（planted→payoff 逾期）+ 设定一致性（`设定/foreshadowing_ledger.json` / `动态百科.json`）。
 - `novel-balance`：节奏热力图 / 注水 / 烂尾预警（读 wiki 的伏笔回收率）。
-- `novel-simulate`：模拟读者留存 / 找弃书点。
+- `novel-simulate`：用合成叙事探针提出弃书点/可预测性复核假设（不预测真实留存）。
 
 （三者都按 `目标平台` 自适应口径：品质向不会被爽文尺子误判。）

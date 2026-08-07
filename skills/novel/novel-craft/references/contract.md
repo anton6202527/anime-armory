@@ -165,7 +165,7 @@
 - Export 硬闸默认要求 `审稿/review_report.json` 存在；缺失即 `REVIEW-MISSING` 阻断。`progress.py` 只做续跑提示，缺报告先显示 warning。
 - 读取 `source_snapshot`：review/score 报告必须绑定正文 hash。正文文件 hash、aggregate hash 不匹配，或 review 报告生成后 `章节/` 新增/删除文件，进入 `REVIEW-SNAPSHOT` / `SCORE-SNAPSHOT`；export 阶段阻断，progress 阶段提示。
 - 读取 `审稿/review_report.json`：任一 `blocking=true` 或 `severity=blocking` → 阻断。
-- 读取 `评分/score_report.json`：`verdict=大改/弃稿重立` → 阻断。
+- 读取 `评分/score_report.json`：缺失（仅适用的商业流程）、schema 损坏、正文 snapshot 失效或市场基准失效可阻断；`verdict=大改/弃稿重立` 只生成 `confidence=heuristic` 的编辑提醒，不单独阻断。
 - 读取 `评分/score_report.json.market_baseline.freshness`：`blocking=true` → `SCORE-BASELINE` 阻断；只有 `score_report.waivers[]` 或 `审稿/waiver_log.jsonl` 存在同 `baseline_date + freshness_status` 作用域的 `score_baseline_freshness` 时降为 warning。
 - 缺 `score_report.json`：商业连载、漫剧源书、目标平台含红果/番茄/抖音/漫剧时在 export / go-no-go 节点阻断；`drafting` 阶段不阻断，因为还没有可评分正文样本。
 - `review` / `score` / `export` 阶段要求章节写后闭环：`审稿/state_delta_第NN章.json` 必须存在，并且已合并进 `审稿/state_ledger.json.chapter_deltas.chapter_NN`。
@@ -184,7 +184,7 @@
 
 ## AI 使用披露
 
-发布或交平台前跑 `scripts/ai_usage.py <作品根> --text-mode AI-generated|AI-assisted|未使用AI文本 --human-contribution "<人工贡献>"`，并尽量补：
+发布或交平台前跑 `scripts/ai_usage.py <作品根> --text-mode AI-generated|AI-assisted|未使用AI文本 --image-mode ... --translation-mode ... --human-contribution "<人工贡献>"`，并尽量补：
 
 - `--text-directness direct_generation|outline_to_draft|revision_only|brainstorming_only|none`
 - `--human-steering "<人工如何设定目标、蓝图、取舍和最终责任>"`

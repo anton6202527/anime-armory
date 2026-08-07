@@ -11,7 +11,7 @@
 - **意图先于蓝图细化**：作者主题、余味、不可妥协项和伦理/审美边界要落成 `author_intent`，后续审稿和编辑按它判断“改得对不对”。
 - **素材先于生活感**：人物行为、五感、场景烟火气先进 `novel-observe`，再转化进场景。
 - **正向审美先于精修**：先登记项目 Demo 或授权/公版样本“为什么有效”，再做 line edit。
-- **读者事实优先级**：真实读者反馈 > 自有投放战绩 > 模拟读者 > 公榜泛化。
+- **证据分层**：真实读者反馈与经审计的自有投放数据是经验数据；合成读者探针只提复核假设；公榜只作市场语境。不得把三者混成同一“读者事实”权重序。
 - **结构先于句子**：developmental edit 未完成前，不做大规模 copyedit/proofread。
 
 ## 0. 入口分流
@@ -130,7 +130,7 @@ python3 skills/novel/novel-craft/scripts/semantic_job.py claim "<作品根>/语�
 - `demo_gate.json.status=passed`。
 - `demo_readiness.json.ready_for_batch=true`；商业放量和文学/审美锚点都无阻断。
 - `style_anchor`、`reader_promises`、`setting_constraints`、`reader_contract` 已写入 Demo gate。
-- 商业项目 score 的 `production_decision` 不是 `kill`。
+- 商业项目已有绑定当前样本与市场基准的 score；`production_decision=kill` 只作为待作者确认的重立建议，不自动阻断批量写。
 
 ## 5. 分章写作循环
 
@@ -199,9 +199,9 @@ python3 skills/novel/novel-feedback/scripts/ingest_reader_events.py "<作品根>
 
 通过标准：
 - score/review 绑定当前正文 snapshot。
-- 模拟读者未补完定性面板时只作低权重参考。
+- `reader_panel_signals.json` 始终是 synthetic/context-only 合成探针；补完人格输出后仍不能当真实读者或统计留存证据，也不自动调分。
 - 读者测试计划写明 cohort、A/B 分配、采集字段、隐私说明；真实反馈尽量带 `ab_test_id`、`variant_id`、`take_id`。
-- beta/package 前至少有 reader test plan；platform/KDP 发布前必须有真实 reader telemetry，或有 `scope.release_profile` 匹配的 `reader_data_missing` / `reader_telemetry_missing` waiver。
+- 普通 platform/KDP 发布不要求先拥有历史 reader telemetry；需要数据验证的发布明确选 `data_validated_launch`，此时才要求真实 telemetry 或作用域匹配的 waiver。beta 测试若要执行，先建 reader test plan。
 
 ## 8. 分层专业编辑
 
@@ -263,7 +263,7 @@ python3 skills/novel/novel-dashboard/scripts/dashboard.py "<作品根>" --write 
 - release manifest `release_ready=true`。
 - review/score/compliance/research/AI usage/metadata pack 均非 stale。
 - AI-assisted / AI-generated 文本有逐章 `chapter_usage`，发布元数据有标题、简介、分类、关键词、权利摘要和 AI/合规摘要。
-- platform/KDP 发布有真实读者数据，或 waiver 明确说明无法取得数据及适用 profile。
+- 只有 `data_validated_launch` 要求真实读者数据，或由 waiver 明确说明无法取得数据及适用 profile；普通发布把遥测列为市场验证建议。
 - 所有 waiver 都有作用域、理由和版本 hash。
 
 ## 快速命令

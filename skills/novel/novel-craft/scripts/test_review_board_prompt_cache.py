@@ -70,6 +70,19 @@ def test_review_board_requires_fresh_review_and_score_snapshots():
         assert any("stale" in reason for reason in stale["reasons"])
 
 
+def test_review_board_treats_score_kill_as_revision_advice():
+    signal = review_board.score_signal("/path/that/does/not/exist")
+    assert signal["blocking"] is False
+    with tempfile.TemporaryDirectory() as root:
+        write_json(os.path.join(root, "评分", "score_report.json"), {
+            "verdict": "弃稿重立",
+            "production_decision": {"decision": "kill", "authority": "advisory"},
+        })
+        signal = review_board.score_signal(root)
+        assert signal["blocking"] is False
+        assert signal["revision_recommended"] is True
+
+
 def test_prompt_cache_metrics_scans_packets_and_writes_outputs():
     with tempfile.TemporaryDirectory() as root:
         os.makedirs(os.path.join(root, "写作任务"), exist_ok=True)

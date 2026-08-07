@@ -18,7 +18,9 @@ from novel_pipeline import (  # noqa: E402
     applicable_stages,
     artifact_graph,
     dry_run_plan,
+    evaluate_stage,
     handoff_contract,
+    record_human_stage_approval,
     registry_payload,
 )
 from provenance import append_event, read_events  # noqa: E402
@@ -100,6 +102,125 @@ def test_explicit_derived_kind_keeps_source_import_without_artifacts():
     assert any(stage["key"] == "source_import" for stage in stages)
 
 
+def test_kind_specific_blueprint_and_outline_contracts_use_real_artifacts():
+    expected = {
+        "create": (["设定/创作蓝图.md"], ["设定/角色卡.md", "设定/读者契约.md"]),
+        "rewrite": (["设定/改动spec.md"], ["设定/角色卡.md", "设定/读者契约.md"]),
+        "continue": (["设定/续写方向.md", "设定/末章状态.md"], ["设定/人物.md", "设定/读者契约.md"]),
+        "expand": (["设定/事件骨架.json", "设定/章节映射.md"], ["设定/人物.md", "设定/读者契约.md"]),
+        "condense": (["设定/主线骨架.json", "设定/章节映射.md"], ["设定/人物.md", "设定/读者契约.md"]),
+        "spinoff": (["设定/锚点表.json"], ["设定/角色卡.md", "设定/读者契约.md"]),
+    }
+    for kind, (blueprint_outputs, outline_inputs) in expected.items():
+        by_key = {stage["key"]: stage for stage in applicable_stages({"kind": kind})}
+        assert by_key["blueprint"]["outputs"] == blueprint_outputs
+        assert by_key["outline"]["inputs"] == outline_inputs
+
+
+def test_source_import_accepts_original_text_without_manifest():
+    with tempfile.TemporaryDirectory() as root:
+        with open(os.path.join(root, "原作.txt"), "w", encoding="utf-8") as f:
+            f.write("已由派生项目初始化器落盘的源书正文。\n")
+        stage = next(s for s in applicable_stages({"kind": "continue"}) if s["key"] == "source_import")
+        evaluated = evaluate_stage(root, stage)
+        assert evaluated["status"] == "done"
+
+
+def test_blueprint_requires_hash_bound_human_approval_and_reapproval_after_edit():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+        with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+            json.dump({"title": "测试书", "kind": "create"}, f, ensure_ascii=False)
+        with open(os.path.join(root, "设定", "author_intent.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "core_theme": "选择",
+                "non_negotiables": ["不替用户决定"],
+            }, f, ensure_ascii=False)
+        blueprint_path = os.path.join(root, "设定", "创作蓝图.md")
+        with open(blueprint_path, "w", encoding="utf-8") as f:
+            f.write("# 创作蓝图\n已由作者复核的内容。\n")
+        stage = next(s for s in applicable_stages({"kind": "create"}) if s["key"] == "blueprint")
+
+        before = evaluate_stage(root, stage)
+        assert before["status"] == "ready"
+        assert before["human_approval"]["approved"] is False
+
+        approval_path, _record = record_human_stage_approval(
+            root, "blueprint", approved_by="author", note="作者确认方向与不可妥协项"
+        )
+        assert os.path.exists(approval_path)
+        approved = evaluate_stage(root, stage)
+        assert approved["status"] == "done"
+        assert approved["human_approval"]["approved"] is True
+
+        with open(blueprint_path, "a", encoding="utf-8") as f:
+            f.write("方向发生实质修改。\n")
+        stale = evaluate_stage(root, stage)
+        assert stale["status"] == "ready"
+        assert "重新人工复核" in stale["human_approval"]["message"]
+
+
+def test_human_approval_requires_complete_inputs_and_expires_when_input_changes():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+        with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+            json.dump({"title": "测试书", "kind": "create"}, f, ensure_ascii=False)
+        with open(os.path.join(root, "设定", "创作蓝图.md"), "w", encoding="utf-8") as f:
+            f.write("# 创作蓝图\n")
+
+        try:
+            record_human_stage_approval(
+                root, "blueprint", approved_by="author", note="确认蓝图"
+            )
+        except ValueError as exc:
+            assert "inputs are incomplete" in str(exc)
+            assert "设定/author_intent.json" in str(exc)
+        else:
+            raise AssertionError("approval must reject an incomplete input set")
+
+        intent_path = os.path.join(root, "设定", "author_intent.json")
+        with open(intent_path, "w", encoding="utf-8") as f:
+            json.dump({"core_theme": "选择", "non_negotiables": ["保留开放结局"]}, f, ensure_ascii=False)
+        _path, record = record_human_stage_approval(
+            root, "blueprint", approved_by="author", note="确认蓝图"
+        )
+        assert {item["path"] for item in record["input_snapshot"]} == {
+            "_meta.json",
+            "设定/author_intent.json",
+        }
+
+        with open(intent_path, "w", encoding="utf-8") as f:
+            json.dump({"core_theme": "责任", "non_negotiables": ["保留开放结局"]}, f, ensure_ascii=False)
+        stage = next(s for s in applicable_stages({"kind": "create"}) if s["key"] == "blueprint")
+        stale = evaluate_stage(root, stage)
+        assert stale["status"] == "ready"
+        assert stale["human_approval"]["approved"] is False
+        assert "输入已变化" in stale["human_approval"]["message"]
+
+
+def test_setting_approval_expires_when_approved_blueprint_changes():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+        with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+            json.dump({"title": "测试书", "kind": "create"}, f, ensure_ascii=False)
+        blueprint_path = os.path.join(root, "设定", "创作蓝图.md")
+        with open(blueprint_path, "w", encoding="utf-8") as f:
+            f.write("# 创作蓝图\n第一版。\n")
+        for name in ("设定圣经.md", "角色卡.md", "世界观.md", "读者契约.md"):
+            with open(os.path.join(root, "设定", name), "w", encoding="utf-8") as f:
+                f.write(f"# {name.removesuffix('.md')}\n")
+
+        record_human_stage_approval(root, "setting", approved_by="author", note="确认设定")
+        stage = next(s for s in applicable_stages({"kind": "create"}) if s["key"] == "setting")
+        assert evaluate_stage(root, stage)["status"] == "done"
+
+        with open(blueprint_path, "a", encoding="utf-8") as f:
+            f.write("第二版。\n")
+        stale = evaluate_stage(root, stage)
+        assert stale["status"] == "ready"
+        assert "输入已变化" in stale["human_approval"]["message"]
+
+
 def test_pipeline_run_state_machine_claims_and_completes_stage():
     with tempfile.TemporaryDirectory() as root:
         with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
@@ -124,6 +245,10 @@ def test_pipeline_run_state_machine_claims_and_completes_stage():
         assert by_key["author_workflow"]["attempts"] == 1
         assert by_key["author_workflow"]["claimed_by"] == "orchestrator"
 
+        os.makedirs(os.path.join(root, "生产数据"), exist_ok=True)
+        for name in ("author_workflow.json", "作者成书流程.md"):
+            with open(os.path.join(root, "生产数据", name), "w", encoding="utf-8") as f:
+                f.write("{}" if name.endswith(".json") else "# 流程\n")
         completed = pipeline_runner.update_run_stage(root, run["run_id"], "author_workflow", "completed")
         by_key = {stage["key"]: stage for stage in completed["stages"]}
         assert by_key["author_workflow"]["status"] == "completed"
@@ -156,7 +281,7 @@ def test_handoff_contract_bounds_specialist_agent():
         assert "bypass_gate_without_waiver" in contract["forbidden_actions"]
 
 
-def test_complete_stage_warns_when_disk_does_not_support_completion():
+def test_complete_stage_rejects_unsupported_claim_and_force_requires_reason():
     with tempfile.TemporaryDirectory() as root:
         with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
             json.dump({"title": "测试书", "kind": "create"}, f, ensure_ascii=False)
@@ -164,11 +289,24 @@ def test_complete_stage_warns_when_disk_does_not_support_completion():
             with open(os.path.join(root, name), "w", encoding="utf-8") as f:
                 f.write("# ok\n")
         run = pipeline_runner.create_run(root, actor="orchestrator")
-        # blueprint 无 设定/蓝图.md → artifact 视图非 done；标 completed 应记 warning（不静默接受）
-        completed = pipeline_runner.update_run_stage(root, run["run_id"], "blueprint", "completed")
+        # blueprint 无 设定/创作蓝图.md → 普通 complete 拒绝；显式 force 必须留理由。
+        try:
+            pipeline_runner.update_run_stage(root, run["run_id"], "blueprint", "completed")
+            assert False, "unsupported completion should fail"
+        except ValueError as exc:
+            assert "artifact view" in str(exc)
+        try:
+            pipeline_runner.update_run_stage(root, run["run_id"], "blueprint", "force_completed")
+            assert False, "force completion without reason should fail"
+        except ValueError as exc:
+            assert "requires --reason" in str(exc)
+        completed = pipeline_runner.update_run_stage(
+            root, run["run_id"], "blueprint", "force_completed",
+            actor="editor", reason="作者明确跳过本轮蓝图门槛",
+        )
         by_key = {s["key"]: s for s in completed["stages"]}
         assert by_key["blueprint"]["status"] == "completed"
-        assert by_key["blueprint"].get("completion_warning")
+        assert by_key["blueprint"]["completion_waiver"]["actor"] == "editor"
 
 
 def test_dry_run_plan_flags_progress_disagreement():
@@ -181,7 +319,7 @@ def test_dry_run_plan_flags_progress_disagreement():
         w("_meta.json", {"title": "对账", "kind": "create", "target_chapters": 1})
         w("_设置.md", "# 设置\n")
         w("_进度.md", "# 进度\n\n| 章节 | 正文初稿 | 机检 |\n|---|---|---|\n| 第01章 | ☐ | ☐ |\n")
-        for f in ("设定/蓝图.md", "设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md",
+        for f in ("设定/创作蓝图.md", "设定/角色卡.md", "设定/世界观.md", "设定/读者契约.md",
                   "设定/章纲.md", "章节/第01章.md", "写作任务/第01章.md"):
             w(f, "# x\n")
         w("审稿/demo_gate.json", {"passed": True})

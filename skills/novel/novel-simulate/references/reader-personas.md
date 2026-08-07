@@ -16,6 +16,12 @@
 ```json
 {
   "date": "2026-06-09",
+  "schema_version": 2,
+  "kind": "novel_synthetic_reader_probe",
+  "evidence_type": "synthetic_probe",
+  "validation_status": "unvalidated",
+  "decision_authority": "context_only",
+  "numeric_score_eligible": false,
   "scope": "opening",
   "chapters_read": [1, 2, 3],
   "sampled_chars": 6200,
@@ -25,16 +31,17 @@
   "hook_strength": 0.62,                 // 章末钩子标记密度 0-1
   "lexical_diversity": 0.81,             // 4-gram 去重率，低=重复/水
   "cliche_density_per_kchar": 2.1,       // 套路命中密度
-  "retention_prior": 0.58                // 留存近似 0-1
+  "retention_proxy": 0.58,               // 表面代理 0-1，不是留存预测
+  "retention_prior": 0.58                // schema v1 兼容别名
 }
 ```
 
-**retention_prior 公式**（确定性近似，非真实留存）：
+**retention_proxy 公式**（确定性表面代理，非真实留存、非校准预测）：
 `0.45·min(爽点密度/6,1) + 0.35·钩子强度 + 0.20·min(多样性/0.9,1) − 0.10·min(套路密度/5,1)`，clamp 到 [0,1]。
 
 ## 判读
 
-- 信号是**确定性近似**；真正的弃书点/爽点捕获要 AI 代理按人格 prompt 读文本补（报告里 `【AI 代理填写】` 占位）。
-- `retention_prior` 给 `novel-score` 1.6 节当**留存维度先验**：虚拟试读，权重低于真实投放战绩、高于公榜泛化。
+- 信号是**确定性表面代理**；人格输出是合成假设。两者都需编辑回到正文逐条验证。
+- `retention_proxy`（兼容名 `retention_prior`）在 `novel-score` 只作 context-only 展示，**不进入自动数值调分**。
 - 人格至少选 3 个差异化的；单人格视角会偏。
-- 模拟≠真实，别拿它单独定生死，只作发布前的预警与方向参考。
+- 合成探针≠真实读者；即使补全人格输出，也不能据此声称“读者会怎样”或“留存是多少”。

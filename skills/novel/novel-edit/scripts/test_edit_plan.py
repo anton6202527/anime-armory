@@ -61,8 +61,10 @@ def test_edit_plan_consumes_revision_balance_and_simulate_inputs():
         assert "节奏诊断：第7章 注水偏弱" in titles
         assert any("弃书点风险" in title for title in titles)
         assert any("伏笔回收编辑排程" in title for title in titles)
-        assert "模拟读者信号仅作低权重留存先验" in titles
-        assert any("模拟留存先验偏低" in title for title in titles)
+        assert "合成叙事探针仅作人工复核假设" in titles
+        assert any("合成留存代理偏低" in title for title in titles)
+        probe_tasks = [task for task in plan["tasks"] if "合成留存代理偏低" in task["title"]]
+        assert probe_tasks[0]["priority"] == "P2"
 
 
 def test_edit_plan_writes_editorial_deliverables():

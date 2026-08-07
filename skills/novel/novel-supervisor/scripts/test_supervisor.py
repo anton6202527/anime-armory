@@ -45,6 +45,49 @@ def test_supervisor_dispatches_next_stage_with_handoff_shape():
         assert action["handoff"]["kind"] == "novel_specialist_handoff_contract"
 
 
+def test_outline_command_uses_existing_scaffold_subcommand():
+    commands = supervisor.command_for_stage("/tmp/book", {"key": "outline"})
+    assert commands == [
+        'python3 skills/novel/novel-craft/scripts/scene_cards.py scaffold "/tmp/book"'
+    ]
+
+
+def test_semantic_jobs_filter_closed_and_honor_human_boundary():
+    with tempfile.TemporaryDirectory() as root:
+        write_minimal_project(root)
+        os.makedirs(os.path.join(root, "语义任务"), exist_ok=True)
+        with open(os.path.join(root, "语义任务", "closed.json"), "w", encoding="utf-8") as f:
+            json.dump({"kind": "novel_semantic_job", "status": "completed"}, f)
+        with open(os.path.join(root, "语义任务", "human.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "kind": "novel_semantic_job",
+                "status": "open",
+                "human_required": True,
+                "assigned_role": "specialist_writer",
+            }, f)
+        jobs = supervisor.open_semantic_jobs(root)
+        assert [job["path"] for job in jobs] == ["语义任务/human.json"]
+        action = supervisor.decide_next_action(root)
+        assert action["status"] == "needs_human"
+        assert action["action"] == "complete_human_semantic_job"
+        assert action["agent_role"] == "human"
+
+
+def test_unknown_semantic_role_never_dispatches():
+    with tempfile.TemporaryDirectory() as root:
+        write_minimal_project(root)
+        os.makedirs(os.path.join(root, "语义任务"), exist_ok=True)
+        with open(os.path.join(root, "语义任务", "bad-role.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "kind": "novel_semantic_job",
+                "status": "open",
+                "assigned_role": "untrusted_executor",
+            }, f)
+        action = supervisor.decide_next_action(root)
+        assert action["status"] == "needs_human"
+        assert action["action"] == "repair_semantic_job_assignment"
+
+
 def test_read_only_decisions_do_not_increment_circuit_ledger():
     with tempfile.TemporaryDirectory() as root:
         write_minimal_project(root)

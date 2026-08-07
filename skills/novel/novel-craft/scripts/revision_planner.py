@@ -90,7 +90,7 @@ def tasks_from_score(root: str) -> list[dict[str, Any]]:
             "SCORE-VERDICT",
             "score_report",
             f"评分结论：{verdict}",
-            priority="P0",
+            priority="P1",
             skill="novel-score",
             stage="direction_spec" if verdict == "弃稿重立" else "rewrite",
             reason=str(payload.get("rewrite_roi") or payload.get("tier") or ""),
@@ -149,11 +149,11 @@ def tasks_from_simulate(root: str) -> list[dict[str, Any]]:
         return [_task(
             "SIMULATE-SIGNAL-ONLY",
             "reader_panel_signals",
-            "模拟读者信号仅作低权重留存先验",
+            "合成叙事探针仅作人工复核假设",
             priority="P2",
             skill="novel-simulate",
             stage="simulate",
-            reason="qualitative_completed=false 时不能当完整试读结论。",
+            reason="synthetic/context-only；补完人格反馈后仍不能当真实读者或统计留存证据。",
         )]
     return []
 
@@ -335,32 +335,7 @@ def dedupe(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def _resolve_conflicts(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """处理跨来源信号冲突：
 
-    1. 弃稿重立降级：score 判"弃稿重立"时，方向都变了——非 score 来源的 P0
-       自动降为 P2（不再是紧急修复，而是"待新方向确定后重新评估"）。
-    2. 跨源对立检测：review 和 balance 对同一章给出相反建议时，打 conflict 标签。"""
-    # 检查是否有弃稿重立判决
-    has_kill = any(
-        t.get("source") == "score_report"
-        and t.get("priority") == "P0"
-        and "弃稿重立" in str(t.get("title", ""))
-        for t in tasks
-    )
-    if has_kill:
-        for t in tasks:
-            if t.get("priority") == "P0" and t.get("source") != "score_report":
-                t["priority"] = "P2"
-                t["title"] = f"[已降级-方向已变] {t['title']}"
-                t["reason"] = (t.get("reason") or "") + (
-                    "；评分结论为「弃稿重立」，方向设定变更后此问题需在新框架下重新评估"
-                )
-                t["resolution"] = {
-                    "type": "score_kill_demotes_non_score_p0",
-                    "winner": "score_report",
-                    "loser": t.get("source"),
-                    "decision": "demote_to_P2",
-                    "explanation": "评分结论为「弃稿重立」时，方向规格已失效；非评分 P0 不再作为当前稿紧急修补项，而是等待新方向确定后重新评估。",
-                    "next_gate": "direction_spec",
-                }
+    主观 score 信号不得覆盖或降级可复核的审稿 P0；这里只检测跨源对立，交给编辑裁决。"""
 
     # 跨源对立检测：review 和 balance 对同一章的建议是否指向相反方向
     review_tasks = [t for t in tasks if t.get("source") == "review_report"]

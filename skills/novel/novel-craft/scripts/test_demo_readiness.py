@@ -52,6 +52,30 @@ def test_demo_readiness_passes_with_score_and_literary_anchors():
         assert report["literary_gate"]["score"] >= 60
 
 
+def test_demo_readiness_low_score_is_editor_warning_not_automatic_stop():
+    with tempfile.TemporaryDirectory() as root:
+        write_json(os.path.join(root, "_meta.json"), {"title": "测试书", "purpose": "商业连载", "target_platform": "番茄"})
+        write_json(os.path.join(root, "审稿", "demo_gate.json"), {
+            "status": "passed",
+            "style_anchor": {"summary": "克制叙述"},
+            "reader_contract": {"theme": "代价", "aesthetic_register": "冷峻"},
+        })
+        write_json(os.path.join(root, "评分", "score_report.json"), {
+            "production_decision": {"decision": "kill", "authority": "advisory"},
+            "verdict": "弃稿重立",
+        })
+        write_json(os.path.join(root, "设定", "aesthetic_bank.json"), {
+            "samples": [{"sample_id": "AES-001"}],
+        })
+        os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+        with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+            f.write("# 第1章\n正文。\n")
+        report = demo_readiness.build_readiness(root)
+        issue = next(item for item in report["issues"] if item["id"] == "DEMO-COMMERCIAL-SCORE-RECONSIDER")
+        assert issue["severity"] == "warning"
+        assert report["ready_for_batch"] is True
+
+
 # ── 黄金三章硬对表 ───────────────────────────────────────────────────────────
 
 def _golden_project(root, *, conflicts, promises=None, chapter_text="# 第1章\n平静叙述。"):

@@ -18,6 +18,7 @@ def test_sparse_storyworld_blocks_pre_draft():
         _write(os.path.join(root, "设定", "章纲.md"), "第 1 章 开局\n")
         report = spt.pressure_test(root)
         assert report["verdict"] == "block_pre_draft"
+        assert {"characters", "world", "reader_contract"} <= set(report["missing_required_artifacts"])
         assert "world_rules" in report["risk_axes"]
         assert report["next_actions"][0]["recommended_skill"] == "novel-craft"
 
@@ -43,7 +44,7 @@ def test_rich_storyworld_passes_or_review_only():
         assert "outline_pressure" not in report["risk_axes"]
 
 
-def test_keyword_stuffed_shell_no_longer_passes():
+def test_keyword_stuffed_shell_warns_but_does_not_hard_block():
     # 升级动机：旧版只查"填没填/长度够不够"，塞满关键词的空壳能全 pass。
     with tempfile.TemporaryDirectory() as root:
         # 角色卡：目标词只出现在文件头，角色块内没有任何目标 → character_agency risk
@@ -55,11 +56,27 @@ def test_keyword_stuffed_shell_no_longer_passes():
         # 读者契约：凑字数、无题旨/承诺/禁偏信号 → reader_contract risk
         _write(os.path.join(root, "设定", "读者契约.md"), "这本书会很好看很好看很好看很好看很好看很好看很好看很好看。")
         report = spt.pressure_test(root)
-        assert report["verdict"] == "block_pre_draft"
+        assert report["verdict"] == "revise_setting"
         for axis in ("character_agency", "world_rules", "outline_pressure", "reader_contract"):
             assert axis in report["risk_axes"], axis
-        assert report["check_depth"] == "structural"
+        assert report["check_depth"] == "structural_proxy"
+        assert report["missing_required_artifacts"] == []
+        assert all(axis["confidence"] == "heuristic" for axis in report["axes"])
         assert report["semantic_followup"]["axes_needing_semantic_review"]
+
+
+def test_condense_does_not_require_worldview_outside_its_stage_contract():
+    with tempfile.TemporaryDirectory() as root:
+        _write(os.path.join(root, "_meta.json"), json.dumps({"kind": "condense"}, ensure_ascii=False))
+        _write(os.path.join(root, "设定", "人物.md"), "## 主角\n目标：回家。\n## 对手\n目标：阻止他。\n## 盟友\n动机：还债。\n")
+        _write(os.path.join(root, "设定", "章纲.md"), "\n".join(
+            f"第 {i} 章 冲突升级并推进读者承诺。" for i in range(1, 6)
+        ))
+        _write(os.path.join(root, "设定", "读者契约.md"), "核心题旨：选择。读者承诺：人物完成抉择。禁偏：不新增世界规则。")
+
+        report = spt.pressure_test(root)
+        assert "world" not in report["missing_required_artifacts"]
+        assert report["verdict"] != "block_pre_draft"
 
 
 def test_main_writes_artifacts():

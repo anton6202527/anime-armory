@@ -12,11 +12,27 @@ import argparse
 import glob
 import json
 import os
+import sys
 from datetime import date
 from typing import Any
 
 
+NOVEL_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "_lib"))
+if NOVEL_LIB not in sys.path:
+    sys.path.insert(0, NOVEL_LIB)
+from novel_pipeline import human_stage_approval_status, stage_by_key  # noqa: E402
+
+
 WORKFLOW_KIND = "novel_author_workflow"
+
+BLUEPRINT_ARTIFACTS_BY_KIND = {
+    "create": ["设定/创作蓝图.md"],
+    "rewrite": ["设定/改动spec.md"],
+    "continue": ["设定/续写方向.md", "设定/末章状态.md"],
+    "expand": ["设定/事件骨架.json", "设定/章节映射.md"],
+    "condense": ["设定/主线骨架.json", "设定/章节映射.md"],
+    "spinoff": ["设定/锚点表.json"],
+}
 
 
 def load_json(path: str, default: Any = None) -> Any:
@@ -59,6 +75,26 @@ def rel_exists(root: str, relpath: str) -> bool:
 
 def any_glob(root: str, pattern: str) -> bool:
     return bool(glob.glob(os.path.join(root, pattern)))
+
+
+def blueprint_artifacts(meta: dict[str, Any]) -> list[str]:
+    kind = str(meta.get("kind") or "create").strip().lower()
+    if kind in {"", "original", "原创", "import"}:
+        kind = "create"
+    return list(BLUEPRINT_ARTIFACTS_BY_KIND.get(kind, BLUEPRINT_ARTIFACTS_BY_KIND["create"]))
+
+
+def draft_progress(root: str, meta: dict[str, Any]) -> tuple[bool, list[str]]:
+    chapter_count = len(glob.glob(os.path.join(root, "章节", "第*.md")))
+    target = as_int(meta.get("target_chapters"))
+    ledger_ok = rel_exists(root, "审稿/state_ledger.json")
+    warnings: list[str] = []
+    if target and chapter_count < target:
+        warnings.append(f"正文仅完成 {chapter_count}/{target} 章，不能把首章存在误判为全稿完成")
+    if not ledger_ok:
+        warnings.append("缺少审稿/state_ledger.json，写后状态闭环未建立")
+    complete = chapter_count > 0 and ledger_ok and (not target or chapter_count >= target)
+    return complete, warnings
 
 
 def as_int(value: Any, default: int = 0) -> int:
@@ -110,7 +146,9 @@ def score_blockers(root: str, *, commercial: bool) -> tuple[list[str], list[str]
     blockers: list[str] = []
     warnings: list[str] = []
     if production_decision == "kill" or verdict in {"弃稿重立", "kill"}:
-        blockers.append(f"score 结论为 {verdict or production_decision}，不应进入定稿")
+        warnings.append(
+            f"score 建议为 {verdict or production_decision}；该量规结论仅供编辑复核，不自动阻断定稿"
+        )
     elif production_decision in {"revise", "major_rewrite"} or verdict in {"大改", "小改"}:
         warnings.append(f"score 结论为 {verdict or production_decision}，需确认修订项已处理")
     freshness = payload.get("market_baseline", {}).get("freshness") if isinstance(payload.get("market_baseline"), dict) else {}
@@ -218,7 +256,7 @@ def open_editor_queries(root: str) -> int:
     )
 
 
-def reader_blockers(root: str, *, commercial: bool) -> tuple[list[str], list[str]]:
+def reader_blockers(root: str, *, validation_required: bool) -> tuple[list[str], list[str]]:
     if has_reader_evidence(root):
         payload = load_json(os.path.join(root, "评分", "reader_telemetry_summary.json"), {}) or {}
         warnings: list[str] = []
@@ -230,13 +268,13 @@ def reader_blockers(root: str, *, commercial: bool) -> tuple[list[str], list[str
             if weakest:
                 warnings.append(f"真实读者掉点章节：{', '.join(str(x) for x in weakest[:5])}")
         return [], warnings
-    if commercial and has_reader_data_waiver(root):
-        return [], ["缺少 reader_telemetry_summary.json，但已有 platform/KDP scoped reader-data waiver"]
-    if commercial:
-        return ["商业/平台/KDP 发布前缺少 reader_telemetry_summary.json 或明确 reader_data waiver"], []
+    if validation_required and has_reader_data_waiver(root):
+        return [], ["缺少 reader_telemetry_summary.json，但 data_validated_launch 已有 scoped reader-data waiver"]
+    if validation_required:
+        return ["data_validated_launch 缺少 reader_telemetry_summary.json 或明确 reader_data waiver"], []
     if has_reader_plan(root):
         return [], ["已有 reader_test_plan，但还没有真实读者 telemetry"]
-    return [], ["未建立 reader_test_plan；非商业项目可继续，但定稿可信度较弱"]
+    return [], ["未建立 reader_test_plan；真实读者数据属于市场验证，不是发布合规前置条件"]
 
 
 def edit_task_counts(root: str) -> tuple[int, int, int]:
@@ -337,9 +375,20 @@ def has_reader_data_waiver(root: str) -> bool:
                 continue
             scope = payload.get("scope") if isinstance(payload.get("scope"), dict) else {}
             release_profile = str(scope.get("release_profile") or "")
-            if release_profile in {"platform_publish", "kdp_publish"}:
+            if release_profile == "data_validated_launch":
                 return True
     return False
+
+
+def market_validation_required(root: str) -> bool:
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    values = [meta.get("release_profile"), meta.get("launch_profile")]
+    settings_path = os.path.join(root, "_设置.md")
+    if os.path.exists(settings_path):
+        with open(settings_path, encoding="utf-8", errors="replace") as f:
+            values.append(f.read())
+    blob = " ".join(str(value or "") for value in values)
+    return "data_validated_launch" in blob or "数据验证发布" in blob
 
 
 def release_ready(root: str) -> bool:
@@ -369,9 +418,11 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     review_blocking, review_warnings = review_blockers(root)
     score_blocking, score_warnings = score_blockers(root, commercial=commercial)
     research_blocking, research_warnings = research_blockers(root)
-    reader_blocking, reader_warnings = reader_blockers(root, commercial=commercial)
+    validation_required = market_validation_required(root)
+    release_profile = "data_validated_launch" if validation_required else "platform_publish"
+    reader_blocking, reader_warnings = reader_blockers(root, validation_required=validation_required)
     release_blocking, release_warnings = release_blockers(root)
-    score_ok = rel_exists(root, "评分/score_report.json") and score != "kill" and not score_blocking
+    score_ok = rel_exists(root, "评分/score_report.json") and not score_blocking
     review_ok = rel_exists(root, "审稿/review_report.json") and not review_blocking
     reader_warning = has_reader_plan(root) and not has_reader_evidence(root)
     edit_deliverables = all(rel_exists(root, rel) for rel in (
@@ -390,6 +441,29 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     map_ok, map_blocking = manuscript_map_status(root)
     ai_ok, ai_blocking = ai_usage_ready(root)
     metadata_ok, metadata_blocking = metadata_pack_status(root)
+    blueprint_evidence = blueprint_artifacts(meta)
+    blueprint_ready = all(rel_exists(root, rel) for rel in blueprint_evidence)
+    blueprint_stage = stage_by_key("blueprint", meta=meta, root=root)
+    blueprint_approved, blueprint_approval_message, _ = human_stage_approval_status(root, blueprint_stage or {})
+    setting_stage = stage_by_key("setting", meta=meta, root=root)
+    setting_approved, setting_approval_message, _ = human_stage_approval_status(root, setting_stage or {})
+    blueprint_contract_ready = blueprint_ready and rel_exists(root, "设定/读者契约.md") and intent_ok
+    blueprint_command = (
+        f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --approve-stage blueprint '
+        '--agent "<复核人>" --reason "<批准说明>"'
+        if blueprint_contract_ready and not blueprint_approved
+        else f'python3 skills/novel/novel-craft/scripts/author_intent.py scaffold "{root}"'
+    )
+    setting_outputs_ready = bool(setting_stage) and all(
+        any_glob(root, pattern) for pattern in (setting_stage.get("outputs") or [])
+    )
+    setting_command = (
+        f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --approve-stage setting '
+        '--agent "<复核人>" --reason "<批准说明>"'
+        if setting_outputs_ready and not setting_approved
+        else f'python3 skills/novel/novel-craft/scripts/manuscript_map.py "{root}" --write'
+    )
+    draft_complete, draft_warnings = draft_progress(root, meta)
     steps: list[dict[str, Any]] = [
         {
             "key": "setup",
@@ -404,12 +478,20 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         {
             "key": "blueprint",
             "label": "构思蓝图与读者契约",
-            "status": done(rel_exists(root, "设定/创作蓝图.md") and rel_exists(root, "设定/读者契约.md") and intent_ok),
+            "status": done(
+                blueprint_ready
+                and rel_exists(root, "设定/读者契约.md")
+                and intent_ok
+                and blueprint_approved
+            ),
             "why": "蓝图、作者意图和读者契约是后续每章不偏题、不忘承诺、不牺牲主题的作者宪法。",
-            "evidence": ["设定/创作蓝图.md", "设定/读者契约.md", "设定/author_intent.json"],
-            "blockers": intent_blocking,
+            "evidence": [*blueprint_evidence, "设定/读者契约.md", "设定/author_intent.json"],
+            "blockers": [
+                *intent_blocking,
+                *([] if blueprint_approved else [blueprint_approval_message]),
+            ],
             "warnings": [],
-            "command": f'python3 skills/novel/novel-craft/scripts/author_intent.py scaffold "{root}"',
+            "command": blueprint_command,
         },
         {
             "key": "evidence",
@@ -432,15 +514,19 @@ def build_steps(root: str) -> list[dict[str, Any]]:
             "key": "setting_scene",
             "label": "设定圣经、场景卡与结构地图",
             "status": done(
-                (rel_exists(root, "设定/角色卡.md") or rel_exists(root, "设定/设定圣经.md"))
+                (rel_exists(root, "设定/角色卡.md") or rel_exists(root, "设定/人物.md") or rel_exists(root, "设定/设定圣经.md"))
                 and rel_exists(root, "设定/scene_cards.json")
                 and map_ok
+                and setting_approved
             ),
             "why": "角色、规则、场景目的和全书结构地图先结构化，后续 review 才能按基准判断是否跑偏。",
-            "evidence": ["设定/角色卡.md", "设定/设定圣经.md", "设定/scene_cards.json", "设定/manuscript_map.json"],
-            "blockers": map_blocking,
+            "evidence": ["设定/角色卡.md", "设定/人物.md", "设定/设定圣经.md", "设定/scene_cards.json", "设定/manuscript_map.json"],
+            "blockers": [
+                *map_blocking,
+                *([] if setting_approved else [setting_approval_message]),
+            ],
             "warnings": [],
-            "command": f'python3 skills/novel/novel-craft/scripts/manuscript_map.py "{root}" --write',
+            "command": setting_command,
         },
         {
             "key": "demo",
@@ -455,11 +541,11 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         {
             "key": "draft_loop",
             "label": "分章写作与状态账本",
-            "status": done(any_glob(root, "章节/第*.md") and rel_exists(root, "审稿/state_ledger.json"), warning=True),
+            "status": done(draft_complete, warning=True),
             "why": "正文、state_delta、state_verify 和 state_ledger 必须闭环，避免越写越漂。",
             "evidence": ["写作任务/第*.md", "章节/第*.md", "审稿/state_ledger.json"],
             "blockers": [],
-            "warnings": [],
+            "warnings": draft_warnings,
             "command": f'python3 skills/novel/scripts/flow.py "{root}"',
         },
         {
@@ -475,8 +561,11 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         {
             "key": "reader_validation",
             "label": "读者测试与真实反馈",
-            "status": done(has_reader_evidence(root) and not reader_blocking, warning=(reader_warning or not commercial) and not reader_blocking),
-            "why": "真实完读/弃读高于模拟读者；没有真实数据时至少先写 reader_test_plan。",
+            "status": done(
+                has_reader_evidence(root) and not reader_blocking,
+                warning=not reader_blocking,
+            ),
+            "why": "真实完读/弃读用于市场验证；仅 data_validated_launch 把它作为硬前置，普通发布不要求先有历史遥测。",
             "evidence": ["评分/reader_test_plan.json", "评分/reader_telemetry_summary.json", "评分/reader_panel_signals.json"],
             "blockers": reader_blocking,
             "warnings": reader_warnings,
@@ -510,7 +599,7 @@ def build_steps(root: str) -> list[dict[str, Any]]:
             "evidence": ["导出/*.txt", "导出/release_manifest.json"],
             "blockers": release_blocking,
             "warnings": release_warnings,
-            "command": f'python3 skills/novel/novel-craft/scripts/release_manifest.py "{root}" --release-name v1 --release-profile platform_publish',
+            "command": f'python3 skills/novel/novel-craft/scripts/release_manifest.py "{root}" --release-name v1 --release-profile {release_profile}',
         },
     ]
     return steps
@@ -519,7 +608,8 @@ def build_steps(root: str) -> list[dict[str, Any]]:
 def build_workflow(root: str) -> dict[str, Any]:
     root = os.path.abspath(root)
     steps = build_steps(root)
-    next_step = next((step for step in steps if step["status"] != "done"), None)
+    # warning 是非阻断提示，不应劫持作者导航；只有 pending 才是当前必做步骤。
+    next_step = next((step for step in steps if step["status"] == "pending"), None)
     return {
         "schema_version": 1,
         "kind": WORKFLOW_KIND,

@@ -26,7 +26,7 @@ except Exception:  # pragma: no cover - provenance is additive
 
 
 BOARD_KIND = "novel_review_board"
-BLOCKING_SCORE_VERDICTS = {"大改", "弃稿重立"}
+ADVISORY_SCORE_VERDICTS = {"大改", "弃稿重立"}
 
 
 def now() -> str:
@@ -97,8 +97,9 @@ def score_signal(root: str) -> dict[str, Any]:
         "total_score": payload.get("total_score") if isinstance(payload, dict) else None,
         "verdict": verdict or "",
         "production_decision": decision or "",
-        "blocking": verdict in BLOCKING_SCORE_VERDICTS or decision == "kill",
-        "revision_recommended": verdict in {"小改", "大改"} or decision == "revise",
+        "blocking": False,
+        "advisory": verdict in ADVISORY_SCORE_VERDICTS or decision in {"revise", "kill"},
+        "revision_recommended": verdict in {"小改", "大改", "弃稿重立"} or decision in {"revise", "kill"},
         "source_snapshot_fresh": fresh,
         "source_snapshot_message": fresh_message,
         "source_aggregate_hash": (payload.get("source_snapshot") or {}).get("aggregate_hash") if isinstance(payload, dict) else "",

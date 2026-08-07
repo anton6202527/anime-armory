@@ -93,8 +93,8 @@ def test_revision_plan_consumes_market_evidence_tasks_and_jobs():
         assert plan["inputs"]["market_evidence_jobs"] is True
 
 
-def test_kill_verdict_demotes_non_score_p0():
-    """评分结论为「弃稿重立」时，非评分来源的 P0 应降为 P2。"""
+def test_kill_verdict_does_not_override_evidence_backed_review_p0():
+    """主观评分不得降级审稿中可复核的 P0。"""
     with tempfile.TemporaryDirectory() as root:
         os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
         os.makedirs(os.path.join(root, "评分"), exist_ok=True)
@@ -117,17 +117,10 @@ def test_kill_verdict_demotes_non_score_p0():
 
         plan = rp.build_plan(root)
         by_id = {task["id"]: task for task in plan["tasks"]}
-        # review P0 应降级
-        assert by_id["REV-001"]["priority"] == "P2", "非评分 P0 应降为 P2"
-        assert "[已降级" in by_id["REV-001"]["title"]
-        assert by_id["REV-001"]["resolution"]["type"] == "score_kill_demotes_non_score_p0"
-        # score P0 不变
-        assert by_id["SCORE-VERDICT"]["priority"] == "P0", "评分 P0 不应降级"
-        assert plan["kill_verdict_demotions"] >= 1
-        assert any(
-            item["resolution"]["type"] == "score_kill_demotes_non_score_p0"
-            for item in plan["conflict_summary"]
-        )
+        assert by_id["REV-001"]["priority"] == "P0"
+        assert "已降级" not in by_id["REV-001"]["title"]
+        assert by_id["SCORE-VERDICT"]["priority"] == "P1"
+        assert plan["kill_verdict_demotions"] == 0
 
 
 def test_kill_verdict_does_not_demote_non_p0():

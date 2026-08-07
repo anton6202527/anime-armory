@@ -11,8 +11,8 @@ init_project.py — 建【原创从零】小说项目骨架（无源文本·访�
 用法:
     python3 init_project.py --title "<书名或'待定'>" --genre "<题材类型>" \\
         --premise "<一句话故事>" --scale microstory|short|medium|long|微短剧|漫剧 \\
-        [--purpose 传统小说|漫剧源书|自定义] \\
-        [--platform 起点|番茄|七猫|晋江|抖音漫剧|红果|历史向|跨平台] \\
+        --purpose 传统小说|漫剧源书|自定义 \\
+        --platform 起点|番茄|七猫|晋江|抖音漫剧|红果|历史向|跨平台 \\
         [--person first|third-limited] [--target-chapters N] \\
         [--ingest <碎片路径>]...  [--out <根>] [--outputs txt,docx,outline]
         [--draft-mode 极速初稿|稳妥初稿|商业连载|漫剧源书]
@@ -38,7 +38,7 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, NOVEL_DEFAULTS,
                             NOVEL_STAGES, normalize_scale, parse_outputs, SCALE_PROFILES,
                             NOVEL_DRAFT_MODES, DRAFT_WORKFLOWS, CHAPTER_GRANULARITY,
-                            AI_TEXT_USAGE_MODES, infer_novel_purpose,
+                            AI_TEXT_USAGE_MODES,
                             normalize_novel_purpose, resolve_novel_draft_mode,
                             resolve_novel_draft_workflow)
 from settings import write_settings
@@ -69,20 +69,21 @@ def build_blueprint(title, genre, purpose, platform, premise, scale, n, wpc, per
 
 ## 一句话故事（logline）
 {premise}
-（标准式：谁，在什么处境，靠什么金手指，去对抗什么，最终要得到什么）
+（中性式：谁，在什么处境，想要什么，受到什么阻力；这段变化为何值得读。商业类型文可再补核心机制/能力与卖点。）
 
 ## 题材 / 用途 / 平台 / 基调
 - 题材类型：{genre}
 - 小说用途：{purpose}（决定交付形态：传统连载、漫剧源书、短篇试写等；红果/抖音差异写在目标平台）
-- 目标平台：{platform}（决定读者口味 / 爽点节奏 / 开篇钩；起名按平台见 novel-title）
+- 目标平台：{platform}（只在有当前证据时适配篇幅、节奏、元数据与合规；平台未定不套商业爽文模板）
 - 基调：（热血/爽/虐/治愈/暗黑/诙谐…）
 
 ## 主角
 - 是谁 / 出身 / 性格底色：
-- **金手指 / 核心能力（必须有代价/限制）**：
+- **核心资源 / 能力 / 关系 / 困境**：
+- 若有超常能力或高杠杆机制，其边界 / 代价 / 后果：
 - 动机 / 心结 / 渴望：
 
-## 核心爽点（这本"爽"在哪，按平台密度铺）
+## 核心阅读承诺（悬念 / 情感 / 主题 / 幽默 / 爽感等；按本作类型填写）
 -
 
 ## 市场假设 / 差异化（商业/平台项目必填 evidence）
@@ -114,10 +115,10 @@ def build_blueprint(title, genre, purpose, platform, premise, scale, n, wpc, per
 def build_settings_bible(title):
     return f"""# 设定圣经 — 《{title}》
 
-> 本作**所有原创设定**：金手指 / 力量 / 势力 / 人物 / 地理 / 物品。逐章写作硬约束，回扫逐条核。
-> **铁律**：内部不许自相矛盾；**金手指必须有代价**；设定一旦定下，跨章复用同一值。
+> 本作**所有已确认的原创事实与规则**：人物 / 关系 / 社会与自然规则 / 能力或技术 / 势力 / 地理 / 物品。逐章写作硬约束，回扫逐条核。
+> **铁律**：内部不许自相矛盾；任何高杠杆能力/机制都要写边界与后果；设定一旦定下，跨章复用同一值。
 
-## 体系（金手指 / 力量 / 修炼）
+## 核心机制（能力 / 技术 / 制度 / 关系规则；不适用可删）
 ### <名称>　是什么 / 规则边界 / **代价·限制** / 首现章 / 不可违反点
 
 ## 势力 / 组织
@@ -142,7 +143,7 @@ def build_character_card(title):
 ## 姓名 / 年龄 / 性别
 ## 外观（锚定 3-5 个不可漂特征）
 ## 出身 / 处境
-## 能力体系（依 设定圣经.md，含代价）
+## 核心资源 / 能力 / 限制（依 设定圣经.md；不适用可删）
 ## 性格底色
 ## 动机 / 心结 / 渴望（驱动主线）
 ## 核心恐惧
@@ -167,7 +168,7 @@ def build_worldview(title):
 
 > 第 3 步填。原创世界的现行规则总览（与 设定圣经 互为表里：圣经记"条目"，本卡记"全局规则"）。
 
-## 力量 / 修炼 / 魔法体系
+## 社会 / 自然 / 技术 / 力量规则（按题材取用）
 ## 政治 / 势力格局
 ## 地理 / 地图
 ## 时间线（关键节点）
@@ -180,18 +181,18 @@ def build_outline(title, n, premise):
     if n >= 6:
         a1, a2 = max(1, n // 4), n * 3 // 4
         acts = (f"## 三幕结构（原创自由编织）\n"
-                f"- 第一幕（约 1-{a1}）：立世界 + 主角处境 + 金手指登场 + 开篇钩（黄金前 3 章立住爽点/悬念）\n"
-                f"- 第二幕（约 {a1+1}-{a2}）：设定展开 + 大势推进 + 多次小爽点 + 中段大反转\n"
-                f"- 第三幕（约 {a2+1}-{n}）：高潮对决 + 主线收束 + 结局（留续作钩可选）\n")
+                f"- 第一幕（约 1-{a1}）：建立人物处境、核心问题与阅读承诺\n"
+                f"- 第二幕（约 {a1+1}-{a2}）：选择与后果递进、关系/信息变化、中段转折\n"
+                f"- 第三幕（约 {a2+1}-{n}）：关键选择、高潮与主线收束（是否留续作问题由用途决定）\n")
     else:
-        acts = "## 结构\n（短篇——围绕单一核心爽点/反转推进）\n"
+        acts = "## 结构\n（短篇——围绕一个核心戏剧问题、人物变化或关键反转完成闭环）\n"
     chapters = "\n".join(
-        f"- 第 {i:02d} 章 《》 — 本章戏剧节拍 / 涉及的设定 / 爽点或钩子" for i in range(1, n + 1))
+        f"- 第 {i:02d} 章 《》 — 本章叙事变化 / 涉及的设定 / 读者承诺推进 / 转场或收束" for i in range(1, n + 1))
     return f"""# 章纲 — 《{title}》
 
 > logline：{premise}
 > 第 5 步填。**章纲未敲定不进 Demo。** 节拍优先、字数兜底（见 novel-craft/references/split.md）。
-> 每章一个戏剧节拍 + 至少一个钩子；爽点按平台密度铺。
+> 每章应发生可辨认的叙事变化并推进至少一项读者承诺。商业连载/改编源书再按最新平台证据补强追读钩与兑现节奏；文学/传统小说允许以人物选择、意象、主题或余味收束。
 
 ## 总体弧线
 {acts}
@@ -206,8 +207,9 @@ def main():
     ap.add_argument("--genre", required=True, help="题材类型，如 都市异能 / 古言宅斗 / 玄幻修真")
     ap.add_argument("--premise", required=True, help="一句话故事（logline）")
     ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
-    ap.add_argument("--platform", default="跨平台")
-    ap.add_argument("--purpose", default=None,
+    ap.add_argument("--platform", required=True,
+                    help="目标平台；无默认，立项访谈确认后显式传入，可选跨平台")
+    ap.add_argument("--purpose", required=True,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
     ap.add_argument("--target-chapters", type=int, default=None)
@@ -251,9 +253,7 @@ def main():
     profile = scale_profile(scale)
     n = args.target_chapters or profile["target_chapters"]
     wpc = profile["words_per_chapter"]
-    purpose = normalize_novel_purpose(args.purpose) or infer_novel_purpose(
-        platform=args.platform, scale=scale, target=args.draft_mode
-    )
+    purpose = normalize_novel_purpose(args.purpose)
     draft_mode = resolve_novel_draft_mode(args.draft_mode, purpose=purpose, platform=args.platform, scale=scale)
     draft_workflow = resolve_novel_draft_workflow(
         args.draft_workflow,
@@ -348,8 +348,8 @@ def main():
     W("_进度.md", build_progress_markdown(title, "create", n))
 
     print(f"[ok] 原创项目骨架 → {out_root}")
-    print(f"     设定/创作蓝图.md ← 骨架（第 2 步填：logline/主角/金手指/爽点/冲突/风格卡）★最重要")
-    print(f"     设定/设定圣经.md ← 骨架（第 3 步填：金手指代价 + 一致性约束）")
+    print(f"     设定/创作蓝图.md ← 骨架（第 2 步填：logline/主角/核心机制或困境/阅读承诺/冲突/风格卡）★最重要")
+    print(f"     设定/设定圣经.md ← 骨架（第 3 步填：事实规则/机制边界 + 一致性约束）")
     print(f"     设定/角色卡.md / character_guardrails.json / 世界观.md / 章纲.md ← 骨架")
     if scaffolded_power_system:
         print(f"     设定/power_system_registry.json ← 力量体系骨架（{scaffolded_power_system}）：填等级体系/面板/逐章成长，"

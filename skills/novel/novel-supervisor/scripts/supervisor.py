@@ -27,7 +27,9 @@ for path in (NOVEL_LIB, NOVEL_SCRIPTS, NOVEL_CRAFT):
     if path not in sys.path:
         sys.path.insert(0, path)
 
-from novel_pipeline import dry_run_plan, handoff_contract  # noqa: E402
+from novel_pipeline import dry_run_plan, handoff_contract, semantic_job_is_open  # noqa: E402
+
+SEMANTIC_AGENT_ROLES = {"specialist_writer", "specialist_reviewer", "specialist_score"}
 
 try:
     from pipeline_runner import create_run, latest_run_id, load_run, write_plan  # noqa: E402
@@ -74,19 +76,26 @@ def _load_batch_queue_module():
     return module
 
 
-def open_semantic_jobs(root: str) -> list[str]:
+def open_semantic_jobs(root: str) -> list[dict[str, Any]]:
     jobs_dir = os.path.join(root, "语义任务")
     if not os.path.isdir(jobs_dir):
         return []
-    out = []
+    out: list[dict[str, Any]] = []
     for name in sorted(os.listdir(jobs_dir)):
         if not name.endswith(".json"):
             continue
         path = os.path.join(jobs_dir, name)
+        if not semantic_job_is_open(path):
+            continue
         payload = load_json(path, {}) or {}
-        status = str(payload.get("status") or payload.get("state") or "open")
-        if status not in {"completed", "approved", "rejected"}:
-            out.append(rel(root, path))
+        out.append({
+            "path": rel(root, path),
+            "status": str(payload.get("status") or payload.get("state") or "open"),
+            "assigned_role": str(payload.get("assigned_role") or "").strip(),
+            "human_required": bool(payload.get("human_required")),
+            "review_required": bool(payload.get("review_required")),
+            "semantic_kind": str(payload.get("semantic_kind") or ""),
+        })
     return out
 
 
@@ -443,7 +452,7 @@ def command_for_stage(root: str, stage: dict[str, Any]) -> list[str]:
     if key == "post_write":
         return [f'python3 skills/novel/scripts/post_write.py "{root}" --chapter 第NN章 --conclusion "{root}/审稿/state_verify_第NN章.json"']
     if key == "outline":
-        return [f'python3 skills/novel/novel-craft/scripts/scene_cards.py "{root}"']
+        return [f'python3 skills/novel/novel-craft/scripts/scene_cards.py scaffold "{root}"']
     return []
 
 
@@ -544,14 +553,43 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
         return action
 
     if semantic_jobs:
+        next_job = semantic_jobs[0]
+        job_path = next_job["path"]
+        if next_job.get("human_required") or next_job.get("assigned_role") == "human":
+            action.update({
+                "status": "needs_human",
+                "action": "complete_human_semantic_job",
+                "agent_role": "human",
+                "reason": "the next semantic job explicitly requires human judgement",
+                "context": semantic_jobs[:10],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/semantic_job.py show "{root}/{job_path}"'
+                ],
+            })
+            return action
+        assigned_role = next_job.get("assigned_role") or (
+            "specialist_reviewer" if next_job.get("review_required") else "specialist_writer"
+        )
+        if assigned_role not in SEMANTIC_AGENT_ROLES:
+            action.update({
+                "status": "needs_human",
+                "action": "repair_semantic_job_assignment",
+                "agent_role": "human",
+                "reason": f"semantic job assigned_role is unsupported: {assigned_role}",
+                "context": semantic_jobs[:10],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/semantic_job.py show "{root}/{job_path}"'
+                ],
+            })
+            return action
         action.update({
             "status": "dispatch",
             "action": "claim_or_complete_semantic_job",
-            "agent_role": "specialist_reviewer",
+            "agent_role": assigned_role,
             "reason": "open semantic jobs exist",
             "context": semantic_jobs[:10],
             "recommended_commands": [
-                f'python3 skills/novel/novel-craft/scripts/semantic_job.py show "{root}/{semantic_jobs[0]}"'
+                f'python3 skills/novel/novel-craft/scripts/semantic_job.py show "{root}/{job_path}"'
             ],
         })
         return action
@@ -566,12 +604,18 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
         return action
 
     if next_stage in HUMAN_STAGES or "human" in str(stage.get("gate") or ""):
+        human_commands = [f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --handoff {next_stage}']
+        if next_stage in {"blueprint", "setting"}:
+            human_commands.append(
+                f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --approve-stage {next_stage} '
+                '--agent "<human-reviewer>" --reason "<approval note>"'
+            )
         action.update({
             "status": "needs_human",
             "action": "human_review_or_creation",
             "agent_role": "human",
             "reason": f"stage {next_stage} is a human-choice/semantic approval boundary",
-            "recommended_commands": [f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --handoff {next_stage}'],
+            "recommended_commands": human_commands,
         })
         return action
 

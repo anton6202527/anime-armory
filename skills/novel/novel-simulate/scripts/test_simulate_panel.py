@@ -132,6 +132,12 @@ def test_write_report_emits_signals_json():
         data = json.load(f)
     assert "cliche_density_per_kchar" in data
     assert "retention_prior" in data
+    assert data["retention_proxy"] == data["retention_prior"]
+    assert data["kind"] == "novel_synthetic_reader_probe"
+    assert data["evidence_type"] == "synthetic_probe"
+    assert data["validation_status"] == "unvalidated"
+    assert data["decision_authority"] == "context_only"
+    assert data["numeric_score_eligible"] is False
     assert data["analysis_mode"] == "signal_only"
     assert data["signal_only"] is True
     assert data["qualitative_completed"] is False

@@ -382,11 +382,11 @@ class DraftPacketsTest(unittest.TestCase):
                 "schema_version": 1, "kind": "novel_mechanical_findings",
                 "findings": [
                     {"chapter": 1, "severity": "🟢", "dim": "AI腔",
-                     "msg": "排比三连段落偏多（6 段疑似），AI 习惯性排比——精简至必要修辞", "evidence": ""},
+                     "msg": "排比三连段落偏多（6 段疑似）；精简装饰性排比", "evidence": ""},
                     {"chapter": 2, "severity": "🟢", "dim": "AI腔",
-                     "msg": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞", "evidence": ""},
+                     "msg": "排比三连段落偏多（4 段疑似）；精简装饰性排比", "evidence": ""},
                     {"chapter": 2, "severity": "🟢", "dim": "重复",
-                     "msg": "破折号「——」过多（5.5/千字），AI 习惯用破折号代替逗号", "evidence": ""},
+                     "msg": "破折号「——」密度偏高（5.5/千字）；复核万能停顿", "evidence": ""},
                     {"chapter": 1, "severity": "🟡", "dim": "字数",
                      "msg": "字数 800 低于下限", "evidence": ""},   # 非 AI 腔项不入账单
                 ],

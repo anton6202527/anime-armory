@@ -209,6 +209,8 @@ class InitMetadataTest(unittest.TestCase):
                         "--genre", "玄幻",
                         "--premise", "少年以有代价的雷火术逆转宗门危机",
                         "--scale", "long",
+                        "--purpose", "传统小说",
+                        "--platform", "跨平台",
                         "--target-chapters", str(n),
                         "--out", root,
                     ],
@@ -227,6 +229,37 @@ class InitMetadataTest(unittest.TestCase):
                     settings = f.read()
                 self.assertIn("小说用途：传统小说", settings)
 
+    def test_create_traditional_template_does_not_force_commercial_story_engine(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = os.path.join(tmp, "literary")
+            subprocess.run(
+                [
+                    sys.executable, CREATE_INIT,
+                    "--title", "河流背面",
+                    "--genre", "现实主义",
+                    "--premise", "一位退休摆渡人必须决定是否说出村庄隐瞒多年的真相",
+                    "--scale", "short",
+                    "--purpose", "传统小说",
+                    "--platform", "跨平台",
+                    "--out", root,
+                ],
+                cwd=REPO,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            with open(os.path.join(root, "设定", "创作蓝图.md"), encoding="utf-8") as f:
+                blueprint = f.read()
+            with open(os.path.join(root, "设定", "章纲.md"), encoding="utf-8") as f:
+                outline = f.read()
+            with open(os.path.join(root, "设定", "设定圣经.md"), encoding="utf-8") as f:
+                bible = f.read()
+            self.assertIn("核心阅读承诺", blueprint)
+            self.assertNotIn("金手指 / 核心能力（必须有代价/限制）", blueprint)
+            self.assertNotIn("每章一个戏剧节拍 + 至少一个钩子", outline)
+            self.assertIn("文学/传统小说允许", outline)
+            self.assertNotIn("金手指必须有代价", bible)
+
     def test_create_purpose_drives_manga_draft_mode_without_explicit_mode(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = os.path.join(tmp, "create_manga")
@@ -238,6 +271,7 @@ class InitMetadataTest(unittest.TestCase):
                     "--premise", "冷宫弃妃以妖力夺回皇权",
                     "--scale", "漫剧",
                     "--purpose", "漫剧源书",
+                    "--platform", "跨平台",
                     "--out", root,
                 ],
                 cwd=REPO,

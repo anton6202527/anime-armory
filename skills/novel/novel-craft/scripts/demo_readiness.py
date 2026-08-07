@@ -186,7 +186,9 @@ def build_readiness(root: str) -> dict[str, Any]:
     if commercial and not score:
         add_issue(issues, "DEMO-COMMERCIAL-SCORE-MISSING", "blocking", "商业/平台项目 Demo 后必须有 opening/full score_report。", "评分/score_report.json")
     elif decision == "kill" or verdict in {"弃稿重立", "kill"}:
-        add_issue(issues, "DEMO-COMMERCIAL-SCORE-KILL", "blocking", f"score 结论为 {verdict or decision}，不应批量写。", "评分/score_report.json")
+        add_issue(issues, "DEMO-COMMERCIAL-SCORE-RECONSIDER", "warning",
+                  f"score 建议为 {verdict or decision}；这是启发式编辑信号，批量写前由作者复核，不自动停稿。",
+                  "评分/score_report.json")
     elif decision in {"revise", "major_rewrite"} or verdict in {"大改", "小改"}:
         add_issue(issues, "DEMO-COMMERCIAL-SCORE-REVISE", "warning", f"score 结论为 {verdict or decision}，批量写前应确认开篇已修。", "评分/score_report.json")
 

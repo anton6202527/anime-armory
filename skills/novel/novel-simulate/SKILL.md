@@ -1,11 +1,11 @@
 ---
 name: novel-simulate
-description: 多代理人"模拟读者"测试 — 在正式发布前、尚无真实读者数据时进行虚拟试读会。通过构建不同人格偏好的 AI 读者(小白、逻辑党、嗑糖党等),提供多维度的定性反馈。帮助作者提前识别弃书点、验证爽点捕获率、评估受众兼容性；若已有平台后台/内测读者数据，应走 novel-feedback 导入真实反馈。Use when asked to 模拟读者, 读者反馈, 试读, 测一下留存, 读者怎么看, 虚拟试读, simulate readers, reader feedback, mock audience. Triggers 模拟读者, 虚拟试读, 读者反馈, 弃书点, 爽点捕获, 留存测试, novel simulate, reader panel.
+description: 合成叙事探针（兼容“模拟读者”叫法）— 用不同阅读偏好视角和可复核的表面信号提出弃书点、理解障碍、可预测性等候选假设。输出不是抽样读者、真实留存预测或统计证据，不参与自动评分；真实平台/内测数据走 novel-feedback。Use when asked to 模拟读者, 合成读者探针, 读者视角复核, 弃书点假设, 读者怎么看, 虚拟试读, simulate readers, narrative probes, mock audience. Triggers 模拟读者, 合成探针, 虚拟试读, 读者反馈, 弃书点, 可预测性, novel simulate, reader panel.
 ---
 
 # novel-simulate — 多代理人“模拟读者”测试
 
-这是一种**定性**的评估工具，旨在模拟真实读者阅读时的心理活动。
+这是一个**合成、定性、待验证**的编辑工具：用多种阅读偏好提出“值得去正文里复核什么”的问题。它不模拟出具有统计代表性的真实读者，也不输出真实留存概率。
 
 ## 读者人格库
 
@@ -24,13 +24,13 @@ python3 skills/novel/novel-simulate/scripts/simulate_panel.py "<作品根>" [--s
 ```
 - **opening**：读前 3 章，模拟新读者的留存决策。
 - **chapter**：读指定章节，模拟追更读者的反馈。
-- **按目标平台定默认人格集与留存先验**：不传 `--personas` 时，脚本读 `目标平台` 选择点（经 `keyword_banks.classify_platform` 归一为 `商业爽文向`/`品质向`，口径同 novel-score）选默认人格——爽文向用全人格、品质/情感向默认换成情感党+逻辑党+毒舌（不把小白爽点党当留存主力），rookie 仍可显式 `--personas` 加回。`retention_prior` 同样按档加权：品质向以情感张力+钩子+文笔多样性为主驱动，不把爽点稀薄当劝退。
+- **按目标平台定默认视角集与代理公式**：不传 `--personas` 时，脚本读 `目标平台` 选择点（经 `keyword_banks.classify_platform` 归一为 `商业爽文向`/`品质向`，口径同 novel-score）选默认视角。兼容字段 `retention_prior` 在 schema v2 中等同 `retention_proxy`，只是关键词、章末标记和文本多样性的表面代理，不是留存预测。
 - 关键词词表来自单一定义源 `skills/novel/_lib/keyword_banks.py`（与 novel-balance/novel-promote 共用）。
 
 ### 2. 产出报告（确定性信号 + LLM 定性骨架）
 脚本产两份：
 - `评分/读者试读反馈_<日期>.md`（人读）：每个人格一节，**确定性信号**（关注词密度/钩子强度/套路密度）已算好，**定性心声 / 弃书点**留「【AI 代理填写】」占位 → AI 代理按人格 prompt 读文本补全（同 `skills/novel/novel-craft/references/选择点与偏好.md` 的交互节点约定）。
-- `评分/reader_panel_signals.json`（机读）：含各人格信号 + `retention_prior`（爽点密度·钩子·多样性·套路加权的留存近似），并明确 `analysis_mode=signal_only`、`signal_only=true`、`qualitative_completed=false`、`personas_completed=[]`。供 `novel-score` 作为低权重留存先验；QA gate 会对 signal-only 写 `SIMULATE-SIGNAL-ONLY` warning；只有报告里的「人格心声 / 弃书点」被 AI/人工补完并回写状态后，才算完整模拟读者面板。
+- `评分/reader_panel_signals.json`（机读）：含各视角信号和 `retention_proxy`（保留 `retention_prior` 兼容字段），并明确 `evidence_type=synthetic_probe`、`validation_status=unvalidated`、`decision_authority=context_only`、`numeric_score_eligible=false`。`novel-score` 只展示上下文、不自动调分；QA gate 会写 `SIMULATE-SIGNAL-ONLY` warning。补完「人格心声 / 弃书点」后仍属于合成证据，不会升级成真实读者面板。
 
 报告含：总评(受众兼容度) / 爽点捕获图 / 弃书点预警 / 各人格针对性改法。
 
@@ -96,6 +96,6 @@ python3 skills/novel/novel-simulate/scripts/simulate_panel.py "<作品根>" [--s
 
 | 错误 | 纠正 |
 |---|---|
-| 把模拟读者当审稿机 | 读者反馈是主观的，不一定“正确”，但代表了“感受” |
+| 把模拟角色当成真实读者样本 | 它只代表模型按提示生成的假设；用正文证据和真人反馈验证 |
 | 人格选择单一 | 至少选择 3 个差异化的人格，以获得全面的视角 |
-| 把 `reader_panel_signals.json` 当完整试读结论 | 默认只是 signal-only；定性占位未补完时只能低权重参考 |
+| 把 `reader_panel_signals.json` 当留存预测或调分依据 | 它始终是 synthetic/context-only；只生成复核问题，不自动改分 |

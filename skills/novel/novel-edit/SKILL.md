@@ -47,7 +47,7 @@ description: Professional editing workflow for completed or in-progress novel dr
 ## 工作流
 
 1. 先跑已有证据层：`novel-review`、必要时 `novel-score`、`novel-balance`、`novel-simulate`、`novel-feedback`；多份报告已齐时先用 `novel-craft/scripts/revision_planner.py` 汇成 `修订/revision_plan.json`。
-2. `edit_plan.py` 会优先读取 `修订/revision_plan.json`，并兜底读取 `评分/pacing_signals.json`、`评分/reader_panel_signals.json`、真实反馈、score/review 和 scene cards，避免节奏/留存信号停在各自报告里。
+2. `edit_plan.py` 会优先读取 `修订/revision_plan.json`，并兜底读取 `评分/pacing_signals.json`、合成且仅 P2 复核的 `评分/reader_panel_signals.json`、真实反馈、score/review 和 scene cards，避免各类证据与假设停在各自报告里。
 3. 若已有 `设定/scene_cards.json`，优先按场景诊断；缺场景卡时先用 `novel-craft/scripts/scene_cards.py scaffold` 生成骨架。
 4. 生成分层编辑计划：
 

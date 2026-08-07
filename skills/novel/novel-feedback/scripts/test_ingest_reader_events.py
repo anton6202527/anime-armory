@@ -83,8 +83,28 @@ def test_experiment_and_take_attribution_are_summarized():
         )
         groups = summary["experiments"]["groups"]
         assert len(groups) == 2
-        assert summary["experiments"]["best_by_ab_test"][0]["variant_id"] == "A"
-        assert summary["experiments"]["best_by_ab_test"][0]["take_ids"] == ["take-a1"]
+        leader = summary["experiments"]["leaders_by_ab_test"][0]
+        assert leader["leader_variant_id"] == "A"
+        assert leader["take_ids"] == ["take-a1"]
+        assert leader["decision"] == "inconclusive"
+        assert leader["decision_authority"] == "context_only"
+        assert "deprecated alias" in summary["experiments"]["compatibility_note"]
+        os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
+        with open(os.path.join(tmp, "评分", "reader_test_plan.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "variants": [
+                    {"variant_id": "A", "take_id": "take-a1", "hypothesis": "开篇更直接"},
+                    {"variant_id": "B", "take_id": "take-b1", "hypothesis": "开篇更含蓄"},
+                ],
+                "min_sample": 20,
+                "scope": "chapter:1",
+                "retest_policy": {"min_completion_delta": 0.05},
+            }, f, ensure_ascii=False)
+        planned = ing.apply_reader_test_plan(tmp, summary)
+        leader = planned["experiments"]["leaders_by_ab_test"][0]
+        assert leader["interpretation"] == "descriptive_leader_only"
+        assert leader["decision"] == "inconclusive"
+        assert "complete statistical decision protocol" in leader["reason"]
 
 
 def test_main_writes_artifacts():

@@ -17,19 +17,19 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 
 ## 核心原则
 
-- **访谈先行，别替用户决定故事**：从"几个字"问出 logline / 主角 / 金手指 / 爽点 / 冲突，**一次问一组、给默认建议让用户确认**，不一次性轰炸。详见 `references/interview.md`。
-- **创作蓝图 = 这部书的宪法**：`设定/创作蓝图.md` 写死 logline/题材/平台/主角+金手指/核心爽点/主线冲突/风格卡。后续每章都受它约束。蓝图没敲定不进设定、不进章纲。
+- **访谈先行，别替用户决定故事**：从"几个字"问出 logline / 主角 / 核心机制或人物困境 / 主要阅读快感 / 冲突，**一次问一组、给建议让用户确认**，不把金手指、打脸爽点强加给文学/传统小说。详见 `references/interview.md`。
+- **创作蓝图 = 这部书的宪法**：`设定/创作蓝图.md` 锁定 logline / 题材与用途 / 主角 / 核心机制或人物困境 / 阅读承诺 / 主线冲突 / 风格卡。金手指、爽点只在对应类型项目填写，不是通用小说必选项。后续每章都受蓝图约束；蓝图没敲定不进设定、不进章纲。
 - **读者契约 = 不偏题 + 好看 + 文学性的执行锚**：蓝图通过后补 `设定/读者契约.md`（模板见 `novel-craft/references/reader-contract.md`），锁定核心题旨、读者承诺、好看机制、文学质感和禁偏清单；Demo 通过后同步到 `审稿/demo_gate.json.reader_contract`，后续每章任务包都必须携带。
 - **市场基准先于商业蓝图**：`商业连载` / `漫剧源书` / 红果/抖音/番茄等平台项目，在填蓝图前先跑 `novel-score/scripts/collect_market_baseline.py` 或补结构化且未过期的人工证据；没有日期和来源的“热门套路”只能记为假设，不能当蓝图依据。
 - **专业资料包先于行业场景**：医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文，或用户要求“专业、真实、行业感、别外行”时，先用 `novel-research` 建 `资料/专业资料包_<主题>.md` + `资料/research_sources.json`；没有 ready 资料包的事实不能写成确定事实。
 - **生活观察先于生活感**：用户要求烟火气、现实质感、人物像活人、职业/地域/日常细节时，先用 `novel-observe` 建 `素材/观察札记.jsonl`；写章时只转化行为、五感和戏剧用途，不照搬真实隐私。
 - **审美样本先于精品化**：品质向、文学向、历史、悬疑、Demo 精修或投稿级项目，Demo 过审后用 `novel-aesthetic` 登记项目高光和授权/公版正向样本，后续 line edit 按“为什么有效”的规则改，而不是只按扣分表修。
 - **吃下碎片**：用户给的风格样本 / 零散笔记 / 半成品片段 → `--ingest` 收进 `素材/`，解析成风格卡 + 已知设定，**缺口逐项问**，不丢用户已有的东西。
-- **设定圣经做一致性追踪**：原创最大翻车点是设定前后矛盾、金手指无代价。`设定/设定圣经.md` 逐条登记 + 回扫核对。
-- **用途先于平台**：先确认小说最终用途（传统小说 / 漫剧源书 / 微短剧源书 / **短故事·超短篇** / 短篇试写等），再按目标平台（起点/番茄/七猫/晋江/抖音漫剧/红果/历史向）调读者口味、爽点节奏和开篇钩；起名委托 `novel-title`。**保持当前默认**：用途无默认，`写小说` 不自动等于 `漫剧源书`；用户没选漫剧/微短剧时，按普通小说/网文立项继续。
-- **短故事是一等创作目标**：用户要写「短故事 / 超短篇 / 番茄短故事 / 短剧选品池底稿」时，选 `--scale microstory`（别名 `短故事`/`超短篇`），**走单篇闭环结构而非连载章纲**：100 字内抛冲突+金手指 → 一次升级 → 强反转 + 一句话简介，工艺见 `novel-craft/references/short-story.md`。短故事/短中篇是否是当前最快验证形态，必须以 `novel-score` 的 market baseline 或 `novel-research` 平台资料包为准。
-- **Demo gate 最重要**：前 1-3 章定文风/爽点密度/钩子/设定自洽，用户审过才批量写。
-- **文本主创模式先定**：投稿/出版目标，尤其晋江/起点/番茄/红果等中文网文平台，默认推荐 `人类主创` 或 `AI辅助`；`AI生成` 正文会在 QA gate 被标为高风险并阻断投稿导出，除非用户提供平台接受 AI 正文的当日证据，并写入作用域匹配的 `ai_generated_text_platform_exception` 豁免。
+- **设定圣经做一致性追踪**：原创最大翻车点是已确认事实前后矛盾、高杠杆机制没有边界或后果。`设定/设定圣经.md` 逐条登记 + 回扫核对。
+- **用途先于平台**：先确认小说最终用途（传统小说 / 漫剧源书 / 微短剧源书 / **短故事·超短篇** / 短篇试写等），再按目标平台（起点/番茄/七猫/晋江/抖音漫剧/红果/历史向）的当前证据适配交付、节奏和开篇；爽点/强钩只对相应类型启用。起名委托 `novel-title`。**保持当前默认**：用途无默认，`写小说` 不自动等于 `漫剧源书`；用户没选漫剧/微短剧时，按普通小说/网文立项继续。
+- **短故事是一等创作目标**：用户要写「短故事 / 超短篇 / 番茄短故事 / 短剧选品池底稿」时，选 `--scale microstory`（别名 `短故事`/`超短篇`），**走单篇闭环结构而非连载章纲**：尽早建立核心问题或处境 → 一次不可逆升级 → 关键选择/反转/余味 + 一句话简介；商业短读可再套平台型强钩模板，工艺见 `novel-craft/references/short-story.md`。短故事/短中篇是否是当前最快验证形态，必须以 `novel-score` 的 market baseline 或 `novel-research` 平台资料包为准。
+- **Demo gate 最重要**：前 1-3 章定文风、人物与阅读承诺、设定自洽；商业连载/改编源书再验证兑现密度与追读钩。用户审过才批量写。
+- **文本主创模式先定**：晋江当前公开规范只允许校对级，以及创意环节的要素级/粗纲级 AI 使用；超出范围的 AI 正文会在 QA gate 阻断。起点/番茄等平台没有统一、公开且足以概括所有合同/活动的许可边界，发布前应运行时核验作者后台、合同或编辑通知，不能把“平台提供 AI 工具”推成“允许全稿 AI”。
 - **批量写章先出任务包**：Demo 过审后先跑 `novel-craft/scripts/draft_packets.py`，每章带蓝图/设定/章纲/Demo 风格锚点/状态账本，再写正文。`商业连载` / `漫剧源书` 默认自动走 Architect → Ghostwriter → Senior Editor 三段式任务包；写完填 `审稿/state_delta_第NN章.json`，避免长篇越写越漂。
 - **原创=用户自有，天然合法**：无版权筛查（区别于 spinoff/rewrite/expand/condense 的合法性铁律）。
 
@@ -49,8 +49,8 @@ python3 skills/novel/novel-score/scripts/collect_market_baseline.py "<作品根>
 
 从用户的只言片语 + 碎片，问清这几组（一次一组、带默认建议）：
 - **题材类型 + 小说用途 + 目标平台**（决定交付形态/篇幅档/爽点节奏）
-- **主角**：是谁 + **金手指/核心能力（必有代价）** + 动机/心结
-- **核心爽点**（这本"爽"在哪）+ **主线冲突/反派**
+- **主角**：是谁 + 核心资源/能力/关系/困境 + 动机/心结；若有超常能力，补边界与后果
+- **核心阅读承诺**（悬念/情感/主题/幽默/爽感等）+ **主线冲突/阻力**
 - **规模档**（microstory(短故事)/short/medium/long/微短剧/漫剧 —— 见 `novel-craft/references/split.md` 字数分档）+ **人称视角** + 目标读者
 - **风格**：给了样本就吃（→ 风格卡）；没给则记"Demo 后回填"
 - **输出**：txt/docx/outline。
@@ -61,7 +61,8 @@ python3 skills/novel/novel-score/scripts/collect_market_baseline.py "<作品根>
 python3 <skill>/scripts/init_project.py \
     --title "<书名或'待定'>" --genre "<题材类型>" \
     --premise "<一句话故事>" --scale short|medium|long|微短剧|漫剧 \
-    [--purpose 漫剧源书] [--platform 红果] [--person third-limited] [--target-chapters N] \
+    --purpose "<小说用途>" --platform "<目标平台或跨平台>" \
+    [--person third-limited] [--target-chapters N] \
     [--ingest <碎片路径>]...
 ```
 → `创作区/写小说/<项目>/`（设定/{创作蓝图,设定圣经,角色卡,世界观,章纲} + 素材/(碎片) + 章节/ + 审稿/ + 导出/ + _meta + _进度）。
@@ -69,11 +70,19 @@ python3 <skill>/scripts/init_project.py \
 
 ### 2. 填创作蓝图.md + 读者契约.md（最重要 · 这部的宪法）
 **先发散再收敛（创意闸 · 蓝图三方案）**：锁定蓝图前必须先给出 **3 个差异化方向**（不是同一方案的三种措辞），每个方向从不同切口发散——如题材/类型混搭、非常规主角视角、结构性玩法（时间线/叙事框架）、金手指的反向设计（代价先行/限制即爽点）。**发散不靠灵感碰运气**：`novel-craft/references/premise-divergence.md` 给了六个撬棍（金手指反向/视角错位/类型杂交/场域平移/前提取反/约束逼创意）+「生成≥5→三项打分→挑或杂交」的可操作步骤；命中高频套路时，`novel-review/scripts/trope_cliche.py` 会在开写前提示，按 premise-divergence 的"命中之后怎么真差异化"处理。每个方向写三行：① 一句话 logline；② **差异化记忆点**（读者能一句话转述传播的"别人没有的东西"）；③ 最像的既有爆款 + 与它的关键差异。然后做**套路自查**：老读者能否从 logline 直接预测前 10 章走向和结局？能 → 该方向回炉或杂交。把选定方向（或杂交结果）与被否方向的一句话理由一起写进蓝图的「差异化决策」小节——留下否稿理由，score 的 novelty 维度与后续 spinoff 选题都会回读。**候选须结构化落盘**：三方向写入 `设定/premise_candidates.json`（`{candidates:[{id,logline,memory_point,closest_hit,key_diff}],chosen}`），随后跑 `python3 skills/novel/novel-create/scripts/premise_divergence_audit.py "<作品根>"` 做"真差异化"机检——候选 <3、两方向字面近似（同一方案换措辞）、共享同一套路锚（措辞不同骨架相同）都会被点名（advisory 不阻断；此前"不是三种措辞"只是 prose 指令，LLM 交三条换汤不换药的 logline 无人拦）。**发散采样口径（对抗 mode collapse）**：生成候选时用 Verbalized Sampling——让模型一次给 ≥5 个候选并各自标注"这个方向的典型度/概率"，**刻意从低典型度尾部取 2-3 个**进入三方向池；直接连问三次"再来一个"只会掉进同一个高概率模式（arXiv 2510.01171 实证：典型性偏差是套路化根因，VS 纯提示词即可提升发散 1.6-2 倍）。→ **用户选一或杂交**。
-把访谈结论写实写细：logline / 主角+金手指 / 核心爽点 / 主线冲突 / 基调 / 风格卡（若有样本）。商业/平台项目把 `评分/market_baseline_<日期>.json` 或人工证据的“热度、拥挤度、差异化缺口”写进“市场假设/差异化”小节，并标明采集日期；没证据的判断只写“待验证假设”。→ **用户审**。
+把访谈结论写实写细：logline / 主角 / 核心机制或困境 / 阅读承诺 / 主线冲突 / 基调 / 风格卡（若有样本）。商业/平台项目把 `评分/market_baseline_<日期>.json` 或人工证据的“热度、拥挤度、差异化缺口”写进“市场假设/差异化”小节，并标明采集日期；没证据的判断只写“待验证假设”。→ **用户审**。审过后记录与当前文件 hash 绑定的批准：
+```bash
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage blueprint \
+  --agent "<复核人>" --reason "<确认了哪些方向与边界>"
+```
 用户审过后，按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：一句话题旨、核心戏剧问题、开篇/中段/终局读者承诺、好看机制、文学质感、禁偏清单。这个文件后续被 `draft_packets.py` 每章读取，防止成稿偏题、只刷事件或文笔变薄。
 
 ### 3. 建设定圣经 + 角色卡 + 世界观
-把蓝图展开成可一致性追踪的设定：金手指的**代价/边界**、势力、关键人物、地理、术语 + 一致性约束清单。**严格按家族统一 schema `novel-craft/references/setting-bible.md`**（设定圣经字段 + 角色卡字段 + 首现章/复用范围/代价三列），这样 spinoff/rewrite/review 读的是同一套字段、不漂。长篇/商业项目同步建 `设定/character_guardrails.json`：把主要角色的 `hard_limits` / `forbidden_actions` / `allow_if_context` 结构化，供 `logic_sentry.py` 机检底线违背。→ **用户审**。
+把蓝图展开成可一致性追踪的设定：人物/关系、社会与自然规则、势力、地理、术语；若有高杠杆能力或机制，登记其**代价/边界/后果**。**严格按家族统一 schema `novel-craft/references/setting-bible.md`**（设定圣经字段 + 角色卡字段 + 首现章/复用范围/边界列），这样 spinoff/rewrite/review 读的是同一套字段、不漂。长篇/商业项目同步建 `设定/character_guardrails.json`：把主要角色的 `hard_limits` / `forbidden_actions` / `allow_if_context` 结构化，供 `logic_sentry.py` 机检底线违背。→ **用户审**。审过后同样记录批准；任一受审文件变化会自动失效并要求重审：
+```bash
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage setting \
+  --agent "<复核人>" --reason "<确认了哪些规则与人物边界>"
+```
 
 长篇/商业连载/系统流/修仙/群像/复杂世界观项目，设定完成后、章纲批量展开前先跑 storyworld 写前压力测试：
 
@@ -81,18 +90,18 @@ python3 <skill>/scripts/init_project.py \
 python3 skills/novel/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>"
 ```
 
-若 `verdict=block_pre_draft`，先补角色目标、世界规则、地理势力、时间线、章纲压力或读者契约，不进入 Demo/批量写章。
+若 `verdict=block_pre_draft`，表示必要结构文件缺失，先补齐再进 Demo；关键词/阈值得到的 `revise_setting` 只是低置信表层提示，由作者复核，不硬挡。
 
 ### 4. 书名
 委托 `novel-title`（原创类型，按目标平台 5 维打分）。蓝图/设定齐了再起，名字才贴。→ **用户审**，选定写回 `_meta.title` + 各文件标题。
 
 ### 5. 章纲
-三幕 + 反转 + 钩子；**节拍优先字数兜底**，按平台档定章数/字数 —— 用 `novel-craft/references/{outline,split}.md`。开篇黄金前 3 章立爽点/悬念。每个弧段（3-5 章）按 outline.md「意外性设计位」登记至少一处预期违背：先写读者此刻的预期线，再写违背方式与回看合理性的伏笔位；twist 型伏笔同步进 `设定/foreshadowing_ledger.json`（`payoff_is_twist=true`），让 wiki 台账能对账"惊喜是否兑现"。→ **用户审**（章纲未敲定不进 Demo）。
+选择与题材相配的宏观结构，并让每章产生可辨认的叙事变化；**节拍优先、字数兜底**，按用途/平台档定章数与建议带宽 —— 用 `novel-craft/references/{outline,split}.md`。商业连载/改编源书在开篇尽快证明阅读承诺并布追读钩；文学/传统小说可用人物选择、意象或主题推进，不强制爽点。每个弧段（3-5 章）按 outline.md「意外性设计位」登记至少一处预期违背：先写读者此刻的预期线，再写违背方式与回看合理性的伏笔位；twist 型伏笔同步进 `设定/foreshadowing_ledger.json`（`payoff_is_twist=true`），让 wiki 台账能对账"惊喜是否兑现"。→ **用户审**（章纲未敲定不进 Demo）。
 
 ### 6. Demo（前 1-3 章）+ 用户审【最重要 gate】
-逐章写（每章一个戏剧节拍 + ≥1 钩子，用 `novel-craft/references/chapter.md` 的单章守则 + 子代理 prompt 模板）。验：文风对不对 / 爽点够不够 / 钩子留没留 / 设定自洽。**每章独立审**。文风定了回填 `创作蓝图.md` 风格卡。
+逐章写（每章应有可辨认的叙事变化，用 `novel-craft/references/chapter.md` 的单章守则 + 子代理 prompt 模板）。商业连载/改编源书再检查钩子与兑现密度；文学/传统小说检查人物选择、意象、主题推进与余味，不强制章章爽点或悬崖钩。**每章独立审**。文风定了回填 `创作蓝图.md` 风格卡。
 Demo 里真正有效的高光（开篇动作、对白潜台词、场景质感、人物选择、句式节奏）要登记进 `novel-aesthetic`，作为后续全书的正向审美标尺；不是为了仿写原句，而是让后续章节知道“这本书好看的机制是什么”。
-> **市场体检（批量前最便宜的 go/no-go）**：Demo 过审后，对 `商业连载` 必跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）。`score_report.json.production_decision` 只允许三类：`go` / `revise` / `kill`；`revise` 先回蓝图/章纲/开篇修，`kill` 停止批量写。普通稳妥初稿可由用户选择是否评分。
+> **市场体检（商业项目的决策辅助）**：Demo 过审后，对 `商业连载` 跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）。`production_decision` 的 `go/revise/kill` 只作编辑建议；低分先核对样本、市场证据与作者目标，不能自动停稿。普通稳妥初稿可由用户选择是否评分。
 > **机器留痕（必做）**：Demo 审完必须写 `审稿/demo_gate.json`（schema 见 `novel-craft/references/demo-gate.md`）。`status != passed` 不批量写；`style_anchor`、`reader_promises`、`setting_constraints`、`reader_contract` 必须喂给后续逐章子任务和 `novel-review`。
 
 > **微短剧/漫剧源书合规预检**：小说用途为 `微短剧源书` / `漫剧源书`，或目标平台含红果/抖音时，Demo 过审后、批量写章前跑：
@@ -167,11 +176,11 @@ python3 skills/novel/novel-craft/scripts/ai_usage.py "<作品根>" \
 
 | 错误 | 纠正 |
 |---|---|
-| 上来就替用户编故事 | 先访谈问清 logline/主角/金手指/爽点/冲突，给默认让用户确认 |
+| 上来就替用户编故事 | 先访谈问清 logline/主角/核心机制或困境/阅读承诺/冲突，给候选让用户确认 |
 | 让用户重答已给过的碎片 | 先复述理解 + 吃 `素材/`，只补缺口 |
 | 蓝图没敲定就建设定/章纲 | 蓝图是宪法，未审不下推 |
-| 金手指无代价 / 设定前后矛盾 | 设定圣经登记代价边界 + 回扫逐条核 |
-| 跳过 Demo gate 直接批量写 | 文风/爽点/设定自洽 1-3 章就能看出 |
+| 高杠杆机制无边界 / 设定前后矛盾 | 设定圣经登记边界与后果 + 回扫逐条核 |
+| 跳过 Demo gate 直接批量写 | 文风/人物/阅读承诺/设定自洽在 1-3 章先验证 |
 | Demo 过审后不出任务包，直接靠主对话记忆写长篇 | 先跑 `draft_packets.py`，每章用任务包 + 状态账本 |
 | 写完章节不填状态增量 | 填 `state_delta_第NN章.json`，合并进 `state_ledger.json` |
 | 要发布却没留 AI 使用披露 | 跑 `ai_usage.py`，产出 `合规/AI使用说明.md` |

@@ -78,7 +78,7 @@ class ProgressContractTest(unittest.TestCase):
             self.assertIn("[block]", out)
             self.assertIn("REV-001", out)
 
-    def test_completed_progress_still_reports_qa_blockers(self):
+    def test_completed_progress_reports_score_verdict_as_advisory(self):
         with tempfile.TemporaryDirectory() as tmp:
             with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
                 json.dump({"kind": "create", "title": "测试"}, f, ensure_ascii=False)
@@ -98,8 +98,9 @@ class ProgressContractTest(unittest.TestCase):
                 [sys.executable, progress.__file__, tmp],
                 capture_output=True, text=True, check=True,
             ).stdout
-            self.assertIn("QA gate 仍有阻断", out)
+            self.assertIn("QA gate 无阻断，但仍有建议项", out)
             self.assertIn("SCORE-VERDICT", out)
+            self.assertNotIn("[block]", out)
 
     def test_set_stage_updates_progress_under_lock(self):
         with tempfile.TemporaryDirectory() as tmp:

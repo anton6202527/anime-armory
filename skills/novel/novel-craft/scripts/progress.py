@@ -156,6 +156,10 @@ def scan_main(argv=None):
             print("[done] _进度.md 未发现未完成项，但 QA gate 仍有阻断。")
             print("")
             print(format_gate_status(gate_status))
+        elif gate_status.get("warnings"):
+            print("[ok] _进度.md 未发现未完成项；QA gate 无阻断，但仍有建议项。")
+            print("")
+            print(format_gate_status(gate_status))
         else:
             print("[ok] _进度.md 未发现未完成项。")
         return
