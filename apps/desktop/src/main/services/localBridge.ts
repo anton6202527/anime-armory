@@ -8,15 +8,20 @@ import { pipeline } from 'node:stream/promises'
 import { dialog } from 'electron'
 import type { AgentInfo, LineKey } from '@shared/types'
 import { detectAgents } from './agents'
+import { CliProxyError, CliProxyService } from './cliProxy'
 import { LINES, type WorkspaceService } from './workspace'
 
 const BRIDGE_HOST = '127.0.0.1'
 export const LOCAL_BRIDGE_PORT = 43117
 const MAX_JSON_BYTES = 128 * 1024
+const MAX_CANVAS_GENERATION_JSON_BYTES = 18 * 1024 * 1024
 const MAX_FILE_BYTES = 2 * 1024 * 1024 * 1024
 const MAX_PROMPT_CHARS = 100_000
 const MAX_JOB_OUTPUT_CHARS = 1_000_000
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000
+const MAX_GLOBAL_CANVAS_GENERATIONS = 3
+const MAX_SESSION_CANVAS_GENERATIONS = 2
+const MAX_CANVAS_GENERATIONS_PER_MINUTE = 12
 const SUPPORTED_AGENTS = new Set(['codex', 'claude', 'opencode'])
 const LINE_KEYS = new Set<LineKey>(['novel', 'n2d', 'comic', 'ad', 'mv', 'song'])
 
@@ -98,13 +103,13 @@ function lineKey(value: string): LineKey {
   return value as LineKey
 }
 
-async function readJson(req: IncomingMessage): Promise<unknown> {
+async function readJson(req: IncomingMessage, maxBytes = MAX_JSON_BYTES): Promise<unknown> {
   const chunks: Buffer[] = []
   let size = 0
   for await (const raw of req) {
     const chunk = Buffer.isBuffer(raw) ? raw : Buffer.from(raw)
     size += chunk.length
-    if (size > MAX_JSON_BYTES) throw new BridgeHttpError(413, '请求内容过大')
+    if (size > maxBytes) throw new BridgeHttpError(413, '请求内容过大')
     chunks.push(chunk)
   }
   try {
@@ -171,10 +176,20 @@ function invocation(agent: AgentInfo, prompt: string): { args: string[]; stdin?:
   }
 }
 
-function agentRank(agent: AgentInfo): number {
-  const order = ['codex', 'claude', 'opencode']
-  const index = order.indexOf(agent.id)
-  return index < 0 ? order.length : index
+function agentEnvironment(): NodeJS.ProcessEnv {
+  const env: NodeJS.ProcessEnv = { ...process.env, TERM: 'dumb', NO_COLOR: '1' }
+  for (const key of Object.keys(env)) {
+    const normalizedKey = key.toUpperCase()
+    if (normalizedKey === 'CLI_PROXY_API_KEY' || normalizedKey.startsWith('CUSTOM_OPENAI_')) delete env[key]
+  }
+  return env
+}
+
+function isDisabledWebAgentRoute(pathname: string): boolean {
+  const normalizedPath = pathname.toLowerCase()
+  return normalizedPath === '/v1/work-files'
+    || normalizedPath === '/v1/agent/jobs'
+    || normalizedPath.startsWith('/v1/agent/jobs/')
 }
 
 export class LocalBridgeService {
@@ -182,6 +197,10 @@ export class LocalBridgeService {
   private sessions = new Map<string, BridgeSession>()
   private jobs = new Map<string, BridgeJob>()
   private pairingAt = new Map<string, number>()
+  private canvasGenerationsBySession = new Map<string, number>()
+  private canvasGenerationTimes = new Map<string, number[]>()
+  private canvasGenerationControllers = new Set<AbortController>()
+  private readonly cliProxy = new CliProxyService()
 
   constructor(private readonly workspace: WorkspaceService) {}
 
@@ -228,13 +247,14 @@ export class LocalBridgeService {
     res.end(JSON.stringify(body))
   }
 
-  private authorize(req: IncomingMessage, origin: string): void {
+  private authorize(req: IncomingMessage, origin: string): string {
     const token = req.headers.authorization?.match(/^Bearer\s+(.+)$/i)?.[1]
     const session = token ? this.sessions.get(token) : undefined
     if (!session || session.origin !== origin || session.expiresAt <= Date.now()) {
       if (token) this.sessions.delete(token)
       throw new BridgeHttpError(401, '本地桥接配对已失效')
     }
+    return token!
   }
 
   private async pair(origin: string): Promise<{ token: string; expiresAt: string }> {
@@ -247,8 +267,8 @@ export class LocalBridgeService {
       defaultId: 0,
       cancelId: 1,
       title: '连接 LabuTV Web',
-      message: '允许浏览器使用本机 AI Agent CLI？',
-      detail: `${origin}\n\n网页只能向 LabuTV 工作区提交结构化创作任务，不能执行任意 Shell 命令。`,
+      message: '允许浏览器使用本机共享模型？',
+      detail: `${origin}\n\n网页只能调用已配置的文本与图片模型；本地 Agent、Shell、文件上传和模型 API Key 均不会向网页开放。`,
       noLink: true,
     })
     if (result.response !== 0) throw new BridgeHttpError(403, '用户拒绝了本地桥接请求')
@@ -343,7 +363,7 @@ export class LocalBridgeService {
     const command = invocation(agent, fullPrompt)
     const child = spawn(agent.path, command.args, {
       cwd: workDir,
-      env: { ...process.env, TERM: 'dumb', NO_COLOR: '1' },
+      env: agentEnvironment(),
       stdio: ['pipe', 'pipe', 'pipe'],
     })
     const job: BridgeJob = {
@@ -391,6 +411,42 @@ export class LocalBridgeService {
     }
   }
 
+  private async generateCanvas(
+    req: IncomingMessage,
+    res: ServerResponse,
+    sessionToken: string,
+    value: unknown,
+  ) {
+    const now = Date.now()
+    const recent = (this.canvasGenerationTimes.get(sessionToken) ?? []).filter((timestamp) => now - timestamp < 60_000)
+    if (recent.length >= MAX_CANVAS_GENERATIONS_PER_MINUTE) {
+      throw new BridgeHttpError(429, '画布生成请求过于频繁，请稍后重试')
+    }
+    const sessionActive = this.canvasGenerationsBySession.get(sessionToken) ?? 0
+    if (sessionActive >= MAX_SESSION_CANVAS_GENERATIONS || this.canvasGenerationControllers.size >= MAX_GLOBAL_CANVAS_GENERATIONS) {
+      throw new BridgeHttpError(429, '当前生成任务较多，请等待已有任务完成')
+    }
+
+    recent.push(now)
+    this.canvasGenerationTimes.set(sessionToken, recent)
+    this.canvasGenerationsBySession.set(sessionToken, sessionActive + 1)
+    const controller = new AbortController()
+    this.canvasGenerationControllers.add(controller)
+    const abort = () => controller.abort()
+    req.once('aborted', abort)
+    res.once('close', abort)
+    try {
+      return await this.cliProxy.generateCanvasContent(value, controller.signal)
+    } finally {
+      req.off('aborted', abort)
+      res.off('close', abort)
+      this.canvasGenerationControllers.delete(controller)
+      const remaining = (this.canvasGenerationsBySession.get(sessionToken) ?? 1) - 1
+      if (remaining > 0) this.canvasGenerationsBySession.set(sessionToken, remaining)
+      else this.canvasGenerationsBySession.delete(sessionToken)
+    }
+  }
+
   private async handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
     this.assertHost(req)
     const origin = this.origin(req)
@@ -402,14 +458,12 @@ export class LocalBridgeService {
     }
     const url = new URL(req.url ?? '/', `http://${BRIDGE_HOST}:${LOCAL_BRIDGE_PORT}`)
     if (req.method === 'GET' && url.pathname === '/v1/status') {
-      const agents = (await detectAgents())
-        .filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id))
-        .sort((left, right) => agentRank(left) - agentRank(right))
       this.json(res, 200, {
         service: 'anime-armory-local-bridge',
-        version: 1,
+        version: 2,
         requiresPairing: true,
-        agents: agents.map(({ id, name }) => ({ id, name })),
+        capabilities: { canvasGeneration: true, localAgentJobs: false },
+        agents: [],
       }, origin)
       return
     }
@@ -418,7 +472,25 @@ export class LocalBridgeService {
       return
     }
 
-    this.authorize(req, origin)
+    const sessionToken = this.authorize(req, origin)
+    if (req.method === 'GET' && url.pathname === '/v1/canvas/models') {
+      this.json(res, 200, await this.cliProxy.discoverCanvasModels(), origin)
+      return
+    }
+    if (req.method === 'POST' && url.pathname === '/v1/canvas/generate') {
+      const value = await readJson(req, MAX_CANVAS_GENERATION_JSON_BYTES)
+      this.json(res, 200, await this.generateCanvas(req, res, sessionToken, value), origin)
+      return
+    }
+    if (req.method === 'GET' && url.pathname.toLowerCase() === '/v1/agents') {
+      this.json(res, 200, { agents: [] }, origin)
+      return
+    }
+    // A paired Web origin may call models only. Keep this denial ahead of every legacy
+    // Agent/file handler so model credentials never share a trust boundary with a local CLI.
+    if (isDisabledWebAgentRoute(url.pathname)) {
+      throw new BridgeHttpError(410, '本地桥接不再向网页开放 Agent、Shell 或文件上传能力')
+    }
     if (req.method === 'GET' && url.pathname === '/v1/agents') {
       const agents = await detectAgents()
       this.json(res, 200, { agents: agents.filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id)) }, origin)
@@ -462,7 +534,8 @@ export class LocalBridgeService {
     void detectAgents().catch(() => undefined)
     const server = createServer((req, res) => {
       void this.handle(req, res).catch((error: unknown) => {
-        const status = error instanceof BridgeHttpError ? error.status : 500
+        const status = error instanceof BridgeHttpError || error instanceof CliProxyError ? error.status : 500
+        const code = error instanceof CliProxyError ? error.code : 'local_bridge_error'
         const message = error instanceof Error ? error.message : String(error)
         let origin: string | undefined
         try {
@@ -470,7 +543,7 @@ export class LocalBridgeService {
         } catch {
           origin = undefined
         }
-        if (!res.headersSent) this.json(res, status, { error: { message } }, origin)
+        if (!res.headersSent) this.json(res, status, { error: { code, message } }, origin)
         else res.destroy()
       })
     })
@@ -489,6 +562,10 @@ export class LocalBridgeService {
     for (const job of this.jobs.values()) job.process?.kill('SIGTERM')
     this.jobs.clear()
     this.sessions.clear()
+    this.canvasGenerationControllers.forEach((controller) => controller.abort())
+    this.canvasGenerationControllers.clear()
+    this.canvasGenerationsBySession.clear()
+    this.canvasGenerationTimes.clear()
     this.server?.close()
     this.server = null
   }

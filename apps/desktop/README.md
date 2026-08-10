@@ -19,11 +19,21 @@ npm run dist         # electron-builder 产出安装包(release/)
 新作品工作区默认为 `~/LabuTV`（若机器上已有旧版 `~/AnimeArmory` 且尚无 `~/LabuTV`，会继续沿用旧目录，避免迁移时丢失作品）。可经菜单“切换工作区…”更换，与技能仓库互斥隔离。
 自动化调试可用 `ANIME_ARMORY_WORKSPACE` 指向临时工作区。
 
-### Web 本地 Agent 桥接
+### Web 本地模型桥接
 
-Electron 启动后会在 `127.0.0.1:43117` 提供仅回环可见的 Web 桥接。浏览器第一次提交本地任务时，桌面端会显示原生确认弹窗；允许后签发 12 小时内存会话令牌。桥接只接受结构化作品、附件与 Prompt，不接受网页提供的 Shell 命令或文件系统路径。附件与 Agent 输出被限制在当前 LabuTV 作品工作区的 `创作区/<系列>/<作品>--web-<id>/`。
+Electron 启动后会在 `127.0.0.1:43117` 提供仅回环可见的 Web 桥接。浏览器第一次调用本机共享模型时，桌面端会显示原生确认弹窗；允许后签发 12 小时内存会话令牌。该配对会话只开放受控的模型发现与文本/图片生成接口，不开放本地 Agent、Shell、文件上传或调用方指定的文件系统路径。
 
-本地开发默认只允许 Web 端的 `localhost:4174` 与 `127.0.0.1:4174`。正式 Web 域名需通过逗号分隔的 `ANIME_ARMORY_WEB_ORIGINS` 显式加入允许列表。当前支持 Codex CLI、Claude Code 与 OpenCode，默认优先 Codex。
+本地开发默认只允许 Web 端的 `localhost:4174` 与 `127.0.0.1:4174`。正式 Web 域名需通过逗号分隔的 `ANIME_ARMORY_WEB_ORIGINS` 显式加入允许列表。Web 端 Agent 任务继续走云端 API 或演示模式，不复用这个持有模型密钥的本地桥接。
+
+画布内的文本/图片即时生成也走同一个已配对桥接，浏览器不会直接访问模型服务。桌面主进程通过 OpenAI-compatible `cli-proxy-api` 调用 `/v1/models`、`/v1/responses` 与 `/v1/images/generations`，仅在上游明确不支持 Responses 时回退 `/v1/chat/completions`，并只向 Web 暴露发现到的 GPT 文本/图片模型。运行桌面端前配置：
+
+```bash
+export CLI_PROXY_API_URL=http://127.0.0.1:8317
+export CLI_PROXY_API_KEY=your_local_proxy_key
+npm run dev
+```
+
+也兼容 `CUSTOM_OPENAI_BASE_URL` / `CUSTOM_OPENAI_API_KEY`；`CLI_PROXY_*` 同时存在时优先。URL 可省略，默认值如上。仅在 macOS 非打包开发环境且未设置任一 API Key 时，桌面端会只读解析 `/opt/homebrew/etc/cliproxyapi.conf` 中 `api-keys` 的第一项；正式包不会读取该开发配置。密钥只存在桌面主进程内存中，不能放进 `VITE_*` 变量。
 
 ### 匿名 Demo 下载与本地作品
 
@@ -57,7 +67,8 @@ src/
 │       ├── watch      chokidar,限定生产子树,300ms 防抖 fs-changed
 │       ├── media      localhost HTTP Range 媒体服务器(视频拖动必需)
 │       ├── agents     登录 shell 探测 claude/codex/opencode/gemini/kimi
-│       ├── localBridge 受控的 Web 配对、附件传输与本地 Agent 任务
+│       ├── localBridge 受控的 Web 配对与画布模型路由（不开放 Agent/Shell/文件）
+│       ├── cliProxy   cli-proxy-api 模型发现、文本/图片生成与安全输出归一化
 │       ├── pipeline   skills/n2d/run.py next --json 桥(30s 超时)
 │       └── demos      演示包下载/sha256 校验/解压安装
 ├── preload/           contextBridge 暴露 window.armory(invoke/on/platform/getPathForFile)

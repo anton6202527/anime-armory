@@ -122,7 +122,7 @@ export function App() {
   }, [canvasAuth.ready, canvasAuth.user, canvasRoute, work]);
 
   function openAuthenticatedWork(nextWork: WebWork, attachments: PendingAttachment[]) {
-    registerLocalFiles(attachments);
+    void registerLocalFiles(attachments);
     const initialWork: WebWork = {
       ...nextWork,
       cloudState: isCloudConfigured() ? "syncing" : "local",

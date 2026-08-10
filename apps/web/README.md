@@ -42,8 +42,12 @@ using authenticated asset metadata in Supabase and signed object transfer to R2.
 
 Supabase remains the authority for identity, project membership, jobs, asset metadata, and the future membership/token ledger. R2 remains the authority for source documents and generated image, audio, video, export, and manifest bytes.
 
-## Local AI Agent bridge
+## Local model bridge
 
-When the Electron app is running, the Web canvas probes its loopback-only bridge at `127.0.0.1:43117`. If Codex CLI, Claude Code, or OpenCode is installed, the Web canvas prefers that local Agent over the cloud API. The first task opens a native Electron confirmation dialog; an approved browser tab receives a temporary session token, and selected source files are copied into the generated local work directory before the CLI starts.
+Canvas text and image nodes prefer the Electron loopback bridge at `127.0.0.1:43117`. The first model request opens a native Electron confirmation dialog; an approved browser origin receives a temporary session token. When the desktop bridge is absent during local `vite` development, the client falls back to a same-origin Vite middleware that talks to the local cli-proxy-api from Node. Web Agent jobs continue through `VITE_AGENT_API_URL` or demo mode—neither model path exposes local Agent CLIs, files, Shell commands, caller-selected filesystem paths, the upstream URL, or its API key.
 
-The bridge accepts structured work, file, and prompt requests only. It does not accept shell commands or caller-selected filesystem paths. Local development origins are allowed by default. Additional production Web origins must be explicitly listed in the Electron environment variable `ANIME_ARMORY_WEB_ORIGINS` as a comma-separated list.
+Local development origins are allowed by default. Additional production Web origins must be explicitly listed in the Electron environment variable `ANIME_ARMORY_WEB_ORIGINS` as a comma-separated list.
+
+After pairing, canvas text and image nodes discover the desktop-side GPT model allowlist through `GET /v1/canvas/models` and generate through `POST /v1/canvas/generate`. The Vite fallback exposes equivalent same-origin development-only routes, rejects non-loopback/cross-origin calls, limits request sizes, concurrency and request rate, and keeps all provider configuration in the server process. It reads `CLI_PROXY_API_URL`/`CLI_PROXY_API_KEY` or the compatible `CUSTOM_OPENAI_BASE_URL`/`CUSTOM_OPENAI_API_KEY` pair from `apps/web/.env.local`; on macOS with the default local URL it can also read the first key from `/opt/homebrew/etc/cliproxyapi.conf`. Never add a `VITE_` prefix to model secrets.
+
+Text generation prefers the Responses API and falls back to Chat Completions only when cli-proxy-api explicitly reports that Responses is unsupported. Image generation uses the Images API. The Web client never connects to port `8317` and never receives either API-key spelling. An older desktop bridge is reported as `bridge_unsupported`, while missing proxy configuration is reported as `proxy_unavailable`, so the UI can distinguish setup problems from a failed generation.

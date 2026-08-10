@@ -1,5 +1,7 @@
 import {
   createContext,
+  lazy,
+  Suspense,
   useCallback,
   useContext,
   useEffect,
@@ -16,6 +18,7 @@ import {
   Handle,
   MarkerType,
   MiniMap,
+  NodeToolbar,
   Panel,
   Position,
   ReactFlow,
@@ -57,6 +60,7 @@ import {
   ImagePlay,
   Info,
   Link2,
+  Languages,
   Maximize2,
   Mic2,
   Minimize2,
@@ -69,6 +73,7 @@ import {
   Plus,
   QrCode,
   RotateCcw,
+  Scissors,
   Search,
   Settings2,
   Share2,
@@ -80,6 +85,7 @@ import {
   UserRound,
   WandSparkles,
   X,
+  Zap,
 } from "lucide-react";
 import { BrandIcon } from "../../components/BrandIcon";
 import { ComposerAssetPicker } from "../../components/ComposerAssetPicker";
@@ -103,14 +109,25 @@ import {
 import { CreateSkillDialog, type CreateSkillFormValues } from "../skill-home/CreateSkillDialog";
 import { SKILLS } from "../../catalog/skills";
 import { createAgentGateway, type AgentGateway } from "../../lib/agent";
+import { discoverCanvasModels, generateCanvasContent, isCanvasGenerationError } from "../../lib/generation";
+import {
+  buildDirectorSceneFromPrompt,
+  createDefaultDirectorScene,
+  normalizeDirectorScene,
+} from "./director/defaults";
+import type {
+  DirectorCamera,
+  DirectorSceneState,
+  DirectorShot,
+} from "./director/types";
 import {
   loadLocalCanvasDocument,
   saveCloudCanvasDocument,
   saveLocalCanvasDocument,
 } from "../../lib/canvasState";
-import { isCloudConfigured, persistWorkToCloud } from "../../lib/cloud";
-import { registerLocalFiles } from "../../lib/localFiles";
-import { saveWork } from "../../lib/work";
+import { getSupabaseAccessToken, isCloudConfigured, persistWorkToCloud } from "../../lib/cloud";
+import { localFile, registerLocalFiles, removeLocalFiles } from "../../lib/localFiles";
+import { loadWork, saveWork } from "../../lib/work";
 import type {
   AgentJob,
   CanvasDocument,
@@ -121,6 +138,8 @@ import type {
   WebWork,
   WorkCreationConfig,
 } from "../../types";
+
+const DirectorStudio = lazy(() => import("./director/DirectorStudio"));
 
 type CanvasView = "workflow" | "storyboard";
 type CanvasTool = "select" | "pan";
@@ -175,7 +194,7 @@ type CanvasLibrarySkill = {
 };
 type WorkflowNodeKind = "text" | "script" | "image" | "audio" | "video" | "compose";
 type WorkflowNodeStatus = "idle" | "ready" | "running" | "done" | "failed";
-type WorkflowNodeVariant = "default" | "director" | "script-new" | "script-legacy" | "script-workflow" | "character-workflow" | "first-frame-video-workflow" | "audio-video-workflow";
+type WorkflowNodeVariant = "default" | "libtv-generator" | "director" | "script-new" | "script-legacy" | "script-workflow" | "character-workflow" | "first-frame-video-workflow" | "audio-video-workflow";
 type OverviewKindFilter = "all" | WorkflowNodeKind | "director" | "legacy-script";
 
 const OVERVIEW_FILTER_OPTIONS: Array<{ value: OverviewKindFilter; label: string }> = [
@@ -225,6 +244,17 @@ type WorkflowNodeData = {
   audioEffect?: string;
   webSearch?: boolean;
   autoValidate?: boolean;
+  resultText?: string;
+  resultAttachmentId?: string;
+  resultMimeType?: string;
+  generatedFromPrompt?: string;
+  generatedWithModel?: string;
+  generationProgress?: number;
+  generationError?: string;
+  generationRequestId?: string;
+  sourceNodeId?: string;
+  sourceContext?: string;
+  directorScene?: DirectorSceneState;
 } & Record<string, unknown>;
 
 type WorkflowNode = Node<WorkflowNodeData, "workflow-node">;
@@ -247,8 +277,10 @@ type CanvasStarterPreset = {
 type CanvasNodeActions = {
   update: (nodeId: string, patch: Partial<WorkflowNodeData>) => void;
   run: (nodeId: string) => void;
+  derive: (nodeId: string, kind: WorkflowNodeKind, variant?: WorkflowNodeVariant) => void;
+  resolveAttachment: (attachmentId: string) => Promise<File | undefined>;
   quickAction: (nodeId: string, action: string) => void;
-  openDirector: (nodeId: string) => void;
+  openDirector: (nodeId: string, options?: { reference?: boolean; runPrompt?: boolean }) => void;
   openScript: (nodeId: string) => void;
   openStandalone: (nodeId: string, workflow: StandaloneWorkflowKind) => void;
 };
@@ -509,12 +541,35 @@ const STYLE_MODEL_FILTERS = ["全部", "Lib Image", "Midjourney V7", "Midjourney
 const EFFECT_MODEL_FILTERS = ["全部", "Lib Video 2.0"];
 
 function nodeRuntimeDefaults(kind: WorkflowNodeKind, variant: WorkflowNodeVariant = "default"): Partial<WorkflowNodeData> {
-  if (kind === "image") return { prompt: "", model: "Lib Image", imageMode: "文生图", aspectRatio: "16:9", quality: "标准画质", resolution: "2K", outputCount: 1 };
+  if (kind === "image") return { prompt: "", model: variant === "libtv-generator" ? "gpt-image-2" : "Lib Image", imageMode: "文生图", aspectRatio: "16:9", quality: "标准画质", resolution: "2K", outputCount: 1 };
   if (kind === "video") return { prompt: "", model: "2.0", videoMode: "文生视频", aspectRatio: "16:9", resolution: "720P", duration: 5, outputCount: 1, webSearch: true, autoValidate: true };
   if (kind === "audio") return { prompt: "", model: "Minimax-speech-2.8-hd", voice: "少女音色", speed: 1, tone: 0, volume: 1, timbrePitch: 0, timbreIntensity: 0, timbre: 0, audioEffect: "无" };
-  if (kind === "script") return { prompt: "", model: variant === "director" ? "Director 3D" : "GVLM 3.1", variant };
-  if (kind === "text") return { prompt: "", model: "GVLM 3.1" };
+  if (kind === "script") return {
+    prompt: "",
+    model: variant === "director" ? "Director 3D" : "GVLM 3.1",
+    variant,
+    ...(variant === "director" ? { directorScene: createDefaultDirectorScene() } : {}),
+  };
+  if (kind === "text") return { prompt: "", model: variant === "libtv-generator" ? "gpt-5.6-terra" : "GVLM 3.1" };
   return {};
+}
+
+const GENERATOR_MODEL_OPTIONS = {
+  text: [
+    { id: "gpt-5.6-terra", label: "GPT-5.6 Terra" },
+    { id: "gpt-5.6-sol", label: "GPT-5.6 Sol" },
+    { id: "gpt-5.6-luna", label: "GPT-5.6 Luna" },
+    { id: "gpt-5.4-mini", label: "GPT-5.4 Mini" },
+  ],
+  image: [
+    { id: "gpt-image-2", label: "GPT Image 2" },
+    { id: "gpt-image-1.5", label: "GPT Image 1.5" },
+  ],
+} as const;
+const MAX_GENERATED_IMAGE_BYTES = 25 * 1024 * 1024;
+
+function generatorModelLabel(modelId: string) {
+  return [...GENERATOR_MODEL_OPTIONS.text, ...GENERATOR_MODEL_OPTIONS.image].find((model) => model.id === modelId)?.label ?? modelId;
 }
 const CANVAS_HISTORY_SOURCES: Array<{ id: CanvasHistorySource; label: string }> = [
   { id: "libtv", label: "LibTV" },
@@ -812,10 +867,28 @@ function initialGraph(work: WebWork): { nodes: WorkflowNode[]; edges: Edge[] } {
 
 function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
   const actions = useContext(CanvasNodeActionsContext);
+  const resolveAttachment = actions?.resolveAttachment;
   const flow = useReactFlow<WorkflowNode, Edge>();
   const [controlMenu, setControlMenu] = useState<"model" | "settings" | "preset" | "voice" | null>(null);
+  const [referenceMenuOpen, setReferenceMenuOpen] = useState(false);
+  const [dockExpanded, setDockExpanded] = useState(false);
+  const [resultAssetUrl, setResultAssetUrl] = useState("");
+  const [runtimeModelOptions, setRuntimeModelOptions] = useState<string[]>([]);
+  const [modelDiscoveryState, setModelDiscoveryState] = useState<"idle" | "loading" | "failed">("idle");
+  const [modelDiscoveryError, setModelDiscoveryError] = useState("");
+  const generatorPromptRef = useRef<HTMLTextAreaElement>(null);
+  const generatorComposingRef = useRef(false);
+  const generatorCompositionGuardRef = useRef(false);
+  const generatorCompositionFrameRef = useRef<number | null>(null);
   const variant = data.variant ?? (data.kind === "script" ? "script-new" : "default");
+  const isLibtvGenerator = variant === "libtv-generator" && (data.kind === "text" || data.kind === "image");
+  const isDirector = variant === "director";
   const prompt = typeof data.prompt === "string" ? data.prompt : "";
+  const resultText = typeof data.resultText === "string" ? data.resultText : "";
+  const resultAttachmentId = typeof data.resultAttachmentId === "string" ? data.resultAttachmentId : "";
+  const persistedGenerationProgress = Math.max(0, Math.min(100, Number(data.generationProgress ?? 0)));
+  const [liveGenerationProgress, setLiveGenerationProgress] = useState(persistedGenerationProgress);
+  const generationProgress = data.status === "running" ? liveGenerationProgress : persistedGenerationProgress;
   const aspectRatio = String(data.aspectRatio ?? "16:9");
   const quality = String(data.quality ?? "标准画质");
   const resolution = String(data.resolution ?? (data.kind === "video" ? "720P" : "2K"));
@@ -828,20 +901,93 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     : 0;
 
   useEffect(() => {
-    if (!selected) setControlMenu(null);
+    if (!selected) {
+      setControlMenu(null);
+      setReferenceMenuOpen(false);
+    }
   }, [selected]);
+
+  useEffect(() => {
+    if (!selected || !isLibtvGenerator || data.status === "running") return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      const textarea = generatorPromptRef.current;
+      if (!textarea || document.activeElement === textarea) return;
+      textarea.focus({ preventScroll: true });
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [data.status, isLibtvGenerator, selected]);
+
+  useEffect(() => () => {
+    if (generatorCompositionFrameRef.current !== null) {
+      window.cancelAnimationFrame(generatorCompositionFrameRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data.status !== "running") {
+      setLiveGenerationProgress(persistedGenerationProgress);
+      return undefined;
+    }
+    setLiveGenerationProgress(Math.max(4, persistedGenerationProgress));
+    const timer = window.setInterval(() => {
+      setLiveGenerationProgress((current) => Math.min(92, current + Math.max(1, Math.round((92 - current) * .08))));
+    }, 650);
+    return () => window.clearInterval(timer);
+  }, [data.generationRequestId, data.status, persistedGenerationProgress]);
+
+  useEffect(() => {
+    let active = true;
+    let objectUrl = "";
+    setResultAssetUrl("");
+    if (resultAttachmentId) {
+      void (resolveAttachment ? resolveAttachment(resultAttachmentId) : localFile(resultAttachmentId)).then((file) => {
+        if (!active || !file) return;
+        objectUrl = URL.createObjectURL(file);
+        setResultAssetUrl(objectUrl);
+      });
+    }
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [resolveAttachment, resultAttachmentId]);
 
   const update = (patch: Partial<WorkflowNodeData>) => actions?.update(id, patch);
   const quick = (action: string) => actions?.quickAction(id, action);
-  const setPrompt = (value: string) => update({ prompt: value, description: value.trim() || data.description });
+  const setPrompt = (value: string) => update(isLibtvGenerator
+    ? { prompt: value }
+    : { prompt: value, description: value.trim() || data.description });
   const stopPointer = (event: ReactPointerEvent<HTMLElement>) => event.stopPropagation();
-  const modelOptions = data.kind === "image"
-    ? ["Lib Image", "Seedream 5.0 Pro", "Midjourney V7", "Qwen Image"]
+  const fallbackModelOptions = isLibtvGenerator && data.kind === "image"
+    ? GENERATOR_MODEL_OPTIONS.image.map((model) => model.id)
+    : isLibtvGenerator && data.kind === "text"
+      ? GENERATOR_MODEL_OPTIONS.text.map((model) => model.id)
+      : data.kind === "image"
+        ? ["Lib Image", "Seedream 5.0 Pro", "Midjourney V7", "Qwen Image"]
     : data.kind === "video"
       ? ["2.0", "Lib Video 2.0", "Seedance 2.0", "Veo 3.1"]
       : data.kind === "audio"
         ? ["Minimax-speech-2.8-hd", "CosyVoice 3", "Fish Speech"]
         : ["GVLM 3.1", "Gemini 3 Pro", "GPT-5.2"];
+  const modelOptions = isLibtvGenerator && runtimeModelOptions.length ? runtimeModelOptions : fallbackModelOptions;
+
+  const loadGeneratorModels = async () => {
+    if (!isLibtvGenerator || modelDiscoveryState === "loading") return;
+    setModelDiscoveryState("loading");
+    setModelDiscoveryError("");
+    try {
+      const models = await discoverCanvasModels();
+      const options = models.filter((model) => model.modality === data.kind).map((model) => model.id);
+      if (!options.length) throw new Error(`cli-proxy-api 没有共享可用的${data.kind === "image" ? "图片" : "文本"}模型`);
+      setRuntimeModelOptions(options);
+      if (!options.includes(String(data.model ?? ""))) update({ model: options[0] });
+      setModelDiscoveryState("idle");
+    } catch (error) {
+      setModelDiscoveryState("failed");
+      setModelDiscoveryError(error instanceof Error ? error.message : "无法读取共享模型");
+    }
+  };
 
   const quickActions = data.kind === "text"
     ? ["自己编写内容", "文生视频", "图片反推提示词", "文字生音乐"]
@@ -866,6 +1012,152 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
           : variant === "script-legacy"
             ? "描述剧情或添加角色参考、视频参考等，为你生成分镜脚本"
             : "描述剧情片段、故事，为你生成分镜脚本";
+
+  const downloadGeneratorResult = () => {
+    if (!resultText && !resultAssetUrl) return;
+    const href = resultAssetUrl || URL.createObjectURL(new Blob([resultText], { type: "text/markdown;charset=utf-8" }));
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    const imageExtension = data.resultMimeType === "image/jpeg"
+      ? "jpg"
+      : data.resultMimeType === "image/webp"
+        ? "webp"
+        : data.resultMimeType === "image/gif"
+          ? "gif"
+          : "png";
+    anchor.download = data.kind === "image" ? `${data.title}.${imageExtension}` : `${data.title}.md`;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    if (!resultAssetUrl) URL.revokeObjectURL(href);
+  };
+
+  const renderLibtvGeneratorBody = () => {
+    if (data.status === "running") return <div
+      className="libtv-generator-skeleton"
+      role="progressbar"
+      aria-label="内容生成进度"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(generationProgress)}
+      aria-valuetext={`生成中 ${Math.round(generationProgress)}%`}
+    >
+      {[76, 89, 82, 91, 88, 66, 90, 57, 43].map((width, index) => <i key={`${width}-${index}`} style={{ width: `${width}%` }} />)}
+      <span>生成中 {Math.max(1, Math.round(generationProgress))}%…</span>
+    </div>;
+    if (data.status === "failed") return <div className="libtv-generator-error nodrag nowheel" role="alert"><strong>生成失败</strong><p>{String(data.generationError ?? "模型暂时没有返回结果，请重试。")}</p><button type="button" onClick={() => actions?.run(id)} disabled={!prompt.trim()}>重新生成</button></div>;
+    if (data.kind === "image" && resultAssetUrl) return <div className="libtv-generator-image nodrag nowheel"><img src={resultAssetUrl} alt={data.title} /></div>;
+    if (data.kind === "text" && resultText) return <div className="libtv-generator-text nodrag nowheel"><p>{resultText}</p><i aria-hidden="true" /></div>;
+    return <div className="libtv-generator-empty"><Icon name={data.kind} /><span>{data.kind === "image" ? "描述画面后生成图片" : "输入你的灵感，生成一段文本"}</span></div>;
+  };
+
+  const renderLibtvGeneratorDock = () => <NodeToolbar
+    position={Position.Bottom}
+    offset={10}
+    align="center"
+    className={`libtv-node-composer nodrag nowheel nopan${dockExpanded ? " is-expanded" : ""}`}
+    onPointerDown={stopPointer}
+    onMouseDown={(event) => event.stopPropagation()}
+    onClick={(event) => event.stopPropagation()}
+    onDoubleClick={(event) => event.stopPropagation()}
+  >
+    <div className="libtv-node-composer-prompt">
+      <textarea
+        ref={generatorPromptRef}
+        className="nodrag nowheel nopan"
+        aria-label={`${data.title}生成提示词`}
+        aria-busy={data.status === "running"}
+        readOnly={data.status === "running"}
+        value={prompt}
+        placeholder={data.kind === "image" ? "描述你想生成的图片，或基于引用内容补充画面要求" : "输入你的创作灵感，例如：一个来自未来的机器人，坐在屋顶看星星"}
+        onChange={(event) => setPrompt(event.target.value)}
+        onPointerDown={(event) => {
+          event.stopPropagation();
+          if (document.activeElement !== event.currentTarget) event.currentTarget.focus({ preventScroll: true });
+        }}
+        onMouseDown={(event) => event.stopPropagation()}
+        onCompositionStart={() => {
+          generatorComposingRef.current = true;
+          generatorCompositionGuardRef.current = false;
+          if (generatorCompositionFrameRef.current !== null) {
+            window.cancelAnimationFrame(generatorCompositionFrameRef.current);
+            generatorCompositionFrameRef.current = null;
+          }
+        }}
+        onCompositionEnd={(event) => {
+          generatorComposingRef.current = false;
+          generatorCompositionGuardRef.current = true;
+          setPrompt(event.currentTarget.value);
+          generatorCompositionFrameRef.current = window.requestAnimationFrame(() => {
+            generatorCompositionGuardRef.current = false;
+            generatorCompositionFrameRef.current = null;
+          });
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setControlMenu(null);
+            setReferenceMenuOpen(false);
+            return;
+          }
+          if (event.key === "Enter" && !event.shiftKey) {
+            if (generatorComposingRef.current || generatorCompositionGuardRef.current || event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
+            event.preventDefault();
+            if (event.currentTarget.value.trim() && data.status !== "running") actions?.run(id);
+          }
+        }}
+      />
+      <button type="button" className="libtv-node-composer-expand" aria-label={dockExpanded ? "收起输入框" : "展开输入框"} onClick={() => setDockExpanded((expanded) => !expanded)}>{dockExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}</button>
+    </div>
+    <footer>
+      <div className="libtv-node-model-wrap">
+        <button type="button" className="libtv-node-model" disabled={data.status === "running"} aria-haspopup="menu" aria-expanded={controlMenu === "model"} onClick={() => {
+          const opening = controlMenu !== "model";
+          setControlMenu(opening ? "model" : null);
+          if (opening) void loadGeneratorModels();
+        }}><Sparkles size={17} /><span>{generatorModelLabel(String(data.model ?? modelOptions[0]))}</span><ChevronDown size={12} /></button>
+        {controlMenu === "model" && <div className="libtv-node-model-menu" role="menu" aria-label="选择生成模型">
+          {modelDiscoveryState === "loading" && <p className="libtv-node-model-state">正在读取共享模型…</p>}
+          {modelDiscoveryState === "failed" && <p className="libtv-node-model-state is-error">{modelDiscoveryError}</p>}
+          {modelOptions.map((model) => <button key={model} type="button" role="menuitem" className={data.model === model ? "is-active" : ""} onClick={() => { update({ model }); setControlMenu(null); }}><span><b>{generatorModelLabel(model)}</b><small>cli-proxy-api · 本机共享</small></span>{data.model === model && <Check size={14} />}</button>)}
+        </div>}
+      </div>
+      <span className="libtv-node-composer-spacer" />
+      <button type="button" className="libtv-node-translate" aria-label="优化提示词" title="优化提示词" onClick={() => quick("优化提示词")}><Languages size={17} /></button>
+      <span className="libtv-node-credit" title="预计积分"><Zap size={12} fill="currentColor" />6</span>
+      <button
+        type="button"
+        className={`libtv-node-submit${data.status === "running" ? " is-running" : ""}`}
+        style={{ "--generation-progress": `${generationProgress * 3.6}deg` } as CSSProperties}
+        disabled={!prompt.trim() || data.status === "running"}
+        onClick={() => actions?.run(id)}
+        aria-label={data.status === "running" ? `生成中 ${Math.round(generationProgress)}%` : "开始生成"}
+      >{data.status === "running" ? <span>{Math.max(1, Math.round(generationProgress))}</span> : <ArrowUp size={19} />}</button>
+    </footer>
+  </NodeToolbar>;
+
+  const renderReferenceMenu = () => <NodeToolbar
+    isVisible={referenceMenuOpen}
+    position={Position.Right}
+    offset={22}
+    align="start"
+    role="menu"
+    aria-label="引用该节点生成"
+    className="libtv-node-reference-menu nodrag nowheel"
+    onPointerDown={stopPointer}
+    onKeyDown={(event) => { if (event.key === "Escape") setReferenceMenuOpen(false); }}
+    onDoubleClick={(event) => event.stopPropagation()}
+  >
+    <strong>引用该节点生成</strong>
+    <button type="button" role="menuitem" onClick={() => { actions?.derive(id, "text", "libtv-generator"); setReferenceMenuOpen(false); }}><Icon name="text" />文本</button>
+    <button type="button" role="menuitem" onClick={() => { actions?.derive(id, "image", "libtv-generator"); setReferenceMenuOpen(false); }}><Icon name="image" />图片</button>
+    <button type="button" role="menuitem" onClick={() => { actions?.derive(id, "video"); setReferenceMenuOpen(false); }}><Icon name="video" />视频</button>
+    <button type="button" role="menuitem" disabled><Scissors size={16} />智能剪辑 <i>Beta</i></button>
+    <button type="button" role="menuitem" onClick={() => { actions?.derive(id, "script", "director"); setReferenceMenuOpen(false); }}><Icon name="workflow" />导演台 <i className="is-new">NEW</i></button>
+    <button type="button" role="menuitem" disabled><Film size={16} />逐帧拉片 <i className="is-model">SD 2.5</i></button>
+    <button type="button" role="menuitem" onClick={() => { actions?.derive(id, "audio"); setReferenceMenuOpen(false); }}><Icon name="audio" />音频</button>
+    <button type="button" role="menuitem" onClick={() => { actions?.derive(id, "script", "script-new"); setReferenceMenuOpen(false); }}><Icon name="script" />脚本 <ChevronRight className="libtv-reference-chevron" size={14} /></button>
+    <button type="button" role="menuitem" disabled><Link2 size={16} />参考节点</button>
+  </NodeToolbar>;
 
   const renderPromptNode = () => (
     <div className="workflow-node-expanded nodrag nowheel" onPointerDown={stopPointer} onDoubleClick={(event) => event.stopPropagation()}>
@@ -962,28 +1254,77 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     </div>;
   };
 
+  const renderDirectorNode = () => <div className="workflow-director-node nodrag" onPointerDown={stopPointer} onDoubleClick={(event) => event.stopPropagation()}>
+    <div className="workflow-director-visual">
+      <Box size={44} strokeWidth={1.35} />
+      <p>在3D空间中搭建场景并进行多视角截图</p>
+      <button type="button" onClick={() => actions?.openDirector(id)}>打开导演台</button>
+    </div>
+    <div className="workflow-director-composer nowheel">
+      <textarea
+        aria-label={`${data.title}场景描述`}
+        placeholder="描述想要搭建的场景，支持通过参考图创建"
+        value={prompt}
+        onChange={(event) => setPrompt(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229) {
+            event.preventDefault();
+            if (prompt.trim()) actions?.openDirector(id, { runPrompt: true });
+          }
+        }}
+      />
+      <button type="button" className="workflow-director-add-reference" aria-label="添加参考图" onClick={() => actions?.openDirector(id, { reference: true })}><Plus size={23} /></button>
+      <button type="button" className="workflow-director-submit" aria-label="打开导演台搭建场景" disabled={!prompt.trim()} onClick={() => actions?.openDirector(id, { runPrompt: true })}><ArrowUp size={21} /></button>
+    </div>
+  </div>;
+
   return (
-    <article className={`workflow-node-card kind-${data.kind} variant-${variant} status-${data.status}${selected ? " is-selected is-expanded" : ""}`}>
-      <Handle type="target" position={Position.Left} className="workflow-handle workflow-handle-target" />
+    <article className={`workflow-node-card kind-${data.kind} variant-${variant} status-${data.status}${selected ? ` is-selected${isLibtvGenerator || isDirector ? "" : " is-expanded"}` : ""}`}>
+      <Handle type="target" position={Position.Left} className="workflow-handle workflow-handle-target">{isLibtvGenerator && <Plus size={11} />}</Handle>
       <header>
         <span className="workflow-node-icon"><Icon name={variant === "director" ? "workflow" : data.kind} /></span>
         <span className="workflow-node-heading"><small>{data.eyebrow}</small><strong>{data.title}</strong></span>
         <i className="workflow-node-status" aria-label={data.status} />
       </header>
-      {!selected && (data.kind === "image" || data.kind === "video") && (
+      {!selected && !isLibtvGenerator && (data.kind === "image" || data.kind === "video") && (
         <div className={`workflow-node-preview preview-${data.kind}`}><span /><span /><span />{data.kind === "video" && <i><Icon name="video" /></i>}</div>
       )}
       {!selected && data.kind === "audio" && <div className="workflow-node-waveform" aria-hidden="true">{[8, 15, 10, 23, 18, 27, 12, 21, 9, 18, 13, 25, 16, 9].map((height, index) => <i key={`${height}-${index}`} style={{ height }} />)}</div>}
-      {variant === "script-workflow" ? renderScriptWorkflowNode()
+      {isLibtvGenerator ? renderLibtvGeneratorBody()
+        : variant === "script-workflow" ? renderScriptWorkflowNode()
         : (variant === "character-workflow" || variant === "first-frame-video-workflow" || variant === "audio-video-workflow") ? renderStandaloneWorkflowNode()
-        : selected && variant === "director" ? <div className="workflow-director-node nodrag" onPointerDown={stopPointer}><div><Camera size={26} /><span><i /><i /><i /></span></div><p>在3D空间中搭建场景并进行多视角截图</p><button type="button" onClick={() => actions?.openDirector(id)}><Maximize2 size={14} />打开导演台</button></div>
+        : isDirector ? renderDirectorNode()
         : selected && data.kind === "compose" ? <div className="workflow-compose-node nodrag" onPointerDown={stopPointer}>{incomingVideoCount ? <><div className="workflow-compose-preview"><Play size={24} /></div><div className="workflow-compose-timeline">{Array.from({ length: incomingVideoCount }).map((_, index) => <span key={index}><i />片段 {index + 1}<small>{String(index * 5).padStart(2, "0")}:00</small></span>)}</div><button type="button" onClick={() => actions?.run(id)}><Icon name="compose" />合成并导出</button></> : <><Icon name="compose" /><strong>空空如也</strong><span>请连接视频节点后操作</span><button type="button" onClick={() => quick("添加视频片段")}><Plus size={14} />添加视频片段</button></>}</div>
           : selected ? renderPromptNode() : <>
             <p>{data.description}</p>
             {data.assetName && <span className="workflow-node-asset">{data.assetName}</span>}
           </>}
       <footer><span>{data.status === "running" ? "生成中…" : data.status === "done" ? "已完成" : data.status === "failed" ? "执行失败" : selected ? "编辑节点参数" : "点击选择节点"}</span><b>•••</b></footer>
-      <Handle type="source" position={Position.Right} className="workflow-handle workflow-handle-source" />
+      <Handle
+        type="source"
+        position={Position.Right}
+        className="workflow-handle workflow-handle-source"
+        aria-label="引用该节点生成"
+        role={isLibtvGenerator ? "button" : undefined}
+        tabIndex={isLibtvGenerator ? 0 : undefined}
+        aria-haspopup={isLibtvGenerator ? "menu" : undefined}
+        aria-expanded={isLibtvGenerator ? referenceMenuOpen : undefined}
+        onPointerDown={(event) => { if (isLibtvGenerator) event.stopPropagation(); }}
+        onClick={(event) => {
+          if (!isLibtvGenerator) return;
+          event.stopPropagation();
+          setReferenceMenuOpen((open) => !open);
+        }}
+        onKeyDown={(event) => {
+          if (!isLibtvGenerator || (event.key !== "Enter" && event.key !== " ")) return;
+          event.preventDefault();
+          event.stopPropagation();
+          setReferenceMenuOpen((open) => !open);
+        }}
+      >{isLibtvGenerator && <Plus size={11} />}</Handle>
+      {isLibtvGenerator && renderLibtvGeneratorDock()}
+      {isLibtvGenerator && renderReferenceMenu()}
+      {isLibtvGenerator && data.status === "done" && (resultText || resultAssetUrl) && <NodeToolbar position={Position.Top} offset={39} align="center" className="libtv-node-download-toolbar nodrag"><button type="button" aria-label="下载生成结果" onClick={downloadGeneratorResult}><Download size={19} /></button></NodeToolbar>}
     </article>
   );
 }
@@ -1117,8 +1458,87 @@ function attachmentAssetTag(attachment: DraftAttachment): AssetTag {
   return "其它";
 }
 
+function mergeDraftAttachments(...groups: DraftAttachment[][]): DraftAttachment[] {
+  const merged = new Map<string, DraftAttachment>();
+  groups.forEach((group) => group.forEach((attachment) => {
+    const current = merged.get(attachment.id);
+    merged.set(attachment.id, {
+      ...current,
+      ...attachment,
+      ...(!attachment.assetId && current?.assetId ? { assetId: current.assetId } : {}),
+    });
+  }));
+  return [...merged.values()];
+}
+
 function timestamp() {
   return new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
+}
+
+function generatedImageFile(base64: string, mimeType: string, title: string): File {
+  const binary = window.atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+  const extension = mimeType === "image/jpeg" ? "jpg" : mimeType === "image/webp" ? "webp" : mimeType === "image/gif" ? "gif" : "png";
+  const safeTitle = title.replace(/[\\/:*?"<>|]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60) || "生成图片";
+  return new File([bytes], `${safeTitle}-${Date.now()}.${extension}`, { type: mimeType, lastModified: Date.now() });
+}
+
+async function generatedPanoramaFile(base64: string, mimeType: string, title: string): Promise<File> {
+  const source = generatedImageFile(base64, mimeType, title);
+  const bitmap = await createImageBitmap(source);
+  try {
+    const width = 2048;
+    const height = 1024;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("无法创建全景图处理画布");
+    const sourceRatio = bitmap.width / Math.max(1, bitmap.height);
+    let sx = 0;
+    let sy = 0;
+    let sw = bitmap.width;
+    let sh = bitmap.height;
+    if (sourceRatio > 2) {
+      sw = bitmap.height * 2;
+      sx = (bitmap.width - sw) / 2;
+    } else if (sourceRatio < 2) {
+      sh = bitmap.width / 2;
+      sy = (bitmap.height - sh) / 2;
+    }
+    context.drawImage(bitmap, sx, sy, sw, sh, 0, 0, width, height);
+    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob((result) => result ? resolve(result) : reject(new Error("全景图编码失败")), "image/png"));
+    const safeTitle = title.replace(/[\\/:*?"<>|]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60) || "AI全景图";
+    return new File([blob], `${safeTitle}-${Date.now()}.png`, { type: "image/png", lastModified: Date.now() });
+  } finally {
+    bitmap.close();
+  }
+}
+
+async function fileBase64(file: File, signal: AbortSignal): Promise<string> {
+  if (file.size > 12 * 1024 * 1024) throw new Error("参考图片不能超过 12MB");
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    const abort = () => reader.abort();
+    signal.addEventListener("abort", abort, { once: true });
+    reader.onload = () => {
+      signal.removeEventListener("abort", abort);
+      const dataUrl = typeof reader.result === "string" ? reader.result : "";
+      const base64 = dataUrl.slice(dataUrl.indexOf(",") + 1);
+      if (!base64) reject(new Error("参考图片读取失败"));
+      else resolve(base64);
+    };
+    reader.onerror = () => {
+      signal.removeEventListener("abort", abort);
+      reject(new Error("参考图片读取失败"));
+    };
+    reader.onabort = () => {
+      signal.removeEventListener("abort", abort);
+      reject(new DOMException("视觉分析已取消", "AbortError"));
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 interface GraphHistoryEntry {
@@ -1134,6 +1554,18 @@ function cloneGraph(nodes: WorkflowNode[], edges: Edge[]): GraphHistoryEntry {
       data: { ...node.data },
     })),
     edges: edges.map((edge) => ({ ...edge })),
+  };
+}
+
+function copyableWorkflowNodeData(data: WorkflowNodeData): WorkflowNodeData {
+  if (data.variant !== "libtv-generator" || data.status !== "running") return { ...data };
+  const hasResult = Boolean(data.resultText || data.resultAttachmentId);
+  return {
+    ...data,
+    status: hasResult ? "done" : "idle",
+    generationProgress: hasResult ? 100 : 0,
+    generationRequestId: undefined,
+    generationError: undefined,
   };
 }
 
@@ -1485,18 +1917,37 @@ export function CanvasPage({
       } else if (storedData.skillId === "mv" && ["音频输入", "图片", "音频生视频"].includes(storedData.title)) {
         data = { ...storedData, ...(storedData.title === "音频生视频" ? { variant: "audio-video-workflow" as const } : {}), assetName: "Skill · n2d-audio-video", skillId: "n2d-audio-video", skillPath: "skills/n2d-audio-video/SKILL.md" };
       }
+      if (data.variant === "director") {
+        data = {
+          ...data,
+          directorScene: normalizeDirectorScene(data.directorScene),
+        };
+      }
+      if (data.variant === "libtv-generator" && data.status === "running") {
+        data = {
+          ...data,
+          status: "failed",
+          generationProgress: 0,
+          generationRequestId: undefined,
+          generationError: "上次生成在页面关闭时中断，请重新提交。",
+        };
+      }
       return {
         ...node,
         type: "workflow-node" as const,
         data,
       };
     });
-    const storedEdges = storedDocument.edges.map((edge) => ({
-      ...edge,
-      type: edge.type ?? "smoothstep",
-      markerEnd: { type: MarkerType.ArrowClosed },
-      className: "workflow-edge",
-    }));
+    const storedEdges = storedDocument.edges.map((edge) => {
+      const target = storedNodes.find((node) => node.id === edge.target);
+      const isLibtvReference = target?.data.sourceNodeId === edge.source && typeof target.data.sourceContext === "string";
+      return {
+        ...edge,
+        type: edge.type ?? "smoothstep",
+        markerEnd: isLibtvReference ? undefined : { type: MarkerType.ArrowClosed },
+        className: isLibtvReference ? "workflow-edge libtv-reference-edge" : "workflow-edge",
+      };
+    });
     return { nodes: storedNodes, edges: storedEdges };
   }, [storedDocument, work.id, work.line]);
   const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowNode>(graph.nodes);
@@ -1527,10 +1978,10 @@ export function CanvasPage({
   const [pendingUploadPoint, setPendingUploadPoint] = useState<{ x: number; y: number } | null>(null);
   const [libraryInsertPoint, setLibraryInsertPoint] = useState<{ x: number; y: number } | null>(null);
   const [directorStudioNodeId, setDirectorStudioNodeId] = useState<string | null>(null);
+  const [directorReferenceNodeId, setDirectorReferenceNodeId] = useState<string | null>(null);
+  const [directorRunPromptNodeId, setDirectorRunPromptNodeId] = useState<string | null>(null);
   const [scriptWorkflowNodeId, setScriptWorkflowNodeId] = useState<string | null>(null);
   const [standaloneWorkflow, setStandaloneWorkflow] = useState<{ nodeId: string; workflow: StandaloneWorkflowKind } | null>(null);
-  const [directorCameraPreset, setDirectorCameraPreset] = useState("正面机位");
-  const [directorShotCount, setDirectorShotCount] = useState(0);
   const [libraryTab, setLibraryTab] = useState<"square" | "favorite" | "recent">("square");
   const [libraryQuery, setLibraryQuery] = useState("");
   const [libraryCategory, setLibraryCategory] = useState("推荐");
@@ -1620,8 +2071,23 @@ export function CanvasPage({
   const [historyMediaKind, setHistoryMediaKind] = useState<"image" | "video" | "audio">("image");
   const [, setSyncState] = useState<CloudWorkState>(work.cloudState);
   const [attachments, setAttachments] = useState<DraftAttachment[]>(storedDocument?.work.attachments ?? work.attachments);
+  const attachmentsRef = useRef(attachments);
   const [cloudProjectId, setCloudProjectId] = useState(work.cloudProjectId ?? storedDocument?.work.cloudProjectId);
   const mountedRef = useRef(true);
+  const workClearedRef = useRef(false);
+  const activeWorkIdRef = useRef(work.id);
+  const generationRequestsRef = useRef(new Map<string, string>());
+  const generationAbortControllersRef = useRef(new Map<string, AbortController>());
+  const promptOptimizationRequestsRef = useRef(new Map<string, string>());
+  const promptOptimizationAbortControllersRef = useRef(new Map<string, AbortController>());
+  const nodesRef = useRef(nodes);
+  nodesRef.current = nodes;
+  const attachmentSyncQueueRef = useRef<Promise<void>>(Promise.resolve());
+  const cloudDocumentWriteQueueRef = useRef<Promise<void>>(Promise.resolve());
+  const unsyncedAttachmentIdsRef = useRef(new Set(
+    isCloudConfigured() ? attachments.filter((attachment) => !attachment.assetId).map((attachment) => attachment.id) : [],
+  ));
+  const attachmentSyncTaskCountRef = useRef(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const promptRef = useRef<HTMLTextAreaElement | null>(null);
   const historyRef = useRef<GraphHistoryEntry[]>([cloneGraph(graph.nodes, graph.edges)]);
@@ -1632,6 +2098,155 @@ export function CanvasPage({
   const flowInstanceRef = useRef<ReactFlowInstance<WorkflowNode, Edge> | null>(null);
   const characterCarouselRef = useRef<HTMLDivElement | null>(null);
   const [historyAvailability, setHistoryAvailability] = useState({ canUndo: false, canRedo: false });
+  const activeDirectorNode = useMemo(() => directorStudioNodeId
+    ? nodes.find((node) => node.id === directorStudioNodeId && node.data.variant === "director") ?? null
+    : null, [directorStudioNodeId, nodes]);
+  const activeDirectorScene = useMemo(() => activeDirectorNode
+    ? normalizeDirectorScene(activeDirectorNode.data.directorScene)
+    : null, [activeDirectorNode]);
+
+  const cancelGenerationRequest = useCallback((nodeId: string) => {
+    generationAbortControllersRef.current.get(nodeId)?.abort();
+    generationAbortControllersRef.current.delete(nodeId);
+    generationRequestsRef.current.delete(nodeId);
+    promptOptimizationAbortControllersRef.current.get(nodeId)?.abort();
+    promptOptimizationAbortControllersRef.current.delete(nodeId);
+    promptOptimizationRequestsRef.current.delete(nodeId);
+  }, []);
+
+  const cancelAllGenerationRequests = useCallback(() => {
+    generationAbortControllersRef.current.forEach((controller) => controller.abort());
+    generationAbortControllersRef.current.clear();
+    generationRequestsRef.current.clear();
+    promptOptimizationAbortControllersRef.current.forEach((controller) => controller.abort());
+    promptOptimizationAbortControllersRef.current.clear();
+    promptOptimizationRequestsRef.current.clear();
+  }, []);
+
+  const enqueueCloudDocumentWrite = useCallback((projectId: string, workId: string) => {
+    const isStale = () => workClearedRef.current || activeWorkIdRef.current !== workId;
+    const writeLatest = async () => {
+      if (isStale()) return;
+      const document = loadLocalCanvasDocument(workId);
+      if (!document) return;
+      const missingIds = document.work.attachments.filter((attachment) => !attachment.assetId).map((attachment) => attachment.id);
+      const hasUnsynced = missingIds.length > 0 || unsyncedAttachmentIdsRef.current.size > 0;
+      const projectedState: CloudWorkState = attachmentSyncTaskCountRef.current > 0
+        ? "syncing"
+        : hasUnsynced ? "failed" : "synced";
+      const projectedError = projectedState === "failed" ? `仍有 ${Math.max(missingIds.length, unsyncedAttachmentIdsRef.current.size)} 个素材未同步` : undefined;
+      const documentToWrite: CanvasDocument = {
+        ...document,
+        work: {
+          ...document.work,
+          cloudProjectId: projectId,
+          cloudState: projectedState,
+          cloudError: projectedError,
+        },
+      };
+      try {
+        await saveCloudCanvasDocument(projectId, documentToWrite);
+      } catch (error) {
+        if (isStale()) return;
+        const message = error instanceof Error ? error.message : String(error);
+        const latestWork = loadWork(workId) ?? document.work;
+        const failedWork: WebWork = {
+          ...latestWork,
+          cloudProjectId: projectId,
+          cloudState: "failed",
+          cloudError: message,
+        };
+        saveWork(failedWork);
+        const latestDocument = loadLocalCanvasDocument(workId);
+        if (latestDocument) {
+          saveLocalCanvasDocument({
+            ...latestDocument,
+            work: {
+              ...latestDocument.work,
+              ...failedWork,
+              attachments: mergeDraftAttachments(latestDocument.work.attachments, failedWork.attachments),
+            },
+          });
+        }
+        if (mountedRef.current && activeWorkIdRef.current === workId) setSyncState("failed");
+        throw error;
+      }
+      if (isStale()) return;
+      const latestDocument = loadLocalCanvasDocument(workId) ?? documentToWrite;
+      const latestWork = loadWork(workId) ?? latestDocument.work;
+      const latestAttachments = mergeDraftAttachments(latestWork.attachments, latestDocument.work.attachments);
+      const latestMissingIds = latestAttachments.filter((attachment) => !attachment.assetId).map((attachment) => attachment.id);
+      const stillUnsynced = latestMissingIds.length > 0 || unsyncedAttachmentIdsRef.current.size > 0;
+      const finalState: CloudWorkState = attachmentSyncTaskCountRef.current > 0
+        ? "syncing"
+        : stillUnsynced ? "failed" : "synced";
+      const finalError = finalState === "failed" ? `仍有 ${Math.max(latestMissingIds.length, unsyncedAttachmentIdsRef.current.size)} 个素材未同步` : undefined;
+      const finalWork: WebWork = {
+        ...latestWork,
+        attachments: latestAttachments,
+        cloudProjectId: projectId,
+        cloudState: finalState,
+        cloudError: finalError,
+      };
+      saveWork(finalWork);
+      saveLocalCanvasDocument({
+        ...latestDocument,
+        work: {
+          ...latestDocument.work,
+          attachments: latestAttachments,
+          cloudProjectId: projectId,
+          cloudState: finalState,
+          cloudError: finalError,
+        },
+      });
+      if (mountedRef.current && activeWorkIdRef.current === workId) setSyncState(finalState);
+    };
+    const queued = cloudDocumentWriteQueueRef.current.then(writeLatest, writeLatest);
+    cloudDocumentWriteQueueRef.current = queued.catch(() => undefined);
+    return queued;
+  }, []);
+
+  const resolveCanvasAttachment = useCallback(async (attachmentId: string): Promise<File | undefined> => {
+    const local = await localFile(attachmentId);
+    if (local) return local;
+    const attachment = attachmentsRef.current.find((item) => item.id === attachmentId);
+    const endpoint = import.meta.env.VITE_ASSET_API_URL?.trim();
+    if (!attachment?.assetId || !endpoint || !attachment.type.startsWith("image/") || attachment.size > MAX_GENERATED_IMAGE_BYTES) return undefined;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 30_000);
+    try {
+      const { AssetApiClient } = await import("@anime-armory/cloud-client");
+      const client = new AssetApiClient({
+        endpoint,
+        getAccessToken: async () => getSupabaseAccessToken(),
+      });
+      const { download } = await client.createDownloadUrl(attachment.assetId, "inline", controller.signal);
+      const response = await fetch(download.url, {
+        method: download.method,
+        headers: download.headers,
+        signal: controller.signal,
+        credentials: "omit",
+      });
+      const declaredLength = Number(response.headers.get("content-length") ?? Number.NaN);
+      if (!response.ok || (Number.isFinite(declaredLength) && declaredLength > MAX_GENERATED_IMAGE_BYTES)) {
+        await response.body?.cancel().catch(() => undefined);
+        throw new Error(`云端图片下载失败（${response.status}）`);
+      }
+      const blob = await response.blob();
+      if (!blob.size || blob.size > MAX_GENERATED_IMAGE_BYTES) throw new Error("云端图片为空或超过 25MB");
+      const file = new File([blob], attachment.name, {
+        type: attachment.type || blob.type || "image/png",
+        lastModified: Date.now(),
+      });
+      await registerLocalFiles([{ ...attachment, file }]);
+      return file;
+    } catch (error) {
+      if (mountedRef.current) setNotice(`无法恢复云端图片：${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }, []);
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
   const editingNode = editingNodeId ? nodes.find((node) => node.id === editingNodeId) ?? null : null;
@@ -1736,6 +2351,15 @@ export function CanvasPage({
   }, []);
 
   useEffect(() => {
+    activeWorkIdRef.current = work.id;
+    workClearedRef.current = false;
+    unsyncedAttachmentIdsRef.current.clear();
+    if (isCloudConfigured()) {
+      work.attachments.forEach((attachment) => {
+        if (!attachment.assetId) unsyncedAttachmentIdsRef.current.add(attachment.id);
+      });
+    }
+    cancelAllGenerationRequests();
     setNodes(graph.nodes);
     setEdges(graph.edges);
     historyRef.current = [cloneGraph(graph.nodes, graph.edges)];
@@ -1747,23 +2371,80 @@ export function CanvasPage({
     const nextConfig = defaultCreationConfig(storedDocument?.work ?? work);
     setCreationConfig(nextConfig);
     setModelModality(nextConfig.model.modality);
-  }, [graph, setEdges, setNodes, storedDocument, work.name, work.prompt]);
+  }, [cancelAllGenerationRequests, graph, setEdges, setNodes, storedDocument, work.id, work.name, work.prompt]);
 
   useEffect(() => setSyncState(work.cloudState), [work.cloudState]);
 
   useEffect(() => {
-    if (work.cloudProjectId) setCloudProjectId(work.cloudProjectId);
-    setAttachments((current) => {
-      const merged = new Map(current.map((attachment) => [attachment.id, attachment]));
-      work.attachments.forEach((attachment) => merged.set(attachment.id, attachment));
-      return [...merged.values()];
+    attachmentsRef.current = attachments;
+    if (!isCloudConfigured()) {
+      unsyncedAttachmentIdsRef.current.clear();
+      return;
+    }
+    const currentIds = new Set(attachments.map((attachment) => attachment.id));
+    attachments.forEach((attachment) => {
+      if (attachment.assetId) unsyncedAttachmentIdsRef.current.delete(attachment.id);
+      else unsyncedAttachmentIdsRef.current.add(attachment.id);
     });
+    [...unsyncedAttachmentIdsRef.current].forEach((attachmentId) => {
+      if (!currentIds.has(attachmentId)) unsyncedAttachmentIdsRef.current.delete(attachmentId);
+    });
+  }, [attachments]);
+
+  useEffect(() => {
+    if (!isCloudConfigured()) return undefined;
+    let cancelled = false;
+    let timer = 0;
+    let attempts = 0;
+    const retryDelays = [1_200, 5_000, 15_000, 45_000];
+    const schedule = (delay: number) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => void retryMissingAttachments(), delay);
+    };
+    const retryMissingAttachments = async () => {
+      if (cancelled || workClearedRef.current || activeWorkIdRef.current !== work.id || attempts >= retryDelays.length) return;
+      if (attachmentSyncTaskCountRef.current > 0) {
+        schedule(1_200);
+        return;
+      }
+      const missing = attachmentsRef.current.filter((attachment) => !attachment.assetId);
+      if (!missing.length) return;
+      const pending = (await Promise.all(missing.map(async (attachment) => {
+        const file = await localFile(attachment.id);
+        return file ? { ...attachment, file } : null;
+      }))).filter((attachment): attachment is PendingAttachment => attachment !== null);
+      if (cancelled || workClearedRef.current || activeWorkIdRef.current !== work.id || !pending.length) return;
+      attempts += 1;
+      await syncAttachmentsToCloud(pending, attachmentsRef.current, { silent: true });
+      if (!cancelled && attachmentsRef.current.some((attachment) => !attachment.assetId) && attempts < retryDelays.length) {
+        schedule(retryDelays[attempts]);
+      }
+    };
+    const retryWhenOnline = () => {
+      attempts = 0;
+      schedule(0);
+    };
+    window.addEventListener("online", retryWhenOnline);
+    schedule(retryDelays[0]);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      window.removeEventListener("online", retryWhenOnline);
+    };
+  }, [attachments, cloudProjectId, work.id]);
+
+  useEffect(() => {
+    if (work.cloudProjectId) setCloudProjectId(work.cloudProjectId);
+    setAttachments((current) => mergeDraftAttachments(current, work.attachments));
   }, [work.attachments, work.cloudProjectId]);
 
   useEffect(() => {
     mountedRef.current = true;
-    return () => { mountedRef.current = false; };
-  }, []);
+    return () => {
+      mountedRef.current = false;
+      cancelAllGenerationRequests();
+    };
+  }, [cancelAllGenerationRequests]);
 
   useEffect(() => {
     let disposed = false;
@@ -1790,13 +2471,22 @@ export function CanvasPage({
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const updatedAt = new Date().toISOString();
+      const latestWork = loadWork(work.id) ?? work;
+      const stableAttachments = mergeDraftAttachments(latestWork.attachments, attachmentsRef.current, attachments);
+      const hasUnsyncedAttachments = stableAttachments.some((attachment) => !attachment.assetId)
+        || unsyncedAttachmentIdsRef.current.size > 0;
+      const effectiveCloudProjectId = cloudProjectId ?? latestWork.cloudProjectId;
+      const nextCloudState: CloudWorkState = effectiveCloudProjectId
+        ? hasUnsyncedAttachments && attachmentSyncTaskCountRef.current === 0 ? "failed" : "syncing"
+        : latestWork.cloudState;
       const nextWork: WebWork = {
-        ...work,
+        ...latestWork,
         name: workName.trim() || "unnamed",
         creationConfig,
-        attachments,
-        ...(cloudProjectId ? { cloudProjectId } : {}),
-        cloudState: cloudProjectId ? "syncing" : work.cloudState,
+        attachments: stableAttachments,
+        ...(effectiveCloudProjectId ? { cloudProjectId: effectiveCloudProjectId } : {}),
+        cloudState: nextCloudState,
+        cloudError: nextCloudState === "failed" ? `仍有 ${Math.max(stableAttachments.filter((attachment) => !attachment.assetId).length, unsyncedAttachmentIdsRef.current.size)} 个素材未同步` : undefined,
       };
       const document: CanvasDocument = {
         schemaVersion: 1,
@@ -1835,20 +2525,9 @@ export function CanvasPage({
 
       saveLocalCanvasDocument(document);
       saveWork(nextWork);
-      if (!cloudProjectId) return;
-      setSyncState("syncing");
-      void saveCloudCanvasDocument(cloudProjectId, document)
-        .then(() => {
-          if (!mountedRef.current) return;
-          setSyncState("synced");
-          saveWork({ ...nextWork, cloudState: "synced", cloudError: undefined });
-        })
-        .catch((error) => {
-          if (!mountedRef.current) return;
-          const message = error instanceof Error ? error.message : String(error);
-          setSyncState("failed");
-          saveWork({ ...nextWork, cloudState: "failed", cloudError: message });
-        });
+      if (!effectiveCloudProjectId) return;
+      setSyncState(nextCloudState);
+      void enqueueCloudDocumentWrite(effectiveCloudProjectId, work.id).catch(() => undefined);
     }, 650);
     return () => window.clearTimeout(timer);
   }, [
@@ -1864,6 +2543,7 @@ export function CanvasPage({
     includeCanvasContext,
     miniMapVisible,
     nodes,
+    enqueueCloudDocumentWrite,
     panelOpen,
     runHistory,
     snapToGridEnabled,
@@ -1880,9 +2560,23 @@ export function CanvasPage({
     }
     const timer = window.setTimeout(() => {
       const current = historyRef.current[historyIndexRef.current];
-      if (current && graphSignature(current.nodes, current.edges) === graphSignature(nodes, edges)) return;
+      const stableNodes = nodes.map((node) => {
+        if (node.data.variant !== "libtv-generator" || node.data.status !== "running") return node;
+        const previousData = current?.nodes.find((item) => item.id === node.id)?.data;
+        return {
+          ...node,
+          data: previousData ?? {
+            ...node.data,
+            status: "idle" as const,
+            generationProgress: 0,
+            generationRequestId: undefined,
+            generationError: undefined,
+          },
+        };
+      });
+      if (current && graphSignature(current.nodes, current.edges) === graphSignature(stableNodes, edges)) return;
       const nextHistory = historyRef.current.slice(0, historyIndexRef.current + 1);
-      nextHistory.push(cloneGraph(nodes, edges));
+      nextHistory.push(cloneGraph(stableNodes, edges));
       historyRef.current = nextHistory.slice(-60);
       historyIndexRef.current = historyRef.current.length - 1;
       setHistoryAvailability({ canUndo: historyIndexRef.current > 0, canRedo: false });
@@ -1893,17 +2587,29 @@ export function CanvasPage({
   const restoreHistory = useCallback((nextIndex: number) => {
     const entry = historyRef.current[nextIndex];
     if (!entry) return;
+    cancelAllGenerationRequests();
     restoringHistoryRef.current = true;
     historyIndexRef.current = nextIndex;
     const graphCopy = cloneGraph(entry.nodes, entry.edges);
-    setNodes(graphCopy.nodes);
+    setNodes(graphCopy.nodes.map((node) => node.data.variant === "libtv-generator" && node.data.status === "running"
+      ? {
+          ...node,
+          data: {
+            ...node.data,
+            status: "failed",
+            generationProgress: 0,
+            generationRequestId: undefined,
+            generationError: "生成已被撤销或重做操作中断，请重新提交。",
+          },
+        }
+      : node));
     setEdges(graphCopy.edges);
     setSelectedNodeId(null);
     setHistoryAvailability({
       canUndo: nextIndex > 0,
       canRedo: nextIndex < historyRef.current.length - 1,
     });
-  }, [setEdges, setNodes]);
+  }, [cancelAllGenerationRequests, setEdges, setNodes]);
 
   const undoGraph = useCallback(() => {
     if (historyIndexRef.current <= 0) return;
@@ -1921,8 +2627,9 @@ export function CanvasPage({
     const selected = nodes.filter((node) => node.selected || node.id === selectedNodeId);
     if (!selected.length) return false;
     const selectedIds = new Set(selected.map((node) => node.id));
+    const copyableNodes = selected.map((node) => ({ ...node, data: copyableWorkflowNodeData(node.data) }));
     clipboardRef.current = cloneGraph(
-      selected,
+      copyableNodes,
       edges.filter((edge) => selectedIds.has(edge.source) && selectedIds.has(edge.target)),
     );
     pasteCountRef.current = 0;
@@ -1965,6 +2672,7 @@ export function CanvasPage({
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (directorStudioNodeId) return;
       const target = event.target as HTMLElement | null;
       if (target?.matches("input, textarea, [contenteditable='true']")) {
         if (event.key === "Escape") target.blur();
@@ -2007,6 +2715,7 @@ export function CanvasPage({
         setLibraryInsertPoint(null);
         setLibraryDetail(null);
         setDirectorStudioNodeId(null);
+        setDirectorReferenceNodeId(null);
         setCanvasInsertMenu(null);
         setCanvasHistoryPickerOpen(false);
         setCanvasHistorySelection([]);
@@ -2028,7 +2737,7 @@ export function CanvasPage({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [assetManagerOpen, copySelectedNodes, duplicateSelectedNodes, pasteNodes, redoGraph, setNodes, undoGraph]);
+  }, [assetManagerOpen, copySelectedNodes, directorStudioNodeId, duplicateSelectedNodes, pasteNodes, redoGraph, setNodes, undoGraph]);
 
   function persistName() {
     const name = workName.trim() || "unnamed";
@@ -2105,37 +2814,168 @@ export function CanvasPage({
       : node));
   }
 
-  function addLinkedNode(sourceId: string, kind: WorkflowNodeKind, title: string, description: string, prompt = "") {
+  function openDirectorStudio(nodeId: string, options?: { reference?: boolean; runPrompt?: boolean }) {
+    const node = nodes.find((item) => item.id === nodeId);
+    if (!node || node.data.variant !== "director") return;
+    if (!node.data.directorScene) {
+      updateNodeData(nodeId, { directorScene: createDefaultDirectorScene() });
+    }
+    setDirectorReferenceNodeId(options?.reference ? nodeId : null);
+    setDirectorRunPromptNodeId(options?.runPrompt ? nodeId : null);
+    setDirectorStudioNodeId(nodeId);
+  }
+
+  function nextGeneratorTitle(kind: WorkflowNodeKind) {
+    const label = kind === "text" ? "文本节点" : kind === "image" ? "图片节点" : kind === "video" ? "视频节点" : kind === "audio" ? "音频节点" : kind === "script" ? "脚本节点" : "合成节点";
+    const count = nodes.filter((node) => node.data.kind === kind && node.data.variant === "libtv-generator").length;
+    return `${label} ${count + 1}`;
+  }
+
+  function addLinkedNode(sourceId: string, kind: WorkflowNodeKind, title: string, description: string, prompt = "", variant: WorkflowNodeVariant = "default", selectNext = true): string | null {
     const source = nodes.find((node) => node.id === sourceId);
-    if (!source) return;
+    if (!source) return null;
     const definition = nodeDefinition(kind);
     const id = `${kind}-${crypto.randomUUID()}`;
     const nextNode: WorkflowNode = {
       id,
       type: "workflow-node",
-      selected: true,
+      selected: selectNext,
       position: { x: source.position.x + 430, y: source.position.y + 34 },
       data: {
-        ...nodeRuntimeDefaults(kind),
+        ...nodeRuntimeDefaults(kind, variant),
         kind,
         title,
         description,
         prompt,
         status: "idle",
         eyebrow: definition.eyebrow,
-        variant: "default",
+        variant,
+        sourceNodeId: sourceId,
+        sourceContext: String(source.data.resultText ?? source.data.generatedFromPrompt ?? source.data.prompt ?? source.data.description ?? ""),
       },
     };
-    setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), nextNode]);
-    setEdges((items) => addEdge(makeEdge(`edge-${crypto.randomUUID()}`, sourceId, id, true), items));
-    setSelectedNodeId(id);
+    setNodes((items) => [...items.map((node) => ({ ...node, selected: selectNext ? false : node.id === sourceId })), nextNode]);
+    setEdges((items) => addEdge({ ...makeEdge(`edge-${crypto.randomUUID()}`, sourceId, id, true), markerEnd: undefined, className: "workflow-edge libtv-reference-edge" }, items));
+    setSelectedNodeId(selectNext ? id : sourceId);
     addActivity(`从「${source.data.title}」创建${title}`);
+    return id;
+  }
+
+  function deriveWorkflowNode(sourceId: string, kind: WorkflowNodeKind, variant: WorkflowNodeVariant = "default") {
+    const source = nodes.find((node) => node.id === sourceId);
+    if (!source) return;
+    const context = String(source.data.resultText ?? source.data.generatedFromPrompt ?? source.data.prompt ?? source.data.description ?? "").trim();
+    const prompt = kind === "image"
+      ? context
+      : kind === "text"
+        ? (context ? `基于以下内容继续创作：\n\n${context}` : "")
+        : context;
+    const title = variant === "director" ? "导演台" : variant === "script-new" ? "脚本节点" : variant === "libtv-generator" ? nextGeneratorTitle(kind) : nodeDefinition(kind).label;
+    const description = kind === "image" ? "引用上游内容生成图片" : kind === "text" ? "引用上游内容继续生成文本" : `引用「${source.data.title}」继续生成`;
+    addLinkedNode(sourceId, kind, title, description, prompt, variant, variant !== "libtv-generator");
+  }
+
+  function sendDirectorShotToCanvas(sourceNodeId: string, shot: DirectorShot, camera: DirectorCamera) {
+    const source = nodes.find((node) => node.id === sourceNodeId);
+    if (!source) return;
+    const imageNodeId = `image-${crypto.randomUUID()}`;
+    const directorAspect = source.data.directorScene?.aspectRatio;
+    const imageNode: WorkflowNode = {
+      id: imageNodeId,
+      type: "workflow-node",
+      selected: true,
+      position: { x: source.position.x + 430, y: source.position.y + 34 },
+      data: {
+        ...nodeRuntimeDefaults("image", "libtv-generator"),
+        kind: "image",
+        title: nextGeneratorTitle("image"),
+        description: `${camera.name} · ${shot.width} × ${shot.height}`,
+        prompt: String(source.data.prompt ?? ""),
+        status: "done",
+        eyebrow: nodeDefinition("image").eyebrow,
+        variant: "libtv-generator",
+        sourceNodeId,
+        sourceContext: String(source.data.prompt ?? source.data.description ?? ""),
+        generationProgress: 100,
+        resultAttachmentId: shot.attachmentId,
+        resultMimeType: shot.mimeType,
+        generatedFromPrompt: String(source.data.prompt ?? ""),
+        generatedWithModel: "Director 3D",
+        assetName: `${shot.name}.png`,
+        aspectRatio: directorAspect && directorAspect !== "adaptive" ? directorAspect : "16:9",
+      },
+    };
+    const nextNodes = [...nodes.map((node) => ({ ...node, selected: false })), imageNode];
+    const nextEdges = addEdge({
+      ...makeEdge(`edge-${crypto.randomUUID()}`, sourceNodeId, imageNodeId, true),
+      markerEnd: undefined,
+      className: "workflow-edge libtv-reference-edge",
+    }, edges);
+    setNodes(nextNodes);
+    setEdges(nextEdges);
+    setSelectedNodeId(imageNodeId);
+    addActivity(`从「${source.data.title}」创建${imageNode.data.title}`);
+    void persistGeneratorNodeSnapshot(imageNodeId, {}, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
+    setNotice(`已将「${shot.name}」发送到画布`);
   }
 
   function handleNodeQuickAction(nodeId: string, action: string) {
     const node = nodes.find((item) => item.id === nodeId);
     if (!node) return;
     const currentPrompt = typeof node.data.prompt === "string" ? node.data.prompt : "";
+    if (action === "优化提示词") {
+      const sourcePrompt = currentPrompt.trim();
+      if (!sourcePrompt) {
+        setNotice("请先输入需要优化的提示词");
+        return;
+      }
+      promptOptimizationAbortControllersRef.current.get(nodeId)?.abort();
+      const controller = new AbortController();
+      const requestId = crypto.randomUUID();
+      promptOptimizationAbortControllersRef.current.set(nodeId, controller);
+      promptOptimizationRequestsRef.current.set(nodeId, requestId);
+      setNotice("正在使用共享 GPT 优化提示词…");
+      void (async () => {
+        try {
+          const models = (await discoverCanvasModels(controller.signal)).filter((model) => model.modality === "text");
+          const requestedModel = typeof node.data.model === "string" ? models.find((model) => model.id === node.data.model) : undefined;
+          const model = requestedModel ?? ["gpt-5.6-terra", "gpt-5.6-sol", "gpt-5.6-luna", "gpt-5.5", "gpt-5.4-mini"]
+            .map((id) => models.find((candidate) => candidate.id === id))
+            .find(Boolean) ?? models[0];
+          if (!model) throw new Error("cli-proxy-api 没有共享可用的 GPT 文本模型");
+          const result = await generateCanvasContent({
+            modality: "text",
+            model: model.id,
+            signal: controller.signal,
+            prompt: [
+              "你是专业的 AI 影视生成提示词编辑器。只输出优化后的中文提示词，不要标题、引号、解释或 Markdown。",
+              "保持用户原意和主体身份，补全可执行的主体、动作、场景、镜头、构图、光线、色彩与质感；不要凭空加入用户未要求的角色、品牌或文字。",
+              `原提示词：${sourcePrompt}`,
+            ].join("\n"),
+          });
+          if (result.modality !== "text") throw new Error("GPT 模型没有返回优化文本");
+          if (promptOptimizationRequestsRef.current.get(nodeId) !== requestId || controller.signal.aborted) return;
+          const latestNode = nodesRef.current.find((item) => item.id === nodeId);
+          if (!latestNode || String(latestNode.data.prompt ?? "").trim() !== sourcePrompt) {
+            setNotice("提示词已在优化期间改变，本次结果未覆盖当前输入");
+            return;
+          }
+          const optimizedPrompt = result.text.trim().slice(0, 12_000);
+          if (!optimizedPrompt) throw new Error("GPT 返回了空提示词");
+          updateNodeData(nodeId, { prompt: optimizedPrompt });
+          await persistGeneratorNodeSnapshot(nodeId, { prompt: optimizedPrompt });
+          setNotice(optimizedPrompt === sourcePrompt ? "提示词已经足够清晰" : "提示词已由共享 GPT 优化");
+        } catch (error) {
+          if (!controller.signal.aborted) setNotice(`提示词优化失败：${error instanceof Error ? error.message : String(error)}`);
+        } finally {
+          if (promptOptimizationRequestsRef.current.get(nodeId) === requestId) {
+            promptOptimizationRequestsRef.current.delete(nodeId);
+            promptOptimizationAbortControllersRef.current.delete(nodeId);
+          }
+        }
+      })();
+      return;
+    }
     if (action === "添加视频片段") {
       const id = `video-${crypto.randomUUID()}`;
       const videoNode: WorkflowNode = {
@@ -2207,9 +3047,386 @@ export function CanvasPage({
     });
   }
 
+  async function persistGeneratorNodeSnapshot(
+    nodeId: string,
+    patch: Partial<WorkflowNodeData>,
+    nextAttachments = attachmentsRef.current,
+    snapshotNodes = nodes,
+    snapshotEdges = edges,
+    options: { writeCloud?: boolean; replaceGraph?: boolean } = {},
+  ) {
+    if (workClearedRef.current || activeWorkIdRef.current !== work.id) return;
+    if (!options.replaceGraph && !nodesRef.current.some((item) => item.id === nodeId)) return;
+    const current = loadLocalCanvasDocument(work.id) ?? {
+      schemaVersion: 1,
+      work,
+      nodes: snapshotNodes.map((item) => ({
+        id: item.id,
+        type: item.type,
+        position: item.position,
+        data: item.data,
+      })),
+      edges: snapshotEdges.map((edge) => ({
+        id: edge.id,
+        source: edge.source,
+        target: edge.target,
+        sourceHandle: edge.sourceHandle,
+        targetHandle: edge.targetHandle,
+        type: edge.type,
+        animated: edge.animated,
+      })),
+      viewport,
+      preferences: {
+        view,
+        gridVisible,
+        snapToGrid: snapToGridEnabled,
+        edgesVisible,
+        miniMapVisible,
+        panelOpen,
+        includeCanvasContext,
+        followLatestRun,
+      },
+      activeSkill,
+      activity,
+      runHistory,
+      updatedAt: new Date().toISOString(),
+    } satisfies CanvasDocument;
+    const mergedAttachments = mergeDraftAttachments(current.work.attachments, nextAttachments);
+    const nextDocumentWork: WebWork = {
+      ...current.work,
+      name: workName.trim() || "unnamed",
+      creationConfig,
+      attachments: mergedAttachments,
+      ...(cloudProjectId ? { cloudProjectId } : {}),
+    };
+    const replaceGraph = options.replaceGraph === true || !current.nodes.some((item) => item.id === nodeId);
+    saveLocalCanvasDocument({
+      ...current,
+      work: nextDocumentWork,
+      nodes: replaceGraph
+        ? snapshotNodes.map((item) => ({
+            id: item.id,
+            type: item.type,
+            position: item.position,
+            data: item.id === nodeId ? { ...item.data, ...patch } : item.data,
+          }))
+        : current.nodes.map((item) => item.id === nodeId ? { ...item, data: { ...item.data, ...patch } } : item),
+      edges: replaceGraph
+        ? snapshotEdges.map((edge) => ({
+            id: edge.id,
+            source: edge.source,
+            target: edge.target,
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+            type: edge.type,
+            animated: edge.animated,
+          }))
+        : current.edges,
+      updatedAt: new Date().toISOString(),
+    });
+    saveWork(nextDocumentWork);
+    if (cloudProjectId && options.writeCloud !== false) await enqueueCloudDocumentWrite(cloudProjectId, work.id).catch(() => undefined);
+  }
+
+  function syncAttachmentsToCloud(
+    pendingAttachments: PendingAttachment[],
+    nextAttachments: DraftAttachment[],
+    messages?: { success?: string; local?: string; failurePrefix?: string; silent?: boolean },
+  ) {
+    if (!isCloudConfigured() || !pendingAttachments.length) return Promise.resolve();
+    const syncWorkId = work.id;
+    const isStale = () => workClearedRef.current || activeWorkIdRef.current !== syncWorkId;
+    pendingAttachments.forEach((attachment) => unsyncedAttachmentIdsRef.current.add(attachment.id));
+    attachmentSyncTaskCountRef.current += 1;
+    let taskReleased = false;
+    const releaseTask = () => {
+      if (taskReleased) return;
+      taskReleased = true;
+      attachmentSyncTaskCountRef.current = Math.max(0, attachmentSyncTaskCountRef.current - 1);
+    };
+    const performSync = async () => {
+      try {
+        if (isStale()) return;
+        const currentWork = loadWork(syncWorkId) ?? work;
+        const queuedAttachments = mergeDraftAttachments(currentWork.attachments, attachmentsRef.current, nextAttachments);
+        const retryById = new Map(pendingAttachments.map((attachment) => [attachment.id, attachment]));
+        for (const attachment of queuedAttachments) {
+          if (attachment.assetId || retryById.has(attachment.id)) continue;
+          const file = await localFile(attachment.id);
+          if (file) retryById.set(attachment.id, { ...attachment, file });
+        }
+        if (isStale()) return;
+        const attachmentsToUpload = [...retryById.values()];
+        attachmentsToUpload.forEach((attachment) => unsyncedAttachmentIdsRef.current.add(attachment.id));
+        const nextWork: WebWork = {
+          ...currentWork,
+          attachments: queuedAttachments,
+          ...((currentWork.cloudProjectId ?? cloudProjectId) ? { cloudProjectId: currentWork.cloudProjectId ?? cloudProjectId } : {}),
+          cloudState: "syncing",
+          cloudError: undefined,
+        };
+        if (mountedRef.current) setSyncState("syncing");
+        saveWork(nextWork);
+        const result = await persistWorkToCloud(nextWork, attachmentsToUpload);
+        if (isStale()) return;
+        const pendingIds = new Set(attachmentsToUpload.map((attachment) => attachment.id));
+        const uploaded = result.work.attachments.filter((item) => pendingIds.has(item.id) && item.assetId);
+        const mergedAttachments = mergeDraftAttachments(
+          attachmentsRef.current,
+          queuedAttachments,
+          nextAttachments,
+          uploaded,
+        );
+        attachmentsRef.current = mergedAttachments;
+        uploaded.forEach((attachment) => unsyncedAttachmentIdsRef.current.delete(attachment.id));
+        const currentIds = new Set(mergedAttachments.map((attachment) => attachment.id));
+        mergedAttachments.forEach((attachment) => {
+          if (attachment.assetId) unsyncedAttachmentIdsRef.current.delete(attachment.id);
+          else unsyncedAttachmentIdsRef.current.add(attachment.id);
+        });
+        [...unsyncedAttachmentIdsRef.current].forEach((attachmentId) => {
+          if (!currentIds.has(attachmentId)) unsyncedAttachmentIdsRef.current.delete(attachmentId);
+        });
+        releaseTask();
+        const latestWork = loadWork(syncWorkId) ?? nextWork;
+        const incompleteCount = mergedAttachments.filter((attachment) => !attachment.assetId).length;
+        const finalCloudState: CloudWorkState = result.state === "auth-required"
+          ? "auth-required"
+          : result.state === "local"
+            ? "local"
+            : attachmentSyncTaskCountRef.current > 0
+              ? "syncing"
+              : incompleteCount || unsyncedAttachmentIdsRef.current.size ? "failed" : "synced";
+        const finalCloudError = finalCloudState === "failed"
+          ? `仍有 ${Math.max(incompleteCount, unsyncedAttachmentIdsRef.current.size)} 个素材未同步`
+          : undefined;
+        const persistedWork: WebWork = {
+          ...latestWork,
+          attachments: mergeDraftAttachments(latestWork.attachments, mergedAttachments),
+          ...(result.work.cloudProjectId ? { cloudProjectId: result.work.cloudProjectId } : {}),
+          cloudState: finalCloudState,
+          cloudError: finalCloudError,
+        };
+        saveWork(persistedWork);
+
+        const currentDocument = loadLocalCanvasDocument(syncWorkId);
+        const persistedDocument = currentDocument ? {
+          ...currentDocument,
+          work: {
+            ...currentDocument.work,
+            name: persistedWork.name,
+            attachments: mergeDraftAttachments(currentDocument.work.attachments, mergedAttachments),
+            ...(persistedWork.cloudProjectId ? { cloudProjectId: persistedWork.cloudProjectId } : {}),
+            cloudState: persistedWork.cloudState,
+            cloudError: persistedWork.cloudError,
+          },
+          updatedAt: new Date().toISOString(),
+        } satisfies CanvasDocument : null;
+        if (persistedDocument) saveLocalCanvasDocument(persistedDocument);
+
+        if (mountedRef.current) {
+          setAttachments(mergedAttachments);
+          if (persistedWork.cloudProjectId) setCloudProjectId(persistedWork.cloudProjectId);
+        }
+        if (persistedWork.cloudProjectId && persistedDocument) {
+          await enqueueCloudDocumentWrite(persistedWork.cloudProjectId, syncWorkId);
+        }
+        if (!isStale() && mountedRef.current) {
+          setSyncState(persistedWork.cloudState);
+          if (!messages?.silent) {
+            if (persistedWork.cloudState === "synced" && messages?.success) setNotice(messages.success);
+            else if ((persistedWork.cloudState === "auth-required" || persistedWork.cloudState === "local") && messages?.local) setNotice(messages.local);
+            else if (persistedWork.cloudState === "failed") setNotice(`${messages?.failurePrefix ?? "素材已保存在本机，云同步失败"}：${persistedWork.cloudError}`);
+          }
+        }
+      } catch (error) {
+        if (isStale()) return;
+        const message = error instanceof Error ? error.message : String(error);
+        const latestWork = loadWork(syncWorkId) ?? work;
+        const failedWork: WebWork = {
+          ...latestWork,
+          attachments: mergeDraftAttachments(latestWork.attachments, attachmentsRef.current, nextAttachments),
+          cloudState: "failed",
+          cloudError: message,
+        };
+        saveWork(failedWork);
+        const currentDocument = loadLocalCanvasDocument(syncWorkId);
+        if (currentDocument) {
+          saveLocalCanvasDocument({
+            ...currentDocument,
+            work: {
+              ...currentDocument.work,
+              attachments: mergeDraftAttachments(currentDocument.work.attachments, attachmentsRef.current),
+              ...(failedWork.cloudProjectId ? { cloudProjectId: failedWork.cloudProjectId } : {}),
+              cloudState: "failed",
+              cloudError: message,
+            },
+            updatedAt: new Date().toISOString(),
+          });
+        }
+        if (mountedRef.current) {
+          setSyncState("failed");
+          if (!messages?.silent) setNotice(`${messages?.failurePrefix ?? "素材已保存在本机，云同步失败"}：${message}`);
+        }
+      } finally {
+        releaseTask();
+      }
+    };
+    const queued = attachmentSyncQueueRef.current.then(performSync, performSync);
+    attachmentSyncQueueRef.current = queued.catch(() => undefined);
+    return queued;
+  }
+
+  async function runLibtvGeneratorNode(node: WorkflowNode) {
+    const prompt = typeof node.data.prompt === "string" ? node.data.prompt.trim() : "";
+    if (!prompt || node.data.status === "running" || (node.data.kind !== "text" && node.data.kind !== "image")) return;
+    const textNodeInstruction = [
+      "你正在为创作画布生成一个文本节点。请直接执行用户输入；如果用户只给出主题、人物或场景，请将其扩写为结构完整、可直接使用的中文创作文本。",
+      "除非用户明确指定其他长度或格式，正文控制在 600–1200 个汉字。只输出结果本身，不解释创作过程。",
+      "",
+      "用户输入：",
+    ].join("\n");
+    const modelPrompt = node.data.kind === "text" && textNodeInstruction.length + prompt.length <= 24_000
+      ? `${textNodeInstruction}\n${prompt}`
+      : prompt;
+    const requestedModel = String(node.data.model ?? (node.data.kind === "image" ? "gpt-image-2" : "gpt-5.6-terra"));
+    const requestId = crypto.randomUUID();
+    cancelGenerationRequest(node.id);
+    const requestController = new AbortController();
+    generationRequestsRef.current.set(node.id, requestId);
+    generationAbortControllersRef.current.set(node.id, requestController);
+    setNodes((items) => items.map((item) => item.id === node.id ? {
+      ...item,
+      data: {
+        ...item.data,
+        status: "running",
+        generationProgress: 4,
+        generationError: undefined,
+        generationRequestId: requestId,
+      },
+    } : item));
+    setNotice(`${node.data.title} 正在生成…`);
+
+    try {
+      const discoveredModels = await discoverCanvasModels(requestController.signal);
+      if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
+      const availableModels = discoveredModels.filter((model) => model.modality === node.data.kind);
+      if (!availableModels.length) {
+        throw new Error(`cli-proxy-api 没有共享可用的${node.data.kind === "image" ? "图片" : "文本"}模型`);
+      }
+      const preferredModelIds = node.data.kind === "image"
+        ? GENERATOR_MODEL_OPTIONS.image.map((model) => model.id)
+        : GENERATOR_MODEL_OPTIONS.text.map((model) => model.id);
+      const effectiveModel = availableModels.find((model) => model.id === requestedModel)?.id
+        ?? preferredModelIds.find((modelId) => availableModels.some((model) => model.id === modelId))
+        ?? availableModels[0].id;
+      setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId
+        ? { ...item, data: { ...item.data, model: effectiveModel } }
+        : item));
+      addActivity(`开始使用 ${effectiveModel} 生成「${node.data.title}」`);
+      const result = await generateCanvasContent({
+        modality: node.data.kind,
+        model: effectiveModel,
+        prompt: modelPrompt,
+        signal: requestController.signal,
+        ...(node.data.kind === "image" ? { aspectRatio: String(node.data.aspectRatio ?? "16:9") } : {}),
+      });
+      if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
+
+      if (result.modality === "text") {
+        const resultPatch: Partial<WorkflowNodeData> = {
+          status: "done",
+          generationProgress: 100,
+          generationRequestId: undefined,
+          generationError: undefined,
+          resultText: result.text,
+          resultAttachmentId: undefined,
+          resultMimeType: undefined,
+          generatedFromPrompt: prompt,
+          generatedWithModel: effectiveModel,
+          description: result.text.slice(0, 160),
+          assetName: `${node.data.title}.md`,
+        };
+        setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
+          ...item,
+          data: { ...item.data, ...resultPatch },
+        } : item));
+        persistGeneratorNodeSnapshot(node.id, resultPatch);
+      } else {
+        const file = generatedImageFile(result.image.base64, result.image.mimeType, node.data.title);
+        const attachmentId = crypto.randomUUID();
+        const attachment: PendingAttachment = {
+          id: attachmentId,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          file,
+        };
+        await registerLocalFiles([attachment]);
+        const metadata: DraftAttachment = {
+          id: attachment.id,
+          name: attachment.name,
+          size: attachment.size,
+          type: attachment.type,
+        };
+        const nextAttachments = [...attachmentsRef.current.filter((item) => item.id !== attachmentId), metadata];
+        attachmentsRef.current = nextAttachments;
+        setAttachments(nextAttachments);
+        const resultPatch: Partial<WorkflowNodeData> = {
+          status: "done",
+          generationProgress: 100,
+          generationRequestId: undefined,
+          generationError: undefined,
+          resultText: undefined,
+          resultAttachmentId: attachmentId,
+          resultMimeType: result.image.mimeType,
+          generatedFromPrompt: result.image.revisedPrompt || prompt,
+          generatedWithModel: effectiveModel,
+          description: result.image.revisedPrompt || prompt,
+          assetName: file.name,
+        };
+        setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
+          ...item,
+          data: { ...item.data, ...resultPatch },
+        } : item));
+        persistGeneratorNodeSnapshot(node.id, resultPatch, nextAttachments);
+        void syncAttachmentsToCloud([attachment], nextAttachments, {
+          failurePrefix: "图片已保存在本机，云同步失败",
+        });
+      }
+      generationRequestsRef.current.delete(node.id);
+      generationAbortControllersRef.current.delete(node.id);
+      addActivity(`完成「${node.data.title}」`);
+      setNotice(`${node.data.title} 已完成`);
+    } catch (error) {
+      if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
+      generationRequestsRef.current.delete(node.id);
+      generationAbortControllersRef.current.delete(node.id);
+      const message = isCanvasGenerationError(error)
+        ? error.message
+        : error instanceof Error ? error.message : "生成失败，请稍后重试。";
+      setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
+        ...item,
+        data: {
+          ...item.data,
+          status: "failed",
+          generationProgress: 0,
+          generationRequestId: undefined,
+          generationError: message,
+        },
+      } : item));
+      addActivity(`「${node.data.title}」生成失败`);
+      setNotice(message);
+    }
+  }
+
   function runWorkflowNode(nodeId: string) {
     const node = nodes.find((item) => item.id === nodeId);
     if (!node || node.data.status === "running") return;
+    if (node.data.variant === "libtv-generator" && (node.data.kind === "text" || node.data.kind === "image")) {
+      void runLibtvGeneratorNode(node);
+      return;
+    }
     if (node.data.variant === "character-workflow" || node.data.variant === "first-frame-video-workflow" || node.data.variant === "audio-video-workflow") {
       setStandaloneWorkflow({
         nodeId,
@@ -2388,7 +3605,7 @@ export function CanvasPage({
       id: copyId,
       selected: true,
       position: { x: source.position.x + 34, y: source.position.y + 34 },
-      data: { ...source.data, title: `${source.data.title} 副本` },
+      data: { ...copyableWorkflowNodeData(source.data), title: `${source.data.title} 副本` },
     };
     setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), copy]);
     setSelectedNodeId(copyId);
@@ -2421,20 +3638,22 @@ export function CanvasPage({
       return;
     }
     const definition = nodeDefinition(kind);
+    const variant = options?.variant ?? "default";
     const anchor = nodes.find((node) => node.id === selectedNodeId) ?? nodes[nodes.length - 1];
     const id = `${kind}-${crypto.randomUUID()}`;
+    const title = variant === "libtv-generator" ? nextGeneratorTitle(kind) : options?.title ?? definition.label;
     const nextNode: WorkflowNode = {
       id,
       type: "workflow-node",
       position: options?.position ?? (anchor ? { x: anchor.position.x + 310, y: anchor.position.y + 42 } : { x: 120, y: 140 }),
       data: {
-        ...nodeRuntimeDefaults(kind, options?.variant),
+        ...nodeRuntimeDefaults(kind, variant),
         kind,
-        title: options?.title ?? definition.label,
+        title,
         description: options?.description ?? definition.description,
         status: "idle",
         eyebrow: definition.eyebrow,
-        variant: options?.variant ?? "default",
+        variant,
         ...(options?.prompt !== undefined ? { prompt: options.prompt } : {}),
         ...(options?.assetName ? { assetName: options.assetName } : {}),
       },
@@ -2443,7 +3662,7 @@ export function CanvasPage({
     if (anchor && options?.connectToAnchor !== false) setEdges((items) => addEdge(makeEdge(`edge-${crypto.randomUUID()}`, anchor.id, id), items));
     setSelectedNodeId(id);
     setDrawer(null);
-    addActivity(`添加${options?.title ?? definition.label}节点`);
+    addActivity(`添加${title}节点`);
   }
 
   function applyToolboxTemplate(template: ToolboxTemplate) {
@@ -2610,10 +3829,11 @@ export function CanvasPage({
 
   function addNodeFromCanvasInsert(kind: WorkflowNodeKind, title: string, description: string, variant: WorkflowNodeVariant = "default") {
     if (!canvasInsertMenu) return;
+    const effectiveVariant = variant === "default" && (kind === "text" || kind === "image") ? "libtv-generator" : variant;
     addWorkflowNode(kind, {
       title,
       description,
-      variant,
+      variant: effectiveVariant,
       position: { x: canvasInsertMenu.flowX, y: canvasInsertMenu.flowY },
       connectToAnchor: false,
     });
@@ -2670,8 +3890,11 @@ export function CanvasPage({
     setNotice(`已从生成历史添加 ${selected.length} 项`);
   }
 
-  async function importAssetFiles(files: File[], openAssetsDrawer: boolean): Promise<string[]> {
+  async function importAssetFiles(files: File[], openAssetsDrawer: boolean, options?: { awaitCloud?: boolean }): Promise<string[]> {
     if (!files.length) return [];
+    const importWorkId = work.id;
+    const isStale = () => workClearedRef.current || activeWorkIdRef.current !== importWorkId;
+    if (isStale()) return [];
     const pending: PendingAttachment[] = files.map((file) => ({
       id: crypto.randomUUID(),
       name: file.name,
@@ -2680,18 +3903,22 @@ export function CanvasPage({
       file,
     }));
     const pendingIds = pending.map((attachment) => attachment.id);
-    registerLocalFiles(pending);
-    const nextAttachments: DraftAttachment[] = [
-      ...attachments,
-      ...pending.map(({ id, name, size, type }) => ({ id, name, size, type })),
-    ];
+    await registerLocalFiles(pending);
+    if (isStale()) {
+      await removeLocalFiles(pendingIds);
+      return [];
+    }
+    const importedMetadata = pending.map(({ id, name, size, type }) => ({ id, name, size, type }));
+    const nextAttachments = mergeDraftAttachments(attachmentsRef.current, importedMetadata);
+    attachmentsRef.current = nextAttachments;
     setAttachments(nextAttachments);
+    const currentWork = loadWork(work.id) ?? work;
     const nextWork: WebWork = {
-      ...work,
+      ...currentWork,
       name: workName.trim() || "unnamed",
       creationConfig,
       attachments: nextAttachments,
-      ...(cloudProjectId ? { cloudProjectId } : {}),
+      ...((currentWork.cloudProjectId ?? cloudProjectId) ? { cloudProjectId: currentWork.cloudProjectId ?? cloudProjectId } : {}),
       cloudState: isCloudConfigured() ? "syncing" : "local",
     };
     saveWork(nextWork);
@@ -2702,23 +3929,86 @@ export function CanvasPage({
       setNotice(`已导入 ${pending.length} 个本地素材`);
       return pendingIds;
     }
-    setSyncState("syncing");
-    try {
-      const result = await persistWorkToCloud(nextWork, pending);
-      if (!mountedRef.current) return pendingIds;
-      setAttachments(result.work.attachments);
-      if (result.work.cloudProjectId) setCloudProjectId(result.work.cloudProjectId);
-      setSyncState(result.work.cloudState);
-      saveWork(result.work);
-      setNotice(`已上传 ${pending.length} 个素材`);
-    } catch (error) {
-      if (!mountedRef.current) return pendingIds;
-      const message = error instanceof Error ? error.message : String(error);
-      setSyncState("failed");
-      saveWork({ ...nextWork, cloudState: "failed", cloudError: message });
-      setNotice(`素材保留在本地，云上传失败：${message}`);
+    const cloudSync = syncAttachmentsToCloud(pending, nextAttachments, {
+      success: `已上传 ${pending.length} 个素材`,
+      local: `已导入 ${pending.length} 个本地素材，登录后可同步`,
+      failurePrefix: "素材保留在本地，云上传失败",
+    });
+    if (options?.awaitCloud === false) {
+      void cloudSync.catch(() => undefined);
+      return pendingIds;
     }
+    await cloudSync;
     return pendingIds;
+  }
+
+  async function registerDirectorFile(file: File): Promise<string> {
+    const [attachmentId] = await importAssetFiles([file], false, { awaitCloud: false });
+    if (!attachmentId) throw new Error("导演台素材保存失败");
+    return attachmentId;
+  }
+
+  async function buildDirectorSceneWithModel(prompt: string, current: DirectorSceneState, signal: AbortSignal): Promise<DirectorSceneState> {
+    try {
+      const models = (await discoverCanvasModels(signal)).filter((model) => model.modality === "text");
+      const model = ["gpt-5.6-terra", "gpt-5.6-sol", "gpt-5.6-luna", "gpt-5.5", "gpt-5.4-mini"]
+        .map((id) => models.find((item) => item.id === id))
+        .find(Boolean) ?? models[0];
+      if (!model) throw new Error("cli-proxy-api 没有共享可用的 GPT 文本模型");
+      const result = await generateCanvasContent({
+        modality: "text",
+        model: model.id,
+        signal,
+        prompt: [
+          "你是 3D 导演台场景解析器。根据原始描述，只输出一行中文标签，不要解释。",
+          "标签必须从这些值中选择：人数=单人/两名/三名/人群；角色=男性/女性/一男一女/儿童/少年/健硕；机位=正面中景/正面特写/正面全景/侧面跟拍/侧面近景/背面中景/俯拍/低角度/过肩/鸟瞰/荷兰角；动作=站立/行走/跑步/坐姿/格斗/招手；时间=白天/黄昏/夜晚；画幅=21:9/16:9/4:3/1:1/3:4/9:16。",
+          `原始描述：${prompt}`,
+        ].join("\n"),
+      });
+      if (result.modality !== "text") throw new Error("GPT 模型没有返回场景解析文本");
+      return buildDirectorSceneFromPrompt(`${prompt}\n模型解析标签：${result.text.slice(0, 4_000)}`, current);
+    } catch (error) {
+      if (signal.aborted) throw error;
+      throw new Error(`共享 GPT 场景解析失败：${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  async function generateDirectorPanorama(prompt: string, signal: AbortSignal): Promise<string> {
+    const models = (await discoverCanvasModels(signal)).filter((model) => model.modality === "image");
+    const model = ["gpt-image-2", "gpt-image-1.5"].map((id) => models.find((item) => item.id === id)).find(Boolean) ?? models[0];
+    if (!model) throw new Error("cli-proxy-api 没有共享可用的图片模型");
+    const result = await generateCanvasContent({
+      modality: "image",
+      model: model.id,
+      signal,
+      aspectRatio: "16:9",
+      prompt: `生成可包裹 3D 场景的 360 度等距柱状投影（equirectangular）全景环境图，左右边缘必须无缝衔接，不要人物、文字、边框或水印。场景：${prompt}`,
+    });
+    if (result.modality !== "image") throw new Error("图片模型没有返回全景图");
+    const file = await generatedPanoramaFile(result.image.base64, result.image.mimeType, "AI全景图");
+    return registerDirectorFile(file);
+  }
+
+  async function analyzeDirectorReference(file: File, current: DirectorSceneState, signal: AbortSignal): Promise<DirectorSceneState> {
+    if (!/^image\/(?:png|jpeg|webp|gif)$/.test(file.type)) throw new Error("参考图格式不支持视觉分析");
+    const models = (await discoverCanvasModels(signal)).filter((model) => model.modality === "text");
+    const model = ["gpt-5.6-terra", "gpt-5.6-sol", "gpt-5.6-luna", "gpt-5.5", "gpt-5.4-mini"]
+      .map((id) => models.find((item) => item.id === id))
+      .find(Boolean) ?? models[0];
+    if (!model) throw new Error("cli-proxy-api 没有可用于识图的 GPT 模型");
+    const result = await generateCanvasContent({
+      modality: "text",
+      model: model.id,
+      signal,
+      image: { base64: await fileBase64(file, signal), mimeType: file.type },
+      prompt: [
+        "分析参考图片，并把它归纳成可编辑的 3D 导演台场景。只输出一行中文标签，不要解释。",
+        "标签必须包括：人数=单人/两名/三名/人群；角色=男性/女性/一男一女/儿童/少年/健硕；机位=正面中景/正面特写/正面全景/侧面跟拍/侧面近景/背面中景/俯拍全景/45°俯拍/低角度仰拍/低角度广角/过肩镜头/过肩镜头（右）/鸟瞰/荷兰角；动作=站立/行走/跑步/坐姿/格斗/招手；时间=白天/黄昏/夜晚；画幅=21:9/16:9/4:3/1:1/3:4/9:16。",
+        "无法确定时选择最接近项，不要虚构图片中不存在的人物。",
+      ].join("\n"),
+    });
+    if (result.modality !== "text") throw new Error("视觉模型没有返回场景分析");
+    return buildDirectorSceneFromPrompt(`参考图视觉分析：${result.text.slice(0, 4_000)}`, current);
   }
 
   async function importAssets(fileList: FileList | null) {
@@ -2727,7 +4017,9 @@ export function CanvasPage({
 
   async function uploadComposerAssets(files: File[]) {
     const ids = await importAssetFiles(files, false);
-    if (ids.length) setComposerAttachmentIds((current) => [...new Set([...current, ...ids])]);
+    if (ids.length && mountedRef.current && !workClearedRef.current) {
+      setComposerAttachmentIds((current) => [...new Set([...current, ...ids])]);
+    }
     return ids;
   }
 
@@ -2751,6 +4043,7 @@ export function CanvasPage({
       setNotice("请先选择一个节点");
       return;
     }
+    selectedIds.forEach(cancelGenerationRequest);
     setNodes((items) => items.filter((node) => !selectedIds.has(node.id)));
     setEdges((items) => items.filter((edge) => !selectedIds.has(edge.source) && !selectedIds.has(edge.target)));
     setSelectedNodeId(null);
@@ -2760,6 +4053,7 @@ export function CanvasPage({
   function deleteOverviewNode(nodeId: string) {
     const node = nodes.find((item) => item.id === nodeId);
     if (!node) return;
+    cancelGenerationRequest(nodeId);
     setNodes((items) => items.filter((item) => item.id !== nodeId));
     setEdges((items) => items.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
     if (selectedNodeId === nodeId) setSelectedNodeId(null);
@@ -2769,10 +4063,17 @@ export function CanvasPage({
   }
 
   function resetWorkflow() {
+    cancelAllGenerationRequests();
     setNodes(graph.nodes);
     setEdges(graph.edges);
     setSelectedNodeId(null);
     addActivity("恢复初始工作流");
+  }
+
+  function clearCurrentLocalWork() {
+    workClearedRef.current = true;
+    cancelAllGenerationRequests();
+    onClearLocalData(attachmentsRef.current.map((attachment) => attachment.id));
   }
 
   function useSuggestedSkill(skill: SuggestedSkill) {
@@ -3100,7 +4401,7 @@ export function CanvasPage({
         }}
       >
         {view === "workflow" ? (
-          <CanvasNodeActionsContext.Provider value={{ update: updateNodeData, run: runWorkflowNode, quickAction: handleNodeQuickAction, openDirector: setDirectorStudioNodeId, openScript: setScriptWorkflowNodeId, openStandalone: (nodeId, workflow) => setStandaloneWorkflow({ nodeId, workflow }) }}>
+          <CanvasNodeActionsContext.Provider value={{ update: updateNodeData, run: runWorkflowNode, derive: deriveWorkflowNode, resolveAttachment: resolveCanvasAttachment, quickAction: handleNodeQuickAction, openDirector: openDirectorStudio, openScript: setScriptWorkflowNodeId, openStandalone: (nodeId, workflow) => setStandaloneWorkflow({ nodeId, workflow }) }}>
           <ReactFlow<WorkflowNode, Edge>
             nodes={nodes}
             edges={edgesVisible ? edges : []}
@@ -3134,7 +4435,7 @@ export function CanvasPage({
             selectionOnDrag={tool === "select"}
             fitView={!storedDocument}
             defaultViewport={storedDocument?.viewport}
-            fitViewOptions={{ padding: 0.18 }}
+            fitViewOptions={{ padding: 0.18, maxZoom: 1 }}
             minZoom={0.1}
             maxZoom={8}
             defaultEdgeOptions={{ type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }}
@@ -3266,7 +4567,7 @@ export function CanvasPage({
           </div>}
           {drawer === "add" && <div className="canvas-add-menu">
             <small>添加节点</small>
-            <div>{ADD_NODE_OPTIONS.map((item) => <button key={item.id} type="button" className={item.id === "script" && addDrawerSubmenu === "script" ? "is-active" : ""} aria-expanded={item.id === "script" ? addDrawerSubmenu === "script" : undefined} onClick={() => { if (item.id === "script") { setAddDrawerSubmenu((current) => current === "script" ? null : "script"); return; } if (item.id === "library") { setDrawer("assets"); return; } addWorkflowNode(item.kind, { title: item.label, ...(item.id === "director" ? { description: "在3D空间中搭建场景并进行多视角截图", variant: "director" as const } : {}) }); }}><span><Icon name={item.id === "director" ? "workflow" : item.kind} /></span><b>{item.label}</b>{item.badge && <i>{item.badge}</i>}{(item.id === "script" || item.id === "library") && <ChevronRight size={14} />}</button>)}</div>
+            <div>{ADD_NODE_OPTIONS.map((item) => <button key={item.id} type="button" className={item.id === "script" && addDrawerSubmenu === "script" ? "is-active" : ""} aria-expanded={item.id === "script" ? addDrawerSubmenu === "script" : undefined} onClick={() => { if (item.id === "script") { setAddDrawerSubmenu((current) => current === "script" ? null : "script"); return; } if (item.id === "library") { setDrawer("assets"); return; } addWorkflowNode(item.kind, { title: item.label, ...((item.id === "text" || item.id === "image") ? { variant: "libtv-generator" as const } : {}), ...(item.id === "director" ? { description: "在3D空间中搭建场景并进行多视角截图", variant: "director" as const } : {}) }); }}><span><Icon name={item.id === "director" ? "workflow" : item.kind} /></span><b>{item.label}</b>{item.badge && <i>{item.badge}</i>}{(item.id === "script" || item.id === "library") && <ChevronRight size={14} />}</button>)}</div>
             {addDrawerSubmenu === "script" && <div className="canvas-add-script-submenu" role="menu" aria-label="脚本类型"><button type="button" role="menuitem" onClick={() => addWorkflowNode("script", { title: "脚本生成器", description: "描述剧情片段、故事，为你生成分镜脚本", variant: "script-new" })}><span>脚本</span><i>NEW</i></button><button type="button" role="menuitem" onClick={() => addWorkflowNode("script", { title: "脚本生成器", description: "描述剧情或添加角色参考、视频参考等，为你生成分镜脚本", variant: "script-legacy" })}><span>脚本（旧版）</span><i>Beta</i></button></div>}
             <small>添加资源</small>
             <button type="button" className="canvas-add-resource" onClick={() => { setPendingUploadPoint(null); fileInputRef.current?.click(); }}><Upload size={16} /><b>上传</b></button>
@@ -3402,40 +4703,53 @@ export function CanvasPage({
         </div>
       )}
 
-      {directorStudioNodeId && (
-        <div className="canvas-director-backdrop" role="presentation">
-          <section className="canvas-director-studio" role="dialog" aria-modal="true" aria-label="导演台">
-            <header>
-              <div><span><Camera size={17} /></span><strong>导演台</strong><small>3D 场景 · 多视角截图</small></div>
-              <nav><button type="button" onClick={() => setNotice("场景文件选择器已打开")}><Upload size={14} />导入场景</button><button type="button" className="is-primary" onClick={() => { setDirectorShotCount((count) => count + 1); setNotice(`已保存${directorCameraPreset}截图`); }}><Camera size={14} />多视角截图</button><button type="button" aria-label="关闭导演台" onClick={() => setDirectorStudioNodeId(null)}><X size={17} /></button></nav>
-            </header>
-            <div className="canvas-director-body">
-              <aside className="canvas-director-objects">
-                <strong>场景对象</strong>
-                {["环境 · 城市屋顶", "角色 · 主角", "道具 · 望远镜", "灯光 · 主光", "摄影机 · Camera 01"].map((item, index) => <button key={item} type="button" className={index === 4 ? "is-active" : ""} onClick={() => setNotice(`已选择${item}`)}><span>{index === 0 ? <Box size={14} /> : index === 1 ? <UserRound size={14} /> : index === 4 ? <Camera size={14} /> : <Sparkles size={14} />}</span>{item}</button>)}
-                <button type="button" className="canvas-director-add-object" onClick={() => setNotice("已新建空场景对象")}><Plus size={14} />添加对象</button>
-              </aside>
-              <section className="canvas-director-viewport">
-                <div className="director-toolbar"><button type="button" className="is-active">移动</button><button type="button">旋转</button><button type="button">缩放</button><span /><button type="button">透视</button><button type="button">网格</button></div>
-                <div className={`director-stage camera-${directorCameraPreset === "正面机位" ? "front" : directorCameraPreset === "侧面机位" ? "side" : "top"}`}>
-                  <div className="director-grid-floor" />
-                  <div className="director-character"><i /><b /><span /></div>
-                  <div className="director-prop" />
-                  <div className="director-camera-frame"><span>16:9</span><i>REC</i></div>
-                  <div className="director-light-cone" />
-                </div>
-                <footer><span>Camera 01</span><b>{directorCameraPreset}</b><span>截图 {directorShotCount}</span></footer>
-              </section>
-              <aside className="canvas-director-inspector">
-                <strong>摄影机</strong>
-                <label><span>机位预设</span><div>{["正面机位", "侧面机位", "俯视机位"].map((preset) => <button key={preset} type="button" className={directorCameraPreset === preset ? "is-active" : ""} onClick={() => setDirectorCameraPreset(preset)}>{preset.replace("机位", "")}</button>)}</div></label>
-                <fieldset><legend>Transform</legend>{["位置 X", "位置 Y", "位置 Z", "旋转 X", "旋转 Y", "旋转 Z"].map((label, index) => <label key={label}><span>{label}</span><input type="number" defaultValue={index === 2 ? 8 : index === 4 ? 180 : 0} /></label>)}</fieldset>
-                <fieldset><legend>镜头</legend><label><span>焦距</span><input type="range" min="18" max="120" defaultValue="50" /><small>50mm</small></label><label><span>景深</span><input type="range" min="0" max="100" defaultValue="32" /><small>32%</small></label><label><span>曝光</span><input type="range" min="-3" max="3" step="0.1" defaultValue="0" /><small>0.0</small></label></fieldset>
-                <button type="button" className="canvas-director-capture" onClick={() => { setDirectorShotCount((count) => count + 1); setNotice(`已保存${directorCameraPreset}截图`); }}><Camera size={15} />保存当前视角</button>
-              </aside>
-            </div>
-          </section>
-        </div>
+      {activeDirectorNode && activeDirectorScene && (
+        <Suspense fallback={<div className="canvas-director-loading" role="status"><Clock3 size={22} />正在加载 3D 导演台…</div>}>
+          <DirectorStudio
+            nodeTitle={activeDirectorNode.data.title}
+            initialPrompt={String(activeDirectorNode.data.prompt ?? "")}
+            initialReferenceOpen={directorReferenceNodeId === activeDirectorNode.id}
+            initialRunPrompt={directorRunPromptNodeId === activeDirectorNode.id}
+            imageAssets={attachments.filter((attachment) => attachment.type.startsWith("image/")).map((attachment) => ({ id: attachment.id, name: attachment.name }))}
+            value={activeDirectorScene}
+            onChange={(directorScene) => {
+              updateNodeData(activeDirectorNode.id, { directorScene });
+              void persistGeneratorNodeSnapshot(
+                activeDirectorNode.id,
+                { directorScene },
+                attachmentsRef.current,
+                nodes,
+                edges,
+                { writeCloud: false },
+              );
+            }}
+            persistScene={(directorScene) => persistGeneratorNodeSnapshot(activeDirectorNode.id, { directorScene })}
+            onPromptChange={(nextPrompt) => {
+              updateNodeData(activeDirectorNode.id, { prompt: nextPrompt });
+              void persistGeneratorNodeSnapshot(
+                activeDirectorNode.id,
+                { prompt: nextPrompt },
+                attachmentsRef.current,
+                nodes,
+                edges,
+                { writeCloud: false },
+              );
+            }}
+            onClose={(directorScene) => {
+              void persistGeneratorNodeSnapshot(activeDirectorNode.id, { directorScene });
+              setDirectorStudioNodeId(null);
+              setDirectorReferenceNodeId(null);
+              setDirectorRunPromptNodeId(null);
+            }}
+            registerFile={registerDirectorFile}
+            resolveAttachment={resolveCanvasAttachment}
+            sendShotToCanvas={(shot, camera) => sendDirectorShotToCanvas(activeDirectorNode.id, shot, camera)}
+            buildScene={buildDirectorSceneWithModel}
+            generatePanorama={generateDirectorPanorama}
+            analyzeReference={analyzeDirectorReference}
+            notify={setNotice}
+          />
+        </Suspense>
       )}
 
       {panelOpen && (
@@ -3812,7 +5126,7 @@ export function CanvasPage({
                 </article>)}</div> : <div className="canvas-preset-empty"><Search size={24} /><strong>没有找到相关素材</strong><span>换个分类或关键词试试</span></div>}
               </section>
               {libraryDetail && <div className="canvas-preset-detail" role="dialog" aria-label={`${libraryDetail.name}详情`}><button type="button" aria-label="关闭素材详情" onClick={() => setLibraryDetail(null)}><X size={16} /></button><div className="canvas-preset-detail-preview"><Sparkles size={42} /></div><section><small>{libraryDetail.model}</small><h3>{libraryDetail.name}</h3><p>由 {libraryDetail.author} 创作，可直接作为{overlay === "style-library" ? "图片风格参考" : "视频镜头特效"}添加到当前画布。</p><dl><div><dt>授权</dt><dd>{libraryDetail.commercial ? "支持商用" : "仅个人使用"}</dd></div><div><dt>使用次数</dt><dd>{libraryDetail.uses}</dd></div><div><dt>分类</dt><dd>{libraryDetail.category}</dd></div></dl><button type="button" onClick={() => { addWorkflowNode(overlay === "style-library" ? "image" : "video", { title: libraryDetail.name, description: `来自素材库 · ${libraryDetail.author}`, prompt: libraryDetail.name, position: libraryInsertPoint ?? undefined, connectToAnchor: !libraryInsertPoint }); setLibraryRecent((items) => [libraryDetail.name, ...items.filter((item) => item !== libraryDetail.name)]); setLibraryDetail(null); setLibraryInsertPoint(null); setOverlay(null); }}>添加到画布</button></section></div>}
-            </div> : <div className="canvas-clear-data-body"><p>将从这台设备删除当前作品记录、画布快照和关联的本机素材。登录、主题、收藏、其他作品及云端项目不会受影响。</p><div><button type="button" onClick={() => setOverlay(null)}>取消</button><button type="button" className="is-danger" onClick={() => onClearLocalData(attachments.map((attachment) => attachment.id))}>清除本地数据</button></div></div>}
+            </div> : <div className="canvas-clear-data-body"><p>将从这台设备删除当前作品记录、画布快照和关联的本机素材。登录、主题、收藏、其他作品及云端项目不会受影响。</p><div><button type="button" onClick={() => setOverlay(null)}>取消</button><button type="button" className="is-danger" onClick={clearCurrentLocalWork}>清除本地数据</button></div></div>}
           </section>
         </div>
       )}

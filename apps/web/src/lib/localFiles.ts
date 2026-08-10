@@ -19,20 +19,26 @@ function database(): Promise<IDBDatabase | null> {
 async function persistFile(id: string, file: File) {
   const db = await database();
   if (!db) return;
-  await new Promise<void>((resolve) => {
-    const transaction = db.transaction(STORE_NAME, "readwrite");
-    transaction.objectStore(STORE_NAME).put(file, id);
-    transaction.oncomplete = () => resolve();
-    transaction.onerror = () => resolve();
-  });
-  db.close();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const transaction = db.transaction(STORE_NAME, "readwrite");
+      transaction.objectStore(STORE_NAME).put(file, id);
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error ?? new Error("本地素材写入失败"));
+      transaction.onabort = () => reject(transaction.error ?? new Error("本地素材写入已中止"));
+    });
+  } finally {
+    db.close();
+  }
 }
 
-export function registerLocalFiles(attachments: PendingAttachment[]) {
+export async function registerLocalFiles(attachments: PendingAttachment[]) {
+  const writes: Promise<void>[] = [];
   for (const attachment of attachments) {
     files.set(attachment.id, attachment.file);
-    void persistFile(attachment.id, attachment.file);
+    writes.push(persistFile(attachment.id, attachment.file));
   }
+  await Promise.all(writes);
 }
 
 export async function localFile(id: string): Promise<File | undefined> {
