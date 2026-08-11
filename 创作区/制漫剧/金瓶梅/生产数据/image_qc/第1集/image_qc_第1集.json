@@ -1,0 +1,3281 @@
+{
+  "artifact_namespace": {
+    "available": true,
+    "declared_targets": 55,
+    "notes": [
+      "本集图片目录不存在。"
+    ],
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
+    "stale": []
+  },
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": [
+      "资产 LOC_JINGYANGGANG：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_QUARTERSTAFF：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_BADGE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_REWARD_SILVER：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 LOC_YANGGU_STREET：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_CAKE_POLE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_WINDOW_LATTICE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 LOC_WUDA_HOME：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_STAIR_RAIL：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_DINING_TABLE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_TEA_CUP：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_DOORFRAME：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_DOOR_LATCH：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_BRAZIER：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_WINE_CUP：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_SPILLED_WINE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_LUGGAGE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_DOOR：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 LOC_COUNTY_YAMEN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_OFFICIAL_DOC：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_GIFT_LOAD：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 LOC_CITY_GATE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_WINDOW_CURTAIN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_CURTAIN_FORK：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 24,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [
+        {
+          "anchor_policy": "non_human_creature",
+          "box_ratio": 0.0,
+          "char": "BEAST_TIGER__常态",
+          "faces": 0,
+          "reason": "non_human_anchor_policy",
+          "verdict": "ok"
+        },
+        {
+          "box_ratio": 0.0041,
+          "char": "CHAR_MAGISTRATE__常态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0099,
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0139,
+          "char": "CHAR_WUDA__日常卖饼态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0116,
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0043,
+          "char": "CHAR_XIMENQING__常态",
+          "faces": 1,
+          "verdict": "warn"
+        }
+      ],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {
+        "BEAST_TIGER__常态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "floor_guard_applied": false,
+          "has_main": false,
+          "intra_pairs": 0,
+          "raw_intra_floor": null
+        },
+        "CHAR_MAGISTRATE__常态": {
+          "floor": 0.9829,
+          "floor_calibrated": true,
+          "floor_guard_applied": false,
+          "has_main": true,
+          "intra_pairs": 2,
+          "raw_intra_floor": 0.9829
+        },
+        "CHAR_PANJINLIAN__25岁武大家常态": {
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "floor_guard_applied": true,
+          "has_main": true,
+          "intra_pairs": 4,
+          "raw_intra_floor": 0.3325
+        },
+        "CHAR_WUDA__日常卖饼态": {
+          "floor": 0.8436,
+          "floor_calibrated": true,
+          "floor_guard_applied": false,
+          "has_main": true,
+          "intra_pairs": 3,
+          "raw_intra_floor": 0.8436
+        },
+        "CHAR_WUSONG__28岁打虎态": {
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "floor_guard_applied": true,
+          "has_main": true,
+          "intra_pairs": 4,
+          "raw_intra_floor": 0.4829
+        },
+        "CHAR_XIMENQING__常态": {
+          "floor": 0.9785,
+          "floor_calibrated": true,
+          "floor_guard_applied": false,
+          "has_main": true,
+          "intra_pairs": 2,
+          "raw_intra_floor": 0.9785
+        }
+      },
+      "encoder": "arcface_buffalo_l",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": []
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "BEAST_TIGER__常态": {
+          "floor": 0.9817,
+          "intra_pairs": 3
+        },
+        "CHAR_MAGISTRATE__常态": {
+          "floor": 0.7322,
+          "intra_pairs": 3
+        },
+        "CHAR_PANJINLIAN__25岁武大家常态": {
+          "floor": 0.55,
+          "intra_pairs": 6
+        },
+        "CHAR_WUDA__日常卖饼态": {
+          "floor": 0.9909,
+          "intra_pairs": 4
+        },
+        "CHAR_WUSONG__28岁打虎态": {
+          "floor": 0.9754,
+          "intra_pairs": 6
+        },
+        "CHAR_XIMENQING__常态": {
+          "floor": 0.8976,
+          "intra_pairs": 3
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "human_anatomy": {
+      "available": true,
+      "extra_threshold": 6,
+      "notes": [
+        "本集无分镜 PNG。"
+      ],
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_CITY_GATE",
+          "name": "阳谷城门清晨",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_COUNTY_YAMEN",
+          "name": "县衙案厅",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_JINGYANGGANG",
+          "name": "景阳冈夜间空地",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_WUDA_HOME",
+          "name": "武大家楼屋雪夜",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_YANGGU_STREET",
+          "name": "阳谷街面与武大家楼窗",
+          "type": "scene"
+        },
+        {
+          "id": "PROP_BADGE",
+          "name": "都头腰牌",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_BRAZIER",
+          "name": "炭盆",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_CAKE_POLE",
+          "name": "炊饼担",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_CURTAIN_FORK",
+          "name": "叉竿",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_DINING_TABLE",
+          "name": "DINING TABLE",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_DOOR",
+          "name": "武大家木门",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_DOORFRAME",
+          "name": "DOORFRAME",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_DOOR_LATCH",
+          "name": "门闩",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_GIFT_LOAD",
+          "name": "东京礼担",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_LUGGAGE",
+          "name": "素布行李",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_OFFICIAL_DOC",
+          "name": "公文",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_QUARTERSTAFF",
+          "name": "梢棒",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_REWARD_SILVER",
+          "name": "REWARD SILVER",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_SPILLED_WINE",
+          "name": "SPILLED WINE",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_STAIR_RAIL",
+          "name": "STAIR RAIL",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_TEA_CUP",
+          "name": "TEA CUP",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_WINDOW_CURTAIN",
+          "name": "WINDOW CURTAIN",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_WINDOW_LATTICE",
+          "name": "WINDOW LATTICE",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_WINE_CUP",
+          "name": "半杯酒",
+          "type": "prop"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "武松",
+        "CHAR_WUSONG",
+        "CHAR_WUSONG__28岁打虎态",
+        "CHAR_WUSONG__常态",
+        "CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切",
+        "CHAR_WUSONG__28岁打虎态_表情_六联表",
+        "CHAR_WUSONG__28岁打虎态__a6702a565e0c_529x941_to_1024x1822",
+        "CHAR_WUSONG__28岁打虎态_三视图__fa433f838911_1672x941_to_1819x1024",
+        "CHAR_WUSONG__28岁打虎态_半身__5fef4c56eb8e_529x941_to_1024x1822",
+        "CHAR_WUSONG__28岁打虎态_45度",
+        "CHAR_WUSONG__28岁打虎态_45度__6ceb10f64c63_529x941_to_1024x1822",
+        "CHAR_WUSONG__28岁打虎态_后45度",
+        "CHAR_WUSONG__28岁打虎态__510fb2c1bfa5_1672x941_to_1819x1024",
+        "风格锚_北宋市井写实电影感",
+        "风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819",
+        "景阳冈猛虎",
+        "BEAST_TIGER",
+        "BEAST_TIGER__常态",
+        "BEAST_TIGER__常态_脸部特写",
+        "BEAST_TIGER__常态_脸部特写_脸锚裁切",
+        "BEAST_TIGER__常态_45度",
+        "BEAST_TIGER__常态_后45度",
+        "Hunters",
+        "CROWD_HUNTERS",
+        "CROWD_HUNTERS__常态",
+        "CROWD_HUNTERS__常态_手部局部",
+        "CROWD_HUNTERS__常态_布料局部",
+        "武大",
+        "CHAR_WUDA",
+        "CHAR_WUDA__日常卖饼态",
+        "CHAR_WUDA__常态",
+        "CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切",
+        "CHAR_WUDA__日常卖饼态_表情_克制",
+        "CHAR_WUDA__日常卖饼态_45度",
+        "CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819",
+        "CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819",
+        "CHAR_WUDA__日常卖饼态_后45度",
+        "潘金莲",
+        "CHAR_PANJINLIAN",
+        "CHAR_PANJINLIAN__25岁武大家常态",
+        "CHAR_PANJINLIAN__常态",
+        "CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切",
+        "CHAR_PANJINLIAN__25岁武大家常态_表情_六联表",
+        "CHAR_PANJINLIAN__25岁武大家常态__384fba505331_529x941_to_1024x1822",
+        "CHAR_PANJINLIAN__25岁武大家常态_三视图__245e027373b6_1672x941_to_1819x1024",
+        "CHAR_PANJINLIAN__25岁武大家常态_半身__b9953dec4b2d_529x941_to_1024x1822",
+        "CHAR_PANJINLIAN__25岁武大家常态_45度",
+        "CHAR_PANJINLIAN__25岁武大家常态_45度__7dfcc34d9f07_529x941_to_1024x1822",
+        "CHAR_PANJINLIAN__25岁武大家常态_后45度",
+        "CHAR_PANJINLIAN__25岁武大家常态__32b5d6d035ab_1672x941_to_1819x1024",
+        "知县",
+        "CHAR_MAGISTRATE",
+        "CHAR_MAGISTRATE__常态",
+        "CHAR_MAGISTRATE__常态_脸部特写",
+        "CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切",
+        "CHAR_MAGISTRATE__常态_45度",
+        "CHAR_MAGISTRATE__常态_后45度",
+        "西门庆",
+        "CHAR_XIMENQING",
+        "CHAR_XIMENQING__常态",
+        "CHAR_XIMENQING__常态_脸部特写",
+        "CHAR_XIMENQING__常态_脸部特写_脸锚裁切",
+        "CHAR_XIMENQING__常态_45度",
+        "CHAR_XIMENQING__常态_后45度"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第1集",
+      "groups": {},
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "BEAST_TIGER__常态": {
+          "floor": 0.9892,
+          "intra_pairs": 3
+        },
+        "CHAR_MAGISTRATE__常态": {
+          "floor": 0.85,
+          "intra_pairs": 3
+        },
+        "CHAR_PANJINLIAN__25岁武大家常态": {
+          "floor": 0.85,
+          "intra_pairs": 6
+        },
+        "CHAR_WUDA__日常卖饼态": {
+          "floor": 0.9907,
+          "intra_pairs": 4
+        },
+        "CHAR_WUSONG__28岁打虎态": {
+          "floor": 0.85,
+          "intra_pairs": 6
+        },
+        "CHAR_XIMENQING__常态": {
+          "floor": 0.9555,
+          "intra_pairs": 3
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "scene": {
+      "available": true,
+      "groups": {},
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "availability_reason": "no_episode_images",
+      "available": false,
+      "notes": [
+        "无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。"
+      ],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [],
+    "history_chars": 0,
+    "notes": [
+      "无跨集历史（首集或降级精度未累积均值）"
+    ]
+  },
+  "episode": "第1集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 12,
+    "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_PANJINLIAN/25岁武大家常态「CHAR_PANJINLIAN/25岁武大家常态 同源脸锚」（出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png）：脸占画面仅 13%（建议 ≥30%，核心角教头线 ≥20%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_MAGISTRATE/常态「基础」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_XIMENQING/常态「基础」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      }
+    ],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
+    "rows": []
+  },
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 0,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a2.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a3.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP08_a1.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a3.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP10_a1.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP10_a2.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip11_first.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip12_end.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip13_first.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip13_end.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip14_first.png",
+        "shot": "Clip_14"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP14_a1.png",
+        "shot": "Clip_14"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip15_first.png",
+        "shot": "Clip_15"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP15_a1.png",
+        "shot": "Clip_15"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP15_a2.png",
+        "shot": "Clip_15"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip15_end.png",
+        "shot": "Clip_15"
+      }
+    ],
+    "precision_level": "full",
+    "required": 0,
+    "skipped": [
+      {
+        "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip01_first.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_01"
+      },
+      {
+        "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_01"
+      },
+      {
+        "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip01_end.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_01"
+      },
+      {
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip02_first.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a2.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a3.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip02_end.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      }
+    ],
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "hair_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/hair_confirmations.json",
+    "rows": []
+  },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/human_image_review.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "ba7be555f1c0dfc4a605b026029b66f0cc611fb6c5b33e28d45e02f13138f2c7",
+      "出图/共享/identity_registry.json": "c84144ace444d97039c0e2febdfb30ccc4ae32466b7379b2cb44ffb80e7a2d79",
+      "出图/共享/style_anchor_registry.json": "7121291eed1e7e83a82a5e03a1ed891cd05fb6b1bf4ba9a88486bd7e9a56162b",
+      "出图/共享/图片/风格锚_北宋市井写实电影感.png": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+      "出图/第1集/prompt/00_总览.md": "ea394de9d3ba63174f78d8e2966384b0c7dfa0dc2c0d90c147f9ba87b17bc46d",
+      "出图/第1集/prompt/01_分镜出图.md": "75497d48531c4ca96e3aabb39d851a8219b6f7b20598ea92a7db475ee579a9b1",
+      "生产数据/image_qc/第1集/face_confirmations.json": null,
+      "生产数据/image_qc/第1集/hair_confirmations.json": null,
+      "生产数据/image_qc/第1集/human_image_review.json": null,
+      "生产数据/image_qc/第1集/outfit_confirmations.json": null,
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": null,
+      "脚本/第1集/storyboard.json": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
+    },
+    "sha": "cd4d450d9cf23a5c6226ab3602dd6b6de7f86c7deece8d29b89d8f01f8ea3fda"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a2.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a3.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a2.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "BEAST_TIGER/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a3.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP08_a1.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a3.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP10_a1.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP10_a2.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUDA/日常卖饼态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip11_first.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+        "png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_PANJINLIAN/25岁武大家常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+        "png": "出图/第1集/图片/Clip12_end.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip13_first.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_MAGISTRATE/常态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip13_end.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip14_first.png",
+        "shot": "Clip_14"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUDA/日常卖饼态",
+          "CHAR_WUSONG/28岁打虎态"
+        ],
+        "label": "镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP14_a1.png",
+        "shot": "Clip_14"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip15_first.png",
+        "shot": "Clip_15"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP15_a1.png",
+        "shot": "Clip_15"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP15_a2.png",
+        "shot": "Clip_15"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_WUSONG/28岁打虎态",
+          "CHAR_XIMENQING/常态"
+        ],
+        "label": "镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip15_end.png",
+        "shot": "Clip_15"
+      }
+    ],
+    "findings": [
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_PANJINLIAN/25岁武大家常态「CHAR_PANJINLIAN/25岁武大家常态 同源脸锚」（出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png）：脸占画面仅 13%（建议 ≥30%，核心角教头线 ≥20%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_MAGISTRATE/常态「基础」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_XIMENQING/常态「基础」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_WUSONG/28岁打虎态：视平线不齐：three_quarter(0.16) vs back(0.68)，跨视图脸中心高度差 52%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 15
+  },
+  "outfit_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
+    "rows": []
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 0,
+    "targets": [],
+    "total": 0
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [],
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "semantic_drift": {
+    "available": true,
+    "compared": 0,
+    "findings": [],
+    "floor": 0.55
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": []
+  },
+  "shot_variety": {
+    "available": true,
+    "clips_checked": 0,
+    "duplicate_pairs": [],
+    "findings": [],
+    "notes": [],
+    "static_pairs": []
+  },
+  "state_ledger": {
+    "advise": true,
+    "available": true,
+    "ledger_present": false,
+    "markers": [
+      "伤口",
+      "升级"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_fingerprint": {
+      "contrast": 178.0,
+      "edge": 51.1,
+      "sat": 11.0
+    },
+    "anchor_status": "ok",
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "anchors": [
+        "出图/共享/图片/风格锚_北宋市井写实电影感.png"
+      ],
+      "style_name": "写实电影感·北宋市井国风漫剧",
+      "taboos": [
+        "仙侠化光效",
+        "艳情媚俗打光",
+        "现代妆容与塑料皮肤",
+        "清宫服饰",
+        "网红脸",
+        "猎奇血浆",
+        "随机霓虹",
+        "烤字",
+        "水印Logo"
+      ]
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——风格归属跳过。"
+    ]
+  },
+  "summary": {
+    "advisory": 5,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "human_anatomy": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 1,
+        "noface": 0,
+        "ok": 0,
+        "warn": 5
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 1,
+    "unavailable_visual_checks": [
+      "seam"
+    ],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "brightness": null,
+      "evidence": "景阳冈冷青月色与土褐；阳谷街市灰暖；武大家室内由灶火暖橙逐步被雪夜冷蓝侵入；衙门与城门回到冷灰。",
+      "warmth": "cool"
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
+    ]
+  },
+  "turnaround_alignment": {
+    "available": true,
+    "checked_forms": 7,
+    "findings": [
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              18,
+              22,
+              26
+            ],
+            "border_delta_p90": 180,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 529
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              18,
+              22,
+              26
+            ],
+            "border_delta_p90": 181,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 529
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              18,
+              22,
+              26
+            ],
+            "border_delta_p90": 183,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 529
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              18,
+              22,
+              26
+            ],
+            "border_delta_p90": 183,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 529
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              18,
+              22,
+              26
+            ],
+            "border_delta_p90": 183,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 529
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "back": [
+            0.6796,
+            0.084
+          ],
+          "front": [
+            0.1589,
+            0.084
+          ],
+          "side": [
+            0.3884,
+            0.0648
+          ],
+          "three_quarter": [
+            0.1583,
+            0.0786
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_WUSONG/28岁打虎态：视平线不齐：three_quarter(0.16) vs back(0.68)，跨视图脸中心高度差 52%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "body_views": {
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              163,
+              159,
+              159
+            ],
+            "border_delta_p90": 41,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              165,
+              162,
+              162
+            ],
+            "border_delta_p90": 34,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "front": [
+            0.5281,
+            0.14
+          ],
+          "three_quarter": [
+            0.8185,
+            0.1489
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      }
+    ],
+    "forms": [
+      {
+        "character_id": "CHAR_WUSONG",
+        "core": true,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "906e16ae9e1117ca68ff438cdc5cd027256b1a9e5d622eb1193ed4d4fb80e78a",
+                "png_sha256": "6fae69a5bca80460db286b573d1db9a710cbbce0a6d80eb51a966138dcc03a1d",
+                "reasons": [],
+                "registry_binding_fingerprint": "906e16ae9e1117ca68ff438cdc5cd027256b1a9e5d622eb1193ed4d4fb80e78a",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-08-11T07:05:09+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
+              "png_sha256": "6fae69a5bca80460db286b573d1db9a710cbbce0a6d80eb51a966138dcc03a1d"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "49f1e12901875e3708ce09f4ab4e14a2ab4f78a616e18def12524ea7ef4bf495",
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+              "png_sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01"
+            }
+          ],
+          "valid": true
+        },
+        "form": "28岁打虎态",
+        "library_tier": "core_full",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": "bd32ffd763e33b750846dd28a8b6c5dd947a5b4856a0470825ec90669c98a112",
+            "png_sha256": "fa433f838911751f4a9ba21207f0e602436617b202d72344bc328afbbd946673",
+            "reasons": [],
+            "registry_binding_fingerprint": "bd32ffd763e33b750846dd28a8b6c5dd947a5b4856a0470825ec90669c98a112",
+            "review_kind": "executor_visual",
+            "reviewed_at": "2026-08-11T06:45:20+00:00",
+            "reviewer": "Codex视觉执行者",
+            "valid": true,
+            "verdict": "pass"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png",
+          "png_sha256": "fa433f838911751f4a9ba21207f0e602436617b202d72344bc328afbbd946673"
+        },
+        "views": {
+          "back": {
+            "face_geometry": {
+              "center_y": 0.6796,
+              "confidence": "heuristic",
+              "face_height": 0.084
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "ffb9dfd88eb99e5738c390e7eccff369eaf92fc04a57dff2f85c1d3d2d787cd8",
+              "png_sha256": "a4b9ab57e089544897fbe17f0cca361e89f99df79404845d84fa75b53545bb6a",
+              "reasons": [],
+              "registry_binding_fingerprint": "ffb9dfd88eb99e5738c390e7eccff369eaf92fc04a57dff2f85c1d3d2d787cd8",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T06:50:00+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 180,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png",
+            "png_sha256": "a4b9ab57e089544897fbe17f0cca361e89f99df79404845d84fa75b53545bb6a",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.1589,
+              "confidence": "heuristic",
+              "face_height": 0.084
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "73e40c368f4880ce02aa4b7073d645fc97cfa3d17a8b36e38af1566d1a01183b",
+              "png_sha256": "a6702a565e0c69efb3d6814bb98a7b59b7e0294bc8e29261c09e443711ac0be9",
+              "reasons": [],
+              "registry_binding_fingerprint": "73e40c368f4880ce02aa4b7073d645fc97cfa3d17a8b36e38af1566d1a01183b",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T06:48:46+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 181,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
+            "png_sha256": "a6702a565e0c69efb3d6814bb98a7b59b7e0294bc8e29261c09e443711ac0be9",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "48c1bab59d028da182258bcd4ed93484045e2c9b349c8b20952f59c57d20bc67",
+              "png_sha256": "998fa54e88d9ddeeb971f565a903b8cebc2408b852cab171a48d951c2ca219ba",
+              "reasons": [],
+              "registry_binding_fingerprint": "48c1bab59d028da182258bcd4ed93484045e2c9b349c8b20952f59c57d20bc67",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T06:49:43+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 183,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png",
+            "png_sha256": "998fa54e88d9ddeeb971f565a903b8cebc2408b852cab171a48d951c2ca219ba",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "face_geometry": {
+              "center_y": 0.3884,
+              "confidence": "heuristic",
+              "face_height": 0.0648
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "0c93e678618af2c7390333d0a46159e6f3a1b53b6a996b3c1f3f29a5201150cb",
+              "png_sha256": "db2e72c943839dfe28319f967772fc39ca26bb999184af828502caa004235926",
+              "reasons": [],
+              "registry_binding_fingerprint": "0c93e678618af2c7390333d0a46159e6f3a1b53b6a996b3c1f3f29a5201150cb",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T06:49:24+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 183,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png",
+            "png_sha256": "db2e72c943839dfe28319f967772fc39ca26bb999184af828502caa004235926",
+            "view": "side"
+          },
+          "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.1583,
+              "confidence": "heuristic",
+              "face_height": 0.0786
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "1ef55a37149ba7e6f23ec8cb1da2b66f62eb932092477870b35e1e132dac0c65",
+              "png_sha256": "6ceb10f64c6367fa4cb7f20fbe9c70ab08c968c086dd7551f19ee6b8fb5006cd",
+              "reasons": [],
+              "registry_binding_fingerprint": "1ef55a37149ba7e6f23ec8cb1da2b66f62eb932092477870b35e1e132dac0c65",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T06:49:07+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 183,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png",
+            "png_sha256": "6ceb10f64c6367fa4cb7f20fbe9c70ab08c968c086dd7551f19ee6b8fb5006cd",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "BEAST_TIGER",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "bc577c379bb5a1e2ef6d1c538b7b79b1f6df3134d0b29666c06ac95f99e3150c",
+                "png_sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                "reasons": [],
+                "registry_binding_fingerprint": "bc577c379bb5a1e2ef6d1c538b7b79b1f6df3134d0b29666c06ac95f99e3150c",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-08-11T09:47:12+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+              "png_sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "74683fcbd76e84185846f8d82bd5e22bb9c7d42d88e9df913103d86e6b3a1668",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-08-11T09:47:56.260129+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+              "png_sha256": "19ae3f729f0e0d1d4e3fc70b86696ae9cb16cf1c160c067314ab37fdd1f08e83"
+            }
+          ],
+          "valid": true
+        },
+        "form": "常态",
+        "library_tier": "named_minimal",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.3289,
+              "confidence": "heuristic",
+              "face_height": 0.5324
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "524af2341199c8ad8fece2b6e1872b4d23c85d7e7794a1ac1b576fed84f5a42c",
+              "png_sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+              "reasons": [],
+              "registry_binding_fingerprint": "524af2341199c8ad8fece2b6e1872b4d23c85d7e7794a1ac1b576fed84f5a42c",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T09:25:27+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                183,
+                182,
+                182
+              ],
+              "bbox_normalized": [
+                0.1125,
+                0.0722,
+                0.9797,
+                0.9528
+              ],
+              "border_delta_p90": 22,
+              "centerline": 0.5461,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9528,
+              "head_top": 0.0722,
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.8806,
+              "subject_width": 0.8672
+            },
+            "path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+            "png_sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CROWD_HUNTERS",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [],
+          "valid": false
+        },
+        "form": "常态",
+        "library_tier": "restricted_partial",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "back"
+          },
+          "front": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_WUDA",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "0dd15b49740add451f4e82ee2acd8a516d54281d42bf9e419c2cdc9b3a5632fc",
+                "png_sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                "reasons": [],
+                "registry_binding_fingerprint": "0dd15b49740add451f4e82ee2acd8a516d54281d42bf9e419c2cdc9b3a5632fc",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-08-11T08:16:51+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+              "png_sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "7f9ee94356e8aade981464fe01ea1448a18e2ca7790c3a6ee11ca3f20c3bed71",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-08-11T08:25:42.793061+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+              "png_sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067"
+            }
+          ],
+          "valid": true
+        },
+        "form": "日常卖饼态",
+        "library_tier": "recurring_standard",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.5281,
+              "confidence": "heuristic",
+              "face_height": 0.14
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "466be38771f53dafcb1b620c381b1e30421cea67750ad60d87f63a73a1d4f903",
+              "png_sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+              "reasons": [],
+              "registry_binding_fingerprint": "466be38771f53dafcb1b620c381b1e30421cea67750ad60d87f63a73a1d4f903",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T08:05:31+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                163,
+                159,
+                159
+              ],
+              "border_delta_p90": 41,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+            "png_sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+            "view": "side"
+          },
+          "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.8185,
+              "confidence": "heuristic",
+              "face_height": 0.1489
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "d1ef44572a2f4e71c902877b9afde805767591066317d02508676f0138d702a0",
+              "png_sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+              "reasons": [],
+              "registry_binding_fingerprint": "d1ef44572a2f4e71c902877b9afde805767591066317d02508676f0138d702a0",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T08:24:36+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                165,
+                162,
+                162
+              ],
+              "border_delta_p90": 34,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+            "png_sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_PANJINLIAN",
+        "core": true,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "67128ce4c9d127c6cf32eeae03d8a392a5208bc19cdf408e60e7ae545de783e0",
+                "png_sha256": "07663bbb3120bfe97c2eb573514382071565b211e40036429878dcb39b0db96a",
+                "reasons": [],
+                "registry_binding_fingerprint": "67128ce4c9d127c6cf32eeae03d8a392a5208bc19cdf408e60e7ae545de783e0",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-08-11T07:49:59+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
+              "png_sha256": "07663bbb3120bfe97c2eb573514382071565b211e40036429878dcb39b0db96a"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "2e2e2071a541ad1803a57e6682dfc81f36d42c3f2f9ff7655edf6e7fcdfea72d",
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+              "png_sha256": "1e8570b01cf17d7b555a10a7ca1477353dcf0dcc13d4c87c908cb871827502c0"
+            }
+          ],
+          "valid": true
+        },
+        "form": "25岁武大家常态",
+        "library_tier": "core_full",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": "0b9fef9ece45bbd26a09a0748e3b6df3e3d9acc3eeb22009b9e8d5f2816f14d3",
+            "png_sha256": "245e027373b685add4569055bb99c1625b6eb503258d44d22d80ac1dee359b0d",
+            "reasons": [],
+            "registry_binding_fingerprint": "0b9fef9ece45bbd26a09a0748e3b6df3e3d9acc3eeb22009b9e8d5f2816f14d3",
+            "review_kind": "executor_visual",
+            "reviewed_at": "2026-08-11T07:30:18+00:00",
+            "reviewer": "Codex视觉执行者",
+            "valid": true,
+            "verdict": "pass"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png",
+          "png_sha256": "245e027373b685add4569055bb99c1625b6eb503258d44d22d80ac1dee359b0d"
+        },
+        "views": {
+          "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "6073f91b836a47114ddfaf3c118443c1944a84fbcf0c8eb48d86ebf48edca1d3",
+              "png_sha256": "5c3104a291502cd8932096b50bf00a609d8fa9126c93107c0a956931e5b27df4",
+              "reasons": [],
+              "registry_binding_fingerprint": "6073f91b836a47114ddfaf3c118443c1944a84fbcf0c8eb48d86ebf48edca1d3",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T07:41:35+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 186,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png",
+            "png_sha256": "5c3104a291502cd8932096b50bf00a609d8fa9126c93107c0a956931e5b27df4",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.178,
+              "confidence": "heuristic",
+              "face_height": 0.084
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "fb946f65de9b124d49d1ad2c7cad6c0052d98ee3e8c50f9b155e0ac1c072d10e",
+              "png_sha256": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c",
+              "reasons": [],
+              "registry_binding_fingerprint": "fb946f65de9b124d49d1ad2c7cad6c0052d98ee3e8c50f9b155e0ac1c072d10e",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T07:34:07+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 183,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
+            "png_sha256": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "4fe9c7685f010d0eb4903c348d45facdc8404aba9999319eef5eb9860fbcb412",
+              "png_sha256": "1a1b6b82f46c6879d8b929b8cbd190cf5dc6163ec90e939aeb393a0723861be8",
+              "reasons": [],
+              "registry_binding_fingerprint": "4fe9c7685f010d0eb4903c348d45facdc8404aba9999319eef5eb9860fbcb412",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T07:40:14+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 192,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png",
+            "png_sha256": "1a1b6b82f46c6879d8b929b8cbd190cf5dc6163ec90e939aeb393a0723861be8",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "4d4b36a2cd86b90e4c5befba74ec38d67399293ba98e53dd6ab9f908ef1afb66",
+              "png_sha256": "e38a213b565d3589f9acb98900a47a5a687be163030544e414ca20142d6fdae2",
+              "reasons": [],
+              "registry_binding_fingerprint": "4d4b36a2cd86b90e4c5befba74ec38d67399293ba98e53dd6ab9f908ef1afb66",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T07:37:38+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 192,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png",
+            "png_sha256": "e38a213b565d3589f9acb98900a47a5a687be163030544e414ca20142d6fdae2",
+            "view": "side"
+          },
+          "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.178,
+              "confidence": "heuristic",
+              "face_height": 0.0776
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "a9cd5274801c15ddfb09e9f8435fb79374bb4f2c534bebd23bd7280de183c0af",
+              "png_sha256": "7dfcc34d9f0799bee5d3ef1265df2ba80f160f66f91002c9f5efc8e65bf7a815",
+              "reasons": [],
+              "registry_binding_fingerprint": "a9cd5274801c15ddfb09e9f8435fb79374bb4f2c534bebd23bd7280de183c0af",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T07:35:46+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                18,
+                22,
+                26
+              ],
+              "border_delta_p90": 192,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 529
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png",
+            "png_sha256": "7dfcc34d9f0799bee5d3ef1265df2ba80f160f66f91002c9f5efc8e65bf7a815",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_MAGISTRATE",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "8299d6e0fb17300b7a29eeab04f3c7b9eeae83f9b780fbc05bd77944a747c05f",
+                "png_sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                "reasons": [],
+                "registry_binding_fingerprint": "8299d6e0fb17300b7a29eeab04f3c7b9eeae83f9b780fbc05bd77944a747c05f",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-08-11T10:03:32+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+              "png_sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "ee9f46e2cb5f7a96daaa37b5726be321d9b46b8f59c505bb8c50e6957b22b5bf",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-08-11T10:03:32.622314+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+              "png_sha256": "7e7126b263f2d01677073d87c58cc23a84dac57f09e2b64f97352c478c0178f4"
+            }
+          ],
+          "valid": true
+        },
+        "form": "常态",
+        "library_tier": "named_minimal",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.4559,
+              "confidence": "heuristic",
+              "face_height": 0.2274
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "a82c359113b6293f437a8dca39f042c390ef54bf5c2f173ccc78bf692dd4c708",
+              "png_sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+              "reasons": [],
+              "registry_binding_fingerprint": "a82c359113b6293f437a8dca39f042c390ef54bf5c2f173ccc78bf692dd4c708",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T10:02:52+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                172,
+                171,
+                170
+              ],
+              "border_delta_p90": 45,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+            "png_sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_XIMENQING",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "8e0bd3b0a7d6f77835cabde3d9b85ca16972ff21490ade1d0325eb8fd759f4b2",
+                "png_sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                "reasons": [],
+                "registry_binding_fingerprint": "8e0bd3b0a7d6f77835cabde3d9b85ca16972ff21490ade1d0325eb8fd759f4b2",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-08-11T10:09:52+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+              "png_sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "c7bcb2a5fc534610dd0481d122b8a5b82ddf85ea2ce3acac12a792d515b26569",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-08-11T10:09:52.440376+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+              "png_sha256": "e6ed90aed2f78eb99a4f14b4639f31d717864706469b307c00c731be14ca3f67"
+            }
+          ],
+          "valid": true
+        },
+        "form": "常态",
+        "library_tier": "named_minimal",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.1334,
+              "confidence": "heuristic",
+              "face_height": 0.101
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "2a75d49852efcaccd2312ea13119a00db183641b56b7a7e90115476126206db2",
+              "png_sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+              "reasons": [],
+              "registry_binding_fingerprint": "2a75d49852efcaccd2312ea13119a00db183641b56b7a7e90115476126206db2",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-11T10:09:14+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                179,
+                176,
+                175
+              ],
+              "border_delta_p90": 45,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+            "png_sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+            "view": "three_quarter"
+          }
+        }
+      }
+    ],
+    "human_review_required": [],
+    "notes": [],
+    "version": 2,
+    "view_contract": [
+      "front",
+      "three_quarter",
+      "side",
+      "rear_three_quarter",
+      "back"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

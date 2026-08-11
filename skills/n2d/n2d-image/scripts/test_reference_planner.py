@@ -790,6 +790,31 @@ def test_build_plan_ignores_blackboard_expression_span_edits(tmp_path):
     assert after == 0
 
 
+def test_load_character_forms_keeps_library_tier_and_core_scope_ignores_negation(tmp_path: Path):
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(
+        json.dumps({"characters": [{
+            "id": "CHAR_MAGISTRATE",
+            "name": "知县",
+            "scope": "只作为本集公务角色，不抢主角视觉重心。",
+            "tier": "单集角色",
+            "library_tier": "named_minimal",
+            "planned_episode_count": 0,
+            "forms": [{"form": "常态", "reference_atlas": {"build_tier": "named_minimal"}}],
+        }]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    chars = rp.load_character_forms(tmp_path)
+
+    assert chars[0]["library_tier"] == "named_minimal"
+    assert chars[0]["forms"][0]["library_tier"] == "named_minimal"
+    assert rp._scope_is_core(chars[0]) is False
+    assert rp._scope_is_core({"scope": "开篇长线核心人物", "library_tier": "named_minimal"}) is True
+    assert rp._scope_is_core({"scope": "单集", "library_tier": "core_full"}) is True
+
+
 def test_reference_feed_tagged_multi_image_for_multi_reference_backend() -> None:
     # 多参考后端 + ≥2 张参考 → 分图分标，给出 @ImageN 标签，明确不要拼 sheet。
     p = rp.plan_character_in_clip(

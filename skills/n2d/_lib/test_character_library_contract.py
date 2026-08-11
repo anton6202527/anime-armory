@@ -51,6 +51,7 @@ def test_episode_thresholds_and_reuse_scope_are_deterministic() -> None:
     assert infer_character_library_tier(episode_count=3) == CHARACTER_LIBRARY_TIER_STANDARD
     assert infer_character_library_tier(scope="第1集起复用") == CHARACTER_LIBRARY_TIER_STANDARD
     assert infer_character_library_tier(episode_count=1) == CHARACTER_LIBRARY_TIER_MINIMAL
+    assert infer_character_library_tier(scope="只作为本集公务角色，不抢主角视觉重心") == CHARACTER_LIBRARY_TIER_MINIMAL
     assert character_library_tier_for_record({"core": True}) == CHARACTER_LIBRARY_TIER_CORE
 
 

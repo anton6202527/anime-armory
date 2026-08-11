@@ -1,0 +1,135 @@
+{
+  "approvals": [
+    {
+      "authorization_id": "AUTH_eec6e3d37ec9ea74",
+      "authorization_path": "生产数据/autonomy_authorization.json",
+      "authorization_sha256": "22491fffb19002c6b2483a088637236fd9fdb78bb3091315b3a4cd434dca4ade",
+      "authorized_by": "user:workspace-owner",
+      "decision": "approved",
+      "delegation_profile": "p2",
+      "evidence": [
+        {
+          "path": "脚本/第1集/axis_blocking_map.json",
+          "sha256": "0e527843376da65d301dee6d569106d0f0fc9f364e261799348db0703c74c378"
+        },
+        {
+          "path": "脚本/第1集/director_beat_sheet.json",
+          "sha256": "3f0cc345338ee754d2c332f0913eff6d70c54782db71c59b3909839e25a840ac"
+        },
+        {
+          "path": "脚本/第1集/edit_rhythm_map.json",
+          "sha256": "9e51dc164c9225f51e8fcc5390202b8b1cafd0a3cd2a57dc440d564cc7df42d6"
+        },
+        {
+          "path": "脚本/第1集/shot_progression_plan.json",
+          "sha256": "a8480b3a81a876aed6e00401541f1321d43c9e07b77715668bd0c69e8156636b"
+        },
+        {
+          "path": "脚本/第1集/transition_map.json",
+          "sha256": "6d89f47cbef495bc324eed9d91f1c0ad4f148d55cfefa64209c3aa65ac3f0376"
+        },
+        {
+          "path": "脚本/第1集/vertical_composition_plan.json",
+          "sha256": "9f8d03e3c7d0a47c4ff2e221d289593c970989ff72c76d6c440b107bc84c7251"
+        }
+      ],
+      "independent_review": "waived_by_project_owner",
+      "note": "项目负责人已启用“仅高风险停审”；代理按当前 confirmed/ready 产物与哈希完成 p2:creative 内部交接签收。独立人审已由负责人在授权范围内豁免。",
+      "review_mode": "delegated_autonomy",
+      "reviewed_at": "2026-08-11T04:01:58+00:00",
+      "reviewer_id": "delegate:n2d-agent",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "7fb9e836dcbc3728d3dc66da02fbb1ba4f6dc2b3976c4480ea83d6e60dadd930",
+      "signed_input_fingerprint_sha": "e69461a2aeb8dda1e3bd25f0cebca458a99aab2aff26d32d715a12ca1ebd0216",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "authorization_id": "AUTH_eec6e3d37ec9ea74",
+      "authorization_path": "生产数据/autonomy_authorization.json",
+      "authorization_sha256": "22491fffb19002c6b2483a088637236fd9fdb78bb3091315b3a4cd434dca4ade",
+      "authorized_by": "user:workspace-owner",
+      "decision": "approved",
+      "delegation_profile": "p2",
+      "evidence": [
+        {
+          "path": "脚本/第1集/axis_blocking_map.json",
+          "sha256": "0e527843376da65d301dee6d569106d0f0fc9f364e261799348db0703c74c378"
+        },
+        {
+          "path": "脚本/第1集/director_beat_sheet.json",
+          "sha256": "3f0cc345338ee754d2c332f0913eff6d70c54782db71c59b3909839e25a840ac"
+        },
+        {
+          "path": "脚本/第1集/edit_rhythm_map.json",
+          "sha256": "9e51dc164c9225f51e8fcc5390202b8b1cafd0a3cd2a57dc440d564cc7df42d6"
+        },
+        {
+          "path": "脚本/第1集/shot_progression_plan.json",
+          "sha256": "a8480b3a81a876aed6e00401541f1321d43c9e07b77715668bd0c69e8156636b"
+        },
+        {
+          "path": "脚本/第1集/transition_map.json",
+          "sha256": "6d89f47cbef495bc324eed9d91f1c0ad4f148d55cfefa64209c3aa65ac3f0376"
+        },
+        {
+          "path": "脚本/第1集/vertical_composition_plan.json",
+          "sha256": "9f8d03e3c7d0a47c4ff2e221d289593c970989ff72c76d6c440b107bc84c7251"
+        }
+      ],
+      "independent_review": "waived_by_project_owner",
+      "note": "项目负责人已启用“仅高风险停审”；代理按当前 confirmed/ready 产物与哈希完成 p2:production 内部交接签收。独立人审已由负责人在授权范围内豁免。",
+      "review_mode": "delegated_autonomy",
+      "reviewed_at": "2026-08-11T04:01:58+00:00",
+      "reviewer_id": "delegate:n2d-agent",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "7fb9e836dcbc3728d3dc66da02fbb1ba4f6dc2b3976c4480ea83d6e60dadd930",
+      "signed_input_fingerprint_sha": "e69461a2aeb8dda1e3bd25f0cebca458a99aab2aff26d32d715a12ca1ebd0216",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p2_director_blocking",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-08-11T04:01:58+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第1集/axis_blocking_map.json": "0e527843376da65d301dee6d569106d0f0fc9f364e261799348db0703c74c378",
+      "脚本/第1集/director_beat_sheet.json": "3f0cc345338ee754d2c332f0913eff6d70c54782db71c59b3909839e25a840ac",
+      "脚本/第1集/edit_rhythm_map.json": "9e51dc164c9225f51e8fcc5390202b8b1cafd0a3cd2a57dc440d564cc7df42d6",
+      "脚本/第1集/shot_progression_plan.json": "a8480b3a81a876aed6e00401541f1321d43c9e07b77715668bd0c69e8156636b",
+      "脚本/第1集/transition_map.json": "6d89f47cbef495bc324eed9d91f1c0ad4f148d55cfefa64209c3aa65ac3f0376",
+      "脚本/第1集/vertical_composition_plan.json": "9f8d03e3c7d0a47c4ff2e221d289593c970989ff72c76d6c440b107bc84c7251"
+    },
+    "sha": "7fb9e836dcbc3728d3dc66da02fbb1ba4f6dc2b3976c4480ea83d6e60dadd930"
+  },
+  "input_fingerprint": {
+    "files": {
+      "脚本/第1集/table_read_packet.json": "80ff6570b5f9af993a9049d32eeb3bb111a83bae65bc92d7aba8651d88e9b844",
+      "脚本/第1集/table_read_signoff.json": "6231044a7ba261b120fbecd9ee5979f0bd4dd7550b3624da2b54713b93b3510f",
+      "脚本/第1集/voiceover.txt": "629f9b563d5f887fd9b548252d7f946de230737174a73ce6b351ab03ffad53cf",
+      "设定库/source_comprehension.json": "8a050aa52bb61c76c8ba1e16eff9b861f5e218b9212667a061d9597d0b369f0a"
+    },
+    "sha": "e69461a2aeb8dda1e3bd25f0cebca458a99aab2aff26d32d715a12ca1ebd0216"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-08-11T04:01:58+00:00",
+  "version": 1
+}

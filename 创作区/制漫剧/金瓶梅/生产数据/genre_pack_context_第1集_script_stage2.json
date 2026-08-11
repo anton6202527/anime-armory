@@ -1,0 +1,47 @@
+{
+  "activation": {
+    "reason": "项目未设置题材；没有题材包可触发。",
+    "state": "genre_unset",
+    "storyboard_clip_count": 15,
+    "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/脚本/第1集/storyboard.json",
+    "storyboard_state": "ready",
+    "triggered": false
+  },
+  "active_scene_archetypes": [],
+  "episode": "第1集",
+  "generated_at": "2026-08-11T03:53:16+00:00",
+  "genre": {
+    "genre_key": "",
+    "label": "",
+    "matched": false,
+    "matched_genre_keys": [],
+    "matched_labels": [],
+    "matches": [],
+    "raw": ""
+  },
+  "issues": [],
+  "kind": "n2d_genre_pack_context",
+  "pack": {
+    "degrade_plans": [],
+    "genre_keys": [],
+    "labels": [],
+    "matched_packs": [],
+    "motion_contract_fields": [],
+    "qc_focus": [],
+    "style_binding_policy": {}
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "stage_key": "script_stage2",
+  "status": "pass",
+  "summary": {
+    "activation_state": "genre_unset",
+    "active_scenes": 0,
+    "issues": 0,
+    "matched_clips": 0,
+    "matched_genre_keys": [],
+    "matched_packs": 0,
+    "storyboard_clip_count": 15,
+    "storyboard_state": "ready"
+  },
+  "version": 1
+}

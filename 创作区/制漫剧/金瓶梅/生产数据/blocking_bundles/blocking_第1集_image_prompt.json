@@ -1,0 +1,36 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": true,
+  "blockers": [
+    {
+      "message": "P-3 制片拆解包未确认；先补齐 脚本/第1集/production_breakdown.json、continuity_breakdown.json、continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md，删除待补/TODO，把内容 status 改为 confirmed，再运行 signoff.py 创作区/制漫剧/金瓶梅 p3 approve 第1集 --reviewer-id <明确身份> --reviewer-role producer（或 assistant_director/script_supervisor）签当前哈希，才可进入出图 prompt/付费出图。",
+      "step": "production_breakdown"
+    }
+  ],
+  "category": "contract_or_gate",
+  "episode": "第1集",
+  "episode_graph": {
+    "graph_hash": "0657cfcc23bba4158229b87370d0033ab80b4247504467060c7bc1d1f6df1cc5",
+    "lineage_gaps": 0,
+    "status": "pass"
+  },
+  "gate": {
+    "affected_artifacts": [
+      "合规/compliance_manifest.json",
+      "脚本/第1集/storyboard.json"
+    ],
+    "findings_path": "创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_prompt_preflight_第1集.json",
+    "return_to_stage": "script_stage2",
+    "stage": "image_prompt_preflight"
+  },
+  "generated_at": "2026-08-11T12:02:11+0800",
+  "headline": "第1集 出图prompt：确定性前置失败",
+  "kind": "n2d_blocking_bundle",
+  "owner": "n2d-image",
+  "repair_commands": [
+    "n2d-image 创作区/制漫剧/金瓶梅 第1集"
+  ],
+  "stage_key": "image_prompt",
+  "stop_reason": "prework_failed",
+  "version": 1
+}

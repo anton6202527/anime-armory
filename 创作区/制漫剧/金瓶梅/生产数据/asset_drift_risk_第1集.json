@@ -1,0 +1,904 @@
+{
+  "assets": [
+    {
+      "band": "high",
+      "drivers": [
+        {
+          "factor": "本集出镜 8 次",
+          "points": 24
+        },
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_WUDA_HOME",
+      "name": "武大家楼屋雪夜",
+      "scope": "",
+      "score": 54,
+      "signals": {
+        "appear": 8,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。",
+        "风险 high：出图后重点看 image_qc 道具/特效 P2 + 场景 O2 初筛，必要时上 asset 状态机结构化 lifecycle（防回退）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "本集出镜 4 次",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_BRAZIER",
+      "name": "炭盆",
+      "scope": "",
+      "score": 46,
+      "signals": {
+        "appear": 4,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "本集出镜 5 次",
+          "points": 15
+        },
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_YANGGU_STREET",
+      "name": "阳谷街面与武大家楼窗",
+      "scope": "",
+      "score": 45,
+      "signals": {
+        "appear": 5,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "本集出镜 3 次",
+          "points": 9
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_DOOR_LATCH",
+      "name": "门闩",
+      "scope": "",
+      "score": 43,
+      "signals": {
+        "appear": 3,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 2 次",
+          "points": 6
+        }
+      ],
+      "id": "PROP_QUARTERSTAFF",
+      "name": "梢棒",
+      "scope": "",
+      "score": 40,
+      "signals": {
+        "appear": 2,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 2 次",
+          "points": 6
+        }
+      ],
+      "id": "PROP_WINE_CUP",
+      "name": "半杯酒",
+      "scope": "",
+      "score": 40,
+      "signals": {
+        "appear": 2,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "本集出镜 3 次",
+          "points": 9
+        },
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_JINGYANGGANG",
+      "name": "景阳冈夜间空地",
+      "scope": "",
+      "score": 39,
+      "signals": {
+        "appear": 3,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "PROP_BADGE",
+      "name": "都头腰牌",
+      "scope": "",
+      "score": 37,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "PROP_OFFICIAL_DOC",
+      "name": "公文",
+      "scope": "",
+      "score": 37,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "PROP_CURTAIN_FORK",
+      "name": "叉竿",
+      "scope": "",
+      "score": 37,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_REWARD_SILVER",
+      "name": "REWARD SILVER",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_CAKE_POLE",
+      "name": "炊饼担",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_WINDOW_LATTICE",
+      "name": "WINDOW LATTICE",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_STAIR_RAIL",
+      "name": "STAIR RAIL",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_DINING_TABLE",
+      "name": "DINING TABLE",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_TEA_CUP",
+      "name": "TEA CUP",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_DOORFRAME",
+      "name": "DOORFRAME",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_SPILLED_WINE",
+      "name": "SPILLED WINE",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_LUGGAGE",
+      "name": "素布行李",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 8 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_DOOR",
+      "name": "武大家木门",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 8,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_GIFT_LOAD",
+      "name": "东京礼担",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_WINDOW_CURTAIN",
+      "name": "WINDOW CURTAIN",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "LOC_COUNTY_YAMEN",
+      "name": "县衙案厅",
+      "scope": "",
+      "score": 33,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "LOC_CITY_GATE",
+      "name": "阳谷城门清晨",
+      "scope": "",
+      "score": 33,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    }
+  ],
+  "episode": "第1集",
+  "high": 1,
+  "kind": "n2d_asset_drift_risk",
+  "medium": 23,
+  "notes": [],
+  "root": "创作区/制漫剧/金瓶梅",
+  "version": 1
+}

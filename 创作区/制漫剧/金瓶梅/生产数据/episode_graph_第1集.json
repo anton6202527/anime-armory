@@ -1,0 +1,217 @@
+{
+  "authority": "derived index only; _进度.md and existing gates remain authoritative",
+  "edges": [
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_01"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_02"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_03"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_04"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_05"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_06"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_07"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_08"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_09"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_10"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_11"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_12"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_13"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_14"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_15"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-08-11T12:02:11+0800",
+  "graph_hash": "0657cfcc23bba4158229b87370d0033ab80b4247504467060c7bc1d1f6df1cc5",
+  "kind": "n2d_episode_graph",
+  "lineage_gaps": [],
+  "nodes": [
+    {
+      "clip": "Clip_01",
+      "duration_sec": 4.893,
+      "id": "clip:Clip_01",
+      "scene": "LOC_JINGYANGGANG/夜/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_02",
+      "duration_sec": 10.229,
+      "id": "clip:Clip_02",
+      "scene": "LOC_JINGYANGGANG/夜/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_03",
+      "duration_sec": 13.02,
+      "id": "clip:Clip_03",
+      "scene": "LOC_JINGYANGGANG→LOC_YANGGU_STREET/蒙太奇",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_04",
+      "duration_sec": 10.145,
+      "id": "clip:Clip_04",
+      "scene": "LOC_YANGGU_STREET/日/外内并置",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_05",
+      "duration_sec": 8.37,
+      "id": "clip:Clip_05",
+      "scene": "LOC_YANGGU_STREET→LOC_WUDA_HOME/日",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_06",
+      "duration_sec": 14.692,
+      "id": "clip:Clip_06",
+      "scene": "LOC_WUDA_HOME/日→月余蒙太奇",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_07",
+      "duration_sec": 12.577,
+      "id": "clip:Clip_07",
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_08",
+      "duration_sec": 9.482,
+      "id": "clip:Clip_08",
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_09",
+      "duration_sec": 14.281,
+      "id": "clip:Clip_09",
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_10",
+      "duration_sec": 10.699,
+      "id": "clip:Clip_10",
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_11",
+      "duration_sec": 10.129,
+      "id": "clip:Clip_11",
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_12",
+      "duration_sec": 5.766,
+      "id": "clip:Clip_12",
+      "scene": "LOC_YANGGU_STREET/雪夜/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_13",
+      "duration_sec": 7.746,
+      "id": "clip:Clip_13",
+      "scene": "LOC_COUNTY_YAMEN/日/内",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_14",
+      "duration_sec": 6.569,
+      "id": "clip:Clip_14",
+      "scene": "LOC_WUDA_HOME/清晨/门外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_15",
+      "duration_sec": 5.786,
+      "id": "clip:Clip_15",
+      "scene": "LOC_CITY_GATE↔LOC_YANGGU_STREET/清晨/外内并置",
+      "type": "story_clip"
+    },
+    {
+      "episode": "第1集",
+      "id": "episode:第1集",
+      "type": "episode"
+    }
+  ],
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "source_files": [
+    {
+      "bytes": 109653,
+      "path": "脚本/第1集/storyboard.json",
+      "role": "storyboard",
+      "sha256": "d17999c76b6808fdca05889797ea061b3f15d53336756802f965b61a291a0f65"
+    }
+  ],
+  "status": "pass",
+  "summary": {
+    "edges": 15,
+    "lineage_gaps": 0,
+    "masters": 0,
+    "nodes": 16,
+    "routes": 0,
+    "story_clips": 15,
+    "video_media": 0
+  },
+  "version": 1
+}

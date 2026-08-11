@@ -1,0 +1,3551 @@
+{
+  "OTIO_SCHEMA": "Timeline.1",
+  "global_start_time": null,
+  "metadata": {
+    "n2d": {
+      "episode": "第1集",
+      "generated_at": "2026-08-11T04:01:57+00:00",
+      "kind": "n2d_editorial_timeline",
+      "phase": "animatic",
+      "planned_audio_slots": 34,
+      "seams": [
+        {
+          "common_entities": [
+            "BEAST_TIGER",
+            "BEAST_TIGER/扑击态",
+            "CHAR_WUSONG",
+            "CHAR_WUSONG/酒后战损态",
+            "PROP_QUARTERSTAFF"
+          ],
+          "entity_entry_exit": "两者始终在景阳冈空地；梢棒仍在武松画外手边。；断棒落在武松画左脚边；猛虎仍在上方。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER",
+          "from_clip": "Clip_01",
+          "from_end_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip02_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "action_phase_in": "下一镜虎身完成转向并连续发动后两扑",
+            "action_phase_out": "虎前爪落地后扭身蓄第二扑",
+            "screen_direction": "虎仍由上方向下压，武松由下方闪避"
+          },
+          "seam_mode": "match_on_action",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_02",
+          "to_episode": "第1集",
+          "to_start_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+          "transition": "动作继续进入三扑拆招。"
+        },
+        {
+          "common_entities": [
+            "CHAR_WUSONG"
+          ],
+          "entity_entry_exit": "断棒落在武松画左脚边；猛虎仍在上方。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER；猛虎与猎户随蒙太奇结束；武松换为都头装并进入阳谷街。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE",
+          "from_clip": "Clip_02",
+          "from_end_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip03_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "action_phase_in": "下一镜只以拳落与虎倒的结果性剪影完成兑现",
+            "action_phase_out": "武松右拳从胸前开始前送",
+            "screen_direction": "反击由下向上"
+          },
+          "seam_mode": "match_on_action",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_03",
+          "to_episode": "第1集",
+          "to_start_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+          "transition": "拳头前送动作切入胜利蒙太奇。"
+        },
+        {
+          "common_entities": [],
+          "entity_entry_exit": "猛虎与猎户随蒙太奇结束；武松换为都头装并进入阳谷街。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE；武松暂在街巷画外靠近；武大在街下，潘金莲在楼上。；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL；换场 LOC_JINGYANGGANG -> LOC_YANGGU_STREET",
+          "from_clip": "Clip_03",
+          "from_end_state": "武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip04_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": false,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "duration_sec": 0.35,
+            "editorial_reason": "由英雄名望的明亮街面过渡到兄嫂被生活压低的日常",
+            "motivation": "由英雄名望的明亮街面过渡到兄嫂被生活压低的日常"
+          },
+          "seam_mode": "dissolve",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_04",
+          "to_episode": "第1集",
+          "to_start_state": "武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+          "transition": "街门阴影溶入武大挑担的街巷。"
+        },
+        {
+          "common_entities": [
+            "CHAR_PANJINLIAN",
+            "CHAR_WUDA",
+            "PROP_CAKE_POLE"
+          ],
+          "entity_entry_exit": "武松暂在街巷画外靠近；武大在街下，潘金莲在楼上。；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL；武松由街口入画；三人从街面经楼梯换入室内，炊饼担留在楼下。；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP",
+          "from_clip": "Clip_04",
+          "from_end_state": "武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip05_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "audio_bridge": "下一镜武大惊喜喊‘二弟’提前0.25秒进入潘金莲窗后反应",
+            "audio_lead_sec": 0.25,
+            "audio_source": "下一镜武大画外喊‘二弟’",
+            "visual_motivation": "她的视线目标变成街上兄弟重逢"
+          },
+          "seam_mode": "j_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_05",
+          "to_episode": "第1集",
+          "to_start_state": "武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+          "transition": "武大的叫卖声先入，随后由潘金莲视线切到街上重逢。"
+        },
+        {
+          "common_entities": [
+            "CHAR_PANJINLIAN",
+            "CHAR_WUSONG"
+          ],
+          "entity_entry_exit": "武松由街口入画；三人从街面经楼梯换入室内，炊饼担留在楼下。；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；武大首拍在场，后续蒙太奇转为画外劳作；武松已在此住满一个月。；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP；换场 LOC_YANGGU_STREET -> LOC_WUDA_HOME",
+          "from_clip": "Clip_05",
+          "from_end_state": "三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip06_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": false,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "axis": "室内武松右、潘金莲左",
+            "eyeline_source": "潘金莲从画左看向画右武松",
+            "eyeline_target": "武松腰牌与正脸"
+          },
+          "seam_mode": "eyeline_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_06",
+          "to_episode": "第1集",
+          "to_start_state": "三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+          "transition": "潘金莲视线反打到她开口留住武松。"
+        },
+        {
+          "common_entities": [
+            "CHAR_PANJINLIAN",
+            "CHAR_WUSONG"
+          ],
+          "entity_entry_exit": "武大首拍在场，后续蒙太奇转为画外劳作；武松已在此住满一个月。；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP；武大由门口出画并留在屋外；叔嫂留在室内，禁止新增旁人。；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE",
+          "from_clip": "Clip_06",
+          "from_end_state": "一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip07_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "duration_sec": 0.4,
+            "editorial_reason": "用窗光季节变化把月余试探压缩到雪夜临界点",
+            "motivation": "用窗光季节变化把月余试探压缩到雪夜临界点"
+          },
+          "seam_mode": "dissolve",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_07",
+          "to_episode": "第1集",
+          "to_start_state": "一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+          "transition": "窗外日光溶成雪夜冷蓝，门轴声接武大出门。"
+        },
+        {
+          "common_entities": [
+            "CHAR_PANJINLIAN",
+            "CHAR_WUSONG",
+            "CHAR_WUSONG/克制警觉态",
+            "PROP_BRAZIER",
+            "PROP_WINE_CUP"
+          ],
+          "entity_entry_exit": "武大由门口出画并留在屋外；叔嫂留在室内，禁止新增旁人。；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE；武大仍在画外卖饼；室内只有叔嫂。；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE",
+          "from_clip": "Clip_07",
+          "from_end_state": "雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip08_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "audio_bridge": "潘‘暖暖身子’的尾音覆盖武松看杯反应约0.3秒",
+            "audio_source": "潘金莲‘暖暖身子’句尾",
+            "audio_tail_sec": 0.3,
+            "editorial_intent": "让诱导语言继续施压而画面先进入防守反应"
+          },
+          "seam_mode": "l_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_08",
+          "to_episode": "第1集",
+          "to_start_state": "雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+          "transition": "潘的句尾留在武松反应上形成L-cut。"
+        },
+        {
+          "common_entities": [
+            "CHAR_PANJINLIAN",
+            "CHAR_WUSONG",
+            "PROP_BRAZIER",
+            "PROP_WINE_CUP"
+          ],
+          "entity_entry_exit": "武大仍在画外卖饼；室内只有叔嫂。；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE；武大仍画外但脚步靠近；室内酒杯状态不可复原。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH",
+          "from_clip": "Clip_08",
+          "from_end_state": "武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip09_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "action_phase_in": "下一镜手与半杯完成越过桌面中线",
+            "action_phase_out": "潘的右手从杯后抬起准备继续前推",
+            "screen_direction": "动作由画左向画右"
+          },
+          "seam_mode": "match_on_action",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_09",
+          "to_episode": "第1集",
+          "to_start_state": "武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+          "transition": "武松边界句结束后，潘的手越过桌面把杯推到眼前。"
+        },
+        {
+          "common_entities": [
+            "CHAR_PANJINLIAN",
+            "PROP_WINE_CUP",
+            "PROP_WINE_CUP/打翻态"
+          ],
+          "entity_entry_exit": "武大仍画外但脚步靠近；室内酒杯状态不可复原。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH；武大由门口入画；武松退到画右外但仍在屋内。；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE",
+          "from_clip": "Clip_09",
+          "from_end_state": "酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip10_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "audio_bridge": "武大归家的脚步与担钩轻响提前0.3秒进入武松句末留白",
+            "audio_lead_sec": 0.3,
+            "audio_source": "下一镜武大脚步与担钩",
+            "visual_motivation": "外部见证者将到，冲突立刻转为叙事权争夺"
+          },
+          "seam_mode": "j_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_10",
+          "to_episode": "第1集",
+          "to_start_state": "酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+          "transition": "门外脚步声先入，切武大推门后的潘金莲泪眼。"
+        },
+        {
+          "common_entities": [
+            "CHAR_WUDA",
+            "PROP_DOOR_LATCH",
+            "PROP_WINE_CUP/打翻态"
+          ],
+          "entity_entry_exit": "武大由门口入画；武松退到画右外但仍在屋内。；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE；武松从屋内出门；武大与潘留在屋内。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR",
+          "from_clip": "Clip_10",
+          "from_end_state": "武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip11_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": true,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "reaction": "武松不争辩，转身系紧行李",
+            "reaction_beat": "不争辩而系紧行李",
+            "reaction_subject": "CHAR_WUSONG",
+            "return_anchor": "武大仍留在门口",
+            "stimulus": "武大迟疑的目光和潘的反咬"
+          },
+          "seam_mode": "reaction_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_11",
+          "to_episode": "第1集",
+          "to_start_state": "武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+          "transition": "行李绳收紧的声音切入武松收拾。"
+        },
+        {
+          "common_entities": [
+            "CHAR_WUSONG",
+            "CHAR_WUSONG/搬离态",
+            "PROP_DOOR_LATCH",
+            "PROP_LUGGAGE"
+          ],
+          "entity_entry_exit": "武松从屋内出门；武大与潘留在屋内。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR；武松离开武大家；武大和潘留在门内。；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC；换场 LOC_WUDA_HOME -> LOC_YANGGU_STREET",
+          "from_clip": "Clip_11",
+          "from_end_state": "武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip12_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": false,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "action_phase_in": "下一镜同一只脚落在雪街石板",
+            "action_phase_out": "武松右脚跨出门槛",
+            "screen_direction": "屋内向画面纵深外离开"
+          },
+          "seam_mode": "match_on_action",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_12",
+          "to_episode": "第1集",
+          "to_start_state": "武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+          "transition": "武松脚跨门槛匹配切到雪街脚步。"
+        },
+        {
+          "common_entities": [
+            "CHAR_WUSONG"
+          ],
+          "entity_entry_exit": "武松离开武大家；武大和潘留在门内。；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC；完整换场到县衙；武大、潘不在场。；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR；换场 LOC_YANGGU_STREET -> LOC_COUNTY_YAMEN",
+          "from_clip": "Clip_12",
+          "from_end_state": "武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip13_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": false,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "composition_relation": "同在竖屏中央形成压迫分割",
+            "element_in": "衙门案桌垂直暗边",
+            "element_out": "家门垂直木板暗面",
+            "match_element_in": "衙门案桌垂直暗边",
+            "match_element_out": "家门垂直木板暗面"
+          },
+          "seam_mode": "graphic_match",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_13",
+          "to_episode": "第1集",
+          "to_start_state": "武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+          "transition": "门板黑面匹配切到衙门案桌阴影。"
+        },
+        {
+          "common_entities": [
+            "CHAR_WUSONG",
+            "PROP_BADGE",
+            "PROP_GIFT_LOAD"
+          ],
+          "entity_entry_exit": "完整换场到县衙；武大、潘不在场。；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR；武松离开家门走向礼担；武大停在门外；潘在楼窗后画外。；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN；换场 LOC_COUNTY_YAMEN -> LOC_WUDA_HOME",
+          "from_clip": "Clip_13",
+          "from_end_state": "武松在衙门抱拳领命，确认明日押礼担赴东京。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip14_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": false,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "audio_bridge": "‘明日就要去东京’尾音延续到武大家门外的下一镜",
+            "audio_source": "武松‘明日就要去东京’句尾",
+            "audio_tail_sec": 0.3,
+            "editorial_intent": "压缩公务过门，让任务直接落到兄弟告别后果"
+          },
+          "seam_mode": "l_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_14",
+          "to_episode": "第1集",
+          "to_start_state": "武松在衙门抱拳领命，确认明日押礼担赴东京。",
+          "transition": "武松‘明日’尾音覆盖回到武大家的告别。"
+        },
+        {
+          "common_entities": [
+            "CHAR_WUSONG",
+            "PROP_GIFT_LOAD"
+          ],
+          "entity_entry_exit": "武松离开家门走向礼担；武大停在门外；潘在楼窗后画外。；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN；武松离开阳谷；武大留在家门外后转画外；潘在楼窗；陌生男子由街下进入局部视野。；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN；换场 LOC_WUDA_HOME -> LOC_CITY_GATE",
+          "from_clip": "Clip_14",
+          "from_end_state": "武松已转身向城门与礼担走去，武大停在家门外目送。",
+          "from_episode": "第1集",
+          "intentional_discontinuity_reason": "",
+          "issues": [],
+          "next_firstframe": "出图/第1集/图片/Clip15_first.png",
+          "policy": "design_cut",
+          "required_boundary_frame": "",
+          "same_location": false,
+          "scope": "intra_episode",
+          "seam_evidence": {
+            "axis": "离城方向保持向纵深外",
+            "eyeline_source": "武大从家门向画面纵深看",
+            "eyeline_target": "下一镜城门下远去的武松与礼担"
+          },
+          "seam_mode": "eyeline_cut",
+          "seam_mode_source": "explicit",
+          "severity": "pass",
+          "strictness": "mode_specific",
+          "to_clip": "Clip_15",
+          "to_episode": "第1集",
+          "to_start_state": "武松已转身向城门与礼担走去，武大停在家门外目送。",
+          "transition": "武大的目送视线切到城门纵深中的武松。"
+        }
+      ],
+      "sound_route_summary": {
+        "audio_strategy_counts": {
+          "base_video_then_post_lipsync": 11,
+          "rough_timing_final_dub_later": 4
+        },
+        "base_video_only_count": 11,
+        "clip_count": 15,
+        "final_voice_required": true,
+        "post_lipsync_required": true
+      },
+      "timing_basis": "text_estimate_no_audio",
+      "version": 1,
+      "voice_casting_status": "casting"
+    }
+  },
+  "name": "第1集 n2d editorial",
+  "tracks": {
+    "OTIO_SCHEMA": "Stack.1",
+    "children": [
+      {
+        "OTIO_SCHEMA": "Track.1",
+        "children": [
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_01"
+              }
+            },
+            "name": "Clip_01",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 146.79
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_02"
+              }
+            },
+            "name": "Clip_02",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 306.87
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_03"
+              }
+            },
+            "name": "Clip_03",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 390.6
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Transition.1",
+            "in_offset": {
+              "OTIO_SCHEMA": "RationalTime.1",
+              "rate": 30.0,
+              "value": 5.25
+            },
+            "metadata": {
+              "n2d": {
+                "seam_evidence": {
+                  "duration_sec": 0.35,
+                  "editorial_reason": "由英雄名望的明亮街面过渡到兄嫂被生活压低的日常",
+                  "motivation": "由英雄名望的明亮街面过渡到兄嫂被生活压低的日常"
+                },
+                "seam_mode": "dissolve"
+              }
+            },
+            "name": "Clip_03_dissolve",
+            "out_offset": {
+              "OTIO_SCHEMA": "RationalTime.1",
+              "rate": 30.0,
+              "value": 5.25
+            },
+            "transition_type": "SMPTE_Dissolve"
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_04"
+              }
+            },
+            "name": "Clip_04",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 304.35
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_05"
+              }
+            },
+            "name": "Clip_05",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 251.1
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_06"
+              }
+            },
+            "name": "Clip_06",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 440.76
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Transition.1",
+            "in_offset": {
+              "OTIO_SCHEMA": "RationalTime.1",
+              "rate": 30.0,
+              "value": 6.0
+            },
+            "metadata": {
+              "n2d": {
+                "seam_evidence": {
+                  "duration_sec": 0.4,
+                  "editorial_reason": "用窗光季节变化把月余试探压缩到雪夜临界点",
+                  "motivation": "用窗光季节变化把月余试探压缩到雪夜临界点"
+                },
+                "seam_mode": "dissolve"
+              }
+            },
+            "name": "Clip_06_dissolve",
+            "out_offset": {
+              "OTIO_SCHEMA": "RationalTime.1",
+              "rate": 30.0,
+              "value": 6.0
+            },
+            "transition_type": "SMPTE_Dissolve"
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_07"
+              }
+            },
+            "name": "Clip_07",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 377.31
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_08"
+              }
+            },
+            "name": "Clip_08",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 284.46
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_09"
+              }
+            },
+            "name": "Clip_09",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 428.43
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_10"
+              }
+            },
+            "name": "Clip_10",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 320.97
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_11"
+              }
+            },
+            "name": "Clip_11",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 303.87
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_12"
+              }
+            },
+            "name": "Clip_12",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 172.98
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_13"
+              }
+            },
+            "name": "Clip_13",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 232.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_14"
+              }
+            },
+            "name": "Clip_14",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 197.07
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "phase": "animatic",
+                "slate": true,
+                "story_clip": "Clip_15"
+              }
+            },
+            "name": "Clip_15",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 173.58
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          }
+        ],
+        "effects": [],
+        "enabled": true,
+        "kind": "Video",
+        "markers": [
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 128.79
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武松睁眼时，虎爪已经压到脸前——今晚， 是一场生死搏杀。"
+              }
+            },
+            "name": "武松睁眼时，虎爪已经压到脸前——今晚， 是一场生死搏杀。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 120.18
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 146.79
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "它冲，我闪；它掀，我躲；虎尾横扫，我再 让。只有三招！"
+              }
+            },
+            "name": "它冲，我闪；它掀，我躲；虎尾横扫，我再 让。只有三招！"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 79.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 278.97
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "猛虎第三次冲来，他双手抡起梢棒——"
+              }
+            },
+            "name": "猛虎第三次冲来，他双手抡起梢棒——"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 24.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 370.35
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "棒断了！"
+              }
+            },
+            "name": "棒断了！"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 29.31
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 412.35
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "我来用拳头。"
+              }
+            },
+            "name": "我来用拳头。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 180.84
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 453.66
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "因为他打死猛虎、又把赏银让给猎户，武松 赢得满城敬重，也获得了都头腰牌。"
+              }
+            },
+            "name": "因为他打死猛虎、又把赏银让给猎户，武松 赢得满城敬重，也获得了都头腰牌。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 176.76
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 655.5
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "山里的虎拦不住他。家门里的人心，却不是 一双拳头能打明白。"
+              }
+            },
+            "name": "山里的虎拦不住他。家门里的人心，却不是 一双拳头能打明白。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 128.13
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 844.26
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "哥哥武大，为了换一家人的安稳，只守着一 担炊饼。"
+              }
+            },
+            "name": "哥哥武大，为了换一家人的安稳，只守着一 担炊饼。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 152.22
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 984.39
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "我想要自己做一回主。可从小到大，谁问过 我愿不愿意？"
+              }
+            },
+            "name": "我想要自己做一回主。可从小到大，谁问过 我愿不愿意？"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 37.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1148.61
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "二弟！真的是你！"
+              }
+            },
+            "name": "二弟！真的是你！"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 34.86
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1197.99
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "哥，我回来了。"
+              }
+            },
+            "name": "哥，我回来了。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 142.86
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1244.85
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武大把兄弟领上楼。潘金莲第一次见到这个 打虎的都头。"
+              }
+            },
+            "name": "武大把兄弟领上楼。潘金莲第一次见到这个 打虎的都头。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 200.82
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1399.71
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "叔叔一个人在外住，连口热饭都没有。我想 要一家人住得近些，也好照应。"
+              }
+            },
+            "name": "叔叔一个人在外住，连口热饭都没有。我想 要一家人住得近些，也好照应。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 57.93
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1618.53
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "嫂嫂厚意，武二记下了。"
+              }
+            },
+            "name": "嫂嫂厚意，武二记下了。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 140.01
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1688.46
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "他住进来一个月。她递过去的每句话，都比 上一句更近。"
+              }
+            },
+            "name": "他住进来一个月。她递过去的每句话，都比 上一句更近。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 172.8
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 1840.47
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "大雪封街这天，武大刚出门，那扇门就在她 手里关闭，门闩随即落下。"
+              }
+            },
+            "name": "大雪封街这天，武大刚出门，那扇门就在她 手里关闭，门闩随即落下。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 110.37
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2031.27
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "叔叔，外头冷。坐近些，饮一杯暖暖身子。"
+              }
+            },
+            "name": "叔叔，外头冷。坐近些，饮一杯暖暖身子。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 52.14
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2153.64
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "等哥哥回来，一起喝。"
+              }
+            },
+            "name": "等哥哥回来，一起喝。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 147.45
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2217.78
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "我又没逼你。只是他日日只认那副炊饼担， 哪里懂得心疼人？"
+              }
+            },
+            "name": "我又没逼你。只是他日日只认那副炊饼担， 哪里懂得心疼人？"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 107.01
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2377.23
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "嫂嫂。那是我亲哥哥。我必须对得起他。"
+              }
+            },
+            "name": "嫂嫂。那是我亲哥哥。我必须对得起他。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 113.46
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2502.24
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "我要你看着我。你若有心，就饮我这半杯。"
+              }
+            },
+            "name": "我要你看着我。你若有心，就饮我这半杯。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 101.46
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2627.7
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武松打翻酒盏，酒泼在地上，炭火噼啪一响。"
+              }
+            },
+            "name": "武松打翻酒盏，酒泼在地上，炭火噼啪一响。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 168.51
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2741.16
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "我敬你是嫂嫂，才坐到现在。你若再敢越一 步，武二绝不容你。"
+              }
+            },
+            "name": "我敬你是嫂嫂，才坐到现在。你若再敢越一 步，武二绝不容你。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 122.16
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 2930.67
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武大回家时，她先红了眼，也先把真相藏了 起来。"
+              }
+            },
+            "name": "武大回家时，她先红了眼，也先把真相藏了 起来。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 87.9
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3064.83
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "你那好兄弟，趁家里没人，反来调戏我！"
+              }
+            },
+            "name": "你那好兄弟，趁家里没人，反来调戏我！"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 68.91
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3170.73
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "我兄弟……不是这样的人。"
+              }
+            },
+            "name": "我兄弟……不是这样的人。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 95.31
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3251.64
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武松一句也没争。他把行李重新系好。"
+              }
+            },
+            "name": "武松一句也没争。他把行李重新系好。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 46.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3364.95
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "二弟，你要去哪里？"
+              }
+            },
+            "name": "二弟，你要去哪里？"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 120.18
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3423.33
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "哥哥，不要问。我得离开。门，我替你关不 上。"
+              }
+            },
+            "name": "哥哥，不要问。我得离开。门，我替你关不 上。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 154.98
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3555.51
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "因此，他搬出了那扇门。想避开闲话，反倒 把哥哥留在了门里。"
+              }
+            },
+            "name": "因此，他搬出了那扇门。想避开闲话，反倒 把哥哥留在了门里。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 127.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3728.49
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武都头，有一担礼要送往东京。路远人杂， 非你不可。"
+              }
+            },
+            "name": "武都头，有一担礼要送往东京。路远人杂， 非你不可。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 81.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3867.87
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "蒙相公差遣，我明日就要去东京。"
+              }
+            },
+            "name": "蒙相公差遣，我明日就要去东京。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 185.07
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 3960.87
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "哥，我不在时，少出早归，早闭门户。我会 回来；有人欺你，等我理论。"
+              }
+            },
+            "name": "哥，我不在时，少出早归，早闭门户。我会 回来；有人欺你，等我理论。"
+          },
+          {
+            "OTIO_SCHEMA": "Marker.2",
+            "color": "GREEN",
+            "marked_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 173.58
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 4157.94
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "subtitle_text": "武松出城那天，潘金莲站在楼窗后。帘外， 另一双眼已经走近。"
+              }
+            },
+            "name": "武松出城那天，潘金莲站在楼窗后。帘外， 另一双眼已经走近。"
+          }
+        ],
+        "metadata": {
+          "n2d": {
+            "track_role": "V1 Picture"
+          }
+        },
+        "name": "V1 Picture",
+        "source_range": null
+      },
+      {
+        "OTIO_SCHEMA": "Track.1",
+        "children": [
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 1,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "武松睁眼时，虎爪已经压到脸前——今晚，是一场生死搏杀。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_001_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 128.79
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 2,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "它冲，我闪；它掀，我躲；虎尾横扫，我再让。只有三招！",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_002_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 120.18
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 3,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "猛虎第三次冲来，他双手抡起梢棒——",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_003_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 79.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 4,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "棒断了！",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_004_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 24.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 5,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "我来用拳头。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_005_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 29.31
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.7,
+                "line_index": 6,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "因为他打死猛虎、又把赏银让给猎户，武松赢得满城敬重，也获得了都头腰牌。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_006_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 180.84
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 7,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "山里的虎拦不住他。家门里的人心，却不是一双拳头能打明白。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_007_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 176.76
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 8,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "哥哥武大，为了换一家人的安稳，只守着一担炊饼。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_008_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 128.13
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 9,
+                "media_status": "planned_missing_reference",
+                "role": "潘金莲",
+                "text": "我想要自己做一回主。可从小到大，谁问过我愿不愿意？",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_009_潘金莲",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 152.22
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 10,
+                "media_status": "planned_missing_reference",
+                "role": "武大",
+                "text": "二弟！真的是你！",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_010_武大",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 37.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 11,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "哥，我回来了。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_011_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 34.86
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 12,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "武大把兄弟领上楼。潘金莲第一次见到这个打虎的都头。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_012_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 142.86
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 13,
+                "media_status": "planned_missing_reference",
+                "role": "潘金莲",
+                "text": "叔叔一个人在外住，连口热饭都没有。我想要一家人住得近些，也好照应。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_013_潘金莲",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 200.82
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 14,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "嫂嫂厚意，武二记下了。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_014_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 57.93
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 15,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "他住进来一个月。她递过去的每句话，都比上一句更近。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_015_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 140.01
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 16,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "大雪封街这天，武大刚出门，那扇门就在她手里关闭，门闩随即落下。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_016_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 172.8
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 17,
+                "media_status": "planned_missing_reference",
+                "role": "潘金莲",
+                "text": "叔叔，外头冷。坐近些，饮一杯暖暖身子。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_017_潘金莲",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 110.37
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 18,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "等哥哥回来，一起喝。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_018_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 52.14
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 19,
+                "media_status": "planned_missing_reference",
+                "role": "潘金莲",
+                "text": "我又没逼你。只是他日日只认那副炊饼担，哪里懂得心疼人？",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_019_潘金莲",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 147.45
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 20,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "嫂嫂。那是我亲哥哥。我必须对得起他。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_020_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 107.01
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 21,
+                "media_status": "planned_missing_reference",
+                "role": "潘金莲",
+                "text": "我要你看着我。你若有心，就饮我这半杯。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_021_潘金莲",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 113.46
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 22,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "武松打翻酒盏，酒泼在地上，炭火噼啪一响。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_022_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 101.46
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.7,
+                "line_index": 23,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "我敬你是嫂嫂，才坐到现在。你若再敢越一步，武二绝不容你。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_023_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 168.51
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 24,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "武大回家时，她先红了眼，也先把真相藏了起来。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_024_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 122.16
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 25,
+                "media_status": "planned_missing_reference",
+                "role": "潘金莲",
+                "text": "你那好兄弟，趁家里没人，反来调戏我！",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_025_潘金莲",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 87.9
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 26,
+                "media_status": "planned_missing_reference",
+                "role": "武大",
+                "text": "我兄弟……不是这样的人。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_026_武大",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 68.91
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 27,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "武松一句也没争。他把行李重新系好。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_027_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 95.31
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 28,
+                "media_status": "planned_missing_reference",
+                "role": "武大",
+                "text": "二弟，你要去哪里？",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_028_武大",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 46.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 29,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "哥哥，不要问。我得离开。门，我替你关不上。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_029_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 120.18
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.6,
+                "line_index": 30,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "因此，他搬出了那扇门。想避开闲话，反倒把哥哥留在了门里。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_030_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 154.98
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 31,
+                "media_status": "planned_missing_reference",
+                "role": "知县",
+                "text": "武都头，有一担礼要送往东京。路远人杂，非你不可。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_031_知县",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 127.38
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 32,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "蒙相公差遣，我明日就要去东京。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_032_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 81.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0.4,
+                "line_index": 33,
+                "media_status": "planned_missing_reference",
+                "role": "武松",
+                "text": "哥，我不在时，少出早归，早闭门户。我会回来；有人欺你，等我理论。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_033_武松",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 185.07
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "MissingReference.1",
+                "available_image_bounds": null,
+                "available_range": null,
+                "metadata": {
+                  "n2d": {
+                    "missing": true
+                  }
+                },
+                "name": "missing_media"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "gap_after_sec": 0,
+                "line_index": 34,
+                "media_status": "planned_missing_reference",
+                "role": "旁白",
+                "text": "武松出城那天，潘金莲站在楼窗后。帘外，另一双眼已经走近。",
+                "timing_basis": "text_estimate_no_audio",
+                "track_role": "A1 Dialogue_Narration",
+                "voice_lock_required": true
+              }
+            },
+            "name": "VO_PLAN_034_旁白",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 173.58
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          }
+        ],
+        "effects": [],
+        "enabled": true,
+        "kind": "Audio",
+        "markers": [],
+        "metadata": {
+          "n2d": {
+            "track_role": "A1 Dialogue_Narration"
+          }
+        },
+        "name": "A1 Dialogue_Narration",
+        "source_range": null
+      },
+      {
+        "OTIO_SCHEMA": "Track.1",
+        "children": [],
+        "effects": [],
+        "enabled": true,
+        "kind": "Audio",
+        "markers": [],
+        "metadata": {
+          "n2d": {
+            "track_role": "A2 Ambience_Foley"
+          }
+        },
+        "name": "A2 Ambience_Foley",
+        "source_range": null
+      },
+      {
+        "OTIO_SCHEMA": "Track.1",
+        "children": [],
+        "effects": [],
+        "enabled": true,
+        "kind": "Audio",
+        "markers": [],
+        "metadata": {
+          "n2d": {
+            "track_role": "A3 BGM"
+          }
+        },
+        "name": "A3 BGM",
+        "source_range": null
+      }
+    ],
+    "effects": [],
+    "enabled": true,
+    "markers": [],
+    "metadata": {},
+    "name": "tracks",
+    "source_range": null
+  }
+}

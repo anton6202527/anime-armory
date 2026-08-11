@@ -1,0 +1,97 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 2,
+  "generated_at": "2026-08-11T02:33:00.845952+00:00",
+  "scope": "all",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第3集",
+      "blocker_id": "E0002-E0003:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0002-E0003",
+        "from_episode": 2,
+        "to_episode": 3,
+        "left_raw_rel": "脚本/第2集/raw.txt",
+        "right_raw_rel": "脚本/第3集/raw.txt",
+        "left_raw_sha256": "0a92d9f7634075b90ebe45faa004257e41c88bac0eefd5977785f107fab4dde5",
+        "right_raw_sha256": "9ebfed95cc774af0ccc2092a8be6f0a84d6ec6c22a9870ab47b49ab6a2423b18",
+        "contract_sha256": "e2f64fce587179430aff9b51db933b89f6868b18ef810198c5ba2c4ef786773e"
+      },
+      "decision": "pending",
+      "notes": "",
+      "reviewed_by": "",
+      "reviewed_at": "",
+      "semantic_evidence": {},
+      "applied_receipt": {}
+    },
+    {
+      "episode": "第4集",
+      "blocker_id": "E0003-E0004:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0003-E0004",
+        "from_episode": 3,
+        "to_episode": 4,
+        "left_raw_rel": "脚本/第3集/raw.txt",
+        "right_raw_rel": "脚本/第4集/raw.txt",
+        "left_raw_sha256": "9ebfed95cc774af0ccc2092a8be6f0a84d6ec6c22a9870ab47b49ab6a2423b18",
+        "right_raw_sha256": "2414280647a686950879d18ff2f46646cb7dbc3213971fd39ec7e9050de4a35b",
+        "contract_sha256": "1dc71be46b1021f908cdf9fa597a1f63d9b5069bf7d711ffb64cebe848530dfc"
+      },
+      "decision": "pending",
+      "notes": "",
+      "reviewed_by": "",
+      "reviewed_at": "",
+      "semantic_evidence": {},
+      "applied_receipt": {}
+    },
+    {
+      "episode": "第7集",
+      "blocker_id": "E0006-E0007:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0006-E0007",
+        "from_episode": 6,
+        "to_episode": 7,
+        "left_raw_rel": "脚本/第6集/raw.txt",
+        "right_raw_rel": "脚本/第7集/raw.txt",
+        "left_raw_sha256": "e7f84c1d88ec38364752fc1c6e9180d7a838432fea37601f4c0567ae4b40ca0d",
+        "right_raw_sha256": "9141c1ebe71eebfcef00db2a243214b11cc9f3cd112e5a16fb168c518e5d9fc3",
+        "contract_sha256": "47d150f63659e401d1890ce121c50b22232ca054b9b1ae509c1a2a6d438e3f76"
+      },
+      "decision": "pending",
+      "notes": "",
+      "reviewed_by": "",
+      "reviewed_at": "",
+      "semantic_evidence": {},
+      "applied_receipt": {}
+    },
+    {
+      "episode": "第8集",
+      "blocker_id": "E0007-E0008:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0007-E0008",
+        "from_episode": 7,
+        "to_episode": 8,
+        "left_raw_rel": "脚本/第7集/raw.txt",
+        "right_raw_rel": "脚本/第8集/raw.txt",
+        "left_raw_sha256": "9141c1ebe71eebfcef00db2a243214b11cc9f3cd112e5a16fb168c518e5d9fc3",
+        "right_raw_sha256": "c82aaa14bdaa576b178c67181b095bf80ceb8ad8ae7fa1d9ef9cbccbd54d9d84",
+        "contract_sha256": "1b0f24550b46b8a9bf11e70e6da819148c762e304a4a9c8b1cfb7ba3f07ad5a8"
+      },
+      "decision": "pending",
+      "notes": "",
+      "reviewed_by": "",
+      "reviewed_at": "",
+      "semantic_evidence": {},
+      "applied_receipt": {}
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_PANJINLIAN",
+  "name": "潘金莲",
+  "scope": "武大妻；幼年被卖、习琵琶与女红，后被张大户安排嫁给武大；开篇长线核心人物。",
+  "library_tier": "core_full",
+  "planned_episode_count": 10,
+  "directories": {
+    "reference": "角色库/CHAR_PANJINLIAN__潘金莲/reference",
+    "prompts": "角色库/CHAR_PANJINLIAN__潘金莲/prompts",
+    "lora": "角色库/CHAR_PANJINLIAN__潘金莲/lora",
+    "voice": "角色库/CHAR_PANJINLIAN__潘金莲/voice",
+    "adapters": "角色库/CHAR_PANJINLIAN__潘金莲/adapters",
+    "qc": "角色库/CHAR_PANJINLIAN__潘金莲/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/潘金莲.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:52:03+00:00"
+}

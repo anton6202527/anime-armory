@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 import signoff_contract as sc
+import autonomy_policy as ap
 
 
 def test_two_role_signoff_is_hash_bound_and_same_solo_owner_can_wear_two_roles(tmp_path: Path) -> None:
@@ -115,3 +116,52 @@ def test_missing_upstream_signoff_cannot_be_approved(tmp_path: Path) -> None:
             payload, tmp_path, reviewer_id="user:producer", reviewer_role="producer",
             evidence_paths=["artifact.json"],
         )
+
+
+def test_delegated_signoff_requires_active_hash_bound_owner_authorization(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 人工批准策略：仅高风险停审\n", encoding="utf-8")
+    (tmp_path / "input.txt").write_text("source", encoding="utf-8")
+    (tmp_path / "artifact.json").write_text('{"status":"confirmed"}', encoding="utf-8")
+    groups = (("creative", ("director",)), ("production", ("producer",)))
+    manifest = sc.new_manifest(
+        tmp_path,
+        artifact_scope="p2_director_blocking",
+        input_paths=["input.txt"],
+        evidence_paths=["artifact.json"],
+        required_role_groups=groups,
+    )
+    with pytest.raises(ValueError, match="autonomy authorization"):
+        sc.record_approval(
+            manifest, tmp_path, reviewer_id="delegate:n2d-agent", reviewer_role="director",
+            evidence_paths=["artifact.json"],
+        )
+
+    authorization = ap.new_authorization(
+        tmp_path,
+        authorized_by="user:owner",
+        source_quote="普通节点自行按最优情况继续，高风险再问我。",
+    )
+    ap.write_authorization(tmp_path, authorization)
+    manifest = sc.record_approval(
+        manifest, tmp_path, reviewer_id="delegate:n2d-agent", reviewer_role="director",
+        evidence_paths=["artifact.json"], delegation_authorization=authorization,
+        delegation_profile="p2",
+    )
+    manifest = sc.record_approval(
+        manifest, tmp_path, reviewer_id="delegate:n2d-agent", reviewer_role="producer",
+        evidence_paths=["artifact.json"], delegation_authorization=authorization,
+        delegation_profile="p2",
+    )
+    assert sc.validate_manifest(
+        manifest, tmp_path, artifact_scope="p2_director_blocking",
+        input_paths=["input.txt"], evidence_paths=["artifact.json"],
+        required_role_groups=groups,
+    ) == []
+    authorization["status"] = "revoked"
+    ap.write_authorization(tmp_path, authorization)
+    issues = sc.validate_manifest(
+        manifest, tmp_path, artifact_scope="p2_director_blocking",
+        input_paths=["input.txt"], evidence_paths=["artifact.json"],
+        required_role_groups=groups,
+    )
+    assert any("自主授权失效" in issue for issue in issues)

@@ -1,0 +1,75 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_adaptation_audit",
+      "beat_audit",
+      "story_economy_audit",
+      "spectacle_contract_audit",
+      "setup_payoff_gate",
+      "series_retention_gate",
+      "shot_risk_audit",
+      "shot_split_decision",
+      "shot_intent_gate",
+      "production_breakdown",
+      "spectacle_plan",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "kind": "n2d_creative_loop_packet",
+  "loop": [
+    {
+      "instruction": "使用 context_pack 生成本阶段候选产物；不得越过花钱/合规/进度回写边界。",
+      "owner": "n2d-visual-agent",
+      "step": "generate"
+    },
+    {
+      "output": "列 block/warn/info；block 必须给 return_to_stage 和最小修复范围。",
+      "owner": "n2d-visual-agent",
+      "rubric": [
+        "每镜是否绑定 CHAR/LOC/PROP/VFX 资产 ID 和参考图",
+        "多人/表情/坐骑/载具/奇观是否使用保真实现拆法",
+        "图中文字、系统面板、测灵等级是否走 overlay 而非烤字"
+      ],
+      "step": "evaluate"
+    },
+    {
+      "instruction": "只修本阶段产物和直接依赖，不重写无关集/无关资产；保留可追溯 diff 摘要。",
+      "owner": "n2d-visual-agent",
+      "step": "optimize"
+    },
+    {
+      "instruction": "通过 gate 后再交给用户确认；进度回写仍走对应 stage skill/contract。",
+      "owner": "n2d-supervisor",
+      "step": "finalize"
+    }
+  ],
+  "max_iterations": 2,
+  "root": "创作区/制漫剧/金瓶梅",
+  "stage_key": "image_prompt",
+  "stop_conditions": [
+    "gate/prework block",
+    "requires human approval",
+    "paid_or_irreversible action",
+    "no material improvement after 2 iterations"
+  ],
+  "version": 1
+}

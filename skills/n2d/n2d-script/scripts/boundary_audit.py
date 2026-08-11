@@ -33,14 +33,20 @@ if COMMON not in sys.path:
 from n2d_const import boundary_buckets, boundary_lexicon  # noqa: E402
 from n2d_settings import get_setting  # noqa: E402
 
-CHAPTER_HEAD = re.compile(r"^第[一二三四五六七八九十百千万0-9]+章")
+_CHAPTER_UNITS = "章回囬囘廻节節卷"
+CHAPTER_HEAD = re.compile(
+    rf"^\s*(?:\[编辑\]\s*)?第\s*[零〇一二三四五六七八九十百千万两0-9]+\s*[{_CHAPTER_UNITS}]"
+)
 # 悬念收尾标点（强断点的"硬断"信号，与词钩叠加判强度）。
 SUSPENSE_PUNCT = ("？", "！", "…", "——", "?", "!")
 COLD_OPEN_RE = re.compile(
     r"(突然|不好了|出事|杀|逃|追|血|门外|推门|系统提示|提示|真相|原来|竟|"
     r"不可能|为什么|是谁|危险|危机|反击|打脸|逆袭)"
 )
-SLOW_OPEN_RE = re.compile(r"^\s*(?:第[一二三四五六七八九十百千万0-9]+章\s*)?(翌日|次日|三日后|与此同时|另一边|话说|回忆|从前)")
+SLOW_OPEN_RE = re.compile(
+    rf"^\s*(?:(?:\[编辑\]\s*)?第\s*[零〇一二三四五六七八九十百千万两0-9]+\s*[{_CHAPTER_UNITS}][^\n]*\n\s*)?"
+    r"(翌日|次日|三日后|与此同时|另一边|话说|回忆|从前)"
+)
 # 视觉奇观词面（report-only·北极星看点④）：只有 AI 能低成本突破实景的画面高潮。
 # 用于初筛"奇观被切点劈半 / 奇观集断点弱（疑埋中段未当锚点）"，不进 strict 闸。
 SPECTACLE_RE = re.compile(

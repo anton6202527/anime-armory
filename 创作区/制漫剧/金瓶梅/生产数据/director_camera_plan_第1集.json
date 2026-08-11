@@ -1,0 +1,902 @@
+{
+  "kind": "n2d_director_camera_plan",
+  "version": 3,
+  "episode": "第1集",
+  "summary": {
+    "clips": 15,
+    "warn_count": 18,
+    "camera_move_missing": 0,
+    "camera_move_unstructured": 10
+  },
+  "clips": [
+    {
+      "index": 1,
+      "clip_id": "EP01_CLIP01",
+      "shot_size": "ECU→CU",
+      "rhythm": "冷开场·CU硬切",
+      "template": "fight_exchange",
+      "existing_camera": "85mm贴脸危机转50mm贴地短移；沿攻击轴，不环绕。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "环绕",
+            "en": "orbit / circular (360°)",
+            "slots": [
+              "speed",
+              "direction",
+              "arc"
+            ],
+            "category": "camera_path",
+            "risk_level": "high",
+            "media_refs": [
+              {
+                "id": "orbit",
+                "preview": "_preview/环绕拍摄.jpg",
+                "contact_sheet": "_contact/环绕拍摄.jpg",
+                "source": "user_provided",
+                "remote": {
+                  "filename": "环绕拍摄.webp",
+                  "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519.webp",
+                  "object_key": "reference-assets/camera-moves/v1/objects/1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519.webp",
+                  "sha256": "1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519",
+                  "bytes": 6451590,
+                  "content_type": "image/webp"
+                }
+              }
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "ECU→CU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU→CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在ECU→CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        },
+        {
+          "severity": "warn",
+          "code": "unmotivated_camera_motion",
+          "message": "已声明摄影机运动但没有 camera_motivation/运镜动机；普通镜应改固定，或补清楚运动揭示了什么新信息。"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "clip_id": "EP01_CLIP02",
+      "shot_size": "MS→CU→MS→CU",
+      "rhythm": "加速·碎切→爽点前停顿",
+      "template": "fight_exchange",
+      "existing_camera": "四镜位沿动作力线硬切；不环绕、不跨轴。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "环绕",
+            "en": "orbit / circular (360°)",
+            "slots": [
+              "speed",
+              "direction",
+              "arc"
+            ],
+            "category": "camera_path",
+            "risk_level": "high",
+            "media_refs": [
+              {
+                "id": "orbit",
+                "preview": "_preview/环绕拍摄.jpg",
+                "contact_sheet": "_contact/环绕拍摄.jpg",
+                "source": "user_provided",
+                "remote": {
+                  "filename": "环绕拍摄.webp",
+                  "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519.webp",
+                  "object_key": "reference-assets/camera-moves/v1/objects/1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519.webp",
+                  "sha256": "1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519",
+                  "bytes": 6451590,
+                  "content_type": "image/webp"
+                }
+              }
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定人物与戏内视线目标的相对关系",
+        "end_size": "CU/MCU",
+        "reason": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS→CU→MS→CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定人物与戏内视线目标的相对关系；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定人物与戏内视线目标的相对关系；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        },
+        {
+          "severity": "warn",
+          "code": "unmotivated_camera_motion",
+          "message": "已声明摄影机运动但没有 camera_motivation/运镜动机；普通镜应改固定，或补清楚运动揭示了什么新信息。"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "clip_id": "EP01_CLIP03",
+      "shot_size": "MS/CU/ECU/MS",
+      "rhythm": "爽点·CU硬切→主题留白",
+      "template": "ensemble_blocking",
+      "existing_camera": "逐镜只保一个清晰人物焦点，拳落、银盘、腰牌、门影以图形与声音连接。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定人物与证据物的构图关系",
+        "end_size": "CU",
+        "reason": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS/CU/ECU/MS；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定人物与证据物的构图关系；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定人物与证据物的构图关系；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=紧张；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "clip_id": "EP01_CLIP04",
+      "shot_size": "FS→MS→CU",
+      "rhythm": "铺垫·长镜",
+      "template": "ensemble_blocking",
+      "existing_camera": "街下35/50mm低位跟拍切楼上85mm静态近景，空间反差大于人物动作。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "跟拍",
+            "en": "following / tracking follow",
+            "slots": [
+              "speed",
+              "direction"
+            ],
+            "category": "camera_path",
+            "risk_level": "medium",
+            "media_refs": [
+              {
+                "id": "follow_shot",
+                "preview": "_preview/跟随拍摄.jpg",
+                "contact_sheet": "_contact/跟随拍摄.jpg",
+                "source": "user_provided",
+                "remote": {
+                  "filename": "跟随拍摄.webp",
+                  "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/0b066abc2019f5a98a119e1b9ea560ff51e64c8c048dceacfcd5431efd1bf85e.webp",
+                  "object_key": "reference-assets/camera-moves/v1/objects/0b066abc2019f5a98a119e1b9ea560ff51e64c8c048dceacfcd5431efd1bf85e.webp",
+                  "sha256": "0b066abc2019f5a98a119e1b9ea560ff51e64c8c048dceacfcd5431efd1bf85e",
+                  "bytes": 5216698,
+                  "content_type": "image/webp"
+                }
+              }
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "FS→MS→CU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "FS→MS→CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在FS→MS→CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        },
+        {
+          "severity": "warn",
+          "code": "unmotivated_camera_motion",
+          "message": "已声明摄影机运动但没有 camera_motivation/运镜动机；普通镜应改固定，或补清楚运动揭示了什么新信息。"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "clip_id": "EP01_CLIP05",
+      "shot_size": "MS→FS→CU",
+      "rhythm": "温暖短镜→审视慢推",
+      "template": "multi_character_same_frame",
+      "existing_camera": "每个take只保一个清晰关系焦点，三人不横排正脸。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "MS→FS→CU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS→FS→CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在MS→FS→CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "clip_id": "EP01_CLIP06",
+      "shot_size": "OTS/CU→ECU/MS/CU",
+      "rhythm": "关系铺垫·景别逐近",
+      "template": "relationship_turn",
+      "existing_camera": "先等距反打，再用同构图匹配切显示距离变化；不越轴。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "OTS/CU→ECU/MS/CU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "OTS/CU→ECU/MS/CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在OTS/CU→ECU/MS/CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "clip_id": "EP01_CLIP07",
+      "shot_size": "FS/ECU→MS/CU→CU",
+      "rhythm": "悬念推进·慢推",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "门闩插入建立封闭条件，再回50/85mm不越轴反打。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "FS/ECU→MS/CU→CU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "FS/ECU→MS/CU→CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在FS/ECU→MS/CU→CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "clip_id": "EP01_CLIP08",
+      "shot_size": "CU/ECU→CU",
+      "rhythm": "正反打逐近",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "85mm等镜距反打，武松边界句轻推近但不换侧。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "推镜头",
+            "en": "dolly in",
+            "slots": [
+              "speed",
+              "end_size"
+            ],
+            "category": "camera_position",
+            "risk_level": "low",
+            "media_refs": [
+              {
+                "id": "dolly_in",
+                "preview": "_preview/镜头前推.jpg",
+                "contact_sheet": "_contact/镜头前推.jpg",
+                "source": "user_provided",
+                "remote": {
+                  "filename": "镜头前推.webp",
+                  "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/e6fbceb013c0b7e00ad2b49d82a59f2df3f4cf4e3baad0c6546cea4a73d2663c.webp",
+                  "object_key": "reference-assets/camera-moves/v1/objects/e6fbceb013c0b7e00ad2b49d82a59f2df3f4cf4e3baad0c6546cea4a73d2663c.webp",
+                  "sha256": "e6fbceb013c0b7e00ad2b49d82a59f2df3f4cf4e3baad0c6546cea4a73d2663c",
+                  "bytes": 5575084,
+                  "content_type": "image/webp"
+                }
+              }
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "CU/ECU→CU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "CU/ECU→CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU/ECU→CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        },
+        {
+          "severity": "warn",
+          "code": "unmotivated_camera_motion",
+          "message": "已声明摄影机运动但没有 camera_motivation/运镜动机；普通镜应改固定，或补清楚运动揭示了什么新信息。"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "clip_id": "EP01_CLIP09",
+      "shot_size": "ECU/CU/MS/CU",
+      "rhythm": "加速·碎切→爽点·CU硬切→留白",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "器物ECU→动作ECU→关系MS→武松CU，逐级把权力从试探者转给守界者。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定人物与戏内视线目标的相对关系",
+        "end_size": "CU/MCU",
+        "reason": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU/CU/MS/CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定人物与戏内视线目标的相对关系；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定人物与戏内视线目标的相对关系；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "clip_id": "EP01_CLIP10",
+      "shot_size": "MS/POV→CU→CU/OTS",
+      "rhythm": "反转·硬切→迟疑留白",
+      "template": "reveal_reaction_chain",
+      "existing_camera": "按武大主观的泪眼→物证→指控→迟疑反应链剪辑。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定人物与戏内视线目标的相对关系",
+        "end_size": "CU/MCU",
+        "reason": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS/POV→CU→CU/OTS；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定人物与戏内视线目标的相对关系；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定人物与戏内视线目标的相对关系；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "clip_id": "EP01_CLIP11",
+      "shot_size": "ECU/MS/CU",
+      "rhythm": "后果·克制长镜",
+      "template": "relationship_turn",
+      "existing_camera": "器物ECU→双人关系MS→武松CU/门闩插入，空间逐步拉开。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定人物与证据物的构图关系",
+        "end_size": "CU",
+        "reason": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU/MS/CU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定人物与证据物的构图关系；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定人物与证据物的构图关系；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "clip_id": "EP01_CLIP12",
+      "shot_size": "ECU→FS",
+      "rhythm": "留白·定格",
+      "template": "relationship_turn",
+      "existing_camera": "脚步ECU退到街巷FS，再用门框固定构图完成关系分割。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": true,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定构图、轴线与景别；人物和环境只在画内运动",
+        "end_size": "ECU→FS",
+        "reason": "storyboard 已选择静机位；保留这项主动导演决定，让表演、停顿与画内调度承载张力。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU→FS；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "storyboard 已选择静机位；保留这项主动导演决定，让表演、停顿与画内调度承载张力。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "storyboard 已选择静机位；保留这项主动导演决定，让表演、停顿与画内调度承载张力。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在ECU→FS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定构图、轴线与景别；人物和环境只在画内运动；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定构图、轴线与景别；人物和环境只在画内运动；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    },
+    {
+      "index": 13,
+      "clip_id": "EP01_CLIP13",
+      "shot_size": "ECU→MS→MCU",
+      "rhythm": "信息过门·短促",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "先证据插入，再尊卑关系MS与武松MCU，不越轴。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "ECU→MS→MCU",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU→MS→MCU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在ECU→MS→MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=聚焦；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "clip_id": "EP01_CLIP14",
+      "shot_size": "MCU/CU→WS",
+      "rhythm": "情感主镜·克制",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "85mm同高反打保持兄弟平等，末尾退成35mm环境关系。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "过肩/反打保持轴线、景别和视线目标",
+        "end_size": "MCU/CU→WS",
+        "reason": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MCU/CU→WS；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在MCU/CU→WS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线、景别和视线目标；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "clip_id": "EP01_CLIP15",
+      "shot_size": "WS→CU→ECU",
+      "rhythm": "集尾·悬念硬断",
+      "template": "reveal_reaction_chain",
+      "existing_camera": "WS离城→CU隔帘→ECU陌生眼神，由空间远景收紧到未知主体。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "静止",
+        "direction": "锁定人物与证据物的构图关系",
+        "end_size": "CU",
+        "reason": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "WS→CU→ECU；锁定静止构图，以画内调度组织张力，首帧不是摆拍肖像。",
+        "起幅·运动余量": "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。",
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "导演意图": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定人物与证据物的构图关系；摄影机保持完全静止，人物呼吸与环境微动留在画内",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。",
+        "后端控制写法": "自然语言运镜：固定机位，锁定人物与证据物的构图关系；摄影机保持完全静止，人物呼吸与环境微动留在画内；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    }
+  ]
+}

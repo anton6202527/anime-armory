@@ -29,9 +29,19 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
+N2D_LIB = str(Path(__file__).resolve().parents[2] / "_lib")
+if N2D_LIB not in sys.path:
+    sys.path.insert(0, N2D_LIB)
 
 import boundary_audit as BA  # noqa: E402
 from n2d_settings import get_setting  # noqa: E402
+from autonomy_policy import (  # noqa: E402
+    DELEGATED_REVIEWER_ID,
+    authorization_sha256,
+    delegation_record,
+    load_authorization,
+    validate_authorization,
+)
 
 KIND = "n2d_boundary_review"
 VERSION = 2
@@ -180,6 +190,28 @@ def _reviewer_error(reviewer: Any) -> str:
     return ""
 
 
+def _entry_reviewer_error(root: str, entry: Dict[str, Any]) -> str:
+    reviewer = str(entry.get("reviewed_by") or entry.get("reviewer") or "").strip()
+    error = _reviewer_error(reviewer)
+    if not error:
+        return ""
+    delegation = entry.get("delegation") if isinstance(entry.get("delegation"), dict) else {}
+    if reviewer != DELEGATED_REVIEWER_ID or not delegation:
+        return error
+    decision = str(entry.get("decision") or "").strip().lower()
+    authorization = load_authorization(root)
+    issues = validate_authorization(authorization, root, boundary_decision=decision)
+    if issues:
+        return "项目级自主授权失效：" + "；".join(issues)
+    if str(delegation.get("authorized_by") or "") != str(authorization.get("authorized_by") or ""):
+        return "delegation authorized_by 与当前项目授权不一致"
+    if str(delegation.get("authorization_id") or "") != str(authorization.get("authorization_id") or ""):
+        return "delegation authorization_id 与当前项目授权不一致"
+    if str(delegation.get("authorization_sha256") or "") != authorization_sha256(root):
+        return "delegation authorization 哈希已变化"
+    return ""
+
+
 def _nonempty_evidence(value: Any) -> bool:
     if isinstance(value, (list, dict)):
         return bool(value)
@@ -256,6 +288,7 @@ def record(
     semantic_evidence: Any = None,
     source_mapping: Any = None,
     range_arg: Optional[str] = None,
+    delegated: bool = False,
 ) -> Dict[str, Any]:
     """Record one exact v2 blocker decision and atomically update the human file.
 
@@ -274,9 +307,16 @@ def record(
         raise ValueError(f"decision={decision!r} 无效；可选 {sorted(VALID_DECISIONS)}")
     if not notes:
         raise ValueError("notes 不能为空")
-    reviewer_error = _reviewer_error(reviewer)
-    if reviewer_error:
-        raise ValueError(reviewer_error)
+    delegation_meta: Dict[str, Any] = {}
+    if delegated:
+        if reviewer != DELEGATED_REVIEWER_ID:
+            raise ValueError(f"代理边界签收 reviewer 必须是 {DELEGATED_REVIEWER_ID}")
+        authorization = load_authorization(root)
+        delegation_meta = delegation_record(root, authorization, boundary_decision=decision)
+    else:
+        reviewer_error = _reviewer_error(reviewer)
+        if reviewer_error:
+            raise ValueError(reviewer_error)
     if decision == "keep" and not _nonempty_evidence(semantic_evidence):
         raise ValueError("decision=keep 必须显式提供非空 semantic_evidence")
     if decision == "accept_risk":
@@ -356,6 +396,10 @@ def record(
         "reviewed_at": now,
         "status": "signed",
     })
+    if delegation_meta:
+        entry["delegation"] = delegation_meta
+    else:
+        entry.pop("delegation", None)
     if decision == "keep":
         entry["semantic_evidence"] = semantic_evidence
         entry["applied_receipt"] = {}
@@ -428,7 +472,7 @@ def _receipt_errors(entry: Dict[str, Any], current_contract: Dict[str, Any]) -> 
     return errors
 
 
-def entry_is_signed(entry: Dict[str, Any], blocker: Optional[Dict[str, Any]] = None) -> bool:
+def entry_is_signed(root: str, entry: Dict[str, Any], blocker: Optional[Dict[str, Any]] = None) -> bool:
     decision = str(entry.get("decision") or "").strip()
     status = str(entry.get("status") or "").strip().lower()
     notes = str(entry.get("notes") or entry.get("boundary_decision") or "").strip()
@@ -440,7 +484,7 @@ def entry_is_signed(entry: Dict[str, Any], blocker: Optional[Dict[str, Any]] = N
     # downstream generation. Keep the note short, but make the cut explicit.
     if not notes:
         return False
-    if _reviewer_error(entry.get("reviewed_by") or entry.get("reviewer")):
+    if _entry_reviewer_error(root, entry):
         return False
     # `accept_risk` may acknowledge advisories, but must never unlock a strict
     # blocker. Blocker false positives should use `keep` with semantic notes.
@@ -473,7 +517,7 @@ def validate(root: str, range_arg: Optional[str] = None) -> Dict[str, Any]:
         decision = str(entry.get("decision") or "").strip()
         if decision not in MUTATING_DECISIONS or str(entry.get("blocker_id") or "") in current_blocker_ids:
             continue
-        reviewer_error = _reviewer_error(entry.get("reviewed_by") or entry.get("reviewer"))
+        reviewer_error = _entry_reviewer_error(root, entry)
         if reviewer_error or not str(entry.get("notes") or "").strip():
             findings.append({
                 "severity": "block",
@@ -550,7 +594,7 @@ def validate(root: str, range_arg: Optional[str] = None) -> Dict[str, Any]:
                 "message": f"{blocker['blocker_id']} 未在 {REVIEW_REL} 按 blocker code + 双侧边界合同签收。",
             })
             continue
-        reviewer_error = _reviewer_error(entry.get("reviewed_by") or entry.get("reviewer"))
+        reviewer_error = _entry_reviewer_error(root, entry)
         if reviewer_error:
             findings.append({
                 "severity": "block",
@@ -604,7 +648,7 @@ def validate(root: str, range_arg: Optional[str] = None) -> Dict[str, Any]:
                         "message": f"{blocker['blocker_id']} decision=keep 需填写 semantic_evidence，不能只写泛化 notes。",
                     })
                     continue
-        if not entry_is_signed(entry, blocker):
+        if not entry_is_signed(root, entry, blocker):
             findings.append({
                 "severity": "block",
                 "code": "unsigned_blocker_review",
@@ -710,6 +754,7 @@ def _add_record_parser(sub: argparse._SubParsersAction, name: str) -> None:
     sp.add_argument("--decision", required=True, choices=sorted(VALID_DECISIONS))
     sp.add_argument("--notes", required=True)
     sp.add_argument("--reviewer", required=True)
+    sp.add_argument("--delegated", action="store_true", help="使用项目级仅高风险停审授权；只允许 decision=keep")
     sp.add_argument("--semantic-evidence", help="keep 的非空语义证据（纯文本）")
     sp.add_argument("--semantic-evidence-json", help="keep 的 JSON 语义证据")
     sp.add_argument("--semantic-evidence-file", help="keep 的 JSON 语义证据文件")
@@ -770,6 +815,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                 semantic_evidence=evidence,
                 source_mapping=mapping,
                 range_arg=ns.range_arg,
+                delegated=ns.delegated,
             )
             if ns.json:
                 print(json.dumps(result, ensure_ascii=False, indent=2))

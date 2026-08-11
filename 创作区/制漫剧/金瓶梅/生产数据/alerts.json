@@ -1,0 +1,42 @@
+{
+  "alerts": [
+    {
+      "kind": "qa_blockers",
+      "level": "critical",
+      "message": "QA 阻断 115 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "scope": "totals",
+      "threshold": 0,
+      "value": 115
+    },
+    {
+      "episode": "第1集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第1集 QA 阻断 115 项",
+      "scope": "第1集",
+      "threshold": 0,
+      "value": 115
+    }
+  ],
+  "counts": {
+    "critical": 1,
+    "warn": 1
+  },
+  "generated_at": "2026-08-11T10:12:07+00:00",
+  "kind": "n2d_production_alerts",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "thresholds": {
+    "beat_density_variance_ceiling": null,
+    "bounce_3s_ceiling": null,
+    "budget_cap": null,
+    "budget_warn_ratio": 0.8,
+    "cost_per_min_ceiling": null,
+    "final_pass_rate_floor": null,
+    "follow_next_rate_floor": null,
+    "qa_blockers_ceiling": 0,
+    "recoup_floor": null,
+    "redraw_rate_ceiling": null,
+    "retention_3s_floor": null
+  },
+  "version": 1
+}

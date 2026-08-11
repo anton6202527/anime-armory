@@ -1,0 +1,308 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第5集",
+  "stage": "all",
+  "production_mode": "混合自动路由",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "开发包/series_bible.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "500cb921e71ef3126a583874943f78d54755f9c7e4ec20ea2bb8f8d066100399"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/adaptation_strategy.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "391dfd229b8071278a661c98cf0557d6035cea69f976bc83f7feb6306b4fbd52"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/season_arc.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "08a98054b818056071ce9847d986d5e0bcfb9ac8646ad1ed1e49eb939f07f52c"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/production_feasibility.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "887842c6341592317c22c7fa8ace70a05fcf3e7ac72c50b0d275e2802eefb24d"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/pilot_greenlight.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2f806fc9e62a60d214cbf6a08e72d779199fa8d695f70f148fc1994f6e63d187"
+    },
+    {
+      "stage": "source",
+      "path": "脚本/第5集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "7182a453cb822bf7b3abb74c30b7dcb371d3a58469a95c97c077f2234189e850"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第5集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "45f82f8bd55142a402a3a7fd45b39eb0b414458e373dad2f33de05738348d9f6"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第5集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "3f21b56799f1140bdf2c84b7b6580e6df1dfc211a168c900d34df71d952fec48"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第5集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "30065d3455a9d5d1b9c8b42ead3bd783fb1b642a2e9fae9417c955618f974abf"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b874e6b80ac314d6407d9c278346d20ce1a0b12e653d1ad9952e01099a28b6b0"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "32ee8dcdb80181bba25a748b67b9b45c2fbd30bd1a1b8d65392bc424eff2d642"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "6758c95e6b1d02c50a572516d4c31f2afd9cdd3a4c5d86582aaa29e87720ed84"
+    },
+    {
+      "stage": "voice",
+      "path": "设定库/voice_casting.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第5集/配音/timing_estimate.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第5集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第5集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第5集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/director_beat_sheet.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/axis_blocking_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/shot_progression_plan.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/transition_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/vertical_composition_plan.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/edit_rhythm_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "生产数据/director_blocking_pack_第5集.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "fff08e27d600fc8aa70d15e19d1b75c76c3ea665c8e4d01a5c05d4919d894149"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "5009a37b78a037ac42a0d57d6e93f64a6ef49ae0d5e3a1f1303ef7687a7f0b92"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "6d8219be6dcf9c5b64e73e32ce21f191ef9c55f27d695438b559a4bd96d20815"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第5集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第5集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第5集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第5集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第5集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第5集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第5集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第5集/成片_第5集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第5集/成片_第5集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第5集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第5集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第5集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第5集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第5集/成片_第5集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第5集/成片_第5集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

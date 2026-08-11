@@ -10,23 +10,26 @@
 | `skill` | string | 固定为 `n2d-script-workbench` |
 | `title` | string | 脚本标题 |
 | `global_style` | string | 合成全部镜头提示词的风格前缀 |
+| `style_locked` | boolean | 首次合成提示词后持久锁定全局风格 |
 | `steps` | object | `shots/assets/prompts` 三步状态 |
 | `shots` | array | 可编辑镜头行 |
 | `assets` | array | 角色、场景、道具资产卡 |
 
 ## 镜头
 
-每个 `shots[]` 必须有稳定 `id`，以及 `duration / visual / scale / lighting / dialogue / sound / camera / final_prompt / color`。`duration` 为正数；修改除 `color` 外的任何字段后清空 `final_prompt`。
+每个 `shots[]` 必须有稳定 `id`，以及 `duration / visual / scale / lighting / dialogue / sound / camera / final_prompt / color`。`duration` 必须在 5–15 秒之间；修改除 `color` 外的任何字段后清空 `final_prompt`。
 
 ## 资产
 
 每个 `assets[]` 必须有 `id / kind / name / description / prompt / status / source`。
 
+画布可同时保留 `attachmentId / nodeId / imageUrl / mimeType / error`。这些字段是跨刷新、跨设备证明真实图片来源的证据，CLI 归一化时必须原样保留，不能只留下抽象状态。
+
 - `kind`: `character | scene | prop`
 - `status`: `pending | generating | ready | failed`
 - `source`: `none | ai | canvas | upload`
 
-`ready` 只表示工作台已有可引用图片；没有真实图片时不得写 `ready`。
+`ready` 只表示工作台已有可引用图片；必须至少存在 `attachmentId`、`nodeId` 或受支持的 `imageUrl`，否则不得写 `ready`。
 
 ## 三步状态
 

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_thread_scheduler",
+  "version": 1,
+  "generated_at": "2026-08-11",
+  "threads": [
+    {
+      "id": "THREAD_E0001",
+      "thread_id": "T_E0001",
+      "source": "story_integrity_audit",
+      "status": "candidate",
+      "opened_ep": "第1集",
+      "last_touched_ep": "第1集",
+      "next_due_ep": "第2集",
+      "payoff_ep": "",
+      "open_question": "哥，我不在时，少出早归，早闭门户。我会回来；有人欺你，等我理论。 武松出城那天，潘金莲站在楼窗后。帘外，另一双眼已经走近。  🪝集尾",
+      "touch_keywords": [
+        "武松"
+      ]
+    }
+  ]
+}

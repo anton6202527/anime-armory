@@ -40,6 +40,9 @@ except Exception:  # pragma: no cover - keep generic settings usable outside n2d
 
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
+    # 默认保持传统逐节点人工批准；仅在项目负责人明确一次性授权并落
+    # autonomy_authorization.json 后，才可切到“仅高风险停审”。
+    "人工批准策略": "逐节点人工批准",
     "基础视觉风格": "冷灰写实3D国风漫剧",
     "拆集节奏": "前长后短",
     # 原生多镜生成默认「自动」：后端支持时 single_take_multishot 一次 co-generate 成一个长 clip（少出很多 clip）。
@@ -191,6 +194,14 @@ BASE_VISUAL_STYLE_CHOICES = (
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("制作模式", ("n2d",), _PRODUCTION_MODE_KEYS, sensitive=True),
+    SettingSpec(
+        "人工批准策略",
+        ("n2d",),
+        ("逐节点人工批准", "仅高风险停审"),
+        key_aliases=("审批策略", "批准策略", "人工审批策略"),
+        syncable=False,
+        sensitive=True,
+    ),
     # 题材：弱选择点——split/分镜阶段 motif_detector 自动检测预填建议值，用户可覆盖。驱动母题增强
     # （系统面板等复现桥段的镜头/台词/出图/overlay）。取值与 n2d_const.GENRE_KEYWORDS 的题材键对齐。
     SettingSpec("题材", ("n2d",), ("系统流", "穿越", "修仙", "都市", "宫斗", "赘婿", "战神", "自定义"), parameterized=True),

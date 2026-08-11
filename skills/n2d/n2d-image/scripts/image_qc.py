@@ -895,12 +895,17 @@ def registry_ref_counts(forms: Optional[List[Dict[str, Any]]]) -> Dict[str, int]
     return out
 
 
-# 逐镜块里 `资产身份注册层` 行引用的身份键，形如 `CHAR_01/常态`、`CHAR_SHEN/常态`
+# 逐镜块里 `资产身份注册层` 行引用的身份键，形如 `CHAR_01/常态`、`BEAST_TIGER/扑击态`
 # （反引号包裹）或裸 CHAR_SHEN。多人同框的主角星标（CHAR_SHEN* / CHAR_SHEN/常态*）
 # 是调度标记，不属于 registry id，比较前需剥掉。
 IDENTITY_REF_RE = re.compile(
-    r"(?<![A-Za-z0-9_])`?(CHAR_[A-Za-z0-9_]*[A-Za-z0-9]\*?(?:/[^`\s，；、*]+)?\*?)`?"
+    r"(?<![A-Za-z0-9_])`?((?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_]*[A-Za-z0-9]\*?(?:/[^`\s，；、*]+)?\*?)`?"
     r"(?![A-Za-z0-9_\u4e00-\u9fff.-])"
+)
+# 生成提示词会把 identity key 与参考图路径写成反引号机器字段；形态名/文件名中可以合法
+# 包含另一个角色的弱别名（如「25岁武大家常态」）。这些 token 不是自然语言出镜声明。
+IDENTITY_ASSET_TOKEN_RE = re.compile(
+    r"`[^`\n]*(?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_][^`\n]*`"
 )
 TAIL_HANDOFF_FIELDS = ("近景/反打身份锁定", "近景身份锁定", "反打身份锁定", "细粒度身份锁定",
                        "尾帧接力生成方式", "尾帧专用", "尾帧身份", "尾帧重抽提示",
@@ -1309,12 +1314,20 @@ WEAK_ALIAS_ASSET_WORDS = ("摹影", "妖气", "特效", "光效", "面板", "ove
 
 
 def _matches_weak_character_alias(text: str, aliases: Set[str]) -> bool:
+    # 形态名允许包含关系/场所词（如 `CHAR_PANJINLIAN/25岁武大家常态`）。
+    # 其中“武大”不能被误读成另一个角色的自然语言提及；先保护结构化身份引用，以及
+    # 反引号包裹的 identity asset_key / 参考图路径。
+    raw_text = str(text or "")
+    protected_spans = [match.span() for match in IDENTITY_REF_RE.finditer(raw_text)]
+    protected_spans.extend(match.span() for match in IDENTITY_ASSET_TOKEN_RE.finditer(raw_text))
     for alias in sorted((a for a in aliases if a), key=len, reverse=True):
-        for match in re.finditer(re.escape(alias), text):
-            prefix = text[max(0, match.start() - 16):match.start()]
-            if WEAK_ALIAS_ASSET_CONTEXT_RE.search(prefix) or (match.start() > 0 and text[match.start() - 1] == "_"):
+        for match in re.finditer(re.escape(alias), raw_text):
+            if any(start <= match.start() < end for start, end in protected_spans):
                 continue
-            suffix_match = re.match(r"[\u4e00-\u9fffA-Za-z0-9_]{0,16}", text[match.end():])
+            prefix = raw_text[max(0, match.start() - 16):match.start()]
+            if WEAK_ALIAS_ASSET_CONTEXT_RE.search(prefix) or (match.start() > 0 and raw_text[match.start() - 1] == "_"):
+                continue
+            suffix_match = re.match(r"[\u4e00-\u9fffA-Za-z0-9_]{0,16}", raw_text[match.end():])
             compound = alias + (suffix_match.group(0) if suffix_match else "")
             if any(word in compound for word in WEAK_ALIAS_ASSET_WORDS):
                 continue

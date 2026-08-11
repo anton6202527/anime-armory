@@ -1,0 +1,308 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第10集",
+  "stage": "all",
+  "production_mode": "混合自动路由",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "开发包/series_bible.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "500cb921e71ef3126a583874943f78d54755f9c7e4ec20ea2bb8f8d066100399"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/adaptation_strategy.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "391dfd229b8071278a661c98cf0557d6035cea69f976bc83f7feb6306b4fbd52"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/season_arc.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "08a98054b818056071ce9847d986d5e0bcfb9ac8646ad1ed1e49eb939f07f52c"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/production_feasibility.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "887842c6341592317c22c7fa8ace70a05fcf3e7ac72c50b0d275e2802eefb24d"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/pilot_greenlight.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2f806fc9e62a60d214cbf6a08e72d779199fa8d695f70f148fc1994f6e63d187"
+    },
+    {
+      "stage": "source",
+      "path": "脚本/第10集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "7d86b5de75c56db63cf1b70c3a6afb618fd56af0ba9ab1557926e9a47a50f754"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第10集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "4c8eb1ce7829d13149fd73a585c847f8ff2ff3ca0e6c84b21ce7b892a72b6439"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第10集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "67b6bff8d8873bf1244617bac6f21a0f3020e18fa29027ef74555f7b606ddb6b"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第10集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b258b90d1b4f62444f20851daea34356f7bc5dd6011dec8b88e4031cd82854b4"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b874e6b80ac314d6407d9c278346d20ce1a0b12e653d1ad9952e01099a28b6b0"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "32ee8dcdb80181bba25a748b67b9b45c2fbd30bd1a1b8d65392bc424eff2d642"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "6758c95e6b1d02c50a572516d4c31f2afd9cdd3a4c5d86582aaa29e87720ed84"
+    },
+    {
+      "stage": "voice",
+      "path": "设定库/voice_casting.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第10集/配音/timing_estimate.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第10集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第10集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第10集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/director_beat_sheet.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/axis_blocking_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/shot_progression_plan.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/transition_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/vertical_composition_plan.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/edit_rhythm_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "生产数据/director_blocking_pack_第10集.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "832d196499e69405176272a93fe0a88a58c7de0e54a3c9e92462067a09dc8112"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "be4530d807180524c3ad921a814ea07c3fa4a55b2306923869e06d944a539fb9"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "0f84e0f74450e5efa482cc3833962aae3fe4a6893d2cc91b2ab775abef70798a"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第10集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第10集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第10集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第10集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第10集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第10集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第10集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第10集/成片_第10集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第10集/成片_第10集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第10集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第10集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第10集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第10集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第10集/成片_第10集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第10集/成片_第10集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

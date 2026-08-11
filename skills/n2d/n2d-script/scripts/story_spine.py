@@ -69,10 +69,11 @@ ADVISORY_MODES = {"保守"}
 # 任何附加限定（"第3章前半"、"第3章打斗段"）都判不可解析——宁可不剔，不可误剔。
 # 数字解析与 split_novel.parse_chapter_number 同口径（同线复制不 import，避免循环依赖）。
 _CH_NUM = r"[0-9零〇一二三四五六七八九十百千万两]+"
+_CHAPTER_UNIT = "章回囬囘廻节節卷"
 _CHAPTER_SPAN_RANGE_RE = re.compile(
-    rf"^第\s*({_CH_NUM})\s*[章回节卷]?\s*(?:[-–—~～]|至|到)\s*(?:第\s*)?({_CH_NUM})\s*[章回节卷]$"
+    rf"^第\s*({_CH_NUM})\s*[{_CHAPTER_UNIT}]?\s*(?:[-–—~～]|至|到)\s*(?:第\s*)?({_CH_NUM})\s*[{_CHAPTER_UNIT}]$"
 )
-_CHAPTER_SPAN_SINGLE_RE = re.compile(rf"^第\s*({_CH_NUM})\s*[章回节卷]$")
+_CHAPTER_SPAN_SINGLE_RE = re.compile(rf"^第\s*({_CH_NUM})\s*[{_CHAPTER_UNIT}]$")
 _CN_DIGITS = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
               "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
 _CN_UNITS = {"十": 10, "百": 100, "千": 1000}
@@ -97,7 +98,7 @@ def _chapter_token_to_int(token: str) -> Optional[int]:
     return total + section + number
 
 
-_CHAPTER_HEADING_RE = re.compile(rf"^\s*第\s*({_CH_NUM})\s*[章回节卷]")
+_CHAPTER_HEADING_RE = re.compile(rf"^\s*(?:\[编辑\]\s*)?第\s*({_CH_NUM})\s*[{_CHAPTER_UNIT}]")
 
 
 def chapter_heading_number(line: str) -> Optional[int]:

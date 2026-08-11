@@ -146,6 +146,20 @@ def test_openai_compiler_keeps_contract_out_of_submit_prompt():
     assert payload["lint"]["errors"] == []
 
 
+def test_real_quadruped_contract_suppresses_human_hand_and_footwear_defaults():
+    payload = compile_image_prompt(_contract(
+        task_type="character_catalog",
+        subject="成年华南虎，真实四足野生猫科；四只虎掌全部着地，长尾完整",
+        action="中性档案姿态，躯干水平",
+        risk_flags=["hands", "grounding"],
+    ))
+
+    prompt = payload["prompt"]
+    assert "可见手部归属清楚" not in prompt
+    assert "单个人形主体最多两条手臂" not in prompt
+    assert "鞋脚结构完整" not in prompt
+
+
 def test_section_compiler_strips_embedded_production_contract_heading() -> None:
     section = """## 镜头 1
 **目标落档**：`出图/第1集/图片/EP01_CLIP01.png`

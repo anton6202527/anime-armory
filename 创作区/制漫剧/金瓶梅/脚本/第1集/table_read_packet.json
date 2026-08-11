@@ -1,0 +1,59 @@
+{
+  "acceptance": {
+    "dialogue_voice_distinct": "accepted",
+    "duration_risk_understood": "accepted",
+    "exposition_not_overloaded": "accepted",
+    "reviewer": "",
+    "rewrite_notes": [],
+    "signoff_manifest": "脚本/第1集/table_read_signoff.json"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-08-11T04:01:58+00:00",
+  "inputs": {
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "timing_estimate": "合成/第1集/配音/timing_estimate.json",
+    "timing_manifest": "合成/第1集/配音/时长清单.json",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第1集/配音/timing_estimate.json": "85a2dc051be55ae865015504f1d9841728d0769fa12e19f50258f9f0565119a5",
+      "合成/第1集/配音/时长清单.json": null,
+      "脚本/第1集/voiceover.txt": "629f9b563d5f887fd9b548252d7f946de230737174a73ce6b351ab03ffad53cf"
+    },
+    "sha": "514a89832bfd3ea3367bd0eeb289f411ac8cb6014ce5fd2eaaf86b28dd63b2a2"
+  },
+  "kind": "n2d_table_read_packet",
+  "machine_reference": {
+    "advisory": true,
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": "not_applicable_before_storyboard",
+    "timing_estimate": {
+      "duration_sec": 144.384,
+      "line_count": 34,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "writer_director_producer",
+  "read_through": {
+    "line_count": 34,
+    "placeholder_or_rough_timing_mentions": 0,
+    "sample_lines": [
+      "[镜头1·旁白·紧张·快] 武松睁眼时，虎爪已经压到脸前——今晚，是一场生死搏杀。  ⚡钩子",
+      "[镜头2·武松·警觉·快] 它冲，我闪；它掀，我躲；虎尾横扫，我再让。只有三招！",
+      "[镜头3·旁白·紧张·快] 猛虎第三次冲来，他双手抡起梢棒——",
+      "[镜头4·武松·惊愕·快] 棒断了！  ⚡钩子",
+      "[镜头5·武松·决绝·快] 我来用拳头。",
+      "[镜头6·旁白·昂扬·快] 因为他打死猛虎、又把赏银让给猎户，武松赢得满城敬重，也获得了都头腰牌。  💥爽点",
+      "[镜头7·旁白·低沉·慢] 山里的虎拦不住他。家门里的人心，却不是一双拳头能打明白。",
+      "[镜头8·旁白·平静] 哥哥武大，为了换一家人的安稳，只守着一担炊饼。",
+      "[镜头9·潘金莲·压抑·慢] 我想要自己做一回主。可从小到大，|| 谁问过我愿不愿意？",
+      "[镜头10·武大·惊喜·快] 二弟！真的是你！",
+      "[镜头11·武松·温暖] 哥，我回来了。  💥情绪回报",
+      "[镜头12·旁白·审视] 武大把兄弟领上楼。潘金莲第一次见到这个打虎的都头。"
+    ],
+    "timing_status": "estimate_only"
+  },
+  "status": "confirmed",
+  "version": 1
+}

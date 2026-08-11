@@ -7,6 +7,12 @@ from pathlib import Path
 import split_novel
 
 
+def test_chapter_parser_accepts_ming_qing_variant_hui_characters():
+    for heading in ("第一囬 風起", "第二囘 波生", "第三廻 事變", "第四節 收束"):
+        assert split_novel.CHAPTER_RE.match(heading)
+    assert split_novel.chapter_heading_count(["第一囬 風起", "第二囘 波生", "正文"]) == 2
+
+
 def test_auto_chapter_aware_guard_detects_fragmented_chaptered_source():
     paras = []
     for i in range(1, 11):

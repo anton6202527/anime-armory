@@ -1,0 +1,58 @@
+{
+  "aspect_ratio": "9:16",
+  "aspect_ratio_alt": "5:7",
+  "backend": "codex",
+  "compliance": {
+    "ai_labeling": "封面 AI 标识为非阻断发布待办（D3），不在此阻断。",
+    "degraded_no_backend_call": true,
+    "note": "无成本 writer：本包只产 prompt/job + 留痕，未生成 PNG、未调后端。在装好生图后端/凭证的机器上，用既有 n2d 出图 runner 按本包 prompt 渲染竖版封面；渲染并人审通过后跑 `cover_pack.py <root> --backfill-cover` 回填 _meta.json 的 cover。_meta.json 的 cover 在真正渲染出 PNG 前保持 null（C4/B4）。"
+  },
+  "cover_meta_field": null,
+  "cover_strategy_ref": "脚本/第1集/封面.md",
+  "identity_bindings": [
+    {
+      "anchor_phrase": "`浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕`",
+      "carries_identity": "CHAR_WUSONG/28岁打虎态",
+      "character_id": "CHAR_WUSONG",
+      "drift_forbidden": [
+        "不要把武松换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句",
+        "重甲、披风、仙侠长发、金冠、现代皮靴"
+      ],
+      "face_anchor_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
+      "face_anchor_ready": false,
+      "face_anchor_sha256": "",
+      "form": "28岁打虎态",
+      "name": "武松",
+      "reference_group_ref": "出图/共享/identity_registry.json#characters[CHAR_WUSONG]/forms/28岁打虎态/reference_group"
+    }
+  ],
+  "kind": "n2d_work_cover_job_pack",
+  "negative": "文字/字幕/水印/Logo/角标/多余肢体/崩脸/串脸/风格漂移",
+  "orientation": "portrait",
+  "output_path": "出图/封面/cover.png",
+  "persistent_subject": false,
+  "prompt": {
+    "en": "Vertical key-visual cover (9:16, 5:7 acceptable), high-CTR short-drama poster. Protagonist clear frontal face, strong emotion, identity locked to the registered face anchor (same face/hair/wardrobe).Carries the show's core hook: 一桩被钱权压下的命案，撬开清河县豪门百回兴亡：每一次欲望都变成交易，每一次交易都留下终将反噬的债。. Leave title-safe margins top/bottom, cinematic lighting, high contrast, strong emotion. No text, no subtitles, no watermark, no logo, no platform badge. Inherit the show's style_contract / identity anchors; no drift.",
+    "zh": "竖版作品封面（9:16，可接受 5:7），高点击率短剧封面。主角 武松（CHAR_WUSONG/28岁打虎态）清晰正脸、强情绪，脸型/眼距/发型/服装配色严格同源锚：`浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕`。画面承载本剧核心卖点：一桩被钱权压下的命案，撬开清河县豪门百回兴亡：每一次欲望都变成交易，每一次交易都留下终将反噬的债。。构图为标题预留上/下安全留白，主体不顶格；电影级布光、强对比、情绪张力拉满。严禁任何文字、字幕、水印、Logo、平台角标（标题由排版层后叠）。继承本剧 style_contract / identity_registry / asset_registry 视觉锚，不得漂移。"
+  },
+  "qc_required": [
+    "portrait_9_16",
+    "protagonist_face_clear",
+    "identity_match",
+    "no_text_no_logo",
+    "title_safe_area"
+  ],
+  "recipe_hash": "eb8f1d8a2c8b72df",
+  "render_blocking": [
+    "missing_ready_face_anchor"
+  ],
+  "style_contract_ref": "设定库/global_style.md",
+  "title": "金瓶梅",
+  "version": 1,
+  "生图模型": "GPT Image 2",
+  "生图渠道": "Codex CLI",
+  "访问入口": "Codex"
+}

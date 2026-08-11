@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_WU_SONG",
+  "name": "武松",
+  "scope": "阳谷县人；景阳冈打虎后任清河县巡捕都头；武大亲弟。",
+  "library_tier": "core_full",
+  "planned_episode_count": 10,
+  "directories": {
+    "reference": "角色库/CHAR_WU_SONG__武松/reference",
+    "prompts": "角色库/CHAR_WU_SONG__武松/prompts",
+    "lora": "角色库/CHAR_WU_SONG__武松/lora",
+    "voice": "角色库/CHAR_WU_SONG__武松/voice",
+    "adapters": "角色库/CHAR_WU_SONG__武松/adapters",
+    "qc": "角色库/CHAR_WU_SONG__武松/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/武松.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:03:10+00:00"
+}

@@ -1,0 +1,63 @@
+{
+  "approvals": [
+    {
+      "authorization_id": "AUTH_eec6e3d37ec9ea74",
+      "authorization_path": "生产数据/autonomy_authorization.json",
+      "authorization_sha256": "22491fffb19002c6b2483a088637236fd9fdb78bb3091315b3a4cd434dca4ade",
+      "authorized_by": "user:workspace-owner",
+      "decision": "approved",
+      "delegation_profile": "table_read",
+      "evidence": [
+        {
+          "path": "脚本/第1集/table_read_packet.json",
+          "sha256": "80ff6570b5f9af993a9049d32eeb3bb111a83bae65bc92d7aba8651d88e9b844"
+        },
+        {
+          "path": "脚本/第1集/table_read_packet.md",
+          "sha256": "a73d0592df55b42368269e94960984b2ac03693a268251f7a6ba6d5151c2dbe9"
+        }
+      ],
+      "independent_review": "waived_by_project_owner",
+      "note": "项目负责人已启用“仅高风险停审”；代理按当前 confirmed/ready 产物与哈希完成 table_read:editorial 内部交接签收。独立人审已由负责人在授权范围内豁免。",
+      "review_mode": "delegated_autonomy",
+      "reviewed_at": "2026-08-11T04:01:58+00:00",
+      "reviewer_id": "delegate:n2d-agent",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "b97e258ef254a52dd3083ee75010f760ef2d4afc2a93402fda184af35b4b2d1c",
+      "signed_input_fingerprint_sha": "e494876776394ab4bdc988e0409b00f7f5200e2ac13bb2c520fb3ffc3ef68e05",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "stage1_table_read",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-08-11T04:01:58+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第1集/table_read_packet.json": "80ff6570b5f9af993a9049d32eeb3bb111a83bae65bc92d7aba8651d88e9b844",
+      "脚本/第1集/table_read_packet.md": "a73d0592df55b42368269e94960984b2ac03693a268251f7a6ba6d5151c2dbe9"
+    },
+    "sha": "b97e258ef254a52dd3083ee75010f760ef2d4afc2a93402fda184af35b4b2d1c"
+  },
+  "input_fingerprint": {
+    "files": {
+      "合成/第1集/配音/时长清单.json": null,
+      "脚本/第1集/voiceover.txt": "629f9b563d5f887fd9b548252d7f946de230737174a73ce6b351ab03ffad53cf"
+    },
+    "sha": "e494876776394ab4bdc988e0409b00f7f5200e2ac13bb2c520fb3ffc3ef68e05"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "editorial",
+      "roles": [
+        "director",
+        "head_writer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-08-11T04:01:58+00:00",
+  "version": 1
+}

@@ -4,6 +4,13 @@ from pathlib import Path
 import repair_preflight as rp
 
 
+def test_component_script_paths_stay_inside_n2d_series() -> None:
+    assert rp.N2D_DIR.name == "n2d"
+    assert (rp.N2D_DIR / "n2d-update" / "scripts" / "update_plan.py").is_file()
+    assert (rp.N2D_DIR / "n2d-script" / "scripts" / "production_breakdown.py").is_file()
+    assert (rp.N2D_DIR / "n2d-image" / "scripts" / "image_qc.py").is_file()
+
+
 def test_build_report_runs_full_video_prompt_preflight_stack(monkeypatch, tmp_path: Path) -> None:
     calls = []
 

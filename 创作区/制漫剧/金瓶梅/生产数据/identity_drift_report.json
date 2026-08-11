@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_identity_drift_report",
+  "version": 1,
+  "root": "创作区/制漫剧/金瓶梅",
+  "generated_at": "2026-08-11T04:17:27+00:00",
+  "available": true,
+  "episodes": [
+    "第1集"
+  ],
+  "characters": {},
+  "notes": [],
+  "png_fingerprints": {},
+  "embedding_drift": {},
+  "recommendations": []
+}

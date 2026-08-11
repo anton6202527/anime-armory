@@ -1,0 +1,68 @@
+{
+  "anchors": [
+    {
+      "id": "STYLE_ANCHOR",
+      "identity_policy": "do_not_clone_face_or_costume",
+      "name": "写实电影感·北宋市井国风漫剧",
+      "path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+      "role": "shared_rendering_language_anchor",
+      "status": "ready",
+      "use_policy": "style_only",
+      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+      "visual_review": {
+        "status": "accepted",
+        "verdict": "pass",
+        "path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+        "reviewer": "Codex视觉执行者",
+        "review_kind": "executor_visual",
+        "reviewer_role": "ai_visual_executor",
+        "human_signoff": false,
+        "reviewed_at": "2026-08-11T06:15:31+00:00",
+        "png_sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+        "confirmation": {
+          "kind": "explicit_current_pixels_acceptance",
+          "accepted_current_pixels": true
+        },
+        "note": "已实际查看当前像素：抽象色卡、明暗光比、笔触与麻布木构雪炭火材质层次完整；无人物、动物、建筑、剧情道具、文字、水印或标志；符合北宋市井粗粝写实电影感。"
+      }
+    }
+  ],
+  "generated_at": "2026-08-11T04:03:10+00:00",
+  "kind": "n2d_style_anchor_registry",
+  "rules": {
+    "identity_policy": "do_not_clone_face_or_costume",
+    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。生成风格锚时不得把 `style_contract.镜头与构图` 的剧情机位、前中后景、人物调度、场景或物件描述注入风格板；角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。",
+    "use_policy": "style_only"
+  },
+  "selected_anchor": {
+    "id": "STYLE_ANCHOR",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "name": "写实电影感·北宋市井国风漫剧",
+    "path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+    "role": "style_anchor",
+    "status": "ready",
+    "updated_at": "2026-08-11T06:10:23+00:00",
+    "updated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+    "use_policy": "style_only",
+    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+    "visual_review": {
+      "status": "accepted",
+      "verdict": "pass",
+      "path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+      "reviewer": "Codex视觉执行者",
+      "review_kind": "executor_visual",
+      "reviewer_role": "ai_visual_executor",
+      "human_signoff": false,
+      "reviewed_at": "2026-08-11T06:15:31+00:00",
+      "png_sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+      "confirmation": {
+        "kind": "explicit_current_pixels_acceptance",
+        "accepted_current_pixels": true
+      },
+      "note": "已实际查看当前像素：抽象色卡、明暗光比、笔触与麻布木构雪炭火材质层次完整；无人物、动物、建筑、剧情道具、文字、水印或标志；符合北宋市井粗粝写实电影感。"
+    }
+  },
+  "style_name": "写实电影感·北宋市井国风漫剧",
+  "updated_at": "2026-08-11T06:15:31+00:00",
+  "version": 1
+}

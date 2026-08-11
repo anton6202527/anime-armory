@@ -49,6 +49,13 @@ def test_no_signal_returns_empty():
     assert ms == []
 
 
+def test_late_imperial_hui_heading_is_recognized():
+    assert L.CHAPTER_HEAD.match("[编辑]第一囬 景陽岡武松打虎")
+    assert L.CHAPTER_HEAD.match("第二囘 西門慶簾下遇金蓮")
+    assert L.CHAPTER_HEAD.match("第三廻 王婆定十件挨光計")
+    assert L.CHAPTER_HEAD.match("第四節 世情翻覆")
+
+
 def test_write_preserves_human_region():
     root = _mk([(1, "第一章\n她换上战甲。")], cards=["阿离"])
     out = Path(root) / "设定库" / "characters" / "_生命周期.md"

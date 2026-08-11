@@ -1,0 +1,104 @@
+{
+  "batched_clips": 11,
+  "batches": [
+    {
+      "clip_ids": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03"
+      ],
+      "firstframe_pngs": [
+        "出图/第1集/图片/Clip01_first.png",
+        "出图/第1集/图片/Clip02_first.png",
+        "出图/第1集/图片/Clip03_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 3 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "LOC_JINGYANGGANG",
+      "scene_name": "景阳冈夜间空地",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 3
+    },
+    {
+      "clip_ids": [
+        "Clip_04",
+        "Clip_05"
+      ],
+      "firstframe_pngs": [
+        "出图/第1集/图片/Clip04_first.png",
+        "出图/第1集/图片/Clip05_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 2 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "LOC_YANGGU_STREET",
+      "scene_name": "阳谷街面与武大家楼窗",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 2
+    },
+    {
+      "clip_ids": [
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11"
+      ],
+      "firstframe_pngs": [
+        "出图/第1集/图片/Clip06_first.png",
+        "出图/第1集/图片/Clip07_first.png",
+        "出图/第1集/图片/Clip08_first.png",
+        "出图/第1集/图片/Clip09_first.png",
+        "出图/第1集/图片/Clip10_first.png",
+        "出图/第1集/图片/Clip11_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 6 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "LOC_WUDA_HOME",
+      "scene_name": "武大家楼屋雪夜",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 6
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_scene_batch_plan",
+  "min_group": 2,
+  "notes": [],
+  "solo": [
+    {
+      "clip_id": "Clip_12",
+      "scene_key": "LOC_YANGGU_STREET",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_13",
+      "scene_key": "LOC_COUNTY_YAMEN",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_14",
+      "scene_key": "LOC_WUDA_HOME",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_15",
+      "scene_key": "LOC_CITY_GATE",
+      "why": "同场景连续镜不足 min_group"
+    }
+  ]
+}

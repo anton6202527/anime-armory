@@ -17,6 +17,23 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Sequence, Tuple
 
+try:
+    from autonomy_policy import (
+        DELEGATED_REVIEWER_ID,
+        authorization_sha256,
+        delegation_record,
+        load_authorization,
+        validate_authorization,
+    )
+except ImportError:  # pragma: no cover - package import fallback
+    from .autonomy_policy import (
+        DELEGATED_REVIEWER_ID,
+        authorization_sha256,
+        delegation_record,
+        load_authorization,
+        validate_authorization,
+    )
+
 
 KIND = "n2d_artifact_signoff"
 VERSION = 1
@@ -50,6 +67,8 @@ PROFILE_SCOPES = {
     "animatic": "stage2_animatic",
     "p3": "p3_production_handoff",
 }
+
+SCOPE_PROFILES = {scope: profile for profile, scope in PROFILE_SCOPES.items()}
 
 
 def now_iso() -> str:
@@ -251,13 +270,24 @@ def record_approval(
     note: str = "",
     unresolved_risks: Sequence[str] = (),
     waiver_reason: str = "",
+    delegation_authorization: Mapping[str, Any] | None = None,
+    delegation_profile: str = "",
 ) -> Dict[str, Any]:
     payload = dict(manifest)
     rid = str(reviewer_id or "").strip()
     role = str(reviewer_role or "").strip().lower()
     decision = str(decision or "approved").strip().lower()
+    delegated = isinstance(delegation_authorization, Mapping)
+    profile = str(delegation_profile or SCOPE_PROFILES.get(str(payload.get("artifact_scope") or ""), "")).strip().lower()
     if rid.lower() in GENERIC_REVIEWER_IDS:
         raise ValueError("reviewer_id 必须是明确身份，不能使用 agent_or_human/unknown 等泛称")
+    if rid.lower().startswith("delegate:") and not delegated:
+        raise ValueError("delegate reviewer 必须绑定有效的项目级 autonomy authorization")
+    delegation_meta: Dict[str, Any] = {}
+    if delegated:
+        if rid != DELEGATED_REVIEWER_ID:
+            raise ValueError(f"代理签收 reviewer_id 必须是 {DELEGATED_REVIEWER_ID}")
+        delegation_meta = delegation_record(root, delegation_authorization, profile=profile)
     if not role:
         raise ValueError("reviewer_role 不能为空")
     if rid.lower() == str(payload.get("authored_by") or "").strip().lower():
@@ -312,6 +342,7 @@ def record_approval(
         "unresolved_risks": risks,
         "waiver_reason": str(waiver_reason or "").strip(),
     }
+    approval.update(delegation_meta)
     approvals = [item for item in payload.get("approvals") or [] if isinstance(item, Mapping)]
     key = _approval_key(approval)
     approvals = [dict(item) for item in approvals if _approval_key(item) != key]
@@ -379,6 +410,7 @@ def validate_manifest(
     if missing_outputs:
         issues.append("待签产物缺失：" + "、".join(missing_outputs))
 
+    profile = SCOPE_PROFILES.get(artifact_scope, "")
     approvals = [item for item in manifest.get("approvals") or [] if isinstance(item, Mapping)]
     valid_approvals: List[Mapping[str, Any]] = []
     for item in approvals:
@@ -389,6 +421,28 @@ def validate_manifest(
         if rid.lower() in GENERIC_REVIEWER_IDS:
             issues.append(f"{prefix} reviewer_id 不是明确身份")
             continue
+        review_mode = str(item.get("review_mode") or "").strip().lower()
+        if rid.lower().startswith("delegate:") and review_mode != "delegated_autonomy":
+            issues.append(f"{prefix} delegate reviewer 未绑定 delegated_autonomy 元数据")
+            continue
+        if review_mode == "delegated_autonomy":
+            authorization = load_authorization(root)
+            delegation_issues = validate_authorization(authorization, root, profile=profile)
+            if delegation_issues:
+                issues.append(f"{prefix} 项目级自主授权失效：{'；'.join(delegation_issues)}")
+                continue
+            if rid != DELEGATED_REVIEWER_ID:
+                issues.append(f"{prefix} delegated reviewer_id 不匹配")
+                continue
+            if str(item.get("authorized_by") or "") != str(authorization.get("authorized_by") or ""):
+                issues.append(f"{prefix} authorized_by 与当前自主授权不一致")
+                continue
+            if str(item.get("authorization_id") or "") != str(authorization.get("authorization_id") or ""):
+                issues.append(f"{prefix} authorization_id 与当前自主授权不一致")
+                continue
+            if str(item.get("authorization_sha256") or "") != authorization_sha256(root):
+                issues.append(f"{prefix} autonomy authorization 哈希已变化，需重新签收")
+                continue
         if author_id and rid.lower() == author_id.lower():
             issues.append(f"{prefix} 违反作者/审批者分离")
             continue

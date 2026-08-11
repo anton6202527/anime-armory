@@ -1060,6 +1060,12 @@ def _normalize_registered_character_marker(ref: str, registered_chars: set) -> s
         return f"{normalized_base}/{form}" if form else normalized_base
     if token in registered_chars:
         return token
+    # image_prompt_pack 的稳定 asset_key / 文件名格式为
+    # `CHAR_CANONICAL__形态`。正则扫描文本时会把中文形态截成
+    # `CHAR_CANONICAL__25`；它仍是已登记人物的机器资产 token，不能误判成新角色。
+    for cid in sorted((str(value or "").strip() for value in registered_chars), key=len, reverse=True):
+        if cid and token.startswith(cid + "__"):
+            return cid
     if token.endswith("_partial"):
         base = token[: -len("_partial")]
         if base in registered_chars:

@@ -1,0 +1,936 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-08-11T04:49:19+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_WUSONG/酒后战损态",
+        "BEAST_TIGER/扑击态"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "department_notes": {
+        "art": "场景 LOC_JINGYANGGANG；入画角色 CHAR_WUSONG/酒后战损态, BEAST_TIGER/扑击态；关键物件 无关键道具。",
+        "camera": "景别/机位：ECU；视线/轴线：武松由画右下看向画左上猛虎；模板：fight_exchange。",
+        "post": "转场 动作继续进入三扑拆招。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+            "at_sec": 2.1,
+            "reason": "虎爪ECU切贴地闪避CU的剪辑边界",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip01_first.png",
+        "relay_boundary": false
+      },
+      "label": "虎爪贴脸",
+      "location_id": "LOC_JINGYANGGANG",
+      "props_and_objects": [],
+      "scene": "LOC_JINGYANGGANG/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          1
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、BEAST_TIGER；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/酒后战损态",
+        "BEAST_TIGER/扑击态"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "department_notes": {
+        "art": "场景 LOC_JINGYANGGANG；入画角色 CHAR_WUSONG/酒后战损态, BEAST_TIGER/扑击态；关键物件 PROP_QUARTERSTAFF/完整至断裂。",
+        "camera": "景别/机位：CU；视线/轴线：武松向上盯虎；模板：fight_exchange。",
+        "post": "转场 拳头前送动作切入胜利蒙太奇。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+            "at_sec": 2.4,
+            "reason": "扑掀两招切虎尾横扫",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a2.png",
+            "at_sec": 4.8,
+            "reason": "虎尾避让切抡棒第三扑",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a3.png",
+            "at_sec": 7.3,
+            "reason": "断棒撞点切武松握拳反应",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip02_first.png",
+        "relay_boundary": false
+      },
+      "label": "三扑、断棒、赤手",
+      "location_id": "LOC_JINGYANGGANG",
+      "props_and_objects": [
+        "PROP_QUARTERSTAFF/完整至断裂"
+      ],
+      "scene": "LOC_JINGYANGGANG/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          2,
+          4,
+          5
+        ],
+        "narration_indices": [
+          3
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、BEAST_TIGER、PROP_QUARTERSTAFF；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/打虎后至都头态",
+        "BEAST_TIGER/战败态",
+        "CROWD_HUNTERS/群像"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "department_notes": {
+        "art": "场景 LOC_JINGYANGGANG；入画角色 CHAR_WUSONG/打虎后至都头态, BEAST_TIGER/战败态, CROWD_HUNTERS/群像；关键物件 PROP_BADGE, PROP_REWARD_SILVER, PROP_QUARTERSTAFF/断裂。",
+        "camera": "景别/机位：CU；视线/轴线：武松看向街巷纵深家门；模板：ensemble_blocking。",
+        "post": "转场 街门阴影溶入武大挑担的街巷。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+            "at_sec": 2.8,
+            "reason": "打虎兑现切让银",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a2.png",
+            "at_sec": 6.2,
+            "reason": "让银切腰牌任命",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a3.png",
+            "at_sec": 9.5,
+            "reason": "腰牌与人群切家门阴影",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip03_first.png",
+        "relay_boundary": false
+      },
+      "label": "打虎成名，家门转冷",
+      "location_id": "LOC_JINGYANGGANG",
+      "props_and_objects": [
+        "PROP_BADGE",
+        "PROP_REWARD_SILVER",
+        "PROP_QUARTERSTAFF/断裂"
+      ],
+      "scene": "LOC_JINGYANGGANG→LOC_YANGGU_STREET/蒙太奇",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          6,
+          7
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、PROP_BADGE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUDA/卖饼劳作态",
+        "CHAR_PANJINLIAN/楼窗压抑态"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "department_notes": {
+        "art": "场景 LOC_YANGGU_STREET；入画角色 CHAR_WUDA/卖饼劳作态, CHAR_PANJINLIAN/楼窗压抑态；关键物件 PROP_CAKE_POLE, PROP_WINDOW_LATTICE。",
+        "camera": "景别/机位：LS；视线/轴线：潘金莲由楼窗向画面下方街口；模板：ensemble_blocking。",
+        "post": "转场 武大的叫卖声先入，随后由潘金莲视线切到街上重逢。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+            "at_sec": 4.5,
+            "reason": "街面武大切楼窗潘金莲",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip04_first.png",
+        "relay_boundary": false
+      },
+      "label": "一担炊饼与一扇楼窗",
+      "location_id": "LOC_YANGGU_STREET",
+      "props_and_objects": [
+        "PROP_CAKE_POLE",
+        "PROP_WINDOW_LATTICE"
+      ],
+      "scene": "LOC_YANGGU_STREET/日/外内并置",
+      "sound_needs": {
+        "dialogue_indices": [
+          9
+        ],
+        "narration_indices": [
+          8
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUDA、CHAR_PANJINLIAN、PROP_CAKE_POLE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/都头态",
+        "CHAR_WUDA/惊喜态",
+        "CHAR_PANJINLIAN/初见审视态"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "department_notes": {
+        "art": "场景 LOC_YANGGU_STREET；入画角色 CHAR_WUSONG/都头态, CHAR_WUDA/惊喜态, CHAR_PANJINLIAN/初见审视态；关键物件 PROP_BADGE, PROP_CAKE_POLE, PROP_STAIR_RAIL。",
+        "camera": "景别/机位：MS；视线/轴线：潘金莲画左看武松画右；模板：multi_character_same_frame。",
+        "post": "转场 潘金莲视线反打到她开口留住武松。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+            "at_sec": 3.2,
+            "reason": "兄弟重逢切上楼",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+            "at_sec": 5.7,
+            "reason": "上楼切潘金莲初见反应",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip05_first.png",
+        "relay_boundary": false
+      },
+      "label": "兄弟重逢，楼上第一次看见",
+      "location_id": "LOC_YANGGU_STREET",
+      "props_and_objects": [
+        "PROP_BADGE",
+        "PROP_CAKE_POLE",
+        "PROP_STAIR_RAIL"
+      ],
+      "scene": "LOC_YANGGU_STREET→LOC_WUDA_HOME/日",
+      "sound_needs": {
+        "dialogue_indices": [
+          10,
+          11
+        ],
+        "narration_indices": [
+          12
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_WUDA、CHAR_PANJINLIAN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/克制常服态",
+        "CHAR_PANJINLIAN/试探态",
+        "CHAR_WUDA/在场后转画外"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUSONG/克制常服态, CHAR_PANJINLIAN/试探态, CHAR_WUDA/在场后转画外；关键物件 PROP_DINING_TABLE, PROP_TEA_CUP, PROP_DOORFRAME。",
+        "camera": "景别/机位：MCU；视线/轴线：潘画左看右，武松多半垂眼或看器物；模板：relationship_turn。",
+        "post": "转场 窗外日光溶成雪夜冷蓝，门轴声接武大出门。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+            "at_sec": 5.2,
+            "reason": "提议反打切武松答谢",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 8.0,
+            "reason": "武松答谢切月余匹配蒙太奇",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip06_first.png",
+        "relay_boundary": false
+      },
+      "label": "留住叔叔，一个月越坐越近",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_DINING_TABLE",
+        "PROP_TEA_CUP",
+        "PROP_DOORFRAME"
+      ],
+      "scene": "LOC_WUDA_HOME/日→月余蒙太奇",
+      "sound_needs": {
+        "dialogue_indices": [
+          13,
+          14
+        ],
+        "narration_indices": [
+          15
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/克制警觉态",
+        "CHAR_PANJINLIAN/主动试探态"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUSONG/克制警觉态, CHAR_PANJINLIAN/主动试探态；关键物件 PROP_DOOR_LATCH, PROP_BRAZIER, PROP_WINE_CUP。",
+        "camera": "景别/机位：MS；视线/轴线：潘画左看右，武松先向下看杯再看画右后门；模板：dialogue_shot_reverse。",
+        "post": "转场 潘的句尾留在武松反应上形成L-cut。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+            "at_sec": 3.6,
+            "reason": "门闩插入切炭盆邀饮",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+            "at_sec": 8.4,
+            "reason": "潘提议切武松反应",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip07_first.png",
+        "relay_boundary": false
+      },
+      "label": "雪夜落闩，炭火邀饮",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_DOOR_LATCH",
+        "PROP_BRAZIER",
+        "PROP_WINE_CUP"
+      ],
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          17,
+          18
+        ],
+        "narration_indices": [
+          16
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、PROP_DOOR_LATCH、PROP_WINE_CUP；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/克制警觉态",
+        "CHAR_PANJINLIAN/急切试探态"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUSONG/克制警觉态, CHAR_PANJINLIAN/急切试探态；关键物件 PROP_BRAZIER, PROP_WINE_CUP, PROP_CAKE_POLE/记忆插入。",
+        "camera": "景别/机位：CU；视线/轴线：潘画左向右；武松画右向左；模板：dialogue_shot_reverse。",
+        "post": "转场 武松边界句结束后，潘的手越过桌面把杯推到眼前。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_a1.png",
+            "at_sec": 4.9,
+            "reason": "潘的筹码切武松边界反打",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip08_first.png",
+        "relay_boundary": false
+      },
+      "label": "拿武大作筹码，武松守界",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_BRAZIER",
+        "PROP_WINE_CUP",
+        "PROP_CAKE_POLE/记忆插入"
+      ],
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          19,
+          20
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、PROP_WINE_CUP；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/愤怒克制态",
+        "CHAR_PANJINLIAN/越界后羞怒态"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUSONG/愤怒克制态, CHAR_PANJINLIAN/越界后羞怒态；关键物件 PROP_BRAZIER, PROP_WINE_CUP/打翻态, PROP_SPILLED_WINE。",
+        "camera": "景别/机位：ECU；视线/轴线：潘左向右；武松右向左后移开；模板：dialogue_shot_reverse。",
+        "post": "转场 门外脚步声先入，切武大推门后的潘金莲泪眼。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+            "at_sec": 4.2,
+            "reason": "杯越线切挡杯动作",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+            "at_sec": 7.0,
+            "reason": "酒泼炭响切武松起身关系镜",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a3.png",
+            "at_sec": 10.0,
+            "reason": "关系镜切武松警告近景",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip09_first.png",
+        "relay_boundary": false
+      },
+      "label": "半杯越线，摔杯拒诱",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_BRAZIER",
+        "PROP_WINE_CUP/打翻态",
+        "PROP_SPILLED_WINE"
+      ],
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          21,
+          23
+        ],
+        "narration_indices": [
+          22
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、PROP_WINE_CUP、PROP_BRAZIER；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUDA/迟疑态",
+        "CHAR_PANJINLIAN/表演受害态"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUDA/迟疑态, CHAR_PANJINLIAN/表演受害态；关键物件 PROP_CAKE_POLE, PROP_DOOR_LATCH, PROP_WINE_CUP/打翻态。",
+        "camera": "景别/机位：CU；视线/轴线：武大由画右后看潘画左，再看武松画右外；模板：reveal_reaction_chain。",
+        "post": "转场 行李绳收紧的声音切入武松收拾。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_a1.png",
+            "at_sec": 3.1,
+            "reason": "武大主观信息切潘指控",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_a2.png",
+            "at_sec": 7.2,
+            "reason": "潘指控切武大迟疑反应",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip10_first.png",
+        "relay_boundary": false
+      },
+      "label": "先红眼的人改写真相",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_CAKE_POLE",
+        "PROP_DOOR_LATCH",
+        "PROP_WINE_CUP/打翻态"
+      ],
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          25,
+          26
+        ],
+        "narration_indices": [
+          24
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUDA、CHAR_PANJINLIAN、PROP_WINE_CUP；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/搬离态",
+        "CHAR_WUDA/慌乱态",
+        "CHAR_PANJINLIAN/沉默后景"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUSONG/搬离态, CHAR_WUDA/慌乱态, CHAR_PANJINLIAN/沉默后景；关键物件 PROP_LUGGAGE, PROP_DOOR_LATCH, PROP_WINE_CUP/打翻态。",
+        "camera": "景别/机位：MS；视线/轴线：武大看武松背影；武松句末看门闩；模板：relationship_turn。",
+        "post": "转场 武松脚跨门槛匹配切到雪街脚步。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+            "at_sec": 3.2,
+            "reason": "系行李切武大追问",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+            "at_sec": 5.9,
+            "reason": "武大追问切门槛告别",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip11_first.png",
+        "relay_boundary": false
+      },
+      "label": "不争，系好行李离门",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_LUGGAGE",
+        "PROP_DOOR_LATCH",
+        "PROP_WINE_CUP/打翻态"
+      ],
+      "scene": "LOC_WUDA_HOME/雪夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          28,
+          29
+        ],
+        "narration_indices": [
+          27
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_WUDA、PROP_LUGGAGE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/搬离态",
+        "CHAR_WUDA/门内态",
+        "CHAR_PANJINLIAN/门内态"
+      ],
+      "clip_id": "EP01_CLIP12",
+      "department_notes": {
+        "art": "场景 LOC_YANGGU_STREET；入画角色 CHAR_WUSONG/搬离态, CHAR_WUDA/门内态, CHAR_PANJINLIAN/门内态；关键物件 PROP_LUGGAGE, PROP_DOOR, PROP_DOOR_LATCH。",
+        "camera": "景别/机位：LS；视线/轴线：武大看武松背影，潘藏在更深后景；模板：relationship_turn。",
+        "post": "转场 门板黑面匹配切到衙门案桌阴影。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+            "at_sec": 2.4,
+            "reason": "脚步远离切门内外关系定场",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip12_first.png",
+        "relay_boundary": false
+      },
+      "label": "一扇门把兄弟分开",
+      "location_id": "LOC_YANGGU_STREET",
+      "props_and_objects": [
+        "PROP_LUGGAGE",
+        "PROP_DOOR",
+        "PROP_DOOR_LATCH"
+      ],
+      "scene": "LOC_YANGGU_STREET/雪夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          30
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、PROP_DOOR；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/都头公务态",
+        "CHAR_MAGISTRATE/知县态"
+      ],
+      "clip_id": "EP01_CLIP13",
+      "department_notes": {
+        "art": "场景 LOC_COUNTY_YAMEN；入画角色 CHAR_WUSONG/都头公务态, CHAR_MAGISTRATE/知县态；关键物件 PROP_OFFICIAL_DOC, PROP_GIFT_LOAD, PROP_BADGE。",
+        "camera": "景别/机位：MS；视线/轴线：知县左上、武松右下互看；模板：dialogue_shot_reverse。",
+        "post": "转场 武松‘明日’尾音覆盖回到武大家的告别。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+            "at_sec": 2.2,
+            "reason": "公文插入切尊卑关系镜",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+            "at_sec": 5.0,
+            "reason": "知县交代切武松领命",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip13_first.png",
+        "relay_boundary": false
+      },
+      "label": "东京差遣",
+      "location_id": "LOC_COUNTY_YAMEN",
+      "props_and_objects": [
+        "PROP_OFFICIAL_DOC",
+        "PROP_GIFT_LOAD",
+        "PROP_BADGE"
+      ],
+      "scene": "LOC_COUNTY_YAMEN/日/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          31,
+          32
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/出城行装态",
+        "CHAR_WUDA/送别态"
+      ],
+      "clip_id": "EP01_CLIP14",
+      "department_notes": {
+        "art": "场景 LOC_WUDA_HOME；入画角色 CHAR_WUSONG/出城行装态, CHAR_WUDA/送别态；关键物件 PROP_GIFT_LOAD, PROP_DOOR, PROP_BADGE。",
+        "camera": "景别/机位：CU；视线/轴线：兄弟互看后武大看纵深；模板：dialogue_shot_reverse。",
+        "post": "转场 武大的目送视线切到城门纵深中的武松。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP14_a1.png",
+            "at_sec": 4.6,
+            "reason": "叮嘱反打切出城关系全景",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip14_first.png",
+        "relay_boundary": false
+      },
+      "label": "早闭门户，我会回来",
+      "location_id": "LOC_WUDA_HOME",
+      "props_and_objects": [
+        "PROP_GIFT_LOAD",
+        "PROP_DOOR",
+        "PROP_BADGE"
+      ],
+      "scene": "LOC_WUDA_HOME/清晨/门外",
+      "sound_needs": {
+        "dialogue_indices": [
+          33
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_WUDA、PROP_DOOR；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WUSONG/出城远景",
+        "CHAR_PANJINLIAN/隔帘态",
+        "CHAR_XIMENQING/未揭面剪影态"
+      ],
+      "clip_id": "EP01_CLIP15",
+      "department_notes": {
+        "art": "场景 LOC_CITY_GATE；入画角色 CHAR_WUSONG/出城远景, CHAR_PANJINLIAN/隔帘态, CHAR_XIMENQING/未揭面剪影态；关键物件 PROP_GIFT_LOAD, PROP_WINDOW_CURTAIN, PROP_CURTAIN_FORK。",
+        "camera": "景别/机位：ECU；视线/轴线：潘由楼上看城门方向；陌生男子由街下抬眼看楼窗；模板：reveal_reaction_chain。",
+        "post": "转场 叉竿轻碰木檐后硬切黑场。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP15_a1.png",
+            "at_sec": 2.2,
+            "reason": "城门离城切潘隔帘",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP15_a2.png",
+            "at_sec": 4.1,
+            "reason": "潘目送切街下陌生视线",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip15_first.png",
+        "relay_boundary": false
+      },
+      "label": "帘后目送，另一双眼走近",
+      "location_id": "LOC_CITY_GATE",
+      "props_and_objects": [
+        "PROP_GIFT_LOAD",
+        "PROP_WINDOW_CURTAIN",
+        "PROP_CURTAIN_FORK"
+      ],
+      "scene": "LOC_CITY_GATE↔LOC_YANGGU_STREET/清晨/外内并置",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          34
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、CHAR_XIMENQING；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "characters": [
+      "BEAST_TIGER/战败态",
+      "BEAST_TIGER/扑击态",
+      "CHAR_MAGISTRATE/知县态",
+      "CHAR_PANJINLIAN/主动试探态",
+      "CHAR_PANJINLIAN/初见审视态",
+      "CHAR_PANJINLIAN/急切试探态",
+      "CHAR_PANJINLIAN/楼窗压抑态",
+      "CHAR_PANJINLIAN/沉默后景",
+      "CHAR_PANJINLIAN/表演受害态",
+      "CHAR_PANJINLIAN/试探态",
+      "CHAR_PANJINLIAN/越界后羞怒态",
+      "CHAR_PANJINLIAN/门内态",
+      "CHAR_PANJINLIAN/隔帘态",
+      "CHAR_WUDA/卖饼劳作态",
+      "CHAR_WUDA/在场后转画外",
+      "CHAR_WUDA/惊喜态",
+      "CHAR_WUDA/慌乱态",
+      "CHAR_WUDA/迟疑态",
+      "CHAR_WUDA/送别态",
+      "CHAR_WUDA/门内态",
+      "CHAR_WUSONG/克制常服态",
+      "CHAR_WUSONG/克制警觉态",
+      "CHAR_WUSONG/出城行装态",
+      "CHAR_WUSONG/出城远景",
+      "CHAR_WUSONG/愤怒克制态",
+      "CHAR_WUSONG/打虎后至都头态",
+      "CHAR_WUSONG/搬离态",
+      "CHAR_WUSONG/都头公务态",
+      "CHAR_WUSONG/都头态",
+      "CHAR_WUSONG/酒后战损态",
+      "CHAR_XIMENQING/未揭面剪影态",
+      "CROWD_HUNTERS/群像"
+    ],
+    "clip_count": 15,
+    "locations": [
+      "LOC_CITY_GATE",
+      "LOC_COUNTY_YAMEN",
+      "LOC_JINGYANGGANG",
+      "LOC_WUDA_HOME",
+      "LOC_YANGGU_STREET"
+    ],
+    "objects": [
+      "PROP_BADGE",
+      "PROP_BRAZIER",
+      "PROP_CAKE_POLE",
+      "PROP_CAKE_POLE/记忆插入",
+      "PROP_CURTAIN_FORK",
+      "PROP_DINING_TABLE",
+      "PROP_DOOR",
+      "PROP_DOORFRAME",
+      "PROP_DOOR_LATCH",
+      "PROP_GIFT_LOAD",
+      "PROP_LUGGAGE",
+      "PROP_OFFICIAL_DOC",
+      "PROP_QUARTERSTAFF/完整至断裂",
+      "PROP_QUARTERSTAFF/断裂",
+      "PROP_REWARD_SILVER",
+      "PROP_SPILLED_WINE",
+      "PROP_STAIR_RAIL",
+      "PROP_TEA_CUP",
+      "PROP_WINDOW_CURTAIN",
+      "PROP_WINDOW_LATTICE",
+      "PROP_WINE_CUP",
+      "PROP_WINE_CUP/打翻态"
+    ]
+  },
+  "version": 1
+}

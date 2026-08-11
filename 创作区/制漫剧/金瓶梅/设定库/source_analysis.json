@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_source_analysis",
+  "generated_at": "2026-08-11",
+  "title": "金瓶梅",
+  "source": "n2d_source_text",
+  "stats": {
+    "characters": 856434,
+    "chapters": 100,
+    "episode_scaffolds": 100,
+    "episode_scaffolds_source": "脚本/split_plan.json:estimated_total_episode_count"
+  },
+  "source_integrity": {
+    "line_count": 3870,
+    "raw_chapter_heading_count": 110,
+    "adjacent_duplicate_heading_count": 0,
+    "adjacent_duplicate_heading_examples": [],
+    "duplicate_heading_examples_truncated": false,
+    "recognized_heading_count_after_fold": 110,
+    "ignored_wrapper_heading_count": 10,
+    "preferred_unit_system": "hui",
+    "chapter_headings_after_fold": 100,
+    "unique_chapter_count": 100,
+    "missing_chapter_numbers": [],
+    "missing_chapter_numbers_truncated": false,
+    "completion_status": "unknown",
+    "completion_clues": [],
+    "suspected_captions": [
+      {
+        "line": 11,
+        "text": "新刻金瓶梅詞話卷之一",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 358,
+        "text": "新刻金瓶梅詞話卷之二",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 676,
+        "text": "新刻金瓶梅詞話卷之三",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 992,
+        "text": "新刻金瓶梅詞話卷之四",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 1339,
+        "text": "新刻金瓶梅詞話卷之五",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 1730,
+        "text": "新刻金瓶梅詞話卷之六",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 2134,
+        "text": "新刻金瓶梅詞話卷之七",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 2554,
+        "text": "新刻金瓶梅詞話卷之八",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 3131,
+        "text": "新刻金瓶梅詞話卷之九",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 3464,
+        "text": "新刻金瓶梅詞話卷之十",
+        "kind": "suspected_caption"
+      }
+    ],
+    "author_notes": []
+  },
+  "genre_candidates": [
+    {
+      "genre": "女频情感",
+      "score": 3,
+      "signals": [
+        "夫人",
+        "侯府",
+        "重逢"
+      ]
+    }
+  ],
+  "worldview_candidates": [
+    "===抓取来源信息(provenance)—注释块，按章拆分时会自动跳过===",
+    "source_url:https://zh.wikisource.org/wiki/%E9%87%91%E7%93%B6%E6%A2%85%E8%A9%9E%E8%A9%B1%EF%BC%88%E8%",
+    "fetched:2026-06-27",
+    "話說宋徽宗皇帝政和年間，朝中寵信高楊童蔡四個奸臣，以致天下大亂，黎民失業，百姓倒懸，四方盜賊蜂起。罡星下生人間，攪亂大宋花花世界，四處反了四大寇。那四大寇？山東宋江、淮西王慶、河北田虎、江南方臘。皆轟",
+    "一個不顧綱常貴賤，一個那分上下高低。一個色膽歪邪，管甚丈夫利害；一個淫心蕩漾，從他律犯明條。一個氣喑眼瞪，好似牛吼柳影；一個言嬌語澀，渾如鶯囀花間。一個耳畔訴雨意雲情，一個枕邊說山盟海誓。百花園內，翻",
+    "「向晚來，雨過南軒，見池面紅妝凌亂。聽春雷隱隱，雨收雲散。但聞得荷香十里，新月一鉤，此景佳無限。蘭湯初浴罷，晚妝殘，深院黃昏懶去眠。（合）金縷唱，碧筒勸，向冰山雪檻排佳宴。清世界，能有幾人見？」",
+    "「一靈眞性投肚內，這個消息誰得知？人人不識西來意，呀的一聲孕男女。認的娘生鐵面皮，纔得見光明際。崑崙頂上轉大千世界，古彌陀分南北東西。」"
+  ],
+  "characters": [
+    {
+      "name": "西門慶",
+      "mentions": 1265,
+      "evidence": [
+        "」西門慶道：「乾娘，你且來，我問你：間壁這個雌兒是誰的娘子？",
+        "」西門慶道：「莫不是賣棗糕徐三的老婆？",
+        "」西門慶道：「敢是賣馉饳的李三娘子兒？"
+      ]
+    },
+    {
+      "name": "」西門慶",
+      "mentions": 1044,
+      "evidence": [
+        "」西門慶道：「乾娘，你且來，我問你：間壁這個雌兒是誰的娘子？",
+        "」西門慶道：「莫不是賣棗糕徐三的老婆？",
+        "」西門慶道：「敢是賣馉饳的李三娘子兒？"
+      ]
+    },
+    {
+      "name": "月娘",
+      "mentions": 490,
+      "evidence": [
+        "」月娘道：「前者六月間，他家老公公死了，出殯時，我在山頭會他一面。",
+        "」月娘道：「他送盒來親近你我，又是個緊鄰，咱休差了禮數，到明日也送些禮物囬答他。",
+        "」月娘道：「也沒見，他要餅吃，連忙做了與他去就罷了，平白又罵他房裏丫頭怎的？"
+      ]
+    },
+    {
+      "name": "伯爵",
+      "mentions": 439,
+      "evidence": [
+        "」伯爵道：「你央及我央兒，我不說便了。",
+        "」伯爵道：「兄弟們不知哥吃驚。",
+        "」伯爵道：「你量我不敢進去？"
+      ]
+    },
+    {
+      "name": "」月娘",
+      "mentions": 331,
+      "evidence": [
+        "」月娘道：「前者六月間，他家老公公死了，出殯時，我在山頭會他一面。",
+        "」月娘道：「他送盒來親近你我，又是個緊鄰，咱休差了禮數，到明日也送些禮物囬答他。",
+        "」月娘道：「也沒見，他要餅吃，連忙做了與他去就罷了，平白又罵他房裏丫頭怎的？"
+      ]
+    },
+    {
+      "name": "婦人",
+      "mentions": 316,
+      "evidence": [
+        "婦人道：「賊混沌，不曉事的！",
+        "婦人道：「賊混沌，不曉事的！",
+        "」婦人道：「呸！"
+      ]
+    },
+    {
+      "name": "金蓮",
+      "mentions": 289,
+      "evidence": [
+        "」金蓮道：「不要說起，今早倦到了不得。",
+        "」金蓮道：「他與你說些什麼來？",
+        "」金蓮道：「俺倆個悶的慌，在這裏下了兩盤棋，早是沒做賊。"
+      ]
+    },
+    {
+      "name": "」伯爵",
+      "mentions": 289,
+      "evidence": [
+        "」伯爵道：「你央及我央兒，我不說便了。",
+        "」伯爵道：「兄弟們不知哥吃驚。",
+        "」伯爵道：「你量我不敢進去？"
+      ]
+    },
+    {
+      "name": "」婦人",
+      "mentions": 256,
+      "evidence": [
+        "」婦人道：「呸！",
+        "」婦人道：「叔叔何不搬來家裏住，省的在縣前土兵服事，做飯腌臢。",
+        "」婦人道：「叔叔青春多少？"
+      ]
+    },
+    {
+      "name": "」金蓮",
+      "mentions": 229,
+      "evidence": [
+        "」金蓮道：「不要說起，今早倦到了不得。",
+        "」金蓮道：「他與你說些什麼來？",
+        "」金蓮道：「俺倆個悶的慌，在這裏下了兩盤棋，早是沒做賊。"
+      ]
+    },
+    {
+      "name": "玳安",
+      "mentions": 196,
+      "evidence": [
+        "」玳安道：「俺爹在鋪子裏，和傅二叔算帳。",
+        "」玳安道：「俺爹再沒續上姊妹，只是這幾日家中事忙，不得脫身來看得六姨。",
+        "玳安道：「六姨，你何苦如此？"
+      ]
+    },
+    {
+      "name": "李瓶兒",
+      "mentions": 183,
+      "evidence": [
+        "聽見他二人說話，西門慶問婦人多少青春，李瓶兒道：「奴屬羊的，今年二十三歲。",
+        "」李瓶兒道：「好大娘三娘，蒙眾娘擡舉，奴心裏也要來。",
+        "」李瓶兒道：「不消說，一定都來。"
+      ]
+    },
+    {
+      "name": "」玳安",
+      "mentions": 158,
+      "evidence": [
+        "」玳安道：「俺爹在鋪子裏，和傅二叔算帳。",
+        "」玳安道：「俺爹再沒續上姊妹，只是這幾日家中事忙，不得脫身來看得六姨。",
+        "」玳安道：「爹若問小的，只說在街上飲馬，六姨使王奶奶叫了我去，捎了這個柬帖兒，多上覆爹，好歹請爹過去哩。"
+      ]
+    },
+    {
+      "name": "春梅",
+      "mentions": 158,
+      "evidence": [
+        "」春梅道：「中有時道使時道！",
+        "」春梅道：「你問他，我去時還在廚房裏雌著，等他慢條廝禮兒纔和麵兒。",
+        "」春梅道：「爹，你怎的恁沒羞！"
+      ]
+    },
+    {
+      "name": "玉樓",
+      "mentions": 151,
+      "evidence": [
+        "」玉樓道：「纔到後面廚房裏走了一下。",
+        "」玉樓道：「姐姐沒言語。",
+        "」玉樓道：「六姐今日和他爹下棋，輸了一兩銀子，到明日整治東道，請姐姐耍子。"
+      ]
+    },
+    {
+      "name": "經濟",
+      "mentions": 149,
+      "evidence": [
+        "」經濟道：「兒子蒙爹娘擡舉，有甚勞苦？",
+        "」經濟道：「你看沒分曉，娘這裏呼喚不來，且在房中抹牌。",
+        "」經濟道：「娘和大姐看罷，兒子卻不當。"
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "name": "俺們堂",
+      "mentions": 1,
+      "evidence": [
+        "那張小官兒好不有錢，騎著大白馬，四五個小廝跟隨，坐在俺們堂屋裏只顧不去。"
+      ]
+    }
+  ],
+  "foreshadowing_candidates": [
+    {
+      "id": "SETUP_001",
+      "description": "須臾，潘道士瞑目變神，端坐於位上，據案擊令牌，恰似問事之狀，久久乃止。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_002",
+      "description": "既不能御柳栖鸟，暗藏著水妖山怪[2]。",
+      "status": "candidate",
+      "payoff_ep": ""
+    }
+  ],
+  "power_system": {
+    "has_power_system_signal": true,
+    "realm_terms": [
+      "大乘",
+      "先天",
+      "神通"
+    ],
+    "system_terms": [],
+    "notes": "候选项来自 n2d 源文本启发式扫描；正式等级/数值规则需在阶段1精修时人工确认。"
+  },
+  "visual_state_signals": [
+    {
+      "signal": "中毒",
+      "snippet": "陰陽宣唸經畢，揭起千秋旛，扯開白絹，用五輪八寶玩著那兩點神水定睛看時，見武大指甲青，唇口紫，面皮黃，眼皆突出，就知是中毒。"
+    },
+    {
+      "signal": "失明",
+      "snippet": "大娘子一目失明，吃長齋念佛，不管閒事。"
+    }
+  ],
+  "episode_briefs": []
+}

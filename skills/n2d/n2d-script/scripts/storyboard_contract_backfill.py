@@ -322,6 +322,42 @@ def fill_template_contract(clip: dict[str, Any]) -> int:
         setdefault("axis", f"{scene} 左右轴线；反打不越轴")
         setdefault("eyeline", eyeline)
         setdefault("shot_pairing", "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系")
+        characters = [x for x in sorted(visible_entities(clip)) if x.startswith(("CHAR_", "BEAST_", "GROUP_", "CROWD_"))]
+        left = characters[0] if characters else "A方"
+        right = characters[1] if len(characters) > 1 else "B方"
+        setdefault("screen_sides", {"left": left, "right": right, "locked_rule": "按 blocking/axis 锁定，不在反打中互换。"})
+        setdefault("coverage_order", ["双人建立", "A方单人/过肩", "B方反打", "道具或反应缓冲", "重建空间落幅"])
+        setdefault("camera_coverage", "establishing master + paired clean singles/OTS + insert/cutaway + reaction")
+        setdefault("lens_height_distance_match", "A/B反打保持相近焦段、距离、机位高度、光位与背景深度。")
+        setdefault("crossing_axis_policy", "默认禁止越轴；必须越轴时先用建立镜、中线移动或插入镜重新定向。")
+        setdefault("buffer_or_reestablishing", "用手部、道具、门框、空镜或双人建立镜做节奏与重新定向缓冲。")
+    elif template == "reveal_reaction_chain":
+        beats = unique(as_list(tc.get("beats"))) or derived_beats(clip)
+        setdefault("reveal_object", first_text(clip.get("label"), clip.get("dramatic_function"), default="本镜揭示对象按 label 锁定。"))
+        setdefault("knowledge_order", beats)
+        setdefault("reaction_beats", beats[1:] or beats)
+        setdefault("cut_point", f"在“{beats[-1]}”完成后切出，不提前泄露下一镜信息。")
+    elif template == "relationship_turn":
+        beats = unique(as_list(tc.get("beats"))) or derived_beats(clip)
+        setdefault("relationship_state_before", first_text(tc.get("relationship_before"), cont.get("start_state"), default="按起幅关系状态。"))
+        setdefault("turning_action", tc.get("turn_evidence") or beats)
+        setdefault("subtext", f"通过{first_text(tc.get('turn_evidence'), beats, default='本镜动作与反应')}改变关系，不用解释性台词替代。")
+        setdefault("relationship_state_after", first_text(tc.get("relationship_after"), cont.get("end_state"), default="按尾帧关系状态。"))
+    elif template == "multi_character_same_frame":
+        characters = [x for x in sorted(visible_entities(clip)) if x.startswith(("CHAR_", "BEAST_", "GROUP_", "CROWD_"))]
+        setdefault("character_slots", characters or ["按 character_ids 登记角色槽位"])
+        setdefault("face_priority", characters[:2] or ["当前说话者/反应者优先，其他主体降到侧背或虚焦。"])
+        setdefault("overlap_rules", "清晰脸不横排堆叠；前景肩背只作遮挡层，手脚与道具归属必须可读。")
+    elif template == "ensemble_blocking":
+        characters = [x for x in sorted(visible_entities(clip)) if x.startswith(("CHAR_", "BEAST_", "GROUP_", "CROWD_"))]
+        setdefault("screen_positions", {x: "按 blocking 与纵深层级锁定" for x in characters} or {"群像": "按 blocking 锁定"})
+        setdefault("focus_hierarchy", characters[:3] or ["唯一主焦点", "群像反应层"])
+        setdefault("crowd_simplification", "群像只保留侧背、剪影、虚焦和分层反应；每个镜位最多一个清晰人物焦点。")
+    elif template == "multi_person_blocking":
+        characters = [x for x in sorted(visible_entities(clip)) if x.startswith(("CHAR_", "BEAST_", "GROUP_", "CROWD_"))]
+        setdefault("screen_positions", {x: "按 blocking 与纵深层级锁定" for x in characters} or {"群像": "按 blocking 锁定"})
+        setdefault("speaker_focus", characters[0] if characters else "当前说话者/反应者")
+        setdefault("crowd_simplification", "非说话者降为侧背、剪影或虚焦反应层，不把多张清晰脸横向排队。")
     elif template == "intimate_interaction":
         setdefault("consent_boundary", "非亲密悼别/照护动作；接触目的明确，禁止暧昧化")
         setdefault("contact_points", ["手掌轻合眼睑/额前区域", "另一手握刀或撑地保持距离"])
@@ -391,10 +427,12 @@ def backfill(data: dict[str, Any]) -> dict[str, Any]:
         appeared = sorted(cur_visible - prev_visible)
         if not disappeared and not appeared:
             continue
-        prev_sched = schedule(prev)
-        cur_sched = schedule(cur)
-        append_unique_list(cur_sched, "offscreen_presence", disappeared)
-        append_unique_list(prev_sched, "offscreen_presence", appeared)
+        # Do not infer offscreen_presence from a clip boundary.  An entity that
+        # disappears may have left the scene entirely, and one that appears in
+        # the next clip is not necessarily present offscreen in the previous
+        # clip.  Guessing here creates visible/offscreen contradictions at the
+        # paid-generation gate.  Preserve the deterministic entry/exit note and
+        # leave entity_schedule truth to the authored storyboard.
         notes: list[str] = []
         if disappeared:
             notes.append("出画/画外保留：" + "、".join(disappeared))

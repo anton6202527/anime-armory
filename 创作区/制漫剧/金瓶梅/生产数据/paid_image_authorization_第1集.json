@@ -1,0 +1,28 @@
+{
+  "kind": "n2d_paid_image_authorization",
+  "version": 1,
+  "episode": "第1集",
+  "status": "approved",
+  "authorized_at": "2026-08-11T06:04:32Z",
+  "authorized_by": "user:workspace_owner",
+  "source_quote": "批准付费生图，上限140次",
+  "backend": "codex",
+  "model_label": "GPT Image 2",
+  "call_cap": 140,
+  "retries_count_toward_cap": true,
+  "planned_calls": {
+    "mandatory_shared_assets": 82,
+    "episode_frames": 55,
+    "total": 137
+  },
+  "excluded": {
+    "optional_candidate_images": 79,
+    "reason": "不属于必要生产物料；为控制费用默认关闭"
+  },
+  "stop_conditions": [
+    "generation_calls_reach_140",
+    "rights_or_compliance_state_changes",
+    "backend_requests_new_external_authority",
+    "repeated_quality_failure_triggers_stop_loss"
+  ]
+}

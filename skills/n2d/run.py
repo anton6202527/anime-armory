@@ -5,6 +5,8 @@
 与"代理创作/花钱生成"，所以本编排器不把 stage 当 subprocess 一把梭跑完——它只**自动跑掉
 确定性前置**（gate / model-router / doctor / compliance / 身份矩阵刷新），跑到第一个
 「需要脑子 / 需要钱包 / 需要签字」的点就停，交回一张结构化「下一步动作卡」NextAction。
+项目若由负责人显式启用 `人工批准策略=仅高风险停审` 并落有效授权，confirmed 的低风险内部
+交接可由编排器按授权自动记录代理签收；付费、合规/权利、声音克隆、公开发布和不可逆变更仍停。
 
 用法：
     python3 run.py next <作品根> [第N集] [--json] [--auto] [--preview]
@@ -1348,6 +1350,7 @@ def _run_production_breakdown_prework(p: Probes, root: str, ep: str) -> None:
     New projects hit this at `image_prompt`; old projects may already have
     `出图prompt=✅`, so `image` also rechecks it before paid generation.
     """
+    _run_delegated_signoff_prework(p, root, "p3", ep)
     production_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "production_breakdown.py")
     if not os.path.exists(production_script):
         return
@@ -1377,6 +1380,7 @@ def _run_production_breakdown_prework(p: Probes, root: str, ep: str) -> None:
 
 def _run_story_acceptance_prework(p: Probes, root: str, ep: str, packet_kind: str) -> None:
     """Traditional low-cost acceptance: table read before storyboard, animatic before image prompt."""
+    _run_delegated_signoff_prework(p, root, packet_kind, ep)
     script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "story_acceptance_packets.py")
     if not os.path.exists(script):
         return
@@ -1402,6 +1406,53 @@ def _run_story_acceptance_prework(p: Probes, root: str, ep: str, packet_kind: st
         detail = str(e)[:160]
         _record_prework_block(p, f"story_acceptance_{packet_kind}", f"story_acceptance_{packet_kind} 无法运行：{detail}")
         p.prework.append({"step": f"story_acceptance_{packet_kind}", "status": "block", "detail": detail})
+
+
+def _run_delegated_signoff_prework(p: Probes, root: str, profile: str, ep: str = "") -> None:
+    """Apply an owner-authorized, hash-bound internal signoff when eligible.
+
+    This helper cannot broaden the authorization: `autonomy.py` itself rejects
+    paid/release/destructive domains and refuses draft evidence.  A missing
+    artifact remains the responsibility of the stage creator and is reported by
+    the normal pack checker immediately afterwards.
+    """
+    if str(get_setting(root, "人工批准策略", "逐节点人工批准") or "") != "仅高风险停审":
+        return
+    script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "autonomy.py")
+    if not os.path.exists(script):
+        detail = "已启用仅高风险停审，但缺 autonomy.py，拒绝静默回退或伪造签收"
+        _record_prework_block(p, "autonomy_signoff", detail)
+        p.prework.append({"step": "autonomy_signoff", "status": "block", "detail": detail})
+        return
+    args = [sys.executable, script, "approve", root, profile]
+    if ep:
+        args.append(ep)
+    args.append("--json")
+    try:
+        result = _run(args)
+        report = _parse_trailing_json(result.stdout) or {}
+        status = str(report.get("status") or "error")
+        if status in {"approved", "already_approved"}:
+            p.prework.append({
+                "step": f"autonomy_signoff_{profile}",
+                "status": "pass",
+                "detail": f"{status} · owner-delegated · hash-bound",
+            })
+        elif status == "not_ready":
+            p.prework.append({
+                "step": f"autonomy_signoff_{profile}",
+                "status": "skip",
+                "detail": "待签产物仍是 draft/缺失；完成内容后下次 next 自动签收",
+            })
+        else:
+            issues = report.get("issues") or []
+            detail = "；".join(str(item) for item in issues[:3]) or (result.stderr or result.stdout or "")[:180]
+            _record_prework_block(p, "autonomy_signoff", f"项目级自主授权无效：{detail}")
+            p.prework.append({"step": f"autonomy_signoff_{profile}", "status": "block", "detail": detail})
+    except Exception as exc:  # pragma: no cover
+        detail = str(exc)[:180]
+        _record_prework_block(p, "autonomy_signoff", f"自主签收无法运行：{detail}")
+        p.prework.append({"step": f"autonomy_signoff_{profile}", "status": "block", "detail": detail})
 
 
 def _run_production_mode_router_prework(p: Probes, root: str, ep: str) -> None:
@@ -1872,6 +1923,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
         dev_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "development_pack.py")
         if os.path.exists(dev_script):
             try:
+                _run_delegated_signoff_prework(p, root, "p1")
                 r = _run([sys.executable, dev_script, root, "check", "--json", "--write-missing"])
                 report = _parse_trailing_json(r.stdout) or {}
                 status = str(report.get("status") or ("pass" if r.returncode == 0 else "block")).strip()
@@ -1954,6 +2006,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
         director_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "director_blocking_pack.py")
         if os.path.exists(director_script):
             try:
+                _run_delegated_signoff_prework(p, root, "p2", ep)
                 r = _run([sys.executable, director_script, root, ep, "check", "--json", "--write-missing"])
                 report = _parse_trailing_json(r.stdout) or {}
                 status = str(report.get("status") or ("pass" if r.returncode == 0 else "block")).strip()

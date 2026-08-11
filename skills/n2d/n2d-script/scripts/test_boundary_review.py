@@ -13,6 +13,7 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import boundary_review as BR  # noqa: E402
+import autonomy_policy as AP  # noqa: E402
 
 
 def _mk_work(raw_text):
@@ -275,6 +276,43 @@ def test_record_api_rejects_empty_keep_fields_and_accept_risk():
         BR.record(decision="keep", notes="已看", semantic_evidence={}, **common)
     with pytest.raises(ValueError, match="accept_risk"):
         BR.record(decision="accept_risk", notes="愿意承担", **common)
+
+
+def test_delegated_boundary_keep_is_auditable_but_mutation_still_requires_human():
+    root = _mk_work(RISKY)
+    (Path(root) / "_设置.md").write_text("- 人工批准策略：仅高风险停审\n", encoding="utf-8")
+    authorization = AP.new_authorization(
+        root,
+        authorized_by="user:owner",
+        source_quote="普通边界按最优情况继续，改边界和高风险再问。",
+    )
+    AP.write_authorization(root, authorization)
+    drafted = BR.draft(root, write=True)
+    for row in drafted["reviews"]:
+        result = BR.record(
+            root,
+            row["blocker_id"],
+            decision="keep",
+            notes="因果与动作闭环成立，保留当前 raw 边界。",
+            reviewer=AP.DELEGATED_REVIEWER_ID,
+            semantic_evidence={"reason": "相邻段落连续，改写冷开即可"},
+            delegated=True,
+        )
+        assert result["entry"]["delegation"]["authorized_by"] == "user:owner"
+    assert BR.validate(root)["ok"]
+
+    raw = Path(root) / "脚本" / "第1集" / "raw.txt"
+    raw.write_text(RISKY + "边界发生改变。", encoding="utf-8")
+    with pytest.raises(ValueError, match="不可代理签收"):
+        BR.record(
+            root,
+            drafted["reviews"][0]["blocker_id"],
+            decision="rewrite",
+            notes="试图代理不可逆改边界。",
+            reviewer=AP.DELEGATED_REVIEWER_ID,
+            source_mapping=[{"from": "U1", "to": "E1"}],
+            delegated=True,
+        )
 
 
 def test_record_mutation_requires_changed_raw_and_builds_receipt_from_old_contract():

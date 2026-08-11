@@ -45,6 +45,17 @@ def test_set_preserves_bold_key_and_appends_record(tmp_path: Path, capsys) -> No
     assert "设置 更新重制策略 = 严审刷新" in text
 
 
+def test_autonomy_approval_setting_is_project_scoped_and_valid(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+
+    rc = cli.main(["set", str(root), "人工批准策略", "仅高风险停审", "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["new"] == "仅高风险停审"
+    assert "- 人工批准策略：仅高风险停审" in (root / "_设置.md").read_text(encoding="utf-8")
+
+
 def test_audit_flags_invalid_values(tmp_path: Path, capsys) -> None:
     root = make_project(tmp_path)
     (root / "_设置.md").write_text("- 更新重制策略：坏值\n", encoding="utf-8")

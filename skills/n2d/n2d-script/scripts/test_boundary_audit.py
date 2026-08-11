@@ -118,6 +118,18 @@ def test_punctuation_alone_is_not_double_counted_as_strong_hook():
     assert data["episodes"][0]["strength"] == 1
 
 
+def test_late_imperial_hui_headings_are_real_episode_boundaries():
+    eps = [
+        "第一囬 景陽岡武松打虎\n武松逼问奸人，对方招认，原来另有隐情！",
+        "第二囘 西門慶簾下遇金蓮\n王婆设局逼近，金莲反击，竟留下新的把柄！",
+        "第三廻 王婆定十件挨光計\n郓哥撞破真相，众人追问，原来祸根已种！",
+    ]
+    root = _mk_work(eps, "题材: 世情古装\n变现模式: 免费\n")
+    data = _run_json(root)
+    assert all(row["chapter"] for row in data["episodes"])
+    assert not any(b["code"] == "chapter_inside_continuation" for b in data["blockers"])
+
+
 def test_paid_mode_without_explicit_wall_is_advisory_only():
     root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n")
     data, rc = _run(root, "--strict", "--json")

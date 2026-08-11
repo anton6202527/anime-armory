@@ -1,0 +1,138 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=character_catalog; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"16:9\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_25岁武大家常态_定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表_定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成中性生产级角色参考图：图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png；本次目标是同源六联表情表：以已通过的角色正面脸锚为母图，在 2×3 等分网格中依次呈现冷静、警觉、震惊、隐忍、将哭、决绝六种肩颈以上表情… 主体：CHAR_PANJINLIAN/25岁武大家常态；鹅蛋脸细弯眉·清醒杏眼·乌黑低髻木簪·青黛窄袖枣红裙·指尖试探；25岁；第1集武大家常为青黛窄袖交领衫、灰青内领、暗枣红长裙、素布腰带；衣料整洁但不华贵。雪夜只加深领口层次与炭火暖色，不突然换艳装。；素木簪、小布香囊；第1集无贵重金银首饰锚；25岁；鹅蛋脸，细弯眉，杏眼，鼻梁秀直，唇峰清楚；暖白偏桃肤色；不套网红尖脸或浓艳蛇蝎妆。；乌黑低髻，鬓边收束，素木簪；家常态不插满头金饰 构图：统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，统一中性灰白/18%灰棚拍背景，背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；柔和均匀棚拍光，严格继承项目 style_contract 与 style_anchor 的线条、材质和色彩管理；不擅自改画风，不做复杂剧情调度。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表的source_frame参考 图2作为25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表的source_frame参考 图3作为CHAR_PANJINLIAN/25岁武大家常态的character参考 图4作为CHAR_PANJINLIAN/25岁武大家常态的character参考 图5作为CHAR_PANJINLIAN/25岁武大家常态的character参考 保持一致：25岁；鹅蛋脸，细弯眉，杏眼，鼻梁秀直，唇峰清楚；暖白偏桃肤色；不套网红尖脸或浓艳蛇蝎妆。；乌黑低髻，鬓边收束，素木簪；家常态不插满头金饰；第1集武大家常为青黛窄袖交领衫、灰青内领、暗枣红长裙、素布腰带… 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 可见身体与鞋脚结构完整、裁切自然、接地明确 画幅：16:9 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1751,
+  "actual_submit_prompt_sha256": "4d325da54bc01ae299e3eeb8f67a13d7565acd0d7441024f412614896f46f498",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=character_catalog; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"16:9\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_25岁武大家常态_定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表_定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成中性生产级角色参考图：图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png；本次目标是同源六联表情表：以已通过的角色正面脸锚为母图，在 2×3 等分网格中依次呈现冷静、警觉、震惊、隐忍、将哭、决绝六种肩颈以上表情… 主体：CHAR_PANJINLIAN/25岁武大家常态；鹅蛋脸细弯眉·清醒杏眼·乌黑低髻木簪·青黛窄袖枣红裙·指尖试探；25岁；第1集武大家常为青黛窄袖交领衫、灰青内领、暗枣红长裙、素布腰带；衣料整洁但不华贵。雪夜只加深领口层次与炭火暖色，不突然换艳装。；素木簪、小布香囊；第1集无贵重金银首饰锚；25岁；鹅蛋脸，细弯眉，杏眼，鼻梁秀直，唇峰清楚；暖白偏桃肤色；不套网红尖脸或浓艳蛇蝎妆。；乌黑低髻，鬓边收束，素木簪；家常态不插满头金饰 构图：统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，统一中性灰白/18%灰棚拍背景，背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；柔和均匀棚拍光，严格继承项目 style_contract 与 style_anchor 的线条、材质和色彩管理；不擅自改画风，不做复杂剧情调度。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表的source_frame参考 图2作为25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表的source_frame参考 图3作为CHAR_PANJINLIAN/25岁武大家常态的character参考 图4作为CHAR_PANJINLIAN/25岁武大家常态的character参考 图5作为CHAR_PANJINLIAN/25岁武大家常态的character参考 保持一致：25岁；鹅蛋脸，细弯眉，杏眼，鼻梁秀直，唇峰清楚；暖白偏桃肤色；不套网红尖脸或浓艳蛇蝎妆。；乌黑低髻，鬓边收束，素木簪；家常态不插满头金饰；第1集武大家常为青黛窄袖交领衫、灰青内领、暗枣红长裙、素布腰带… 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 可见身体与鞋脚结构完整、裁切自然、接地明确 画幅：16:9 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态__384fba505331_529x941_to_1024x1822.png",
+        "role": "source_frame",
+        "sha256": "c0eebb34a34a7c6d061f2431be1249066e665f0d3030c87d40ec6c1bfb0337ba"
+      },
+      {
+        "index": 2,
+        "owner": "25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图__245e027373b6_1672x941_to_1819x1024.png",
+        "role": "source_frame",
+        "sha256": "d557cb0f71e4762f6a03f142be45df6b3826b248ee377954042e48787532523e"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "1e8570b01cf17d7b555a10a7ca1477353dcf0dcc13d4c87c908cb871827502c0"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身__b9953dec4b2d_529x941_to_1024x1822.png",
+        "role": "character",
+        "sha256": "3a7b8f60b7adccf888fd14ee400ea98a080fe391f4e2a636651685bc65c251d1"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度__7dfcc34d9f07_529x941_to_1024x1822.png",
+        "role": "character",
+        "sha256": "695347bf67e23dee4d9924aa950577f8202ee212829337c7f144c74f2d7e73f3"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "16:9",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "ab3c69f1e9c3758b5e4d5fd539347eb49c6f1bac188ee63d122bb50f749464ee",
+    "compiler_decisions": [],
+    "execution_context_sha256": "d1dd6d3b58670acc511d3b52c61a613209227cae956ca2ee741d9c1559ccb63b",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:43>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 43,
+      "constraint_compression": {
+        "policy_guard_input": 1,
+        "policy_guard_output": 1,
+        "preserve_input": 1,
+        "preserve_output": 1
+      },
+      "estimated_text_tokens": 304,
+      "negative_chars": 0,
+      "prompt_chars": 1213,
+      "reference_count": 5
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成中性生产级角色参考图：图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png；本次目标是同源六联表情表：以已通过的角色正面脸锚为母图，在 2×3 等分网格中依次呈现冷静、警觉、震惊、隐忍、将哭、决绝六种肩颈以上表情… 主体：CHAR_PANJINLIAN/25岁武大家常态；鹅蛋脸细弯眉·清醒杏眼·乌黑低髻木簪·青黛窄袖枣红裙·指尖试探；25岁；第1集武大家常为青黛窄袖交领衫、灰青内领、暗枣红长裙、素布腰带；衣料整洁但不华贵。雪夜只加深领口层次与炭火暖色，不突然换艳装。；素木簪、小布香囊；第1集无贵重金银首饰锚；25岁；鹅蛋脸，细弯眉，杏眼，鼻梁秀直，唇峰清楚；暖白偏桃肤色；不套网红尖脸或浓艳蛇蝎妆。；乌黑低髻，鬓边收束，素木簪；家常态不插满头金饰 构图：统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，统一中性灰白/18%灰棚拍背景，背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；柔和均匀棚拍光，严格继承项目 style_contract 与 style_anchor 的线条、材质和色彩管理；不擅自改画风，不做复杂剧情调度。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表的source_frame参考 图2作为25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表的source_frame参考 图3作为CHAR_PANJINLIAN/25岁武大家常态的character参考 图4作为CHAR_PANJINLIAN/25岁武大家常态的character参考 图5作为CHAR_PANJINLIAN/25岁武大家常态的character参考 保持一致：25岁；鹅蛋脸，细弯眉，杏眼，鼻梁秀直，唇峰清楚；暖白偏桃肤色；不套网红尖脸或浓艳蛇蝎妆。；乌黑低髻，鬓边收束，素木簪；家常态不插满头金饰；第1集武大家常为青黛窄袖交领衫、灰青内领、暗枣红长裙、素布腰带… 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 可见身体与鞋脚结构完整、裁切自然、接地明确 画幅：16:9 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态__384fba505331_529x941_to_1024x1822.png",
+        "role": "source_frame",
+        "sha256": "c0eebb34a34a7c6d061f2431be1249066e665f0d3030c87d40ec6c1bfb0337ba"
+      },
+      {
+        "index": 2,
+        "owner": "25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图__245e027373b6_1672x941_to_1819x1024.png",
+        "role": "source_frame",
+        "sha256": "d557cb0f71e4762f6a03f142be45df6b3826b248ee377954042e48787532523e"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "1e8570b01cf17d7b555a10a7ca1477353dcf0dcc13d4c87c908cb871827502c0"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身__b9953dec4b2d_529x941_to_1024x1822.png",
+        "role": "character",
+        "sha256": "3a7b8f60b7adccf888fd14ee400ea98a080fe391f4e2a636651685bc65c251d1"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度__7dfcc34d9f07_529x941_to_1024x1822.png",
+        "role": "character",
+        "sha256": "695347bf67e23dee4d9924aa950577f8202ee212829337c7f144c74f2d7e73f3"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "16:9",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "a06a323e258012181d83a84d3281a2533ab73cf8bc1ab08d99d0fb0be006e0b5",
+    "source_contract_text_sha256": "d06f7ce165d13a91b32458f44bb125b043372ec6c16102429b6a293ffed953ce",
+    "task_type": "character_catalog",
+    "version": 1
+  },
+  "created_at": "2026-08-11T07:44:32+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "4ffe269276be53ee2720c7e85248a7a7b44fc06c1f9fa73453d1ab40ad168e5e",
+  "request_params_sha256": "018914d928d6d859cfb8cd3ab3d0e9a143ac9250cd94d2040234baaef0943fad",
+  "shot": "25岁武大家常态::定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表",
+  "target": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
+  "version": 1
+}

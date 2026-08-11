@@ -1,0 +1,14 @@
+{
+  "kind": "n2d_transition_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "seams": [
+    {"seam_id": "Seam_01", "from_beat": "Beat_01", "to_beat": "Beat_02", "seam_mode": "match_on_action", "seam_mode_source": "explicit", "need_endframe": false, "out_point": "断棒落出画面，武松右拳开始抬起", "in_point": "同一屏幕方向接右拳完成抬起", "transition_type": "动作切", "sound_bridge": "断棒声尾接拳风", "continuity_guard": "武松右手、虎来向与地面光位不变", "seam_evidence": {"action_phase_out": "右拳由腰侧抬至胸前约三分之一", "action_phase_in": "右拳从胸前继续上提进入出拳", "screen_direction": "拳由画面右下向左上，虎仍在左前"}},
+    {"seam_id": "Seam_02", "from_beat": "Beat_02", "to_beat": "Beat_03", "seam_mode": "hard_cut", "seam_mode_source": "explicit", "need_endframe": false, "out_point": "都头腰牌在画面中央轻碰", "in_point": "街面锣鼓与武大抬头，重新建立县西街", "transition_type": "硬切", "sound_bridge": "腰牌金属声切入街面锣鼓", "continuity_guard": "明确换场换时，不伪装连续动作", "seam_evidence": {"editorial_intent": "从公共英雄身份骤切私人家庭关系，制造打虎/家门反差"}},
+    {"seam_id": "Seam_03", "from_beat": "Beat_03", "to_beat": "Beat_04", "seam_mode": "dissolve", "seam_mode_source": "explicit", "need_endframe": false, "out_point": "武松行李放入二楼后房", "in_point": "同一房间一个月后，大雪映窗、门闩落下", "transition_type": "短叠化", "sound_bridge": "日常街声淡出，冬风与门闩声淡入", "continuity_guard": "房屋结构和角色服装基线不变，只切到冬雪状态", "seam_evidence": {"duration_sec": 0.6, "editorial_reason": "压缩一个月日常试探，保留空间连续而不逐日铺陈"}},
+    {"seam_id": "Seam_04", "from_beat": "Beat_04", "to_beat": "Beat_05", "seam_mode": "eyeline_cut", "seam_mode_source": "explicit", "need_endframe": false, "out_point": "潘金莲举起半杯酒看向画右武松", "in_point": "武松画右抬眼看酒盏再看潘金莲", "transition_type": "视线切", "sound_bridge": "炭火底声连续，台词不重叠", "continuity_guard": "潘左武右、酒盏在潘手、火盆主光一致", "seam_evidence": {"eyeline_source": "CHAR_PANJINLIAN由画左看向画右", "eyeline_target": "CHAR_WUSONG与两人之间的半杯酒", "axis": "火盆—酒盏对话轴"}},
+    {"seam_id": "Seam_05", "from_beat": "Beat_05", "to_beat": "Beat_06", "seam_mode": "reaction_cut", "seam_mode_source": "explicit", "need_endframe": false, "out_point": "酒落地、武松拒绝，门外传来武大脚步", "in_point": "潘金莲先红眼，再转向刚进门的武大", "transition_type": "反应切", "sound_bridge": "脚步和门轴声先入半拍", "continuity_guard": "潘仍在画左，武松画右；武大由南街门/楼梯后景进入", "seam_evidence": {"stimulus": "武松明确拒绝且武大回家", "reaction_subject": "CHAR_PANJINLIAN", "reaction_beat": "僵住半拍→收紧眼神→迅速红眼反咬"}},
+    {"seam_id": "Seam_06", "from_beat": "Beat_06", "to_beat": "Beat_07", "seam_mode": "j_cut", "seam_mode_source": "explicit", "need_endframe": false, "out_point": "武松穿过南街门，门轴声未落", "in_point": "县衙公文特写与知县命令", "transition_type": "声音先行", "sound_bridge": "知县‘武都头’在南街门关闭前0.5秒先入", "continuity_guard": "明确换至县衙；武松都头服、行李状态和时间顺序一致", "seam_evidence": {"audio_source": "知县画外音‘武都头’", "audio_lead_sec": 0.5}}
+  ]
+}

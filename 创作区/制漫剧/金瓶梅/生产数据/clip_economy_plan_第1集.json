@@ -1,0 +1,318 @@
+{
+  "clips": [
+    {
+      "clip": "EP01_CLIP01",
+      "duration_sec": 4.893,
+      "economy_class": "selective_detail",
+      "estimated_takes": 2,
+      "merge_blocked_reason": "高动作模板/锚链/奇观镜（安全拆分优先）",
+      "mergeable": false,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "duration_sec": 10.229,
+      "economy_class": "premium_detail",
+      "estimated_takes": 4,
+      "merge_blocked_reason": "高动作模板/锚链/奇观镜（安全拆分优先）",
+      "mergeable": false,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "duration_sec": 13.02,
+      "economy_class": "premium_detail",
+      "estimated_takes": 4,
+      "merge_blocked_reason": "高动作模板/锚链/奇观镜（安全拆分优先）",
+      "mergeable": false,
+      "take_policy": "single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "duration_sec": 10.145,
+      "economy_class": "premium_detail",
+      "estimated_takes": 2,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "duration_sec": 8.37,
+      "economy_class": "premium_detail",
+      "estimated_takes": 3,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "duration_sec": 14.692,
+      "economy_class": "premium_detail",
+      "estimated_takes": 1,
+      "mergeable": true,
+      "take_policy": "single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "duration_sec": 12.577,
+      "economy_class": "premium_detail",
+      "estimated_takes": 3,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "duration_sec": 9.482,
+      "economy_class": "premium_detail",
+      "estimated_takes": 2,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "duration_sec": 14.281,
+      "economy_class": "premium_detail",
+      "estimated_takes": 4,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "duration_sec": 10.699,
+      "economy_class": "premium_detail",
+      "estimated_takes": 3,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "duration_sec": 10.129,
+      "economy_class": "premium_detail",
+      "estimated_takes": 3,
+      "merge_blocked_reason": "高动作模板/锚链/奇观镜（安全拆分优先）",
+      "mergeable": false,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "duration_sec": 5.766,
+      "economy_class": "premium_detail",
+      "estimated_takes": 2,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "duration_sec": 7.746,
+      "economy_class": "selective_detail",
+      "estimated_takes": 3,
+      "mergeable": true,
+      "take_policy": ""
+    },
+    {
+      "clip": "EP01_CLIP14",
+      "duration_sec": 6.569,
+      "economy_class": "premium_detail",
+      "estimated_takes": 1,
+      "mergeable": true,
+      "take_policy": "single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "duration_sec": 5.786,
+      "economy_class": "selective_detail",
+      "estimated_takes": 3,
+      "mergeable": true,
+      "take_policy": ""
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "code": "generation_density_over_budget",
+      "confidence": "heuristic",
+      "message": "本集复杂度=complex（5场景/7角色/4动作镜），当前每分钟预计生成 16.62 次 > 预算 14.0/min。采纳下方 merge/单拍多镜合并后约 9.97/min。简单叙事优先「更少更长的多镜单拍」，不必逐节拍独立成付费 clip。",
+      "severity": "warn"
+    },
+    {
+      "code": "long_clips_force_part_split",
+      "confidence": "heuristic",
+      "message": "9 个 clip 时长超单次生成窗口，被拆成 ≥3 段付费 part：EP01_CLIP02(10.229s→4段), EP01_CLIP03(13.02s→4段), EP01_CLIP05(8.37s→3段), EP01_CLIP07(12.577s→3段), EP01_CLIP09(14.281s→4段), EP01_CLIP10(10.699s→3段)…。「每个独立生成 clip 再简短点」：把这些 beat 写短到单次窗口一段成，或合并内部镜位（take_policy=single_take_multishot），直接减 part 数。时长/节奏改动属阶段2签收变更，本脚本不自动改写。",
+      "severity": "warn"
+    },
+    {
+      "code": "merge_candidates_available",
+      "confidence": "heuristic",
+      "message": "发现 0 组相邻合并候选 + 9 个单 Clip 补 take_policy 候选，采纳后本集预计生成次数 40 → 24。均属阶段2精修的签收变更，由编剧确认后改 storyboard，本脚本不自动改写。",
+      "severity": "warn"
+    }
+  ],
+  "fold_candidates": [],
+  "generated_at": "2026-08-11T04:02:09+00:00",
+  "kind": "n2d_clip_economy_plan",
+  "long_clips": [
+    {
+      "clip": "EP01_CLIP02",
+      "duration_sec": 10.229,
+      "estimated_takes": 4
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "duration_sec": 13.02,
+      "estimated_takes": 4
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "duration_sec": 8.37,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "duration_sec": 12.577,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "duration_sec": 14.281,
+      "estimated_takes": 4
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "duration_sec": 10.699,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "duration_sec": 10.129,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "duration_sec": 7.746,
+      "estimated_takes": 3
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "duration_sec": 5.786,
+      "estimated_takes": 3
+    }
+  ],
+  "merge_groups": [],
+  "ok": true,
+  "rules": [
+    "两条正交预算：takes/min（一个 clip 拆几次生成）与 clips/min（本集被拆成几个 clip）。前者靠 merge/单拍省，后者靠合并相邻节拍减 clip 数。",
+    "生成次数预算按集看，不只按单 Clip 时长看：简单叙事优先「更少更长的多镜单拍」而不是逐节拍独立 clip。",
+    "长 clip（超单次生成窗口、被拆成多段付费 part）会被点名 shorten：把 beat 写短到单次窗口一段成，直接减 part 数（用户诉求「每个独立生成 clip 再简短点」）。",
+    "已生成视频的 Clip 是沉没成本：不进省次数候选、不触发 enforce 阻断；进行中的集不追溯返工，返工走 n2d-update 最小重制。",
+    "合并候选只提案不执行：改 storyboard 是签收产物变更，须编剧在阶段2精修确认。",
+    "高动作模板/锚链/奇观镜不进合并候选：安全拆分与锚帧链优先于省次数（与 shot_split_decision 同口径）。",
+    "本报告全部启发式、report-only（宪法 B10）；密度口径带能力快照日期，会过期，执行前按 C2 刷新。"
+  ],
+  "should_block": false,
+  "single_take_candidates": [
+    {
+      "clip": "EP01_CLIP04",
+      "current_takes": 2,
+      "duration_sec": 10.145,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 1,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "current_takes": 3,
+      "duration_sec": 8.37,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 2,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "current_takes": 3,
+      "duration_sec": 12.577,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 2,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "current_takes": 2,
+      "duration_sec": 9.482,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 1,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "current_takes": 4,
+      "duration_sec": 14.281,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 3,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "current_takes": 3,
+      "duration_sec": 10.699,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 2,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "current_takes": 2,
+      "duration_sec": 5.766,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 1,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "current_takes": 3,
+      "duration_sec": 7.746,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 2,
+      "suggestion": "add_take_policy_single_take_multishot"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "current_takes": 3,
+      "duration_sec": 5.786,
+      "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+      "saving_takes": 2,
+      "suggestion": "add_take_policy_single_take_multishot"
+    }
+  ],
+  "summary": {
+    "budget_per_min": 14.0,
+    "capability_snapshot_date": "2026-07-22",
+    "clip_budget_per_min": 11.0,
+    "clips": 15,
+    "clips_over_budget": false,
+    "clips_per_minute": 6.23,
+    "complexity": {
+      "action_budget_allowance": 2.0,
+      "action_clips": 4,
+      "applied_budget_per_min": 14.0,
+      "budget_per_min": 14.0,
+      "class": "complex",
+      "clip_budget_per_min": 11.0,
+      "distinct_characters": 7,
+      "distinct_locations": 5,
+      "premium_beats": 12
+    },
+    "current_estimated_takes": 40,
+    "economy_mode": "未设置(保守)",
+    "fold_candidates": 0,
+    "long_clips_forcing_parts": 9,
+    "max_take_sec": 15.0,
+    "merge_groups": 0,
+    "over_budget": true,
+    "projected_takes_after_merge": 24,
+    "projected_takes_per_minute": 9.97,
+    "single_take_candidates": 9,
+    "sunk_cost_clips": 0,
+    "takes_per_minute": 16.62,
+    "total_span_sec": 144.384
+  },
+  "version": 1
+}

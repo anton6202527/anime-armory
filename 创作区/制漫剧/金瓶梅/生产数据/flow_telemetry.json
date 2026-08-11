@@ -1,0 +1,34 @@
+{
+  "event_count": 9,
+  "kind": "n2d_flow_telemetry",
+  "last_event_at": "2026-08-11T12:02:11+0800",
+  "milestone_count": 0,
+  "milestones": {},
+  "next_action_count": 9,
+  "orchestrator_latency_ms": {
+    "max": 4034.522,
+    "p50": 1964.009,
+    "p95": 3761.057
+  },
+  "prework": {
+    "cache_hit_rate": 0.0,
+    "cache_hits": 0,
+    "total": 174
+  },
+  "stage_transitions": {
+    "script_stage1->script_stage2": 1,
+    "script_stage2->image_prompt": 1
+  },
+  "stages": {
+    "image_prompt": 2,
+    "script_stage1": 4,
+    "script_stage2": 3
+  },
+  "stop_reasons": {
+    "blocked_by_entry_check": 2,
+    "needs_agent_gen": 3,
+    "prework_failed": 4
+  },
+  "updated_at": "2026-08-11T12:02:11+0800",
+  "version": 1
+}

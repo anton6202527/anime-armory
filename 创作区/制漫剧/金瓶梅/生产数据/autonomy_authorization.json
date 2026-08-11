@@ -1,0 +1,37 @@
+{
+  "allowed_boundary_decisions": [
+    "keep"
+  ],
+  "allowed_internal_actions": [
+    "reversible_text_and_prompt_decisions",
+    "hash_bound_internal_handoff_signoff",
+    "non_mutating_boundary_keep_with_semantic_evidence",
+    "deterministic_checks_and_internal_previews"
+  ],
+  "allowed_signoff_profiles": [
+    "p1",
+    "table_read",
+    "p2",
+    "animatic",
+    "p3"
+  ],
+  "authorization_id": "AUTH_eec6e3d37ec9ea74",
+  "authorized_at": "2026-08-11T03:02:26+00:00",
+  "authorized_by": "user:workspace-owner",
+  "delegated_reviewer_id": "delegate:n2d-agent",
+  "human_confirmation_required": [
+    "paid_generation_or_purchase",
+    "rights_compliance_or_age_rating",
+    "voice_clone_or_biometric_authorization",
+    "public_release_or_distribution",
+    "destructive_or_irreversible_change"
+  ],
+  "independent_review": "waived_by_project_owner_for_allowed_internal_actions",
+  "kind": "n2d_autonomy_authorization",
+  "policy": "only_high_risk_human",
+  "project_name": "金瓶梅",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "source_quote": "同时改写相关 skill，让各节点需要人工批准的情况大幅减少，自行根据最优情况，继续制作下去即可！",
+  "status": "active",
+  "version": 1
+}

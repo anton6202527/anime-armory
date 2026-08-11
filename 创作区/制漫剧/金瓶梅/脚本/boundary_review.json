@@ -1,0 +1,106 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 2,
+  "generated_at": "2026-08-11T02:33:00.845952+00:00",
+  "scope": "all",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第3集",
+      "blocker_id": "E0002-E0003:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0002-E0003",
+        "from_episode": 2,
+        "to_episode": 3,
+        "left_raw_rel": "脚本/第2集/raw.txt",
+        "right_raw_rel": "脚本/第3集/raw.txt",
+        "left_raw_sha256": "0a92d9f7634075b90ebe45faa004257e41c88bac0eefd5977785f107fab4dde5",
+        "right_raw_sha256": "9ebfed95cc774af0ccc2092a8be6f0a84d6ec6c22a9870ab47b49ab6a2423b18",
+        "contract_sha256": "e2f64fce587179430aff9b51db933b89f6868b18ef810198c5ba2c4ef786773e"
+      },
+      "decision": "keep",
+      "notes": "按已批准 P-1 保留第2→3集 raw 边界，阶段1改写第3集冷开。",
+      "reviewed_by": "user:workspace-owner",
+      "reviewed_at": "2026-08-11T02:51:33.028314+00:00",
+      "semantic_evidence": "第2集以王婆答应设局收尾；第3回主体是王婆十步计划与秘密会面，因果连续。弱点仅为回首诗词和解释性起笔，改用十件物什与门闩冷开即可。",
+      "applied_receipt": {},
+      "boundary_contract_sha256": "e2f64fce587179430aff9b51db933b89f6868b18ef810198c5ba2c4ef786773e",
+      "status": "signed"
+    },
+    {
+      "episode": "第4集",
+      "blocker_id": "E0003-E0004:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0003-E0004",
+        "from_episode": 3,
+        "to_episode": 4,
+        "left_raw_rel": "脚本/第3集/raw.txt",
+        "right_raw_rel": "脚本/第4集/raw.txt",
+        "left_raw_sha256": "9ebfed95cc774af0ccc2092a8be6f0a84d6ec6c22a9870ab47b49ab6a2423b18",
+        "right_raw_sha256": "2414280647a686950879d18ff2f46646cb7dbc3213971fd39ec7e9050de4a35b",
+        "contract_sha256": "1dc71be46b1021f908cdf9fa597a1f63d9b5069bf7d711ffb64cebe848530dfc"
+      },
+      "decision": "keep",
+      "notes": "按已批准 P-1 保留第3→4集 raw 边界，阶段1改写第4集冷开。",
+      "reviewed_by": "user:workspace-owner",
+      "reviewed_at": "2026-08-11T02:51:33.144609+00:00",
+      "semantic_evidence": "第3集完成越界；第4回立即推进私情外泄、郓哥起疑和武大捉奸，冲突同线连续。前置果篮滚向茶房门即可形成强冷开。",
+      "applied_receipt": {},
+      "boundary_contract_sha256": "1dc71be46b1021f908cdf9fa597a1f63d9b5069bf7d711ffb64cebe848530dfc",
+      "status": "signed"
+    },
+    {
+      "episode": "第7集",
+      "blocker_id": "E0006-E0007:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0006-E0007",
+        "from_episode": 6,
+        "to_episode": 7,
+        "left_raw_rel": "脚本/第6集/raw.txt",
+        "right_raw_rel": "脚本/第7集/raw.txt",
+        "left_raw_sha256": "e7f84c1d88ec38364752fc1c6e9180d7a838432fea37601f4c0567ae4b40ca0d",
+        "right_raw_sha256": "9141c1ebe71eebfcef00db2a243214b11cc9f3cd112e5a16fb168c518e5d9fc3",
+        "contract_sha256": "47d150f63659e401d1890ce121c50b22232ca054b9b1ae509c1a2a6d438e3f76"
+      },
+      "decision": "keep",
+      "notes": "按已批准 P-1 保留第6→7集 raw 边界，阶段1以交叉剪辑连接转段。",
+      "reviewed_by": "user:workspace-owner",
+      "reviewed_at": "2026-08-11T02:51:33.264243+00:00",
+      "semantic_evidence": "第6集完成命案遮掩并留证；第7回转入孟玉楼婚事，展示西门庆在旧罪未结时继续借婚姻扩张财富，属于主轴转段。证物与聘银交叉剪辑可保因果。",
+      "applied_receipt": {},
+      "boundary_contract_sha256": "47d150f63659e401d1890ce121c50b22232ca054b9b1ae509c1a2a6d438e3f76",
+      "status": "signed"
+    },
+    {
+      "episode": "第8集",
+      "blocker_id": "E0007-E0008:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0007-E0008",
+        "from_episode": 7,
+        "to_episode": 8,
+        "left_raw_rel": "脚本/第7集/raw.txt",
+        "right_raw_rel": "脚本/第8集/raw.txt",
+        "left_raw_sha256": "9141c1ebe71eebfcef00db2a243214b11cc9f3cd112e5a16fb168c518e5d9fc3",
+        "right_raw_sha256": "c82aaa14bdaa576b178c67181b095bf80ceb8ad8ae7fa1d9ef9cbccbd54d9d84",
+        "contract_sha256": "1b0f24550b46b8a9bf11e70e6da819148c762e304a4a9c8b1cfb7ba3f07ad5a8"
+      },
+      "decision": "keep",
+      "notes": "按已批准 P-1 保留第7→8集 raw 边界，阶段1改写第8集冷开。",
+      "reviewed_by": "user:workspace-owner",
+      "reviewed_at": "2026-08-11T02:51:33.388508+00:00",
+      "semantic_evidence": "第7集完成新婚与财产扩张；第8回回到潘金莲等待与失衡，直接兑现新婚对秘密关系的后果。以亡夫灵位和远处新婚鼓乐冷开即可。",
+      "applied_receipt": {},
+      "boundary_contract_sha256": "1b0f24550b46b8a9bf11e70e6da819148c762e304a4a9c8b1cfb7ba3f07ad5a8",
+      "status": "signed"
+    }
+  ],
+  "updated_at": "2026-08-11T02:51:33.388508+00:00"
+}

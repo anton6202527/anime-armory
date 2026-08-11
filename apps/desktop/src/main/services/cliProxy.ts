@@ -20,7 +20,7 @@ export const MAX_CANVAS_PROMPT_CHARS = 24_000
 const MODEL_ID_PATTERN = /^[a-zA-Z0-9._:/-]{1,160}$/
 const GPT_MODEL_PATTERN = /^(?:[a-z0-9._-]+\/)*gpt(?:-|$)/i
 const GPT_IMAGE_MODEL_PATTERN = /(?:^|\/)gpt-image(?:-|$)|(?:^|\/)dall-e(?:-|$)/i
-const ASPECT_RATIOS = new Set(['1:1', '3:2', '2:3', '4:3', '3:4', '16:9', '9:16'])
+const ASPECT_RATIOS = new Set(['1:1', '2:1', '3:2', '2:3', '4:3', '3:4', '16:9', '9:16'])
 
 export type CanvasGenerationModality = 'text' | 'image'
 
@@ -36,6 +36,7 @@ export interface CanvasGenerationRequest {
   model: string
   prompt: string
   aspectRatio?: string
+  quality?: 'standard' | 'high'
   image?: { base64: string; mimeType: string }
 }
 
@@ -199,12 +200,16 @@ function parseGenerationRequest(value: unknown): CanvasGenerationRequest {
     ? input.aspectRatio.trim()
     : undefined
   if (aspectRatio && (modality !== 'image' || !ASPECT_RATIOS.has(aspectRatio))) {
-    throw new CliProxyError(400, 'canvas_generation_invalid_request', '图片比例仅支持 1:1、3:2、2:3、4:3、3:4、16:9 或 9:16')
+    throw new CliProxyError(400, 'canvas_generation_invalid_request', '图片比例仅支持 1:1、2:1、3:2、2:3、4:3、3:4、16:9 或 9:16')
+  }
+  const quality = input.quality === 'standard' || input.quality === 'high' ? input.quality : undefined
+  if (input.quality !== undefined && (modality !== 'image' || !quality)) {
+    throw new CliProxyError(400, 'canvas_generation_invalid_request', '图片画质无效')
   }
   let image: CanvasGenerationRequest['image']
   if (input.image !== undefined) {
-    if (modality !== 'text' || !input.image || typeof input.image !== 'object' || Array.isArray(input.image)) {
-      throw new CliProxyError(400, 'canvas_generation_invalid_request', '参考图片仅支持文本模型视觉分析')
+    if (!input.image || typeof input.image !== 'object' || Array.isArray(input.image)) {
+      throw new CliProxyError(400, 'canvas_generation_invalid_request', '参考图片格式无效')
     }
     const rawImage = input.image as Record<string, unknown>
     const base64 = typeof rawImage.base64 === 'string' ? rawImage.base64.replace(/\s/g, '') : ''
@@ -214,16 +219,17 @@ function parseGenerationRequest(value: unknown): CanvasGenerationRequest {
     }
     const bytes = Buffer.from(base64, 'base64')
     const detectedMimeType = imageMimeType(bytes)
-    if (!bytes.length || bytes.length > MAX_INPUT_IMAGE_BYTES || detectedMimeType !== mimeType) {
+    if (!bytes.length || bytes.length > MAX_INPUT_IMAGE_BYTES || detectedMimeType !== mimeType
+      || (modality === 'image' && mimeType === 'image/gif')) {
       throw new CliProxyError(400, 'canvas_generation_invalid_request', '参考图片格式无效或超过 12MB')
     }
     image = { base64: bytes.toString('base64'), mimeType }
   }
-  return { modality, model, prompt, ...(aspectRatio ? { aspectRatio } : {}), ...(image ? { image } : {}) }
+  return { modality, model, prompt, ...(aspectRatio ? { aspectRatio } : {}), ...(quality ? { quality } : {}), ...(image ? { image } : {}) }
 }
 
 function imageSize(aspectRatio?: string): '1024x1024' | '1536x1024' | '1024x1536' {
-  if (aspectRatio === '16:9' || aspectRatio === '3:2' || aspectRatio === '4:3') return '1536x1024'
+  if (aspectRatio === '2:1' || aspectRatio === '16:9' || aspectRatio === '3:2' || aspectRatio === '4:3') return '1536x1024'
   if (aspectRatio === '9:16' || aspectRatio === '2:3' || aspectRatio === '3:4') return '1024x1536'
   return '1024x1024'
 }
@@ -497,16 +503,31 @@ export class CliProxyService {
       return { modality: 'text', model: input.model, text }
     }
 
-    const payload = await this.request('/v1/images/generations', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        model: input.model,
-        prompt: input.prompt,
-        size: imageSize(input.aspectRatio),
-        response_format: 'b64_json',
-      }),
-    }, IMAGE_TIMEOUT_MS, MAX_IMAGE_RESPONSE_BYTES, signal)
+    const imageRequest = input.image ? (() => {
+      const form = new FormData()
+      form.set('model', input.model)
+      form.set('prompt', input.prompt)
+      form.set('size', imageSize(input.aspectRatio))
+      form.set('quality', input.quality === 'high' ? 'high' : 'medium')
+      form.set('response_format', 'b64_json')
+      const extension = input.image.mimeType === 'image/jpeg' ? 'jpg' : input.image.mimeType.split('/')[1] || 'png'
+      form.set('image', new Blob([Buffer.from(input.image.base64, 'base64')], { type: input.image.mimeType }), `reference.${extension}`)
+      return { pathname: '/v1/images/edits', init: { method: 'POST', body: form } satisfies RequestInit }
+    })() : {
+      pathname: '/v1/images/generations',
+      init: {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          model: input.model,
+          prompt: input.prompt,
+          size: imageSize(input.aspectRatio),
+          quality: input.quality === 'high' ? 'high' : 'medium',
+          response_format: 'b64_json',
+        }),
+      } satisfies RequestInit,
+    }
+    const payload = await this.request(imageRequest.pathname, imageRequest.init, IMAGE_TIMEOUT_MS, MAX_IMAGE_RESPONSE_BYTES, signal)
     const record = payload && typeof payload === 'object' && !Array.isArray(payload)
       ? payload as Record<string, unknown>
       : null

@@ -407,6 +407,47 @@ COMPACT_NARRATIVE_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
         "post_cue_points",
         "vfx_rule",
     ),
+    # Narrative/directing templates are prompt-critical even though they are
+    # not motion spectacles.  Keeping their required fields in the shared
+    # contract lets storyboard backfill and review gates use one schema.
+    "dialogue_shot_reverse": TEMPLATE_BASE_FIELDS + (
+        "axis",
+        "eyeline",
+        "shot_pairing",
+        "screen_sides",
+        "coverage_order",
+        "camera_coverage",
+        "lens_height_distance_match",
+        "crossing_axis_policy",
+        "buffer_or_reestablishing",
+    ),
+    "reveal_reaction_chain": TEMPLATE_BASE_FIELDS + (
+        "reveal_object",
+        "knowledge_order",
+        "reaction_beats",
+        "cut_point",
+    ),
+    "relationship_turn": TEMPLATE_BASE_FIELDS + (
+        "relationship_state_before",
+        "turning_action",
+        "subtext",
+        "relationship_state_after",
+    ),
+    "multi_character_same_frame": TEMPLATE_BASE_FIELDS + (
+        "character_slots",
+        "face_priority",
+        "overlap_rules",
+    ),
+    "ensemble_blocking": TEMPLATE_BASE_FIELDS + (
+        "screen_positions",
+        "focus_hierarchy",
+        "crowd_simplification",
+    ),
+    "multi_person_blocking": TEMPLATE_BASE_FIELDS + (
+        "screen_positions",
+        "speaker_focus",
+        "crowd_simplification",
+    ),
 }
 
 LARGE_ESTABLISHING_FIELDS: Tuple[str, ...] = (

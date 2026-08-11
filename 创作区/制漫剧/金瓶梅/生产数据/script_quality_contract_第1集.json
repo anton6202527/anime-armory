@@ -1,0 +1,588 @@
+{
+  "content_hash": "aae3e0d787c5e0ac",
+  "contract_hash": "aae3e0d787c5e0ac",
+  "episode": "第1集",
+  "findings": [],
+  "generated_at": "2026-08-11T04:16:19+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "pacing_allocation",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "adaptation_triage": {
+      "decisions": [
+        "defer",
+        "dramatize",
+        "narrate",
+        "omit"
+      ],
+      "items": 9,
+      "path": "脚本/第1集/adaptation_triage.json"
+    },
+    "audience_question_ledger": {
+      "ending_hook": true,
+      "findings": [],
+      "payoff_contexts": [
+        "我得离开。门，我替你关不上。 [镜头30·旁白·悲凉] 因此，他搬出了那扇门。想避开闲话，反倒把哥哥留在了门里。",
+        "银、腰牌、入城 | MS/CU/ECU 蒙太奇 | 爽点兑现与主题反转 | dissolve | | EP01_CLIP04",
+        "在无力形成强反差。 audience_payoff 开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和",
+        "audience_payoff 开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和东京差遣把危险留在",
+        "EP01_CLIP09 payoff_evidence 半杯邀饮升级为摔杯拒诱和明确警告 bait_risk low hook_id",
+        "spectacle_story_function 用清晰拆招而非混战，证明武松临危判断与意志。 rhythm 加速·碎切→爽点前停",
+        "CU硬切→主题留白 dramatic_function 快速兑现打虎结局、让银与任都头，再用门影把胜利转成人心难题。 audience_effect",
+        "audience_effect 明确知道武松的底线与潘接下来必须升级的压力。 continuity_story start_state"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "[镜头24·旁白·压迫] 武大回家时，她先红了眼，也先把真相藏了起来。 [镜头25·潘金莲·委屈·快] 你那好兄弟，",
+          "question_id": "Q01",
+          "signal": "真相",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "逼近。 ### EP01_CLIP10｜先红眼的人改写真相｜1:37.689–1:48.388 武大带雪推门，主",
+          "question_id": "Q02",
+          "signal": "真相",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "content_proposition 一个能打死猛虎的人，为什么后来守不住哥哥的家门？ content_promise",
+          "question_id": "Q03",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "EP01_CLIP10 payoff_evidence 潘金莲越界未成后倒置真相反咬武松 bait_risk low hook_id BOUNDARY_TEST",
+          "question_id": "Q04",
+          "signal": "真相",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "怒气，潘坐在画左由惊转羞怒。 label 先红眼的人改写真相 scene LOC_WUDA_HOME/雪夜/内 subtitle_lines",
+          "question_id": "Q05",
+          "signal": "真相",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "subtitle_lines 武大回家时，她先红了眼，也先把真相藏了起来。 你那好兄弟，趁家里没人，反来调戏我！ 我兄弟",
+          "question_id": "Q06",
+          "signal": "真相",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "条件。 audience_effect 知道真正危险不是任务本身，而是武松离开后家门无人。 continuity_story",
+          "question_id": "Q07",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": "静音也能读懂虎口将合、武松无处可退。",
+        "clip_id": "EP01_CLIP01",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "把观众直接丢进虎扑最危险的一瞬，先问他能否活。",
+        "duration": 4.893,
+        "key_clip": true,
+        "pacing_role": "冷开场主钩与生死危机",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": true,
+        "spectacle_story_function": "建立武松的外在英雄能力，作为后续无法处理人心的反差基准。"
+      },
+      {
+        "audience_effect": "先因断棒惊一下，再因赤手迎虎得到昂扬爽感。",
+        "clip_id": "EP01_CLIP02",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。",
+        "duration": 10.229,
+        "key_clip": true,
+        "pacing_role": "打虎主看点与能力证明",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight",
+        "spectacle_clip": true,
+        "spectacle_story_function": "用清晰拆招而非混战，证明武松临危判断与意志。"
+      },
+      {
+        "audience_effect": "得到一次完整爽点，同时被一句‘人心更难’带入真正主线。",
+        "clip_id": "EP01_CLIP03",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "快速兑现打虎结局、让银与任都头，再用门影把胜利转成人心难题。",
+        "duration": 13.02,
+        "key_clip": true,
+        "pacing_role": "打虎兑现、人格建立与内外困局转折",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight",
+        "spectacle_clip": false,
+        "spectacle_story_function": "拳落只拍结果，不拖长搏虎；奇观为人物名望与道德声望服务。"
+      },
+      {
+        "audience_effect": "理解三角关系中的结构性不平与各自欲望。",
+        "clip_id": "EP01_CLIP04",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "用武大低处挑担与潘金莲高处受困的空间反差，交代婚姻困局而不替任何人洗白。",
+        "duration": 10.145,
+        "key_clip": false,
+        "pacing_role": "人物困境建立与欲望来源",
+        "primary_runtime": true,
+        "runtime_priority": "selective_primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "短暂放松后意识到新的欲望线已经开启。",
+        "clip_id": "EP01_CLIP05",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "先给兄弟重逢的真情，再让潘金莲的观察改变场景温度。",
+        "duration": 8.67,
+        "key_clip": false,
+        "pacing_role": "兄弟情建立与危险视线入场",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "看懂潘金莲不是突然转向，而是在一个月里逐步试探。",
+        "clip_id": "EP01_CLIP06",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "让‘照应’的合理表面逐渐变成越界距离，武松的克制也被建立。",
+        "duration": 14.692,
+        "key_clip": false,
+        "pacing_role": "欲望线启动与边界被连续试探",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "听见门闩就预感危险，等待谁先把话说破。",
+        "clip_id": "EP01_CLIP07",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "让门闩把普通家屋变成伦理压力锅；武松第一次口头设置共同饮酒边界。",
+        "duration": 12.677,
+        "key_clip": false,
+        "pacing_role": "密室条件形成与越界提议",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "明确知道武松的底线与潘接下来必须升级的压力。",
+        "clip_id": "EP01_CLIP08",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "潘用婚姻不满作情感筹码；武松把问题重新锚回兄弟伦理。",
+        "duration": 10.228,
+        "key_clip": false,
+        "pacing_role": "伦理冲突明牌与第一次清晰边界",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "在酒盏越线的压迫后得到清晰、克制而有力的拒绝爽点。",
+        "clip_id": "EP01_CLIP09",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "把试探升级为明确越线，再以摔杯和警告完成武松的主动拒绝。",
+        "duration": 14.281,
+        "key_clip": true,
+        "pacing_role": "本集伦理高潮与守界爽点",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "产生强烈不公与焦虑，意识到家门冲突不能靠当场胜负结束。",
+        "clip_id": "EP01_CLIP10",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "潘抢先占据叙述权，把越界者变成受害者；武大虽不信却没有能力核验。",
+        "duration": 10.699,
+        "key_clip": true,
+        "pacing_role": "本集反咬反转与兄弟信任受压",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "感到他赢了当场伦理，却输掉对哥哥的保护位置。",
+        "clip_id": "EP01_CLIP11",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "武松拒绝争夺叙述权，以搬离阻止冲突继续，却承认自己守不住这扇门。",
+        "duration": 10.129,
+        "key_clip": false,
+        "pacing_role": "反转后果与兄弟分离",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": true,
+        "spectacle_story_function": "行李、门槛和人物位移只服务于兄弟保护关系断裂，不把搬离拍成无意义动作展示。"
+      },
+      {
+        "audience_effect": "看见武松离开不是解决，而是在制造更危险的空位。",
+        "clip_id": "EP01_CLIP12",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "用门的物理闭合呈现保护关系断裂，不追加解释。",
+        "duration": 5.766,
+        "key_clip": false,
+        "pacing_role": "后果留白与门槛母题兑现",
+        "primary_runtime": true,
+        "runtime_priority": "selective",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "知道真正危险不是任务本身，而是武松离开后家门无人。",
+        "clip_id": "EP01_CLIP13",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "以合理公务把武松从阳谷移开，为下一集危险发生制造时间与空间条件。",
+        "duration": 7.946,
+        "key_clip": false,
+        "pacing_role": "制造保护空窗的外部任务",
+        "primary_runtime": false,
+        "runtime_priority": "selective",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "因‘我会回来’产生反讽性担忧，并期待他何时回返。",
+        "clip_id": "EP01_CLIP14",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "武松把能想到的防线都交给哥哥，却不知道危险就在门内与窗外。",
+        "duration": 6.569,
+        "key_clip": false,
+        "pacing_role": "兄弟承诺与悲剧性预警",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "在保护者离开的一刻意识到有人正靠近这扇无人能守的门。",
+        "clip_id": "EP01_CLIP15",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "确认武松离城，同时只以眼神和叉竿声引入新的欲望主体，不提前揭面。",
+        "duration": 5.786,
+        "key_clip": true,
+        "pacing_role": "离城事实与下一危险入场",
+        "primary_runtime": true,
+        "runtime_priority": "primary_cliffhanger",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      }
+    ],
+    "clip_pacing_roles": [
+      {
+        "clip_id": "EP01_CLIP01",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 4.893,
+        "pacing_role": "冷开场主钩与生死危机",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP02",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.229,
+        "pacing_role": "打虎主看点与能力证明",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP03",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 13.02,
+        "pacing_role": "打虎兑现、人格建立与内外困局转折",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP04",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.145,
+        "pacing_role": "人物困境建立与欲望来源",
+        "primary_runtime": true,
+        "runtime_priority": "selective_primary"
+      },
+      {
+        "clip_id": "EP01_CLIP05",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 8.67,
+        "pacing_role": "兄弟情建立与危险视线入场",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP06",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 14.692,
+        "pacing_role": "欲望线启动与边界被连续试探",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP07",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 12.677,
+        "pacing_role": "密室条件形成与越界提议",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP08",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.228,
+        "pacing_role": "伦理冲突明牌与第一次清晰边界",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP09",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 14.281,
+        "pacing_role": "本集伦理高潮与守界爽点",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP10",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.699,
+        "pacing_role": "本集反咬反转与兄弟信任受压",
+        "primary_runtime": true,
+        "runtime_priority": "primary_highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP11",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.129,
+        "pacing_role": "反转后果与兄弟分离",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP12",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 5.766,
+        "pacing_role": "后果留白与门槛母题兑现",
+        "primary_runtime": true,
+        "runtime_priority": "selective"
+      },
+      {
+        "clip_id": "EP01_CLIP13",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 7.946,
+        "pacing_role": "制造保护空窗的外部任务",
+        "primary_runtime": false,
+        "runtime_priority": "selective"
+      },
+      {
+        "clip_id": "EP01_CLIP14",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 6.569,
+        "pacing_role": "兄弟承诺与悲剧性预警",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP15",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 5.786,
+        "pacing_role": "离城事实与下一危险入场",
+        "primary_runtime": true,
+        "runtime_priority": "primary_cliffhanger"
+      }
+    ],
+    "core_attraction": {
+      "audience_payoff": "开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和东京差遣把危险留在家门内。",
+      "category": "英雄奇观 + 家门伦理困局 + 欲望反转",
+      "why_watch": "武松能赤手打虎，却无法用拳头解决嫂嫂越界、反咬和哥哥的软弱；外在英雄与内在无力形成强反差。"
+    },
+    "first_3s_visual_hook": {
+      "content_promise": "本集先给出打虎高光，再揭示拳头解决不了的人心困局。",
+      "content_proposition": "一个能打死猛虎的人，为什么后来守不住哥哥的家门？",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.8
+      },
+      "hook_type": "危机",
+      "muted_readable": true,
+      "muted_safe": true,
+      "muted_safe_proof": "关声仍能从贴脸虎爪、地面武松和极限闪避动作读懂生死危机。",
+      "onscreen_duration_sec": 1.4,
+      "onscreen_text": "虎 爪 压 脸，人 心 呢？",
+      "onscreen_text_duration_sec": 1.4,
+      "visual_hook": "虎爪从竖屏上方压到武松脸前，武松后仰贴地，瞳孔里映出虎口。"
+    },
+    "pacing_allocation": {
+      "declared": {
+        "compressed_clip_ids": [],
+        "compression_strategy": "不为每句旁白单开视频；同场相邻节拍并成 story clip，内部用 shots[] 表达剪辑镜位。",
+        "highlight_budget_note": "打虎动作、叔嫂火盆对峙、反咬与离城悬念吃主时长；身份背景、一个月流逝和差遣信息用蒙太奇、插入镜及声桥承载。",
+        "primary_runtime_focus": [
+          "EP01_CLIP01",
+          "EP01_CLIP02",
+          "EP01_CLIP03",
+          "EP01_CLIP06",
+          "EP01_CLIP07",
+          "EP01_CLIP08",
+          "EP01_CLIP09",
+          "EP01_CLIP10",
+          "EP01_CLIP11",
+          "EP01_CLIP14",
+          "EP01_CLIP15"
+        ],
+        "selective_runtime": [
+          "EP01_CLIP04",
+          "EP01_CLIP05",
+          "EP01_CLIP12",
+          "EP01_CLIP13"
+        ]
+      },
+      "rule": "主时长优先给核心看点/爽点/打斗/反转/兑现；桥接、解释、气氛、普通反应镜必须短，不能用压缩说明保留低优先级长镜；长镜必须重定级为 primary/highlight。",
+      "runtime_summary": {
+        "compressed_clip_ids": [],
+        "compressed_duration": 0.0,
+        "compressed_runtime_share": 0.0,
+        "primary_clip_ids": [
+          "EP01_CLIP01",
+          "EP01_CLIP02",
+          "EP01_CLIP03",
+          "EP01_CLIP04",
+          "EP01_CLIP05",
+          "EP01_CLIP06",
+          "EP01_CLIP07",
+          "EP01_CLIP08",
+          "EP01_CLIP09",
+          "EP01_CLIP10",
+          "EP01_CLIP11",
+          "EP01_CLIP12",
+          "EP01_CLIP14",
+          "EP01_CLIP15"
+        ],
+        "primary_duration": 137.784,
+        "primary_runtime_share": 0.945,
+        "total_duration": 145.73,
+        "unclassified_duration": 7.946
+      },
+      "source": "storyboard.pacing_allocation"
+    },
+    "performance_cues": [],
+    "retention_promise_ledger": [
+      {
+        "bait_risk": "low",
+        "hook_id": "OPEN_TIGER",
+        "opened_at": "EP01_CLIP01",
+        "payoff_clip": "EP01_CLIP03",
+        "payoff_due": "EP01_CLIP03",
+        "payoff_evidence": "武松赤手打虎并获都头腰牌",
+        "payoff_status": "paid",
+        "promise": "武松能否从贴脸虎扑下活下来",
+        "promise_type": "opening_hook"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "HUMAN_HEART",
+        "opened_at": "EP01_CLIP03",
+        "payoff_clip": "EP01_CLIP10",
+        "payoff_due": "EP01_CLIP10",
+        "payoff_evidence": "潘金莲越界未成后倒置真相反咬武松",
+        "payoff_status": "paid",
+        "promise": "家门里的人心是否比猛虎更难对付",
+        "promise_type": "thematic_question"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "BOUNDARY_TEST",
+        "opened_at": "EP01_CLIP06",
+        "payoff_clip": "EP01_CLIP09",
+        "payoff_due": "EP01_CLIP09",
+        "payoff_evidence": "半杯邀饮升级为摔杯拒诱和明确警告",
+        "payoff_status": "paid",
+        "promise": "潘金莲会怎样逼近武松的伦理边界",
+        "promise_type": "desire_hook"
+      },
+      {
+        "bait_risk": "medium",
+        "delayed_payoff_ep": "第2集",
+        "hook_id": "TAIL_OTHER_EYES",
+        "opened_at": "EP01_CLIP15",
+        "payoff_due": "第2集",
+        "payoff_status": "open",
+        "promise": "武松离城后，楼窗外走近的另一双眼是谁、会带来什么",
+        "promise_type": "cliffhanger"
+      }
+    ]
+  },
+  "source_paths": {
+    "adaptation_triage": "脚本/第1集/adaptation_triage.json",
+    "story_quality_pack": "生产数据/story_quality_pack_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "source_sha256": {
+    "adaptation_triage": "4299ca2ce3582ebadeaba32964cfd2bfb068a79aa372f2409e610ae7b1ef0d8a",
+    "story_quality_pack": "41bf5dadc98620840cfb6a05768f0a21de9ae436ddf9b2daf8e5ed6e0f7329db",
+    "storyboard": "1cfbe1a6fb8d4f40f96028ea7d3680ff6026205299217f095754dfe02c7e3065"
+  },
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "clips": 15,
+    "compressed_runtime_share": 0.0,
+    "open_questions": 0,
+    "primary_runtime_share": 0.945,
+    "status": "pass",
+    "warnings": 0
+  },
+  "version": 1
+}

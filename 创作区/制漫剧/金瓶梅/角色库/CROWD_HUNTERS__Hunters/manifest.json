@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CROWD_HUNTERS",
+  "name": "Hunters",
+  "scope": "本集入镜角色",
+  "library_tier": "restricted_partial",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/CROWD_HUNTERS__Hunters/reference",
+    "prompts": "角色库/CROWD_HUNTERS__Hunters/prompts",
+    "lora": "角色库/CROWD_HUNTERS__Hunters/lora",
+    "voice": "角色库/CROWD_HUNTERS__Hunters/voice",
+    "adapters": "角色库/CROWD_HUNTERS__Hunters/adapters",
+    "qc": "角色库/CROWD_HUNTERS__Hunters/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/Hunters.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:52:03+00:00"
+}

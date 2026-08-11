@@ -213,7 +213,7 @@
 }
 .workflow-node-card.variant-libtv-generator::before { display: none; }
 .workflow-node-card.variant-libtv-generator.status-running { min-height: 250px; }
-.workflow-node-card.variant-libtv-generator.is-selected { border-color: #4b6f78; background: #173039; box-shadow: 0 0 0 1px rgba(76,133,147,.18), 0 15px 32px rgba(0,0,0,.3); }
+.workflow-node-card.variant-libtv-generator.is-selected { border-color: #969696; background: #1d1d1d; box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 15px 32px rgba(0,0,0,.3); }
 .workflow-node-card.variant-libtv-generator > header {
   position: absolute;
   left: -2px;
@@ -259,7 +259,7 @@
 .libtv-generator-skeleton span { position: absolute; left: 50%; bottom: 12px; padding: 4px 11px; border: 1px solid #686868; border-radius: 6px; color: #ededed; background: #101010; font-size: 11px; transform: translateX(-50%); white-space: nowrap; }
 @keyframes libtv-skeleton { 0%,100% { background-position: 100% 0; opacity: .72; } 50% { background-position: 0 0; opacity: 1; } }
 .libtv-generator-text { position: relative; min-height: 138px; max-height: 250px; padding: 10px 11px 14px; overflow-y: auto; color: #e5e5e5; background: #1c1c1c; }
-.workflow-node-card.variant-libtv-generator.is-selected .libtv-generator-text { background: #173039; }
+.workflow-node-card.variant-libtv-generator.is-selected .libtv-generator-text { background: #1c1c1c; }
 .libtv-generator-text p { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 11px; line-height: 1.55; }
 .libtv-generator-text > i { position: absolute; right: 4px; bottom: 4px; width: 9px; height: 9px; opacity: .42; background: repeating-linear-gradient(135deg, transparent 0 2px, #9b9b9b 2px 3px); }
 .libtv-generator-image { min-height: 184px; background: #171717; }
@@ -268,6 +268,68 @@
 .libtv-generator-error strong { color: #f0c6ca; font-size: 12px; }
 .libtv-generator-error p { margin: 0; color: #b88e93; font-size: 10px; line-height: 1.5; }
 .libtv-generator-error button { width: max-content; height: 27px; padding: 0 9px; border: 1px solid #604247; border-radius: 6px; color: #ebd4d7; background: #38272a; cursor: pointer; font-size: 10px; }
+
+/* The story input is a LibTV-style readonly result card. Selecting it keeps the
+   card compact; editing happens only in the downstream generator composer. */
+.react-flow__node-workflow-node:has(.workflow-node-card.variant-libtv-source) { width: 310px; z-index: 8 !important; }
+.workflow-node-card.variant-libtv-source {
+  width: 310px;
+  height: 176px;
+  min-height: 176px;
+  padding: 0;
+  overflow: visible;
+  border-color: #484848;
+  border-radius: 11px;
+  background: #1b1b1b;
+  box-shadow: 0 12px 26px rgba(0,0,0,.24);
+}
+.workflow-node-card.variant-libtv-source::before { display: none; }
+.workflow-node-card.variant-libtv-source:hover,
+.workflow-node-card.variant-libtv-source.is-selected { border-color: #7f7f7f; background: #1b1b1b; transform: none; }
+.workflow-node-card.variant-libtv-source > header {
+  position: absolute;
+  left: -2px;
+  top: -28px;
+  width: 314px;
+  height: 21px;
+  gap: 5px;
+  pointer-events: none;
+}
+.workflow-node-card.variant-libtv-source > header .workflow-node-icon { width: 16px; height: 16px; border-radius: 2px; color: #969696; background: transparent; }
+.workflow-node-card.variant-libtv-source > header .workflow-node-icon .canvas-icon { width: 15px; height: 15px; }
+.workflow-node-card.variant-libtv-source > header .workflow-node-heading { display: block; }
+.workflow-node-card.variant-libtv-source > header .workflow-node-heading small,
+.workflow-node-card.variant-libtv-source > header .workflow-node-status,
+.workflow-node-card.variant-libtv-source > footer { display: none; }
+.workflow-node-card.variant-libtv-source > header .workflow-node-heading strong { color: #969696; font-size: 13px; font-weight: 450; }
+.workflow-node-card.variant-libtv-source .workflow-handle-target { display: none; }
+.workflow-node-card.variant-libtv-source .workflow-handle-source {
+  right: -4px !important;
+  width: 7px !important;
+  height: 7px !important;
+  border: 1px solid #777 !important;
+  background: #232323 !important;
+}
+.libtv-source-text { position: relative; width: 100%; height: 174px; padding: 11px 15px 14px; overflow: hidden; border-radius: 10px; color: #e4e4e4; background: #1b1b1b; cursor: grab; user-select: none; -webkit-user-select: none; }
+.workflow-node-card.variant-libtv-source:active .libtv-source-text { cursor: grabbing; }
+.libtv-source-text p { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 12px; font-weight: 450; line-height: 1.82; }
+.libtv-source-text > i { position: absolute; right: 5px; bottom: 5px; width: 10px; height: 10px; opacity: .38; background: repeating-linear-gradient(135deg, transparent 0 2px, #a2a2a2 2px 3px); }
+
+/* Script generation uses the taller LibTV result tile shown by the reference
+   workflow, while text/image generator nodes retain their compact dimensions. */
+.react-flow__node-workflow-node:has(.workflow-node-card.variant-script-new) { width: 310px; }
+.workflow-node-card.variant-script-new.variant-libtv-generator { width: 310px; min-height: 310px; border-radius: 12px; }
+.workflow-node-card.variant-script-new.variant-libtv-generator > header { width: 314px; }
+.workflow-node-card.variant-script-new .libtv-generator-empty { min-height: 308px; border-radius: 11px; }
+.workflow-node-card.variant-script-new .libtv-generator-empty span { display: none; }
+.workflow-node-card.variant-script-new .libtv-generator-empty .libtv-script-placeholder-lines { width: 50px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.libtv-script-placeholder-lines i { width: 48px; height: 5px; display: block; border-radius: 1px; background: #696969; }
+.libtv-script-placeholder-lines i:nth-child(2) { width: 48px; }
+.libtv-script-placeholder-lines i:nth-child(3) { width: 48px; }
+.libtv-script-placeholder-lines i:nth-child(4) { width: 48px; }
+.libtv-script-placeholder-lines i:nth-child(5) { width: 29px; }
+.workflow-node-card.variant-script-new.status-running { min-height: 310px; }
+.workflow-node-card.variant-script-new .libtv-generator-skeleton { min-height: 308px; }
 
 .libtv-node-composer.react-flow__node-toolbar {
   width: min(660px, calc(100vw - 36px));
@@ -284,10 +346,16 @@
   transition: height .16s ease;
 }
 .libtv-node-composer.react-flow__node-toolbar.is-expanded { height: min(300px, calc(100vh - 90px)); }
+.libtv-node-composer.react-flow__node-toolbar.is-script-composer { height: 210px; }
+.libtv-node-composer.react-flow__node-toolbar.is-script-composer.is-expanded { height: min(360px, calc(100vh - 90px)); }
 .libtv-node-composer-prompt { position: relative; min-height: 0; flex: 1; }
 .libtv-node-composer-prompt textarea { width: 100%; height: 100%; min-height: 92px; padding: 23px 48px 12px 18px; resize: none; border: 0; outline: 0; color: #efefef; caret-color: #f4f4f4; background: transparent; cursor: text; pointer-events: auto; user-select: text; -webkit-user-select: text; touch-action: manipulation; font: 14px/1.55 Inter, "PingFang SC", "Microsoft YaHei", sans-serif; }
+.libtv-node-composer.is-script-composer .libtv-node-composer-prompt textarea { padding-top: 77px; }
 .libtv-node-composer-prompt textarea::placeholder { color: #767676; }
 .libtv-node-composer-prompt textarea[readonly] { cursor: wait; }
+.libtv-node-composer-reference { position: absolute; z-index: 2; top: 9px; left: 12px; width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid #666; border-radius: 9px; color: #e6e6e6; background: linear-gradient(145deg, #5a5a5a, #454545); box-shadow: 0 4px 10px rgba(0,0,0,.26); pointer-events: none; }
+.libtv-node-composer-reference > span { position: absolute; z-index: 1; top: -6px; left: -5px; min-width: 17px; height: 17px; display: grid; place-items: center; padding: 0 3px; border: 1px solid #555; border-radius: 9px; color: #ddd; background: #202020; font-size: 9px; }
+.libtv-node-composer-reference .canvas-icon { width: 20px; height: 20px; }
 .libtv-node-composer-expand { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 7px; color: #8d8d8d; background: transparent; cursor: pointer; }
 .libtv-node-composer-expand:hover { color: #e6e6e6; background: #343434; }
 .libtv-node-composer > footer { position: relative; height: 48px; display: flex; align-items: center; gap: 8px; flex: none; padding: 0 9px 8px 16px; }
@@ -343,8 +411,21 @@
 .libtv-node-download-toolbar.react-flow__node-toolbar { pointer-events: auto; }
 .libtv-node-download-toolbar button { width: 42px; height: 42px; display: grid; place-items: center; padding: 0; border: 1px solid #464646; border-radius: 12px; color: #e6e6e6; background: #292929; box-shadow: 0 8px 22px rgba(0,0,0,.32); cursor: pointer; }
 .libtv-node-download-toolbar button:hover { background: #363636; }
-.libtv-reference-edge .react-flow__edge-path { stroke: #7a7d85; stroke-width: 1.3; stroke-dasharray: 32 96; animation: libtv-reference-edge-flow 1.4s linear infinite; }
-@keyframes libtv-reference-edge-flow { to { stroke-dashoffset: -128; } }
+.libtv-reference-edge-base { stroke: #74777d; stroke-width: 1.25; vector-effect: non-scaling-stroke; }
+.libtv-reference-edge-base.is-selected { stroke: #8a8d93; }
+.libtv-reference-edge-pulse {
+  stroke: #42b9ff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 34 126;
+  filter: drop-shadow(0 0 3px rgba(65,185,255,.95)) drop-shadow(0 0 7px rgba(37,139,255,.58));
+  opacity: .95;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+  animation: libtv-reference-edge-flow 2.15s linear infinite;
+}
+@keyframes libtv-reference-edge-flow { to { stroke-dashoffset: -160; } }
+@media (prefers-reduced-motion: reduce) { .libtv-reference-edge-pulse { animation: none; opacity: .62; } }
 
 .react-flow__node-workflow-node:has(.workflow-node-card.variant-director) { width: 410px; z-index: 9 !important; }
 .workflow-node-card.variant-director { box-sizing: border-box; width: 410px; height: 410px; min-height: 410px; padding: 0; overflow: visible; border-color: #686868; border-radius: 16px; background: #1e1e1e; box-shadow: 0 15px 34px rgba(0,0,0,.32); }

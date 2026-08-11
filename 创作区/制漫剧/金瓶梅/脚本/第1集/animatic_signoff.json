@@ -1,0 +1,126 @@
+{
+  "approvals": [
+    {
+      "authorization_id": "AUTH_eec6e3d37ec9ea74",
+      "authorization_path": "生产数据/autonomy_authorization.json",
+      "authorization_sha256": "22491fffb19002c6b2483a088637236fd9fdb78bb3091315b3a4cd434dca4ade",
+      "authorized_by": "user:workspace-owner",
+      "decision": "approved",
+      "delegation_profile": "animatic",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "7d72ae025a11f56151174755d820a649086e532f3edcc67d02a886faa4fb902c"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "ea6bede90fa11b62a2a638250663d5793ec804675b722a17feb899db18b46567"
+        },
+        {
+          "path": "生产数据/timelines/第1集/animatic_timeline.otio",
+          "sha256": "4a83694a85af495e1b2d5abfe800a331cab4f5ae176a006f9763aef8582e1aff"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "7b9a47140ceaabb2fe815fc1eee611a0db812b0fbd1f951c776ce4564f35140a"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "af4b87d07afd0d88073ce164a126fc6ff891fa4fd4a5aa3d20181cb61779b6c8"
+        }
+      ],
+      "independent_review": "waived_by_project_owner",
+      "note": "项目负责人已启用“仅高风险停审”；代理按当前 confirmed/ready 产物与哈希完成 animatic:creative 内部交接签收。独立人审已由负责人在授权范围内豁免。",
+      "review_mode": "delegated_autonomy",
+      "reviewed_at": "2026-08-11T04:01:58+00:00",
+      "reviewer_id": "delegate:n2d-agent",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "3aec161738c314a3325fb11527b8f12f9e362cbb1f5f2e8f1a9d071a9e46bbb4",
+      "signed_input_fingerprint_sha": "c890ce156acca42179be6b0d1f2a7e21a5cf3b1304a86310f98cb7cd613c5f0f",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "authorization_id": "AUTH_eec6e3d37ec9ea74",
+      "authorization_path": "生产数据/autonomy_authorization.json",
+      "authorization_sha256": "22491fffb19002c6b2483a088637236fd9fdb78bb3091315b3a4cd434dca4ade",
+      "authorized_by": "user:workspace-owner",
+      "decision": "approved",
+      "delegation_profile": "animatic",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "7d72ae025a11f56151174755d820a649086e532f3edcc67d02a886faa4fb902c"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "ea6bede90fa11b62a2a638250663d5793ec804675b722a17feb899db18b46567"
+        },
+        {
+          "path": "生产数据/timelines/第1集/animatic_timeline.otio",
+          "sha256": "4a83694a85af495e1b2d5abfe800a331cab4f5ae176a006f9763aef8582e1aff"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "7b9a47140ceaabb2fe815fc1eee611a0db812b0fbd1f951c776ce4564f35140a"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "af4b87d07afd0d88073ce164a126fc6ff891fa4fd4a5aa3d20181cb61779b6c8"
+        }
+      ],
+      "independent_review": "waived_by_project_owner",
+      "note": "项目负责人已启用“仅高风险停审”；代理按当前 confirmed/ready 产物与哈希完成 animatic:editorial 内部交接签收。独立人审已由负责人在授权范围内豁免。",
+      "review_mode": "delegated_autonomy",
+      "reviewed_at": "2026-08-11T04:01:58+00:00",
+      "reviewer_id": "delegate:n2d-agent",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "3aec161738c314a3325fb11527b8f12f9e362cbb1f5f2e8f1a9d071a9e46bbb4",
+      "signed_input_fingerprint_sha": "c890ce156acca42179be6b0d1f2a7e21a5cf3b1304a86310f98cb7cd613c5f0f",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "stage2_animatic",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-08-11T04:01:58+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "生产数据/animatic_第1集.html": "7d72ae025a11f56151174755d820a649086e532f3edcc67d02a886faa4fb902c",
+      "生产数据/animatic_第1集.json": "ea6bede90fa11b62a2a638250663d5793ec804675b722a17feb899db18b46567",
+      "生产数据/timelines/第1集/animatic_timeline.otio": "4a83694a85af495e1b2d5abfe800a331cab4f5ae176a006f9763aef8582e1aff",
+      "脚本/第1集/animatic_packet.json": "7b9a47140ceaabb2fe815fc1eee611a0db812b0fbd1f951c776ce4564f35140a",
+      "脚本/第1集/animatic_packet.md": "af4b87d07afd0d88073ce164a126fc6ff891fa4fd4a5aa3d20181cb61779b6c8"
+    },
+    "sha": "3aec161738c314a3325fb11527b8f12f9e362cbb1f5f2e8f1a9d071a9e46bbb4"
+  },
+  "input_fingerprint": {
+    "files": {
+      "合成/第1集/配音/voice_zh.wav": null,
+      "脚本/第1集/storyboard.json": "d17999c76b6808fdca05889797ea061b3f15d53336756802f965b61a291a0f65",
+      "脚本/第1集/字幕_中文.srt": "d4e1b9be099c8166ce2654addbcd824841e38f3aa17d804964b4de4e640a503b",
+      "脚本/第1集/镜头时长.json": "f10aa81e131fbfbf9a55208c5060515559d6ca7be69e1ea83020accedac6506d"
+    },
+    "sha": "c890ce156acca42179be6b0d1f2a7e21a5cf3b1304a86310f98cb7cd613c5f0f"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "editorial",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-08-11T04:01:58+00:00",
+  "version": 1
+}

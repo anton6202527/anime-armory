@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_edit_rhythm_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "timing_basis": "合成/第1集/配音/timing_estimate.json；34句约144.384秒，无WAV估时",
+  "total_target_seconds": 144.4,
+  "rules": {
+    "hook_cadence": "按真实时间每15-20秒至少一个危机、信息、欲望、反转或后果增量。",
+    "action_density": "打虎用2-3秒短镜和动作插入；雪夜对白用4-6秒表演镜但靠站位变化避免PPT。",
+    "reaction_policy": "断棒、邀请、半杯酒、泼酒、反咬、搬离和门户警告均保留0.3-0.8秒关键反应。",
+    "trim_priority": "若实测超150秒，先压镜6-9和15的旁白/蒙太奇停顿；不删试探→拒绝→反咬→搬离→离城因果。"
+  },
+  "beats": [
+    {"beat_id": "Beat_01", "estimated_seconds": 14.0, "tempo": "快—骤停", "reaction_cut": "断棒后武松惊愕0.4秒", "sound_or_bgm_cue": "虎啸→三次破风→断棒瞬停", "trim_or_hold": "拳前停0.2秒，不延长奔跑"},
+    {"beat_id": "Beat_02", "estimated_seconds": 24.0, "tempo": "快兑现—短蒙太奇—降速", "reaction_cut": "猎户敬服、潘看卖身物证", "sound_or_bgm_cue": "拳落重音→腰牌轻碰→琵琶两音", "trim_or_hold": "赏银/任职只留物证；潘身世最多三组画面"},
+    {"beat_id": "Beat_03", "estimated_seconds": 20.0, "tempo": "温暖中速—暗流", "reaction_cut": "武松先看武大再答潘", "sound_or_bgm_cue": "街面声与轻鼓淡下，琵琶母题弱入", "trim_or_hold": "重逢保温度；家宴礼数全部压缩"},
+    {"beat_id": "Beat_04", "estimated_seconds": 22.0, "tempo": "慢压—逐步收紧", "reaction_cut": "潘笑意停顿、武松后撤", "sound_or_bgm_cue": "门闩切断街声，炭火与低弦脉冲", "trim_or_hold": "递酒对话可留气口；不加身体特写"},
+    {"beat_id": "Beat_05", "estimated_seconds": 22.0, "tempo": "克制—爆点—静止", "reaction_cut": "泼酒后潘空一拍，武大脚步先入", "sound_or_bgm_cue": "酒落/炭火爆响，BGM空0.3秒", "trim_or_hold": "武松拒绝台词完整；前后各留一个反应"},
+    {"beat_id": "Beat_06", "estimated_seconds": 20.0, "tempo": "反咬加速—搬离降速", "reaction_cut": "武大犹疑、行李绳勒紧、潘隔帘", "sound_or_bgm_cue": "反向吸气→绳结→门轴", "trim_or_hold": "争吵不扩写；用收行李承担后果"},
+    {"beat_id": "Beat_07", "estimated_seconds": 22.4, "tempo": "公差简洁—告别放慢—硬断", "reaction_cut": "武大点头不安、潘窗后凝视", "sound_or_bgm_cue": "印章→脚步→叉竿碰檐，母题悬停", "trim_or_hold": "警告完整；集尾最后1秒不给解释"}
+  ]
+}

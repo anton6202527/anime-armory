@@ -1,0 +1,248 @@
+{
+  "adapter": {
+    "adapter_kind": "codex_cli",
+    "api_surface": "codex exec --image ...",
+    "auto_runnable": true,
+    "best_for": [
+      "default_n2d",
+      "character_consistency",
+      "multi_reference",
+      "facial_expression_control",
+      "agentic_prompt_repair"
+    ],
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "classification": "approved",
+    "cost_tier": "project_default",
+    "env_keys": [],
+    "evidence": {
+      "source": "local codex CLI (codex exec --image) + OpenAI GPT Image/ChatGPT Images official docs; GPT Image 2 is n2d's normalized family label here, exact provider model id requires per-run evidence; no official subject-id evidence",
+      "verified_at": "2026-06-25"
+    },
+    "exact_model_evidence_required": true,
+    "exact_model_id": "",
+    "generation_modes": [
+      "text2image",
+      "image_reference"
+    ],
+    "identity_profile": {
+      "canonical": "codex",
+      "channel": "Codex CLI",
+      "in_context_consistency": "strong",
+      "ingests_video": false,
+      "label": "GPT Image 2（渠道 Codex CLI）",
+      "max_reference_images": null,
+      "model": "GPT Image 2",
+      "multi_reference": true,
+      "native_modes": [],
+      "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+      "persistent_subject": false,
+      "recommended_diverse_reference_min": null,
+      "strategy": "multi_reference"
+    },
+    "in_context_consistency": "strong",
+    "label": "Codex CLI (访问入口) · 模型 GPT Image 2",
+    "limitations": [
+      "no_registerable_subject_id",
+      "reference_budget_local_policy"
+    ],
+    "model": "GPT Image 2",
+    "model_precision": "normalized_family",
+    "multi_reference": true,
+    "native_subject": false,
+    "official": true,
+    "output": "png_file",
+    "persistent_subject": false,
+    "probe_backend": "codex",
+    "prompt_profile": {
+      "advisory_char_limit": 1500,
+      "backend": "codex",
+      "embed_aspect": true,
+      "language": "zh",
+      "name": "codex_gpt_image_agent_brief",
+      "negative_strategy": "inline_constraints",
+      "request_fields": [
+        "aspect_ratio",
+        "quality",
+        "output_format"
+      ]
+    },
+    "reference_input": {
+      "character_refs": null,
+      "max_total": 24,
+      "mode": "multi_image_flags",
+      "object_refs": null,
+      "style_refs": null
+    },
+    "subject_registration": false,
+    "supports_edit": false,
+    "supports_high_fidelity_reference": true,
+    "supports_mask": false,
+    "supports_text_rendering": "medium",
+    "transport": "cli_image_flags"
+  },
+  "backend": "codex",
+  "capability_assertions": {
+    "auto_runnable": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": true
+    },
+    "channel": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "Codex CLI"
+    },
+    "exact_model_evidence_required": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": true
+    },
+    "exact_model_id": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": ""
+    },
+    "max_reference_images": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": 24
+    },
+    "model": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "GPT Image 2"
+    },
+    "model_precision": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "normalized_family"
+    },
+    "negative_strategy": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "inline_constraints"
+    },
+    "official": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": true
+    },
+    "output": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "png_file"
+    },
+    "persistent_subject": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": false
+    },
+    "prompt_language": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "zh"
+    },
+    "prompt_profile": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "codex_gpt_image_agent_brief"
+    },
+    "prompt_request_fields": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": [
+        "aspect_ratio",
+        "quality",
+        "output_format"
+      ]
+    },
+    "reference_mode": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": "multi_image_flags"
+    },
+    "supports_edit": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": false
+    },
+    "supports_high_fidelity_reference": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": true
+    },
+    "supports_image_reference": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": true
+    },
+    "supports_mask": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": false
+    },
+    "supports_text2image": {
+      "evidence_kind": "cli_help+official_docs",
+      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "value": true
+    }
+  },
+  "evidence_kind": "cli_help+official_docs",
+  "kind": "n2d_image_backend_refresh_evidence",
+  "model_evidence": {
+    "exact_model_id": "",
+    "normalized_model_label": "GPT Image 2",
+    "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
+    "precision": "normalized_family"
+  },
+  "note": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+  "source_urls": [
+    "https://developers.openai.com/api/docs/guides/image-generation"
+  ],
+  "sources": [
+    "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
+    "OpenAI official Image generation guide"
+  ],
+  "verified_at": "2026-08-11"
+}

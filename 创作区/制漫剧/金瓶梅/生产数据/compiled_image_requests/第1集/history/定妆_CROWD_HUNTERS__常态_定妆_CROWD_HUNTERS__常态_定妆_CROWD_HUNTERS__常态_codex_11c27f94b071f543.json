@@ -1,0 +1,82 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=character_catalog; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_定妆_CROWD_HUNTERS__常态_定妆_CROWD_HUNTERS__常态_定妆_CROWD_HUNTERS__常态.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成中性生产级角色参考图：图片/定妆_CROWD_HUNTERS__常态.png；本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外 主体：CROWD_HUNTERS/常态；Hunters·Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸；成年古装角色，年龄感按剧情身份保守处理；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；无固定配饰；背景人群不携带抢焦道具；Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份 构图：restricted_partial 局部参考板，不是剧情剧照：只画手部、肩背、布料或侧后剪影；不建立完整正脸，不出现清晰五官，不画跪哭/递笔录等剧情动作；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 保持一致：Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份… 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：9:16 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1629,
+  "actual_submit_prompt_sha256": "d682db3ac71a48d818504802f769ccfc04ff781c31e27a978922b94e1c0a6a87",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=character_catalog; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_定妆_CROWD_HUNTERS__常态_定妆_CROWD_HUNTERS__常态_定妆_CROWD_HUNTERS__常态.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成中性生产级角色参考图：图片/定妆_CROWD_HUNTERS__常态.png；本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外 主体：CROWD_HUNTERS/常态；Hunters·Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸；成年古装角色，年龄感按剧情身份保守处理；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；无固定配饰；背景人群不携带抢焦道具；Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份 构图：restricted_partial 局部参考板，不是剧情剧照：只画手部、肩背、布料或侧后剪影；不建立完整正脸，不出现清晰五官，不画跪哭/递笔录等剧情动作；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 保持一致：Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份… 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：9:16 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "11c27f94b071f5432f755bd44a0670649a2936a2ba83b51be24af2a7af0be5fe",
+    "compiler_decisions": [],
+    "execution_context_sha256": "1dae0b1cccfffc1578154fa38a790f62864c5b6b636a128c9d3e44859e911e31",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:38>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 38,
+      "constraint_compression": {
+        "policy_guard_input": 2,
+        "policy_guard_output": 2,
+        "preserve_input": 1,
+        "preserve_output": 1
+      },
+      "estimated_text_tokens": 278,
+      "negative_chars": 0,
+      "prompt_chars": 1109,
+      "reference_count": 1
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成中性生产级角色参考图：图片/定妆_CROWD_HUNTERS__常态.png；本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外 主体：CROWD_HUNTERS/常态；Hunters·Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸；成年古装角色，年龄感按剧情身份保守处理；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；无固定配饰；背景人群不携带抢焦道具；Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份 构图：restricted_partial 局部参考板，不是剧情剧照：只画手部、肩背、布料或侧后剪影；不建立完整正脸，不出现清晰五官，不画跪哭/递笔录等剧情动作；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 保持一致：Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。；背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份… 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：9:16 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "db1a4e5088d3e101fac8fde8b1274f946ee53edea04a953a31de234bb31bcd9c",
+    "source_contract_text_sha256": "4ed3a719d107a93e3b75233b6d1ca15555b3de687f4c3680f46ee3eeb559249a",
+    "task_type": "character_catalog",
+    "version": 1
+  },
+  "created_at": "2026-08-11T10:10:21+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "3e79e6c7807d4016ce361d94be1b2a0f526a9329b56b445cd7871ace9818f9ad",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "定妆_CROWD_HUNTERS__常态::定妆_CROWD_HUNTERS__常态",
+  "target": "出图/共享/图片/定妆_CROWD_HUNTERS__常态.png",
+  "version": 1
+}

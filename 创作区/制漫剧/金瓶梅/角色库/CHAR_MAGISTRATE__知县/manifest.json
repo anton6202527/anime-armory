@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_MAGISTRATE",
+  "name": "知县",
+  "scope": "成年男性县官，北宋地方官常服，案后端坐，克制威严，非清宫补服与官帽；只作为本集公务角色，不抢主角视觉重心。",
+  "library_tier": "named_minimal",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/CHAR_MAGISTRATE__知县/reference",
+    "prompts": "角色库/CHAR_MAGISTRATE__知县/prompts",
+    "lora": "角色库/CHAR_MAGISTRATE__知县/lora",
+    "voice": "角色库/CHAR_MAGISTRATE__知县/voice",
+    "adapters": "角色库/CHAR_MAGISTRATE__知县/adapters",
+    "qc": "角色库/CHAR_MAGISTRATE__知县/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/知县.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:52:03+00:00"
+}

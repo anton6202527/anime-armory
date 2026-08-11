@@ -1,0 +1,25 @@
+{
+  "available": true,
+  "episode": "第1集",
+  "kind": "n2d_memory_anchor_plan",
+  "notes": [
+    "本集无需重注入记忆锚（无长间隔再登场 / 晚集 / 已测漂移角色）。"
+  ],
+  "rows": [],
+  "source_fingerprint": {
+    "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
+    "identity_registry_sha256": "f5af6da35145169a5eca4b132773c4f32df9dbed9c250cc918b5634d63e527bc",
+    "storyboard_sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
+  },
+  "status": "ready",
+  "target_appearances": [
+    "CHAR_WUSONG/28岁打虎态",
+    "BEAST_TIGER/常态",
+    "CROWD_HUNTERS/常态",
+    "CHAR_WUDA/日常卖饼态",
+    "CHAR_PANJINLIAN/25岁武大家常态",
+    "CHAR_MAGISTRATE/常态",
+    "CHAR_XIMENQING/常态"
+  ],
+  "version": 3
+}

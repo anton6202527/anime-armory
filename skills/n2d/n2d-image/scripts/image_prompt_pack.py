@@ -192,7 +192,16 @@ ASSET_ID_HINTS.update({
     "PROP_WATER_BUCKETS": {**ASSET_ID_HINTS["PROP_SHUI_TONG"], "name": "挑水木桶"},
     "PROP_WATER_JAR": {**ASSET_ID_HINTS["PROP_WATER_JARS"], "name": "食堂水缸"},
     "PROP_DOOR_LOCK": {**ASSET_ID_HINTS["PROP_KEY_LOCK"], "name": "门栓铁锁"},
-    "PROP_DOOR": {**ASSET_ID_HINTS["LOC_ZAYI_HUT"], "name": "破屋木门"},
+    # Generic ids must stay project-neutral.  A previous project-specific alias
+    # pointed every PROP_DOOR at 贺平生杂役小屋 and leaked that scene into
+    # unrelated productions.  Project material/asset cards override this
+    # conservative fallback with the actual door design.
+    "PROP_DOOR": {
+        "name": "场景木门",
+        "path_name": "定妆_道具_场景木门",
+        "profile": "与所在场景建筑年代、木作、色调和开合方向一致的木门；门框、门板、门闩与尺度固定，不新增现代五金。",
+        "must_not_have": ["现代防盗门", "现代门锁", "无来源文字", "结构漂移", "数量漂移"],
+    },
     "LOC_BLACK_HALL": {**ASSET_ID_HINTS["LOC_ZAYI_DADIAN"], "name": "黑暗杂役大殿", "path_name": "定妆_场景_黑暗杂役大殿"},
     "LOC_BLACK_HALL_TO_WATER_YARD": {**ASSET_ID_HINTS["LOC_ZAYI_WATER_JARS"], "name": "黑殿到水缸区转场", "path_name": "定妆_场景_黑殿到水缸区转场"},
     "LOC_SERVANT_QUARTER": {**ASSET_ID_HINTS["LOC_ZAYI_HUT"], "name": "杂役空房", "path_name": "定妆_场景_杂役空房"},
@@ -1550,6 +1559,10 @@ FALLBACK_CHARACTER_VISUALS: Dict[str, Dict[str, str]] = {
     },
 }
 CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|主反派")
+NEGATED_CORE_SCOPE_RE = re.compile(
+    r"(?:不抢|非|不是|不作为|不作|不做|不当|仅作|只作|仅作为|只作为)"
+    r"[^；;。,.，\n]{0,16}(?:全篇|全程|长线|核心|主角|女主|男主|主反派)"
+)
 CORE_SCOPE_HINTS_BY_ID = {
     "CHAR_01": "核心主角/全篇长线",
 }
@@ -1621,7 +1634,8 @@ def narrative_scope_for(cid: str, base_scope: str, visual_tier: str) -> Tuple[st
         scope = merge_scope(scope, fallback_scope)
     if cid in CORE_SCOPE_HINTS_BY_ID:
         scope = merge_scope(scope, CORE_SCOPE_HINTS_BY_ID[cid])
-    narrative_tier = "核心长线" if CORE_SCOPE_RE.search(scope) else "单集角色"
+    positive_scope = NEGATED_CORE_SCOPE_RE.sub("", scope)
+    narrative_tier = "核心长线" if CORE_SCOPE_RE.search(positive_scope) else "单集角色"
     return scope, narrative_tier
 
 
@@ -1712,19 +1726,31 @@ def apply_scope_visual_hints(
     if prefix not in face:
         face = f"{prefix}；{face}"
 
-    if any(token in scope_text for token in ("狼妖", "巨狼", "兽化", "兽瞳", "犬齿", "獠牙", "爪")):
+    explicit_canid_demon = any(
+        token in scope_text for token in ("狼妖", "犬妖", "半妖", "妖化", "兽化", "人形狼", "狼头人身")
+    )
+    if explicit_canid_demon:
         wolf_face = "非人狼妖特征必须清晰：兽瞳、狼耳/狼鬃发际、尖犬齿、长指爪甲，不得洗成人类五官模板。"
         if wolf_face not in face:
             face = f"{wolf_face}；{face}"
         claw = "兽化长指、爪甲、犬齿是身份标记；若本镜另有道具，以分镜 prompt 为准。"
         if "爪甲" not in accessories and "犬齿" not in accessories:
             accessories = f"{claw}；{accessories}".strip("；")
-    if any(token in f"{scope_text} {face}" for token in ("虎妖", "虎头人身", "吊睛白额")):
+    # “吊睛白额” is also a canonical description of an ordinary tiger in
+    # classical vernacular fiction.  Treating that phrase alone as proof of a
+    # humanoid demon corrupted public-domain period stories (for example a
+    # real four-legged tiger became a bipedal tiger-man).  Humanoid tiger
+    # anatomy now requires explicit demon/hybrid wording from the source.
+    explicit_tiger_demon = any(
+        token in f"{scope_text} {face}"
+        for token in ("虎妖", "虎头人身", "人形虎", "虎人", "半妖", "妖化", "兽化", "妖物真身", "人形强肩背")
+    )
+    if explicit_tiger_demon:
         tiger_face = "非人虎妖真身必须清晰：吊睛白额虎首、人形强肩背、粗壮前臂与利爪；不得洗成人类五官或普通四足老虎。"
         if tiger_face not in face:
             face = f"{tiger_face}；{face}"
         hair = "虎首与肩颈为粗硬灰黄黑纹毛发，无人类束发、发冠或现代发型。"
-        outfit = "完整虎头人身妖物真身，以毛发、利爪和胸前贯穿旧伤为主体；不添加无来源人类长袍、西式兽人铠甲或金甲。"
+        outfit = "完整虎头人身妖物真身，以天然灰黄黑纹毛发、利爪和胸前贯穿旧伤为主体，身体保持无人物衣装的原生轮廓。"
         tiger_marks = "吊睛白额、粗壮利爪、胸前贯穿旧伤与黑妖血是身份标记；无首饰与人类发冠。"
         if "吊睛白额" not in accessories:
             accessories = f"{tiger_marks}；{accessories}".strip("；")
@@ -1732,10 +1758,17 @@ def apply_scope_visual_hints(
         outfit = f"青衫/深青灰古装衣袍按剧情身份保持；{outfit}"
 
     out_drift = list(drift)
-    for item in (
-        f"不要把{name}换成普通俊美人类",
-        f"不要丢失{name} scope里的非人/妖物视觉特征",
-    ):
+    if explicit_canid_demon or explicit_tiger_demon or any(token in scope_text for token in ("妖", "半妖", "妖化", "兽化")):
+        scope_drift = (
+            f"不要把{name}换成普通俊美人类",
+            f"不要丢失{name} scope里的非人/妖物视觉特征",
+        )
+    else:
+        scope_drift = (
+            f"不要把{name}换成人类、兽人或双足类人生物",
+            f"不要丢失{name} scope里的真实物种与四足解剖特征",
+        )
+    for item in scope_drift:
         if item not in out_drift:
             out_drift.append(item)
     return face, hair, outfit, accessories, out_drift
@@ -1763,10 +1796,32 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         return CHARACTER_DEFS
 
     defs: Dict[str, Dict[str, Any]] = {}
+    # A storyboard may use a compact machine id while an older authored card
+    # uses a spaced variant (for example CHAR_WUSONG vs CHAR_WU_SONG).  When
+    # the episode material list proves they share the same human name, bind the
+    # authored card to the storyboard id and suppress the duplicate alias.  One
+    # story character must never become two identity-registry subjects.
+    preferred_name_to_id: Dict[str, str] = {}
+    for cid in needed:
+        name = str((materials.get(cid) or {}).get("name") or "").strip()
+        if name:
+            preferred_name_to_id.setdefault(name, cid)
+    for preferred_id in needed:
+        if preferred_id in by_id:
+            continue
+        preferred_name = str((materials.get(preferred_id) or {}).get("name") or "").strip()
+        if not preferred_name:
+            continue
+        aliases = [entry for alias_id, entry in by_id.items() if alias_id not in needed and entry[1] == preferred_name]
+        if len(aliases) == 1:
+            by_id[preferred_id] = aliases[0]
+
     used: List[str] = []
     for cid in needed:
         add_unique(used, cid)
-    for cid in by_id:
+    for cid, (_path, name, _text) in by_id.items():
+        if cid not in needed and preferred_name_to_id.get(name):
+            continue
         add_unique(used, cid)
     style = project_style_name(root)
     vc_text = flatten(visual_contract(story))
@@ -1810,8 +1865,22 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         performance = md_first_bullet(text, ("固定表情风格 / 动作习惯", "表演")) or traits or fallback_character_visual(cid, name, "performance_signature")
         if cid.startswith("BEAST_"):
             injury = md_first_bullet(text, ("持续伤势", "伤势"))
+            beast_shape = md_bullet(text, "形态")
+            # BEAST_* 没有独立角色卡时，人物 fallback 会先注入“成年古装角色 / 古装衣袍”。
+            # 这些词不仅把真兽误导成人形古装角色，也会在多人镜中被服装绑定 lint 错派给人物。
+            # 物种真值必须在任何 prompt 编译、identity registry 落档之前覆盖人物 fallback。
+            age_context = md_bullet(text, "年龄/阶段") or "成年猛兽阶段；按剧情保持同一头猛虎的体量与伤势连续。"
+            if beast_shape:
+                face = f"{age_context}；{beast_shape}" if age_context not in beast_shape else beast_shape
+            elif (
+                not face
+                or "成年古装角色" in face
+                or "的脸型、年龄感、肤色和五官比例" in face
+                or not any(token in face for token in ("猛虎", "虎首", "虎头", "兽首", "非人"))
+            ):
+                face = "成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。"
             hair = md_first_bullet(text, ("毛发", "发型")) or "非人兽首与粗硬毛发按形态真值保持，不生成人类束发或发饰。"
-            outfit = md_first_bullet(text, ("服装", "甲胄")) or "以非人虎头人身、黑黄粗硬毛发和伤势为主体；不添加西式兽人铠甲或无来源古装衣袍。"
+            outfit = md_first_bullet(text, ("服装", "甲胄")) or "全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
             if injury:
                 accessory = f"持续伤势：{injury}；{accessory}".strip("；")
         form = str(manifest.get("form") or first_form_from_card(text) or "常态")
@@ -2057,6 +2126,30 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
             "english_prompt": "",
             "source": str(path.relative_to(root)),
         })
+    # Also accept the common writer form ``- `PROP_ID` 展示名：描述``.  The
+    # earlier parser only recognized ``PROP_ID/展示名`` inside the backticks,
+    # so authored Chinese names were silently ignored and stale registry data
+    # could win on the next prompt-pack rebuild.
+    named_bullet_re = re.compile(
+        r"^\s*-\s*`((?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)`"
+        r"\s*([^：:\n]+?)\s*[：:]\s*(.+?)\s*$",
+        re.M,
+    )
+    for match in named_bullet_re.finditer(text):
+        aid = canonical_asset_id(match.group(1))
+        if not aid:
+            continue
+        raw_name = clean_material_name(match.group(2) or "", aid)
+        profile = match.group(3).strip()
+        out[aid] = {
+            "asset_id": aid,
+            "name": raw_name or asset_name_from_raw(aid, aid),
+            "type": asset_type_for_id(aid),
+            "profile": profile or raw_name or asset_name_from_raw(aid, aid),
+            "positive": profile or raw_name,
+            "english_prompt": "",
+            "source": str(path.relative_to(root)),
+        }
     return out
 
 
@@ -2275,6 +2368,13 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         material = materials.get(aid, {})
         base_hint = ASSET_ID_HINTS.get(aid, {})
         registry_hint = asset_hint_from_registry_asset(existing_assets.get(aid, {}))
+        material_name = clean_asset_display_name(aid, str(material.get("name") or "")) if material.get("name") else ""
+        registry_name = clean_asset_display_name(aid, str(registry_hint.get("name") or "")) if registry_hint.get("name") else ""
+        if material_name and registry_name and material_name != registry_name:
+            # 素材清单是当前编剧/制片真值；asset_registry 是上一次编译产物。
+            # 名称已变化说明旧 registry 可能来自另一个模板/项目，不能继续把
+            # 其 structure / scene_dna / owner 污染回当前资产。
+            registry_hint = {}
         hint = deep_merge_mapping(base_hint, registry_hint) if registry_hint else dict(base_hint)
         hint_constraints = hint.get("constraints") if isinstance(hint.get("constraints"), Mapping) else {}
         if aid.startswith("LOC_"):

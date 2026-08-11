@@ -314,6 +314,8 @@ def test_parse_chapter_span_strict():
     assert SS.parse_chapter_span("第十二章") == (12, 12)
     assert SS.parse_chapter_span("第一百零三章") == (103, 103)
     assert SS.parse_chapter_span("第3至5章") == (3, 5)
+    assert SS.parse_chapter_span("第三囬") == (3, 3)
+    assert SS.parse_chapter_span("第3囘-第5廻") == (3, 5)
     # 任何附加限定/倒序/非章指代 → fail-closed 不可解析
     assert SS.parse_chapter_span("第3章前半") is None
     assert SS.parse_chapter_span("第5-3章") is None
@@ -400,6 +402,9 @@ if __name__ == "__main__":
 def test_chapter_heading_number():
     assert SS.chapter_heading_number("第4章 旧忆") == 4
     assert SS.chapter_heading_number("第十二回 风波再起") == 12
+    assert SS.chapter_heading_number("[编辑]第十三囬 世情翻覆") == 13
+    assert SS.chapter_heading_number("第十四囘 因果相承") == 14
+    assert SS.chapter_heading_number("第十五廻 家业倾颓") == 15
     assert SS.chapter_heading_number("正文里提到第4章的事") is None
 
 

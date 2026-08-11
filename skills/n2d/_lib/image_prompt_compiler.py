@@ -778,6 +778,11 @@ def _conditional_guards(contract: Mapping[str, Any], task: str, language: str) -
     ground = bool(re.search(r"全身|站立|跪|倒地|落地|脚|鞋|full body|standing|kneel|ground", blob, re.I)) or "grounding" in flags
     closeup = bool(re.search(r"\b(?:CU|MCU|ECU)\b|近景|特写|反打|close-up", blob, re.I)) or "closeup" in flags
     multi = task == "multi_subject" or bool(_one_line(contract.get("subject_slots")))
+    real_quadruped = bool(re.search(
+        r"真实四足|四(?:只|条)?(?:虎)?掌(?:全部)?着地|野生猫科|四足兽类|real(?:istic)? quadruped",
+        blob,
+        re.I,
+    ))
     if task in {"scene_asset", "prop_asset", "style_anchor"}:
         # Scene contracts often name characters only to describe blocking and
         # axis continuity; isolated asset cards often name a knife/weapon whose
@@ -787,6 +792,13 @@ def _conditional_guards(contract: Mapping[str, Any], task: str, language: str) -
         ground = False
         closeup = False
         multi = False
+    elif real_quadruped:
+        # Human anatomy defaults are actively harmful for real animal plates:
+        # words such as “arms”, “hands” and “footwear” can turn a normal tiger
+        # into a bipedal tiger-man. The caller's explicit quadruped guard owns
+        # animal grounding and full-body completeness.
+        hands = False
+        ground = False
     guards: List[str] = []
     if language == "en":
         if hands:

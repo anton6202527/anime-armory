@@ -28,7 +28,10 @@ ESTIMATED_EPISODE_COUNT_RE = re.compile(
     rb'"estimated_total_episode_count"\s*:\s*([0-9]+)'
 )
 
-CHAPTER_RE = re.compile(r"^\s*第\s*([0-9零一二三四五六七八九十百千两]+)\s*[章回节卷]")
+CHAPTER_RE = re.compile(
+    r"^\s*(?:\[编辑\]\s*)?第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*([章回囬囘廻节節卷])"
+)
+HUI_UNITS = frozenset("回囬囘廻")
 CHINESE_DIGITS = {
     "零": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
     "五": 5, "六": 6, "七": 7, "八": 8, "九": 9,
@@ -224,13 +227,18 @@ def _source_integrity(text: str) -> dict:
                 kept_headings.append({
                     "line": index + 1,
                     "number": parse_chapter_number(match.group(1)),
+                    "unit": match.group(2),
                     "text": line.strip(),
                 })
         previous = line
         previous_line = index + 1
 
+    # 维基文库/古籍导出常用「第1章」包十个真实「第N囬」。若存在回目，
+    # 以回目为有效源单元，避免把卷包装标题混入章节数并覆盖 1-10 回。
+    hui_headings = [row for row in kept_headings if row.get("unit") in HUI_UNITS]
+    effective_headings = hui_headings or kept_headings
     chapter_numbers = sorted({
-        row["number"] for row in kept_headings if isinstance(row.get("number"), int)
+        row["number"] for row in effective_headings if isinstance(row.get("number"), int)
     })
     missing: list[int] = []
     missing_truncated = False
@@ -304,7 +312,10 @@ def _source_integrity(text: str) -> dict:
         "adjacent_duplicate_heading_count": len(duplicate_rows),
         "adjacent_duplicate_heading_examples": duplicate_rows[:INTEGRITY_EXAMPLE_LIMIT],
         "duplicate_heading_examples_truncated": len(duplicate_rows) > INTEGRITY_EXAMPLE_LIMIT,
-        "chapter_headings_after_fold": len(kept_headings),
+        "recognized_heading_count_after_fold": len(kept_headings),
+        "ignored_wrapper_heading_count": len(kept_headings) - len(effective_headings),
+        "preferred_unit_system": "hui" if hui_headings else "chapter",
+        "chapter_headings_after_fold": len(effective_headings),
         "unique_chapter_count": len(chapter_numbers),
         "missing_chapter_numbers": missing,
         "missing_chapter_numbers_truncated": missing_truncated,
@@ -324,7 +335,10 @@ def split_sentences(text: str) -> list[str]:
 
 def chapter_count(text: str) -> int:
     folded = fold_adjacent_duplicate_chapter_headings(text)
-    return sum(1 for line in folded.splitlines() if CHAPTER_RE.match(line))
+    matches = [CHAPTER_RE.match(line) for line in folded.splitlines()]
+    matches = [match for match in matches if match]
+    hui = [match for match in matches if match.group(2) in HUI_UNITS]
+    return len(hui or matches)
 
 
 def clean_name(name: str) -> str:

@@ -449,7 +449,7 @@ def load_shared_sections(root: Path) -> List[Target]:
             section_by_alias.append((aliases, section))
             for rel in shared_image_paths_from_text(body):
                 variant_shot = shared_variant_shot(shot, rel)
-                add_target(variant_shot, rel, section, aliases, shared_variant_note(rel))
+                add_target(variant_shot, rel, section, aliases, shared_variant_note(rel, section_body=body))
     add_registry_shared_targets(root, section_by_alias, add_target)
     return targets
 
@@ -482,13 +482,34 @@ def shared_variant_shot(base: str, rel_path: str) -> str:
     return f"{base}::{token or stem}"
 
 
-def shared_variant_note(rel_path: str) -> str:
+def shared_variant_note(rel_path: str, *, section_body: str = "") -> str:
     stem = Path(rel_path).stem
     if "风格锚" in stem or "style_anchor" in stem.lower():
         return (
             "本次目标是抽象分区式视觉语言控制板，不是剧情剧照、环境设定图、海报或道具陈列："
             "只展示色卡、明暗/光比阶梯、线条笔触和近裁材质样本；"
             "不得出现人物、动物/妖物、建筑/城寨、兵器、道具、器皿、家具、卷轴、地图、可读或伪造文字与剧情动作。"
+        )
+    real_quadruped = bool(re.search(
+        r"真实四足|四(?:只|条)?(?:虎)?掌(?:全部)?着地|野生猫科|四足兽类",
+        str(section_body or ""),
+    ))
+    if real_quadruped:
+        if "脸部特写" in stem or "表情" in stem:
+            return (
+                "本次目标是真实四足动物的同源头部近景：保持兽首、圆耳、短吻、眼鼻比例、毛纹与主参考一致；"
+                "肩颈以下自然裁切。禁止人脸化、兽人化、类人胸臂、衣装、文字或水印。"
+            )
+        if any(token in stem for token in ("45度", "三分之二", "_侧", "侧面", "_背", "背面")):
+            return (
+                "本次目标是真实四足动物的同源角度参考：四只兽掌着地，躯干水平，肩胛、脊背、骨盆、四肢和长尾"
+                "符合真实物种解剖；按文件名角度旋转整体身体，不只转头。禁止双足直立、虎头人身/狼头人身、"
+                "类人胸肌、手臂手掌、兽人或妖物形态。"
+            )
+        return (
+            "本次目标是真实四足动物的共享主参考图：四只兽掌全部着地，躯干水平，头部正对相机，"
+            "肩胛、脊背、骨盆、四肢和长尾符合真实物种解剖；全身从耳尖、四掌到尾尖完整可见。"
+            "禁止双足直立、虎头人身/狼头人身、类人胸肌、手臂手掌、兽人、妖物、衣装或剧情伤痕。"
         )
     if "布局图" in stem or "空间图" in stem or "平面图" in stem or "spatial_map" in stem:
         return (
@@ -741,7 +762,7 @@ def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, Cl
                     continue
                 for rel in registry_image_paths(form):
                     shot = shared_variant_shot(next(iter(sorted(aliases))) or char_id or "shared", rel)
-                    add_target(shot, rel, section, aliases, shared_variant_note(rel))
+                    add_target(shot, rel, section, aliases, shared_variant_note(rel, section_body=section.body))
 
     asset_path = root / "出图" / "共享" / "asset_registry.json"
     if asset_path.is_file():
@@ -759,7 +780,7 @@ def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, Cl
                 continue
             for rel in registry_image_paths(asset):
                 shot = shared_variant_shot(asset_id or "asset", rel)
-                add_target(shot, rel, section, aliases, shared_variant_note(rel))
+                add_target(shot, rel, section, aliases, shared_variant_note(rel, section_body=section.body))
 
 
 def registry_form_aliases(char_id: str, form_name: str) -> set[str]:
@@ -3460,11 +3481,22 @@ def model_facing_policy_guards(
         and _target_has_character_alias(target)
         and not any(token in stem for token in ("45度", "三分之二", "_侧", "侧面", "_背", "背面", "半身", "脸部", "三视图", "表情", "动作"))
     )
+    real_quadruped = (
+        target.mode == "shared"
+        and _target_has_character_alias(target)
+        and bool(re.search(r"真实四足|四(?:只|条)?(?:虎)?掌(?:全部)?着地|野生猫科|四足兽类", body))
+    )
     gaze_lock = not shared_scene_target and bool(re.search(
         r"CHAR_|人物|角色|少年|少女|男人|女人|男子|女子|主角|对手|打斗|格挡|挥剑|劈砍|出拳|对话",
         body,
     )) and bool(camera_gaze_negatives_for(body))
-    if primary_character_makeup:
+    if primary_character_makeup and real_quadruped:
+        guards.append(
+            "真实四足动物正面母本（最高优先级）：四只兽掌全部着地，躯干水平，头部正对相机，"
+            "肩胛、脊背、骨盆、四肢和长尾符合真实猫科/犬科解剖；禁止双足直立、虎头人身/狼头人身、"
+            "类人胸肌、类人手臂手掌、兽人或妖物形态。全身从耳尖、四掌到尾尖完整可见"
+        )
+    elif primary_character_makeup:
         guards.append(
             "共享角色正面主母本：身体、肩线和脸严格正对相机，头部偏转不超过 5 度，双眼与五官近似对称可核验；"
             "眼神轻微越过镜头而非写真式盯镜头。不得生成 45°、三分之二侧脸、侧身、背身或多视图拼板"
@@ -3604,7 +3636,12 @@ def model_facing_policy_guards(
             "若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
         ])
 
-    if target.mode == "shared" and not shared_scene_target and _target_has_character_alias(target):
+    if real_quadruped:
+        guards.append(
+            "共享真实动物定妆使用中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；"
+            "四足全身与尾部完整可见，不套用人物的鞋靴、服装、手部或直立姿态规则"
+        )
+    elif target.mode == "shared" and not shared_scene_target and _target_has_character_alias(target):
         guards.append(
             "共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；"
             "全身、角度和三视图从头到鞋靴完整可见"

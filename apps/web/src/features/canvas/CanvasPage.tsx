@@ -13,6 +13,7 @@ import {
   type ReactNode,
 } from "react";
 import {
+  BaseEdge,
   Background,
   BackgroundVariant,
   Handle,
@@ -23,11 +24,13 @@ import {
   Position,
   ReactFlow,
   addEdge,
+  getBezierPath,
   useEdgesState,
   useNodesState,
   useReactFlow,
   type Connection,
   type Edge,
+  type EdgeProps,
   type Node,
   type NodeProps,
   type ReactFlowInstance,
@@ -100,6 +103,41 @@ import {
   type StandaloneWorkflowKind,
   type StandaloneWorkflowResult,
 } from "./StandaloneSkillWorkflows";
+import {
+  ScriptWorkflowOverlay as ControlledScriptWorkflowOverlay,
+  type ScriptAssetBatchRequest,
+  type ScriptAssetBatchResult,
+  type ScriptAssetCanvasSelectRequest,
+  type ScriptAssetGenerateRequest,
+  type ScriptAssetGenerateResult,
+  type ScriptAssetUploadRequest,
+  type ScriptBatchVideoRequest,
+  type ScriptPromptBatchRequest,
+  type ScriptPromptBatchResult,
+  type ScriptPromptComposeRequest,
+  type ScriptPromptComposeResult,
+  type ScriptWorkbenchCanvasImage,
+  type ScriptWorkbenchImageOptions,
+  type ScriptWorkbenchModelOption,
+} from "./ScriptWorkflowOverlay";
+import {
+  SCRIPT_WORKBENCH_MODEL_JSON_INSTRUCTIONS,
+  composeScriptWorkbenchPrompt,
+  composeScriptWorkbenchVideoPrompt,
+  deriveScriptWorkbenchSteps,
+  hasRealScriptWorkbenchAssetSource,
+  isScriptWorkbenchReadyForBatchVideo,
+  normalizeScriptWorkbench,
+  parseScriptWorkbenchModelOutput,
+  serializeScriptWorkbench,
+  extractScriptWorkbenchJson,
+  updateScriptWorkbenchAsset,
+  validateScriptWorkbench,
+  type ScriptWorkbenchAsset,
+  type ScriptWorkbenchAssetPatch,
+  type ScriptWorkbenchDocument,
+  type ScriptWorkbenchShot,
+} from "./scriptWorkbenchModel";
 import {
   TOOLBOX_CLASSICS,
   TOOLBOX_TEMPLATES,
@@ -194,7 +232,7 @@ type CanvasLibrarySkill = {
 };
 type WorkflowNodeKind = "text" | "script" | "image" | "audio" | "video" | "compose";
 type WorkflowNodeStatus = "idle" | "ready" | "running" | "done" | "failed";
-type WorkflowNodeVariant = "default" | "libtv-generator" | "director" | "script-new" | "script-legacy" | "script-workflow" | "character-workflow" | "first-frame-video-workflow" | "audio-video-workflow";
+type WorkflowNodeVariant = "default" | "libtv-source" | "libtv-generator" | "director" | "script-new" | "script-legacy" | "script-workflow" | "character-workflow" | "first-frame-video-workflow" | "audio-video-workflow";
 type OverviewKindFilter = "all" | WorkflowNodeKind | "director" | "legacy-script";
 
 const OVERVIEW_FILTER_OPTIONS: Array<{ value: OverviewKindFilter; label: string }> = [
@@ -255,6 +293,7 @@ type WorkflowNodeData = {
   sourceNodeId?: string;
   sourceContext?: string;
   directorScene?: DirectorSceneState;
+  scriptWorkbench?: ScriptWorkbenchDocument;
 } & Record<string, unknown>;
 
 type WorkflowNode = Node<WorkflowNodeData, "workflow-node">;
@@ -277,11 +316,13 @@ type CanvasStarterPreset = {
 type CanvasNodeActions = {
   update: (nodeId: string, patch: Partial<WorkflowNodeData>) => void;
   run: (nodeId: string) => void;
+  cancel: (nodeId: string) => void;
   derive: (nodeId: string, kind: WorkflowNodeKind, variant?: WorkflowNodeVariant) => void;
   resolveAttachment: (attachmentId: string) => Promise<File | undefined>;
   quickAction: (nodeId: string, action: string) => void;
   openDirector: (nodeId: string, options?: { reference?: boolean; runPrompt?: boolean }) => void;
   openScript: (nodeId: string) => void;
+  scriptAction: (nodeId: string, action: "regenerate" | "storyboard" | "video" | "download") => void;
   openStandalone: (nodeId: string, workflow: StandaloneWorkflowKind) => void;
 };
 
@@ -546,7 +587,7 @@ function nodeRuntimeDefaults(kind: WorkflowNodeKind, variant: WorkflowNodeVarian
   if (kind === "audio") return { prompt: "", model: "Minimax-speech-2.8-hd", voice: "少女音色", speed: 1, tone: 0, volume: 1, timbrePitch: 0, timbreIntensity: 0, timbre: 0, audioEffect: "无" };
   if (kind === "script") return {
     prompt: "",
-    model: variant === "director" ? "Director 3D" : "GVLM 3.1",
+    model: variant === "director" ? "Director 3D" : variant === "script-new" ? "gpt-5.6-terra" : "GVLM 3.1",
     variant,
     ...(variant === "director" ? { directorScene: createDefaultDirectorScene() } : {}),
   };
@@ -722,6 +763,48 @@ function makeEdge(id: string, source: string, target: string, animated = false):
   };
 }
 
+function makeLibtvReferenceEdge(id: string, source: string, target: string): Edge {
+  return {
+    id,
+    source,
+    target,
+    type: "libtv-reference",
+    markerEnd: undefined,
+    animated: false,
+    className: "workflow-edge libtv-reference-edge",
+  };
+}
+
+function LibtvReferenceEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  selected,
+}: EdgeProps) {
+  const [path] = getBezierPath({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    curvature: .24,
+  });
+  return <>
+    <BaseEdge
+      id={id}
+      path={path}
+      interactionWidth={22}
+      className={`libtv-reference-edge-base${selected ? " is-selected" : ""}`}
+    />
+    <path d={path} className="libtv-reference-edge-pulse" fill="none" aria-hidden="true" />
+  </>;
+}
+
 type WorkflowStagePreset = Pick<WorkflowNodeData, "kind" | "title" | "description" | "eyebrow" | "assetName">;
 
 const WORKFLOW_STAGES: Record<CreationLine, readonly WorkflowStagePreset[]> = {
@@ -778,8 +861,9 @@ const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
     nodes: [
       {
         kind: "text",
-        title: "故事脚本",
+        title: "剧本",
         description: "《我在盛唐写天下》· 古风 / 穿越 / 爽文漫剧",
+        variant: "libtv-source",
         data: { prompt: "《我在盛唐写天下》\n类型：古风 / 穿越 / 爽文漫剧\n时长建议：60–90秒\n基调：热血 × 盛唐史诗感 × 爽点节奏\n\n【序幕】现代深夜办公室，沈昭昭加班昏倒。\n【第一幕】她在盛唐金銮殿醒来，被命当殿作诗。\n【第二幕】她吟出惊世诗篇，满殿震动。\n【第三幕】镜头推远，盛唐山河展开。" },
       },
       {
@@ -787,7 +871,7 @@ const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
         title: "脚本生成器",
         description: "描述故事、剧情片段或创作目标，生成可继续编辑的分镜脚本",
         variant: "script-new",
-        data: { prompt: "请把以下故事构想生成可执行的分镜脚本：" },
+        data: { prompt: "根据我上传的剧本生成一个完整的故事脚本" },
       },
     ],
   },
@@ -881,7 +965,9 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
   const generatorCompositionGuardRef = useRef(false);
   const generatorCompositionFrameRef = useRef<number | null>(null);
   const variant = data.variant ?? (data.kind === "script" ? "script-new" : "default");
-  const isLibtvGenerator = variant === "libtv-generator" && (data.kind === "text" || data.kind === "image");
+  const isLibtvSource = variant === "libtv-source" && data.kind === "text";
+  const isScriptGenerator = variant === "script-new" && data.kind === "script";
+  const isLibtvGenerator = (variant === "libtv-generator" && (data.kind === "text" || data.kind === "image")) || isScriptGenerator;
   const isDirector = variant === "director";
   const prompt = typeof data.prompt === "string" ? data.prompt : "";
   const resultText = typeof data.resultText === "string" ? data.resultText : "";
@@ -959,9 +1045,10 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     ? { prompt: value }
     : { prompt: value, description: value.trim() || data.description });
   const stopPointer = (event: ReactPointerEvent<HTMLElement>) => event.stopPropagation();
+  const generatorModality = data.kind === "image" ? "image" : "text";
   const fallbackModelOptions = isLibtvGenerator && data.kind === "image"
     ? GENERATOR_MODEL_OPTIONS.image.map((model) => model.id)
-    : isLibtvGenerator && data.kind === "text"
+    : isLibtvGenerator && (data.kind === "text" || isScriptGenerator)
       ? GENERATOR_MODEL_OPTIONS.text.map((model) => model.id)
       : data.kind === "image"
         ? ["Lib Image", "Seedream 5.0 Pro", "Midjourney V7", "Qwen Image"]
@@ -978,8 +1065,8 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     setModelDiscoveryError("");
     try {
       const models = await discoverCanvasModels();
-      const options = models.filter((model) => model.modality === data.kind).map((model) => model.id);
-      if (!options.length) throw new Error(`cli-proxy-api 没有共享可用的${data.kind === "image" ? "图片" : "文本"}模型`);
+      const options = models.filter((model) => model.modality === generatorModality).map((model) => model.id);
+      if (!options.length) throw new Error(`cli-proxy-api 没有共享可用的${generatorModality === "image" ? "图片" : "文本"}模型`);
       setRuntimeModelOptions(options);
       if (!options.includes(String(data.model ?? ""))) update({ model: options[0] });
       setModelDiscoveryState("idle");
@@ -1014,8 +1101,9 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
             : "描述剧情片段、故事，为你生成分镜脚本";
 
   const downloadGeneratorResult = () => {
-    if (!resultText && !resultAssetUrl) return;
-    const href = resultAssetUrl || URL.createObjectURL(new Blob([resultText], { type: "text/markdown;charset=utf-8" }));
+    const downloadableText = isLibtvSource ? (prompt || data.description) : resultText;
+    if (!downloadableText && !resultAssetUrl) return;
+    const href = resultAssetUrl || URL.createObjectURL(new Blob([downloadableText], { type: "text/markdown;charset=utf-8" }));
     const anchor = document.createElement("a");
     anchor.href = href;
     const imageExtension = data.resultMimeType === "image/jpeg"
@@ -1029,7 +1117,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
-    if (!resultAssetUrl) URL.revokeObjectURL(href);
+    if (!resultAssetUrl) window.setTimeout(() => URL.revokeObjectURL(href), 0);
   };
 
   const renderLibtvGeneratorBody = () => {
@@ -1048,20 +1136,33 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     if (data.status === "failed") return <div className="libtv-generator-error nodrag nowheel" role="alert"><strong>生成失败</strong><p>{String(data.generationError ?? "模型暂时没有返回结果，请重试。")}</p><button type="button" onClick={() => actions?.run(id)} disabled={!prompt.trim()}>重新生成</button></div>;
     if (data.kind === "image" && resultAssetUrl) return <div className="libtv-generator-image nodrag nowheel"><img src={resultAssetUrl} alt={data.title} /></div>;
     if (data.kind === "text" && resultText) return <div className="libtv-generator-text nodrag nowheel"><p>{resultText}</p><i aria-hidden="true" /></div>;
-    return <div className="libtv-generator-empty"><Icon name={data.kind} /><span>{data.kind === "image" ? "描述画面后生成图片" : "输入你的灵感，生成一段文本"}</span></div>;
+    return <div className="libtv-generator-empty">
+      {isScriptGenerator
+        ? <span className="libtv-script-placeholder-lines" aria-hidden="true"><i /><i /><i /><i /><i /></span>
+        : <Icon name={data.kind} />}
+      <span>{data.kind === "image" ? "描述画面后生成图片" : isScriptGenerator ? "描述故事后生成可编辑分镜脚本" : "输入你的灵感，生成一段文本"}</span>
+    </div>;
   };
+
+  const renderLibtvSourceBody = () => <div className="libtv-source-text nowheel">
+    <p>{prompt || data.description}</p>
+    <i aria-hidden="true" />
+  </div>;
 
   const renderLibtvGeneratorDock = () => <NodeToolbar
     position={Position.Bottom}
     offset={10}
     align="center"
-    className={`libtv-node-composer nodrag nowheel nopan${dockExpanded ? " is-expanded" : ""}`}
+    className={`libtv-node-composer nodrag nowheel nopan${isScriptGenerator ? " is-script-composer" : ""}${dockExpanded ? " is-expanded" : ""}`}
     onPointerDown={stopPointer}
     onMouseDown={(event) => event.stopPropagation()}
     onClick={(event) => event.stopPropagation()}
     onDoubleClick={(event) => event.stopPropagation()}
   >
     <div className="libtv-node-composer-prompt">
+      {isScriptGenerator && data.sourceContext && <span className="libtv-node-composer-reference" aria-label="已引用 1 个剧本节点">
+        <span>1</span><Icon name="script" />
+      </span>}
       <textarea
         ref={generatorPromptRef}
         className="nodrag nowheel nopan"
@@ -1069,7 +1170,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
         aria-busy={data.status === "running"}
         readOnly={data.status === "running"}
         value={prompt}
-        placeholder={data.kind === "image" ? "描述你想生成的图片，或基于引用内容补充画面要求" : "输入你的创作灵感，例如：一个来自未来的机器人，坐在屋顶看星星"}
+        placeholder={data.kind === "image" ? "描述你想生成的图片，或基于引用内容补充画面要求" : isScriptGenerator ? "描述故事、剧情片段或创作目标，为你生成可编辑的分镜脚本" : "输入你的创作灵感，例如：一个来自未来的机器人，坐在屋顶看星星"}
         onChange={(event) => setPrompt(event.target.value)}
         onPointerDown={(event) => {
           event.stopPropagation();
@@ -1128,10 +1229,10 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
         type="button"
         className={`libtv-node-submit${data.status === "running" ? " is-running" : ""}`}
         style={{ "--generation-progress": `${generationProgress * 3.6}deg` } as CSSProperties}
-        disabled={!prompt.trim() || data.status === "running"}
-        onClick={() => actions?.run(id)}
-        aria-label={data.status === "running" ? `生成中 ${Math.round(generationProgress)}%` : "开始生成"}
-      >{data.status === "running" ? <span>{Math.max(1, Math.round(generationProgress))}</span> : <ArrowUp size={19} />}</button>
+        disabled={!prompt.trim() && data.status !== "running"}
+        onClick={() => data.status === "running" ? actions?.cancel(id) : actions?.run(id)}
+        aria-label={data.status === "running" ? `取消生成，当前 ${Math.round(generationProgress)}%` : "开始生成"}
+      >{data.status === "running" ? <X size={17} /> : <ArrowUp size={19} />}</button>
     </footer>
   </NodeToolbar>;
 
@@ -1217,23 +1318,26 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     </div>
   );
 
-  const renderScriptWorkflowNode = () => (
-    <div className="workflow-script-result nodrag" onPointerDown={stopPointer}>
+  const renderScriptWorkflowNode = () => {
+    const workbench = normalizeScriptWorkbench(data.scriptWorkbench);
+    const steps = deriveScriptWorkbenchSteps(workbench);
+    const stepStates = [steps.shots, steps.assets, steps.prompts];
+    const workflowReady = isScriptWorkbenchReadyForBatchVideo(workbench);
+    return <div className="workflow-script-result nodrag" onPointerDown={stopPointer}>
       <div className="workflow-script-result-actions">
-        <button type="button" onClick={() => actions?.run(id)}><RotateCcw size={13} />重新生成</button>
-        <button type="button" disabled>批量生成分镜</button>
-        <button type="button" disabled>批量生视频</button>
-        <button type="button" aria-label="下载" disabled><Download size={13} /></button>
+        <button type="button" onClick={() => actions?.scriptAction(id, "regenerate")}><RotateCcw size={13} />重新生成</button>
+        <button type="button" disabled={!workflowReady} title={!workflowReady ? "镜头、资产与提示词全部完成后可用" : undefined} onClick={() => actions?.scriptAction(id, "storyboard")}>批量生成分镜</button>
+        <button type="button" disabled={!workflowReady} title={!workflowReady ? "镜头、资产与提示词全部完成后可用" : undefined} onClick={() => actions?.scriptAction(id, "video")}>批量生视频</button>
+        <button type="button" aria-label="下载脚本 JSON" onClick={() => actions?.scriptAction(id, "download")}><Download size={13} /></button>
       </div>
-      <strong>我在盛唐写天下</strong>
+      <strong>{workbench.title}</strong>
+      <small>{workbench.shots.length} 个镜头 · {workbench.assets.length} 个资产</small>
       <div className="workflow-script-result-steps">
-        <span className="is-done"><i><Check size={11} /></i><b>确认镜头</b></span>
-        <span><i>2</i><b>准备资产</b></span>
-        <span><i>3</i><b>合成提示词</b></span>
+        {["确认镜头", "准备资产", "合成提示词"].map((label, index) => <span key={label} className={stepStates[index] === "done" ? "is-done" : stepStates[index] === "active" ? "is-active" : ""}><i>{stepStates[index] === "done" ? <Check size={11} /> : index + 1}</i><b>{label}</b></span>)}
       </div>
       <button type="button" className="workflow-script-open" onClick={() => actions?.openScript(id)}>打开脚本节点 <ArrowRight size={13} /></button>
-    </div>
-  );
+    </div>;
+  };
 
   const renderStandaloneWorkflowNode = () => {
     const workflow: StandaloneWorkflowKind = variant === "character-workflow"
@@ -1279,18 +1383,19 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
   </div>;
 
   return (
-    <article className={`workflow-node-card kind-${data.kind} variant-${variant} status-${data.status}${selected ? ` is-selected${isLibtvGenerator || isDirector ? "" : " is-expanded"}` : ""}`}>
+    <article className={`workflow-node-card kind-${data.kind} variant-${variant}${isScriptGenerator ? " variant-libtv-generator" : ""} status-${data.status}${selected ? ` is-selected${isLibtvGenerator || isLibtvSource || isDirector ? "" : " is-expanded"}` : ""}`}>
       <Handle type="target" position={Position.Left} className="workflow-handle workflow-handle-target">{isLibtvGenerator && <Plus size={11} />}</Handle>
       <header>
         <span className="workflow-node-icon"><Icon name={variant === "director" ? "workflow" : data.kind} /></span>
         <span className="workflow-node-heading"><small>{data.eyebrow}</small><strong>{data.title}</strong></span>
         <i className="workflow-node-status" aria-label={data.status} />
       </header>
-      {!selected && !isLibtvGenerator && (data.kind === "image" || data.kind === "video") && (
+      {!selected && !isLibtvGenerator && !isLibtvSource && (data.kind === "image" || data.kind === "video") && (
         <div className={`workflow-node-preview preview-${data.kind}`}><span /><span /><span />{data.kind === "video" && <i><Icon name="video" /></i>}</div>
       )}
       {!selected && data.kind === "audio" && <div className="workflow-node-waveform" aria-hidden="true">{[8, 15, 10, 23, 18, 27, 12, 21, 9, 18, 13, 25, 16, 9].map((height, index) => <i key={`${height}-${index}`} style={{ height }} />)}</div>}
-      {isLibtvGenerator ? renderLibtvGeneratorBody()
+      {isLibtvSource ? renderLibtvSourceBody()
+        : isLibtvGenerator ? renderLibtvGeneratorBody()
         : variant === "script-workflow" ? renderScriptWorkflowNode()
         : (variant === "character-workflow" || variant === "first-frame-video-workflow" || variant === "audio-video-workflow") ? renderStandaloneWorkflowNode()
         : isDirector ? renderDirectorNode()
@@ -1324,7 +1429,8 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
       >{isLibtvGenerator && <Plus size={11} />}</Handle>
       {isLibtvGenerator && renderLibtvGeneratorDock()}
       {isLibtvGenerator && renderReferenceMenu()}
-      {isLibtvGenerator && data.status === "done" && (resultText || resultAssetUrl) && <NodeToolbar position={Position.Top} offset={39} align="center" className="libtv-node-download-toolbar nodrag"><button type="button" aria-label="下载生成结果" onClick={downloadGeneratorResult}><Download size={19} /></button></NodeToolbar>}
+      {isLibtvSource && Boolean(prompt || data.description) && <NodeToolbar position={Position.Top} offset={39} align="center" className="libtv-node-download-toolbar nodrag"><button type="button" aria-label="下载剧本内容" title="下载剧本内容" onPointerDown={stopPointer} onClick={downloadGeneratorResult}><Download size={19} /></button></NodeToolbar>}
+      {isLibtvGenerator && !isScriptGenerator && data.status === "done" && (resultText || resultAssetUrl) && <NodeToolbar position={Position.Top} offset={39} align="center" className="libtv-node-download-toolbar nodrag"><button type="button" aria-label="下载生成结果" onClick={downloadGeneratorResult}><Download size={19} /></button></NodeToolbar>}
     </article>
   );
 }
@@ -1346,6 +1452,7 @@ function AudioNodeControls({ data, update }: { data: WorkflowNodeData; update: (
 }
 
 const NODE_TYPES = { "workflow-node": WorkflowNodeCard };
+const EDGE_TYPES = { "libtv-reference": LibtvReferenceEdge };
 
 function StoryboardView({
   nodes,
@@ -1471,6 +1578,12 @@ function mergeDraftAttachments(...groups: DraftAttachment[][]): DraftAttachment[
   return [...merged.values()];
 }
 
+function sameStringList(value: unknown, expected: string[]): boolean {
+  return Array.isArray(value)
+    && value.length === expected.length
+    && value.every((item, index) => item === expected[index]);
+}
+
 function timestamp() {
   return new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
 }
@@ -1482,6 +1595,60 @@ function generatedImageFile(base64: string, mimeType: string, title: string): Fi
   const extension = mimeType === "image/jpeg" ? "jpg" : mimeType === "image/webp" ? "webp" : mimeType === "image/gif" ? "gif" : "png";
   const safeTitle = title.replace(/[\\/:*?"<>|]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60) || "生成图片";
   return new File([bytes], `${safeTitle}-${Date.now()}.${extension}`, { type: mimeType, lastModified: Date.now() });
+}
+
+async function generatedScriptAssetFile(
+  base64: string,
+  mimeType: string,
+  title: string,
+  ratio: "2:1" | "16:9" | "9:16" | "1:1",
+  resolution: "2K" | "4K",
+  quality: "standard" | "high",
+  signal: AbortSignal,
+): Promise<File> {
+  const source = generatedImageFile(base64, mimeType, title);
+  const bitmap = await createImageBitmap(source);
+  try {
+    if (signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    const ratioValue = ratio === "2:1" ? 2 : ratio === "16:9" ? 16 / 9 : ratio === "9:16" ? 9 / 16 : 1;
+    const longEdge = resolution === "4K" ? 4096 : 2048;
+    const width = ratioValue >= 1 ? longEdge : Math.max(1, Math.round(longEdge * ratioValue));
+    const height = ratioValue >= 1 ? Math.max(1, Math.round(longEdge / ratioValue)) : longEdge;
+    const sourceRatio = bitmap.width / Math.max(1, bitmap.height);
+    let sx = 0;
+    let sy = 0;
+    let sw = bitmap.width;
+    let sh = bitmap.height;
+    if (sourceRatio > ratioValue) {
+      sw = bitmap.height * ratioValue;
+      sx = (bitmap.width - sw) / 2;
+    } else if (sourceRatio < ratioValue) {
+      sh = bitmap.width / ratioValue;
+      sy = (bitmap.height - sh) / 2;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("无法创建资产图处理画布");
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
+    context.drawImage(bitmap, sx, sy, sw, sh, 0, 0, width, height);
+    if (signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(
+      (result) => result ? resolve(result) : reject(new Error("资产图编码失败")),
+      "image/jpeg",
+      quality === "high" ? .95 : .9,
+    ));
+    if (!blob.size || blob.size > MAX_GENERATED_IMAGE_BYTES) {
+      throw new Error("资产图编码后为空或超过 25MB，请降低分辨率或画质后重试");
+    }
+    if (signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    const safeTitle = title.replace(/[\\/:*?"<>|]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60) || "故事资产";
+    return new File([blob], `${safeTitle}-${resolution}-${Date.now()}.jpg`, { type: "image/jpeg", lastModified: Date.now() });
+  } finally {
+    bitmap.close();
+  }
 }
 
 async function generatedPanoramaFile(base64: string, mimeType: string, title: string): Promise<File> {
@@ -1541,6 +1708,46 @@ async function fileBase64(file: File, signal: AbortSignal): Promise<string> {
   });
 }
 
+async function referenceImageCollage(files: File[], signal: AbortSignal): Promise<File> {
+  const usable = files.filter((file) => file.type.startsWith("image/")).slice(0, 6);
+  if (!usable.length) throw new Error("参考资产没有可读取的图片");
+  if (usable.length === 1 && /^image\/(?:png|jpeg|webp)$/.test(usable[0].type) && usable[0].size <= 12 * 1024 * 1024) {
+    return usable[0];
+  }
+  const columns = Math.min(3, Math.ceil(Math.sqrt(usable.length)));
+  const rows = Math.ceil(usable.length / columns);
+  const cell = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = columns * cell;
+  canvas.height = rows * cell;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("无法创建参考资产拼图");
+  context.fillStyle = "#1b1c1f";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  for (let index = 0; index < usable.length; index += 1) {
+    if (signal.aborted) throw new DOMException("图片生成已取消", "AbortError");
+    const bitmap = await createImageBitmap(usable[index]);
+    try {
+      const scale = Math.min((cell - 24) / bitmap.width, (cell - 24) / bitmap.height);
+      const width = Math.max(1, Math.round(bitmap.width * scale));
+      const height = Math.max(1, Math.round(bitmap.height * scale));
+      const x = (index % columns) * cell + Math.round((cell - width) / 2);
+      const y = Math.floor(index / columns) * cell + Math.round((cell - height) / 2);
+      context.drawImage(bitmap, x, y, width, height);
+    } finally {
+      bitmap.close();
+    }
+  }
+  const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(
+    (result) => result ? resolve(result) : reject(new Error("参考资产拼图编码失败")),
+    "image/jpeg",
+    .9,
+  ));
+  if (signal.aborted) throw new DOMException("图片生成已取消", "AbortError");
+  if (!blob.size || blob.size > 12 * 1024 * 1024) throw new Error("参考资产拼图超过 12MB");
+  return new File([blob], `script-reference-${Date.now()}.jpg`, { type: "image/jpeg", lastModified: Date.now() });
+}
+
 interface GraphHistoryEntry {
   nodes: WorkflowNode[];
   edges: Edge[];
@@ -1557,8 +1764,12 @@ function cloneGraph(nodes: WorkflowNode[], edges: Edge[]): GraphHistoryEntry {
   };
 }
 
+function isTransientGenerationNode(data: WorkflowNodeData): boolean {
+  return data.variant === "libtv-generator" || data.variant === "script-new";
+}
+
 function copyableWorkflowNodeData(data: WorkflowNodeData): WorkflowNodeData {
-  if (data.variant !== "libtv-generator" || data.status !== "running") return { ...data };
+  if (!isTransientGenerationNode(data) || data.status !== "running") return { ...data };
   const hasResult = Boolean(data.resultText || data.resultAttachmentId);
   return {
     ...data,
@@ -1574,304 +1785,6 @@ function graphSignature(nodes: WorkflowNode[], edges: Edge[]) {
     nodes: nodes.map((node) => ({ id: node.id, position: node.position, data: node.data })),
     edges: edges.map((edge) => ({ id: edge.id, source: edge.source, target: edge.target })),
   });
-}
-
-type ScriptWorkflowStep = 1 | 2 | 3;
-type ScriptShotField = "visual" | "lighting" | "dialogue" | "sound" | "camera";
-type ScriptAssetKind = "character" | "scene" | "prop";
-type ScriptImageOptionKey = "model" | "quality" | "resolution" | "ratio";
-type ScriptImageOptionScope = "asset" | "batch";
-
-type ScriptShot = {
-  id: string;
-  duration: number;
-  visual: string;
-  scale: string;
-  lighting: string;
-  dialogue: string;
-  sound: string;
-  camera: string;
-  finalPrompt: string;
-  color: "red" | "yellow" | "green" | "blue" | "gray" | "";
-};
-
-type ScriptAsset = {
-  id: string;
-  kind: ScriptAssetKind;
-  name: string;
-  description: string;
-  prompt: string;
-  generated: boolean;
-};
-
-const SCRIPT_GLOBAL_STYLE = "唐代古风·电影级写实CG，盛唐金红暖调为主，辅以高饱和朱红与玄色对比，强逆光剪影与丁达尔效应，高清电影感，3D写实渲染。";
-
-const SCRIPT_SHOTS: ScriptShot[] = [
-  { id: "shot-1", duration: 8, visual: "画面从黑暗中亮起，微弱刺眼的蓝光照亮现代沈昭昭苍白疲惫的侧脸。她坐在昏暗的办公室里伏案敲击键盘，手机在桌面不断闪烁。突然，她停下动作，呼吸急促，瞳孔失焦，头部重重砸向桌面，画面瞬间切入纯黑。", scale: "近景", lighting: "深夜冷蓝光，局域光照明，极度压抑疲惫，持续轻微闪烁", dialogue: "", sound: "急促机械键盘敲击声、连续的手机叮叮提示音，沉重的倒桌声", camera: "手持微晃，缓慢向人物脸部推进", finalPrompt: "", color: "" },
-  { id: "shot-2", duration: 5, visual: "主观镜头从极度黑暗中骤然睁眼，视线由模糊迅速转为清晰。强烈阳光带着金色丁达尔光柱从前方直射而来，晨鼓声中，视线快速扫过雕梁画栋、排列整齐的群臣和高耸殿门。", scale: "全景", lighting: "强烈晨曦逆光，丁达尔效应，金碧辉煌，极具震撼与压迫感", dialogue: "", sound: "震天彻地的古代朝堂巨鼓声，带着回音", camera: "第一视角主观摇镜，带有苏醒时的视线晃动感", finalPrompt: "", color: "" },
-  { id: "shot-3", duration: 8, visual: "镜头切至客观全景，交代危机场面。古代沈昭昭身穿官服跪在金銮殿中央，两名高大威猛的金甲侍卫左右夹击，反扭着她的双手。紫服大臣站在画面前方，神情严厉地斥责她。", scale: "全景", lighting: "肃穆阴沉的朝堂光影，冷暖对比强烈，主角处于光影交界处", dialogue: "", sound: "甲胄摩擦的金属声、脚步声、肃静的环境底噪", camera: "高机位俯拍，缓慢顺时针环绕，凸显主角孤立无援", finalPrompt: "", color: "" },
-  { id: "shot-4", duration: 7, visual: "一名身穿紫色官服的大臣气势汹汹地从朝班中跨出一步，手中笏板直指跪在地上的古代沈昭昭，吹胡子瞪眼，厉声斥责。古代沈昭昭被喝问得一脸茫然，微微抬头环顾四周。", scale: "中近景", lighting: "光线硬朗，阴影加深，强化冲突氛围", dialogue: "大臣：大逆不道！假称诗才惊世，欺君罔上，当斩！\n古代沈昭昭：这是……唐朝？", sound: "怒喝声回荡，主角急促的呼吸声", camera: "过肩镜头，从大臣背侧拍向主角，随后快速推至主角面部特写", finalPrompt: "", color: "" },
-  { id: "shot-5", duration: 6, visual: "镜头上摇越过长长的朝阶，聚焦在龙椅之上的皇帝。他眼神阴沉冷酷，不怒自威，微微前倾身体，满座群臣屏息肃立。", scale: "中景", lighting: "皇帝背后带有微弱金色轮廓光，面部处于半明半暗的冷峻光影中", dialogue: "皇帝：既言才华盖世，当殿作诗。若不能——斩。", sound: "寂静中只有皇帝低沉浑厚的嗓音，带有大殿回声", camera: "超低机位仰拍，缓慢向前推进，权力感最大化", finalPrompt: "", color: "" },
-  { id: "shot-6", duration: 5, visual: "随着皇帝一声斩字落地，一旁侍卫猛然抽出腰间的大刀。大刀雪白的刀刃在半空中划过一道刺眼寒光，镜头极速推进至古代沈昭昭的眼睛大特写，清晰看到锋利刀刃反射在她颤抖的棕色瞳孔之中。", scale: "大特写", lighting: "极高对比度，锐利的金属反光刺破暗部，极致紧张", dialogue: "", sound: "极其清脆刺耳的金属拔刀声，心跳声猛烈放大", camera: "快速推拉，直逼眼球特写", finalPrompt: "", color: "" },
-  { id: "shot-7", duration: 10, visual: "在死亡威胁下，古代沈昭昭身体突然停止颤抖。她双唇发白却猛地睁开双眼，眼神由恐惧转为坚毅。她深吸一口气，微微侧头望向打开的殿门，门外万里无云，阳光灿烂的长安城如画卷般延伸。", scale: "全身景", lighting: "从殿内阴暗逐渐过渡到阳光普照的希望感，光影象征心境转变", dialogue: "", sound: "衣服摩擦声、沉重而深长的呼吸声，背景音乐开始铺陈激昂鼓点", camera: "机位随着主角站起同步缓慢上升，从俯视转为平视，镜头底端平移", finalPrompt: "", color: "" },
-  { id: "shot-8", duration: 8, visual: "古代沈昭昭彻底站定，身躯笔直如松。她迎着刺眼的殿门阳光，嘴角勾起一抹自信弧度，目光灼灼，用极其清晰且带着煽动力的语气低声自语。", scale: "半身景", lighting: "高光打在面部，背景逐渐虚化变暗，视觉中心高度集中", dialogue: "古代沈昭昭：既来盛唐……便与盛唐争一争。", sound: "低沉的自语声，衣袍挥舞带起的烈风声", camera: "正面跟推，镜头随着她手臂抬起产生轻微震颤", finalPrompt: "", color: "" },
-  { id: "shot-9", duration: 10, visual: "古代沈昭昭仰起头，胸腔挺起，对着空旷高耸的穹顶高声吟诵。声音清越激昂，如惊雷滚滚在大殿内回荡。伴随着她的怒吼，仿佛看无形的气浪以她为中心向四周层层扩散，整个殿堂震颤，群臣震惊。", scale: "近景", lighting: "顶光仿佛神谕般降临，微尘在光柱中狂舞，极致热血爆发", dialogue: "古代沈昭昭：君不见黄河之水天上来——", sound: "极具震撼的女声怒音咆哮，带有史诗感的BGM瞬间推向最高点", camera: "360度快速环绕拍摄，慢动作交叉剪辑，最终特写拉近嘴部", finalPrompt: "", color: "" },
-  { id: "shot-10", duration: 5, visual: "诗句的余音宛如惊雷劈入人群。画面快速切过群臣的反应：刚才还咄咄逼人的大臣瞪大双眼，嘴巴微张，惊得手中笏板滑落。周围群臣也纷纷倒吸一口凉气，身体僵硬，满脸写着不可思议。", scale: "中远景", lighting: "自然光效，氛围由威严转为集体震撼失语", dialogue: "", sound: "木质笏板掉落在地上的清脆响声、群臣倒吸凉气的惊叹声", camera: "水平快速横移扫视，捕捉不同官员的震惊丑态", finalPrompt: "", color: "" },
-  { id: "shot-11", duration: 6, visual: "高高在上的皇帝眼孔剧烈收缩，原本稳坐如山的躯体猛然一震。他双手死死抓住龙椅扶手，上半身前倾，不受控制地缓缓站立起来，华贵的龙袍微微发抖。他眼中不再有高傲的杀意，取而代之的是面对千古绝唱时难以掩饰的狂热与折服。", scale: "近景", lighting: "皇帝面部阴影被高光驱散，表情里的狂热被强化", dialogue: "皇帝：此诗……当传万世。", sound: "龙椅摩擦的沉闷声，沉重的心跳声，皇帝气息不稳的台词", camera: "正面仰拍慢推，配合皇帝站起的动作，镜头产生膜拜感", finalPrompt: "", color: "" },
-  { id: "shot-12", duration: 10, visual: "镜头从大殿门框内向外快速穿越，猛然升空。视角升至半空，俯视阳光万里、繁华无际的长安城。城墙楼宇巍峨，华灯未歇的长安街市铺展至地平线。前景隐约叠化出古代沈昭昭背着手、站在高高城楼上的坚定身影。", scale: "大远景", lighting: "极其明亮壮阔的白昼，万里晴空，史诗感爆发的终幕画面", dialogue: "[旁白]既然来了……那便写尽三万里长安！", sound: "风声呼啸，盛世长街的繁华白噪音，大气磅礴的交响乐收尾", camera: "航拍视角由低到高升镜并后拉，画面极限开阔宏大", finalPrompt: "", color: "" },
-];
-
-const SCRIPT_ASSETS: ScriptAsset[] = [
-  { id: "asset-modern", kind: "character", name: "现代沈昭昭", description: "现代都市白领，女，28岁，身高165厘米，偏瘦，披肩中长发，黑眼圈明显，面容疲惫。", prompt: "现代职场女性，28岁，披肩黑发，苍白肤色，白色衬衫与黑色西装长裤，四视图角色设定，纯白背景，面部清晰，服装一致，空手。", generated: false },
-  { id: "asset-ancient", kind: "character", name: "古代沈昭昭", description: "唐代低阶女官，女扮男装，28岁，红色圆领袍，黑色幞头，眼神逐渐坚毅。", prompt: "唐代女扮男装低阶女官，红色圆领袍、黑色幞头与革带，清秀英气，四视图角色设定，纯白背景，保持人物一致性。", generated: false },
-  { id: "asset-emperor", kind: "character", name: "皇帝", description: "唐代君主，男，45岁，身材高大魁梧，黑金龙袍，威严冷峻。", prompt: "唐代帝王，45岁，魁梧，黑金龙袍与冕旒，深邃黑瞳，威严八字胡，四视图角色设定，纯白背景。", generated: false },
-  { id: "asset-minister", kind: "character", name: "大臣", description: "唐代朝堂高官，男，60岁，微胖，紫色官袍，面相刻薄严厉。", prompt: "唐代朝廷高官，60岁，紫色圆领官袍，黑色幞头，法令纹深，面相严厉，四视图角色设定，纯白背景。", generated: false },
-  { id: "asset-guard", kind: "character", name: "侍卫", description: "唐代金甲禁军，男，30岁，身材强壮，黑发束起，方脸，神情冷峻。", prompt: "唐代金甲侍卫，30岁，强壮，黑发束起，方脸冷峻，银黑甲胄，四视图角色设定，纯白背景。", generated: false },
-  { id: "asset-crowd", kind: "character", name: "群臣", description: "唐代百官群像，男性为主，年龄30至70岁不等，官服品级丰富。", prompt: "唐代文武百官群像角色设定，红紫青绿官袍，年龄体型各异，队列清晰，纯白背景，无文字水印。", generated: false },
-  { id: "asset-palace", kind: "scene", name: "金銮殿", description: "唐代皇宫正殿内部，室内，宏观尺度，金柱、龙椅、红毯与开阔朝堂。", prompt: "盛唐金銮殿空场景，恢弘对称构图，巨大龙椅和盘龙金柱，红毯与大理石地面，四个大全景视角，无人物。", generated: false },
-  { id: "asset-changan", kind: "scene", name: "长安城", description: "大唐都城，室外，宏观尺度，坊市屋顶、宽阔街道与远山云霞。", prompt: "盛唐长安城空场景，万里晴空，整齐坊市与宽阔朱雀大街，远山云霞，四个大全景视角，无人物。", generated: false },
-  { id: "asset-sword", kind: "prop", name: "大刀", description: "唐代禁军横刀，长直刃，银色精钢材质，黑色刀柄与黄铜护手。", prompt: "唐代禁军横刀，长直刃，银色精钢，黑色刀柄，黄铜护手，专业产品影棚六视图，纯白背景，无文字水印。", generated: false },
-];
-
-const SCRIPT_ASSET_LABELS: Record<ScriptAssetKind, { title: string; generate: string; singular: string }> = {
-  character: { title: "角色", generate: "生成或上传角色图", singular: "角色" },
-  scene: { title: "场景", generate: "生成或上传场景图", singular: "场景" },
-  prop: { title: "道具", generate: "生成或上传道具图", singular: "道具" },
-};
-
-const SCRIPT_IMAGE_OPTION_VALUES: Record<ScriptImageOptionKey, readonly string[]> = {
-  model: ["Lib Image", "Seedream 5.0 Pro"],
-  quality: ["标准画质", "高清画质"],
-  resolution: ["2K", "4K"],
-  ratio: ["2:1", "16:9", "9:16", "1:1"],
-};
-
-function ScriptWorkflowOverlay({
-  open,
-  nodeId,
-  onClose,
-  onBatchVideo,
-}: {
-  open: boolean;
-  nodeId: string | null;
-  onClose: () => void;
-  onBatchVideo: (nodeId: string, shots: ScriptShot[]) => void;
-}) {
-  const [step, setStep] = useState<ScriptWorkflowStep>(1);
-  const [shots, setShots] = useState<ScriptShot[]>(() => SCRIPT_SHOTS.map((shot) => ({ ...shot })));
-  const [assets, setAssets] = useState<ScriptAsset[]>(() => SCRIPT_ASSETS.map((asset) => ({ ...asset })));
-  const [style, setStyle] = useState(SCRIPT_GLOBAL_STYLE);
-  const [styleDraft, setStyleDraft] = useState(SCRIPT_GLOBAL_STYLE);
-  const [editingCell, setEditingCell] = useState<{ id: string; field: ScriptShotField } | null>(null);
-  const [rowMenuId, setRowMenuId] = useState<string | null>(null);
-  const [assetMenuId, setAssetMenuId] = useState<string | null>(null);
-  const [assetDialogId, setAssetDialogId] = useState<string | null>(null);
-  const [assetDialogTab, setAssetDialogTab] = useState<"generate" | "canvas" | "upload">("generate");
-  const [batchOpen, setBatchOpen] = useState(false);
-  const [batchSelection, setBatchSelection] = useState<string[]>(() => SCRIPT_ASSETS.map((asset) => asset.id));
-  const [newAssetKind, setNewAssetKind] = useState<ScriptAssetKind | null>(null);
-  const [newAssetName, setNewAssetName] = useState("");
-  const [newAssetDescription, setNewAssetDescription] = useState("");
-  const [styleEditing, setStyleEditing] = useState(false);
-  const [promptDialogShotId, setPromptDialogShotId] = useState<string | null>(null);
-  const [assetGenerating, setAssetGenerating] = useState(false);
-  const [composing, setComposing] = useState(false);
-  const [imageModel, setImageModel] = useState("Lib Image");
-  const [imageQuality, setImageQuality] = useState("标准画质");
-  const [imageResolution, setImageResolution] = useState("2K");
-  const [imageRatio, setImageRatio] = useState("2:1");
-  const [imageOptionMenu, setImageOptionMenu] = useState<{ scope: ScriptImageOptionScope; key: ScriptImageOptionKey } | null>(null);
-  const workflowSessionRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (!nodeId || workflowSessionRef.current === nodeId) return;
-    workflowSessionRef.current = nodeId;
-    setStep(1);
-    setShots(SCRIPT_SHOTS.map((shot) => ({ ...shot })));
-    setAssets(SCRIPT_ASSETS.map((asset) => ({ ...asset })));
-    setBatchSelection(SCRIPT_ASSETS.map((asset) => asset.id));
-    setStyle(SCRIPT_GLOBAL_STYLE);
-    setStyleDraft(SCRIPT_GLOBAL_STYLE);
-  }, [nodeId]);
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      if (imageOptionMenu) setImageOptionMenu(null);
-      else if (batchOpen) setBatchOpen(false);
-      else if (assetDialogId) setAssetDialogId(null);
-      else if (promptDialogShotId) setPromptDialogShotId(null);
-      else if (newAssetKind) { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); }
-      else if (styleEditing) setStyleEditing(false);
-      else onClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [assetDialogId, batchOpen, imageOptionMenu, newAssetKind, onClose, open, promptDialogShotId, styleEditing]);
-
-  if (!open || !nodeId) return null;
-
-  const generatedCount = assets.filter((asset) => asset.generated).length;
-  const composedCount = shots.filter((shot) => shot.finalPrompt).length;
-  const allAssetsReady = assets.length > 0 && generatedCount === assets.length;
-  const allPromptsReady = shots.length > 0 && composedCount === shots.length;
-  const completedStages = 1 + Number(allAssetsReady) + Number(allPromptsReady);
-  const activeAsset = assets.find((asset) => asset.id === assetDialogId) ?? null;
-  const generatedAssets = assets.filter((asset) => asset.generated);
-  const activePromptShot = shots.find((shot) => shot.id === promptDialogShotId) ?? null;
-
-  const updateShot = (id: string, patch: Partial<ScriptShot>) => {
-    setShots((items) => items.map((shot) => shot.id === id ? { ...shot, ...patch, finalPrompt: patch.finalPrompt ?? (Object.keys(patch).some((key) => key !== "color") ? "" : shot.finalPrompt) } : shot));
-  };
-  const updateAsset = (id: string, patch: Partial<ScriptAsset>) => setAssets((items) => items.map((asset) => asset.id === id ? { ...asset, ...patch } : asset));
-  const composePrompt = (shot: ScriptShot) => `${style} ${shot.scale}，${shot.visual} 光影氛围：${shot.lighting}。${shot.dialogue ? `对白：${shot.dialogue}。` : ""}音效：${shot.sound}。运镜：${shot.camera}。主体一致，细节清晰，电影级构图。`;
-  const composeAll = () => {
-    if (composing) return;
-    setComposing(true);
-    const queue = shots.map((shot) => ({ ...shot }));
-    queue.forEach((shot, index) => {
-      window.setTimeout(() => {
-        setShots((items) => items.map((item) => item.id === shot.id ? { ...item, finalPrompt: composePrompt(item) } : item));
-        if (index === queue.length - 1) setComposing(false);
-      }, 120 + index * 120);
-    });
-  };
-  const generateAssets = (ids: string[], closeWhenDone: boolean) => {
-    if (!ids.length || assetGenerating) return;
-    setAssetGenerating(true);
-    ids.forEach((id, index) => {
-      window.setTimeout(() => {
-        updateAsset(id, { generated: true });
-        if (index === ids.length - 1) {
-          setAssetGenerating(false);
-          if (closeWhenDone) setBatchOpen(false);
-        }
-      }, 180 + index * 150);
-    });
-  };
-  const addShot = () => {
-    const index = shots.length + 1;
-    setShots((items) => [...items, { id: `shot-${crypto.randomUUID()}`, duration: 5, visual: "点击补充新镜头画面描述", scale: "中景", lighting: "自然光，电影感", dialogue: "", sound: "环境底噪", camera: "固定机位", finalPrompt: "", color: "" }]);
-    window.setTimeout(() => document.querySelector(`[data-script-shot-index="${index}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" }), 0);
-  };
-  const addAsset = () => {
-    if (!newAssetKind || !newAssetName.trim()) return;
-    const id = `asset-${crypto.randomUUID()}`;
-    const description = newAssetDescription.trim() || `新增${SCRIPT_ASSET_LABELS[newAssetKind].singular}，等待补充详细设定。`;
-    setAssets((items) => [...items, { id, kind: newAssetKind, name: newAssetName.trim(), description, prompt: `${newAssetName.trim()}，${description}，${style}`, generated: false }]);
-    setBatchSelection((items) => [...items, id]);
-    setNewAssetKind(null);
-    setNewAssetName("");
-    setNewAssetDescription("");
-  };
-
-  const imageOptionValue = (key: ScriptImageOptionKey) => ({
-    model: imageModel,
-    quality: imageQuality,
-    resolution: imageResolution,
-    ratio: imageRatio,
-  })[key];
-  const selectImageOption = (key: ScriptImageOptionKey, value: string) => {
-    if (key === "model") setImageModel(value);
-    if (key === "quality") setImageQuality(value);
-    if (key === "resolution") setImageResolution(value);
-    if (key === "ratio") setImageRatio(value);
-    setImageOptionMenu(null);
-  };
-  const renderImageOption = (scope: ScriptImageOptionScope, key: ScriptImageOptionKey) => {
-    const currentValue = imageOptionValue(key);
-    const isOpen = imageOptionMenu?.scope === scope && imageOptionMenu.key === key;
-    return <span className="script-option-control" key={`${scope}-${key}`}>
-      <button
-        type="button"
-        aria-haspopup="menu"
-        aria-expanded={isOpen}
-        onClick={(event) => {
-          event.stopPropagation();
-          setImageOptionMenu((current) => current?.scope === scope && current.key === key ? null : { scope, key });
-        }}
-      >{currentValue}<ChevronDown size={12} /></button>
-      {isOpen && <div className="script-option-popover" role="menu" aria-label={`${currentValue}选项`} onClick={(event) => event.stopPropagation()}>
-        {SCRIPT_IMAGE_OPTION_VALUES[key].map((value) => <button type="button" role="menuitemradio" aria-checked={value === currentValue} className={value === currentValue ? "is-selected" : ""} key={value} onClick={() => selectImageOption(key, value)}><span>{value}</span>{value === currentValue && <Check size={13} />}</button>)}
-      </div>}
-    </span>;
-  };
-
-  const renderEditableCell = (shot: ScriptShot, field: ScriptShotField, emptyLabel = "+") => {
-    const value = shot[field];
-    const isEditing = editingCell?.id === shot.id && editingCell.field === field;
-    return isEditing ? <textarea
-      autoFocus
-      aria-label={`编辑${field}`}
-      value={value}
-      onChange={(event) => updateShot(shot.id, { [field]: event.target.value } as Partial<ScriptShot>)}
-      onBlur={() => setEditingCell(null)}
-      onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === "Enter") setEditingCell(null); if (event.key === "Escape") setEditingCell(null); }}
-    /> : <button type="button" className={!value ? "is-empty" : ""} onClick={() => setEditingCell({ id: shot.id, field })}>{value || emptyLabel}</button>;
-  };
-
-  const renderShotTable = () => <div className="script-workflow-table-scroll">
-    <table className="script-workflow-table">
-      <colgroup><col className="col-number" /><col className="col-duration" /><col className="col-visual" /><col className="col-scale" /><col className="col-light" /><col className="col-dialogue" /><col className="col-sound" /><col className="col-camera" /><col className="col-final" /><col className="col-action" /></colgroup>
-      <thead><tr>{["镜号", "时长", "画面描述", "景别", "光影氛围", "对白·旁白", "音效", "运镜", "最终提示词", "操作"].map((label) => <th key={label}>{label}</th>)}</tr></thead>
-      <tbody>{shots.map((shot, index) => <tr key={shot.id} data-script-shot-index={index + 1} className={shot.color ? `is-${shot.color}` : ""}>
-        <td><span className="script-shot-number" title="拖拽行"><GripVertical size={13} />{index + 1}</span></td>
-        <td><button type="button" onClick={() => updateShot(shot.id, { duration: [5, 6, 7, 8, 10, 12, 15][([5, 6, 7, 8, 10, 12, 15].indexOf(shot.duration) + 1) % 7] })}>{shot.duration}s</button></td>
-        <td>{renderEditableCell(shot, "visual")}</td>
-        <td><SelectMenu ariaLabel={`镜头${index + 1}景别`} value={shot.scale} options={["大远景", "全景", "中远景", "中景", "中近景", "近景", "半身景", "头肩景", "特写", "大特写"].map((item) => ({ value: item, label: item }))} onChange={(scale) => updateShot(shot.id, { scale })} /></td>
-        <td>{renderEditableCell(shot, "lighting")}</td>
-        <td>{renderEditableCell(shot, "dialogue")}</td>
-        <td>{renderEditableCell(shot, "sound")}</td>
-        <td>{renderEditableCell(shot, "camera")}</td>
-        <td><button type="button" className={`script-final-prompt${shot.finalPrompt ? " is-ready" : ""}`} onClick={() => { if (!shot.finalPrompt) updateShot(shot.id, { finalPrompt: composePrompt(shot) }); else setPromptDialogShotId(shot.id); }}>{composing && !shot.finalPrompt ? <><span className="script-spinner" />合成中</> : shot.finalPrompt ? "查看提示词" : "待生成提示词"}</button></td>
-        <td className="script-shot-action"><button type="button" aria-label={`镜头${index + 1}行操作`} aria-expanded={rowMenuId === shot.id} onClick={() => setRowMenuId((current) => current === shot.id ? null : shot.id)}><MoreHorizontal size={16} /></button>{rowMenuId === shot.id && <div className="script-shot-menu" role="menu"><small>请选择颜色</small><div><button type="button" aria-label="清除颜色" className="clear" onClick={() => { updateShot(shot.id, { color: "" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为红色" className="red" onClick={() => { updateShot(shot.id, { color: "red" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为黄色" className="yellow" onClick={() => { updateShot(shot.id, { color: "yellow" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为绿色" className="green" onClick={() => { updateShot(shot.id, { color: "green" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为蓝色" className="blue" onClick={() => { updateShot(shot.id, { color: "blue" }); setRowMenuId(null); }} /><button type="button" aria-label="标记为灰色" className="gray" onClick={() => { updateShot(shot.id, { color: "gray" }); setRowMenuId(null); }} /></div><button type="button" className="delete" onClick={() => { setShots((items) => items.filter((item) => item.id !== shot.id)); setRowMenuId(null); }}><Trash2 size={13} />删除该行</button></div>}</td>
-      </tr>)}</tbody>
-    </table>
-  </div>;
-
-  return <section className="script-workflow-overlay" role="dialog" aria-modal="true" aria-label="脚本生成工作台" onClick={(event) => { const target = event.target as HTMLElement; if (!target.closest(".script-shot-action")) setRowMenuId(null); if (!target.closest(".script-asset-card")) setAssetMenuId(null); if (!target.closest(".script-option-control")) setImageOptionMenu(null); }}>
-    <header className="script-workflow-topbar">
-      <nav aria-label="脚本生成步骤">
-        <button type="button" className={step === 1 ? "is-active is-done" : "is-done"} onClick={() => setStep(1)}><i>{step === 1 ? 1 : <Check size={13} />}</i><span><b>确认镜头</b><small>{shots.length}个镜头已就绪</small></span></button>
-        <em />
-        <button type="button" className={`${step === 2 ? "is-active" : ""}${allAssetsReady ? " is-done" : ""}`} onClick={() => setStep(2)}><i>{allAssetsReady ? <Check size={13} /> : 2}</i><span><b>准备资产</b><small>{generatedCount}/{assets.length} 已生成、还差 {assets.length - generatedCount} 个</small></span></button>
-        <em />
-        <button type="button" className={`${step === 3 ? "is-active" : ""}${allPromptsReady ? " is-done" : ""}`} onClick={() => setStep(3)}><i>{allPromptsReady ? <Check size={13} /> : 3}</i><span><b>合成提示词</b><small>{composedCount}/{shots.length} 已合成</small></span></button>
-      </nav>
-      <div><button type="button" className="script-batch-video" disabled={completedStages < 3} onClick={() => onBatchVideo(nodeId, shots)}>{completedStages}/3 {completedStages === 3 ? "批量生视频" : "完成后可批量生视频"}</button><button type="button" className="script-workflow-close" aria-label="关闭脚本工作台" title="关闭 (ESC)" onClick={onClose}><X size={17} /></button></div>
-    </header>
-
-    {step === 1 && <main className="script-workflow-shot-step">{renderShotTable()}<footer><button type="button" onClick={addShot}><Plus size={15} />添加镜头</button><button type="button" className="primary" onClick={() => setStep(2)}>→ 下一步：准备资产</button></footer></main>}
-
-    {step === 2 && <main className="script-workflow-assets-step">
-      <div className="script-workflow-assets-scroll">
-        <button type="button" className="script-global-style" onClick={() => { setStyleDraft(style); setStyleEditing(true); }}><span>全局风格</span><p>{style}</p><i><PencilLine size={13} /></i></button>
-        {(["character", "scene", "prop"] as ScriptAssetKind[]).map((kind) => <section className={`script-asset-section kind-${kind}`} key={kind}>
-          <h3>{SCRIPT_ASSET_LABELS[kind].title}</h3>
-          <div>{assets.filter((asset) => asset.kind === kind).map((asset, assetIndex) => <article className={`script-asset-card${asset.generated ? " is-generated" : ""}`} key={asset.id}>
-            <button type="button" className="script-asset-preview" aria-label={`${asset.name}${asset.generated ? "设定图" : SCRIPT_ASSET_LABELS[kind].generate}`} onClick={() => { setAssetDialogId(asset.id); setAssetDialogTab(asset.generated ? "canvas" : "generate"); }}><span>{asset.generated ? <><Sparkles size={21} /><b>资产已生成</b></> : SCRIPT_ASSET_LABELS[kind].generate}</span><i className={`asset-tone-${assetIndex % 5}`} /></button>
-            <button type="button" className="script-asset-more" aria-label={`${asset.name}资产卡操作菜单`} aria-expanded={assetMenuId === asset.id} onClick={(event) => { event.stopPropagation(); setAssetMenuId((current) => current === asset.id ? null : asset.id); }}><MoreHorizontal size={15} /></button>
-            {assetMenuId === asset.id && <div className="script-asset-menu" role="menu" onClick={(event) => event.stopPropagation()}><button type="button" role="menuitem" onClick={() => { setAssetDialogId(asset.id); setAssetDialogTab("canvas"); setAssetMenuId(null); }}>选择图片</button><button type="button" role="menuitem" onClick={() => { setAssetDialogId(asset.id); setAssetDialogTab("generate"); setAssetMenuId(null); }}>AI 生{SCRIPT_ASSET_LABELS[kind].singular}</button><button type="button" role="menuitem" disabled={!asset.generated}>跳转至节点</button><button type="button" role="menuitem" onClick={() => { updateAsset(asset.id, { generated: false }); setAssetMenuId(null); }}>清除图片</button><button type="button" role="menuitem" className="danger" onClick={() => { setAssets((items) => items.filter((item) => item.id !== asset.id)); setBatchSelection((items) => items.filter((id) => id !== asset.id)); setAssetMenuId(null); }}>删除</button></div>}
-            <strong>{asset.name}</strong><p>{asset.description}</p>
-          </article>)}<button type="button" className="script-asset-add" aria-label={`新增${SCRIPT_ASSET_LABELS[kind].singular}`} onClick={() => { setNewAssetName(""); setNewAssetDescription(""); setNewAssetKind(kind); }}><Plus size={20} /><span>新增</span></button></div>
-        </section>)}
-      </div>
-      <footer><span>检测到有 {assets.filter((asset) => !asset.generated && asset.kind === "character").length} 个人物角色和 {assets.filter((asset) => !asset.generated && asset.kind === "scene").length} 个场景和 {assets.filter((asset) => !asset.generated && asset.kind === "prop").length} 个道具没有设定图，您可以手动上传或 AI 批量生成</span><div><button type="button" onClick={() => setBatchOpen(true)}><Sparkles size={14} />一键生成所有资产</button><button type="button" className="primary" onClick={() => setStep(3)}>→ 下一步：合成提示词</button></div></footer>
-    </main>}
-
-    {step === 3 && <main className="script-workflow-shot-step is-compose">{renderShotTable()}<footer><button type="button" onClick={() => setStep(2)}><ArrowLeft size={14} />返回准备资产</button><button type="button" className="primary" disabled={composing || allPromptsReady} onClick={composeAll}>{composing ? <><span className="script-spinner" />合成中 {composedCount}/{shots.length}</> : allPromptsReady ? <><Check size={14} />提示词已全部合成</> : <><Sparkles size={14} />一键合成全部提示词</>}</button></footer></main>}
-
-    {styleEditing && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setStyleEditing(false); }}><section className="script-style-modal" role="dialog" aria-label="编辑全局风格"><header><strong>编辑全局风格</strong><button type="button" aria-label="关闭" onClick={() => setStyleEditing(false)}><X size={15} /></button></header><textarea value={styleDraft} aria-label="全局美术风格" onChange={(event) => setStyleDraft(event.target.value)} /><p>全局美术风格首次合成后即锁定，后续不可再修改。</p><footer><button type="button" onClick={() => setStyleEditing(false)}>取消</button><button type="button" className="primary" onClick={() => { setStyle(styleDraft.trim() || SCRIPT_GLOBAL_STYLE); setStyleEditing(false); }}>确认</button></footer></section></div>}
-
-    {activePromptShot && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setPromptDialogShotId(null); }}><section className="script-prompt-modal" role="dialog" aria-label={`镜头提示词 ${shots.findIndex((shot) => shot.id === activePromptShot.id) + 1}`}><header><strong>最终提示词 · 镜头 {shots.findIndex((shot) => shot.id === activePromptShot.id) + 1}</strong><button type="button" aria-label="关闭" onClick={() => setPromptDialogShotId(null)}><X size={15} /></button></header><textarea value={activePromptShot.finalPrompt} aria-label="最终提示词" onChange={(event) => setShots((items) => items.map((shot) => shot.id === activePromptShot.id ? { ...shot, finalPrompt: event.target.value } : shot))} /><footer><button type="button" onClick={() => updateShot(activePromptShot.id, { finalPrompt: composePrompt(activePromptShot) })}><RotateCcw size={13} />重新合成</button><button type="button" onClick={() => { void navigator.clipboard?.writeText(activePromptShot.finalPrompt); }}>复制提示词</button><button type="button" className="primary" onClick={() => setPromptDialogShotId(null)}>完成</button></footer></section></div>}
-
-    {newAssetKind && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); } }}><section className="script-new-asset-modal" role="dialog" aria-label={`新增${SCRIPT_ASSET_LABELS[newAssetKind].singular}`}><header><strong>新增{SCRIPT_ASSET_LABELS[newAssetKind].singular}</strong><button type="button" aria-label="关闭" onClick={() => { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); }}><X size={15} /></button></header><label>名称<input autoFocus value={newAssetName} onChange={(event) => setNewAssetName(event.target.value)} placeholder={`请输入${SCRIPT_ASSET_LABELS[newAssetKind].singular}名称`} /></label><label>描述<textarea value={newAssetDescription} onChange={(event) => setNewAssetDescription(event.target.value)} placeholder="补充外观、服装、环境或材质信息" /></label><footer><button type="button" onClick={() => { setNewAssetKind(null); setNewAssetName(""); setNewAssetDescription(""); }}>取消</button><button type="button" disabled={!newAssetName.trim()} onClick={addAsset}>新增</button></footer></section></div>}
-
-    {activeAsset && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) { setImageOptionMenu(null); setAssetDialogId(null); } }}><section className="script-asset-dialog" role="dialog" aria-label={`选择图片（${activeAsset.name}）`}><header><strong>选择图片（{activeAsset.name}）</strong><button type="button" aria-label="关闭" onClick={() => { setImageOptionMenu(null); setAssetDialogId(null); }}><X size={16} /></button></header><nav><button type="button" className={assetDialogTab === "generate" ? "is-active" : ""} onClick={() => { setImageOptionMenu(null); setAssetDialogTab("generate"); }}>AI生成</button><button type="button" className={assetDialogTab === "canvas" ? "is-active" : ""} onClick={() => { setImageOptionMenu(null); setAssetDialogTab("canvas"); }}>从当前画布选择</button><button type="button" className={assetDialogTab === "upload" ? "is-active" : ""} onClick={() => { setImageOptionMenu(null); setAssetDialogTab("upload"); }}>本地上传</button></nav>{assetDialogTab === "generate" ? <><textarea aria-label="开始你的设计" value={activeAsset.prompt} onChange={(event) => updateAsset(activeAsset.id, { prompt: event.target.value })} /><footer><div>{(["model", "quality", "resolution", "ratio"] as ScriptImageOptionKey[]).map((key) => renderImageOption("asset", key))}</div><span><Sparkles size={13} />18</span><button type="button" className="primary" disabled={assetGenerating} onClick={() => { setImageOptionMenu(null); generateAssets([activeAsset.id], false); window.setTimeout(() => setAssetDialogId(null), 420); }}>{assetGenerating ? "生成中" : "确认生成"}</button></footer></> : assetDialogTab === "canvas" ? <div className="script-asset-source">{generatedAssets.length ? <div className="script-asset-source-grid">{generatedAssets.map((candidate, index) => <button type="button" key={candidate.id} aria-label={`使用${candidate.name}设定图`} onClick={() => { updateAsset(activeAsset.id, { generated: true }); setAssetDialogId(null); }}><i className={`asset-tone-${index % 5}`} /><span>{candidate.name} 设定图</span>{candidate.id === activeAsset.id && <Check size={15} />}</button>)}</div> : <span><ImagePlay size={25} /><b>当前画布暂无可选图片</b><small>生成或上传图片后可在这里选择</small></span>}</div> : <label className="script-asset-upload"><Upload size={28} /><strong>拖拽图片到这里，或点击上传</strong><small>支持 PNG、JPG、WEBP</small><input type="file" accept="image/*" onChange={(event) => { if (event.target.files?.length) { updateAsset(activeAsset.id, { generated: true }); setAssetDialogId(null); } }} /></label>}</section></div>}
-
-    {batchOpen && <div className="script-submodal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) { setImageOptionMenu(null); setBatchOpen(false); } }}><section className="script-batch-modal" role="dialog" aria-label="一键生成所有资产"><header><strong>一键生成所有资产</strong><button type="button" aria-label="关闭" onClick={() => { setImageOptionMenu(null); setBatchOpen(false); }}><X size={17} /></button></header><div className="script-batch-list">{(["character", "scene", "prop"] as ScriptAssetKind[]).map((kind) => { const items = assets.filter((asset) => asset.kind === kind); return items.length ? <section key={kind}><h4>{SCRIPT_ASSET_LABELS[kind].title} ({items.length})</h4>{items.map((asset) => <label key={asset.id}><input type="checkbox" checked={batchSelection.includes(asset.id)} onChange={(event) => setBatchSelection((selected) => event.target.checked ? [...selected, asset.id] : selected.filter((id) => id !== asset.id))} /><span><strong>{asset.name}<i>{SCRIPT_ASSET_LABELS[kind].singular}</i></strong><textarea value={asset.prompt} onChange={(event) => updateAsset(asset.id, { prompt: event.target.value })} /></span></label>)}</section> : null; })}</div><footer><label><input type="checkbox" checked={batchSelection.length === assets.length && assets.length > 0} onChange={(event) => setBatchSelection(event.target.checked ? assets.map((asset) => asset.id) : [])} /><span>已选 {batchSelection.length}/{assets.length}</span></label><div className="script-batch-options">{(["model", "quality", "resolution", "ratio"] as ScriptImageOptionKey[]).map((key) => renderImageOption("batch", key))}</div><span className="script-batch-cost"><Sparkles size={13} />{batchSelection.length * 18}</span><button type="button" className="primary" disabled={!batchSelection.length || assetGenerating} onClick={() => { setImageOptionMenu(null); generateAssets(batchSelection, true); }}>{assetGenerating ? "生成中…" : `生成(${batchSelection.length})`}</button></footer></section></div>}
-  </section>;
 }
 
 function defaultCreationConfig(work: WebWork): WorkCreationConfig {
@@ -1923,7 +1836,27 @@ export function CanvasPage({
           directorScene: normalizeDirectorScene(data.directorScene),
         };
       }
-      if (data.variant === "libtv-generator" && data.status === "running") {
+      if (data.variant === "script-workflow") {
+        data = {
+          ...data,
+          scriptWorkbench: normalizeScriptWorkbench(data.scriptWorkbench),
+        };
+      }
+      if (
+        data.kind === "video"
+        && data.status === "done"
+        && data.skillId === "n2d-first-frame-video"
+        && typeof data.scriptSourceNodeId === "string"
+        && !data.resultAttachmentId
+      ) {
+        data = {
+          ...data,
+          status: "ready",
+          assetName: undefined,
+          generationError: "旧版本曾把未提交的视频任务标为完成，现已恢复为待提交。",
+        };
+      }
+      if (isTransientGenerationNode(data) && data.status === "running") {
         data = {
           ...data,
           status: "failed",
@@ -1938,17 +1871,52 @@ export function CanvasPage({
         data,
       };
     });
+    const scriptReferenceEdges = storedDocument.edges.filter((edge) => (
+      storedNodes.find((node) => node.id === edge.target)?.data.variant === "script-new"
+    ));
+    const scriptSourceIds = new Set(scriptReferenceEdges.map((edge) => edge.source));
+    const normalizedNodes = storedNodes.map((node) => {
+      const incomingScriptEdge = scriptReferenceEdges.find((edge) => edge.target === node.id);
+      if (incomingScriptEdge) {
+        const source = storedNodes.find((candidate) => candidate.id === incomingScriptEdge.source);
+        return {
+          ...node,
+          position: source ? { x: source.position.x + 730, y: source.position.y - 94 } : node.position,
+          data: {
+            ...node.data,
+            prompt: node.data.prompt === "请把以下故事构想生成可执行的分镜脚本："
+              ? "根据我上传的剧本生成一个完整的故事脚本"
+              : node.data.prompt,
+            sourceNodeId: source?.id,
+            sourceContext: String(source?.data.resultText ?? source?.data.prompt ?? source?.data.description ?? ""),
+          },
+        };
+      }
+      if (scriptSourceIds.has(node.id) && node.data.kind === "text" && node.data.skillId === "n2d-script-workbench") {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            title: "剧本",
+            variant: "libtv-source" as const,
+            status: "done" as const,
+          },
+        };
+      }
+      return node;
+    });
     const storedEdges = storedDocument.edges.map((edge) => {
-      const target = storedNodes.find((node) => node.id === edge.target);
+      const target = normalizedNodes.find((node) => node.id === edge.target);
       const isLibtvReference = target?.data.sourceNodeId === edge.source && typeof target.data.sourceContext === "string";
       return {
         ...edge,
-        type: edge.type ?? "smoothstep",
+        type: isLibtvReference ? "libtv-reference" : edge.type ?? "smoothstep",
+        animated: isLibtvReference ? false : edge.animated,
         markerEnd: isLibtvReference ? undefined : { type: MarkerType.ArrowClosed },
         className: isLibtvReference ? "workflow-edge libtv-reference-edge" : "workflow-edge",
       };
     });
-    return { nodes: storedNodes, edges: storedEdges };
+    return { nodes: normalizedNodes, edges: storedEdges };
   }, [storedDocument, work.id, work.line]);
   const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowNode>(graph.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(graph.edges);
@@ -1981,6 +1949,10 @@ export function CanvasPage({
   const [directorReferenceNodeId, setDirectorReferenceNodeId] = useState<string | null>(null);
   const [directorRunPromptNodeId, setDirectorRunPromptNodeId] = useState<string | null>(null);
   const [scriptWorkflowNodeId, setScriptWorkflowNodeId] = useState<string | null>(null);
+  const [scriptWorkflowInitialDialog, setScriptWorkflowInitialDialog] = useState<"video" | null>(null);
+  const [scriptPromptModels, setScriptPromptModels] = useState<ScriptWorkbenchModelOption[]>([]);
+  const [scriptImageModels, setScriptImageModels] = useState<ScriptWorkbenchModelOption[]>([]);
+  const [scriptCanvasImages, setScriptCanvasImages] = useState<ScriptWorkbenchCanvasImage[]>([]);
   const [standaloneWorkflow, setStandaloneWorkflow] = useState<{ nodeId: string; workflow: StandaloneWorkflowKind } | null>(null);
   const [libraryTab, setLibraryTab] = useState<"square" | "favorite" | "recent">("square");
   const [libraryQuery, setLibraryQuery] = useState("");
@@ -2082,6 +2054,8 @@ export function CanvasPage({
   const promptOptimizationAbortControllersRef = useRef(new Map<string, AbortController>());
   const nodesRef = useRef(nodes);
   nodesRef.current = nodes;
+  const edgesRef = useRef(edges);
+  edgesRef.current = edges;
   const attachmentSyncQueueRef = useRef<Promise<void>>(Promise.resolve());
   const cloudDocumentWriteQueueRef = useRef<Promise<void>>(Promise.resolve());
   const unsyncedAttachmentIdsRef = useRef(new Set(
@@ -2104,6 +2078,19 @@ export function CanvasPage({
   const activeDirectorScene = useMemo(() => activeDirectorNode
     ? normalizeDirectorScene(activeDirectorNode.data.directorScene)
     : null, [activeDirectorNode]);
+  const activeScriptNode = useMemo(() => scriptWorkflowNodeId
+    ? nodes.find((node) => node.id === scriptWorkflowNodeId && node.data.variant === "script-workflow") ?? null
+    : null, [nodes, scriptWorkflowNodeId]);
+  const activeScriptWorkbench = useMemo(() => activeScriptNode
+    ? normalizeScriptWorkbench(activeScriptNode.data.scriptWorkbench)
+    : null, [activeScriptNode]);
+  const presentedScriptWorkbench = useMemo(() => activeScriptWorkbench ? {
+    ...activeScriptWorkbench,
+    assets: activeScriptWorkbench.assets.map((asset) => {
+      const preview = scriptCanvasImages.find((image) => image.attachmentId === asset.attachmentId)?.imageUrl;
+      return preview ? { ...asset, imageUrl: preview } : asset;
+    }),
+  } : null, [activeScriptWorkbench, scriptCanvasImages]);
 
   const cancelGenerationRequest = useCallback((nodeId: string) => {
     generationAbortControllersRef.current.get(nodeId)?.abort();
@@ -2247,6 +2234,69 @@ export function CanvasPage({
       window.clearTimeout(timer);
     }
   }, []);
+
+  useEffect(() => {
+    if (!scriptWorkflowNodeId) {
+      setScriptPromptModels([]);
+      setScriptImageModels([]);
+      return undefined;
+    }
+    const controller = new AbortController();
+    void discoverCanvasModels(controller.signal).then((models) => {
+      if (controller.signal.aborted) return;
+      setScriptPromptModels(models.filter((model) => model.modality === "text").map((model) => ({
+        id: model.id,
+        label: generatorModelLabel(model.id),
+        description: "本机共享模型 · 实际费用由代理提供方确认",
+      })));
+      setScriptImageModels(models.filter((model) => model.modality === "image").map((model) => ({
+        id: model.id,
+        label: generatorModelLabel(model.id),
+        description: "本机共享模型 · 实际费用由代理提供方确认",
+      })));
+    }).catch((error) => {
+      if (controller.signal.aborted) return;
+      setScriptPromptModels([]);
+      setScriptImageModels([]);
+      setNotice(`无法读取本地共享模型：${error instanceof Error ? error.message : String(error)}`);
+    });
+    return () => controller.abort();
+  }, [scriptWorkflowNodeId]);
+
+  useEffect(() => {
+    if (!scriptWorkflowNodeId) {
+      setScriptCanvasImages([]);
+      return undefined;
+    }
+    let active = true;
+    const objectUrls: string[] = [];
+    const nodeByAttachmentId = new Map<string, WorkflowNode>();
+    nodes.forEach((node) => {
+      if (node.data.kind !== "image" || typeof node.data.resultAttachmentId !== "string") return;
+      nodeByAttachmentId.set(node.data.resultAttachmentId, node);
+    });
+    const candidates = attachments.filter((attachment) => attachment.type.startsWith("image/"));
+    void Promise.all(candidates.map(async (attachment): Promise<ScriptWorkbenchCanvasImage> => {
+      const sourceNode = nodeByAttachmentId.get(attachment.id);
+      const file = await resolveCanvasAttachment(attachment.id);
+      const imageUrl = file ? URL.createObjectURL(file) : undefined;
+      if (imageUrl) objectUrls.push(imageUrl);
+      return {
+        id: attachment.id,
+        name: sourceNode?.data.title ?? attachment.name,
+        attachmentId: attachment.id,
+        mimeType: attachment.type,
+        ...(sourceNode ? { nodeId: sourceNode.id } : {}),
+        ...(imageUrl ? { imageUrl } : {}),
+      };
+    })).then((items) => {
+      if (active) setScriptCanvasImages(items);
+    });
+    return () => {
+      active = false;
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [attachments, nodes, resolveCanvasAttachment, scriptWorkflowNodeId]);
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
   const editingNode = editingNodeId ? nodes.find((node) => node.id === editingNodeId) ?? null : null;
@@ -2561,7 +2611,7 @@ export function CanvasPage({
     const timer = window.setTimeout(() => {
       const current = historyRef.current[historyIndexRef.current];
       const stableNodes = nodes.map((node) => {
-        if (node.data.variant !== "libtv-generator" || node.data.status !== "running") return node;
+        if (!isTransientGenerationNode(node.data) || node.data.status !== "running") return node;
         const previousData = current?.nodes.find((item) => item.id === node.id)?.data;
         return {
           ...node,
@@ -2591,7 +2641,7 @@ export function CanvasPage({
     restoringHistoryRef.current = true;
     historyIndexRef.current = nextIndex;
     const graphCopy = cloneGraph(entry.nodes, entry.edges);
-    setNodes(graphCopy.nodes.map((node) => node.data.variant === "libtv-generator" && node.data.status === "running"
+    setNodes(graphCopy.nodes.map((node) => isTransientGenerationNode(node.data) && node.data.status === "running"
       ? {
           ...node,
           data: {
@@ -2855,7 +2905,7 @@ export function CanvasPage({
       },
     };
     setNodes((items) => [...items.map((node) => ({ ...node, selected: selectNext ? false : node.id === sourceId })), nextNode]);
-    setEdges((items) => addEdge({ ...makeEdge(`edge-${crypto.randomUUID()}`, sourceId, id, true), markerEnd: undefined, className: "workflow-edge libtv-reference-edge" }, items));
+    setEdges((items) => addEdge(makeLibtvReferenceEdge(`edge-${crypto.randomUUID()}`, sourceId, id), items));
     setSelectedNodeId(selectNext ? id : sourceId);
     addActivity(`从「${source.data.title}」创建${title}`);
     return id;
@@ -2906,11 +2956,7 @@ export function CanvasPage({
       },
     };
     const nextNodes = [...nodes.map((node) => ({ ...node, selected: false })), imageNode];
-    const nextEdges = addEdge({
-      ...makeEdge(`edge-${crypto.randomUUID()}`, sourceNodeId, imageNodeId, true),
-      markerEnd: undefined,
-      className: "workflow-edge libtv-reference-edge",
-    }, edges);
+    const nextEdges = addEdge(makeLibtvReferenceEdge(`edge-${crypto.randomUUID()}`, sourceNodeId, imageNodeId), edges);
     setNodes(nextNodes);
     setEdges(nextEdges);
     setSelectedNodeId(imageNodeId);
@@ -3277,6 +3323,320 @@ export function CanvasPage({
     return queued;
   }
 
+  async function resolveSharedCanvasModel(
+    modality: "text" | "image",
+    requestedModel: string | undefined,
+    signal: AbortSignal,
+  ): Promise<string> {
+    const models = (await discoverCanvasModels(signal)).filter((model) => model.modality === modality);
+    if (!models.length) throw new Error(`cli-proxy-api 没有共享可用的${modality === "image" ? "图片" : "文本"}模型`);
+    const preferences = modality === "image"
+      ? GENERATOR_MODEL_OPTIONS.image.map((model) => model.id)
+      : GENERATOR_MODEL_OPTIONS.text.map((model) => model.id);
+    return models.find((model) => model.id === requestedModel)?.id
+      ?? preferences.find((modelId) => models.some((model) => model.id === modelId))
+      ?? models[0].id;
+  }
+
+  function scriptSourceText(node: WorkflowNode): string {
+    const incoming = edgesRef.current
+      .filter((edge) => edge.target === node.id)
+      .map((edge) => nodesRef.current.find((candidate) => candidate.id === edge.source))
+      .filter((candidate): candidate is WorkflowNode => Boolean(candidate));
+    const blocks = [
+      typeof node.data.sourceContext === "string" ? node.data.sourceContext : "",
+      ...incoming.map((candidate) => String(
+        candidate.data.resultText
+        ?? candidate.data.generatedFromPrompt
+        ?? candidate.data.prompt
+        ?? candidate.data.description
+        ?? "",
+      )),
+    ].map((value) => value.trim()).filter(Boolean);
+    const combined = [...new Set(blocks)].join("\n\n--- 上游素材 ---\n\n");
+    if (combined.length <= 14_000) return combined;
+    return `${combined.slice(0, 9_000)}\n\n……（中段因本地模型输入上限省略）……\n\n${combined.slice(-5_000)}`;
+  }
+
+  function setGraphImmediately(nextNodes: WorkflowNode[], nextEdges: Edge[]) {
+    nodesRef.current = nextNodes;
+    edgesRef.current = nextEdges;
+    setNodes(nextNodes);
+    setEdges(nextEdges);
+  }
+
+  function commitScriptWorkbench(nodeId: string, nextWorkbench: ScriptWorkbenchDocument, writeCloud = false) {
+    const normalized = normalizeScriptWorkbench(nextWorkbench);
+    const patch: Partial<WorkflowNodeData> = {
+      scriptWorkbench: normalized,
+      title: normalized.title,
+      description: `${normalized.shots.length}个镜头 · ${normalized.assets.length}个资产 · 三步脚本工作台`,
+      assetName: `${normalized.shots.length}个镜头`,
+      status: "done",
+    };
+    const nextNodes = nodesRef.current.map((node) => node.id === nodeId
+      ? { ...node, data: { ...node.data, ...patch } }
+      : node);
+    nodesRef.current = nextNodes;
+    setNodes(nextNodes);
+    void persistGeneratorNodeSnapshot(
+      nodeId,
+      patch,
+      attachmentsRef.current,
+      nextNodes,
+      edgesRef.current,
+      { writeCloud, replaceGraph: true },
+    );
+  }
+
+  async function parseOrRepairScriptWorkbench(
+    modelText: string,
+    model: string,
+    signal: AbortSignal,
+  ): Promise<ScriptWorkbenchDocument> {
+    try {
+      const parsed = parseScriptWorkbenchModelOutput(modelText);
+      if (!parsed.assets.length) throw new Error("脚本没有生成角色、场景或道具资产");
+      return parsed;
+    } catch (firstError) {
+      const repair = await generateCanvasContent({
+        modality: "text",
+        model,
+        signal,
+        prompt: [
+          "修复下面的故事脚本 JSON。严格按给定契约补齐字段、至少保留一个镜头和一个真实待准备资产；只返回 JSON，不要解释。",
+          SCRIPT_WORKBENCH_MODEL_JSON_INSTRUCTIONS,
+          `首次解析错误：${firstError instanceof Error ? firstError.message : String(firstError)}`,
+          "待修复内容：",
+          modelText.slice(0, 16_000),
+        ].join("\n\n"),
+      });
+      if (repair.modality !== "text") throw new Error("文本模型没有返回修复结果");
+      const parsed = parseScriptWorkbenchModelOutput(repair.text);
+      if (!parsed.assets.length) throw new Error("修复后的脚本仍没有可准备资产");
+      return parsed;
+    }
+  }
+
+  async function runScriptWorkbenchGeneratorNode(node: WorkflowNode, force = false) {
+    const latestSource = nodesRef.current.find((candidate) => candidate.id === node.id);
+    if (!latestSource || latestSource.data.status === "running") return;
+    const existingResult = nodesRef.current.find((candidate) => candidate.data.variant === "script-workflow" && candidate.data.sourceNodeId === node.id);
+    if (existingResult && !force) {
+      const selected = nodesRef.current.map((candidate) => ({ ...candidate, selected: candidate.id === existingResult.id }));
+      nodesRef.current = selected;
+      setNodes(selected);
+      setSelectedNodeId(existingResult.id);
+      setNotice("脚本已生成，打开结果节点继续编辑");
+      return;
+    }
+
+    const userPrompt = String(latestSource.data.prompt ?? "").trim().slice(0, 4_000);
+    const sourceText = scriptSourceText(latestSource);
+    if (!userPrompt && !sourceText) {
+      setNotice("请先输入故事内容或连接一个文本节点");
+      return;
+    }
+
+    const requestId = crypto.randomUUID();
+    cancelGenerationRequest(node.id);
+    const controller = new AbortController();
+    generationRequestsRef.current.set(node.id, requestId);
+    generationAbortControllersRef.current.set(node.id, controller);
+    const runningPatch: Partial<WorkflowNodeData> = {
+      status: "running",
+      generationProgress: 4,
+      generationError: undefined,
+      generationRequestId: requestId,
+      skillId: "n2d-script-workbench",
+      skillPath: "skills/n2d-script-workbench/SKILL.md",
+    };
+    const runningNodes = nodesRef.current.map((candidate) => candidate.id === node.id
+      ? { ...candidate, data: { ...candidate.data, ...runningPatch } }
+      : candidate);
+    nodesRef.current = runningNodes;
+    setNodes(runningNodes);
+    void persistGeneratorNodeSnapshot(node.id, runningPatch, attachmentsRef.current, runningNodes, edgesRef.current, { writeCloud: false });
+    addActivity(`开始使用本地共享模型拆解「${latestSource.data.title}」`);
+    setNotice("正在分析故事并生成可编辑镜头…");
+
+    try {
+      const model = await resolveSharedCanvasModel("text", String(latestSource.data.model ?? ""), controller.signal);
+      if (generationRequestsRef.current.get(node.id) !== requestId) return;
+      const generation = await generateCanvasContent({
+        modality: "text",
+        model,
+        signal: controller.signal,
+        prompt: [
+          "你是专业漫剧故事脚本与分镜导演。把用户故事拆成可直接编辑、可生图、可生视频的三步工作台数据。",
+          "要求：通常生成 8–20 个镜头；每镜 5–15 秒；镜头描述具体可视；资产去重并覆盖主要角色、场景、关键道具；不要复制不在原故事中的受版权保护内容。",
+          "final_prompt 先留空，资产必须是 status=pending、source=none。",
+          SCRIPT_WORKBENCH_MODEL_JSON_INSTRUCTIONS,
+          `用户操作指令：${userPrompt || "根据上游故事生成完整分镜脚本"}`,
+          sourceText ? `故事与上游素材：\n${sourceText}` : "",
+        ].filter(Boolean).join("\n\n"),
+      });
+      if (generation.modality !== "text") throw new Error("文本模型没有返回脚本 JSON");
+      const workbench = await parseOrRepairScriptWorkbench(generation.text, model, controller.signal);
+      const issues = validateScriptWorkbench(workbench);
+      if (issues.length) throw new Error(`脚本合同校验失败：${issues.slice(0, 3).map((issue) => `${issue.path} ${issue.message}`).join("；")}`);
+      if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
+
+      const currentNodes = nodesRef.current;
+      const currentResult = currentNodes.find((candidate) => candidate.data.variant === "script-workflow" && candidate.data.sourceNodeId === node.id);
+      if (force && existingResult && !currentResult) {
+        generationRequestsRef.current.delete(node.id);
+        generationAbortControllersRef.current.delete(node.id);
+        return;
+      }
+      const resultId = currentResult?.id ?? `script-workflow-${crypto.randomUUID()}`;
+      const resultData: WorkflowNodeData = {
+        ...nodeRuntimeDefaults("script", "script-workflow"),
+        kind: "script",
+        title: workbench.title,
+        description: `${workbench.shots.length}个镜头 · ${workbench.assets.length}个资产 · 三步脚本工作台`,
+        status: "done",
+        eyebrow: "脚本",
+        variant: "script-workflow",
+        skillId: "n2d-script-workbench",
+        skillPath: "skills/n2d-script-workbench/SKILL.md",
+        sourceNodeId: node.id,
+        assetName: `${workbench.shots.length}个镜头`,
+        scriptWorkbench: workbench,
+        generatedWithModel: model,
+        generatedFromPrompt: userPrompt,
+      };
+      const resultNode: WorkflowNode = currentResult ? {
+        ...currentResult,
+        selected: true,
+        data: { ...currentResult.data, ...resultData },
+      } : {
+        id: resultId,
+        type: "workflow-node",
+        position: { x: latestSource.position.x + 390, y: latestSource.position.y - 18 },
+        selected: true,
+        data: resultData,
+      };
+      const sourceDonePatch: Partial<WorkflowNodeData> = {
+        status: "done",
+        generationProgress: 100,
+        generationRequestId: undefined,
+        generationError: undefined,
+        model,
+        assetName: `生成历史/${workbench.title}.script.json`,
+      };
+      let nextNodes = currentNodes.map((candidate) => candidate.id === node.id
+        ? { ...candidate, selected: false, data: { ...candidate.data, ...sourceDonePatch } }
+        : candidate.id === resultId ? resultNode : { ...candidate, selected: false });
+      if (!currentResult) nextNodes = [...nextNodes, resultNode];
+      let nextEdges = edgesRef.current;
+      if (!nextEdges.some((edge) => edge.source === node.id && edge.target === resultId)) {
+        nextEdges = [...nextEdges, makeEdge(`edge-${crypto.randomUUID()}`, node.id, resultId, true)];
+      }
+      setGraphImmediately(nextNodes, nextEdges);
+      setSelectedNodeId(resultId);
+      await persistGeneratorNodeSnapshot(resultId, resultData, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
+      generationRequestsRef.current.delete(node.id);
+      generationAbortControllersRef.current.delete(node.id);
+      addActivity(`完成「${workbench.title}」脚本拆镜`);
+      setNotice(`已生成 ${workbench.shots.length} 个镜头，打开结果节点继续`);
+      window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: node.id }, { id: resultId }], padding: .38, maxZoom: 1, duration: 300 }));
+    } catch (error) {
+      if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
+      generationRequestsRef.current.delete(node.id);
+      generationAbortControllersRef.current.delete(node.id);
+      const message = isCanvasGenerationError(error) ? error.message : error instanceof Error ? error.message : "脚本生成失败";
+      const failedPatch: Partial<WorkflowNodeData> = {
+        status: "failed",
+        generationProgress: 0,
+        generationRequestId: undefined,
+        generationError: message,
+      };
+      const nextNodes = nodesRef.current.map((candidate) => candidate.id === node.id
+        ? { ...candidate, data: { ...candidate.data, ...failedPatch } }
+        : candidate);
+      nodesRef.current = nextNodes;
+      setNodes(nextNodes);
+      void persistGeneratorNodeSnapshot(node.id, failedPatch, attachmentsRef.current, nextNodes, edgesRef.current);
+      addActivity(`「${latestSource.data.title}」脚本生成失败`);
+      setNotice(message);
+    }
+  }
+
+  async function generatorReferenceInput(
+    node: WorkflowNode,
+    signal: AbortSignal,
+  ): Promise<{ base64: string; mimeType: string } | undefined> {
+    const directIds = Array.isArray(node.data.referenceAttachmentIds)
+      ? node.data.referenceAttachmentIds.filter((value): value is string => typeof value === "string" && Boolean(value))
+      : [];
+    const nodeIds = Array.isArray(node.data.referenceNodeIds)
+      ? node.data.referenceNodeIds.filter((value): value is string => typeof value === "string" && Boolean(value))
+      : [];
+    let imageUrls = Array.isArray(node.data.referenceImageUrls)
+      ? node.data.referenceImageUrls.filter((value): value is string => typeof value === "string" && Boolean(value))
+      : [];
+    const linkedIds = nodeIds.flatMap((nodeId) => {
+      const attachmentId = nodesRef.current.find((candidate) => candidate.id === nodeId)?.data.resultAttachmentId;
+      return typeof attachmentId === "string" && attachmentId ? [attachmentId] : [];
+    });
+    let attachmentIds = [...new Set([...directIds, ...linkedIds])];
+    const scriptAssetIds = Array.isArray(node.data.scriptAssetIds)
+      ? node.data.scriptAssetIds.filter((value): value is string => typeof value === "string" && Boolean(value))
+      : [];
+    const scriptSourceNodeId = String(node.data.storyboardSourceNodeId ?? node.data.scriptSourceNodeId ?? node.data.sourceNodeId ?? "");
+    const scriptSource = scriptSourceNodeId
+      ? nodesRef.current.find((candidate) => candidate.id === scriptSourceNodeId)
+      : undefined;
+    if (scriptAssetIds.length && scriptSource?.data.scriptWorkbench) {
+      const workbench = normalizeScriptWorkbench(scriptSource.data.scriptWorkbench);
+      const selectedAssets = scriptAssetIds.flatMap((assetId) => {
+        const asset = workbench.assets.find((candidate) => candidate.id === assetId);
+        return asset ? [asset] : [];
+      });
+      const missingAssets: string[] = [];
+      const currentAttachmentIds: string[] = [];
+      const currentImageUrls: string[] = [];
+      for (const asset of selectedAssets) {
+        const linkedAttachmentId = asset.nodeId
+          ? String(nodesRef.current.find((candidate) => candidate.id === asset.nodeId)?.data.resultAttachmentId ?? "")
+          : "";
+        const attachmentId = linkedAttachmentId || asset.attachmentId || "";
+        if (attachmentId) currentAttachmentIds.push(attachmentId);
+        else if (asset.imageUrl) currentImageUrls.push(asset.imageUrl);
+        else missingAssets.push(asset.name);
+      }
+      if (selectedAssets.length !== scriptAssetIds.length) missingAssets.push("已删除的脚本资产");
+      if (missingAssets.length) throw new Error(`参考资产已失效：${[...new Set(missingAssets)].join("、")}`);
+      attachmentIds = [...new Set(currentAttachmentIds)];
+      imageUrls = [...new Set(currentImageUrls)];
+    }
+    if (!attachmentIds.length && !imageUrls.length) return undefined;
+    const files: File[] = [];
+    const missingAttachmentIds: string[] = [];
+    for (const attachmentId of attachmentIds) {
+      if (signal.aborted) throw new DOMException("图片生成已取消", "AbortError");
+      const file = await resolveCanvasAttachment(attachmentId);
+      if (file?.type.startsWith("image/")) files.push(file);
+      else missingAttachmentIds.push(attachmentId);
+    }
+    if (missingAttachmentIds.length) throw new Error(`有 ${missingAttachmentIds.length} 个参考资产已失效，请在脚本工作台重新选择图片`);
+    for (const imageUrl of imageUrls) {
+      if (files.length >= 6) break;
+      if (signal.aborted) throw new DOMException("图片生成已取消", "AbortError");
+      const response = await fetch(imageUrl, { signal, credentials: imageUrl.startsWith(location.origin) || imageUrl.startsWith("/") ? "same-origin" : "omit" });
+      if (!response.ok) throw new Error(`参考资产读取失败（${response.status}）`);
+      const blob = await response.blob();
+      if (!blob.type.startsWith("image/") || !blob.size || blob.size > MAX_GENERATED_IMAGE_BYTES) {
+        throw new Error("参考资产不是有效图片或超过 25MB");
+      }
+      files.push(new File([blob], `reference-${files.length + 1}`, { type: blob.type, lastModified: Date.now() }));
+    }
+    if (!files.length) throw new Error("参考资产已失效，请在脚本工作台重新选择图片");
+    const reference = await referenceImageCollage(files, signal);
+    return { base64: await fileBase64(reference, signal), mimeType: reference.type };
+  }
+
   async function runLibtvGeneratorNode(node: WorkflowNode) {
     const prompt = typeof node.data.prompt === "string" ? node.data.prompt.trim() : "";
     if (!prompt || node.data.status === "running" || (node.data.kind !== "text" && node.data.kind !== "image")) return;
@@ -3324,12 +3684,19 @@ export function CanvasPage({
         ? { ...item, data: { ...item.data, model: effectiveModel } }
         : item));
       addActivity(`开始使用 ${effectiveModel} 生成「${node.data.title}」`);
+      const referenceInput = node.data.kind === "image"
+        ? await generatorReferenceInput(node, requestController.signal)
+        : undefined;
+      if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
       const result = await generateCanvasContent({
         modality: node.data.kind,
         model: effectiveModel,
-        prompt: modelPrompt,
+        prompt: referenceInput
+          ? `${modelPrompt}\n\n必须以输入参考图中的角色、服装、场景和道具为视觉依据，保持主体身份一致；参考图可能是多资产拼图。`
+          : modelPrompt,
         signal: requestController.signal,
         ...(node.data.kind === "image" ? { aspectRatio: String(node.data.aspectRatio ?? "16:9") } : {}),
+        ...(referenceInput ? { image: referenceInput } : {}),
       });
       if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
 
@@ -3347,11 +3714,14 @@ export function CanvasPage({
           description: result.text.slice(0, 160),
           assetName: `${node.data.title}.md`,
         };
-        setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
+        const nextNodes = nodesRef.current.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
           ...item,
           data: { ...item.data, ...resultPatch },
-        } : item));
-        persistGeneratorNodeSnapshot(node.id, resultPatch);
+        } : item);
+        nodesRef.current = nextNodes;
+        setNodes(nextNodes);
+        await persistGeneratorNodeSnapshot(node.id, resultPatch, attachmentsRef.current, nextNodes, edgesRef.current);
+        if (generationRequestsRef.current.get(node.id) !== requestId) return;
       } else {
         const file = generatedImageFile(result.image.base64, result.image.mimeType, node.data.title);
         const attachmentId = crypto.randomUUID();
@@ -3363,6 +3733,10 @@ export function CanvasPage({
           file,
         };
         await registerLocalFiles([attachment]);
+        if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId || requestController.signal.aborted) {
+          await removeLocalFiles([attachmentId]);
+          return;
+        }
         const metadata: DraftAttachment = {
           id: attachment.id,
           name: attachment.name,
@@ -3385,11 +3759,14 @@ export function CanvasPage({
           description: result.image.revisedPrompt || prompt,
           assetName: file.name,
         };
-        setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
+        const nextNodes = nodesRef.current.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
           ...item,
           data: { ...item.data, ...resultPatch },
-        } : item));
-        persistGeneratorNodeSnapshot(node.id, resultPatch, nextAttachments);
+        } : item);
+        nodesRef.current = nextNodes;
+        setNodes(nextNodes);
+        await persistGeneratorNodeSnapshot(node.id, resultPatch, nextAttachments, nextNodes, edgesRef.current);
+        if (generationRequestsRef.current.get(node.id) !== requestId) return;
         void syncAttachmentsToCloud([attachment], nextAttachments, {
           failurePrefix: "图片已保存在本机，云同步失败",
         });
@@ -3405,16 +3782,19 @@ export function CanvasPage({
       const message = isCanvasGenerationError(error)
         ? error.message
         : error instanceof Error ? error.message : "生成失败，请稍后重试。";
-      setNodes((items) => items.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
+      const failedPatch: Partial<WorkflowNodeData> = {
+        status: "failed",
+        generationProgress: 0,
+        generationRequestId: undefined,
+        generationError: message,
+      };
+      const nextNodes = nodesRef.current.map((item) => item.id === node.id && item.data.generationRequestId === requestId ? {
         ...item,
-        data: {
-          ...item.data,
-          status: "failed",
-          generationProgress: 0,
-          generationRequestId: undefined,
-          generationError: message,
-        },
-      } : item));
+        data: { ...item.data, ...failedPatch },
+      } : item);
+      nodesRef.current = nextNodes;
+      setNodes(nextNodes);
+      void persistGeneratorNodeSnapshot(node.id, failedPatch, attachmentsRef.current, nextNodes, edgesRef.current);
       addActivity(`「${node.data.title}」生成失败`);
       setNotice(message);
     }
@@ -3435,55 +3815,27 @@ export function CanvasPage({
       return;
     }
     if (node.data.variant === "script-workflow") {
+      setScriptWorkflowInitialDialog(null);
       setScriptWorkflowNodeId(nodeId);
       return;
     }
     if (node.data.kind === "script" && node.data.variant === "script-new") {
-      const existingResult = nodes.find((item) => item.data.variant === "script-workflow" && item.data.sourceNodeId === nodeId);
-      if (existingResult) {
-        setNodes((items) => items.map((item) => ({ ...item, selected: item.id === existingResult.id })));
-        setSelectedNodeId(existingResult.id);
-        setNotice("脚本已生成，打开结果节点继续");
-        return;
-      }
-      const resultId = `script-workflow-${crypto.randomUUID()}`;
-      updateNodeData(nodeId, {
-        status: "running",
-        generationProgress: 2,
-        skillId: "n2d-script-workbench",
-        skillPath: "skills/n2d-script-workbench/SKILL.md",
-      });
-      addActivity(`开始执行「${node.data.title}」`);
-      setNotice("脚本生成中 2%…");
-      window.setTimeout(() => { updateNodeData(nodeId, { generationProgress: 36 }); setNotice("脚本生成中 36%…"); }, 260);
-      window.setTimeout(() => { updateNodeData(nodeId, { generationProgress: 78 }); setNotice("脚本生成中 78%…"); }, 620);
-      window.setTimeout(() => {
-        const resultNode: WorkflowNode = {
-          id: resultId,
-          type: "workflow-node",
-          position: { x: node.position.x + 390, y: node.position.y - 18 },
-          selected: true,
-          data: {
-            ...nodeRuntimeDefaults("script", "script-workflow"),
-            kind: "script",
-            title: "我在盛唐写天下",
-            description: "12个镜头已就绪 · 准备资产 · 合成提示词",
-            status: "done",
-            eyebrow: "脚本",
-            variant: "script-workflow",
-            skillId: "n2d-script-workbench",
-            skillPath: "skills/n2d-script-workbench/SKILL.md",
-            sourceNodeId: nodeId,
-            assetName: "12个镜头",
-          },
-        };
-        setNodes((items) => [...items.map((item) => item.id === nodeId ? { ...item, selected: false, data: { ...item.data, status: "done" as const, generationProgress: 100, assetName: "生成历史/我在盛唐写天下.script.json" } } : { ...item, selected: false }), resultNode]);
-        setEdges((items) => [...items, makeEdge(`edge-${crypto.randomUUID()}`, nodeId, resultId, true)]);
-        setSelectedNodeId(resultId);
-        addActivity("完成「我在盛唐写天下」脚本拆镜");
-        setNotice("脚本已生成，打开结果节点继续");
-        window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: nodeId }, { id: resultId }], padding: .38, maxZoom: 1, duration: 300 }));
-      }, 1050);
+      void runScriptWorkbenchGeneratorNode(node);
+      return;
+    }
+    if (node.data.kind === "video") {
+      const failedPatch: Partial<WorkflowNodeData> = {
+        status: "failed",
+        generationError: "当前本地共享模型只提供文本和图片能力；视频生成后端尚未接入，任务未提交。",
+      };
+      const nextNodes = nodesRef.current.map((item) => item.id === nodeId
+        ? { ...item, data: { ...item.data, ...failedPatch } }
+        : item);
+      nodesRef.current = nextNodes;
+      setNodes(nextNodes);
+      void persistGeneratorNodeSnapshot(nodeId, failedPatch, attachmentsRef.current, nextNodes, edgesRef.current);
+      addActivity(`「${node.data.title}」未提交：视频后端未接入`);
+      setNotice("视频后端尚未接入；已保留真实任务参数，没有伪造生成结果");
       return;
     }
     updateNodeData(nodeId, { status: "running" });
@@ -3497,39 +3849,592 @@ export function CanvasPage({
     }, 900);
   }
 
-  function createBatchVideoNodes(scriptNodeId: string, shots: ScriptShot[]) {
-    const scriptNode = nodes.find((node) => node.id === scriptNodeId);
+  function cancelWorkflowGeneration(nodeId: string) {
+    const node = nodesRef.current.find((candidate) => candidate.id === nodeId);
+    if (!node || node.data.status !== "running") return;
+    cancelGenerationRequest(nodeId);
+    const patch: Partial<WorkflowNodeData> = {
+      status: "failed",
+      generationProgress: 0,
+      generationRequestId: undefined,
+      generationError: "生成已由用户取消，可随时重新提交。",
+    };
+    const nextNodes = nodesRef.current.map((candidate) => candidate.id === nodeId
+      ? { ...candidate, data: { ...candidate.data, ...patch } }
+      : candidate);
+    nodesRef.current = nextNodes;
+    setNodes(nextNodes);
+    void persistGeneratorNodeSnapshot(nodeId, patch, attachmentsRef.current, nextNodes, edgesRef.current, { writeCloud: false });
+    setNotice("已取消生成");
+  }
+
+  function createBatchVideoNodes(scriptNodeId: string, shots: ScriptWorkbenchShot[]) {
+    const scriptNode = nodesRef.current.find((node) => node.id === scriptNodeId);
     if (!scriptNode) return;
-    const existingIds = new Set(nodes.filter((node) => node.data.scriptSourceNodeId === scriptNodeId).map((node) => String(node.data.scriptShotId)));
-    const createdNodes = shots.filter((shot) => !existingIds.has(shot.id)).map((shot, index): WorkflowNode => ({
+    const existingByShot = new Map(nodesRef.current
+      .filter((node) => node.data.kind === "video" && node.data.scriptSourceNodeId === scriptNodeId && typeof node.data.scriptShotId === "string")
+      .map((node) => [String(node.data.scriptShotId), node]));
+    const workbench = normalizeScriptWorkbench(scriptNode.data.scriptWorkbench);
+    const updatedNodes = nodesRef.current.map((node) => {
+      if (node.data.kind !== "video" || node.data.scriptSourceNodeId !== scriptNodeId) return { ...node, selected: false };
+      const shot = shots.find((candidate) => candidate.id === node.data.scriptShotId);
+      if (!shot) return { ...node, selected: false };
+      const references = scriptAssetReferences(workbench, shot);
+      const prompt = composeScriptWorkbenchVideoPrompt(workbench.global_style, shot) || shot.final_prompt || shot.visual;
+      const changed = node.data.prompt !== prompt
+        || Number(node.data.duration) !== shot.duration
+        || !sameStringList(node.data.referenceAttachmentIds, references.attachmentIds)
+        || !sameStringList(node.data.referenceNodeIds, references.nodeIds)
+        || !sameStringList(node.data.referenceImageUrls, references.imageUrls)
+        || !sameStringList(node.data.scriptAssetIds, references.assetIds);
+      if (changed) cancelGenerationRequest(node.id);
+      return {
+        ...node,
+        selected: false,
+        data: {
+          ...node.data,
+          title: `镜头 ${String(shots.indexOf(shot) + 1).padStart(2, "0")}`,
+          description: `${shot.duration}s · ${shot.scale} · ${shot.visual.slice(0, 54)}…`,
+          prompt,
+          duration: shot.duration,
+          referenceAttachmentIds: references.attachmentIds,
+          referenceNodeIds: references.nodeIds,
+          referenceImageUrls: references.imageUrls,
+          scriptAssetIds: references.assetIds,
+          ...(changed ? {
+            status: "ready" as const,
+            generationProgress: 0,
+            generationRequestId: undefined,
+            resultAttachmentId: undefined,
+            resultMimeType: undefined,
+            assetName: undefined,
+            generationError: undefined,
+          } : {}),
+        },
+      };
+    });
+    const createdNodes = shots.filter((shot) => !existingByShot.has(shot.id)).map((shot): WorkflowNode => {
+      const references = scriptAssetReferences(workbench, shot);
+      const shotIndex = Math.max(0, shots.findIndex((candidate) => candidate.id === shot.id));
+      return {
       id: `script-video-${crypto.randomUUID()}`,
       type: "workflow-node",
-      position: { x: scriptNode.position.x + 420 + (index % 4) * 300, y: scriptNode.position.y - 170 + Math.floor(index / 4) * 250 },
+      position: { x: scriptNode.position.x + 420 + (shotIndex % 4) * 300, y: scriptNode.position.y - 170 + Math.floor(shotIndex / 4) * 250 },
       data: {
         ...nodeRuntimeDefaults("video"),
         kind: "video",
-        title: `镜头 ${String(index + 1).padStart(2, "0")}`,
+        title: `镜头 ${String(shotIndex + 1).padStart(2, "0")}`,
         description: `${shot.duration}s · ${shot.scale} · ${shot.visual.slice(0, 54)}…`,
-        prompt: shot.finalPrompt || shot.visual,
+        prompt: composeScriptWorkbenchVideoPrompt(workbench.global_style, shot) || shot.final_prompt || shot.visual,
         status: "ready",
         eyebrow: "视频镜头",
         videoMode: "首帧生成视频",
         duration: shot.duration,
+        referenceAttachmentIds: references.attachmentIds,
+        referenceNodeIds: references.nodeIds,
+        referenceImageUrls: references.imageUrls,
+        scriptAssetIds: references.assetIds,
+        skillId: "n2d-first-frame-video",
+        skillPath: "skills/n2d-first-frame-video/SKILL.md",
         scriptSourceNodeId: scriptNodeId,
         scriptShotId: shot.id,
       },
-    }));
-    if (createdNodes.length) {
-      setNodes((items) => [...items.map((item) => ({ ...item, selected: false })), ...createdNodes]);
-      setEdges((items) => [...items, ...createdNodes.map((node) => makeEdge(`edge-${crypto.randomUUID()}`, scriptNodeId, node.id))]);
-      setSelectedNodeId(createdNodes[0].id);
-      addActivity(`已为 ${createdNodes.length} 个镜头创建视频生成节点`);
-      setNotice(`已创建 ${createdNodes.length} 个批量视频节点`);
+    }});
+    if (createdNodes.length || existingByShot.size) {
+      const nextNodes = [...updatedNodes, ...createdNodes];
+      const nextEdges = [...edgesRef.current, ...createdNodes.map((createdNode) => makeEdge(`edge-${crypto.randomUUID()}`, scriptNodeId, createdNode.id))];
+      setGraphImmediately(nextNodes, nextEdges);
+      void persistGeneratorNodeSnapshot(scriptNodeId, {}, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
+      setSelectedNodeId(createdNodes[0]?.id ?? existingByShot.values().next().value?.id ?? null);
+      addActivity(`已同步 ${shots.length} 个视频生成任务`);
+      setNotice(createdNodes.length ? `已创建 ${createdNodes.length} 个视频任务，其余任务已同步` : "视频任务参数已同步");
     } else {
       setNotice("批量视频节点已存在");
     }
+    setScriptWorkflowInitialDialog(null);
     setScriptWorkflowNodeId(null);
     window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ padding: .18, maxZoom: .85, duration: 360 }));
+  }
+
+  function createScriptAssetImageNode(
+    scriptNodeId: string,
+    asset: ScriptWorkbenchAsset,
+    attachmentId: string,
+    mimeType: string,
+    promptText: string,
+    model: string,
+    options?: ScriptWorkbenchImageOptions,
+  ): string {
+    const scriptNode = nodesRef.current.find((node) => node.id === scriptNodeId);
+    if (!scriptNode) throw new Error("脚本结果节点已不存在");
+    const existing = nodesRef.current.find((node) => node.data.scriptAssetId === asset.id && node.data.scriptSourceNodeId === scriptNodeId);
+    const imageIndex = nodesRef.current.filter((node) => node.data.scriptSourceNodeId === scriptNodeId && node.data.kind === "image").length;
+    const nodeId = existing?.id ?? `script-asset-image-${crypto.randomUUID()}`;
+    if (existing) cancelGenerationRequest(existing.id);
+    const data: WorkflowNodeData = {
+      ...nodeRuntimeDefaults("image", "libtv-generator"),
+      kind: "image",
+      title: asset.name,
+      description: asset.description || promptText,
+      prompt: promptText,
+      status: "done",
+      eyebrow: asset.kind === "character" ? "角色资产" : asset.kind === "scene" ? "场景资产" : "道具资产",
+      variant: "libtv-generator",
+      sourceNodeId: scriptNodeId,
+      sourceContext: promptText,
+      resultAttachmentId: attachmentId,
+      resultMimeType: mimeType,
+      generatedFromPrompt: promptText,
+      generatedWithModel: model,
+      generationProgress: 100,
+      generationRequestId: undefined,
+      generationError: undefined,
+      ...(options ? { aspectRatio: options.ratio, resolution: options.resolution, quality: options.quality } : {}),
+      assetName: attachmentsRef.current.find((item) => item.id === attachmentId)?.name ?? `${asset.name}.png`,
+      scriptSourceNodeId: scriptNodeId,
+      scriptAssetId: asset.id,
+    };
+    const imageNode: WorkflowNode = existing ? { ...existing, data: { ...existing.data, ...data } } : {
+      id: nodeId,
+      type: "workflow-node",
+      position: {
+        x: scriptNode.position.x + 430 + (imageIndex % 4) * 300,
+        y: scriptNode.position.y - 120 + Math.floor(imageIndex / 4) * 250,
+      },
+      data,
+    };
+    const nextNodes = existing
+      ? nodesRef.current.map((node) => node.id === nodeId ? imageNode : node)
+      : [...nodesRef.current, imageNode];
+    const nextEdges = edgesRef.current.some((edge) => edge.source === scriptNodeId && edge.target === nodeId)
+      ? edgesRef.current
+      : [...edgesRef.current, makeEdge(`edge-${crypto.randomUUID()}`, scriptNodeId, nodeId, true)];
+    setGraphImmediately(nextNodes, nextEdges);
+    return nodeId;
+  }
+
+  async function generateScriptAssetPatch(
+    request: ScriptAssetGenerateRequest,
+  ): Promise<ScriptWorkbenchAssetPatch> {
+    const model = await resolveSharedCanvasModel("image", request.options.modelId, request.signal);
+    const result = await generateCanvasContent({
+      modality: "image",
+      model,
+      signal: request.signal,
+      aspectRatio: request.options.ratio,
+      quality: request.options.quality,
+      prompt: [
+        request.asset.prompt || `${request.asset.name}，${request.asset.description}`,
+        `资产类型：${request.asset.kind === "character" ? "角色设定" : request.asset.kind === "scene" ? "空场景设定" : "道具设定"}。`,
+        `全局风格：${request.workbench.global_style}。`,
+        `目标规格：${request.options.resolution}，${request.options.quality === "high" ? "高清精细" : "标准画质"}，画幅 ${request.options.ratio}。`,
+        "主体一致、细节清晰，不要文字、水印或拼写标注。",
+      ].join("\n"),
+    });
+    if (result.modality !== "image") throw new Error("图片模型没有返回资产图");
+    if (request.signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    const file = await generatedScriptAssetFile(
+      result.image.base64,
+      result.image.mimeType,
+      request.asset.name,
+      request.options.ratio,
+      request.options.resolution,
+      request.options.quality,
+      request.signal,
+    );
+    if (request.signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    const [attachmentId] = await importAssetFiles([file], false, { awaitCloud: false, signal: request.signal });
+    if (request.signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    if (!attachmentId) throw new Error("资产图片保存失败");
+    const nodeId = createScriptAssetImageNode(
+      request.nodeId,
+      request.asset,
+      attachmentId,
+      file.type,
+      result.image.revisedPrompt || request.asset.prompt,
+      model,
+      request.options,
+    );
+    return {
+      status: "ready",
+      source: "ai",
+      attachmentId,
+      nodeId,
+      mimeType: file.type,
+      error: null,
+    };
+  }
+
+  async function generateScriptAsset(request: ScriptAssetGenerateRequest): Promise<ScriptAssetGenerateResult> {
+    try {
+      const patch = await generateScriptAssetPatch(request);
+      const latest = nodesRef.current.find((node) => node.id === request.nodeId)?.data.scriptWorkbench;
+      commitScriptWorkbench(request.nodeId, updateScriptWorkbenchAsset(normalizeScriptWorkbench(latest ?? request.workbench), request.asset.id, patch));
+      return { patch };
+    } catch (error) {
+      if (request.signal.aborted) throw error;
+      const message = error instanceof Error ? error.message : String(error);
+      const latest = nodesRef.current.find((node) => node.id === request.nodeId)?.data.scriptWorkbench;
+      commitScriptWorkbench(request.nodeId, updateScriptWorkbenchAsset(normalizeScriptWorkbench(latest ?? request.workbench), request.asset.id, {
+        status: "failed",
+        source: "none",
+        error: message,
+      }));
+      throw error;
+    }
+  }
+
+  async function generateScriptAssets(request: ScriptAssetBatchRequest): Promise<ScriptAssetBatchResult> {
+    const updates: ScriptAssetBatchResult["updates"] = [];
+    for (const assetId of request.assetIds) {
+      if (request.signal.aborted) throw new DOMException("批量资产生成已取消", "AbortError");
+      const asset = request.workbench.assets.find((candidate) => candidate.id === assetId);
+      if (!asset) continue;
+      try {
+        const patch = await generateScriptAssetPatch({
+          nodeId: request.nodeId,
+          workbench: request.workbench,
+          asset,
+          options: request.options,
+          signal: request.signal,
+        });
+        updates.push({ assetId, patch });
+        const latest = nodesRef.current.find((node) => node.id === request.nodeId)?.data.scriptWorkbench;
+        commitScriptWorkbench(request.nodeId, updateScriptWorkbenchAsset(normalizeScriptWorkbench(latest ?? request.workbench), assetId, patch));
+      } catch (error) {
+        if (request.signal.aborted) throw error;
+        const failedPatch: ScriptWorkbenchAssetPatch = {
+          status: "failed",
+          source: "none",
+          error: error instanceof Error ? error.message : String(error),
+        };
+        updates.push({
+          assetId,
+          patch: failedPatch,
+        });
+        const latest = nodesRef.current.find((node) => node.id === request.nodeId)?.data.scriptWorkbench;
+        commitScriptWorkbench(request.nodeId, updateScriptWorkbenchAsset(normalizeScriptWorkbench(latest ?? request.workbench), assetId, failedPatch));
+      }
+    }
+    return { updates };
+  }
+
+  async function selectScriptCanvasImage(request: ScriptAssetCanvasSelectRequest): Promise<ScriptAssetGenerateResult> {
+    if (request.signal.aborted) throw new DOMException("选择已取消", "AbortError");
+    const attachmentId = request.image.attachmentId
+      ?? (request.image.nodeId ? String(nodesRef.current.find((node) => node.id === request.image.nodeId)?.data.resultAttachmentId ?? "") : "");
+    if (!attachmentId) throw new Error("所选画布图片没有可持久化的素材引用");
+    return {
+      patch: {
+        status: "ready",
+        source: "canvas",
+        attachmentId,
+        ...(request.image.nodeId ? { nodeId: request.image.nodeId } : {}),
+        ...(request.image.mimeType ? { mimeType: request.image.mimeType } : {}),
+        error: null,
+      },
+    };
+  }
+
+  async function uploadScriptAsset(request: ScriptAssetUploadRequest): Promise<ScriptAssetGenerateResult> {
+    if (!/^image\/(?:png|jpeg|webp)$/.test(request.file.type)) throw new Error("仅支持 PNG、JPG、WEBP 图片");
+    if (request.file.size > MAX_GENERATED_IMAGE_BYTES) throw new Error("图片不能超过 25MB");
+    const [attachmentId] = await importAssetFiles([request.file], false, {
+      awaitCloud: false,
+      signal: request.signal,
+    });
+    if (request.signal.aborted) throw new DOMException("上传已取消", "AbortError");
+    if (!attachmentId) throw new Error("本地图片保存失败");
+    const nodeId = createScriptAssetImageNode(
+      request.nodeId,
+      request.asset,
+      attachmentId,
+      request.file.type,
+      request.asset.prompt || request.asset.description,
+      "本地上传",
+    );
+    const patch: ScriptWorkbenchAssetPatch = {
+      status: "ready",
+      source: "upload",
+      attachmentId,
+      nodeId,
+      mimeType: request.file.type,
+      error: null,
+    };
+    const latest = nodesRef.current.find((node) => node.id === request.nodeId)?.data.scriptWorkbench;
+    commitScriptWorkbench(
+      request.nodeId,
+      updateScriptWorkbenchAsset(normalizeScriptWorkbench(latest ?? request.workbench), request.asset.id, patch),
+    );
+    return { patch };
+  }
+
+  async function composeScriptPrompt(request: ScriptPromptComposeRequest): Promise<ScriptPromptComposeResult> {
+    if (request.mode === "concat") {
+      return { finalPrompt: composeScriptWorkbenchPrompt(request.workbench.global_style, request.shot) };
+    }
+    const model = await resolveSharedCanvasModel("text", request.modelId, request.signal);
+    const result = await generateCanvasContent({
+      modality: "text",
+      model,
+      signal: request.signal,
+      prompt: [
+        "你是电影分镜提示词专家。根据给定镜头与资产，把信息合成为一段可直接用于分镜生图的中文提示词。只输出最终提示词，不解释，不使用 Markdown。",
+        `全局风格：${request.workbench.global_style}`,
+        `可用资产：${request.workbench.assets.map((asset) => `${asset.name}（${asset.description}）`).join("；")}`,
+        `镜头 JSON：${JSON.stringify(request.shot)}`,
+        "保留镜头动作、景别、光影、对白语境、声音氛围和运镜意图；主体身份和服装必须一致。",
+      ].join("\n\n"),
+    });
+    if (result.modality !== "text" || !result.text.trim()) throw new Error("提示词模型没有返回内容");
+    return { finalPrompt: result.text.trim() };
+  }
+
+  async function composeAllScriptPrompts(request: ScriptPromptBatchRequest): Promise<ScriptPromptBatchResult> {
+    const shots = request.workbench.shots.filter((shot) => request.shotIds.includes(shot.id));
+    if (request.mode === "concat") {
+      return {
+        prompts: shots.map((shot) => ({
+          shotId: shot.id,
+          finalPrompt: composeScriptWorkbenchPrompt(request.workbench.global_style, shot),
+        })),
+      };
+    }
+    const model = await resolveSharedCanvasModel("text", request.modelId, request.signal);
+    const compactShots = shots.map((shot) => ({
+      id: shot.id,
+      duration: shot.duration,
+      visual: shot.visual.slice(0, 900),
+      scale: shot.scale,
+      lighting: shot.lighting.slice(0, 500),
+      dialogue: shot.dialogue.slice(0, 500),
+      sound: shot.sound.slice(0, 300),
+      camera: shot.camera.slice(0, 300),
+    }));
+    const result = await generateCanvasContent({
+      modality: "text",
+      model,
+      signal: request.signal,
+      prompt: [
+        "你是电影分镜提示词专家。为每个镜头生成一段可直接生图的中文提示词。只返回 JSON，不要 Markdown。",
+        '返回格式：{"prompts":[{"shotId":"原镜头id","finalPrompt":"最终提示词"}]}。必须逐一覆盖输入中的每个 shotId，不得新增或改写 id。',
+        `全局风格：${request.workbench.global_style}`,
+        `可用资产：${request.workbench.assets.map((asset) => `${asset.name}（${asset.description.slice(0, 300)}）`).join("；")}`,
+        `镜头：${JSON.stringify(compactShots)}`,
+      ].join("\n\n"),
+    });
+    if (result.modality !== "text") throw new Error("提示词模型没有返回 JSON");
+    const payload = extractScriptWorkbenchJson(result.text);
+    const record = payload && typeof payload === "object" && !Array.isArray(payload) ? payload as Record<string, unknown> : null;
+    const rawPrompts = Array.isArray(record?.prompts) ? record.prompts : [];
+    const allowedIds = new Set(shots.map((shot) => shot.id));
+    const prompts = rawPrompts.flatMap((value) => {
+      if (!value || typeof value !== "object" || Array.isArray(value)) return [];
+      const item = value as Record<string, unknown>;
+      const shotId = typeof item.shotId === "string" ? item.shotId : "";
+      const finalPrompt = typeof item.finalPrompt === "string" ? item.finalPrompt.trim() : "";
+      return shotId && allowedIds.has(shotId) && finalPrompt ? [{ shotId, finalPrompt }] : [];
+    });
+    const promptIds = new Set(prompts.map((item) => item.shotId));
+    if (prompts.length !== shots.length || promptIds.size !== shots.length || shots.some((shot) => !promptIds.has(shot.id))) {
+      throw new Error(`批量提示词返回不完整或包含重复镜头（${promptIds.size}/${shots.length}）`);
+    }
+    return { prompts };
+  }
+
+  function sanitizePresentedWorkbench(workbench: ScriptWorkbenchDocument): ScriptWorkbenchDocument {
+    return normalizeScriptWorkbench({
+      ...workbench,
+      assets: workbench.assets.map((asset) => {
+        if (!asset.imageUrl?.startsWith("blob:")) return asset;
+        const { imageUrl: _previewUrl, ...persisted } = asset;
+        return persisted;
+      }),
+    });
+  }
+
+  function closeScriptWorkbench() {
+    const activeId = scriptWorkflowNodeId;
+    if (activeId) {
+      const latest = nodesRef.current.find((node) => node.id === activeId);
+      if (latest?.data.scriptWorkbench) commitScriptWorkbench(activeId, normalizeScriptWorkbench(latest.data.scriptWorkbench), true);
+    }
+    setScriptWorkflowInitialDialog(null);
+    setScriptWorkflowNodeId(null);
+  }
+
+  function jumpToScriptAssetNode(nodeId: string) {
+    if (!nodesRef.current.some((node) => node.id === nodeId)) {
+      setNotice("关联图片节点已被删除");
+      return;
+    }
+    const nextNodes = nodesRef.current.map((node) => ({ ...node, selected: node.id === nodeId }));
+    nodesRef.current = nextNodes;
+    setNodes(nextNodes);
+    setSelectedNodeId(nodeId);
+    setScriptWorkflowInitialDialog(null);
+    setScriptWorkflowNodeId(null);
+    window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: nodeId }], padding: .55, maxZoom: 1.1, duration: 280 }));
+  }
+
+  function scriptAssetReferences(workbench: ScriptWorkbenchDocument, shot: ScriptWorkbenchShot) {
+    const searchable = [shot.visual, shot.dialogue, shot.final_prompt].join("\n");
+    const ready = workbench.assets.filter((asset) => asset.status === "ready" && hasRealScriptWorkbenchAssetSource(asset));
+    const explicitlyReferenced = ready.filter((asset) => {
+      const escapedName = asset.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp(`@${escapedName}(?![\\p{L}\\p{N}_-])`, "u").test(searchable);
+    });
+    // The image bridge composes at most six references into one model input.
+    // Keep task metadata aligned with the images that will actually be sent.
+    const selected = (explicitlyReferenced.length ? explicitlyReferenced : ready).slice(0, 6);
+    const currentSources = selected.map((asset) => {
+      const linkedAttachmentId = asset.nodeId
+        ? String(nodesRef.current.find((candidate) => candidate.id === asset.nodeId)?.data.resultAttachmentId ?? "")
+        : "";
+      const attachmentId = linkedAttachmentId || asset.attachmentId || "";
+      return {
+        attachmentId,
+        imageUrl: attachmentId ? "" : asset.imageUrl || "",
+      };
+    });
+    return {
+      attachmentIds: [...new Set(currentSources.flatMap(({ attachmentId }) => attachmentId ? [attachmentId] : []))],
+      nodeIds: selected.flatMap((asset) => asset.nodeId ? [asset.nodeId] : []),
+      imageUrls: [...new Set(currentSources.flatMap(({ imageUrl }) => imageUrl ? [imageUrl] : []))],
+      assetIds: selected.map((asset) => asset.id),
+    };
+  }
+
+  function createBatchStoryboardNodes(scriptNodeId: string, workbench: ScriptWorkbenchDocument) {
+    const scriptNode = nodesRef.current.find((node) => node.id === scriptNodeId);
+    if (!scriptNode) return;
+    const existingByShot = new Map(nodesRef.current
+      .filter((node) => node.data.storyboardSourceNodeId === scriptNodeId && typeof node.data.scriptShotId === "string")
+      .map((node) => [String(node.data.scriptShotId), node]));
+    const updatedNodes = nodesRef.current.map((node) => {
+      if (node.data.storyboardSourceNodeId !== scriptNodeId) return { ...node, selected: false };
+      const shot = workbench.shots.find((candidate) => candidate.id === node.data.scriptShotId);
+      if (!shot?.final_prompt.trim()) return { ...node, selected: false };
+      const references = scriptAssetReferences(workbench, shot);
+      const changed = node.data.prompt !== shot.final_prompt
+        || !sameStringList(node.data.referenceAttachmentIds, references.attachmentIds)
+        || !sameStringList(node.data.referenceNodeIds, references.nodeIds)
+        || !sameStringList(node.data.referenceImageUrls, references.imageUrls)
+        || !sameStringList(node.data.scriptAssetIds, references.assetIds);
+      if (changed) cancelGenerationRequest(node.id);
+      return {
+        ...node,
+        selected: false,
+        data: {
+          ...node.data,
+          title: `分镜 ${String(workbench.shots.indexOf(shot) + 1).padStart(2, "0")}`,
+          description: `${shot.scale} · ${shot.visual.slice(0, 70)}`,
+          prompt: shot.final_prompt,
+          sourceContext: shot.final_prompt,
+          referenceAttachmentIds: references.attachmentIds,
+          referenceNodeIds: references.nodeIds,
+          referenceImageUrls: references.imageUrls,
+          scriptAssetIds: references.assetIds,
+          ...(changed ? {
+            status: "idle" as const,
+            generationProgress: 0,
+            generationRequestId: undefined,
+            resultAttachmentId: undefined,
+            resultMimeType: undefined,
+            assetName: undefined,
+            generationError: undefined,
+          } : {}),
+        },
+      };
+    });
+    const created = workbench.shots.filter((shot) => shot.final_prompt.trim() && !existingByShot.has(shot.id)).map((shot): WorkflowNode => {
+      const references = scriptAssetReferences(workbench, shot);
+      const shotIndex = Math.max(0, workbench.shots.findIndex((candidate) => candidate.id === shot.id));
+      return {
+      id: `script-storyboard-${crypto.randomUUID()}`,
+      type: "workflow-node",
+      position: { x: scriptNode.position.x + 430 + (shotIndex % 4) * 300, y: scriptNode.position.y - 170 + Math.floor(shotIndex / 4) * 250 },
+      data: {
+        ...nodeRuntimeDefaults("image", "libtv-generator"),
+        kind: "image",
+        title: `分镜 ${String(shotIndex + 1).padStart(2, "0")}`,
+        description: `${shot.scale} · ${shot.visual.slice(0, 70)}`,
+        prompt: shot.final_prompt,
+        status: "idle",
+        eyebrow: "分镜画面",
+        variant: "libtv-generator",
+        sourceNodeId: scriptNodeId,
+        sourceContext: shot.final_prompt,
+        aspectRatio: "16:9",
+        referenceAttachmentIds: references.attachmentIds,
+        referenceNodeIds: references.nodeIds,
+        referenceImageUrls: references.imageUrls,
+        scriptAssetIds: references.assetIds,
+        storyboardSourceNodeId: scriptNodeId,
+        scriptShotId: shot.id,
+      },
+    }});
+    if (!created.length && !existingByShot.size) {
+      setNotice("没有可创建的分镜图片任务");
+      return;
+    }
+    const nextNodes = [...updatedNodes, ...created];
+    const nextEdges = [...edgesRef.current, ...created.map((node) => makeEdge(`edge-${crypto.randomUUID()}`, scriptNodeId, node.id, true))];
+    setGraphImmediately(nextNodes, nextEdges);
+    setSelectedNodeId(created[0]?.id ?? null);
+    void persistGeneratorNodeSnapshot(scriptNodeId, {}, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
+    setScriptWorkflowInitialDialog(null);
+    setScriptWorkflowNodeId(null);
+    setNotice(created.length ? `已创建 ${created.length} 个分镜图片任务，其余任务已同步` : "分镜图片任务参数已同步");
+    const focusNodes = created.length ? created : [...existingByShot.values()];
+    window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: focusNodes.map((node) => ({ id: node.id })), padding: .25, maxZoom: .9, duration: 320 }));
+  }
+
+  function handleScriptNodeAction(nodeId: string, action: "regenerate" | "storyboard" | "video" | "download") {
+    const resultNode = nodesRef.current.find((node) => node.id === nodeId && node.data.variant === "script-workflow");
+    if (!resultNode) return;
+    const workbench = normalizeScriptWorkbench(resultNode.data.scriptWorkbench);
+    if (action === "download") {
+      const url = URL.createObjectURL(new Blob([serializeScriptWorkbench(workbench, true)], { type: "application/json;charset=utf-8" }));
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${workbench.title.replace(/[\\/:*?"<>|]/g, " ").trim() || "故事脚本"}.json`;
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+      return;
+    }
+    if (action === "storyboard") {
+      if (!isScriptWorkbenchReadyForBatchVideo(workbench)) {
+        setNotice("请先完成镜头、真实资产与全部提示词");
+        return;
+      }
+      createBatchStoryboardNodes(nodeId, workbench);
+      return;
+    }
+    if (action === "video") {
+      if (!isScriptWorkbenchReadyForBatchVideo(workbench)) {
+        setNotice("请先完成镜头、真实资产与全部提示词");
+        return;
+      }
+      setScriptWorkflowInitialDialog("video");
+      setScriptWorkflowNodeId(nodeId);
+      return;
+    }
+    const sourceId = typeof resultNode.data.sourceNodeId === "string" ? resultNode.data.sourceNodeId : "";
+    const source = nodesRef.current.find((node) => node.id === sourceId);
+    if (!source) {
+      setNotice("原脚本生成节点已被删除，无法重新生成");
+      return;
+    }
+    if (!window.confirm("重新生成会覆盖当前三步脚本内容，是否继续？")) return;
+    void runScriptWorkbenchGeneratorNode(source, true);
+  }
+
+  function batchVideoFromWorkbench(request: ScriptBatchVideoRequest) {
+    if (request.signal.aborted) return;
+    createBatchVideoNodes(request.nodeId, request.workbench.shots);
   }
 
   function completeStandaloneWorkflow(nodeId: string, workflow: StandaloneWorkflowKind, result: StandaloneWorkflowResult) {
@@ -3774,7 +4679,8 @@ export function CanvasPage({
       ? { x: stageBounds.left + stageBounds.width / 2, y: stageBounds.top + stageBounds.height / 2 }
       : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const flowCenter = flowInstanceRef.current?.screenToFlowPosition(screenCenter) ?? screenCenter;
-    const recipeWidth = 248 + Math.max(0, preset.nodes.length - 1) * 330;
+    const nodeGap = preset.id === "story-script" ? 730 : 330;
+    const recipeWidth = (preset.id === "story-script" ? 310 : 248) + Math.max(0, preset.nodes.length - 1) * nodeGap;
     const originX = flowCenter.x - recipeWidth / 2;
     const originY = flowCenter.y - 94;
     const createdNodes = preset.nodes.map((item, index): WorkflowNode => {
@@ -3783,7 +4689,10 @@ export function CanvasPage({
       return {
         id,
         type: "workflow-node",
-        position: { x: originX + index * 330, y: originY },
+        position: {
+          x: originX + index * nodeGap,
+          y: preset.id === "story-script" ? originY + (index === 0 ? 46 : -48) : originY,
+        },
         selected: index === preset.nodes.length - 1,
         data: {
           ...nodeRuntimeDefaults(item.kind, item.variant),
@@ -3791,7 +4700,7 @@ export function CanvasPage({
           kind: item.kind,
           title: item.title,
           description: item.description,
-          status: index === 0 ? "ready" : "idle",
+          status: index === 0 ? "done" : "idle",
           eyebrow: definition.eyebrow,
           variant: item.variant ?? "default",
           assetName: `Skill · ${preset.skill}`,
@@ -3800,12 +4709,21 @@ export function CanvasPage({
         },
       };
     });
-    const createdEdges = createdNodes.slice(1).map((node, index) => makeEdge(
-      `starter-edge-${crypto.randomUUID()}`,
-      createdNodes[index].id,
-      node.id,
-      index === 0,
-    ));
+    if (preset.id === "story-script" && createdNodes[0] && createdNodes[1]) {
+      const source = createdNodes[0];
+      const sourceContext = String(source.data.resultText ?? source.data.prompt ?? source.data.description ?? "");
+      createdNodes[1] = {
+        ...createdNodes[1],
+        data: {
+          ...createdNodes[1].data,
+          sourceNodeId: source.id,
+          sourceContext,
+        },
+      };
+    }
+    const createdEdges = createdNodes.slice(1).map((node, index) => preset.id === "story-script" && index === 0
+      ? makeLibtvReferenceEdge(`starter-edge-${crypto.randomUUID()}`, createdNodes[index].id, node.id)
+      : makeEdge(`starter-edge-${crypto.randomUUID()}`, createdNodes[index].id, node.id, index === 0));
     setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), ...createdNodes]);
     setEdges((items) => [...items, ...createdEdges]);
     setSelectedNodeId(createdNodes.at(-1)?.id ?? null);
@@ -3890,10 +4808,10 @@ export function CanvasPage({
     setNotice(`已从生成历史添加 ${selected.length} 项`);
   }
 
-  async function importAssetFiles(files: File[], openAssetsDrawer: boolean, options?: { awaitCloud?: boolean }): Promise<string[]> {
+  async function importAssetFiles(files: File[], openAssetsDrawer: boolean, options?: { awaitCloud?: boolean; signal?: AbortSignal }): Promise<string[]> {
     if (!files.length) return [];
     const importWorkId = work.id;
-    const isStale = () => workClearedRef.current || activeWorkIdRef.current !== importWorkId;
+    const isStale = () => Boolean(options?.signal?.aborted) || workClearedRef.current || activeWorkIdRef.current !== importWorkId;
     if (isStale()) return [];
     const pending: PendingAttachment[] = files.map((file) => ({
       id: crypto.randomUUID(),
@@ -4043,9 +4961,17 @@ export function CanvasPage({
       setNotice("请先选择一个节点");
       return;
     }
-    selectedIds.forEach(cancelGenerationRequest);
-    setNodes((items) => items.filter((node) => !selectedIds.has(node.id)));
-    setEdges((items) => items.filter((edge) => !selectedIds.has(edge.source) && !selectedIds.has(edge.target)));
+    selectedIds.forEach((nodeId) => {
+      cancelGenerationRequest(nodeId);
+      const selected = nodesRef.current.find((node) => node.id === nodeId);
+      if (selected?.data.variant === "script-workflow" && typeof selected.data.sourceNodeId === "string") {
+        cancelWorkflowGeneration(selected.data.sourceNodeId);
+      }
+    });
+    const nextNodes = nodesRef.current.filter((node) => !selectedIds.has(node.id));
+    const nextEdges = edgesRef.current.filter((edge) => !selectedIds.has(edge.source) && !selectedIds.has(edge.target));
+    setGraphImmediately(nextNodes, nextEdges);
+    void persistGeneratorNodeSnapshot("graph-delete", {}, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
     setSelectedNodeId(null);
     addActivity(`删除 ${selectedIds.size} 个节点`);
   }
@@ -4054,8 +4980,13 @@ export function CanvasPage({
     const node = nodes.find((item) => item.id === nodeId);
     if (!node) return;
     cancelGenerationRequest(nodeId);
-    setNodes((items) => items.filter((item) => item.id !== nodeId));
-    setEdges((items) => items.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
+    if (node.data.variant === "script-workflow" && typeof node.data.sourceNodeId === "string") {
+      cancelWorkflowGeneration(node.data.sourceNodeId);
+    }
+    const nextNodes = nodesRef.current.filter((item) => item.id !== nodeId);
+    const nextEdges = edgesRef.current.filter((edge) => edge.source !== nodeId && edge.target !== nodeId);
+    setGraphImmediately(nextNodes, nextEdges);
+    void persistGeneratorNodeSnapshot("graph-delete", {}, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
     if (selectedNodeId === nodeId) setSelectedNodeId(null);
     setOverviewNodeMenu(null);
     addActivity(`删除节点「${node.data.title}」`);
@@ -4401,12 +5332,13 @@ export function CanvasPage({
         }}
       >
         {view === "workflow" ? (
-          <CanvasNodeActionsContext.Provider value={{ update: updateNodeData, run: runWorkflowNode, derive: deriveWorkflowNode, resolveAttachment: resolveCanvasAttachment, quickAction: handleNodeQuickAction, openDirector: openDirectorStudio, openScript: setScriptWorkflowNodeId, openStandalone: (nodeId, workflow) => setStandaloneWorkflow({ nodeId, workflow }) }}>
+          <CanvasNodeActionsContext.Provider value={{ update: updateNodeData, run: runWorkflowNode, cancel: cancelWorkflowGeneration, derive: deriveWorkflowNode, resolveAttachment: resolveCanvasAttachment, quickAction: handleNodeQuickAction, openDirector: openDirectorStudio, openScript: (nodeId) => { setScriptWorkflowInitialDialog(null); setScriptWorkflowNodeId(nodeId); }, scriptAction: handleScriptNodeAction, openStandalone: (nodeId, workflow) => setStandaloneWorkflow({ nodeId, workflow }) }}>
           <ReactFlow<WorkflowNode, Edge>
             nodes={nodes}
             edges={edgesVisible ? edges : []}
             onInit={(instance) => { flowInstanceRef.current = instance; }}
             nodeTypes={NODE_TYPES}
+            edgeTypes={EDGE_TYPES}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
@@ -5131,11 +6063,26 @@ export function CanvasPage({
         </div>
       )}
 
-      <ScriptWorkflowOverlay
+      <ControlledScriptWorkflowOverlay
         open={Boolean(scriptWorkflowNodeId)}
         nodeId={scriptWorkflowNodeId}
-        onClose={() => setScriptWorkflowNodeId(null)}
-        onBatchVideo={createBatchVideoNodes}
+        workbench={presentedScriptWorkbench}
+        initialDialog={scriptWorkflowInitialDialog}
+        onChange={(nextWorkbench) => {
+          if (scriptWorkflowNodeId) commitScriptWorkbench(scriptWorkflowNodeId, sanitizePresentedWorkbench(nextWorkbench));
+        }}
+        onClose={closeScriptWorkbench}
+        promptModels={scriptPromptModels}
+        imageModels={scriptImageModels}
+        canvasImages={scriptCanvasImages}
+        onComposePrompt={composeScriptPrompt}
+        onComposeAllPrompts={composeAllScriptPrompts}
+        onGenerateAsset={generateScriptAsset}
+        onGenerateAssets={generateScriptAssets}
+        onSelectCanvasImage={selectScriptCanvasImage}
+        onUploadAsset={uploadScriptAsset}
+        onJumpToAssetNode={(nodeId) => jumpToScriptAssetNode(nodeId)}
+        onBatchVideo={batchVideoFromWorkbench}
       />
 
       <StandaloneSkillWorkflowOverlay

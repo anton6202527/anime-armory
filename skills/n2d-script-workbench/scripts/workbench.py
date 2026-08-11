@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,7 @@ ASSET_STATES = {"pending", "generating", "ready", "failed"}
 ASSET_SOURCES = {"none", "ai", "canvas", "upload"}
 SHOT_FIELDS = ("id", "duration", "visual", "scale", "lighting", "dialogue", "sound", "camera")
 ASSET_FIELDS = ("id", "kind", "name", "description", "prompt", "status", "source")
+ASSET_EVIDENCE_FIELDS = ("attachmentId", "nodeId", "imageUrl", "mimeType", "error")
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -38,9 +40,13 @@ def stable_id(prefix: str, index: int, name: str) -> str:
 
 def normalize_shot(raw: dict[str, Any], index: int) -> dict[str, Any]:
     visual = str(raw.get("visual") or raw.get("description") or "").strip()
+    try:
+        duration = min(15, max(5, math.floor(float(raw.get("duration") or 5) + 0.5)))
+    except (TypeError, ValueError, OverflowError):
+        duration = 5
     return {
         "id": str(raw.get("id") or stable_id("shot", index, visual)),
-        "duration": float(raw.get("duration") or 5),
+        "duration": duration,
         "visual": visual,
         "scale": str(raw.get("scale") or "中景"),
         "lighting": str(raw.get("lighting") or "自然光，电影感"),
@@ -55,7 +61,7 @@ def normalize_shot(raw: dict[str, Any], index: int) -> dict[str, Any]:
 def normalize_asset(raw: dict[str, Any], index: int) -> dict[str, Any]:
     kind = str(raw.get("kind") or "character")
     name = str(raw.get("name") or "").strip()
-    return {
+    result = {
         "id": str(raw.get("id") or stable_id("asset", index, f"{kind}:{name}")),
         "kind": kind,
         "name": name,
@@ -64,13 +70,40 @@ def normalize_asset(raw: dict[str, Any], index: int) -> dict[str, Any]:
         "status": str(raw.get("status") or "pending"),
         "source": str(raw.get("source") or "none"),
     }
+    if result["source"] != "none":
+        for field in ASSET_EVIDENCE_FIELDS:
+            if field == "error":
+                continue
+            value = raw.get(field)
+            if isinstance(value, str) and value.strip():
+                result[field] = value.strip()
+    error = raw.get("error")
+    if isinstance(error, str) and error.strip():
+        result["error"] = error.strip()
+    if result["status"] == "ready" and not has_real_asset_source(result):
+        result["status"] = "pending"
+    return result
+
+
+def has_real_asset_source(asset: dict[str, Any]) -> bool:
+    if asset.get("source") == "none":
+        return False
+    if str(asset.get("attachmentId") or "").strip() or str(asset.get("nodeId") or "").strip():
+        return True
+    image_url = str(asset.get("imageUrl") or "").strip().lower()
+    return image_url.startswith(("http://", "https://", "blob:", "data:image/", "/"))
 
 
 def refresh_steps(payload: dict[str, Any]) -> None:
     shots = payload.get("shots", [])
     assets = payload.get("assets", [])
-    shot_done = bool(shots) and all(str(shot.get("visual", "")).strip() for shot in shots)
-    asset_done = bool(assets) and all(asset.get("status") == "ready" for asset in assets)
+    shot_done = bool(shots) and all(
+        all(str(shot.get(field, "")).strip() for field in ("id", "visual", "scale", "lighting", "sound", "camera"))
+        and isinstance(shot.get("duration"), (int, float))
+        and 5 <= float(shot["duration"]) <= 15
+        for shot in shots
+    )
+    asset_done = bool(assets) and all(asset.get("status") == "ready" and has_real_asset_source(asset) for asset in assets)
     prompt_done = bool(shots) and all(str(shot.get("final_prompt", "")).strip() for shot in shots)
     payload["steps"] = {
         "shots": "done" if shot_done else "active",
@@ -85,6 +118,7 @@ def build(raw: dict[str, Any]) -> dict[str, Any]:
         "skill": SKILL,
         "title": str(raw.get("title") or "未命名故事脚本").strip(),
         "global_style": str(raw.get("global_style") or "电影级画面，主体一致，细节清晰").strip(),
+        "style_locked": raw.get("style_locked") is True,
         "steps": {},
         "shots": [normalize_shot(item, index) for index, item in enumerate(raw.get("shots", []), 1) if isinstance(item, dict)],
         "assets": [normalize_asset(item, index) for index, item in enumerate(raw.get("assets", []), 1) if isinstance(item, dict)],
@@ -111,6 +145,8 @@ def validate(payload: dict[str, Any]) -> list[str]:
         errors.append("title 不能为空")
     if not str(payload.get("global_style", "")).strip():
         errors.append("global_style 不能为空")
+    if not isinstance(payload.get("style_locked"), bool):
+        errors.append("style_locked 必须是 boolean")
     steps = payload.get("steps")
     if not isinstance(steps, dict):
         errors.append("steps 必须是 object")
@@ -134,8 +170,11 @@ def validate(payload: dict[str, Any]) -> list[str]:
                 errors.append(f"shots[{index}].id 重复")
             seen.add(str(shot.get("id")))
             try:
-                if float(shot.get("duration", 0)) <= 0:
-                    errors.append(f"shots[{index}].duration 必须大于 0")
+                duration = float(shot.get("duration", 0))
+                if not math.isfinite(duration):
+                    errors.append(f"shots[{index}].duration 必须是有限数字")
+                elif duration < 5 or duration > 15:
+                    errors.append(f"shots[{index}].duration 必须在 5–15 秒之间")
             except (TypeError, ValueError):
                 errors.append(f"shots[{index}].duration 必须是数字")
     assets = payload.get("assets")
@@ -159,8 +198,8 @@ def validate(payload: dict[str, Any]) -> list[str]:
                 errors.append(f"assets[{index}].status 无效")
             if asset.get("source") not in ASSET_SOURCES:
                 errors.append(f"assets[{index}].source 无效")
-            if asset.get("status") == "ready" and asset.get("source") == "none":
-                errors.append(f"assets[{index}] ready 时 source 不能为 none")
+            if asset.get("status") == "ready" and not has_real_asset_source(asset):
+                errors.append(f"assets[{index}] ready 时必须保留 attachmentId、nodeId 或 imageUrl 证据")
     return errors
 
 
@@ -192,6 +231,7 @@ def main() -> int:
         style = str(payload.get("global_style", "")).strip()
         for shot in payload.get("shots", []):
             shot["final_prompt"] = compose_prompt(style, shot)
+        payload["style_locked"] = True
         refresh_steps(payload)
         errors = validate(payload)
         if errors:

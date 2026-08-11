@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "BEAST_TIGER",
+  "name": "BEAST_TIGER",
+  "scope": "本集入镜角色",
+  "library_tier": "named_minimal",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/BEAST_TIGER__BEAST_TIGER/reference",
+    "prompts": "角色库/BEAST_TIGER__BEAST_TIGER/prompts",
+    "lora": "角色库/BEAST_TIGER__BEAST_TIGER/lora",
+    "voice": "角色库/BEAST_TIGER__BEAST_TIGER/voice",
+    "adapters": "角色库/BEAST_TIGER__BEAST_TIGER/adapters",
+    "qc": "角色库/BEAST_TIGER__BEAST_TIGER/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/BEAST_TIGER.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:52:03+00:00"
+}

@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4767 | 目录文本总行数 303028
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4771 | 目录文本总行数 305017
 
 # n2d — 主状态机调度器
 
@@ -32,7 +32,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`制作模式`、`合成阶段`、`项目规模`、`基础视觉风格`、`视频模型路由`（只记录用户主动固定约束；具体生视频后端到 n2d-video 阶段再定）、`生视频模型`、`生视频渠道`、`生图模型`、`生图AI`（旧称，实为 `生图渠道`/访问入口）、`配音后端`、`视频分辨率`、`画幅`、`对口型`、`BGM来源`、`一致性增强`、`目标平台`、`发行地区`、`合规用途`。
+本 skill 涉及的选择点：`制作模式`、`人工批准策略`、`合成阶段`、`项目规模`、`基础视觉风格`、`视频模型路由`（只记录用户主动固定约束；具体生视频后端到 n2d-video 阶段再定）、`生视频模型`、`生视频渠道`、`生图模型`、`生图AI`（旧称，实为 `生图渠道`/访问入口）、`配音后端`、`视频分辨率`、`画幅`、`对口型`、`BGM来源`、`一致性增强`、`目标平台`、`发行地区`、`合规用途`。
+
+> **自主批准模式（少打断、可审计）**：默认仍是 `人工批准策略=逐节点人工批准`。用户明确授权普通节点自行决策时，用 `n2d-settings` 写为 `仅高风险停审`，再运行 `python3 skills/n2d/n2d-script/scripts/autonomy.py authorize <作品根> --authorized-by <明确用户身份> --source-quote '<授权原话>'`。此后 `run.py next/enter` 会在 P-1、围读、P-2、animatic、P-3 的内容已 `confirmed/ready` 时自动写 delegated signoff；代理不是人类 reviewer，manifest 会明确记录项目负责人豁免独立人审、当前授权 SHA 与产物 SHA。普通的构图、措辞、节奏、锚帧、母题和内部可逆 prompt 决策也由 agent 选最优项并写理由，不再逐节点暂停。**付费生成/购买、权利与内容合规/分级、声音克隆授权、公开发布/投放、删除覆盖或边界移动等不可逆变更仍必须停审**；最终 `master_delivery_complete`/发布验收不自动签。
 
 > 作为生产线入口：开新作品（`创作区/制漫剧/<剧名>/`）时先给首跑选择包（至少 `制作模式` + `项目规模` + `基础视觉风格`；有明确账号/预算/后端约束时可先问 `生图模型` + `生图AI/生图渠道`），选后初始化 `<作品根>/_设置.md`。`项目规模=多集长线/长篇量产` 时，首跑就把“GPT Image 2/Codex 参考派生 vs Seedream/可灵等原生主体库”的一致性税讲清：短 demo 可用 GPT Image 2，经 Codex/OpenAI 访问；长线核心/常驻角色默认推荐主体库或等效 face_embedding/LoRA，别等第 3 集才被 gate 拦。真正进 `n2d-image` 付费生图前会重新扫描当前可用生图渠道：多个可自动落 PNG 的官方/已登录渠道则让用户选一个并写 `生图AI`，同时确认/补齐对应 `生图模型`；一个都没有则停下提示准备可用生图渠道。拆集不再让用户选择单集时长；内部用 `拆集节奏=前长后短` 的节奏倾向，旧项目 `_设置.md` 的 `单集时长` 仅作兼容读取。粗拆默认按章/场景/强钩候选，不锚字数；剧情连贯和剧情丰满优先于时长，不能为省秒数删掉必要镜头、铺垫、动机或承接。**生视频后端选择不在开局出现**：开局只记录用户主动指定的固定后端/单账号/交付硬约束；默认写/沿用 `视频模型路由=自动按镜头路由`，具体 `生视频模型` / `生视频渠道` 到 `n2d-video` 出视频前由 router/probe + 适配层决定，无法自动执行或需要人工取舍时再问。若 `_设置.md` 已存在，直接沿用其中值；若用户本轮已明说某项，按其话覆盖落档。旧项目的 `生视频AI` 只作兼容 fallback，新项目不要再写这个合并字段。
 
@@ -115,28 +117,28 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 **情境 A — 用户给了一个小说路径，作品根尚不存在**：
 → 推荐 `n2d-script <小说路径>`（先落 P-1 开发包草稿 + 首批粗切，再进 Stage 1）。**首跑时先按上面摘要把制作模式菜单念给用户选一次**，再按 `n2d/references/visual_styles.md` 选择 `基础视觉风格`；生视频后端不在开局选择，除非用户主动固定某后端/账号硬约束，否则延后到 `n2d-video` 出视频前由 router/probe 决策。选后统一落 `_设置.md`。
-> **P-1 开发包 gate（拆集/写词前的制片开发层）**：新作品会在 `<作品根>/开发包/` 生成 `series_bible.md`、`adaptation_strategy.json`、`season_arc.json`、`production_feasibility.json`、`pilot_greenlight.md`。`run.py next/enter` 在 `script_stage1` 前自动跑 `development_pack.py check --write-missing`；`status=confirmed` 只代表内容填完，另需 `开发包/signoff.json` 绑定当前源输入、五件套 SHA、明确 reviewer/role/time/risk，由创意与制片两组签收。任一内容或 signoff 缺失/过期都会阻断正式写词。
+> **P-1 开发包 gate（拆集/写词前的制片开发层）**：新作品会在 `<作品根>/开发包/` 生成 `series_bible.md`、`adaptation_strategy.json`、`season_arc.json`、`production_feasibility.json`、`pilot_greenlight.md`。`run.py next/enter` 在 `script_stage1` 前自动跑 `development_pack.py check --write-missing`；`status=confirmed` 只代表内容填完，另需 `开发包/signoff.json` 绑定当前源输入与五件套 SHA。标准模式由创意与制片两组人工签收；有效的“仅高风险停审”授权可自动写明 delegated signoff。任一内容或签收缺失/过期都会阻断正式写词。
 ```bash
 python3 skills/n2d/n2d-script/scripts/development_pack.py <作品根> scaffold --write
 python3 skills/n2d/n2d-script/scripts/development_pack.py <作品根> check --json --write-missing
 ```
-> **低成本围读 gate（导演排戏前的编剧室/演员围读层）**：每集完成 voiceover/时长脚手架后先生成 `table_read_packet.json/md`。内容 `status=confirmed` 只表示可审；director/head_writer 还须在 `table_read_signoff.json` 对当前输入与围读包哈希签收。这样先发现“台词不活、信息太满、角色声线不清”，又不允许生成器自称已围读。
+> **低成本围读 gate（导演排戏前的编剧室/演员围读层）**：每集完成 voiceover/时长脚手架后先生成 `table_read_packet.json/md`。内容 `status=confirmed` 只表示可审；标准模式由 director/head_writer 在 `table_read_signoff.json` 签收，有效自主授权则由代理按负责人豁免独立人审的范围签当前哈希。这样先发现“台词不活、信息太满、角色声线不清”，同时不把代理签收伪装成人工围读。
 ```bash
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind table_read
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind table_read --json --write-missing
 ```
-> **P-2 导演排戏包 gate（分镜前的导演排戏层）**：围读确认后，`run.py next/enter` 在 `script_stage2` 前继续自动跑 `director_blocking_pack.py check --write-missing`。脚本可从旧 storyboard 预填内容，但永远保持 draft，不自我签收；六件套内容 confirmed 后，还要由导演 + 制片/剪辑在 `director_blocking_signoff.json` 对当前哈希双角色签收。
+> **P-2 导演排戏包 gate（分镜前的导演排戏层）**：围读确认后，`run.py next/enter` 在 `script_stage2` 前继续自动跑 `director_blocking_pack.py check --write-missing`。脚本可从旧 storyboard 预填内容，但永远保持 draft；六件套内容 confirmed 后，标准模式由导演 + 制片/剪辑双角色签收，有效自主授权则写 delegated signoff 后继续。
 ```bash
 python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
 python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
 ```
 > **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右或 9:16 纵深高低位、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，先跑 `python3 skills/n2d/n2d-script/scripts/shot_reverse_contract.py <作品根> 第N集 --write --sync-axis-map` 物化 `脚本/第N集/shot_reverse_contract.json` 并回填 `shot_reverse_patterns[]`；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，出图/出视频 prompt 收据也会记录该合同 SHA。无理由越轴、左右互换、看镜头替代看戏内对象、OTS 没有前景肩部，视为连续性硬伤，不靠后期补救。
-> **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：从 storyboard + 镜头时长物化 timed preview、working `editorial_timeline.otio` 与不可变 `animatic_timeline.otio` 签收快照。放行要同时满足预览可生成、packet 内容 confirmed，以及导演 + 剪辑/制片在 `animatic_signoff.json` 对当前输入、preview 与快照哈希签收；后续镜头替换只更新 working OTIO。
+> **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：从 storyboard + 镜头时长物化 timed preview、working `editorial_timeline.otio` 与不可变 `animatic_timeline.otio` 签收快照。放行要同时满足预览可生成、packet 内容 confirmed，以及标准人工签收或有效自主授权下的 delegated signoff；后续镜头替换只更新 working OTIO。
 ```bash
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind animatic --json --write-missing
 ```
-> **P-3 制片拆解包 gate（出图 prompt 前的一副导演/场记/制片交接层）**：Animatic 签收后自动生成六件套；内容 confirmed 后，还要由制片/副导演/场记在 `production_handoff_signoff.json` 对当前 storyboard、P-2 签收、animatic 签收与交付文件哈希签收。
+> **P-3 制片拆解包 gate（出图 prompt 前的一副导演/场记/制片交接层）**：Animatic 签收后自动生成六件套；内容 confirmed 后，标准模式由制片/副导演/场记签收，有效自主授权则由代理签当前 storyboard、P-2/animatic 与交付文件哈希后继续。导入队列不等于获准付费生成，正式出图/出视频仍停在付费闸门。
 > **接缝分类硬合同**：P-2 为每条 seam 显式写 `continuous_take_relay / match_on_action / graphic_match / eyeline_cut / reaction_cut / insert_cutaway / j_cut / l_cut / dissolve / hard_cut / intentional_discontinuity` 之一及模式证据。只有 relay 绑定同一边界帧 SHA；动作匹配看相位/方向，graphic match 看匹配元素/构图，视线/J-L/反应/插入/溶解各看自身证据。迁移脚本只生成待审候选。
 ```bash
 python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
@@ -150,7 +152,7 @@ python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage s
 python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage image_prompt --write --json
 python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage video_prompt --write --json
 ```
-> **源理解合同 gate（拆集前最上游）**：不能只切章节。`run.py next` 在 `script_stage1` 会先跑 `source_language.py`，只要 `小说/*.txt` 存在，就要求 `设定库/source_comprehension.json` 为 `status=confirmed`，且 `understanding_contract` 补齐现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、改编边界和设定/战力规则；文言文/外文只影响脚手架模板，不再是唯一阻断条件。处理命令：
+> **源理解合同 gate（拆集前最上游）**：不能只切章节。`run.py next` 在 `script_stage1` 会先跑 `source_language.py`，只要 `小说/*.txt` 存在，就要求 `设定库/source_comprehension.json` 为 `status=confirmed`，且 `understanding_contract` 补齐现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、改编边界和设定/战力规则；文言文/外文只影响脚手架模板，不再是唯一阻断条件。明清章回体、近世白话等“白话叙事夹文言/韵文/说书套语”的源仍保持 `register=modern_zh` 兼容，但会标 `register_profile=late_imperial_vernacular` 并额外要求 `premodern_adapter`：逐回释义覆盖、古今词/称谓/制度对照、诗词与说书层处理、历史语境、敏感内容和目标台词语体；下游从现代剧情理解拆集，不把诗词评论与正文机械等权成戏。处理命令：
 ```bash
 python3 skills/n2d/n2d-script/scripts/source_language.py <作品根> --scaffold
 python3 skills/n2d/n2d-script/scripts/source_language.py <作品根> --json

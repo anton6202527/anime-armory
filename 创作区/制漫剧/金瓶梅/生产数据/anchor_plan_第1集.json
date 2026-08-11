@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_anchor_plan",
+  "episode": "第1集",
+  "params": {
+    "min_segment": 4.0,
+    "target_segment": 5.0,
+    "fight_target": 3.5,
+    "long_shot_threshold": 8.0,
+    "snap_tolerance": 1.5,
+    "default_midframe": false,
+    "midframe_exempt_below": 3.0
+  },
+  "planned": [],
+  "skipped": [
+    {
+      "clip": "EP01_CLIP01",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP14",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "why": "已手动声明 anchors，人工优先"
+    }
+  ],
+  "exempted": [],
+  "summary": {
+    "clips_planned": 0,
+    "total_anchors": 0,
+    "added_images": 0,
+    "added_video_segments": 0,
+    "exempted_clips": 0
+  },
+  "backend_selection": {
+    "backend": "",
+    "channel": "",
+    "supports_three_plus_frames": false,
+    "anchor_consumption_plan": {
+      "backend": "",
+      "execution_backend": "",
+      "frame_control_mode": "unknown",
+      "anchor_count": 1,
+      "need_end": true,
+      "consumption_mode": "unknown_manual_confirm",
+      "frame_strategy": "legacy_auto",
+      "consumes_mid_anchors_natively": false,
+      "consumes_endframe": false,
+      "requires_split_relay": false,
+      "reference_only": false,
+      "known_profile": false,
+      "supports_native_mid_anchors": false,
+      "supports_last_frame": false,
+      "auto_routable": true,
+      "action": "manual confirmation required before paid generation"
+    }
+  }
+}

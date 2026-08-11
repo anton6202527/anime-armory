@@ -114,8 +114,12 @@ def _content_column_bounds(img: Image.Image) -> tuple[int, int]:
     y_step = max(1, height // 240)
     column_luma: list[float] = []
     for x in range(width):
-        samples = [_luma(img.getpixel((x, y))) for y in range(0, height, y_step)]
-        column_luma.append(sum(samples) / max(1, len(samples)))
+        samples = sorted(_luma(img.getpixel((x, y))) for y in range(0, height, y_step))
+        # A full-height average makes a dark, broad character split its own
+        # neutral turnaround column into two false segments.  The upper
+        # quartile still samples that column's exposed background while black
+        # padding remains dark at every y-position.
+        column_luma.append(samples[min(len(samples) - 1, round((len(samples) - 1) * 0.90))])
 
     lo = min(column_luma)
     hi = max(column_luma)
@@ -184,7 +188,14 @@ def _subject_bbox(img: Image.Image) -> tuple[int, int, int, int] | None:
     for y in range(0, height, step):
         for x in range(x_left, x_right + 1, step):
             r, g, b = img.getpixel((x, y))
-            if abs(r - bg_r) + abs(g - bg_g) + abs(b - bg_b) > SUBJECT_MASK_DISTANCE:
+            # Use Euclidean RGB distance.  The previous Manhattan-distance
+            # comparison classified ordinary top-to-bottom studio gradients as
+            # foreground, which moved the detected head to the canvas edge and
+            # could produce a half-face crop from otherwise valid turnarounds.
+            if (
+                (r - bg_r) ** 2 + (g - bg_g) ** 2 + (b - bg_b) ** 2
+                > SUBJECT_MASK_DISTANCE ** 2
+            ):
                 xs.append(x)
                 ys.append(y)
 
@@ -197,6 +208,33 @@ def _subject_bbox(img: Image.Image) -> tuple[int, int, int, int] | None:
     return left, top, right, bottom
 
 
+def _head_center_x(img: Image.Image, bbox: tuple[int, int, int, int]) -> float:
+    """Estimate head centre from upper-body foreground, not canvas centre.
+
+    A turnaround column may contain asymmetric neighbour slivers or a subject
+    standing slightly off-centre.  The median foreground x-coordinate in the
+    upper fifth remains stable in both cases and keeps the face crop centred.
+    """
+    width, height = img.size
+    left, top, right, bottom = bbox
+    content_left, content_right = _content_column_bounds(img)
+    bg_r, bg_g, bg_b = _background_rgb(img, content_left, content_right)
+    band_bottom = min(height, top + max(32, round((bottom - top) * 0.22)))
+    step = max(1, min(width, height) // 700)
+    xs: list[int] = []
+    for y in range(top, band_bottom, step):
+        for x in range(max(left, content_left), min(right, content_right) + 1, step):
+            r, g, b = img.getpixel((x, y))
+            if (
+                (r - bg_r) ** 2 + (g - bg_g) ** 2 + (b - bg_b) ** 2
+                > SUBJECT_MASK_DISTANCE ** 2
+            ):
+                xs.append(x)
+    if not xs:
+        return (left + right) / 2
+    return float(_median(xs))
+
+
 def _clamp_box(width: int, height: int, box: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
     left, top, right, bottom = box
     left = max(0, min(width - 1, left))
@@ -206,8 +244,60 @@ def _clamp_box(width: int, height: int, box: tuple[int, int, int, int]) -> tuple
     return left, top, right, bottom
 
 
+def _landscape_face_inset_box(img: Image.Image) -> tuple[int, int, int, int] | None:
+    """Return a right-side face inset from a landscape reference board.
+
+    Named-minimal character/animal plates sometimes land as one full-body
+    subject plus a large same-source face inset on the right.  Treating the
+    entire landscape as one portrait makes generic head detection lock onto an
+    ear, shoulder or empty top margin.  A dense foreground island in the right
+    42% is strong evidence for the supplied face inset; plain landscape fronts
+    with empty side space stay below the density threshold and are unchanged.
+    """
+    width, height = img.size
+    if width < height * 1.45:
+        return None
+    x0 = round(width * 0.58)
+    x1 = width
+    y0 = round(height * 0.08)
+    y1 = round(height * 0.92)
+    bg_r, bg_g, bg_b = _background_rgb(img, 0, width - 1)
+    step = max(1, min(width, height) // 700)
+    xs: list[int] = []
+    ys: list[int] = []
+    samples = 0
+    for y in range(y0, y1, step):
+        for x in range(x0, x1, step):
+            samples += 1
+            r, g, b = img.getpixel((x, y))
+            if (
+                (r - bg_r) ** 2 + (g - bg_g) ** 2 + (b - bg_b) ** 2
+                > SUBJECT_MASK_DISTANCE ** 2
+            ):
+                xs.append(x)
+                ys.append(y)
+    if not xs or len(xs) / max(1, samples) < 0.12:
+        return None
+    left, top, right, bottom = min(xs), min(ys), max(xs), max(ys)
+    if right - left < width * 0.14 or bottom - top < height * 0.28:
+        return None
+    side = round(max(right - left, bottom - top) * 1.12)
+    side = min(width, height, max(160, side))
+    center_x = (left + right) / 2
+    center_y = (top + bottom) / 2
+    crop_left = round(center_x - side / 2)
+    crop_top = round(center_y - side / 2)
+    crop_left = max(0, min(width - side, crop_left))
+    crop_top = max(0, min(height - side, crop_top))
+    return crop_left, crop_top, crop_left + side, crop_top + side
+
+
 def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
     width, height = img.size
+    if kind == "face_anchor_refs":
+        inset_box = _landscape_face_inset_box(img)
+        if inset_box:
+            return inset_box
     bbox = _subject_bbox(img)
     if not bbox:
         return _crop_box(width, height, FACE_ANCHOR_CROP if kind == "face_anchor_refs" else HALF_BODY_CROP)
@@ -218,12 +308,12 @@ def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
     if kind == "face_anchor_refs":
         content_left, content_right = _content_column_bounds(img)
         content_width = max(1, content_right - content_left + 1)
-        # Front masters are centered production plates.  Build a square around
-        # the head rather than widening from the whole-body bbox: a held sword
-        # or trailing garment can otherwise make the face only ~10% of frame.
-        side = max(96, round(min(content_width * 0.55, subject_height * 0.14)))
-        center_x = (content_left + content_right) / 2
-        crop_top = top + round(subject_height * 0.045)
+        # Build a generous square around the detected head.  It includes the
+        # entire hairstyle and chin/upper shoulders, while the content-column
+        # cap prevents neighbouring turnaround columns entering the crop.
+        side = max(128, round(min(content_width * 0.68, subject_height * 0.26)))
+        center_x = _head_center_x(img, bbox)
+        crop_top = top - round(subject_height * 0.015)
         return _clamp_box(
             width,
             height,
@@ -256,6 +346,21 @@ def _base_expression_crop_box(img: Image.Image) -> tuple[int, int, int, int]:
     assets while retaining exact same-source identity.
     """
     width, height = img.size
+    inset_box = _landscape_face_inset_box(img)
+    if inset_box:
+        inset_left, inset_top, inset_right, inset_bottom = inset_box
+        side = min(
+            width,
+            height,
+            max(160, round(max(inset_right - inset_left, inset_bottom - inset_top) * 1.08)),
+        )
+        center_x = (inset_left + inset_right) / 2
+        center_y = (inset_top + inset_bottom) / 2
+        crop_left = round(center_x - side / 2)
+        crop_top = round(center_y - side / 2)
+        crop_left = max(0, min(width - side, crop_left))
+        crop_top = max(0, min(height - side, crop_top))
+        return crop_left, crop_top, crop_left + side, crop_top + side
     left, top, right, bottom = _front_crop_box(img, "face_anchor_refs")
     side = min(width, height, max(128, round(max(right - left, bottom - top) * 2.0)))
     center_x = (left + right) / 2
@@ -341,6 +446,18 @@ def _turnaround_split_plan(form: dict[str, Any]) -> tuple[dict[str, tuple[int, s
 
 def _save_front_crop(src: Path, dst: Path, kind: str, target_size: tuple[int, int]) -> list[int]:
     img = Image.open(src).convert("RGB")
+    inset_box = _landscape_face_inset_box(img) if kind == "half_body" else None
+    if inset_box:
+        # Composite reference board: keep the main full/upper-body subject on
+        # the left and exclude the supplied face inset from the half-body
+        # derivative. A square production ref avoids stretching the remaining
+        # left panel back to the original wide board dimensions.
+        box = (0, 0, inset_box[0], img.height)
+        crop = img.crop(box)
+        out = ImageOps.fit(crop, (1024, 1024), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        out.save(dst)
+        return list(box)
     box = _front_crop_box(img, kind)
     crop = img.crop(box)
     out = ImageOps.fit(crop, target_size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.12))
@@ -596,7 +713,15 @@ def derive_project(
                     turn_width, turn_height = opened.size
                 if front_rel and front_path.exists():
                     with Image.open(front_path) as opened:
-                        target_size = opened.size
+                        front_width, front_height = opened.size
+                    # 旧/首轮主参考常由后端以 16:9 横幅交付；若直接继承该尺寸，五角单列
+                    # 会被 pad 成“中间一条人、两侧大黑边”，脸与服装占比过低。已有正面本身
+                    # 是竖幅时保留其规格；横幅则按 turnaround 高度归一为 9:16 竖幅。
+                    target_size = (
+                        (max(512, round(turn_height * 9 / 16)), turn_height)
+                        if front_width >= front_height
+                        else (front_width, front_height)
+                    )
                 else:
                     # A wide turnaround board must split into portrait assets,
                     # not wide canvases with a tiny figure and huge side bars.

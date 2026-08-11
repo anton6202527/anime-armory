@@ -45,11 +45,50 @@ def test_backfill_policy_template_and_presence_chain():
     assert data["clips"][0]["continuity"]["expression_span"] == "大"
     assert data["clips"][1]["continuity"]["start_state"] == "A 看面板"
     assert "入画" in data["clips"][0]["continuity"]["entry_exit"]
-    assert "offscreen_presence" in data["clips"][0]["entity_schedule"]
+    assert "entity_schedule" not in data["clips"][0]
     assert data["clips"][0]["template_contract"]["text_layer"] == "compose_overlay_only"
     assert data["clips"][1]["template_contract"]["axis"]
+    assert data["clips"][1]["template_contract"]["screen_sides"]
+    assert data["clips"][1]["template_contract"]["coverage_order"]
     assert data["clips"][2]["template_contract"]["distance_boundary"]
     assert changes["template_contract"] >= 3
+
+
+def test_backfill_does_not_invent_offscreen_presence_across_clip_boundary():
+    data = {
+        "clips": [
+            {"id": "C1", "character_ids": ["CHAR_A"], "continuity": {"start_state": "A", "end_state": "A"}},
+            {"id": "C2", "character_ids": ["CHAR_B"], "continuity": {"start_state": "B", "end_state": "B"}},
+        ]
+    }
+
+    bf.backfill(data)
+
+    assert "entity_schedule" not in data["clips"][0]
+    assert "entity_schedule" not in data["clips"][1]
+    assert "CHAR_B" in data["clips"][0]["continuity"]["entry_exit"]
+
+
+def test_narrative_templates_share_gate_required_fields():
+    templates = (
+        "dialogue_shot_reverse",
+        "reveal_reaction_chain",
+        "relationship_turn",
+        "multi_character_same_frame",
+        "ensemble_blocking",
+    )
+    for template in templates:
+        clip = {
+            "id": template,
+            "label": template,
+            "template": template,
+            "character_ids": ["CHAR_A", "CHAR_B"],
+            "continuity": {"start_state": "before", "end_state": "after", "eyeline": "A看B"},
+        }
+        bf.fill_template_contract(clip)
+        contract = clip["template_contract"]
+        for field in bf.spectacle_required_fields(template):
+            assert contract.get(field), f"{template}.{field}"
 
 
 def test_write_json_atomic_roundtrip(tmp_path):

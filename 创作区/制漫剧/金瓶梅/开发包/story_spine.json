@@ -1,0 +1,205 @@
+{
+  "kind": "n2d_story_spine",
+  "version": 1,
+  "status": "confirmed",
+  "generated_at": "2026-08-11T02:45:00+00:00",
+  "consumes": [
+    "设定库/source_comprehension.json",
+    "开发包/adaptation_strategy.json"
+  ],
+  "mainline_logline": "西门庆把欲望、金钱和人情不断换成婚姻、财富与官权，一桩被压下的命案则沿着百回家宅兴亡追索他与依附者的全部因果债。",
+  "spine": [
+    {
+      "id": "SPINE_01",
+      "beat": "武松建立公义标尺；潘金莲试探失败，武松离家并留下门户警告。",
+      "source_span": "第1回",
+      "causal_role": "起因",
+      "depends_on": []
+    },
+    {
+      "id": "SPINE_02",
+      "beat": "叉竿偶遇经王婆逐步设局变成合谋，武大受伤后被毒杀。",
+      "source_span": "第2-5回",
+      "causal_role": "不可逆升级",
+      "depends_on": ["SRC_CAUSE_001"]
+    },
+    {
+      "id": "SPINE_03",
+      "beat": "西门庆以银钱改变验看和证词；武松追责受阻、误杀流配，命案转成长线。",
+      "source_span": "第6-10回",
+      "causal_role": "首弧转折",
+      "depends_on": ["SRC_CAUSE_001", "SRC_CAUSE_002"]
+    },
+    {
+      "id": "SPINE_04",
+      "beat": "西门庆持续通过婚姻、财产和官商交易扩大西门宅，李瓶儿入宅生子，权势与家业同步上升。",
+      "source_span": "第11-50回",
+      "causal_role": "扩张",
+      "depends_on": ["SRC_CAUSE_003", "SRC_CAUSE_004", "SRC_CAUSE_006"]
+    },
+    {
+      "id": "SPINE_05",
+      "beat": "官哥夭亡、李瓶儿病逝，繁华第一次遭遇金钱无法修复的损失；西门庆的悲恸仍不足以改变行为。",
+      "source_span": "第51-70回",
+      "causal_role": "情感反转",
+      "depends_on": ["SRC_CAUSE_004"]
+    },
+    {
+      "id": "SPINE_06",
+      "beat": "权势和纵欲共同抵达顶点，长期身体代价在第七十九回集中兑现，西门庆病亡。",
+      "source_span": "第71-80回",
+      "causal_role": "主轴高潮",
+      "depends_on": ["SRC_CAUSE_006", "SRC_CAUSE_007"]
+    },
+    {
+      "id": "SPINE_07",
+      "beat": "家主死后利益网络反向瓜分家产，潘金莲与陈经济私情败露，武松归来完成旧案复仇。",
+      "source_span": "第81-90回",
+      "causal_role": "长线兑现",
+      "depends_on": ["SRC_CAUSE_008", "SRC_CAUSE_009"]
+    },
+    {
+      "id": "SPINE_08",
+      "beat": "陈经济、春梅和离散人物继续复制或承受旧宅模式，最终以群体结局和群冤收束完成余波。",
+      "source_span": "第91-100回",
+      "causal_role": "尾声兑现",
+      "depends_on": ["SRC_CAUSE_010"]
+    }
+  ],
+  "threads": [
+    {
+      "id": "THREAD_MURDER",
+      "name": "武大命案与武松追责",
+      "class": "spine",
+      "decision": "keep",
+      "weight": "high",
+      "serves_mainline": "给全剧提供跨八十余回的责任链、制度腐败证据与最终复仇兑现。",
+      "source_spans": ["第1-10回", "第81-87回"],
+      "source_chapters": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 81, 82, 83, 84, 85, 86, 87],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_001", "SRC_FORESHADOW_002"],
+      "pays_foreshadow": ["SRC_FORESHADOW_001", "SRC_FORESHADOW_002"],
+      "connectivity": {
+        "downstream_mainline_deps": ["SPINE_03", "SPINE_07"],
+        "payoff_reroute": "",
+        "no_orphan_proof": "全线保留，不产生孤儿伏笔。"
+      }
+    },
+    {
+      "id": "THREAD_POWER",
+      "name": "西门庆权钱扩张与身体反噬",
+      "class": "spine",
+      "decision": "keep",
+      "weight": "high",
+      "serves_mainline": "贯穿婚姻、商业、官场、纵欲与家业崩解，是全剧负向成长主轴。",
+      "source_spans": ["第2-80回"],
+      "source_chapters": [],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_003", "SRC_FORESHADOW_006"],
+      "pays_foreshadow": ["SRC_FORESHADOW_003", "SRC_FORESHADOW_006"],
+      "connectivity": {
+        "downstream_mainline_deps": ["SPINE_04", "SPINE_06", "SPINE_07"],
+        "payoff_reroute": "",
+        "no_orphan_proof": "全线保留，不产生孤儿伏笔。"
+      }
+    },
+    {
+      "id": "THREAD_PAN",
+      "name": "潘金莲从受困到共谋再到旧罪回收",
+      "class": "supporting",
+      "decision": "keep",
+      "weight": "high",
+      "serves_mainline": "把性别与婚姻结构、个人能动性和伤害责任放在同一条连续人物弧中。",
+      "source_spans": ["第1-10回", "第81-87回"],
+      "source_chapters": [],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_004"],
+      "pays_foreshadow": ["SRC_FORESHADOW_004"],
+      "connectivity": {
+        "downstream_mainline_deps": ["SPINE_02", "SPINE_07"],
+        "payoff_reroute": "",
+        "no_orphan_proof": "全线保留，不产生孤儿伏笔。"
+      }
+    },
+    {
+      "id": "THREAD_LIPINGER",
+      "name": "李瓶儿、财产、母职与丧失",
+      "class": "supporting",
+      "decision": "keep",
+      "weight": "high",
+      "serves_mainline": "构成中段最大情感高峰，并证明财富、宠爱和官位不能购买真正安全。",
+      "source_spans": ["第13-67回"],
+      "source_chapters": [],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_005"],
+      "pays_foreshadow": ["SRC_FORESHADOW_005"],
+      "connectivity": {
+        "downstream_mainline_deps": ["SPINE_04", "SPINE_05"],
+        "payoff_reroute": "",
+        "no_orphan_proof": "全线保留，不产生孤儿伏笔。"
+      }
+    },
+    {
+      "id": "THREAD_LOWER_COST",
+      "name": "仆役与下层人物承担的豪门成本",
+      "class": "supporting",
+      "decision": "keep",
+      "weight": "mid",
+      "serves_mainline": "防止豪门繁华变成无代价猎奇，使每次权力扩张都有受害者与后续怨恨。",
+      "source_spans": ["第21-60回", "第81-100回"],
+      "source_chapters": [],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": ["SPINE_04", "SPINE_07", "SPINE_08"],
+        "payoff_reroute": "",
+        "no_orphan_proof": "该线程不单独持有受保护伏笔，并完整保留代表性节点。"
+      }
+    },
+    {
+      "id": "THREAD_AFTERSHOCK",
+      "name": "家主死后的离散与权力复制",
+      "class": "spine",
+      "decision": "keep",
+      "weight": "high",
+      "serves_mainline": "兑现豪门盛衰，不把后二十回当可略过尾声。",
+      "source_spans": ["第79-100回"],
+      "source_chapters": [],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": ["SPINE_07", "SPINE_08"],
+        "payoff_reroute": "",
+        "no_orphan_proof": "该线程是主轴尾段，不执行剪除。"
+      }
+    }
+  ],
+  "continuity_fixes": [],
+  "protected_invariants": [
+    "人物动机",
+    "选择后果",
+    "伏笔兑现",
+    "婚姻/财产/官职/死亡状态变化",
+    "命案与司法腐败责任链",
+    "女性群像差异",
+    "受害者和下层人物后果"
+  ],
+  "_source_foreshadow_ids": [
+    "SRC_FORESHADOW_001",
+    "SRC_FORESHADOW_002",
+    "SRC_FORESHADOW_003",
+    "SRC_FORESHADOW_004",
+    "SRC_FORESHADOW_005",
+    "SRC_FORESHADOW_006"
+  ],
+  "_source_protected_foreshadow_ids": [
+    "SRC_FORESHADOW_001",
+    "SRC_FORESHADOW_002",
+    "SRC_FORESHADOW_003",
+    "SRC_FORESHADOW_004",
+    "SRC_FORESHADOW_005",
+    "SRC_FORESHADOW_006"
+  ]
+}

@@ -1,0 +1,466 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "extreme_top"
+      ],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10",
+        "EP01_CLIP11",
+        "EP01_CLIP12",
+        "EP01_CLIP13",
+        "EP01_CLIP14",
+        "EP01_CLIP15"
+      ],
+      "band": "high",
+      "character_id": "CHAR_WUSONG",
+      "drivers": [
+        {
+          "factor": "大表情 4 镜",
+          "points": 24
+        },
+        {
+          "factor": "极端角度 4 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 12/15",
+          "points": 16.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "28岁打虎态",
+      "library_tier": "core_full",
+      "name": "武松",
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "阳谷县人；景阳冈打虎后任清河县巡捕都头；武大亲弟。",
+      "score": 80.0,
+      "signals": {
+        "angle": 4,
+        "appear": 15,
+        "closeup": 0,
+        "emotion": 4,
+        "multi": 12,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。",
+        "当前角色库档位=core_full 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "deep_shadow"
+      ],
+      "appears_in": [
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP10",
+        "EP01_CLIP11",
+        "EP01_CLIP12",
+        "EP01_CLIP13",
+        "EP01_CLIP14",
+        "EP01_CLIP15"
+      ],
+      "band": "high",
+      "character_id": "CHAR_WUDA",
+      "drivers": [
+        {
+          "factor": "大表情 3 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 11/11",
+          "points": 20.0
+        },
+        {
+          "factor": "极端角度 2 镜",
+          "points": 12
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "日常卖饼态",
+      "library_tier": "recurring_standard",
+      "name": "武大",
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "卖炊饼的小贩；武松亲兄；潘金莲丈夫；迎儿之父。",
+      "score": 72.0,
+      "signals": {
+        "angle": 2,
+        "appear": 11,
+        "closeup": 0,
+        "emotion": 3,
+        "multi": 11,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。",
+        "当前角色库档位=recurring_standard 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "deep_shadow"
+      ],
+      "appears_in": [
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP15"
+      ],
+      "band": "high",
+      "character_id": "CHAR_PANJINLIAN",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 7/7",
+          "points": 20.0
+        },
+        {
+          "factor": "大表情 2 镜",
+          "points": 16
+        },
+        {
+          "factor": "极端角度 1 镜",
+          "points": 6
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "25岁武大家常态",
+      "library_tier": "core_full",
+      "name": "潘金莲",
+      "predicted_block_mitigated_by": "project_memory_reference_bundle",
+      "project_memory_mitigation": {
+        "backend": "codex",
+        "gaps": [],
+        "ready": true,
+        "requirements": [
+          "先生成共享定妆/脸部特写/场景道具主参考并标 ready",
+          "正式分镜出图必须生成 codex_reference_bundles 或等价 reference_manifest",
+          "每个高风险镜 actual image inputs 不得为 0，missing_ready_refs 必须清零",
+          "多人同框按 split_composite/反打/单人分层执行，成图后跑 full image_qc"
+        ],
+        "strategy": "project_memory_reference_bundle"
+      },
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "武大妻；幼年被卖、习琵琶与女红，后被张大户安排嫁给武大；开篇长线核心人物。",
+      "score": 58.0,
+      "signals": {
+        "angle": 1,
+        "appear": 7,
+        "closeup": 0,
+        "emotion": 2,
+        "multi": 7,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+        "注意：这不是官方服务端 subject_id；若 codex_reference_bundles 出现 actual image inputs=0、missing_ready_refs 未清零或多人同框未按分层/反打执行，仍应在 image_preflight/image 阶段阻断。",
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。",
+        "当前角色库档位=core_full 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP13"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_MAGISTRATE",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 1/1",
+          "points": 20.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "library_tier": "named_minimal",
+      "name": "知县",
+      "reference_gaps": [],
+      "scope": "成年男性县官，北宋地方官常服，案后端坐，克制威严，非清宫补服与官帽；只作为本集公务角色，不抢主角视觉重心。",
+      "score": 36.0,
+      "signals": {
+        "angle": 0,
+        "appear": 1,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第1集",
+  "high": 3,
+  "kind": "n2d_face_drift_risk",
+  "medium": 1,
+  "missing_3q_baseline": 3,
+  "notes": [],
+  "prior_drift_available": true,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "LOC_JINGYANGGANG",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_QUARTERSTAFF",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_BADGE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_REWARD_SILVER",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_YANGGU_STREET",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_CAKE_POLE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_WINDOW_LATTICE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_WUDA_HOME",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_STAIR_RAIL",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_DINING_TABLE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_TEA_CUP",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_DOORFRAME",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_DOOR_LATCH",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_BRAZIER",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_WINE_CUP",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_SPILLED_WINE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_LUGGAGE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_DOOR",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_COUNTY_YAMEN",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_OFFICIAL_DOC",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_GIFT_LOAD",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_CITY_GATE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_WINDOW_CURTAIN",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_CURTAIN_FORK",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 24,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

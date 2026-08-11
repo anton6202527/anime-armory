@@ -53,6 +53,16 @@ def test_validate_runtime_v2_artifact_kinds_pass() -> None:
             "evidence_fingerprint": {}, "required_approval_groups": [], "approvals": [], "status": "pending",
         },
         {
+            "kind": "n2d_autonomy_authorization", "version": 1, "status": "active",
+            "policy": "only_high_risk_human", "project_root": "/tmp/work",
+            "authorization_id": "AUTH_1", "authorized_by": "user:owner",
+            "authorized_at": "2026-08-11T00:00:00+00:00", "source_quote": "继续制作",
+            "delegated_reviewer_id": "delegate:n2d-agent",
+            "allowed_signoff_profiles": ["table_read", "p2", "animatic", "p3"],
+            "allowed_boundary_decisions": ["keep"],
+            "human_confirmation_required": ["paid_generation_or_purchase"],
+        },
+        {
             "kind": "n2d_production_mode_route", "version": 1, "episode": "第1集",
             "status": "aligned", "decision": {}, "signals": {}, "inputs_fingerprint": {},
         },

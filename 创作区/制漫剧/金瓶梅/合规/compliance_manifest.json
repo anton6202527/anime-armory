@@ -1,0 +1,135 @@
+{
+  "kind": "n2d_compliance_manifest",
+  "version": 1,
+  "updated_at": "2026-08-11",
+  "distribution_intent": "internal_only",
+  "scope": {
+    "episodes": "all"
+  },
+  "rights": {
+    "source_text": {
+      "status": "public_domain",
+      "evidence": "《金瓶梅》古典公版原著；本项目仅使用公版正文，不采纳现代译注或整理版的新增表达"
+    },
+    "adaptation": {
+      "status": "public_domain",
+      "evidence": "基于古典公版原著进行内部漫剧改编；新写旁白、对白与分镜由本项目生成"
+    },
+    "music_bgm": {
+      "status": "not_applicable",
+      "evidence": ""
+    },
+    "sfx": {
+      "status": "not_applicable",
+      "evidence": ""
+    },
+    "fonts": {
+      "status": "not_applicable",
+      "evidence": ""
+    }
+  },
+  "character_likeness": {
+    "characters": [
+      {
+        "character_id": "CHAR_WUSONG",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      },
+      {
+        "character_id": "BEAST_TIGER",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      },
+      {
+        "character_id": "CROWD_HUNTERS",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      },
+      {
+        "character_id": "CHAR_WUDA",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      },
+      {
+        "character_id": "CHAR_PANJINLIAN",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      },
+      {
+        "character_id": "CHAR_MAGISTRATE",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      },
+      {
+        "character_id": "CHAR_XIMENQING",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色"
+      }
+    ]
+  },
+  "voice": {
+    "status": "synthetic_voice",
+    "uses_voice_clone": false,
+    "authorization_status": "not_applicable",
+    "evidence": "未使用真人参考音；若使用参考音，改为 authorized_clone + approved + evidence"
+  },
+  "image_identity": {
+    "uses_cameo": false,
+    "authorization_status": "not_applicable",
+    "feeds_face_references": false,
+    "evidence": "未用 cameo；若用 Sora2 cameo，改 uses_cameo=true + approved + evidence，且不得喂第三方脸锚"
+  },
+  "platform_review": {
+    "targets": [
+      {
+        "platform": "TODO",
+        "region": "CN",
+        "language": "zh",
+        "policy_profile": "TODO_profile_2026-08-11",
+        "profile_checked_at": "2026-08-11",
+        "copyright_review": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": false
+      }
+    ]
+  },
+  "localization": {
+    "status": "not_applicable",
+    "subtitle_languages": [
+      "zh"
+    ],
+    "dub_languages": [],
+    "notes": ""
+  },
+  "regulatory_filing": {
+    "regime": "NRTA_网络微短剧",
+    "applicable": true,
+    "tier": "TODO: 重点/普通/其他（按投资额·题材分级）",
+    "planning_filing_no": "TODO: 规划备案号",
+    "release_filing_no": "TODO: 上线备案号",
+    "pre_broadcast_review": "pending",
+    "filed_at": "",
+    "platform_human_review": "pending",
+    "notes": "境内付费投放须先备案后上线；纯海外/内部预览可 applicable=false 并写理由"
+  },
+  "ai_labeling": {
+    "applicable": true,
+    "explicit_label": {
+      "status": "pending",
+      "text": "AI生成",
+      "position": "bottom-right",
+      "prominent_label_spec": "TODO: 确认显著标识满足 前5s出现/≥3s持续/显著位/经裁剪存活（2026广电规格）"
+    },
+    "implicit_metadata": {
+      "spec": "GB45438-2025",
+      "service_provider_code": "TODO: 服务提供者编码（GB 45438）",
+      "content_id": "TODO: 内容制作编号",
+      "applied": false
+    },
+    "digital_watermark": {
+      "status": "optional_external",
+      "notes": "数字水印为鼓励项，可外置；本流水线不强制"
+    },
+    "notes": "AI 标识为非阻断发布待办：compose 可 best-effort 落显式标签和元数据；失败不阻断成片/进度，发布前按目标地区/平台补齐"
+  }
+}

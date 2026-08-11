@@ -1233,6 +1233,43 @@ def test_identity_ref_regex_ignores_char_file_stems() -> None:
     assert image_qc.IDENTITY_REF_RE.findall(text) == ["CHAR_SHENNIAN/常态"]
 
 
+def test_identity_ref_regex_covers_character_and_beast_subjects() -> None:
+    text = "`CHAR_WUSONG/打虎态` 与 `BEAST_TIGER/扑击态` 同框"
+    assert image_qc.IDENTITY_REF_RE.findall(text) == ["CHAR_WUSONG/打虎态", "BEAST_TIGER/扑击态"]
+
+
+def test_beast_outfit_in_multi_subject_shot_is_not_assigned_to_human() -> None:
+    body = (
+        "**资产身份注册层**：`CHAR_WUSONG/打虎态`、`BEAST_TIGER/扑击态`。\n"
+        "### 正向 prompt（中文）\n武松穿深褐短打；猛虎全身黑黄粗硬虎毛。"
+    )
+    forms = [{
+        "id": "CHAR_WUSONG",
+        "key": "CHAR_WUSONG/打虎态",
+        "form": "打虎态",
+        "character_dna_text": "深褐短打",
+        "wardrobe_profile_text": "深褐短打",
+        "strong_aliases": set(),
+        "weak_aliases": {"武松"},
+        "outfit_aliases": set(),
+        "reference_stems": [],
+    }]
+    refs = image_qc.IDENTITY_REF_RE.findall(body)
+
+    assert image_qc._lint_outfit_form_binding("Clip 03", body, refs, forms) == []
+
+
+def test_weak_alias_does_not_match_inside_another_identity_form() -> None:
+    assert not image_qc._matches_weak_character_alias(
+        (
+            "尾帧锁定 `CHAR_PANJINLIAN/25岁武大家常态`；"
+            "asset_key=`CHAR_PANJINLIAN__25岁武大家常态`；"
+            "primary_ref=`出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png`。"
+        ),
+        {"武大"},
+    )
+
+
 def test_character_shot_manifest_skips_no_face_asset_only_shot() -> None:
     blk = {
         "label": "Clip 16 毒酒碎裂",

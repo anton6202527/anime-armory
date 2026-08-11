@@ -1,0 +1,1082 @@
+{
+  "kind": "n2d_source_comprehension",
+  "version": 1,
+  "register": "modern_zh",
+  "lang_guess": "late_imperial_vernacular",
+  "register_profile": "late_imperial_vernacular",
+  "confidence": "high",
+  "signals": [
+    "章回体/近世白话套语 2316 处、18 类（密度 0.32%）",
+    "繁体专有字密度 6.2%（繁体白话·可直接理解·仅提示）",
+    "现代白话特征：「的」密度 1.2%、现代虚词 2.2%"
+  ],
+  "scores": {
+    "classical_strong": 0.0102,
+    "de_density": 0.0124,
+    "modern_marker": 0.0221,
+    "yue_count": 72,
+    "trad_ratio": 0.0621,
+    "cjk_ratio": 0.839,
+    "late_imperial_marker_density": 0.00323,
+    "late_imperial_marker_types": 18,
+    "late_imperial_marker_count": 2316
+  },
+  "source_traits": {
+    "content_chars": 856140,
+    "chapter_markers": 111,
+    "long_form": true,
+    "power_system_likely": false,
+    "power_system_signals": {
+      "境界": 2
+    },
+    "late_imperial_marker_count": 2316,
+    "late_imperial_marker_types": [
+      "不題",
+      "且說",
+      "單表",
+      "奴家",
+      "娘子",
+      "官人",
+      "小人",
+      "怎生",
+      "恁的",
+      "按下",
+      "有詩為證",
+      "正是",
+      "看官",
+      "端的",
+      "詞曰",
+      "詩曰",
+      "話說",
+      "那廝"
+    ],
+    "register_profile": "late_imperial_vernacular",
+    "source_unit_count": 100
+  },
+  "source": "小说/金瓶梅.txt",
+  "source_unit_inventory": [
+    {
+      "unit_id": "SRC_UNIT_0001",
+      "source_span": "第一囬",
+      "title": "景陽岡武松打虎 潘金蓮嫌夫賣風月",
+      "line": 13
+    },
+    {
+      "unit_id": "SRC_UNIT_0002",
+      "source_span": "第二囬",
+      "title": "西門慶簾下遇金蓮 王婆子貪賄說風情",
+      "line": 87
+    },
+    {
+      "unit_id": "SRC_UNIT_0003",
+      "source_span": "第三囬",
+      "title": "王婆定十件挨光計 西門慶茶房戲金蓮",
+      "line": 122
+    },
+    {
+      "unit_id": "SRC_UNIT_0004",
+      "source_span": "第四囬",
+      "title": "淫婦背武大偷奸 鄆哥不憤鬧茶肆",
+      "line": 149
+    },
+    {
+      "unit_id": "SRC_UNIT_0005",
+      "source_span": "第五囬",
+      "title": "鄆哥幫捉罵王婆 淫婦藥酖武大郎",
+      "line": 178
+    },
+    {
+      "unit_id": "SRC_UNIT_0006",
+      "source_span": "第六囬",
+      "title": "西門慶買囑何九 王婆打酒遇大雨",
+      "line": 200
+    },
+    {
+      "unit_id": "SRC_UNIT_0007",
+      "source_span": "第七囬",
+      "title": "薛婆兒說娶孟玉樓 楊姑娘氣罵張四舅",
+      "line": 228
+    },
+    {
+      "unit_id": "SRC_UNIT_0008",
+      "source_span": "第八囬",
+      "title": "潘金蓮永夜盼西門慶 燒夫靈和尚聽淫聲",
+      "line": 256
+    },
+    {
+      "unit_id": "SRC_UNIT_0009",
+      "source_span": "第九囬",
+      "title": "西門慶計娶潘金蓮 武都頭誤打李外傳",
+      "line": 298
+    },
+    {
+      "unit_id": "SRC_UNIT_0010",
+      "source_span": "第十囬",
+      "title": "武二充配孟州道 妻妾宴賞芙蓉亭",
+      "line": 327
+    },
+    {
+      "unit_id": "SRC_UNIT_0011",
+      "source_span": "第十一囬",
+      "title": "潘金蓮激打孫雪娥 西門慶梳籠李桂姐",
+      "line": 362
+    },
+    {
+      "unit_id": "SRC_UNIT_0012",
+      "source_span": "第十二囬",
+      "title": "潘金蓮私僕受辱 劉理星魘勝貪財",
+      "line": 390
+    },
+    {
+      "unit_id": "SRC_UNIT_0013",
+      "source_span": "第十三囬",
+      "title": "李瓶兒隔牆密約 迎春女窺隙偷光",
+      "line": 431
+    },
+    {
+      "unit_id": "SRC_UNIT_0014",
+      "source_span": "第十四囬",
+      "title": "花子虛因氣喪身 李瓶兒送奸赴會",
+      "line": 467
+    },
+    {
+      "unit_id": "SRC_UNIT_0015",
+      "source_span": "第十五囬",
+      "title": "佳人笑賞翫燈樓 狎客幫嫖麗春院",
+      "line": 496
+    },
+    {
+      "unit_id": "SRC_UNIT_0016",
+      "source_span": "第十六囬",
+      "title": "西門慶謀財娶婦 應伯爵慶喜追歡",
+      "line": 517
+    },
+    {
+      "unit_id": "SRC_UNIT_0017",
+      "source_span": "第十七囬",
+      "title": "宇給事劾倒楊提督 李瓶兒招贅蔣竹山",
+      "line": 540
+    },
+    {
+      "unit_id": "SRC_UNIT_0018",
+      "source_span": "第十八囬",
+      "title": "來保上東京幹事 陳經濟花園管工",
+      "line": 569
+    },
+    {
+      "unit_id": "SRC_UNIT_0019",
+      "source_span": "第十九囬",
+      "title": "草裏蛇邏打蔣竹山 李瓶兒情感西門慶",
+      "line": 601
+    },
+    {
+      "unit_id": "SRC_UNIT_0020",
+      "source_span": "第二十囬",
+      "title": "孟玉樓義勸吳月娘 西門慶大鬧麗春院",
+      "line": 631
+    },
+    {
+      "unit_id": "SRC_UNIT_0021",
+      "source_span": "第二十一囬",
+      "title": "吳月娘掃雪烹茶 應伯爵替花勾使",
+      "line": 682
+    },
+    {
+      "unit_id": "SRC_UNIT_0022",
+      "source_span": "第二十二囬",
+      "title": "西門慶私淫來旺婦 春梅正色罵李銘",
+      "line": 718
+    },
+    {
+      "unit_id": "SRC_UNIT_0023",
+      "source_span": "第二十三囬",
+      "title": "玉簫觀風賽月房 金蓮竊聽藏春塢",
+      "line": 739
+    },
+    {
+      "unit_id": "SRC_UNIT_0024",
+      "source_span": "第二十四囬",
+      "title": "陳經濟元夜戲嬌姿 惠祥怒詈來旺婦",
+      "line": 763
+    },
+    {
+      "unit_id": "SRC_UNIT_0025",
+      "source_span": "第二十五囬",
+      "title": "雪娥透露蝶蜂情 來旺醉謗西門慶",
+      "line": 787
+    },
+    {
+      "unit_id": "SRC_UNIT_0026",
+      "source_span": "第二十六囬",
+      "title": "來旺兒遞解徐州 宋惠連含羞自縊",
+      "line": 814
+    },
+    {
+      "unit_id": "SRC_UNIT_0027",
+      "source_span": "第二十七囬",
+      "title": "李瓶兒私語翡翠軒 潘金蓮醉鬧葡萄架",
+      "line": 844
+    },
+    {
+      "unit_id": "SRC_UNIT_0028",
+      "source_span": "第二十八囬",
+      "title": "陳經濟因鞋戲金蓮 西門慶怒打鐵棍兒",
+      "line": 885
+    },
+    {
+      "unit_id": "SRC_UNIT_0029",
+      "source_span": "第二十九囬",
+      "title": "吳神仙貴賤相人 潘金蓮蘭湯午戰",
+      "line": 906
+    },
+    {
+      "unit_id": "SRC_UNIT_0030",
+      "source_span": "第三十囬",
+      "title": "來保押送生辰擔 西門慶生子喜加官",
+      "line": 957
+    },
+    {
+      "unit_id": "SRC_UNIT_0031",
+      "source_span": "第三十一囬",
+      "title": "琴童藏壺覷玉簫 西門慶開宴吃喜酒",
+      "line": 1000
+    },
+    {
+      "unit_id": "SRC_UNIT_0032",
+      "source_span": "第三十二囬",
+      "title": "李桂姐拜娘認女 應伯爵打渾趨時",
+      "line": 1030
+    },
+    {
+      "unit_id": "SRC_UNIT_0033",
+      "source_span": "第三十三囬",
+      "title": "陳經濟失鑰罰唱 韓道國縱婦爭鋒",
+      "line": 1048
+    },
+    {
+      "unit_id": "SRC_UNIT_0034",
+      "source_span": "第三十四囬",
+      "title": "書僮兒因寵攬事 平安兒含恨戳舌",
+      "line": 1073
+    },
+    {
+      "unit_id": "SRC_UNIT_0035",
+      "source_span": "第三十五囬",
+      "title": "西門慶挾恨責平安 書僮兒妝旦勸狎客",
+      "line": 1099
+    },
+    {
+      "unit_id": "SRC_UNIT_0036",
+      "source_span": "第三十六囬",
+      "title": "翟謙寄書尋女子 西門慶結交蔡狀元",
+      "line": 1139
+    },
+    {
+      "unit_id": "SRC_UNIT_0037",
+      "source_span": "第三十七囬",
+      "title": "馮媽媽說嫁韓氏女 西門慶包占王六兒",
+      "line": 1168
+    },
+    {
+      "unit_id": "SRC_UNIT_0038",
+      "source_span": "第三十八囬",
+      "title": "西門慶夾打二搗鬼 潘金蓮雪夜弄琵琶",
+      "line": 1193
+    },
+    {
+      "unit_id": "SRC_UNIT_0039",
+      "source_span": "第三十九囬",
+      "title": "西門慶玉皇廟打醮 吳月娘聽尼僧說經",
+      "line": 1237
+    },
+    {
+      "unit_id": "SRC_UNIT_0040",
+      "source_span": "第四十囬",
+      "title": "抱孩童瓶兒希寵 妝丫鬟金蓮市愛",
+      "line": 1310
+    },
+    {
+      "unit_id": "SRC_UNIT_0041",
+      "source_span": "第四十一囬",
+      "title": "西門慶與喬大戶結親 潘金蓮共李瓶兒鬭氣",
+      "line": 1349
+    },
+    {
+      "unit_id": "SRC_UNIT_0042",
+      "source_span": "第四十二囬",
+      "title": "豪家攔門翫煙火 貴客高樓醉賞燈",
+      "line": 1380
+    },
+    {
+      "unit_id": "SRC_UNIT_0043",
+      "source_span": "第四十三囬",
+      "title": "為失金西門慶罵金蓮 因結親月娘會喬太太",
+      "line": 1417
+    },
+    {
+      "unit_id": "SRC_UNIT_0044",
+      "source_span": "第四十四囬",
+      "title": "吳月娘留宿李桂姐 西門慶醉拶夏花兒",
+      "line": 1452
+    },
+    {
+      "unit_id": "SRC_UNIT_0045",
+      "source_span": "第四十五囬",
+      "title": "桂姐央留夏花兒 月娘含怒罵玳安",
+      "line": 1510
+    },
+    {
+      "unit_id": "SRC_UNIT_0046",
+      "source_span": "第四十六囬",
+      "title": "元夜遊行遇雪雨 妻妾笑卜龜兒卦",
+      "line": 1534
+    },
+    {
+      "unit_id": "SRC_UNIT_0047",
+      "source_span": "第四十七囬",
+      "title": "王六兒說事圖財 西門慶受贓枉法",
+      "line": 1576
+    },
+    {
+      "unit_id": "SRC_UNIT_0048",
+      "source_span": "第四十八囬",
+      "title": "曾御史參劾提刑官 蔡太師奏行七件事",
+      "line": 1600
+    },
+    {
+      "unit_id": "SRC_UNIT_0049",
+      "source_span": "第四十九囬",
+      "title": "西門慶迎請宋巡按 永福寺餞行遇胡僧",
+      "line": 1657
+    },
+    {
+      "unit_id": "SRC_UNIT_0050",
+      "source_span": "第五十囬",
+      "title": "琴童潛聽燕鶯歡 玳安嬉游蝴蝶巷",
+      "line": 1715
+    },
+    {
+      "unit_id": "SRC_UNIT_0051",
+      "source_span": "第五十一囬",
+      "title": "月娘聽演金剛科 桂姐躲在西門宅",
+      "line": 1742
+    },
+    {
+      "unit_id": "SRC_UNIT_0052",
+      "source_span": "第五十二囬",
+      "title": "應伯爵山洞戲春嬌 潘金蓮花園看蘑菇",
+      "line": 1786
+    },
+    {
+      "unit_id": "SRC_UNIT_0053",
+      "source_span": "第五十三囬",
+      "title": "吳月娘承歡求子息 李瓶兒酬願保兒童",
+      "line": 1824
+    },
+    {
+      "unit_id": "SRC_UNIT_0054",
+      "source_span": "第五十四囬",
+      "title": "應伯爵郊園會諸友 任醫官豪家看病症",
+      "line": 1865
+    },
+    {
+      "unit_id": "SRC_UNIT_0055",
+      "source_span": "第五十五囬",
+      "title": "西門慶東京慶壽旦 苗員外揚州送歌童",
+      "line": 1897
+    },
+    {
+      "unit_id": "SRC_UNIT_0056",
+      "source_span": "第五十六囬",
+      "title": "西門慶周濟常時節 應伯爵舉薦水秀才",
+      "line": 1934
+    },
+    {
+      "unit_id": "SRC_UNIT_0057",
+      "source_span": "第五十七囬",
+      "title": "道長老募修永福寺 薛姑子勸捨陀羅經",
+      "line": 1961
+    },
+    {
+      "unit_id": "SRC_UNIT_0058",
+      "source_span": "第五十八囬",
+      "title": "懷妒忌金蓮打秋菊 乞臘肉磨鏡叟訴冤",
+      "line": 1996
+    },
+    {
+      "unit_id": "SRC_UNIT_0059",
+      "source_span": "第五十九囬",
+      "title": "西門慶摔死雪獅子 李瓶兒痛哭官哥兒",
+      "line": 2037
+    },
+    {
+      "unit_id": "SRC_UNIT_0060",
+      "source_span": "第六十囬",
+      "title": "李瓶兒因暗氣惹病 西門慶立緞鋪開張",
+      "line": 2083
+    },
+    {
+      "unit_id": "SRC_UNIT_0061",
+      "source_span": "第六十一囬",
+      "title": "韓道國筵請西門慶 李瓶兒苦痛宴重陽",
+      "line": 2148
+    },
+    {
+      "unit_id": "SRC_UNIT_0062",
+      "source_span": "第六十二囬",
+      "title": "潘道士解禳祭燈壇 西門慶大哭李瓶兒",
+      "line": 2225
+    },
+    {
+      "unit_id": "SRC_UNIT_0063",
+      "source_span": "第六十三囬",
+      "title": "親朋祭奠開筵宴 西門慶觀戲感李瓶",
+      "line": 2259
+    },
+    {
+      "unit_id": "SRC_UNIT_0064",
+      "source_span": "第六十四囬",
+      "title": "玉簫跪央潘金蓮 合衛官祭富室娘",
+      "line": 2282
+    },
+    {
+      "unit_id": "SRC_UNIT_0065",
+      "source_span": "第六十五囬",
+      "title": "吳道官迎殯頒眞容 宋御史結豪請六黃",
+      "line": 2303
+    },
+    {
+      "unit_id": "SRC_UNIT_0066",
+      "source_span": "第六十六囬",
+      "title": "翟管家寄書致賻 黃眞人煉度薦亡",
+      "line": 2343
+    },
+    {
+      "unit_id": "SRC_UNIT_0067",
+      "source_span": "第六十七囬",
+      "title": "西門慶書房賞雪 李瓶兒夢訴幽情",
+      "line": 2413
+    },
+    {
+      "unit_id": "SRC_UNIT_0068",
+      "source_span": "第六十八囬",
+      "title": "鄭月兒賣俏透密意 玳安慇勤尋文嫂",
+      "line": 2452
+    },
+    {
+      "unit_id": "SRC_UNIT_0069",
+      "source_span": "第六十九囬",
+      "title": "文嫂通情林太太 王三官中詐求奸",
+      "line": 2496
+    },
+    {
+      "unit_id": "SRC_UNIT_0070",
+      "source_span": "第七十囬",
+      "title": "西門慶工完陞級 羣僚庭參朱太尉",
+      "line": 2530
+    },
+    {
+      "unit_id": "SRC_UNIT_0071",
+      "source_span": "第七十一囬",
+      "title": "李瓶兒何千戶家托夢 提刑官引奏朝儀",
+      "line": 2570
+    },
+    {
+      "unit_id": "SRC_UNIT_0072",
+      "source_span": "第七十二囬",
+      "title": "王三官拜西門為義父 應伯爵替李銘釋冤",
+      "line": 2623
+    },
+    {
+      "unit_id": "SRC_UNIT_0073",
+      "source_span": "第七十三囬",
+      "title": "潘金蓮不憤憶吹簫 郁大姐夜唱鬧五更",
+      "line": 2678
+    },
+    {
+      "unit_id": "SRC_UNIT_0074",
+      "source_span": "第七十四囬",
+      "title": "宋御史索求八仙鼎 吳月娘聽宣黃氏卷",
+      "line": 2748
+    },
+    {
+      "unit_id": "SRC_UNIT_0075",
+      "source_span": "第七十五囬",
+      "title": "春梅毀罵申二姐 玉簫愬言潘金蓮",
+      "line": 2820
+    },
+    {
+      "unit_id": "SRC_UNIT_0076",
+      "source_span": "第七十六囬",
+      "title": "孟玉樓解慍吳月娘 西門慶斥逐溫葵軒",
+      "line": 2860
+    },
+    {
+      "unit_id": "SRC_UNIT_0077",
+      "source_span": "第七十七囬",
+      "title": "西門慶踏雪訪愛月 賁四嫂倚牖盼佳期",
+      "line": 2907
+    },
+    {
+      "unit_id": "SRC_UNIT_0078",
+      "source_span": "第七十八囬",
+      "title": "西門慶兩戰林太太 吳月娘翫燈請藍氏",
+      "line": 2974
+    },
+    {
+      "unit_id": "SRC_UNIT_0079",
+      "source_span": "第七十九囬",
+      "title": "西門慶貪慾得病 吳月娘墓生產子",
+      "line": 3030
+    },
+    {
+      "unit_id": "SRC_UNIT_0080",
+      "source_span": "第八十囬",
+      "title": "陳經濟竊玉偷香 李嬌兒盜財歸院",
+      "line": 3099
+    },
+    {
+      "unit_id": "SRC_UNIT_0081",
+      "source_span": "第八十一囬",
+      "title": "韓道國拐財倚勢 湯來保欺主背恩",
+      "line": 3149
+    },
+    {
+      "unit_id": "SRC_UNIT_0082",
+      "source_span": "第八十二囬",
+      "title": "潘金蓮月夜偷期 陳經濟畫樓雙羙",
+      "line": 3175
+    },
+    {
+      "unit_id": "SRC_UNIT_0083",
+      "source_span": "第八十三囬",
+      "title": "秋菊含恨洩幽情 春梅寄柬諧佳會",
+      "line": 3211
+    },
+    {
+      "unit_id": "SRC_UNIT_0084",
+      "source_span": "第八十四囬",
+      "title": "吳月娘大鬧碧霞宮 宋公明義釋清風寨",
+      "line": 3248
+    },
+    {
+      "unit_id": "SRC_UNIT_0085",
+      "source_span": "第八十五囬",
+      "title": "月娘識破金蓮姦情 薛嫂月夜賣春梅",
+      "line": 3280
+    },
+    {
+      "unit_id": "SRC_UNIT_0086",
+      "source_span": "第八十六囬",
+      "title": "雪娥唆打陳經濟 王婆售利嫁金蓮",
+      "line": 3308
+    },
+    {
+      "unit_id": "SRC_UNIT_0087",
+      "source_span": "第八十七囬",
+      "title": "王婆子貪財受報 武都頭殺嫂祭兄",
+      "line": 3342
+    },
+    {
+      "unit_id": "SRC_UNIT_0088",
+      "source_span": "第八十八囬",
+      "title": "潘金蓮托夢守禦府 吳月娘佈施募緣僧",
+      "line": 3367
+    },
+    {
+      "unit_id": "SRC_UNIT_0089",
+      "source_span": "第八十九囬",
+      "title": "清明節寡婦上新墳 吳月娘誤入永福寺",
+      "line": 3395
+    },
+    {
+      "unit_id": "SRC_UNIT_0090",
+      "source_span": "第九十囬",
+      "title": "來旺盜拐孫雪娥 雪娥官賣守備府",
+      "line": 3434
+    },
+    {
+      "unit_id": "SRC_UNIT_0091",
+      "source_span": "第九十一囬",
+      "title": "孟玉樓愛嫁李衙內 李衙內怒打玉簪兒",
+      "line": 3484
+    },
+    {
+      "unit_id": "SRC_UNIT_0092",
+      "source_span": "第九十二囬",
+      "title": "陳經濟被陷嚴州府 吳月娘大鬧授官廳",
+      "line": 3515
+    },
+    {
+      "unit_id": "SRC_UNIT_0093",
+      "source_span": "第九十三囬",
+      "title": "王杏庵仗義賙貧 任道士因財惹禍",
+      "line": 3554
+    },
+    {
+      "unit_id": "SRC_UNIT_0094",
+      "source_span": "第九十四囬",
+      "title": "劉二醉毆陳經濟 洒家店雪娥為娼",
+      "line": 3600
+    },
+    {
+      "unit_id": "SRC_UNIT_0095",
+      "source_span": "第九十五囬",
+      "title": "平安偷盜假當物 薛嫂喬計說人情",
+      "line": 3627
+    },
+    {
+      "unit_id": "SRC_UNIT_0096",
+      "source_span": "第九十六囬",
+      "title": "春梅遊玩舊家池館 守備使張勝尋經濟",
+      "line": 3651
+    },
+    {
+      "unit_id": "SRC_UNIT_0097",
+      "source_span": "第九十七囬",
+      "title": "經濟守禦府用事 薛嫂賣花說姻親",
+      "line": 3683
+    },
+    {
+      "unit_id": "SRC_UNIT_0098",
+      "source_span": "第九十八囬",
+      "title": "陳經濟臨清開大店 韓愛姐翠館遇情郎",
+      "line": 3717
+    },
+    {
+      "unit_id": "SRC_UNIT_0099",
+      "source_span": "第九十九囬",
+      "title": "劉二醉罵王六兒 張勝忿殺陳經濟",
+      "line": 3760
+    },
+    {
+      "unit_id": "SRC_UNIT_0100",
+      "source_span": "第一百囬",
+      "title": "韓愛姐湖州尋父 普靜師薦拔羣冤",
+      "line": 3808
+    }
+  ],
+  "status": "confirmed",
+  "comprehension_doc": "设定库/source_comprehension.md",
+  "understanding_contract": {
+    "modern_understanding": "全书以西门庆从地方富商攀升为官绅、扩张财富与家庭，再因贪欲和滥权猝死、家业迅速崩解为主轴；潘金莲、李瓶儿、吴月娘、孟玉楼、春梅、陈经济等人的欲望、处境、竞争与结局构成相互咬合的群像。前十回以武松打虎建立正义与力量标尺，再转入潘金莲受困婚姻、试探武松失败、与西门庆相遇，在王婆撮合下通奸，继而伤害并毒死武大；西门庆以钱权掩盖罪行，武松追索真相却未能立即完成复仇，形成延续至第八十七回的长线因果。全书不是单纯艳情故事，而是借家庭日常、金钱交易、性别与阶层权力，展示欲望如何与官商勾连、制度腐败共同吞噬人物和家业。改编应把可见选择、权力交换、受害后果和报应链作为主干，而非逐段复制宴饮、诗词、说书评论或露骨描写。",
+    "episode_promise_basis": [
+      {
+        "trace_id": "SRC_PROMISE_001",
+        "promise": "武大之死能否得到真相与公道，武松能否完成复仇",
+        "opened_at": "第一至六回",
+        "payoff_or_progress": "第九至十回受阻并转为长线悬念，第八十五至八十七回完成追索与复仇",
+        "risk_if_cut": "会失去前十回最强的因果钩、正邪对照和后段回收"
+      },
+      {
+        "trace_id": "SRC_PROMISE_002",
+        "promise": "西门庆依靠金钱、欲望和官场关系能攀升到何处，又将如何反噬",
+        "opened_at": "第二回起",
+        "payoff_or_progress": "第十六至五十回持续扩张，第七十至八十回权势见顶后病亡，第八十一回后家业崩解",
+        "risk_if_cut": "会把全书降格为零散情事，丢掉官商腐败与盛衰主轴"
+      },
+      {
+        "trace_id": "SRC_PROMISE_003",
+        "promise": "潘金莲进入西门宅后能否获得安全与主导权，嫉妒和算计将造成什么代价",
+        "opened_at": "第七至十回",
+        "payoff_or_progress": "中段在妻妾竞争中不断升级，第八十二至八十七回因与陈经济私情败露而被逐、被卖并遭武松复仇",
+        "risk_if_cut": "会抹平人物从受困者到伤害者的复杂弧线"
+      },
+      {
+        "trace_id": "SRC_PROMISE_004",
+        "promise": "李瓶儿携财入西门宅、产子得宠后能否守住孩子与位置",
+        "opened_at": "第十三至十六回",
+        "payoff_or_progress": "第三十回得子加官形成高点，第五十九至六十七回孩子夭亡、李瓶儿病逝并形成西门庆短暂真情与更深空洞",
+        "risk_if_cut": "会失去中段最重要的情感高峰、家庭裂痕和死亡预演"
+      },
+      {
+        "trace_id": "SRC_PROMISE_005",
+        "promise": "西门庆死后，依附其权势的人、财产与家庭秩序将如何离散",
+        "opened_at": "第七十九至八十回",
+        "payoff_or_progress": "第八十一至一百回由偷盗、背叛、逐卖、再嫁、陈经济与春梅支线及普静荐拔完成群体结局",
+        "risk_if_cut": "会失去全书由盛转衰的总兑现和报应结构"
+      }
+    ],
+    "character_motives": [
+      {
+        "trace_id": "SRC_MOTIVE_001",
+        "character": "西门庆",
+        "want": "占有欲望对象、扩大财富并把金钱转换成社会与官场权力",
+        "obstacle": "家庭竞争、受害者追索、官场风险、身体极限与自身永不满足",
+        "choice_pressure": "每次都可在克制与继续购买/操控之间选择，却不断用钱权消除阻力",
+        "arc_delta": "由地方浪荡富商上升为官绅，再在权势顶点因贪欲和身体透支猝死"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_002",
+        "character": "潘金莲",
+        "want": "摆脱低位婚姻与被支配处境，追求欲望、体面和在家庭中的控制权",
+        "obstacle": "父权婚姻、经济依附、妻妾等级、竞争者与自己以伤害换取权力的选择",
+        "choice_pressure": "可拒绝王婆与西门庆的合谋，也可在进入西门宅后停止升级嫉妒与报复",
+        "arc_delta": "从受困且有能动性的年轻女性，逐步成为共谋与伤害者，最终因旧罪与新情事遭报复"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_003",
+        "character": "武松",
+        "want": "护住兄长、查清死因并恢复被钱权扭曲的公道",
+        "obstacle": "离家公差、证据被收买、地方权势与自己急切报仇造成的误杀/流配",
+        "choice_pressure": "在官府程序失效后，是忍耐取证还是直接以暴力复仇",
+        "arc_delta": "由英雄与官差转为被制度排斥的复仇者，长线坚持至第八十七回"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_004",
+        "character": "武大",
+        "want": "靠小生意维持家庭与安稳生活",
+        "obstacle": "身体与阶层弱势、婚姻失衡、对西门庆权势的恐惧",
+        "choice_pressure": "发现背叛后是否求助、对抗或继续忍让",
+        "arc_delta": "从忍让求生转为试图捉奸，受伤后被合谋毒害"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_005",
+        "character": "王婆",
+        "want": "利用信息、人情与性别隔离获利",
+        "obstacle": "事情败露、法律追责与双方反复变化的风险",
+        "choice_pressure": "可拒绝撮合，也可不断加深设计直至参与灭口",
+        "arc_delta": "由茶坊掮客变为犯罪共谋，最终承担报应"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_006",
+        "character": "吴月娘",
+        "want": "维持正妻地位、家产、香火和家庭表面秩序",
+        "obstacle": "西门庆无度、妻妾冲突、财产流失与家主死后的外部掠夺",
+        "choice_pressure": "在默许、规劝、宗教寄托和保护家人之间反复取舍",
+        "arc_delta": "由宅门秩序维护者转为衰败后的守家与求生者"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_007",
+        "character": "李瓶儿",
+        "want": "摆脱原婚姻、获得情感归属，并以财富与儿子稳固位置",
+        "obstacle": "西门庆的占有、妻妾嫉妒、孩子脆弱与自身疾病",
+        "choice_pressure": "在私情、财产转移、再嫁和进入西门宅之间逐步加码",
+        "arc_delta": "由主动转移财富入宅到得宠产子，再因丧子与病痛走向死亡"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_008",
+        "character": "春梅",
+        "want": "维护尊严、摆脱婢女身份并获得实际权力",
+        "obstacle": "奴婢身份、主人支配、宅门倾覆和后续男性权力结构",
+        "choice_pressure": "在忠附、反抗、利用关系与复制旧权力方式之间选择",
+        "arc_delta": "从有强烈自尊的婢女上升为守备府夫人，亦进入欲望与权力循环"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_009",
+        "character": "陈经济",
+        "want": "依附西门家获得享乐、关系与重新翻身的机会",
+        "obstacle": "家道变化、自制力薄弱、私情暴露与不断下降的社会位置",
+        "choice_pressure": "在承担责任和继续投机纵欲之间选择",
+        "arc_delta": "从西门家女婿与内宅青年滑向私情败露、流离与被杀"
+      }
+    ],
+    "causality_chain": [
+      {
+        "trace_id": "SRC_CAUSE_001",
+        "cause": "潘金莲婚姻受困、试探武松失败后，与西门庆在王婆撮合下通奸",
+        "effect": "武大捉奸受伤，三人合谋毒死武大并掩盖证据",
+        "must_keep": "must_keep：欲望—利益撮合—受害—灭口的完整责任链",
+        "adaptation_note": "情色过程可非露骨压缩，但王婆逐步设局、武大受伤、毒杀决定与证据处理不可删"
+      },
+      {
+        "trace_id": "SRC_CAUSE_002",
+        "cause": "西门庆用金钱收买何九等关键证人并借地方关系压案",
+        "effect": "武松无法依正常程序伸冤，急切复仇导致误杀并被流配",
+        "must_keep": "must_keep：私人罪行与制度腐败相互放大的因果",
+        "adaptation_note": "需清楚拍出钱如何改变证词/程序，不把武松失败写成单纯莽撞"
+      },
+      {
+        "trace_id": "SRC_CAUSE_003",
+        "cause": "西门庆持续把金钱、情欲与人情网络转换为婚姻、财产和官场关系",
+        "effect": "家庭规模和权势扩张，同时妻妾、仆役与外部依附者的冲突加剧",
+        "must_keep": "must_keep：家宅扩张与腐败上升是同一套交换机制",
+        "adaptation_note": "重复宴饮可合并，但每次身份/财富/权力升级必须留可见状态变化"
+      },
+      {
+        "trace_id": "SRC_CAUSE_004",
+        "cause": "李瓶儿将感情和财产转向西门庆并进入西门宅，后产下官哥儿",
+        "effect": "她一度得宠，也成为潘金莲嫉妒的焦点；孩子夭亡后李瓶儿迅速病逝",
+        "must_keep": "must_keep：财产、母职、宠爱与丧失共同构成中段情感主轴",
+        "adaptation_note": "不可只拍争宠；要保留李瓶儿的选择、希望、丧子与西门庆真实但有限的悲恸"
+      },
+      {
+        "trace_id": "SRC_CAUSE_005",
+        "cause": "西门庆对仆役、下层女性和办事人的占有与惩罚不断升级",
+        "effect": "宋惠莲等人受辱死亡，来旺等被驱逐，家庭内部积累恐惧、怨恨和背叛",
+        "must_keep": "must_keep：豪门繁华的成本由下层人物承担",
+        "adaptation_note": "避免只作猎奇支线；每个典型事件须回扣权力结构和后续反噬"
+      },
+      {
+        "trace_id": "SRC_CAUSE_006",
+        "cause": "官商勾连与受贿使西门庆不断升迁、扩大生意并逃避约束",
+        "effect": "权势到达高点，违法与奢靡获得更大空间，也使其死亡后的资产更易被依附者瓜分",
+        "must_keep": "must_keep：升官不是背景信息，而是行为免罚与扩张的条件",
+        "adaptation_note": "用少量关键交易、印信、账目和官场场面代替长篇制度说明"
+      },
+      {
+        "trace_id": "SRC_CAUSE_007",
+        "cause": "西门庆长期无度、服药纵欲并忽视身体警告",
+        "effect": "第七十九回病亡，家宅失去权力核心，财产与关系网立即崩散",
+        "must_keep": "must_keep：死亡由长期选择累积而来，不是突然天罚",
+        "adaptation_note": "前段需持续埋身体代价与失控信号，避免结局像机械报应"
+      },
+      {
+        "trace_id": "SRC_CAUSE_008",
+        "cause": "家主死后，妻妾、仆役、女婿与外部关系各自求生或逐利",
+        "effect": "盗财、离散、再嫁、卖人和私情败露接连发生，潘金莲与陈经济旧线重新引出武松复仇",
+        "must_keep": "must_keep：家业崩解要呈现为失去制度性庇护后的连锁反应",
+        "adaptation_note": "后二十回不可当尾声略过，需保住因果回收与人物各自结局"
+      },
+      {
+        "trace_id": "SRC_CAUSE_009",
+        "cause": "潘金莲与陈经济私情败露，吴月娘逐人、王婆再度把女性当作交易对象",
+        "effect": "潘金莲被卖并遭武松复仇，春梅和陈经济进入各自后续命运",
+        "must_keep": "must_keep：早期王婆撮合与晚期王婆售卖形成结构回环",
+        "adaptation_note": "不将复仇拍成单纯爽杀；同时呈现旧罪、制度失灵和女性被交易的处境"
+      },
+      {
+        "trace_id": "SRC_CAUSE_010",
+        "cause": "西门宅形成的逐利、纵欲与权力复制继续作用于陈经济、春梅等幸存者",
+        "effect": "陈经济败亡，春梅虽上升仍被旧模式吞噬，最终由普静荐拔收束群体冤魂与因果",
+        "must_keep": "must_keep：结尾不是单人报应，而是整套欲望与权力循环的余波",
+        "adaptation_note": "宗教收束可保留其时代意义与情绪功能，避免讲成超自然规则说明"
+      }
+    ],
+    "foreshadowing_ledger": [
+      {
+        "trace_id": "SRC_FORESHADOW_001",
+        "setup": "第一回武松拒绝潘金莲并临行警告兄长谨慎门户",
+        "payoff_plan": "第二至六回警告应验；第九至十回开始追责，第八十七回最终复仇",
+        "status": "open_long_payoff",
+        "do_not_drop_reason": "连接开局英雄线、武大命案和后段复仇回收"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_002",
+        "setup": "何九发现武大尸体异常并获得可疑证据，同时接受西门庆贿赂",
+        "payoff_plan": "成为武松查案时识破谋杀与制度腐败的关键证据链",
+        "status": "open",
+        "do_not_drop_reason": "没有该证据，武松追责和买通官府会缺乏可见因果"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_003",
+        "setup": "西门庆每次以金钱解决法律、婚姻和商业阻碍",
+        "payoff_plan": "中段转为升官发财，死后同一利益网络迅速反向瓜分家产",
+        "status": "open_long_payoff",
+        "do_not_drop_reason": "构成全书盛衰与官商腐败的结构伏笔"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_004",
+        "setup": "潘金莲进入西门宅时已把欲望、安全与伤害他人绑定",
+        "payoff_plan": "妻妾竞争升级，最终私情败露、被逐、被卖并遭复仇",
+        "status": "open_long_payoff",
+        "do_not_drop_reason": "保证人物结局来自连续选择而非末段突然惩罚"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_005",
+        "setup": "李瓶儿的财富、得宠与生子被当作在宅门中获得安全的筹码",
+        "payoff_plan": "官哥儿夭亡、李瓶儿病逝，显示财富与宠爱不能提供真正安全",
+        "status": "open_long_payoff",
+        "do_not_drop_reason": "中段情感弧和潘金莲嫉妒线的核心"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_006",
+        "setup": "西门庆反复服药纵欲、身体出现病症仍继续无度",
+        "payoff_plan": "第七十九回病亡，触发全宅崩解",
+        "status": "open_long_payoff",
+        "do_not_drop_reason": "死亡必须是累积后果而非突发报应"
+      }
+    ],
+    "adaptation_boundaries": {
+      "preserve": [
+        "西门庆由富商到官绅再到死亡、家业崩解的总主轴",
+        "武大命案—买通证人—武松追责受阻—第八十七回复仇的完整长线因果",
+        "潘金莲既受结构压迫又主动参与伤害的复杂性，不洗白也不扁平妖魔化",
+        "吴月娘、孟玉楼、李瓶儿、春梅、宋惠莲等女性各自不同的处境、选择和结局",
+        "财富、性别、阶层、奴仆制度与官商腐败相互作用的社会批判",
+        "关键亲属、妻妾、主仆和称谓关系，以及人物死亡/离散/再嫁的结局",
+        "宋代故事时空与明代生活经验交叠这一原著特色，视觉上统一为可信的前现代市井社会"
+      ],
+      "modernize_or_compress": [
+        "不承载预示、反讽、人物心境或节奏功能的诗词曲与作者议论",
+        "重复宴饮、礼单、衣饰器物清单和同功能应酬，保留状态变化与关键物证即可",
+        "说书套语改为少量带章回韵味的旁白，不逐段照搬",
+        "古今难懂词先转成现代剧情理解，关键称谓和物质文化词保留",
+        "露骨性描写改用门窗、灯影、衣物、声音、事后状态和人物选择表达",
+        "重复的羞辱性身体描写与污名词缩减为剧情所需事实，不让镜头继续羞辱弱者"
+      ],
+      "do_not_change": [
+        "不得把强迫、剥削、交易、通奸共谋和谋杀浪漫化成纯爱情",
+        "不得把武大之死或家庭崩坏单归咎于女性，必须保留西门庆、王婆、金钱与制度责任",
+        "不得为追求爽点改成玄幻、系统或超能力题材",
+        "不得删掉受害者后果、仆役代价和权力交易，只保留豪门猎奇",
+        "不得让诗词评话覆盖人物正在发生的选择、冲突与可见后果"
+      ]
+    },
+    "power_system_rules": {
+      "applicable": "no",
+      "level_or_rank_rules": [],
+      "growth_constraints": [],
+      "combat_consistency_rules": [],
+      "not_applicable_reason": "非战力/系统/修炼题材，暂无等级战力规则。"
+    },
+    "source_register_strategy": {
+      "register": "modern_zh",
+      "profile": "late_imperial_vernacular",
+      "dialogue_style": "现代可懂白话为骨，保留官人、娘子、都头、大娘等关系性称谓和少量章回韵味；身份、年龄与权力差异通过用词层级体现",
+      "terms_to_keep": ["官人", "娘子", "都头", "大娘", "小叔", "媒婆", "炊饼", "勾栏", "提刑", "生辰担"],
+      "terms_to_translate": ["挨光", "梳笼", "把揽说事过钱", "乔张致", "马泊六", "搠不出", "拶", "递解"]
+    },
+    "premodern_adapter": {
+      "coverage_scope": "全书一百回：已建立十个宏观弧段、主要人物动机、十条主因果与六条长线伏笔；首批制作窗口精读第一至十回，后续续切前按对应十回窗口补逐回细释并刷新合同。",
+      "unit_glosses": [
+        {
+          "source_span": "第一回",
+          "modern_summary": "以武松打虎建立英雄与公义标尺；交代武大、潘金莲的婚姻处境。潘金莲试探武松遭拒，武松临行提醒兄长谨慎门户。",
+          "dramatic_function": "建立正义标尺、核心家庭关系和即将应验的警告",
+          "trace_ids": ["SRC_MOTIVE_002", "SRC_MOTIVE_003", "SRC_FORESHADOW_001"]
+        },
+        {
+          "source_span": "第二回",
+          "modern_summary": "潘金莲与西门庆因叉竿相遇，双方互生欲念；王婆识破西门庆意图，准备以撮合获利。",
+          "dramatic_function": "触发命案主因果，引入利益掮客王婆",
+          "trace_ids": ["SRC_CAUSE_001", "SRC_MOTIVE_001", "SRC_MOTIVE_005"]
+        },
+        {
+          "source_span": "第三回",
+          "modern_summary": "王婆提出并实施逐步接近的挨光计划，把偶遇变成可控的秘密会面；西门庆与潘金莲越过边界。",
+          "dramatic_function": "把欲望转成有步骤的合谋，展示信息与空间如何被交易",
+          "trace_ids": ["SRC_CAUSE_001", "SRC_PROMISE_001"]
+        },
+        {
+          "source_span": "第四回",
+          "modern_summary": "私情持续；郓哥因利益受损察觉异常，与王婆冲突并把线索带给武大。武大捉奸时被西门庆踢伤。",
+          "dramatic_function": "秘密被外部目击，冲突从私情升级为人身伤害",
+          "trace_ids": ["SRC_CAUSE_001", "SRC_PROMISE_001"]
+        },
+        {
+          "source_span": "第五回",
+          "modern_summary": "郓哥协助武大追查。面对武大伤后可能揭发，潘金莲、西门庆与王婆选择以毒药灭口并伪装死亡。",
+          "dramatic_function": "完成从背叛到谋杀的不可逆升级",
+          "trace_ids": ["SRC_CAUSE_001", "SRC_FORESHADOW_001"]
+        },
+        {
+          "source_span": "第六回",
+          "modern_summary": "西门庆买通验尸相关的何九等人，王婆继续遮掩；尸体异常与残留证据没有完全消失。",
+          "dramatic_function": "把私人罪行连接到金钱腐蚀程序，并留下查案证据",
+          "trace_ids": ["SRC_CAUSE_002", "SRC_FORESHADOW_002", "SRC_PROMISE_002"]
+        },
+        {
+          "source_span": "第七回",
+          "modern_summary": "西门庆在命案尚未真正结清时又谋娶有财产的孟玉楼；媒人和亲族围绕婚姻、财产与名分博弈。",
+          "dramatic_function": "从单一命案扩展到西门庆以婚姻累积财富与家庭权力的主轴",
+          "trace_ids": ["SRC_CAUSE_003", "SRC_PROMISE_002"]
+        },
+        {
+          "source_span": "第八回",
+          "modern_summary": "潘金莲苦等西门庆，在亡夫灵前与欲望、恐惧和不安共处；西门庆因新婚与外部享乐疏远她。",
+          "dramatic_function": "显示共谋关系并不提供安全，开启潘金莲入宅后的竞争焦虑",
+          "trace_ids": ["SRC_PROMISE_003", "SRC_FORESHADOW_004"]
+        },
+        {
+          "source_span": "第九回",
+          "modern_summary": "西门庆安排迎娶潘金莲；武松归来追查兄长死因，常规申诉受钱权阻碍，复仇行动又因误杀而失手。",
+          "dramatic_function": "让命案真相与制度失败正面碰撞，把即时复仇改成长线悬念",
+          "trace_ids": ["SRC_CAUSE_002", "SRC_PROMISE_001", "SRC_FORESHADOW_002"]
+        },
+        {
+          "source_span": "第十回",
+          "modern_summary": "武松被判流配，正义暂时离场；西门宅以妻妾宴饮和芙蓉亭赏乐恢复繁华表象，罪行被日常生活覆盖。",
+          "dramatic_function": "首批窗口收束：恶方获暂时胜利，英雄线被压下，豪门主剧正式开启",
+          "trace_ids": ["SRC_PROMISE_001", "SRC_PROMISE_002", "SRC_CAUSE_003"]
+        },
+        {
+          "source_span": "第十一至二十回",
+          "modern_summary": "李瓶儿与西门庆私情、花子虚死亡及财产转移推动新一轮娶妇扩张；官场风波与李瓶儿改嫁又使关系反复。",
+          "dramatic_function": "建立李瓶儿—财富—婚姻主弧，并扩大宅门与官场双线",
+          "trace_ids": ["SRC_CAUSE_003", "SRC_CAUSE_004", "SRC_PROMISE_004"]
+        },
+        {
+          "source_span": "第二十一至三十回",
+          "modern_summary": "内宅私情、仆役惩罚和妻妾竞争升级；宋惠莲死亡暴露下层代价。李瓶儿入宅、生子，西门庆同时升官。",
+          "dramatic_function": "把豪门上升与底层受害并置，形成家业高点前的裂缝",
+          "trace_ids": ["SRC_CAUSE_005", "SRC_CAUSE_006", "SRC_PROMISE_004"]
+        },
+        {
+          "source_span": "第三十一至四十回",
+          "modern_summary": "庆宴、结交官员、包占王六儿与宗教活动交织；宅内宠爱与嫉妒围绕李瓶儿母子集中。",
+          "dramatic_function": "展示权势网络成形，同时推进母子安全与妻妾冲突",
+          "trace_ids": ["SRC_CAUSE_003", "SRC_CAUSE_006", "SRC_FORESHADOW_005"]
+        },
+        {
+          "source_span": "第四十一至五十回",
+          "modern_summary": "豪家社交与灯节繁华达到高密度，受贿枉法和迎送官员使西门庆的权钱关系公开化。",
+          "dramatic_function": "完成官商勾连的可见升级，为盛极转衰积累债务",
+          "trace_ids": ["SRC_PROMISE_002", "SRC_CAUSE_006", "SRC_FORESHADOW_003"]
+        },
+        {
+          "source_span": "第五十一至六十回",
+          "modern_summary": "宗教求子、宴饮游乐与仆役受难并行；官哥儿夭亡，李瓶儿由痛苦转病，豪门内部出现无法用钱修复的损失。",
+          "dramatic_function": "从物质高峰切入死亡与情感崩塌",
+          "trace_ids": ["SRC_CAUSE_004", "SRC_PROMISE_004", "SRC_FORESHADOW_005"]
+        },
+        {
+          "source_span": "第六十一至七十回",
+          "modern_summary": "李瓶儿病逝、丧仪和西门庆悲恸形成全书重要情感谷底；此后他又迅速回到享乐与升官，显示悔悟有限。",
+          "dramatic_function": "完成李瓶儿弧并揭示西门庆情感真实却不足以改变行为",
+          "trace_ids": ["SRC_CAUSE_004", "SRC_PROMISE_004", "SRC_CAUSE_007"]
+        },
+        {
+          "source_span": "第七十一至八十回",
+          "modern_summary": "西门庆的官场地位和私生活继续膨胀，身体代价累积；第七十九回病亡，第八十回即出现盗财与秩序松动。",
+          "dramatic_function": "让权势与肉身到达同一顶点后断裂，启动家业崩解",
+          "trace_ids": ["SRC_PROMISE_002", "SRC_CAUSE_007", "SRC_PROMISE_005"]
+        },
+        {
+          "source_span": "第八十一至九十回",
+          "modern_summary": "家主死后仆役背叛、潘金莲与陈经济私情败露、春梅被卖、潘金莲被王婆转卖；武松归来完成复仇，旧案终于回收。",
+          "dramatic_function": "兑现开局命案与潘金莲弧，展示豪门保护消失后的连锁坍塌",
+          "trace_ids": ["SRC_CAUSE_008", "SRC_CAUSE_009", "SRC_PROMISE_001", "SRC_PROMISE_003"]
+        },
+        {
+          "source_span": "第九十一至一百回",
+          "modern_summary": "孟玉楼再嫁、陈经济受陷与流离、春梅在守备府上升，旧宅人物继续分散；陈经济被杀，韩爱姐寻父，普静荐拔群冤收束全书。",
+          "dramatic_function": "交代幸存者与复制旧权力模式者的结局，完成群体因果收束",
+          "trace_ids": ["SRC_CAUSE_010", "SRC_PROMISE_005"]
+        }
+      ],
+      "historical_terms": [
+        {
+          "source_term": "官人 / 娘子 / 大娘 / 小叔",
+          "modern_meaning": "由身份、婚姻和亲属关系决定的称谓，不能简单统一成先生/女士",
+          "screen_treatment": "关键对白保留，首次出现用语境让观众理解，不做屏幕注释堆叠"
+        },
+        {
+          "source_term": "都头 / 提刑 / 知县 / 递解",
+          "modern_meaning": "地方治安与司法官职、押送服刑等制度词",
+          "screen_treatment": "保留官职名，用服饰、衙门空间、印信与行动职责说明权力"
+        },
+        {
+          "source_term": "梳笼 / 勾栏 / 媒婆 / 把揽说事过钱",
+          "modern_meaning": "娱乐性交易、风月场所、婚恋掮客与依靠关系代办牟利",
+          "screen_treatment": "对白适度白话化；用交易物、账目和人物动作表现，不露骨讲解"
+        },
+        {
+          "source_term": "生辰担 / 赏银 / 房奁 / 身价",
+          "modern_meaning": "礼物输送、赏赐、婚嫁财产与人口交易中的金钱尺度",
+          "screen_treatment": "保留关键数字与物证，重复礼单合并成视觉蒙太奇"
+        },
+        {
+          "source_term": "挨光 / 乔张致 / 马泊六",
+          "modern_meaning": "接近勾引的步骤、装腔作势、牵线皮条等近世口语",
+          "screen_treatment": "在现代剧情理解中转义；仅少量特色词保留给王婆等角色"
+        }
+      ],
+      "verse_and_commentary_policy": "诗词曲只有在承担预示、反讽、人物心境、时代气氛或场面节奏时保留；长篇历史类比和重复赞词压缩为一句旁白、可见意象或章节题眼。不得用诗词替代正在发生的选择与后果。",
+      "narrator_formula_policy": "保留少量‘话说/看官/且说’形成章回辨识度，主要用于转场、时间跳跃和冷开场反讽；每集不连续堆叠，避免全片成为评书念原文。",
+      "historical_context_policy": "角色服饰、宅院层级、街市行业、货币交易、官职印信、妻妾主仆秩序须进入角色/场景/道具卡；原著宋代故事时空与明代生活细节交叠，项目视觉统一为可信的前现代市井社会，不把不确定年代细节伪装成考据定论。",
+      "sensitive_content_policy": "保留成年人物欲望、通奸、强迫、剥削、家庭暴力、谋杀与人口交易对主因果的作用；性行为一律非露骨，以门窗灯影、衣物、声音、视线和事后状态表达。涉及未成年人、羞辱性身体描述和受害者时不情色化、不猎奇化；不以‘报应’抹掉施害责任和制度背景。正式公开发行前另走平台分级与合规审查。",
+      "dialogue_style_target": "现代可懂白话为骨，保留关键古称谓、身份差异和少量章回口吻；西门庆圆滑强势，潘金莲机敏锋利，武松短句克制，王婆市井油滑，吴月娘稳重守序。禁止逐字硬译、满篇仿古腔和破坏时代感的现代网络梗。"
+    }
+  }
+}

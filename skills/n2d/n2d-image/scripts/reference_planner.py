@@ -85,6 +85,18 @@ PLAN_KIND = "n2d_reference_plan"
 
 # 核心长线角色判定（与 gate.check_image_ai_policy 同口径）：scope 含贯穿全篇/长线/主角标记。
 _CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|主反派")
+_NEGATED_CORE_SCOPE_RE = re.compile(
+    r"(?:不|非|不是|并非|仅|只)(?:作为|属于|是|做|担任)?[^。；，,]{0,12}"
+    r"(?:核心|主角|女主|男主|主反派)"
+)
+
+
+def _scope_is_core(char: Mapping[str, Any]) -> bool:
+    """以显式角色库档位为先，并排除“不抢主角”等否定语境。"""
+    if str(char.get("library_tier") or "").strip() == "core_full":
+        return True
+    scope = _NEGATED_CORE_SCOPE_RE.sub("", str(char.get("scope") or ""))
+    return bool(_CORE_SCOPE_RE.search(scope))
 
 # 参考角色 → 默认 image2image 强度建议（对齐现有 01_分镜出图.md 写法）。
 STRENGTH = {
@@ -769,11 +781,25 @@ def load_character_forms(root: Path) -> List[Dict[str, Any]]:
             "character_dna": f.get("character_dna") or {},
             "anchor_phrase": str(f.get("anchor_phrase") or ""),
             "physical_scale": f.get("physical_scale") or {},
+            "library_tier": f.get("library_tier") or ch.get("library_tier"),
+            "narrative_tier": f.get("narrative_tier") or ch.get("tier"),
+            "planned_episode_count": f.get("planned_episode_count") or ch.get("planned_episode_count"),
+            "face_policy": f.get("face_policy") or ch.get("face_policy"),
+            "restricted_partial": f.get("restricted_partial") or ch.get("restricted_partial"),
+            "restricted_partial_contract": (
+                f.get("restricted_partial_contract") or ch.get("restricted_partial_contract")
+            ),
         } for f in forms]
         out.append({
             "id": cid,
             "name": str(ch.get("name") or cid),
             "scope": str(ch.get("scope") or ""),
+            "narrative_tier": ch.get("tier") or ch.get("narrative_tier"),
+            "library_tier": ch.get("library_tier"),
+            "planned_episode_count": ch.get("planned_episode_count"),
+            "face_policy": ch.get("face_policy"),
+            "restricted_partial": ch.get("restricted_partial"),
+            "restricted_partial_contract": ch.get("restricted_partial_contract"),
             "aliases": aliases,
             "forms": norm_forms,
             "lora": lora,
@@ -1149,7 +1175,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
 
     clip_plans: List[Dict[str, Any]] = []
     action_required: List[Dict[str, Any]] = []
-    core_present = any(_CORE_SCOPE_RE.search(str(char.get("scope") or "")) for char in chars)
+    core_present = any(_scope_is_core(char) for char in chars)
     if core_present and memory_contract.get("status") != "ready":
         action_required.append({
             "kind": "memory_anchor_contract",
@@ -1197,7 +1223,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             tier = (image_lock_tier or (lambda *a, **k: "multi_reference"))(
                 backend, form.get("image_adapters") or {}, c.get("lora") or {}
             )
-            scope_is_core = bool(_CORE_SCOPE_RE.search(c.get("scope") or ""))
+            scope_is_core = _scope_is_core(c)
             deltas = variation_deltas(lens, text, form.get("angle_policy") or {},
                                       parsed["shot_size"], parsed["expression_span"])
             cf = {"id": c["id"], "name": c["name"], "form": form.get("form"),

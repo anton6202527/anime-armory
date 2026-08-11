@@ -47,6 +47,16 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
 from n2d_contract import character_library_tier_for_record
 from seam_contract import needs_end_anchor
 
+
+def _character_is_core(record: Mapping[str, Any]) -> bool:
+    """Use the canonical tier contract instead of matching negated prose.
+
+    A scope such as “不抢主角视觉重心” contains the token “主角” but describes
+    a minor role.  The shared contract removes negated core phrases and still
+    honors an explicit ``library_tier=core_full``.
+    """
+    return character_library_tier_for_record(record) == "core_full"
+
 def check_input_frame_qc(root: str, ep: str) -> None:
     """出视频前置（省最贵那一步的钱）：图生视频是 n2d 最贵工位，image2video 会**忠实把首帧缺陷动起来**——
     崩脸的首帧 → 崩脸的片。所以付费出视频前先确认输入首帧已过出图落档机检 `image_qc`。
@@ -259,7 +269,7 @@ def check_identity_registry(
             # 铁律 B11（2026-06-27 用户裁决）：核心/长线角色表演指纹 demo 也强制——
             # 不随 profile（demo/production）降级，demo 与 production 同标准。
             if (
-                _CORE_SCOPE_RE.search(f"{char.get('tier') or ''} {char.get('scope') or ''}")
+                _character_is_core(char)
                 and not _performance_signature_present(char, form)
             ):
                 add(
@@ -536,7 +546,7 @@ def check_production_core_identity_lock(root: str, ep: str, stage: str = "image_
     for char in reg.get("characters", []) or []:
         if not isinstance(char, dict):
             continue
-        if not _CORE_SCOPE_RE.search(f"{char.get('tier') or ''} {char.get('scope') or ''}"):
+        if not _character_is_core(char):
             continue
         cid = str(char.get("id") or "").strip()
         name = str(char.get("name") or cid or "?").strip()
@@ -731,7 +741,7 @@ def check_character_backend_pin(root: str, ep: str) -> None:
                 continue
             form_name = str(fm.get("form") or "").strip()
             label = f"{cid}/{form_name}" if form_name else (cid or "?")
-            is_core = bool(_CORE_SCOPE_RE.search(f"{c.get('tier') or ''} {c.get('scope') or ''}"))
+            is_core = _character_is_core(c)
             sev = BLOCK if is_core else WARN
             add(sev, "角色一致性", reg_path,
                 f"角色 `{label}` 身份钉在出图后端 `{pin_canon}`，本集项目 生图AI=`{cur_canon}`——"
@@ -811,8 +821,7 @@ def check_core_anchor_pinning(root: str, ep: str) -> None:
         cid = str(c.get("id") or "").strip()
         if cid not in referenced_ids:
             continue
-        scope = f"{c.get('tier') or ''} {c.get('scope') or ''}"
-        if not _CORE_SCOPE_RE.search(scope):
+        if not _character_is_core(c):
             continue  # 仅核心长线角色前置高档
         forms = c.get("forms") if isinstance(c.get("forms"), list) else []
         if any(str((fm or {}).get("anchor_sha") or "").strip() for fm in forms if isinstance(fm, dict)):
@@ -956,7 +965,7 @@ def check_core_expression_anchor_coverage(root: str, ep: str) -> None:
         if not isinstance(c, dict):
             continue
         cid = str(c.get("id") or "").strip()
-        if not cid or not _CORE_SCOPE_RE.search(f"{c.get('tier') or ''} {c.get('scope') or ''}"):
+        if not cid or not _character_is_core(c):
             continue  # 仅核心长线角色前置高档
         has_expr = any(
             isinstance(fm, dict) and isinstance(fm.get("expression_anchors"), list) and fm.get("expression_anchors")

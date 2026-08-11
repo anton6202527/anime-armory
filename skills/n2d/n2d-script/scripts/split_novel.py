@@ -116,7 +116,9 @@ def normalize_paragraphs(text):
     return [p for p in paras if p]
 
 
-CHAPTER_RE = re.compile(r"^\s*第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*[章回节卷]")
+# 章回体古籍常见“囬/囘/廻”异体回字与繁体“節”；统一视为章节单位，
+# 避免明清刻本/维基文库转写在 --by-chapter 下退化成章内碎切。
+CHAPTER_RE = re.compile(r"^\s*(?:\[编辑\]\s*)?第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*[章回囬囘廻节節卷]")
 CHINESE_DIGITS = {
     "零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
     "五": 5, "六": 6, "七": 7, "八": 8, "九": 9,
@@ -167,10 +169,10 @@ def parse_chapter_number(value):
     text = str(value).strip()
     if not text:
         return None
-    m = re.search(r"第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*[章回节卷]", text)
+    m = re.search(r"第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*[章回囬囘廻节節卷]", text)
     token = m.group(1) if m else text
     token = re.sub(r"^第", "", token)
-    token = re.sub(r"[章回节卷]$", "", token)
+    token = re.sub(r"[章回囬囘廻节節卷]$", "", token)
     token = re.sub(r"[\s,，_、.-]", "", token)
     if token.isdigit():
         return int(token)

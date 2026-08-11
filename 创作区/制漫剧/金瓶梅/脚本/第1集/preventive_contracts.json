@@ -1,0 +1,816 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_01",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=4.893s；voiceover_indices=[1]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_02",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_02_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=10.229s；dialogue_indices=[2, 4, 5]；voiceover_indices=[2, 3, 4, 5]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_03",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=13.02s；voiceover_indices=[6, 7]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_04",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_04_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=10.145s；dialogue_indices=[9]；voiceover_indices=[8, 9]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_05",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_05_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=8.37s；dialogue_indices=[10, 11]；voiceover_indices=[10, 11, 12]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_06",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_06_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=14.692s；dialogue_indices=[13, 14]；voiceover_indices=[13, 14, 15]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_07",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_07_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=12.577s；dialogue_indices=[17, 18]；voiceover_indices=[16, 17, 18]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_08",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_08_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=9.482s；dialogue_indices=[19, 20]；voiceover_indices=[19, 20]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_09",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_09_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=14.281s；dialogue_indices=[21, 23]；voiceover_indices=[21, 22, 23]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_10",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_10_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=10.699s；dialogue_indices=[25, 26]；voiceover_indices=[24, 25, 26]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_11",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_11_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=10.129s；dialogue_indices=[28, 29]；voiceover_indices=[27, 28, 29]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_12",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=5.766s；voiceover_indices=[30]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_13",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_13_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=7.746s；dialogue_indices=[31, 32]；voiceover_indices=[31, 32]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_14",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_14_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=6.569s；dialogue_indices=[33]；voiceover_indices=[33]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_15",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=5.786s；voiceover_indices=[34]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      }
+    ],
+    "mode": "混合自动路由",
+    "native_av_policy": {
+      "lipsync_policy": "逐镜route决定；未锁表演音轨时先做中性闭口基础视频，后续独立口型pass。",
+      "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+      "voice_identity_policy": "仅使用平台许可或纯合成音色；未获真人授权不使用克隆或参考音。"
+    },
+    "policy": "time_basis_first_per_shot_sound_routing",
+    "post_dub": {
+      "fit_strategy": "当前144.384秒为无WAV估时；音色定妆后按实测刷新OTIO与镜头时长。",
+      "overflow_policy": "实测超出150秒则先压旁白与蒙太奇停顿，不重度压速、不删因果。"
+    },
+    "production_route_status": "aligned"
+  },
+  "episode": "第1集",
+  "episode_promise": {
+    "cliffhanger": "武松被差往东京；潘金莲站在楼窗后，帘外另一双眼走近。第2集以叉竿偶遇立即兑现。",
+    "obstacle": "武松能用力量解决猛虎，却不能靠拳头处理嫂嫂的试探、反咬、兄长的求稳与县令公差。",
+    "opening_hook": "武松睁眼即见虎爪压脸，首屏无声也能读懂生死危机。",
+    "payoff_or_progress": "打虎与泼酒拒绝完成力量/边界双兑现；潘金莲反咬、武松搬离，把保护欲转成实际空门。",
+    "promise": "看山中无敌的武松，如何在家门内识破越界却仍失去保护兄长的位置。",
+    "source_trace_ids": [
+      "SRC_MOTIVE_002",
+      "SRC_MOTIVE_003",
+      "SRC_CAUSE_001",
+      "SRC_FORESHADOW_001",
+      "SRC_PROMISE_001"
+    ]
+  },
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "虎爪贴脸",
+        "武松屏息判断",
+        "贴地闪开",
+        "虎爪砸地",
+        "爪已贴脸",
+        "眼神判断",
+        "人闪开",
+        "爪砸地"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "虎爪与泥地",
+        "武松肩背与枯叶地面",
+        "爪风、尘土和武松衣摆惯性均沿上→下及向右避让方向。"
+      ],
+      "degrade_plan": "若整段动作不稳，拆虎爪ECU、武松眼神CU、爪落泥地插入三镜硬切。",
+      "effect_cause": "爪风、尘土和武松衣摆惯性均沿上→下及向右避让方向。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "CHAR_WUSONG：画面下方贴地主焦点",
+        "BEAST_TIGER：画面上方压下的攻击主体",
+        "虎自上方后景扑向画面下方；武松贴地居下方，向画右闪开。",
+        "虎上武松下，人物不交换方位。",
+        "虎沿纵深轴扑下，武松只横移半身位。",
+        "ECU固定→贴地横移，镜头行程短。"
+      ],
+      "vfx_layers": [
+        "爪风、尘土和武松衣摆惯性均沿上→下及向右避让方向。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "扑→闪",
+        "掀→躲",
+        "尾剪→让",
+        "梢棒劈下",
+        "棒断",
+        "握拳迎虎",
+        "看清三招",
+        "看清棒路"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "虎爪与泥地",
+        "虎尾与空气尘叶",
+        "梢棒与树干/虎前方硬点",
+        "武松手与断棒",
+        "虎尾、衣摆、尘土、断木飞散均服从各自力线，武松不无重力滑行。"
+      ],
+      "degrade_plan": "按扑、掀、尾剪、断棒、握拳五个短镜分别生成后剪辑，不做一镜到底。",
+      "effect_cause": "虎尾、衣摆、尘土、断木飞散均服从各自力线，武松不无重力滑行。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "猛虎保持画面上方高位，武松在下方沿画右—中央小范围避让；反击由下→上。",
+        "猛虎上方、武松下方的主关系不反转。",
+        "双方都不离开景阳冈主空地，位移控制在一个身位内。",
+        "50mm短跟→85mm插入→50mm动作中景→85mm反应近景。"
+      ],
+      "vfx_layers": [
+        "虎尾、衣摆、尘土、断木飞散均服从各自力线，武松不无重力滑行。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "拳落虎倒",
+        "让银猎户",
+        "腰牌任命",
+        "人群让路",
+        "走向家门",
+        "start_state: 梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+        "end_state: 武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+        "entry_exit: 猛虎与猎户随蒙太奇结束；武松换为都头装并进入阳谷街。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "手部与 LOC_JINGYANGGANG 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "五个蒙太奇镜位分别生成，禁止把虎、猎户、任命人群和家门压进同一画面。",
+      "risk_type": "ensemble_blocking",
+      "screen_positions": [
+        "武松始终为主焦点；猎户群像只在让银镜两侧，人群让路时只用侧背与纵深，不排成正脸横列。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "武大挑担",
+        "街市压低人物",
+        "楼窗切换",
+        "潘金莲心声",
+        "start_state: 武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+        "end_state: 武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+        "entry_exit: 武松暂在街巷画外靠近；武大在街下，潘金莲在楼上。；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL",
+        "街道低位跟武大炊饼担，切楼窗格栅后的潘金莲；她的心声覆盖武大低头叫卖。"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "手部与 LOC_WUDA_HOME 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "街下劳作和楼上心声分成两个独立take，用叫卖声与视线连接。",
+      "risk_type": "ensemble_blocking",
+      "screen_positions": [
+        "武大只在街下镜位，潘金莲只在楼上窗后镜位；以高低空间并置，不做同框清晰双脸。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "兄弟相认",
+        "稳住担子",
+        "上楼",
+        "潘金莲初见",
+        "start_state: 武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+        "end_state: 三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+        "entry_exit: 武松由街口入画；三人从街面经楼梯换入室内，炊饼担留在楼下。；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP",
+        "武大放下担子抱住武松；武松扶稳哥哥。楼梯向上转场，潘金莲的视线先扫腰牌再停在武松脸上。"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "手部与 LOC_WUDA_HOME 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "若三人同框不稳，按兄弟双人、上楼背影、潘金莲单人反应三take剪辑。",
+      "risk_type": "multi_character_same_frame",
+      "screen_positions": [
+        "CHAR_WUSONG：街面居中偏右、上楼后室内画右",
+        "CHAR_WUDA：街面自画右入、楼梯前位",
+        "CHAR_PANJINLIAN：楼上画左，只在初见反应镜清晰",
+        "街面武松居中、武大自画右入；上楼后武大前、武松后，潘金莲在楼上画左等候。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "合理照应",
+        "武松礼貌接受",
+        "月余三次试探",
+        "物理距离逐近",
+        "武松退回礼法边界",
+        "start_state: 三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+        "end_state: 一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+        "entry_exit: 武大首拍在场，后续蒙太奇转为画外劳作；武松已在此住满一个月。；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "手部与 LOC_WUDA_HOME 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "若月余蒙太奇不稳，拆成茶盏、针线、饭碗三个器物插入镜，加窗光变化串联。",
+      "risk_type": "relationship_turn",
+      "screen_positions": [
+        "CHAR_PANJINLIAN：桌面画左",
+        "CHAR_WUSONG：桌面画右",
+        "CHAR_WUDA：首拍中景关系锚，随后转画外",
+        "潘始终画左、武松画右；桌沿与器物形成中央边界，武大首拍居中后转画外。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "武大出门",
+        "门闩落下",
+        "半杯推近",
+        "武松提出等哥哥",
+        "start_state: 一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+        "end_state: 雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+        "entry_exit: 武大由门口出画并留在屋外；叔嫂留在室内，禁止新增旁人。；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE",
+        "武大背影消失在雪街，潘关门落闩；室内冷暖分界中，她把酒盏推向炭盆，武松不接。"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。"
+      ],
+      "degrade_plan": "门闩、酒盏、两人单人反应分四take剪辑。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_PANJINLIAN：炭盆左侧",
+        "CHAR_WUSONG：桌面右侧",
+        "CHAR_WUDA：仅首镜门外背影，随后画外",
+        "潘画左、武松画右、炭盆居下方中央；门在画右后。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "否认逼迫",
+        "贬低武大",
+        "武松抬眼",
+        "亲哥哥边界",
+        "start_state: 雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+        "end_state: 武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+        "entry_exit: 武大仍在画外卖饼；室内只有叔嫂。；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE",
+        "潘金莲在炭火近景说武大不懂心疼；炊饼担插入只作一闪。反打武松抬眼，强调‘亲哥哥’。"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "手部与 LOC_WUDA_HOME 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "两人单人近景与炊饼担插入镜剪辑，不做双人复杂运动。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_PANJINLIAN：炭盆左侧近景",
+        "CHAR_WUSONG：桌面右侧近景",
+        "潘左武松右，桌面与酒盏保持中线边界。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "半杯越线",
+        "要求直视",
+        "挡杯",
+        "酒泼炭响",
+        "武松起身",
+        "明确警告",
+        "start_state: 武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+        "end_state: 酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。"
+      ],
+      "clip_id": "Clip_09",
+      "contact_points": [
+        "按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。"
+      ],
+      "degrade_plan": "拆成杯越线、手背挡杯、酒液落地、武松起身、潘反应五take。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_PANJINLIAN：画左坐姿低位",
+        "CHAR_WUSONG：画右坐姿后起身高位",
+        "潘左坐、武松右坐后起身；桌面中线和炭盆为边界，杯由左越向右后落在中央下方。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "武大见泪眼",
+        "见打翻酒杯",
+        "潘反咬",
+        "武大迟疑",
+        "看向沉默武松",
+        "start_state: 酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+        "end_state: 武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+        "entry_exit: 武大由门口入画；武松退到画右外但仍在屋内。；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE"
+      ],
+      "clip_id": "Clip_10",
+      "contact_points": [
+        "手部与 LOC_WUDA_HOME 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "泪眼、酒杯、武大反应、画外武松四镜剪辑。",
+      "risk_type": "reveal_reaction_chain",
+      "screen_positions": [
+        "CHAR_PANJINLIAN：画左泪眼主焦点",
+        "CHAR_WUDA：画右后门口入、迟疑反应",
+        "CHAR_WUSONG：画右外，只作沉默画外对象",
+        "武大由画右后门口入，潘在画左，武松退至画右外；地上酒杯保持中央下方。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "沉默",
+        "系行李",
+        "武大追问",
+        "门槛告别",
+        "不碰门闩",
+        "start_state: 武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+        "end_state: 武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+        "entry_exit: 武松从屋内出门；武大与潘留在屋内。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR"
+      ],
+      "clip_id": "Clip_11",
+      "contact_points": [
+        "按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。"
+      ],
+      "degrade_plan": "行李ECU、武大反应、武松门槛CU三镜剪辑。",
+      "risk_type": "relationship_turn",
+      "screen_positions": [
+        "CHAR_WUSONG：画右至门槛主焦点",
+        "CHAR_WUDA：中景追问者",
+        "CHAR_PANJINLIAN：画左后景焦外",
+        "武松由屋内画右向门槛纵深走；武大追到中景；潘留画左后景焦外。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "脚落雪街",
+        "武松走远",
+        "家门合上",
+        "武大留在门内",
+        "潘留在更深后景",
+        "start_state: 武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+        "end_state: 武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+        "entry_exit: 武松离开武大家；武大和潘留在门内。；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC"
+      ],
+      "clip_id": "Clip_12",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "脚步远离与门内剪影两张关键画面做轻运动剪辑。",
+      "risk_type": "relationship_turn",
+      "screen_positions": [
+        "CHAR_WUSONG：街外纵深背影",
+        "CHAR_WUDA：门内靠前剪影",
+        "CHAR_PANJINLIAN：门内更深后景剪影",
+        "武松在街外纵深远离；门框居中；武大门内靠前，潘在更深后景，仅以剪影分层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "公文与礼担",
+        "知县交代",
+        "武松领命",
+        "start_state: 武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+        "end_state: 武松在衙门抱拳领命，确认明日押礼担赴东京。",
+        "entry_exit: 完整换场到县衙；武大、潘不在场。；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR",
+        "公文展开与礼担绳结插入，知县在案后交代；武松抱拳接令。"
+      ],
+      "clip_id": "Clip_13",
+      "contact_points": [
+        "手部与 LOC_COUNTY_YAMEN 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "公文、知县、武松三镜剪辑。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_MAGISTRATE：画左案后",
+        "CHAR_WUSONG：画右下站立听令",
+        "知县画左案后、武松画右下站立；公文居中央前景。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "整理衣领",
+        "少出早归",
+        "早闭门户",
+        "承诺回来",
+        "武大点头",
+        "start_state: 武松在衙门抱拳领命，确认明日押礼担赴东京。",
+        "end_state: 武松已转身向城门与礼担走去，武大停在家门外目送。",
+        "entry_exit: 武松离开家门走向礼担；武大停在门外；潘在楼窗后画外。；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN"
+      ],
+      "clip_id": "Clip_14",
+      "contact_points": [
+        "手部与 LOC_WUDA_HOME 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "武松CU、武大CU、两人门前WS三镜。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_WUDA：家门外画左",
+        "CHAR_WUSONG：家门外画右，随后转向纵深",
+        "CHAR_PANJINLIAN：楼窗画外，只留帘影",
+        "武松画右、武大画左；家门在后，出城方向向画面纵深。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "武松出城",
+        "潘隔帘目送",
+        "街下视线抬起",
+        "叉竿轻响",
+        "切黑",
+        "start_state: 武松已转身向城门与礼担走去，武大停在家门外目送。",
+        "end_state: 武松已出城；潘仍在楼窗后；陌生男子只露檐影下眼部与叉竿，身份未揭。",
+        "entry_exit: 武松离开阳谷；武大留在家门外后转画外；潘在楼窗；陌生男子由街下进入局部视野。；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN"
+      ],
+      "clip_id": "Clip_15",
+      "contact_points": [
+        "按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。"
+      ],
+      "degrade_plan": "城门背影、潘眼部、陌生眼部与叉竿声三镜剪辑，不做复杂同框。",
+      "risk_type": "reveal_reaction_chain",
+      "screen_positions": [
+        "武松在远处城门纵深；潘在楼窗上方；陌生男子只在街下檐影局部入画。"
+      ],
+      "vfx_layers": []
+    }
+  ],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [
+      {
+        "id": "PROP_QUARTERSTAFF",
+        "lock": "梢棒先整后断成两截；断棒后才徒手反击"
+      },
+      {
+        "id": "PROP_WINE_CUP",
+        "lock": "同一浅陶酒盏；递杯→打翻→酒落地顺序不可乱"
+      },
+      {
+        "id": "PROP_LUGGAGE",
+        "lock": "武松行李包裹与扁担，搬离路径连续"
+      },
+      {
+        "id": "PROP_OFFICIAL_DOC",
+        "lock": "县令公差文书与封缄；画面正文后期叠字"
+      }
+    ],
+    "characters": [
+      {
+        "form": "28岁打虎态/都头态",
+        "id": "CHAR_WUSONG",
+        "lock": "同一脸部DNA；服装状态可变",
+        "source": "设定库/characters/武松.md"
+      },
+      {
+        "form": "25岁武大家常态",
+        "id": "CHAR_PANJINLIAN",
+        "lock": "低髻木簪、青黛窄袖、暗枣红裙；禁艳俗化",
+        "source": "设定库/characters/潘金莲.md"
+      },
+      {
+        "form": "日常卖饼态/家中常态",
+        "id": "CHAR_WUDA",
+        "lock": "成年自然矮身量；禁儿童化和喜剧畸形",
+        "source": "设定库/characters/武大.md"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "LOC_JINGYANGGANG",
+        "lock": "榜文—青石—林缘—虎来向",
+        "source": "设定库/locations/景阳冈.md"
+      },
+      {
+        "id": "LOC_WUDA_HOME",
+        "lock": "南街门—右侧木梯—二楼临街窗—北灶间/后门",
+        "source": "设定库/locations/武大家楼屋与街面.md"
+      }
+    ]
+  },
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "dramatic_function": "把观众直接丢进虎扑最危险的一瞬，先问他能否活。",
+      "editing_intent": "85mm 虎爪 ECU 硬开场，接武松贴地闪避与虎爪砸地插入；按动作匹配剪切，不延长血腥搏杀。",
+      "emotional_turn": "猝然受袭→屏息判断",
+      "source_trace_ids": [
+        "SRC_MOTIVE_002"
+      ],
+      "visual_question": "虎口将合时，武松能否避开第一击？"
+    },
+    {
+      "clip_id": "Clip_02",
+      "dramatic_function": "完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。",
+      "editing_intent": "三次攻防逐拍加速，以尾剪、断棒声和握拳反应作冲击剪切；棒断后抽空声场再落近景。",
+      "emotional_turn": "从容避让→断棒绝境→赤手迎敌",
+      "source_trace_ids": [
+        "SRC_MOTIVE_002"
+      ],
+      "visual_question": "失去梢棒后，他还敢不敢迎虎？"
+    },
+    {
+      "clip_id": "Clip_03",
+      "dramatic_function": "快速兑现打虎结局、让银与任都头，再用门影把胜利转成人心难题。",
+      "editing_intent": "拳落、死虎、让银、腰牌、人群让路五个短镜压缩成蒙太奇；腰牌碰响图形匹配家门门闩。",
+      "emotional_turn": "生死搏杀→英雄荣誉→家门阴影",
+      "source_trace_ids": [
+        "SRC_MOTIVE_002",
+        "SRC_PROMISE_001"
+      ],
+      "visual_question": "山中胜虎之后，家门内真正难对付的是什么？"
+    },
+    {
+      "clip_id": "Clip_04",
+      "dramatic_function": "用武大低处挑担与潘金莲高处受困的空间反差，交代婚姻困局而不替任何人洗白。",
+      "editing_intent": "街面低机位跟武大挑担，按叫卖声 J-cut 到楼窗高位长焦；上下空间反差保持同一街巷轴线。",
+      "emotional_turn": "日常劳作→窗后窒息",
+      "source_trace_ids": [
+        "SRC_MOTIVE_003"
+      ],
+      "visual_question": "楼窗后的潘金莲究竟在等待什么？"
+    },
+    {
+      "clip_id": "Clip_05",
+      "dramatic_function": "先给兄弟重逢的真情，再让潘金莲的观察改变场景温度。",
+      "editing_intent": "兄弟拥抱以稳定中景完整承接，沿木梯向上匹配剪到潘金莲视线插入；暖意在目光落到腰牌时转冷。",
+      "emotional_turn": "重逢温暖→被审视的不安",
+      "source_trace_ids": [
+        "SRC_MOTIVE_003"
+      ],
+      "visual_question": "潘金莲看见的是归家的叔叔，还是新的可能？"
+    },
+    {
+      "clip_id": "Clip_06",
+      "dramatic_function": "让‘照应’的合理表面逐渐变成越界距离，武松的克制也被建立。",
+      "editing_intent": "以茶盏、桌沿和座位距离三次匹配剪辑压缩一个月；每次潘更近，武松把器物推回中线。",
+      "emotional_turn": "礼貌照应→持续试探",
+      "source_trace_ids": [
+        "SRC_MOTIVE_003"
+      ],
+      "visual_question": "一次次靠近，武松会不会松动边界？"
+    },
+    {
+      "clip_id": "Clip_07",
+      "dramatic_function": "让门闩把普通家屋变成伦理压力锅；武松第一次口头设置共同饮酒边界。",
+      "editing_intent": "武大背影离场后切门闩 ECU，落闩声作段落重音；室内固定轴线正反打，酒盏只到中线不越线。",
+      "emotional_turn": "雪夜空屋→封闭压迫",
+      "source_trace_ids": [
+        "SRC_CAUSE_001"
+      ],
+      "visual_question": "门一关上，潘金莲会把试探推到哪一步？"
+    },
+    {
+      "clip_id": "Clip_08",
+      "dramatic_function": "潘用婚姻不满作情感筹码；武松把问题重新锚回兄弟伦理。",
+      "editing_intent": "潘金莲近景与武松反打保持互补视线，中间只闪一次炊饼担插入；‘亲哥哥’落在稳定近景并留半拍。",
+      "emotional_turn": "诉苦拉近→伦理挡回",
+      "source_trace_ids": [
+        "SRC_CAUSE_001"
+      ],
+      "visual_question": "情感诉苦能否绕过武松对兄长的忠义？"
+    },
+    {
+      "clip_id": "Clip_09",
+      "dramatic_function": "把试探升级为明确越线，再以摔杯和警告完成武松的主动拒绝。",
+      "editing_intent": "酒盏 ECU 越过中线，按手背一挡切到落杯爆响，再仰拍武松起身；用冲击剪切完成边界反击。",
+      "emotional_turn": "暧昧越线→克制爆发",
+      "source_trace_ids": [
+        "SRC_CAUSE_001"
+      ],
+      "visual_question": "武松会沉默躲开，还是当面拒绝？"
+    },
+    {
+      "clip_id": "Clip_10",
+      "dramatic_function": "潘抢先占据叙述权，把越界者变成受害者；武大虽不信却没有能力核验。",
+      "editing_intent": "反应优先：先给潘泪眼，再给地上酒杯证物，最后反打武大迟疑；武松保持画外，避免三人同框稀释叙述争夺。",
+      "emotional_turn": "拒绝爽点→叙述反咬",
+      "source_trace_ids": [
+        "SRC_CAUSE_001"
+      ],
+      "visual_question": "谁先说出口，谁就会得到武大的相信吗？"
+    },
+    {
+      "clip_id": "Clip_11",
+      "dramatic_function": "武松拒绝争夺叙述权，以搬离阻止冲突继续，却承认自己守不住这扇门。",
+      "editing_intent": "行李绳 ECU 收紧图形匹配武松决心；随后门槛双人反打，武松不碰门闩，话尽即转身。",
+      "emotional_turn": "被误解→主动退让",
+      "source_trace_ids": [
+        "SRC_CAUSE_001",
+        "SRC_FORESHADOW_001"
+      ],
+      "visual_question": "离开能平息闲话，还是会留下更危险的空位？"
+    },
+    {
+      "clip_id": "Clip_12",
+      "dramatic_function": "用门的物理闭合呈现保护关系断裂，不追加解释。",
+      "editing_intent": "固定对称机位长留：武松走入雪街纵深，门在中轴缓慢合上；关门声后留一拍静默。",
+      "emotional_turn": "决绝离门→危险空位成立",
+      "source_trace_ids": [
+        "SRC_FORESHADOW_001"
+      ],
+      "visual_question": "这扇门合上后，里面的人还有谁能守？"
+    },
+    {
+      "clip_id": "Clip_13",
+      "dramatic_function": "以合理公务把武松从阳谷移开，为下一集危险发生制造时间与空间条件。",
+      "editing_intent": "公文封缄与礼担绳结用插入镜交账，知县中景交代后反打武松接令；文书正文只留版式占位。",
+      "emotional_turn": "暂得安稳→被公务调离",
+      "source_trace_ids": [
+        "SRC_FORESHADOW_001"
+      ],
+      "visual_question": "这趟东京公差会让家门失守多久？"
+    },
+    {
+      "clip_id": "Clip_14",
+      "dramatic_function": "武松把能想到的防线都交给哥哥，却不知道危险就在门内与窗外。",
+      "editing_intent": "门外双人反打保持 85mm 克制距离，整衣领动作一触即收；以楼窗帘影作非抢焦插入，形成观众独享信息。",
+      "emotional_turn": "兄弟叮嘱→反讽担忧",
+      "source_trace_ids": [
+        "SRC_FORESHADOW_001"
+      ],
+      "visual_question": "武松的叮嘱能否抵住他离城后的风险？"
+    },
+    {
+      "clip_id": "Clip_15",
+      "dramatic_function": "确认武松离城，同时只以眼神和叉竿声引入新的欲望主体，不提前揭面。",
+      "editing_intent": "35mm 城门纵深看礼担缩小，切 85mm 隔帘潘金莲，再切陌生男子眼部剪影；叉竿碰檐声上硬切黑。",
+      "emotional_turn": "保护者离开→陌生危险逼近",
+      "source_trace_ids": [
+        "SRC_FORESHADOW_001",
+        "SRC_PROMISE_001"
+      ],
+      "visual_question": "帘外走近的那双眼属于谁？"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

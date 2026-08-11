@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_vertical_composition_plan",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "composition_rules": {
+    "safe_zone": "上下各留约8%，左右各留约6%；底部130px字幕区不放关键手、酒盏、公文或门闩。",
+    "face_readability": "核心反应脸高度至少占画面约18%；双人镜不足时拆单人反打，不挤成小脸。",
+    "z_axis_depth": "优先前景道具—中景人物—后景门/窗的纵深，不把三人横排。",
+    "overlay_policy": "标题、公文正文与字幕统一compose overlay；生成画面只留干净承载面。"
+  },
+  "beat_composition": [
+    {"beat_id": "Beat_01", "primary_subject_zone": "武松眼/拳在上中，虎爪从右上压入", "foreground_midground_background": "虎爪前景—武松中景—青石树林后景", "subtitle_clearance": "下方枯土地面留空", "vertical_motion": "虎由上压下，武松下沉再起身"},
+    {"beat_id": "Beat_02", "primary_subject_zone": "拳落与腰牌居中上", "foreground_midground_background": "拳/腰牌前景—武松/猎户中景—荒冈或街面后景", "subtitle_clearance": "道具不进入底部字幕区", "vertical_motion": "拳下落后以腰牌垂直摆动停住"},
+    {"beat_id": "Beat_03", "primary_subject_zone": "兄弟脸在中上；潘金莲从画左窗框进入", "foreground_midground_background": "门框前景—三人中景—楼窗/梯后景", "subtitle_clearance": "底部留街地或桌沿", "vertical_motion": "街面入门后沿楼梯上行，空间自然收窄"},
+    {"beat_id": "Beat_04", "primary_subject_zone": "潘左上、武松右上，火盆居中下但高于字幕区", "foreground_midground_background": "酒盏前景—两人中景—门闩/窗雪后景", "subtitle_clearance": "字幕落在暗色地板留白", "vertical_motion": "门闩下落、酒盏上举、武松微后撤"},
+    {"beat_id": "Beat_05", "primary_subject_zone": "半杯酒居中，双方反应脸分列中上", "foreground_midground_background": "酒盏前景—二人中景—楼梯脚步后景", "subtitle_clearance": "酒液落点避开字幕字框", "vertical_motion": "酒盏被打翻向下，潘视线由酒落点抬向武松"},
+    {"beat_id": "Beat_06", "primary_subject_zone": "潘/武大在画左中上，武松在画右靠门", "foreground_midground_background": "行李绳前景—三人中景—门/楼梯后景", "subtitle_clearance": "人物脚和行李不占底部130px", "vertical_motion": "扁担从地面抬肩，随后人物沿楼梯下行"},
+    {"beat_id": "Beat_07", "primary_subject_zone": "公文居中上、武松背影沿纵深缩小、潘脸在楼窗中上", "foreground_midground_background": "公文/窗棂前景—人物中景—城门/街面后景", "subtitle_clearance": "公文留白在画面上半，底部只留路面", "vertical_motion": "印章落桌、城门纵深离开、窗后目光下落"}
+  ]
+}

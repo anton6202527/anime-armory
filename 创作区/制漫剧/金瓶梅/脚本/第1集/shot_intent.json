@@ -1,0 +1,226 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 2,
+  "episode": "第1集",
+  "storyboard_sha": "dd2aa0d9084fe65e86e6e7fd96ec6e5e081efb04f94365efab7d946479d24c39",
+  "shots": [
+    {
+      "clip": "EP01_CLIP01",
+      "clip_no": 1,
+      "expression_span": "中",
+      "seam_mode": "match_on_action",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "clip_no": 2,
+      "expression_span": "大",
+      "seam_mode": "match_on_action",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "clip_no": 3,
+      "expression_span": "中",
+      "seam_mode": "dissolve",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "clip_no": 4,
+      "expression_span": "中",
+      "seam_mode": "j_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "clip_no": 5,
+      "expression_span": "中",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "clip_no": 6,
+      "expression_span": "中",
+      "seam_mode": "dissolve",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "clip_no": 7,
+      "expression_span": "中",
+      "seam_mode": "l_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "clip_no": 8,
+      "expression_span": "中",
+      "seam_mode": "match_on_action",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "clip_no": 9,
+      "expression_span": "大",
+      "seam_mode": "j_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "clip_no": 10,
+      "expression_span": "大",
+      "seam_mode": "reaction_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "clip_no": 11,
+      "expression_span": "中",
+      "seam_mode": "match_on_action",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "clip_no": 12,
+      "expression_span": "微",
+      "seam_mode": "graphic_match",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "clip_no": 13,
+      "expression_span": "中",
+      "seam_mode": "l_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP14",
+      "clip_no": 14,
+      "expression_span": "中",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "clip_no": 15,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "CHAR_WUSONG",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "景阳冈酒后战损、梢棒断裂→获腰牌整肃都头装→武大家克制常服→搬离后行李态→东京差遣出城态；不留无来源新伤。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_WUDA",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "街市劳作态→兄弟重逢喜悦→火盆事件不知情→受反咬后迟疑惶恐→送别时担忧加深。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_PANJINLIAN",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "楼窗压抑观察→试探性温柔→雪夜主动封门→被拒后的羞怒→对武大表演受害→集尾隔帘冷眼；不做露骨情色化。",
+      "source": "seed"
+    },
+    {
+      "character": "BEAST_TIGER",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "完整扑击态→梢棒命中但棒断→被赤手压制→战败静止；不复活、不增加猎奇伤口。",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/seam_mode/need_endframe/end_anchor_required/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

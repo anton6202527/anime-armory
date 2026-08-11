@@ -21,6 +21,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -93,6 +94,12 @@ def pick_cover_subject(root: Path) -> Dict[str, Any]:
     def rank(ch: Mapping[str, Any]) -> Tuple[int, int]:
         tier = str(ch.get("library_tier") or "")
         scope = str(ch.get("tier") or "") + str(ch.get("scope") or "")
+        scope = re.sub(
+            r"(?:不|非|不是|并非|仅|只)(?:作为|属于|是|做|担任)?[^。；，,]{0,12}"
+            r"(?:核心|主角|女主|男主|主反派)",
+            "",
+            scope,
+        )
         core = 0 if tier == "core_full" or "核心" in scope or "主角" in scope else 1
         planned = -int(ch.get("planned_episode_count") or 0)
         return core, planned
@@ -129,7 +136,11 @@ def _first_episode_cover_ref(root: Path) -> str:
     script_dir = root / "脚本"
     if not script_dir.is_dir():
         return ""
-    for ep in sorted(p.name for p in script_dir.iterdir() if p.is_dir()):
+    def episode_key(name: str) -> Tuple[int, int, str]:
+        match = re.fullmatch(r"第\s*(\d+)\s*集", name)
+        return (0, int(match.group(1)), name) if match else (1, 0, name)
+
+    for ep in sorted((p.name for p in script_dir.iterdir() if p.is_dir()), key=episode_key):
         cover_md = script_dir / ep / "封面.md"
         if cover_md.is_file():
             return f"脚本/{ep}/封面.md"

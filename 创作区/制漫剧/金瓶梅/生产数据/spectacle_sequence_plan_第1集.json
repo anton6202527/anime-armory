@@ -1,0 +1,341 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/金瓶梅",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_01",
+      "source_id": "EP01_CLIP01",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_PANJINLIAN",
+        "CHAR_WUDA",
+        "CHAR_WUSONG"
+      ],
+      "loc": "LOC_JINGYANGGANG",
+      "assets": [
+        "BEAST_TIGER",
+        "CHAR_PANJINLIAN",
+        "CHAR_WUDA",
+        "CHAR_WUSONG",
+        "LOC_JINGYANGGANG",
+        "PROP_QUARTERSTAFF"
+      ],
+      "screen_direction": "虎上武松下，人物不交换方位。",
+      "spatial_path": "虎沿纵深轴扑下，武松只横移半身位。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "ECU固定→贴地横移，镜头行程短。",
+      "in_state": "冷开场：武松贴地，虎爪已压到脸前。",
+      "out_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+      "continuity_text": "冷开场：武松贴地，虎爪已压到脸前。 武松在画右半跪回望，猛虎转身准备再扑。 动作继续进入三扑拆招。 match_on_action 虎前爪落地后扭身蓄第二扑 下一镜虎身完成转向并连续发动后两扑 虎仍由上方向下压，武松由下方闪避 False 两者始终在景阳冈空地；梢棒仍在武松画外手边。 ECU 武松由画右下看向画左上猛虎 中 出图/第1集/图片/EP01_CLIP01_a1.png 2.1 edit_cut 虎爪ECU切贴地闪避CU的剪辑边界",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_02",
+      "source_id": "EP01_CLIP02",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_PANJINLIAN",
+        "CHAR_WUDA",
+        "CHAR_WUSONG"
+      ],
+      "loc": "LOC_JINGYANGGANG",
+      "assets": [
+        "BEAST_TIGER",
+        "CHAR_PANJINLIAN",
+        "CHAR_WUDA",
+        "CHAR_WUSONG",
+        "LOC_JINGYANGGANG",
+        "PROP_BADGE",
+        "PROP_QUARTERSTAFF",
+        "PROP_REWARD_SILVER"
+      ],
+      "screen_direction": "猛虎上方、武松下方的主关系不反转。",
+      "spatial_path": "双方都不离开景阳冈主空地，位移控制在一个身位内。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "50mm短跟→85mm插入→50mm动作中景→85mm反应近景。",
+      "in_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+      "out_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+      "continuity_text": "武松在画右半跪回望，猛虎转身准备再扑。 梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。 拳头前送动作切入胜利蒙太奇。 match_on_action 武松右拳从胸前开始前送 下一镜只以拳落与虎倒的结果性剪影完成兑现 反击由下向上 False 断棒落在武松画左脚边；猛虎仍在上方。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER CU 武松向上盯虎 大 True 出图/第1集/图片/EP01_CLIP02_a1.png 2.4 edit_cut 扑掀两招切虎尾横扫 出图/第1集/图片/EP01_CLIP02_a2.png 4.8 edit_cut 虎尾避让切抡棒第三扑 出图/第1集/图片/EP01_CLIP02_a3.png 7.3 edit_cut 断棒撞点切武松握拳反应",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_ACTION_01",
+      "sequence_type": "fight_exchange",
+      "clip_order": [
+        "Clip_01",
+        "Clip_02"
+      ],
+      "spectacle_types": [
+        "fight_exchange",
+        "fight_exchange"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_PANJINLIAN",
+          "CHAR_WUDA",
+          "CHAR_WUSONG"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "BEAST_TIGER",
+          "CHAR_PANJINLIAN",
+          "CHAR_WUDA",
+          "CHAR_WUSONG",
+          "LOC_JINGYANGGANG",
+          "PROP_BADGE",
+          "PROP_QUARTERSTAFF",
+          "PROP_REWARD_SILVER"
+        ],
+        "locs": [
+          "LOC_JINGYANGGANG"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "虎上武松下，人物不交换方位。",
+          "猛虎上方、武松下方的主关系不反转。"
+        ],
+        "spatial_path_global": [
+          "虎沿纵深轴扑下，武松只横移半身位。",
+          "双方都不离开景阳冈主空地，位移控制在一个身位内。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "ECU固定→贴地横移，镜头行程短。",
+          "50mm短跟→85mm插入→50mm动作中景→85mm反应近景。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_01",
+          "in": "冷开场：武松贴地，虎爪已压到脸前。",
+          "out": "武松在画右半跪回望，猛虎转身准备再扑。",
+          "continuity": "冷开场：武松贴地，虎爪已压到脸前。 武松在画右半跪回望，猛虎转身准备再扑。 动作继续进入三扑拆招。 match_on_action 虎前爪落地后扭身蓄第二扑 下一镜虎身完成转向并连续发动后两扑 虎仍由上方向下压，武松由下方闪避 False 两者始终在景阳冈空地；梢棒仍在武松画外手边。 ECU 武松由画右下看向画左上猛虎 中 出图/第1集/图片/EP01_CLIP01_a1.png 2.1 edit_cut 虎爪ECU切贴地闪避CU的剪辑边界"
+        },
+        {
+          "clip_id": "Clip_02",
+          "in": "武松在画右半跪回望，猛虎转身准备再扑。",
+          "out": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+          "continuity": "武松在画右半跪回望，猛虎转身准备再扑。 梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。 拳头前送动作切入胜利蒙太奇。 match_on_action 武松右拳从胸前开始前送 下一镜只以拳落与虎倒的结果性剪影完成兑现 反击由下向上 False 断棒落在武松画左脚边；猛虎仍在上方。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER CU 武松向上盯虎 大 True 出图/第1集/图片/EP01_CLIP02_a1.png 2.4 edit_cut 扑掀两招切虎尾横扫 出图/第1集/图片/EP01_CLIP02_a2.png 4.8 edit_cut 虎尾避让切抡棒第三扑 出图/第1集/图片/EP01_CLIP02_a3.png 7.3 edit_cut 断棒撞点切武松握拳反应"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "pose_sequence"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_01",
+          "Clip_02"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 2,
+    "sequences": 1,
+    "action_sequences": 1,
+    "large_scene_sequences": 0,
+    "multi_clip_sequences": 1
+  }
+}

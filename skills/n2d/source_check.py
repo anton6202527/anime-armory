@@ -17,8 +17,16 @@
 """
 import sys, os, re, json, glob, hashlib
 
-CH_TXT_RE = re.compile(r"^第\s*([0-9一二三四五六七八九十百零〇两]+)\s*章", re.M)  # 导出 txt 章标记
-RAW_CH_RE = re.compile(r"第\s*([0-9一二三四五六七八九十百零〇两]+)\s*章")  # raw.txt 原文章号(中/阿)
+_CHAPTER_UNITS = "章回囬囘廻节節卷"
+_HUI_UNITS = frozenset("回囬囘廻")
+CH_TXT_RE = re.compile(
+    rf"^\s*(?:\[编辑\]\s*)?第\s*([0-9一二三四五六七八九十百零〇两]+)\s*([{_CHAPTER_UNITS}])",
+    re.M,
+)  # 导出 txt 章/回标记（兼容明清刻本异体字）
+RAW_CH_RE = re.compile(
+    rf"^\s*(?:\[编辑\]\s*)?第\s*([0-9一二三四五六七八九十百零〇两]+)\s*([{_CHAPTER_UNITS}])",
+    re.M,
+)  # raw.txt 原文章/回号(中/阿)
 EP_RE = re.compile(r"第(\d+)集")
 _CN_D = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
          "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
@@ -43,10 +51,23 @@ def _h(s):
     return hashlib.sha1(re.sub(r"\s+", "", s).encode("utf-8")).hexdigest()[:12]
 
 
+def _preferred_marks(text, pattern):
+    """Prefer real 章回 headings over volume-wrapper ``第N章`` exports.
+
+    Some public-domain editions wrap every ten hui in a synthetic ``第N章``
+    while the actual story units use ``第一囬`` ... ``第一百囬``. Mixing both
+    systems would overwrite hashes 1-10 and report a ten-chapter book. If any
+    hui-style headings exist, they are the canonical source units.
+    """
+    marks = list(pattern.finditer(text or ""))
+    hui = [mark for mark in marks if mark.group(2) in _HUI_UNITS]
+    return hui or marks
+
+
 def hashes_from_txt(txt_path):
-    """从导出 txt 按 第N章 切开，每章正文哈希。"""
+    """从导出 txt 按 第N章/回 切开，每个真实源单元正文哈希。"""
     text = open(txt_path, encoding="utf-8", errors="replace").read()
-    marks = list(CH_TXT_RE.finditer(text))
+    marks = _preferred_marks(text, CH_TXT_RE)
     out = {}
     for i, m in enumerate(marks):
         end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
@@ -78,7 +99,8 @@ def map_chapter_to_eps(root):
         raw = os.path.join(d, "raw.txt")
         if not os.path.isfile(raw):
             continue
-        marks = sorted({cn2int(x) for x in RAW_CH_RE.findall(open(raw, encoding="utf-8", errors="replace").read())})
+        raw_text = open(raw, encoding="utf-8", errors="replace").read()
+        marks = sorted({cn2int(m.group(1)) for m in _preferred_marks(raw_text, RAW_CH_RE)})
         if marks:
             for ch in marks:
                 chap_to_eps.setdefault(ch, []).append(ep)

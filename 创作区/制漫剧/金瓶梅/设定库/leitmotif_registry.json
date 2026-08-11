@@ -1,0 +1,26 @@
+{
+  "kind": "n2d_leitmotif_registry",
+  "version": 1,
+  "motifs": [
+    {
+      "id": "MOTIF_WUSONG",
+      "subject": ["CHAR_WUSONG", "情绪:公义与克制"],
+      "desc": "两记低鼓后接一记短金属上行；动作时坚实，面对家门困局时抽掉最后落音。"
+    },
+    {
+      "id": "MOTIF_JINLIAN",
+      "subject": ["CHAR_PANJINLIAN", "情绪:欲望与受困"],
+      "desc": "琵琶两音下行，第二音悬而不落；主动越界时叠一根轻微失谐低弦，不使用媚俗滑音。"
+    },
+    {
+      "id": "MOTIF_THRESHOLD",
+      "subject": ["主题:家门与边界", "情绪:命案因果启动"],
+      "desc": "门闩木响衍生的稀疏低弦脉冲；每次门被关上、推开或保护失效时复现，逐集增加不协和。"
+    },
+    {
+      "id": "MOTIF_EVIDENCE",
+      "subject": ["主题:命案证据与制度腐败"],
+      "desc": "冷木鱼单击与极低弦脉冲；第1集只在集尾极弱预示，第5-6集药碗、证物和银锭时完整出现。"
+    }
+  ]
+}

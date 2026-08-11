@@ -1,0 +1,503 @@
+{
+  "assets": [],
+  "characters": [],
+  "episodes": [
+    "第1集",
+    "第2集",
+    "第3集",
+    "第4集",
+    "第5集",
+    "第6集",
+    "第7集",
+    "第8集",
+    "第9集",
+    "第10集"
+  ],
+  "findings": [
+    {
+      "code": "missing_identity_registry",
+      "message": "缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。",
+      "severity": "warn"
+    },
+    {
+      "code": "missing_asset_registry",
+      "message": "缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。",
+      "severity": "info"
+    },
+    {
+      "code": "episode_missing_storyboard",
+      "message": "部分集缺 storyboard.json：第2集、第3集、第4集、第5集、第6集、第7集、第8集、第9集",
+      "severity": "info"
+    },
+    {
+      "code": "series_layers_not_registered",
+      "message": "以下剧级层尚未登记：ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory",
+      "severity": "info"
+    }
+  ],
+  "generated_at": "2026-08-11T04:02:09+00:00",
+  "kind": "n2d_series_bible",
+  "narrative_graph": {
+    "episode_nodes": [
+      {
+        "assets": [
+          "LOC_JINGYANGGANG",
+          "PROP_QUARTERSTAFF",
+          "PROP_BADGE",
+          "PROP_REWARD_SILVER",
+          "LOC_YANGGU_STREET",
+          "PROP_CAKE_POLE",
+          "PROP_WINDOW_LATTICE",
+          "LOC_WUDA_HOME",
+          "PROP_STAIR_RAIL",
+          "PROP_DINING_TABLE",
+          "PROP_DOORFRAME",
+          "PROP_TEA_CUP",
+          "PROP_BRAZIER",
+          "PROP_DOOR_LATCH",
+          "PROP_WINE_CUP",
+          "PROP_SPILLED_WINE",
+          "PROP_LUGGAGE",
+          "PROP_DOOR",
+          "PROP_GIFT_LOAD",
+          "PROP_OFFICIAL_DOC",
+          "LOC_COUNTY_YAMEN",
+          "PROP_CURTAIN_FORK",
+          "PROP_WINDOW_CURTAIN",
+          "LOC_CITY_GATE"
+        ],
+        "characters": [
+          "CHAR_WUSONG/酒后战损态",
+          "BEAST_TIGER/扑击态",
+          "CHAR_WUSONG/打虎后至都头态",
+          "BEAST_TIGER/战败态",
+          "CROWD_HUNTERS/群像",
+          "CHAR_WUDA/卖饼劳作态",
+          "CHAR_PANJINLIAN/楼窗压抑态",
+          "CHAR_WUSONG/都头态",
+          "CHAR_WUDA/惊喜态",
+          "CHAR_PANJINLIAN/初见审视态",
+          "CHAR_WUSONG/克制常服态",
+          "CHAR_PANJINLIAN/试探态",
+          "CHAR_WUDA/在场后转画外",
+          "CHAR_WUSONG/克制警觉态",
+          "CHAR_PANJINLIAN/主动试探态",
+          "CHAR_WUDA/出门后画外",
+          "CHAR_PANJINLIAN/急切试探态",
+          "CHAR_WUSONG/愤怒克制态",
+          "CHAR_PANJINLIAN/越界后羞怒态",
+          "CHAR_WUDA/迟疑态",
+          "CHAR_PANJINLIAN/表演受害态",
+          "CHAR_WUSONG/沉默画外",
+          "CHAR_WUSONG/搬离态",
+          "CHAR_WUDA/慌乱态",
+          "CHAR_PANJINLIAN/沉默后景",
+          "CHAR_WUDA/门内态",
+          "CHAR_PANJINLIAN/门内态",
+          "CHAR_WUSONG/都头公务态",
+          "CHAR_MAGISTRATE/知县态",
+          "CHAR_WUSONG/出城行装态",
+          "CHAR_WUDA/送别态",
+          "CHAR_PANJINLIAN/楼窗画外",
+          "CHAR_WUSONG/出城远景",
+          "CHAR_PANJINLIAN/隔帘态",
+          "CHAR_XIMENQING/未揭面剪影态"
+        ],
+        "clip_count": 15,
+        "clips": [
+          {
+            "assets": [
+              "LOC_JINGYANGGANG",
+              "PROP_QUARTERSTAFF"
+            ],
+            "characters": [
+              "CHAR_WUSONG/酒后战损态",
+              "BEAST_TIGER/扑击态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_JINGYANGGANG",
+              "PROP_QUARTERSTAFF",
+              "PROP_BADGE",
+              "PROP_REWARD_SILVER"
+            ],
+            "characters": [
+              "CHAR_WUSONG/酒后战损态",
+              "BEAST_TIGER/扑击态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_JINGYANGGANG",
+              "LOC_YANGGU_STREET",
+              "PROP_BADGE",
+              "PROP_REWARD_SILVER",
+              "PROP_QUARTERSTAFF",
+              "PROP_CAKE_POLE",
+              "PROP_WINDOW_LATTICE"
+            ],
+            "characters": [
+              "CHAR_WUSONG/打虎后至都头态",
+              "BEAST_TIGER/战败态",
+              "CROWD_HUNTERS/群像"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP03"
+          },
+          {
+            "assets": [
+              "LOC_YANGGU_STREET",
+              "PROP_CAKE_POLE",
+              "PROP_WINDOW_LATTICE",
+              "LOC_WUDA_HOME",
+              "PROP_BADGE",
+              "PROP_QUARTERSTAFF",
+              "PROP_REWARD_SILVER",
+              "PROP_STAIR_RAIL"
+            ],
+            "characters": [
+              "CHAR_WUDA/卖饼劳作态",
+              "CHAR_PANJINLIAN/楼窗压抑态"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP04"
+          },
+          {
+            "assets": [
+              "LOC_YANGGU_STREET",
+              "LOC_WUDA_HOME",
+              "PROP_BADGE",
+              "PROP_CAKE_POLE",
+              "PROP_STAIR_RAIL",
+              "PROP_WINDOW_LATTICE",
+              "PROP_DINING_TABLE",
+              "PROP_DOORFRAME",
+              "PROP_TEA_CUP"
+            ],
+            "characters": [
+              "CHAR_WUSONG/都头态",
+              "CHAR_WUDA/惊喜态",
+              "CHAR_PANJINLIAN/初见审视态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP05"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_DINING_TABLE",
+              "PROP_TEA_CUP",
+              "PROP_DOORFRAME",
+              "PROP_BADGE",
+              "PROP_CAKE_POLE",
+              "PROP_STAIR_RAIL",
+              "PROP_BRAZIER",
+              "PROP_DOOR_LATCH",
+              "PROP_WINE_CUP"
+            ],
+            "characters": [
+              "CHAR_WUSONG/克制常服态",
+              "CHAR_PANJINLIAN/试探态",
+              "CHAR_WUDA/在场后转画外"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP06"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_DOOR_LATCH",
+              "PROP_BRAZIER",
+              "PROP_WINE_CUP",
+              "PROP_DINING_TABLE",
+              "PROP_DOORFRAME",
+              "PROP_TEA_CUP",
+              "PROP_CAKE_POLE"
+            ],
+            "characters": [
+              "CHAR_WUSONG/克制警觉态",
+              "CHAR_PANJINLIAN/主动试探态",
+              "CHAR_WUDA/出门后画外"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP07"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_BRAZIER",
+              "PROP_WINE_CUP",
+              "PROP_CAKE_POLE",
+              "PROP_DOOR_LATCH",
+              "PROP_SPILLED_WINE"
+            ],
+            "characters": [
+              "CHAR_WUSONG/克制警觉态",
+              "CHAR_PANJINLIAN/急切试探态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP08"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_BRAZIER",
+              "PROP_WINE_CUP",
+              "PROP_SPILLED_WINE",
+              "PROP_CAKE_POLE",
+              "PROP_DOOR_LATCH"
+            ],
+            "characters": [
+              "CHAR_WUSONG/愤怒克制态",
+              "CHAR_PANJINLIAN/越界后羞怒态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP09"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_CAKE_POLE",
+              "PROP_DOOR_LATCH",
+              "PROP_WINE_CUP",
+              "PROP_BRAZIER",
+              "PROP_SPILLED_WINE",
+              "PROP_LUGGAGE"
+            ],
+            "characters": [
+              "CHAR_WUDA/迟疑态",
+              "CHAR_PANJINLIAN/表演受害态",
+              "CHAR_WUSONG/沉默画外"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP10"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_LUGGAGE",
+              "PROP_DOOR_LATCH",
+              "PROP_WINE_CUP",
+              "PROP_CAKE_POLE",
+              "PROP_DOOR"
+            ],
+            "characters": [
+              "CHAR_WUSONG/搬离态",
+              "CHAR_WUDA/慌乱态",
+              "CHAR_PANJINLIAN/沉默后景"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP11"
+          },
+          {
+            "assets": [
+              "LOC_YANGGU_STREET",
+              "PROP_LUGGAGE",
+              "PROP_DOOR",
+              "PROP_DOOR_LATCH",
+              "LOC_WUDA_HOME",
+              "PROP_WINE_CUP",
+              "PROP_BADGE",
+              "PROP_GIFT_LOAD",
+              "PROP_OFFICIAL_DOC"
+            ],
+            "characters": [
+              "CHAR_WUSONG/搬离态",
+              "CHAR_WUDA/门内态",
+              "CHAR_PANJINLIAN/门内态"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP12"
+          },
+          {
+            "assets": [
+              "LOC_COUNTY_YAMEN",
+              "PROP_OFFICIAL_DOC",
+              "PROP_GIFT_LOAD",
+              "PROP_BADGE",
+              "PROP_DOOR",
+              "PROP_DOOR_LATCH",
+              "PROP_LUGGAGE"
+            ],
+            "characters": [
+              "CHAR_WUSONG/都头公务态",
+              "CHAR_MAGISTRATE/知县态"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP13"
+          },
+          {
+            "assets": [
+              "LOC_WUDA_HOME",
+              "PROP_GIFT_LOAD",
+              "PROP_DOOR",
+              "PROP_BADGE",
+              "PROP_OFFICIAL_DOC",
+              "PROP_CURTAIN_FORK",
+              "PROP_WINDOW_CURTAIN"
+            ],
+            "characters": [
+              "CHAR_WUSONG/出城行装态",
+              "CHAR_WUDA/送别态",
+              "CHAR_PANJINLIAN/楼窗画外"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP14"
+          },
+          {
+            "assets": [
+              "LOC_CITY_GATE",
+              "LOC_YANGGU_STREET",
+              "PROP_GIFT_LOAD",
+              "PROP_WINDOW_CURTAIN",
+              "PROP_CURTAIN_FORK",
+              "PROP_BADGE",
+              "PROP_DOOR"
+            ],
+            "characters": [
+              "CHAR_WUSONG/出城远景",
+              "CHAR_PANJINLIAN/隔帘态",
+              "CHAR_XIMENQING/未揭面剪影态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP15"
+          }
+        ],
+        "episode": "第1集",
+        "has_storyboard": true,
+        "hooks": [
+          "[镜头1·旁白·紧张·快] 武松睁眼时，虎爪已经压到脸前——今晚，是一场生死搏杀。  ⚡钩子",
+          "[镜头4·武松·惊愕·快] 棒断了！  ⚡钩子",
+          "[镜头6·旁白·昂扬·快] 因为他打死猛虎、又把赏银让给猎户，武松赢得满城敬重，也获得了都头腰牌。  💥爽点",
+          "[镜头11·武松·温暖] 哥，我回来了。  💥情绪回报",
+          "[镜头13·潘金莲·试探·慢] 叔叔一个人在外住，连口热饭都没有。我想要一家人住得近些，也好照应。  ⚡欲望钩",
+          "[镜头16·旁白·紧张] 大雪封街这天，武大刚出门，那扇门就在她手里关闭，门闩随即落下。  ⚡钩子 💥转折"
+        ],
+        "threads": [
+          "迫] 武大回家时，她先红了眼，也先把真相藏了起来。 [镜头25·潘金莲·委屈·快] 你那好兄弟，",
+          "P01_CLIP10｜先红眼的人改写真相｜1:37.689–1:48.388 武大带雪推门，主",
+          "tion\": \"一个能打死猛虎的人，为什么后来守不住哥哥的家门？\", \"content_p",
+          "ence\": \"潘金莲越界未成后倒置真相反咬武松\", \"bait_risk\": \"l",
+          "景只保留潘金莲，武大只作为上一拍处境证据。\", \"entity_schedule\":",
+          "\"label\": \"先红眼的人改写真相\", \"duration\": 10.699,",
+          "\"武大回家时，她先红了眼，也先把真相藏了起来。\", \"你那好兄弟，趁家里没人",
+          "\"武大突然掌握真相\", \"武松争辩\","
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第2集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第3集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第4集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第5集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第6集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第7集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第8集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第9集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第10集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      }
+    ],
+    "hook_count": 6,
+    "thread_count": 8
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "truth_sources": {
+    "ambient_map": null,
+    "global_style": "设定库/global_style.md",
+    "leitmotif_registry": "设定库/leitmotif_registry.json",
+    "location_spatial_memory": null,
+    "narrative_state_ledger": "设定库/narrative_state_ledger.json",
+    "scene_floorplan": "设定库/scene_floorplan.json",
+    "series_packaging": null,
+    "setup_payoff_ledger": "设定库/setup_payoff_ledger.json",
+    "story_integrity_ledger": "设定库/story_integrity_ledger.json",
+    "thread_scheduler": "设定库/thread_scheduler.json",
+    "translation_glossary": null,
+    "ui_asset_registry": null,
+    "角色圣经": null
+  },
+  "version": 1
+}

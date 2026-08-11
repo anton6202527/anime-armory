@@ -1,0 +1,65 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-08-11T04:05:10+00:00",
+  "kind": "n2d_repair_preflight",
+  "next_when_blocked": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集 check --json --write-missing"
+  ],
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "stage": "image_prompt",
+  "status": "block",
+  "steps": [
+    {
+      "detail": "n2d-update/update_plan.py missing",
+      "status": "skip",
+      "step": "update_plan"
+    },
+    {
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集 check --json --write-missing",
+      "detail": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py': [Errno 2] No such file or directory",
+      "payload": {},
+      "returncode": 2,
+      "status": "block",
+      "step": "production_breakdown"
+    },
+    {
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集 --stage image_prompt --json --write --write-missing",
+      "detail": "{\n  \"contract_path\": \"脚本/第1集/preventive_contracts.json\",\n  \"episode\": \"第1集\",\n  \"findings\": [],\n  \"gates\": [\n    \"shot_intent_gate\"\n  ],\n  \"generated_at\": \"2026-08-11T04:05:10+00:00\",\n  \"kind\": \"n2d_preventive_contract_report\",\n  \"outputs\": {\n    \"json\": \"生产数据/preventive_contracts_image_prompt_第1集.json\",\n    \"markdown\": \"生产数据/preventive_contracts_image_prompt_第1集.md\"\n  },\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅\",\n  \"scaffolded\": false,\n  \"stage\": \"image_prompt\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"block\": 0,\n    \"info\": 0,\n    \"warn\": 0\n  },\n  \"version\": 1\n}",
+      "payload": {
+        "contract_path": "脚本/第1集/preventive_contracts.json",
+        "episode": "第1集",
+        "findings": [],
+        "gates": [
+          "shot_intent_gate"
+        ],
+        "generated_at": "2026-08-11T04:05:10+00:00",
+        "kind": "n2d_preventive_contract_report",
+        "outputs": {
+          "json": "生产数据/preventive_contracts_image_prompt_第1集.json",
+          "markdown": "生产数据/preventive_contracts_image_prompt_第1集.md"
+        },
+        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+        "scaffolded": false,
+        "stage": "image_prompt",
+        "status": "pass",
+        "summary": {
+          "block": 0,
+          "info": 0,
+          "warn": 0
+        },
+        "version": 1
+      },
+      "returncode": 0,
+      "status": "pass",
+      "step": "preventive_contracts"
+    }
+  ],
+  "summary": {
+    "block": 1,
+    "pass": 1,
+    "skip": 1,
+    "steps": 3,
+    "warn": 0
+  },
+  "version": 1
+}

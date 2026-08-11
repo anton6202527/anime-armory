@@ -127,7 +127,7 @@ def run_cmd(name: str, cmd: Sequence[str], *, block_on_nonzero: bool = True) -> 
 
 
 def update_plan_check(root: Path, ep: str) -> Dict[str, Any]:
-    script = SKILLS_DIR / "n2d-update" / "scripts" / "update_plan.py"
+    script = N2D_DIR / "n2d-update" / "scripts" / "update_plan.py"
     if not script.is_file():
         return {"step": "update_plan", "status": "skip", "detail": "n2d-update/update_plan.py missing"}
     row = run_cmd("update_plan", [sys.executable, str(script), "check", str(root), ep, "--write-plan", "--json"], block_on_nonzero=False)
@@ -141,7 +141,7 @@ def update_plan_check(root: Path, ep: str) -> Dict[str, Any]:
 
 
 def production_breakdown_check(root: Path, ep: str, *, write_missing: bool) -> Dict[str, Any]:
-    script = SKILLS_DIR / "n2d-script" / "scripts" / "production_breakdown.py"
+    script = N2D_DIR / "n2d-script" / "scripts" / "production_breakdown.py"
     cmd = [sys.executable, str(script), str(root), ep, "check", "--json"]
     if write_missing:
         cmd.append("--write-missing")
@@ -184,7 +184,7 @@ def preventive_contracts_check(root: Path, ep: str, stage: str, *, write_missing
 
 
 def image_qc_status(root: Path, ep: str, *, repair_qc: bool) -> Dict[str, Any]:
-    script = SKILLS_DIR / "n2d-image" / "scripts" / "image_qc.py"
+    script = N2D_DIR / "n2d-image" / "scripts" / "image_qc.py"
     if repair_qc:
         row = run_cmd("image_qc_repair", [sys.executable, str(script), str(root), ep, "--json"], block_on_nonzero=False)
         row["repair_attempted"] = True

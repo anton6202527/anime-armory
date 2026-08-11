@@ -1,0 +1,552 @@
+{
+  "kind": "n2d_axis_blocking_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "scene_axis_rules": [
+    {
+      "scene_id": "SCENE_RIDGE",
+      "location": "LOC_JINGYANGGANG",
+      "main_axis": "青石—虎来向构成右后至左前动作轴",
+      "screen_direction": "虎主攻方向右后→左前；武松闪避后仍回到轴线同侧",
+      "default_eyelines": "武松视线略上看虎首；猎户由坡下左后进入",
+      "blocking_floorplan": "山神庙在来路侧、青石居中、乱树林在北偏西；断棒前不越轴"
+    },
+    {
+      "scene_id": "SCENE_WU_HOME",
+      "location": "LOC_WUDA_HOME",
+      "main_axis": "火盆/酒桌连接潘金莲画左与武松画右；南街门在画面下方外侧",
+      "screen_direction": "潘金莲越界从画左向中轴推进；武松从画右向出口后撤；武大由南街门进入中景",
+      "default_eyelines": "画左潘金莲看画右武松；画右武松看画左但多次避开；武大进门先看潘再看武",
+      "blocking_floorplan": "二楼临街窗靠南、火盆居中偏下、酒桌偏左、武松退路通右侧楼梯"
+    },
+    {
+      "scene_id": "SCENE_DISPATCH",
+      "location": "清河县衙门/城门桥接",
+      "main_axis": "公文从知县画左递向武松画右；离城方向由内城向画面纵深",
+      "screen_direction": "文书交接左→右，武松出城后保持向纵深远离",
+      "default_eyelines": "知县与武松短正反打；告别时兄弟互看，不看镜头",
+      "blocking_floorplan": "只用案桌、公文、城门三锚，不展开新母场景"
+    }
+  ],
+  "beat_blocking": [
+    {
+      "beat_id": "Beat_01",
+      "characters": "CHAR_WUSONG、虎",
+      "z_depth": "虎爪前景、武松中景、青石/树林后景",
+      "entry_exit": "虎由右后扑入；武松围青石同侧闪避",
+      "power_relation": "虎占前景和上方，断棒时武松被压到下中区",
+      "axis_exception": "无"
+    },
+    {
+      "beat_id": "Beat_02",
+      "characters": "CHAR_WUSONG、猎户剪影、CHAR_WUDA、CHAR_PANJINLIAN",
+      "z_depth": "拳落近景后以道具蒙太奇切换，不把不同时空角色同框",
+      "entry_exit": "虎倒地→腰牌→炊饼担→楼窗",
+      "power_relation": "武松外部强势；武大/潘金莲各受劳动与交易限制",
+      "axis_exception": "用硬切重建新场景"
+    },
+    {
+      "beat_id": "Beat_03",
+      "characters": "CHAR_WUDA、CHAR_WUSONG、CHAR_PANJINLIAN",
+      "z_depth": "兄弟中景在前，潘金莲从楼窗/门框后进入中景",
+      "entry_exit": "武大从街面拉武松进南街门，上楼后潘金莲由内间出现",
+      "power_relation": "武大短暂成为家庭连接者；潘金莲以邀请取得空间主动",
+      "axis_exception": "无"
+    },
+    {
+      "beat_id": "Beat_04",
+      "characters": "CHAR_PANJINLIAN、CHAR_WUSONG；CHAR_WUDA画外",
+      "z_depth": "潘金莲画左近酒桌，火盆中间，武松画右靠外路",
+      "entry_exit": "门闩落下后两人不换侧；潘逐步靠中轴，武松不前移",
+      "power_relation": "潘掌握封闭空间与酒；武松用距离和称谓守边界",
+      "axis_exception": "无"
+    },
+    {
+      "beat_id": "Beat_05",
+      "characters": "CHAR_PANJINLIAN、CHAR_WUSONG、CHAR_WUDA",
+      "z_depth": "酒盏前景、二人中景；武大脚步先在楼梯后景出现",
+      "entry_exit": "武松打翻酒盏后退向画右；武大由楼梯/门口进入",
+      "power_relation": "拒绝瞬间武松夺回边界，潘随后转向叙事反击",
+      "axis_exception": "以酒盏插入镜作为重定向缓冲"
+    },
+    {
+      "beat_id": "Beat_06",
+      "characters": "CHAR_PANJINLIAN、CHAR_WUDA、CHAR_WUSONG",
+      "z_depth": "潘与武大在画左/中景形成一组，武松退到画右门路",
+      "entry_exit": "武松从后房系行李，经右侧楼梯下到南街门",
+      "power_relation": "潘靠近武大取得家庭话语位置；武松主动退出",
+      "axis_exception": "无"
+    },
+    {
+      "beat_id": "Beat_07",
+      "characters": "CHAR_WUSONG、CHAR_WUDA、CHAR_PANJINLIAN、知县",
+      "z_depth": "公文近景→兄弟中景→城门远景→楼窗中远景",
+      "entry_exit": "知县交文书；武松回家告别后向城外纵深离开",
+      "power_relation": "公差高于私人保护；潘留在屋内，武松变成远景",
+      "axis_exception": "每次换场用公文/门/脚步重新建立方向"
+    }
+  ],
+  "shot_reverse_patterns": [
+    {
+      "pattern_id": "SR_EP01_CLIP01",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP01"
+      ],
+      "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
+      "screen_sides": {
+        "spatial_mode": "vertical_depth_9x16",
+        "A": {
+          "character_id": "character_id=BEAST_TIGER；screen_position=画面上方压下的攻击主体",
+          "screen_position": "character_id=BEAST_TIGER；screen_position=画面上方压下的攻击主体"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=画面下方贴地主焦点"
+        },
+        "left": "vertical-depth mode; left/right not primary",
+        "right": "vertical-depth mode; left/right not primary",
+        "upper_foreground": "character_id=BEAST_TIGER；screen_position=画面上方压下的攻击主体",
+        "lower_background": "CHAR_WUSONG",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "BEAST_TIGER: 看向画面下方/后景的戏内对象，不看镜头；CHAR_WUSONG: 看向画面上方/前景的戏内对象，不看镜头。",
+      "shot_pairing": [
+        "A 面：BEAST_TIGER clean single / OTS，焦点在 BEAST_TIGER；CHAR_WUSONG 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_WUSONG reverse clean single / OTS，焦点在 CHAR_WUSONG；BEAST_TIGER 的肩或侧背在前景虚化边缘。",
+        "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
+      ],
+      "coverage_order": [
+        "建立镜确认 A/B 空间关系和行动轴线",
+        "A 面 clean single/OTS：焦点 BEAST_TIGER，CHAR_WUSONG 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_WUSONG，BEAST_TIGER 的前景肩部或侧背只作遮挡层",
+        "道具/手部/反应插入作为节奏和越轴缓冲",
+        "回到反应近景或重建空间镜落幅"
+      ],
+      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
+      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "continuity_must": [
+        "武松尚未持棒",
+        "虎完整无伤",
+        "攻势方向始终上→下"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP02",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP02"
+      ],
+      "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
+      "screen_sides": {
+        "spatial_mode": "vertical_depth_9x16",
+        "A": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG/酒后战损态；screen_position=画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+        },
+        "B": {
+          "character_id": "character_id=BEAST_TIGER/扑击态；screen_position=画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
+          "screen_position": "character_id=BEAST_TIGER/扑击态；screen_position=画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+        },
+        "left": "vertical-depth mode; left/right not primary",
+        "right": "vertical-depth mode; left/right not primary",
+        "upper_foreground": "CHAR_WUSONG",
+        "lower_background": "character_id=BEAST_TIGER/扑击态；screen_position=画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
+        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+      },
+      "eyeline_match": "CHAR_WUSONG/酒后战损态: 看向画面下方/后景的戏内对象，不看镜头；BEAST_TIGER/扑击态: 看向画面上方/前景的戏内对象，不看镜头。",
+      "shot_pairing": [
+        "A 面：CHAR_WUSONG/酒后战损态 clean single / OTS，焦点在 CHAR_WUSONG/酒后战损态；BEAST_TIGER/扑击态 的肩或侧背在前景虚化边缘。",
+        "B 面：BEAST_TIGER/扑击态 reverse clean single / OTS，焦点在 BEAST_TIGER/扑击态；CHAR_WUSONG/酒后战损态 的肩或侧背在前景虚化边缘。",
+        "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
+      ],
+      "coverage_order": [
+        "建立镜确认 A/B 空间关系和行动轴线",
+        "A 面 clean single/OTS：焦点 CHAR_WUSONG/酒后战损态，BEAST_TIGER/扑击态 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 BEAST_TIGER/扑击态，CHAR_WUSONG/酒后战损态 的前景肩部或侧背只作遮挡层",
+        "道具/手部/反应插入作为节奏和越轴缓冲",
+        "回到反应近景或重建空间镜落幅"
+      ],
+      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
+      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "continuity_must": [
+        "继承猛虎转身再扑",
+        "梢棒先完整后断裂",
+        "武松末帧赤手未命中"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP06",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP06"
+      ],
+      "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_PANJINLIAN",
+          "screen_position": "character_id=CHAR_PANJINLIAN；screen_position=桌面画左"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=桌面画右"
+        },
+        "left": "CHAR_PANJINLIAN",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "CHAR_PANJINLIAN: 看画右的戏内对象，不看镜头；CHAR_WUSONG: 看画左的戏内对象，不看镜头。",
+      "shot_pairing": [
+        "A 面：CHAR_PANJINLIAN clean single / OTS，焦点在 CHAR_PANJINLIAN；CHAR_WUSONG 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_WUSONG reverse clean single / OTS，焦点在 CHAR_WUSONG；CHAR_PANJINLIAN 的肩或侧背在前景虚化边缘。",
+        "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
+      ],
+      "coverage_order": [
+        "建立镜确认 A/B 空间关系和行动轴线",
+        "A 面 clean single/OTS：焦点 CHAR_PANJINLIAN，CHAR_WUSONG 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_WUSONG，CHAR_PANJINLIAN 的前景肩部或侧背只作遮挡层",
+        "道具/手部/反应插入作为节奏和越轴缓冲",
+        "回到反应近景或重建空间镜落幅"
+      ],
+      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
+      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "buffer_or_reestablishing": "双人建立镜、道具插入、反应近景或空镜负责重新定向；不得直接跳反轴近景。",
+      "continuity_must": [
+        "武松不主动触碰潘金莲",
+        "称谓始终为嫂嫂/叔叔",
+        "一个月由窗光和器物变化明确标示"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP07",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP07"
+      ],
+      "axis_line": "炭盆—桌面横轴，潘左武松右。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_PANJINLIAN",
+          "screen_position": "character_id=CHAR_PANJINLIAN；screen_position=炭盆左侧"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=桌面右侧"
+        },
+        "left": "CHAR_PANJINLIAN",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "潘向右看武松；武松先看杯再看门。",
+      "shot_pairing": "潘的提议近景 ↔ 武松拒接的克制反打。",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+      "continuity_must": [
+        "武大已经出门",
+        "门闩确实落下",
+        "酒盏由潘一侧进入桌面中线",
+        "武松不碰杯"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP08",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP08"
+      ],
+      "axis_line": "潘左武松右的炭盆横轴。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_PANJINLIAN",
+          "screen_position": "character_id=CHAR_PANJINLIAN；screen_position=炭盆左侧近景"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=桌面右侧近景"
+        },
+        "left": "CHAR_PANJINLIAN",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "双方视线第一次正面对接。",
+      "shot_pairing": "潘的情感筹码CU ↔ 武松的伦理边界CU。",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+      "continuity_must": [
+        "酒盏仍未被武松触碰",
+        "武大只以画外/记忆道具存在",
+        "两人身体不接触"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP09",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP09"
+      ],
+      "axis_line": "潘左武松右，杯沿左→右越线。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_PANJINLIAN",
+          "screen_position": "character_id=CHAR_PANJINLIAN；screen_position=画左坐姿低位"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=画右坐姿后起身高位"
+        },
+        "left": "CHAR_PANJINLIAN",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "潘先强求对视；武松警告时短暂直视后移开。",
+      "shot_pairing": "杯与潘的逼近 ↔ 武松手与脸的拒绝。",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+      "continuity_must": [
+        "只有一只酒杯越线并被打翻",
+        "酒液落在炭盆边而非人物身上",
+        "武松只起身后退，不接触潘"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP10",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP10"
+      ],
+      "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_PANJINLIAN",
+          "screen_position": "character_id=CHAR_PANJINLIAN；screen_position=画左泪眼主焦点"
+        },
+        "B": {
+          "character_id": "CHAR_WUDA",
+          "screen_position": "character_id=CHAR_WUDA；screen_position=画右后门口入、迟疑反应"
+        },
+        "left": "CHAR_PANJINLIAN",
+        "right": "CHAR_WUDA",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "CHAR_PANJINLIAN: 看画右的戏内对象，不看镜头；CHAR_WUDA: 看画左的戏内对象，不看镜头。",
+      "shot_pairing": [
+        "A 面：CHAR_PANJINLIAN clean single / OTS，焦点在 CHAR_PANJINLIAN；CHAR_WUDA 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_WUDA reverse clean single / OTS，焦点在 CHAR_WUDA；CHAR_PANJINLIAN 的肩或侧背在前景虚化边缘。",
+        "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
+      ],
+      "coverage_order": [
+        "建立镜确认 A/B 空间关系和行动轴线",
+        "A 面 clean single/OTS：焦点 CHAR_PANJINLIAN，CHAR_WUDA 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_WUDA，CHAR_PANJINLIAN 的前景肩部或侧背只作遮挡层",
+        "道具/手部/反应插入作为节奏和越轴缓冲",
+        "回到反应近景或重建空间镜落幅"
+      ],
+      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
+      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "buffer_or_reestablishing": "双人建立镜、道具插入、反应近景或空镜负责重新定向；不得直接跳反轴近景。",
+      "continuity_must": [
+        "地上酒杯与酒液保持上一镜状态",
+        "武松不插话",
+        "潘先哭后控诉"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP11",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP11"
+      ],
+      "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_PANJINLIAN",
+          "screen_position": "character_id=CHAR_PANJINLIAN；screen_position=画左后景焦外"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=画右至门槛主焦点"
+        },
+        "left": "CHAR_PANJINLIAN",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "CHAR_PANJINLIAN: 看画右的戏内对象，不看镜头；CHAR_WUSONG: 看画左的戏内对象，不看镜头。",
+      "shot_pairing": [
+        "A 面：CHAR_PANJINLIAN clean single / OTS，焦点在 CHAR_PANJINLIAN；CHAR_WUSONG 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_WUSONG reverse clean single / OTS，焦点在 CHAR_WUSONG；CHAR_PANJINLIAN 的肩或侧背在前景虚化边缘。",
+        "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
+      ],
+      "coverage_order": [
+        "建立镜确认 A/B 空间关系和行动轴线",
+        "A 面 clean single/OTS：焦点 CHAR_PANJINLIAN，CHAR_WUSONG 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_WUSONG，CHAR_PANJINLIAN 的前景肩部或侧背只作遮挡层",
+        "道具/手部/反应插入作为节奏和越轴缓冲",
+        "回到反应近景或重建空间镜落幅"
+      ],
+      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
+      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "buffer_or_reestablishing": "双人建立镜、道具插入、反应近景或空镜负责重新定向；不得直接跳反轴近景。",
+      "continuity_must": [
+        "打翻酒杯仍在地上",
+        "武松只带自己的行李",
+        "武大不阻拦肢体",
+        "潘不插话"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP12",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP12"
+      ],
+      "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
+      "screen_sides": {
+        "spatial_mode": "vertical_depth_9x16",
+        "A": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG/搬离态；screen_position=画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+        },
+        "B": {
+          "character_id": "CHAR_WUDA",
+          "screen_position": "character_id=CHAR_WUDA/门内态；screen_position=画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+        },
+        "left": "vertical-depth mode; left/right not primary",
+        "right": "vertical-depth mode; left/right not primary",
+        "upper_foreground": "CHAR_WUSONG",
+        "lower_background": "CHAR_WUDA",
+        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+      },
+      "eyeline_match": "CHAR_WUSONG/搬离态: 看向画面下方/后景的戏内对象，不看镜头；CHAR_WUDA/门内态: 看向画面上方/前景的戏内对象，不看镜头。",
+      "shot_pairing": [
+        "A 面：CHAR_WUSONG/搬离态 clean single / OTS，焦点在 CHAR_WUSONG/搬离态；CHAR_WUDA/门内态 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_WUDA/门内态 reverse clean single / OTS，焦点在 CHAR_WUDA/门内态；CHAR_WUSONG/搬离态 的肩或侧背在前景虚化边缘。",
+        "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
+      ],
+      "coverage_order": [
+        "建立镜确认 A/B 空间关系和行动轴线",
+        "A 面 clean single/OTS：焦点 CHAR_WUSONG/搬离态，CHAR_WUDA/门内态 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_WUDA/门内态，CHAR_WUSONG/搬离态 的前景肩部或侧背只作遮挡层",
+        "道具/手部/反应插入作为节奏和越轴缓冲",
+        "回到反应近景或重建空间镜落幅"
+      ],
+      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
+      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "continuity_must": [
+        "武松只向外走",
+        "门合上但不显示落闩",
+        "武大和潘留在门内"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP13",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP13"
+      ],
+      "axis_line": "案桌横轴，知县左武松右。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_MAGISTRATE",
+          "screen_position": "character_id=CHAR_MAGISTRATE；screen_position=画左案后"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=画右下站立听令"
+        },
+        "left": "CHAR_MAGISTRATE",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "知县向右下看武松；武松向左上回视。",
+      "shot_pairing": "知县案后MS ↔ 武松领命MCU。",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+      "continuity_must": [
+        "武松穿都头公务装并带腰牌",
+        "礼担尚未出发",
+        "公文文字走后期或保持不可读"
+      ]
+    },
+    {
+      "pattern_id": "SR_EP01_CLIP14",
+      "source": "shot_reverse_contract",
+      "applies_to": [
+        "EP01_CLIP14"
+      ],
+      "axis_line": "门前横轴，武大左武松右。",
+      "screen_sides": {
+        "spatial_mode": "left_right",
+        "A": {
+          "character_id": "CHAR_WUDA",
+          "screen_position": "character_id=CHAR_WUDA；screen_position=家门外画左"
+        },
+        "B": {
+          "character_id": "CHAR_WUSONG",
+          "screen_position": "character_id=CHAR_WUSONG；screen_position=家门外画右，随后转向纵深"
+        },
+        "left": "CHAR_WUDA",
+        "right": "CHAR_WUSONG",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
+      },
+      "eyeline_match": "兄弟同高互看。",
+      "shot_pairing": "武松叮嘱 ↔ 武大点头反应。",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+      "continuity_must": [
+        "礼担等待出发",
+        "潘只在楼窗画外",
+        "武松不重新进屋"
+      ]
+    }
+  ],
+  "shot_reverse_contract_path": "脚本/第1集/shot_reverse_contract.json",
+  "updated_at": "2026-08-11T04:37:25+00:00"
+}

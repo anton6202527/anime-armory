@@ -1,0 +1,148 @@
+{
+  "kind": "n2d_possession_ledger",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "events": [
+    {
+      "clip": "EP01_CLIP01",
+      "asset": "PROP_QUARTERSTAFF",
+      "holder": "景阳冈地面（武松手边、画外）",
+      "action": "placed",
+      "state": "完整，尚未持起"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "asset": "PROP_QUARTERSTAFF",
+      "holder": "CHAR_WUSONG",
+      "action": "pickup",
+      "state": "持起重劈后断裂并丢落"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "asset": "PROP_QUARTERSTAFF",
+      "holder": "景阳冈地面",
+      "action": "release",
+      "state": "断裂，不再随身"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "asset": "PROP_REWARD_SILVER",
+      "holder": "CROWD_HUNTERS",
+      "action": "transfer",
+      "state": "武松推回赏银，由猎户收回"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "asset": "PROP_BADGE",
+      "holder": "CHAR_WUSONG",
+      "action": "acquire",
+      "state": "任命后佩于腰间"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "asset": "PROP_CAKE_POLE",
+      "holder": "CHAR_WUDA",
+      "action": "hold",
+      "state": "挑担卖饼"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "asset": "PROP_CAKE_POLE",
+      "holder": "阳谷街楼下",
+      "action": "release",
+      "state": "兄弟上楼前留在街下"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "asset": "PROP_BADGE",
+      "holder": "CHAR_WUSONG",
+      "action": "hold",
+      "state": "腰间佩带，潘金莲初见时可辨"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "asset": "PROP_WINE_CUP",
+      "holder": "CHAR_PANJINLIAN",
+      "action": "hold",
+      "state": "半杯酒，由画左推向桌面中线"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "asset": "PROP_WINE_CUP",
+      "holder": "CHAR_PANJINLIAN",
+      "action": "move",
+      "state": "继续推近，武松尚未触碰"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "asset": "PROP_WINE_CUP",
+      "holder": "地面炭盆旁",
+      "action": "release",
+      "state": "武松手背格挡后打翻"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "asset": "PROP_WINE_CUP",
+      "holder": "地面炭盆旁",
+      "action": "hold",
+      "state": "保持打翻状态，作为武大看见的结果性物证"
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "asset": "PROP_LUGGAGE",
+      "holder": "CHAR_WUSONG",
+      "action": "acquire",
+      "state": "只收自己的行李并系紧"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "asset": "PROP_LUGGAGE",
+      "holder": "CHAR_WUSONG",
+      "action": "hold",
+      "state": "背负离开武大家"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "asset": "PROP_OFFICIAL_DOC",
+      "holder": "CHAR_MAGISTRATE",
+      "action": "hold",
+      "state": "案上差遣公文，文字不可读或后期叠加"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "asset": "PROP_GIFT_LOAD",
+      "holder": "县衙差役",
+      "action": "hold",
+      "state": "备妥待次日押送"
+    },
+    {
+      "clip": "EP01_CLIP14",
+      "asset": "PROP_GIFT_LOAD",
+      "holder": "县衙差役",
+      "action": "move",
+      "state": "在出城方向等待启程，作后景层"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "asset": "PROP_GIFT_LOAD",
+      "holder": "县衙差役",
+      "action": "move",
+      "state": "随武松离城进入纵深远景"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "asset": "PROP_WINDOW_CURTAIN",
+      "holder": "武大家楼窗",
+      "action": "hold",
+      "state": "潘金莲隔帘目送，不离窗位"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "asset": "PROP_CURTAIN_FORK",
+      "holder": "CHAR_XIMENQING",
+      "action": "hold",
+      "state": "仅局部入画并轻碰木檐，不完成叉帘事件"
+    }
+  ]
+}

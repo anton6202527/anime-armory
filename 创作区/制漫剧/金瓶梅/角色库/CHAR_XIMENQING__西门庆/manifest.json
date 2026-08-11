@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_XIMENQING",
+  "name": "西门庆",
+  "scope": "成年男性，只露檐影下眼部、帽檐与持叉竿的手部轮廓，衣料比普通市民略讲究但不显示身份徽记，不露清晰全脸，不与潘金莲同框对话。",
+  "library_tier": "named_minimal",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/CHAR_XIMENQING__西门庆/reference",
+    "prompts": "角色库/CHAR_XIMENQING__西门庆/prompts",
+    "lora": "角色库/CHAR_XIMENQING__西门庆/lora",
+    "voice": "角色库/CHAR_XIMENQING__西门庆/voice",
+    "adapters": "角色库/CHAR_XIMENQING__西门庆/adapters",
+    "qc": "角色库/CHAR_XIMENQING__西门庆/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/西门庆.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:52:03+00:00"
+}

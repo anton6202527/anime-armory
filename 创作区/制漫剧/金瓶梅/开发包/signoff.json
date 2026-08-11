@@ -1,0 +1,112 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "开发包/adaptation_strategy.json",
+          "sha256": "391dfd229b8071278a661c98cf0557d6035cea69f976bc83f7feb6306b4fbd52"
+        },
+        {
+          "path": "开发包/pilot_greenlight.md",
+          "sha256": "2f806fc9e62a60d214cbf6a08e72d779199fa8d695f70f148fc1994f6e63d187"
+        },
+        {
+          "path": "开发包/production_feasibility.json",
+          "sha256": "887842c6341592317c22c7fa8ace70a05fcf3e7ac72c50b0d275e2802eefb24d"
+        },
+        {
+          "path": "开发包/season_arc.json",
+          "sha256": "08a98054b818056071ce9847d986d5e0bcfb9ac8646ad1ed1e49eb939f07f52c"
+        },
+        {
+          "path": "开发包/series_bible.md",
+          "sha256": "500cb921e71ef3126a583874943f78d54755f9c7e4ec20ea2bb8f8d066100399"
+        }
+      ],
+      "note": "用户明确批准 P-1，并同时启用仅高风险停审；按当前设置与五件套哈希重新签收创意组。",
+      "reviewed_at": "2026-08-11T03:02:26+00:00",
+      "reviewer_id": "user:workspace-owner",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "b132ac44d44cc2b2d9ec9fca81a99d56c441d47fbc4ac61037b85c038b6ab32d",
+      "signed_input_fingerprint_sha": "40599b455f9b21aca40c7a1a51fb658b1ffb6d75dfb692489e1b238ed827d545",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "开发包/adaptation_strategy.json",
+          "sha256": "391dfd229b8071278a661c98cf0557d6035cea69f976bc83f7feb6306b4fbd52"
+        },
+        {
+          "path": "开发包/pilot_greenlight.md",
+          "sha256": "2f806fc9e62a60d214cbf6a08e72d779199fa8d695f70f148fc1994f6e63d187"
+        },
+        {
+          "path": "开发包/production_feasibility.json",
+          "sha256": "887842c6341592317c22c7fa8ace70a05fcf3e7ac72c50b0d275e2802eefb24d"
+        },
+        {
+          "path": "开发包/season_arc.json",
+          "sha256": "08a98054b818056071ce9847d986d5e0bcfb9ac8646ad1ed1e49eb939f07f52c"
+        },
+        {
+          "path": "开发包/series_bible.md",
+          "sha256": "500cb921e71ef3126a583874943f78d54755f9c7e4ec20ea2bb8f8d066100399"
+        }
+      ],
+      "note": "用户明确批准 P-1，并同时启用仅高风险停审；按当前设置与五件套哈希重新签收制片组，付费媒体仍独立停审。",
+      "reviewed_at": "2026-08-11T03:02:26+00:00",
+      "reviewer_id": "user:workspace-owner",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "b132ac44d44cc2b2d9ec9fca81a99d56c441d47fbc4ac61037b85c038b6ab32d",
+      "signed_input_fingerprint_sha": "40599b455f9b21aca40c7a1a51fb658b1ffb6d75dfb692489e1b238ed827d545",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p1_development_greenlight",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-08-11T03:02:26+00:00",
+  "episode": "",
+  "evidence_fingerprint": {
+    "files": {
+      "开发包/adaptation_strategy.json": "391dfd229b8071278a661c98cf0557d6035cea69f976bc83f7feb6306b4fbd52",
+      "开发包/pilot_greenlight.md": "2f806fc9e62a60d214cbf6a08e72d779199fa8d695f70f148fc1994f6e63d187",
+      "开发包/production_feasibility.json": "887842c6341592317c22c7fa8ace70a05fcf3e7ac72c50b0d275e2802eefb24d",
+      "开发包/season_arc.json": "08a98054b818056071ce9847d986d5e0bcfb9ac8646ad1ed1e49eb939f07f52c",
+      "开发包/series_bible.md": "500cb921e71ef3126a583874943f78d54755f9c7e4ec20ea2bb8f8d066100399"
+    },
+    "sha": "b132ac44d44cc2b2d9ec9fca81a99d56c441d47fbc4ac61037b85c038b6ab32d"
+  },
+  "input_fingerprint": {
+    "files": {
+      "_设置.md": "a71b6f0cb954d36de95b325537d208b4680ee569fc50d8be8678ba338ea4b10c",
+      "小说/金瓶梅.docx": "3c0477108e78f70c03b77b2c9a0bd13a57079ddfb2b6373e25ecb154a95b0915",
+      "小说/金瓶梅.txt": "714b0a0d5ad61143d814e93819ee2306becd2481e91993f64b8d1c3184d331b3"
+    },
+    "sha": "40599b455f9b21aca40c7a1a51fb658b1ffb6d75dfb692489e1b238ed827d545"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director",
+        "head_writer",
+        "showrunner"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-08-11T03:02:26+00:00",
+  "version": 1
+}

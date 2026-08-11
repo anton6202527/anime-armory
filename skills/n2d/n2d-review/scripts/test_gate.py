@@ -4273,6 +4273,7 @@ def test_episode_registry_refs_normalize_partial_and_age_aliases(tmp_path):
             "id": "EP01_CLIP03",
             "template_contract": {"face_priority": ["CHAR_HE_PINGSHENG_partial"]},
             "axis": {"characters": ["CHAR_HE_PINGSHENG_14"]},
+            "primary_ref": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__14岁常态.png",
         }]
     }, ensure_ascii=False), encoding="utf-8")
     (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
@@ -11221,6 +11222,29 @@ def test_core_anchor_pinning_skips_minor_role(tmp_path):
     _write_idreg_simple(root, [{"id": "CHAR_99", "name": "门口杂役", "scope": "单元配角",
                                      "forms": [{"form": "常态", "reference_group": {"front": "x.png"}}]}])
     _ref_episode(root, "第1集", "CHAR_99 出场")
+    gate.check_core_anchor_pinning(root, "第1集")
+    assert not any(f["dim"] == "锚点钉死" for f in gate.findings)
+
+
+def test_core_anchor_pinning_honors_explicit_core_full_tier(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _write_idreg_simple(root, [{"id": "CHAR_10", "name": "阿离", "scope": "系列人物",
+                                     "library_tier": "core_full",
+                                     "forms": [{"form": "常态", "reference_group": {"front": "x.png"}}]}])
+    _ref_episode(root, "第1集", "CHAR_10 出场")
+    gate.check_core_anchor_pinning(root, "第1集")
+    assert any(f["dim"] == "锚点钉死" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_core_anchor_pinning_does_not_treat_negated_main_role_as_core(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _write_idreg_simple(root, [{"id": "CHAR_MAGISTRATE", "name": "知县",
+                                     "scope": "只作为本集公务角色，不抢主角视觉重心。",
+                                     "library_tier": "named_minimal",
+                                     "forms": [{"form": "常态", "reference_group": {"front": "x.png"}}]}])
+    _ref_episode(root, "第1集", "CHAR_MAGISTRATE 出场")
     gate.check_core_anchor_pinning(root, "第1集")
     assert not any(f["dim"] == "锚点钉死" for f in gate.findings)
 

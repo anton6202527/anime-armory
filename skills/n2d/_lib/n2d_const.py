@@ -141,6 +141,10 @@ def identity_review_binding_fingerprint(
 CHARACTER_LIBRARY_CORE_SCOPE_RE = re.compile(
     r"全篇|全程|长线|核心|主角|女主|男主|主反派"
 )
+CHARACTER_LIBRARY_NEGATED_CORE_SCOPE_RE = re.compile(
+    r"(?:不抢|非|不是|不作为|不作|不做|不当|仅作|只作|仅作为|只作为)"
+    r"[^；;。,.，\n]{0,16}(?:全篇|全程|长线|核心|主角|女主|男主|主反派)"
+)
 CHARACTER_LIBRARY_RECURRING_SCOPE_RE = re.compile(
     r"常驻|多集|中长线|反复|复现|复用|主要配角|男二|女二|主反派|贯穿"
 )
@@ -181,10 +185,11 @@ def infer_character_library_tier(
     except (TypeError, ValueError):
         appearances = 0
     scope_text = str(scope or "")
+    positive_scope_text = CHARACTER_LIBRARY_NEGATED_CORE_SCOPE_RE.sub("", scope_text)
     narrative_text = str(narrative_tier or "")
     if (
         narrative_text == "核心长线"
-        or CHARACTER_LIBRARY_CORE_SCOPE_RE.search(f"{scope_text} {narrative_text}")
+        or CHARACTER_LIBRARY_CORE_SCOPE_RE.search(f"{positive_scope_text} {narrative_text}")
         or appearances >= 10
     ):
         return CHARACTER_LIBRARY_TIER_CORE

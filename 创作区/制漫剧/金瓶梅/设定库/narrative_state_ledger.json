@@ -1,0 +1,59 @@
+{
+  "kind": "n2d_narrative_state_ledger",
+  "version": 1,
+  "knowledge": [
+    {
+      "id": "KNOW_E01_WUSONG_TRUTH",
+      "character": "武松",
+      "fact": "潘金莲主动试探并在遭拒后反咬",
+      "keyword": "半杯酒",
+      "known_from_ep": "第1集",
+      "status": "confirmed"
+    },
+    {
+      "id": "KNOW_E01_WUDA_PARTIAL",
+      "character": "武大",
+      "fact": "只知道妻子与弟弟发生冲突，不知道完整真相",
+      "keyword": "调戏",
+      "known_from_ep": "第1集",
+      "status": "confirmed"
+    }
+  ],
+  "locations": [
+    {
+      "character": "武松",
+      "ep": "第1集",
+      "place": "离开清河县、往东京路上",
+      "status": "confirmed",
+      "transition": "县令差遣→回家告别→出城"
+    },
+    {
+      "character": "潘金莲",
+      "ep": "第1集",
+      "place": "武大家二楼临街窗后",
+      "status": "confirmed"
+    },
+    {
+      "character": "武大",
+      "ep": "第1集",
+      "place": "武大家楼屋内",
+      "status": "confirmed"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "REL_E01_WUSONG_PAN",
+      "ep": "第1集",
+      "characters": ["武松", "潘金莲"],
+      "desc": "叔嫂关系从礼貌共居转为越界试探、拒绝与公开叙事冲突；武松搬离。",
+      "status": "confirmed"
+    },
+    {
+      "id": "REL_E01_WUSONG_WUDA",
+      "ep": "第1集",
+      "characters": ["武松", "武大"],
+      "desc": "兄弟亲情仍在，但武松为避嫌搬离并被公差带走，保护关系转为空间分离。",
+      "status": "confirmed"
+    }
+  ]
+}

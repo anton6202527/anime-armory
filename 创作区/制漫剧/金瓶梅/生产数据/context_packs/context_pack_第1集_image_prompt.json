@@ -1,0 +1,3313 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_adaptation_audit",
+      "beat_audit",
+      "story_economy_audit",
+      "spectacle_contract_audit",
+      "setup_payoff_gate",
+      "series_retention_gate",
+      "shot_risk_audit",
+      "shot_split_decision",
+      "shot_intent_gate",
+      "production_breakdown",
+      "spectacle_plan",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 721,
+      "exists": true,
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 写实电影感  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 人工批准策略: 仅高风险停审  # source=explicit_user\n\nraw audit history omitted: records_seen=5, corrections_included=0/3",
+      "preview_policy": "settings_region_plus_bounded_corrections",
+      "relpath": "_设置.md",
+      "sha256": "a71b6f0cb954d36de95b325537d208b4680ee569fc50d8be8678ba338ea4b10c"
+    },
+    {
+      "bytes": 1608,
+      "exists": true,
+      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "ab26cd72b6e3b14f534d562456fa8022cfddeabbb2521f28ec9d2957b80c2473"
+    },
+    {
+      "bytes": 109653,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "audience_effect": "静音也能读懂虎口将合、武松无处可退。",
+            "beat_id": "Beat_01",
+            "character_ids": [
+              "CHAR_WUSONG/酒后战损态",
+              "BEAST_TIGER/扑击态"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "画面下方贴地主焦点",
+                "slot": "FOREGROUND_SLOT"
+              },
+              {
+                "character_id": "BEAST_TIGER",
+                "position": "画面上方压下的攻击主体",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+                  "at_sec": 2.1,
+                  "reason": "虎爪ECU切贴地闪避CU的剪辑边界",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+              "entry_exit": "两者始终在景阳冈空地；梢棒仍在武松画外手边。",
+              "expression_span": "中",
+              "eyeline": "武松由画右下看向画左上猛虎",
+              "need_endframe": false,
+              "seam_evidence": {
+                "action_phase_in": "下一镜虎身完成转向并连续发动后两扑",
+                "action_phase_out": "虎前爪落地后扭身蓄第二扑",
+                "screen_direction": "虎仍由上方向下压，武松由下方闪避"
+              },
+              "seam_mode": "match_on_action",
+              "shot_size": "ECU",
+              "start_state": "冷开场：武松贴地，虎爪已压到脸前。",
+              "transition": "动作继续进入三扑拆招。"
+            },
+            "description": "85mm ECU，虎爪由竖屏上方压下；武松贴地后仰，眼中映出虎口，枯叶被爪风掀起。",
+            "dialogue_indices": [],
+            "dramatic_function": "把观众直接丢进虎扑最危险的一瞬，先问他能否活。",
+            "duration": 4.893,
+            "economy_intent": "selective_detail",
+            "end_sec": 4.893,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/酒后战损态",
+                "BEAST_TIGER/扑击态"
+              ],
+              "forbidden_presence": [
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_WUSONG": [
+                  "确认虎扑已到贴脸距离"
+                ]
+              },
+              "locations": [
+                "LOC_JINGYANGGANG"
+              ],
+              "objects": [
+                "PROP_QUARTERSTAFF"
+              ],
+              "offscreen_presence": [
+                "PROP_QUARTERSTAFF"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "BEAST_TIGER"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip01_first.png",
+            "id": "EP01_CLIP01",
+            "label": "虎爪贴脸",
+            "location_id": "LOC_JINGYANGGANG",
+            "multi_subject_strategy": "regional_construct_required：虎爪攻击层与武松贴地反应层沿同一轴线分区构建。",
+            "narration_indices": [
+              1
+            ],
+            "object_ids": [
+              "PROP_QUARTERSTAFF"
+            ],
+            "pacing_role": "冷开场主钩与生死危机",
+            "rhythm": "冷开场·CU硬切",
+            "runtime_priority": "primary",
+            "scene": "LOC_JINGYANGGANG/夜/外",
+            "shots": [
+              {
+                "camera": "固定微震",
+                "desc": "虎爪压入画面，武松瞳孔收紧。",
+                "id": "S01A",
+                "lens": "85mm",
+                "shot_size": "ECU",
+                "t": "0.0-2.1s",
+                "video_prompt": "虎爪带枯叶风压从上向下逼近，武松只做短促后仰与屏息，镜头不环绕。"
+              },
+              {
+                "camera": "贴地短横移",
+                "desc": "武松擦着爪缘滚开，虎爪砸入泥地。",
+                "id": "S01B",
+                "lens": "50mm",
+                "shot_size": "CU",
+                "t": "2.1-4.893s",
+                "video_prompt": "武松沿画面右侧贴地翻滚，虎爪落点扬起尘土，保持上→下攻击轴。"
+              }
+            ],
+            "spectacle_story_function": "建立武松的外在英雄能力，作为后续无法处理人心的反差基准。",
+            "start_sec": 0.0,
+            "subtitle_lines": [
+              "武松睁眼时，虎爪已经压到脸前——今晚，是一场生死搏杀。"
+            ],
+            "template": "fight_exchange",
+            "template_contract": {
+              "action_scope": "一次扑击、一次闪避、一次落地，不增加咬合或反击。",
+              "apex_light": "虎爪落地帧沿用画左上冷月侧逆光，以爪缘和泥尘窄高光强调重量，不闪白。",
+              "attack_path": "猛虎由画面上方向下扑压，武松向画右贴地让开。",
+              "beats": [
+                "虎爪贴脸",
+                "武松屏息判断",
+                "贴地闪开",
+                "虎爪砸地"
+              ],
+              "blocking": "虎自上方后景扑向画面下方；武松贴地居下方，向画右闪开。",
+              "camera_path": "ECU固定→贴地横移，镜头行程短。",
+              "camera_rule": "85mm贴脸危机转50mm贴地短移；沿攻击轴，不环绕。",
+              "combat_micro_expression": "武松起幅瞳孔骤缩、眼睑收紧并屏息；闪开后下颌压低、视线仍锁猛虎。",
+              "contact_points": [
+                "虎爪与泥地",
+                "武松肩背与枯叶地面"
+              ],
+              "continuity_must": [
+                "武松尚未持棒",
+                "虎完整无伤",
+                "攻势方向始终上→下"
+              ],
+              "degrade_plan": "若整段动作不稳，拆虎爪ECU、武松眼神CU、爪落泥地插入三镜硬切。",
+              "force_direction": "上→下；武松避让向画右。",
+              "impact_frame": "虎爪砸入武松原先头部位置的泥地，人物已经离开落点。",
+              "keyframe_plan": "首帧锁虎爪与脸距离；2.1秒锁武松开始侧滚；末帧锁虎爪落地与武松安全方位。",
+              "negative": [
+                "不新增第二只虎",
+                "不越轴",
+                "不夸张血浆",
+                "不出现现代物件"
+              ],
+              "physics_guard": "爪风、尘土和武松衣摆惯性均沿上→下及向右避让方向。",
+              "post_cue_points": [
+                "虎啸贴脸",
+                "虎爪落地低频",
+                "滚动衣料摩擦"
+              ],
+              "readability_beats": [
+                "爪已贴脸",
+                "眼神判断",
+                "人闪开",
+                "爪砸地"
+              ],
+              "recovery_beat": "武松半跪回望，虎转身准备第二扑。",
+              "screen_direction": "虎上武松下，人物不交换方位。",
+              "secondary_motion": "枯叶与尘土随虎爪向下爆开，武松衣摆沿向右翻滚方向滞后甩动；虎须与鬃毛只作短促惯性。",
+              "spatial_path": "虎沿纵深轴扑下，武松只横移半身位。",
+              "speed_curve": "压迫慢半拍→虎爪爆发下落→武松短促闪避→落地停顿。",
+              "template_id": "fight_exchange"
+            },
+            "voiceover_indices": [
+              1
+            ]
+          },
+          {
+            "audience_effect": "先因断棒惊一下，再因赤手迎虎得到昂扬爽感。",
+            "beat_id": "Beat_02",
+            "character_ids": [
+              "CHAR_WUSONG/酒后战损态",
+              "BEAST_TIGER/扑击态"
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+                  "at_sec": 2.4,
+                  "reason": "扑掀两招切虎尾横扫",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP02_a2.png",
+                  "at_sec": 4.8,
+                  "reason": "虎尾避让切抡棒第三扑",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP02_a3.png",
+                  "at_sec": 7.3,
+                  "reason": "断棒撞点切武松握拳反应",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_anchor_required": true,
+              "end_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+              "entry_exit": "断棒落在武松画左脚边；猛虎仍在上方。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER",
+              "expression_span": "大",
+              "eyeline": "武松向上盯虎",
+              "need_endframe": false,
+              "seam_evidence": {
+                "action_phase_in": "下一镜只以拳落与虎倒的结果性剪影完成兑现",
+                "action_phase_out": "武松右拳从胸前开始前送",
+                "screen_direction": "反击由下向上"
+              },
+              "seam_mode": "match_on_action",
+              "shot_size": "CU",
+              "start_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+              "transition": "拳头前送动作切入胜利蒙太奇。"
+            },
+            "description": "三次攻防沿同一轴线逐步加速；梢棒劈下却折断，声场抽空后武松丢掉断棒握拳。",
+            "dialogue_indices": [
+              2,
+              4,
+              5
+            ],
+            "dramatic_function": "完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。",
+            "duration": 10.229,
+            "economy_intent": "high_motion_detail",
+            "end_sec": 15.122,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/酒后战损态",
+                "BEAST_TIGER/扑击态"
+              ],
+              "forbidden_presence": [
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_WUSONG": [
+                  "摸清猛虎只有扑、掀、剪三套近身攻势"
+                ]
+              },
+              "locations": [
+                "LOC_JINGYANGGANG"
+              ],
+              "objects": [
+                "PROP_QUARTERSTAFF/完整至断裂"
+              ],
+              "offscreen_presence": [
+                "CROWD_HUNTERS",
+                "PROP_BADGE",
+                "PROP_REWARD_SILVER"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "BEAST_TIGER",
+                "PROP_QUARTERSTAFF"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip02_first.png",
+            "id": "EP01_CLIP02",
+            "label": "三扑、断棒、赤手",
+            "location_id": "LOC_JINGYANGGANG",
+            "narration_indices": [
+              3
+            ],
+            "object_ids": [
+              "PROP_QUARTERSTAFF/完整至断裂"
+            ],
+            "pacing_role": "打虎主看点与能力证明",
+            "rhythm": "加速·碎切→爽点前停顿",
+            "runtime_priority": "primary_highlight",
+            "scene": "LOC_JINGYANGGANG/夜/外",
+            "shots": [
+              {
+                "camera": "沿轴短跟",
+                "desc": "虎冲、武松侧闪；虎掀、武松后撤。",
+                "id": "S02A",
+                "lens": "50mm",
+                "shot_size": "MS",
+                "t": "0.0-2.4s",
+                "video_prompt": "两次明确攻防分拍完成，虎保持上方，武松保持下方，不交换左右。"
+              },
+              {
+                "camera": "尾扫方向短摇",
+                "desc": "虎尾横扫，武松俯身让过，双手抓起梢棒。",
+                "id": "S02B",
+                "lens": "85mm→50mm",
+                "shot_size": "CU→MS",
+                "t": "2.4-4.8s",
+                "video_prompt": "虎尾只横扫一次，武松低身避让后抡棒，衣摆与尾风方向一致。"
+              },
+              {
+                "camera": "短推后定格",
+                "desc": "第三扑到来，梢棒重劈树干边缘却从中折断。",
+                "id": "S02C",
+                "lens": "50mm→85mm",
+                "shot_size": "MS→ECU",
+                "t": "4.8-7.3s",
+                "video_prompt": "武松由下向上抡棒，梢棒在接触瞬间断裂，碎木不遮脸。"
+              },
+              {
+                "camera": "固定微推",
+                "desc": "武松看一眼断棒，扔下木段，握拳迎上。",
+                "id": "S02D",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "7.3-10.229s",
+                "video_prompt": "声场停顿后武松下颌收紧、双拳抬起，猛虎焦外再逼近。"
+              }
+            ],
+            "spectacle_story_function": "用清晰拆招而非混战，证明武松临危判断与意志。",
+            "start_sec": 4.893,
+            "subtitle_lines": [
+              "它冲，我闪；它掀，我躲；虎尾横扫，我再让。只有三招！",
+              "猛虎第三次冲来，他双手抡起梢棒——",
+              "棒断了！",
+              "我来用拳头。"
+            ],
+            "template": "fight_exchange",
+            "template_contract": {
+              "action_scope": "三次虎攻、三次闪避、一次抡棒、一次断棒、一次握拳。",
+              "apex_light": "断棒撞点保留冷月窄侧逆光，木屑边缘短亮后立即抽暗；握拳时只回一记低位冷高光。",
+              "attack_path": "虎上→下连续三扑；武松横向小幅避让后由下→上抡棒。",
+              "beats": [
+                "扑→闪",
+                "掀→躲",
+                "尾剪→让",
+                "梢棒劈下",
+                "棒断",
+                "握拳迎虎"
+              ],
+              "blocking": "猛虎保持画面上方高位，武松在下方沿画右—中央小范围避让；反击由下→上。",
+              "camera_path": "50mm短跟→85mm插入→50mm动作中景→85mm反应近景。",
+              "camera_rule": "四镜位沿动作力线硬切；不环绕、不跨轴。",
+              "combat_micro_expression": "武松前两闪保持警觉专注，断棒瞬间眉峰上抬，随后咬肌收紧、眼神由惊转决绝；猛虎眼睑压低持续锁敌。",
+              "contact_points": [
+                "虎爪与泥地",
+                "虎尾与空气尘叶",
+                "梢棒与树干/虎前方硬点",
+                "武松手与断棒"
+              ],
+              "continuity_must": [
+                "继承猛虎转身再扑",
+                "梢棒先完整后断裂",
+                "武松末帧赤手未命中"
+              ],
+              "degrade_plan": "按扑、掀、尾剪、断棒、握拳五个短镜分别生成后剪辑，不做一镜到底。",
+              "force_direction": "虎攻上→下，武松棒击下→上，断木沿画面两侧飞出。",
+              "impact_frame": "第三扑与梢棒重劈同帧，梢棒断裂但武松尚未被虎咬中。",
+              "keyframe_plan": "2.4秒锁二扑结束，4.8秒锁虎尾让位，7.3秒锁断棒，末帧锁握拳。",
+              "negative": [
+                "不增加第四套虎招",
+                "不多生梢棒",
+                "不让人物腾空",
+                "不展示猎奇伤口"
+              ],
+              "physics_guard": "虎尾、衣摆、尘土、断木飞散均服从各自力线，武松不无重力滑行。",
+              "post_cue_points": [
+                "三招各一短击点",
+                "断棒处静音0.3秒",
+                "握拳处低鼓回击"
+              ],
+              "readability_beats": [
+                "看清三招",
+                "看清棒路",
+                "看清断点",
+                "看清赤手选择"
+              ],
+              "recovery_beat": "武松扔下断棒，双拳架起；猛虎低伏准备最后一扑。",
+              "screen_direction": "猛虎上方、武松下方的主关系不反转。",
+              "secondary_motion": "虎尾带动枯叶横扫，武松衣摆与发束按闪避方向滞后；断木碎屑沿击打切线飞散且不遮脸。",
+              "spatial_path": "双方都不离开景阳冈主空地，位移控制在一个身位内。",
+              "speed_curve": "两次快闪→尾剪更快→抡棒短蓄→断裂瞬停→握拳稳住。",
+              "template_id": "fight_exchange"
+            },
+            "voiceover_indices": [
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "audience_effect": "得到一次完整爽点，同时被一句‘人心更难’带入真正主线。",
+            "beat_id": "Beat_03",
+            "character_ids": [
+              "CHAR_WUSONG/打虎后至都头态",
+              "BEAST_TIGER/战败态",
+              "CROWD_HUNTERS/群像"
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+                  "at_sec": 2.8,
+                  "reason": "打虎兑现切让银",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP03_a2.png",
+                  "at_sec": 6.2,
+                  "reason": "让银切腰牌任命",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP03_a3.png",
+                  "at_sec": 9.5,
+                  "reason": "腰牌与人群切家门阴影",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+              "entry_exit": "猛虎与猎户随蒙太奇结束；武松换为都头装并进入阳谷街。；入画/现身：CROWD_HUNTERS、PROP_BADGE、PROP_REWARD_SILVER；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE",
+              "expression_span": "中",
+              "eyeline": "武松看向街巷纵深家门",
+              "need_endframe": false,
+              "seam_evidence": {
+                "duration_sec": 0.35,
+                "editorial_reason": "由英雄名望的明亮街面过渡到兄嫂被生活压低的日常",
+                "motivation": "由英雄名望的明亮街面过渡到兄嫂被生活压低的日常"
+              },
+              "seam_mode": "dissolve",
+              "shot_size": "CU",
+              "start_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+              "transition": "街门阴影溶入武大挑担的街巷。"
+            },
+            "description": "拳落剪影、死虎静止、让银手部、腰牌入手、人群让路，最后腰牌碰响匹配切成家门门闩。",
+            "dialogue_indices": [],
+            "dramatic_function": "快速兑现打虎结局、让银与任都头，再用门影把胜利转成人心难题。",
+            "duration": 13.02,
+            "economy_intent": "premium_detail",
+            "end_sec": 28.142,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/打虎后至都头态",
+                "BEAST_TIGER/战败态",
+                "CROWD_HUNTERS/群像"
+              ],
+              "forbidden_presence": [
+                "CHAR_PANJINLIAN/正脸特写"
+              ],
+              "knowledge_state": {
+                "CHAR_WUSONG": [
+                  "只知道自己将回阳谷寻兄，不知家门内未来冲突"
+                ]
+              },
+              "locations": [
+                "LOC_JINGYANGGANG",
+                "LOC_YANGGU_STREET"
+              ],
+              "objects": [
+                "PROP_BADGE",
+                "PROP_REWARD_SILVER",
+                "PROP_QUARTERSTAFF/断裂"
+              ],
+              "offscreen_presence": [
+                "BEAST_TIGER",
+                "CHAR_PANJINLIAN",
+                "CHAR_WUDA",
+                "PROP_CAKE_POLE",
+                "PROP_WINDOW_LATTICE"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "PROP_BADGE"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip03_first.png",
+            "id": "EP01_CLIP03",
+            "label": "打虎成名，家门转冷",
+            "location_id": "LOC_JINGYANGGANG",
+            "narration_indices": [
+              6,
+              7
+            ],
+            "object_ids": [
+              "PROP_BADGE",
+              "PROP_REWARD_SILVER",
+              "PROP_QUARTERSTAFF/断裂"
+            ],
+            "pacing_role": "打虎兑现、人格建立与内外困局转折",
+            "rhythm": "爽点·CU硬切→主题留白",
+            "runtime_priority": "primary_highlight",
+            "scene": "LOC_JINGYANGGANG→LOC_YANGGU_STREET/蒙太奇",
+            "shots": [
+              {
+                "camera": "沿拳路短跟后定格",
+                "desc": "拳落与虎倒以克制剪影兑现。",
+                "id": "S03A",
+                "lens": "50mm→85mm",
+                "shot_size": "MS→CU",
+                "t": "0.0-2.8s",
+                "video_prompt": "武松只完成最后一拳，猛虎失力倒下，禁止血浆与反复殴打。"
+              },
+              {
+                "camera": "固定",
+                "desc": "赏银推回猎户手中，猎户愣住。",
+                "id": "S03B",
+                "lens": "85mm",
+                "shot_size": "ECU",
+                "t": "2.8-6.2s",
+                "video_prompt": "武松把银盘稳稳推回，手部与银锭为清晰焦点。"
+              },
+              {
+                "camera": "腰牌轻抬后短退",
+                "desc": "都头腰牌挂上，街市人群为他让路。",
+                "id": "S03C",
+                "lens": "85mm→50mm",
+                "shot_size": "CU→MS",
+                "t": "6.2-9.5s",
+                "video_prompt": "腰牌先清晰再带出武松穿行阳谷街，人群只作层次化侧背。"
+              },
+              {
+                "camera": "慢推",
+                "desc": "武松走向兄长家，门框投下狭长阴影。",
+                "id": "S03D",
+                "lens": "50mm→85mm",
+                "shot_size": "MS→门闩ECU",
+                "t": "9.5-13.02s",
+                "video_prompt": "暖街逐步被家门阴影吞没，腰牌碰响匹配门闩木响。"
+              }
+            ],
+            "spectacle_story_function": "拳落只拍结果，不拖长搏虎；奇观为人物名望与道德声望服务。",
+            "start_sec": 15.122,
+            "subtitle_lines": [
+              "因为他打死猛虎、又把赏银让给猎户，武松赢得满城敬重，也获得了都头腰牌。",
+              "山里的虎拦不住他。家门里的人心，却不是一双拳头能打明白。"
+            ],
+            "take_policy": "single_take_multishot",
+            "template": "ensemble_blocking",
+            "template_contract": {
+              "beats": [
+                "拳落虎倒",
+                "让银猎户",
+                "腰牌任命",
+                "人群让路",
+                "走向家门"
+              ],
+              "blocking": "武松始终为主焦点；猎户群像只在让银镜两侧，人群让路时只用侧背与纵深，不排成正脸横列。",
+              "camera_rule": "逐镜只保一个清晰人物焦点，拳落、银盘、腰牌、门影以图形与声音连接。",
+              "continuity_must": [
+                "虎战败后不复活",
+                "赏银由武松推回猎户",
+                "腰牌只在任命后出现",
+                "武松最后进入阳谷街"
+              ],
+              "degrade_plan": "五个蒙太奇镜位分别生成，禁止把虎、猎户、任命人群和家门压进同一画面。",
+              "focus_hierarchy": [
+                "武松动作与手部为第一焦点",
+                "猎户只作群体反应",
+                "街市人群只作层次"
+              ],
+              "negative": [
+                "多人正脸横排",
+                "猎奇虎尸",
+                "银锭或腰牌漂移",
+                "现代街景"
+              ],
+              "screen_positions": {
+                "BEAST_TIGER": "首拍地面后转画外",
+                "CHAR_WUSONG": "每个镜位中央或主三分点",
+                "CROWD_HUNTERS": "画面两侧与后景"
+              },
+              "template_id": "ensemble_blocking"
+            },
+            "voiceover_indices": [
+              6,
+              7
+            ]
+          },
+          {
+            "audience_effect": "理解三角关系中的结构性不平与各自欲望。",
+            "beat_id": "Beat_04",
+            "character_ids": [
+              "CHAR_WUDA/卖饼劳作态",
+              "CHAR_PANJINLIAN/楼窗压抑态"
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+                  "at_sec": 4.5,
+                  "reason": "街面武大切楼窗潘金莲",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+              "entry_exit": "武松暂在街巷画外靠近；武大在街下，潘金莲在楼上。；出画/画外保留：BEAST_TIGER、CHAR_WUSONG、CROWD_HUNTERS、PROP_BADGE、PROP_QUARTERSTAFF、PROP_REWARD_SILVER；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_CAKE_POLE、PROP_WINDOW_LATTICE；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL",
+              "expression_span": "中",
+              "eyeline": "潘金莲由楼窗向画面下方街口",
+              "need_endframe": false,
+              "seam_evidence": {
+                "audio_bridge": "下一镜武大惊喜喊‘二弟’提前0.25秒进入潘金莲窗后反应",
+                "audio_lead_sec": 0.25,
+                "audio_source": "下一镜武大画外喊‘二弟’",
+                "visual_motivation": "她的视线目标变成街上兄弟重逢"
+              },
+              "seam_mode": "j_cut",
+              "shot_size": "LS",
+              "start_state": "武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+              "transition": "武大的叫卖声先入，随后由潘金莲视线切到街上重逢。"
+            },
+            "description": "街道低位跟武大炊饼担，切楼窗格栅后的潘金莲；她的心声覆盖武大低头叫卖。",
+            "dialogue_indices": [
+              9
+            ],
+            "dramatic_function": "用武大低处挑担与潘金莲高处受困的空间反差，交代婚姻困局而不替任何人洗白。",
+            "duration": 10.145,
+            "economy_intent": "premium_detail",
+            "end_sec": 38.287,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUDA/卖饼劳作态",
+                "CHAR_PANJINLIAN/楼窗压抑态"
+              ],
+              "forbidden_presence": [
+                "CHAR_WUSONG"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "感到婚姻并非自己选择"
+                ],
+                "CHAR_WUDA": [
+                  "只求靠卖饼维持安稳"
+                ]
+              },
+              "locations": [
+                "LOC_YANGGU_STREET",
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_CAKE_POLE",
+                "PROP_WINDOW_LATTICE"
+              ],
+              "offscreen_presence": [
+                "BEAST_TIGER",
+                "CHAR_WUSONG",
+                "CROWD_HUNTERS",
+                "PROP_BADGE",
+                "PROP_QUARTERSTAFF",
+                "PROP_REWARD_SILVER",
+                "PROP_STAIR_RAIL"
+              ],
+              "required_presence": [
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN",
+                "PROP_CAKE_POLE"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip04_first.png",
+            "id": "EP01_CLIP04",
+            "inner_focus_context_reason": "本 Clip 是街下武大劳作与楼上潘金莲心声的平行蒙太奇，两人不在同一清晰画面；心声近景只保留潘金莲，武大只作为上一拍处境证据。",
+            "label": "一担炊饼与一扇楼窗",
+            "location_id": "LOC_YANGGU_STREET",
+            "narration_indices": [
+              8
+            ],
+            "object_ids": [
+              "PROP_CAKE_POLE",
+              "PROP_WINDOW_LATTICE"
+            ],
+            "pacing_role": "人物困境建立与欲望来源",
+            "rhythm": "铺垫·长镜",
+            "runtime_priority": "selective_primary",
+            "scene": "LOC_YANGGU_STREET/日/外内并置",
+            "shots": [
+              {
+                "camera": "街面低位跟",
+                "desc": "武大挑担穿过比他更高的人群，炊饼蒸汽遮一下画。",
+                "id": "S04A",
+                "lens": "35mm→50mm",
+                "shot_size": "FS→MS",
+                "t": "0.0-4.5s",
+                "video_prompt": "武大步伐稳定但吃力，担子轻晃，行人只作侧背层次。"
+              },
+              {
+                "camera": "窗格后慢推",
+                "desc": "潘金莲手扶窗格，看街下却不看武大，眼中压着不甘。",
+                "id": "S04B",
+                "lens": "85mm",
+                "shot_size": "MCU→CU",
+                "t": "4.5-10.145s",
+                "video_prompt": "窗格阴影把脸分割，微风只动鬓发与帘角，表情由麻木转为压抑发问。"
+              }
+            ],
+            "start_sec": 28.142,
+            "subtitle_lines": [
+              "哥哥武大，为了换一家人的安稳，只守着一担炊饼。",
+              "我想要自己做一回主。可从小到大，谁问过我愿不愿意？"
+            ],
+            "template": "ensemble_blocking",
+            "template_contract": {
+              "beats": [
+                "武大挑担",
+                "街市压低人物",
+                "楼窗切换",
+                "潘金莲心声"
+              ],
+              "blocking": "武大只在街下镜位，潘金莲只在楼上窗后镜位；以高低空间并置，不做同框清晰双脸。",
+              "camera_rule": "街下35/50mm低位跟拍切楼上85mm静态近景，空间反差大于人物动作。",
+              "continuity_must": [
+                "炊饼担随武大移动",
+                "潘金莲不离楼窗",
+                "心声镜只保留潘为清晰主体"
+              ],
+              "degrade_plan": "街下劳作和楼上心声分成两个独立take，用叫卖声与视线连接。",
+              "focus_hierarchy": [
+                "前半武大与担子",
+                "后半潘金莲与窗格"
+              ],
+              "negative": [
+                "两人无理由同框",
+                "潘金莲艳俗摆拍",
+                "武大滑稽化",
+                "现代街招"
+              ],
+              "screen_positions": {
+                "CHAR_PANJINLIAN": "楼窗上方画左",
+                "CHAR_WUDA": "街下纵深中央"
+              },
+              "template_id": "ensemble_blocking"
+            },
+            "voiceover_indices": [
+              8,
+              9
+            ]
+          },
+          {
+            "audience_effect": "短暂放松后意识到新的欲望线已经开启。",
+            "beat_id": "Beat_05",
+            "character_ids": [
+              "CHAR_WUSONG/都头态",
+              "CHAR_WUDA/惊喜态",
+              "CHAR_PANJINLIAN/初见审视态"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "街面居中偏右、上楼后室内画右",
+                "slot": "RIGHT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "街面自画右入、楼梯前位",
+                "slot": "FOREGROUND_SLOT"
+              },
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "楼上画左，只在初见反应镜清晰",
+                "slot": "LEFT_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+                  "at_sec": 3.2,
+                  "reason": "兄弟重逢切上楼",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+                  "at_sec": 5.7,
+                  "reason": "上楼切潘金莲初见反应",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+              "entry_exit": "武松由街口入画；三人从街面经楼梯换入室内，炊饼担留在楼下。；出画/画外保留：PROP_WINDOW_LATTICE；入画/现身：CHAR_WUSONG、PROP_BADGE、PROP_STAIR_RAIL；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP",
+              "expression_span": "中",
+              "eyeline": "潘金莲画左看武松画右",
+              "need_endframe": false,
+              "seam_evidence": {
+                "axis": "室内武松右、潘金莲左",
+                "eyeline_source": "潘金莲从画左看向画右武松",
+                "eyeline_target": "武松腰牌与正脸"
+              },
+              "seam_mode": "eyeline_cut",
+              "shot_size": "MS",
+              "start_state": "武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+              "transition": "潘金莲视线反打到她开口留住武松。"
+            },
+            "description": "武大放下担子抱住武松；武松扶稳哥哥。楼梯向上转场，潘金莲的视线先扫腰牌再停在武松脸上。",
+            "dialogue_indices": [
+              10,
+              11
+            ],
+            "dramatic_function": "先给兄弟重逢的真情，再让潘金莲的观察改变场景温度。",
+            "duration": 8.37,
+            "economy_intent": "premium_detail",
+            "end_sec": 46.657,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/都头态",
+                "CHAR_WUDA/惊喜态",
+                "CHAR_PANJINLIAN/初见审视态"
+              ],
+              "forbidden_presence": [
+                "BEAST_TIGER"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "第一次把武松与打虎都头身份对应起来"
+                ]
+              },
+              "locations": [
+                "LOC_YANGGU_STREET",
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_BADGE",
+                "PROP_CAKE_POLE",
+                "PROP_STAIR_RAIL"
+              ],
+              "offscreen_presence": [
+                "PROP_WINDOW_LATTICE",
+                "PROP_DINING_TABLE",
+                "PROP_DOORFRAME",
+                "PROP_TEA_CUP"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip05_first.png",
+            "id": "EP01_CLIP05",
+            "label": "兄弟重逢，楼上第一次看见",
+            "location_id": "LOC_YANGGU_STREET",
+            "multi_subject_strategy": "split_composite_required + shot_reverse_shot：兄弟双人、上楼背影、潘金莲单人反应分take生成。",
+            "narration_indices": [
+              12
+            ],
+            "object_ids": [
+              "PROP_BADGE",
+              "PROP_CAKE_POLE",
+              "PROP_STAIR_RAIL"
+            ],
+            "pacing_role": "兄弟情建立与危险视线入场",
+            "rhythm": "温暖短镜→审视慢推",
+            "runtime_priority": "primary",
+            "scene": "LOC_YANGGU_STREET→LOC_WUDA_HOME/日",
+            "shots": [
+              {
+                "camera": "短跟后停",
+                "desc": "武大从画右奔来抱住武松，武松稳住他与担子。",
+                "id": "S05A",
+                "lens": "50mm",
+                "shot_size": "MS",
+                "t": "0.0-3.2s",
+                "video_prompt": "兄弟拥抱朴实短促，武松扶住炊饼担避免翻倒。"
+              },
+              {
+                "camera": "跟随上楼",
+                "desc": "武大领武松上楼，狭窄楼梯压缩人物距离。",
+                "id": "S05B",
+                "lens": "35mm",
+                "shot_size": "FS",
+                "t": "3.2-5.7s",
+                "video_prompt": "两人依次上楼，武大在前、武松在后，保持楼梯方向连续。"
+              },
+              {
+                "camera": "视线切后慢推",
+                "desc": "潘金莲先看腰牌，再抬眼看武松。",
+                "id": "S05C",
+                "lens": "85mm",
+                "shot_size": "POV→CU",
+                "t": "5.7-8.37s",
+                "video_prompt": "腰牌轻晃作为视线起点，切潘金莲克制审视的近景，不做媚俗表演。"
+              }
+            ],
+            "start_sec": 38.287,
+            "subtitle_lines": [
+              "二弟！真的是你！",
+              "哥，我回来了。",
+              "武大把兄弟领上楼。潘金莲第一次见到这个打虎的都头。"
+            ],
+            "template": "multi_character_same_frame",
+            "template_contract": {
+              "beats": [
+                "兄弟相认",
+                "稳住担子",
+                "上楼",
+                "潘金莲初见"
+              ],
+              "blocking": "街面武松居中、武大自画右入；上楼后武大前、武松后，潘金莲在楼上画左等候。",
+              "camera_rule": "每个take只保一个清晰关系焦点，三人不横排正脸。",
+              "continuity_must": [
+                "炊饼担留在街下",
+                "腰牌始终在武松腰间",
+                "潘金莲只在楼上入画"
+              ],
+              "degrade_plan": "若三人同框不稳，按兄弟双人、上楼背影、潘金莲单人反应三take剪辑。",
+              "focus_hierarchy": [
+                "重逢镜以兄弟为焦点",
+                "上楼镜以纵深为焦点",
+                "初见镜以潘金莲视线为焦点"
+              ],
+              "negative": [
+                "三张正脸横排",
+                "武大身高漂移",
+                "潘金莲媚俗挑逗",
+                "现代楼梯"
+              ],
+              "screen_positions": {
+                "CHAR_PANJINLIAN": "楼上画左",
+                "CHAR_WUDA": "街面画右入→楼梯前位→室内居中",
+                "CHAR_WUSONG": "街面居中→楼梯后位→室内画右"
+              },
+              "template_id": "multi_character_same_frame"
+            },
+            "voiceover_indices": [
+              10,
+              11,
+              12
+            ]
+          },
+          {
+            "audience_effect": "看懂潘金莲不是突然转向，而是在一个月里逐步试探。",
+            "beat_id": "Beat_06",
+            "character_ids": [
+              "CHAR_WUSONG/克制常服态",
+              "CHAR_PANJINLIAN/试探态",
+              "CHAR_WUDA/在场后转画外"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "桌面画左",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "桌面画右",
+                "slot": "RIGHT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "首拍中景关系锚，随后转画外",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+                  "at_sec": 5.2,
+                  "reason": "提议反打切武松答谢",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+                  "at_sec": 8.0,
+                  "reason": "武松答谢切月余匹配蒙太奇",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+              "entry_exit": "武大首拍在场，后续蒙太奇转为画外劳作；武松已在此住满一个月。；出画/画外保留：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；入画/现身：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP",
+              "expression_span": "中",
+              "eyeline": "潘画左看右，武松多半垂眼或看器物",
+              "need_endframe": false,
+              "seam_evidence": {
+                "duration_sec": 0.4,
+                "editorial_reason": "用窗光季节变化把月余试探压缩到雪夜临界点",
+                "motivation": "用窗光季节变化把月余试探压缩到雪夜临界点"
+              },
+              "seam_mode": "dissolve",
+              "shot_size": "MCU",
+              "start_state": "三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+              "transition": "窗外日光溶成雪夜冷蓝，门轴声接武大出门。"
+            },
+            "description": "室内正反打后以三次桌面/茶盏/座位匹配剪辑表示一个月流逝；每次潘更近，武松都把器物推回边界。",
+            "dialogue_indices": [
+              13,
+              14
+            ],
+            "dramatic_function": "让‘照应’的合理表面逐渐变成越界距离，武松的克制也被建立。",
+            "duration": 14.692,
+            "economy_intent": "single_take_multishot",
+            "end_sec": 61.349,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/克制常服态",
+                "CHAR_PANJINLIAN/试探态",
+                "CHAR_WUDA/在场后转画外"
+              ],
+              "forbidden_presence": [
+                "BEAST_TIGER"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "确认武松不会主动迎合但尚未明确拒绝"
+                ],
+                "CHAR_WUSONG": [
+                  "察觉嫂嫂话语逐步越界但仍维护称谓礼数"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_DINING_TABLE",
+                "PROP_TEA_CUP",
+                "PROP_DOORFRAME"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUDA",
+                "PROP_BADGE",
+                "PROP_CAKE_POLE",
+                "PROP_STAIR_RAIL",
+                "PROP_BRAZIER",
+                "PROP_DOOR_LATCH",
+                "PROP_WINE_CUP"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_PANJINLIAN"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip06_first.png",
+            "id": "EP01_CLIP06",
+            "label": "留住叔叔，一个月越坐越近",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "shot_reverse_shot：首拍三人定场后，叔嫂各用单人反打，武大只作画外关系锚。",
+            "narration_indices": [
+              15
+            ],
+            "object_ids": [
+              "PROP_DINING_TABLE",
+              "PROP_TEA_CUP",
+              "PROP_DOORFRAME"
+            ],
+            "pacing_role": "欲望线启动与边界被连续试探",
+            "rhythm": "关系铺垫·景别逐近",
+            "runtime_priority": "primary",
+            "scene": "LOC_WUDA_HOME/日→月余蒙太奇",
+            "shots": [
+              {
+                "camera": "固定正反打",
+                "desc": "潘金莲以‘一家照应’提议，武大在中景点头。",
+                "id": "S06A",
+                "lens": "85mm",
+                "shot_size": "OTS/CU",
+                "t": "0.0-5.2s",
+                "video_prompt": "潘画左、武松画右，武大只作中景关系锚，视线和轴线不变。"
+              },
+              {
+                "camera": "固定",
+                "desc": "武松垂眼答谢，把茶盏留在自己一侧。",
+                "id": "S06B",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "5.2-8.0s",
+                "video_prompt": "武松表情礼貌但不迎视，手只扶住自己面前杯沿。"
+              },
+              {
+                "camera": "三次匹配切",
+                "desc": "茶盏、针线、饭碗三次过月；潘每次更近，武松每次退回半步。",
+                "id": "S06C",
+                "lens": "85mm→50mm",
+                "shot_size": "ECU→MS→CU",
+                "t": "8.0-14.692s",
+                "video_prompt": "用器物位置和窗外光色变化表示月余，不做暧昧身体接触。"
+              }
+            ],
+            "start_sec": 46.657,
+            "subtitle_lines": [
+              "叔叔一个人在外住，连口热饭都没有。我想要一家人住得近些，也好照应。",
+              "嫂嫂厚意，武二记下了。",
+              "他住进来一个月。她递过去的每句话，都比上一句更近。"
+            ],
+            "take_policy": "single_take_multishot",
+            "template": "relationship_turn",
+            "template_contract": {
+              "beats": [
+                "合理照应",
+                "武松礼貌接受",
+                "月余三次试探",
+                "物理距离逐近",
+                "武松退回礼法边界"
+              ],
+              "blocking": "潘始终画左、武松画右；桌沿与器物形成中央边界，武大首拍居中后转画外。",
+              "camera_rule": "先等距反打，再用同构图匹配切显示距离变化；不越轴。",
+              "continuity_must": [
+                "武松不主动触碰潘金莲",
+                "称谓始终为嫂嫂/叔叔",
+                "一个月由窗光和器物变化明确标示"
+              ],
+              "degrade_plan": "若月余蒙太奇不稳，拆成茶盏、针线、饭碗三个器物插入镜，加窗光变化串联。",
+              "negative": [
+                "露骨肢体",
+                "媚俗慢镜",
+                "突然亲密",
+                "三人正脸横排"
+              ],
+              "relationship_after": "潘的试探已越过普通照应，武松察觉并开始主动保持距离。",
+              "relationship_before": "叔嫂礼数清楚，潘以家人照应作表面理由。",
+              "template_id": "relationship_turn",
+              "turn_evidence": [
+                "茶盏越过桌面中线",
+                "潘座位逐拍逼近",
+                "武松每次把器物推回并退半步"
+              ]
+            },
+            "voiceover_indices": [
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "audience_effect": "听见门闩就预感危险，等待谁先把话说破。",
+            "beat_id": "Beat_07",
+            "character_ids": [
+              "CHAR_WUSONG/克制警觉态",
+              "CHAR_PANJINLIAN/主动试探态",
+              "CHAR_WUDA/出门后画外"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "炭盆左侧",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "桌面右侧",
+                "slot": "RIGHT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "仅首镜门外背影，随后画外",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+                  "at_sec": 3.6,
+                  "reason": "门闩插入切炭盆邀饮",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+                  "at_sec": 8.4,
+                  "reason": "潘提议切武松反应",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+              "entry_exit": "武大由门口出画并留在屋外；叔嫂留在室内，禁止新增旁人。；出画/画外保留：PROP_DINING_TABLE、PROP_DOORFRAME、PROP_TEA_CUP；入画/现身：PROP_BRAZIER、PROP_DOOR_LATCH、PROP_WINE_CUP；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE",
+              "expression_span": "中",
+              "eyeline": "潘画左看右，武松先向下看杯再看画右后门",
+              "need_endframe": false,
+              "seam_evidence": {
+                "audio_bridge": "潘‘暖暖身子’的尾音覆盖武松看杯反应约0.3秒",
+                "audio_source": "潘金莲‘暖暖身子’句尾",
+                "audio_tail_sec": 0.3,
+                "editorial_intent": "让诱导语言继续施压而画面先进入防守反应"
+              },
+              "seam_mode": "l_cut",
+              "shot_size": "MS",
+              "start_state": "一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+              "transition": "潘的句尾留在武松反应上形成L-cut。"
+            },
+            "description": "武大背影消失在雪街，潘关门落闩；室内冷暖分界中，她把酒盏推向炭盆，武松不接。",
+            "dialogue_indices": [
+              17,
+              18
+            ],
+            "dramatic_function": "让门闩把普通家屋变成伦理压力锅；武松第一次口头设置共同饮酒边界。",
+            "duration": 12.577,
+            "economy_intent": "premium_detail",
+            "end_sec": 73.926,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/克制警觉态",
+                "CHAR_PANJINLIAN/主动试探态",
+                "CHAR_WUDA/出门后画外"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "确认屋内只剩叔嫂二人"
+                ],
+                "CHAR_WUSONG": [
+                  "确认武大已出门且门闩由潘落下"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_DOOR_LATCH",
+                "PROP_BRAZIER",
+                "PROP_WINE_CUP"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUDA",
+                "PROP_DINING_TABLE",
+                "PROP_DOORFRAME",
+                "PROP_TEA_CUP",
+                "PROP_CAKE_POLE"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_PANJINLIAN",
+                "PROP_DOOR_LATCH",
+                "PROP_WINE_CUP"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip07_first.png",
+            "id": "EP01_CLIP07",
+            "label": "雪夜落闩，炭火邀饮",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "shot_reverse_shot：武大出门为独立背影take，叔嫂对话用成对单人反打。",
+            "narration_indices": [
+              16
+            ],
+            "object_ids": [
+              "PROP_DOOR_LATCH",
+              "PROP_BRAZIER",
+              "PROP_WINE_CUP"
+            ],
+            "pacing_role": "密室条件形成与越界提议",
+            "rhythm": "悬念推进·慢推",
+            "runtime_priority": "primary",
+            "scene": "LOC_WUDA_HOME/雪夜/内",
+            "shots": [
+              {
+                "camera": "由门外短退到门闩",
+                "desc": "武大走入雪街，门关，门闩落下。",
+                "id": "S07A",
+                "lens": "35mm→85mm",
+                "shot_size": "FS→ECU",
+                "t": "0.0-3.6s",
+                "video_prompt": "武大背影离开，门板闭合截断雪声，木闩从左滑到右锁死。"
+              },
+              {
+                "camera": "炭盆前慢推",
+                "desc": "潘金莲坐到画左炭火边，把半杯酒推近。",
+                "id": "S07B",
+                "lens": "50mm→85mm",
+                "shot_size": "MS→CU",
+                "t": "3.6-8.4s",
+                "video_prompt": "酒盏越过桌面中线，潘只用眼神和手势试探，不发生身体接触。"
+              },
+              {
+                "camera": "固定反打",
+                "desc": "武松看酒不看人，提出等哥哥回来。",
+                "id": "S07C",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "8.4-12.577s",
+                "video_prompt": "武松呼吸稳、下颌微收，右手留在膝上不碰杯。"
+              }
+            ],
+            "start_sec": 61.349,
+            "subtitle_lines": [
+              "大雪封街这天，武大刚出门，那扇门就在她手里关闭，门闩随即落下。",
+              "叔叔，外头冷。坐近些，饮一杯暖暖身子。",
+              "等哥哥回来，一起喝。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "炭盆—桌面横轴，潘左武松右。",
+              "beats": [
+                "武大出门",
+                "门闩落下",
+                "半杯推近",
+                "武松提出等哥哥"
+              ],
+              "blocking": "潘画左、武松画右、炭盆居下方中央；门在画右后。",
+              "camera_rule": "门闩插入建立封闭条件，再回50/85mm不越轴反打。",
+              "continuity_must": [
+                "武大已经出门",
+                "门闩确实落下",
+                "酒盏由潘一侧进入桌面中线",
+                "武松不碰杯"
+              ],
+              "degrade_plan": "门闩、酒盏、两人单人反应分四take剪辑。",
+              "eyeline": "潘向右看武松；武松先看杯再看门。",
+              "negative": [
+                "露骨肢体",
+                "武大突然回屋",
+                "酒杯自动移动",
+                "暖光美化越界"
+              ],
+              "shot_pairing": "潘的提议近景 ↔ 武松拒接的克制反打。",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              16,
+              17,
+              18
+            ]
+          },
+          {
+            "audience_effect": "明确知道武松的底线与潘接下来必须升级的压力。",
+            "beat_id": "Beat_08",
+            "character_ids": [
+              "CHAR_WUSONG/克制警觉态",
+              "CHAR_PANJINLIAN/急切试探态"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "炭盆左侧近景",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "桌面右侧近景",
+                "slot": "RIGHT_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP08_a1.png",
+                  "at_sec": 4.9,
+                  "reason": "潘的筹码切武松边界反打",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+              "entry_exit": "武大仍在画外卖饼；室内只有叔嫂。；出画/画外保留：CHAR_WUDA、PROP_DOOR_LATCH；入画/现身：PROP_CAKE_POLE；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE",
+              "expression_span": "中",
+              "eyeline": "潘画左向右；武松画右向左",
+              "need_endframe": false,
+              "seam_evidence": {
+                "action_phase_in": "下一镜手与半杯完成越过桌面中线",
+                "action_phase_out": "潘的右手从杯后抬起准备继续前推",
+                "screen_direction": "动作由画左向画右"
+              },
+              "seam_mode": "match_on_action",
+              "shot_size": "CU",
+              "start_state": "雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+              "transition": "武松边界句结束后，潘的手越过桌面把杯推到眼前。"
+            },
+            "description": "潘金莲在炭火近景说武大不懂心疼；炊饼担插入只作一闪。反打武松抬眼，强调‘亲哥哥’。",
+            "dialogue_indices": [
+              19,
+              20
+            ],
+            "dramatic_function": "潘用婚姻不满作情感筹码；武松把问题重新锚回兄弟伦理。",
+            "duration": 9.482,
+            "economy_intent": "dialogue_shot_reverse",
+            "end_sec": 83.408,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/克制警觉态",
+                "CHAR_PANJINLIAN/急切试探态"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "武松把兄弟伦理置于她的诉求之上"
+                ],
+                "CHAR_WUSONG": [
+                  "确认试探已针对兄长婚姻发起"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_BRAZIER",
+                "PROP_WINE_CUP",
+                "PROP_CAKE_POLE/记忆插入"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUDA",
+                "PROP_DOOR_LATCH",
+                "PROP_SPILLED_WINE"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_PANJINLIAN",
+                "PROP_WINE_CUP"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip08_first.png",
+            "id": "EP01_CLIP08",
+            "label": "拿武大作筹码，武松守界",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "shot_reverse_shot：潘金莲筹码CU与武松边界CU分take，记忆插入不出现第二张清晰脸。",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_BRAZIER",
+              "PROP_WINE_CUP",
+              "PROP_CAKE_POLE/记忆插入"
+            ],
+            "pacing_role": "伦理冲突明牌与第一次清晰边界",
+            "rhythm": "正反打逐近",
+            "runtime_priority": "primary",
+            "scene": "LOC_WUDA_HOME/雪夜/内",
+            "shots": [
+              {
+                "camera": "慢推后硬切",
+                "desc": "潘压低声音抱怨武大，切担绳勒肩的短暂记忆插入。",
+                "id": "S08A",
+                "lens": "85mm",
+                "shot_size": "CU→ECU插入",
+                "t": "0.0-4.9s",
+                "video_prompt": "潘的表情由委屈转为试探；炊饼担只闪现一镜，不出现武大正脸。"
+              },
+              {
+                "camera": "固定微推",
+                "desc": "武松第一次直视潘金莲，说出亲哥哥与必须对得起。",
+                "id": "S08B",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "4.9-9.482s",
+                "video_prompt": "武松视线抬起但身体仍不前倾，眉眼收紧、语气克制。"
+              }
+            ],
+            "start_sec": 73.926,
+            "subtitle_lines": [
+              "我又没逼你。只是他日日只认那副炊饼担，哪里懂得心疼人？",
+              "嫂嫂。那是我亲哥哥。我必须对得起他。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "潘左武松右的炭盆横轴。",
+              "beats": [
+                "否认逼迫",
+                "贬低武大",
+                "武松抬眼",
+                "亲哥哥边界"
+              ],
+              "blocking": "潘左武松右，桌面与酒盏保持中线边界。",
+              "camera_rule": "85mm等镜距反打，武松边界句轻推近但不换侧。",
+              "continuity_must": [
+                "酒盏仍未被武松触碰",
+                "武大只以画外/记忆道具存在",
+                "两人身体不接触"
+              ],
+              "degrade_plan": "两人单人近景与炊饼担插入镜剪辑，不做双人复杂运动。",
+              "eyeline": "双方视线第一次正面对接。",
+              "negative": [
+                "越轴",
+                "潘靠到武松身上",
+                "武松主动微笑",
+                "武大无理由入画"
+              ],
+              "shot_pairing": "潘的情感筹码CU ↔ 武松的伦理边界CU。",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              19,
+              20
+            ]
+          },
+          {
+            "audience_effect": "在酒盏越线的压迫后得到清晰、克制而有力的拒绝爽点。",
+            "beat_id": "Beat_09",
+            "character_ids": [
+              "CHAR_WUSONG/愤怒克制态",
+              "CHAR_PANJINLIAN/越界后羞怒态"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "画左坐姿低位",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "画右坐姿后起身高位",
+                "slot": "RIGHT_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+                  "at_sec": 4.2,
+                  "reason": "杯越线切挡杯动作",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+                  "at_sec": 7.0,
+                  "reason": "酒泼炭响切武松起身关系镜",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP09_a3.png",
+                  "at_sec": 10.0,
+                  "reason": "关系镜切武松警告近景",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_anchor_required": true,
+              "end_state": "酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+              "entry_exit": "武大仍画外但脚步靠近；室内酒杯状态不可复原。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_SPILLED_WINE；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH",
+              "expression_span": "大",
+              "eyeline": "潘左向右；武松右向左后移开",
+              "need_endframe": false,
+              "seam_evidence": {
+                "audio_bridge": "武大归家的脚步与担钩轻响提前0.3秒进入武松句末留白",
+                "audio_lead_sec": 0.3,
+                "audio_source": "下一镜武大脚步与担钩",
+                "visual_motivation": "外部见证者将到，冲突立刻转为叙事权争夺"
+              },
+              "seam_mode": "j_cut",
+              "shot_size": "ECU",
+              "start_state": "武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+              "transition": "门外脚步声先入，切武大推门后的潘金莲泪眼。"
+            },
+            "description": "半杯酒ECU越过中线；武松手背一挡，酒盏翻落，酒泼炭边爆响。武松起身占据竖屏高位，潘仍坐在左下。",
+            "dialogue_indices": [
+              21,
+              23
+            ],
+            "dramatic_function": "把试探升级为明确越线，再以摔杯和警告完成武松的主动拒绝。",
+            "duration": 14.281,
+            "economy_intent": "premium_detail",
+            "end_sec": 97.689,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/愤怒克制态",
+                "CHAR_PANJINLIAN/越界后羞怒态"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "确认武松不但拒绝，还会以兄嫂名分约束她"
+                ],
+                "CHAR_WUSONG": [
+                  "确认必须当场切断试探"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_BRAZIER",
+                "PROP_WINE_CUP/打翻态",
+                "PROP_SPILLED_WINE"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUDA",
+                "PROP_CAKE_POLE",
+                "PROP_DOOR_LATCH"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_PANJINLIAN",
+                "PROP_WINE_CUP",
+                "PROP_BRAZIER"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip09_first.png",
+            "id": "EP01_CLIP09",
+            "label": "半杯越线，摔杯拒诱",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "regional_construct_required + shot_reverse_shot：杯与手部动作、武松起身、潘反应分层分take。",
+            "narration_indices": [
+              22
+            ],
+            "object_ids": [
+              "PROP_BRAZIER",
+              "PROP_WINE_CUP/打翻态",
+              "PROP_SPILLED_WINE"
+            ],
+            "pacing_role": "本集伦理高潮与守界爽点",
+            "rhythm": "加速·碎切→爽点·CU硬切→留白",
+            "runtime_priority": "primary_highlight",
+            "scene": "LOC_WUDA_HOME/雪夜/内",
+            "shots": [
+              {
+                "camera": "随杯短推",
+                "desc": "半杯越过中线，潘要求武松看她。",
+                "id": "S09A",
+                "lens": "85mm",
+                "shot_size": "ECU→CU",
+                "t": "0.0-4.2s",
+                "video_prompt": "酒杯由左向右慢推，潘的手停在杯后，武松焦外不动。"
+              },
+              {
+                "camera": "硬切固定",
+                "desc": "武松手背挡杯，杯翻，酒泼炭边。",
+                "id": "S09B",
+                "lens": "85mm",
+                "shot_size": "ECU",
+                "t": "4.2-7.0s",
+                "video_prompt": "只完成一次挡杯与翻落，酒液受重力落地，炭火短促爆响。"
+              },
+              {
+                "camera": "随武松起身轻仰",
+                "desc": "武松起身形成高位，潘坐在左下惊住。",
+                "id": "S09C",
+                "lens": "50mm→85mm",
+                "shot_size": "MS→CU",
+                "t": "7.0-10.0s",
+                "video_prompt": "武松后撤半步起身，不逼近潘；两人左右不交换。"
+              },
+              {
+                "camera": "固定微推",
+                "desc": "武松压怒说完警告，停半拍后转身。",
+                "id": "S09D",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "10.0-14.281s",
+                "video_prompt": "眉头收紧、咬肌短动、声音克制；句末移开视线，不做暴力威胁动作。"
+              }
+            ],
+            "start_sec": 83.408,
+            "subtitle_lines": [
+              "我要你看着我。你若有心，就饮我这半杯。",
+              "武松打翻酒盏，酒泼在地上，炭火噼啪一响。",
+              "我敬你是嫂嫂，才坐到现在。你若再敢越一步，武二绝不容你。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "潘左武松右，杯沿左→右越线。",
+              "beats": [
+                "半杯越线",
+                "要求直视",
+                "挡杯",
+                "酒泼炭响",
+                "武松起身",
+                "明确警告"
+              ],
+              "blocking": "潘左坐、武松右坐后起身；桌面中线和炭盆为边界，杯由左越向右后落在中央下方。",
+              "camera_rule": "器物ECU→动作ECU→关系MS→武松CU，逐级把权力从试探者转给守界者。",
+              "continuity_must": [
+                "只有一只酒杯越线并被打翻",
+                "酒液落在炭盆边而非人物身上",
+                "武松只起身后退，不接触潘"
+              ],
+              "degrade_plan": "拆成杯越线、手背挡杯、酒液落地、武松起身、潘反应五take。",
+              "eyeline": "潘先强求对视；武松警告时短暂直视后移开。",
+              "interaction_physics": {
+                "contact": "武松手背—杯沿",
+                "force": "画右向左短促格挡",
+                "result": "杯向中央下方翻落，酒液泼地并触炭爆响"
+              },
+              "negative": [
+                "掌掴或殴打",
+                "酒杯自行复原",
+                "双方越轴",
+                "情色化身体特写"
+              ],
+              "shot_pairing": "杯与潘的逼近 ↔ 武松手与脸的拒绝。",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              21,
+              22,
+              23
+            ]
+          },
+          {
+            "audience_effect": "产生强烈不公与焦虑，意识到家门冲突不能靠当场胜负结束。",
+            "beat_id": "Beat_10",
+            "character_ids": [
+              "CHAR_WUDA/迟疑态",
+              "CHAR_PANJINLIAN/表演受害态",
+              "CHAR_WUSONG/沉默画外"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "画左泪眼主焦点",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "画右后门口入、迟疑反应",
+                "slot": "RIGHT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "画右外，只作沉默画外对象",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP10_a1.png",
+                  "at_sec": 3.1,
+                  "reason": "武大主观信息切潘指控",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP10_a2.png",
+                  "at_sec": 7.2,
+                  "reason": "潘指控切武大迟疑反应",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_anchor_required": true,
+              "end_state": "武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+              "entry_exit": "武大由门口入画；武松退到画右外但仍在屋内。；出画/画外保留：PROP_BRAZIER、PROP_SPILLED_WINE；入画/现身：CHAR_WUDA、PROP_CAKE_POLE、PROP_DOOR_LATCH；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE",
+              "expression_span": "大",
+              "eyeline": "武大由画右后看潘画左，再看武松画右外",
+              "need_endframe": false,
+              "seam_evidence": {
+                "reaction": "武松不争辩，转身系紧行李",
+                "reaction_beat": "不争辩而系紧行李",
+                "reaction_subject": "CHAR_WUSONG",
+                "return_anchor": "武大仍留在门口",
+                "stimulus": "武大迟疑的目光和潘的反咬"
+              },
+              "seam_mode": "reaction_cut",
+              "shot_size": "CU",
+              "start_state": "酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+              "transition": "行李绳收紧的声音切入武松收拾。"
+            },
+            "description": "武大推门，先看见潘的泪眼，再看见地上酒杯；潘反咬。武大转向画外武松，迟疑回应。",
+            "dialogue_indices": [
+              25,
+              26
+            ],
+            "dramatic_function": "潘抢先占据叙述权，把越界者变成受害者；武大虽不信却没有能力核验。",
+            "duration": 10.699,
+            "economy_intent": "reveal_reaction_chain",
+            "end_sec": 108.388,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUDA/迟疑态",
+                "CHAR_PANJINLIAN/表演受害态",
+                "CHAR_WUSONG/沉默画外"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "知道真实过程并主动倒置"
+                ],
+                "CHAR_WUDA": [
+                  "看见妻子泪眼和打翻酒杯但未见冲突过程"
+                ],
+                "CHAR_WUSONG": [
+                  "听见反咬但选择不争"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_CAKE_POLE",
+                "PROP_DOOR_LATCH",
+                "PROP_WINE_CUP/打翻态"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUSONG",
+                "PROP_BRAZIER",
+                "PROP_SPILLED_WINE",
+                "PROP_LUGGAGE"
+              ],
+              "required_presence": [
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN",
+                "PROP_WINE_CUP"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip10_first.png",
+            "id": "EP01_CLIP10",
+            "label": "先红眼的人改写真相",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "shot_reverse_shot：泪眼、地上酒杯、武大迟疑与画外武松分别成镜，不做三张清晰脸同框。",
+            "narration_indices": [
+              24
+            ],
+            "object_ids": [
+              "PROP_CAKE_POLE",
+              "PROP_DOOR_LATCH",
+              "PROP_WINE_CUP/打翻态"
+            ],
+            "pacing_role": "本集反咬反转与兄弟信任受压",
+            "rhythm": "反转·硬切→迟疑留白",
+            "runtime_priority": "primary_highlight",
+            "scene": "LOC_WUDA_HOME/雪夜/内",
+            "shots": [
+              {
+                "camera": "随门开短移",
+                "desc": "武大带雪推门，视线先落泪眼再落碎杯。",
+                "id": "S10A",
+                "lens": "50mm",
+                "shot_size": "MS→POV",
+                "t": "0.0-3.1s",
+                "video_prompt": "门开带入冷风，潘在画左抬起泪眼，地上杯与酒液状态承接上一镜。"
+              },
+              {
+                "camera": "固定",
+                "desc": "潘把控诉说完，泪在眼眶但不落得夸张。",
+                "id": "S10B",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "3.1-7.2s",
+                "video_prompt": "潘说话由委屈加速到指控，目光始终锁武大，不看武松。"
+              },
+              {
+                "camera": "轻退",
+                "desc": "武大迟疑说兄弟不是这样的人，越肩看向画外武松。",
+                "id": "S10C",
+                "lens": "85mm",
+                "shot_size": "CU→OTS",
+                "t": "7.2-10.699s",
+                "video_prompt": "武大眉眼犹疑、肩膀收缩，画外武松保持沉默。"
+              }
+            ],
+            "start_sec": 97.689,
+            "subtitle_lines": [
+              "武大回家时，她先红了眼，也先把真相藏了起来。",
+              "你那好兄弟，趁家里没人，反来调戏我！",
+              "我兄弟……不是这样的人。"
+            ],
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+              "beats": [
+                "武大见泪眼",
+                "见打翻酒杯",
+                "潘反咬",
+                "武大迟疑",
+                "看向沉默武松"
+              ],
+              "blocking": "武大由画右后门口入，潘在画左，武松退至画右外；地上酒杯保持中央下方。",
+              "camera_rule": "按武大主观的泪眼→物证→指控→迟疑反应链剪辑。",
+              "continuity_must": [
+                "地上酒杯与酒液保持上一镜状态",
+                "武松不插话",
+                "潘先哭后控诉"
+              ],
+              "degrade_plan": "泪眼、酒杯、武大反应、画外武松四镜剪辑。",
+              "knowledge_order": [
+                "武大只见结果",
+                "潘先给解释",
+                "武大表达怀疑",
+                "武松沉默导致事实悬置"
+              ],
+              "negative": [
+                "武大突然掌握真相",
+                "武松争辩",
+                "酒杯复原",
+                "夸张雷电转场"
+              ],
+              "reaction_beats": [
+                "武大惊",
+                "看杯困惑",
+                "听控诉迟疑",
+                "看向兄弟"
+              ],
+              "reveal_object": "潘金莲以泪眼和打翻酒杯重新解释刚发生的事件。",
+              "template_id": "reveal_reaction_chain"
+            },
+            "voiceover_indices": [
+              24,
+              25,
+              26
+            ]
+          },
+          {
+            "audience_effect": "感到他赢了当场伦理，却输掉对哥哥的保护位置。",
+            "beat_id": "Beat_11",
+            "character_ids": [
+              "CHAR_WUSONG/搬离态",
+              "CHAR_WUDA/慌乱态",
+              "CHAR_PANJINLIAN/沉默后景"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "画右至门槛主焦点",
+                "slot": "RIGHT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "中景追问者",
+                "slot": "FOREGROUND_SLOT"
+              },
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "画左后景焦外",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+                  "at_sec": 3.2,
+                  "reason": "系行李切武大追问",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+                  "at_sec": 5.9,
+                  "reason": "武大追问切门槛告别",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+              "entry_exit": "武松从屋内出门；武大与潘留在屋内。；出画/画外保留：PROP_CAKE_POLE；入画/现身：PROP_LUGGAGE；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR",
+              "expression_span": "中",
+              "eyeline": "武大看武松背影；武松句末看门闩",
+              "need_endframe": false,
+              "seam_evidence": {
+                "action_phase_in": "下一镜同一只脚落在雪街石板",
+                "action_phase_out": "武松右脚跨出门槛",
+                "screen_direction": "屋内向画面纵深外离开"
+              },
+              "seam_mode": "match_on_action",
+              "shot_size": "MS",
+              "start_state": "武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+              "transition": "武松脚跨门槛匹配切到雪街脚步。"
+            },
+            "description": "行李绳ECU收紧，武松背起包袱；武大追一步发问。武松在门槛前说完，手不去碰门闩。",
+            "dialogue_indices": [
+              28,
+              29
+            ],
+            "dramatic_function": "武松拒绝争夺叙述权，以搬离阻止冲突继续，却承认自己守不住这扇门。",
+            "duration": 10.129,
+            "economy_intent": "relationship_turn",
+            "end_sec": 118.517,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/搬离态",
+                "CHAR_WUDA/慌乱态",
+                "CHAR_PANJINLIAN/沉默后景"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_WUDA": [
+                  "不知道完整冲突，只知道兄弟要走"
+                ],
+                "CHAR_WUSONG": [
+                  "认为离开能避嫌但无法替哥哥管住家门"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_LUGGAGE",
+                "PROP_DOOR_LATCH",
+                "PROP_WINE_CUP/打翻态"
+              ],
+              "offscreen_presence": [
+                "CHAR_PANJINLIAN",
+                "PROP_CAKE_POLE",
+                "PROP_DOOR"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_WUDA",
+                "PROP_LUGGAGE"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip11_first.png",
+            "id": "EP01_CLIP11",
+            "label": "不争，系好行李离门",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "regional_construct_required + shot_reverse_shot：武松与武大关系镜为主，潘只作焦外后景层。",
+            "narration_indices": [
+              27
+            ],
+            "object_ids": [
+              "PROP_LUGGAGE",
+              "PROP_DOOR_LATCH",
+              "PROP_WINE_CUP/打翻态"
+            ],
+            "pacing_role": "反转后果与兄弟分离",
+            "rhythm": "后果·克制长镜",
+            "runtime_priority": "primary",
+            "scene": "LOC_WUDA_HOME/雪夜/内",
+            "shots": [
+              {
+                "camera": "固定后轻退",
+                "desc": "行李绳收紧，武松背包起身。",
+                "id": "S11A",
+                "lens": "85mm→50mm",
+                "shot_size": "ECU→MS",
+                "t": "0.0-3.2s",
+                "video_prompt": "绳结只拉紧一次，武松动作利落不摔物，不看潘。"
+              },
+              {
+                "camera": "短跟",
+                "desc": "武大追一步问去哪里，潘留在焦外后景。",
+                "id": "S11B",
+                "lens": "50mm",
+                "shot_size": "MS",
+                "t": "3.2-5.9s",
+                "video_prompt": "武大由门口向前一步，武松停在门槛，潘只作焦外静止。"
+              },
+              {
+                "camera": "固定",
+                "desc": "武松说门替你关不上，视线落门闩却不碰。",
+                "id": "S11C",
+                "lens": "85mm",
+                "shot_size": "CU→门闩插入",
+                "t": "5.9-10.129s",
+                "video_prompt": "武松眼神由哥哥移到门闩，句末背身跨出门槛。"
+              }
+            ],
+            "spectacle_story_function": "行李、门槛和人物位移只服务于兄弟保护关系断裂，不把搬离拍成无意义动作展示。",
+            "start_sec": 108.388,
+            "subtitle_lines": [
+              "武松一句也没争。他把行李重新系好。",
+              "二弟，你要去哪里？",
+              "哥哥，不要问。我得离开。门，我替你关不上。"
+            ],
+            "template": "relationship_turn",
+            "template_contract": {
+              "beats": [
+                "沉默",
+                "系行李",
+                "武大追问",
+                "门槛告别",
+                "不碰门闩"
+              ],
+              "blocking": "武松由屋内画右向门槛纵深走；武大追到中景；潘留画左后景焦外。",
+              "camera_rule": "器物ECU→双人关系MS→武松CU/门闩插入，空间逐步拉开。",
+              "continuity_must": [
+                "打翻酒杯仍在地上",
+                "武松只带自己的行李",
+                "武大不阻拦肢体",
+                "潘不插话"
+              ],
+              "degrade_plan": "行李ECU、武大反应、武松门槛CU三镜剪辑。",
+              "negative": [
+                "打斗",
+                "武松辱骂",
+                "潘突然认错",
+                "门闩自动关闭"
+              ],
+              "relationship_after": "兄弟仍相认相护，但武松已离开共同住处，保护出现空间缺口。",
+              "relationship_before": "兄弟同住，武松可在家中直接保护武大。",
+              "template_id": "relationship_turn",
+              "turn_evidence": [
+                "行李绳收紧",
+                "武松跨过门槛",
+                "‘门，我替你关不上’"
+              ]
+            },
+            "voiceover_indices": [
+              27,
+              28,
+              29
+            ]
+          },
+          {
+            "audience_effect": "看见武松离开不是解决，而是在制造更危险的空位。",
+            "beat_id": "Beat_12",
+            "character_ids": [
+              "CHAR_WUSONG/搬离态",
+              "CHAR_WUDA/门内态",
+              "CHAR_PANJINLIAN/门内态"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "街外纵深背影",
+                "slot": "FOREGROUND_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "门内靠前剪影",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "门内更深后景剪影",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+                  "at_sec": 2.4,
+                  "reason": "脚步远离切门内外关系定场",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+              "entry_exit": "武松离开武大家；武大和潘留在门内。；出画/画外保留：PROP_WINE_CUP；入画/现身：PROP_DOOR；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC",
+              "expression_span": "微",
+              "eyeline": "武大看武松背影，潘藏在更深后景",
+              "need_endframe": false,
+              "seam_evidence": {
+                "composition_relation": "同在竖屏中央形成压迫分割",
+                "element_in": "衙门案桌垂直暗边",
+                "element_out": "家门垂直木板暗面",
+                "match_element_in": "衙门案桌垂直暗边",
+                "match_element_out": "家门垂直木板暗面"
+              },
+              "seam_mode": "graphic_match",
+              "shot_size": "LS",
+              "start_state": "武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+              "transition": "门板黑面匹配切到衙门案桌阴影。"
+            },
+            "description": "武松脚落雪街后沿纵深走远；门在画面中间缓慢合上，武大剪影在门内，潘剪影更深处。",
+            "dialogue_indices": [],
+            "dramatic_function": "用门的物理闭合呈现保护关系断裂，不追加解释。",
+            "duration": 5.766,
+            "economy_intent": "symbolic_single_take",
+            "end_sec": 124.283,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/搬离态",
+                "CHAR_WUDA/门内态",
+                "CHAR_PANJINLIAN/门内态"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_WUDA": [
+                  "留在门内并失去兄弟同住保护"
+                ],
+                "CHAR_WUSONG": [
+                  "以搬离避免闲话"
+                ]
+              },
+              "locations": [
+                "LOC_YANGGU_STREET",
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_LUGGAGE",
+                "PROP_DOOR",
+                "PROP_DOOR_LATCH"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN",
+                "PROP_WINE_CUP",
+                "CHAR_MAGISTRATE",
+                "PROP_BADGE",
+                "PROP_GIFT_LOAD",
+                "PROP_OFFICIAL_DOC"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "PROP_DOOR"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip12_first.png",
+            "id": "EP01_CLIP12",
+            "label": "一扇门把兄弟分开",
+            "location_id": "LOC_YANGGU_STREET",
+            "multi_subject_strategy": "regional_construct_required：街外背影与门内双层剪影按前后景区域构建，不呈现多张清晰脸。",
+            "narration_indices": [
+              30
+            ],
+            "object_ids": [
+              "PROP_LUGGAGE",
+              "PROP_DOOR",
+              "PROP_DOOR_LATCH"
+            ],
+            "pacing_role": "后果留白与门槛母题兑现",
+            "rhythm": "留白·定格",
+            "runtime_priority": "selective",
+            "scene": "LOC_YANGGU_STREET/雪夜/外",
+            "shots": [
+              {
+                "camera": "由脚步轻退",
+                "desc": "武松右脚落雪，背影沿街走远。",
+                "id": "S12A",
+                "lens": "85mm→35mm",
+                "shot_size": "ECU→FS",
+                "t": "0.0-2.4s",
+                "video_prompt": "脚印连续向纵深延伸，行李随步伐轻晃。"
+              },
+              {
+                "camera": "固定",
+                "desc": "家门合上，武大与潘的剪影被分层留在门内。",
+                "id": "S12B",
+                "lens": "50mm",
+                "shot_size": "FS",
+                "t": "2.4-5.766s",
+                "video_prompt": "门板慢合但不落闩，武大靠前、潘更深处，武松背影继续远去。"
+              }
+            ],
+            "start_sec": 118.517,
+            "subtitle_lines": [
+              "因此，他搬出了那扇门。想避开闲话，反倒把哥哥留在了门里。"
+            ],
+            "template": "relationship_turn",
+            "template_contract": {
+              "beats": [
+                "脚落雪街",
+                "武松走远",
+                "家门合上",
+                "武大留在门内",
+                "潘留在更深后景"
+              ],
+              "blocking": "武松在街外纵深远离；门框居中；武大门内靠前，潘在更深后景，仅以剪影分层。",
+              "camera_rule": "脚步ECU退到街巷FS，再用门框固定构图完成关系分割。",
+              "continuity_must": [
+                "武松只向外走",
+                "门合上但不显示落闩",
+                "武大和潘留在门内"
+              ],
+              "degrade_plan": "脚步远离与门内剪影两张关键画面做轻运动剪辑。",
+              "negative": [
+                "武松回头折返",
+                "门内人物左右互换",
+                "新增路人清晰正脸",
+                "门闩自动落下"
+              ],
+              "relationship_after": "武松离开共同住处，武大被留在门内且保护出现空间缺口。",
+              "relationship_before": "武松仍能站在门槛内与哥哥直接对话。",
+              "template_id": "relationship_turn",
+              "turn_evidence": [
+                "雪地脚印延伸",
+                "门框完成物理分割",
+                "武大剪影留在门内"
+              ]
+            },
+            "voiceover_indices": [
+              30
+            ]
+          },
+          {
+            "audience_effect": "知道真正危险不是任务本身，而是武松离开后家门无人。",
+            "beat_id": "Beat_13",
+            "character_ids": [
+              "CHAR_WUSONG/都头公务态",
+              "CHAR_MAGISTRATE/知县态"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_MAGISTRATE",
+                "position": "画左案后",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "画右下站立听令",
+                "slot": "RIGHT_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+                  "at_sec": 2.2,
+                  "reason": "公文插入切尊卑关系镜",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+                  "at_sec": 5.0,
+                  "reason": "知县交代切武松领命",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松在衙门抱拳领命，确认明日押礼担赴东京。",
+              "entry_exit": "完整换场到县衙；武大、潘不在场。；出画/画外保留：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR、PROP_DOOR_LATCH、PROP_LUGGAGE；入画/现身：CHAR_MAGISTRATE、PROP_BADGE、PROP_GIFT_LOAD、PROP_OFFICIAL_DOC；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR",
+              "expression_span": "中",
+              "eyeline": "知县左上、武松右下互看",
+              "need_endframe": false,
+              "seam_evidence": {
+                "audio_bridge": "‘明日就要去东京’尾音延续到武大家门外的下一镜",
+                "audio_source": "武松‘明日就要去东京’句尾",
+                "audio_tail_sec": 0.3,
+                "editorial_intent": "压缩公务过门，让任务直接落到兄弟告别后果"
+              },
+              "seam_mode": "l_cut",
+              "shot_size": "MS",
+              "start_state": "武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+              "transition": "武松‘明日’尾音覆盖回到武大家的告别。"
+            },
+            "description": "公文展开与礼担绳结插入，知县在案后交代；武松抱拳接令。",
+            "dialogue_indices": [
+              31,
+              32
+            ],
+            "dramatic_function": "以合理公务把武松从阳谷移开，为下一集危险发生制造时间与空间条件。",
+            "duration": 7.746,
+            "economy_intent": "dialogue_multishot",
+            "end_sec": 132.029,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/都头公务态",
+                "CHAR_MAGISTRATE/知县态"
+              ],
+              "forbidden_presence": [
+                "CHAR_WUDA",
+                "CHAR_PANJINLIAN",
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_MAGISTRATE": [
+                  "认为武松适合押送礼担"
+                ],
+                "CHAR_WUSONG": [
+                  "明日需离城赴东京"
+                ]
+              },
+              "locations": [
+                "LOC_COUNTY_YAMEN"
+              ],
+              "objects": [
+                "PROP_OFFICIAL_DOC",
+                "PROP_GIFT_LOAD",
+                "PROP_BADGE"
+              ],
+              "offscreen_presence": [
+                "CHAR_PANJINLIAN",
+                "CHAR_WUDA",
+                "PROP_DOOR",
+                "PROP_DOOR_LATCH",
+                "PROP_LUGGAGE"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_MAGISTRATE",
+                "PROP_OFFICIAL_DOC"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip13_first.png",
+            "id": "EP01_CLIP13",
+            "label": "东京差遣",
+            "location_id": "LOC_COUNTY_YAMEN",
+            "multi_subject_strategy": "shot_reverse_shot：案后知县MS与武松领命MCU成对反打，公文为独立插入。",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_OFFICIAL_DOC",
+              "PROP_GIFT_LOAD",
+              "PROP_BADGE"
+            ],
+            "pacing_role": "制造保护空窗的外部任务",
+            "rhythm": "信息过门·短促",
+            "runtime_priority": "selective",
+            "scene": "LOC_COUNTY_YAMEN/日/内",
+            "shots": [
+              {
+                "camera": "固定",
+                "desc": "公文展开，手指点到东京，礼担绳结作下一插入。",
+                "id": "S13A",
+                "lens": "85mm",
+                "shot_size": "ECU",
+                "t": "0.0-2.2s",
+                "video_prompt": "纸面不烤可读文字，仅保印章与路线示意，手指稳定。"
+              },
+              {
+                "camera": "固定轻俯",
+                "desc": "知县案后交代，武松站在画右下听令。",
+                "id": "S13B",
+                "lens": "50mm",
+                "shot_size": "MS",
+                "t": "2.2-5.0s",
+                "video_prompt": "尊卑轴稳定，知县不离案，武松不随意走动。"
+              },
+              {
+                "camera": "轻推",
+                "desc": "武松抱拳领命，腰牌轻碰。",
+                "id": "S13C",
+                "lens": "85mm",
+                "shot_size": "MCU",
+                "t": "5.0-7.746s",
+                "video_prompt": "抱拳只完成一次，神情坚定但想到哥哥时短暂压眉。"
+              }
+            ],
+            "start_sec": 124.283,
+            "subtitle_lines": [
+              "武都头，有一担礼要送往东京。路远人杂，非你不可。",
+              "蒙相公差遣，我明日就要去东京。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "案桌横轴，知县左武松右。",
+              "beats": [
+                "公文与礼担",
+                "知县交代",
+                "武松领命"
+              ],
+              "blocking": "知县画左案后、武松画右下站立；公文居中央前景。",
+              "camera_rule": "先证据插入，再尊卑关系MS与武松MCU，不越轴。",
+              "continuity_must": [
+                "武松穿都头公务装并带腰牌",
+                "礼担尚未出发",
+                "公文文字走后期或保持不可读"
+              ],
+              "degrade_plan": "公文、知县、武松三镜剪辑。",
+              "eyeline": "知县向右下看武松；武松向左上回视。",
+              "negative": [
+                "现代地图",
+                "清宫衙服",
+                "无来源随从",
+                "烤字"
+              ],
+              "shot_pairing": "知县案后MS ↔ 武松领命MCU。",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              31,
+              32
+            ]
+          },
+          {
+            "audience_effect": "因‘我会回来’产生反讽性担忧，并期待他何时回返。",
+            "beat_id": "Beat_14",
+            "character_ids": [
+              "CHAR_WUSONG/出城行装态",
+              "CHAR_WUDA/送别态",
+              "CHAR_PANJINLIAN/楼窗画外"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_WUDA",
+                "position": "家门外画左",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_WUSONG",
+                "position": "家门外画右，随后转向纵深",
+                "slot": "RIGHT_SLOT"
+              },
+              {
+                "character_id": "CHAR_PANJINLIAN",
+                "position": "楼窗画外，只留帘影",
+                "slot": "BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP14_a1.png",
+                  "at_sec": 4.6,
+                  "reason": "叮嘱反打切出城关系全景",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松已转身向城门与礼担走去，武大停在家门外目送。",
+              "entry_exit": "武松离开家门走向礼担；武大停在门外；潘在楼窗后画外。；出画/画外保留：CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；入画/现身：CHAR_PANJINLIAN、CHAR_WUDA、PROP_DOOR；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN",
+              "expression_span": "中",
+              "eyeline": "兄弟互看后武大看纵深",
+              "need_endframe": false,
+              "seam_evidence": {
+                "axis": "离城方向保持向纵深外",
+                "eyeline_source": "武大从家门向画面纵深看",
+                "eyeline_target": "下一镜城门下远去的武松与礼担"
+              },
+              "seam_mode": "eyeline_cut",
+              "shot_size": "CU",
+              "start_state": "武松在衙门抱拳领命，确认明日押礼担赴东京。",
+              "transition": "武大的目送视线切到城门纵深中的武松。"
+            },
+            "description": "门外85mm双人反打，武松替武大整一下衣领后立即放手，叮嘱早闭门户；楼窗帘影在上方不抢焦。",
+            "dialogue_indices": [
+              33
+            ],
+            "dramatic_function": "武松把能想到的防线都交给哥哥，却不知道危险就在门内与窗外。",
+            "duration": 6.569,
+            "economy_intent": "performance_single_take",
+            "end_sec": 138.598,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/出城行装态",
+                "CHAR_WUDA/送别态",
+                "CHAR_PANJINLIAN/楼窗画外"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING"
+              ],
+              "knowledge_state": {
+                "CHAR_WUDA": [
+                  "答应少出早归、早闭门户"
+                ],
+                "CHAR_WUSONG": [
+                  "知道离城带来保护空窗但不知具体威胁"
+                ]
+              },
+              "locations": [
+                "LOC_WUDA_HOME"
+              ],
+              "objects": [
+                "PROP_GIFT_LOAD",
+                "PROP_DOOR",
+                "PROP_BADGE"
+              ],
+              "offscreen_presence": [
+                "CHAR_PANJINLIAN",
+                "PROP_GIFT_LOAD",
+                "CHAR_MAGISTRATE",
+                "PROP_OFFICIAL_DOC",
+                "CHAR_XIMENQING",
+                "PROP_CURTAIN_FORK",
+                "PROP_WINDOW_CURTAIN"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_WUDA",
+                "PROP_DOOR"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip14_first.png",
+            "id": "EP01_CLIP14",
+            "label": "早闭门户，我会回来",
+            "location_id": "LOC_WUDA_HOME",
+            "multi_subject_strategy": "shot_reverse_shot：兄弟同高反打，潘金莲不入清晰画面，只用楼窗帘影作后景关系锚。",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_GIFT_LOAD",
+              "PROP_DOOR",
+              "PROP_BADGE"
+            ],
+            "pacing_role": "兄弟承诺与悲剧性预警",
+            "rhythm": "情感主镜·克制",
+            "runtime_priority": "primary",
+            "scene": "LOC_WUDA_HOME/清晨/门外",
+            "shots": [
+              {
+                "camera": "固定",
+                "desc": "武松替武大整衣领并叮嘱，武大点头。",
+                "id": "S14A",
+                "lens": "85mm",
+                "shot_size": "MCU双人→CU反打",
+                "t": "0.0-4.6s",
+                "video_prompt": "兄弟接触只限整理衣领后立即放手，表情真诚克制。"
+              },
+              {
+                "camera": "轻退",
+                "desc": "‘我会回来’落在武大反应上，带出后景礼担与城门方向。",
+                "id": "S14B",
+                "lens": "85mm→35mm",
+                "shot_size": "CU→WS",
+                "t": "4.6-6.569s",
+                "video_prompt": "武大眼眶微湿不落泪，武松转身，镜头退见出城方向。"
+              }
+            ],
+            "start_sec": 132.029,
+            "subtitle_lines": [
+              "哥，我不在时，少出早归，早闭门户。我会回来；有人欺你，等我理论。"
+            ],
+            "take_policy": "single_take_multishot",
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "门前横轴，武大左武松右。",
+              "beats": [
+                "整理衣领",
+                "少出早归",
+                "早闭门户",
+                "承诺回来",
+                "武大点头"
+              ],
+              "blocking": "武松画右、武大画左；家门在后，出城方向向画面纵深。",
+              "camera_rule": "85mm同高反打保持兄弟平等，末尾退成35mm环境关系。",
+              "continuity_must": [
+                "礼担等待出发",
+                "潘只在楼窗画外",
+                "武松不重新进屋"
+              ],
+              "degrade_plan": "武松CU、武大CU、两人门前WS三镜。",
+              "eyeline": "兄弟同高互看。",
+              "negative": [
+                "煽情拥抱过长",
+                "潘插话",
+                "西门庆提前入画",
+                "现代行李"
+              ],
+              "shot_pairing": "武松叮嘱 ↔ 武大点头反应。",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              33
+            ]
+          },
+          {
+            "audience_effect": "在保护者离开的一刻意识到有人正靠近这扇无人能守的门。",
+            "beat_id": "Beat_15",
+            "character_ids": [
+              "CHAR_WUSONG/出城远景",
+              "CHAR_PANJINLIAN/隔帘态",
+              "CHAR_XIMENQING/未揭面剪影态"
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP15_a1.png",
+                  "at_sec": 2.2,
+                  "reason": "城门离城切潘隔帘",
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP15_a2.png",
+                  "at_sec": 4.1,
+                  "reason": "潘目送切街下陌生视线",
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "武松已出城；潘仍在楼窗后；陌生男子只露檐影下眼部与叉竿，身份未揭。",
+              "entry_exit": "武松离开阳谷；武大留在家门外后转画外；潘在楼窗；陌生男子由街下进入局部视野。；出画/画外保留：CHAR_WUDA、PROP_BADGE、PROP_DOOR；入画/现身：CHAR_XIMENQING、PROP_CURTAIN_FORK、PROP_WINDOW_CURTAIN",
+              "expression_span": "中",
+              "eyeline": "潘由楼上看城门方向；陌生男子由街下抬眼看楼窗",
+              "need_endframe": false,
+              "seam_evidence": {
+                "editorial_intent": "在陌生视线确认目标但尚未接触时硬断，保留第2集相逢与身份揭示"
+              },
+              "seam_mode": "hard_cut",
+              "shot_size": "ECU",
+              "start_state": "武松已转身向城门与礼担走去，武大停在家门外目送。",
+              "transition": "叉竿轻碰木檐后硬切黑场。"
+            },
+            "description": "城门35mm纵深看武松与礼担变小；切楼窗85mm隔帘潘金莲；街下陌生男子只露眼部剪影与叉竿轻碰檐木，硬切黑。",
+            "dialogue_indices": [],
+            "dramatic_function": "确认武松离城，同时只以眼神和叉竿声引入新的欲望主体，不提前揭面。",
+            "duration": 5.786,
+            "economy_intent": "parallel_reveal",
+            "end_sec": 144.384,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_WUSONG/出城远景",
+                "CHAR_PANJINLIAN/隔帘态",
+                "CHAR_XIMENQING/未揭面剪影态"
+              ],
+              "forbidden_presence": [
+                "CHAR_XIMENQING/清晰全脸",
+                "CHAR_WUSONG/折返"
+              ],
+              "knowledge_state": {
+                "CHAR_PANJINLIAN": [
+                  "知道武松已经离城"
+                ],
+                "CHAR_WUSONG": [
+                  "不知道街下陌生视线"
+                ],
+                "CHAR_XIMENQING": [
+                  "尚未与潘正式相识，只注意到楼窗身影"
+                ]
+              },
+              "locations": [
+                "LOC_CITY_GATE",
+                "LOC_YANGGU_STREET"
+              ],
+              "objects": [
+                "PROP_GIFT_LOAD",
+                "PROP_WINDOW_CURTAIN",
+                "PROP_CURTAIN_FORK"
+              ],
+              "offscreen_presence": [
+                "CHAR_WUDA",
+                "PROP_BADGE",
+                "PROP_DOOR"
+              ],
+              "required_presence": [
+                "CHAR_WUSONG",
+                "CHAR_PANJINLIAN",
+                "CHAR_XIMENQING"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/Clip15_first.png",
+            "id": "EP01_CLIP15",
+            "label": "帘后目送，另一双眼走近",
+            "location_id": "LOC_CITY_GATE",
+            "narration_indices": [
+              34
+            ],
+            "object_ids": [
+              "PROP_GIFT_LOAD",
+              "PROP_WINDOW_CURTAIN",
+              "PROP_CURTAIN_FORK"
+            ],
+            "pacing_role": "离城事实与下一危险入场",
+            "rhythm": "集尾·悬念硬断",
+            "runtime_priority": "primary_cliffhanger",
+            "scene": "LOC_CITY_GATE↔LOC_YANGGU_STREET/清晨/外内并置",
+            "shots": [
+              {
+                "camera": "固定慢退",
+                "desc": "武松随礼担穿过城门，背影变小。",
+                "id": "S15A",
+                "lens": "35mm",
+                "shot_size": "WS",
+                "t": "0.0-2.2s",
+                "video_prompt": "礼担与武松沿纵深稳定离城，不回头，不增加追随者。"
+              },
+              {
+                "camera": "帘后慢推",
+                "desc": "潘金莲隔帘看远，表情从余怒沉成空缺。",
+                "id": "S15B",
+                "lens": "85mm",
+                "shot_size": "CU",
+                "t": "2.2-4.1s",
+                "video_prompt": "帘纱轻动，潘只露一只清晰眼睛与半张侧脸，不做媚俗表演。"
+              },
+              {
+                "camera": "视线落到街下",
+                "desc": "陌生男子眼部在檐影下抬起，叉竿轻碰木檐。",
+                "id": "S15C",
+                "lens": "85mm",
+                "shot_size": "ECU/剪影",
+                "t": "4.1-5.786s",
+                "video_prompt": "只露眼部与帽檐剪影，叉竿轻碰檐木后立即黑场，不揭全脸。"
+              }
+            ],
+            "start_sec": 138.598,
+            "subtitle_lines": [
+              "武松出城那天，潘金莲站在楼窗后。帘外，另一双眼已经走近。"
+            ],
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+              "beats": [
+                "武松出城",
+                "潘隔帘目送",
+                "街下视线抬起",
+                "叉竿轻响",
+                "切黑"
+              ],
+              "blocking": "武松在远处城门纵深；潘在楼窗上方；陌生男子只在街下檐影局部入画。",
+              "camera_rule": "WS离城→CU隔帘→ECU陌生眼神，由空间远景收紧到未知主体。",
+              "continuity_must": [
+                "武松不回头",
+                "潘留在楼窗内",
+                "陌生男子不露清晰全脸",
+                "叉竿事件不在本集完整发生"
+              ],
+              "degrade_plan": "城门背影、潘眼部、陌生眼部与叉竿声三镜剪辑，不做复杂同框。",
+              "knowledge_order": [
+                "观众先确认武松离城",
+                "再看见潘独处",
+                "最后看见未知视线靠近"
+              ],
+              "negative": [
+                "提前揭示姓名",
+                "潘与陌生男子对话",
+                "武松折返",
+                "情色凝视特写"
+              ],
+              "reaction_beats": [
+                "武松不回头",
+                "潘隔帘沉默",
+                "陌生眼神抬起"
+              ],
+              "reveal_object": "保护者离城后，街下有新的陌生视线注意到楼窗。",
+              "template_id": "reveal_reaction_chain"
+            },
+            "voiceover_indices": [
+              34
+            ]
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_storyboard",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "title",
+          "status",
+          "total_duration",
+          "timing_basis",
+          "policy",
+          "core_attraction",
+          "first_3s_visual_hook",
+          "retention_promise_ledger",
+          "pacing_allocation",
+          "visual_contract",
+          "style_contract",
+          "series_handoff",
+          "clips"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/storyboard.json",
+      "sha256": "d17999c76b6808fdca05889797ea061b3f15d53336756802f965b61a291a0f65"
+    },
+    {
+      "bytes": 8707,
+      "exists": true,
+      "preview": "# 《金瓶梅》第1集素材清单\n> 本清单只定义资产需求与 prompt，尚未执行任何付费出图。角色年龄均按成年人处理；叔嫂冲突不露骨、不情色化。\n## 共享风格锚\n### STYLE_北宋市井写实电影感\n中文 Prompt：9:16 竖屏，北宋阳谷县冬日市井，写实电影感国风漫剧，真实皮肤与麻布纹理、粗粝木构和青石路，冷灰冬日天光与低位灶火暖色对照，有来源的光，影视景别与纵深构图，克制色彩，无仙侠光效，无现代物件，无清宫服饰，无文字水印。\nEnglish Prompt: Vertical 9:16 cinematic realistic Northern Song market town in winter, natural skin and coarse linen textures, weathered timber and stone streets, cool overcast daylight contrasted with low warm stove light, motivated lighting, filmic depth and restrained colors, no fantasy glow, no modern objects, no Qing costumes, no text or watermark.\n目标路径：`出图/共享/图片/风格锚_北宋市井写实电影感.png`\n## 角色 / 生物\n### CHAR_WUSONG 武松 @ 酒后战损 / 都头 / 搬离 / 出城\n中文 Prompt：三十岁上下成年男性，身材高大结实但非夸张健美，眉骨硬朗、眼神沉着，短须，北宋平民武人发式；景阳冈态为磨损深褐短褐、尘土汗迹与断梢棒；都头态为整洁克制的宋代公服外搭与腰牌；搬离态背素布行李；同一脸型、发式、身高和服装主色，写实电影感，不仙侠化。\nEnglish Prompt: Adult male around thirty, tall and powerfully built without superhero exaggeration, strong brow, steady eyes, short beard, Northern Song martial commoner hairstyle; worn dark-brown travel clothes with dust and broken staff on Jingyang Ridge, restrained Song-era constable attire with badge later, plain cloth luggage when leaving; identical face, hairstyle, height and core colors across states, cinematic realism, no fantasy styling.\n### CHAR_WUDA 武大 @ 卖饼 / 重逢 / 迟疑 / 送别\n中文 Prompt：成年男性，身量矮小、肩背因挑担略弯，面相朴实温厚，冬日粗布短衣，手与肩有长期劳作痕迹；炊饼担是生活核心，不滑稽化，不丑角化，情绪从惊喜到迟疑、慌乱与担忧自然演进。\nEnglish Prompt: Adult short-statured male with slightly stooped shoulders from carrying a vendor pole, plain warm face, coarse winter work clothes, labor-worn hands and shoulder; bread pole as a livelihood anchor, never caricatured or comic, natural emotional progression from joy to hesitation, panic and worry.\n### CHAR_PANJINLIAN 潘金莲 @ 压抑 / 试探 / 羞怒 / 隔帘\n中文 Prompt：成年女性，端正清秀而非网红脸，北宋市民妇人发式与素净冬衣，主色灰白与暗青，眼神聪慧压抑；试探靠眼神、手势、距离和器物完成，不用低领暴露、艳情妆容或媚俗姿态；窗格与帘纱可形成克制遮挡。\nEnglish Prompt: Adult woman with refined natural features rather than an influencer face, Northern Song married-townswoman hairstyle and modest winter clothing in muted gray-white and dark teal, intelligent restrained eyes; desire shown through gaze, hand gesture, distance and objects, no revealing neckline, erotic makeup or vulgar posing; lattice and curtain may create restrained occlusion.\n### BEAST_TIGER 景阳冈猛虎\n中文 Prompt：成年华南虎体型与真实肌肉骨架，冬夜冷月侧逆光，毛发沾尘与枯叶，不怪兽化、不萌宠化；扑击、掀身、尾扫与战败状态保持同一花纹、体型和伤势，不夸张血浆。\nEnglish Prompt: Adult South China tiger with realistic anatomy an\n...",
+      "relpath": "脚本/第1集/素材清单.md",
+      "sha256": "c1286a0fc601cd6c112652271291af7e80a196e148bc28a117a4e6e3fd861889"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/identity_registry.json"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/asset_registry.json"
+    },
+    {
+      "bytes": 10010,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "clip_id": "Clip_01",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "若整段动作不稳，拆虎爪ECU、武松眼神CU、爪落泥地插入三镜硬切。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "虎爪砸入武松原先头部位置的泥地，人物已经离开落点。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "虎爪砸入武松原先头部位置的泥地，人物已经离开落点。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "虎爪砸入武松原先头部位置的泥地，人物已经离开落点。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "虎爪砸入武松原先头部位置的泥地，人物已经离开落点。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_01/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP01",
+            "spectacle_type": "fight_exchange"
+          },
+          {
+            "clip_id": "Clip_02",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "按扑、掀、尾剪、断棒、握拳五个短镜分别生成后剪辑，不做一镜到底。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "第三扑与梢棒重劈同帧，梢棒断裂但武松尚未被虎咬中。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "第三扑与梢棒重劈同帧，梢棒断裂但武松尚未被虎咬中。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "第三扑与梢棒重劈同帧，梢棒断裂但武松尚未被虎咬中。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "第三扑与梢棒重劈同帧，梢棒断裂但武松尚未被虎咬中。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_02/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP02",
+            "spectacle_type": "fight_exchange"
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_spectacle_plan",
+        "summary": {
+          "contract_missing_clips": 0,
+          "motion_control_required_clips": 2,
+          "spectacle_clips": 2
+        },
+        "top_level_keys": [
+          "kind",
+          "version",
+          "root",
+          "episode",
+          "clips",
+          "summary"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/spectacle_plan_第1集.json",
+      "sha256": "fd785391122a88ce7d952178097b7e16b1ef332b3edf026d36caffcb8c67a6ec"
+    },
+    {
+      "bytes": 5124,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "graph_hash": "0657cfcc23bba4158229b87370d0033ab80b4247504467060c7bc1d1f6df1cc5",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 15,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 16,
+          "routes": 0,
+          "story_clips": 15,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第1集.json",
+      "sha256": "a81b7c8184828e6d41cdcd137c65ac9e9c319c7dda5805ec686de97472fc45fd"
+    }
+  ],
+  "genre_pack_context": {
+    "activation": {
+      "reason": "项目未设置题材；没有题材包可触发。",
+      "state": "genre_unset",
+      "storyboard_clip_count": 15,
+      "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/脚本/第1集/storyboard.json",
+      "storyboard_state": "ready",
+      "triggered": false
+    },
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-08-11T04:02:08+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "matched_genre_keys": [],
+      "matched_labels": [],
+      "matches": [],
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "genre_keys": [],
+      "labels": [],
+      "matched_packs": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+    "stage_key": "image_prompt",
+    "status": "pass",
+    "summary": {
+      "activation_state": "genre_unset",
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0,
+      "matched_genre_keys": [],
+      "matched_packs": 0,
+      "storyboard_clip_count": 15,
+      "storyboard_state": "ready"
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "出图/共享/identity_registry.json",
+    "出图/共享/asset_registry.json"
+  ],
+  "root": "创作区/制漫剧/金瓶梅",
+  "settings_context": {
+    "authority": {
+      "audit_records": "provenance_only_non_authoritative",
+      "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+      "records_can_override_effective_settings": false
+    },
+    "effective_settings": {
+      "人工批准策略": {
+        "source": "explicit_user",
+        "value": "仅高风险停审"
+      },
+      "制作模式": {
+        "source": "explicit_user",
+        "value": "混合自动路由"
+      },
+      "基础视觉风格": {
+        "source": "explicit_user",
+        "value": "写实电影感"
+      },
+      "项目规模": {
+        "source": "explicit_user",
+        "value": "长篇量产"
+      },
+      "首切范围": {
+        "source": "explicit_user",
+        "value": "部分先切"
+      }
+    },
+    "kind": "n2d_settings_context",
+    "recent_corrections": [],
+    "record_summary": {
+      "corrections_included": 0,
+      "corrections_seen": 0,
+      "format": "record_section",
+      "full_history_omitted": true,
+      "limit": 3,
+      "records_seen": 5
+    },
+    "source_path": "_设置.md",
+    "source_sha256": "a71b6f0cb954d36de95b325537d208b4680ee569fc50d8be8678ba338ea4b10c",
+    "status": "ok",
+    "version": 1
+  },
+  "stage_key": "image_prompt",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第1集/storyboard.json",
+      "脚本/第1集/素材清单.md",
+      "生产数据/spectacle_plan_第1集.json",
+      "生产数据/episode_graph_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

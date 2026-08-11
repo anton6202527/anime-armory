@@ -9,7 +9,7 @@ const MAX_SMALL_RESPONSE_BYTES = 256 * 1024;
 const MAX_GENERATION_RESPONSE_BYTES = 32 * 1024 * 1024;
 const STATUS_CACHE_MS = 15_000;
 const MODEL_ID_PATTERN = /^[a-zA-Z0-9._:/-]{1,160}$/;
-const ASPECT_RATIOS = new Set(["1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16"]);
+const ASPECT_RATIOS = new Set(["1:1", "2:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16"]);
 
 export type CanvasGenerationModality = "text" | "image";
 
@@ -25,6 +25,7 @@ export interface CanvasGenerationInput {
   model: string;
   prompt: string;
   aspectRatio?: string;
+  quality?: "standard" | "high";
   image?: { base64: string; mimeType: string };
   signal?: AbortSignal;
 }
@@ -342,11 +343,12 @@ export async function generateCanvasContent(input: CanvasGenerationInput): Promi
     || !MODEL_ID_PATTERN.test(input.model)
     || !input.prompt.trim()
     || input.prompt.trim().length > MAX_PROMPT_CHARS
-    || (input.image && (input.modality !== "text"
-      || input.image.base64.length > MAX_INPUT_IMAGE_BASE64_CHARS
+    || (input.image && (input.image.base64.length > MAX_INPUT_IMAGE_BASE64_CHARS
       || !/^[a-zA-Z0-9+/]+={0,2}$/.test(input.image.base64)
-      || !/^image\/(?:png|jpeg|webp|gif)$/.test(input.image.mimeType)))
-    || (input.aspectRatio && (input.modality !== "image" || !ASPECT_RATIOS.has(input.aspectRatio)))) {
+      || !/^image\/(?:png|jpeg|webp|gif)$/.test(input.image.mimeType)
+      || (input.modality === "image" && input.image.mimeType === "image/gif")))
+    || (input.aspectRatio && (input.modality !== "image" || !ASPECT_RATIOS.has(input.aspectRatio)))
+    || (input.quality && (input.modality !== "image" || (input.quality !== "standard" && input.quality !== "high")))) {
     throw new CanvasGenerationError("invalid_request", "生成参数无效");
   }
   const bridge = await assertGenerationBridge();
@@ -360,6 +362,7 @@ export async function generateCanvasContent(input: CanvasGenerationInput): Promi
       prompt: input.prompt.trim(),
       ...(input.image ? { image: input.image } : {}),
       ...(input.aspectRatio ? { aspectRatio: input.aspectRatio } : {}),
+      ...(input.quality ? { quality: input.quality } : {}),
     }),
   }, input.modality === "image" ? 190_000 : 100_000, MAX_GENERATION_RESPONSE_BYTES);
   if (!value || typeof value !== "object" || Array.isArray(value)) {

@@ -6,7 +6,8 @@
 人物动机、因果链、设定/战力规则如果不先变成可审计理解层，后面分镜再专业也是在错误理解上精修。
 本脚本做三件事：
   1) **体检**：确定性扫源文本 → register ∈ {modern_zh(现代白话) / classical_zh(文言文) / non_chinese(外文)}，
-     另标 traditional(繁体白话·提示)。纯关键词密度判定·不调模型·不臆造。
+     另标 traditional(繁体白话·提示)，并在不破坏 register 兼容性的前提下识别
+     late_imperial_vernacular（近世章回白话：白话叙事夹文言、韵文、说书套语）。纯关键词密度判定·不调模型·不臆造。
   2) **闸门**：只要存在源文本，就必须有 confirmed 的 `source_comprehension.json`，且其中
      `understanding_contract` 的现代理解、承诺账、人物动机、因果链、伏笔账和战力/规则策略可机检。
      调用方（run.py script_stage1 prework）据此**先停下提示用户**，不闷头拆集。
@@ -45,6 +46,13 @@ _CLASSICAL_STRONG = "之也矣焉哉乎曰兮耳邪欤歟尔夫盖此乃为汝�
 # 只收**文言文几乎不用**的现代虚词；故意剔除 可以/已经/知道/现在 等文言也常见的词，避免短文言样本误判。
 _MODERN_MARKERS = ("了", "吗", "呢", "着", "这个", "那个", "什么", "我们",
                    "他们", "她们", "怎么", "不是", "一样", "时候", "起来", "出来")
+# 明清章回体/近世白话常见的叙述套语。它不是 classical_zh：正文通常已有白话语法，
+# 但若套普通现代白话模板，会漏掉韵文、说书人评论、古今称谓和制度语境的适配工作。
+_LATE_IMPERIAL_MARKERS = (
+    "看官", "話說", "话说", "且說", "且说", "不題", "不题", "按下", "單表", "单表",
+    "正是", "有詩為證", "有诗为证", "詩曰", "诗曰", "詞曰", "词曰", "怎生", "恁的",
+    "端的", "那廝", "那厮", "小人", "娘子", "官人", "奴家",
+)
 # 繁体专有字（仅提示繁体白话·不拦截；现代繁体白话完全可直接理解）。
 _TRAD_ONLY = "個們這說裡麼長東報應發瞭隻來時對開關問題實現點線業"
 _CJK_RE = re.compile(r"[一-鿿]")
@@ -64,6 +72,7 @@ POWER_SYSTEM_MARKERS = (
     "境界", "修为", "灵根", "战力", "等级", "系统", "面板", "属性", "经验值", "升级",
     "炼气", "筑基", "金丹", "元婴", "渡劫", "功法", "法宝", "武魂", "异能",
 )
+POWER_SYSTEM_CORE_MARKERS = ("系统", "面板", "属性", "经验值", "升级", "战力", "修为", "靈根", "灵根")
 
 CONTRACT_REQUIRED = (
     "modern_understanding",
@@ -78,8 +87,13 @@ CONTRACT_REQUIRED = (
 # 元数据/frontmatter 行（非正文）：markdown 标题/分隔、版权/标签/简介/作者/书名等声明行，判文体前剥离。
 _META_LINE_RE = re.compile(r"^\s*(#|---|>|\[|copyright|版权|标签|简介|作者|书名|来源|平台|看点)[:：\s]",
                            re.IGNORECASE)
+_CHAPTER_UNIT = "章节回囬囘廻節节卷"
 _CHAPTER_HEADING_LINE_RE = re.compile(
-    r"^\s*(?:第[一二三四五六七八九十百千万\d]+[章节回]|Chapter\s+\d+)", re.I
+    rf"^\s*(?:第\s*[零〇一二三四五六七八九十百千万两\d]+\s*[{_CHAPTER_UNIT}]|Chapter\s+\d+)", re.I
+)
+_EDITED_HEADING_RE = re.compile(
+    rf"^\s*(?:\[编辑\]\s*)?(第\s*[零〇一二三四五六七八九十百千万两\d]+\s*[{_CHAPTER_UNIT}])\s*(.*)$",
+    re.I,
 )
 
 
@@ -119,24 +133,62 @@ def _filled(value) -> bool:
     return bool(value)
 
 
+def extract_source_unit_inventory(text: str) -> list[dict]:
+    """Extract a compact, deterministic chapter/hui inventory without pretending to summarize it.
+
+    Chaptered web exports often add volume wrappers such as ``第1章 … 第一回`` around the real
+    ``第一囬 …`` headings. If at least three hui-style headings exist, prefer those and exclude the
+    wrapper headings; otherwise retain all recognized chapter units. Exact duplicate headings fold.
+    """
+    rows = []
+    for line_no, line in enumerate((text or "").splitlines(), 1):
+        m = _EDITED_HEADING_RE.match(line)
+        if not m:
+            continue
+        unit, title = m.group(1).strip(), m.group(2).strip()
+        rows.append({"source_span": unit, "title": title, "line": line_no})
+    hui_rows = [row for row in rows if re.search(r"[回囬囘廻]", row["source_span"])]
+    selected = hui_rows if len(hui_rows) >= 3 else rows
+    out, seen = [], set()
+    for row in selected:
+        key = (row["source_span"], row["title"])
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({"unit_id": f"SRC_UNIT_{len(out) + 1:04d}", **row})
+    return out
+
+
 def detect_source_traits(text: str) -> dict:
     # Fold before metadata stripping so two headings separated in the original
     # source can never become "adjacent" merely because a metadata line vanished.
     raw = _strip_meta(_fold_adjacent_duplicate_chapter_headings(text or ""))
     compact = re.sub(r"\s+", "", raw)
-    chapters = len(re.findall(r"(第[一二三四五六七八九十百千万\d]+[章节回]|Chapter\s+\d+)", raw, re.I))
-    has_power = any(m in raw for m in POWER_SYSTEM_MARKERS)
+    chapters = len(re.findall(
+        rf"(?:第\s*[零〇一二三四五六七八九十百千万两\d]+\s*[{_CHAPTER_UNIT}]|Chapter\s+\d+)",
+        raw,
+        re.I,
+    ))
+    power_counts = {m: raw.count(m) for m in POWER_SYSTEM_MARKERS if raw.count(m)}
+    power_total = sum(power_counts.values())
+    core_total = sum(raw.count(m) for m in POWER_SYSTEM_CORE_MARKERS)
+    # 长篇里“境界”偶见一两次常是普通词义，不能据此误判修炼/系统题材。
+    has_power = power_total >= 3 and (len(power_counts) >= 2 or core_total >= 3)
+    late_counts = {m: raw.count(m) for m in _LATE_IMPERIAL_MARKERS if raw.count(m)}
     return {
         "content_chars": len(compact),
         "chapter_markers": chapters,
         "long_form": len(compact) >= 50000 or chapters >= 20,
         "power_system_likely": has_power,
+        "power_system_signals": power_counts,
+        "late_imperial_marker_count": sum(late_counts.values()),
+        "late_imperial_marker_types": sorted(late_counts),
     }
 
 
 def _default_contract(register: str, traits: dict | None = None) -> dict:
     traits = traits or {}
-    return {
+    contract = {
         "modern_understanding": "",
         "episode_promise_basis": [
             {"trace_id": "SRC_PROMISE_001", "promise": "", "opened_at": "", "payoff_or_progress": "", "risk_if_cut": ""}
@@ -164,11 +216,33 @@ def _default_contract(register: str, traits: dict | None = None) -> dict:
         },
         "source_register_strategy": {
             "register": register,
+            "profile": traits.get("register_profile", ""),
             "dialogue_style": "",
             "terms_to_keep": [],
             "terms_to_translate": [],
         },
     }
+    if traits.get("register_profile") == "late_imperial_vernacular":
+        contract["premodern_adapter"] = {
+            "coverage_scope": "",
+            "unit_glosses": [{
+                "source_span": "",
+                "modern_summary": "",
+                "dramatic_function": "",
+                "trace_ids": [],
+            }],
+            "historical_terms": [{
+                "source_term": "",
+                "modern_meaning": "",
+                "screen_treatment": "",
+            }],
+            "verse_and_commentary_policy": "",
+            "narrator_formula_policy": "",
+            "historical_context_policy": "",
+            "sensitive_content_policy": "",
+            "dialogue_style_target": "",
+        }
+    return contract
 
 
 def _merge_contract(base: dict, existing) -> dict:
@@ -211,6 +285,19 @@ def comprehension_contract_issues(record: dict | None, expected_register: str, t
             issues.append("疑似战力/系统/修炼题材，power_system_rules 缺：" + "、".join(missing))
     elif not _filled(power.get("not_applicable_reason")) and str(power.get("applicable") or "").lower() in {"no", "false", "否"}:
         issues.append("非战力题材也必须写 power_system_rules.not_applicable_reason。")
+    if traits.get("register_profile") == "late_imperial_vernacular":
+        adapter = contract.get("premodern_adapter")
+        if not isinstance(adapter, dict):
+            issues.append("近世章回白话源缺 understanding_contract.premodern_adapter。")
+        else:
+            required = (
+                "coverage_scope", "unit_glosses", "historical_terms", "verse_and_commentary_policy",
+                "narrator_formula_policy", "historical_context_policy", "sensitive_content_policy",
+                "dialogue_style_target",
+            )
+            missing = [key for key in required if not _filled(adapter.get(key))]
+            if missing:
+                issues.append("近世章回白话适配合同缺：" + "、".join(missing))
     return issues
 
 
@@ -287,10 +374,26 @@ def classify_register(text: str) -> dict:
                 "signals": signals, "scores": scores}
 
     # 3) 现代白话。register 本身不阻断；是否放行取决于源理解合同。
+    late_counts = {m: compact.count(m) for m in _LATE_IMPERIAL_MARKERS if compact.count(m)}
+    late_total = sum(late_counts.values())
+    late_density = late_total / cjk_n
+    # 至少三类套语且密度达到 0.06% 才识别；避免现代文偶写一句“话说”就误套章回体模板。
+    late_imperial = len(late_counts) >= 3 and late_total >= 6 and late_density >= 0.0006
+    scores["late_imperial_marker_density"] = round(late_density, 5)
+    scores["late_imperial_marker_types"] = len(late_counts)
+    scores["late_imperial_marker_count"] = late_total
+    if late_imperial:
+        signals.append(
+            f"章回体/近世白话套语 {late_total} 处、{len(late_counts)} 类（密度 {late_density:.2%}）"
+        )
     if trad >= 0.02:
         signals.append(f"繁体专有字密度 {trad:.1%}（繁体白话·可直接理解·仅提示）")
     signals.append(f"现代白话特征：「的」密度 {de:.1%}、现代虚词 {modern:.1%}")
-    return {"register": "modern_zh", "lang_guess": "traditional_baihua" if trad >= 0.02 else "modern_baihua",
+    return {"register": "modern_zh", "lang_guess": (
+                "late_imperial_vernacular" if late_imperial else
+                ("traditional_baihua" if trad >= 0.02 else "modern_baihua")
+            ),
+            "register_profile": "late_imperial_vernacular" if late_imperial else "modern_baihua",
             "cjk_ratio": round(cjk_ratio, 3), "confidence": "high",
             "signals": signals, "scores": scores}
 
@@ -327,6 +430,9 @@ def check(root: str) -> dict:
         text = f.read()
     cls = classify_register(text)
     traits = detect_source_traits(text)
+    traits["register_profile"] = cls.get("register_profile") or cls.get("lang_guess")
+    inventory = extract_source_unit_inventory(text)
+    traits["source_unit_count"] = len(inventory)
     register = cls["register"]
     out = {"verdict": "pass", "register": register, "lang_guess": cls["lang_guess"],
            "confidence": cls["confidence"], "signals": cls["signals"],
@@ -344,7 +450,9 @@ def check(root: str) -> dict:
         return out
     out["verdict"] = "needs_comprehension"
     out["contract_issues"] = issues
-    label = "现代白话" if register == "modern_zh" else ("文言文/古文" if register == "classical_zh" else f"外文（{cls['lang_guess']}）")
+    label = ("近世章回白话（白话叙事夹文言/韵文/说书套语）"
+             if cls.get("register_profile") == "late_imperial_vernacular"
+             else ("现代白话" if register == "modern_zh" else ("文言文/古文" if register == "classical_zh" else f"外文（{cls['lang_guess']}）")))
     out["message"] = (
         f"⚠️ 源文本为 **{label}**（{'；'.join(cls['signals'][:2])}）。拆集前必须先确认『源理解合同』，"
         f"把编剧理解、长篇伏笔、爽点账、人物动机、因果链、设定/战力规则变成可审计输入；当前缺口："
@@ -433,6 +541,10 @@ _CONTRACT_MD_APPENDIX = """
 - 不适用原因（如无）：……
 """
 
+_LATE_IMPERIAL_CONTRACT_APPENDIX = _CONTRACT_MD_APPENDIX.replace(
+    "## 5. 编剧理解合同（所有 register 必填）", "## 8. 编剧理解合同（所有 register 必填）"
+).replace("### 5.", "### 8.")
+
 
 _CLASSICAL_TEMPLATE = """# 源理解层 — {title}
 
@@ -463,6 +575,53 @@ _CLASSICAL_TEMPLATE = """# 源理解层 — {title}
 
 ---
 确认理解层补全后，把 `设定库/source_comprehension.json` 的 `status` 改为 `confirmed`，再继续拆集。
+"""
+
+_LATE_IMPERIAL_TEMPLATE = """# 源理解合同 — {title}
+
+> register=**{register}**，profile=**late_imperial_vernacular**（明清章回体/近世白话）· 体检置信度 {confidence}。
+> 这类源文本不是纯文言，也不能按普通现代白话直接拆集：正文常混合白话叙事、文言议论、诗词曲、
+> 说书人套语、古代称谓与制度风俗。下游必须先从本合同取得**现代剧情理解**，再决定哪些古意保留为
+> 台词/旁白/视觉锚，哪些仅作注释或压缩；不得逐句硬译，也不得把诗词、评话和正文机械等权成戏。
+> 体检信号：{signals}
+
+## 1. 全书与首批窗口的现代剧情理解
+- 全书主线/人物关系/结局方向：……（待补）
+- 首批制作覆盖范围：……（待补；写到回/章/段）
+- 首批范围逐回释义：……（待补；每回写事件、动机、选择、后果、伏笔与状态变化）
+
+## 2. 逐回释义索引（unit glosses）
+| 源范围 | 现代剧情摘要 | 戏剧功能 | 关联 SRC trace_id |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+## 3. 古今词、称谓、制度与风俗对照
+| 原词/称谓/制度 | 现代含义 | 屏幕处理（保留/白话化/视觉化/注释/省略） |
+|---|---|---|
+| （待补） |  |  |
+
+## 4. 诗词曲、说书人评论与套语策略
+- 诗词曲：……（待补；只保留承载人物、预示、反讽或节奏功能者，其余可压缩/视觉化）
+- “话说/看官/有诗为证”等说书层：……（待补；定义旁白保留比例，避免全片评书腔）
+- 文言议论/历史类比：……（待补；区分剧情因果与作者评论）
+
+## 5. 台词语体目标
+- 目标：……（待补；例如“现代可懂白话为骨，保留关键古称谓和少量章回韵味”）
+- 禁止：逐字硬译、满篇仿古腔、现代网络梗破坏时代感、把人物称谓关系改错。
+
+## 6. 历史语境与敏感内容改编策略
+- 服制/空间/货币/身份秩序/礼俗：……（待补）
+- 暴力、性、剥削、未成年人、污名化等内容：……（待补；保剧情因果，不露骨、不猎奇化，不删受害者处境）
+- 发行分级与平台边界：……（待补；此处只定创作策略，正式发行仍走合规包）
+
+## 7. 改编边界
+- 必须保留：……
+- 可现代化/压缩：……
+- 禁止改动：……
+
+---
+确认后同步补全 `设定库/source_comprehension.json` 的 `understanding_contract`，尤其
+`premodern_adapter`，并把 `status` 改为 `confirmed`。
 """
 
 _FOREIGN_TEMPLATE = """# 源理解层 — {title}
@@ -506,6 +665,9 @@ def scaffold(root: str) -> dict:
         text = f.read()
     cls = classify_register(text)
     traits = detect_source_traits(text)
+    traits["register_profile"] = cls.get("register_profile") or cls.get("lang_guess")
+    inventory = extract_source_unit_inventory(text)
+    traits["source_unit_count"] = len(inventory)
     register = cls["register"]
     title = os.path.splitext(os.path.basename(src))[0]
     setdir = os.path.join(root, "设定库")
@@ -517,7 +679,9 @@ def scaffold(root: str) -> dict:
     # 已有且已 confirmed → 不动 md 正文（保人工成果），只刷新机器记录的体检信号。
     wrote_md = False
     if not os.path.exists(md_path):
-        if register == "classical_zh":
+        if traits.get("register_profile") == "late_imperial_vernacular":
+            tmpl = _LATE_IMPERIAL_TEMPLATE + _LATE_IMPERIAL_CONTRACT_APPENDIX
+        elif register == "classical_zh":
             tmpl = _CLASSICAL_TEMPLATE + _CONTRACT_MD_APPENDIX
         elif register == "non_chinese":
             tmpl = _FOREIGN_TEMPLATE + _CONTRACT_MD_APPENDIX
@@ -536,9 +700,11 @@ def scaffold(root: str) -> dict:
     )
     record = {
         "kind": KIND, "version": 1, "register": register, "lang_guess": cls["lang_guess"],
+        "register_profile": traits.get("register_profile"),
         "confidence": cls["confidence"], "signals": cls["signals"], "scores": cls["scores"],
         "source_traits": traits,
         "source": os.path.relpath(src, root),
+        "source_unit_inventory": inventory,
         "status": status or "draft",
         "comprehension_doc": COMPREHENSION_MD_REL,
         CONTRACT_KEY: contract,

@@ -1,0 +1,16 @@
+{
+  "kind": "n2d_director_beat_sheet",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "inputs": {"voiceover": "脚本/第1集/voiceover.txt", "timing_estimate": "合成/第1集/配音/timing_estimate.json"},
+  "beats": [
+    {"beat_id": "Beat_01", "source_voiceover_range": "voiceover lines 1-4", "dramatic_function": "危机冷开场；虎三式升级到断棒反转", "audience_question": "没了兵器，武松还能活下来吗？", "emotional_value_shift": {"from": "猝然受袭", "to": "武器失效、危机加深"}, "director_intent": "用可读动作方向而非长旁白建立打虎奇观。", "must_keep_reaction": "断棒后保留武松惊愕半拍，再让决绝接管。"},
+    {"beat_id": "Beat_02", "source_voiceover_range": "voiceover lines 5-9", "dramatic_function": "徒手反击兑现；硬切家庭人物动机", "audience_question": "山中英雄回到家门，会面对怎样的困局？", "emotional_value_shift": {"from": "绝境", "to": "胜利后进入隐性不安"}, "director_intent": "拳落给足爽点，再用炊饼担与卖身物证形成力量/处境反差。", "must_keep_reaction": "猎户敬服一拍；潘金莲看向卖身契/琵琶时不做媚态。"},
+    {"beat_id": "Beat_03", "source_voiceover_range": "voiceover lines 10-14", "dramatic_function": "兄弟重逢；潘金莲邀请武松进入家门", "audience_question": "她的热情是亲情还是试探？", "emotional_value_shift": {"from": "亲情温暖", "to": "三角关系出现暗流"}, "director_intent": "先让兄弟关系可信，再让潘金莲的目光与邀请改变空间。", "must_keep_reaction": "武松听到邀请时先看武大，再低头答嫂嫂。"},
+    {"beat_id": "Beat_04", "source_voiceover_range": "voiceover lines 15-19", "dramatic_function": "月余压缩；雪夜闭门与第一轮试探", "audience_question": "武松会接受她把距离一步步缩短吗？", "emotional_value_shift": {"from": "日常试探", "to": "封闭空间里的明确危险"}, "director_intent": "用门闩截断街声、火盆两侧站位和递酒推进，不靠身体特写。", "must_keep_reaction": "武松拒绝共饮后，潘金莲笑意停顿半拍再继续施压。"},
+    {"beat_id": "Beat_05", "source_voiceover_range": "voiceover lines 20-24", "dramatic_function": "半杯酒越界；泼酒拒绝；武大归家", "audience_question": "明确拒绝会带来怎样的报复？", "emotional_value_shift": {"from": "克制对峙", "to": "边界兑现后转为受挫恨意"}, "director_intent": "让酒盏动作承担爽点，随后切潘金莲僵住和迅速藏起真相。", "must_keep_reaction": "泼酒后保留潘金莲空一拍、收紧眼神；武大进门前先给门外脚步。"},
+    {"beat_id": "Beat_06", "source_voiceover_range": "voiceover lines 25-29", "dramatic_function": "反咬；武大犹疑；武松选择搬离", "audience_question": "武松避嫌离开，谁来保护武大？", "emotional_value_shift": {"from": "真相掌握在武松手里", "to": "潘金莲夺得家中叙事位置"}, "director_intent": "三人不同景深呈现权力改写：潘金莲靠武大、武松退向门、武大夹在中间。", "must_keep_reaction": "武大说‘不是这样的人’时看弟弟；武松沉默系绳，潘金莲隔帘观察。"},
+    {"beat_id": "Beat_07", "source_voiceover_range": "voiceover lines 30-34", "dramatic_function": "搬离后果；东京公差；门户警告与跨集钩", "audience_question": "武松离城后，帘外走近的人是谁？", "emotional_value_shift": {"from": "家庭裂口", "to": "保护者彻底离场、危险进入"}, "director_intent": "以门、公文、脚步和楼窗做因果蒙太奇，不提前揭示西门庆。", "must_keep_reaction": "武大接下警告时强作镇定；潘金莲在窗后只看背影，不与帘外来人提前对视。"}
+  ]
+}

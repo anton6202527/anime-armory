@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_WU_DA",
+  "name": "武大",
+  "scope": "卖炊饼的小贩；武松亲兄；潘金莲丈夫；迎儿之父。",
+  "library_tier": "recurring_standard",
+  "planned_episode_count": 3,
+  "directories": {
+    "reference": "角色库/CHAR_WU_DA__武大/reference",
+    "prompts": "角色库/CHAR_WU_DA__武大/prompts",
+    "lora": "角色库/CHAR_WU_DA__武大/lora",
+    "voice": "角色库/CHAR_WU_DA__武大/voice",
+    "adapters": "角色库/CHAR_WU_DA__武大/adapters",
+    "qc": "角色库/CHAR_WU_DA__武大/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/武大.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-08-11T04:03:10+00:00"
+}

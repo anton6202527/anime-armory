@@ -87,6 +87,7 @@ THREAD_SCHEDULER_KIND = "n2d_thread_scheduler"
 PILOT_ARC_CONTRACT_KIND = "n2d_pilot_arc_contract"
 STORYBOARD_KIND = "n2d_storyboard"
 ARTIFACT_SIGNOFF_KIND = "n2d_artifact_signoff"
+AUTONOMY_AUTHORIZATION_KIND = "n2d_autonomy_authorization"
 PRODUCTION_MODE_ROUTE_KIND = "n2d_production_mode_route"
 EDITORIAL_TIMELINE_KIND = "n2d_editorial_timeline"
 VOICE_CASTING_KIND = "n2d_voice_casting"
@@ -479,6 +480,31 @@ SCHEMAS: Dict[str, Dict[str, Any]] = {
             "required_approval_groups": arr({"type": "object"}),
             "approvals": arr({"type": "object"}),
             "status": {"type": "string"},
+        },
+    ),
+    AUTONOMY_AUTHORIZATION_KIND: obj(
+        (
+            "kind", "version", "status", "policy", "project_root", "authorization_id",
+            "authorized_by", "authorized_at", "source_quote", "delegated_reviewer_id",
+            "allowed_signoff_profiles", "allowed_boundary_decisions", "human_confirmation_required",
+        ),
+        {
+            "kind": {"type": "string", "enum": [AUTONOMY_AUTHORIZATION_KIND]},
+            "version": {"type": "integer"},
+            "status": {"type": "string"},
+            "policy": {"type": "string"},
+            "project_root": {"type": "string"},
+            "project_name": {"type": "string"},
+            "authorization_id": {"type": "string"},
+            "authorized_by": {"type": "string"},
+            "authorized_at": {"type": "string"},
+            "source_quote": {"type": "string"},
+            "delegated_reviewer_id": {"type": "string"},
+            "allowed_signoff_profiles": arr({"type": "string"}),
+            "allowed_boundary_decisions": arr({"type": "string"}),
+            "allowed_internal_actions": arr({"type": "string"}),
+            "human_confirmation_required": arr({"type": "string"}),
+            "independent_review": {"type": "string"},
         },
     ),
     PRODUCTION_MODE_ROUTE_KIND: obj(

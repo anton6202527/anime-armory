@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_shot_progression_plan",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "rules": {
+    "establishing": "每次换场先给一个可读空间锚；竖屏中核心脸不小于画面高度约18%。",
+    "movement_motivation": "只在危险逼近、人物越界或保护者离场时移动；普通对白固定机位。",
+    "peak_closeup": "断棒、泼酒拒绝、反咬和楼窗集尾落CU/ECU或明确反应镜。",
+    "scale_ladder": "LS建立→MS关系→MCU施压→CU反应→insert缓冲→回MS交代后果，避免三镜同景别。"
+  },
+  "progressions": [
+    {"beat_id": "Beat_01", "start_shot_size": "ECU虎爪/武松眼", "peak_shot_size": "CU断棒与武松惊愕", "release_shot_size": "MS武松落地稳身", "camera_move": "短促跟摇后固定", "camera_motivation": "开场以逼近产生生死压迫，断棒后固定让反应可读", "must_have_insert_or_reaction": "断棒截面与武松惊愕半拍"},
+    {"beat_id": "Beat_02", "start_shot_size": "MCU拳起", "peak_shot_size": "低机位CU拳落/虎眼", "release_shot_size": "LS猎户与都头腰牌蒙太奇", "camera_move": "拳落短推，随后硬切静物", "camera_motivation": "把动作势能在身份物证上骤停", "must_have_insert_or_reaction": "猎户敬服、腰牌、炊饼担、卖身契/琵琶"},
+    {"beat_id": "Beat_03", "start_shot_size": "LS街面兄弟相认", "peak_shot_size": "MCU潘金莲观察武松", "release_shot_size": "MS三人空间关系", "camera_move": "跟随武大拉兄弟入门，楼上改固定", "camera_motivation": "从公开街面进入私密楼屋，空间收窄即风险增加", "must_have_insert_or_reaction": "武松听邀请先看武大"},
+    {"beat_id": "Beat_04", "start_shot_size": "CU门闩", "peak_shot_size": "MCU潘递酒与武松拒绝", "release_shot_size": "双人MS隔火盆", "camera_move": "固定为主，潘越界时只做极慢微推", "camera_motivation": "距离变化来自人物走位，镜头只在压力升级时跟进", "must_have_insert_or_reaction": "门闩、炭火、武松后撤半步"},
+    {"beat_id": "Beat_05", "start_shot_size": "OTS半杯酒", "peak_shot_size": "CU泼酒与双方反应", "release_shot_size": "MS门外脚步/武大入场", "camera_move": "拒绝前固定，打翻瞬间短促冲击后停住", "camera_motivation": "动作爽点需要一次明确冲击，随后给受挫反应落地", "must_have_insert_or_reaction": "酒盏落地、潘空一拍、武大脚步"},
+    {"beat_id": "Beat_06", "start_shot_size": "MCU潘靠武大反咬", "peak_shot_size": "CU武松系紧行李绳", "release_shot_size": "LS武松穿过南街门", "camera_move": "固定三角站位；搬离时克制跟到门口", "camera_motivation": "让退出路径成为关系后果，不做煽情环绕", "must_have_insert_or_reaction": "武大犹疑、行李绳、潘隔帘冷眼"},
+    {"beat_id": "Beat_07", "start_shot_size": "CU公文封缄", "peak_shot_size": "MCU兄弟门户警告", "release_shot_size": "LS城门背影/MCU楼窗", "camera_move": "公文与告别固定；离城慢拉远", "camera_motivation": "只有保护者远离时拉远，强化无力感", "must_have_insert_or_reaction": "武大点头却不安、潘金莲扶窗、帘外脚步影"}
+  ]
+}

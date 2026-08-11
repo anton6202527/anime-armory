@@ -29,18 +29,18 @@
 
 ## Skills 规模统计
 
-> 统计时间：2026-08-06。`SKILL.md 总行数` 统计六个系列及 `skills/<skill-name>/` 顶层独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-08-11。`SKILL.md 总行数` 统计六个系列及 `skills/<skill-name>/` 顶层独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `skills/n2d/**/SKILL.md` | 21 | 4767 | 303028 |
+| n2d | `skills/n2d/**/SKILL.md` | 21 | 4771 | 305017 |
 | novel | `skills/novel/**/SKILL.md` | 29 | 3238 | 77734 |
 | comic | `skills/comic/**/SKILL.md` | 13 | 1546 | 49412 |
 | song | `skills/song/**/SKILL.md` | 11 | 660 | 9911 |
 | mv | `skills/mv/**/SKILL.md` | 14 | 1149 | 28813 |
 | ad | `skills/ad/**/SKILL.md` | 14 | 1209 | 48081 |
-| 独立 skill | `skills/<skill-name>/SKILL.md` | 4 | 232 | 1098 |
-| **合计** | `skills/**/SKILL.md` | **106** | 12801 | 518077 |
+| 独立 skill | `skills/<skill-name>/SKILL.md` | 4 | 232 | 1141 |
+| **合计** | `skills/**/SKILL.md` | **106** | 12805 | 520109 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 

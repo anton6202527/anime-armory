@@ -1,0 +1,2024 @@
+{
+  "kind": "n2d_asset_reference_registry",
+  "version": 1,
+  "generated_at": "2026-08-11T04:15:54+00:00",
+  "assets": [
+    {
+      "id": "LOC_JINGYANGGANG",
+      "type": "scene",
+      "name": "景阳冈夜间空地",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+          "status": "planned"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
+          "status": "planned"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/场景/LOC_JINGYANGGANG_景阳冈夜间空地.md",
+          "status": "ready",
+          "sha256": "e21644e96b7657d966b7eddfbbb012e85798643f77ae5f3c6c50d516ff802209"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。",
+        "axis_rules": "武松画面下方、虎由上方压下；攻防主轴为上→下，武松反击沿下→上，切镜不交换方向。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "cool_low_key",
+          "saturation_profile": "controlled",
+          "key_light_direction": "left",
+          "source_text": "月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。；月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "景阳冈夜间空地",
+        "landmarks": [
+          "景阳冈夜间空地"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "北宋山冈冬夜，枯林、乱石、薄雾与泥土地，月光从画左上侧逆，冷青与土褐主色，竖屏纵深让虎从上方压下，武松位于下方，无仙侠雾光。",
+        "color_lighting_weather": "月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。",
+        "resident_assets": [
+          "景阳冈夜间空地"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "武松画面下方、虎由上方压下；攻防主轴为上→下，武松反击沿下→上，切镜不交换方向。",
+      "screen_direction_rules": "武松画面下方、虎由上方压下；攻防主轴为上→下，武松反击沿下→上，切镜不交换方向。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+            "status": "planned"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
+            "status": "planned"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_QUARTERSTAFF",
+      "type": "prop",
+      "name": "梢棒",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_梢棒.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_梢棒_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_梢棒_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_QUARTERSTAFF_梢棒.md",
+          "status": "ready",
+          "sha256": "0911415389bf9981b9712c113f047aa9cb49efb030153a5c2842056867277fae"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_梢棒.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "整棒与断棒两态，木纹、长度与断口保持一致。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让梢棒结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "梢棒 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "梢棒"
+        ],
+        "spatial_layout": "梢棒只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "整棒与断棒两态，木纹、长度与断口保持一致。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "梢棒"
+        ],
+        "forbidden": [
+          "梢棒结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "整棒与断棒两态，木纹、长度与断口保持一致。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_BADGE",
+      "type": "prop",
+      "name": "都头腰牌",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_都头腰牌.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_都头腰牌_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_BADGE_都头腰牌.md",
+          "status": "ready",
+          "sha256": "c0be0beb895ac17c1d6f17fa411af5763c5df5a65926bc97ad5f725a66e4ceae"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_都头腰牌.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "旧铜/木质克制质感，文字不烤入画面。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让都头腰牌结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "都头腰牌 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "都头腰牌"
+        ],
+        "spatial_layout": "都头腰牌只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "旧铜/木质克制质感，文字不烤入画面。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "都头腰牌"
+        ],
+        "forbidden": [
+          "都头腰牌结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "旧铜/木质克制质感，文字不烤入画面。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_REWARD_SILVER",
+      "type": "prop",
+      "name": "REWARD SILVER",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_REWARD_SILVER_REWARD_SILVER.md",
+          "status": "ready",
+          "sha256": "27a782d55c60b08051aeae43913dd27b647aebe9b9acf6374a3558fc43091013"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "REWARD SILVER",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让REWARD SILVER结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "REWARD SILVER 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "REWARD SILVER"
+        ],
+        "spatial_layout": "REWARD SILVER只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "REWARD SILVER",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "REWARD SILVER"
+        ],
+        "forbidden": [
+          "REWARD SILVER结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "REWARD SILVER",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_YANGGU_STREET",
+      "type": "scene",
+      "name": "阳谷街面与武大家楼窗",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+          "status": "planned"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
+          "status": "planned"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/场景/LOC_YANGGU_STREET_阳谷街面与武大家楼窗.md",
+          "status": "ready",
+          "sha256": "b0776fd57520cd2a4bdfa33cfe99c8067358e8244f4f2a1b99507ecbdde55635"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "冬日漫射天光自画面上方，店铺灶火作低位暖补光。",
+        "axis_rules": "街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "warm_low_key",
+          "saturation_profile": "controlled",
+          "key_light_direction": "top",
+          "source_text": "冬日漫射天光自画面上方，店铺灶火作低位暖补光。；冬日漫射天光自画面上方，店铺灶火作低位暖补光。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "阳谷街面与武大家楼窗",
+        "landmarks": [
+          "阳谷街面与武大家楼窗"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌。",
+        "color_lighting_weather": "冬日漫射天光自画面上方，店铺灶火作低位暖补光。",
+        "resident_assets": [
+          "阳谷街面与武大家楼窗"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察。",
+      "screen_direction_rules": "街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+            "status": "planned"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
+            "status": "planned"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_CAKE_POLE",
+      "type": "prop",
+      "name": "炊饼担",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_炊饼担.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_炊饼担_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_CAKE_POLE_炊饼担.md",
+          "status": "ready",
+          "sha256": "34a7e8831e6a0149c22ea18ca43bf94fac5d67c614603e7741ffbfc6c892542d"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_炊饼担.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "担杆、双筐、布盖与蒸汽结构固定。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让炊饼担结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "炊饼担 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "炊饼担"
+        ],
+        "spatial_layout": "炊饼担只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "担杆、双筐、布盖与蒸汽结构固定。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "炊饼担"
+        ],
+        "forbidden": [
+          "炊饼担结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "担杆、双筐、布盖与蒸汽结构固定。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_WINDOW_LATTICE",
+      "type": "prop",
+      "name": "WINDOW LATTICE",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_WINDOW_LATTICE_WINDOW_LATTICE.md",
+          "status": "ready",
+          "sha256": "a8047584a18930065676a2d96c87e8117fcc5ae67108e1155432b401c493d16c"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "WINDOW LATTICE",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让WINDOW LATTICE结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "WINDOW LATTICE 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "WINDOW LATTICE"
+        ],
+        "spatial_layout": "WINDOW LATTICE只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "WINDOW LATTICE",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "WINDOW LATTICE"
+        ],
+        "forbidden": [
+          "WINDOW LATTICE结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "WINDOW LATTICE",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_WUDA_HOME",
+      "type": "scene",
+      "name": "武大家楼屋雪夜",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+          "status": "planned"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
+          "status": "planned"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/场景/LOC_WUDA_HOME_武大家楼屋雪夜.md",
+          "status": "ready",
+          "sha256": "702f263bd1e5606e6c64d942ef1bf3a10474ddb2b5ad06e8089588e00aef7812"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。",
+        "axis_rules": "武松固定画右、潘金莲固定画左，炭盆在两人下方中央形成边界；武大归家由画面右后门口入。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "controlled",
+          "key_light_direction": "left",
+          "source_text": "窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。；窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "武大家楼屋雪夜",
+        "landmarks": [
+          "武大家楼屋雪夜"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界。",
+        "color_lighting_weather": "窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。",
+        "resident_assets": [
+          "武大家楼屋雪夜"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "武松固定画右、潘金莲固定画左，炭盆在两人下方中央形成边界；武大归家由画面右后门口入。",
+      "screen_direction_rules": "武松固定画右、潘金莲固定画左，炭盆在两人下方中央形成边界；武大归家由画面右后门口入。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+            "status": "planned"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
+            "status": "planned"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_STAIR_RAIL",
+      "type": "prop",
+      "name": "STAIR RAIL",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_STAIR_RAIL_STAIR_RAIL.md",
+          "status": "ready",
+          "sha256": "f1a33665574f3ac626bb200e9628f16153f6b94952ff94dc0f911e96a99e0b70"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "STAIR RAIL",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让STAIR RAIL结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "STAIR RAIL 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "STAIR RAIL"
+        ],
+        "spatial_layout": "STAIR RAIL只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "STAIR RAIL",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "STAIR RAIL"
+        ],
+        "forbidden": [
+          "STAIR RAIL结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "STAIR RAIL",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_DINING_TABLE",
+      "type": "prop",
+      "name": "DINING TABLE",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_DINING_TABLE_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_DINING_TABLE_DINING_TABLE.md",
+          "status": "ready",
+          "sha256": "611215217e09d19e5a86d09ee2657a2136430ef7675dd6451a278d1a33c629ca"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "DINING TABLE",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让DINING TABLE结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "DINING TABLE 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "DINING TABLE"
+        ],
+        "spatial_layout": "DINING TABLE只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "DINING TABLE",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "DINING TABLE"
+        ],
+        "forbidden": [
+          "DINING TABLE结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "DINING TABLE",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_TEA_CUP",
+      "type": "prop",
+      "name": "TEA CUP",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_TEA_CUP_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_TEA_CUP_TEA_CUP.md",
+          "status": "ready",
+          "sha256": "71595ca06b4dd1af6a5595934c134fe8ed52147a1deb5268a731c8806c1f96e2"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "TEA CUP",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让TEA CUP结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "TEA CUP 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "TEA CUP"
+        ],
+        "spatial_layout": "TEA CUP只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "TEA CUP",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "TEA CUP"
+        ],
+        "forbidden": [
+          "TEA CUP结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "TEA CUP",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_DOORFRAME",
+      "type": "prop",
+      "name": "DOORFRAME",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_DOORFRAME_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_DOORFRAME.md",
+          "status": "ready",
+          "sha256": "30ac535caec82b7549f578907ba12073c44f3d6f973a42e2c28e072b4b35f250"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "DOORFRAME",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让DOORFRAME结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "DOORFRAME 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "DOORFRAME"
+        ],
+        "spatial_layout": "DOORFRAME只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "DOORFRAME",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "DOORFRAME"
+        ],
+        "forbidden": [
+          "DOORFRAME结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "DOORFRAME",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_DOOR_LATCH",
+      "type": "prop",
+      "name": "门闩",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_门闩.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_门闩_比例.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_门闩_反面.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_DOOR_LATCH_门闩.md",
+          "status": "ready",
+          "sha256": "026b74ca3f6b4a32583f72172add351b58d8b3ec57941c46323f2cfc60b0f50f"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_门闩.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "横向木闩从左滑右，落闩方向固定。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让门闩结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "门闩 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "门闩"
+        ],
+        "spatial_layout": "门闩只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "横向木闩从左滑右，落闩方向固定。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "门闩"
+        ],
+        "forbidden": [
+          "门闩结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "横向木闩从左滑右，落闩方向固定。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_BRAZIER",
+      "type": "prop",
+      "name": "炭盆",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_炭盆.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_炭盆_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_炭盆_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_BRAZIER_炭盆.md",
+          "status": "ready",
+          "sha256": "188305c3122a96e025edde4c777980056699e116ae10e408c4cf13e3891e0357"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_炭盆.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "低位暖光来源，酒液落在盆边而非人物身上。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让炭盆结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "炭盆 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "炭盆"
+        ],
+        "spatial_layout": "炭盆只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "低位暖光来源，酒液落在盆边而非人物身上。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "炭盆"
+        ],
+        "forbidden": [
+          "炭盆结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "低位暖光来源，酒液落在盆边而非人物身上。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_WINE_CUP",
+      "type": "prop",
+      "name": "半杯酒",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_半杯酒.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_半杯酒_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_半杯酒_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_WINE_CUP_半杯酒.md",
+          "status": "ready",
+          "sha256": "68e81e0fec48cbe38e70996293382f86bdb81370ce38acb25cc520936f457a3f"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_半杯酒.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "同一只杯从潘侧越线、被挡、翻落，之后保持打翻态。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让半杯酒结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "半杯酒 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "半杯酒"
+        ],
+        "spatial_layout": "半杯酒只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "同一只杯从潘侧越线、被挡、翻落，之后保持打翻态。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "半杯酒"
+        ],
+        "forbidden": [
+          "半杯酒结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "同一只杯从潘侧越线、被挡、翻落，之后保持打翻态。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_SPILLED_WINE",
+      "type": "prop",
+      "name": "SPILLED WINE",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_SPILLED_WINE_SPILLED_WINE.md",
+          "status": "ready",
+          "sha256": "0c5b8fdf22a47c00fba4d145ae4e9f7346dd37d372e6923ebaec6e030f08ca25"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "SPILLED WINE",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让SPILLED WINE结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "SPILLED WINE 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "SPILLED WINE"
+        ],
+        "spatial_layout": "SPILLED WINE只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "SPILLED WINE",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "SPILLED WINE"
+        ],
+        "forbidden": [
+          "SPILLED WINE结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "SPILLED WINE",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_LUGGAGE",
+      "type": "prop",
+      "name": "素布行李",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_素布行李.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_素布行李_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_LUGGAGE_素布行李.md",
+          "status": "ready",
+          "sha256": "64890fe2b7e0f23c11ba95ad1fbb17b9724649b7c08245f23a59b3f4e2f7121c"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_素布行李.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "只含武松个人物品，绳结与背负方向固定。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让素布行李结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "素布行李 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "素布行李"
+        ],
+        "spatial_layout": "素布行李只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "只含武松个人物品，绳结与背负方向固定。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "素布行李"
+        ],
+        "forbidden": [
+          "素布行李结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "只含武松个人物品，绳结与背负方向固定。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_DOOR",
+      "type": "prop",
+      "name": "武大家木门",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_场景木门.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_场景木门_比例.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_场景木门_反面.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_DOOR_武大家木门.md",
+          "status": "ready",
+          "sha256": "d800c19ae38dcb73b5daaeb6ac8a3c755d3cdced21eb28033c72e7aa6b2fea11"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_场景木门.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "北宋小民楼屋的旧木板门，竖向门板、粗木门框与横向木闩同源；合门后不自动落闩。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移",
+          "现代防盗门",
+          "现代门锁",
+          "无来源文字"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让武大家木门结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移",
+        "不要现代防盗门",
+        "不要现代门锁",
+        "不要无来源文字"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "武大家木门 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "武大家木门"
+        ],
+        "spatial_layout": "武大家木门只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "北宋小民楼屋的旧木板门，竖向门板、粗木门框与横向木闩同源；合门后不自动落闩。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "武大家木门"
+        ],
+        "forbidden": [
+          "武大家木门结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "北宋小民楼屋的旧木板门，竖向门板、粗木门框与横向木闩同源；合门后不自动落闩。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_COUNTY_YAMEN",
+      "type": "scene",
+      "name": "县衙案厅",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
+          "status": "planned"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_县衙案厅_反打.png",
+          "status": "planned"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_县衙案厅_平面图.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/场景/LOC_COUNTY_YAMEN_县衙案厅.md",
+          "status": "ready",
+          "sha256": "1036ac33a3de846f2c001f87c33e6fddd771eedc0d2ee53153b80fbaa3f9a0f6"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "高窗冷光从画左，案上纸面暖反光克制。",
+        "axis_rules": "知县画左案后、武松画右下站立，尊卑轴稳定。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "controlled",
+          "key_light_direction": "left",
+          "source_text": "高窗冷光从画左，案上纸面暖反光克制。；高窗冷光从画左，案上纸面暖反光克制。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "县衙案厅",
+        "landmarks": [
+          "县衙案厅"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图。",
+        "color_lighting_weather": "高窗冷光从画左，案上纸面暖反光克制。",
+        "resident_assets": [
+          "县衙案厅"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "知县画左案后、武松画右下站立，尊卑轴稳定。",
+      "screen_direction_rules": "知县画左案后、武松画右下站立，尊卑轴稳定。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
+            "status": "planned"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_县衙案厅_反打.png",
+            "status": "planned"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_OFFICIAL_DOC",
+      "type": "prop",
+      "name": "公文",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_公文.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_公文_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_公文_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_OFFICIAL_DOC_公文.md",
+          "status": "ready",
+          "sha256": "8758b9b3becd0028df27c4c8faeb262d0e833e9ba09dc6cfd8bf402a6bd05728"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_公文.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "印章与纸张可见，正文全部后期 overlay 或保持不可读。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让公文结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "公文 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "公文"
+        ],
+        "spatial_layout": "公文只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "印章与纸张可见，正文全部后期 overlay 或保持不可读。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "公文"
+        ],
+        "forbidden": [
+          "公文结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "印章与纸张可见，正文全部后期 overlay 或保持不可读。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_GIFT_LOAD",
+      "type": "prop",
+      "name": "东京礼担",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_东京礼担.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_东京礼担_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_GIFT_LOAD_东京礼担.md",
+          "status": "ready",
+          "sha256": "fb899a34dd7a0c7a2f5237a70f9a02367db8422b0f49150d403879863f00ee76"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_东京礼担.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "数量与捆扎方式在 CLIP13–15 保持一致。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让东京礼担结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "东京礼担 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "东京礼担"
+        ],
+        "spatial_layout": "东京礼担只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "数量与捆扎方式在 CLIP13–15 保持一致。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "东京礼担"
+        ],
+        "forbidden": [
+          "东京礼担结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "数量与捆扎方式在 CLIP13–15 保持一致。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_CITY_GATE",
+      "type": "scene",
+      "name": "阳谷城门清晨",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
+          "status": "planned"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png",
+          "status": "planned"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_平面图.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/场景/LOC_CITY_GATE_阳谷城门清晨.md",
+          "status": "ready",
+          "sha256": "c7d928918c2659f8aeef164944ca24814dad84a1313dbf168be170c0b9dd148d"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "清晨逆光从城门外画面上方进入，楼窗内保持暗暖。",
+        "axis_rules": "武松向画面纵深外行，楼窗在画面上方后景；陌生视线从街下方靠近。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "warm_low_key",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "top",
+          "source_text": "清晨逆光从城门外画面上方进入，楼窗内保持暗暖。；清晨逆光从城门外画面上方进入，楼窗内保持暗暖。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "阳谷城门清晨",
+        "landmarks": [
+          "阳谷城门清晨"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "北宋小县城门清晨，冬日逆光、薄雾、青石路与礼担队伍，纵深明确，武松向城外变小；不做宏大帝都城门。",
+        "color_lighting_weather": "清晨逆光从城门外画面上方进入，楼窗内保持暗暖。",
+        "resident_assets": [
+          "阳谷城门清晨"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "武松向画面纵深外行，楼窗在画面上方后景；陌生视线从街下方靠近。",
+      "screen_direction_rules": "武松向画面纵深外行，楼窗在画面上方后景；陌生视线从街下方靠近。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
+            "status": "planned"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png",
+            "status": "planned"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_WINDOW_CURTAIN",
+      "type": "prop",
+      "name": "WINDOW CURTAIN",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_WINDOW_CURTAIN_WINDOW_CURTAIN.md",
+          "status": "ready",
+          "sha256": "5941ed85a68025c3d1afa935e58046a451bd81d0872eef3c5b5a86761ee395a0"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "WINDOW CURTAIN",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让WINDOW CURTAIN结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "WINDOW CURTAIN 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "WINDOW CURTAIN"
+        ],
+        "spatial_layout": "WINDOW CURTAIN只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "WINDOW CURTAIN",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "WINDOW CURTAIN"
+        ],
+        "forbidden": [
+          "WINDOW CURTAIN结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "WINDOW CURTAIN",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_CURTAIN_FORK",
+      "type": "prop",
+      "name": "叉竿",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_叉竿.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_叉竿_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_叉竿_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_CURTAIN_FORK_叉竿.md",
+          "status": "ready",
+          "sha256": "12605378284f822201136ce9f5153e1988833b5b376586094c19d443e504a463"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_叉竿.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "集尾只露局部与轻碰木檐，不提前完成相逢事件。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让叉竿结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "叉竿 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "叉竿"
+        ],
+        "spatial_layout": "叉竿只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "集尾只露局部与轻碰木檐，不提前完成相逢事件。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "resident_assets": [
+          "叉竿"
+        ],
+        "forbidden": [
+          "叉竿结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "集尾只露局部与轻碰木檐，不提前完成相逢事件。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    }
+  ],
+  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"
+}

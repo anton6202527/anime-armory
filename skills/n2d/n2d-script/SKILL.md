@@ -107,10 +107,11 @@ python3 skills/n2d/n2d-script/scripts/source_language.py <作品根>            
 python3 skills/n2d/n2d-script/scripts/source_language.py <作品根> --scaffold # 建/刷新源理解合同脚手架
 ```
 
-- `source_language.py` 仍会识别 `modern_zh` / `classical_zh` / `non_chinese`，但 register 只决定脚手架模板，不决定是否放行。
+- `source_language.py` 仍会识别 `modern_zh` / `classical_zh` / `non_chinese`，但 register 不决定是否放行。明清章回体/近世白话保持 `modern_zh` 兼容，并另标 `register_profile=late_imperial_vernacular`，使用专门脚手架；`囬/囘/廻/節` 等异体章回标题也按章节单位识别。
 - 处理三步：
   1. `--scaffold` 生成 `设定库/source_comprehension.md` + `设定库/source_comprehension.json`（机器记录·register/信号/status/contract）。
   2. 补全 `source_comprehension.md` 和 JSON 的 `understanding_contract`。必填块：`modern_understanding`、`episode_promise_basis`、`character_motives`、`causality_chain`、`foreshadowing_ledger`、`adaptation_boundaries`、`power_system_rules`；疑似系统流/修炼/战力题材时，等级规则、成长限制、战力一致性必须写实，不能只写“不适用”。
+     - 若 `register_profile=late_imperial_vernacular`，还必须补 `premodern_adapter`：`coverage_scope`、逐回/逐章 `unit_glosses`、`historical_terms`、诗词/评论策略、说书套语策略、历史语境、敏感内容策略与 `dialogue_style_target`。默认目标是“现代可懂白话为骨，保留关键古称谓和少量章回韵味”；不逐字硬译、不满篇仿古，也不把诗词、作者议论、说书套语和剧情正文机械等权成戏。
   3. 把 `source_comprehension.json` 的 `status` 置 `confirmed` → 闸放行。**下游从源理解合同拆集**，后续每集承诺、分镜意图、制片拆解、引用槽位、动作物理、音频时长和 release verdict 都要能追溯到这层理解。
 
 > 文体识别纯关键词密度判定（强文言标记 vs「的」密度 vs 现代虚词；CJK 占比判外文）·不调模型·保守（现代白话夹"之乎者也"成语不误判）。判定阈值/标记集见 `source_language.py` 顶部常量。
@@ -230,6 +231,7 @@ python3 <skill>/scripts/boundary_audit.py <作品根> --strict # 阶段1入口�
 python3 <skill>/scripts/boundary_audit.py <作品根> --json   # 机器可读（series_arc 块）
 python3 <skill>/scripts/boundary_review.py draft <作品根> --write # 刷新 boundary_review_draft.json；不覆盖人工 boundary_review.json
 python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --decision keep --notes '语义判断' --reviewer '<人工声明 reviewer 标识>' --semantic-evidence '闭环/承接证据'
+python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --decision keep --notes '代理语义判断' --reviewer 'delegate:n2d-agent' --semantic-evidence '闭环/承接证据' --delegated  # 仅有效自主授权
 python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --decision rewrite --notes '已实施的修改' --reviewer '<人工声明 reviewer 标识>' --source-mapping-file '<source_mapping.json>'
 python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验 blocker code + 双侧边界合同 + 决策/实施收据
 ```
@@ -258,7 +260,7 @@ python3 <skill>/scripts/apply_split_mapping.py <作品根> <approved_mapping.jso
 > 全是启发式**初筛**，只 flag 候选交人判、不计算真分、不臆造——深层动机/世界观自洽/台词质感/导演审美仍需人判。**绝不堆噪声淹没硬伤**（容错铁律）。
 
 **叙事状态台账（NS1·知识/位置/关系跨集·2026-06-24）**：视觉 `state_ledger` 只管伤/泪/妆/服，**知识/位置/关系**这条叙事轴此前无人看守——最容易出又最难发现的硬伤（A 第3集还不知道、第5集却表现知道；上集在甲地、本集无转场却到乙地）。跑 `python3 skills/n2d/n2d-script/scripts/narrative_state_audit.py <作品根> --write` 从各集 voiceover 捞候选写 `设定库/narrative_state_ledger.json`（知识条目自动用 `【…】/《…》` 专名预填 `keyword`，`character/known_from_ep` 交编剧填；自由文本不臆断谁知道什么）。填全后 `narrative_state_audit.py <作品根> --check` 或 `n2d-review` 的 NS1 做**确定性跨集校验**：**知识倒流**（声明第K集才知道，但更早集该角色已提及该 keyword）+ **位置瞬移**（同角色相邻有声明的集换地点、两集都无转场词）。诚实边界同 SP1：校验只跑在字段填全的条目上。
-`n2d/run.py next` 进入 `script_stage1` 前会自动跑 strict 版。`boundary_review.py draft --write` 每次刷新机器文件 `脚本/boundary_review_draft.json`，只在首次缺失时创建人工文件 `脚本/boundary_review.json`，续切/重审绝不覆盖人工决定。人工决定不要手改 JSON：用 `boundary_review.py sign`（`record` 为等价别名）按**精确 `blocker_id`** 原子写入。`keep` 必须显式给非空 notes、`semantic_evidence` 和非空且不含明显自动化标识的人工声明 reviewer；自动/agent/bot/system 身份字样不能签。`move/merge/split/rewrite` 要先真实改完左右 `raw.txt`，再由 CLI 从旧 machine/human `boundary_contract` 自动绑定改前合同 SHA 与当前左右新 SHA，并要求 JSON 参数或文件形式的非空 source mapping；左右 SHA 都没变、合同陈旧/未知或 reviewer 声明缺失都会拒写。该本地字符串不认证真实身份、岗位权限或与生成流程的独立性；需要强保证时接外部认证 reviewer ID、签名或审批收据并绑定同一 blocker/合同/raw SHA。`accept_risk` 只能确认 advisory，不能解除 strict blocker。
+`n2d/run.py next` 进入 `script_stage1` 前会自动跑 strict 版。`boundary_review.py draft --write` 每次刷新机器文件 `脚本/boundary_review_draft.json`，只在首次缺失时创建人工文件 `脚本/boundary_review.json`，续切/重审绝不覆盖签收决定。决定不要手改 JSON：用 `boundary_review.py sign`（`record` 为等价别名）按**精确 `blocker_id`** 原子写入。标准模式的 `keep` 必须显式给非空 notes、`semantic_evidence` 和可追责人工 reviewer；自动/agent/bot/system 身份不能冒充人审。只有 `人工批准策略=仅高风险停审` 且 `autonomy_authorization.json` 有效，才可用 `delegate:n2d-agent + --delegated` 代理签 `keep`，记录授权人和授权 SHA。`move/merge/split/rewrite` 永远不可代理：须先真实改完左右 `raw.txt`，再由人工 reviewer 绑定改前合同、当前新 SHA 与 source mapping；左右 SHA 都没变、合同陈旧/未知或 reviewer 声明缺失都会拒写。`accept_risk` 只能确认 advisory，不能解除 strict blocker。
 
 **前长后短的落地**：粗胚默认按章/场景/强钩候选切；**第1集**在精修时主动加权，必要时并入更多开篇内容来立世界观、主角欲望和系列总钩。真正节奏靠**爽点/钩子重切(②) + 配音/原生音画实测(③)**校准；不要为了让第1集或后续集落到某个秒数而拆断完整闭环。脚本自动剥离开头简介/标签/看点等元数据（`--keep-frontmatter` 可保留）。
 
@@ -302,7 +304,7 @@ python3 <skill>/scripts/apply_split_mapping.py <作品根> <approved_mapping.jso
    - 若参考图还用于制作风格识别，`global_style.md` 必须把识别出的风格归一成具体 `基础视觉风格` 或 `自定义（...）` 六字段契约，并写明**禁止继承截图 UI/播放按钮/字幕/搜索框/水印/平台标签**；这些只作风格和人物参考，不进入成片画面。
    - **本 skill 只生成 prompt 文本**——实际出定妆照在 Stage 4 (`n2d-image`) 做
 4. 新角色/场景在其首次出现的那一集补建卡；补建前同样先查跨项目资产库。
-5. **角色形象生命周期时间线（跨集·全局产物·Gap2）**：主要角色建卡后跑 `python3 skills/n2d/n2d-script/scripts/lifecycle_scan.py <作品根> --write` —— 确定性预扫 raw 的"时间/年龄、换装/造型、形态/状态"里程碑信号，写/刷新 `设定库/characters/_生命周期.md`（自动段每次重生成，人工确认区保留）。**人确认/合并候选**为"集号→角色→形象变化→定妆动作"，再把变体写回对应角色卡『形象里程碑』。涉及年龄跳/成长阶段的行，定妆动作必须写清 `form`、年龄/年龄档、目标文件前缀和上一阶段派生来源（如 `18岁少年态 → 定妆_某角色_18岁少年*.png ← 14岁常态脸锚`）。这是 n2d 此前缺的**跨集造型排程**层（对标小云雀"全局角色管理·全生命周期形象扫描"）：里程碑集到达前由 `n2d-image` 提前派生『形态变体』定妆，避免锁死后到第 N 集才发现该变=返工；也作 `n2d-identity` 跨集漂移的**预期变化基线**（里程碑解释的变化=合法演进，之外=漂移）。格式见 `references/formats.md §1.1`。与角色卡『形态变体』『识别锚点』、`visual_contract.角色状态演进`（集内）互补，不重叠。
+5. **角色形象生命周期时间线（跨集·全局产物·Gap2）**：主要角色建卡后跑 `python3 skills/n2d/n2d-script/scripts/lifecycle_scan.py <作品根> --write` —— 确定性预扫 raw 的"时间/年龄、换装/造型、形态/状态"里程碑信号，写/刷新 `设定库/characters/_生命周期.md`（自动段每次重生成，确认区保留）。标准模式由人确认/合并候选；“仅高风险停审”模式由代理只确认源文有明确证据的可逆候选，含糊年龄跳、身份变化或会触发额外付费定妆的条目仍停审。确认结果再写回角色卡『形象里程碑』。涉及年龄跳/成长阶段的行，定妆动作必须写清 `form`、年龄/年龄档、目标文件前缀和上一阶段派生来源（如 `18岁少年态 → 定妆_某角色_18岁少年*.png ← 14岁常态脸锚`）。这是 n2d 此前缺的**跨集造型排程**层；里程碑集到达前由 `n2d-image` 提前派生『形态变体』定妆，也作 `n2d-identity` 跨集漂移的预期变化基线。格式见 `references/formats.md §1.1`。
 
 ### 第 3 步 — 阶段1·剧本改编（台词先行，**不做分镜**）
 
@@ -344,7 +346,7 @@ python3 skills/n2d/n2d-dashboard/scripts/dashboard.py record <作品根> \
 
 > **本 skill 不写出图 prompt**（即 `出图/共享/图片/` 与 `出图/第N集/图片/` 下的所有 prompt + PNG）。物料齐后用户调 `n2d-image`，那个 skill 才负责出图 prompt 两层架构。
 
-**批量提示**：用户要"一次多集"时，按 `脚本批次` 选择点的节奏走（默认**逐集**：每集停下报边界决策+物料清单再继续；可选 小批/整批，见「脚本批次」段）；逐集复用同一批角色卡/场景卡，保证跨集一致，不要重新发明角色外貌。
+**批量提示**：用户要"一次多集"时，按 `脚本批次` 选择点的节奏走（默认**逐集**：每集报告边界决策+物料清单；可选 小批/整批，见「脚本批次」段）；逐集复用同一批角色卡/场景卡，保证跨集一致，不要重新发明角色外貌。若 `人工批准策略=仅高风险停审` 且授权有效，报告只做进度留痕，不暂停流水线；边界 `keep` 可带语义证据代理签收，移动/合并/拆分/重写 raw 仍必须人工批准。
 
 ### 第 4 步 — 报告 + 推进（收尾必做：详列下一步）
 
@@ -369,7 +371,7 @@ Stage 1 交出 voiceover 后，不要直接进入导演排戏。先做低成本�
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第N集 check --kind table_read --json --write-missing
 ```
 
-缺文件时会在 `脚本/第N集/` 生成 `table_read_packet.json/.md` 与 `table_read_signoff.json`。补完内容、把包置为 `confirmed` 后，仍须由 director 或 head_writer 运行 `signoff.py <作品根> table_read approve 第N集 --reviewer-id ... --reviewer-role director` 签当前输入与证据哈希；每条 blocker/warn 要有处理结论或结构化风险签收。这个包不新增 `_进度.md` 列；内容或签收任一未通过时不会进入 P-2。
+缺文件时会在 `脚本/第N集/` 生成 `table_read_packet.json/.md` 与 `table_read_signoff.json`。补完内容、把包置为 `confirmed` 后，标准模式由 director/head_writer 运行 `signoff.py` 签当前输入与证据哈希；“仅高风险停审”模式由 `run.py` 调 `autonomy.py approve` 自动写 delegated signoff。每条 blocker/warn 仍须有处理结论或结构化风险签收；内容或签收任一未通过时不会进入 P-2。
 
 ## 阶段1.5 — P-2 导演排戏包（分镜前先排戏）
 
@@ -388,7 +390,7 @@ python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第N
 - `vertical_composition_plan.json`：9:16 安全区、脸部可读性、Z 轴纵深、overlay/字幕区和竖向运动。
 - `edit_rhythm_map.json`：前 3 秒钩子、前 6 秒命题、中段钩子密度、爽点/留白、集尾 cliffhanger 和声音/BGM cue。
 
-**签收口径**：六件套默认 `draft`，补齐后置为 `confirmed` 只表示可审；`director_blocking_signoff.json` 还必须由 director 与 producer/editor 两个角色组分别批准。运行两次 `signoff.py <作品根> p2 approve 第N集 --reviewer-id ... --reviewer-role <director|producer|editor>`。生成器即使能从旧 storyboard 预填内容，也永远不能把 P-2 自动确认为已批准。
+**签收口径**：六件套默认 `draft`，补齐后置为 `confirmed` 只表示可审。标准模式下，`director_blocking_signoff.json` 仍由 director 与 producer/editor 两个角色组分别批准；“仅高风险停审”模式下，代理只能在六件套 confirmed、授权有效且哈希当前时写 `delegated_autonomy` 签收，明确记录负责人豁免独立人审，不能把自动产物伪装成导演亲审。
 
 对话/对峙段在 P-2 confirmed 后再跑一遍正反打合同审计：
 
@@ -406,7 +408,7 @@ Stage 2 交出 `storyboard.json` 和 `镜头时长.json` 后，先做一次低�
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第N集 check --kind animatic --json --write-missing
 ```
 
-缺文件时会生成 `animatic_packet.json/.md` 与 `animatic_signoff.json`。内容 confirmed 后，还须 director 与 editor/producer 两个角色组分别运行 `signoff.py <作品根> animatic approve 第N集 ...`；风险接受使用 `approved_with_risk` 并同时记录 `--risk` 与 `--waiver-reason`。内容、OTIO/timed preview、剧情经济性或签收任一未通过，都不会进入出图 prompt。
+缺文件时会生成 `animatic_packet.json/.md` 与 `animatic_signoff.json`。内容 confirmed 后，标准模式由 director 与 editor/producer 两个角色组分别运行 `signoff.py`；“仅高风险停审”模式由代理绑定 packet、OTIO/timed preview 与当前输入哈希签收。风险接受仍须显式记录 `approved_with_risk`、risk 与 waiver reason，不能被普通代理默认吞掉。内容、预览、剧情经济性或签收任一未通过，都不会进入出图 prompt。
 
 ## 阶段2.5 — P-3 制片拆解包（出图 prompt 前先交接）
 
@@ -427,7 +429,7 @@ python3 skills/n2d/n2d-script/scripts/production_breakdown.py <作品根> 第N�
 - `生产数据/ai_shooting_schedule_batch_seed_第N集.json`
 - `生产数据/ai_shooting_schedule_batch_seed_第N集.md`
 
-**签收口径**：六件套默认 `draft`，内容 confirmed 后还须 producer/assistant_director/script_supervisor 之一签 `production_handoff_signoff.json`。`continuity_chain.json` 是接缝机器真值：每个 Clip→下一 Clip 必须显式写 `seam_mode` 与该类型的 `seam_evidence`；只有 `continuous_take_relay` 要求上一镜尾帧 SHA 与下一镜首帧相同，其他切法按动作相位、视线目标、反应对象、插入物、声桥、叠化或有意不连续理由验收。旧数据可用 `seam_migrate.py <作品根> 第N集 --write` 生成待审候选，但会重置 P-2 签收，不能把推断当导演批准。P-3 不新增进度列，内容或签收未通过均不会进入出图 prompt。
+**签收口径**：六件套默认 `draft`。内容 confirmed 后，标准模式由 producer/assistant_director/script_supervisor 之一签 `production_handoff_signoff.json`；“仅高风险停审”模式由代理按项目授权签收，但不授予付费出图/出视频权限。`continuity_chain.json` 是接缝机器真值：每个 Clip→下一 Clip 必须显式写 `seam_mode` 与该类型的 `seam_evidence`；只有 `continuous_take_relay` 要求上一镜尾帧 SHA 与下一镜首帧相同，其他切法按动作相位、视线目标、反应对象、插入物、声桥、叠化或有意不连续理由验收。旧数据可用 `seam_migrate.py <作品根> 第N集 --write` 生成待审候选，但会重置 P-2 签收，不能把推断当导演亲审。P-3 不新增进度列，内容或签收未通过均不会进入出图 prompt。
 
 导入队列时用：
 
@@ -477,8 +479,8 @@ python3 skills/n2d/n2d-batch/scripts/queue.py plan <作品根> --from-shooting-s
    - 设计完对照 `分镜语法.md`（镜头空间）+ `导演节奏.md`（时间留存）**两份**自查清单。
    - **关键帧/编辑切点自动规划（storyboard.json 定稿后必跑）**：运行 `python3 skills/n2d/n2d-script/scripts/anchor_planner.py <作品根> 第N集`。默认 `中段锚帧默认=关闭`，普通单拍不补 `_mid`；E1 多 `lens/camera/shot_size` 镜位边界始终出 `use=edit_cut`，R1/R2/R3 高风险连续动作/长镜/漂移实证始终出执行锚。只有用户显式开启且后端单次请求原生支持 3+ 帧时，普通 D0 镜才加 `_mid`。
      - **执行语义**：`use=edit_cut` 生成前后 take 共用边界图；`use=split/keyframe` 进入 native multiframe 或 split relay；`use=qc/reference` 只作验收，runner 不消费。first-frame-only/未知后端不再默认建议为所有普通镜额外花一张中帧图。
-     - **流程**：先 dry-run 产 `生产数据/anchor_plan_第N集.json/md`（规则、边界、成本）→ 人确认 → `--write` 注回 `continuity.anchors` 与 `policy.midframe_default_mode=risk_only|explicit_opt_in`。下游 n2d-image 只出声明所需图片，n2d-video 按 `frame_strategy` 执行；缺 E1 边界图或高风险后端无法消费时，付费前 BLOCK。
-   - **题材母题检测（storyboard.json 定稿后·检测+建议·人确认后注入）**：跑 `python3 skills/n2d/n2d-script/scripts/motif_detector.py <作品根> 第N集`（默认 dry-run）识别**题材**（系统流/穿越/修仙…）与**复现母题桥段**（系统面板出现/升级/系统刷新/签到/抽奖/爆装备）→ 出 `生产数据/motif_plan_第N集.{json,md}` 给增强建议（场景/道具/台词/成长档/overlay 文字层）。穿越/系统流爽文的"系统面板"是高频复现且带成长属性（面板进化、等级只增不减）的核心爽点，做好观众爱看。**人确认/微调题材与母题后** `--write` 注回：把 `template=system_panel`/`motif_id` 写进对应 Clip 的 `template_contract`、初始化/追加 `出图/共享/motif_registry.json`（成长 progression 骨架，等级/属性待人按剧情填）。题材落 `_设置.md` `题材`/`母题增强` 选择点（弱选择点·检测预填可覆盖）。**混合渲染**：AI 只出锁色锁形发光光幕底框（`VFX_系统面板`，禁烤文字数字），等级/属性数值由 n2d-compose 期 overlay 叠清晰文字层。完整契约见 `references/题材母题框架.md`；模板见 `references/专项镜头模板库.md` §0.2/§12。
+     - **流程**：先 dry-run 产 `生产数据/anchor_plan_第N集.json/md`（规则、边界、成本）→ 标准模式人确认；“仅高风险停审”模式由代理按风险最小、可逆、默认 risk-only 的方案记录理由 → `--write` 注回 `continuity.anchors` 与 `policy.midframe_default_mode=risk_only|explicit_opt_in`。下游 n2d-image 只出声明所需图片，n2d-video 按 `frame_strategy` 执行；任何会增加付费调用的选项仍在付费前 BLOCK。
+   - **题材母题检测（storyboard.json 定稿后·检测+建议·确认后注入）**：跑 `python3 skills/n2d/n2d-script/scripts/motif_detector.py <作品根> 第N集`（默认 dry-run）识别**题材**（系统流/穿越/修仙…）与**复现母题桥段**（系统面板出现/升级/系统刷新/签到/抽奖/爆装备）→ 出 `生产数据/motif_plan_第N集.{json,md}` 给增强建议（场景/道具/台词/成长档/overlay 文字层）。穿越/系统流爽文的"系统面板"是高频复现且带成长属性（面板进化、等级只增不减）的核心爽点，做好观众爱看。标准模式人确认；“仅高风险停审”模式由代理依据源理解合同和题材证据选择最优、可逆方案并写理由，然后 `--write` 注回。任何改剧情因果、引入敏感题材或增加付费生成的选择仍停在对应闸门。**混合渲染**：AI 只出锁色锁形发光光幕底框（`VFX_系统面板`，禁烤文字数字），等级/属性数值由 n2d-compose 期 overlay 叠清晰文字层。完整契约见 `references/题材母题框架.md`；模板见 `references/专项镜头模板库.md` §0.2/§12。
 4. `素材清单.md` — 角色/场景/道具的 AI 图片 prompt（复用角色卡锚定，**中文+英文双版默认都写**）。中文 prompt 偶尔会触发平台安全规避或误判，英文版作为同义兜底；执行下游出图/出视频时默认建议中英都保留，由平台/CLI 选择更稳的一版。
 
 **完成后**：`_进度.md` 勾选 `分镜设计` / `素材清单` / `字幕中` ✅（默认中文-only 不勾 `字幕英`；项目显式选中英双语/仅英文且已产 `字幕_英文.srt` 时才同步勾 `字幕英`）。`奇观连续性` 列**无需手勾**——出图前 image_prompt prework 生成序列总账后自动回写（✅=有奇观且覆盖，—=无奇观）。记录生产数据：

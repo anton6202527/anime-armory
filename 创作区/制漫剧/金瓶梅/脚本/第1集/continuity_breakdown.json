@@ -1,0 +1,477 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第1集",
+  "generated_at": "2026-08-11T04:49:19+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "end_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+      "eyeline": "武松由画右下看向画左上猛虎",
+      "knowledge_state": {
+        "CHAR_WUSONG": [
+          "确认虎扑已到贴脸距离"
+        ]
+      },
+      "location_id": "LOC_JINGYANGGANG",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "BEAST_TIGER"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：武松由画右下看向画左上猛虎；转场方式：动作继续进入三扑拆招。。",
+      "shot_reverse_continuity": {},
+      "start_state": "冷开场：武松贴地，虎爪已压到脸前。",
+      "transition_guard": "动作继续进入三扑拆招。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、BEAST_TIGER；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "end_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+      "eyeline": "武松向上盯虎",
+      "knowledge_state": {
+        "CHAR_WUSONG": [
+          "摸清猛虎只有扑、掀、剪三套近身攻势"
+        ]
+      },
+      "location_id": "LOC_JINGYANGGANG",
+      "props_continuity": "关键物件保持可追踪：PROP_QUARTERSTAFF/完整至断裂；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "BEAST_TIGER",
+        "PROP_QUARTERSTAFF"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：武松向上盯虎；转场方式：拳头前送动作切入胜利蒙太奇。。",
+      "shot_reverse_continuity": {},
+      "start_state": "武松在画右半跪回望，猛虎转身准备再扑。",
+      "transition_guard": "拳头前送动作切入胜利蒙太奇。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、BEAST_TIGER、PROP_QUARTERSTAFF；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "end_state": "武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+      "eyeline": "武松看向街巷纵深家门",
+      "knowledge_state": {
+        "CHAR_WUSONG": [
+          "只知道自己将回阳谷寻兄，不知家门内未来冲突"
+        ]
+      },
+      "location_id": "LOC_JINGYANGGANG",
+      "props_continuity": "关键物件保持可追踪：PROP_BADGE、PROP_REWARD_SILVER、PROP_QUARTERSTAFF/断裂；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "PROP_BADGE"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：武松看向街巷纵深家门；转场方式：街门阴影溶入武大挑担的街巷。。",
+      "shot_reverse_continuity": {},
+      "start_state": "梢棒已断并落地，武松居下方握拳，猛虎低伏在上方。",
+      "transition_guard": "街门阴影溶入武大挑担的街巷。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、PROP_BADGE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "end_state": "武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+      "eyeline": "潘金莲由楼窗向画面下方街口",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "感到婚姻并非自己选择"
+        ],
+        "CHAR_WUDA": [
+          "只求靠卖饼维持安稳"
+        ]
+      },
+      "location_id": "LOC_YANGGU_STREET",
+      "props_continuity": "关键物件保持可追踪：PROP_CAKE_POLE、PROP_WINDOW_LATTICE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUDA",
+        "CHAR_PANJINLIAN",
+        "PROP_CAKE_POLE"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘金莲由楼窗向画面下方街口；转场方式：武大的叫卖声先入，随后由潘金莲视线切到街上重逢。。",
+      "shot_reverse_continuity": {},
+      "start_state": "武松已着都头装走入阳谷街，兄长家门在前方阴影中。",
+      "transition_guard": "武大的叫卖声先入，随后由潘金莲视线切到街上重逢。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUDA、CHAR_PANJINLIAN、PROP_CAKE_POLE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "end_state": "三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+      "eyeline": "潘金莲画左看武松画右",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "第一次把武松与打虎都头身份对应起来"
+        ]
+      },
+      "location_id": "LOC_YANGGU_STREET",
+      "props_continuity": "关键物件保持可追踪：PROP_BADGE、PROP_CAKE_POLE、PROP_STAIR_RAIL；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PANJINLIAN"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘金莲画左看武松画右；转场方式：潘金莲视线反打到她开口留住武松。。",
+      "shot_reverse_continuity": {},
+      "start_state": "武大挑担行至街口，潘金莲仍在楼窗后看向街下。",
+      "transition_guard": "潘金莲视线反打到她开口留住武松。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_WUDA、CHAR_PANJINLIAN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "end_state": "一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+      "eyeline": "潘画左看右，武松多半垂眼或看器物",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "确认武松不会主动迎合但尚未明确拒绝"
+        ],
+        "CHAR_WUSONG": [
+          "察觉嫂嫂话语逐步越界但仍维护称谓礼数"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_DINING_TABLE、PROP_TEA_CUP、PROP_DOORFRAME；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_PANJINLIAN"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘画左看右，武松多半垂眼或看器物；转场方式：窗外日光溶成雪夜冷蓝，门轴声接武大出门。。",
+      "shot_reverse_continuity": {},
+      "start_state": "三人在武大家楼屋内落座，武松画右、潘金莲画左、武大居中。",
+      "transition_guard": "窗外日光溶成雪夜冷蓝，门轴声接武大出门。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP07",
+      "end_state": "雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+      "eyeline": "潘画左看右，武松先向下看杯再看画右后门",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "确认屋内只剩叔嫂二人"
+        ],
+        "CHAR_WUSONG": [
+          "确认武大已出门且门闩由潘落下"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_DOOR_LATCH、PROP_BRAZIER、PROP_WINE_CUP；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_PANJINLIAN",
+        "PROP_DOOR_LATCH",
+        "PROP_WINE_CUP"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘画左看右，武松先向下看杯再看画右后门；转场方式：潘的句尾留在武松反应上形成L-cut。。",
+      "shot_reverse_continuity": {
+        "axis_line": "炭盆—桌面横轴，潘左武松右。",
+        "buffer_or_reestablishing": "用手部、道具、门框、空镜或双人建立镜做节奏与重新定向缓冲。",
+        "camera_coverage": "establishing master + paired clean singles/OTS + insert/cutaway + reaction",
+        "coverage_order": [
+          "双人建立",
+          "A方单人/过肩",
+          "B方反打",
+          "道具或反应缓冲",
+          "重建空间落幅"
+        ],
+        "crossing_axis_policy": "默认禁止越轴；必须越轴时先用建立镜、中线移动或插入镜重新定向。",
+        "eyeline_match": "潘向右看武松；武松先看杯再看门。",
+        "lens_height_distance_match": "A/B反打保持相近焦段、距离、机位高度、光位与背景深度。",
+        "screen_sides": {
+          "left": "CHAR_PANJINLIAN",
+          "locked_rule": "按 blocking/axis 锁定，不在反打中互换。",
+          "right": "CHAR_WUSONG"
+        },
+        "shot_pairing": "潘的提议近景 ↔ 武松拒接的克制反打。"
+      },
+      "start_state": "一月后，武松仍居画右并主动拉开距离，潘金莲画左已把茶盏推过桌面中线。",
+      "transition_guard": "潘的句尾留在武松反应上形成L-cut。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、PROP_DOOR_LATCH、PROP_WINE_CUP；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP08",
+      "end_state": "武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+      "eyeline": "潘画左向右；武松画右向左",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "武松把兄弟伦理置于她的诉求之上"
+        ],
+        "CHAR_WUSONG": [
+          "确认试探已针对兄长婚姻发起"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_BRAZIER、PROP_WINE_CUP、PROP_CAKE_POLE/记忆插入；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_PANJINLIAN",
+        "PROP_WINE_CUP"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘画左向右；武松画右向左；转场方式：武松边界句结束后，潘的手越过桌面把杯推到眼前。。",
+      "shot_reverse_continuity": {
+        "axis_line": "潘左武松右的炭盆横轴。",
+        "buffer_or_reestablishing": "用手部、道具、门框、空镜或双人建立镜做节奏与重新定向缓冲。",
+        "camera_coverage": "establishing master + paired clean singles/OTS + insert/cutaway + reaction",
+        "coverage_order": [
+          "双人建立",
+          "A方单人/过肩",
+          "B方反打",
+          "道具或反应缓冲",
+          "重建空间落幅"
+        ],
+        "crossing_axis_policy": "默认禁止越轴；必须越轴时先用建立镜、中线移动或插入镜重新定向。",
+        "eyeline_match": "双方视线第一次正面对接。",
+        "lens_height_distance_match": "A/B反打保持相近焦段、距离、机位高度、光位与背景深度。",
+        "screen_sides": {
+          "left": "CHAR_PANJINLIAN",
+          "locked_rule": "按 blocking/axis 锁定，不在反打中互换。",
+          "right": "CHAR_WUSONG"
+        },
+        "shot_pairing": "潘的情感筹码CU ↔ 武松的伦理边界CU。"
+      },
+      "start_state": "雪夜门闩已落，潘在画左炭盆边推来半杯酒，武松画右未接。",
+      "transition_guard": "武松边界句结束后，潘的手越过桌面把杯推到眼前。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、PROP_WINE_CUP；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP09",
+      "end_state": "酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+      "eyeline": "潘左向右；武松右向左后移开",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "确认武松不但拒绝，还会以兄嫂名分约束她"
+        ],
+        "CHAR_WUSONG": [
+          "确认必须当场切断试探"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_BRAZIER、PROP_WINE_CUP/打翻态、PROP_SPILLED_WINE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_PANJINLIAN",
+        "PROP_WINE_CUP",
+        "PROP_BRAZIER"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘左向右；武松右向左后移开；转场方式：门外脚步声先入，切武大推门后的潘金莲泪眼。。",
+      "shot_reverse_continuity": {
+        "axis_line": "潘左武松右，杯沿左→右越线。",
+        "buffer_or_reestablishing": "用手部、道具、门框、空镜或双人建立镜做节奏与重新定向缓冲。",
+        "camera_coverage": "establishing master + paired clean singles/OTS + insert/cutaway + reaction",
+        "coverage_order": [
+          "双人建立",
+          "A方单人/过肩",
+          "B方反打",
+          "道具或反应缓冲",
+          "重建空间落幅"
+        ],
+        "crossing_axis_policy": "默认禁止越轴；必须越轴时先用建立镜、中线移动或插入镜重新定向。",
+        "eyeline_match": "潘先强求对视；武松警告时短暂直视后移开。",
+        "lens_height_distance_match": "A/B反打保持相近焦段、距离、机位高度、光位与背景深度。",
+        "screen_sides": {
+          "left": "CHAR_PANJINLIAN",
+          "locked_rule": "按 blocking/axis 锁定，不在反打中互换。",
+          "right": "CHAR_WUSONG"
+        },
+        "shot_pairing": "杯与潘的逼近 ↔ 武松手与脸的拒绝。"
+      },
+      "start_state": "武松仍未碰杯，首次直视潘金莲并明确兄弟伦理边界。",
+      "transition_guard": "门外脚步声先入，切武大推门后的潘金莲泪眼。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、PROP_WINE_CUP、PROP_BRAZIER；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP10",
+      "end_state": "武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+      "eyeline": "武大由画右后看潘画左，再看武松画右外",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "知道真实过程并主动倒置"
+        ],
+        "CHAR_WUDA": [
+          "看见妻子泪眼和打翻酒杯但未见冲突过程"
+        ],
+        "CHAR_WUSONG": [
+          "听见反咬但选择不争"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_CAKE_POLE、PROP_DOOR_LATCH、PROP_WINE_CUP/打翻态；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUDA",
+        "CHAR_PANJINLIAN",
+        "PROP_WINE_CUP"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：武大由画右后看潘画左，再看武松画右外；转场方式：行李绳收紧的声音切入武松收拾。。",
+      "shot_reverse_continuity": {},
+      "start_state": "酒杯已翻落、酒液在炭盆边，武松站在画右压住怒气，潘坐在画左由惊转羞怒。",
+      "transition_guard": "行李绳收紧的声音切入武松收拾。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUDA、CHAR_PANJINLIAN、PROP_WINE_CUP；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP11",
+      "end_state": "武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+      "eyeline": "武大看武松背影；武松句末看门闩",
+      "knowledge_state": {
+        "CHAR_WUDA": [
+          "不知道完整冲突，只知道兄弟要走"
+        ],
+        "CHAR_WUSONG": [
+          "认为离开能避嫌但无法替哥哥管住家门"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_LUGGAGE、PROP_DOOR_LATCH、PROP_WINE_CUP/打翻态；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "PROP_LUGGAGE"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：武大看武松背影；武松句末看门闩；转场方式：武松脚跨门槛匹配切到雪街脚步。。",
+      "shot_reverse_continuity": {},
+      "start_state": "武大站在门口迟疑看向画外武松，潘在画左泪眼控诉，武松沉默。",
+      "transition_guard": "武松脚跨门槛匹配切到雪街脚步。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_WUDA、PROP_LUGGAGE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP12",
+      "end_state": "武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+      "eyeline": "武大看武松背影，潘藏在更深后景",
+      "knowledge_state": {
+        "CHAR_WUDA": [
+          "留在门内并失去兄弟同住保护"
+        ],
+        "CHAR_WUSONG": [
+          "以搬离避免闲话"
+        ]
+      },
+      "location_id": "LOC_YANGGU_STREET",
+      "props_continuity": "关键物件保持可追踪：PROP_LUGGAGE、PROP_DOOR、PROP_DOOR_LATCH；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "PROP_DOOR"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：武大看武松背影，潘藏在更深后景；转场方式：门板黑面匹配切到衙门案桌阴影。。",
+      "shot_reverse_continuity": {},
+      "start_state": "武松背行李跨出门槛，武大停在屋内，潘留在后景，门仍未关。",
+      "transition_guard": "门板黑面匹配切到衙门案桌阴影。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、PROP_DOOR；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP13",
+      "end_state": "武松在衙门抱拳领命，确认明日押礼担赴东京。",
+      "eyeline": "知县左上、武松右下互看",
+      "knowledge_state": {
+        "CHAR_MAGISTRATE": [
+          "认为武松适合押送礼担"
+        ],
+        "CHAR_WUSONG": [
+          "明日需离城赴东京"
+        ]
+      },
+      "location_id": "LOC_COUNTY_YAMEN",
+      "props_continuity": "关键物件保持可追踪：PROP_OFFICIAL_DOC、PROP_GIFT_LOAD、PROP_BADGE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_MAGISTRATE",
+        "PROP_OFFICIAL_DOC"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：知县左上、武松右下互看；转场方式：武松‘明日’尾音覆盖回到武大家的告别。。",
+      "shot_reverse_continuity": {
+        "axis_line": "案桌横轴，知县左武松右。",
+        "buffer_or_reestablishing": "用手部、道具、门框、空镜或双人建立镜做节奏与重新定向缓冲。",
+        "camera_coverage": "establishing master + paired clean singles/OTS + insert/cutaway + reaction",
+        "coverage_order": [
+          "双人建立",
+          "A方单人/过肩",
+          "B方反打",
+          "道具或反应缓冲",
+          "重建空间落幅"
+        ],
+        "crossing_axis_policy": "默认禁止越轴；必须越轴时先用建立镜、中线移动或插入镜重新定向。",
+        "eyeline_match": "知县向右下看武松；武松向左上回视。",
+        "lens_height_distance_match": "A/B反打保持相近焦段、距离、机位高度、光位与背景深度。",
+        "screen_sides": {
+          "left": "CHAR_MAGISTRATE",
+          "locked_rule": "按 blocking/axis 锁定，不在反打中互换。",
+          "right": "CHAR_WUSONG"
+        },
+        "shot_pairing": "知县案后MS ↔ 武松领命MCU。"
+      },
+      "start_state": "武松已走远，家门合上但未见落闩，武大与潘留在门内。",
+      "transition_guard": "武松‘明日’尾音覆盖回到武大家的告别。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_MAGISTRATE、PROP_OFFICIAL_DOC；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP14",
+      "end_state": "武松已转身向城门与礼担走去，武大停在家门外目送。",
+      "eyeline": "兄弟互看后武大看纵深",
+      "knowledge_state": {
+        "CHAR_WUDA": [
+          "答应少出早归、早闭门户"
+        ],
+        "CHAR_WUSONG": [
+          "知道离城带来保护空窗但不知具体威胁"
+        ]
+      },
+      "location_id": "LOC_WUDA_HOME",
+      "props_continuity": "关键物件保持可追踪：PROP_GIFT_LOAD、PROP_DOOR、PROP_BADGE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "PROP_DOOR"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：兄弟互看后武大看纵深；转场方式：武大的目送视线切到城门纵深中的武松。。",
+      "shot_reverse_continuity": {
+        "axis_line": "门前横轴，武大左武松右。",
+        "buffer_or_reestablishing": "用手部、道具、门框、空镜或双人建立镜做节奏与重新定向缓冲。",
+        "camera_coverage": "establishing master + paired clean singles/OTS + insert/cutaway + reaction",
+        "coverage_order": [
+          "双人建立",
+          "A方单人/过肩",
+          "B方反打",
+          "道具或反应缓冲",
+          "重建空间落幅"
+        ],
+        "crossing_axis_policy": "默认禁止越轴；必须越轴时先用建立镜、中线移动或插入镜重新定向。",
+        "eyeline_match": "兄弟同高互看。",
+        "lens_height_distance_match": "A/B反打保持相近焦段、距离、机位高度、光位与背景深度。",
+        "screen_sides": {
+          "left": "CHAR_WUDA",
+          "locked_rule": "按 blocking/axis 锁定，不在反打中互换。",
+          "right": "CHAR_WUSONG"
+        },
+        "shot_pairing": "武松叮嘱 ↔ 武大点头反应。"
+      },
+      "start_state": "武松在衙门抱拳领命，确认明日押礼担赴东京。",
+      "transition_guard": "武大的目送视线切到城门纵深中的武松。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_WUDA、PROP_DOOR；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP15",
+      "end_state": "武松已出城；潘仍在楼窗后；陌生男子只露檐影下眼部与叉竿，身份未揭。",
+      "eyeline": "潘由楼上看城门方向；陌生男子由街下抬眼看楼窗",
+      "knowledge_state": {
+        "CHAR_PANJINLIAN": [
+          "知道武松已经离城"
+        ],
+        "CHAR_WUSONG": [
+          "不知道街下陌生视线"
+        ],
+        "CHAR_XIMENQING": [
+          "尚未与潘正式相识，只注意到楼窗身影"
+        ]
+      },
+      "location_id": "LOC_CITY_GATE",
+      "props_continuity": "关键物件保持可追踪：PROP_GIFT_LOAD、PROP_WINDOW_CURTAIN、PROP_CURTAIN_FORK；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_WUSONG",
+        "CHAR_PANJINLIAN",
+        "CHAR_XIMENQING"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：潘由楼上看城门方向；陌生男子由街下抬眼看楼窗；转场方式：叉竿轻碰木檐后硬切黑场。。",
+      "shot_reverse_continuity": {},
+      "start_state": "武松已转身向城门与礼担走去，武大停在家门外目送。",
+      "transition_guard": "叉竿轻碰木檐后硬切黑场。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_WUSONG、CHAR_PANJINLIAN、CHAR_XIMENQING；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

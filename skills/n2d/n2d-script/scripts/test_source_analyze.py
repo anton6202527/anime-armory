@@ -141,6 +141,27 @@ def test_duplicate_heading_fold_is_exact_not_merely_same_chapter_number():
     ]
 
 
+def test_late_imperial_hui_inventory_wins_over_volume_wrappers():
+    text = """第1章 金瓶梅詞話 第一回
+[编辑]第一囬 景陽岡武松打虎
+正文一。
+第二囘 西門慶簾下遇金蓮
+正文二。
+第三廻 王婆定十件挨光計
+正文三。
+"""
+    analysis = source_analyze.analyze_source("测试", text)
+    integrity = analysis["source_integrity"]
+
+    assert analysis["stats"]["chapters"] == 3
+    assert integrity["raw_chapter_heading_count"] == 4
+    assert integrity["recognized_heading_count_after_fold"] == 4
+    assert integrity["ignored_wrapper_heading_count"] == 1
+    assert integrity["preferred_unit_system"] == "hui"
+    assert integrity["unique_chapter_count"] == 3
+    assert source_analyze.chapter_count(text) == 3
+
+
 def test_cli_recovers_episode_count_from_bounded_split_plan_header(tmp_path):
     root = tmp_path / "work"
     source = tmp_path / "novel.txt"

@@ -1,0 +1,85 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "我得离开。门，我替你关不上。 [镜头30·旁白·悲凉] 因此，他搬出了那扇门。想避开闲话，反倒把哥哥留在了门里。",
+      "银、腰牌、入城 | MS/CU/ECU 蒙太奇 | 爽点兑现与主题反转 | dissolve | | EP01_CLIP04",
+      "在无力形成强反差。 audience_payoff 开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和",
+      "audience_payoff 开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和东京差遣把危险留在",
+      "EP01_CLIP09 payoff_evidence 半杯邀饮升级为摔杯拒诱和明确警告 bait_risk low hook_id",
+      "spectacle_story_function 用清晰拆招而非混战，证明武松临危判断与意志。 rhythm 加速·碎切→爽点前停",
+      "CU硬切→主题留白 dramatic_function 快速兑现打虎结局、让银与任都头，再用门影把胜利转成人心难题。 audience_effect",
+      "audience_effect 明确知道武松的底线与潘接下来必须升级的压力。 continuity_story start_state"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "[镜头24·旁白·压迫] 武大回家时，她先红了眼，也先把真相藏了起来。 [镜头25·潘金莲·委屈·快] 你那好兄弟，",
+        "question_id": "Q01",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "逼近。 ### EP01_CLIP10｜先红眼的人改写真相｜1:37.689–1:48.388 武大带雪推门，主",
+        "question_id": "Q02",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "content_proposition 一个能打死猛虎的人，为什么后来守不住哥哥的家门？ content_promise",
+        "question_id": "Q03",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "EP01_CLIP10 payoff_evidence 潘金莲越界未成后倒置真相反咬武松 bait_risk low hook_id BOUNDARY_TEST",
+        "question_id": "Q04",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "怒气，潘坐在画左由惊转羞怒。 label 先红眼的人改写真相 scene LOC_WUDA_HOME/雪夜/内 subtitle_lines",
+        "question_id": "Q05",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "subtitle_lines 武大回家时，她先红了眼，也先把真相藏了起来。 你那好兄弟，趁家里没人，反来调戏我！ 我兄弟",
+        "question_id": "Q06",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "条件。 audience_effect 知道真正危险不是任务本身，而是武松离开后家门无人。 continuity_story",
+        "question_id": "Q07",
+        "signal": "任务",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": false,
+    "reason": "第1集无上集边界",
+    "status": "n/a"
+  },
+  "episode": "第1集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "4e6e87c19711262c",
+  "performance_prompt_cues": [],
+  "summary": {
+    "boundary_status": "n/a",
+    "open_questions": 0,
+    "performance_cue_clips": 0
+  },
+  "version": 1
+}

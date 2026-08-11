@@ -81,6 +81,25 @@ def test_character_library_tiers_use_story_weight_and_ten_episode_threshold() ->
     assert tier(scope="群像局部", narrative_tier="局部参考", episode_count=12, restricted=True) == "restricted_partial"
 
 
+def test_negated_main_character_phrase_does_not_upgrade_one_episode_role() -> None:
+    scope, narrative_tier = image_prompt_pack.narrative_scope_for(
+        "CHAR_MAGISTRATE",
+        "只作为本集公务角色，不抢主角视觉重心。",
+        "core",
+    )
+
+    assert "不抢主角" in scope
+    assert narrative_tier == "单集角色"
+
+
+def test_generic_door_hint_does_not_leak_another_projects_scene() -> None:
+    hint = image_prompt_pack.ASSET_ID_HINTS["PROP_DOOR"]
+
+    assert hint["name"] == "场景木门"
+    assert "贺平生" not in json.dumps(hint, ensure_ascii=False)
+    assert "杂役小屋" not in json.dumps(hint, ensure_ascii=False)
+
+
 def test_missing_character_card_gets_project_specific_visual_fallback(tmp_path: Path) -> None:
     story = {"clips": [{"character_ids": ["CHAR_WANG_DUN", "CHAR_HE_PINGSHENG"]}]}
 
@@ -166,6 +185,28 @@ def test_project_local_numeric_character_id_does_not_leak_another_projects_fallb
     assert "成年古装角色" not in cfg["anchor"]
     assert "陈青源" not in json.dumps(cfg, ensure_ascii=False)
     assert "江湖劲装" not in cfg["outfit"]
+
+
+def test_classical_tiger_phrase_stays_real_quadruped_without_explicit_demon_wording(tmp_path: Path) -> None:
+    story = {
+        "clips": [{"character_ids": ["BEAST_TIGER"]}],
+        "character_materials": {
+            "BEAST_TIGER": {
+                "name": "景阳冈猛虎",
+                "profile": "本集入镜；成年猛虎真身；吊睛白额、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相。",
+            }
+        },
+    }
+
+    cfg = image_prompt_pack.derive_character_defs(tmp_path, story)["BEAST_TIGER"]
+    payload = json.dumps(cfg, ensure_ascii=False)
+
+    assert "成年猛虎真身" in cfg["face"]
+    assert "四足" in payload
+    assert "虎妖" not in payload
+    assert "虎头人身" not in payload
+    assert "人形强肩背" not in payload
+    assert "普通四足老虎" not in payload
 
 
 def test_reference_slot_writer_never_creates_hardcoded_numeric_character_card(tmp_path: Path) -> None:
@@ -394,6 +435,50 @@ def test_material_asset_map_reads_compact_shared_asset_bullets(tmp_path: Path) -
     assert "半截" in assets["PROP_01"]["profile"]
     assert assets["PROP_02"]["name"] == "镇魔司横刀"
     assert assets["VFX_01"]["name"] == "百妖谱底框"
+
+
+def test_material_asset_map_reads_name_after_backticked_id(tmp_path: Path) -> None:
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        "## 关键道具\n\n- `PROP_DOOR` 武大家木门：北宋小民旧木板门，合门后不自动落闩。\n",
+        encoding="utf-8",
+    )
+
+    assets = image_prompt_pack.material_asset_map(tmp_path, {"episode": "第1集"})
+
+    assert assets["PROP_DOOR"]["name"] == "武大家木门"
+    assert "不自动落闩" in assets["PROP_DOOR"]["profile"]
+
+
+def test_current_material_truth_replaces_stale_registry_semantics(tmp_path: Path) -> None:
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        "## 关键道具\n\n- `PROP_DOOR` 武大家木门：北宋小民旧木板门，合门后不自动落闩。\n",
+        encoding="utf-8",
+    )
+    registry = tmp_path / "出图" / "共享" / "asset_registry.json"
+    registry.parent.mkdir(parents=True)
+    registry.write_text(
+        json.dumps({
+            "assets": [{
+                "id": "PROP_DOOR",
+                "name": "破屋木门",
+                "constraints": {"structure": "贺平生杂役小屋的粗糙木门"},
+                "scene_dna": {"belonging_anchor": "贺平生杂役小屋"},
+            }]
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    story = {"episode": "第1集", "clips": [{"object_ids": ["PROP_DOOR"]}], "visual_contract": {}}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+
+    door = defs["PROP_DOOR"]
+    assert door["name"] == "武大家木门"
+    assert "不自动落闩" in door["positive"]
+    assert "贺平生" not in json.dumps(door, ensure_ascii=False)
 
 
 def test_material_asset_map_expands_grouped_asset_heading_without_id_alias_pollution(tmp_path: Path) -> None:
@@ -1912,6 +1997,54 @@ def test_derive_character_defs_keeps_registered_cards_not_only_current_story(tmp
 
     assert "CHAR_ALPHA" in defs
     assert "CHAR_BETA" in defs
+
+
+def test_derive_character_defs_collapses_legacy_id_alias_by_material_name(tmp_path: Path) -> None:
+    card_dir = tmp_path / "设定库" / "characters"
+    card_dir.mkdir(parents=True)
+    (card_dir / "武松.md").write_text(
+        "\n".join([
+            "# 角色卡 — 武松（ID: CHAR_WU_SONG）",
+            "- 身份：都头。",
+            "- 固定外貌：方颌浓眉。",
+            "- 固定服装：深靛都头服。",
+            "- **锚点句**：方颌浓眉·深靛都头服",
+        ]),
+        encoding="utf-8",
+    )
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        "### CHAR_WUSONG 武松 @ 都头态\n\n中文 Prompt：方颌浓眉的都头。\n",
+        encoding="utf-8",
+    )
+    story = {"episode": "第1集", "clips": [{"character_ids": ["CHAR_WUSONG/都头态"]}]}
+
+    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
+
+    assert "CHAR_WUSONG" in defs
+    assert "CHAR_WU_SONG" not in defs
+    assert defs["CHAR_WUSONG"]["name"] == "武松"
+    assert "方颌浓眉" in defs["CHAR_WUSONG"]["face"]
+
+
+def test_derive_character_defs_keeps_beast_out_of_human_costume_fallback(tmp_path: Path) -> None:
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        "### BEAST_TIGER 猛虎 @ 扑击态\n\n中文 Prompt：吊睛白额猛虎扑击。\n",
+        encoding="utf-8",
+    )
+    story = {"episode": "第1集", "clips": [{"character_ids": ["BEAST_TIGER/扑击态"]}]}
+
+    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
+    tiger = defs["BEAST_TIGER"]
+    rendered = json.dumps(tiger, ensure_ascii=False)
+
+    assert any(token in tiger["face"] for token in ("猛虎", "虎首", "非人"))
+    assert "成年古装角色" not in rendered
+    assert "古装衣袍" not in tiger["outfit"]
+    assert "铠甲" not in tiger["outfit"]
 
 
 def test_state_lock_line_resolves_character_and_asset_names() -> None:

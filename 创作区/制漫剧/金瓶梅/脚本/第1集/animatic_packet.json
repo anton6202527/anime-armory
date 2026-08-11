@@ -1,0 +1,179 @@
+{
+  "acceptance": {
+    "cliffhanger_or_payoff_clear": "accepted",
+    "image_generation_ready": "accepted",
+    "mid_episode_drag_checked": "accepted",
+    "opening_readable_without_sound": "accepted",
+    "reviewer": "",
+    "signoff_manifest": "脚本/第1集/animatic_signoff.json"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-08-11T04:01:58+00:00",
+  "inputs": {
+    "rough_audio": "合成/第1集/配音/voice_zh.wav",
+    "shot_durations": "脚本/第1集/镜头时长.json",
+    "storyboard": "脚本/第1集/storyboard.json",
+    "subtitle_zh": "脚本/第1集/字幕_中文.srt",
+    "timed_preview": "生产数据/animatic_第1集.html",
+    "timed_preview_manifest": "生产数据/animatic_第1集.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第1集/配音/voice_zh.wav": null,
+      "脚本/第1集/storyboard.json": "d17999c76b6808fdca05889797ea061b3f15d53336756802f965b61a291a0f65",
+      "脚本/第1集/字幕_中文.srt": "d4e1b9be099c8166ce2654addbcd824841e38f3aa17d804964b4de4e640a503b",
+      "脚本/第1集/镜头时长.json": "f10aa81e131fbfbf9a55208c5060515559d6ca7be69e1ea83020accedac6506d"
+    },
+    "sha": "c890ce156acca42179be6b0d1f2a7e21a5cf3b1304a86310f98cb7cd613c5f0f"
+  },
+  "kind": "n2d_animatic_packet",
+  "machine_reference": {
+    "advisory": true,
+    "long_clips": {
+      "note": ">15s 需拆段计划、>20s 详拍叙事跨度已超上限（story_economy 同口径）",
+      "over_15s": 0,
+      "over_20s": 0
+    },
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": {
+      "block": 0,
+      "narration_heavy_clips": 0,
+      "over_budget_codes": [],
+      "warn": 0
+    },
+    "timing_estimate": {
+      "duration_sec": 144.384,
+      "line_count": 34,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "director_editor_producer",
+  "status": "confirmed",
+  "timeline": {
+    "clip_count": 15,
+    "clips": [
+      {
+        "clip_id": "EP01_CLIP01",
+        "dramatic_function": "把观众直接丢进虎扑最危险的一瞬，先问他能否活。",
+        "duration_sec": 4.893,
+        "pacing_role": "冷开场主钩与生死危机",
+        "review_focus": "hook/reversal/seam/readability",
+        "transition": "动作继续进入三扑拆招。"
+      },
+      {
+        "clip_id": "EP01_CLIP02",
+        "dramatic_function": "完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。",
+        "duration_sec": 10.229,
+        "pacing_role": "打虎主看点与能力证明",
+        "review_focus": "rhythm/readability",
+        "transition": "拳头前送动作切入胜利蒙太奇。"
+      },
+      {
+        "clip_id": "EP01_CLIP03",
+        "dramatic_function": "快速兑现打虎结局、让银与任都头，再用门影把胜利转成人心难题。",
+        "duration_sec": 13.02,
+        "pacing_role": "打虎兑现、人格建立与内外困局转折",
+        "review_focus": "rhythm/readability",
+        "transition": "街门阴影溶入武大挑担的街巷。"
+      },
+      {
+        "clip_id": "EP01_CLIP04",
+        "dramatic_function": "用武大低处挑担与潘金莲高处受困的空间反差，交代婚姻困局而不替任何人洗白。",
+        "duration_sec": 10.145,
+        "pacing_role": "人物困境建立与欲望来源",
+        "review_focus": "rhythm/readability",
+        "transition": "武大的叫卖声先入，随后由潘金莲视线切到街上重逢。"
+      },
+      {
+        "clip_id": "EP01_CLIP05",
+        "dramatic_function": "先给兄弟重逢的真情，再让潘金莲的观察改变场景温度。",
+        "duration_sec": 8.37,
+        "pacing_role": "兄弟情建立与危险视线入场",
+        "review_focus": "rhythm/readability",
+        "transition": "潘金莲视线反打到她开口留住武松。"
+      },
+      {
+        "clip_id": "EP01_CLIP06",
+        "dramatic_function": "让‘照应’的合理表面逐渐变成越界距离，武松的克制也被建立。",
+        "duration_sec": 14.692,
+        "pacing_role": "欲望线启动与边界被连续试探",
+        "review_focus": "rhythm/readability",
+        "transition": "窗外日光溶成雪夜冷蓝，门轴声接武大出门。"
+      },
+      {
+        "clip_id": "EP01_CLIP07",
+        "dramatic_function": "让门闩把普通家屋变成伦理压力锅；武松第一次口头设置共同饮酒边界。",
+        "duration_sec": 12.577,
+        "pacing_role": "密室条件形成与越界提议",
+        "review_focus": "rhythm/readability",
+        "transition": "潘的句尾留在武松反应上形成L-cut。"
+      },
+      {
+        "clip_id": "EP01_CLIP08",
+        "dramatic_function": "潘用婚姻不满作情感筹码；武松把问题重新锚回兄弟伦理。",
+        "duration_sec": 9.482,
+        "pacing_role": "伦理冲突明牌与第一次清晰边界",
+        "review_focus": "rhythm/readability",
+        "transition": "武松边界句结束后，潘的手越过桌面把杯推到眼前。"
+      },
+      {
+        "clip_id": "EP01_CLIP09",
+        "dramatic_function": "把试探升级为明确越线，再以摔杯和警告完成武松的主动拒绝。",
+        "duration_sec": 14.281,
+        "pacing_role": "本集伦理高潮与守界爽点",
+        "review_focus": "rhythm/readability",
+        "transition": "门外脚步声先入，切武大推门后的潘金莲泪眼。"
+      },
+      {
+        "clip_id": "EP01_CLIP10",
+        "dramatic_function": "潘抢先占据叙述权，把越界者变成受害者；武大虽不信却没有能力核验。",
+        "duration_sec": 10.699,
+        "pacing_role": "本集反咬反转与兄弟信任受压",
+        "review_focus": "rhythm/readability",
+        "transition": "行李绳收紧的声音切入武松收拾。"
+      },
+      {
+        "clip_id": "EP01_CLIP11",
+        "dramatic_function": "武松拒绝争夺叙述权，以搬离阻止冲突继续，却承认自己守不住这扇门。",
+        "duration_sec": 10.129,
+        "pacing_role": "反转后果与兄弟分离",
+        "review_focus": "rhythm/readability",
+        "transition": "武松脚跨门槛匹配切到雪街脚步。"
+      },
+      {
+        "clip_id": "EP01_CLIP12",
+        "dramatic_function": "用门的物理闭合呈现保护关系断裂，不追加解释。",
+        "duration_sec": 5.766,
+        "pacing_role": "后果留白与门槛母题兑现",
+        "review_focus": "rhythm/readability",
+        "transition": "门板黑面匹配切到衙门案桌阴影。"
+      },
+      {
+        "clip_id": "EP01_CLIP13",
+        "dramatic_function": "以合理公务把武松从阳谷移开，为下一集危险发生制造时间与空间条件。",
+        "duration_sec": 7.746,
+        "pacing_role": "制造保护空窗的外部任务",
+        "review_focus": "rhythm/readability",
+        "transition": "武松‘明日’尾音覆盖回到武大家的告别。"
+      },
+      {
+        "clip_id": "EP01_CLIP14",
+        "dramatic_function": "武松把能想到的防线都交给哥哥，却不知道危险就在门内与窗外。",
+        "duration_sec": 6.569,
+        "pacing_role": "兄弟承诺与悲剧性预警",
+        "review_focus": "rhythm/readability",
+        "transition": "武大的目送视线切到城门纵深中的武松。"
+      },
+      {
+        "clip_id": "EP01_CLIP15",
+        "dramatic_function": "确认武松离城，同时只以眼神和叉竿声引入新的欲望主体，不提前揭面。",
+        "duration_sec": 5.786,
+        "pacing_role": "离城事实与下一危险入场",
+        "review_focus": "hook/reversal/seam/readability",
+        "transition": "叉竿轻碰木檐后硬切黑场。"
+      }
+    ],
+    "estimated_total_sec": 144.384
+  },
+  "version": 1
+}

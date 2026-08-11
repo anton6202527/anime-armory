@@ -196,7 +196,7 @@ def test_front_crop_uses_subject_bbox_for_padded_split_front(tmp_path: Path) -> 
     assert face_item["derivation"]["method"] == "front_crop"
     crop_box = face_item["derivation"]["crop_box"]
     assert crop_box != [304, 132, 456, 372]
-    assert 290 <= crop_box[1] <= 330
+    assert 245 <= crop_box[1] <= 285
     assert crop_box[3] <= 450
     out = root / face_item["path"]
     assert out.exists()
@@ -219,10 +219,60 @@ def test_front_crop_uses_full_width_when_bright_background_touches_edge(tmp_path
     assert derive_makeup_pack._content_column_bounds(im) == (0, 799)
     crop_box = derive_makeup_pack._front_crop_box(im, "face_anchor_refs")
 
-    assert 330 <= crop_box[0] <= 360
-    assert 440 <= crop_box[2] <= 470
-    assert 170 <= crop_box[1] <= 210
-    assert crop_box[3] <= 350
+    assert 290 <= crop_box[0] <= 330
+    assert 470 <= crop_box[2] <= 510
+    assert 130 <= crop_box[1] <= 170
+    assert crop_box[3] <= 380
+
+
+def test_face_crop_centres_off_axis_head_on_gradient_turnaround_split(tmp_path: Path) -> None:
+    front = tmp_path / "front.png"
+    width, height = 529, 941
+    img = Image.new("RGB", (width, height), (18, 22, 26))
+    # Portrait column has a vertical gray gradient.  The person is intentionally
+    # right of canvas centre and a narrow neighbour sliver touches the edge.
+    for y in range(height):
+        shade = 152 + round(40 * y / (height - 1))
+        for x in range(98, 432):
+            img.putpixel((x, y), (shade, shade, shade))
+    img.paste(Image.new("RGB", (82, 135), (35, 31, 29)), (268, 65))   # head/hair
+    img.paste(Image.new("RGB", (190, 610), (55, 45, 38)), (215, 200))  # body
+    img.paste(Image.new("RGB", (8, 260), (48, 42, 38)), (424, 300))   # neighbour sliver
+    img.save(front)
+
+    im = Image.open(front).convert("RGB")
+    crop_box = derive_makeup_pack._front_crop_box(im, "face_anchor_refs")
+    crop_center = (crop_box[0] + crop_box[2]) / 2
+
+    assert 285 <= crop_center <= 330
+    assert crop_box[1] <= 70
+    assert crop_box[3] >= 230
+
+
+def test_landscape_reference_board_prefers_right_face_inset(tmp_path: Path) -> None:
+    front = tmp_path / "animal-board.png"
+    width, height = 1600, 900
+    img = Image.new("RGB", (width, height), (184, 184, 184))
+    # Full-body animal occupies the centre-left while a large same-source head
+    # inset occupies the right. The face crop must choose the inset.
+    img.paste(Image.new("RGB", (520, 620), (70, 55, 40)), (260, 160))
+    img.paste(Image.new("RGB", (430, 560), (62, 48, 35)), (1120, 170))
+    img.save(front)
+
+    im = Image.open(front).convert("RGB")
+    crop_box = derive_makeup_pack._front_crop_box(im, "face_anchor_refs")
+
+    assert crop_box[0] >= 900
+    assert crop_box[1] <= 170
+    assert crop_box[2] >= 1500
+    assert crop_box[3] >= 730
+    expression_box = derive_makeup_pack._base_expression_crop_box(im)
+    assert expression_box[0] >= 850
+    assert expression_box[2] == width
+    half = tmp_path / "half.png"
+    half_box = derive_makeup_pack._save_front_crop(front, half, "half_body", (width, height))
+    assert half_box[2] <= crop_box[0]
+    assert Image.open(half).size == (1024, 1024)
 
 
 def test_front_from_turnaround_updates_matching_reference_slot_metadata(tmp_path: Path) -> None:
@@ -279,6 +329,41 @@ def test_front_from_turnaround_updates_matching_reference_slot_metadata(tmp_path
     slot = form["reference_slots"][0]
     assert slot["sha256"] == derive_makeup_pack._sha256(root / slot["path"])
     assert slot["dimensions"] == {"width": 800, "height": 1200}
+
+
+def test_front_from_turnaround_does_not_inherit_landscape_front_canvas(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "横幅正面测试"
+    image_dir = root / "出图" / "共享" / "图片"
+    front = image_dir / "CHAR_TEST_常态.png"
+    turn = image_dir / "CHAR_TEST_常态_三视图.png"
+    _png(front, (180, 180, 180), size=(1672, 941))
+    turn.parent.mkdir(parents=True, exist_ok=True)
+    board = Image.new("RGB", (1670, 940), (180, 180, 180))
+    for index in range(5):
+        board.paste(Image.new("RGB", (250, 860), (40 + index * 10, 45, 50)), (index * 334 + 42, 40))
+    board.save(turn)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(json.dumps({
+        "characters": [{"id": "CHAR_TEST", "library_tier": "core_full", "forms": [{
+            "form": "常态", "asset_key": "CHAR_TEST_常态",
+            "reference_group": {
+                "front": {"path": "出图/共享/图片/CHAR_TEST_常态.png", "status": "ready"},
+                "turnaround": {
+                    "path": "出图/共享/图片/CHAR_TEST_常态_三视图.png", "status": "ready",
+                    "layout": "five_angle_v1", "column_count": 5,
+                },
+            },
+            "reference_atlas": {"build_tier": "core_full", "base_views": {}},
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    derive_makeup_pack.derive_project(
+        root, write=True, force=True, front_from_turnaround=True,
+        asset_keys={"CHAR_TEST_常态"}, views={"front"},
+    )
+
+    assert Image.open(front).size == (529, 940)
 
 
 def test_derive_project_splits_five_angle_turnaround_with_rear_three_quarter(tmp_path: Path) -> None:

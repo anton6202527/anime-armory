@@ -117,3 +117,15 @@ def test_cover_strategy_ref_reused(tmp_path):
     (ep / "封面.md").write_text("# 封面策略", encoding="utf-8")
     pack = cover_pack.build_pack(tmp_path)
     assert pack["cover_strategy_ref"] == "脚本/第1集/封面.md"
+
+
+def test_cover_strategy_ref_uses_natural_episode_order(tmp_path):
+    _project(tmp_path)
+    for episode in ("第10集", "第2集", "第1集"):
+        ep = tmp_path / "脚本" / episode
+        ep.mkdir(parents=True)
+        (ep / "封面.md").write_text(f"# {episode}", encoding="utf-8")
+
+    pack = cover_pack.build_pack(tmp_path)
+
+    assert pack["cover_strategy_ref"] == "脚本/第1集/封面.md"

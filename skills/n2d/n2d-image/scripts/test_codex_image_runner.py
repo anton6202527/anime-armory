@@ -2686,6 +2686,37 @@ def test_primary_character_makeup_uses_strict_front_guard_not_action_gaze() -> N
     assert "镜头为旁观者视角" not in guards
 
 
+def test_real_quadruped_makeup_uses_animal_guard_not_human_front_plate() -> None:
+    section = codex_image_runner.ClipSection(
+        "BEAST_TIGER",
+        "## 景阳冈猛虎",
+        "景阳冈成年华南虎，真实四足野生猫科动物；四只虎掌全部着地，完整长尾。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "BEAST_TIGER::定妆_BEAST_TIGER__常态",
+        "BEAST_TIGER",
+        "shared",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+        section,
+    )
+    target.aliases = {"BEAST_TIGER", "BEAST_TIGER/常态"}
+
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "真实四足动物正面母本" in guards
+    assert "四只兽掌全部着地" in guards
+    assert "禁止双足直立" in guards
+    assert "不套用人物的鞋靴、服装、手部或直立姿态规则" in guards
+    assert "身体、肩线和脸严格正对相机" not in guards
+    assert "从头到鞋靴完整可见" not in guards
+    note = codex_image_runner.shared_variant_note(target.rel_path, section_body=section.body)
+    assert "真实四足动物的共享主参考图" in note
+    assert "从耳尖、四掌到尾尖完整可见" in note
+    assert "人物全身/标准立绘" not in note
+    assert "鞋靴" not in note
+
+
 def test_style_anchor_uses_control_board_note_and_skips_story_guards() -> None:
     section = codex_image_runner.ClipSection(
         "STYLE_ANCHOR",
