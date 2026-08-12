@@ -1,0 +1,62 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 1,
+  "cli_image_input_limit": 5,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/风格锚_北宋市井写实电影感.png",
+      "bytes": 2142868,
+      "owner": "STYLE_ANCHOR",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2726018,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+      "priority": 60,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/风格锚_北宋市井写实电影感.png"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_北宋市井写实电影感.png"
+      ],
+      "use_policy": "style_only"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [
+    "LOC_YANGGU_STREET"
+  ],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "LOC_YANGGU_STREET::定妆_场景_阳谷街面与武大家楼窗",
+  "target": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

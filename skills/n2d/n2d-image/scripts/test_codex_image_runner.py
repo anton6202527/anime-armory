@@ -2137,6 +2137,18 @@ def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:
     assert "鞋靴" in codex_image_runner.shared_variant_note(
         "出图/共享/图片/定妆_CHAR_TEST_45度.png"
     )
+
+
+def test_shared_variant_note_locks_small_prop_to_single_palm_scale() -> None:
+    body = "约一掌高（12至16厘米），可单手完整握持，宽度略窄于掌宽。"
+    scale = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_腰牌_比例.png", section_body=body
+    )
+    in_hand = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_腰牌_手持.png", section_body=body
+    )
+    assert "产品独照" in scale and "完整成年手掌" in scale
+    assert "只出现一只" in in_hand and "另一只手完全不入画" in in_hand
     assert "鞋靴" in codex_image_runner.shared_variant_note(
         "出图/共享/图片/定妆_CHAR_TEST_三视图.png"
     )
@@ -2153,6 +2165,45 @@ def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:
     assert "严格180°" in back
     assert "脸、双眼、鼻梁、嘴唇" in back
     assert "禁止后45°冒充正背面" in back
+
+
+def test_shared_variant_note_keeps_architectural_fixture_installed_for_use_reference() -> None:
+    body = "单扇窗框是墙上固定建筑构件，人站立可单手推开窗扇。"
+    note = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_WINDOW_LATTICE_手持.png", section_body=body
+    )
+    assert "完整安装" in note
+    assert "禁止双手捧着整块" in note
+    assert "多格拼板" in note
+    rail_note = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_STAIR_RAIL_手持.png",
+        section_body="室内楼梯扶栏，暗褐老木，成人腰高，固定安装。",
+    )
+    assert "完整安装" in rail_note
+
+
+def test_shared_variant_note_keeps_large_furniture_grounded_during_interaction() -> None:
+    note = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_DINING_TABLE_手持.png",
+        section_body="长方木桌，厚桌面、四条桌腿与横撑。",
+    )
+    assert "四腿/底座完整落地" in note
+    assert "禁止将整张桌" in note
+    assert "多格拼板" in note
+
+
+def test_shared_variant_note_requires_true_reverse_scene_view() -> None:
+    note = codex_image_runner.shared_variant_note("出图/共享/图片/定妆_场景_屋内_反打.png")
+    assert "摄影机必须移到" in note
+    assert "未展示的对侧墙面" in note
+    assert "禁止复制主视图" in note
+
+
+def test_shared_variant_note_does_not_invent_floor_plan_features() -> None:
+    note = codex_image_runner.shared_variant_note("出图/共享/图片/定妆_场景_屋内_平面图.png")
+    assert "只标出资产登记" in note
+    assert "不得凭空新增破顶" in note
+    assert "主交战区" not in note
 
 
 def test_style_anchor_shared_aliases_include_short_names() -> None:

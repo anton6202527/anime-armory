@@ -310,8 +310,11 @@
   border: 1px solid #777 !important;
   background: #232323 !important;
 }
-.libtv-source-text { position: relative; width: 100%; height: 174px; padding: 11px 15px 14px; overflow: hidden; border-radius: 10px; color: #e4e4e4; background: #1b1b1b; cursor: grab; user-select: none; -webkit-user-select: none; }
-.workflow-node-card.variant-libtv-source:active .libtv-source-text { cursor: grabbing; }
+.libtv-source-text { position: relative; width: 100%; height: 174px; padding: 11px 15px 14px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; scrollbar-color: #606060 transparent; border-radius: 10px; color: #e4e4e4; background: #1b1b1b; cursor: text; user-select: text; -webkit-user-select: text; }
+.libtv-source-text:focus-visible { outline: 1px solid #858585; outline-offset: -2px; }
+.libtv-source-text::-webkit-scrollbar { width: 8px; }
+.libtv-source-text::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: #606060; background-clip: padding-box; }
+.libtv-source-text::-webkit-scrollbar-track { background: transparent; }
 .libtv-source-text p { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 12px; font-weight: 450; line-height: 1.82; }
 .libtv-source-text > i { position: absolute; right: 5px; bottom: 5px; width: 10px; height: 10px; opacity: .38; background: repeating-linear-gradient(135deg, transparent 0 2px, #a2a2a2 2px 3px); }
 

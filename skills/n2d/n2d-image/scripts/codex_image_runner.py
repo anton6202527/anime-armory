@@ -484,6 +484,18 @@ def shared_variant_shot(base: str, rel_path: str) -> str:
 
 def shared_variant_note(rel_path: str, *, section_body: str = "") -> str:
     stem = Path(rel_path).stem
+    architectural_fixture = bool(re.search(
+        r"墙上固定|固定安装|建筑构件|窗框|窗台|门框|楼梯(?:扶栏|栏杆)|扶栏|栏杆",
+        str(section_body or ""),
+    ))
+    installed_furniture = bool(re.search(
+        r"长方木桌|餐桌|桌面|桌腿|床榻|长凳|家具",
+        str(section_body or ""),
+    ))
+    small_hand_prop = bool(re.search(
+        r"掌心|掌长|掌宽|一掌高|单手(?:完整)?(?:握持|托住|包住)|8\s*(?:至|到|[-~])\s*10\s*厘米|12\s*(?:至|到|[-~])\s*16\s*厘米",
+        str(section_body or ""),
+    ))
     if "风格锚" in stem or "style_anchor" in stem.lower():
         return (
             "本次目标是抽象分区式视觉语言控制板，不是剧情剧照、环境设定图、海报或道具陈列："
@@ -514,8 +526,9 @@ def shared_variant_note(rel_path: str, *, section_body: str = "") -> str:
     if "布局图" in stem or "空间图" in stem or "平面图" in stem or "spatial_map" in stem:
         return (
             "本次目标是场景空间布局图，不是电影气氛图：必须用俯视或高位等距视角画清平面关系，"
-            "标出入口、主交战区、右后高位来源、上方破顶范围和角色运动轴线；"
-            "允许少量图例线/箭头/区域色块，禁止只生成普通仰拍/平视场景插画。"
+            "只标出资产登记和场景卡已声明的入口、门窗、家具/常驻物件、人物站位、运动路径、轴线和光源；"
+            "不得凭空新增破顶、交战区、高位来源、暗道或其他未登记结构。"
+            "允许少量简体中文图例线/箭头/区域色块，但不要长句；禁止只生成普通仰拍/平视场景插画。"
         )
     if "手部局部" in stem:
         return (
@@ -527,6 +540,12 @@ def shared_variant_note(rel_path: str, *, section_body: str = "") -> str:
             "本次目标是服装/布料材质局部参考：只画肩背、袖口、衣襟、布纹、磨损和颜色层级，"
             "不建立新人物身份；禁止出现清晰人物脸、全身立绘、可读文字、现代 logo 或剧情动作。"
         )
+    if stem.endswith("反打"):
+        return (
+            "本次目标是场景主视图的真实反打空间参考：摄影机必须移到主视图的对面或轴线另一端，朝原机位方向拍摄，"
+            "需要看到主视图未展示的对侧墙面/入口/家具背面，并让登记地标在画面中的左右关系合理反转。"
+            "建筑材质、天气、时间、冷暖光源和常驻物件必须与主视图同源；禁止复制主视图或只做轻微变焦/平移，禁止新增人物、文字、现代物件或改换地点。"
+        )
     if "握持比例" in stem:
         return (
             "本次目标是武器握持比例参考：以中性浅灰背景展示武器全长、手掌握点、人与武器尺度关系，"
@@ -535,6 +554,13 @@ def shared_variant_note(rel_path: str, *, section_body: str = "") -> str:
             "禁止只画无尺度的武器美术图。"
         )
     if stem.endswith("_比例"):
+        if small_hand_prop:
+            return (
+                "本次目标是小型道具的真实尺度证据图，不是产品独照：同一中性棚拍画面必须出现一只完整成年手掌，"
+                "并让道具完整落在掌心内或与手掌同平面紧邻；道具任何边都不得超过登记的掌长/掌宽上限。"
+                "完整五指与手腕必须可见且解剖自然，只出现这一只手，裁到前臂；禁止删除尺度参照、禁止放大成盾牌/托盘/大木板，"
+                "禁止清晰人物脸、完整人物、文字标尺、水印、多格拼板或单独产品照。"
+            )
         return (
             "本次目标是道具尺度/比例参考：必须展示道具完整轮廓、背带/提带/握点、主要结构件和材质，"
             "并加入一个无脸尺度参照（单手/双手/前臂、下巴以下中性人台或背身剪影均可），让观众能判断"
@@ -542,6 +568,24 @@ def shared_variant_note(rel_path: str, *, section_body: str = "") -> str:
             "禁止出现清晰可辨人物五官/新角色脸，禁止文字标尺、水印或现代物件。"
         )
     if stem.endswith("_手持"):
+        if architectural_fixture:
+            return (
+                "本次目标是固定建筑构件的真实操作参考，不是把构件拆下来搬运：构件必须完整安装在墙体/门洞/楼梯上，"
+                "只出现一名裁到下巴以下或背身的无脸中性成年人，用单手正常推、拉、扶或扣住登记的操作点，"
+                "清楚展示手、操作点、固定框与墙体的连接。禁止双手捧着整块窗/门/栏杆，禁止拆离墙体、产品陈列、多格拼板、清晰人脸、文字或水印。"
+            )
+        if installed_furniture:
+            return (
+                "本次目标是大件家具的日常交互参考，不是搬运演示：家具必须四腿/底座完整落地并保持正常使用方向，"
+                "只出现一名裁到下巴以下或背身的无脸成年人，以坐、俯身、一手扶桌沿/床沿或放置小物的自然姿势展示接触点和高度。"
+                "禁止将整张桌、床、凳子抬起、抱在怀里或悬空，禁止多格拼板、多人演示、清晰人脸、文字或水印。"
+            )
+        if small_hand_prop:
+            return (
+                "本次目标是小型道具单手持用参考：只出现一只成年人的手和前臂；道具完整落在掌心、由五指包持或托住，"
+                "任何边不得超过登记的掌长/掌宽上限。完整五指和手腕连接必须清楚自然，另一只手完全不入画。"
+                "禁止双手捧持导致道具放大，禁止产品独照、完整人物、清晰人脸、多格拼板、文字或水印。"
+            )
         return (
             "本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与"
             "提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。"
@@ -778,9 +822,24 @@ def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, Cl
             section = find_shared_section(section_by_alias, aliases)
             if not section:
                 continue
+            asset_contract = json.dumps(
+                {
+                    "name": asset.get("name"),
+                    "constraints": asset.get("constraints"),
+                    "current_state": asset.get("current_state"),
+                    "scene_dna": asset.get("scene_dna"),
+                },
+                ensure_ascii=False,
+            )
             for rel in registry_image_paths(asset):
                 shot = shared_variant_shot(asset_id or "asset", rel)
-                add_target(shot, rel, section, aliases, shared_variant_note(rel, section_body=section.body))
+                add_target(
+                    shot,
+                    rel,
+                    section,
+                    aliases,
+                    shared_variant_note(rel, section_body=f"{section.body}\n{asset_contract}"),
+                )
 
 
 def registry_form_aliases(char_id: str, form_name: str) -> set[str]:

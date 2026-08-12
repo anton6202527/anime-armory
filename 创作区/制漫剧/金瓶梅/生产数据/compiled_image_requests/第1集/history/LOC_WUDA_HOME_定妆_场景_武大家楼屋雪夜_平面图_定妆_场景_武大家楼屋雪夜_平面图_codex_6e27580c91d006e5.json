@@ -1,0 +1,96 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_WUDA_HOME_定妆_场景_武大家楼屋雪夜_平面图_定妆_场景_武大家楼屋雪夜_平面图.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：返工硬约束（最高优先级）：当前像素拒绝：虽清楚展示门窗、桌凳、炭盆和站位，但凭空加入破顶范围、交战区与高位光源，污染本场景连续性。已修正规则：平面图只允许登记过的空间要素。；图片/定妆_场景_武大家楼屋雪夜_平面图.png… 场景：低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界；归属锚: 武大家楼屋雪夜；稳定地标: 武大家楼屋雪夜；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界；光色天气: 窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬；常驻物件: 武大家楼屋雪夜；反打/视线规则: 武松固定画右、潘金莲固定画左，炭盆在两人下方中央形成边界；武大归家由画面右后门口入；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_WUDA_HOME的asset参考 返工硬约束（最高优先级）：当前像素拒绝：虽清楚展示门窗、桌凳、炭盆和站位，但凭空加入破顶范围、交战区与高位光源，污染本场景连续性。已修正规则：平面图只允许登记过的空间要素 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1406,
+  "actual_submit_prompt_sha256": "d06e857b9c4e75d4c566f21531f643ce55aa2f99c12949ec9c7c9fd127a30294",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_WUDA_HOME_定妆_场景_武大家楼屋雪夜_平面图_定妆_场景_武大家楼屋雪夜_平面图.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：返工硬约束（最高优先级）：当前像素拒绝：虽清楚展示门窗、桌凳、炭盆和站位，但凭空加入破顶范围、交战区与高位光源，污染本场景连续性。已修正规则：平面图只允许登记过的空间要素。；图片/定妆_场景_武大家楼屋雪夜_平面图.png… 场景：低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界；归属锚: 武大家楼屋雪夜；稳定地标: 武大家楼屋雪夜；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界；光色天气: 窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬；常驻物件: 武大家楼屋雪夜；反打/视线规则: 武松固定画右、潘金莲固定画左，炭盆在两人下方中央形成边界；武大归家由画面右后门口入；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_WUDA_HOME的asset参考 返工硬约束（最高优先级）：当前像素拒绝：虽清楚展示门窗、桌凳、炭盆和站位，但凭空加入破顶范围、交战区与高位光源，污染本场景连续性。已修正规则：平面图只允许登记过的空间要素 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "LOC_WUDA_HOME",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_武大家楼屋雪夜__ff9b146e47b8_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "8240b095358da329ccaaa9fbf69c0f8e937111658e1fbf1c03b377fce2d2c7ca"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "6e27580c91d006e50e6e8425c43494326ae1d088dbacb427fe0a8167d6ac5e51",
+    "compiler_decisions": [],
+    "execution_context_sha256": "025003588e07786e48888c91c6467caf714ad1d8c7617124be73c782cc8f9ac8",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:38>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 38,
+      "constraint_compression": {
+        "policy_guard_input": 2,
+        "policy_guard_output": 2,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 227,
+      "negative_chars": 0,
+      "prompt_chars": 905,
+      "reference_count": 2
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成生产级场景参考图：返工硬约束（最高优先级）：当前像素拒绝：虽清楚展示门窗、桌凳、炭盆和站位，但凭空加入破顶范围、交战区与高位光源，污染本场景连续性。已修正规则：平面图只允许登记过的空间要素。；图片/定妆_场景_武大家楼屋雪夜_平面图.png… 场景：低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界；归属锚: 武大家楼屋雪夜；稳定地标: 武大家楼屋雪夜；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 低矮木屋室内，桌、长凳、炭盆、门闩与楼窗位置固定；窗雪冷光从画右后进入，炭火暖光从画左下托脸，潘固定画左、武松固定画右，桌沿和炭盆形成中央边界；光色天气: 窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬；常驻物件: 武大家楼屋雪夜；反打/视线规则: 武松固定画右、潘金莲固定画左，炭盆在两人下方中央形成边界；武大归家由画面右后门口入；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_WUDA_HOME的asset参考 返工硬约束（最高优先级）：当前像素拒绝：虽清楚展示门窗、桌凳、炭盆和站位，但凭空加入破顶范围、交战区与高位光源，污染本场景连续性。已修正规则：平面图只允许登记过的空间要素 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "LOC_WUDA_HOME",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_武大家楼屋雪夜__ff9b146e47b8_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "8240b095358da329ccaaa9fbf69c0f8e937111658e1fbf1c03b377fce2d2c7ca"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "caa7558de6a042465f42cb6b8dfa2607dea19a6ef28f5569059ca98f04dce927",
+    "source_contract_text_sha256": "a1279c32a2f1f710a9bf6cb450ca32d102c47b992be641737b828e42b0f8fbc7",
+    "task_type": "scene_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-12T04:11:05+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "92cb19ad4939764c4a044a7f67c1dc199b8e062286a571d311744268d12acdcb",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "LOC_WUDA_HOME::定妆_场景_武大家楼屋雪夜_平面图",
+  "target": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png",
+  "version": 1
+}

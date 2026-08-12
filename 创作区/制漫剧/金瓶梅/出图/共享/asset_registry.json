@@ -10,15 +10,31 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T01:36:50.278786+00:00"
+          }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-08-12T01:36:50.278996+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png",
@@ -35,7 +51,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -79,7 +99,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "core": true,
       "frequency": 12,
@@ -92,14 +112,27 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-08-12T01:36:50.279028+00:00"
+            }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-            "status": "planned"
+            "status": "review_pending",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
           }
         }
-      }
+      },
+      "artifact_sha256": "be4f71b6df2b6db8ca4524fd5145fa6da5cdac5ad35f48c1f099863cebe88229",
+      "self_check_at": "2026-08-12T01:36:50+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_QUARTERSTAFF",
@@ -108,15 +141,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_梢棒.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T01:47:09.097976+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_梢棒_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_梢棒_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -129,7 +176,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_梢棒.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -168,7 +219,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "整棒与断棒两态，木纹、长度与断口保持一致。",
@@ -179,7 +230,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
+      "self_check_at": "2026-08-12T01:47:09+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_BADGE",
@@ -188,15 +242,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T02:02:54.855084+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_都头腰牌_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -209,11 +277,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "旧铜/木质克制质感，文字不烤入画面。",
+        "structure": "旧铜/木质克制质感，文字不烤入画面。腰牌约一掌高（约12至16厘米）、可被成年男子单手完整握持；悬挂腰间时不超过髋部，不得画成盾牌、门牌或大木板。",
+        "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -225,6 +298,7 @@
       "face_policy": "faceless",
       "drift_forbidden": [
         "不要让都头腰牌结构/颜色/尺寸漂移",
+        "不要把腰牌放大成超过手掌的大木板、盾牌或门牌",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -248,10 +322,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "旧铜/木质克制质感，文字不烤入画面。",
+      "current_state": "旧铜/木质克制质感，约一掌高（12至16厘米），可单手完整握持，文字不烤入画面。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -259,7 +333,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
+      "self_check_at": "2026-08-12T02:02:54+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_REWARD_SILVER",
@@ -268,15 +345,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T02:33:08.947474+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -289,11 +380,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "REWARD SILVER",
+        "structure": "北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰。",
+        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -304,7 +400,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让REWARD SILVER结构/颜色/尺寸漂移",
+        "不要让赏银银铤结构/颜色/尺寸漂移",
+        "不要变成现代标准金条、金币、硬币、金色元宝或镜面纪念品",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -316,7 +413,7 @@
           "REWARD SILVER"
         ],
         "spatial_layout": "REWARD SILVER只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "REWARD SILVER",
+        "architecture_materials": "北宋粗铸银铤，低矮船形、两端微翘、中部浅凹，哑光银灰并保留锤铸痕，无可读铭文。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "REWARD SILVER"
@@ -328,10 +425,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "REWARD SILVER",
+      "current_state": "一枚北宋官府赏银银铤，掌心大小，粗铸银灰、无可读铭文。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -339,7 +436,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
+      "self_check_at": "2026-08-12T02:33:08+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "LOC_YANGGU_STREET",
@@ -348,15 +448,31 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T03:16:37.400935+00:00"
+          }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-08-12T03:16:37.401086+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png",
@@ -373,7 +489,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -417,7 +537,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "core": true,
       "frequency": 12,
@@ -430,14 +550,27 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-08-12T03:16:37.401379+00:00"
+            }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-            "status": "planned"
+            "status": "review_pending",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
           }
         }
-      }
+      },
+      "artifact_sha256": "1f5805cad3244eea50f90fbaf9bdbf9b69c35af4f7d5448863c84c5b010a1315",
+      "self_check_at": "2026-08-12T03:16:37+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_CAKE_POLE",
@@ -446,15 +579,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_炊饼担.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T03:23:53.736403+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_炊饼担_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -467,7 +614,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_炊饼担.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -506,7 +657,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "担杆、双筐、布盖与蒸汽结构固定。",
@@ -517,7 +668,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
+      "self_check_at": "2026-08-12T03:23:53+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_WINDOW_LATTICE",
@@ -526,15 +680,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T03:35:59.760072+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -547,11 +715,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "WINDOW LATTICE",
+        "structure": "北宋县城民宅二层木制格窗：单扇窄高长方形窗框，暗褐老木，细密正方格棂，内侧糊素色无纹窗纸，侧轴向内开合；是墙上固定建筑构件，不是手持小物。",
+        "scale": "窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -562,7 +735,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让WINDOW LATTICE结构/颜色/尺寸漂移",
+        "不要让木制方格棂、窄高单扇窗框、素色窗纸的结构/颜色/尺寸漂移",
+        "不要玻璃窗、铝合金窗、西式窗、满洲窗、清式繁复花格或现代五金",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -571,10 +745,10 @@
       "scene_dna": {
         "belonging_anchor": "WINDOW LATTICE 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "WINDOW LATTICE"
+          "武大家二层临街木格窗"
         ],
         "spatial_layout": "WINDOW LATTICE只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "WINDOW LATTICE",
+        "architecture_materials": "暗褐老木窗框与细密正方格棂，内糊素色无纹窗纸，侧轴内开；与阳谷街面武大家二层木楼一致。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "WINDOW LATTICE"
@@ -586,10 +760,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "WINDOW LATTICE",
+      "current_state": "武大家二层临街木格窗，暗褐老木、素纸无纹，窗扇可由室内单手推开。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -597,7 +771,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
+      "self_check_at": "2026-08-12T03:35:59+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "LOC_WUDA_HOME",
@@ -606,19 +783,39 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T03:58:47.038253+00:00"
+          }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-08-12T03:58:47.038418+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -631,7 +828,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -675,7 +876,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "core": true,
       "frequency": 12,
@@ -688,14 +889,27 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-08-12T03:58:47.038473+00:00"
+            }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-            "status": "planned"
+            "status": "review_pending",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
           }
         }
-      }
+      },
+      "artifact_sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
+      "self_check_at": "2026-08-12T03:58:47+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_STAIR_RAIL",
@@ -704,15 +918,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T04:22:42.354494+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -725,11 +953,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "STAIR RAIL",
+        "structure": "武大家二层木楼的室内楼梯扶栏：粗朴暗褐老木，一道斜向圆角扶手、等距直棂和端部方柱，榫卯结构，固定在窄木楼梯一侧，不是可搬运家具。",
+        "scale": "扶手顶面距踏步前缘约 85–95 厘米，为成年人腰部高度；一手可自然包握，直棂间距均匀。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -740,7 +973,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让STAIR RAIL结构/颜色/尺寸漂移",
+        "不要让斜向木扶手、等距直棂、端柱与楼梯固定关系漂移",
+        "不要金属、玻璃、旋转楼梯、宫殿雕花、欧式栏杆或室外阳台护栏",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -752,7 +986,7 @@
           "STAIR RAIL"
         ],
         "spatial_layout": "STAIR RAIL只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "STAIR RAIL",
+        "architecture_materials": "粗朴暗褐老木，斜向圆角扶手、等距直棂与方端柱以榫卯固定在室内窄木楼梯一侧。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "STAIR RAIL"
@@ -764,10 +998,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "STAIR RAIL",
+      "current_state": "武大家室内窄木楼梯单侧扶栏，暗褐老木，成人腰高，固定安装。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -775,7 +1009,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
+      "self_check_at": "2026-08-12T04:22:42+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_DINING_TABLE",
@@ -784,15 +1021,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T06:01:55.876185+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_DINING_TABLE_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -805,11 +1056,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "DINING TABLE",
+        "structure": "武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐。",
+        "scale": "约长 120–140 厘米、宽 60–75 厘米、高 70–75 厘米；坐下时桌沿在腰上，两人对坐后中间仍有放置茶盏的空间。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -820,7 +1076,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让DINING TABLE结构/颜色/尺寸漂移",
+        "不要让长方厚木桌面、四直腿与桌下横撑结构/颜色/尺寸漂移",
+        "不要圆桌、八仙桌、现代餐桌、金属桌腿、玻璃、抽屉、桌布、繁复雕花或宫廷家具",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -832,7 +1089,7 @@
           "DINING TABLE"
         ],
         "spatial_layout": "DINING TABLE只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "DINING TABLE",
+        "architecture_materials": "厚实暗褐老木桌面，四直腿与桌下横撑榫卯结构，表面磨损与武大家室内木件同源。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "DINING TABLE"
@@ -844,10 +1101,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "DINING TABLE",
+      "current_state": "武大家屋内两人对坐的贫户长方老木桌，素净无桌布。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -855,7 +1112,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
+      "self_check_at": "2026-08-12T06:01:55+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_TEA_CUP",
@@ -864,15 +1124,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T07:08:14.475206+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_TEA_CUP_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -885,11 +1159,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "TEA CUP",
+        "structure": "北宋县城贫户日用茶盏：单只小型粗陶敞口盏，口沿微外撇，深腹、矮圈足，灰褐至深褐粗釉，无杯把、无杯盖、无托盘、无纹字。",
+        "scale": "口径约 8–10 厘米，高约 5–7 厘米，可一手托住或以拇指与其余手指环持，整体明显小于成人掌宽。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -900,7 +1179,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让TEA CUP结构/颜色/尺寸漂移",
+        "不要让小型敞口、深腹、矮圈足粗陶盏的结构/颜色/尺寸漂移",
+        "不要杯把、杯盖、托盘、玻璃、白瓷高足杯、马克杯、日式寿司茶杯或现代器皿",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -912,7 +1192,7 @@
           "TEA CUP"
         ],
         "spatial_layout": "TEA CUP只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "TEA CUP",
+        "architecture_materials": "灰褐至深褐粗釉陶胎，小型敞口、深腹、矮圈足，素净无纹。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "TEA CUP"
@@ -924,10 +1204,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "TEA CUP",
+      "current_state": "武大家木桌上的单只灰褐粗陶小茶盏，无把无盖。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -935,7 +1215,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
+      "self_check_at": "2026-08-12T07:08:14+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_DOORFRAME",
@@ -944,15 +1227,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T07:27:54.222081+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_DOORFRAME_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -965,11 +1262,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "DOORFRAME",
+        "structure": "武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开。",
+        "scale": "净宽约 75–85 厘米，净高约 180–190 厘米；成年人单人通行，横楣略高于头顶，门槛低于脚踝。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -980,7 +1282,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让DOORFRAME结构/颜色/尺寸漂移",
+        "不要让两立柱、单横楣、低门槛与土墙固定的结构/颜色/尺寸漂移",
+        "不要拱门、牌楼、宫殿彩画、繁复雕花、现代门套、金属合页、玻璃或西式门框",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -992,7 +1295,7 @@
           "DOORFRAME"
         ],
         "spatial_layout": "DOORFRAME只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "DOORFRAME",
+        "architecture_materials": "暗褐老木两立柱与单横楣，低石/木门槛，榫卯固定于斑驳土墙，与武大家屋内主场景同源。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "DOORFRAME"
@@ -1004,10 +1307,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "DOORFRAME",
+      "current_state": "武大家屋内右后出入口的素木门框，土墙固定，配粗板木门向内开。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1015,7 +1318,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
+      "self_check_at": "2026-08-12T07:27:54+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_DOOR_LATCH",
@@ -1024,15 +1330,29 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_门闩.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-12T08:15:18.921059+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_道具_门闩_反面.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -1045,11 +1365,16 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_门闩.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "横向木闩从左滑右，落闩方向固定。",
+        "structure": "武大家粗板木门内侧的横向木闩：一根暗褐厚木方条，左侧为滑动起点，从左向右水平推入门框右侧木质闩座；两个导向木套固定在门板内侧，无金属锁芯。",
+        "scale": "木闩长约 75–90 厘米，截面约 5–7 厘米方，安装在成人腰部至腹部高度，可单手包握并水平推动。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -1060,7 +1385,8 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让门闩结构/颜色/尺寸漂移",
+        "不要让单根横向厚木闩、两导向木套、右侧闩座和从左滑右的方向漂移",
+        "不要现代门锁、挂锁、金属插销、门链、钥匙、双闩、竖向闩或电子锁",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
@@ -1072,7 +1398,7 @@
           "门闩"
         ],
         "spatial_layout": "门闩只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "横向木闩从左滑右，落闩方向固定。",
+        "architecture_materials": "暗褐厚木方闩，门板内侧两个木质导向套，门框右侧木质闩座；全木结构，从左向右落闩。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
           "门闩"
@@ -1084,10 +1410,10 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "横向木闩从左滑右，落闩方向固定。",
+      "current_state": "横向厚木闩位于门内腰高，由左向右滑入木质闩座，落闩方向固定。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1095,7 +1421,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
+      "self_check_at": "2026-08-12T08:15:18+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_BRAZIER",

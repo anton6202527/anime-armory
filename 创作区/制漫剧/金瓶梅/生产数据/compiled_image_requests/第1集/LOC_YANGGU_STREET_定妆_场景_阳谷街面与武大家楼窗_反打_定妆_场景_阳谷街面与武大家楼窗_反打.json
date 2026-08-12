@@ -1,0 +1,96 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_YANGGU_STREET_定妆_场景_阳谷街面与武大家楼窗_反打_定妆_场景_阳谷街面与武大家楼窗_反打.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：图片/定妆_场景_阳谷街面与武大家楼窗_反打.png；本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，仅把该主体作为场景连续性地标，严格继承其身份附件 场景：北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌；归属锚: 阳谷街面与武大家楼窗；稳定地标: 阳谷街面与武大家楼窗；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌；光色天气: 冬日漫射天光自画面上方，店铺灶火作低位暖补光；常驻物件: 阳谷街面与武大家楼窗；反打/视线规则: 街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_YANGGU_STREET的asset参考 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1323,
+  "actual_submit_prompt_sha256": "3e0b1c7b9d4d69adc9c8fb103627c94063a254dbb0752f5c1ce9273b460a2a4e",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_YANGGU_STREET_定妆_场景_阳谷街面与武大家楼窗_反打_定妆_场景_阳谷街面与武大家楼窗_反打.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：图片/定妆_场景_阳谷街面与武大家楼窗_反打.png；本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，仅把该主体作为场景连续性地标，严格继承其身份附件 场景：北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌；归属锚: 阳谷街面与武大家楼窗；稳定地标: 阳谷街面与武大家楼窗；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌；光色天气: 冬日漫射天光自画面上方，店铺灶火作低位暖补光；常驻物件: 阳谷街面与武大家楼窗；反打/视线规则: 街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_YANGGU_STREET的asset参考 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "LOC_YANGGU_STREET",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_阳谷街面与武大家楼窗__1f5805cad324_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "1cfd0cb3d775cf9dc3b6a3e0d1de8aeb8e2fbc2af4a8920b74c13237d030347b"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "5b19fc1d6d594b0d0ba2a8568b0997ecc2b9924c9c8be2969e721e5964af0480",
+    "compiler_decisions": [],
+    "execution_context_sha256": "7c4f73642d17d137a0cad65475992ad42b06eb10b93ededbda8f72f4410610ea",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:37>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 37,
+      "constraint_compression": {
+        "policy_guard_input": 1,
+        "policy_guard_output": 1,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 204,
+      "negative_chars": 0,
+      "prompt_chars": 814,
+      "reference_count": 2
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成生产级场景参考图：图片/定妆_场景_阳谷街面与武大家楼窗_反打.png；本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，仅把该主体作为场景连续性地标，严格继承其身份附件 场景：北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌；归属锚: 阳谷街面与武大家楼窗；稳定地标: 阳谷街面与武大家楼窗；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 北宋县城窄街，青石、木铺、蒸汽、冬日漫射光；武大家为临街两层木屋，上有格窗与素帘，下有窄门，街面纵深清楚，避免清代牌楼和现代招牌；光色天气: 冬日漫射天光自画面上方，店铺灶火作低位暖补光；常驻物件: 阳谷街面与武大家楼窗；反打/视线规则: 街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_YANGGU_STREET的asset参考 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "LOC_YANGGU_STREET",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_阳谷街面与武大家楼窗__1f5805cad324_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "1cfd0cb3d775cf9dc3b6a3e0d1de8aeb8e2fbc2af4a8920b74c13237d030347b"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "babf795d05468f2da1e58cf303a40b2292316271e626a890dfa394d0a6109545",
+    "source_contract_text_sha256": "c1bd2f805a35306dd2192f13aaaa2e49bd1d5049142d1ffd429cbcf231e3a20c",
+    "task_type": "scene_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-12T03:16:49+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "a7cd7d08762fe959c81000d34f0ac1a18587493f64240eefadc8a708224b10e4",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "LOC_YANGGU_STREET::定妆_场景_阳谷街面与武大家楼窗_反打",
+  "target": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
+  "version": 1
+}

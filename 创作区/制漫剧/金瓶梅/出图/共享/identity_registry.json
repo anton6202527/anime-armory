@@ -1900,10 +1900,12 @@
           "reference_group": {
             "silhouette": {
               "path": "出图/共享/图片/定妆_CROWD_HUNTERS__常态.png",
-              "status": "review_pending",
+              "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared silhouette reference passed finalized review",
+                "reviewed_at": "2026-08-12T01:32:31.273357+00:00"
               }
             },
             "hand": {
@@ -1920,10 +1922,12 @@
             "partial_refs": {
               "silhouette": {
                 "path": "出图/共享/图片/定妆_CROWD_HUNTERS__常态.png",
-                "status": "review_pending",
+                "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared silhouette reference passed finalized review",
+                  "reviewed_at": "2026-08-12T01:32:31.273456+00:00"
                 }
               },
               "hand": {
@@ -2080,10 +2084,14 @@
           ],
           "performance_signature": "只作远后景笑声和肩部轮廓层，不单独表演，不出现可识别清晰脸。",
           "signature_equipment": [],
-          "self_check_passed": false,
+          "self_check_passed": true,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
           "restricted_partial": true,
-          "no_full_face": true
+          "no_full_face": true,
+          "self_check_at": "2026-08-12T01:32:31+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "anchor_sha": "ac559def295416b0fd499defc30edb0927486c9da49ba1813e13937cf7d621a4",
+          "artifact_sha256": "ac559def295416b0fd499defc30edb0927486c9da49ba1813e13937cf7d621a4"
         }
       ],
       "asset_bundle": {

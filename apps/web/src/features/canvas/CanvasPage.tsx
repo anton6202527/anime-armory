@@ -1144,7 +1144,13 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     </div>;
   };
 
-  const renderLibtvSourceBody = () => <div className="libtv-source-text nowheel">
+  const renderLibtvSourceBody = () => <div
+    className="libtv-source-text nodrag nowheel nopan"
+    role="region"
+    aria-label={`${data.title}正文，可滚动查看`}
+    tabIndex={0}
+    onPointerDown={stopPointer}
+  >
     <p>{prompt || data.description}</p>
     <i aria-hidden="true" />
   </div>;
@@ -1427,7 +1433,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
           setReferenceMenuOpen((open) => !open);
         }}
       >{isLibtvGenerator && <Plus size={11} />}</Handle>
-      {isLibtvGenerator && renderLibtvGeneratorDock()}
+      {isLibtvGenerator && (!isScriptGenerator || data.status !== "running") && renderLibtvGeneratorDock()}
       {isLibtvGenerator && renderReferenceMenu()}
       {isLibtvSource && Boolean(prompt || data.description) && <NodeToolbar position={Position.Top} offset={39} align="center" className="libtv-node-download-toolbar nodrag"><button type="button" aria-label="下载剧本内容" title="下载剧本内容" onPointerDown={stopPointer} onClick={downloadGeneratorResult}><Download size={19} /></button></NodeToolbar>}
       {isLibtvGenerator && !isScriptGenerator && data.status === "done" && (resultText || resultAssetUrl) && <NodeToolbar position={Position.Top} offset={39} align="center" className="libtv-node-download-toolbar nodrag"><button type="button" aria-label="下载生成结果" onClick={downloadGeneratorResult}><Download size={19} /></button></NodeToolbar>}
@@ -1813,7 +1819,7 @@ export function CanvasPage({
   const graph = useMemo(() => {
     if (!storedDocument) return initialGraph(work);
     if (!storedDocument.nodes.length) return { nodes: [], edges: [] };
-    const storedNodes = storedDocument.nodes.map((node) => {
+    const storedNodes: WorkflowNode[] = storedDocument.nodes.map((node): WorkflowNode => {
       const storedData = node.data as WorkflowNodeData;
       let data = storedData;
       if (storedData.skillId === "n2d-script") {
@@ -1871,14 +1877,50 @@ export function CanvasPage({
         data,
       };
     });
-    const scriptReferenceEdges = storedDocument.edges.filter((edge) => (
-      storedNodes.find((node) => node.id === edge.target)?.data.variant === "script-new"
+    const legacyScriptResults = new Map(storedNodes
+      .filter((node) => {
+        if (node.data.variant !== "script-workflow" || typeof node.data.sourceNodeId !== "string") return false;
+        return storedNodes.some((source) => source.id === node.data.sourceNodeId && source.data.variant === "script-new");
+      })
+      .map((node) => [String(node.data.sourceNodeId), node]));
+    const mergedStoredNodes = storedNodes
+      .filter((node) => ![...legacyScriptResults.values()].some((result) => result.id === node.id))
+      .map((node) => {
+        const legacyResult = legacyScriptResults.get(node.id);
+        if (!legacyResult || node.data.variant !== "script-new") return node;
+        return {
+          ...node,
+          selected: node.selected || legacyResult.selected,
+          data: {
+            ...node.data,
+            ...legacyResult.data,
+            prompt: node.data.prompt,
+            sourceNodeId: node.data.sourceNodeId,
+            sourceContext: node.data.sourceContext,
+          },
+        };
+      });
+    const legacyResultIds = new Set([...legacyScriptResults.values()].map((node) => node.id));
+    const mergedStoredEdges = storedDocument.edges
+      .filter((edge) => !(legacyScriptResults.has(edge.source) && legacyResultIds.has(edge.target)))
+      .map((edge) => ({
+        ...edge,
+        source: legacyResultIds.has(edge.source)
+          ? String(storedNodes.find((node) => node.id === edge.source)?.data.sourceNodeId ?? edge.source)
+          : edge.source,
+        target: legacyResultIds.has(edge.target)
+          ? String(storedNodes.find((node) => node.id === edge.target)?.data.sourceNodeId ?? edge.target)
+          : edge.target,
+      }))
+      .filter((edge) => edge.source !== edge.target);
+    const scriptReferenceEdges = mergedStoredEdges.filter((edge) => (
+      mergedStoredNodes.find((node) => node.id === edge.target)?.data.variant === "script-new"
     ));
     const scriptSourceIds = new Set(scriptReferenceEdges.map((edge) => edge.source));
-    const normalizedNodes = storedNodes.map((node) => {
+    const normalizedNodes = mergedStoredNodes.map((node) => {
       const incomingScriptEdge = scriptReferenceEdges.find((edge) => edge.target === node.id);
       if (incomingScriptEdge) {
-        const source = storedNodes.find((candidate) => candidate.id === incomingScriptEdge.source);
+        const source = mergedStoredNodes.find((candidate) => candidate.id === incomingScriptEdge.source);
         return {
           ...node,
           position: source ? { x: source.position.x + 730, y: source.position.y - 94 } : node.position,
@@ -1905,7 +1947,7 @@ export function CanvasPage({
       }
       return node;
     });
-    const storedEdges = storedDocument.edges.map((edge) => {
+    const storedEdges = mergedStoredEdges.map((edge) => {
       const target = normalizedNodes.find((node) => node.id === edge.target);
       const isLibtvReference = target?.data.sourceNodeId === edge.source && typeof target.data.sourceContext === "string";
       return {
@@ -3421,7 +3463,9 @@ export function CanvasPage({
   async function runScriptWorkbenchGeneratorNode(node: WorkflowNode, force = false) {
     const latestSource = nodesRef.current.find((candidate) => candidate.id === node.id);
     if (!latestSource || latestSource.data.status === "running") return;
-    const existingResult = nodesRef.current.find((candidate) => candidate.data.variant === "script-workflow" && candidate.data.sourceNodeId === node.id);
+    const existingResult = latestSource.data.variant === "script-workflow"
+      ? latestSource
+      : nodesRef.current.find((candidate) => candidate.data.variant === "script-workflow" && candidate.data.sourceNodeId === node.id);
     if (existingResult && !force) {
       const selected = nodesRef.current.map((candidate) => ({ ...candidate, selected: candidate.id === existingResult.id }));
       nodesRef.current = selected;
@@ -3445,6 +3489,8 @@ export function CanvasPage({
     generationAbortControllersRef.current.set(node.id, controller);
     const runningPatch: Partial<WorkflowNodeData> = {
       status: "running",
+      variant: "script-new",
+      title: "脚本生成器",
       generationProgress: 4,
       generationError: undefined,
       generationRequestId: requestId,
@@ -3483,15 +3529,8 @@ export function CanvasPage({
       if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
 
       const currentNodes = nodesRef.current;
-      const currentResult = currentNodes.find((candidate) => candidate.data.variant === "script-workflow" && candidate.data.sourceNodeId === node.id);
-      if (force && existingResult && !currentResult) {
-        generationRequestsRef.current.delete(node.id);
-        generationAbortControllersRef.current.delete(node.id);
-        return;
-      }
-      const resultId = currentResult?.id ?? `script-workflow-${crypto.randomUUID()}`;
       const resultData: WorkflowNodeData = {
-        ...nodeRuntimeDefaults("script", "script-workflow"),
+        ...latestSource.data,
         kind: "script",
         title: workbench.title,
         description: `${workbench.shots.length}个镜头 · ${workbench.assets.length}个资产 · 三步脚本工作台`,
@@ -3500,54 +3539,37 @@ export function CanvasPage({
         variant: "script-workflow",
         skillId: "n2d-script-workbench",
         skillPath: "skills/n2d-script-workbench/SKILL.md",
-        sourceNodeId: node.id,
         assetName: `${workbench.shots.length}个镜头`,
         scriptWorkbench: workbench,
         generatedWithModel: model,
         generatedFromPrompt: userPrompt,
-      };
-      const resultNode: WorkflowNode = currentResult ? {
-        ...currentResult,
-        selected: true,
-        data: { ...currentResult.data, ...resultData },
-      } : {
-        id: resultId,
-        type: "workflow-node",
-        position: { x: latestSource.position.x + 390, y: latestSource.position.y - 18 },
-        selected: true,
-        data: resultData,
-      };
-      const sourceDonePatch: Partial<WorkflowNodeData> = {
-        status: "done",
         generationProgress: 100,
         generationRequestId: undefined,
         generationError: undefined,
         model,
-        assetName: `生成历史/${workbench.title}.script.json`,
       };
-      let nextNodes = currentNodes.map((candidate) => candidate.id === node.id
-        ? { ...candidate, selected: false, data: { ...candidate.data, ...sourceDonePatch } }
-        : candidate.id === resultId ? resultNode : { ...candidate, selected: false });
-      if (!currentResult) nextNodes = [...nextNodes, resultNode];
-      let nextEdges = edgesRef.current;
-      if (!nextEdges.some((edge) => edge.source === node.id && edge.target === resultId)) {
-        nextEdges = [...nextEdges, makeEdge(`edge-${crypto.randomUUID()}`, node.id, resultId, true)];
-      }
-      setGraphImmediately(nextNodes, nextEdges);
-      setSelectedNodeId(resultId);
-      await persistGeneratorNodeSnapshot(resultId, resultData, attachmentsRef.current, nextNodes, nextEdges, { replaceGraph: true });
+      const nextNodes = currentNodes.map((candidate) => candidate.id === node.id
+        ? { ...candidate, selected: true, data: resultData }
+        : { ...candidate, selected: false });
+      setGraphImmediately(nextNodes, edgesRef.current);
+      setSelectedNodeId(node.id);
+      await persistGeneratorNodeSnapshot(node.id, resultData, attachmentsRef.current, nextNodes, edgesRef.current, { replaceGraph: true });
       generationRequestsRef.current.delete(node.id);
       generationAbortControllersRef.current.delete(node.id);
       addActivity(`完成「${workbench.title}」脚本拆镜`);
-      setNotice(`已生成 ${workbench.shots.length} 个镜头，打开结果节点继续`);
-      window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: node.id }, { id: resultId }], padding: .38, maxZoom: 1, duration: 300 }));
+      setNotice(`已生成 ${workbench.shots.length} 个镜头，打开脚本节点继续`);
+      window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: node.id }], padding: .38, maxZoom: 1, duration: 300 }));
     } catch (error) {
       if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
       generationRequestsRef.current.delete(node.id);
       generationAbortControllersRef.current.delete(node.id);
       const message = isCanvasGenerationError(error) ? error.message : error instanceof Error ? error.message : "脚本生成失败";
       const failedPatch: Partial<WorkflowNodeData> = {
-        status: "failed",
+        status: latestSource.data.scriptWorkbench ? "done" : "failed",
+        ...(latestSource.data.scriptWorkbench ? {
+          variant: "script-workflow",
+          title: normalizeScriptWorkbench(latestSource.data.scriptWorkbench).title,
+        } : {}),
         generationProgress: 0,
         generationRequestId: undefined,
         generationError: message,
@@ -3854,7 +3876,11 @@ export function CanvasPage({
     if (!node || node.data.status !== "running") return;
     cancelGenerationRequest(nodeId);
     const patch: Partial<WorkflowNodeData> = {
-      status: "failed",
+      status: node.data.scriptWorkbench ? "done" : "failed",
+      ...(node.data.scriptWorkbench ? {
+        variant: "script-workflow",
+        title: normalizeScriptWorkbench(node.data.scriptWorkbench).title,
+      } : {}),
       generationProgress: 0,
       generationRequestId: undefined,
       generationError: "生成已由用户取消，可随时重新提交。",
@@ -4422,14 +4448,8 @@ export function CanvasPage({
       setScriptWorkflowNodeId(nodeId);
       return;
     }
-    const sourceId = typeof resultNode.data.sourceNodeId === "string" ? resultNode.data.sourceNodeId : "";
-    const source = nodesRef.current.find((node) => node.id === sourceId);
-    if (!source) {
-      setNotice("原脚本生成节点已被删除，无法重新生成");
-      return;
-    }
     if (!window.confirm("重新生成会覆盖当前三步脚本内容，是否继续？")) return;
-    void runScriptWorkbenchGeneratorNode(source, true);
+    void runScriptWorkbenchGeneratorNode(resultNode, true);
   }
 
   function batchVideoFromWorkbench(request: ScriptBatchVideoRequest) {
@@ -4963,10 +4983,6 @@ export function CanvasPage({
     }
     selectedIds.forEach((nodeId) => {
       cancelGenerationRequest(nodeId);
-      const selected = nodesRef.current.find((node) => node.id === nodeId);
-      if (selected?.data.variant === "script-workflow" && typeof selected.data.sourceNodeId === "string") {
-        cancelWorkflowGeneration(selected.data.sourceNodeId);
-      }
     });
     const nextNodes = nodesRef.current.filter((node) => !selectedIds.has(node.id));
     const nextEdges = edgesRef.current.filter((edge) => !selectedIds.has(edge.source) && !selectedIds.has(edge.target));
@@ -4980,9 +4996,6 @@ export function CanvasPage({
     const node = nodes.find((item) => item.id === nodeId);
     if (!node) return;
     cancelGenerationRequest(nodeId);
-    if (node.data.variant === "script-workflow" && typeof node.data.sourceNodeId === "string") {
-      cancelWorkflowGeneration(node.data.sourceNodeId);
-    }
     const nextNodes = nodesRef.current.filter((item) => item.id !== nodeId);
     const nextEdges = edgesRef.current.filter((edge) => edge.source !== nodeId && edge.target !== nodeId);
     setGraphImmediately(nextNodes, nextEdges);

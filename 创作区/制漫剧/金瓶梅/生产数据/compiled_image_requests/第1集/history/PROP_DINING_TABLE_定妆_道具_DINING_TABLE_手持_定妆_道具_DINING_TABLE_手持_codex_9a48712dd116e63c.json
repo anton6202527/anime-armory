@@ -1,0 +1,96 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_DINING_TABLE_定妆_道具_DINING_TABLE_手持_定妆_道具_DINING_TABLE_手持.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_DINING_TABLE_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；DINING TABLE；结构锁: DINING TABLE；归属/用途: 剧情资产；当前状态: DINING TABLE；剧情生命周期: 共享定妆、本集引用；材质与颜色: DINING TABLE；脸部策略: faceless；资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DINING_TABLE::定妆_道具_DINING_TABLE_手持的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DINING TABLE结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1409,
+  "actual_submit_prompt_sha256": "c7a3f778126143a17a151453627d1563ab8866a6cd5e3321bd4e13a84b2825ff",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_DINING_TABLE_定妆_道具_DINING_TABLE_手持_定妆_道具_DINING_TABLE_手持.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_DINING_TABLE_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；DINING TABLE；结构锁: DINING TABLE；归属/用途: 剧情资产；当前状态: DINING TABLE；剧情生命周期: 共享定妆、本集引用；材质与颜色: DINING TABLE；脸部策略: faceless；资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DINING_TABLE::定妆_道具_DINING_TABLE_手持的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DINING TABLE结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_DINING_TABLE::定妆_道具_DINING_TABLE_手持",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DINING_TABLE__b781bb7c58b3_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "0286ef863e8ad17b930f17c2d7aca1f853f50df89d42e835ac07bd5a39264930"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "9a48712dd116e63c0bce3d7dae304923dab01a678db047574995f460bd5b51b1",
+    "compiler_decisions": [],
+    "execution_context_sha256": "6cd94b016d8cdd0861b16ea8f3dc3dff8eb3dbd8a0d8625107d5f0a3fc94b63a",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:36>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 36,
+      "constraint_compression": {
+        "policy_guard_input": 3,
+        "policy_guard_output": 3,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 225,
+      "negative_chars": 0,
+      "prompt_chars": 897,
+      "reference_count": 2
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成独立生产级资产参考图：图片/定妆_道具_DINING_TABLE_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；DINING TABLE；结构锁: DINING TABLE；归属/用途: 剧情资产；当前状态: DINING TABLE；剧情生命周期: 共享定妆、本集引用；材质与颜色: DINING TABLE；脸部策略: faceless；资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DINING_TABLE::定妆_道具_DINING_TABLE_手持的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DINING TABLE结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_DINING_TABLE::定妆_道具_DINING_TABLE_手持",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DINING_TABLE__b781bb7c58b3_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "0286ef863e8ad17b930f17c2d7aca1f853f50df89d42e835ac07bd5a39264930"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "12d86001b787765ac290587d9dfb9fea1eef3af950bafddca3f2ab3eecc3d504",
+    "source_contract_text_sha256": "d95116cd94f823450fbadf4a87f3963156372e0b097f48ed8fff821a1ef98d59",
+    "task_type": "prop_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-12T06:22:06+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "79e399f29307b2b7f2be8981d3503f9fe43d49b87ef821f6688ee521f330de49",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "PROP_DINING_TABLE::定妆_道具_DINING_TABLE_手持",
+  "target": "出图/共享/图片/定妆_道具_DINING_TABLE_手持.png",
+  "version": 1
+}
