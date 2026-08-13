@@ -6,14 +6,25 @@
     "style_identity_lock"
   ],
   "episode": "第1集",
-  "findings": [],
-  "generated_at": "2026-08-11T04:52:03+00:00",
+  "findings": [
+    {
+      "artifacts": [
+        "_设置.md",
+        "出图/共享/identity_registry.json"
+      ],
+      "code": "lock_artifact_stale",
+      "lock_id": "style_identity_lock",
+      "message": "style_identity_lock 锁定后文件已变化：_设置.md, 出图/共享/identity_registry.json",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-08-13T03:49:27+00:00",
   "kind": "n2d_production_locks_check",
   "lock_path": "生产数据/production_locks_第1集.json",
   "stage": "image",
-  "status": "pass",
+  "status": "block",
   "summary": {
-    "block": 0,
+    "block": 1,
     "locks": 4,
     "required_locks": 4
   },

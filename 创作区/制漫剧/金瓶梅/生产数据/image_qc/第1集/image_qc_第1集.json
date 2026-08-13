@@ -12,17 +12,8 @@
     "available": true,
     "findings": [],
     "notes": [
-      "资产 PROP_BRAZIER：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_WINE_CUP：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_SPILLED_WINE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_LUGGAGE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_DOOR：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
       "资产 LOC_COUNTY_YAMEN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_OFFICIAL_DOC：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_GIFT_LOAD：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 LOC_CITY_GATE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_WINDOW_CURTAIN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_CURTAIN_FORK：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+      "资产 LOC_CITY_GATE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
     ]
   },
   "asset_human_review": [],
@@ -1039,17 +1030,26 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "20fef7f69061aee9e356698a55c43e85c012ee8f3be3c88d3621dc568478e382",
+      "出图/共享/asset_registry.json": "403fd159cc2733ef2d10544118656741b7ba5c25f29bd2fac203efc08726fd86",
       "出图/共享/identity_registry.json": "ca5e4a9494f751725c4424629297e70c28e0511965983e30d305b3376d8c4f6d",
       "出图/共享/style_anchor_registry.json": "7121291eed1e7e83a82a5e03a1ed891cd05fb6b1bf4ba9a88486bd7e9a56162b",
       "出图/共享/图片/定妆_道具_DINING_TABLE.png": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
       "出图/共享/图片/定妆_道具_DOORFRAME.png": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
       "出图/共享/图片/定妆_道具_REWARD_SILVER.png": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
+      "出图/共享/图片/定妆_道具_SPILLED_WINE.png": "e554296ef79a3874ead671c0d89112527bae9eb3c1e77d1d3e0603a58b4848c7",
       "出图/共享/图片/定妆_道具_STAIR_RAIL.png": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
       "出图/共享/图片/定妆_道具_TEA_CUP.png": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
+      "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png": "20b77b9553c83ca9276bcc4f122d2f5681ff3522dd2a5359b5553e95376d1a86",
       "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
+      "出图/共享/图片/定妆_道具_东京礼担.png": "47d374cc47a4d7f07fb7c675b51b8b2340691b3e87641be89dc5bcbc75dbfe29",
+      "出图/共享/图片/定妆_道具_公文.png": "5cf63c225aed32779ed5b5b27275451402f3fc4a50affd337c87afade8af983b",
+      "出图/共享/图片/定妆_道具_半杯酒.png": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
+      "出图/共享/图片/定妆_道具_叉竿.png": "00f9c0181eb896797e7e8c57f080f2341b968dfeb8ebc77672850cfe8ffb773c",
+      "出图/共享/图片/定妆_道具_场景木门.png": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
       "出图/共享/图片/定妆_道具_梢棒.png": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
       "出图/共享/图片/定妆_道具_炊饼担.png": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
+      "出图/共享/图片/定妆_道具_炭盆.png": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
+      "出图/共享/图片/定妆_道具_素布行李.png": "e3cdc5344ecf1a1d9966f0b19db560a7dd0e3c82be4fea4280d8ff01be6de805",
       "出图/共享/图片/定妆_道具_都头腰牌.png": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
       "出图/共享/图片/定妆_道具_门闩.png": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
       "出图/共享/图片/风格锚_北宋市井写实电影感.png": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
@@ -1059,10 +1059,10 @@
       "生产数据/image_qc/第1集/hair_confirmations.json": null,
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/outfit_confirmations.json": null,
-      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "19b6d158dc9fda7b36d724e5a54baae57af619953d69196759fbf68530c6826d",
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "f33a0669bf07bab6085cda6868d002746aa9733d53e4f5537e71de1f49bb5b9a",
       "脚本/第1集/storyboard.json": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
     },
-    "sha": "750743c77afd7271e5a4bd0da1a5b3603507b14cb1e644a5fb77c3341dc87b03"
+    "sha": "6e69c023c1c25d3d68aaae2284087961f0bec775976643511b6c52e206d8a4c2"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1680,7 +1680,7 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 9,
+    "confirmed": 18,
     "pending": 1,
     "targets": [
       {
@@ -1720,6 +1720,34 @@
         "stitched": true
       },
       {
+        "asset": "PROP_BRAZIER",
+        "asset_name": "炭盆",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "a752a719cea01544d1035952d27d82ad47694ce2686c54c60c84eab6248878f1",
+        "label": "共享主参考·炭盆",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_炭盆.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_炭盆.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_炭盆.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "低位暖光来源",
+          "酒液落在盆边而非人物身上"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BRAZIER_shared_primary_定妆_道具_炭盆_compare.png",
+        "stitched": true
+      },
+      {
         "asset": "PROP_CAKE_POLE",
         "asset_name": "炊饼担",
         "asset_type": "prop",
@@ -1746,6 +1774,34 @@
         ],
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_shared_primary_定妆_道具_炊饼担_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CURTAIN_FORK",
+        "asset_name": "叉竿",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "567f9cf67a45270cd67e9123b905fca05b6a6d9eeb02e3c3bd629f8a9711986c",
+        "label": "共享主参考·叉竿",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_叉竿.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_叉竿.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_叉竿.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "集尾只露局部与轻碰木檐",
+          "不提前完成相逢事件"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CURTAIN_FORK_shared_primary_定妆_道具_叉竿_compare.png",
         "stitched": true
       },
       {
@@ -1784,6 +1840,39 @@
         ],
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DINING_TABLE_shared_primary_定妆_道具_DINING_TABLE_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_DOOR",
+        "asset_name": "武大家木门",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "a118a18d0a42699a30f4a3c3768f8917c4a8da00ac66bd09e4e6e9f3a8f3ddec",
+        "label": "共享主参考·武大家木门",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移",
+          "现代防盗门",
+          "现代门锁",
+          "无来源文字"
+        ],
+        "png": "出图/共享/图片/定妆_道具_场景木门.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_场景木门.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_场景木门.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "北宋小民楼屋的旧木板门",
+          "竖向门板",
+          "粗木门框与横向木闩同源",
+          "合门后不自动落闩"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DOOR_shared_primary_定妆_道具_场景木门_compare.png",
         "stitched": true
       },
       {
@@ -1861,6 +1950,89 @@
         "stitched": true
       },
       {
+        "asset": "PROP_GIFT_LOAD",
+        "asset_name": "东京礼担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "d6c70b9027b1f75da16bdebe35ff4b09269bdec9f76518f3acb5a5466b4fad1e",
+        "label": "共享主参考·东京礼担",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_东京礼担.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_东京礼担.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_东京礼担.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "数量与捆扎方式在 CLIP13–15 保持一致"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_GIFT_LOAD_shared_primary_定妆_道具_东京礼担_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_LUGGAGE",
+        "asset_name": "素布行李",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "a65809f99b72f01f77795b066df261f387d5cab7a8294d7e2ccb221ab4c2b15d",
+        "label": "共享主参考·素布行李",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_素布行李.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_素布行李.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_素布行李.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "只含武松个人物品",
+          "绳结与背负方向固定"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_LUGGAGE_shared_primary_定妆_道具_素布行李_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_OFFICIAL_DOC",
+        "asset_name": "公文",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "5190a7306317bd90ce1581c017001027337fe18459467777522dab2bcb830758",
+        "label": "共享主参考·公文",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_公文.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_公文.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_公文.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "印章与纸张可见",
+          "正文全部后期 overlay 或保持不可读"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_OFFICIAL_DOC_shared_primary_定妆_道具_公文_compare.png",
+        "stitched": true
+      },
+      {
         "asset": "PROP_QUARTERSTAFF",
         "asset_name": "梢棒",
         "asset_type": "prop",
@@ -1924,6 +2096,33 @@
         ],
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_shared_primary_定妆_道具_REWARD_SILVER_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SPILLED_WINE",
+        "asset_name": "SPILLED WINE",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "3070dc133338532c6f6214b4a7ac493601142de5dd949feb15749de1d9effcd4",
+        "label": "共享主参考·SPILLED WINE",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "SPILLED WINE"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_SPILLED_WINE_shared_primary_定妆_道具_SPILLED_WINE_compare.png",
         "stitched": true
       },
       {
@@ -2002,6 +2201,33 @@
         "stitched": true
       },
       {
+        "asset": "PROP_WINDOW_CURTAIN",
+        "asset_name": "WINDOW CURTAIN",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "ca8a1a80a6f87154fe2666452354d353b54bc2941017832e426a60c88581588e",
+        "label": "共享主参考·WINDOW CURTAIN",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "WINDOW CURTAIN"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_CURTAIN_shared_primary_定妆_道具_WINDOW_CURTAIN_compare.png",
+        "stitched": true
+      },
+      {
         "asset": "PROP_WINDOW_LATTICE",
         "asset_name": "WINDOW LATTICE",
         "asset_type": "prop",
@@ -2037,9 +2263,39 @@
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_shared_primary_定妆_道具_WINDOW_LATTICE_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_WINE_CUP",
+        "asset_name": "半杯酒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "e162a57ef689947690bc4d2106a18ffc705ee54e4b7db6fed57d47d86166e8f1",
+        "label": "共享主参考·半杯酒",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_半杯酒.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_道具_半杯酒.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_半杯酒.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "同一只杯从潘侧越线",
+          "被挡",
+          "翻落",
+          "之后保持打翻态"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINE_CUP_shared_primary_定妆_道具_半杯酒_compare.png",
+        "stitched": true
       }
     ],
-    "total": 10
+    "total": 19
   },
   "qc_environment": {
     "face_mode": "insightface",

@@ -1,7 +1,7 @@
 # Episode Graph · 第1集
 
 - 状态：pass
-- graph hash：`0657cfcc23bba415`
+- graph hash：`e6c3d15e85183e39`
 - nodes / edges：16 / 15
 - story / routes / media / masters：15 / 0 / 0 / 0
 

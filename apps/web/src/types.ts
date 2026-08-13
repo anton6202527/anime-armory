@@ -102,6 +102,27 @@ export interface CanvasDocument {
 
 export type AgentJobState = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
+export type AgentArtifactKind = "text" | "image" | "video" | "audio";
+
+/**
+ * Normalized output contract returned by a Skill/Agent run. Binary artifacts may
+ * be returned as a short-lived URL, inline base64, or an already uploaded cloud
+ * asset. The browser turns every accepted artifact into a canvas node.
+ */
+export interface AgentArtifact {
+  id: string;
+  kind: AgentArtifactKind;
+  name: string;
+  mimeType?: string;
+  size?: number;
+  text?: string;
+  url?: string;
+  base64?: string;
+  assetId?: string;
+  /** Browser-only materialized file returned by a trusted local gateway. */
+  file?: File;
+}
+
 export interface AgentJob {
   id: string;
   state: AgentJobState;
@@ -110,4 +131,5 @@ export interface AgentJob {
   agentId?: string;
   output?: string;
   workDir?: string;
+  artifacts?: AgentArtifact[];
 }

@@ -30,6 +30,34 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_BRAZIER",
+      "asset_name": "炭盆",
+      "confirmed_at": "2026-08-13T03:55:10+00:00",
+      "contract_fingerprint": "a752a719cea01544d1035952d27d82ad47694ce2686c54c60c84eab6248878f1",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_炭盆.png",
+      "png_sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
+      "reason": "已查看当前原始PNG：旧铁炭盆主体完整，三足与通风口结构清楚，炭火可辨；无现代部件、文字、水印或畸变，构图可供比例与手持派生。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "低位暖光来源",
+        "酒液落在盆边而非人物身上"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BRAZIER_shared_primary_定妆_道具_炭盆_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_CAKE_POLE",
       "asset_name": "炊饼担",
       "confirmed_at": "2026-08-12T03:23:53+00:00",
@@ -56,6 +84,34 @@
       "shot": "shared_primary",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_shared_primary_定妆_道具_炊饼担_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_CURTAIN_FORK",
+      "asset_name": "叉竿",
+      "confirmed_at": "2026-08-13T08:21:24+00:00",
+      "contract_fingerprint": "567f9cf67a45270cd67e9123b905fca05b6a6d9eeb02e3c3bd629f8a9711986c",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_叉竿.png",
+      "png_sha256": "00f9c0181eb896797e7e8c57f080f2341b968dfeb8ebc77672850cfe8ffb773c",
+      "reason": "已审当前原图像素：单根细长原木叉竿，顶端自然Y形分叉且叉头圆钝，可挑起窗帘而不易损布；无金属、塑料、现代伸缩结构、文字或水印。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "集尾只露局部与轻碰木檐",
+        "不提前完成相逢事件"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CURTAIN_FORK_shared_primary_定妆_道具_叉竿_compare.png",
       "verdict": "ok"
     },
     {
@@ -94,6 +150,39 @@
       "shot": "shared_primary",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DINING_TABLE_shared_primary_定妆_道具_DINING_TABLE_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_DOOR",
+      "asset_name": "武大家木门",
+      "confirmed_at": "2026-08-13T07:59:48+00:00",
+      "contract_fingerprint": "a118a18d0a42699a30f4a3c3768f8917c4a8da00ac66bd09e4e6e9f3a8f3ddec",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移",
+        "现代防盗门",
+        "现代门锁",
+        "无来源文字"
+      ],
+      "png": "出图/共享/图片/定妆_道具_场景木门.png",
+      "png_sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
+      "reason": "已审当前原图像素：单扇深色旧木板门、朴素木框与横向全木门闩结构清楚；无现代金属锁、玻璃、装饰纹样、文字或水印，符合北宋市井场景木门定妆。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "北宋小民楼屋的旧木板门",
+        "竖向门板",
+        "粗木门框与横向木闩同源",
+        "合门后不自动落闩"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DOOR_shared_primary_定妆_道具_场景木门_compare.png",
       "verdict": "ok"
     },
     {
@@ -171,6 +260,89 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_GIFT_LOAD",
+      "asset_name": "东京礼担",
+      "confirmed_at": "2026-08-13T08:11:46+00:00",
+      "contract_fingerprint": "d6c70b9027b1f75da16bdebe35ff4b09269bdec9f76518f3acb5a5466b4fad1e",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_东京礼担.png",
+      "png_sha256": "47d374cc47a4d7f07fb7c675b51b8b2340691b3e87641be89dc5bcbc75dbfe29",
+      "reason": "已审当前原图像素：弯木扁担两端对称悬挂竹编礼筐，筐上有木匣、圆盒和布包并以麻绳可靠捆扎；整体可实际肩挑，无现代礼盒、塑料或文字。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "数量与捆扎方式在 CLIP13–15 保持一致"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_GIFT_LOAD_shared_primary_定妆_道具_东京礼担_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_LUGGAGE",
+      "asset_name": "素布行李",
+      "confirmed_at": "2026-08-13T07:26:48+00:00",
+      "contract_fingerprint": "a65809f99b72f01f77795b066df261f387d5cab7a8294d7e2ccb221ab4c2b15d",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_素布行李.png",
+      "png_sha256": "e3cdc5344ecf1a1d9966f0b19db560a7dd0e3c82be4fea4280d8ff01be6de805",
+      "reason": "已查看当前原始PNG：单件粗麻素布包袱，折叠包裹与麻绳十字绑结清楚，磨损可信；无拉链、皮箱、现代扣具、文字、水印或数量漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "只含武松个人物品",
+        "绳结与背负方向固定"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_LUGGAGE_shared_primary_定妆_道具_素布行李_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_OFFICIAL_DOC",
+      "asset_name": "公文",
+      "confirmed_at": "2026-08-13T08:07:23+00:00",
+      "contract_fingerprint": "5190a7306317bd90ce1581c017001027337fe18459467777522dab2bcb830758",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_公文.png",
+      "png_sha256": "5cf63c225aed32779ed5b5b27275451402f3fc4a50affd337c87afade8af983b",
+      "reason": "已审当前原图像素：单张长幅旧纸公文，纸纤维、折痕与朱印清楚；正文保持不可读且未生成现代排版、水印或多余物件，符合后期叠字工作流。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "印章与纸张可见",
+        "正文全部后期 overlay 或保持不可读"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_OFFICIAL_DOC_shared_primary_定妆_道具_公文_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_QUARTERSTAFF",
       "asset_name": "梢棒",
       "confirmed_at": "2026-08-12T01:47:08+00:00",
@@ -234,6 +406,33 @@
       "shot": "shared_primary",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_shared_primary_定妆_道具_REWARD_SILVER_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_SPILLED_WINE",
+      "asset_name": "SPILLED WINE",
+      "confirmed_at": "2026-08-13T04:37:25+00:00",
+      "contract_fingerprint": "3070dc133338532c6f6214b4a7ac493601142de5dd949feb15749de1d9effcd4",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+      "png_sha256": "e554296ef79a3874ead671c0d89112527bae9eb3c1e77d1d3e0603a58b4848c7",
+      "reason": "已查看当前原始PNG：浅米黄透明薄酒渍，面积克制、边缘不规则并有少量滴点；无血红黏稠观感、杯体、文字或水印，与半杯酒颜色连续。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "SPILLED WINE"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_SPILLED_WINE_shared_primary_定妆_道具_SPILLED_WINE_compare.png",
       "verdict": "ok"
     },
     {
@@ -312,6 +511,33 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_WINDOW_CURTAIN",
+      "asset_name": "WINDOW CURTAIN",
+      "confirmed_at": "2026-08-13T08:16:15+00:00",
+      "contract_fingerprint": "ca8a1a80a6f87154fe2666452354d353b54bc2941017832e426a60c88581588e",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+      "png_sha256": "20b77b9553c83ca9276bcc4f122d2f5681ff3522dd2a5359b5553e95376d1a86",
+      "reason": "已审当前原图像素：两片粗麻布帘通过布袢直接系在细木杆上，材质朴素、可开合，无金属滑轨、环扣、欧式帘头或现代落地帘装饰；可作为北宋小民居室窗帘主参考。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "WINDOW CURTAIN"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_CURTAIN_shared_primary_定妆_道具_WINDOW_CURTAIN_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_WINDOW_LATTICE",
       "asset_name": "WINDOW LATTICE",
       "confirmed_at": "2026-08-12T03:35:59+00:00",
@@ -347,9 +573,39 @@
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_shared_primary_定妆_道具_WINDOW_LATTICE_compare.png",
       "verdict": "ok"
+    },
+    {
+      "asset": "PROP_WINE_CUP",
+      "asset_name": "半杯酒",
+      "confirmed_at": "2026-08-13T04:13:26+00:00",
+      "contract_fingerprint": "e162a57ef689947690bc4d2106a18ffc705ee54e4b7db6fed57d47d86166e8f1",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_半杯酒.png",
+      "png_sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
+      "reason": "已查看当前原始PNG：单只直立粗陶小酒盏，敞口矮圈足、无把无盖，浅色酒液约半杯；无泼洒、多杯、现代玻璃、文字或水印。",
+      "review_kind": "executor_visual",
+      "reviewer": "codex_executor",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "同一只杯从潘侧越线",
+        "被挡",
+        "翻落",
+        "之后保持打翻态"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINE_CUP_shared_primary_定妆_道具_半杯酒_compare.png",
+      "verdict": "ok"
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-08-12T08:15:18+00:00",
+  "updated_at": "2026-08-13T08:21:24+00:00",
   "version": 1
 }

@@ -1433,15 +1433,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_炭盆.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-13T04:38:34.905531+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_炭盆_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-13T04:38:34.905671+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_炭盆_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-13T04:38:34.905685+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -1454,7 +1472,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_炭盆.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -1493,7 +1515,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "低位暖光来源，酒液落在盆边而非人物身上。",
@@ -1504,7 +1526,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
+      "self_check_at": "2026-08-13T04:38:34+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_WINE_CUP",
@@ -1513,15 +1538,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_半杯酒.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-13T04:27:34.310106+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_半杯酒_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-13T04:27:34.310224+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_半杯酒_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-13T04:27:34.310238+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -1534,7 +1577,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_半杯酒.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -1573,7 +1620,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "同一只杯从潘侧越线、被挡、翻落，之后保持打翻态。",
@@ -1584,7 +1631,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "artifact_sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
+      "self_check_at": "2026-08-13T04:27:34+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_SPILLED_WINE",
@@ -1593,15 +1643,27 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       },
       "reference_slots": [
@@ -1614,7 +1676,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -1673,11 +1739,19 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_素布行李.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_素布行李_手持.png",
@@ -1694,7 +1768,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_素布行李.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -1753,7 +1831,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_场景木门.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_场景木门_比例.png",
@@ -1774,7 +1856,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_场景木门.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -1937,7 +2023,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_公文.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_公文_比例.png",
@@ -1958,7 +2048,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_公文.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -2017,7 +2111,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_东京礼担.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
@@ -2038,7 +2136,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_东京礼担.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -2195,7 +2297,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png",
@@ -2216,7 +2322,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -2275,7 +2385,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_叉竿.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_叉竿_比例.png",
@@ -2296,7 +2410,11 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_叉竿.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {

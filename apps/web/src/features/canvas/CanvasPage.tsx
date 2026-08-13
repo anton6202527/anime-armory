@@ -96,7 +96,7 @@ import { LineIcon } from "../../components/LineIcon";
 import { MembershipMark } from "../../components/MembershipMark";
 import { SelectMenu } from "../../components/SelectMenu";
 import { MODEL_GROUPS, getModelById } from "../../catalog/models";
-import type { ModelModality } from "../../catalog/types";
+import type { ModelDefinition, ModelModality } from "../../catalog/types";
 import { MembershipDialog } from "../account/MembershipDialog";
 import {
   StandaloneSkillWorkflowOverlay,
@@ -147,7 +147,7 @@ import {
 import { CreateSkillDialog, type CreateSkillFormValues } from "../skill-home/CreateSkillDialog";
 import { SKILLS } from "../../catalog/skills";
 import { createAgentGateway, type AgentGateway } from "../../lib/agent";
-import { discoverCanvasModels, generateCanvasContent, isCanvasGenerationError } from "../../lib/generation";
+import { discoverCanvasModels, generateCanvasContent, isCanvasGenerationError, type CanvasModel } from "../../lib/generation";
 import {
   buildDirectorSceneFromPrompt,
   createDefaultDirectorScene,
@@ -168,6 +168,7 @@ import { localFile, registerLocalFiles, removeLocalFiles } from "../../lib/local
 import { loadWork, saveWork } from "../../lib/work";
 import type {
   AgentJob,
+  AgentArtifact,
   CanvasDocument,
   CloudWorkState,
   CreationLine,
@@ -608,6 +609,43 @@ const GENERATOR_MODEL_OPTIONS = {
   ],
 } as const;
 const MAX_GENERATED_IMAGE_BYTES = 25 * 1024 * 1024;
+const MAX_AGENT_ARTIFACT_BYTES = 512 * 1024 * 1024;
+
+function artifactMimeType(artifact: AgentArtifact): string {
+  if (artifact.mimeType) return artifact.mimeType;
+  if (artifact.kind === "image") return "image/png";
+  if (artifact.kind === "video") return "video/mp4";
+  if (artifact.kind === "audio") return "audio/mpeg";
+  return "text/markdown";
+}
+
+async function agentArtifactFile(artifact: AgentArtifact): Promise<File | null> {
+  if (artifact.file) return artifact.file;
+  const mimeType = artifactMimeType(artifact);
+  let blob: Blob;
+  if (artifact.base64) {
+    if (artifact.base64.length > Math.ceil(MAX_AGENT_ARTIFACT_BYTES * 4 / 3) || !/^[a-zA-Z0-9+/]+={0,2}$/.test(artifact.base64)) return null;
+    const binary = window.atob(artifact.base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    blob = new Blob([bytes], { type: mimeType });
+  } else if (artifact.url) {
+    let parsed: URL;
+    try {
+      parsed = new URL(artifact.url, window.location.href);
+    } catch {
+      return null;
+    }
+    if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+    const response = await fetch(parsed, { credentials: "omit", redirect: "error" });
+    if (!response.ok) return null;
+    blob = await response.blob();
+  } else {
+    return null;
+  }
+  if (!blob.size || blob.size > MAX_AGENT_ARTIFACT_BYTES) return null;
+  return new File([blob], artifact.name, { type: mimeType, lastModified: Date.now() });
+}
 
 function generatorModelLabel(modelId: string) {
   return [...GENERATOR_MODEL_OPTIONS.text, ...GENERATOR_MODEL_OPTIONS.image].find((model) => model.id === modelId)?.label ?? modelId;
@@ -644,6 +682,29 @@ const CANVAS_MODALITY_LABELS: Record<ModelModality, string> = {
   video: "视频",
   audio: "音频",
 };
+
+function runtimeModelProvider(modelId: string): "OpenAI" | "Google" | "开放模型" {
+  const normalized = modelId.toLocaleLowerCase();
+  if (normalized.includes("gemini")) return "Google";
+  if (normalized.includes("gpt") || normalized.includes("dall-e")) return "OpenAI";
+  return "开放模型";
+}
+
+function runtimeModelDefinition(model: CanvasModel): ModelDefinition {
+  const provider = runtimeModelProvider(model.id);
+  return {
+    id: model.id,
+    modelId: model.id,
+    name: generatorModelLabel(model.label || model.id),
+    provider,
+    modality: model.modality,
+    description: `${provider} · 已由本机模型服务开放，可直接用于当前画布。`,
+    availability: "api",
+    tags: ["本机已连接", "可调用"],
+    recommended: true,
+    providerSpec: `${provider === "Google" ? "gemini" : "openai"}/${model.id}`,
+  };
+}
 
 function loadCanvasFavoriteSkills() {
   try {
@@ -967,7 +1028,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
   const variant = data.variant ?? (data.kind === "script" ? "script-new" : "default");
   const isLibtvSource = variant === "libtv-source" && data.kind === "text";
   const isScriptGenerator = variant === "script-new" && data.kind === "script";
-  const isLibtvGenerator = (variant === "libtv-generator" && (data.kind === "text" || data.kind === "image")) || isScriptGenerator;
+  const isLibtvGenerator = variant === "libtv-generator" || isScriptGenerator;
   const isDirector = variant === "director";
   const prompt = typeof data.prompt === "string" ? data.prompt : "";
   const resultText = typeof data.resultText === "string" ? data.resultText : "";
@@ -1113,7 +1174,10 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
         : data.resultMimeType === "image/gif"
           ? "gif"
           : "png";
-    anchor.download = data.kind === "image" ? `${data.title}.${imageExtension}` : `${data.title}.md`;
+    const mediaExtension = data.kind === "video" ? (data.resultMimeType === "video/webm" ? "webm" : "mp4")
+      : data.kind === "audio" ? (data.resultMimeType === "audio/wav" ? "wav" : data.resultMimeType === "audio/ogg" ? "ogg" : "mp3")
+        : data.kind === "image" ? imageExtension : "md";
+    anchor.download = `${data.title}.${mediaExtension}`;
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
@@ -1135,6 +1199,8 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
     </div>;
     if (data.status === "failed") return <div className="libtv-generator-error nodrag nowheel" role="alert"><strong>生成失败</strong><p>{String(data.generationError ?? "模型暂时没有返回结果，请重试。")}</p><button type="button" onClick={() => actions?.run(id)} disabled={!prompt.trim()}>重新生成</button></div>;
     if (data.kind === "image" && resultAssetUrl) return <div className="libtv-generator-image nodrag nowheel"><img src={resultAssetUrl} alt={data.title} /></div>;
+    if (data.kind === "video" && resultAssetUrl) return <div className="libtv-generator-video nodrag nowheel"><video src={resultAssetUrl} controls preload="metadata" aria-label={data.title} /></div>;
+    if (data.kind === "audio" && resultAssetUrl) return <div className="libtv-generator-audio nodrag nowheel"><Icon name="audio" /><audio src={resultAssetUrl} controls preload="metadata" aria-label={data.title} /></div>;
     if (data.kind === "text" && resultText) return <div className="libtv-generator-text nodrag nowheel"><p>{resultText}</p><i aria-hidden="true" /></div>;
     return <div className="libtv-generator-empty">
       {isScriptGenerator
@@ -2054,6 +2120,8 @@ export function CanvasPage({
   const [composerAttachmentIds, setComposerAttachmentIds] = useState<string[]>(() => (storedDocument?.work.attachments ?? work.attachments).map((attachment) => attachment.id));
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [modelModality, setModelModality] = useState<ModelModality>(creationConfig.model.modality);
+  const [runtimeModels, setRuntimeModels] = useState<ModelDefinition[]>([]);
+  const [runtimeModelsState, setRuntimeModelsState] = useState<"idle" | "loading" | "ready" | "unavailable">("idle");
   const [overviewTab, setOverviewTab] = useState<"canvas" | "assets">("canvas");
   const [overviewQuery, setOverviewQuery] = useState("");
   const [overviewSearchOpen, setOverviewSearchOpen] = useState(false);
@@ -2092,6 +2160,7 @@ export function CanvasPage({
   const activeWorkIdRef = useRef(work.id);
   const generationRequestsRef = useRef(new Map<string, string>());
   const generationAbortControllersRef = useRef(new Map<string, AbortController>());
+  const materializedAgentJobsRef = useRef(new Set<string>());
   const promptOptimizationRequestsRef = useRef(new Map<string, string>());
   const promptOptimizationAbortControllersRef = useRef(new Map<string, AbortController>());
   const nodesRef = useRef(nodes);
@@ -2240,9 +2309,9 @@ export function CanvasPage({
     if (local) return local;
     const attachment = attachmentsRef.current.find((item) => item.id === attachmentId);
     const endpoint = import.meta.env.VITE_ASSET_API_URL?.trim();
-    if (!attachment?.assetId || !endpoint || !attachment.type.startsWith("image/") || attachment.size > MAX_GENERATED_IMAGE_BYTES) return undefined;
+    if (!attachment?.assetId || !endpoint || !/^(?:image|video|audio)\//.test(attachment.type) || attachment.size > MAX_AGENT_ARTIFACT_BYTES) return undefined;
     const controller = new AbortController();
-    const timer = window.setTimeout(() => controller.abort(), 30_000);
+    const timer = window.setTimeout(() => controller.abort(), attachment.type.startsWith("image/") ? 30_000 : 120_000);
     try {
       const { AssetApiClient } = await import("@anime-armory/cloud-client");
       const client = new AssetApiClient({
@@ -2257,12 +2326,12 @@ export function CanvasPage({
         credentials: "omit",
       });
       const declaredLength = Number(response.headers.get("content-length") ?? Number.NaN);
-      if (!response.ok || (Number.isFinite(declaredLength) && declaredLength > MAX_GENERATED_IMAGE_BYTES)) {
+      if (!response.ok || (Number.isFinite(declaredLength) && declaredLength > MAX_AGENT_ARTIFACT_BYTES)) {
         await response.body?.cancel().catch(() => undefined);
-        throw new Error(`云端图片下载失败（${response.status}）`);
+        throw new Error(`云端媒体下载失败（${response.status}）`);
       }
       const blob = await response.blob();
-      if (!blob.size || blob.size > MAX_GENERATED_IMAGE_BYTES) throw new Error("云端图片为空或超过 25MB");
+      if (!blob.size || blob.size > MAX_AGENT_ARTIFACT_BYTES) throw new Error("云端媒体为空或超过 512MB");
       const file = new File([blob], attachment.name, {
         type: attachment.type || blob.type || "image/png",
         lastModified: Date.now(),
@@ -2270,7 +2339,7 @@ export function CanvasPage({
       await registerLocalFiles([{ ...attachment, file }]);
       return file;
     } catch (error) {
-      if (mountedRef.current) setNotice(`无法恢复云端图片：${error instanceof Error ? error.message : String(error)}`);
+      if (mountedRef.current) setNotice(`无法恢复云端媒体：${error instanceof Error ? error.message : String(error)}`);
       return undefined;
     } finally {
       window.clearTimeout(timer);
@@ -2342,7 +2411,20 @@ export function CanvasPage({
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
   const editingNode = editingNodeId ? nodes.find((node) => node.id === editingNodeId) ?? null : null;
-  const selectedModel = getModelById(creationConfig.model.modelId);
+  const selectableModelGroups = useMemo<Record<ModelModality, ModelDefinition[]>>(() => {
+    const groups = {} as Record<ModelModality, ModelDefinition[]>;
+    (Object.keys(MODEL_GROUPS) as ModelModality[]).forEach((modality) => {
+      const connected = runtimeModels.filter((model) => model.modality === modality);
+      const connectedIds = new Set(connected.flatMap((model) => [model.id, model.modelId ?? ""]).filter(Boolean));
+      groups[modality] = [
+        ...connected,
+        ...MODEL_GROUPS[modality].filter((model) => !connectedIds.has(model.id) && !connectedIds.has(model.modelId ?? "")),
+      ];
+    });
+    return groups;
+  }, [runtimeModels]);
+  const selectedModel = Object.values(selectableModelGroups).flat().find((model) => model.id === creationConfig.model.modelId)
+    ?? getModelById(creationConfig.model.modelId);
   const overviewNodes = useMemo(() => {
     const query = overviewQuery.trim().toLocaleLowerCase();
     return nodes
@@ -2553,6 +2635,22 @@ export function CanvasPage({
       window.clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if (composerMenu !== "model") return undefined;
+    const controller = new AbortController();
+    setRuntimeModelsState("loading");
+    void discoverCanvasModels(controller.signal).then((models) => {
+      if (controller.signal.aborted) return;
+      setRuntimeModels(models.map(runtimeModelDefinition));
+      setRuntimeModelsState("ready");
+    }).catch(() => {
+      if (controller.signal.aborted) return;
+      setRuntimeModels([]);
+      setRuntimeModelsState("unavailable");
+    });
+    return () => controller.abort();
+  }, [composerMenu]);
 
   useEffect(() => {
     if (!notice) return undefined;
@@ -4557,6 +4655,7 @@ export function CanvasPage({
     connectToAnchor?: boolean;
     variant?: WorkflowNodeVariant;
     prompt?: string;
+    data?: Partial<WorkflowNodeData>;
   }) {
     if (work.line === "comic" && kind === "video") {
       setNotice("漫画工作流不包含视频节点");
@@ -4581,6 +4680,7 @@ export function CanvasPage({
         variant,
         ...(options?.prompt !== undefined ? { prompt: options.prompt } : {}),
         ...(options?.assetName ? { assetName: options.assetName } : {}),
+        ...options?.data,
       },
     };
     setNodes((items) => [...items.map((node) => ({ ...node, selected: false })), { ...nextNode, selected: true }]);
@@ -4886,6 +4986,85 @@ export function CanvasPage({
     return attachmentId;
   }
 
+  async function materializeAgentArtifacts(job: AgentJob): Promise<number> {
+    if (materializedAgentJobsRef.current.has(job.id)) return 0;
+    const artifacts: AgentArtifact[] = job.artifacts?.length ? job.artifacts : job.output?.trim() ? [{
+      id: "agent-output",
+      kind: "text",
+      name: `${activeSkillTitle || "Skill"} 运行结果`,
+      mimeType: "text/markdown",
+      text: job.output.slice(-200_000),
+    }] : [];
+    if (!artifacts.length) return 0;
+    materializedAgentJobsRef.current.add(job.id);
+    const stageBounds = document.querySelector<HTMLElement>(".creation-canvas-stage .react-flow")?.getBoundingClientRect();
+    const screenOrigin = stageBounds
+      ? { x: stageBounds.left + Math.min(230, stageBounds.width * .2), y: stageBounds.top + 150 }
+      : { x: 160, y: 160 };
+    const flowOrigin = flowInstanceRef.current?.screenToFlowPosition(screenOrigin) ?? screenOrigin;
+    let inserted = 0;
+
+    for (const artifact of artifacts.slice(0, 100)) {
+      if (!artifact || !artifact.id || !artifact.name || !["text", "image", "video", "audio"].includes(artifact.kind)) continue;
+      let resultText = artifact.kind === "text" ? artifact.text?.trim() ?? "" : "";
+      let attachmentId = "";
+      let mimeType = artifactMimeType(artifact);
+
+      if (artifact.assetId) {
+        const attachment: DraftAttachment = {
+          id: `agent-${job.id}-${artifact.id}`,
+          name: artifact.name,
+          size: Math.max(0, artifact.size ?? 0),
+          type: mimeType,
+          assetId: artifact.assetId,
+        };
+        const nextAttachments = mergeDraftAttachments(attachmentsRef.current, [attachment]);
+        attachmentsRef.current = nextAttachments;
+        setAttachments(nextAttachments);
+        attachmentId = attachment.id;
+      } else if (!resultText || artifact.kind !== "text") {
+        const file = await agentArtifactFile(artifact).catch(() => null);
+        if (file) {
+          mimeType = file.type || mimeType;
+          if (artifact.kind === "text" && file.size <= 4 * 1024 * 1024) resultText = (await file.text()).trim();
+          else [attachmentId] = await importAssetFiles([file], false, { awaitCloud: false });
+        }
+      }
+
+      if (artifact.kind === "text" ? !resultText : !attachmentId) continue;
+      const position = {
+        x: flowOrigin.x + (inserted % 2) * 350,
+        y: flowOrigin.y + Math.floor(inserted / 2) * 270,
+      };
+      addWorkflowNode(artifact.kind, {
+        title: artifact.name,
+        description: `由 Skill 自动产出 · ${activeSkillTitle || "Agent"}`,
+        assetName: "Skill 产物 · 已自动添加",
+        variant: "libtv-generator",
+        position,
+        connectToAnchor: false,
+        data: {
+          status: "done",
+          resultText: resultText || undefined,
+          resultAttachmentId: attachmentId || undefined,
+          resultMimeType: mimeType,
+          generatedWithModel: selectedModel?.name || creationConfig.model.modelId,
+          agentJobId: job.id,
+          agentArtifactId: artifact.id,
+        },
+      });
+      inserted += 1;
+    }
+
+    if (inserted) {
+      setDrawer(null);
+      setView("workflow");
+      addActivity(`Skill 产物已自动添加到画布（${inserted} 项）`);
+      setNotice(`已将 ${inserted} 项 Skill 产物添加到左侧画布`);
+    }
+    return inserted;
+  }
+
   async function buildDirectorSceneWithModel(prompt: string, current: DirectorSceneState, signal: AbortSignal): Promise<DirectorSceneState> {
     try {
       const models = (await discoverCanvasModels(signal)).filter((model) => model.modality === "text");
@@ -5109,6 +5288,12 @@ export function CanvasPage({
       || (composerAttachments.length ? "请根据已选素材和当前画布继续创作。" : "")
       || (selectedModel ? `请使用 ${selectedModel.name} 开始创作。` : "");
     if (!gateway || !cleanPrompt || submitting) return;
+    let submissionGateway = gateway;
+    if (submissionGateway.mode === "demo") {
+      submissionGateway = await createAgentGateway();
+      if (!mountedRef.current) return;
+      setGateway(submissionGateway);
+    }
     const stageNode = nodes.find((node) => node.id !== "text-source" && (node.data.status === "ready" || node.data.status === "idle"));
     setSubmitting(true);
     setPanelOpen(true);
@@ -5127,17 +5312,17 @@ export function CanvasPage({
       if (includeCanvasContext) contextParts.push(`[画布上下文] 当前共有 ${nodes.length} 个节点、${edges.length} 条连线。`);
       if (composerAttachments.length) contextParts.push(`[本次引用素材] ${composerAttachments.map((attachment) => attachment.name).join("、")}`);
       const submittedWork = composerAttachments.length ? { ...effectiveWork, attachments: composerAttachments } : effectiveWork;
-      let current = await gateway.submit({ work: submittedWork, prompt: contextParts.join("\n\n") });
+      let current = await submissionGateway.submit({ work: submittedWork, prompt: contextParts.join("\n\n") });
       if (!mountedRef.current) return;
       setActiveJob(current);
       updateRun(current, cleanPrompt);
       addActivity("向 Agent 提交创作任务");
 
-      if (gateway.status && (current.state === "queued" || current.state === "running")) {
+      if (submissionGateway.status && (current.state === "queued" || current.state === "running")) {
         for (let attempt = 0; attempt < 300 && (current.state === "queued" || current.state === "running"); attempt += 1) {
           await new Promise((resolve) => window.setTimeout(resolve, 1200));
           if (!mountedRef.current) return;
-          current = await gateway.status(current.id);
+          current = await submissionGateway.status(current.id);
           setActiveJob(current);
           updateRun(current, cleanPrompt);
         }
@@ -5153,7 +5338,10 @@ export function CanvasPage({
           return node;
         });
       });
-      if (current.state === "succeeded") addActivity("Agent 完成创作任务");
+      if (current.state === "succeeded") {
+        addActivity("Agent 完成创作任务");
+        await materializeAgentArtifacts(current);
+      }
     } catch (error) {
       if (!mountedRef.current) return;
       const failed: AgentJob = { id: crypto.randomUUID(), state: "failed", message: error instanceof Error ? error.message : String(error) };
@@ -5788,8 +5976,20 @@ export function CanvasPage({
                     ))}
                   </div>
                   <div className="model-section-label">{CANVAS_MODALITY_LABELS[modelModality]}</div>
+                  {(modelModality === "text" || modelModality === "image") && (
+                    <div className={`model-runtime-status state-${runtimeModelsState}`}>
+                      <i />
+                      {runtimeModelsState === "loading"
+                        ? "正在读取本机开放模型…"
+                        : runtimeModelsState === "ready"
+                          ? `已连接 ${runtimeModels.filter((model) => model.modality === modelModality).length} 个可调用模型`
+                          : runtimeModelsState === "unavailable"
+                            ? "本机模型服务未连接，以下为平台候选模型"
+                            : "连接本机模型服务后会自动显示开放模型"}
+                    </div>
+                  )}
                   <div className="model-list">
-                    {MODEL_GROUPS[modelModality].map((model) => (
+                    {selectableModelGroups[modelModality].map((model) => (
                       <div key={model.id} className="model-row">
                         <button className="model-row-main" type="button" onClick={() => {
                           setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.id, ...(model.providerSpec ? { providerSpec: model.providerSpec } : {}) } }));
@@ -5800,7 +6000,7 @@ export function CanvasPage({
                         }}>
                           <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{model.name.slice(0, 1)}</span>
                           <span className="model-copy">
-                            <span className="model-name"><b>{model.name}</b>{model.premium && <span className="model-membership-mark" role="button" tabIndex={0} aria-label={`查看 ${model.name} 的会员积分方案`} onClick={(event) => { event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); } }}><MembershipMark /></span>}</span>
+                            <span className="model-name"><b>{model.name}</b>{runtimeModels.some((item) => item.id === model.id) && <em className="model-connected-badge">已连接</em>}{model.premium && <span className="model-membership-mark" role="button" tabIndex={0} aria-label={`查看 ${model.name} 的会员积分方案`} onClick={(event) => { event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); } }}><MembershipMark /></span>}</span>
                             <small>{model.description}</small>
                           </span>
                           <Plus size={16} />

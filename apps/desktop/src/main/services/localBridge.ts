@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from 'node:child_process'
 import { randomBytes, randomUUID } from 'node:crypto'
-import { createWriteStream } from 'node:fs'
+import { createReadStream, createWriteStream } from 'node:fs'
 import fsp from 'node:fs/promises'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import path from 'node:path'
@@ -18,6 +18,10 @@ const MAX_CANVAS_GENERATION_JSON_BYTES = 18 * 1024 * 1024
 const MAX_FILE_BYTES = 2 * 1024 * 1024 * 1024
 const MAX_PROMPT_CHARS = 100_000
 const MAX_JOB_OUTPUT_CHARS = 1_000_000
+const MAX_JOB_ARTIFACTS = 100
+const MAX_ARTIFACT_SCAN_FILES = 20_000
+const MAX_INLINE_TEXT_BYTES = 256 * 1024
+const MAX_ARTIFACT_BYTES = 512 * 1024 * 1024
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000
 const MAX_GLOBAL_CANVAS_GENERATIONS = 3
 const MAX_SESSION_CANVAS_GENERATIONS = 2
@@ -43,6 +47,18 @@ interface BridgeJob {
   startedAt: string
   finishedAt?: string
   process?: ChildProcess
+  baselineFiles: Map<string, string>
+  artifacts: BridgeArtifact[]
+}
+
+interface BridgeArtifact {
+  id: string
+  kind: 'text' | 'image' | 'video' | 'audio'
+  name: string
+  path: string
+  mimeType: string
+  size: number
+  text?: string
 }
 
 interface JobRequest {
@@ -141,7 +157,7 @@ function parseJobRequest(value: unknown): JobRequest {
     const rawModelId = typeof rawModel?.modelId === 'string' ? rawModel.modelId.trim() : ''
     const modelId = /^[a-zA-Z0-9._/-]{1,160}$/.test(rawModelId) ? rawModelId : ''
     const rawProviderSpec = typeof rawModel?.providerSpec === 'string' ? rawModel.providerSpec.trim() : ''
-    const providerSpec = /^(?:deepseek|gemini)\/[a-zA-Z0-9._/-]{1,180}$/.test(rawProviderSpec) ? rawProviderSpec : ''
+    const providerSpec = /^(?:deepseek|gemini|openai)\/[a-zA-Z0-9._/-]{1,180}$/.test(rawProviderSpec) ? rawProviderSpec : ''
     if (modality && modelId) creationConfig = {
       generationMode,
       model: { modality, modelId, ...(providerSpec ? { providerSpec } : {}) },
@@ -156,8 +172,7 @@ function invocation(agent: AgentInfo, prompt: string): { args: string[]; stdin?:
       return {
         args: [
           'exec',
-          '--sandbox', 'workspace-write',
-          '--ask-for-approval', 'never',
+          '--approve-for-me',
           '--skip-git-repo-check',
           '--ephemeral',
           '--color', 'never',
@@ -185,22 +200,18 @@ function agentEnvironment(): NodeJS.ProcessEnv {
   return env
 }
 
-function isDisabledWebAgentRoute(pathname: string): boolean {
-  const normalizedPath = pathname.toLowerCase()
-  return normalizedPath === '/v1/work-files'
-    || normalizedPath === '/v1/agent/jobs'
-    || normalizedPath.startsWith('/v1/agent/jobs/')
-}
-
 export class LocalBridgeService {
   private server: Server | null = null
   private sessions = new Map<string, BridgeSession>()
+  private agentSessions = new Map<string, BridgeSession>()
   private jobs = new Map<string, BridgeJob>()
   private pairingAt = new Map<string, number>()
+  private agentPairingAt = new Map<string, number>()
   private canvasGenerationsBySession = new Map<string, number>()
   private canvasGenerationTimes = new Map<string, number[]>()
   private canvasGenerationControllers = new Set<AbortController>()
   private readonly cliProxy = new CliProxyService()
+  private readonly headlessAgentAuthorization = process.env.ANIME_ARMORY_ALLOW_LOCAL_AGENT === '1'
 
   constructor(private readonly workspace: WorkspaceService) {}
 
@@ -247,11 +258,11 @@ export class LocalBridgeService {
     res.end(JSON.stringify(body))
   }
 
-  private authorize(req: IncomingMessage, origin: string): string {
+  private authorize(req: IncomingMessage, origin: string, sessions = this.sessions): string {
     const token = req.headers.authorization?.match(/^Bearer\s+(.+)$/i)?.[1]
-    const session = token ? this.sessions.get(token) : undefined
+    const session = token ? sessions.get(token) : undefined
     if (!session || session.origin !== origin || session.expiresAt <= Date.now()) {
-      if (token) this.sessions.delete(token)
+      if (token) sessions.delete(token)
       throw new BridgeHttpError(401, '本地桥接配对已失效')
     }
     return token!
@@ -275,6 +286,29 @@ export class LocalBridgeService {
     const token = randomBytes(32).toString('base64url')
     const expiresAt = Date.now() + TOKEN_TTL_MS
     this.sessions.set(token, { origin, expiresAt })
+    return { token, expiresAt: new Date(expiresAt).toISOString() }
+  }
+
+  private async pairAgent(origin: string): Promise<{ token: string; expiresAt: string }> {
+    const previous = this.agentPairingAt.get(origin) ?? 0
+    if (Date.now() - previous < 5000) throw new BridgeHttpError(429, 'Agent 授权请求过于频繁')
+    this.agentPairingAt.set(origin, Date.now())
+    if (!this.headlessAgentAuthorization) {
+      const result = await dialog.showMessageBox({
+        type: 'warning',
+        buttons: ['允许本次创作', '拒绝'],
+        defaultId: 0,
+        cancelId: 1,
+        title: '允许 LabuTV Web 运行本地 Agent',
+        message: '允许当前网页调用本机 AI Agent 执行 Skill？',
+        detail: `${origin}\n\nAgent 会接收本次选择的素材，在“创作区”当前作品目录中读写文件，并调用已安装的 Codex/Claude/OpenCode CLI。不会向网页暴露 Shell、任意文件路径或模型 API Key。授权 12 小时内有效。`,
+        noLink: true,
+      })
+      if (result.response !== 0) throw new BridgeHttpError(403, '用户拒绝了本地 Agent 授权')
+    }
+    const token = randomBytes(32).toString('base64url')
+    const expiresAt = Date.now() + TOKEN_TTL_MS
+    this.agentSessions.set(token, { origin, expiresAt })
     return { token, expiresAt: new Date(expiresAt).toISOString() }
   }
 
@@ -326,6 +360,89 @@ export class LocalBridgeService {
     job.output = `${job.output}${text}`.slice(-MAX_JOB_OUTPUT_CHARS)
   }
 
+  private artifactType(filePath: string): Pick<BridgeArtifact, 'kind' | 'mimeType'> | null {
+    const extension = path.extname(filePath).toLowerCase()
+    const types: Record<string, Pick<BridgeArtifact, 'kind' | 'mimeType'>> = {
+      '.md': { kind: 'text', mimeType: 'text/markdown' },
+      '.txt': { kind: 'text', mimeType: 'text/plain' },
+      '.json': { kind: 'text', mimeType: 'application/json' },
+      '.srt': { kind: 'text', mimeType: 'application/x-subrip' },
+      '.vtt': { kind: 'text', mimeType: 'text/vtt' },
+      '.csv': { kind: 'text', mimeType: 'text/csv' },
+      '.png': { kind: 'image', mimeType: 'image/png' },
+      '.jpg': { kind: 'image', mimeType: 'image/jpeg' },
+      '.jpeg': { kind: 'image', mimeType: 'image/jpeg' },
+      '.webp': { kind: 'image', mimeType: 'image/webp' },
+      '.gif': { kind: 'image', mimeType: 'image/gif' },
+      '.mp4': { kind: 'video', mimeType: 'video/mp4' },
+      '.webm': { kind: 'video', mimeType: 'video/webm' },
+      '.mov': { kind: 'video', mimeType: 'video/quicktime' },
+      '.wav': { kind: 'audio', mimeType: 'audio/wav' },
+      '.mp3': { kind: 'audio', mimeType: 'audio/mpeg' },
+      '.m4a': { kind: 'audio', mimeType: 'audio/mp4' },
+      '.ogg': { kind: 'audio', mimeType: 'audio/ogg' },
+    }
+    return types[extension] ?? null
+  }
+
+  private async snapshotArtifactFiles(root: string): Promise<Map<string, string>> {
+    const snapshot = new Map<string, string>()
+    const queue = [root]
+    let visited = 0
+    while (queue.length && visited < MAX_ARTIFACT_SCAN_FILES) {
+      const directory = queue.shift()!
+      const entries = await fsp.readdir(directory, { withFileTypes: true }).catch(() => [])
+      for (const entry of entries) {
+        if (visited++ >= MAX_ARTIFACT_SCAN_FILES) break
+        if (entry.name.startsWith('.') || entry.name === '源本' || entry.name === 'node_modules' || entry.name === '__pycache__') continue
+        const absolute = path.join(directory, entry.name)
+        if (entry.isDirectory()) {
+          queue.push(absolute)
+          continue
+        }
+        if (!entry.isFile() || !this.artifactType(absolute)) continue
+        const stat = await fsp.stat(absolute).catch(() => null)
+        if (!stat) continue
+        snapshot.set(path.relative(root, absolute), `${stat.size}:${stat.mtimeMs}`)
+      }
+    }
+    return snapshot
+  }
+
+  private async collectJobArtifacts(job: BridgeJob): Promise<void> {
+    const current = await this.snapshotArtifactFiles(job.workDir)
+    const changed = [...current.entries()]
+      .filter(([relative, signature]) => job.baselineFiles.get(relative) !== signature)
+      .filter(([relative]) => !['_web任务.md', '_meta.json', '_进度.md', '_设置.md'].includes(path.basename(relative)))
+      .sort(([left], [right]) => {
+        const leftKind = this.artifactType(left)?.kind
+        const rightKind = this.artifactType(right)?.kind
+        const rank = (kind: BridgeArtifact['kind'] | undefined) => kind === 'text' ? 1 : 0
+        return rank(leftKind) - rank(rightKind) || left.localeCompare(right, 'zh-CN')
+      })
+      .slice(0, MAX_JOB_ARTIFACTS)
+    const artifacts: BridgeArtifact[] = []
+    for (const [relative] of changed) {
+      const absolute = path.resolve(job.workDir, relative)
+      if (!absolute.startsWith(`${path.resolve(job.workDir)}${path.sep}`)) continue
+      const type = this.artifactType(absolute)
+      const stat = await fsp.stat(absolute).catch(() => null)
+      if (!type || !stat?.isFile() || !stat.size || stat.size > MAX_ARTIFACT_BYTES) continue
+      const artifact: BridgeArtifact = {
+        id: randomUUID(),
+        ...type,
+        name: path.basename(relative),
+        path: absolute,
+        size: stat.size,
+      }
+      if (type.kind === 'text' && stat.size <= MAX_INLINE_TEXT_BYTES) {
+        artifact.text = await fsp.readFile(absolute, 'utf8').catch(() => '')
+      }
+      artifacts.push(artifact)
+    }
+    job.artifacts = artifacts
+  }
+
   private async startJob(request: JobRequest): Promise<BridgeJob> {
     const agents = (await detectAgents()).filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id))
     const agent = request.agentId
@@ -345,6 +462,7 @@ export class LocalBridgeService {
           ? `用户选择的模型：${request.creationConfig.model.modelId}`
           : '',
       '只修改当前作品目录；如需创作流程说明，先读取技能仓库 skills/README.md 并使用对应系列 skill。',
+      '把面向用户的文字、图片、音频和视频成品实际写入当前作品目录；任务结束后系统会自动识别本次新增或更新的产物并送回 Web 画布。',
       '',
       '用户需求：',
       request.prompt,
@@ -361,6 +479,7 @@ export class LocalBridgeService {
     }, null, 2), 'utf8')
 
     const command = invocation(agent, fullPrompt)
+    const baselineFiles = await this.snapshotArtifactFiles(workDir)
     const child = spawn(agent.path, command.args, {
       cwd: workDir,
       env: agentEnvironment(),
@@ -376,6 +495,8 @@ export class LocalBridgeService {
       output: '',
       startedAt: new Date().toISOString(),
       process: child,
+      baselineFiles,
+      artifacts: [],
     }
     this.jobs.set(job.id, job)
     child.stdout?.on('data', (chunk: Buffer) => this.appendOutput(job, chunk.toString('utf8')))
@@ -388,10 +509,16 @@ export class LocalBridgeService {
     })
     child.on('exit', (code, signal) => {
       if (job.state === 'cancelled') return
-      job.state = code === 0 ? 'succeeded' : 'failed'
-      job.message = code === 0 ? `${agent.name} 已完成` : `${agent.name} 退出（${signal ?? code ?? 'unknown'}）`
-      job.finishedAt = new Date().toISOString()
-      delete job.process
+      void this.collectJobArtifacts(job).catch((error: unknown) => {
+        this.appendOutput(job, `\n[产物收集失败] ${error instanceof Error ? error.message : String(error)}\n`)
+      }).finally(() => {
+        job.state = code === 0 ? 'succeeded' : 'failed'
+        job.message = code === 0
+          ? `${agent.name} 已完成${job.artifacts.length ? `，发现 ${job.artifacts.length} 项产物` : ''}`
+          : `${agent.name} 退出（${signal ?? code ?? 'unknown'}）`
+        job.finishedAt = new Date().toISOString()
+        delete job.process
+      })
     })
     if (command.stdin) child.stdin?.end(command.stdin)
     else child.stdin?.end()
@@ -406,6 +533,7 @@ export class LocalBridgeService {
       agentId: job.agentId,
       output: job.output,
       workDir: job.workDir,
+      artifacts: job.artifacts.map(({ path: _path, ...artifact }) => artifact),
       startedAt: job.startedAt,
       ...(job.finishedAt ? { finishedAt: job.finishedAt } : {}),
     }
@@ -458,12 +586,13 @@ export class LocalBridgeService {
     }
     const url = new URL(req.url ?? '/', `http://${BRIDGE_HOST}:${LOCAL_BRIDGE_PORT}`)
     if (req.method === 'GET' && url.pathname === '/v1/status') {
+      const agents = (await detectAgents()).filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id))
       this.json(res, 200, {
         service: 'anime-armory-local-bridge',
-        version: 2,
+        version: 3,
         requiresPairing: true,
-        capabilities: { canvasGeneration: true, localAgentJobs: false },
-        agents: [],
+        capabilities: { canvasGeneration: true, localAgentJobs: agents.length > 0 },
+        agents: agents.map(({ id, name }) => ({ id, name })),
       }, origin)
       return
     }
@@ -471,42 +600,59 @@ export class LocalBridgeService {
       this.json(res, 200, await this.pair(origin), origin)
       return
     }
-
-    const sessionToken = this.authorize(req, origin)
+    if (req.method === 'POST' && url.pathname === '/v1/agent/pair') {
+      this.json(res, 200, await this.pairAgent(origin), origin)
+      return
+    }
     if (req.method === 'GET' && url.pathname === '/v1/canvas/models') {
+      this.authorize(req, origin)
       this.json(res, 200, await this.cliProxy.discoverCanvasModels(), origin)
       return
     }
     if (req.method === 'POST' && url.pathname === '/v1/canvas/generate') {
+      const sessionToken = this.authorize(req, origin)
       const value = await readJson(req, MAX_CANVAS_GENERATION_JSON_BYTES)
       this.json(res, 200, await this.generateCanvas(req, res, sessionToken, value), origin)
       return
     }
     if (req.method === 'GET' && url.pathname.toLowerCase() === '/v1/agents') {
-      this.json(res, 200, { agents: [] }, origin)
-      return
-    }
-    // A paired Web origin may call models only. Keep this denial ahead of every legacy
-    // Agent/file handler so model credentials never share a trust boundary with a local CLI.
-    if (isDisabledWebAgentRoute(url.pathname)) {
-      throw new BridgeHttpError(410, '本地桥接不再向网页开放 Agent、Shell 或文件上传能力')
-    }
-    if (req.method === 'GET' && url.pathname === '/v1/agents') {
+      this.authorize(req, origin, this.agentSessions)
       const agents = await detectAgents()
       this.json(res, 200, { agents: agents.filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id)) }, origin)
       return
     }
     if (req.method === 'POST' && url.pathname === '/v1/work-files') {
+      this.authorize(req, origin, this.agentSessions)
       this.json(res, 201, await this.saveFile(req, this.parseFileHeaders(req)), origin)
       return
     }
     if (req.method === 'POST' && url.pathname === '/v1/agent/jobs') {
+      this.authorize(req, origin, this.agentSessions)
       const job = await this.startJob(parseJobRequest(await readJson(req)))
       this.json(res, 202, this.publicJob(job), origin)
       return
     }
+    const artifactMatch = url.pathname.match(/^\/v1\/agent\/jobs\/([0-9a-f-]+)\/artifacts\/([0-9a-f-]+)$/i)
+    if (req.method === 'GET' && artifactMatch?.[1] && artifactMatch[2]) {
+      this.authorize(req, origin, this.agentSessions)
+      const job = this.jobs.get(uuid(artifactMatch[1], 'jobId'))
+      const artifact = job?.artifacts.find((item) => item.id === uuid(artifactMatch[2], 'artifactId'))
+      if (!job || !artifact) throw new BridgeHttpError(404, '本地产物不存在')
+      const resolved = path.resolve(artifact.path)
+      if (!resolved.startsWith(`${path.resolve(job.workDir)}${path.sep}`)) throw new BridgeHttpError(403, '产物路径越界')
+      this.cors(res, origin)
+      res.writeHead(200, {
+        'content-type': artifact.mimeType,
+        'content-length': String(artifact.size),
+        'cache-control': 'no-store',
+        'content-disposition': `inline; filename*=UTF-8''${encodeURIComponent(artifact.name)}`,
+      })
+      createReadStream(resolved).pipe(res)
+      return
+    }
     const jobMatch = url.pathname.match(/^\/v1\/agent\/jobs\/([0-9a-f-]+)$/i)
     if (req.method === 'GET' && jobMatch?.[1]) {
+      this.authorize(req, origin, this.agentSessions)
       const job = this.jobs.get(uuid(jobMatch[1], 'jobId'))
       if (!job) throw new BridgeHttpError(404, '本地任务不存在')
       this.json(res, 200, this.publicJob(job), origin)
@@ -514,6 +660,7 @@ export class LocalBridgeService {
     }
     const cancelMatch = url.pathname.match(/^\/v1\/agent\/jobs\/([0-9a-f-]+)\/cancel$/i)
     if (req.method === 'POST' && cancelMatch?.[1]) {
+      this.authorize(req, origin, this.agentSessions)
       const job = this.jobs.get(uuid(cancelMatch[1], 'jobId'))
       if (!job) throw new BridgeHttpError(404, '本地任务不存在')
       if (job.state === 'running') {
@@ -562,6 +709,7 @@ export class LocalBridgeService {
     for (const job of this.jobs.values()) job.process?.kill('SIGTERM')
     this.jobs.clear()
     this.sessions.clear()
+    this.agentSessions.clear()
     this.canvasGenerationControllers.forEach((controller) => controller.abort())
     this.canvasGenerationControllers.clear()
     this.canvasGenerationsBySession.clear()

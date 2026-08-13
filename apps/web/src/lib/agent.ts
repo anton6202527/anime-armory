@@ -3,7 +3,7 @@ import { getSupabaseAccessToken } from "./cloud";
 import { localFile } from "./localFiles";
 
 const LOCAL_BRIDGE_URL = "http://127.0.0.1:43117/v1";
-const LOCAL_BRIDGE_TOKEN_KEY = "anime-armory.local-bridge-token";
+const LOCAL_AGENT_TOKEN_KEY = "anime-armory.local-agent-token";
 
 export interface SubmitAgentJobInput {
   work: WebWork;
@@ -21,6 +21,7 @@ interface LocalBridgeStatus {
   service: string;
   version: number;
   agents: Array<{ id: string; name: string }>;
+  capabilities?: { canvasGeneration?: boolean; localAgentJobs?: boolean };
 }
 
 async function responseJson<T>(response: Response): Promise<T> {
@@ -52,20 +53,21 @@ class LocalAgentGateway implements AgentGateway {
   readonly label: string;
 
   constructor(private readonly statusInfo: LocalBridgeStatus) {
-    this.label = statusInfo.agents[0]?.name ? `本地 · ${statusInfo.agents[0].name}` : "本地 Agent";
+    const preferred = statusInfo.agents.find((agent) => agent.id === "codex") ?? statusInfo.agents[0];
+    this.label = preferred?.name ? `本地 · ${preferred.name}` : "本地 Agent";
   }
 
   private async token(forcePair = false): Promise<string> {
     if (!forcePair) {
-      const stored = sessionStorage.getItem(LOCAL_BRIDGE_TOKEN_KEY);
+      const stored = sessionStorage.getItem(LOCAL_AGENT_TOKEN_KEY);
       if (stored) return stored;
     }
-    const paired = await responseJson<{ token: string }>(await fetch(`${LOCAL_BRIDGE_URL}/pair`, {
+    const paired = await responseJson<{ token: string }>(await fetch(`${LOCAL_BRIDGE_URL}/agent/pair`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{}",
     }));
-    sessionStorage.setItem(LOCAL_BRIDGE_TOKEN_KEY, paired.token);
+    sessionStorage.setItem(LOCAL_AGENT_TOKEN_KEY, paired.token);
     return paired.token;
   }
 
@@ -75,7 +77,7 @@ class LocalAgentGateway implements AgentGateway {
     headers.set("authorization", `Bearer ${token}`);
     const response = await fetch(`${LOCAL_BRIDGE_URL}${path}`, { ...init, headers });
     if (response.status === 401 && retry) {
-      sessionStorage.removeItem(LOCAL_BRIDGE_TOKEN_KEY);
+      sessionStorage.removeItem(LOCAL_AGENT_TOKEN_KEY);
       await this.token(true);
       return this.authorizedFetch(path, init, false);
     }
@@ -113,14 +115,27 @@ class LocalAgentGateway implements AgentGateway {
         line: input.work.line,
         prompt: input.prompt,
         creationConfig: input.work.creationConfig,
-        agentId: this.statusInfo.agents[0]?.id,
+        agentId: this.statusInfo.agents.find((agent) => agent.id === "codex")?.id ?? this.statusInfo.agents[0]?.id,
       }),
     });
     return responseJson<AgentJob>(response);
   }
 
+  private async withArtifactFiles(job: AgentJob): Promise<AgentJob> {
+    if (!job.artifacts?.length) return job;
+    const artifacts = await Promise.all(job.artifacts.map(async (artifact) => {
+      if (artifact.text || artifact.url || artifact.base64 || artifact.assetId || artifact.file) return artifact;
+      const response = await this.authorizedFetch(`/agent/jobs/${job.id}/artifacts/${artifact.id}`);
+      if (!response.ok) return artifact;
+      const blob = await response.blob();
+      if (!blob.size) return artifact;
+      return { ...artifact, file: new File([blob], artifact.name, { type: artifact.mimeType || blob.type, lastModified: Date.now() }) };
+    }));
+    return { ...job, artifacts };
+  }
+
   async status(jobId: string): Promise<AgentJob> {
-    return responseJson<AgentJob>(await this.authorizedFetch(`/agent/jobs/${jobId}`));
+    return this.withArtifactFiles(await responseJson<AgentJob>(await this.authorizedFetch(`/agent/jobs/${jobId}`)));
   }
 }
 
@@ -156,11 +171,10 @@ class DemoAgentGateway implements AgentGateway {
   readonly label = "演示模式";
 
   async submit(): Promise<AgentJob> {
-    await new Promise((resolve) => window.setTimeout(resolve, 420));
     return {
       id: crypto.randomUUID(),
-      state: "queued",
-      message: "未检测到本地桥接；配置云端 API 后会由云端 Agent 执行。",
+      state: "failed",
+      message: "未连接可执行 Skill 的本地 Agent 或云端服务；任务未提交。请启动最新版桌面端并授权本地 Agent。",
       estimatedTokens: 0,
     };
   }
@@ -168,7 +182,7 @@ class DemoAgentGateway implements AgentGateway {
 
 export async function createAgentGateway(): Promise<AgentGateway> {
   const bridge = await probeLocalBridge();
-  if (bridge?.agents.length) return new LocalAgentGateway(bridge);
+  if (bridge?.capabilities?.localAgentJobs && bridge.agents.length) return new LocalAgentGateway(bridge);
   const cloudUrl = import.meta.env.VITE_AGENT_API_URL?.trim();
   return cloudUrl ? new CloudAgentGateway(cloudUrl) : new DemoAgentGateway();
 }

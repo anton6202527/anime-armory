@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-08-12T08:28:29+00:00
-- 事件日志：`/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl`
+- 生成时间：2026-08-13T08:32:41+00:00
+- 事件日志：`创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 455 | — | 3h24m18s | 151 | 0 | 115 | 129 | 82.8% | 0.0% |
+| 10 | 400 | — | 4h25m25s | 198 | 0 | 49 | 103 | 82.8% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 2m26s | — | 3h24m18s | 50.3% | 0.0% | 0 | — | — | — | — |
+| 2m26s | — | 4h25m25s | 50.0% | 0.0% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.8543 | 0.7616 | 0 | 0.0% |
+| 0.5202 | 0.2475 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,7 +28,7 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 50.3% | 90.0% | ⚠️ 差距 |
+| 一次通过率 | 50.0% | 90.0% | ⚠️ 差距 |
 | 重抽率 | 0.0% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
@@ -47,7 +47,7 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 3h24m18s | 50.3% | 0.0% | — | 115 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 4h25m25s | 50.0% | 0.0% | — | 49 | — | — | — | — | — | — |
 | 第2集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -60,11 +60,11 @@
 
 ## 最新阻断
 
-- 第1集 / image_preflight / 预防式合同: BEAST_TIGER/战败态 — reference_slot_gate: 核心/出场角色 BEAST_TIGER/战败态 引用槽位未绑定真实产物：出图/共享/图片/定妆_BEAST_TIGER__常态.png 不存在；出图/共享/图片/定妆_BEAST_TIGER__常态.png 不存在；出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: BEAST_TIGER/扑击态 — reference_slot_gate: 核心/出场角色 BEAST_TIGER/扑击态 引用槽位未绑定真实产物：出图/共享/图片/定妆_BEAST_TIGER__常态.png 不存在；出图/共享/图片/定妆_BEAST_TIGER__常态.png 不存在；出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: CHAR_MAGISTRATE — reference_slot_gate: 核心/出场角色 CHAR_MAGISTRATE 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png 不存在；出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png 不存在；出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: CHAR_PANJINLIAN — reference_slot_gate: 核心/出场角色 CHAR_PANJINLIAN 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png 不存在；出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png 不存在；出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: CHAR_WUDA — reference_slot_gate: 核心/出场角色 CHAR_WUDA 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png 不存在；出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png 不存在；出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: CHAR_WUSONG — reference_slot_gate: 核心/出场角色 CHAR_WUSONG 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 不存在；出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 不存在；出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: CHAR_XIMENQING — reference_slot_gate: 核心/出场角色 CHAR_XIMENQING 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 不存在；出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 不存在；出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png 不存在
-- 第1集 / image_preflight / 预防式合同: CROWD_HUNTERS/群像 — reference_slot_gate: 核心/出场角色 CROWD_HUNTERS/群像 引用槽位未绑定真实产物：出图/共享/图片/定妆_CROWD_HUNTERS__常态.png 不存在；出图/共享/图片/定妆_CROWD_HUNTERS__常态.png 不存在；出图/共享/图片/定妆_CROWD_HUNTERS__常态_手部局部.png 不存在
+- 第1集 / image_preflight / 预防式合同: CROWD_HUNTERS/群像 — reference_slot_gate: 核心/出场角色 CROWD_HUNTERS/群像 引用槽位未绑定真实产物：出图/共享/图片/定妆_CROWD_HUNTERS__常态_手部局部.png 不存在；出图/共享/图片/定妆_CROWD_HUNTERS__常态_布料局部.png 不存在；出图/共享/图片/定妆_CROWD_HUNTERS__常态_手部局部.png 不存在
+- 第1集 / image_preflight / 预防式合同: LOC_CITY_GATE — reference_slot_gate: 道具/场景 LOC_CITY_GATE 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_阳谷城门清晨.png 不存在；出图/共享/图片/定妆_场景_阳谷城门清晨.png 不存在；出图/共享/图片/定妆_场景_阳谷城门清晨.png 不存在
+- 第1集 / image_preflight / 预防式合同: LOC_COUNTY_YAMEN — reference_slot_gate: 道具/场景 LOC_COUNTY_YAMEN 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_县衙案厅.png 不存在；出图/共享/图片/定妆_场景_县衙案厅.png 不存在；出图/共享/图片/定妆_场景_县衙案厅.png 不存在
+- 第1集 / image_preflight / 预防式合同: LOC_JINGYANGGANG — reference_slot_gate: 道具/场景 LOC_JINGYANGGANG 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png 不存在
+- 第1集 / image_preflight / 预防式合同: LOC_YANGGU_STREET — reference_slot_gate: 道具/场景 LOC_YANGGU_STREET 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png 不存在
+- 第1集 / image_preflight / 预防式合同: PROP_BRAZIER — reference_slot_gate: 道具/场景 PROP_BRAZIER 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_炭盆.png 不存在；出图/共享/图片/定妆_道具_炭盆.png 不存在；出图/共享/图片/定妆_道具_炭盆_比例.png 不存在
+- 第1集 / image_preflight / 预防式合同: PROP_CURTAIN_FORK — reference_slot_gate: 道具/场景 PROP_CURTAIN_FORK 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_叉竿.png 不存在；出图/共享/图片/定妆_道具_叉竿.png 不存在；出图/共享/图片/定妆_道具_叉竿_比例.png 不存在
+- 第1集 / image_preflight / 预防式合同: PROP_DOOR — reference_slot_gate: 道具/场景 PROP_DOOR 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_场景木门.png 不存在；出图/共享/图片/定妆_道具_场景木门.png 不存在；出图/共享/图片/定妆_道具_场景木门_比例.png 不存在

@@ -25,7 +25,11 @@ Electron 启动后会在 `127.0.0.1:43117` 提供仅回环可见的 Web 桥接�
 
 本地开发默认只允许 Web 端的 `localhost:4174` 与 `127.0.0.1:4174`。正式 Web 域名需通过逗号分隔的 `ANIME_ARMORY_WEB_ORIGINS` 显式加入允许列表。Web 端 Agent 任务继续走云端 API 或演示模式，不复用这个持有模型密钥的本地桥接。
 
-画布内的文本/图片即时生成也走同一个已配对桥接，浏览器不会直接访问模型服务。桌面主进程通过 OpenAI-compatible `cli-proxy-api` 调用 `/v1/models`、`/v1/responses` 与 `/v1/images/generations`，仅在上游明确不支持 Responses 时回退 `/v1/chat/completions`，并只向 Web 暴露发现到的 GPT 文本/图片模型。运行桌面端前配置：
+画布内的文本/图片即时生成也走同一个已配对桥接，浏览器不会直接访问模型服务。桌面主进程通过 OpenAI-compatible `cli-proxy-api` 调用 `/v1/models`、`/v1/responses` 与 `/v1/images/generations`，仅在上游明确不支持 Responses 时回退 `/v1/chat/completions`，并只向 Web 暴露发现到的 GPT / Gemini 文本与图片模型。运行桌面端前配置：
+
+完整 Skill 任务使用独立的本地 Agent 授权。网页第一次提交时，桌面端会明确提示当前 Origin、作品目录读写范围和将调用的本机 Agent；同意后才开放素材上传、任务提交、状态查询及本次任务产物下载，授权与模型调用配对 token 相互隔离。网页不能提供 Shell 命令、工作目录或任意文件路径。任务完成后，桥接只扫描当前作品目录内本次新增/更新的文字、图片、音频和视频产物，并把受限产物清单返回画布。
+
+仅自动化测试可在启动桌面端前设置 `ANIME_ARMORY_ALLOW_LOCAL_AGENT=1` 跳过原生授权弹窗；普通启动不得设置此变量。
 
 ```bash
 export CLI_PROXY_API_URL=http://127.0.0.1:8317

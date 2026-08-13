@@ -78,8 +78,8 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-08-11T12:02:11+0800",
-  "graph_hash": "0657cfcc23bba4158229b87370d0033ab80b4247504467060c7bc1d1f6df1cc5",
+  "generated_at": "2026-08-13T11:49:47+0800",
+  "graph_hash": "e6c3d15e85183e39b1af804152e61a3397e1a80d2f4d2879e65e9d3ca14036de",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -113,7 +113,7 @@
     },
     {
       "clip": "Clip_05",
-      "duration_sec": 8.37,
+      "duration_sec": 8.67,
       "id": "clip:Clip_05",
       "scene": "LOC_YANGGU_STREET→LOC_WUDA_HOME/日",
       "type": "story_clip"
@@ -127,14 +127,14 @@
     },
     {
       "clip": "Clip_07",
-      "duration_sec": 12.577,
+      "duration_sec": 12.677,
       "id": "clip:Clip_07",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_08",
-      "duration_sec": 9.482,
+      "duration_sec": 10.228,
       "id": "clip:Clip_08",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
@@ -169,7 +169,7 @@
     },
     {
       "clip": "Clip_13",
-      "duration_sec": 7.746,
+      "duration_sec": 7.946,
       "id": "clip:Clip_13",
       "scene": "LOC_COUNTY_YAMEN/日/内",
       "type": "story_clip"
@@ -197,10 +197,10 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
   "source_files": [
     {
-      "bytes": 109653,
+      "bytes": 120432,
       "path": "脚本/第1集/storyboard.json",
       "role": "storyboard",
-      "sha256": "d17999c76b6808fdca05889797ea061b3f15d53336756802f965b61a291a0f65"
+      "sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
     }
   ],
   "status": "pass",

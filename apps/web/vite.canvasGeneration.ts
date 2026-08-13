@@ -23,7 +23,9 @@ const TEXT_TIMEOUT_MS = 90_000;
 const IMAGE_TIMEOUT_MS = 180_000;
 const MODEL_ID_PATTERN = /^[a-zA-Z0-9._:/-]{1,160}$/;
 const GPT_MODEL_PATTERN = /^(?:[a-z0-9._-]+\/)*gpt(?:-|$)/i;
+const GEMINI_MODEL_PATTERN = /^(?:[a-z0-9._-]+\/)*gemini(?:-|$)/i;
 const GPT_IMAGE_MODEL_PATTERN = /(?:^|\/)gpt-image(?:-|$)|(?:^|\/)dall-e(?:-|$)/i;
+const GEMINI_IMAGE_MODEL_PATTERN = /(?:^|\/)gemini[^/]*(?:image|banana)/i;
 const ASPECT_RATIOS = new Set(["1:1", "2:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16"]);
 
 type CanvasGenerationModality = "text" | "image";
@@ -469,8 +471,8 @@ class ViteCanvasGenerationService {
       const id = typeof (raw as Record<string, unknown>).id === "string"
         ? ((raw as Record<string, unknown>).id as string).trim()
         : "";
-      if (!MODEL_ID_PATTERN.test(id) || !GPT_MODEL_PATTERN.test(id) || seen.has(id)) continue;
-      const modality: CanvasGenerationModality = GPT_IMAGE_MODEL_PATTERN.test(id) ? "image" : "text";
+      if (!MODEL_ID_PATTERN.test(id) || (!GPT_MODEL_PATTERN.test(id) && !GEMINI_MODEL_PATTERN.test(id)) || seen.has(id)) continue;
+      const modality: CanvasGenerationModality = GPT_IMAGE_MODEL_PATTERN.test(id) || GEMINI_IMAGE_MODEL_PATTERN.test(id) ? "image" : "text";
       seen.add(id);
       models.push({ id, label: id, modality, provider: "cli-proxy-api" });
     }

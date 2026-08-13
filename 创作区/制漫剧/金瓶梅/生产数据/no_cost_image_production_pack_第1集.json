@@ -133,50 +133,50 @@
       {
         "kind": "reference_anchor",
         "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
-        "slot": "front"
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG_28岁打虎态_action_pose_pack.png",
+        "slot": "action_pose_pack"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png",
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
         "slot": "three_quarter"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png",
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
         "slot": "side"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png",
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
         "slot": "rear_three_quarter"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png",
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
         "slot": "back"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png",
-        "slot": "turnaround"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
-        "slot": "face_anchor_refs"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
         "slot": "expression_bank"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER_常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+        "slot": "side"
       }
     ],
     "episode": "第1集",
@@ -498,294 +498,6 @@
   ],
   "reference_generation_queue": [
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "834bc9b988cca1af",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_001"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "3e88836494c90179",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_002"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "64c35c7e4976a93b",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_003"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5903a90137fee9a1",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_004"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "254fabf39d2a816a",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_005"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-            "scope": "character",
-            "slot": "turnaround"
-          }
-        ],
-        "slot": "turnaround",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "fee00dd11490ad04",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-          "scope": "character",
-          "slot": "turnaround"
-        }
-      ],
-      "scope": "character",
-      "slot": "turnaround",
-      "task_id": "REF_006"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          }
-        ],
-        "slot": "face_anchor_refs",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "284875ffadc69a73",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        }
-      ],
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_008"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-            "scope": "character",
-            "slot": "expression_bank"
-          }
-        ],
-        "slot": "expression_bank",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "70a3a2a1ff12c6e7",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-          "scope": "character",
-          "slot": "expression_bank"
-        }
-      ],
-      "scope": "character",
-      "slot": "expression_bank",
-      "task_id": "REF_009"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_CHAR_WUSONG_28岁打虎态_action_pose_pack.png",
       "owner": "CHAR_WUSONG/28岁打虎态",
       "priority": "P0",
@@ -820,42 +532,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_010"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-      "owner": "BEAST_TIGER/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "BEAST_TIGER/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e41f9273acd028e1",
-      "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_011"
     },
     {
       "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
@@ -1007,14 +683,8 @@
       "priority": "P0",
       "prompt_recipe": {
         "owner": "BEAST_TIGER/常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
+        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
         "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          },
           {
             "owner": "BEAST_TIGER/常态",
             "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
@@ -1022,7 +692,7 @@
             "slot": "expression_bank"
           }
         ],
-        "slot": "face_anchor_refs",
+        "slot": "expression_bank",
         "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
       },
       "qc_required": [
@@ -1030,14 +700,8 @@
         "no_logo_text",
         "identity_or_asset_match"
       ],
-      "recipe_hash": "e60f4a0b333998be",
+      "recipe_hash": "929bace60084237a",
       "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        },
         {
           "owner": "BEAST_TIGER/常态",
           "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
@@ -1046,8 +710,8 @@
         }
       ],
       "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_017"
+      "slot": "expression_bank",
+      "task_id": "REF_018"
     },
     {
       "output_path": "出图/共享/图片/定妆_BEAST_TIGER_常态_action_pose_pack.png",
@@ -1084,78 +748,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_019"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "8492a5d20a4f263b",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_020"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "c978f9d6ed41240c",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_021"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
@@ -1266,78 +858,6 @@
       "task_id": "REF_024"
     },
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          }
-        ],
-        "slot": "face_anchor_refs",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "c37b393d0fc26005",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        }
-      ],
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_026"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-            "scope": "character",
-            "slot": "expression_bank"
-          }
-        ],
-        "slot": "expression_bank",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "30b657421d25025d",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-          "scope": "character",
-          "slot": "expression_bank"
-        }
-      ],
-      "scope": "character",
-      "slot": "expression_bank",
-      "task_id": "REF_027"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_CHAR_WUDA_日常卖饼态_action_pose_pack.png",
       "owner": "CHAR_WUDA/日常卖饼态",
       "priority": "P0",
@@ -1374,294 +894,6 @@
       "task_id": "REF_028"
     },
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "3af484cf3463ba69",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_029"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "4c7e1eb0b1c289b0",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_030"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "d45ce1c840c1d08d",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_031"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "4857eab0249ce0b3",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_032"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "4eab4c4c21cb287c",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_033"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-            "scope": "character",
-            "slot": "turnaround"
-          }
-        ],
-        "slot": "turnaround",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "4d2bf5946b9c03e6",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-          "scope": "character",
-          "slot": "turnaround"
-        }
-      ],
-      "scope": "character",
-      "slot": "turnaround",
-      "task_id": "REF_034"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          }
-        ],
-        "slot": "face_anchor_refs",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "85ceab501133dc32",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        }
-      ],
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_036"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-            "scope": "character",
-            "slot": "expression_bank"
-          }
-        ],
-        "slot": "expression_bank",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "17dbb133df916485",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-          "scope": "character",
-          "slot": "expression_bank"
-        }
-      ],
-      "scope": "character",
-      "slot": "expression_bank",
-      "task_id": "REF_037"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN_25岁武大家常态_action_pose_pack.png",
       "owner": "CHAR_PANJINLIAN/25岁武大家常态",
       "priority": "P0",
@@ -1696,42 +928,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_038"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "530baf86beb71369",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_039"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
@@ -1914,54 +1110,6 @@
       "task_id": "REF_044"
     },
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          },
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-            "scope": "character",
-            "slot": "expression_bank"
-          }
-        ],
-        "slot": "face_anchor_refs",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7a9eba202c0a8206",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        },
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-          "scope": "character",
-          "slot": "expression_bank"
-        }
-      ],
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_046"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_action_pose_pack.png",
       "owner": "CHAR_MAGISTRATE/常态",
       "priority": "P0",
@@ -1996,42 +1144,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_048"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-      "owner": "CHAR_XIMENQING/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_XIMENQING/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "d2cd4a6fad54985b",
-      "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_049"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
@@ -2183,14 +1295,8 @@
       "priority": "P0",
       "prompt_recipe": {
         "owner": "CHAR_XIMENQING/常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
+        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
         "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          },
           {
             "owner": "CHAR_XIMENQING/常态",
             "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
@@ -2198,7 +1304,7 @@
             "slot": "expression_bank"
           }
         ],
-        "slot": "face_anchor_refs",
+        "slot": "expression_bank",
         "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
       },
       "qc_required": [
@@ -2206,14 +1312,8 @@
         "no_logo_text",
         "identity_or_asset_match"
       ],
-      "recipe_hash": "a5f63ada9dca2ccc",
+      "recipe_hash": "8ad1ef6889764d77",
       "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        },
         {
           "owner": "CHAR_XIMENQING/常态",
           "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
@@ -2222,8 +1322,8 @@
         }
       ],
       "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_055"
+      "slot": "expression_bank",
+      "task_id": "REF_056"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING_常态_action_pose_pack.png",
@@ -3342,78 +2442,6 @@
       "task_id": "REF_164"
     },
     {
-      "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-      "owner": "LOC_JINGYANGGANG",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_JINGYANGGANG",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "wide_plate"
-          }
-        ],
-        "slot": "wide_plate",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "265e794b1702d40f",
-      "satisfies": [
-        {
-          "owner": "LOC_JINGYANGGANG",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "wide_plate"
-        }
-      ],
-      "scope": "asset",
-      "slot": "wide_plate",
-      "task_id": "REF_058"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-      "owner": "LOC_JINGYANGGANG",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_JINGYANGGANG",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "reverse_angle"
-          }
-        ],
-        "slot": "reverse_angle",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "8ed9d68c25293e32",
-      "satisfies": [
-        {
-          "owner": "LOC_JINGYANGGANG",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "reverse_angle"
-        }
-      ],
-      "scope": "asset",
-      "slot": "reverse_angle",
-      "task_id": "REF_059"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_empty_plate.png",
       "owner": "LOC_JINGYANGGANG",
       "priority": "P1",
@@ -3486,78 +2514,6 @@
       "task_id": "REF_061"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_梢棒.png",
-      "owner": "PROP_QUARTERSTAFF",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_QUARTERSTAFF",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_QUARTERSTAFF",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "2dbd317a4060a377",
-      "satisfies": [
-        {
-          "owner": "PROP_QUARTERSTAFF",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_062"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_梢棒_比例.png",
-      "owner": "PROP_QUARTERSTAFF",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_QUARTERSTAFF",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_QUARTERSTAFF",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "8d3c595de0ffe327",
-      "satisfies": [
-        {
-          "owner": "PROP_QUARTERSTAFF",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_063"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_QUARTERSTAFF_detail_closeup.png",
       "owner": "PROP_QUARTERSTAFF",
       "priority": "P1",
@@ -3592,78 +2548,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_064"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-      "owner": "PROP_BADGE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_BADGE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7668c03de26c726e",
-      "satisfies": [
-        {
-          "owner": "PROP_BADGE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_065"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-      "owner": "PROP_BADGE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_BADGE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "ef5d2d5415200d56",
-      "satisfies": [
-        {
-          "owner": "PROP_BADGE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_066"
     },
     {
       "output_path": "出图/共享/图片/定妆_PROP_BADGE_detail_closeup.png",
@@ -3702,78 +2586,6 @@
       "task_id": "REF_067"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-      "owner": "PROP_REWARD_SILVER",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_REWARD_SILVER",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_REWARD_SILVER",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "88414edd8c2257d7",
-      "satisfies": [
-        {
-          "owner": "PROP_REWARD_SILVER",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_068"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
-      "owner": "PROP_REWARD_SILVER",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_REWARD_SILVER",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_REWARD_SILVER",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "3e36b38be8c860a9",
-      "satisfies": [
-        {
-          "owner": "PROP_REWARD_SILVER",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_069"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_REWARD_SILVER_detail_closeup.png",
       "owner": "PROP_REWARD_SILVER",
       "priority": "P1",
@@ -3808,78 +2620,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_070"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-      "owner": "LOC_YANGGU_STREET",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_YANGGU_STREET",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "wide_plate"
-          }
-        ],
-        "slot": "wide_plate",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "885feece95909569",
-      "satisfies": [
-        {
-          "owner": "LOC_YANGGU_STREET",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "wide_plate"
-        }
-      ],
-      "scope": "asset",
-      "slot": "wide_plate",
-      "task_id": "REF_071"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-      "owner": "LOC_YANGGU_STREET",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_YANGGU_STREET",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "reverse_angle"
-          }
-        ],
-        "slot": "reverse_angle",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "40bf71d2bf0b016c",
-      "satisfies": [
-        {
-          "owner": "LOC_YANGGU_STREET",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "reverse_angle"
-        }
-      ],
-      "scope": "asset",
-      "slot": "reverse_angle",
-      "task_id": "REF_072"
     },
     {
       "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png",
@@ -3954,78 +2694,6 @@
       "task_id": "REF_074"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_炊饼担.png",
-      "owner": "PROP_CAKE_POLE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_CAKE_POLE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "f002636b66caa243",
-      "satisfies": [
-        {
-          "owner": "PROP_CAKE_POLE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_075"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
-      "owner": "PROP_CAKE_POLE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_CAKE_POLE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "64704034604288f6",
-      "satisfies": [
-        {
-          "owner": "PROP_CAKE_POLE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_076"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_CAKE_POLE_detail_closeup.png",
       "owner": "PROP_CAKE_POLE",
       "priority": "P1",
@@ -4062,78 +2730,6 @@
       "task_id": "REF_077"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
-      "owner": "PROP_WINDOW_LATTICE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_WINDOW_LATTICE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_WINDOW_LATTICE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "a11e4dfed7af0f66",
-      "satisfies": [
-        {
-          "owner": "PROP_WINDOW_LATTICE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_078"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
-      "owner": "PROP_WINDOW_LATTICE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_WINDOW_LATTICE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_WINDOW_LATTICE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "3cee07268dcd6d16",
-      "satisfies": [
-        {
-          "owner": "PROP_WINDOW_LATTICE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_079"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_WINDOW_LATTICE_detail_closeup.png",
       "owner": "PROP_WINDOW_LATTICE",
       "priority": "P1",
@@ -4168,78 +2764,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_080"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-      "owner": "LOC_WUDA_HOME",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_WUDA_HOME",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "wide_plate"
-          }
-        ],
-        "slot": "wide_plate",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "c7edefe499fd7b31",
-      "satisfies": [
-        {
-          "owner": "LOC_WUDA_HOME",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "wide_plate"
-        }
-      ],
-      "scope": "asset",
-      "slot": "wide_plate",
-      "task_id": "REF_081"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-      "owner": "LOC_WUDA_HOME",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_WUDA_HOME",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "reverse_angle"
-          }
-        ],
-        "slot": "reverse_angle",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0113fb4273e5a882",
-      "satisfies": [
-        {
-          "owner": "LOC_WUDA_HOME",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "reverse_angle"
-        }
-      ],
-      "scope": "asset",
-      "slot": "reverse_angle",
-      "task_id": "REF_082"
     },
     {
       "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
@@ -4314,78 +2838,6 @@
       "task_id": "REF_084"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
-      "owner": "PROP_STAIR_RAIL",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_STAIR_RAIL",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_STAIR_RAIL",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "b55ec2e473c58c7e",
-      "satisfies": [
-        {
-          "owner": "PROP_STAIR_RAIL",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_085"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
-      "owner": "PROP_STAIR_RAIL",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_STAIR_RAIL",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_STAIR_RAIL",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5c7bfe42535e8212",
-      "satisfies": [
-        {
-          "owner": "PROP_STAIR_RAIL",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_086"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_STAIR_RAIL_detail_closeup.png",
       "owner": "PROP_STAIR_RAIL",
       "priority": "P1",
@@ -4420,78 +2872,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_087"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
-      "owner": "PROP_DINING_TABLE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_DINING_TABLE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_DINING_TABLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "af38ed42ac1db83c",
-      "satisfies": [
-        {
-          "owner": "PROP_DINING_TABLE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_088"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
-      "owner": "PROP_DINING_TABLE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_DINING_TABLE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_DINING_TABLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "bd277e0c8aba7298",
-      "satisfies": [
-        {
-          "owner": "PROP_DINING_TABLE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_089"
     },
     {
       "output_path": "出图/共享/图片/定妆_PROP_DINING_TABLE_detail_closeup.png",
@@ -4530,78 +2910,6 @@
       "task_id": "REF_090"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
-      "owner": "PROP_TEA_CUP",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_TEA_CUP",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_TEA_CUP",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e0157b3c9cee45ef",
-      "satisfies": [
-        {
-          "owner": "PROP_TEA_CUP",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_091"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
-      "owner": "PROP_TEA_CUP",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_TEA_CUP",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_TEA_CUP",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "f1a553f7e76c3b31",
-      "satisfies": [
-        {
-          "owner": "PROP_TEA_CUP",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_092"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_TEA_CUP_detail_closeup.png",
       "owner": "PROP_TEA_CUP",
       "priority": "P1",
@@ -4638,78 +2946,6 @@
       "task_id": "REF_093"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-      "owner": "PROP_DOORFRAME",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_DOORFRAME",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0cf3f4659dd96d8f",
-      "satisfies": [
-        {
-          "owner": "PROP_DOORFRAME",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_094"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
-      "owner": "PROP_DOORFRAME",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_DOORFRAME",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "c2ac3c618e05cb28",
-      "satisfies": [
-        {
-          "owner": "PROP_DOORFRAME",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_095"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_DOORFRAME_detail_closeup.png",
       "owner": "PROP_DOORFRAME",
       "priority": "P1",
@@ -4744,78 +2980,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_096"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_门闩.png",
-      "owner": "PROP_DOOR_LATCH",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_DOOR_LATCH",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "9fa6429eda4116e1",
-      "satisfies": [
-        {
-          "owner": "PROP_DOOR_LATCH",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_097"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-      "owner": "PROP_DOOR_LATCH",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_DOOR_LATCH",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0d2b7828059b9277",
-      "satisfies": [
-        {
-          "owner": "PROP_DOOR_LATCH",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_098"
     },
     {
       "output_path": "出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png",
@@ -6112,222 +4276,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_134"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
-      "owner": "CHAR_WUSONG/28岁打虎态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_WUSONG/28岁打虎态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUSONG/28岁打虎态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "53920bf98e8daa67",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUSONG/28岁打虎态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_007"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
-      "owner": "BEAST_TIGER/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "BEAST_TIGER/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "c4dcec61370e3577",
-      "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_016"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7e58dec0c43bc094",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_025"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
-      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "a914a96c0e4e5646",
-      "satisfies": [
-        {
-          "owner": "CHAR_PANJINLIAN/25岁武大家常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_035"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "21e56fabb33c20f3",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_045"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
-      "owner": "CHAR_XIMENQING/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_XIMENQING/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "f0c6669acc07f1eb",
-      "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_054"
     }
   ],
   "regional_construct_manifests": [
@@ -6912,78 +4860,6 @@
       "recipe_hash": "87cec87ccbee0166",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "owner": "LOC_JINGYANGGANG",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_JINGYANGGANG",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "265e794b1702d40f",
-          "satisfies": [
-            {
-              "owner": "LOC_JINGYANGGANG",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_058"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-          "owner": "LOC_JINGYANGGANG",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_JINGYANGGANG",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "8ed9d68c25293e32",
-          "satisfies": [
-            {
-              "owner": "LOC_JINGYANGGANG",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_059"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_empty_plate.png",
           "owner": "LOC_JINGYANGGANG",
           "priority": "P1",
@@ -7018,6 +4894,42 @@
           "scope": "asset",
           "slot": "empty_plate",
           "task_id": "REF_060"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_lighting_plate.png",
+          "owner": "LOC_JINGYANGGANG",
+          "priority": "P1",
+          "prompt_recipe": {
+            "owner": "LOC_JINGYANGGANG",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+            "satisfies": [
+              {
+                "owner": "LOC_JINGYANGGANG",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+                "scope": "asset",
+                "slot": "lighting_plate"
+              }
+            ],
+            "slot": "lighting_plate",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "494f2a43f3bd8600",
+          "satisfies": [
+            {
+              "owner": "LOC_JINGYANGGANG",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+              "scope": "asset",
+              "slot": "lighting_plate"
+            }
+          ],
+          "scope": "asset",
+          "slot": "lighting_plate",
+          "task_id": "REF_061"
         }
       ],
       "regional_construct": {
@@ -7096,78 +5008,6 @@
       "recipe_hash": "faec922e1e7bfbf6",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "owner": "LOC_JINGYANGGANG",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_JINGYANGGANG",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "265e794b1702d40f",
-          "satisfies": [
-            {
-              "owner": "LOC_JINGYANGGANG",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_058"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-          "owner": "LOC_JINGYANGGANG",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_JINGYANGGANG",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "8ed9d68c25293e32",
-          "satisfies": [
-            {
-              "owner": "LOC_JINGYANGGANG",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_059"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_empty_plate.png",
           "owner": "LOC_JINGYANGGANG",
           "priority": "P1",
@@ -7204,21 +5044,21 @@
           "task_id": "REF_060"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_梢棒.png",
-          "owner": "PROP_QUARTERSTAFF",
+          "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_lighting_plate.png",
+          "owner": "LOC_JINGYANGGANG",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_QUARTERSTAFF",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_JINGYANGGANG",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_QUARTERSTAFF",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_JINGYANGGANG",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -7226,54 +5066,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "2dbd317a4060a377",
+          "recipe_hash": "494f2a43f3bd8600",
           "satisfies": [
             {
-              "owner": "PROP_QUARTERSTAFF",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_JINGYANGGANG",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_062"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_梢棒_比例.png",
-          "owner": "PROP_QUARTERSTAFF",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_QUARTERSTAFF",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_QUARTERSTAFF",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "8d3c595de0ffe327",
-          "satisfies": [
-            {
-              "owner": "PROP_QUARTERSTAFF",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_063"
+          "slot": "lighting_plate",
+          "task_id": "REF_061"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_QUARTERSTAFF_detail_closeup.png",
@@ -7388,78 +5192,6 @@
       "recipe_hash": "aebcec3dd0ff4bc0",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "owner": "LOC_JINGYANGGANG",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_JINGYANGGANG",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "265e794b1702d40f",
-          "satisfies": [
-            {
-              "owner": "LOC_JINGYANGGANG",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_058"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-          "owner": "LOC_JINGYANGGANG",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_JINGYANGGANG",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_JINGYANGGANG",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "8ed9d68c25293e32",
-          "satisfies": [
-            {
-              "owner": "LOC_JINGYANGGANG",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_059"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_empty_plate.png",
           "owner": "LOC_JINGYANGGANG",
           "priority": "P1",
@@ -7496,21 +5228,21 @@
           "task_id": "REF_060"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "owner": "PROP_BADGE",
+          "output_path": "出图/共享/图片/定妆_LOC_JINGYANGGANG_lighting_plate.png",
+          "owner": "LOC_JINGYANGGANG",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_JINGYANGGANG",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_JINGYANGGANG",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -7518,54 +5250,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "7668c03de26c726e",
+          "recipe_hash": "494f2a43f3bd8600",
           "satisfies": [
             {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_JINGYANGGANG",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_065"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "ef5d2d5415200d56",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_066"
+          "slot": "lighting_plate",
+          "task_id": "REF_061"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_BADGE_detail_closeup.png",
@@ -7604,78 +5300,6 @@
           "task_id": "REF_067"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-          "owner": "PROP_REWARD_SILVER",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_REWARD_SILVER",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_REWARD_SILVER",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "88414edd8c2257d7",
-          "satisfies": [
-            {
-              "owner": "PROP_REWARD_SILVER",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_068"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
-          "owner": "PROP_REWARD_SILVER",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_REWARD_SILVER",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_REWARD_SILVER",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3e36b38be8c860a9",
-          "satisfies": [
-            {
-              "owner": "PROP_REWARD_SILVER",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_069"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_REWARD_SILVER_detail_closeup.png",
           "owner": "PROP_REWARD_SILVER",
           "priority": "P1",
@@ -7712,78 +5336,6 @@
           "task_id": "REF_070"
         },
         {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "885feece95909569",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_071"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "40bf71d2bf0b016c",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_072"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png",
           "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
@@ -7818,6 +5370,42 @@
           "scope": "asset",
           "slot": "empty_plate",
           "task_id": "REF_073"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_lighting_plate.png",
+          "owner": "LOC_YANGGU_STREET",
+          "priority": "P1",
+          "prompt_recipe": {
+            "owner": "LOC_YANGGU_STREET",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+            "satisfies": [
+              {
+                "owner": "LOC_YANGGU_STREET",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+                "scope": "asset",
+                "slot": "lighting_plate"
+              }
+            ],
+            "slot": "lighting_plate",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "f048ecae7df06567",
+          "satisfies": [
+            {
+              "owner": "LOC_YANGGU_STREET",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+              "scope": "asset",
+              "slot": "lighting_plate"
+            }
+          ],
+          "scope": "asset",
+          "slot": "lighting_plate",
+          "task_id": "REF_074"
         }
       ],
       "regional_construct": {
@@ -7904,78 +5492,6 @@
       "recipe_hash": "28a5ead8b41746ec",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "885feece95909569",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_071"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "40bf71d2bf0b016c",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_072"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png",
           "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
@@ -8012,21 +5528,21 @@
           "task_id": "REF_073"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_炊饼担.png",
-          "owner": "PROP_CAKE_POLE",
+          "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_lighting_plate.png",
+          "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_YANGGU_STREET",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_CAKE_POLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_YANGGU_STREET",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -8034,54 +5550,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "f002636b66caa243",
+          "recipe_hash": "f048ecae7df06567",
           "satisfies": [
             {
-              "owner": "PROP_CAKE_POLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_YANGGU_STREET",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_075"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
-          "owner": "PROP_CAKE_POLE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_CAKE_POLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "64704034604288f6",
-          "satisfies": [
-            {
-              "owner": "PROP_CAKE_POLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_076"
+          "slot": "lighting_plate",
+          "task_id": "REF_074"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_CAKE_POLE_detail_closeup.png",
@@ -8120,78 +5600,6 @@
           "task_id": "REF_077"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
-          "owner": "PROP_WINDOW_LATTICE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_WINDOW_LATTICE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_WINDOW_LATTICE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "a11e4dfed7af0f66",
-          "satisfies": [
-            {
-              "owner": "PROP_WINDOW_LATTICE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_078"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
-          "owner": "PROP_WINDOW_LATTICE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_WINDOW_LATTICE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_WINDOW_LATTICE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3cee07268dcd6d16",
-          "satisfies": [
-            {
-              "owner": "PROP_WINDOW_LATTICE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_079"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_WINDOW_LATTICE_detail_closeup.png",
           "owner": "PROP_WINDOW_LATTICE",
           "priority": "P1",
@@ -8228,78 +5636,6 @@
           "task_id": "REF_080"
         },
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -8334,6 +5670,42 @@
           "scope": "asset",
           "slot": "empty_plate",
           "task_id": "REF_083"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
+          "priority": "P1",
+          "prompt_recipe": {
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+            "satisfies": [
+              {
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+                "scope": "asset",
+                "slot": "lighting_plate"
+              }
+            ],
+            "slot": "lighting_plate",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "fed9b1d4bdf484ed",
+          "satisfies": [
+            {
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+              "scope": "asset",
+              "slot": "lighting_plate"
+            }
+          ],
+          "scope": "asset",
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         }
       ],
       "regional_construct": {
@@ -8414,78 +5786,6 @@
       "recipe_hash": "a149d9cb8381e0cf",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "7668c03de26c726e",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_065"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "ef5d2d5415200d56",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_066"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_BADGE_detail_closeup.png",
           "owner": "PROP_BADGE",
           "priority": "P1",
@@ -8520,78 +5820,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_067"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "885feece95909569",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_071"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "40bf71d2bf0b016c",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_072"
         },
         {
           "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png",
@@ -8630,21 +5858,21 @@
           "task_id": "REF_073"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_炊饼担.png",
-          "owner": "PROP_CAKE_POLE",
+          "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_lighting_plate.png",
+          "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_YANGGU_STREET",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_CAKE_POLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_YANGGU_STREET",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -8652,54 +5880,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "f002636b66caa243",
+          "recipe_hash": "f048ecae7df06567",
           "satisfies": [
             {
-              "owner": "PROP_CAKE_POLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_YANGGU_STREET",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_075"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
-          "owner": "PROP_CAKE_POLE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_CAKE_POLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "64704034604288f6",
-          "satisfies": [
-            {
-              "owner": "PROP_CAKE_POLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_076"
+          "slot": "lighting_plate",
+          "task_id": "REF_074"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_CAKE_POLE_detail_closeup.png",
@@ -8738,78 +5930,6 @@
           "task_id": "REF_077"
         },
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -8846,21 +5966,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
-          "owner": "PROP_STAIR_RAIL",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_STAIR_RAIL",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_STAIR_RAIL",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -8868,54 +5988,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "b55ec2e473c58c7e",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_STAIR_RAIL",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_085"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
-          "owner": "PROP_STAIR_RAIL",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_STAIR_RAIL",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_STAIR_RAIL",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "5c7bfe42535e8212",
-          "satisfies": [
-            {
-              "owner": "PROP_STAIR_RAIL",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_086"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_STAIR_RAIL_detail_closeup.png",
@@ -9037,78 +6121,6 @@
       "recipe_hash": "a32049879a917d5b",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -9145,21 +6157,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
-          "owner": "PROP_DINING_TABLE",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_DINING_TABLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_DINING_TABLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -9167,54 +6179,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "af38ed42ac1db83c",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_DINING_TABLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_088"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
-          "owner": "PROP_DINING_TABLE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DINING_TABLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DINING_TABLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "bd277e0c8aba7298",
-          "satisfies": [
-            {
-              "owner": "PROP_DINING_TABLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_089"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DINING_TABLE_detail_closeup.png",
@@ -9253,78 +6229,6 @@
           "task_id": "REF_090"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
-          "owner": "PROP_TEA_CUP",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_TEA_CUP",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_TEA_CUP",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e0157b3c9cee45ef",
-          "satisfies": [
-            {
-              "owner": "PROP_TEA_CUP",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_091"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
-          "owner": "PROP_TEA_CUP",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_TEA_CUP",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_TEA_CUP",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "f1a553f7e76c3b31",
-          "satisfies": [
-            {
-              "owner": "PROP_TEA_CUP",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_092"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_TEA_CUP_detail_closeup.png",
           "owner": "PROP_TEA_CUP",
           "priority": "P1",
@@ -9359,78 +6263,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_093"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-          "owner": "PROP_DOORFRAME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOORFRAME",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0cf3f4659dd96d8f",
-          "satisfies": [
-            {
-              "owner": "PROP_DOORFRAME",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_094"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
-          "owner": "PROP_DOORFRAME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOORFRAME",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c2ac3c618e05cb28",
-          "satisfies": [
-            {
-              "owner": "PROP_DOORFRAME",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_095"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOORFRAME_detail_closeup.png",
@@ -9551,78 +6383,6 @@
       "recipe_hash": "0a0c3ea4724599a2",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -9659,21 +6419,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_门闩.png",
-          "owner": "PROP_DOOR_LATCH",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -9681,54 +6441,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "9fa6429eda4116e1",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_097"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0d2b7828059b9277",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_098"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png",
@@ -10058,78 +6782,6 @@
       "recipe_hash": "f89f5029c0bb67a1",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -10164,6 +6816,42 @@
           "scope": "asset",
           "slot": "empty_plate",
           "task_id": "REF_083"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
+          "priority": "P1",
+          "prompt_recipe": {
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+            "satisfies": [
+              {
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+                "scope": "asset",
+                "slot": "lighting_plate"
+              }
+            ],
+            "slot": "lighting_plate",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "fed9b1d4bdf484ed",
+          "satisfies": [
+            {
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+              "scope": "asset",
+              "slot": "lighting_plate"
+            }
+          ],
+          "scope": "asset",
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_道具_炭盆.png",
@@ -10459,78 +7147,6 @@
       "recipe_hash": "e2af12f7b663e8fd",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -10565,6 +7181,42 @@
           "scope": "asset",
           "slot": "empty_plate",
           "task_id": "REF_083"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
+          "priority": "P1",
+          "prompt_recipe": {
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+            "satisfies": [
+              {
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+                "scope": "asset",
+                "slot": "lighting_plate"
+              }
+            ],
+            "slot": "lighting_plate",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "fed9b1d4bdf484ed",
+          "satisfies": [
+            {
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+              "scope": "asset",
+              "slot": "lighting_plate"
+            }
+          ],
+          "scope": "asset",
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_道具_炭盆.png",
@@ -10968,78 +7620,6 @@
       "recipe_hash": "b5eb64e4fbad09c1",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_道具_炊饼担.png",
-          "owner": "PROP_CAKE_POLE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_CAKE_POLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "f002636b66caa243",
-          "satisfies": [
-            {
-              "owner": "PROP_CAKE_POLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_075"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
-          "owner": "PROP_CAKE_POLE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_CAKE_POLE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_CAKE_POLE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "64704034604288f6",
-          "satisfies": [
-            {
-              "owner": "PROP_CAKE_POLE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_076"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_CAKE_POLE_detail_closeup.png",
           "owner": "PROP_CAKE_POLE",
           "priority": "P1",
@@ -11074,78 +7654,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_077"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
         },
         {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
@@ -11184,21 +7692,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_门闩.png",
-          "owner": "PROP_DOOR_LATCH",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -11206,54 +7714,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "9fa6429eda4116e1",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_097"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0d2b7828059b9277",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_098"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png",
@@ -11479,78 +7951,6 @@
       "recipe_hash": "798644d150b1a350",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
           "owner": "LOC_WUDA_HOME",
           "priority": "P1",
@@ -11587,21 +7987,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_门闩.png",
-          "owner": "PROP_DOOR_LATCH",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -11609,54 +8009,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "9fa6429eda4116e1",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_097"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0d2b7828059b9277",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_098"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png",
@@ -11887,78 +8251,6 @@
       "recipe_hash": "452c937af158bf76",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "885feece95909569",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_071"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "40bf71d2bf0b016c",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_072"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png",
           "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
@@ -11995,21 +8287,21 @@
           "task_id": "REF_073"
         },
         {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
+          "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_lighting_plate.png",
+          "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
+            "owner": "LOC_YANGGU_STREET",
             "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "LOC_WUDA_HOME",
+                "owner": "LOC_YANGGU_STREET",
                 "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "wide_plate"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "wide_plate",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -12017,54 +8309,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "c7edefe499fd7b31",
+          "recipe_hash": "f048ecae7df06567",
           "satisfies": [
             {
-              "owner": "LOC_WUDA_HOME",
+              "owner": "LOC_YANGGU_STREET",
               "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "wide_plate"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
+          "slot": "lighting_plate",
+          "task_id": "REF_074"
         },
         {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
@@ -12103,21 +8359,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-          "owner": "PROP_DOORFRAME",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_DOORFRAME",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -12125,54 +8381,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "0cf3f4659dd96d8f",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_DOORFRAME",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_094"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
-          "owner": "PROP_DOORFRAME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOORFRAME",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c2ac3c618e05cb28",
-          "satisfies": [
-            {
-              "owner": "PROP_DOORFRAME",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_095"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOORFRAME_detail_closeup.png",
@@ -12209,78 +8429,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_096"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "9fa6429eda4116e1",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_097"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0d2b7828059b9277",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_098"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png",
@@ -12616,78 +8764,6 @@
       },
       "recipe_hash": "f1ad994005c816f4",
       "reference_tasks": [
-        {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "7668c03de26c726e",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_065"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "ef5d2d5415200d56",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_066"
-        },
         {
           "output_path": "出图/共享/图片/定妆_PROP_BADGE_detail_closeup.png",
           "owner": "PROP_BADGE",
@@ -13123,78 +9199,6 @@
       "recipe_hash": "97f5071f685f9777",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "7668c03de26c726e",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_065"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-          "owner": "PROP_BADGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_BADGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_BADGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "ef5d2d5415200d56",
-          "satisfies": [
-            {
-              "owner": "PROP_BADGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_066"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_BADGE_detail_closeup.png",
           "owner": "PROP_BADGE",
           "priority": "P1",
@@ -13229,78 +9233,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_067"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c7edefe499fd7b31",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_081"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "owner": "LOC_WUDA_HOME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_WUDA_HOME",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_WUDA_HOME",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0113fb4273e5a882",
-          "satisfies": [
-            {
-              "owner": "LOC_WUDA_HOME",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_082"
         },
         {
           "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png",
@@ -13339,21 +9271,21 @@
           "task_id": "REF_083"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-          "owner": "PROP_DOORFRAME",
+          "output_path": "出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png",
+          "owner": "LOC_WUDA_HOME",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_WUDA_HOME",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_DOORFRAME",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_WUDA_HOME",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -13361,54 +9293,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "0cf3f4659dd96d8f",
+          "recipe_hash": "fed9b1d4bdf484ed",
           "satisfies": [
             {
-              "owner": "PROP_DOORFRAME",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_WUDA_HOME",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_094"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
-          "owner": "PROP_DOORFRAME",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOORFRAME",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOORFRAME",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c2ac3c618e05cb28",
-          "satisfies": [
-            {
-              "owner": "PROP_DOORFRAME",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_095"
+          "slot": "lighting_plate",
+          "task_id": "REF_084"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOORFRAME_detail_closeup.png",
@@ -13445,78 +9341,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_096"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "9fa6429eda4116e1",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_097"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "owner": "PROP_DOOR_LATCH",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_DOOR_LATCH",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_DOOR_LATCH",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "0d2b7828059b9277",
-          "satisfies": [
-            {
-              "owner": "PROP_DOOR_LATCH",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_098"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png",
@@ -13847,78 +9671,6 @@
       "recipe_hash": "3acc99f28537f7b3",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "885feece95909569",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_071"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "owner": "LOC_YANGGU_STREET",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_YANGGU_STREET",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_YANGGU_STREET",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "40bf71d2bf0b016c",
-          "satisfies": [
-            {
-              "owner": "LOC_YANGGU_STREET",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_072"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png",
           "owner": "LOC_YANGGU_STREET",
           "priority": "P1",
@@ -13953,6 +9705,42 @@
           "scope": "asset",
           "slot": "empty_plate",
           "task_id": "REF_073"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_LOC_YANGGU_STREET_lighting_plate.png",
+          "owner": "LOC_YANGGU_STREET",
+          "priority": "P1",
+          "prompt_recipe": {
+            "owner": "LOC_YANGGU_STREET",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+            "satisfies": [
+              {
+                "owner": "LOC_YANGGU_STREET",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+                "scope": "asset",
+                "slot": "lighting_plate"
+              }
+            ],
+            "slot": "lighting_plate",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "f048ecae7df06567",
+          "satisfies": [
+            {
+              "owner": "LOC_YANGGU_STREET",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+              "scope": "asset",
+              "slot": "lighting_plate"
+            }
+          ],
+          "scope": "asset",
+          "slot": "lighting_plate",
+          "task_id": "REF_074"
         },
         {
           "output_path": "出图/共享/图片/定妆_道具_东京礼担.png",
@@ -14438,7 +10226,7 @@
   "summary": {
     "clips": 15,
     "keyshot_candidate_tasks": 15,
-    "reference_generation_tasks": 161,
+    "reference_generation_tasks": 105,
     "regional_construct_manifests": 15,
     "shot_packages": 15
   },

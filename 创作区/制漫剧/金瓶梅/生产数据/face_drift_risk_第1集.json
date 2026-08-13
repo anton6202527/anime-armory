@@ -66,9 +66,7 @@
       "form": "28岁打虎态",
       "library_tier": "core_full",
       "name": "武松",
-      "reference_gaps": [
-        "missing_3q_baseline"
-      ],
+      "reference_gaps": [],
       "scope": "阳谷县人；景阳冈打虎后任清河县巡捕都头；武大亲弟。",
       "score": 80.0,
       "signals": {
@@ -84,8 +82,7 @@
         "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。",
-        "当前角色库档位=core_full 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     },
@@ -133,9 +130,7 @@
       "form": "日常卖饼态",
       "library_tier": "recurring_standard",
       "name": "武大",
-      "reference_gaps": [
-        "missing_3q_baseline"
-      ],
+      "reference_gaps": [],
       "scope": "卖炊饼的小贩；武松亲兄；潘金莲丈夫；迎儿之父。",
       "score": 72.0,
       "signals": {
@@ -151,8 +146,7 @@
         "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。",
-        "当前角色库档位=recurring_standard 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     },
@@ -196,22 +190,8 @@
       "form": "25岁武大家常态",
       "library_tier": "core_full",
       "name": "潘金莲",
-      "predicted_block_mitigated_by": "project_memory_reference_bundle",
-      "project_memory_mitigation": {
-        "backend": "codex",
-        "gaps": [],
-        "ready": true,
-        "requirements": [
-          "先生成共享定妆/脸部特写/场景道具主参考并标 ready",
-          "正式分镜出图必须生成 codex_reference_bundles 或等价 reference_manifest",
-          "每个高风险镜 actual image inputs 不得为 0，missing_ready_refs 必须清零",
-          "多人同框按 split_composite/反打/单人分层执行，成图后跑 full image_qc"
-        ],
-        "strategy": "project_memory_reference_bundle"
-      },
-      "reference_gaps": [
-        "missing_3q_baseline"
-      ],
+      "predicted_block_mitigated_by": "same_source_expression_refs",
+      "reference_gaps": [],
       "scope": "武大妻；幼年被卖、习琵琶与女红，后被张大户安排嫁给武大；开篇长线核心人物。",
       "score": 58.0,
       "signals": {
@@ -223,14 +203,12 @@
         "recurrence_gap": 0
       },
       "suggestions": [
-        "已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
-        "注意：这不是官方服务端 subject_id；若 codex_reference_bundles 出现 actual image inputs=0、missing_ready_refs 未清零或多人同框未按分层/反打执行，仍应在 image_preflight/image 阶段阻断。",
+        "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
         "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
         "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。",
-        "当前角色库档位=core_full 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     },
@@ -280,7 +258,7 @@
   "high": 3,
   "kind": "n2d_face_drift_risk",
   "medium": 1,
-  "missing_3q_baseline": 3,
+  "missing_3q_baseline": 0,
   "notes": [],
   "prior_drift_available": true,
   "recurrence_reentries": 0,

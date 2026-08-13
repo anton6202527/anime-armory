@@ -47,7 +47,7 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-08-11T04:52:05+00:00",
+  "generated_at": "2026-08-13T03:49:46+00:00",
   "kind": "n2d_production_handoff_pack_check",
   "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
   "root": "创作区/制漫剧/金瓶梅",

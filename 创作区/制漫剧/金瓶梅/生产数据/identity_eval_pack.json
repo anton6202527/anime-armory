@@ -1,0 +1,496 @@
+{
+  "generated_at": "2026-08-13T03:49:36.874521+00:00",
+  "identity_registry_path": "出图/共享/identity_registry.json",
+  "identity_registry_sha256": "ca5e4a9494f751725c4424629297e70c28e0511965983e30d305b3376d8c4f6d",
+  "kind": "n2d_identity_eval_pack",
+  "rows": [
+    {
+      "buckets": {
+        "back": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "0ce33add35694f86b935b9c71c83a8c82b23fc3c431a1033adc82749aa0aa845",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png",
+          "registry_binding_fingerprint": "ffb9dfd88eb99e5738c390e7eccff369eaf92fc04a57dff2f85c1d3d2d787cd8",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T06:50:00+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "a4b9ab57e089544897fbe17f0cca361e89f99df79404845d84fa75b53545bb6a",
+          "status": "pass",
+          "view": "back"
+        },
+        "expression": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "expression_readable_without_identity_drift",
+            "hair_accessories_and_costume_continuity",
+            "neutral_or_declared_expression_lighting",
+            "same_identity_as_canonical_face_anchor"
+          ],
+          "decoded_pixel_fingerprint": "ac09639a0fbea2b2cd8146e064264c9ec16aac32199ea9d98c3c54b9649e1865",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
+          "registry_binding_fingerprint": "906e16ae9e1117ca68ff438cdc5cd027256b1a9e5d622eb1193ed4d4fb80e78a",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_expression_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:05:09+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "6fae69a5bca80460db286b573d1db9a710cbbce0a6d80eb51a966138dcc03a1d",
+          "status": "pass",
+          "view": "expression"
+        },
+        "front": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "da0628d1b34ec5c45f67f318b2e5a90ce6790747b87a5448ae08bc2d4d40e341",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
+          "registry_binding_fingerprint": "73e40c368f4880ce02aa4b7073d645fc97cfa3d17a8b36e38af1566d1a01183b",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T06:48:46+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "a6702a565e0c69efb3d6814bb98a7b59b7e0294bc8e29261c09e443711ac0be9",
+          "status": "pass",
+          "view": "front"
+        },
+        "rear_three_quarter": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "11bc8f09f105d2513d3e3c5accd9d0be62615af5b4f4f70f8bc28cbc19ff60f0",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png",
+          "registry_binding_fingerprint": "48c1bab59d028da182258bcd4ed93484045e2c9b349c8b20952f59c57d20bc67",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T06:49:43+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "998fa54e88d9ddeeb971f565a903b8cebc2408b852cab171a48d951c2ca219ba",
+          "status": "pass",
+          "view": "rear_three_quarter"
+        },
+        "side": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "3dce0549aa0782ca50589d683a3140b25e91e1e26e2d33858fb939e23ff13f51",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png",
+          "registry_binding_fingerprint": "0c93e678618af2c7390333d0a46159e6f3a1b53b6a996b3c1f3f29a5201150cb",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T06:49:24+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "db2e72c943839dfe28319f967772fc39ca26bb999184af828502caa004235926",
+          "status": "pass",
+          "view": "side"
+        },
+        "three_quarter": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "a5092203664f7ea969f716518269415e8712d6c5ef63fcf758faa0a37ed22b11",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png",
+          "registry_binding_fingerprint": "1ef55a37149ba7e6f23ec8cb1da2b66f62eb932092477870b35e1e132dac0c65",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T06:49:07+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "6ceb10f64c6367fa4cb7f20fbe9c70ab08c968c086dd7551f19ee6b8fb5006cd",
+          "status": "pass",
+          "view": "three_quarter"
+        },
+        "turnaround": {
+          "character_id": "CHAR_WUSONG",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "4216d8e1bfc67cf08327cf04fa870b2a4735725093df48402b904589337003dc",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "28岁打虎态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png",
+          "registry_binding_fingerprint": "bd32ffd763e33b750846dd28a8b6c5dd947a5b4856a0470825ec90669c98a112",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T06:45:20+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "fa433f838911751f4a9ba21207f0e602436617b202d72344bc328afbbd946673",
+          "status": "pass",
+          "view": "turnaround"
+        }
+      },
+      "character_id": "CHAR_WUSONG",
+      "failed_buckets": [],
+      "form": "28岁打虎态",
+      "library_tier": "core_full",
+      "required_buckets": [
+        "front",
+        "three_quarter",
+        "side",
+        "rear_three_quarter",
+        "back",
+        "expression",
+        "turnaround"
+      ],
+      "verdict": "pass"
+    },
+    {
+      "buckets": {
+        "back": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "93c270d19ac8bff3d556bd31de509ceb2576ed2e20a55b70a0c97fa2ecd545ff",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png",
+          "registry_binding_fingerprint": "6073f91b836a47114ddfaf3c118443c1944a84fbcf0c8eb48d86ebf48edca1d3",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:41:35+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "5c3104a291502cd8932096b50bf00a609d8fa9126c93107c0a956931e5b27df4",
+          "status": "pass",
+          "view": "back"
+        },
+        "expression": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "expression_readable_without_identity_drift",
+            "hair_accessories_and_costume_continuity",
+            "neutral_or_declared_expression_lighting",
+            "same_identity_as_canonical_face_anchor"
+          ],
+          "decoded_pixel_fingerprint": "6c892e54ddbc32e9fea0aa536fdc918bd3d08b916e1cc02cd4f9fc9df6fb220c",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
+          "registry_binding_fingerprint": "67128ce4c9d127c6cf32eeae03d8a392a5208bc19cdf408e60e7ae545de783e0",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_expression_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:49:59+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "07663bbb3120bfe97c2eb573514382071565b211e40036429878dcb39b0db96a",
+          "status": "pass",
+          "view": "expression"
+        },
+        "front": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "a8985909bc8644b30fec725dc861a725ffca448689aac637fabea5f9df9569c7",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
+          "registry_binding_fingerprint": "fb946f65de9b124d49d1ad2c7cad6c0052d98ee3e8c50f9b155e0ac1c072d10e",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:34:07+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c",
+          "status": "pass",
+          "view": "front"
+        },
+        "rear_three_quarter": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "f32d099f7b9285dd8e839d44d123daaf3734dca923cd089a44074b99df40af07",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png",
+          "registry_binding_fingerprint": "4fe9c7685f010d0eb4903c348d45facdc8404aba9999319eef5eb9860fbcb412",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:40:14+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "1a1b6b82f46c6879d8b929b8cbd190cf5dc6163ec90e939aeb393a0723861be8",
+          "status": "pass",
+          "view": "rear_three_quarter"
+        },
+        "side": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "b78f03faeaf9ce19a700f5933a046a44dfb6cfd12d1e09c5bec84981837e1e1b",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png",
+          "registry_binding_fingerprint": "4d4b36a2cd86b90e4c5befba74ec38d67399293ba98e53dd6ab9f908ef1afb66",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:37:38+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "e38a213b565d3589f9acb98900a47a5a687be163030544e414ca20142d6fdae2",
+          "status": "pass",
+          "view": "side"
+        },
+        "three_quarter": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "5620c008681d37e4424ba7bc787fb7dd9bfc86ed431bb66fee5c2a4f024f5e3d",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png",
+          "registry_binding_fingerprint": "a9cd5274801c15ddfb09e9f8435fb79374bb4f2c534bebd23bd7280de183c0af",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:35:46+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "7dfcc34d9f0799bee5d3ef1265df2ba80f160f66f91002c9f5efc8e65bf7a815",
+          "status": "pass",
+          "view": "three_quarter"
+        },
+        "turnaround": {
+          "character_id": "CHAR_PANJINLIAN",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "17721844140ea56c014bffb2bcea908eea750092e8b5159cd5a233f650fdae18",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "25岁武大家常态",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png",
+          "registry_binding_fingerprint": "0b9fef9ece45bbd26a09a0748e3b6df3e3d9acc3eeb22009b9e8d5f2816f14d3",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-08-11T07:30:18+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "245e027373b685add4569055bb99c1625b6eb503258d44d22d80ac1dee359b0d",
+          "status": "pass",
+          "view": "turnaround"
+        }
+      },
+      "character_id": "CHAR_PANJINLIAN",
+      "failed_buckets": [],
+      "form": "25岁武大家常态",
+      "library_tier": "core_full",
+      "required_buckets": [
+        "front",
+        "three_quarter",
+        "side",
+        "rear_three_quarter",
+        "back",
+        "expression",
+        "turnaround"
+      ],
+      "verdict": "pass"
+    }
+  ],
+  "summary": {
+    "core_forms": 2,
+    "failed": 0,
+    "passed": 2
+  },
+  "version": 3
+}

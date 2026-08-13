@@ -3436,6 +3436,31 @@ def _is_explicitly_abandoned_optional_shared_image(
     return False
 
 
+def _is_explicitly_archived_stop_loss_shared_image(
+    root: Path,
+    asset: str,
+    artifact_sha: str,
+    event: Mapping[str, Any],
+) -> bool:
+    """Allow production to move on after an exact rejected shared PNG is retired.
+
+    This is not an acceptance or a general QA waiver.  The exact generated hash
+    must have a terminal executor/human rejection with ``stop_loss=true`` and
+    ``accepted_current_pixels=false``, and the rejected PNG must already have
+    been removed from the canonical shared-library path.  Episode frames and
+    any rejected image still present in the formal namespace remain blocking.
+    """
+    meta = event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+    return bool(
+        asset.startswith("出图/共享/图片/")
+        and str(meta.get("stop_loss") or "").strip().lower() in {"true", "1", "yes"}
+        and str(meta.get("accepted_current_pixels", "")).strip().lower() in {"false", "0", "no"}
+        and artifact_sha
+        and str(meta.get("artifact_sha256") or "") == artifact_sha
+        and not (root / asset).exists()
+    )
+
+
 def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict[str, str]]:
     """Return the latest different image awaiting hash-bound QA acceptance.
 
@@ -3443,7 +3468,9 @@ def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict
     be improved.  Moving to a different image requires a later dashboard QA
     event with ``status=accepted`` and the exact generated pixel hash, except
     for an exact-hash rejected optional shared identity view that has been
-    explicitly retired and removed from its canonical path.
+    explicitly retired and removed from its canonical path, or for an exact-hash
+    rejected shared-library target explicitly closed by the audited stop-loss
+    policy and removed from the canonical namespace.
     """
     path = root / "生产数据" / "production_events.jsonl"
     if not path.is_file():
@@ -3487,6 +3514,13 @@ def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict
             if (
                 generation.get("status") == "rejected"
                 and _is_explicitly_abandoned_optional_shared_image(
+                    root, asset, artifact_sha, event
+                )
+            ):
+                return None
+            if (
+                generation.get("status") == "rejected"
+                and _is_explicitly_archived_stop_loss_shared_image(
                     root, asset, artifact_sha, event
                 )
             ):

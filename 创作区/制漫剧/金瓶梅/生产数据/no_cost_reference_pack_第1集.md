@@ -1,109 +1,109 @@
 # 无成本图片增强参考档
 
 - episode: 第1集
-- total: 164 ｜ ready: 0 ｜ planned: 164
+- total: 164 ｜ ready: 59 ｜ planned: 105
 - multi_subject_clips: EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09、EP01_CLIP10、EP01_CLIP11、EP01_CLIP12、EP01_CLIP13、EP01_CLIP14、EP01_CLIP15
 
 | Scope | Owner | Slot | Status | Path | Reason |
 |---|---|---|---|---|---|
-| character | CHAR_WUSONG/28岁打虎态 | front | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUSONG/28岁打虎态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUSONG/28岁打虎态 | side | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUSONG/28岁打虎态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUSONG/28岁打虎态 | back | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUSONG/28岁打虎态 | turnaround | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png | 核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。 |
-| character | CHAR_WUSONG/28岁打虎态 | half_body_or_full_body | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
-| character | CHAR_WUSONG/28岁打虎态 | face_anchor_refs | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
-| character | CHAR_WUSONG/28岁打虎态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
+| character | CHAR_WUSONG/28岁打虎态 | front | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUSONG/28岁打虎态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUSONG/28岁打虎态 | side | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUSONG/28岁打虎态 | rear_three_quarter | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUSONG/28岁打虎态 | back | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUSONG/28岁打虎态 | turnaround | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png | 核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。 |
+| character | CHAR_WUSONG/28岁打虎态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
+| character | CHAR_WUSONG/28岁打虎态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
+| character | CHAR_WUSONG/28岁打虎态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_WUSONG/28岁打虎态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_WUSONG_28岁打虎态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
-| character | BEAST_TIGER/常态 | front | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | BEAST_TIGER/常态 | front | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | three_quarter | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | side | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | back | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | BEAST_TIGER/常态 | half_body_or_full_body | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
-| character | BEAST_TIGER/常态 | face_anchor_refs | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
+| character | BEAST_TIGER/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
+| character | BEAST_TIGER/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png | 脸部特写锚，近景/反打/表情镜必用。 |
 | character | BEAST_TIGER/常态 | expression_bank | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | BEAST_TIGER/常态 | action_pose_pack | planned | 出图/共享/图片/定妆_BEAST_TIGER_常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
-| character | CHAR_WUDA/日常卖饼态 | front | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUDA/日常卖饼态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUDA/日常卖饼态 | front | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUDA/日常卖饼态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_WUDA/日常卖饼态 | side | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_WUDA/日常卖饼态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_WUDA/日常卖饼态 | back | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUDA/日常卖饼态 | half_body_or_full_body | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
-| character | CHAR_WUDA/日常卖饼态 | face_anchor_refs | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
-| character | CHAR_WUDA/日常卖饼态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
+| character | CHAR_WUDA/日常卖饼态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
+| character | CHAR_WUDA/日常卖饼态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
+| character | CHAR_WUDA/日常卖饼态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_WUDA/日常卖饼态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_WUDA_日常卖饼态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | front | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | side | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | back | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | turnaround | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png | 核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | half_body_or_full_body | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | face_anchor_refs | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
-| character | CHAR_PANJINLIAN/25岁武大家常态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | front | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | side | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | rear_three_quarter | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | back | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | turnaround | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png | 核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
+| character | CHAR_PANJINLIAN/25岁武大家常态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_PANJINLIAN/25岁武大家常态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN_25岁武大家常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
-| character | CHAR_MAGISTRATE/常态 | front | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_MAGISTRATE/常态 | front | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_MAGISTRATE/常态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_MAGISTRATE/常态 | side | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_MAGISTRATE/常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_MAGISTRATE/常态 | back | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_MAGISTRATE/常态 | turnaround | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_turnaround.png | 核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。 |
-| character | CHAR_MAGISTRATE/常态 | half_body_or_full_body | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
-| character | CHAR_MAGISTRATE/常态 | face_anchor_refs | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
-| character | CHAR_MAGISTRATE/常态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
+| character | CHAR_MAGISTRATE/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
+| character | CHAR_MAGISTRATE/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png | 脸部特写锚，近景/反打/表情镜必用。 |
+| character | CHAR_MAGISTRATE/常态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_MAGISTRATE/常态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
-| character | CHAR_XIMENQING/常态 | front | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_XIMENQING/常态 | front | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_XIMENQING/常态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_XIMENQING/常态 | side | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_XIMENQING/常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_XIMENQING/常态 | back | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_XIMENQING/常态 | half_body_or_full_body | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
-| character | CHAR_XIMENQING/常态 | face_anchor_refs | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
+| character | CHAR_XIMENQING/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
+| character | CHAR_XIMENQING/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png | 脸部特写锚，近景/反打/表情镜必用。 |
 | character | CHAR_XIMENQING/常态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_XIMENQING/常态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_XIMENQING_常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
-| asset | LOC_JINGYANGGANG | wide_plate | planned | 出图/共享/图片/定妆_场景_景阳冈夜间空地.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
-| asset | LOC_JINGYANGGANG | reverse_angle | planned | 出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | LOC_JINGYANGGANG | wide_plate | ready | 出图/共享/图片/定妆_场景_景阳冈夜间空地.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | LOC_JINGYANGGANG | reverse_angle | ready | 出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_JINGYANGGANG | empty_plate | planned | 出图/共享/图片/定妆_LOC_JINGYANGGANG_empty_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_JINGYANGGANG | lighting_plate | planned | 出图/共享/图片/定妆_LOC_JINGYANGGANG_lighting_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
-| asset | PROP_QUARTERSTAFF | primary | planned | 出图/共享/图片/定妆_道具_梢棒.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_QUARTERSTAFF | scale_reference | planned | 出图/共享/图片/定妆_道具_梢棒_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_QUARTERSTAFF | primary | ready | 出图/共享/图片/定妆_道具_梢棒.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_QUARTERSTAFF | scale_reference | ready | 出图/共享/图片/定妆_道具_梢棒_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_QUARTERSTAFF | detail_closeup | planned | 出图/共享/图片/定妆_PROP_QUARTERSTAFF_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_BADGE | primary | planned | 出图/共享/图片/定妆_道具_都头腰牌.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_BADGE | scale_reference | planned | 出图/共享/图片/定妆_道具_都头腰牌_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_BADGE | primary | ready | 出图/共享/图片/定妆_道具_都头腰牌.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_BADGE | scale_reference | ready | 出图/共享/图片/定妆_道具_都头腰牌_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_BADGE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_BADGE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_REWARD_SILVER | primary | planned | 出图/共享/图片/定妆_道具_REWARD_SILVER.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_REWARD_SILVER | scale_reference | planned | 出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_REWARD_SILVER | primary | ready | 出图/共享/图片/定妆_道具_REWARD_SILVER.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_REWARD_SILVER | scale_reference | ready | 出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_REWARD_SILVER | detail_closeup | planned | 出图/共享/图片/定妆_PROP_REWARD_SILVER_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | LOC_YANGGU_STREET | wide_plate | planned | 出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
-| asset | LOC_YANGGU_STREET | reverse_angle | planned | 出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | LOC_YANGGU_STREET | wide_plate | ready | 出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | LOC_YANGGU_STREET | reverse_angle | ready | 出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_YANGGU_STREET | empty_plate | planned | 出图/共享/图片/定妆_LOC_YANGGU_STREET_empty_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_YANGGU_STREET | lighting_plate | planned | 出图/共享/图片/定妆_LOC_YANGGU_STREET_lighting_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
-| asset | PROP_CAKE_POLE | primary | planned | 出图/共享/图片/定妆_道具_炊饼担.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_CAKE_POLE | scale_reference | planned | 出图/共享/图片/定妆_道具_炊饼担_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_CAKE_POLE | primary | ready | 出图/共享/图片/定妆_道具_炊饼担.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_CAKE_POLE | scale_reference | ready | 出图/共享/图片/定妆_道具_炊饼担_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_CAKE_POLE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_CAKE_POLE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_WINDOW_LATTICE | primary | planned | 出图/共享/图片/定妆_道具_WINDOW_LATTICE.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_WINDOW_LATTICE | scale_reference | planned | 出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_WINDOW_LATTICE | primary | ready | 出图/共享/图片/定妆_道具_WINDOW_LATTICE.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_WINDOW_LATTICE | scale_reference | ready | 出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_WINDOW_LATTICE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_WINDOW_LATTICE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | LOC_WUDA_HOME | wide_plate | planned | 出图/共享/图片/定妆_场景_武大家楼屋雪夜.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
-| asset | LOC_WUDA_HOME | reverse_angle | planned | 出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | LOC_WUDA_HOME | wide_plate | ready | 出图/共享/图片/定妆_场景_武大家楼屋雪夜.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | LOC_WUDA_HOME | reverse_angle | ready | 出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_WUDA_HOME | empty_plate | planned | 出图/共享/图片/定妆_LOC_WUDA_HOME_empty_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_WUDA_HOME | lighting_plate | planned | 出图/共享/图片/定妆_LOC_WUDA_HOME_lighting_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
-| asset | PROP_STAIR_RAIL | primary | planned | 出图/共享/图片/定妆_道具_STAIR_RAIL.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_STAIR_RAIL | scale_reference | planned | 出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_STAIR_RAIL | primary | ready | 出图/共享/图片/定妆_道具_STAIR_RAIL.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_STAIR_RAIL | scale_reference | ready | 出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_STAIR_RAIL | detail_closeup | planned | 出图/共享/图片/定妆_PROP_STAIR_RAIL_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DINING_TABLE | primary | planned | 出图/共享/图片/定妆_道具_DINING_TABLE.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DINING_TABLE | scale_reference | planned | 出图/共享/图片/定妆_道具_DINING_TABLE_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DINING_TABLE | primary | ready | 出图/共享/图片/定妆_道具_DINING_TABLE.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DINING_TABLE | scale_reference | ready | 出图/共享/图片/定妆_道具_DINING_TABLE_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_DINING_TABLE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_DINING_TABLE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_TEA_CUP | primary | planned | 出图/共享/图片/定妆_道具_TEA_CUP.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_TEA_CUP | scale_reference | planned | 出图/共享/图片/定妆_道具_TEA_CUP_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_TEA_CUP | primary | ready | 出图/共享/图片/定妆_道具_TEA_CUP.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_TEA_CUP | scale_reference | ready | 出图/共享/图片/定妆_道具_TEA_CUP_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_TEA_CUP | detail_closeup | planned | 出图/共享/图片/定妆_PROP_TEA_CUP_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DOORFRAME | primary | planned | 出图/共享/图片/定妆_道具_DOORFRAME.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DOORFRAME | scale_reference | planned | 出图/共享/图片/定妆_道具_DOORFRAME_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DOORFRAME | primary | ready | 出图/共享/图片/定妆_道具_DOORFRAME.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DOORFRAME | scale_reference | ready | 出图/共享/图片/定妆_道具_DOORFRAME_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_DOORFRAME | detail_closeup | planned | 出图/共享/图片/定妆_PROP_DOORFRAME_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DOOR_LATCH | primary | planned | 出图/共享/图片/定妆_道具_门闩.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DOOR_LATCH | scale_reference | planned | 出图/共享/图片/定妆_道具_门闩_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DOOR_LATCH | primary | ready | 出图/共享/图片/定妆_道具_门闩.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DOOR_LATCH | scale_reference | ready | 出图/共享/图片/定妆_道具_门闩_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_DOOR_LATCH | detail_closeup | planned | 出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_BRAZIER | primary | planned | 出图/共享/图片/定妆_道具_炭盆.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_BRAZIER | scale_reference | planned | 出图/共享/图片/定妆_道具_炭盆_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |

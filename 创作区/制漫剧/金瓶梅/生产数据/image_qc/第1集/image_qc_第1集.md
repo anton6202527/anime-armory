@@ -42,17 +42,26 @@
   - 🟡 多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 10 · pending 1 · confirmed 9
+- total 19 · pending 1 · confirmed 18
 - 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json`
   - 🔴 shared_primary 出图/共享/图片/定妆_道具_都头腰牌.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_shared_primary_定妆_道具_都头腰牌_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_炭盆.png（PROP_BRAZIER 炭盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BRAZIER_shared_primary_定妆_道具_炭盆_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_炊饼担.png（PROP_CAKE_POLE 炊饼担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_shared_primary_定妆_道具_炊饼担_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_叉竿.png（PROP_CURTAIN_FORK 叉竿） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CURTAIN_FORK_shared_primary_定妆_道具_叉竿_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_DINING_TABLE.png（PROP_DINING_TABLE DINING TABLE） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约长 120–140 厘米、宽 60–75 厘米、高 70–75 厘米；坐下时桌沿在腰上，两人对坐后中间仍有放置茶盏的空间。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DINING_TABLE_shared_primary_定妆_道具_DINING_TABLE_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_场景木门.png（PROP_DOOR 武大家木门） 禁形=现代物件、文字水印、结构漂移、数量漂移、现代防盗门、现代门锁、无来源文字；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DOOR_shared_primary_定妆_道具_场景木门_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_DOORFRAME.png（PROP_DOORFRAME DOORFRAME） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=净宽约 75–85 厘米，净高约 180–190 厘米；成年人单人通行，横楣略高于头顶，门槛低于脚踝。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DOORFRAME_shared_primary_定妆_道具_DOORFRAME_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_门闩.png（PROP_DOOR_LATCH 门闩） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=木闩长约 75–90 厘米，截面约 5–7 厘米方，安装在成人腰部至腹部高度，可单手包握并水平推动。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_DOOR_LATCH_shared_primary_定妆_道具_门闩_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_东京礼担.png（PROP_GIFT_LOAD 东京礼担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_GIFT_LOAD_shared_primary_定妆_道具_东京礼担_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_素布行李.png（PROP_LUGGAGE 素布行李） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_LUGGAGE_shared_primary_定妆_道具_素布行李_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_公文.png（PROP_OFFICIAL_DOC 公文） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_OFFICIAL_DOC_shared_primary_定妆_道具_公文_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_梢棒.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_shared_primary_定妆_道具_梢棒_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_REWARD_SILVER.png（PROP_REWARD_SILVER REWARD SILVER） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_shared_primary_定妆_道具_REWARD_SILVER_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_SPILLED_WINE.png（PROP_SPILLED_WINE SPILLED WINE） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_SPILLED_WINE_shared_primary_定妆_道具_SPILLED_WINE_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_STAIR_RAIL.png（PROP_STAIR_RAIL STAIR RAIL） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=扶手顶面距踏步前缘约 85–95 厘米，为成年人腰部高度；一手可自然包握，直棂间距均匀。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_STAIR_RAIL_shared_primary_定妆_道具_STAIR_RAIL_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_TEA_CUP.png（PROP_TEA_CUP TEA CUP） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=口径约 8–10 厘米，高约 5–7 厘米，可一手托住或以拇指与其余手指环持，整体明显小于成人掌宽。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_TEA_CUP_shared_primary_定妆_道具_TEA_CUP_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png（PROP_WINDOW_CURTAIN WINDOW CURTAIN） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_CURTAIN_shared_primary_定妆_道具_WINDOW_CURTAIN_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_WINDOW_LATTICE.png（PROP_WINDOW_LATTICE WINDOW LATTICE） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_shared_primary_定妆_道具_WINDOW_LATTICE_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_半杯酒.png（PROP_WINE_CUP 半杯酒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINE_CUP_shared_primary_定妆_道具_半杯酒_compare.png
 
 落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

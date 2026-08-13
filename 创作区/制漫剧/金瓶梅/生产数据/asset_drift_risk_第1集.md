@@ -8,20 +8,20 @@
 | 武大家楼屋雪夜（LOC_WUDA_HOME） | 场景 | 🔴 high | 54 | 本集出镜 8 次(+24)；禁漂项 2 个(+8)；结构/件数强锁(+8) |
 | 炭盆（PROP_BRAZIER） | 道具 | 🟡 medium | 46 | 禁漂项 5 个(+20)；本集出镜 4 次(+12)；结构/件数强锁(+8) |
 | 阳谷街面与武大家楼窗（LOC_YANGGU_STREET） | 场景 | 🟡 medium | 45 | 本集出镜 5 次(+15)；禁漂项 2 个(+8)；结构/件数强锁(+8) |
-| 门闩（PROP_DOOR_LATCH） | 道具 | 🟡 medium | 43 | 禁漂项 5 个(+20)；本集出镜 3 次(+9)；结构/件数强锁(+8) |
+| 门闩（PROP_DOOR_LATCH） | 道具 | 🟡 medium | 43 | 禁漂项 6 个(+20)；本集出镜 3 次(+9)；结构/件数强锁(+8) |
 | 梢棒（PROP_QUARTERSTAFF） | 道具 | 🟡 medium | 40 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 半杯酒（PROP_WINE_CUP） | 道具 | 🟡 medium | 40 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 景阳冈夜间空地（LOC_JINGYANGGANG） | 场景 | 🟡 medium | 39 | 本集出镜 3 次(+9)；禁漂项 2 个(+8)；结构/件数强锁(+8) |
-| 都头腰牌（PROP_BADGE） | 道具 | 🟡 medium | 37 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 都头腰牌（PROP_BADGE） | 道具 | 🟡 medium | 37 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 公文（PROP_OFFICIAL_DOC） | 道具 | 🟡 medium | 37 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 叉竿（PROP_CURTAIN_FORK） | 道具 | 🟡 medium | 37 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| REWARD SILVER（PROP_REWARD_SILVER） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| REWARD SILVER（PROP_REWARD_SILVER） | 道具 | 🟡 medium | 34 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 炊饼担（PROP_CAKE_POLE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| WINDOW LATTICE（PROP_WINDOW_LATTICE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| STAIR RAIL（PROP_STAIR_RAIL） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| DINING TABLE（PROP_DINING_TABLE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| TEA CUP（PROP_TEA_CUP） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| DOORFRAME（PROP_DOORFRAME） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| WINDOW LATTICE（PROP_WINDOW_LATTICE） | 道具 | 🟡 medium | 34 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| STAIR RAIL（PROP_STAIR_RAIL） | 道具 | 🟡 medium | 34 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| DINING TABLE（PROP_DINING_TABLE） | 道具 | 🟡 medium | 34 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| TEA CUP（PROP_TEA_CUP） | 道具 | 🟡 medium | 34 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| DOORFRAME（PROP_DOORFRAME） | 道具 | 🟡 medium | 34 | 禁漂项 6 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | SPILLED WINE（PROP_SPILLED_WINE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 素布行李（PROP_LUGGAGE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
 | 武大家木门（PROP_DOOR） | 道具 | 🟡 medium | 34 | 禁漂项 8 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |

@@ -432,6 +432,79 @@ def test_strict_pending_review_allows_explicitly_abandoned_optional_shared_view(
     ) == {"asset": asset, "artifact_sha256": artifact_sha}
 
 
+def test_strict_pending_review_allows_archived_stop_loss_shared_target(tmp_path: Path) -> None:
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    asset = "出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png"
+    artifact_sha = "d" * 64
+    records = [
+        {
+            "stage": "image",
+            "event": "redraw",
+            "generation": {"asset": asset, "status": "pass"},
+            "meta": {"artifact_sha256": artifact_sha},
+        },
+        {
+            "stage": "image",
+            "event": "qa",
+            "generation": {"asset": asset, "status": "rejected"},
+            "meta": {
+                "artifact_sha256": artifact_sha,
+                "accepted_current_pixels": False,
+                "stop_loss": True,
+            },
+        },
+    ]
+    events.write_text(
+        "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/next.png"
+    ) is None
+
+    canonical = tmp_path / asset
+    canonical.parent.mkdir(parents=True, exist_ok=True)
+    canonical.write_bytes(b"still present")
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/next.png"
+    ) == {"asset": asset, "artifact_sha256": artifact_sha}
+
+
+def test_strict_pending_review_stop_loss_never_skips_episode_frame(tmp_path: Path) -> None:
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    asset = "出图/第1集/图片/Clip01_first.png"
+    artifact_sha = "e" * 64
+    records = [
+        {
+            "stage": "image",
+            "event": "generation",
+            "generation": {"asset": asset, "status": "pass"},
+            "meta": {"artifact_sha256": artifact_sha},
+        },
+        {
+            "stage": "image",
+            "event": "qa",
+            "generation": {"asset": asset, "status": "rejected"},
+            "meta": {
+                "artifact_sha256": artifact_sha,
+                "accepted_current_pixels": False,
+                "stop_loss": True,
+            },
+        },
+    ]
+    events.write_text(
+        "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/next.png"
+    ) == {"asset": asset, "artifact_sha256": artifact_sha}
+
+
 def test_run_target_image_qc_uses_selected_python(tmp_path: Path, monkeypatch) -> None:
     report = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
     report.parent.mkdir(parents=True)
