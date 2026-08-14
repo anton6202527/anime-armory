@@ -39,6 +39,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -51,8 +56,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -62,13 +67,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:side"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:side"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -86,7 +92,7 @@
         },
         {
           "char_id": "BEAST_TIGER",
-          "name": "景阳冈猛虎",
+          "name": "BEAST_TIGER",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "named_minimal",
@@ -103,7 +109,7 @@
             },
             {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
             },
             {
@@ -201,19 +207,25 @@
             },
             {
               "char_id": "BEAST_TIGER",
-              "hair_bucket": "白",
-              "outfit_bucket": null,
-              "anchor_phrase": "景阳冈成年华南虎·真实四足猫科解剖·吊睛白额·橙褐底黑色条纹·宽大虎掌·长尾·无伤常态"
+              "hair_bucket": null,
+              "outfit_bucket": "黑",
+              "anchor_phrase": "BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
             }
           ],
-          "collision": false,
-          "collisions": [],
+          "collision": true,
+          "collisions": [
+            {
+              "pair": "CHAR_WUSONG↔BEAST_TIGER",
+              "layer": "服装主色同为「黑」、发色未区分",
+              "embedding_confusable": false
+            }
+          ],
           "embedding_checked": true,
-          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+          "guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
         },
         "relative_scale": {
           "CHAR_WUSONG": "三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。",
-          "BEAST_TIGER": "成年雄虎体量；四足肩高明显低于成年男子头部，躯干长而低伏，虎掌宽大，长尾完整。"
+          "BEAST_TIGER": "按 storyboard 中同框体量关系保持。"
         },
         "shot_scheduling": {
           "verdict": "split_or_layer_required",
@@ -257,6 +269,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -269,8 +286,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -280,13 +297,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:three_quarter",
               "@Image2:front",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:side"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:side"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -306,7 +324,7 @@
         },
         {
           "char_id": "BEAST_TIGER",
-          "name": "景阳冈猛虎",
+          "name": "BEAST_TIGER",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "named_minimal",
@@ -325,7 +343,7 @@
             },
             {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
             },
             {
@@ -427,19 +445,25 @@
             },
             {
               "char_id": "BEAST_TIGER",
-              "hair_bucket": "白",
-              "outfit_bucket": null,
-              "anchor_phrase": "景阳冈成年华南虎·真实四足猫科解剖·吊睛白额·橙褐底黑色条纹·宽大虎掌·长尾·无伤常态"
+              "hair_bucket": null,
+              "outfit_bucket": "黑",
+              "anchor_phrase": "BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
             }
           ],
-          "collision": false,
-          "collisions": [],
+          "collision": true,
+          "collisions": [
+            {
+              "pair": "CHAR_WUSONG↔BEAST_TIGER",
+              "layer": "服装主色同为「黑」、发色未区分",
+              "embedding_confusable": false
+            }
+          ],
           "embedding_checked": true,
-          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+          "guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
         },
         "relative_scale": {
           "CHAR_WUSONG": "三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。",
-          "BEAST_TIGER": "成年雄虎体量；四足肩高明显低于成年男子头部，躯干长而低伏，虎掌宽大，长尾完整。"
+          "BEAST_TIGER": "按 storyboard 中同框体量关系保持。"
         },
         "shot_scheduling": {
           "verdict": "split_or_layer_required",
@@ -482,6 +506,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -494,8 +523,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -505,13 +534,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:turnaround"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -529,7 +559,7 @@
         },
         {
           "char_id": "BEAST_TIGER",
-          "name": "景阳冈猛虎",
+          "name": "BEAST_TIGER",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "named_minimal",
@@ -547,7 +577,7 @@
             },
             {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
             },
             {
@@ -609,11 +639,17 @@
             "extreme_angle:deep_shadow",
             "multi_character"
           ],
-          "recommended_references": [],
+          "recommended_references": [
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CROWD_HUNTERS__常态.png",
+              "strength_hint": 0.5
+            }
+          ],
           "reference_budget": {
             "limit": null,
-            "requested": 0,
-            "selected": 0,
+            "requested": 1,
+            "selected": 1,
             "dropped": 0
           },
           "dropped_references": [],
@@ -699,9 +735,9 @@
             },
             {
               "char_id": "BEAST_TIGER",
-              "hair_bucket": "白",
-              "outfit_bucket": null,
-              "anchor_phrase": "景阳冈成年华南虎·真实四足猫科解剖·吊睛白额·橙褐底黑色条纹·宽大虎掌·长尾·无伤常态"
+              "hair_bucket": null,
+              "outfit_bucket": "黑",
+              "anchor_phrase": "BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
             },
             {
               "char_id": "CROWD_HUNTERS",
@@ -710,14 +746,20 @@
               "anchor_phrase": "Hunters·Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
             }
           ],
-          "collision": false,
-          "collisions": [],
+          "collision": true,
+          "collisions": [
+            {
+              "pair": "CHAR_WUSONG↔BEAST_TIGER",
+              "layer": "服装主色同为「黑」、发色未区分",
+              "embedding_confusable": false
+            }
+          ],
           "embedding_checked": true,
-          "guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+          "guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
         },
         "relative_scale": {
           "CHAR_WUSONG": "三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。",
-          "BEAST_TIGER": "成年雄虎体量；四足肩高明显低于成年男子头部，躯干长而低伏，虎掌宽大，长尾完整。",
+          "BEAST_TIGER": "按 storyboard 中同框体量关系保持。",
           "CROWD_HUNTERS": "按 storyboard 中同框体量关系保持。"
         },
         "shot_scheduling": {
@@ -835,6 +877,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -847,8 +894,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -858,13 +905,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:turnaround"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -978,12 +1026,17 @@
               "role": "face_anchor",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -993,11 +1046,12 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
-              "@Image3:face_anchor"
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1102,12 +1156,17 @@
               "role": "face_anchor",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1117,11 +1176,12 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
-              "@Image3:face_anchor"
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1253,6 +1313,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1260,8 +1325,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1271,12 +1336,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1391,6 +1457,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1398,8 +1469,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1409,12 +1480,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1546,6 +1618,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1553,8 +1630,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1564,12 +1641,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1612,6 +1690,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1619,8 +1702,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1630,12 +1713,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1752,6 +1836,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1759,8 +1848,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1770,12 +1859,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1818,6 +1908,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1825,8 +1920,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1836,12 +1931,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -1959,6 +2055,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -1966,8 +2067,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1977,12 +2078,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2026,6 +2128,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2033,8 +2140,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -2044,12 +2151,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2240,6 +2348,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2247,8 +2360,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -2258,12 +2371,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2381,6 +2495,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2388,8 +2507,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -2399,12 +2518,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2521,6 +2641,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2528,8 +2653,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -2539,12 +2664,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2678,6 +2804,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2690,8 +2821,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -2701,13 +2832,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:turnaround"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2826,6 +2958,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2838,8 +2975,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -2849,13 +2986,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:turnaround"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -2987,6 +3125,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -2994,8 +3137,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -3005,12 +3148,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -3044,7 +3188,7 @@
             },
             {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+              "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
             },
             {
@@ -3195,6 +3339,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -3202,8 +3351,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -3213,12 +3362,13 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression"
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -3410,6 +3560,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
               "strength_hint": 0.6
@@ -3422,8 +3577,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -3433,13 +3588,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:turnaround"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -3485,6 +3641,11 @@
               "strength_hint": 0.7
             },
             {
+              "role": "outfit",
+              "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+              "strength_hint": 0.5
+            },
+            {
               "role": "expression",
               "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
               "strength_hint": 0.6
@@ -3497,8 +3658,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -3508,13 +3669,14 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
               "@Image2:three_quarter",
               "@Image3:face_anchor",
-              "@Image4:expression",
-              "@Image5:turnaround"
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
@@ -3551,7 +3713,7 @@
             },
             {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+              "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
             },
             {
@@ -3903,9 +4065,9 @@
         "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
         "shot_scheduling": "split_or_layer_required",
         "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
-        "anchor_collision": false,
+        "anchor_collision": true,
         "anchor_embedding_confusable": false,
-        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        "anchor_guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
       },
       {
         "kind": "multi_subject_strategy",
@@ -3930,9 +4092,9 @@
         "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
         "shot_scheduling": "split_or_layer_required",
         "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
-        "anchor_collision": false,
+        "anchor_collision": true,
         "anchor_embedding_confusable": false,
-        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        "anchor_guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
       },
       {
         "kind": "multi_subject_strategy",
@@ -3958,9 +4120,9 @@
         "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
         "shot_scheduling": "slots_required",
         "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
-        "anchor_collision": false,
+        "anchor_collision": true,
         "anchor_embedding_confusable": false,
-        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        "anchor_guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
       },
       {
         "kind": "multi_subject_strategy",
@@ -4334,9 +4496,9 @@
         "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
         "shot_scheduling": "split_or_layer_required",
         "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
-        "anchor_collision": false,
+        "anchor_collision": true,
         "anchor_embedding_confusable": false,
-        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        "anchor_guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
       },
       {
         "clip": "EP01_CLIP02",
@@ -4381,9 +4543,9 @@
         "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
         "shot_scheduling": "split_or_layer_required",
         "shot_scheduling_default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
-        "anchor_collision": false,
+        "anchor_collision": true,
         "anchor_embedding_confusable": false,
-        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        "anchor_guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
       },
       {
         "clip": "EP01_CLIP03",
@@ -4439,9 +4601,9 @@
         "execution": "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。",
         "shot_scheduling": "slots_required",
         "shot_scheduling_default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
-        "anchor_collision": false,
+        "anchor_collision": true,
         "anchor_embedding_confusable": false,
-        "anchor_guidance": "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+        "anchor_guidance": "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，并在逐镜 prompt 写 `区分锚点` 字段。"
       },
       {
         "clip": "EP01_CLIP04",
@@ -4961,7 +5123,7 @@
       "status": "ready",
       "available": true,
       "path": "生产数据/memory_anchor_plan_第1集.json",
-      "sha256": "f963f2aa549054c2ed1d1421deec6ca3358a45cd3d4553951ecb302e97982582",
+      "sha256": "bcbba84af3bb1380803dcc37ba3ce5d9ccde160a6c4520aa88cae624a3b219e1",
       "required_rows": 0,
       "required_char_keys": [],
       "consumed_char_keys": [],
@@ -4972,11 +5134,11 @@
       "errors": [],
       "source_fingerprint": {
         "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-        "identity_registry_sha256": "ca5e4a9494f751725c4424629297e70c28e0511965983e30d305b3376d8c4f6d",
+        "identity_registry_sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
         "storyboard_sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
       },
       "current_source_fingerprint": {
-        "identity_registry_sha256": "ca5e4a9494f751725c4424629297e70c28e0511965983e30d305b3376d8c4f6d",
+        "identity_registry_sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
         "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
         "storyboard_sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
       },

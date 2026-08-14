@@ -2272,10 +2272,24 @@ def test_shared_variant_note_requires_true_reverse_scene_view() -> None:
     assert "禁止复制主视图" in note
 
 
+def test_shared_variant_note_requires_true_reverse_fixture_structure() -> None:
+    note = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_场景木门_反面.png",
+        section_body="北宋小民楼屋的旧木板门，固定安装在粗木门框内，正面有横向木闩。",
+    )
+
+    assert "真实背面结构参考" in note
+    assert "加固横档" in note
+    assert "不得把正面可见的横木门闩" in note
+    assert "禁止镜像或复刻正面" in note
+
+
 def test_shared_variant_note_does_not_invent_floor_plan_features() -> None:
     note = codex_image_runner.shared_variant_note("出图/共享/图片/定妆_场景_屋内_平面图.png")
     assert "只标出资产登记" in note
     assert "不得凭空新增破顶" in note
+    assert "不得添加标题、图例栏、侧栏" in note
+    assert "最多八个简短中文标签" in note
     assert "主交战区" not in note
 
 
@@ -3035,6 +3049,7 @@ def test_shared_scene_resident_beast_keeps_registered_species_and_topology() -> 
     assert "武器入体/接触点铁律" not in guards
     assert "镜头为旁观者视角" not in guards
     assert "生产级场景主母本" in codex_image_runner.shared_variant_note(target.rel_path)
+    assert "不得做上下/左右多格拼板" in codex_image_runner.shared_variant_note(target.rel_path)
 
 
 def test_faceless_shared_scene_still_attaches_explicit_resident_beast_identity(tmp_path: Path) -> None:

@@ -246,7 +246,9 @@ def test_face_crop_centres_off_axis_head_on_gradient_turnaround_split(tmp_path: 
 
     assert 285 <= crop_center <= 330
     assert crop_box[1] <= 70
-    assert crop_box[3] >= 230
+    # Tight identity anchors should still retain the complete synthetic head,
+    # without the broad shoulder area that previously diluted face-area QC.
+    assert crop_box[3] >= 195
 
 
 def test_landscape_reference_board_prefers_right_face_inset(tmp_path: Path) -> None:

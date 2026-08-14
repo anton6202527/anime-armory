@@ -2,12 +2,9 @@
   "episode": "第1集",
   "generated_at": "2026-08-11T04:37:34+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-08-11T04:52:03+00:00",
-  "last_confirmed_by": "授权代理（仅高风险停审）",
+  "last_confirmed_at": "2026-08-14T09:10:32+00:00",
+  "last_confirmed_by": "codex_executor(owner-delegated)",
   "last_confirmed_lock_ids": [
-    "source_lock",
-    "script_lock",
-    "storyboard_lock",
     "style_identity_lock"
   ],
   "locks": [
@@ -155,15 +152,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-08-11T04:52:03+00:00",
-      "approver": "授权代理（仅高风险停审）",
+      "approved_at": "2026-08-14T09:10:32+00:00",
+      "approver": "codex_executor(owner-delegated)",
       "artifact_count": 4,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-08-11T03:02:26+00:00",
+          "mtime": "2026-08-11T06:15:22+00:00",
           "path": "_设置.md",
-          "sha256": "a71b6f0cb954d36de95b325537d208b4680ee569fc50d8be8678ba338ea4b10c"
+          "sha256": "cdd056bc67af799591f5cd5e8f0e497eefe29b76d73925eb2b5f4494e39243d6"
         },
         {
           "exists": true,
@@ -173,15 +170,15 @@
         },
         {
           "exists": true,
-          "mtime": "2026-08-11T04:52:03+00:00",
+          "mtime": "2026-08-14T09:09:32+00:00",
           "path": "出图/共享/identity_registry.json",
-          "sha256": "f5af6da35145169a5eca4b132773c4f32df9dbed9c250cc918b5634d63e527bc"
+          "sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889"
         },
         {
           "exists": true,
-          "mtime": "2026-08-11T04:19:59+00:00",
+          "mtime": "2026-08-14T01:52:11+00:00",
           "path": "生产数据/identity_adapter_matrix.json",
-          "sha256": "342613bb00ac149c1e5ec3e85eed92c17c30f6a7bd5d418d02247a14f06eaff3"
+          "sha256": "320959157c00a695cb3b179e92c56b15be846f5f6cc1c42bad1519b04808e77b"
         }
       ],
       "episode": "第1集",
@@ -450,6 +447,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "draft",
-  "updated_at": "2026-08-11T04:52:03+00:00",
+  "updated_at": "2026-08-14T09:10:32+00:00",
   "version": 1
 }

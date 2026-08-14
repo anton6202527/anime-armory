@@ -24,8 +24,8 @@
     "asset_targets": 77,
     "character_targets": 57,
     "multi_subject_targets": 30,
-    "planned": 105,
-    "ready": 59,
+    "planned": 87,
+    "ready": 77,
     "total": 164
   },
   "targets": [
@@ -159,7 +159,7 @@
     },
     {
       "owner": "BEAST_TIGER/常态",
-      "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+      "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -391,7 +391,7 @@
     },
     {
       "owner": "CHAR_MAGISTRATE/常态",
-      "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+      "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -463,7 +463,7 @@
     },
     {
       "owner": "CHAR_XIMENQING/常态",
-      "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+      "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -827,7 +827,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_BRAZIER",
@@ -835,7 +835,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_BRAZIER",
@@ -851,7 +851,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_WINE_CUP",
@@ -859,7 +859,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_WINE_CUP",
@@ -875,7 +875,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_SPILLED_WINE",
@@ -883,7 +883,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_SPILLED_WINE",
@@ -899,7 +899,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_LUGGAGE",
@@ -923,7 +923,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_DOOR",
@@ -931,7 +931,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_DOOR",
@@ -947,7 +947,7 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "wide_plate",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "LOC_COUNTY_YAMEN",
@@ -955,7 +955,7 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "reverse_angle",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "LOC_COUNTY_YAMEN",
@@ -979,7 +979,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_OFFICIAL_DOC",
@@ -1003,7 +1003,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_GIFT_LOAD",
@@ -1027,7 +1027,7 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "wide_plate",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "LOC_CITY_GATE",
@@ -1035,7 +1035,7 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "reverse_angle",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "LOC_CITY_GATE",
@@ -1059,7 +1059,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_WINDOW_CURTAIN",
@@ -1083,7 +1083,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_CURTAIN_FORK",
@@ -1091,7 +1091,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_CURTAIN_FORK",

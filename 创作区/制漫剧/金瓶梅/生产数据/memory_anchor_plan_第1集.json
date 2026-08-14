@@ -8,7 +8,7 @@
   "rows": [],
   "source_fingerprint": {
     "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-    "identity_registry_sha256": "ca5e4a9494f751725c4424629297e70c28e0511965983e30d305b3376d8c4f6d",
+    "identity_registry_sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
     "storyboard_sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
   },
   "status": "ready",

@@ -38,6 +38,7 @@ FACE_ANCHOR_SUFFIX = "脸部特写"
 FACE_ANCHOR_TARGET_SIZE = (1024, 1024)
 HALF_BODY_CROP = (0.08, 0.02, 0.92, 0.68)
 FACE_ANCHOR_CROP = (0.38, 0.11, 0.57, 0.31)
+FACE_ANCHOR_SUBJECT_HEIGHT_RATIO = 0.17
 SUBJECT_MASK_DISTANCE = 70
 EXPRESSION_CROP_METHOD = "expression_face_crop"
 BASE_EXPRESSION_CROP_METHOD = "front_expression_crop"
@@ -308,10 +309,15 @@ def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
     if kind == "face_anchor_refs":
         content_left, content_right = _content_column_bounds(img)
         content_width = max(1, content_right - content_left + 1)
-        # Build a generous square around the detected head.  It includes the
-        # entire hairstyle and chin/upper shoulders, while the content-column
-        # cap prevents neighbouring turnaround columns entering the crop.
-        side = max(128, round(min(content_width * 0.68, subject_height * 0.26)))
+        # Keep the detected face large enough for identity QC.  A 0.26-height
+        # crop left small-headed full-body references at roughly 13% face area;
+        # 0.17 targets about 30% while retaining hair, chin and a little collar.
+        # The content-column cap still prevents neighbouring turnaround columns
+        # from entering unusually narrow source crops.
+        side = max(
+            144,
+            round(min(content_width * 0.68, subject_height * FACE_ANCHOR_SUBJECT_HEIGHT_RATIO)),
+        )
         center_x = _head_center_x(img, bbox)
         crop_top = top - round(subject_height * 0.015)
         return _clamp_box(

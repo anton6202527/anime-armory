@@ -1,13 +1,13 @@
 # n2d 生产告警
 
-- root: /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅
-- generated_at: 2026-08-13T08:27:53+00:00
+- root: 创作区/制漫剧/金瓶梅
+- generated_at: 2026-08-14T09:11:55+00:00
 - 告警数: 2（critical 1 / warn 1）
 
 | 级别 | 类型 | 范围 | 说明 |
 |---|---|---|---|
-| 🔴 critical | qa_blockers | totals | QA 阻断 49 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
-| 🟡 warn | qa_blockers | 第1集 | 第1集 QA 阻断 49 项 |
+| 🔴 critical | qa_blockers | totals | QA 阻断 17 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
+| 🟡 warn | qa_blockers | 第1集 | 第1集 QA 阻断 17 项 |
 
 ## 当前阈值
 ```json

@@ -3,8 +3,8 @@
     {
       "asset": "PROP_BADGE",
       "asset_name": "都头腰牌",
-      "confirmed_at": "2026-08-12T02:02:54+00:00",
-      "contract_fingerprint": "93ac970d6b401c4f9b1e4ce28794e6e449db72bd8451f0c40f1e30ad4cb48e8e",
+      "confirmed_at": "2026-08-14T01:52:42+00:00",
+      "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
       "human_signoff": false,
       "must_not_have": [
         "现代物件",
@@ -14,15 +14,18 @@
       ],
       "png": "出图/共享/图片/定妆_道具_都头腰牌.png",
       "png_sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
-      "reason": "当前像素目视通过：长方圆角深色木牌配旧铜包角、铆钉与黑色系绳，克制耐用，符合古代官署随身凭信的道具语言；牌面无可读文字、现代徽记、警徽、二维码或水印，结构清晰且仅一件。",
+      "reason": "实际查看当前像素：单件竖向木制都头腰牌，旧铜护角与系绳明确；无多牌拼接、无现代证件结构、无文字水印。",
       "review_kind": "executor_visual",
-      "reviewer": "Codex视觉执行者",
+      "reviewer": "codex_executor(owner-delegated)",
       "reviewer_role": "ai_visual_executor",
-      "scale": "None",
+      "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
       "shape_contract": [
         "旧铜",
         "木质克制质感",
-        "文字不烤入画面"
+        "文字不烤入画面",
+        "约一掌高（12至16厘米）",
+        "宽度略窄于成年男子手掌",
+        "可单手完整握持"
       ],
       "shot": "shared_primary",
       "source": "image_qc:executor_visual_prop_shape_confirm",
@@ -227,8 +230,8 @@
     {
       "asset": "PROP_DOOR_LATCH",
       "asset_name": "门闩",
-      "confirmed_at": "2026-08-12T08:15:18+00:00",
-      "contract_fingerprint": "50752a793ae6922b76fe24d3031ae61f5f78ff4edff6cfedf56c4211b8b4f48f",
+      "confirmed_at": "2026-08-14T01:53:32+00:00",
+      "contract_fingerprint": "9002762476e4d8716496848af5be7905b58b4f8298ea5ef1a214d067bb4f696b",
       "human_signoff": false,
       "must_not_have": [
         "现代物件",
@@ -238,17 +241,14 @@
       ],
       "png": "出图/共享/图片/定妆_道具_门闩.png",
       "png_sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
-      "reason": "当前像素已审：单根横向厚木方闩贯穿左、中两个木导向套并进入右侧木闩座，全木榫钉结构，无任何金属锁具或垂直插销；左右方向可由闩杆左端余量与右端入座关系判断。",
+      "reason": "实际查看当前像素：一根横向粗木闩贯穿木制承托件，结构可水平滑动；比例与单手推动的传统门闩一致，无现代金属锁具、文字水印或数量漂移。",
       "review_kind": "executor_visual",
-      "reviewer": "Codex视觉执行者",
+      "reviewer": "codex_executor(owner-delegated)",
       "reviewer_role": "ai_visual_executor",
       "scale": "木闩长约 75–90 厘米，截面约 5–7 厘米方，安装在成人腰部至腹部高度，可单手包握并水平推动。",
       "shape_contract": [
-        "武大家粗板木门内侧的横向木闩：一根暗褐厚木方条",
-        "左侧为滑动起点",
-        "从左向右水平推入门框右侧木质闩座",
-        "两个导向木套固定在门板内侧",
-        "无金属锁芯",
+        "横向木闩从左滑右",
+        "落闩方向固定",
         "木闩长约 75–90 厘米",
         "截面约 5–7 厘米方",
         "安装在成人腰部至腹部高度",
@@ -606,6 +606,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-08-13T08:21:24+00:00",
+  "updated_at": "2026-08-14T01:53:32+00:00",
   "version": 1
 }

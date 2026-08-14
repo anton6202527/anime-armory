@@ -1400,6 +1400,35 @@ def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Pa
     assert signature["numeric_measurement"] == "pending_after_landed_frame_qc"
 
 
+def test_scene_primary_does_not_impersonate_reverse_or_floor_plan(tmp_path: Path) -> None:
+    old_defs = image_prompt_pack.ASSET_DEFS
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "定妆_场景_县衙案厅.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "LOC_TEST": {
+                "type": "scene",
+                "name": "县衙案厅",
+                "path_name": "定妆_场景_县衙案厅",
+                "positive": "地方县衙内厅",
+                "negative": "现代物件",
+                "constraints": {},
+            }
+        }
+        registry = image_prompt_pack.build_asset_registry(tmp_path)
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_defs
+
+    scene = registry["assets"][0]
+    assert scene["reference_group"]["primary"]["status"] == "ready"
+    assert scene["reference_group"]["reverse"]["status"] == "planned"
+    assert scene["reference_group"]["reverse"]["path"].endswith("_反打.png")
+    assert scene["reference_group"]["floor_plan"]["status"] == "planned"
+    assert scene["reference_group"]["floor_plan"]["path"].endswith("_平面图.png")
+    assert scene["scene_atlas"]["base_views"]["back"]["status"] == "planned"
+
+
 def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> None:
     story = {
         "episode": 2,

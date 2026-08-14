@@ -1,7 +1,7 @@
 # 无成本图片生产包
 
 - episode: 第1集
-- reference_generation_tasks: 105
+- reference_generation_tasks: 87
 - keyshot_candidate_tasks: 15
 - regional_construct_manifests: 15
 - shot_packages: 15
@@ -80,40 +80,22 @@
 | REF_093 | P1 | PROP_TEA_CUP | detail_closeup | 出图/共享/图片/定妆_PROP_TEA_CUP_detail_closeup.png |
 | REF_096 | P1 | PROP_DOORFRAME | detail_closeup | 出图/共享/图片/定妆_PROP_DOORFRAME_detail_closeup.png |
 | REF_099 | P1 | PROP_DOOR_LATCH | detail_closeup | 出图/共享/图片/定妆_PROP_DOOR_LATCH_detail_closeup.png |
-| REF_100 | P1 | PROP_BRAZIER | primary | 出图/共享/图片/定妆_道具_炭盆.png |
-| REF_101 | P1 | PROP_BRAZIER | scale_reference | 出图/共享/图片/定妆_道具_炭盆_比例.png |
 | REF_102 | P1 | PROP_BRAZIER | detail_closeup | 出图/共享/图片/定妆_PROP_BRAZIER_detail_closeup.png |
-| REF_103 | P1 | PROP_WINE_CUP | primary | 出图/共享/图片/定妆_道具_半杯酒.png |
-| REF_104 | P1 | PROP_WINE_CUP | scale_reference | 出图/共享/图片/定妆_道具_半杯酒_比例.png |
 | REF_105 | P1 | PROP_WINE_CUP | detail_closeup | 出图/共享/图片/定妆_PROP_WINE_CUP_detail_closeup.png |
-| REF_106 | P1 | PROP_SPILLED_WINE | primary | 出图/共享/图片/定妆_道具_SPILLED_WINE.png |
-| REF_107 | P1 | PROP_SPILLED_WINE | scale_reference | 出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png |
 | REF_108 | P1 | PROP_SPILLED_WINE | detail_closeup | 出图/共享/图片/定妆_PROP_SPILLED_WINE_detail_closeup.png |
-| REF_109 | P1 | PROP_LUGGAGE | primary | 出图/共享/图片/定妆_道具_素布行李.png |
 | REF_110 | P1 | PROP_LUGGAGE | scale_reference | 出图/共享/图片/定妆_道具_素布行李_比例.png |
 | REF_111 | P1 | PROP_LUGGAGE | detail_closeup | 出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png |
-| REF_112 | P1 | PROP_DOOR | primary | 出图/共享/图片/定妆_道具_场景木门.png |
-| REF_113 | P1 | PROP_DOOR | scale_reference | 出图/共享/图片/定妆_道具_场景木门_比例.png |
 | REF_114 | P1 | PROP_DOOR | detail_closeup | 出图/共享/图片/定妆_PROP_DOOR_detail_closeup.png |
-| REF_115 | P1 | LOC_COUNTY_YAMEN | wide_plate | 出图/共享/图片/定妆_场景_县衙案厅.png |
-| REF_116 | P1 | LOC_COUNTY_YAMEN | reverse_angle | 出图/共享/图片/定妆_场景_县衙案厅_反打.png |
 | REF_117 | P1 | LOC_COUNTY_YAMEN | empty_plate | 出图/共享/图片/定妆_LOC_COUNTY_YAMEN_empty_plate.png |
 | REF_118 | P1 | LOC_COUNTY_YAMEN | lighting_plate | 出图/共享/图片/定妆_LOC_COUNTY_YAMEN_lighting_plate.png |
-| REF_119 | P1 | PROP_OFFICIAL_DOC | primary | 出图/共享/图片/定妆_道具_公文.png |
 | REF_120 | P1 | PROP_OFFICIAL_DOC | scale_reference | 出图/共享/图片/定妆_道具_公文_比例.png |
 | REF_121 | P1 | PROP_OFFICIAL_DOC | detail_closeup | 出图/共享/图片/定妆_PROP_OFFICIAL_DOC_detail_closeup.png |
-| REF_122 | P1 | PROP_GIFT_LOAD | primary | 出图/共享/图片/定妆_道具_东京礼担.png |
 | REF_123 | P1 | PROP_GIFT_LOAD | scale_reference | 出图/共享/图片/定妆_道具_东京礼担_比例.png |
 | REF_124 | P1 | PROP_GIFT_LOAD | detail_closeup | 出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png |
-| REF_125 | P1 | LOC_CITY_GATE | wide_plate | 出图/共享/图片/定妆_场景_阳谷城门清晨.png |
-| REF_126 | P1 | LOC_CITY_GATE | reverse_angle | 出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png |
 | REF_127 | P1 | LOC_CITY_GATE | empty_plate | 出图/共享/图片/定妆_LOC_CITY_GATE_empty_plate.png |
 | REF_128 | P1 | LOC_CITY_GATE | lighting_plate | 出图/共享/图片/定妆_LOC_CITY_GATE_lighting_plate.png |
-| REF_129 | P1 | PROP_WINDOW_CURTAIN | primary | 出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png |
 | REF_130 | P1 | PROP_WINDOW_CURTAIN | scale_reference | 出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png |
 | REF_131 | P1 | PROP_WINDOW_CURTAIN | detail_closeup | 出图/共享/图片/定妆_PROP_WINDOW_CURTAIN_detail_closeup.png |
-| REF_132 | P1 | PROP_CURTAIN_FORK | primary | 出图/共享/图片/定妆_道具_叉竿.png |
-| REF_133 | P1 | PROP_CURTAIN_FORK | scale_reference | 出图/共享/图片/定妆_道具_叉竿_比例.png |
 | REF_134 | P1 | PROP_CURTAIN_FORK | detail_closeup | 出图/共享/图片/定妆_PROP_CURTAIN_FORK_detail_closeup.png |
 
 ## 关键镜候选

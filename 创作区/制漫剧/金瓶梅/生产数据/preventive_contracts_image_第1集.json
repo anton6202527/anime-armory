@@ -4,78 +4,8 @@
   "findings": [
     {
       "gate": "reference_slot_gate",
-      "loc": "CROWD_HUNTERS/群像",
-      "message": "核心/出场角色 CROWD_HUNTERS/群像 引用槽位未绑定真实产物：出图/共享/图片/定妆_CROWD_HUNTERS__常态_手部局部.png 不存在；出图/共享/图片/定妆_CROWD_HUNTERS__常态_布料局部.png 不存在；出图/共享/图片/定妆_CROWD_HUNTERS__常态_手部局部.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "LOC_CITY_GATE",
-      "message": "道具/场景 LOC_CITY_GATE 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_阳谷城门清晨.png 不存在；出图/共享/图片/定妆_场景_阳谷城门清晨.png 不存在；出图/共享/图片/定妆_场景_阳谷城门清晨.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "LOC_COUNTY_YAMEN",
-      "message": "道具/场景 LOC_COUNTY_YAMEN 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_县衙案厅.png 不存在；出图/共享/图片/定妆_场景_县衙案厅.png 不存在；出图/共享/图片/定妆_场景_县衙案厅.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "LOC_JINGYANGGANG",
-      "message": "道具/场景 LOC_JINGYANGGANG 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "LOC_YANGGU_STREET",
-      "message": "道具/场景 LOC_YANGGU_STREET 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "PROP_BRAZIER",
-      "message": "道具/场景 PROP_BRAZIER 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_炭盆.png 不存在；出图/共享/图片/定妆_道具_炭盆.png 不存在；出图/共享/图片/定妆_道具_炭盆_比例.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "PROP_CURTAIN_FORK",
-      "message": "道具/场景 PROP_CURTAIN_FORK 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_叉竿.png 不存在；出图/共享/图片/定妆_道具_叉竿.png 不存在；出图/共享/图片/定妆_道具_叉竿_比例.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "PROP_DOOR",
-      "message": "道具/场景 PROP_DOOR 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_场景木门.png 不存在；出图/共享/图片/定妆_道具_场景木门.png 不存在；出图/共享/图片/定妆_道具_场景木门_比例.png 不存在",
+      "loc": "PROP_DOORFRAME",
+      "message": "道具/场景 PROP_DOORFRAME 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_DOORFRAME_反面.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -85,7 +15,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_GIFT_LOAD",
-      "message": "道具/场景 PROP_GIFT_LOAD 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_东京礼担.png 不存在；出图/共享/图片/定妆_道具_东京礼担.png 不存在；出图/共享/图片/定妆_道具_东京礼担_比例.png 不存在",
+      "message": "道具/场景 PROP_GIFT_LOAD 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_东京礼担_比例.png 不存在；出图/共享/图片/定妆_道具_东京礼担_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -95,7 +25,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_LUGGAGE",
-      "message": "道具/场景 PROP_LUGGAGE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_素布行李.png 不存在；出图/共享/图片/定妆_道具_素布行李.png 不存在；出图/共享/图片/定妆_道具_素布行李_比例.png 不存在",
+      "message": "道具/场景 PROP_LUGGAGE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_素布行李_比例.png 不存在；出图/共享/图片/定妆_道具_素布行李_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -105,7 +35,17 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_OFFICIAL_DOC",
-      "message": "道具/场景 PROP_OFFICIAL_DOC 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_公文.png 不存在；出图/共享/图片/定妆_道具_公文.png 不存在；出图/共享/图片/定妆_道具_公文_比例.png 不存在",
+      "message": "道具/场景 PROP_OFFICIAL_DOC 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_公文_比例.png 不存在；出图/共享/图片/定妆_道具_公文_手持.png 不存在",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "PROP_REWARD_SILVER",
+      "message": "道具/场景 PROP_REWARD_SILVER 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_REWARD_SILVER_反面.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -115,7 +55,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_SPILLED_WINE",
-      "message": "道具/场景 PROP_SPILLED_WINE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_SPILLED_WINE.png 不存在；出图/共享/图片/定妆_道具_SPILLED_WINE.png 不存在；出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png 不存在",
+      "message": "道具/场景 PROP_SPILLED_WINE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -125,7 +65,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_WINDOW_CURTAIN",
-      "message": "道具/场景 PROP_WINDOW_CURTAIN 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png 不存在；出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png 不存在；出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png 不存在",
+      "message": "道具/场景 PROP_WINDOW_CURTAIN 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png 不存在；出图/共享/图片/定妆_道具_WINDOW_CURTAIN_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -134,8 +74,8 @@
     },
     {
       "gate": "reference_slot_gate",
-      "loc": "PROP_WINE_CUP",
-      "message": "道具/场景 PROP_WINE_CUP 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_半杯酒.png 不存在；出图/共享/图片/定妆_道具_半杯酒.png 不存在；出图/共享/图片/定妆_道具_半杯酒_比例.png 不存在",
+      "loc": "PROP_WINDOW_LATTICE",
+      "message": "道具/场景 PROP_WINDOW_LATTICE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_WINDOW_LATTICE_反面.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -146,14 +86,14 @@
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-08-13T03:49:29+00:00",
+  "generated_at": "2026-08-14T09:11:37+00:00",
   "kind": "n2d_preventive_contract_report",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
   "scaffolded": false,
   "stage": "image",
   "status": "blocked",
   "summary": {
-    "block": 14,
+    "block": 8,
     "info": 0,
     "warn": 0
   },

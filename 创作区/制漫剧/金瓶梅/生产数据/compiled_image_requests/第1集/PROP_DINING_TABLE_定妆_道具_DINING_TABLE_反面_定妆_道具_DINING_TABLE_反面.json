@@ -1,0 +1,110 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_DINING_TABLE_定妆_道具_DINING_TABLE_反面_定妆_道具_DINING_TABLE_反面.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_DINING_TABLE_反面.png；本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐；结构锁: 武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐；归属/用途: 剧情资产；当前状态: 武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DINING_TABLE的asset参考 图3作为PROP_DINING_TABLE的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DINING TABLE结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1393,
+  "actual_submit_prompt_sha256": "7ba2d0bd56ce4e036667989cd0250b585cc5691af1654d3a713b9874fa2dac7e",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_DINING_TABLE_定妆_道具_DINING_TABLE_反面_定妆_道具_DINING_TABLE_反面.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_DINING_TABLE_反面.png；本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐；结构锁: 武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐；归属/用途: 剧情资产；当前状态: 武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DINING_TABLE的asset参考 图3作为PROP_DINING_TABLE的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DINING TABLE结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_DINING_TABLE",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DINING_TABLE__b781bb7c58b3_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "0286ef863e8ad17b930f17c2d7aca1f853f50df89d42e835ac07bd5a39264930"
+      },
+      {
+        "index": 3,
+        "owner": "PROP_DINING_TABLE",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DINING_TABLE_比例__2ae3976ab6bc_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "4b7899d015f9c96a8f50ebd9c4fa7df44ae6b5db930d7295551670a47197ddc7"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "6d7a5954afcb026c51d8a4624f216092f8818ad5ffda79732d6898cf5614eb2f",
+    "compiler_decisions": [],
+    "execution_context_sha256": "8e0d6e0c5cf930f0bea29d03610653798b8e7b55e8d18bfbd04ed4f19a94869c",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:30>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 30,
+      "constraint_compression": {
+        "policy_guard_input": 3,
+        "policy_guard_output": 3,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 221,
+      "negative_chars": 0,
+      "prompt_chars": 881,
+      "reference_count": 3
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成独立生产级资产参考图：图片/定妆_道具_DINING_TABLE_反面.png；本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐；结构锁: 武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐；归属/用途: 剧情资产；当前状态: 武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DINING_TABLE的asset参考 图3作为PROP_DINING_TABLE的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DINING TABLE结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_DINING_TABLE",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DINING_TABLE__b781bb7c58b3_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "0286ef863e8ad17b930f17c2d7aca1f853f50df89d42e835ac07bd5a39264930"
+      },
+      {
+        "index": 3,
+        "owner": "PROP_DINING_TABLE",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DINING_TABLE_比例__2ae3976ab6bc_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "4b7899d015f9c96a8f50ebd9c4fa7df44ae6b5db930d7295551670a47197ddc7"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "43c68760d069d77f6e06ef281abed8075aa60e567d0331bb8e7e97c9e347bac5",
+    "source_contract_text_sha256": "9c6b0967da16ab358add690d53d019d7259a2bf6908bc4f2cf07b6800d9f1108",
+    "task_type": "prop_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-14T07:46:36+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "9bb663da005c23ffbd517cd35343d77be6ede7eb1ac17c5b51cc86e5e26c4943",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "PROP_DINING_TABLE::定妆_道具_DINING_TABLE_反面",
+  "target": "出图/共享/图片/定妆_道具_DINING_TABLE_反面.png",
+  "version": 1
+}

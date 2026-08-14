@@ -3214,8 +3214,10 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
         if cfg["type"] in {"scene", "location"}:
             rg.update({
                 "front": asset_ref_existing(root, [path_name, path_name + "_正机位"]),
-                "reverse": asset_ref_existing(root, [path_name + "_反打", path_name + "_反打机位", path_name]),
-                "floor_plan": asset_ref_existing(root, [path_name + "_平面图", path_name]),
+                # Reverse and floor-plan are distinct spatial evidence.  Never
+                # let a landed primary silently satisfy either slot.
+                "reverse": asset_ref_existing(root, [path_name + "_反打", path_name + "_反打机位"]),
+                "floor_plan": asset_ref_existing(root, [path_name + "_平面图"]),
             })
         if cfg["type"] in {"prop", "weapon"}:
             # These are distinct production views. A landed clean primary asset
@@ -3276,7 +3278,7 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
                 "scene_atlas": {
                     "base_views": {
                         "front": asset_ref_existing(root, [path_name, path_name + "_正机位"]),
-                        "back": asset_ref_existing(root, [path_name + "_反打", path_name + "_反打机位", path_name]),
+                        "back": asset_ref_existing(root, [path_name + "_反打", path_name + "_反打机位"]),
                     }
                 },
             })

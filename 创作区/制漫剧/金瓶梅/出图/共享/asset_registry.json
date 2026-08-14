@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-08-11T04:15:54+00:00",
+  "generated_at": "2026-08-14T09:09:32+00:00",
   "assets": [
     {
       "id": "LOC_JINGYANGGANG",
@@ -15,7 +15,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-12T01:36:50.278786+00:00"
+            "reviewed_at": "2026-08-14T02:53:42.657932+00:00"
           }
         },
         "front": {
@@ -25,20 +25,28 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-08-12T01:36:50.278996+00:00"
+            "reviewed_at": "2026-08-14T02:53:42.658139+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:53:42.658155+00:00"
           }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:53:42.658165+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -51,7 +59,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "be4f71b6df2b6db8ca4524fd5145fa6da5cdac5ad35f48c1f099863cebe88229",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -117,22 +126,44 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-08-12T01:36:50.279028+00:00"
+              "reviewed_at": "2026-08-14T02:53:42.658177+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
-            "status": "review_pending",
+            "status": "ready",
             "human_review": {
-              "status": "pending",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-08-14T02:53:42.658184+00:00"
             }
           }
         }
       },
+      "self_check_at": "2026-08-14T02:53:42+00:00",
+      "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "be4f71b6df2b6db8ca4524fd5145fa6da5cdac5ad35f48c1f099863cebe88229",
-      "self_check_at": "2026-08-12T01:36:50+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+            "png_sha256": "be4f71b6df2b6db8ca4524fd5145fa6da5cdac5ad35f48c1f099863cebe88229",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
+            "png_sha256": "03957706e173d09b4560d63e6a7e1284c31ad3ec7b8369372f15b47d621fa754",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_QUARTERSTAFF",
@@ -151,7 +182,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_梢棒_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -159,7 +190,7 @@
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_梢棒_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -176,7 +207,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_梢棒.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -231,9 +263,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
       "self_check_at": "2026-08-12T01:47:09+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_梢棒.png",
+            "png_sha256": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_梢棒_比例.png",
+            "png_sha256": "578fd6c7aac6b33133bc6ca78c6b12165febee49f44a7c00ca9cf74b3c2035e5",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_梢棒_手持.png",
+            "png_sha256": "5d1a9d74577273f7130355e4d035831abe3323d950da374ae397260db952a8fa",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_BADGE",
@@ -252,7 +311,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -260,7 +319,7 @@
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_都头腰牌_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -272,12 +331,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_BADGE_都头腰牌.md",
           "status": "ready",
-          "sha256": "c0be0beb895ac17c1d6f17fa411af5763c5df5a65926bc97ad5f725a66e4ceae"
+          "sha256": "08fa3a698af297d6276b15c708dd25583de50b7af7a49315e56b2fd7ed6d9f46"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_都头腰牌.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -285,7 +345,7 @@
         }
       ],
       "constraints": {
-        "structure": "旧铜/木质克制质感，文字不烤入画面。腰牌约一掌高（约12至16厘米）、可被成年男子单手完整握持；悬挂腰间时不超过髋部，不得画成盾牌、门牌或大木板。",
+        "structure": "旧铜/木质克制质感，文字不烤入画面。",
         "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
         "face_policy": "faceless",
         "must_not_have": [
@@ -298,11 +358,11 @@
       "face_policy": "faceless",
       "drift_forbidden": [
         "不要让都头腰牌结构/颜色/尺寸漂移",
-        "不要把腰牌放大成超过手掌的大木板、盾牌或门牌",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要把腰牌放大成超过手掌的大木板、盾牌或门牌"
       ],
       "scene_dna": {
         "belonging_anchor": "都头腰牌 属于本集剧情资产，不是独立场景。",
@@ -325,7 +385,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "旧铜/木质克制质感，约一掌高（12至16厘米），可单手完整握持，文字不烤入画面。",
+      "current_state": "旧铜/木质克制质感，文字不烤入画面。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -334,9 +394,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
       "self_check_at": "2026-08-12T02:02:54+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_都头腰牌.png",
+            "png_sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
+            "png_sha256": "29ad17409907c84e92dd08590c33d8413038a1f09c1b024fedd8ba4ebbbe7185",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_都头腰牌_手持.png",
+            "png_sha256": "c974d0b0326936b3c9ddf6349cce2dea056b97455323c8854200770cddaddb83",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_REWARD_SILVER",
@@ -355,19 +442,15 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
           }
         },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_手持.png",
-          "status": "review_pending",
-          "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
-          }
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_反面.png",
+          "status": "planned"
         }
       },
       "reference_slots": [
@@ -375,12 +458,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_REWARD_SILVER_REWARD_SILVER.md",
           "status": "ready",
-          "sha256": "27a782d55c60b08051aeae43913dd27b647aebe9b9acf6374a3558fc43091013"
+          "sha256": "46e1d0d595ea6160880fe3d8d4a416135c8442269e41a29bec250432cbaaca2c"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -400,12 +484,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让赏银银铤结构/颜色/尺寸漂移",
-        "不要变成现代标准金条、金币、硬币、金色元宝或镜面纪念品",
+        "不要让REWARD SILVER结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让赏银银铤结构/颜色/尺寸漂移",
+        "不要变成现代标准金条、金币、硬币、金色元宝或镜面纪念品"
       ],
       "scene_dna": {
         "belonging_anchor": "REWARD SILVER 属于本集剧情资产，不是独立场景。",
@@ -428,7 +513,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "一枚北宋官府赏银银铤，掌心大小，粗铸银灰、无可读铭文。",
+      "current_state": "北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -437,9 +522,29 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
       "self_check_at": "2026-08-12T02:33:08+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+            "png_sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
+            "png_sha256": "4f22295f10e1216f448ba567185ce0555b78cc88cf3efbd372afc42e5836104e",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "LOC_YANGGU_STREET",
@@ -453,7 +558,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-12T03:16:37.400935+00:00"
+            "reviewed_at": "2026-08-14T03:07:03.615092+00:00"
           }
         },
         "front": {
@@ -463,20 +568,28 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-08-12T03:16:37.401086+00:00"
+            "reviewed_at": "2026-08-14T03:07:03.615238+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-14T03:07:03.615251+00:00"
           }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-08-14T03:07:03.615260+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -489,7 +602,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "1f5805cad3244eea50f90fbaf9bdbf9b69c35af4f7d5448863c84c5b010a1315",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -555,22 +669,44 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-08-12T03:16:37.401379+00:00"
+              "reviewed_at": "2026-08-14T03:07:03.615274+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
-            "status": "review_pending",
+            "status": "ready",
             "human_review": {
-              "status": "pending",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-08-14T03:07:03.615284+00:00"
             }
           }
         }
       },
+      "self_check_at": "2026-08-14T03:07:03+00:00",
+      "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "1f5805cad3244eea50f90fbaf9bdbf9b69c35af4f7d5448863c84c5b010a1315",
-      "self_check_at": "2026-08-12T03:16:37+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+            "png_sha256": "1f5805cad3244eea50f90fbaf9bdbf9b69c35af4f7d5448863c84c5b010a1315",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
+            "png_sha256": "c9d895367254a9a27d4917967c5b8c4cd4c8160abe53073c55df8edd18132a49",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_CAKE_POLE",
@@ -589,7 +725,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -597,7 +733,7 @@
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_炊饼担_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -614,7 +750,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_炊饼担.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -669,9 +806,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
       "self_check_at": "2026-08-12T03:23:53+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_炊饼担.png",
+            "png_sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
+            "png_sha256": "0a66e4f0b733c070cd56d7fbcd8194a6ce011b3099c84feeabc9ea289ecf129a",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_炊饼担_手持.png",
+            "png_sha256": "77cfa5f73568c023fc7c6b71107b388f1ba35b99936fab01aaf55c425eacb3e9",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_WINDOW_LATTICE",
@@ -690,19 +854,15 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
           }
         },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_手持.png",
-          "status": "review_pending",
-          "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
-          }
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_反面.png",
+          "status": "planned"
         }
       },
       "reference_slots": [
@@ -710,12 +870,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_WINDOW_LATTICE_WINDOW_LATTICE.md",
           "status": "ready",
-          "sha256": "a8047584a18930065676a2d96c87e8117fcc5ae67108e1155432b401c493d16c"
+          "sha256": "04942ba6a24e35a78ba63e22509d176fdcfef281e01242f62a4762e7e202a2a4"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -735,12 +896,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让木制方格棂、窄高单扇窗框、素色窗纸的结构/颜色/尺寸漂移",
-        "不要玻璃窗、铝合金窗、西式窗、满洲窗、清式繁复花格或现代五金",
+        "不要让WINDOW LATTICE结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让木制方格棂、窄高单扇窗框、素色窗纸的结构/颜色/尺寸漂移",
+        "不要玻璃窗、铝合金窗、西式窗、满洲窗、清式繁复花格或现代五金"
       ],
       "scene_dna": {
         "belonging_anchor": "WINDOW LATTICE 属于本集剧情资产，不是独立场景。",
@@ -763,7 +925,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "武大家二层临街木格窗，暗褐老木、素纸无纹，窗扇可由室内单手推开。",
+      "current_state": "北宋县城民宅二层木制格窗：单扇窄高长方形窗框，暗褐老木，细密正方格棂，内侧糊素色无纹窗纸，侧轴向内开合；是墙上固定建筑构件，不是手持小物。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -772,9 +934,29 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
       "self_check_at": "2026-08-12T03:35:59+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+            "png_sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
+            "png_sha256": "027669b1ea3c7a19c5db97f53beda679788b567595fbf87af195741c4d19ea8a",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "LOC_WUDA_HOME",
@@ -803,7 +985,7 @@
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -811,7 +993,7 @@
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -828,7 +1010,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -899,7 +1082,7 @@
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
-            "status": "review_pending",
+            "status": "ready",
             "human_review": {
               "status": "pending",
               "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -907,9 +1090,36 @@
           }
         }
       },
-      "artifact_sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
       "self_check_at": "2026-08-12T03:58:47+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+            "png_sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
+            "png_sha256": "b048662d527f9ff79aea7bb3794fac69a316a0642ab248c73e3ced2fbb89396d",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png",
+            "png_sha256": "2df7a56e436ea12ea278b4b12189c555d7c9b5d75d6030a52b09ef2733b5c9f7",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_STAIR_RAIL",
@@ -928,7 +1138,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -936,7 +1146,7 @@
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -948,12 +1158,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_STAIR_RAIL_STAIR_RAIL.md",
           "status": "ready",
-          "sha256": "f1a33665574f3ac626bb200e9628f16153f6b94952ff94dc0f911e96a99e0b70"
+          "sha256": "96e35e4d7bd1b1f0e0f1a4de1bfa97a06c5e1d8b2ba5d487e3194e7980e6e025"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -973,12 +1184,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让斜向木扶手、等距直棂、端柱与楼梯固定关系漂移",
-        "不要金属、玻璃、旋转楼梯、宫殿雕花、欧式栏杆或室外阳台护栏",
+        "不要让STAIR RAIL结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让斜向木扶手、等距直棂、端柱与楼梯固定关系漂移",
+        "不要金属、玻璃、旋转楼梯、宫殿雕花、欧式栏杆或室外阳台护栏"
       ],
       "scene_dna": {
         "belonging_anchor": "STAIR RAIL 属于本集剧情资产，不是独立场景。",
@@ -1001,7 +1213,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "武大家室内窄木楼梯单侧扶栏，暗褐老木，成人腰高，固定安装。",
+      "current_state": "武大家二层木楼的室内楼梯扶栏：粗朴暗褐老木，一道斜向圆角扶手、等距直棂和端部方柱，榫卯结构，固定在窄木楼梯一侧，不是可搬运家具。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1010,9 +1222,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
       "self_check_at": "2026-08-12T04:22:42+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
+            "png_sha256": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
+            "png_sha256": "5e544bb8a712f0c3dddb39ed8d6d60ef164d29602a5e076624c5dcea2c671de0",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_STAIR_RAIL_手持.png",
+            "png_sha256": "823506c8006f63e4df890e0b0a7f9725967814f4f069a92f6ac7eafb5ba87be3",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_DINING_TABLE",
@@ -1026,23 +1265,27 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-12T06:01:55.876185+00:00"
+            "reviewed_at": "2026-08-14T07:50:04.780371+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-14T07:50:04.780732+00:00"
           }
         },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_DINING_TABLE_手持.png",
-          "status": "review_pending",
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_DINING_TABLE_反面.png",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-14T07:50:04.780752+00:00"
           }
         }
       },
@@ -1051,12 +1294,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_DINING_TABLE_DINING_TABLE.md",
           "status": "ready",
-          "sha256": "611215217e09d19e5a86d09ee2657a2136430ef7675dd6451a278d1a33c629ca"
+          "sha256": "df2bf1adafbcea836075c094aa946d5b2aac4e511cdd978787f5acaded1511de"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1076,12 +1320,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让长方厚木桌面、四直腿与桌下横撑结构/颜色/尺寸漂移",
-        "不要圆桌、八仙桌、现代餐桌、金属桌腿、玻璃、抽屉、桌布、繁复雕花或宫廷家具",
+        "不要让DINING TABLE结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让长方厚木桌面、四直腿与桌下横撑结构/颜色/尺寸漂移",
+        "不要圆桌、八仙桌、现代餐桌、金属桌腿、玻璃、抽屉、桌布、繁复雕花或宫廷家具"
       ],
       "scene_dna": {
         "belonging_anchor": "DINING TABLE 属于本集剧情资产，不是独立场景。",
@@ -1104,7 +1349,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "武大家屋内两人对坐的贫户长方老木桌，素净无桌布。",
+      "current_state": "武大家屋内的贫户长方木桌：厚实暗褐老木桌面，四条直腿，桌下横撑以榫卯连接，无抽屉、无桌布、无雕花，能供两人隔桌对坐。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1113,9 +1358,29 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-14T07:50:04+00:00",
+      "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
-      "self_check_at": "2026-08-12T06:01:55+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
+            "png_sha256": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
+            "png_sha256": "2ae3976ab6bcba0bd0c143c539a04576a731a3b4f25703260c8267b10b6ad3f3",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_TEA_CUP",
@@ -1134,7 +1399,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1142,7 +1407,7 @@
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_TEA_CUP_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1154,12 +1419,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_TEA_CUP_TEA_CUP.md",
           "status": "ready",
-          "sha256": "71595ca06b4dd1af6a5595934c134fe8ed52147a1deb5268a731c8806c1f96e2"
+          "sha256": "30d022bb66dfe54d2f59b84fd97eeab5f376db686e82156637a82bc8b839226c"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1179,12 +1445,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让小型敞口、深腹、矮圈足粗陶盏的结构/颜色/尺寸漂移",
-        "不要杯把、杯盖、托盘、玻璃、白瓷高足杯、马克杯、日式寿司茶杯或现代器皿",
+        "不要让TEA CUP结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让小型敞口、深腹、矮圈足粗陶盏的结构/颜色/尺寸漂移",
+        "不要杯把、杯盖、托盘、玻璃、白瓷高足杯、马克杯、日式寿司茶杯或现代器皿"
       ],
       "scene_dna": {
         "belonging_anchor": "TEA CUP 属于本集剧情资产，不是独立场景。",
@@ -1207,7 +1474,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "武大家木桌上的单只灰褐粗陶小茶盏，无把无盖。",
+      "current_state": "北宋县城贫户日用茶盏：单只小型粗陶敞口盏，口沿微外撇，深腹、矮圈足，灰褐至深褐粗釉，无杯把、无杯盖、无托盘、无纹字。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1216,9 +1483,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
       "self_check_at": "2026-08-12T07:08:14+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_TEA_CUP.png",
+            "png_sha256": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
+            "png_sha256": "4aef11fb2d5ac69aee18a45374aec8340a27719e59d429d16a83dee32f02670c",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_TEA_CUP_手持.png",
+            "png_sha256": "2c8fa21ebf4fd31413c5fc349d78fd2e0f2df8d76ef18c2a66e8a681703d6a3e",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_DOORFRAME",
@@ -1237,19 +1531,15 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
           }
         },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_DOORFRAME_手持.png",
-          "status": "review_pending",
-          "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
-          }
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_DOORFRAME_反面.png",
+          "status": "planned"
         }
       },
       "reference_slots": [
@@ -1257,12 +1547,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_DOORFRAME.md",
           "status": "ready",
-          "sha256": "30ac535caec82b7549f578907ba12073c44f3d6f973a42e2c28e072b4b35f250"
+          "sha256": "e81dcbda056a84e1a22d6406a3c7f8b8e3132c202d03d21de8b18b34bfd97b4e"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1282,12 +1573,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让两立柱、单横楣、低门槛与土墙固定的结构/颜色/尺寸漂移",
-        "不要拱门、牌楼、宫殿彩画、繁复雕花、现代门套、金属合页、玻璃或西式门框",
+        "不要让DOORFRAME结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让两立柱、单横楣、低门槛与土墙固定的结构/颜色/尺寸漂移",
+        "不要拱门、牌楼、宫殿彩画、繁复雕花、现代门套、金属合页、玻璃或西式门框"
       ],
       "scene_dna": {
         "belonging_anchor": "DOORFRAME 属于本集剧情资产，不是独立场景。",
@@ -1310,7 +1602,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "武大家屋内右后出入口的素木门框，土墙固定，配粗板木门向内开。",
+      "current_state": "武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1319,9 +1611,29 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
       "self_check_at": "2026-08-12T07:27:54+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_DOORFRAME.png",
+            "png_sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
+            "png_sha256": "8290ad629c772bf735b33821651bd7d6e6ea5dd9b220c327d32915ad57e21117",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_DOOR_LATCH",
@@ -1340,7 +1652,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_门闩_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1348,7 +1660,7 @@
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_道具_门闩_反面.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1360,12 +1672,13 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_DOOR_LATCH_门闩.md",
           "status": "ready",
-          "sha256": "026b74ca3f6b4a32583f72172add351b58d8b3ec57941c46323f2cfc60b0f50f"
+          "sha256": "5517188e2a00efdbdc2777ad376d9aa9a865b564e01f85f86cd233f15a315055"
         },
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_门闩.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1373,7 +1686,7 @@
         }
       ],
       "constraints": {
-        "structure": "武大家粗板木门内侧的横向木闩：一根暗褐厚木方条，左侧为滑动起点，从左向右水平推入门框右侧木质闩座；两个导向木套固定在门板内侧，无金属锁芯。",
+        "structure": "横向木闩从左滑右，落闩方向固定。",
         "scale": "木闩长约 75–90 厘米，截面约 5–7 厘米方，安装在成人腰部至腹部高度，可单手包握并水平推动。",
         "face_policy": "faceless",
         "must_not_have": [
@@ -1385,12 +1698,13 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让单根横向厚木闩、两导向木套、右侧闩座和从左滑右的方向漂移",
-        "不要现代门锁、挂锁、金属插销、门链、钥匙、双闩、竖向闩或电子锁",
+        "不要让门闩结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让单根横向厚木闩、两导向木套、右侧闩座和从左滑右的方向漂移",
+        "不要现代门锁、挂锁、金属插销、门链、钥匙、双闩、竖向闩或电子锁"
       ],
       "scene_dna": {
         "belonging_anchor": "门闩 属于本集剧情资产，不是独立场景。",
@@ -1413,7 +1727,7 @@
       "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
-      "current_state": "横向厚木闩位于门内腰高，由左向右滑入木质闩座，落闩方向固定。",
+      "current_state": "横向木闩从左滑右，落闩方向固定。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -1422,9 +1736,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
       "self_check_at": "2026-08-12T08:15:18+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_门闩.png",
+            "png_sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_门闩_比例.png",
+            "png_sha256": "4865f8ad535c8778bc6e299703e4b70d51ccd444910b0094b97ccf4d82a498ad",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_门闩_反面.png",
+            "png_sha256": "10dcc21b57f66afe54a4318b45052fa98ba2e7eb49e9a63abb5259ecb1ad6df9",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_BRAZIER",
@@ -1472,7 +1813,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_炭盆.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1527,9 +1869,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
       "self_check_at": "2026-08-13T04:38:34+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_炭盆.png",
+            "png_sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_炭盆_比例.png",
+            "png_sha256": "bb1bc8397ca0f4fbdc2acec341945badbb8888a697fcbdc25c4139e6d28334f7",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_炭盆_手持.png",
+            "png_sha256": "3adf378b7ed5aa32d1e69a5c143bde4a843e0ab095617fbd35f015b4c123bf6b",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_WINE_CUP",
@@ -1577,7 +1946,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_半杯酒.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1632,9 +2002,36 @@
         ],
         "status": "active"
       },
-      "artifact_sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
       "self_check_at": "2026-08-13T04:27:34+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_半杯酒.png",
+            "png_sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_半杯酒_比例.png",
+            "png_sha256": "9fd31196fb3963de405b8cf37682e17bdecabed76e78a228285c2c7506418701",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_半杯酒_手持.png",
+            "png_sha256": "f5c4553c729d08181aa877f4a24341e4bc951bf780176811323143e178cc6154",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
     },
     {
       "id": "PROP_SPILLED_WINE",
@@ -1643,7 +2040,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1651,7 +2048,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1659,7 +2056,7 @@
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png",
-          "status": "review_pending",
+          "status": "planned",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1676,7 +2073,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "e554296ef79a3874ead671c0d89112527bae9eb3c1e77d1d3e0603a58b4848c7",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1720,7 +2118,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "SPILLED WINE",
       "lifecycle": {
@@ -1730,6 +2128,26 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+            "png_sha256": "e554296ef79a3874ead671c0d89112527bae9eb3c1e77d1d3e0603a58b4848c7",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png",
+            "png_sha256": "9a622aefc969037427b113dccf816082b39c4f76bc182581e9579b42c5f76d50",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -1739,7 +2157,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_素布行李.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1747,7 +2165,7 @@
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
-          "status": "review_pending",
+          "status": "planned",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1768,7 +2186,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_素布行李.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "e3cdc5344ecf1a1d9966f0b19db560a7dd0e3c82be4fea4280d8ff01be6de805",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1812,7 +2231,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "只含武松个人物品，绳结与背负方向固定。",
       "lifecycle": {
@@ -1822,6 +2241,19 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_素布行李.png",
+            "png_sha256": "e3cdc5344ecf1a1d9966f0b19db560a7dd0e3c82be4fea4280d8ff01be6de805",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -1831,19 +2263,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_场景木门.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-14T09:09:33.199150+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_场景木门_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-14T09:09:33.199312+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_道具_场景木门_反面.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-14T09:09:33.199327+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -1856,7 +2302,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_场景木门.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1905,8 +2352,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "北宋小民楼屋的旧木板门，竖向门板、粗木门框与横向木闩同源；合门后不自动落闩。",
       "lifecycle": {
@@ -1916,7 +2363,23 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_场景木门.png",
+            "png_sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      },
+      "artifact_sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
+      "self_check_at": "2026-08-14T09:09:33+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "LOC_COUNTY_YAMEN",
@@ -1925,19 +2388,43 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:53:42.753201+00:00"
+          }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:53:42.753455+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_县衙案厅_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:53:42.753468+00:00"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_县衙案厅_平面图.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:53:42.753478+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -1950,7 +2437,12 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
-          "status": "planned"
+          "status": "ready",
+          "sha256": "9cd78fefcaf906db2c594d5577ca62823fb1b2a9fcfc198924efd50f0e579220",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -1994,8 +2486,8 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
@@ -2007,13 +2499,55 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-08-14T02:53:42.753489+00:00"
+            }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_县衙案厅_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-08-14T02:53:42.753496+00:00"
+            }
           }
         }
+      },
+      "self_check_at": "2026-08-14T02:53:42+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "9cd78fefcaf906db2c594d5577ca62823fb1b2a9fcfc198924efd50f0e579220",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_场景_县衙案厅.png",
+            "png_sha256": "9cd78fefcaf906db2c594d5577ca62823fb1b2a9fcfc198924efd50f0e579220",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0014
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_县衙案厅_反打.png",
+            "png_sha256": "914ea5d5977557f89569158707eb783c0d078470e66e8a8101eff09e38bc02c0",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_县衙案厅_平面图.png",
+            "png_sha256": "e8f7989ebc3a7cde824ff115c2416f994facb99bb14baaa5496851728d225c33",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -2023,7 +2557,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_公文.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2048,7 +2582,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_公文.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "5cf63c225aed32779ed5b5b27275451402f3fc4a50affd337c87afade8af983b",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2092,7 +2627,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "印章与纸张可见，正文全部后期 overlay 或保持不可读。",
       "lifecycle": {
@@ -2102,6 +2637,19 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_公文.png",
+            "png_sha256": "5cf63c225aed32779ed5b5b27275451402f3fc4a50affd337c87afade8af983b",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -2111,7 +2659,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_东京礼担.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2136,7 +2684,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_东京礼担.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "47d374cc47a4d7f07fb7c675b51b8b2340691b3e87641be89dc5bcbc75dbfe29",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2180,7 +2729,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "数量与捆扎方式在 CLIP13–15 保持一致。",
       "lifecycle": {
@@ -2190,6 +2739,19 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_东京礼担.png",
+            "png_sha256": "47d374cc47a4d7f07fb7c675b51b8b2340691b3e87641be89dc5bcbc75dbfe29",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -2199,19 +2761,43 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:15:32.669701+00:00"
+          }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:15:32.669822+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:15:32.669834+00:00"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_平面图.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-08-14T02:15:32.669844+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -2224,7 +2810,12 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
-          "status": "planned"
+          "status": "ready",
+          "sha256": "9f5fe49faf93bab685c65b90e9572d04beb1cd93b5bc66b6941eb6fbebb434bb",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
@@ -2268,7 +2859,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "core": true,
       "frequency": 12,
@@ -2281,13 +2872,55 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-08-14T02:15:32.669854+00:00"
+            }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-08-14T02:15:32.669861+00:00"
+            }
           }
         }
+      },
+      "self_check_at": "2026-08-14T02:15:32+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "9f5fe49faf93bab685c65b90e9572d04beb1cd93b5bc66b6941eb6fbebb434bb",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
+            "png_sha256": "9f5fe49faf93bab685c65b90e9572d04beb1cd93b5bc66b6941eb6fbebb434bb",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png",
+            "png_sha256": "e12d83c21d474c6140fd17a1cbc77d852339e11ca46ff86e17f650602ce0e2aa",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_阳谷城门清晨_平面图.png",
+            "png_sha256": "f28a2db5334c5c346b2f75076865b570ccc0e02b1cd32d279d3e0fe8ba156671",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -2297,7 +2930,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2322,7 +2955,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "20b77b9553c83ca9276bcc4f122d2f5681ff3522dd2a5359b5553e95376d1a86",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2366,7 +3000,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "WINDOW CURTAIN",
       "lifecycle": {
@@ -2376,6 +3010,19 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+            "png_sha256": "20b77b9553c83ca9276bcc4f122d2f5681ff3522dd2a5359b5553e95376d1a86",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     },
     {
@@ -2385,19 +3032,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_叉竿.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-14T03:18:03.452339+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_叉竿_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-14T03:18:03.452917+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_叉竿_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-14T03:18:03.452943+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -2410,7 +3071,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_叉竿.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "00f9c0181eb896797e7e8c57f080f2341b968dfeb8ebc77672850cfe8ffb773c",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2453,8 +3115,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "集尾只露局部与轻碰木檐，不提前完成相逢事件。",
       "lifecycle": {
@@ -2464,6 +3126,22 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "self_check_at": "2026-08-14T03:18:03+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "00f9c0181eb896797e7e8c57f080f2341b968dfeb8ebc77672850cfe8ffb773c",
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_叉竿.png",
+            "png_sha256": "00f9c0181eb896797e7e8c57f080f2341b968dfeb8ebc77672850cfe8ffb773c",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
       }
     }
   ],

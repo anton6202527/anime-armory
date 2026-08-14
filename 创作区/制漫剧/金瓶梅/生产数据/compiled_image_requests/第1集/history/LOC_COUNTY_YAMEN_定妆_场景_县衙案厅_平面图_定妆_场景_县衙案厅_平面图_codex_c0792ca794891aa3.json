@@ -1,0 +1,96 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_COUNTY_YAMEN_定妆_场景_县衙案厅_平面图_定妆_场景_县衙案厅_平面图.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：图片/定妆_场景_县衙案厅_平面图.png；本次目标是场景空间布局图，不是电影气氛图：必须用俯视或高位等距视角画清平面关系，只标出资产登记和场景卡已声明的入口、门窗、家具/常驻物件、人物站位、运动路径、轴线和光源；不得凭空新增破顶、交战区、高位来源、暗道或其他未登记结构。允许少量简体中文图例线/箭头/区域色块，但不要长句；禁止只生成普通仰拍/平视场景插画 场景：北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图；归属锚: 县衙案厅；稳定地标: 县衙案厅；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图；光色天气: 高窗冷光从画左，案上纸面暖反光克制；常驻物件: 县衙案厅；反打/视线规则: 知县画左案后、武松画右下站立，尊卑轴稳定；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_COUNTY_YAMEN的asset参考 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1304,
+  "actual_submit_prompt_sha256": "1468a853886aa5d4196edd6e449a427fd5b55b5be14485999430a1d54626fe8f",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_COUNTY_YAMEN_定妆_场景_县衙案厅_平面图_定妆_场景_县衙案厅_平面图.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：图片/定妆_场景_县衙案厅_平面图.png；本次目标是场景空间布局图，不是电影气氛图：必须用俯视或高位等距视角画清平面关系，只标出资产登记和场景卡已声明的入口、门窗、家具/常驻物件、人物站位、运动路径、轴线和光源；不得凭空新增破顶、交战区、高位来源、暗道或其他未登记结构。允许少量简体中文图例线/箭头/区域色块，但不要长句；禁止只生成普通仰拍/平视场景插画 场景：北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图；归属锚: 县衙案厅；稳定地标: 县衙案厅；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图；光色天气: 高窗冷光从画左，案上纸面暖反光克制；常驻物件: 县衙案厅；反打/视线规则: 知县画左案后、武松画右下站立，尊卑轴稳定；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_COUNTY_YAMEN的asset参考 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "LOC_COUNTY_YAMEN",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_县衙案厅__9cd78fefcaf9_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "c7d2c19c1a4b11688ce307e2ac17d8cccad90ce237c370220501921c2869871b"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "c0792ca794891aa3993957a1d6f6cac67083bf9b9fcf457f2a2c749403e44beb",
+    "compiler_decisions": [],
+    "execution_context_sha256": "e81949b0acc6afbbb21a58358b11d8a50a5facde229cb138cc911ca1780d81b2",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:35>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 35,
+      "constraint_compression": {
+        "policy_guard_input": 1,
+        "policy_guard_output": 1,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 202,
+      "negative_chars": 0,
+      "prompt_chars": 806,
+      "reference_count": 2
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成生产级场景参考图：图片/定妆_场景_县衙案厅_平面图.png；本次目标是场景空间布局图，不是电影气氛图：必须用俯视或高位等距视角画清平面关系，只标出资产登记和场景卡已声明的入口、门窗、家具/常驻物件、人物站位、运动路径、轴线和光源；不得凭空新增破顶、交战区、高位来源、暗道或其他未登记结构。允许少量简体中文图例线/箭头/区域色块，但不要长句；禁止只生成普通仰拍/平视场景插画 场景：北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图；归属锚: 县衙案厅；稳定地标: 县衙案厅；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 北宋地方县衙内厅，木案、公文、印章、高窗冷光与克制陈设，知县画左案后、武松画右下，不出现清宫元素或现代地图；光色天气: 高窗冷光从画左，案上纸面暖反光克制；常驻物件: 县衙案厅；反打/视线规则: 知县画左案后、武松画右下站立，尊卑轴稳定；纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为LOC_COUNTY_YAMEN的asset参考 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；场景禁漂：现代物品；平台UI；水印；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "LOC_COUNTY_YAMEN",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_县衙案厅__9cd78fefcaf9_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "c7d2c19c1a4b11688ce307e2ac17d8cccad90ce237c370220501921c2869871b"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "64cb342a0220a94144dee25febcb0178bcfb1a736f35893f33983aafc7860458",
+    "source_contract_text_sha256": "1cd5d417b936bb8badce501aec49a60a0220cb26968f1bb8fcb345674f359594",
+    "task_type": "scene_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-14T02:42:01+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "a1362bcda5929d3b52815122ef431cf4f17793d13a704a5fac7ed7d3362c13ba",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "LOC_COUNTY_YAMEN::定妆_场景_县衙案厅_平面图",
+  "target": "出图/共享/图片/定妆_场景_县衙案厅_平面图.png",
+  "version": 1
+}

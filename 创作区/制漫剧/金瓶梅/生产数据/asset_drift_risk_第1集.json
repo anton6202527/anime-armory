@@ -131,7 +131,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -153,7 +153,7 @@
       "score": 43,
       "signals": {
         "appear": 3,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -403,7 +403,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -421,7 +421,7 @@
       "score": 34,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -471,7 +471,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -489,7 +489,7 @@
       "score": 34,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -505,7 +505,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -523,7 +523,7 @@
       "score": 34,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -539,7 +539,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -557,7 +557,7 @@
       "score": 34,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -573,7 +573,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -591,7 +591,7 @@
       "score": 34,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -607,7 +607,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 7 个",
           "points": 20
         },
         {
@@ -625,7 +625,7 @@
       "score": 34,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 6,
+        "drift_forbidden": 7,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,

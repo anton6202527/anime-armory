@@ -1,9 +1,9 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第1集
-- 总判定: **block** · 硬阻断 2（必须修） · 非阻断初筛 5 · 视觉降级 1
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 5 · 视觉降级 1
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
-- 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
+- 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
 ## 本集图片命名空间（硬闸）
 - 🟢 当前 prompt 声明目标 55 张；未声明 live Clip PNG 0 张
@@ -33,18 +33,17 @@
 - 🟢 未发现最新落档事件来自本地贴脸修复。
 
 ## 执行层 lint（逐镜 prompt）
-- 🔴 15 镜已 lint · block 1 · warn 5
+- 🟡 15 镜已 lint · block 0 · warn 5
   - 🟡 脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
-  - 🔴 脸部锚弱信噪比 CHAR_PANJINLIAN/25岁武大家常态「CHAR_PANJINLIAN/25岁武大家常态 同源脸锚」（出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png）：脸占画面仅 13%（建议 ≥30%，核心角教头线 ≥20%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
-  - 🟡 脸部锚弱信噪比 CHAR_MAGISTRATE/常态「基础」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
-  - 🟡 脸部锚弱信噪比 CHAR_XIMENQING/常态「基础」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
+  - 🟡 脸部锚弱信噪比 CHAR_MAGISTRATE/常态「face_anchor」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
+  - 🟡 脸部锚弱信噪比 CHAR_XIMENQING/常态「face_anchor」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
   - 🟡 多视图对齐初筛异常 CHAR_WUSONG/28岁打虎态：视平线不齐：three_quarter(0.16) vs back(0.68)，跨视图脸中心高度差 52%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。
   - 🟡 多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 19 · pending 1 · confirmed 18
+- total 19 · pending 0 · confirmed 19
 - 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json`
-  - 🔴 shared_primary 出图/共享/图片/定妆_道具_都头腰牌.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_shared_primary_定妆_道具_都头腰牌_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_都头腰牌.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_shared_primary_定妆_道具_都头腰牌_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_炭盆.png（PROP_BRAZIER 炭盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BRAZIER_shared_primary_定妆_道具_炭盆_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_炊饼担.png（PROP_CAKE_POLE 炊饼担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_shared_primary_定妆_道具_炊饼担_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_叉竿.png（PROP_CURTAIN_FORK 叉竿） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CURTAIN_FORK_shared_primary_定妆_道具_叉竿_compare.png
