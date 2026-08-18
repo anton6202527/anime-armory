@@ -1,0 +1,43 @@
+{
+  "confirmations": [
+    {
+      "char": "CHAR_WUSONG__28岁打虎态",
+      "confirmed_at": "2026-08-18T02:11:52+00:00",
+      "floor": 0.5,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/Clip02_end.png",
+      "png_sha256": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
+      "reason": "已查看当前原像素并与武松脸锚、a2、a3 并排核对：方颌、浓直眉、深目、短髭、鼻口比例与高束发髻同源；三分之二侧脸、湿发和冷夜低照造成分数略低，不是换脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.456,
+      "score_vs_main": 0.4351,
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_WUSONG__28岁打虎态",
+      "confirmed_at": "2026-08-18T03:25:40+00:00",
+      "floor": 0.5,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP01_CLIP03_a3.png",
+      "png_sha256": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
+      "reason": "已查看当前重抽原始像素；浓直眉、深目、方颌短髭、发髻及年龄与武松脸锚一致，三分之二侧前脸清晰，0.4889 的机器分数由门影与远景尺度造成，可实际辨认同一人物。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.4889,
+      "score_vs_main": 0.4845,
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_face_confirmations",
+  "updated_at": "2026-08-18T03:25:40+00:00",
+  "version": 1
+}

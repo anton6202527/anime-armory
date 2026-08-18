@@ -2284,6 +2284,18 @@ def test_shared_variant_note_requires_true_reverse_fixture_structure() -> None:
     assert "禁止镜像或复刻正面" in note
 
 
+def test_shared_variant_note_keeps_reverse_doorframe_aperture_empty() -> None:
+    note = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_DOORFRAME_反面.png",
+        section_body="武大家屋内固定安装的粗木门框。",
+    )
+
+    assert "空门框" in note
+    assert "门洞中央必须从上到下保持完全通透" in note
+    assert "绝对禁止在门洞内生成门扇" in note
+    assert "横撑" in note
+
+
 def test_shared_variant_note_does_not_invent_floor_plan_features() -> None:
     note = codex_image_runner.shared_variant_note("出图/共享/图片/定妆_场景_屋内_平面图.png")
     assert "只标出资产登记" in note

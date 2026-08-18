@@ -1,0 +1,203 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 5,
+  "cli_image_input_limit": 5,
+  "cli_image_input_truncated": true,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+      "bytes": 629284,
+      "owner": "CHAR_WUSONG/28岁打虎态",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+      "bytes": 1218212,
+      "owner": "BEAST_TIGER/常态",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 12,
+      "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+      "bytes": 519359,
+      "owner": "CHAR_WUSONG/28岁打虎态",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/reference_enhanced/第1集/定妆_CHAR_WUSONG__28岁打虎态_半身__5fef4c56eb8e_529x941_to_1024x1822.png",
+      "prepared_bytes": 1264867,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUSONG__28岁打虎态_半身__5fef4c56eb8e_529x941_to_1024x1822.png",
+      "prepared_sha256": "da1a2ae2a993079da3775ece4bb748ae5ac7fa738c54203ee9483c8ba482c57e",
+      "priority": 20,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 941,
+        "original_long_edge": 941,
+        "original_short_edge": 529,
+        "original_width": 529,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1822,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1822,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "5fef4c56eb8e2628cd2bbb91b9bdea7ace90bd73f5de0b4dd55f9b903c965aca",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+      "bytes": 1276894,
+      "owner": "BEAST_TIGER/常态",
+      "priority": 20,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+      "role": "character",
+      "sequence": 11,
+      "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+      "bytes": 2830753,
+      "owner": "LOC_JINGYANGGANG",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/reference_enhanced/第1集/定妆_场景_景阳冈夜间空地__be4f71b6df2b_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3660367,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_场景_景阳冈夜间空地__be4f71b6df2b_941x1672_to_1024x1819.png",
+      "prepared_sha256": "606ca1aab713e5bf9972d68e3757a2b744c4fb13416d7c0a9999861e6b324968",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+      "role": "asset",
+      "sequence": 17,
+      "sha256": "be4f71b6df2b6db8ca4524fd5145fa6da5cdac5ad35f48c1f099863cebe88229",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_场景_景阳冈夜间空地.png"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_北宋市井写实电影感.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "28岁打虎态",
+      "id": "CHAR_WUSONG",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png",
+        "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png"
+      ]
+    },
+    {
+      "form": "常态",
+      "id": "BEAST_TIGER",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
+        "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png"
+      ]
+    },
+    {
+      "id": "LOC_JINGYANGGANG",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+        "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
+        "出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_01_first",
+  "target": "出图/第1集/图片/Clip01_first.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -1,41 +1,278 @@
 {
-  "assets": [],
-  "characters": [],
+  "assets": [
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_JINGYANGGANG",
+      "name": "景阳冈夜间空地",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_QUARTERSTAFF",
+      "name": "梢棒",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_BADGE",
+      "name": "都头腰牌",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_REWARD_SILVER",
+      "name": "REWARD SILVER",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_YANGGU_STREET",
+      "name": "阳谷街面与武大家楼窗",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_CAKE_POLE",
+      "name": "炊饼担",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_WINDOW_LATTICE",
+      "name": "WINDOW LATTICE",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_WUDA_HOME",
+      "name": "武大家楼屋雪夜",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_STAIR_RAIL",
+      "name": "STAIR RAIL",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_DINING_TABLE",
+      "name": "DINING TABLE",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_TEA_CUP",
+      "name": "TEA CUP",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_DOORFRAME",
+      "name": "DOORFRAME",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_DOOR_LATCH",
+      "name": "门闩",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_BRAZIER",
+      "name": "炭盆",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_WINE_CUP",
+      "name": "半杯酒",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_SPILLED_WINE",
+      "name": "SPILLED WINE",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_LUGGAGE",
+      "name": "素布行李",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_DOOR",
+      "name": "武大家木门",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_COUNTY_YAMEN",
+      "name": "县衙案厅",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_OFFICIAL_DOC",
+      "name": "公文",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_GIFT_LOAD",
+      "name": "东京礼担",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_CITY_GATE",
+      "name": "阳谷城门清晨",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_WINDOW_CURTAIN",
+      "name": "WINDOW CURTAIN",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_CURTAIN_FORK",
+      "name": "叉竿",
+      "type": "prop"
+    }
+  ],
+  "characters": [
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_WUSONG__28岁打虎态",
+          "form": "28岁打虎态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_WUSONG",
+      "name": "武松",
+      "scope": "阳谷县人；景阳冈打虎后任清河县巡捕都头；武大亲弟。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "BEAST_TIGER__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "BEAST_TIGER",
+      "name": "BEAST_TIGER",
+      "scope": "本集入镜角色"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CROWD_HUNTERS__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CROWD_HUNTERS",
+      "name": "Hunters",
+      "scope": "本集入镜角色"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_WUDA__日常卖饼态",
+          "form": "日常卖饼态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_WUDA",
+      "name": "武大",
+      "scope": "卖炊饼的小贩；武松亲兄；潘金莲丈夫；迎儿之父。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_PANJINLIAN__25岁武大家常态",
+          "form": "25岁武大家常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_PANJINLIAN",
+      "name": "潘金莲",
+      "scope": "武大妻；幼年被卖、习琵琶与女红，后被张大户安排嫁给武大；开篇长线核心人物。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_MAGISTRATE__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_MAGISTRATE",
+      "name": "知县",
+      "scope": "成年男性县官，北宋地方官常服，案后端坐，克制威严，非清宫补服与官帽；只作为本集公务角色，不抢主角视觉重心。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_XIMENQING__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_XIMENQING",
+      "name": "西门庆",
+      "scope": "成年男性，只露檐影下眼部、帽檐与持叉竿的手部轮廓，衣料比普通市民略讲究但不显示身份徽记，不露清晰全脸，不与潘金莲同框对话。"
+    }
+  ],
   "episodes": [
-    "第1集",
-    "第2集",
-    "第3集",
-    "第4集",
-    "第5集",
-    "第6集",
-    "第7集",
-    "第8集",
-    "第9集",
-    "第10集"
+    "第1集"
   ],
   "findings": [
     {
-      "code": "missing_identity_registry",
-      "message": "缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。",
-      "severity": "warn"
-    },
-    {
-      "code": "missing_asset_registry",
-      "message": "缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。",
-      "severity": "info"
-    },
-    {
-      "code": "episode_missing_storyboard",
-      "message": "部分集缺 storyboard.json：第2集、第3集、第4集、第5集、第6集、第7集、第8集、第9集",
-      "severity": "info"
-    },
-    {
       "code": "series_layers_not_registered",
-      "message": "以下剧级层尚未登记：ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory",
+      "message": "以下剧级层尚未登记：ambient_map、ui_asset_registry、translation_glossary、series_packaging",
       "severity": "info"
     }
   ],
-  "generated_at": "2026-08-11T04:02:09+00:00",
+  "generated_at": "2026-08-17T02:44:51+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -82,13 +319,11 @@
           "CHAR_WUDA/在场后转画外",
           "CHAR_WUSONG/克制警觉态",
           "CHAR_PANJINLIAN/主动试探态",
-          "CHAR_WUDA/出门后画外",
           "CHAR_PANJINLIAN/急切试探态",
           "CHAR_WUSONG/愤怒克制态",
           "CHAR_PANJINLIAN/越界后羞怒态",
           "CHAR_WUDA/迟疑态",
           "CHAR_PANJINLIAN/表演受害态",
-          "CHAR_WUSONG/沉默画外",
           "CHAR_WUSONG/搬离态",
           "CHAR_WUDA/慌乱态",
           "CHAR_PANJINLIAN/沉默后景",
@@ -98,7 +333,6 @@
           "CHAR_MAGISTRATE/知县态",
           "CHAR_WUSONG/出城行装态",
           "CHAR_WUDA/送别态",
-          "CHAR_PANJINLIAN/楼窗画外",
           "CHAR_WUSONG/出城远景",
           "CHAR_PANJINLIAN/隔帘态",
           "CHAR_XIMENQING/未揭面剪影态"
@@ -221,8 +455,7 @@
             ],
             "characters": [
               "CHAR_WUSONG/克制警觉态",
-              "CHAR_PANJINLIAN/主动试探态",
-              "CHAR_WUDA/出门后画外"
+              "CHAR_PANJINLIAN/主动试探态"
             ],
             "hook_signal": true,
             "id": "EP01_CLIP07"
@@ -271,8 +504,7 @@
             ],
             "characters": [
               "CHAR_WUDA/迟疑态",
-              "CHAR_PANJINLIAN/表演受害态",
-              "CHAR_WUSONG/沉默画外"
+              "CHAR_PANJINLIAN/表演受害态"
             ],
             "hook_signal": true,
             "id": "EP01_CLIP10"
@@ -343,8 +575,7 @@
             ],
             "characters": [
               "CHAR_WUSONG/出城行装态",
-              "CHAR_WUDA/送别态",
-              "CHAR_PANJINLIAN/楼窗画外"
+              "CHAR_WUDA/送别态"
             ],
             "hook_signal": false,
             "id": "EP01_CLIP14"
@@ -388,96 +619,6 @@
           "\"武大回家时，她先红了眼，也先把真相藏了起来。\", \"你那好兄弟，趁家里没人",
           "\"武大突然掌握真相\", \"武松争辩\","
         ]
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第2集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第3集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第4集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第5集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第6集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第7集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第8集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第9集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
-      },
-      {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第10集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
       }
     ],
     "hook_count": 6,
@@ -488,7 +629,7 @@
     "ambient_map": null,
     "global_style": "设定库/global_style.md",
     "leitmotif_registry": "设定库/leitmotif_registry.json",
-    "location_spatial_memory": null,
+    "location_spatial_memory": "设定库/location_spatial_memory.json",
     "narrative_state_ledger": "设定库/narrative_state_ledger.json",
     "scene_floorplan": "设定库/scene_floorplan.json",
     "series_packaging": null,
@@ -497,7 +638,7 @@
     "thread_scheduler": "设定库/thread_scheduler.json",
     "translation_glossary": null,
     "ui_asset_registry": null,
-    "角色圣经": null
+    "角色圣经": "设定库/角色圣经.md"
   },
   "version": 1
 }

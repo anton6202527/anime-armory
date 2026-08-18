@@ -108,6 +108,11 @@
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
@@ -121,12 +126,17 @@
               "role": "expression",
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.6
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+              "strength_hint": 0.55
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -136,22 +146,22 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:expression"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:side"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": null,
-          "needs_action": true,
+          "needs_action": false,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
           "memory_anchor_refs_consumed": [],
@@ -337,6 +347,11 @@
           ],
           "recommended_references": [
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+              "strength_hint": 0.78
+            },
+            {
               "role": "front",
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
               "strength_hint": 0.55
@@ -355,12 +370,17 @@
               "role": "expression",
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.6
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+              "strength_hint": 0.55
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 6,
+            "selected": 6,
             "dropped": 0
           },
           "dropped_references": [],
@@ -370,20 +390,20 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
-              "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:expression"
+              "@Image1:three_quarter",
+              "@Image2:front",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:side"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
-            "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）",
-            "45°/¾ 侧脸参考（动作镜主身份锚·避免 frontal 摆拍偏置）"
+            "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
           ],
           "native_subject_action": null,
           "escalation": null,
@@ -576,6 +596,11 @@
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
@@ -593,8 +618,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -604,22 +629,21 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:expression"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": null,
-          "needs_action": true,
+          "needs_action": false,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
           "memory_anchor_refs_consumed": [],
@@ -3187,6 +3211,11 @@
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
               "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
@@ -3204,8 +3233,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -3215,22 +3244,21 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:expression"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": null,
-          "needs_action": true,
+          "needs_action": false,
           "memory_anchor_reinjected": false,
           "memory_anchor_refs_requested": [],
           "memory_anchor_refs_consumed": [],
@@ -3712,6 +3740,11 @@
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
               "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
               "strength_hint": 0.7
@@ -3729,8 +3762,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -3740,18 +3773,18 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:expression"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
             "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
           ],
           "native_subject_action": null,
@@ -4464,16 +4497,6 @@
         "native_subject_action": null
       },
       {
-        "clip": "EP01_CLIP01",
-        "char_id": "BEAST_TIGER",
-        "form": "常态",
-        "missing": [
-          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）"
-        ],
-        "escalation": null,
-        "native_subject_action": null
-      },
-      {
         "kind": "multi_subject_strategy",
         "clip": "EP01_CLIP01",
         "mode": "regional_construct_required",
@@ -4513,9 +4536,7 @@
         "char_id": "BEAST_TIGER",
         "form": "常态",
         "missing": [
-          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
-          "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）",
-          "45°/¾ 侧脸参考（动作镜主身份锚·避免 frontal 摆拍偏置）"
+          "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
         ],
         "escalation": null,
         "native_subject_action": null
@@ -4553,16 +4574,6 @@
         "form": "28岁打虎态",
         "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_WUSONG --form '28岁打虎态'`",
-        "native_subject_action": null
-      },
-      {
-        "clip": "EP01_CLIP03",
-        "char_id": "BEAST_TIGER",
-        "form": "常态",
-        "missing": [
-          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）"
-        ],
-        "escalation": null,
         "native_subject_action": null
       },
       {
@@ -4989,16 +5000,6 @@
         "native_subject_action": null
       },
       {
-        "clip": "EP01_CLIP13",
-        "char_id": "CHAR_MAGISTRATE",
-        "form": "常态",
-        "missing": [
-          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）"
-        ],
-        "escalation": null,
-        "native_subject_action": null
-      },
-      {
         "kind": "multi_subject_strategy",
         "clip": "EP01_CLIP13",
         "mode": "regional_construct_required",
@@ -5081,7 +5082,6 @@
         "char_id": "CHAR_XIMENQING",
         "form": "常态",
         "missing": [
-          "45°/three_quarter 角度参考（当前角色库档位=named_minimal，本镜实际需要）",
           "情绪表情库（哭/怒/惊…起止表情；当前仅中性脸部特写或缺）"
         ],
         "escalation": null,
@@ -5123,7 +5123,7 @@
       "status": "ready",
       "available": true,
       "path": "生产数据/memory_anchor_plan_第1集.json",
-      "sha256": "bcbba84af3bb1380803dcc37ba3ce5d9ccde160a6c4520aa88cae624a3b219e1",
+      "sha256": "2c31ee6473c2941b10eb60558b54d8ea506723f63e24a415ba1082fa35ab91e7",
       "required_rows": 0,
       "required_char_keys": [],
       "consumed_char_keys": [],
@@ -5134,13 +5134,13 @@
       "errors": [],
       "source_fingerprint": {
         "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-        "identity_registry_sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
-        "storyboard_sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
+        "identity_registry_sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
+        "storyboard_sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
       },
       "current_source_fingerprint": {
-        "identity_registry_sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
+        "identity_registry_sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
         "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-        "storyboard_sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
+        "storyboard_sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
       },
       "unconsumed_char_keys": []
     },

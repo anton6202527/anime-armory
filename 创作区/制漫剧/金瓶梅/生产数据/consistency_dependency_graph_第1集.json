@@ -1,0 +1,1237 @@
+{
+  "edges": [
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_JINGYANGGANG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:PROP_QUARTERSTAFF",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:LOC_JINGYANGGANG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_QUARTERSTAFF",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_REWARD_SILVER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_JINGYANGGANG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_YANGGU_STREET",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_REWARD_SILVER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_QUARTERSTAFF",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_WINDOW_LATTICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_YANGGU_STREET",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_WINDOW_LATTICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_QUARTERSTAFF",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_REWARD_SILVER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_STAIR_RAIL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_YANGGU_STREET",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_STAIR_RAIL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_WINDOW_LATTICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_DINING_TABLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_DOORFRAME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_TEA_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_DINING_TABLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_TEA_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_DOORFRAME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_STAIR_RAIL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_BRAZIER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_BRAZIER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_DINING_TABLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_DOORFRAME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_TEA_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_BRAZIER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_SPILLED_WINE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_BRAZIER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_SPILLED_WINE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_BRAZIER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_SPILLED_WINE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_LUGGAGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_LUGGAGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_CAKE_POLE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_DOOR",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:LOC_YANGGU_STREET",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_LUGGAGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_DOOR",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_WINE_CUP",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_MAGISTRATE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_GIFT_LOAD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_OFFICIAL_DOC",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:LOC_COUNTY_YAMEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_MAGISTRATE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_OFFICIAL_DOC",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_GIFT_LOAD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_DOOR",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_DOOR_LATCH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_LUGGAGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:LOC_WUDA_HOME",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_GIFT_LOAD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_DOOR",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_MAGISTRATE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_OFFICIAL_DOC",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_CURTAIN_FORK",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_WINDOW_CURTAIN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:LOC_CITY_GATE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:LOC_YANGGU_STREET",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_WUSONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_PANJINLIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_XIMENQING",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_GIFT_LOAD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_WINDOW_CURTAIN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_CURTAIN_FORK",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_WUDA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_BADGE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_DOOR",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:audio_space_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:motion_grammar_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:expression_state_consistency_第1集.json"
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_consistency_dependency_graph",
+  "nodes": [
+    {
+      "id": "clip:Clip_01",
+      "kind": "clip",
+      "label": "Clip_01",
+      "loc": "LOC_JINGYANGGANG",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "fight_exchange"
+    },
+    {
+      "id": "clip:Clip_02",
+      "kind": "clip",
+      "label": "Clip_02",
+      "loc": "LOC_JINGYANGGANG",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "fight_exchange"
+    },
+    {
+      "id": "clip:Clip_03",
+      "kind": "clip",
+      "label": "Clip_03",
+      "loc": "LOC_JINGYANGGANG",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "ensemble_blocking"
+    },
+    {
+      "id": "clip:Clip_04",
+      "kind": "clip",
+      "label": "Clip_04",
+      "loc": "LOC_YANGGU_STREET",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "ensemble_blocking"
+    },
+    {
+      "id": "clip:Clip_05",
+      "kind": "clip",
+      "label": "Clip_05",
+      "loc": "LOC_YANGGU_STREET",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "multi_character_same_frame"
+    },
+    {
+      "id": "clip:Clip_06",
+      "kind": "clip",
+      "label": "Clip_06",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "relationship_turn"
+    },
+    {
+      "id": "clip:Clip_07",
+      "kind": "clip",
+      "label": "Clip_07",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_08",
+      "kind": "clip",
+      "label": "Clip_08",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_09",
+      "kind": "clip",
+      "label": "Clip_09",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_10",
+      "kind": "clip",
+      "label": "Clip_10",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "reveal_reaction_chain"
+    },
+    {
+      "id": "clip:Clip_11",
+      "kind": "clip",
+      "label": "Clip_11",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "relationship_turn"
+    },
+    {
+      "id": "clip:Clip_12",
+      "kind": "clip",
+      "label": "Clip_12",
+      "loc": "LOC_YANGGU_STREET",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "relationship_turn"
+    },
+    {
+      "id": "clip:Clip_13",
+      "kind": "clip",
+      "label": "Clip_13",
+      "loc": "LOC_COUNTY_YAMEN",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_14",
+      "kind": "clip",
+      "label": "Clip_14",
+      "loc": "LOC_WUDA_HOME",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_15",
+      "kind": "clip",
+      "label": "Clip_15",
+      "loc": "LOC_CITY_GATE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "reveal_reaction_chain"
+    },
+    {
+      "id": "entity:BEAST_TIGER",
+      "kind": "character",
+      "label": "BEAST_TIGER",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:CHAR_MAGISTRATE",
+      "kind": "character",
+      "label": "知县",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_PANJINLIAN",
+      "kind": "character",
+      "label": "潘金莲",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_WUDA",
+      "kind": "character",
+      "label": "武大",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_WUSONG",
+      "kind": "character",
+      "label": "武松",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_XIMENQING",
+      "kind": "character",
+      "label": "西门庆",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CROWD_HUNTERS",
+      "kind": "character",
+      "label": "Hunters",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:LOC_CITY_GATE",
+      "kind": "scene",
+      "label": "阳谷城门清晨",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_COUNTY_YAMEN",
+      "kind": "scene",
+      "label": "县衙案厅",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_JINGYANGGANG",
+      "kind": "scene",
+      "label": "景阳冈夜间空地",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_WUDA_HOME",
+      "kind": "scene",
+      "label": "武大家楼屋雪夜",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_YANGGU_STREET",
+      "kind": "scene",
+      "label": "阳谷街面与武大家楼窗",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_BADGE",
+      "kind": "prop",
+      "label": "都头腰牌",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_BRAZIER",
+      "kind": "prop",
+      "label": "炭盆",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_CAKE_POLE",
+      "kind": "prop",
+      "label": "炊饼担",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_CURTAIN_FORK",
+      "kind": "prop",
+      "label": "叉竿",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_DINING_TABLE",
+      "kind": "prop",
+      "label": "DINING TABLE",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_DOOR",
+      "kind": "prop",
+      "label": "武大家木门",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_DOORFRAME",
+      "kind": "prop",
+      "label": "DOORFRAME",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_DOOR_LATCH",
+      "kind": "prop",
+      "label": "门闩",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_GIFT_LOAD",
+      "kind": "prop",
+      "label": "东京礼担",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_LUGGAGE",
+      "kind": "prop",
+      "label": "素布行李",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_OFFICIAL_DOC",
+      "kind": "prop",
+      "label": "公文",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_QUARTERSTAFF",
+      "kind": "prop",
+      "label": "梢棒",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_REWARD_SILVER",
+      "kind": "prop",
+      "label": "REWARD SILVER",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_SPILLED_WINE",
+      "kind": "prop",
+      "label": "SPILLED WINE",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_STAIR_RAIL",
+      "kind": "prop",
+      "label": "STAIR RAIL",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_TEA_CUP",
+      "kind": "prop",
+      "label": "TEA CUP",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_WINDOW_CURTAIN",
+      "kind": "prop",
+      "label": "WINDOW CURTAIN",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_WINDOW_LATTICE",
+      "kind": "prop",
+      "label": "WINDOW LATTICE",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_WINE_CUP",
+      "kind": "prop",
+      "label": "半杯酒",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "episode:第1集",
+      "kind": "episode",
+      "label": "第1集",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "evidence:audio_space_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "audio_space_consistency_第1集.json",
+      "path": "生产数据/audio_space_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:expression_state_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "expression_state_consistency_第1集.json",
+      "path": "生产数据/expression_state_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:motion_grammar_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "motion_grammar_consistency_第1集.json",
+      "path": "生产数据/motion_grammar_consistency_第1集.json"
+    }
+  ],
+  "root": "创作区/制漫剧/金瓶梅",
+  "summary": {
+    "clips": 15,
+    "edges": 178,
+    "images": 0,
+    "nodes": 50,
+    "videos": 0
+  },
+  "version": 1
+}

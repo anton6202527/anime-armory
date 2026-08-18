@@ -139,24 +139,6 @@
       {
         "kind": "reference_anchor",
         "owner": "BEAST_TIGER/常态",
-        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-        "slot": "three_quarter"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "BEAST_TIGER/常态",
-        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-        "slot": "side"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "BEAST_TIGER/常态",
-        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-        "slot": "rear_three_quarter"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "BEAST_TIGER/常态",
         "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
         "slot": "back"
       },
@@ -177,6 +159,24 @@
         "owner": "CHAR_WUDA/日常卖饼态",
         "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
         "slot": "side"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+        "slot": "rear_three_quarter"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
+        "slot": "back"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA_日常卖饼态_action_pose_pack.png",
+        "slot": "action_pose_pack"
       }
     ],
     "episode": "第1集",
@@ -532,114 +532,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_010"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-      "owner": "BEAST_TIGER/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "BEAST_TIGER/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "933f341e10722995",
-      "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_012"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-      "owner": "BEAST_TIGER/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "BEAST_TIGER/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "1eacc40e0247097a",
-      "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_013"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-      "owner": "BEAST_TIGER/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "BEAST_TIGER/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7d683c7bcc3de936",
-      "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_014"
     },
     {
       "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
@@ -3126,42 +3018,6 @@
       "task_id": "REF_108"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
-      "owner": "PROP_LUGGAGE",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_LUGGAGE",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_LUGGAGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "42cba54f0de3b6b2",
-      "satisfies": [
-        {
-          "owner": "PROP_LUGGAGE",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_110"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png",
       "owner": "PROP_LUGGAGE",
       "priority": "P1",
@@ -3306,42 +3162,6 @@
       "task_id": "REF_118"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_公文_比例.png",
-      "owner": "PROP_OFFICIAL_DOC",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_OFFICIAL_DOC",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_OFFICIAL_DOC",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "a5cd0e43f87e8633",
-      "satisfies": [
-        {
-          "owner": "PROP_OFFICIAL_DOC",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_120"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_PROP_OFFICIAL_DOC_detail_closeup.png",
       "owner": "PROP_OFFICIAL_DOC",
       "priority": "P1",
@@ -3376,42 +3196,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_121"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
-      "owner": "PROP_GIFT_LOAD",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_GIFT_LOAD",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_GIFT_LOAD",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "66c713db93bdcadd",
-      "satisfies": [
-        {
-          "owner": "PROP_GIFT_LOAD",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_123"
     },
     {
       "output_path": "出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png",
@@ -3520,42 +3304,6 @@
       "scope": "asset",
       "slot": "lighting_plate",
       "task_id": "REF_128"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png",
-      "owner": "PROP_WINDOW_CURTAIN",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_WINDOW_CURTAIN",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_WINDOW_CURTAIN",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "scale_reference"
-          }
-        ],
-        "slot": "scale_reference",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "14df75fd51592c6a",
-      "satisfies": [
-        {
-          "owner": "PROP_WINDOW_CURTAIN",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "scale_reference"
-        }
-      ],
-      "scope": "asset",
-      "slot": "scale_reference",
-      "task_id": "REF_130"
     },
     {
       "output_path": "出图/共享/图片/定妆_PROP_WINDOW_CURTAIN_detail_closeup.png",
@@ -6835,42 +6583,6 @@
           "task_id": "REF_099"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
-          "owner": "PROP_LUGGAGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_LUGGAGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_LUGGAGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "42cba54f0de3b6b2",
-          "satisfies": [
-            {
-              "owner": "PROP_LUGGAGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_110"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png",
           "owner": "PROP_LUGGAGE",
           "priority": "P1",
@@ -7207,42 +6919,6 @@
           "task_id": "REF_099"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
-          "owner": "PROP_LUGGAGE",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_LUGGAGE",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_LUGGAGE",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "42cba54f0de3b6b2",
-          "satisfies": [
-            {
-              "owner": "PROP_LUGGAGE",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_110"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png",
           "owner": "PROP_LUGGAGE",
           "priority": "P1",
@@ -7505,42 +7181,6 @@
           "task_id": "REF_118"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_公文_比例.png",
-          "owner": "PROP_OFFICIAL_DOC",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_OFFICIAL_DOC",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_OFFICIAL_DOC",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "a5cd0e43f87e8633",
-          "satisfies": [
-            {
-              "owner": "PROP_OFFICIAL_DOC",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_120"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_OFFICIAL_DOC_detail_closeup.png",
           "owner": "PROP_OFFICIAL_DOC",
           "priority": "P1",
@@ -7575,42 +7215,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_121"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
-          "owner": "PROP_GIFT_LOAD",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_GIFT_LOAD",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_GIFT_LOAD",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "66c713db93bdcadd",
-          "satisfies": [
-            {
-              "owner": "PROP_GIFT_LOAD",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_123"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png",
@@ -7939,42 +7543,6 @@
           "task_id": "REF_114"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
-          "owner": "PROP_GIFT_LOAD",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_GIFT_LOAD",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_GIFT_LOAD",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "66c713db93bdcadd",
-          "satisfies": [
-            {
-              "owner": "PROP_GIFT_LOAD",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_123"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png",
           "owner": "PROP_GIFT_LOAD",
           "priority": "P1",
@@ -8159,42 +7727,6 @@
           "task_id": "REF_074"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
-          "owner": "PROP_GIFT_LOAD",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_GIFT_LOAD",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_GIFT_LOAD",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "66c713db93bdcadd",
-          "satisfies": [
-            {
-              "owner": "PROP_GIFT_LOAD",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_123"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png",
           "owner": "PROP_GIFT_LOAD",
           "priority": "P1",
@@ -8301,42 +7833,6 @@
           "scope": "asset",
           "slot": "lighting_plate",
           "task_id": "REF_128"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png",
-          "owner": "PROP_WINDOW_CURTAIN",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_WINDOW_CURTAIN",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_WINDOW_CURTAIN",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "scale_reference"
-              }
-            ],
-            "slot": "scale_reference",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "14df75fd51592c6a",
-          "satisfies": [
-            {
-              "owner": "PROP_WINDOW_CURTAIN",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "scale_reference"
-            }
-          ],
-          "scope": "asset",
-          "slot": "scale_reference",
-          "task_id": "REF_130"
         },
         {
           "output_path": "出图/共享/图片/定妆_PROP_WINDOW_CURTAIN_detail_closeup.png",
@@ -8462,7 +7958,7 @@
   "summary": {
     "clips": 15,
     "keyshot_candidate_tasks": 15,
-    "reference_generation_tasks": 87,
+    "reference_generation_tasks": 80,
     "regional_construct_manifests": 15,
     "shot_packages": 15
   },

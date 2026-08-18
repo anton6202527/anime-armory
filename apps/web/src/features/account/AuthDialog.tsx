@@ -65,7 +65,7 @@ export function AuthDialog({ open, configured, onClose, onContinue }: AuthDialog
         <p>输入邮箱和密码，首次登录会自动创建账号。</p>
 
         {!configured ? (
-          <div className="auth-config-note"><LockKeyhole size={18} /><span><b>登录服务尚未配置</b><small>请先在 Web 环境文件中填写 Supabase URL 与 Publishable Key。</small></span></div>
+          <div className="auth-config-note"><LockKeyhole size={18} /><span><b>登录服务尚未配置</b><small>请先在后端环境文件中填写 Supabase URL 与 Publishable Key，并重启后端。</small></span></div>
         ) : (
           <form onSubmit={(event) => void submit(event)}>
             <label><span>邮箱</span><div><Mail size={16} /><input autoFocus type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" autoComplete="email" /></div></label>

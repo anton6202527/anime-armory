@@ -1,0 +1,27 @@
+{
+  "auto_required_reasons": [
+    "production lock change: video_material_lock lock_artifact_stale",
+    "production lock change: video_material_lock lock_required_artifact_missing",
+    "production lock change: rough_cut_lock lock_required_artifact_missing",
+    "production lock change: picture_lock lock_required_artifact_missing",
+    "gate waiver finding: gate_findings_image_第1集.json"
+  ],
+  "findings": [],
+  "generated_at": "2026-08-15T12:09:31+00:00",
+  "kind": "n2d_creative_governance_check",
+  "paths": {
+    "decisions": "创作区/制漫剧/金瓶梅/生产数据/creative_decisions.jsonl",
+    "raci": "创作区/制漫剧/金瓶梅/生产数据/crew_raci.json"
+  },
+  "requested_require_decision": false,
+  "require_decision": true,
+  "required_due_to": "",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "decisions": 1,
+    "production_ready_decisions": 1,
+    "warn": 0
+  },
+  "version": 1
+}

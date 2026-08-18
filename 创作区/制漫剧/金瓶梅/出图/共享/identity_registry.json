@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-08-14T01:52:01+00:00",
+  "generated_at": "2026-08-17T04:23:00+00:00",
   "characters": [
     {
       "id": "CHAR_WUSONG",
@@ -1118,7 +1118,7 @@
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared front reference passed finalized review",
-                "reviewed_at": "2026-08-11T09:47:56.260056+00:00"
+                "reviewed_at": "2026-08-15T11:48:13.456697+00:00"
               },
               "visual_review": {
                 "status": "ready",
@@ -1153,7 +1153,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared visual_review reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260076+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.456711+00:00"
                 }
               }
             },
@@ -1175,7 +1175,7 @@
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared outfit reference passed finalized review",
-                "reviewed_at": "2026-08-11T09:47:56.260108+00:00"
+                "reviewed_at": "2026-08-15T11:48:13.456740+00:00"
               }
             },
             "half_body": {
@@ -1198,7 +1198,7 @@
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared half_body reference passed finalized review",
-                "reviewed_at": "2026-08-11T09:47:56.260117+00:00"
+                "reviewed_at": "2026-08-15T11:48:13.456749+00:00"
               }
             },
             "face_anchor_refs": [
@@ -1222,7 +1222,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260129+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.456757+00:00"
                 }
               }
             ],
@@ -1248,7 +1248,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared expressions[0] reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260141+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.456765+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -1282,69 +1282,402 @@
                     "status": "accepted",
                     "reviewer": "image_qc.mark_finalized",
                     "reason": "shared visual_review reference passed finalized review",
-                    "reviewed_at": "2026-08-11T09:47:56.260151+00:00"
+                    "reviewed_at": "2026-08-15T11:48:13.456774+00:00"
                   }
                 }
               }
             ],
             "three_quarter": {
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-15T11:21:18+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                    "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                    "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                    "role": "source_frame",
+                    "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                    "prepared_rel_path": "",
+                    "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-08-15T11:48:13.456797+00:00"
+              },
+              "visual_review": {
+                "status": "ready",
+                "verdict": "pass",
+                "character_id": "BEAST_TIGER",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-15T11:48:13+00:00",
+                "png_sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+                "registry_binding_fingerprint": "4adc17565e77fea5781cd5da0a2fa911fe8d6b53fdcca5f29231ba198bfcd011",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际查看当前像素：单一成年虎，前45度明确；四肢足掌尾巴完整，白额、条纹、体量与母图一致。",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared visual_review reference passed finalized review",
+                  "reviewed_at": "2026-08-15T11:48:13.456805+00:00"
+                }
               }
             },
             "side": {
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-15T11:26:00+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                    "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                    "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                    "role": "source_frame",
+                    "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                    "prepared_rel_path": "",
+                    "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared side reference passed finalized review",
+                "reviewed_at": "2026-08-15T11:48:13.456827+00:00"
+              },
+              "visual_review": {
+                "status": "ready",
+                "verdict": "pass",
+                "character_id": "BEAST_TIGER",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-15T11:48:13+00:00",
+                "png_sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
+                "registry_binding_fingerprint": "24f22f6dffe880cfe8e12aee3236584e6abcefd9df0b5692b39932d52af16d1f",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际查看当前像素：完整90度侧姿；四足各自连续、尾巴和脊背正常，白额、白腹、条纹与母图一致。",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared visual_review reference passed finalized review",
+                  "reviewed_at": "2026-08-15T11:48:13.456836+00:00"
+                }
               }
             },
             "rear_three_quarter": {
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-15T11:46:38+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                    "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                    "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                    "role": "source_frame",
+                    "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_后45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                    "prepared_rel_path": "",
+                    "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared rear_three_quarter reference passed finalized review",
+                "reviewed_at": "2026-08-15T11:48:13.456858+00:00"
+              },
+              "visual_review": {
+                "status": "ready",
+                "verdict": "pass",
+                "character_id": "BEAST_TIGER",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-15T11:48:13+00:00",
+                "png_sha256": "b5e3fccdcf6188f4022dae1fa9175282d9a3aaafbac837e2cff55cc010f2b72b",
+                "registry_binding_fingerprint": "f7e3e4793c800c53f747a5761614a9da64398fc4847ea80f79bf333d073dd75b",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际查看当前像素：后侧45度明确；后躯、肩背、四足和尾巴连续，条纹与体量同源一致。",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared visual_review reference passed finalized review",
+                  "reviewed_at": "2026-08-15T11:48:13.456865+00:00"
+                }
               }
             },
             "back": {
               "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:07:53+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                    "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                    "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                    "role": "source_frame",
+                    "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                    "prepared_rel_path": "",
+                    "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态_45度__692454f1fea1_1672x941_to_1819x1024.png",
+                    "sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+                    "prepared_sha256": "2e217450acb533a1b59ff564cd3f8cdbbff6e75bef3241d1c486bee2a8c26b8d",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态_侧__c221d241c113_1672x941_to_1819x1024.png",
+                    "sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
+                    "prepared_sha256": "d3e624ba471c0b93c57deef3d7a7c1d92c8fee5b3c63260b067819b578a73c8f",
+                    "role": "character",
+                    "owner": "BEAST_TIGER/常态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "BEAST_TIGER",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:09:03+00:00",
+                "png_sha256": "d305b0f738ef162c2f7c6b49f46dad9e082972e1619b9d3ea1f6f02489a7b51d",
+                "registry_binding_fingerprint": "194d1eea94f421bacd8faa1b8a79ef3877ccc63efa7c6e3237ebf195dfaef61c",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素及正面、前45度、侧面、后45度锚已并排核对：真实四足成年虎背面，耳位、肩胛宽度、背脊中线、臀腿比例、尾根与黑黄条纹连续；四肢连接自然、双后掌落地，无遮挡新增肢体，无人形化、伤痕、衣装、文字或水印。"
               }
             }
           },
@@ -1358,7 +1691,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared front reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260207+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.456895+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -1393,68 +1726,401 @@
                     "status": "accepted",
                     "reviewer": "image_qc.mark_finalized",
                     "reason": "shared visual_review reference passed finalized review",
-                    "reviewed_at": "2026-08-11T09:47:56.260216+00:00"
+                    "reviewed_at": "2026-08-15T11:48:13.456902+00:00"
                   }
                 }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                  "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-15T11:21:18+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                      "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                      "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                      "role": "source_frame",
+                      "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                      "prepared_rel_path": "",
+                      "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-08-15T11:48:13.456922+00:00"
+                },
+                "visual_review": {
+                  "status": "ready",
+                  "verdict": "pass",
+                  "character_id": "BEAST_TIGER",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "three_quarter",
+                  "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-15T11:48:13+00:00",
+                  "png_sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+                  "registry_binding_fingerprint": "4adc17565e77fea5781cd5da0a2fa911fe8d6b53fdcca5f29231ba198bfcd011",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际查看当前像素：单一成年虎，前45度明确；四肢足掌尾巴完整，白额、条纹、体量与母图一致。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-08-15T11:48:13.456930+00:00"
+                  }
                 }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                  "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-15T11:26:00+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                      "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                      "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                      "role": "source_frame",
+                      "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                      "prepared_rel_path": "",
+                      "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared side reference passed finalized review",
+                  "reviewed_at": "2026-08-15T11:48:13.456951+00:00"
+                },
+                "visual_review": {
+                  "status": "ready",
+                  "verdict": "pass",
+                  "character_id": "BEAST_TIGER",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-15T11:48:13+00:00",
+                  "png_sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
+                  "registry_binding_fingerprint": "24f22f6dffe880cfe8e12aee3236584e6abcefd9df0b5692b39932d52af16d1f",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际查看当前像素：完整90度侧姿；四足各自连续、尾巴和脊背正常，白额、白腹、条纹与母图一致。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-08-15T11:48:13.456959+00:00"
+                  }
                 }
               },
               "rear_three_quarter": {
                 "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                  "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-15T11:46:38+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                      "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                      "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                      "role": "source_frame",
+                      "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_后45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                      "prepared_rel_path": "",
+                      "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared rear_three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-08-15T11:48:13.456979+00:00"
+                },
+                "visual_review": {
+                  "status": "ready",
+                  "verdict": "pass",
+                  "character_id": "BEAST_TIGER",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-15T11:48:13+00:00",
+                  "png_sha256": "b5e3fccdcf6188f4022dae1fa9175282d9a3aaafbac837e2cff55cc010f2b72b",
+                  "registry_binding_fingerprint": "f7e3e4793c800c53f747a5761614a9da64398fc4847ea80f79bf333d073dd75b",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际查看当前像素：后侧45度明确；后躯、肩背、四足和尾巴连续，条纹与体量同源一致。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-08-15T11:48:13.456987+00:00"
+                  }
                 }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                  "source_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:07:53+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024.png",
+                      "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+                      "prepared_sha256": "e3d81cd6d3155db3e15d56d4f4fddafefb0928fe5c4ae3891a14442be81be18d",
+                      "role": "source_frame",
+                      "owner": "BEAST_TIGER::定妆_BEAST_TIGER__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+                      "prepared_rel_path": "",
+                      "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态_45度__692454f1fea1_1672x941_to_1819x1024.png",
+                      "sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+                      "prepared_sha256": "2e217450acb533a1b59ff564cd3f8cdbbff6e75bef3241d1c486bee2a8c26b8d",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_BEAST_TIGER__常态_侧__c221d241c113_1672x941_to_1819x1024.png",
+                      "sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
+                      "prepared_sha256": "d3e624ba471c0b93c57deef3d7a7c1d92c8fee5b3c63260b067819b578a73c8f",
+                      "role": "character",
+                      "owner": "BEAST_TIGER/常态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "BEAST_TIGER",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:09:03+00:00",
+                  "png_sha256": "d305b0f738ef162c2f7c6b49f46dad9e082972e1619b9d3ea1f6f02489a7b51d",
+                  "registry_binding_fingerprint": "194d1eea94f421bacd8faa1b8a79ef3877ccc63efa7c6e3237ebf195dfaef61c",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素及正面、前45度、侧面、后45度锚已并排核对：真实四足成年虎背面，耳位、肩胛宽度、背脊中线、臀腿比例、尾根与黑黄条纹连续；四肢连接自然、双后掌落地，无遮挡新增肢体，无人形化、伤痕、衣装、文字或水印。"
                 }
               },
               "half_body": {
@@ -1477,7 +2143,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared half_body reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260262+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.457012+00:00"
                 }
               }
             },
@@ -1502,7 +2168,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260271+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.457019+00:00"
                 }
               }
             ],
@@ -1528,7 +2194,7 @@
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared expression_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-08-11T09:47:56.260281+00:00"
+                  "reviewed_at": "2026-08-15T11:48:13.457027+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -1562,7 +2228,7 @@
                     "status": "accepted",
                     "reviewer": "image_qc.mark_finalized",
                     "reason": "shared visual_review reference passed finalized review",
-                    "reviewed_at": "2026-08-11T09:47:56.260290+00:00"
+                    "reviewed_at": "2026-08-15T11:48:13.457034+00:00"
                   }
                 }
               }
@@ -1711,7 +2377,7 @@
           "signature_equipment": [],
           "self_check_passed": true,
           "self_check_note": "front review failed: 当前像素目视拒收：双足直立、类人胸臂与手掌，属于兽人形而非真实四足成年华南虎；胸前另有无设定伤痕。",
-          "self_check_at": "2026-08-11T09:47:56+00:00",
+          "self_check_at": "2026-08-15T11:48:13+00:00",
           "self_check_by": "image_qc.mark_finalized",
           "artifact_sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
           "anchor_sha": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7"
@@ -2330,47 +2996,299 @@
             },
             "side": {
               "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                "source_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1024,
+                  1819
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:16:23+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                    "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+                    "prepared_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
+                    "role": "source_frame",
+                    "owner": "CHAR_WUDA::定妆_CHAR_WUDA__日常卖饼态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819.png",
+                    "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+                    "prepared_sha256": "aa4fe0702cb6c349ae8d61a4a1c2d45ba3a5ef3b18e57cb751ce7f04f79e8f96",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+                    "prepared_rel_path": "",
+                    "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819.png",
+                    "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+                    "prepared_sha256": "e82125094724d30d2eb66ee674a329ae303f330f109cbd1e73011dc8fd3fbddb",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_WUDA",
+                "form": "日常卖饼态",
+                "library_tier": "recurring_standard",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:18:35+00:00",
+                "png_sha256": "58f40d6e6e96a78ba2940be2217f6a32d74cc0ec236312575fb21d2a5c83ef6a",
+                "registry_binding_fingerprint": "f0c5f265c1a212787ff40c18d820c922619af983f4e4cbb571245c89122205b4",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素已与正面、前45度及脸部特写并排核对：圆脸侧轮廓、低鼻梁、下颌、眼袋、灰褐头巾及后侧结方向一致；矮壮腹部体态、褐灰交领粗布、绑腿鞋脚完整，双手自然，无多肢、现代物件、文字或水印。"
               }
             },
             "rear_three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                "source_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1024,
+                  1819
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:22:33+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                    "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+                    "prepared_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
+                    "role": "source_frame",
+                    "owner": "CHAR_WUDA::定妆_CHAR_WUDA__日常卖饼态_后45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819.png",
+                    "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+                    "prepared_sha256": "aa4fe0702cb6c349ae8d61a4a1c2d45ba3a5ef3b18e57cb751ce7f04f79e8f96",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+                    "prepared_rel_path": "",
+                    "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819.png",
+                    "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+                    "prepared_sha256": "e82125094724d30d2eb66ee674a329ae303f330f109cbd1e73011dc8fd3fbddb",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_WUDA",
+                "form": "日常卖饼态",
+                "library_tier": "recurring_standard",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:24:03+00:00",
+                "png_sha256": "43f07d2704c5ca283a6a4fa157f378260a0fa045d3ab5ab3b7723fa4ab68d5f4",
+                "registry_binding_fingerprint": "9b31b983eec50a9f98a58cde5e08ff23e20664310d5c6a2c3d2c94c10a763a78",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与前45度、侧面锚并排核对：角度为有效后45度，仍保留可辨侧脸；头巾后结、发际、肩背衣层、褐灰粗布纹理、矮壮腰臀及绑腿鞋脚连续，双臂双手连接自然，无前45度重复、人体错误、现代物件、文字或水印。"
               }
             },
             "back": {
               "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                "source_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1024,
+                  1819
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:28:23+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                    "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+                    "prepared_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
+                    "role": "source_frame",
+                    "owner": "CHAR_WUDA::定妆_CHAR_WUDA__日常卖饼态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819.png",
+                    "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+                    "prepared_sha256": "aa4fe0702cb6c349ae8d61a4a1c2d45ba3a5ef3b18e57cb751ce7f04f79e8f96",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+                    "prepared_rel_path": "",
+                    "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819.png",
+                    "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+                    "prepared_sha256": "e82125094724d30d2eb66ee674a329ae303f330f109cbd1e73011dc8fd3fbddb",
+                    "role": "character",
+                    "owner": "CHAR_WUDA/日常卖饼态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_WUDA",
+                "form": "日常卖饼态",
+                "library_tier": "recurring_standard",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:31:33+00:00",
+                "png_sha256": "5aa96a58d26ccd90e49a395e13d80fffde9d708e75f9a685d0712ad1495758dd",
+                "registry_binding_fingerprint": "04e5a2ccf423da029e5617227c8c8b44767bbebe99e164beb0583e292f84a743",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、后45度锚并排核对：标准正背视角，头巾后结、黑发边缘、肩宽、褐色外袍下摆、深灰裤、绑腿和鞋底后跟连续；头脚完整、双臂双手自然对称，无新增肢体、现代物件、文字或水印。"
               }
             }
           },
@@ -2532,47 +3450,299 @@
               },
               "side": {
                 "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                  "source_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1024,
+                    1819
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:16:23+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                      "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+                      "prepared_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
+                      "role": "source_frame",
+                      "owner": "CHAR_WUDA::定妆_CHAR_WUDA__日常卖饼态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819.png",
+                      "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+                      "prepared_sha256": "aa4fe0702cb6c349ae8d61a4a1c2d45ba3a5ef3b18e57cb751ce7f04f79e8f96",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+                      "prepared_rel_path": "",
+                      "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819.png",
+                      "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+                      "prepared_sha256": "e82125094724d30d2eb66ee674a329ae303f330f109cbd1e73011dc8fd3fbddb",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_WUDA",
+                  "form": "日常卖饼态",
+                  "library_tier": "recurring_standard",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:18:35+00:00",
+                  "png_sha256": "58f40d6e6e96a78ba2940be2217f6a32d74cc0ec236312575fb21d2a5c83ef6a",
+                  "registry_binding_fingerprint": "f0c5f265c1a212787ff40c18d820c922619af983f4e4cbb571245c89122205b4",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素已与正面、前45度及脸部特写并排核对：圆脸侧轮廓、低鼻梁、下颌、眼袋、灰褐头巾及后侧结方向一致；矮壮腹部体态、褐灰交领粗布、绑腿鞋脚完整，双手自然，无多肢、现代物件、文字或水印。"
                 }
               },
               "rear_three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                  "source_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1024,
+                    1819
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:22:33+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                      "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+                      "prepared_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
+                      "role": "source_frame",
+                      "owner": "CHAR_WUDA::定妆_CHAR_WUDA__日常卖饼态_后45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819.png",
+                      "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+                      "prepared_sha256": "aa4fe0702cb6c349ae8d61a4a1c2d45ba3a5ef3b18e57cb751ce7f04f79e8f96",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+                      "prepared_rel_path": "",
+                      "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819.png",
+                      "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+                      "prepared_sha256": "e82125094724d30d2eb66ee674a329ae303f330f109cbd1e73011dc8fd3fbddb",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_WUDA",
+                  "form": "日常卖饼态",
+                  "library_tier": "recurring_standard",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:24:03+00:00",
+                  "png_sha256": "43f07d2704c5ca283a6a4fa157f378260a0fa045d3ab5ab3b7723fa4ab68d5f4",
+                  "registry_binding_fingerprint": "9b31b983eec50a9f98a58cde5e08ff23e20664310d5c6a2c3d2c94c10a763a78",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与前45度、侧面锚并排核对：角度为有效后45度，仍保留可辨侧脸；头巾后结、发际、肩背衣层、褐灰粗布纹理、矮壮腰臀及绑腿鞋脚连续，双臂双手连接自然，无前45度重复、人体错误、现代物件、文字或水印。"
                 }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                  "source_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1024,
+                    1819
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:28:23+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819.png",
+                      "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+                      "prepared_sha256": "6845de555b6bfd5e133592b73dd74ed6ada10d1e35d25a5cc3aa6475a9fe01b3",
+                      "role": "source_frame",
+                      "owner": "CHAR_WUDA::定妆_CHAR_WUDA__日常卖饼态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819.png",
+                      "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+                      "prepared_sha256": "aa4fe0702cb6c349ae8d61a4a1c2d45ba3a5ef3b18e57cb751ce7f04f79e8f96",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+                      "prepared_rel_path": "",
+                      "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819.png",
+                      "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+                      "prepared_sha256": "e82125094724d30d2eb66ee674a329ae303f330f109cbd1e73011dc8fd3fbddb",
+                      "role": "character",
+                      "owner": "CHAR_WUDA/日常卖饼态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_WUDA",
+                  "form": "日常卖饼态",
+                  "library_tier": "recurring_standard",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:31:33+00:00",
+                  "png_sha256": "5aa96a58d26ccd90e49a395e13d80fffde9d708e75f9a685d0712ad1495758dd",
+                  "registry_binding_fingerprint": "04e5a2ccf423da029e5617227c8c8b44767bbebe99e164beb0583e292f84a743",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、后45度锚并排核对：标准正背视角，头巾后结、黑发边缘、肩宽、褐色外袍下摆、深灰裤、绑腿和鞋底后跟连续；头脚完整、双臂双手自然对称，无新增肢体、现代物件、文字或水印。"
                 }
               },
               "half_body": {
@@ -4203,62 +5373,389 @@
             ],
             "three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:39:44+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                    "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                    "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                    "role": "source_frame",
+                    "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                    "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                    "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_MAGISTRATE",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:41:25+00:00",
+                "png_sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                "registry_binding_fingerprint": "ec46ffb556093841ed6eea2c26303cffa846b40956ef86d35135b495a3bf8ad8",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、脸部特写、半身锚并排核对：前45度有效，方长脸、浓眉、窄眼、直鼻、八字髭与短山羊胡同源；黑幞头、深灰蓝圆领官袍、皮腰带、宽袖、全身鞋脚连续，双手自然，无戏曲夸张帽翅、现代物件、文字或水印。"
               }
             },
             "side": {
               "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:44:25+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                    "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                    "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                    "role": "source_frame",
+                    "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                    "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                    "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024.png",
+                    "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                    "prepared_sha256": "7f3ae854bde434aeaef9d3f94c8d93aeb34de8e4eb0f0ec34f12fd3f1337cb92",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_MAGISTRATE",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:46:26+00:00",
+                "png_sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+                "registry_binding_fingerprint": "fa601f889d2963ab9035f856e2687a7a22d7325c65976a4fc7f0a4f747081015",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、前45度锚并排核对：标准侧面角度，额鼻唇下颌轮廓、八字髭与短山羊胡同源；黑幞头后部垂带结构合理，深灰蓝圆领官袍、腰带、宽袖、全身鞋脚连续，单侧可见手指自然，无现代物件、文字或水印。"
               }
             },
             "rear_three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:49:24+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                    "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                    "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                    "role": "source_frame",
+                    "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_后45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                    "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                    "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024.png",
+                    "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                    "prepared_sha256": "7f3ae854bde434aeaef9d3f94c8d93aeb34de8e4eb0f0ec34f12fd3f1337cb92",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_侧__ce5c95a7cbff_1672x941_to_1819x1024.png",
+                    "sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+                    "prepared_sha256": "b9df51c9eb118659d888381357f068799f980461eda4f3ad0505ef48796b76f5",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_MAGISTRATE",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:51:14+00:00",
+                "png_sha256": "62985d76bb7848772ecb3d04ae9cb4073314a5260af096615147d7dfe88e8e38",
+                "registry_binding_fingerprint": "5749870da7f372c0e755915530fc1368809dcab34ee915fcaa32500b9e9093c1",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与前45度、侧面锚并排核对：有效后45度且侧脸仍可辨；幞头后部与垂带、后颈白领、官袍背中线、腰带、宽袖、双层下摆及鞋脚连续，单侧手自然，无角度重复、人体错误、现代物件、文字或水印。"
               }
             },
             "back": {
               "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T03:54:26+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                    "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                    "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                    "role": "source_frame",
+                    "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                    "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                    "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024.png",
+                    "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                    "prepared_sha256": "7f3ae854bde434aeaef9d3f94c8d93aeb34de8e4eb0f0ec34f12fd3f1337cb92",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_侧__ce5c95a7cbff_1672x941_to_1819x1024.png",
+                    "sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+                    "prepared_sha256": "b9df51c9eb118659d888381357f068799f980461eda4f3ad0505ef48796b76f5",
+                    "role": "character",
+                    "owner": "CHAR_MAGISTRATE/常态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_MAGISTRATE",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T03:57:20+00:00",
+                "png_sha256": "243f10b3a1dad7a3ffdeff4d27fc2d0b7ec747a796a03f73e7f3c8f2895249f7",
+                "registry_binding_fingerprint": "2da5d2d6f6c00c9333987463cf693319ba6e5579e4c8dc27c56e8237dee32c48",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、后45度锚并排核对：标准正背视角，肩线与背中线对称；幞头后部、双垂带、后颈白领、腰带背面、深灰蓝官袍宽袖与双层下摆、双脚后跟连续，双手自然垂落，无角度偏斜、人体错误、现代物件、文字或水印。"
               }
             }
           },
@@ -4313,62 +5810,389 @@
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                  "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:39:44+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                      "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                      "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                      "role": "source_frame",
+                      "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                      "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                      "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_MAGISTRATE",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:41:25+00:00",
+                  "png_sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                  "registry_binding_fingerprint": "ec46ffb556093841ed6eea2c26303cffa846b40956ef86d35135b495a3bf8ad8",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、脸部特写、半身锚并排核对：前45度有效，方长脸、浓眉、窄眼、直鼻、八字髭与短山羊胡同源；黑幞头、深灰蓝圆领官袍、皮腰带、宽袖、全身鞋脚连续，双手自然，无戏曲夸张帽翅、现代物件、文字或水印。"
                 }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                  "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:44:25+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                      "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                      "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                      "role": "source_frame",
+                      "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                      "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                      "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024.png",
+                      "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                      "prepared_sha256": "7f3ae854bde434aeaef9d3f94c8d93aeb34de8e4eb0f0ec34f12fd3f1337cb92",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_MAGISTRATE",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:46:26+00:00",
+                  "png_sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+                  "registry_binding_fingerprint": "fa601f889d2963ab9035f856e2687a7a22d7325c65976a4fc7f0a4f747081015",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、前45度锚并排核对：标准侧面角度，额鼻唇下颌轮廓、八字髭与短山羊胡同源；黑幞头后部垂带结构合理，深灰蓝圆领官袍、腰带、宽袖、全身鞋脚连续，单侧可见手指自然，无现代物件、文字或水印。"
                 }
               },
               "rear_three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                  "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:49:24+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                      "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                      "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                      "role": "source_frame",
+                      "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_后45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                      "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                      "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024.png",
+                      "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                      "prepared_sha256": "7f3ae854bde434aeaef9d3f94c8d93aeb34de8e4eb0f0ec34f12fd3f1337cb92",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_侧__ce5c95a7cbff_1672x941_to_1819x1024.png",
+                      "sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+                      "prepared_sha256": "b9df51c9eb118659d888381357f068799f980461eda4f3ad0505ef48796b76f5",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_MAGISTRATE",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:51:14+00:00",
+                  "png_sha256": "62985d76bb7848772ecb3d04ae9cb4073314a5260af096615147d7dfe88e8e38",
+                  "registry_binding_fingerprint": "5749870da7f372c0e755915530fc1368809dcab34ee915fcaa32500b9e9093c1",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与前45度、侧面锚并排核对：有效后45度且侧脸仍可辨；幞头后部与垂带、后颈白领、官袍背中线、腰带、宽袖、双层下摆及鞋脚连续，单侧手自然，无角度重复、人体错误、现代物件、文字或水印。"
                 }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                  "source_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T03:54:26+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024.png",
+                      "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+                      "prepared_sha256": "5e790eec4f0760136b61306fdad88a7d2d6e2fb1bf5571fc3ccae081206c1caa",
+                      "role": "source_frame",
+                      "owner": "CHAR_MAGISTRATE::定妆_CHAR_MAGISTRATE__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024.png",
+                      "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+                      "prepared_sha256": "a79d7f1fb35303b55393455974c8d13c3864dd136313faeed539e3d2a627b0b5",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024.png",
+                      "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+                      "prepared_sha256": "7f3ae854bde434aeaef9d3f94c8d93aeb34de8e4eb0f0ec34f12fd3f1337cb92",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_MAGISTRATE__常态_侧__ce5c95a7cbff_1672x941_to_1819x1024.png",
+                      "sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+                      "prepared_sha256": "b9df51c9eb118659d888381357f068799f980461eda4f3ad0505ef48796b76f5",
+                      "role": "character",
+                      "owner": "CHAR_MAGISTRATE/常态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_MAGISTRATE",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T03:57:20+00:00",
+                  "png_sha256": "243f10b3a1dad7a3ffdeff4d27fc2d0b7ec747a796a03f73e7f3c8f2895249f7",
+                  "registry_binding_fingerprint": "2da5d2d6f6c00c9333987463cf693319ba6e5579e4c8dc27c56e8237dee32c48",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、后45度锚并排核对：标准正背视角，肩线与背中线对称；幞头后部、双垂带、后颈白领、腰带背面、深灰蓝官袍宽袖与双层下摆、双脚后跟连续，双手自然垂落，无角度偏斜、人体错误、现代物件、文字或水印。"
                 }
               },
               "half_body": {
@@ -4872,62 +6696,389 @@
             ],
             "three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T04:01:12+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                    "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                    "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                    "role": "source_frame",
+                    "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                    "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                    "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_XIMENQING",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T04:03:49+00:00",
+                "png_sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                "registry_binding_fingerprint": "0f748ab1ef00e714110e2092aa364a9fa548db3b6b287ec9fba8395a9e5064c4",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、脸部特写、半身锚并排核对：前45度有效，长椭圆脸、浓直眉、长眼、挺鼻、薄唇与年轻富户气质同源；高束发髻木簪、暗紫褐提花交领袍、饰片皮腰带、玉佩流苏、双层下摆及黑靴连续，双手自然，无仙侠夸张、现代物件、文字或水印。"
               }
             },
             "side": {
               "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T04:06:38+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                    "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                    "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                    "role": "source_frame",
+                    "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                    "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                    "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024.png",
+                    "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                    "prepared_sha256": "e840f11957170d8520d2dd3ffa125e94ff9769ffa70d07a82c7e0375f7da33a3",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                    "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                    "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_XIMENQING",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T04:09:23+00:00",
+                "png_sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+                "registry_binding_fingerprint": "06f57e11bd27b49b8526fdf7d400c0d12946e3538c4cadb24e11407feba6a52d",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、前45度锚并排核对：标准侧面角度，眉骨—鼻梁—唇—下颌轮廓与年轻富户身份同源；高束发髻木簪、暗紫褐提花交领袍、饰片腰带、玉佩流苏、双层下摆及黑靴连续，单侧手自然，无换脸、仙侠夸张、现代物件、文字或水印。"
               }
             },
             "rear_three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T04:11:27+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                    "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                    "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                    "role": "source_frame",
+                    "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_后45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                    "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                    "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024.png",
+                    "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                    "prepared_sha256": "e840f11957170d8520d2dd3ffa125e94ff9769ffa70d07a82c7e0375f7da33a3",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_侧__444ce22eef6e_1672x941_to_1819x1024.png",
+                    "sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+                    "prepared_sha256": "35986de7db88190ba7498e3f5680227892b81774b9ac6fabeebefc45061e1ac2",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_XIMENQING",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T04:12:21+00:00",
+                "png_sha256": "2ee9b70961d5901f7e886a2a13ae5bf2d8739bad3c710043dc7fe54b5d297450",
+                "registry_binding_fingerprint": "1da611fc12231ee81776322ecbc38d8c918c93e99c9dc833e4c1e5b80c083af1",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、侧面锚并排核对：后45度角度成立，耳侧轮廓与年轻富户面貌同源；后脑高束发髻及木簪、暗紫褐提花交领袍、背部衣褶、饰片腰带、双层下摆和黑靴连续，饰物遮挡符合视角，无换脸、仙侠夸张、现代物件、文字或水印。"
               }
             },
             "back": {
               "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  1819,
+                  1024
+                ],
+                "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-08-17T04:14:54+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                    "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                    "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                    "role": "source_frame",
+                    "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                    "prepared_rel_path": "",
+                    "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                    "prepared_sha256": "",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                    "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                    "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024.png",
+                    "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                    "prepared_sha256": "e840f11957170d8520d2dd3ffa125e94ff9769ffa70d07a82c7e0375f7da33a3",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_侧__444ce22eef6e_1672x941_to_1819x1024.png",
+                    "sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+                    "prepared_sha256": "35986de7db88190ba7498e3f5680227892b81774b9ac6fabeebefc45061e1ac2",
+                    "role": "character",
+                    "owner": "CHAR_XIMENQING/常态",
+                    "source": "reference_bundle"
+                  }
                 ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_XIMENQING",
+                "form": "常态",
+                "library_tier": "named_minimal",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-08-17T04:15:48+00:00",
+                "png_sha256": "16907bc469c95ea5faed0859c6f8016d725eb49b101d55bc79c8068f0cd9d4c5",
+                "registry_binding_fingerprint": "f0984d48b26d2a8b36ba02a62b1bd04c47a000fb2c926607861ef6f35acf8b91",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "当前原像素与正面、后45度锚并排核对：标准背面成立，后脑高束发髻与横向木簪、暗紫褐提花袍后领及中缝、饰片腰带、袖口滚边、双层下摆和黑靴均连续；正面玉佩在背视角自然不可见，无多肢、现代物件、文字或水印。"
               }
             }
           },
@@ -4982,62 +7133,389 @@
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                  "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T04:01:12+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                      "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                      "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                      "role": "source_frame",
+                      "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                      "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                      "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_XIMENQING",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T04:03:49+00:00",
+                  "png_sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                  "registry_binding_fingerprint": "0f748ab1ef00e714110e2092aa364a9fa548db3b6b287ec9fba8395a9e5064c4",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、脸部特写、半身锚并排核对：前45度有效，长椭圆脸、浓直眉、长眼、挺鼻、薄唇与年轻富户气质同源；高束发髻木簪、暗紫褐提花交领袍、饰片皮腰带、玉佩流苏、双层下摆及黑靴连续，双手自然，无仙侠夸张、现代物件、文字或水印。"
                 }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                  "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T04:06:38+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                      "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                      "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                      "role": "source_frame",
+                      "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                      "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                      "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024.png",
+                      "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                      "prepared_sha256": "e840f11957170d8520d2dd3ffa125e94ff9769ffa70d07a82c7e0375f7da33a3",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+                      "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+                      "prepared_sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_XIMENQING",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T04:09:23+00:00",
+                  "png_sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+                  "registry_binding_fingerprint": "06f57e11bd27b49b8526fdf7d400c0d12946e3538c4cadb24e11407feba6a52d",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、前45度锚并排核对：标准侧面角度，眉骨—鼻梁—唇—下颌轮廓与年轻富户身份同源；高束发髻木簪、暗紫褐提花交领袍、饰片腰带、玉佩流苏、双层下摆及黑靴连续，单侧手自然，无换脸、仙侠夸张、现代物件、文字或水印。"
                 }
               },
               "rear_three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                  "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T04:11:27+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                      "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                      "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                      "role": "source_frame",
+                      "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_后45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                      "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                      "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024.png",
+                      "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                      "prepared_sha256": "e840f11957170d8520d2dd3ffa125e94ff9769ffa70d07a82c7e0375f7da33a3",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_侧__444ce22eef6e_1672x941_to_1819x1024.png",
+                      "sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+                      "prepared_sha256": "35986de7db88190ba7498e3f5680227892b81774b9ac6fabeebefc45061e1ac2",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_XIMENQING",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T04:12:21+00:00",
+                  "png_sha256": "2ee9b70961d5901f7e886a2a13ae5bf2d8739bad3c710043dc7fe54b5d297450",
+                  "registry_binding_fingerprint": "1da611fc12231ee81776322ecbc38d8c918c93e99c9dc833e4c1e5b80c083af1",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、侧面锚并排核对：后45度角度成立，耳侧轮廓与年轻富户面貌同源；后脑高束发髻及木簪、暗紫褐提花交领袍、背部衣褶、饰片腰带、双层下摆和黑靴连续，饰物遮挡符合视角，无换脸、仙侠夸张、现代物件、文字或水印。"
                 }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                  "source_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    1819,
+                    1024
+                  ],
+                  "generated_by": "skills/n2d/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-08-17T04:14:54+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024.png",
+                      "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+                      "prepared_sha256": "81958b9eeb4d3a718e2db42db61fd244080859d05f567e45b00e0d5bbebb858e",
+                      "role": "source_frame",
+                      "owner": "CHAR_XIMENQING::定妆_CHAR_XIMENQING__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+                      "prepared_rel_path": "",
+                      "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+                      "prepared_sha256": "",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024.png",
+                      "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+                      "prepared_sha256": "6af1d5167f7f72aaff47a1547eb88699b4024680d7a2a59f338078414cc6ef6a",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024.png",
+                      "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+                      "prepared_sha256": "e840f11957170d8520d2dd3ffa125e94ff9769ffa70d07a82c7e0375f7da33a3",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_XIMENQING__常态_侧__444ce22eef6e_1672x941_to_1819x1024.png",
+                      "sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+                      "prepared_sha256": "35986de7db88190ba7498e3f5680227892b81774b9ac6fabeebefc45061e1ac2",
+                      "role": "character",
+                      "owner": "CHAR_XIMENQING/常态",
+                      "source": "reference_bundle"
+                    }
                   ]
+                },
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_XIMENQING",
+                  "form": "常态",
+                  "library_tier": "named_minimal",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-08-17T04:15:48+00:00",
+                  "png_sha256": "16907bc469c95ea5faed0859c6f8016d725eb49b101d55bc79c8068f0cd9d4c5",
+                  "registry_binding_fingerprint": "f0984d48b26d2a8b36ba02a62b1bd04c47a000fb2c926607861ef6f35acf8b91",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "当前原像素与正面、后45度锚并排核对：标准背面成立，后脑高束发髻与横向木簪、暗紫褐提花袍后领及中缝、饰片腰带、袖口滚边、双层下摆和黑靴均连续；正面玉佩在背视角自然不可见，无多肢、现代物件、文字或水印。"
                 }
               },
               "half_body": {

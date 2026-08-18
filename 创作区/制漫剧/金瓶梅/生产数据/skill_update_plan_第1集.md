@@ -7,15 +7,15 @@
 - 重制策略：`最小`
 
 ## 当前生产缺口
-- 当前待办：`出图`（出图 = `95/179`）
+- 当前待办：`出图`（出图 = `124/179`）
 - 建议 skill：`n2d-image`
 - 建议命令：`n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集`
 
 ## 图片质检环境与阶段跳转
 - 机检能力：`full`
 - 当前解释器：`/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
-- 当前 image_qc：`verdict=review`，硬阻断 `0`，非阻断初筛 `5`，降级 `True`
-- block 摘要：reference_slot_gate: 道具/场景 PROP_DOOR 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_场景木门_比例.png 不存在；出图/共享/图片/定妆_道具_场景木门_反面.png 不存在 | reference_slot_gate: 道具/场景 PROP_DOORFRAME 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_DOORFRAME_反面.png 不存在
+- 当前 image_qc：`verdict=review`，硬阻断 `0`，非阻断初筛 `7`，降级 `True`
+- block 摘要：接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 | 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
 - 当前应停在/回退：`video` — full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 - 建议安装：无需补装
 - 报告：`/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md`

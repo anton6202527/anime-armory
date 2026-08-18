@@ -1,0 +1,110 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_REWARD_SILVER_定妆_道具_REWARD_SILVER_反面_定妆_道具_REWARD_SILVER_反面.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：返工硬约束（最高优先级）：当前像素已审：图中仍是正面盆状凹槽，仅换角度重画，没有展示真正的背面。返工须把同一银锭完全翻面，露出与主资产外轮廓一致的凸起或平整底面、铸造接缝和底部磨损；只一锭，严禁再次出现正面凹槽。；图片/定妆_道具_REWARD_SILVER_反面.png… 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰；结构锁: 北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰；归属/用途: 剧情资产… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_REWARD_SILVER的asset参考 图3作为PROP_REWARD_SILVER的asset参考 返工硬约束（最高优先级）：当前像素已审：图中仍是正面盆状凹槽，仅换角度重画，没有展示真正的背面。返工须把同一银锭完全翻面，露出与主资产外轮廓一致的凸起或平整底面、铸造接缝和底部磨损；只一锭，严禁再次出现正面凹槽 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让REWARD SILVER结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1515,
+  "actual_submit_prompt_sha256": "777931fd7be31020461b34631eafdd3eb203b7d9ebc1f7b06a96d38a485ee01b",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_REWARD_SILVER_定妆_道具_REWARD_SILVER_反面_定妆_道具_REWARD_SILVER_反面.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：返工硬约束（最高优先级）：当前像素已审：图中仍是正面盆状凹槽，仅换角度重画，没有展示真正的背面。返工须把同一银锭完全翻面，露出与主资产外轮廓一致的凸起或平整底面、铸造接缝和底部磨损；只一锭，严禁再次出现正面凹槽。；图片/定妆_道具_REWARD_SILVER_反面.png… 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰；结构锁: 北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰；归属/用途: 剧情资产… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_REWARD_SILVER的asset参考 图3作为PROP_REWARD_SILVER的asset参考 返工硬约束（最高优先级）：当前像素已审：图中仍是正面盆状凹槽，仅换角度重画，没有展示真正的背面。返工须把同一银锭完全翻面，露出与主资产外轮廓一致的凸起或平整底面、铸造接缝和底部磨损；只一锭，严禁再次出现正面凹槽 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让REWARD SILVER结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_REWARD_SILVER",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_REWARD_SILVER__9c2278de6a63_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "6a3df08e93c0ba587c5f3b0be40e726605def4275bb90664ed0a736ca303027b"
+      },
+      {
+        "index": 3,
+        "owner": "PROP_REWARD_SILVER",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_REWARD_SILVER_比例__4f22295f10e1_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "063c05860a277fca8b467c6cf43dfcf0a00c88d59bbdf923428edea6d2048f5b"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "25b3fbf7427575234b4bf1a6f8b794e2a01fef5c1ab4974151aa86749d7ac90c",
+    "compiler_decisions": [],
+    "execution_context_sha256": "9ea2666c2b636db9d773bb1189ad7ddaec1b3c8aa432a87b635d9cb0c4109d31",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:34>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 34,
+      "constraint_compression": {
+        "policy_guard_input": 4,
+        "policy_guard_output": 4,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 250,
+      "negative_chars": 0,
+      "prompt_chars": 1000,
+      "reference_count": 3
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成独立生产级资产参考图：返工硬约束（最高优先级）：当前像素已审：图中仍是正面盆状凹槽，仅换角度重画，没有展示真正的背面。返工须把同一银锭完全翻面，露出与主资产外轮廓一致的凸起或平整底面、铸造接缝和底部磨损；只一锭，严禁再次出现正面凹槽。；图片/定妆_道具_REWARD_SILVER_反面.png… 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰；结构锁: 北宋官府赏银用粗铸银铤：低矮长方船形/马蹄形，两端微翘，中部浅凹，边缘与表面保留锤铸不规则质感；一枚约掌心可托，不得做成现代标准金条、纪念元宝或镜面首饰；归属/用途: 剧情资产… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_REWARD_SILVER的asset参考 图3作为PROP_REWARD_SILVER的asset参考 返工硬约束（最高优先级）：当前像素已审：图中仍是正面盆状凹槽，仅换角度重画，没有展示真正的背面。返工须把同一银锭完全翻面，露出与主资产外轮廓一致的凸起或平整底面、铸造接缝和底部磨损；只一锭，严禁再次出现正面凹槽 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让REWARD SILVER结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_REWARD_SILVER",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_REWARD_SILVER__9c2278de6a63_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "6a3df08e93c0ba587c5f3b0be40e726605def4275bb90664ed0a736ca303027b"
+      },
+      {
+        "index": 3,
+        "owner": "PROP_REWARD_SILVER",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_REWARD_SILVER_比例__4f22295f10e1_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "063c05860a277fca8b467c6cf43dfcf0a00c88d59bbdf923428edea6d2048f5b"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "5864ef8cf55c6fff5b4b192660cce51c2f9d1a969ae25224c802635427003b0b",
+    "source_contract_text_sha256": "6b685380c3dcc1268ef5e0ca724e26b8cadda21c7036e1c621462ab703e23bd8",
+    "task_type": "prop_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-15T10:35:41+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "d431e625748fb53f31e9216e689a821ccac206683ccff5c1b62d89357c41b8ba",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "PROP_REWARD_SILVER::定妆_道具_REWARD_SILVER_反面",
+  "target": "出图/共享/图片/定妆_道具_REWARD_SILVER_反面.png",
+  "version": 1
+}

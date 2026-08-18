@@ -2,9 +2,7 @@
   "artifact_namespace": {
     "available": true,
     "declared_targets": 55,
-    "notes": [
-      "本集图片目录不存在。"
-    ],
+    "notes": [],
     "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
     "stale": []
   },
@@ -13,7 +11,18 @@
     "findings": [],
     "notes": []
   },
-  "asset_human_review": [],
+  "asset_human_review": [
+    {
+      "asset": "景阳冈夜间空地",
+      "kind": "scene",
+      "png": "图片/EP01_CLIP03_a2.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a2.png",
+      "ref": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+      "shot": "Clip_03",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/asset_review/scene_Clip_03_compare.png",
+      "stitched": true
+    }
+  ],
   "asset_lifecycle": {
     "available": true,
     "checked": 24,
@@ -84,14 +93,16 @@
           "raw_intra_floor": null
         },
         "CHAR_MAGISTRATE__常态": {
-          "floor": 0.9873,
+          "floor": 0.5,
           "floor_calibrated": true,
-          "floor_guard_applied": false,
+          "floor_guard_applied": true,
           "has_main": true,
-          "intra_pairs": 2,
-          "raw_intra_floor": 0.9873
+          "intra_pairs": 4,
+          "raw_intra_floor": 0.4558
         },
         "CHAR_PANJINLIAN__25岁武大家常态": {
+          "ep_mean_score": 0.2245,
+          "ep_n_shots": 1,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -100,14 +111,18 @@
           "raw_intra_floor": 0.3325
         },
         "CHAR_WUDA__日常卖饼态": {
-          "floor": 0.8436,
+          "ep_mean_score": 0.7456,
+          "ep_n_shots": 1,
+          "floor": 0.5052,
           "floor_calibrated": true,
           "floor_guard_applied": false,
           "has_main": true,
-          "intra_pairs": 3,
-          "raw_intra_floor": 0.8436
+          "intra_pairs": 4,
+          "raw_intra_floor": 0.5052
         },
         "CHAR_WUSONG__28岁打虎态": {
+          "ep_mean_score": 0.5288,
+          "ep_n_shots": 12,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -116,12 +131,12 @@
           "raw_intra_floor": 0.4829
         },
         "CHAR_XIMENQING__常态": {
-          "floor": 0.9744,
+          "floor": 0.5,
           "floor_calibrated": true,
-          "floor_guard_applied": false,
+          "floor_guard_applied": true,
           "has_main": true,
-          "intra_pairs": 2,
-          "raw_intra_floor": 0.9744
+          "intra_pairs": 4,
+          "raw_intra_floor": 0.4599
         },
         "CROWD_HUNTERS__常态": {
           "floor": 0.5,
@@ -139,34 +154,207 @@
       "notes": [
         "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
       ],
-      "shots": []
+      "shots": [
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_end.png",
+          "score": 0.5855,
+          "score_vs_main": 0.562,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first.png",
+          "score": 0.6677,
+          "score_vs_main": 0.6657,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-08-18T02:11:52+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已查看当前原像素并与武松脸锚、a2、a3 并排核对：方颌、浓直眉、深目、短髭、鼻口比例与高束发髻同源；三分之二侧脸、湿发和冷夜低照造成分数略低，不是换脸。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/Clip02_end.png",
+          "score": 0.456,
+          "score_vs_main": 0.4351,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_first.png",
+          "score": 0.5917,
+          "score_vs_main": 0.5736,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first.png",
+          "score": 0.5829,
+          "score_vs_main": 0.436,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "face_idx": 0,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_WUDA__日常卖饼态",
+                "face_idx": 0,
+                "score": 0.7692
+              },
+              {
+                "char": "CHAR_WUDA__日常卖饼态",
+                "face_idx": 1,
+                "score": 0.2494
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_WUDA__日常卖饼态"
+            ],
+            "missing_chars": [
+              "CHAR_PANJINLIAN__25岁武大家常态"
+            ],
+            "swap_suspected": true
+          },
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first.png",
+          "score": 0.2245,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.6149,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.5623,
+          "score_vs_main": 0.4938,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP02_a2.png",
+          "score": 0.5991,
+          "score_vs_main": 0.5027,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP02_a3.png",
+          "score": 0.5507,
+          "score_vs_main": 0.467,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 1,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.6141,
+          "score_vs_main": 0.4036,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP03_a2.png",
+          "score": 0.7461,
+          "score_vs_main": 0.7074,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-08-18T03:25:40+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已查看当前重抽原始像素；浓直眉、深目、方颌短髭、发髻及年龄与武松脸锚一致，三分之二侧前脸清晰，0.4889 的机器分数由门影与远景尺度造成，可实际辨认同一人物。",
+          "manual_reviewer": "Codex",
+          "png": "图片/EP01_CLIP03_a3.png",
+          "score": 0.4889,
+          "score_vs_main": 0.4845,
+          "verdict": "ok"
+        }
+      ]
     },
     "hair": {
       "available": true,
       "characters": {
         "BEAST_TIGER__常态": {
-          "floor": 0.9816,
-          "intra_pairs": 3
+          "floor": 0.8262,
+          "intra_pairs": 6
         },
         "CHAR_MAGISTRATE__常态": {
-          "floor": 0.9046,
-          "intra_pairs": 3
+          "floor": 0.7476,
+          "intra_pairs": 6
         },
         "CHAR_PANJINLIAN__25岁武大家常态": {
           "floor": 0.55,
           "intra_pairs": 6
         },
         "CHAR_WUDA__日常卖饼态": {
-          "floor": 0.9909,
-          "intra_pairs": 4
+          "floor": 0.9795,
+          "intra_pairs": 6
         },
         "CHAR_WUSONG__28岁打虎态": {
           "floor": 0.9754,
           "intra_pairs": 6
         },
         "CHAR_XIMENQING__常态": {
-          "floor": 0.9768,
-          "intra_pairs": 3
+          "floor": 0.7733,
+          "intra_pairs": 6
         },
         "CROWD_HUNTERS__常态": {
           "floor": 1.0,
@@ -177,13 +365,135 @@
       "min_group": 3,
       "notes": [],
       "rel_margin": 0.15,
-      "shots": []
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.9754,
+          "png": "图片/Clip01_end.png",
+          "score": 0.6243,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.9754,
+          "png": "图片/Clip01_first.png",
+          "score": 0.5721,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/Clip02_end.png",
+          "score": 0.2653,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/Clip02_first.png",
+          "score": 0.168,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/Clip03_first.png",
+          "score": 0.1468,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "floor": 0.55,
+          "png": "图片/Clip04_first.png",
+          "score": 0.3577,
+          "verdict": "warn"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.9754,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.4942,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.1148,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/EP01_CLIP02_a2.png",
+          "score": 0.2117,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/EP01_CLIP02_a3.png",
+          "score": 0.1754,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.2108,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.9754,
+          "png": "图片/EP01_CLIP03_a2.png",
+          "score": 0.3881,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "crop_suspect": true,
+          "floor": 0.9754,
+          "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
+          "png": "图片/EP01_CLIP03_a3.png",
+          "score": 0.2059,
+          "verdict": "ok"
+        }
+      ]
     },
     "human_anatomy": {
       "available": true,
       "extra_threshold": 6,
+      "locator": "肤色启发",
       "notes": [
-        "本集无分镜 PNG。"
+        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
       ],
       "shots": []
     },
@@ -333,7 +643,10 @@
         "BEAST_TIGER__常态",
         "BEAST_TIGER__常态_脸部特写_脸锚裁切",
         "BEAST_TIGER__常态_45度",
+        "BEAST_TIGER__常态__1ad793c294a1_1672x941_to_1819x1024",
         "BEAST_TIGER__常态_后45度",
+        "BEAST_TIGER__常态_45度__692454f1fea1_1672x941_to_1819x1024",
+        "BEAST_TIGER__常态_侧__c221d241c113_1672x941_to_1819x1024",
         "Hunters",
         "CROWD_HUNTERS",
         "CROWD_HUNTERS__常态",
@@ -346,6 +659,7 @@
         "CHAR_WUDA__日常卖饼态_45度",
         "CHAR_WUDA__日常卖饼态__775cced667b8_941x1672_to_1024x1819",
         "CHAR_WUDA__日常卖饼态_半身__1bd58a5fb5c0_941x1672_to_1024x1819",
+        "CHAR_WUDA__日常卖饼态_45度__b16fc72a8d8c_941x1672_to_1024x1819",
         "CHAR_WUDA__日常卖饼态_后45度",
         "潘金莲",
         "CHAR_PANJINLIAN",
@@ -365,17 +679,74 @@
         "CHAR_MAGISTRATE__常态",
         "CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切",
         "CHAR_MAGISTRATE__常态_45度",
+        "CHAR_MAGISTRATE__常态__fdc55058dee2_1672x941_to_1819x1024",
+        "CHAR_MAGISTRATE__常态_半身__01bfa2b0b6b2_1672x941_to_1819x1024",
+        "CHAR_MAGISTRATE__常态_45度__745c401b7262_1672x941_to_1819x1024",
         "CHAR_MAGISTRATE__常态_后45度",
+        "CHAR_MAGISTRATE__常态_侧__ce5c95a7cbff_1672x941_to_1819x1024",
         "西门庆",
         "CHAR_XIMENQING",
         "CHAR_XIMENQING__常态",
         "CHAR_XIMENQING__常态_脸部特写_脸锚裁切",
         "CHAR_XIMENQING__常态_45度",
-        "CHAR_XIMENQING__常态_后45度"
+        "CHAR_XIMENQING__常态__990656733bd0_1672x941_to_1819x1024",
+        "CHAR_XIMENQING__常态_半身__9356b14bcd05_1672x941_to_1819x1024",
+        "CHAR_XIMENQING__常态_45度__553932a76621_1672x941_to_1819x1024",
+        "CHAR_XIMENQING__常态_后45度",
+        "CHAR_XIMENQING__常态_侧__444ce22eef6e_1672x941_to_1819x1024"
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第1集",
-      "groups": {},
+      "groups": {
+        "LOC_CITY_GATE": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "LOC_COUNTY_YAMEN": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "LOC_JINGYANGGANG": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "LOC_WUDA_HOME": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "LOC_YANGGU_STREET": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "PROP_BADGE": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_BRAZIER": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "PROP_CAKE_POLE": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_DOOR_LATCH": {
+          "median_dist": 0.472,
+          "shots": 4
+        },
+        "PROP_QUARTERSTAFF": {
+          "median_dist": 0.45,
+          "shots": 3
+        },
+        "PROP_REWARD_SILVER": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_WINDOW_LATTICE": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        }
+      },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
       "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
@@ -387,12 +758,12 @@
       "available": true,
       "characters": {
         "BEAST_TIGER__常态": {
-          "floor": 0.9866,
-          "intra_pairs": 3
+          "floor": 0.85,
+          "intra_pairs": 6
         },
         "CHAR_MAGISTRATE__常态": {
-          "floor": 0.9829,
-          "intra_pairs": 3
+          "floor": 0.85,
+          "intra_pairs": 6
         },
         "CHAR_PANJINLIAN__25岁武大家常态": {
           "floor": 0.85,
@@ -400,15 +771,15 @@
         },
         "CHAR_WUDA__日常卖饼态": {
           "floor": 0.9907,
-          "intra_pairs": 4
+          "intra_pairs": 6
         },
         "CHAR_WUSONG__28岁打虎态": {
           "floor": 0.85,
           "intra_pairs": 6
         },
         "CHAR_XIMENQING__常态": {
-          "floor": 0.9864,
-          "intra_pairs": 3
+          "floor": 0.85,
+          "intra_pairs": 6
         },
         "CROWD_HUNTERS__常态": {
           "floor": 1.0,
@@ -419,31 +790,238 @@
       "min_group": 3,
       "notes": [],
       "rel_margin": 0.15,
-      "shots": []
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/Clip01_end.png",
+          "score": 0.5464,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/Clip01_first.png",
+          "score": 0.6165,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/Clip02_end.png",
+          "score": 0.105,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/Clip02_first.png",
+          "score": 0.0656,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/Clip03_first.png",
+          "score": 0.1571,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "floor": 0.85,
+          "png": "图片/Clip04_first.png",
+          "score": 0.2964,
+          "verdict": "warn"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.4262,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.0511,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP02_a2.png",
+          "score": 0.1302,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP02_a3.png",
+          "score": 0.093,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.2201,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP03_a2.png",
+          "score": 0.4538,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
+          "png": "图片/EP01_CLIP03_a3.png",
+          "score": 0.1773,
+          "verdict": "ok"
+        }
+      ]
     },
     "scene": {
       "available": true,
-      "groups": {},
+      "groups": {
+        "景阳冈夜间空地": {
+          "constraints": {
+            "axis_rules": "武松画面下方、虎由上方压下；攻防主轴为上→下，武松反击沿下→上，切镜不交换方向。",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。",
+            "lighting_signature": {
+              "color_temperature": "cool_low_key",
+              "key_light_direction": "left",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "controlled",
+              "source_text": "月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。；月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 25.9,
+          "registered_id": "LOC_JINGYANGGANG",
+          "shots": 12
+        },
+        "阳谷街面与武大家楼窗": {
+          "constraints": {
+            "axis_rules": "街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察。",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "冬日漫射天光自画面上方，店铺灶火作低位暖补光。",
+            "lighting_signature": {
+              "color_temperature": "warm_low_key",
+              "key_light_direction": "top",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "controlled",
+              "source_text": "冬日漫射天光自画面上方，店铺灶火作低位暖补光。；冬日漫射天光自画面上方，店铺灶火作低位暖补光。"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "registered_id": "LOC_YANGGU_STREET",
+          "shots": 1,
+          "skipped": "组<3镜"
+        }
+      },
       "impact_physics": [],
-      "notes": [],
-      "shots": []
+      "notes": [
+        "场景[景阳冈夜间空地] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[景阳冈夜间空地] 已注册light_anchor：月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。。验收时请重点核对。",
+        "场景[景阳冈夜间空地] 已注册axis_rules：武松画面下方、虎由上方压下；攻防主轴为上→下，武松反击沿下→上，切镜不交换方向。。验收时请重点核对。",
+        "场景[景阳冈夜间空地] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[景阳冈夜间空地] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[景阳冈夜间空地] 已注册lighting_signature：{'color_temperature': 'cool_low_key', 'saturation_profile': 'controlled', 'key_light_direction': 'left', 'source_text': '月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。；月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。",
+        "场景[阳谷街面与武大家楼窗] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[阳谷街面与武大家楼窗] 已注册light_anchor：冬日漫射天光自画面上方，店铺灶火作低位暖补光。。验收时请重点核对。",
+        "场景[阳谷街面与武大家楼窗] 已注册axis_rules：街道纵深轴；武大由画右奔向居中武松，潘金莲在楼窗上方后景观察。。验收时请重点核对。",
+        "场景[阳谷街面与武大家楼窗] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[阳谷街面与武大家楼窗] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[阳谷街面与武大家楼窗] 已注册lighting_signature：{'color_temperature': 'warm_low_key', 'saturation_profile': 'controlled', 'key_light_direction': 'top', 'source_text': '冬日漫射天光自画面上方，店铺灶火作低位暖补光。；冬日漫射天光自画面上方，店铺灶火作低位暖补光。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
+      ],
+      "shots": [
+        {
+          "avg_dist": 0.529,
+          "group_median": 0.111,
+          "kind": "光色",
+          "png": "图片/EP01_CLIP03_a2.png",
+          "scene": "景阳冈夜间空地",
+          "verdict": "warn"
+        }
+      ]
     },
     "seam": {
-      "availability_reason": "no_episode_images",
-      "available": false,
-      "notes": [
-        "无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。"
-      ],
-      "seams": []
+      "availability_reason": "ready",
+      "available": true,
+      "contradictions": [],
+      "notes": [],
+      "seams": [
+        {
+          "action_shift": 0.061,
+          "action_verdict": null,
+          "color_dist": 0.0911,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 25,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_first.png",
+          "relative_outlier": false,
+          "seam_mode": "match_on_action",
+          "struct_verdict": "warn",
+          "tail": "Clip01_end.png",
+          "transition": "动作继续进入三扑拆招。",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.03,
+          "action_verdict": null,
+          "color_dist": 0.1357,
+          "color_verdict": "warn",
+          "cross_face_cos": null,
+          "dist": 20,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip03_first.png",
+          "relative_outlier": false,
+          "seam_mode": "match_on_action",
+          "struct_verdict": "warn",
+          "tail": "Clip02_end.png",
+          "transition": "拳头前送动作切入胜利蒙太奇。",
+          "verdict": "info"
+        }
+      ]
     }
   },
   "cross_episode_face_drift": {
     "available": true,
     "entries": [],
-    "history_chars": 0,
-    "notes": [
-      "无跨集历史（首集或降级精度未累积均值）"
-    ]
+    "history_chars": 3
   },
   "episode": "第1集",
   "face_anchor_lighting": {
@@ -477,69 +1055,36 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 0,
+    "applied": 2,
     "available": true,
-    "configured": 0,
+    "configured": 2,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
-    "rows": []
+    "rows": [
+      {
+        "char": "CHAR_WUSONG__28岁打虎态",
+        "original_verdict": "warn",
+        "png": "图片/Clip02_end.png",
+        "reason": "已查看当前原像素并与武松脸锚、a2、a3 并排核对：方颌、浓直眉、深目、短髭、鼻口比例与高束发髻同源；三分之二侧脸、湿发和冷夜低照造成分数略低，不是换脸。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.456
+      },
+      {
+        "char": "CHAR_WUSONG__28岁打虎态",
+        "original_verdict": "warn",
+        "png": "图片/EP01_CLIP03_a3.png",
+        "reason": "已查看当前重抽原始像素；浓直眉、深目、方颌短髭、发髻及年龄与武松脸锚一致，三分之二侧前脸清晰，0.4889 的机器分数由门影与远景尺度造成，可实际辨认同一人物。",
+        "reviewer": "Codex",
+        "score": 0.4889
+      }
+    ]
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 0,
+    "covered": 5,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "BEAST_TIGER/常态",
-          "CHAR_WUSONG/28岁打虎态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "png": "出图/第1集/图片/Clip03_first.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "BEAST_TIGER/常态",
-          "CHAR_WUSONG/28岁打虎态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "BEAST_TIGER/常态",
-          "CHAR_WUSONG/28岁打虎态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "png": "出图/第1集/图片/EP01_CLIP03_a2.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "BEAST_TIGER/常态",
-          "CHAR_WUSONG/28岁打虎态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "png": "出图/第1集/图片/EP01_CLIP03_a3.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_PANJINLIAN/25岁武大家常态",
-          "CHAR_WUDA/日常卖饼态"
-        ],
-        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
-        "png": "出图/第1集/图片/Clip04_first.png",
-        "shot": "Clip_04"
-      },
       {
         "face_coverage_required": true,
         "identity_refs": [
@@ -962,7 +1507,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 0,
+    "required": 5,
     "skipped": [
       {
         "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
@@ -1013,13 +1558,28 @@
         "shot": "Clip_02"
       }
     ],
-    "unclassified": [],
+    "unclassified": [
+      {
+        "face_verdict": "ok",
+        "label": "lint_unclassified",
+        "png": "图片/Clip01_end.png",
+        "reason": "unclassified_face_shot",
+        "shot": "Clip_01"
+      },
+      {
+        "face_verdict": "ok",
+        "label": "lint_unclassified",
+        "png": "图片/Clip02_end.png",
+        "reason": "unclassified_face_shot",
+        "shot": "Clip_02"
+      }
+    ],
     "verdict": "ok"
   },
   "hair_manual_confirmations": {
     "applied": 0,
     "available": true,
-    "configured": 0,
+    "configured": 4,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/hair_confirmations.json",
     "rows": []
   },
@@ -1031,8 +1591,8 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "0c00d649955dbf4ce357c6d1b84c92a0a2403ffce5b97cbb1616a4594fc9f976",
-      "出图/共享/identity_registry.json": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
+      "出图/共享/asset_registry.json": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811",
+      "出图/共享/identity_registry.json": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
       "出图/共享/style_anchor_registry.json": "7d3966e143ebd40fd55f16215b3df6832b38569c21a3ee5f2637886d1bc8a3df",
       "出图/共享/图片/定妆_道具_DINING_TABLE.png": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
       "出图/共享/图片/定妆_道具_DOORFRAME.png": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
@@ -1055,15 +1615,28 @@
       "出图/共享/图片/定妆_道具_门闩.png": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
       "出图/共享/图片/风格锚_北宋市井写实电影感.png": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
       "出图/第1集/prompt/00_总览.md": "30107c542631447917fa38bdfe0592dcfa648f24714100adbab6ac55673ecad4",
-      "出图/第1集/prompt/01_分镜出图.md": "75d92c2b2c949dc79f4486621c492a4e05b788a6b0c4cc3638ab5437c037c2a1",
-      "生产数据/image_qc/第1集/face_confirmations.json": null,
-      "生产数据/image_qc/第1集/hair_confirmations.json": null,
+      "出图/第1集/prompt/01_分镜出图.md": "ece602994247f74a4f10f6caa0b2f470ebb4a98f99a91f9c025543183e86ef37",
+      "出图/第1集/图片/Clip01_end.png": "cb45f9575816763638dbdf1405a1e69e7cbc490d67c661db0f18d5a22e06db9f",
+      "出图/第1集/图片/Clip01_first.png": "6b6d492f9c408b818ec011f2ef6778f02d52fb4eb5dfb45abb70d7803cdb7e92",
+      "出图/第1集/图片/Clip02_end.png": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
+      "出图/第1集/图片/Clip02_first.png": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
+      "出图/第1集/图片/Clip03_first.png": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
+      "出图/第1集/图片/Clip04_first.png": "f727bce027d7ab685770e87f9ad012e03a7d49aa30bdc11ca5b94c71cde37baf",
+      "出图/第1集/图片/EP01_CLIP01_a1.png": "d3d8fb1d2a0e1fd872d92c2d325120fe06aa510314bc6f67bd2d7adf040c6645",
+      "出图/第1集/图片/EP01_CLIP02_a1.png": "116401263082ce8ae1be0d3af054d26eac4554c647046eb3e6cb95e75177cfdd",
+      "出图/第1集/图片/EP01_CLIP02_a2.png": "e9db4b83a9b1a39d1d4cf9309de92e8298fb24b1635b12e495ae3b4bafd52bfd",
+      "出图/第1集/图片/EP01_CLIP02_a3.png": "943c7e19fafa46a91f9ed116e934b1aaeae3bff43e51a8b80ec50e64bcc6b35b",
+      "出图/第1集/图片/EP01_CLIP03_a1.png": "bb7d5b5bc3041c37454712e08d66607b118cd450c6ca37714918f7cd1bbf2a82",
+      "出图/第1集/图片/EP01_CLIP03_a2.png": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
+      "出图/第1集/图片/EP01_CLIP03_a3.png": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
+      "生产数据/image_qc/第1集/face_confirmations.json": "c18cc99f3cc2a8cd7b9df525ca945f495c98b3fe09a600e612e56b50353bd70d",
+      "生产数据/image_qc/第1集/hair_confirmations.json": "299afd0cf115ae33ad98f1e3f3157e82b872563cfefd03c37fd31e5dec3cb015",
       "生产数据/image_qc/第1集/human_image_review.json": null,
-      "生产数据/image_qc/第1集/outfit_confirmations.json": null,
-      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "15cd9a913341a70e9c2394313d2391f223ff7db3667e93b20d6bfa90fb080373",
-      "脚本/第1集/storyboard.json": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
+      "生产数据/image_qc/第1集/outfit_confirmations.json": "43a2c800921761e0b95ab035aa60eb6321d7d115195cb2cee5bfdc2eed57e14a",
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "173e93ddc383918e0078ef2c41a16d488eb574ef769106b54312367d5360c932",
+      "脚本/第1集/storyboard.json": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
     },
-    "sha": "f2b2843d0fa183eab5144e27d6faaa86d0f94550edb70dec7c77654d31da0a29"
+    "sha": "8050684ba1b4aa386140f5a59983fa6ff842f275e42d546d5d59fb2cc647d419"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1652,7 +2225,22 @@
       {
         "code": "turnaround_misaligned",
         "level": "warn",
-        "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+        "msg": "多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
       }
     ],
     "notes": [],
@@ -1661,7 +2249,7 @@
   "outfit_manual_confirmations": {
     "applied": 0,
     "available": true,
-    "configured": 0,
+    "configured": 4,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
     "rows": []
   },
@@ -1676,8 +2264,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 19,
-    "pending": 0,
+    "confirmed": 36,
+    "pending": 2,
     "targets": [
       {
         "asset": "PROP_BADGE",
@@ -2282,31 +2870,697 @@
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINE_CUP_shared_primary_定妆_道具_半杯酒_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip02_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_Clip02_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP02_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP02_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP02_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP02_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP02_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP02_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BADGE",
+        "asset_name": "都头腰牌",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_都头腰牌.png",
+        "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "旧铜",
+          "木质克制质感",
+          "文字不烤入画面",
+          "约一掌高（12至16厘米）",
+          "宽度略窄于成年男子手掌",
+          "可单手完整握持"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BADGE",
+        "asset_name": "都头腰牌",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_都头腰牌.png",
+        "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "旧铜",
+          "木质克制质感",
+          "文字不烤入画面",
+          "约一掌高（12至16厘米）",
+          "宽度略窄于成年男子手掌",
+          "可单手完整握持"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BADGE",
+        "asset_name": "都头腰牌",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_都头腰牌.png",
+        "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "旧铜",
+          "木质克制质感",
+          "文字不烤入画面",
+          "约一掌高（12至16厘米）",
+          "宽度略窄于成年男子手掌",
+          "可单手完整握持"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BADGE",
+        "asset_name": "都头腰牌",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_都头腰牌.png",
+        "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "旧铜",
+          "木质克制质感",
+          "文字不烤入画面",
+          "约一掌高（12至16厘米）",
+          "宽度略窄于成年男子手掌",
+          "可单手完整握持"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_QUARTERSTAFF",
+        "asset_name": "梢棒",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "整棒与断棒两态",
+          "木纹",
+          "长度与断口保持一致"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_REWARD_SILVER",
+        "asset_name": "REWARD SILVER",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "北宋官府赏银用粗铸银铤：低矮长方船形",
+          "马蹄形",
+          "两端微翘",
+          "中部浅凹",
+          "边缘与表面保留锤铸不规则质感",
+          "一枚约掌心可托",
+          "不得做成现代标准金条",
+          "纪念元宝或镜面首饰",
+          "单枚约成年男子掌心大小",
+          "可一手托住",
+          "不得大于整只手掌或小成硬币"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_REWARD_SILVER",
+        "asset_name": "REWARD SILVER",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "北宋官府赏银用粗铸银铤：低矮长方船形",
+          "马蹄形",
+          "两端微翘",
+          "中部浅凹",
+          "边缘与表面保留锤铸不规则质感",
+          "一枚约掌心可托",
+          "不得做成现代标准金条",
+          "纪念元宝或镜面首饰",
+          "单枚约成年男子掌心大小",
+          "可一手托住",
+          "不得大于整只手掌或小成硬币"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_REWARD_SILVER",
+        "asset_name": "REWARD SILVER",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "北宋官府赏银用粗铸银铤：低矮长方船形",
+          "马蹄形",
+          "两端微翘",
+          "中部浅凹",
+          "边缘与表面保留锤铸不规则质感",
+          "一枚约掌心可托",
+          "不得做成现代标准金条",
+          "纪念元宝或镜面首饰",
+          "单枚约成年男子掌心大小",
+          "可一手托住",
+          "不得大于整只手掌或小成硬币"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_REWARD_SILVER",
+        "asset_name": "REWARD SILVER",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "北宋官府赏银用粗铸银铤：低矮长方船形",
+          "马蹄形",
+          "两端微翘",
+          "中部浅凹",
+          "边缘与表面保留锤铸不规则质感",
+          "一枚约掌心可托",
+          "不得做成现代标准金条",
+          "纪念元宝或镜面首饰",
+          "单枚约成年男子掌心大小",
+          "可一手托住",
+          "不得大于整只手掌或小成硬币"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CAKE_POLE",
+        "asset_name": "炊饼担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "206f1920fea0711992fe15a947e92eadf9ecce17f826d6556dbbbcf2f8e7c729",
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip04_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_炊饼担.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "担杆",
+          "双筐",
+          "布盖与蒸汽结构固定"
+        ],
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_WINDOW_LATTICE",
+        "asset_name": "WINDOW LATTICE",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "1b38dd14482b4156fa950801a2d99d6d79eb881d2f521ff0a229c238000cfb6d",
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip04_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+        "scale": "窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "北宋县城民宅二层木制格窗：单扇窄高长方形窗框",
+          "暗褐老木",
+          "细密正方格棂",
+          "内侧糊素色无纹窗纸",
+          "侧轴向内开合",
+          "是墙上固定建筑构件",
+          "不是手持小物",
+          "窗框约高 110–130 厘米",
+          "宽 55–70 厘米",
+          "窗台约在成年人腰至胸下",
+          "人站立可单手推开窗扇"
+        ],
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_Clip_04_Clip04_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 19
+    "total": 38
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
   "semantic_drift": {
     "available": true,
-    "compared": 0,
-    "findings": [],
+    "compared": 14,
+    "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a2.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a3.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a3.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      }
+    ],
     "floor": 0.55
   },
   "shot_scale_contract": {
-    "available": true,
-    "checked": 0,
-    "findings": []
+    "available": false,
+    "findings": [],
+    "notes": [
+      "shot_scale_contract 失败：too many values to unpack (expected 2)"
+    ]
   },
   "shot_variety": {
     "available": true,
@@ -2333,9 +3587,21 @@
       "sat": 11.0
     },
     "anchor_status": "ok",
-    "available": false,
-    "checked": 0,
-    "findings": [],
+    "available": true,
+    "checked": 13,
+    "distance": 2.031,
+    "episode_fingerprint": {
+      "contrast": 46.0,
+      "edge": 18.7,
+      "sat": 60.5
+    },
+    "findings": [
+      {
+        "code": "style_attribution_drift",
+        "level": "warn",
+        "msg": "风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+      }
+    ],
     "intent": {
       "anchors": [
         "出图/共享/图片/风格锚_北宋市井写实电影感.png"
@@ -2352,13 +3618,10 @@
         "烤字",
         "水印Logo"
       ]
-    },
-    "notes": [
-      "本集无可测出图帧（或 Pillow 不可用）——风格归属跳过。"
-    ]
+    }
   },
   "summary": {
-    "advisory": 5,
+    "advisory": 26,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -2367,16 +3630,22 @@
         "warn": 0
       },
       "face": {
+        "block": 1,
+        "noface": 0,
+        "ok": 12,
+        "warn": 0
+      },
+      "face_reference_coverage_unclassified": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 0
+        "warn": 2
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
-        "warn": 0
+        "ok": 12,
+        "warn": 1
       },
       "human_anatomy": {
         "block": 0,
@@ -2388,7 +3657,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 5
+        "warn": 8
       },
       "multimodal": {
         "block": 0,
@@ -2399,11 +3668,17 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
-        "warn": 0
+        "ok": 12,
+        "warn": 1
       },
       "prohibited_face_patch": {
         "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 2,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -2412,34 +3687,43 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 0
+        "warn": 1
       },
       "seam": {
         "block": 0,
         "noface": 0,
         "ok": 0,
         "warn": 0
+      },
+      "semantic_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 12
+      },
+      "style_attribution": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
       }
     },
-    "degraded": true,
-    "hard_blocks": 0,
-    "unavailable_visual_checks": [
-      "seam"
-    ],
-    "verdict": "review"
+    "degraded": false,
+    "hard_blocks": 3,
+    "unavailable_visual_checks": [],
+    "verdict": "block"
   },
   "tone_light_contract": {
-    "available": false,
-    "checked": 0,
+    "available": true,
+    "checked": 13,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "景阳冈冷青月色与土褐；阳谷街市灰暖；武大家室内由灶火暖橙逐步被雪夜冷蓝侵入；衙门与城门回到冷灰。",
       "warmth": "cool"
     },
-    "notes": [
-      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
-    ]
+    "luma_median": 31.0,
+    "warmth_median": -0.2
   },
   "turnaround_alignment": {
     "available": true,
@@ -2558,6 +3842,160 @@
       },
       {
         "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              174,
+              172,
+              173
+            ],
+            "border_delta_p90": 29,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              183,
+              182,
+              182
+            ],
+            "bbox_normalized": [
+              0.1125,
+              0.0722,
+              0.9797,
+              0.9528
+            ],
+            "border_delta_p90": 22,
+            "centerline": 0.5461,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9528,
+            "head_top": 0.0722,
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.8806,
+            "subject_width": 0.8672
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              174,
+              173,
+              174
+            ],
+            "bbox_normalized": [
+              0.2266,
+              0.0472,
+              0.7156,
+              0.9333
+            ],
+            "border_delta_p90": 24,
+            "centerline": 0.4711,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9333,
+            "head_top": 0.0472,
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.8861,
+            "subject_width": 0.4891
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              178,
+              176,
+              177
+            ],
+            "bbox_normalized": [
+              0.075,
+              0.1139,
+              0.9094,
+              0.9167
+            ],
+            "border_delta_p90": 22,
+            "centerline": 0.4922,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9167,
+            "head_top": 0.1139,
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.8028,
+            "subject_width": 0.8344
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              170,
+              169,
+              169
+            ],
+            "border_delta_p90": 33,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "front": [
+            0.3289,
+            0.5324
+          ],
+          "rear_three_quarter": [
+            0.6621,
+            0.1339
+          ],
+          "three_quarter": [
+            0.7019,
+            0.067
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              166,
+              164,
+              165
+            ],
+            "border_delta_p90": 33,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
           "front": {
             "background_delta": 28,
             "background_rgb": [
@@ -2566,6 +4004,40 @@
               159
             ],
             "border_delta_p90": 41,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              163,
+              160,
+              160
+            ],
+            "border_delta_p90": 36,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              166,
+              164,
+              165
+            ],
+            "border_delta_p90": 34,
             "confidence": "heuristic",
             "image_size": {
               "height": 1672,
@@ -2600,13 +4072,124 @@
             0.5281,
             0.14
           ],
+          "side": [
+            0.8002,
+            0.0383
+          ],
           "three_quarter": [
             0.8185,
             0.1489
           ]
         },
         "level": "warn",
-        "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+        "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              172,
+              170,
+              170
+            ],
+            "border_delta_p90": 44,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              172,
+              171,
+              170
+            ],
+            "border_delta_p90": 45,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              178,
+              176,
+              176
+            ],
+            "border_delta_p90": 39,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              177,
+              175,
+              175
+            ],
+            "border_delta_p90": 43,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              172,
+              169,
+              169
+            ],
+            "border_delta_p90": 45,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "front": [
+            0.4559,
+            0.2274
+          ],
+          "side": [
+            0.7827,
+            0.0563
+          ],
+          "three_quarter": [
+            0.1488,
+            0.0956
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
       }
     ],
     "forms": [
@@ -2925,11 +4508,36 @@
         },
         "views": {
           "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "194d1eea94f421bacd8faa1b8a79ef3877ccc63efa7c6e3237ebf195dfaef61c",
+              "png_sha256": "d305b0f738ef162c2f7c6b49f46dad9e082972e1619b9d3ea1f6f02489a7b51d",
+              "reasons": [],
+              "registry_binding_fingerprint": "194d1eea94f421bacd8faa1b8a79ef3877ccc63efa7c6e3237ebf195dfaef61c",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:09:03+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                174,
+                172,
+                173
+              ],
+              "border_delta_p90": 29,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
+            "png_sha256": "d305b0f738ef162c2f7c6b49f46dad9e082972e1619b9d3ea1f6f02489a7b51d",
             "view": "back"
           },
           "front": {
@@ -2981,27 +4589,132 @@
             "view": "front"
           },
           "rear_three_quarter": {
+            "face_geometry": {
+              "center_y": 0.6621,
+              "confidence": "heuristic",
+              "face_height": 0.1339
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "f7e3e4793c800c53f747a5761614a9da64398fc4847ea80f79bf333d073dd75b",
+              "png_sha256": "b5e3fccdcf6188f4022dae1fa9175282d9a3aaafbac837e2cff55cc010f2b72b",
+              "reasons": [],
+              "registry_binding_fingerprint": "f7e3e4793c800c53f747a5761614a9da64398fc4847ea80f79bf333d073dd75b",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-15T11:48:13+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
-              "measurable": false,
-              "reason": "png_missing"
+              "background_delta": 28,
+              "background_rgb": [
+                174,
+                173,
+                174
+              ],
+              "bbox_normalized": [
+                0.2266,
+                0.0472,
+                0.7156,
+                0.9333
+              ],
+              "border_delta_p90": 24,
+              "centerline": 0.4711,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9333,
+              "head_top": 0.0472,
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.8861,
+              "subject_width": 0.4891
             },
             "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
+            "png_sha256": "b5e3fccdcf6188f4022dae1fa9175282d9a3aaafbac837e2cff55cc010f2b72b",
             "view": "rear_three_quarter"
           },
           "side": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "24f22f6dffe880cfe8e12aee3236584e6abcefd9df0b5692b39932d52af16d1f",
+              "png_sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
+              "reasons": [],
+              "registry_binding_fingerprint": "24f22f6dffe880cfe8e12aee3236584e6abcefd9df0b5692b39932d52af16d1f",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-15T11:48:13+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
-              "measurable": false,
-              "reason": "png_missing"
+              "background_delta": 28,
+              "background_rgb": [
+                178,
+                176,
+                177
+              ],
+              "bbox_normalized": [
+                0.075,
+                0.1139,
+                0.9094,
+                0.9167
+              ],
+              "border_delta_p90": 22,
+              "centerline": 0.4922,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9167,
+              "head_top": 0.1139,
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.8028,
+              "subject_width": 0.8344
             },
             "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+            "png_sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
             "view": "side"
           },
           "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.7019,
+              "confidence": "heuristic",
+              "face_height": 0.067
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "4adc17565e77fea5781cd5da0a2fa911fe8d6b53fdcca5f29231ba198bfcd011",
+              "png_sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+              "reasons": [],
+              "registry_binding_fingerprint": "4adc17565e77fea5781cd5da0a2fa911fe8d6b53fdcca5f29231ba198bfcd011",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-15T11:48:13+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                170,
+                169,
+                169
+              ],
+              "border_delta_p90": 33,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+            "png_sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
             "view": "three_quarter"
           }
         }
@@ -3170,11 +4883,36 @@
         },
         "views": {
           "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "04e5a2ccf423da029e5617227c8c8b44767bbebe99e164beb0583e292f84a743",
+              "png_sha256": "5aa96a58d26ccd90e49a395e13d80fffde9d708e75f9a685d0712ad1495758dd",
+              "reasons": [],
+              "registry_binding_fingerprint": "04e5a2ccf423da029e5617227c8c8b44767bbebe99e164beb0583e292f84a743",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:31:33+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                166,
+                164,
+                165
+              ],
+              "border_delta_p90": 33,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
+            "png_sha256": "5aa96a58d26ccd90e49a395e13d80fffde9d708e75f9a685d0712ad1495758dd",
             "view": "back"
           },
           "front": {
@@ -3216,19 +4954,74 @@
             "view": "front"
           },
           "rear_three_quarter": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "9b31b983eec50a9f98a58cde5e08ff23e20664310d5c6a2c3d2c94c10a763a78",
+              "png_sha256": "43f07d2704c5ca283a6a4fa157f378260a0fa045d3ab5ab3b7723fa4ab68d5f4",
+              "reasons": [],
+              "registry_binding_fingerprint": "9b31b983eec50a9f98a58cde5e08ff23e20664310d5c6a2c3d2c94c10a763a78",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:24:03+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                163,
+                160,
+                160
+              ],
+              "border_delta_p90": 36,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+            "png_sha256": "43f07d2704c5ca283a6a4fa157f378260a0fa045d3ab5ab3b7723fa4ab68d5f4",
             "view": "rear_three_quarter"
           },
           "side": {
+            "face_geometry": {
+              "center_y": 0.8002,
+              "confidence": "heuristic",
+              "face_height": 0.0383
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "f0c5f265c1a212787ff40c18d820c922619af983f4e4cbb571245c89122205b4",
+              "png_sha256": "58f40d6e6e96a78ba2940be2217f6a32d74cc0ec236312575fb21d2a5c83ef6a",
+              "reasons": [],
+              "registry_binding_fingerprint": "f0c5f265c1a212787ff40c18d820c922619af983f4e4cbb571245c89122205b4",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:18:35+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                166,
+                164,
+                165
+              ],
+              "border_delta_p90": 34,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+            "png_sha256": "58f40d6e6e96a78ba2940be2217f6a32d74cc0ec236312575fb21d2a5c83ef6a",
             "view": "side"
           },
           "three_quarter": {
@@ -3560,11 +5353,36 @@
         },
         "views": {
           "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "2da5d2d6f6c00c9333987463cf693319ba6e5579e4c8dc27c56e8237dee32c48",
+              "png_sha256": "243f10b3a1dad7a3ffdeff4d27fc2d0b7ec747a796a03f73e7f3c8f2895249f7",
+              "reasons": [],
+              "registry_binding_fingerprint": "2da5d2d6f6c00c9333987463cf693319ba6e5579e4c8dc27c56e8237dee32c48",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:57:20+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                172,
+                170,
+                170
+              ],
+              "border_delta_p90": 44,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
+            "png_sha256": "243f10b3a1dad7a3ffdeff4d27fc2d0b7ec747a796a03f73e7f3c8f2895249f7",
             "view": "back"
           },
           "front": {
@@ -3606,27 +5424,112 @@
             "view": "front"
           },
           "rear_three_quarter": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "5749870da7f372c0e755915530fc1368809dcab34ee915fcaa32500b9e9093c1",
+              "png_sha256": "62985d76bb7848772ecb3d04ae9cb4073314a5260af096615147d7dfe88e8e38",
+              "reasons": [],
+              "registry_binding_fingerprint": "5749870da7f372c0e755915530fc1368809dcab34ee915fcaa32500b9e9093c1",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:51:14+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                178,
+                176,
+                176
+              ],
+              "border_delta_p90": 39,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
+            "png_sha256": "62985d76bb7848772ecb3d04ae9cb4073314a5260af096615147d7dfe88e8e38",
             "view": "rear_three_quarter"
           },
           "side": {
+            "face_geometry": {
+              "center_y": 0.7827,
+              "confidence": "heuristic",
+              "face_height": 0.0563
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "fa601f889d2963ab9035f856e2687a7a22d7325c65976a4fc7f0a4f747081015",
+              "png_sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+              "reasons": [],
+              "registry_binding_fingerprint": "fa601f889d2963ab9035f856e2687a7a22d7325c65976a4fc7f0a4f747081015",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:46:26+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                177,
+                175,
+                175
+              ],
+              "border_delta_p90": 43,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+            "png_sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
             "view": "side"
           },
           "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.1488,
+              "confidence": "heuristic",
+              "face_height": 0.0956
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "ec46ffb556093841ed6eea2c26303cffa846b40956ef86d35135b495a3bf8ad8",
+              "png_sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+              "reasons": [],
+              "registry_binding_fingerprint": "ec46ffb556093841ed6eea2c26303cffa846b40956ef86d35135b495a3bf8ad8",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T03:41:25+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                172,
+                169,
+                169
+              ],
+              "border_delta_p90": 45,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+            "png_sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
             "view": "three_quarter"
           }
         }
@@ -3687,11 +5590,36 @@
         },
         "views": {
           "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "f0984d48b26d2a8b36ba02a62b1bd04c47a000fb2c926607861ef6f35acf8b91",
+              "png_sha256": "16907bc469c95ea5faed0859c6f8016d725eb49b101d55bc79c8068f0cd9d4c5",
+              "reasons": [],
+              "registry_binding_fingerprint": "f0984d48b26d2a8b36ba02a62b1bd04c47a000fb2c926607861ef6f35acf8b91",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T04:15:48+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                174,
+                171,
+                171
+              ],
+              "border_delta_p90": 46,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
+            "png_sha256": "16907bc469c95ea5faed0859c6f8016d725eb49b101d55bc79c8068f0cd9d4c5",
             "view": "back"
           },
           "front": {
@@ -3733,27 +5661,107 @@
             "view": "front"
           },
           "rear_three_quarter": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "1da611fc12231ee81776322ecbc38d8c918c93e99c9dc833e4c1e5b80c083af1",
+              "png_sha256": "2ee9b70961d5901f7e886a2a13ae5bf2d8739bad3c710043dc7fe54b5d297450",
+              "reasons": [],
+              "registry_binding_fingerprint": "1da611fc12231ee81776322ecbc38d8c918c93e99c9dc833e4c1e5b80c083af1",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T04:12:21+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                172,
+                170,
+                169
+              ],
+              "border_delta_p90": 44,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
+            "png_sha256": "2ee9b70961d5901f7e886a2a13ae5bf2d8739bad3c710043dc7fe54b5d297450",
             "view": "rear_three_quarter"
           },
           "side": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "06f57e11bd27b49b8526fdf7d400c0d12946e3538c4cadb24e11407feba6a52d",
+              "png_sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+              "reasons": [],
+              "registry_binding_fingerprint": "06f57e11bd27b49b8526fdf7d400c0d12946e3538c4cadb24e11407feba6a52d",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T04:09:23+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                168,
+                166,
+                166
+              ],
+              "border_delta_p90": 48,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+            "png_sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
             "view": "side"
           },
           "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.1233,
+              "confidence": "heuristic",
+              "face_height": 0.0893
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "0f748ab1ef00e714110e2092aa364a9fa548db3b6b287ec9fba8395a9e5064c4",
+              "png_sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+              "reasons": [],
+              "registry_binding_fingerprint": "0f748ab1ef00e714110e2092aa364a9fa548db3b6b287ec9fba8395a9e5064c4",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-08-17T04:03:49+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                172,
+                170,
+                170
+              ],
+              "border_delta_p90": 46,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 941,
+                "width": 1672
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
             },
             "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+            "png_sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
             "view": "three_quarter"
           }
         }

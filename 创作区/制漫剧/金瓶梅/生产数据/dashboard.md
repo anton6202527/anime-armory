@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-08-14T09:11:55+00:00
+- 生成时间：2026-08-18T03:57:19+00:00
 - 事件日志：`创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,19 +8,19 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 410 | — | 5h13m12s | 238 | 0 | 17 | 101 | 83.2% | 0.0% |
+| 10 | 657 | — | 8h20m15s | 345 | 0 | 27 | 196 | 84.6% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 2m26s | — | 5h13m12s | 49.6% | 0.0% | 0 | — | — | — | — |
+| 2m26s | — | 8h20m15s | 49.3% | 0.0% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.4244 | 0.0714 | 0 | 0.0% |
+| 0.5681 | 0.0783 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,7 +28,7 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 49.6% | 90.0% | ⚠️ 差距 |
+| 一次通过率 | 49.3% | 90.0% | ⚠️ 差距 |
 | 重抽率 | 0.0% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
@@ -47,7 +47,7 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 5h13m12s | 49.6% | 0.0% | — | 17 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 8h20m15s | 49.3% | 0.0% | — | 27 | — | — | — | — | — | — |
 | 第2集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -60,11 +60,17 @@
 
 ## 最新阻断
 
-- 第1集 / image / 动作物理与形制连续性: 出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png — 当前像素拒绝并止损：浅色酒液飞溅成立，但完全缺少挡杯的手，且杯型漂成高脚杯，违背已锁定的粗陶小酒盏。该派生连续两版均未满足动作语义，不再第三次追抽；归档失败图，保留主参考与比例参考继续生产。
-- 第1集 / image / 道具比例语义: 出图/共享/图片/定妆_道具_素布行李_比例.png — 当前像素拒绝并止损：新版已修掉超大尺度与拖地绳，包袱形制良好，但完全缺少成人手掌、前臂或人台，无法证明可单手携带；连续两版均未完成比例语义，不再第三次追抽。归档失败比例图，保留主参考继续生产。
-- 第1集 / image_preflight / 预防式合同: PROP_DOORFRAME — reference_slot_gate: 道具/场景 PROP_DOORFRAME 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_DOORFRAME_反面.png 不存在
-- 第1集 / image_preflight / 预防式合同: PROP_GIFT_LOAD — reference_slot_gate: 道具/场景 PROP_GIFT_LOAD 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_东京礼担_比例.png 不存在；出图/共享/图片/定妆_道具_东京礼担_手持.png 不存在
-- 第1集 / image_preflight / 预防式合同: PROP_LUGGAGE — reference_slot_gate: 道具/场景 PROP_LUGGAGE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_素布行李_比例.png 不存在；出图/共享/图片/定妆_道具_素布行李_手持.png 不存在
-- 第1集 / image_preflight / 预防式合同: PROP_OFFICIAL_DOC — reference_slot_gate: 道具/场景 PROP_OFFICIAL_DOC 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_公文_比例.png 不存在；出图/共享/图片/定妆_道具_公文_手持.png 不存在
-- 第1集 / image_preflight / 预防式合同: PROP_REWARD_SILVER — reference_slot_gate: 道具/场景 PROP_REWARD_SILVER 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_REWARD_SILVER_反面.png 不存在
-- 第1集 / image_preflight / 预防式合同: PROP_SPILLED_WINE — reference_slot_gate: 道具/场景 PROP_SPILLED_WINE 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png 不存在
+- 第1集 / image / 结构化交互图谱(I2): 脚本/第1集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第1集 / image / 结构化交互图谱(I2): 脚本/第1集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第1集 / image / 结构化交互图谱(I2): 脚本/第1集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第1集 / image / 结构化交互图谱(I2): 脚本/第1集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第1集 / image / 结构化交互图谱(I2): 脚本/第1集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第1集 / image / 表情连续(EXP1): 脚本/第1集/storyboard.json — [production一致性升级:重复同维度] Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9477f3aefd25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+- 第1集 / image / 表情连续(EXP1): 脚本/第1集/storyboard.json — [production一致性升级:重复同维度] Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=ff50f685763a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+- 第1集 / image / 表情连续(EXP1): 脚本/第1集/storyboard.json — [production一致性升级:重复同维度] Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=8ff00690254d，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+
+## 验收总账
+
+| 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
+|---|---|---:|---:|---:|---:|---|
+| 第1集 | blocked | 31 | 2 | 0 | 37 | 武松(medium)；BEAST_TIGER(warn)；Hunters(warn) |

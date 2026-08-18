@@ -78,8 +78,8 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-08-14T17:11:55+0800",
-  "graph_hash": "e6c3d15e85183e39b1af804152e61a3397e1a80d2f4d2879e65e9d3ca14036de",
+  "generated_at": "2026-08-17T10:48:41+0800",
+  "graph_hash": "1dfdb592558157c6463b596e1ecd87d45f3a2d4fa431299559642a6443e65057",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -197,10 +197,10 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
   "source_files": [
     {
-      "bytes": 120432,
+      "bytes": 126496,
       "path": "脚本/第1集/storyboard.json",
       "role": "storyboard",
-      "sha256": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde"
+      "sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
     }
   ],
   "status": "pass",

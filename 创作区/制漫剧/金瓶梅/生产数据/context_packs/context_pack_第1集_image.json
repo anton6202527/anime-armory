@@ -39,21 +39,21 @@
       "sha256": "cdd056bc67af799591f5cd5e8f0e497eefe29b76d73925eb2b5f4494e39243d6"
     },
     {
-      "bytes": 1611,
+      "bytes": 1612,
       "exists": true,
-      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 95/179 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 110/179 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
       "relpath": "_进度.md",
-      "sha256": "f7208c613fe67c0018dcba514b6d3da466e6e3743b639b56aeab167a773ad245"
+      "sha256": "27a9ab7cf9f1209b29d001789351ca8706e1a77691dc4f17ff888d30a79da93b"
     },
     {
-      "bytes": 505249,
+      "bytes": 505672,
       "exists": true,
       "preview": "# 第1集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第1集.json`；content_hash=aae3e0d787c5e0ac\n- 核心看点：audience_payoff=开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和东京差遣把危险留在家门内。；category=英雄奇观 + 家门伦理困局 + 欲望反转；why_watch=武松能赤手打虎，却无法用拳头解决嫂嫂越界、反咬和哥哥的软弱；外在英雄与内在无力形成强反差。\n- 首屏钩子：content_promise=本集先给出打虎高光，再揭示拳头解决不了的人心困局。；content_proposition=一个能打死猛虎的人，为什么后来守不住哥哥的家门？；expected_metric=primary=retention_3s；target=0.8；hook_type=危机；muted_readable=True；muted_safe=True；muted_safe_proof=关声仍能从贴脸虎爪、地面武松和极限闪避动作读懂生死危机。；onscreen_duration_sec=1.4…\n  - Pacing: primary=94% compressed=0%；主时长=EP01_CLIP01,EP01_CLIP02,EP01_CLIP03,EP01_CLIP04,EP01_CLIP05,EP01_CLIP06,EP01_CLIP07,EP01_CLIP08；compression_strategy=不为每句旁白单开视频；同场相邻节拍并成 story clip，内部用 shots[] 表达剪辑镜位。；highlight_budget_note=打虎动作、叔嫂火盆对峙、反咬与离城悬念吃主时长；身份背景、一个月流逝和差遣信息用蒙太奇、插入镜及声桥承载。…\n  - R01: bait_risk=low；hook_id=OPEN_TIGER；opened_at=EP01_CLIP01；payoff_clip=EP01_CLIP03；payoff_due=EP01_CLIP03；payoff_evidence=武松赤手打虎并获都头腰牌；payoff_status=paid；promise=武松能否从贴脸虎扑下活下来；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=HUMAN_HEART；opened_at=EP01_CLIP03；payoff_clip=EP01_CLIP10；payoff_due=EP01_CLIP10；payoff_evidence=潘金莲越界未成后倒置真相反咬武松；payoff_status=paid；promise=家门里的人心是否比猛虎更难对付；promise_type=thematic_question\n  - R03: bait_risk=low；hook_id=BOUNDARY_TEST；opened_at=EP01_CLIP06；payoff_clip=EP01_CLIP09；payoff_due=EP01_CLIP09；payoff_evidence=半杯邀饮升级为摔杯拒诱和明确警告；payoff_status=paid；promise=潘金莲会怎样逼近武松的伦理边界；promise_type=desire_hook\n  - R04: bait_risk=medium；delayed_payoff_ep=第2集；hook_id=TAIL_OTHER_EYES；opened_at=EP01_CLIP15；payoff_due=第2集；payoff_status=open；promise=武松离城后，楼窗外走近的另一双眼是谁、会带来什么；promise_type=cliffhanger\n  - Q01: expected_next_handling=本集兑现/推进；question_context=[镜头24·旁白·压迫] 武大回家时，她先红了眼，也先把真相藏了起来。 [镜头25·潘金莲·委屈·快] 你那好兄弟，；question_id=Q01；signal=真相；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=逼近。 ### EP01_CLIP10｜先红眼的人改写真相｜1:37.689–1:48.388 武大带雪推门，主；question_id=Q02；signal=真相；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=content_proposition 一个能打死猛虎的人，为什么后来守不住哥哥的家门？ content_promise；question_id=Q03；signal=为什么；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=EP01_CLIP10 payoff_evidence 潘金莲越界未成后倒置真相反咬武松 bait_risk low hook_id BOUNDARY_TEST；question_id=Q04；signal=真相；status=paid_or_progressed\n  - Q05: expected_next_handli\n...",
       "relpath": "出图/第1集/prompt/01_分镜出图.md",
-      "sha256": "75d92c2b2c949dc79f4486621c492a4e05b788a6b0c4cc3638ab5437c037c2a1"
+      "sha256": "67665fd86b50afd49e4a0d091c0049fcf62f366a275a56c053c1828e96ab4540"
     },
     {
-      "bytes": 258277,
+      "bytes": 288001,
       "exists": true,
       "preview": {
         "kind": "n2d_identity_registry",
@@ -67,10 +67,10 @@
         "version": 1
       },
       "relpath": "出图/共享/identity_registry.json",
-      "sha256": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889"
+      "sha256": "51579a6110c677dce88474fd754dbcf8d463491df5b7b236bb67609213741f75"
     },
     {
-      "bytes": 122909,
+      "bytes": 127476,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -84,7 +84,7 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "0c00d649955dbf4ce357c6d1b84c92a0a2403ffce5b97cbb1616a4594fc9f976"
+      "sha256": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811"
     },
     {
       "exists": false,
@@ -95,7 +95,7 @@
       "exists": true,
       "preview": {
         "episode": "第1集",
-        "graph_hash": "e6c3d15e85183e39b1af804152e61a3397e1a80d2f4d2879e65e9d3ca14036de",
+        "graph_hash": "1dfdb592558157c6463b596e1ecd87d45f3a2d4fa431299559642a6443e65057",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
@@ -125,7 +125,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "d95221b8e60da519d4894740513a7dd363fb33eeedebdc6b00537350639c582c"
+      "sha256": "a4cc8ad32ef583ddccc72202debfe034b10cdc2f64febdd60ec3451ea2e4733b"
     }
   ],
   "genre_pack_context": {
@@ -139,7 +139,7 @@
     },
     "active_scene_archetypes": [],
     "episode": "第1集",
-    "generated_at": "2026-08-14T09:11:36+00:00",
+    "generated_at": "2026-08-17T02:48:30+00:00",
     "genre": {
       "genre_key": "",
       "label": "",

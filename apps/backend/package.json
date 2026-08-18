@@ -2,9 +2,16 @@
   "name": "@anime-armory/backend",
   "private": true,
   "version": "0.1.0",
-  "description": "Supabase database and Edge Functions for LabuTV.",
+  "description": "Loopback REST AI backend, Supabase database, and Edge Functions for LabuTV.",
+  "type": "module",
+  "dependencies": {
+    "@anime-armory/contracts": "0.1.0"
+  },
   "scripts": {
-    "typecheck": "npx --yes deno@2.9.2 check --config supabase/functions/assets/deno.json --lock supabase/functions/assets/deno.lock --frozen supabase/functions/assets/index.ts",
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json && npx --yes deno@2.9.2 check --config supabase/functions/assets/deno.json --lock supabase/functions/assets/deno.lock --frozen supabase/functions/assets/index.ts",
     "supabase": "supabase"
   }
 }

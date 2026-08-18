@@ -93,15 +93,14 @@ import {
 import { BrandIcon } from "../../components/BrandIcon";
 import { ComposerAssetPicker } from "../../components/ComposerAssetPicker";
 import { LineIcon } from "../../components/LineIcon";
-import { MembershipMark } from "../../components/MembershipMark";
 import { SelectMenu } from "../../components/SelectMenu";
-import { MODEL_GROUPS, getModelById } from "../../catalog/models";
+import { RUNTIME_MODEL_MODALITIES, runtimeModelDefinitions } from "../../catalog/runtimeModels";
 import type { ModelDefinition, ModelModality } from "../../catalog/types";
 import { MembershipDialog } from "../account/MembershipDialog";
 import {
   StandaloneSkillWorkflowOverlay,
+  type StandaloneSkillRunRequest,
   type StandaloneWorkflowKind,
-  type StandaloneWorkflowResult,
 } from "./StandaloneSkillWorkflows";
 import {
   ScriptWorkflowOverlay as ControlledScriptWorkflowOverlay,
@@ -147,7 +146,7 @@ import {
 import { CreateSkillDialog, type CreateSkillFormValues } from "../skill-home/CreateSkillDialog";
 import { SKILLS } from "../../catalog/skills";
 import { createAgentGateway, type AgentGateway } from "../../lib/agent";
-import { discoverCanvasModels, generateCanvasContent, isCanvasGenerationError, type CanvasModel } from "../../lib/generation";
+import { discoverCanvasModels, generateCanvasContent, isCanvasGenerationError } from "../../lib/generation";
 import {
   buildDirectorSceneFromPrompt,
   createDefaultDirectorScene,
@@ -163,7 +162,7 @@ import {
   saveCloudCanvasDocument,
   saveLocalCanvasDocument,
 } from "../../lib/canvasState";
-import { getSupabaseAccessToken, isCloudConfigured, persistWorkToCloud } from "../../lib/cloud";
+import { isCloudConfigured, persistWorkToCloud } from "../../lib/cloud";
 import { localFile, registerLocalFiles, removeLocalFiles } from "../../lib/localFiles";
 import { loadWork, saveWork } from "../../lib/work";
 import type {
@@ -683,29 +682,6 @@ const CANVAS_MODALITY_LABELS: Record<ModelModality, string> = {
   audio: "音频",
 };
 
-function runtimeModelProvider(modelId: string): "OpenAI" | "Google" | "开放模型" {
-  const normalized = modelId.toLocaleLowerCase();
-  if (normalized.includes("gemini")) return "Google";
-  if (normalized.includes("gpt") || normalized.includes("dall-e")) return "OpenAI";
-  return "开放模型";
-}
-
-function runtimeModelDefinition(model: CanvasModel): ModelDefinition {
-  const provider = runtimeModelProvider(model.id);
-  return {
-    id: model.id,
-    modelId: model.id,
-    name: generatorModelLabel(model.label || model.id),
-    provider,
-    modality: model.modality,
-    description: `${provider} · 已由本机模型服务开放，可直接用于当前画布。`,
-    availability: "api",
-    tags: ["本机已连接", "可调用"],
-    recommended: true,
-    providerSpec: `${provider === "Google" ? "gemini" : "openai"}/${model.id}`,
-  };
-}
-
 function loadCanvasFavoriteSkills() {
   try {
     return new Set<string>(JSON.parse(localStorage.getItem("anime-armory.web.favorite-skills") ?? "[]") as string[]);
@@ -1118,12 +1094,19 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
       : data.kind === "audio"
         ? ["Minimax-speech-2.8-hd", "CosyVoice 3", "Fish Speech"]
         : ["GVLM 3.1", "Gemini 3 Pro", "GPT-5.2"];
-  const modelOptions = isLibtvGenerator && runtimeModelOptions.length ? runtimeModelOptions : fallbackModelOptions;
+  const modelOptions = isLibtvGenerator ? runtimeModelOptions : fallbackModelOptions;
+  const selectedRuntimeModel = runtimeModelOptions.includes(String(data.model ?? "")) ? String(data.model) : "";
+  const modelButtonLabel = isLibtvGenerator
+    ? selectedRuntimeModel ? generatorModelLabel(selectedRuntimeModel)
+      : modelDiscoveryState === "loading" ? "读取模型…"
+        : modelDiscoveryState === "failed" ? "模型不可用" : "选择模型"
+    : String(data.model ?? modelOptions[0] ?? "未配置模型");
 
   const loadGeneratorModels = async () => {
     if (!isLibtvGenerator || modelDiscoveryState === "loading") return;
     setModelDiscoveryState("loading");
     setModelDiscoveryError("");
+    setRuntimeModelOptions([]);
     try {
       const models = await discoverCanvasModels();
       const options = models.filter((model) => model.modality === generatorModality).map((model) => model.id);
@@ -1132,6 +1115,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
       if (!options.includes(String(data.model ?? ""))) update({ model: options[0] });
       setModelDiscoveryState("idle");
     } catch (error) {
+      setRuntimeModelOptions([]);
       setModelDiscoveryState("failed");
       setModelDiscoveryError(error instanceof Error ? error.message : "无法读取共享模型");
     }
@@ -1287,11 +1271,11 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
           const opening = controlMenu !== "model";
           setControlMenu(opening ? "model" : null);
           if (opening) void loadGeneratorModels();
-        }}><Sparkles size={17} /><span>{generatorModelLabel(String(data.model ?? modelOptions[0]))}</span><ChevronDown size={12} /></button>
+        }}><Sparkles size={17} /><span>{modelButtonLabel}</span><ChevronDown size={12} /></button>
         {controlMenu === "model" && <div className="libtv-node-model-menu" role="menu" aria-label="选择生成模型">
           {modelDiscoveryState === "loading" && <p className="libtv-node-model-state">正在读取共享模型…</p>}
           {modelDiscoveryState === "failed" && <p className="libtv-node-model-state is-error">{modelDiscoveryError}</p>}
-          {modelOptions.map((model) => <button key={model} type="button" role="menuitem" className={data.model === model ? "is-active" : ""} onClick={() => { update({ model }); setControlMenu(null); }}><span><b>{generatorModelLabel(model)}</b><small>cli-proxy-api · 本机共享</small></span>{data.model === model && <Check size={14} />}</button>)}
+          {modelOptions.map((model) => <button key={model} type="button" role="menuitem" className={data.model === model ? "is-active" : ""} onClick={() => { update({ model }); setControlMenu(null); }}><span><b>{generatorModelLabel(model)}</b><small>LabuTV 后端 · discovery 已开放</small></span>{data.model === model && <Check size={14} />}</button>)}
         </div>}
       </div>
       <span className="libtv-node-composer-spacer" />
@@ -1346,7 +1330,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
         onChange={(event) => setPrompt(event.target.value)}
       />
       <div className="workflow-node-generator-bar">
-        <button type="button" className="workflow-node-model-button" aria-expanded={controlMenu === "model"} onClick={() => setControlMenu((current) => current === "model" ? null : "model")}><span>{String(data.model ?? modelOptions[0])}</span><ChevronDown size={12} /></button>
+        <button type="button" className="workflow-node-model-button" aria-expanded={controlMenu === "model"} onClick={() => setControlMenu((current) => current === "model" ? null : "model")}><span>{modelButtonLabel}</span><ChevronDown size={12} /></button>
         {data.kind === "image" && <button type="button" className="workflow-node-settings-button" aria-label="图片生成参数" aria-expanded={controlMenu === "settings"} onClick={() => setControlMenu((current) => current === "settings" ? null : "settings")}><Settings2 size={13} /><span>{aspectRatio} · {quality} · {resolution} · {outputCount}张</span></button>}
         {data.kind === "video" && <>
           <button type="button" className="workflow-node-mode-button" onClick={() => update({ videoMode: data.videoMode === "文生视频" ? "首帧生成视频" : "文生视频" })}>{data.videoMode ?? "文生视频"}</button>
@@ -1861,13 +1845,11 @@ function graphSignature(nodes: WorkflowNode[], edges: Edge[]) {
 
 function defaultCreationConfig(work: WebWork): WorkCreationConfig {
   if (work.creationConfig) return work.creationConfig;
-  const fallback = MODEL_GROUPS.text[0];
   return {
     generationMode: "auto",
     model: {
       modality: "text",
-      modelId: fallback?.id ?? "",
-      ...(fallback?.providerSpec ? { providerSpec: fallback.providerSpec } : {}),
+      modelId: "",
     },
   };
 }
@@ -2122,6 +2104,7 @@ export function CanvasPage({
   const [modelModality, setModelModality] = useState<ModelModality>(creationConfig.model.modality);
   const [runtimeModels, setRuntimeModels] = useState<ModelDefinition[]>([]);
   const [runtimeModelsState, setRuntimeModelsState] = useState<"idle" | "loading" | "ready" | "unavailable">("idle");
+  const [runtimeModelsRefresh, setRuntimeModelsRefresh] = useState(0);
   const [overviewTab, setOverviewTab] = useState<"canvas" | "assets">("canvas");
   const [overviewQuery, setOverviewQuery] = useState("");
   const [overviewSearchOpen, setOverviewSearchOpen] = useState(false);
@@ -2307,43 +2290,7 @@ export function CanvasPage({
   const resolveCanvasAttachment = useCallback(async (attachmentId: string): Promise<File | undefined> => {
     const local = await localFile(attachmentId);
     if (local) return local;
-    const attachment = attachmentsRef.current.find((item) => item.id === attachmentId);
-    const endpoint = import.meta.env.VITE_ASSET_API_URL?.trim();
-    if (!attachment?.assetId || !endpoint || !/^(?:image|video|audio)\//.test(attachment.type) || attachment.size > MAX_AGENT_ARTIFACT_BYTES) return undefined;
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => controller.abort(), attachment.type.startsWith("image/") ? 30_000 : 120_000);
-    try {
-      const { AssetApiClient } = await import("@anime-armory/cloud-client");
-      const client = new AssetApiClient({
-        endpoint,
-        getAccessToken: async () => getSupabaseAccessToken(),
-      });
-      const { download } = await client.createDownloadUrl(attachment.assetId, "inline", controller.signal);
-      const response = await fetch(download.url, {
-        method: download.method,
-        headers: download.headers,
-        signal: controller.signal,
-        credentials: "omit",
-      });
-      const declaredLength = Number(response.headers.get("content-length") ?? Number.NaN);
-      if (!response.ok || (Number.isFinite(declaredLength) && declaredLength > MAX_AGENT_ARTIFACT_BYTES)) {
-        await response.body?.cancel().catch(() => undefined);
-        throw new Error(`云端媒体下载失败（${response.status}）`);
-      }
-      const blob = await response.blob();
-      if (!blob.size || blob.size > MAX_AGENT_ARTIFACT_BYTES) throw new Error("云端媒体为空或超过 512MB");
-      const file = new File([blob], attachment.name, {
-        type: attachment.type || blob.type || "image/png",
-        lastModified: Date.now(),
-      });
-      await registerLocalFiles([{ ...attachment, file }]);
-      return file;
-    } catch (error) {
-      if (mountedRef.current) setNotice(`无法恢复云端媒体：${error instanceof Error ? error.message : String(error)}`);
-      return undefined;
-    } finally {
-      window.clearTimeout(timer);
-    }
+    return undefined;
   }, []);
 
   useEffect(() => {
@@ -2411,20 +2358,15 @@ export function CanvasPage({
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
   const editingNode = editingNodeId ? nodes.find((node) => node.id === editingNodeId) ?? null : null;
-  const selectableModelGroups = useMemo<Record<ModelModality, ModelDefinition[]>>(() => {
-    const groups = {} as Record<ModelModality, ModelDefinition[]>;
-    (Object.keys(MODEL_GROUPS) as ModelModality[]).forEach((modality) => {
-      const connected = runtimeModels.filter((model) => model.modality === modality);
-      const connectedIds = new Set(connected.flatMap((model) => [model.id, model.modelId ?? ""]).filter(Boolean));
-      groups[modality] = [
-        ...connected,
-        ...MODEL_GROUPS[modality].filter((model) => !connectedIds.has(model.id) && !connectedIds.has(model.modelId ?? "")),
-      ];
-    });
-    return groups;
-  }, [runtimeModels]);
-  const selectedModel = Object.values(selectableModelGroups).flat().find((model) => model.id === creationConfig.model.modelId)
-    ?? getModelById(creationConfig.model.modelId);
+  const selectableModelGroups = useMemo<Record<ModelModality, ModelDefinition[]>>(() => ({
+    text: runtimeModels.filter((model) => model.modality === "text"),
+    image: runtimeModels.filter((model) => model.modality === "image"),
+    video: [],
+    audio: [],
+  }), [runtimeModels]);
+  const selectedModel = runtimeModels.find((model) => (
+    model.id === creationConfig.model.modelId || model.modelId === creationConfig.model.modelId
+  ));
   const overviewNodes = useMemo(() => {
     const query = overviewQuery.trim().toLocaleLowerCase();
     return nodes
@@ -2438,7 +2380,13 @@ export function CanvasPage({
   const visibleCharacterPresets = characterRecentOnly
     ? CHARACTER_PRESETS.filter((character) => recentCharacterIds.includes(character.id))
     : CHARACTER_PRESETS;
-  const canvasSkillLibrary = useMemo(() => [...AGENT_SKILL_LIBRARY, ...canvasCustomSkills], [canvasCustomSkills]);
+  const canvasSkillLibrary = useMemo(
+    () => [
+      ...AGENT_SKILL_LIBRARY.filter((skill) => !skill.line || skill.line === work.line),
+      ...canvasCustomSkills.filter((skill) => !skill.line || skill.line === work.line),
+    ],
+    [canvasCustomSkills, work.line],
+  );
   const selectedSkillDetail = canvasSkillLibrary.find((skill) => skill.id === skillDetailId) ?? null;
   const activeLibrarySkill = canvasSkillLibrary.find((skill) => skill.id === activeSkill) ?? null;
   const activeSuggestedSkill = suggestedSkills.find((skill) => skill.id === activeSkill) ?? null;
@@ -2518,7 +2466,9 @@ export function CanvasPage({
     () => attachments.filter((attachment) => composerAttachmentIds.includes(attachment.id)),
     [attachments, composerAttachmentIds],
   );
-  const composerReady = Boolean(prompt.trim() || composerAttachments.length || activeSkill || selectedModel);
+  const composerReady = runtimeModelsState === "ready"
+    && Boolean(selectedModel)
+    && Boolean(prompt.trim() || composerAttachments.length || activeSkill || selectedModel);
   const showAgentStarter = isNewConversation || !activeJob;
   const addActivity = useCallback((label: string) => {
     setActivity((items) => [{ id: crypto.randomUUID(), label, time: timestamp() }, ...items].slice(0, 30));
@@ -2637,20 +2587,40 @@ export function CanvasPage({
   }, []);
 
   useEffect(() => {
-    if (composerMenu !== "model") return undefined;
     const controller = new AbortController();
     setRuntimeModelsState("loading");
-    void discoverCanvasModels(controller.signal).then((models) => {
-      if (controller.signal.aborted) return;
-      setRuntimeModels(models.map(runtimeModelDefinition));
-      setRuntimeModelsState("ready");
-    }).catch(() => {
-      if (controller.signal.aborted) return;
-      setRuntimeModels([]);
-      setRuntimeModelsState("unavailable");
-    });
+    setRuntimeModels([]);
+    void discoverCanvasModels(controller.signal)
+      .then((models) => {
+        if (controller.signal.aborted) return;
+        const discovered = runtimeModelDefinitions(models);
+        setRuntimeModels(discovered);
+        setCreationConfig((current) => {
+          const exact = discovered.find((model) => model.id === current.model.modelId || model.modelId === current.model.modelId);
+          const fallback = exact
+            ?? discovered.find((model) => model.modality === current.model.modality)
+            ?? discovered.find((model) => model.modality === "text")
+            ?? discovered.find((model) => model.modality === "image");
+          if (!fallback) return current;
+          const modelId = fallback.modelId ?? fallback.id;
+          if (current.model.modality === fallback.modality && current.model.modelId === modelId && !current.model.providerSpec) {
+            return current;
+          }
+          return { ...current, model: { modality: fallback.modality, modelId } };
+        });
+        setModelModality((current) => discovered.some((model) => model.modality === current)
+          ? current
+          : discovered.some((model) => model.modality === "text") ? "text" : "image");
+        setRuntimeModelsState("ready");
+      })
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setRuntimeModels([]);
+        setModelModality("text");
+        setRuntimeModelsState("unavailable");
+      });
     return () => controller.abort();
-  }, [composerMenu]);
+  }, [runtimeModelsRefresh]);
 
   useEffect(() => {
     if (!notice) return undefined;
@@ -3478,6 +3448,60 @@ export function CanvasPage({
       ?? models[0].id;
   }
 
+  async function runBackendSkillText(
+    skillId: string,
+    promptText: string,
+    signal: AbortSignal,
+    context: Record<string, unknown>,
+  ): Promise<{ text: string; model: string }> {
+    const model = await resolveSharedCanvasModel("text", creationConfig.model.modelId, signal);
+    let submissionGateway = gateway ?? await createAgentGateway();
+    if (submissionGateway.mode === "demo") submissionGateway = await createAgentGateway();
+    if (submissionGateway.mode === "demo") throw new Error("后端 AI / Skill 服务尚未就绪");
+    if (!mountedRef.current || signal.aborted) throw new DOMException("Skill 运行已取消", "AbortError");
+    setGateway(submissionGateway);
+
+    const effectiveWork: WebWork = {
+      ...work,
+      name: workName.trim() || "unnamed",
+      creationConfig: {
+        ...creationConfig,
+        skillId,
+        model: { modality: "text", modelId: model },
+      },
+      attachments: [],
+      ...(cloudProjectId ? { cloudProjectId } : {}),
+    };
+    let current = await submissionGateway.submit({
+      work: effectiveWork,
+      prompt: promptText,
+      skillId,
+      context,
+    });
+    setActiveJob(current);
+    updateRun(current, promptText);
+
+    if (submissionGateway.status) {
+      for (let attempt = 0; attempt < 300 && (current.state === "queued" || current.state === "running"); attempt += 1) {
+        await new Promise((resolve) => window.setTimeout(resolve, 1200));
+        if (!mountedRef.current || signal.aborted) throw new DOMException("Skill 运行已取消", "AbortError");
+        current = await submissionGateway.status(current.id);
+        setActiveJob(current);
+        updateRun(current, promptText);
+      }
+    }
+    if (current.state !== "succeeded") {
+      throw new Error(current.state === "queued" || current.state === "running"
+        ? "后端 Skill 运行超时"
+        : current.message || `后端 Skill 任务${current.state}`);
+    }
+    const text = current.output?.trim()
+      || current.artifacts?.find((artifact) => artifact.kind === "text" && artifact.text?.trim())?.text?.trim()
+      || "";
+    if (!text) throw new Error("后端 Skill 没有返回文本结果");
+    return { text, model };
+  }
+
   function scriptSourceText(node: WorkflowNode): string {
     const incoming = edgesRef.current
       .filter((edge) => edge.target === node.id)
@@ -3601,17 +3625,13 @@ export function CanvasPage({
     nodesRef.current = runningNodes;
     setNodes(runningNodes);
     void persistGeneratorNodeSnapshot(node.id, runningPatch, attachmentsRef.current, runningNodes, edgesRef.current, { writeCloud: false });
-    addActivity(`开始使用本地共享模型拆解「${latestSource.data.title}」`);
-    setNotice("正在分析故事并生成可编辑镜头…");
+    addActivity(`开始通过后端 Skill 拆解「${latestSource.data.title}」`);
+    setNotice("正在通过 n2d-script-workbench 生成可编辑镜头…");
 
     try {
-      const model = await resolveSharedCanvasModel("text", String(latestSource.data.model ?? ""), controller.signal);
-      if (generationRequestsRef.current.get(node.id) !== requestId) return;
-      const generation = await generateCanvasContent({
-        modality: "text",
-        model,
-        signal: controller.signal,
-        prompt: [
+      const generation = await runBackendSkillText(
+        "n2d-script-workbench",
+        [
           "你是专业漫剧故事脚本与分镜导演。把用户故事拆成可直接编辑、可生图、可生视频的三步工作台数据。",
           "要求：通常生成 8–20 个镜头；每镜 5–15 秒；镜头描述具体可视；资产去重并覆盖主要角色、场景、关键道具；不要复制不在原故事中的受版权保护内容。",
           "final_prompt 先留空，资产必须是 status=pending、source=none。",
@@ -3619,9 +3639,11 @@ export function CanvasPage({
           `用户操作指令：${userPrompt || "根据上游故事生成完整分镜脚本"}`,
           sourceText ? `故事与上游素材：\n${sourceText}` : "",
         ].filter(Boolean).join("\n\n"),
-      });
-      if (generation.modality !== "text") throw new Error("文本模型没有返回脚本 JSON");
-      const workbench = await parseOrRepairScriptWorkbench(generation.text, model, controller.signal);
+        controller.signal,
+        { sourceNodeId: node.id, workflow: "script-workbench" },
+      );
+      if (generationRequestsRef.current.get(node.id) !== requestId) return;
+      const workbench = await parseOrRepairScriptWorkbench(generation.text, generation.model, controller.signal);
       const issues = validateScriptWorkbench(workbench);
       if (issues.length) throw new Error(`脚本合同校验失败：${issues.slice(0, 3).map((issue) => `${issue.path} ${issue.message}`).join("；")}`);
       if (!mountedRef.current || generationRequestsRef.current.get(node.id) !== requestId) return;
@@ -3639,12 +3661,12 @@ export function CanvasPage({
         skillPath: "skills/n2d-script-workbench/SKILL.md",
         assetName: `${workbench.shots.length}个镜头`,
         scriptWorkbench: workbench,
-        generatedWithModel: model,
+        generatedWithModel: generation.model,
         generatedFromPrompt: userPrompt,
         generationProgress: 100,
         generationRequestId: undefined,
         generationError: undefined,
-        model,
+        model: generation.model,
       };
       const nextNodes = currentNodes.map((candidate) => candidate.id === node.id
         ? { ...candidate, selected: true, data: resultData }
@@ -3958,15 +3980,18 @@ export function CanvasPage({
       setNotice("视频后端尚未接入；已保留真实任务参数，没有伪造生成结果");
       return;
     }
-    updateNodeData(nodeId, { status: "running" });
-    addActivity(`开始执行「${node.data.title}」`);
-    setNotice(`${node.data.title} 正在生成…`);
-    window.setTimeout(() => {
-      const extension = node.data.kind === "image" ? "png" : node.data.kind === "audio" ? "wav" : node.data.kind === "video" || node.data.kind === "compose" ? "mp4" : "md";
-      updateNodeData(nodeId, { status: "done", assetName: `生成历史/${node.data.title}.${extension}` });
-      addActivity(`完成「${node.data.title}」`);
-      setNotice(`${node.data.title} 已完成`);
-    }, 900);
+    const failedPatch: Partial<WorkflowNodeData> = {
+      status: "failed",
+      generationError: "当前节点没有对应的后端 REST 执行适配器，任务未提交。",
+    };
+    const nextNodes = nodesRef.current.map((item) => item.id === nodeId
+      ? { ...item, data: { ...item.data, ...failedPatch } }
+      : item);
+    nodesRef.current = nextNodes;
+    setNodes(nextNodes);
+    void persistGeneratorNodeSnapshot(nodeId, failedPatch, attachmentsRef.current, nextNodes, edgesRef.current);
+    addActivity(`「${node.data.title}」未提交：缺少后端适配器`);
+    setNotice("该节点尚未接入后端 REST 执行适配器；没有生成伪造结果");
   }
 
   function cancelWorkflowGeneration(nodeId: string) {
@@ -4555,41 +4580,91 @@ export function CanvasPage({
     createBatchVideoNodes(request.nodeId, request.workbench.shots);
   }
 
-  function completeStandaloneWorkflow(nodeId: string, workflow: StandaloneWorkflowKind, result: StandaloneWorkflowResult) {
-    const sourceNode = nodes.find((node) => node.id === nodeId);
-    if (!sourceNode) return;
-    const skill = workflow === "character-turnaround" ? "n2d-character-turnaround" : workflow === "first-frame-video" ? "n2d-first-frame-video" : "n2d-audio-video";
-    const resultId = `${workflow}-result-${crypto.randomUUID()}`;
-    const resultNode: WorkflowNode = {
-      id: resultId,
-      type: "workflow-node",
-      position: { x: sourceNode.position.x + 390, y: sourceNode.position.y + 10 },
-      selected: true,
-      data: {
-        ...nodeRuntimeDefaults(result.nodeKind),
-        kind: result.nodeKind,
-        title: result.title,
-        description: result.description,
-        prompt: result.prompt,
-        status: "done",
-        eyebrow: result.nodeKind === "image" ? "角色设定" : "视频结果",
-        assetName: result.assetName,
-        model: result.model,
-        aspectRatio: result.aspectRatio,
-        resolution: result.resolution,
-        ...(result.duration ? { duration: result.duration } : {}),
-        skillId: skill,
-        skillPath: `skills/${skill}/SKILL.md`,
-        sourceNodeId: nodeId,
-      },
+  async function runStandaloneWorkflow(request: StandaloneSkillRunRequest) {
+    const sourceNode = nodesRef.current.find((node) => node.id === request.nodeId);
+    if (!sourceNode) throw new Error("发起任务的画布节点已不存在");
+    if (!request.sourceFile) throw new Error("请先上传真实输入文件；占位素材不会提交到后端");
+
+    const [sourceAttachmentId] = await importAssetFiles([request.sourceFile], false, { awaitCloud: false });
+    if (!sourceAttachmentId) throw new Error("输入文件未能保存到当前作品");
+
+    let submissionGateway = gateway ?? await createAgentGateway();
+    if (!mountedRef.current) throw new Error("画布已关闭");
+    if (submissionGateway.mode === "demo") {
+      submissionGateway = await createAgentGateway();
+      if (!mountedRef.current) throw new Error("画布已关闭");
+    }
+    setGateway(submissionGateway);
+    setPanelOpen(true);
+    setPanelTab("history");
+    setNodes((items) => items.map((node) => node.id === request.nodeId
+      ? { ...node, data: { ...node.data, status: "running", generationError: undefined, skillId: request.skillId, skillPath: `skills/${request.skillId}/SKILL.md` } }
+      : node));
+
+    const effectiveWork = {
+      ...work,
+      name: workName.trim() || "unnamed",
+      creationConfig,
+      attachments: attachmentsRef.current,
+      ...(cloudProjectId ? { cloudProjectId } : {}),
     };
-    setNodes((items) => [...items.map((item) => item.id === nodeId ? { ...item, selected: false, data: { ...item.data, status: "done" as const, assetName: `Skill · ${skill}` } } : { ...item, selected: false }), resultNode]);
-    setEdges((items) => [...items, makeEdge(`edge-${crypto.randomUUID()}`, nodeId, resultId, true)]);
-    setSelectedNodeId(resultId);
-    setStandaloneWorkflow(null);
-    addActivity(`完成「${result.title}」并发送到画布`);
-    setNotice(`${result.title} 已发送到画布`);
-    window.requestAnimationFrame(() => void flowInstanceRef.current?.fitView({ nodes: [{ id: nodeId }, { id: resultId }], padding: .38, maxZoom: 1, duration: 300 }));
+    saveWork(effectiveWork);
+    let latestJob: AgentJob | null = null;
+    try {
+      let current = await submissionGateway.submit({
+        work: effectiveWork,
+        prompt: request.prompt,
+        skillId: request.skillId,
+        context: {
+          standaloneWorkflow: request.workflow,
+          sourceNodeId: request.nodeId,
+          sourceAttachmentId,
+          ...request.context,
+        },
+      });
+      latestJob = current;
+      if (!mountedRef.current) throw new Error("画布已关闭");
+      setActiveJob(current);
+      updateRun(current, request.prompt);
+      addActivity(`向后端提交 Skill：${request.skillId}`);
+
+      if (submissionGateway.status && (current.state === "queued" || current.state === "running")) {
+        for (let attempt = 0; attempt < 300 && (current.state === "queued" || current.state === "running"); attempt += 1) {
+          await new Promise((resolve) => window.setTimeout(resolve, 1200));
+          if (!mountedRef.current) throw new Error("画布已关闭");
+          current = await submissionGateway.status(current.id);
+          latestJob = current;
+          setActiveJob(current);
+          updateRun(current, request.prompt);
+        }
+      }
+
+      if (current.state !== "succeeded") {
+        const message = current.state === "queued" || current.state === "running"
+          ? "后端 Skill 运行超时，请稍后重试"
+          : current.message || `后端 Skill 任务${current.state}`;
+        throw new Error(message);
+      }
+      const inserted = await materializeAgentArtifacts(current);
+      if (!inserted) throw new Error("后端任务成功，但没有返回可展示的产物");
+      setNodes((items) => items.map((node) => node.id === request.nodeId
+        ? { ...node, data: { ...node.data, status: "done", generationError: undefined, assetName: `Skill · ${request.skillId}` } }
+        : node));
+      addActivity(`后端 Skill 完成：${request.skillId}`);
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : String(cause);
+      if (mountedRef.current) {
+        if (!latestJob) {
+          const failed: AgentJob = { id: crypto.randomUUID(), state: "failed", message };
+          setActiveJob(failed);
+          updateRun(failed, request.prompt);
+        }
+        setNodes((items) => items.map((node) => node.id === request.nodeId
+          ? { ...node, data: { ...node.data, status: "failed", generationError: message, assetName: `Skill 失败 · ${request.skillId}` } }
+          : node));
+      }
+      throw cause;
+    }
   }
 
   function locateOverviewNode(node: WorkflowNode) {
@@ -5288,6 +5363,11 @@ export function CanvasPage({
       || (composerAttachments.length ? "请根据已选素材和当前画布继续创作。" : "")
       || (selectedModel ? `请使用 ${selectedModel.name} 开始创作。` : "");
     if (!gateway || !cleanPrompt || submitting) return;
+    if (runtimeModelsState !== "ready" || !selectedModel) {
+      setNotice(runtimeModelsState === "unavailable" ? "后端模型服务不可用，请稍后重试" : "正在读取后端可用模型，请稍候");
+      setComposerMenu("model");
+      return;
+    }
     let submissionGateway = gateway;
     if (submissionGateway.mode === "demo") {
       submissionGateway = await createAgentGateway();
@@ -5312,7 +5392,21 @@ export function CanvasPage({
       if (includeCanvasContext) contextParts.push(`[画布上下文] 当前共有 ${nodes.length} 个节点、${edges.length} 条连线。`);
       if (composerAttachments.length) contextParts.push(`[本次引用素材] ${composerAttachments.map((attachment) => attachment.name).join("、")}`);
       const submittedWork = composerAttachments.length ? { ...effectiveWork, attachments: composerAttachments } : effectiveWork;
-      let current = await submissionGateway.submit({ work: submittedWork, prompt: contextParts.join("\n\n") });
+      const selectedUserSkillDefinition = activeSkill?.startsWith("user:") && activeLibrarySkill?.id === activeSkill
+        ? {
+            title: activeLibrarySkill.title,
+            description: activeLibrarySkill.description,
+            guide: activeLibrarySkill.guide?.trim() || activeLibrarySkill.description,
+            steps: activeLibrarySkill.steps ?? [],
+            useCases: activeLibrarySkill.useCases ?? [],
+          }
+        : undefined;
+      let current = await submissionGateway.submit({
+        work: submittedWork,
+        prompt: contextParts.join("\n\n"),
+        skillId: activeSkill ?? creationConfig.skillId ?? work.line,
+        ...(selectedUserSkillDefinition ? { skillDefinition: selectedUserSkillDefinition } : {}),
+      });
       if (!mountedRef.current) return;
       setActiveJob(current);
       updateRun(current, cleanPrompt);
@@ -5910,7 +6004,7 @@ export function CanvasPage({
               <div className="canvas-gateway-card"><span className={gateway && gateway.mode !== "demo" ? "agent-status-dot is-live" : "agent-status-dot"} /><span><small>当前执行环境</small><b>{gateway?.label ?? "正在检测本地 Agent…"}</b></span></div>
               <label><span><b>附带画布上下文</b><small>发送节点数和连线信息，帮助 Agent 理解当前进度</small></span><input type="checkbox" checked={includeCanvasContext} onChange={(event) => setIncludeCanvasContext(event.target.checked)} /></label>
               <label><span><b>自动查看最新任务</b><small>提交后自动切换到历史与实时输出</small></span><input type="checkbox" checked={followLatestRun} onChange={(event) => setFollowLatestRun(event.target.checked)} /></label>
-              <div className="canvas-agent-security"><b>{gateway?.mode === "local" ? "本地桥接已隔离" : "密钥只保存在服务端"}</b><p>{gateway?.mode === "local" ? "任务只在授权后发送到受控作品目录。" : "浏览器不会接触模型 API Key。"}</p></div>
+              <div className="canvas-agent-security"><b>密钥只保存在服务端</b><p>浏览器只提交 REST 任务，不会接触模型 API Key。</p></div>
               <button type="button" className="canvas-clear-data-button" onClick={() => setOverlay("clear-data")}><Icon name="close" /><span><b>清除本机作品数据</b><small>删除当前作品、画布快照和本机素材</small></span></button>
             </section>}
           </div>
@@ -5964,14 +6058,18 @@ export function CanvasPage({
 
           <div className="composer-inline-choices" aria-label="创作设置">
             <div className="composer-menu-wrap model-menu-wrap">
-              <button className={composerMenu === "model" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择模型" aria-label="选择模型" aria-expanded={composerMenu === "model"} onClick={() => setComposerMenu(composerMenu === "model" ? null : "model")}>
+              <button className={composerMenu === "model" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择模型" aria-label="选择模型" aria-expanded={composerMenu === "model"} onClick={() => {
+                const opening = composerMenu !== "model";
+                setComposerMenu(opening ? "model" : null);
+                if (opening && runtimeModelsState === "unavailable") setRuntimeModelsRefresh((current) => current + 1);
+              }}>
                 <Box size={18} strokeWidth={1.6} />
               </button>
               {composerMenu === "model" && (
                 <div className="floating-panel model-picker" role="dialog" aria-label="选择模型">
                   <div className="floating-panel-title"><strong>选择模型</strong></div>
                   <div className="segmented-tabs" role="tablist">
-                    {(Object.keys(CANVAS_MODALITY_LABELS) as ModelModality[]).map((item) => (
+                    {RUNTIME_MODEL_MODALITIES.map((item) => (
                       <button key={item} className={modelModality === item ? "active" : ""} type="button" role="tab" aria-selected={modelModality === item} onClick={() => setModelModality(item)}>{CANVAS_MODALITY_LABELS[item]}</button>
                     ))}
                   </div>
@@ -5980,19 +6078,20 @@ export function CanvasPage({
                     <div className={`model-runtime-status state-${runtimeModelsState}`}>
                       <i />
                       {runtimeModelsState === "loading"
-                        ? "正在读取本机开放模型…"
+                        ? "正在读取后端开放模型…"
                         : runtimeModelsState === "ready"
                           ? `已连接 ${runtimeModels.filter((model) => model.modality === modelModality).length} 个可调用模型`
                           : runtimeModelsState === "unavailable"
-                            ? "本机模型服务未连接，以下为平台候选模型"
-                            : "连接本机模型服务后会自动显示开放模型"}
+                            ? "后端模型服务不可用，当前没有可选模型"
+                            : "连接后端后会显示实际开放模型"}
                     </div>
                   )}
+                  <p className="model-runtime-note">Skill 编排当前使用 GPT 文本/视觉；图片模型仅用于画布直接生图。</p>
                   <div className="model-list">
                     {selectableModelGroups[modelModality].map((model) => (
                       <div key={model.id} className="model-row">
                         <button className="model-row-main" type="button" onClick={() => {
-                          setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.id, ...(model.providerSpec ? { providerSpec: model.providerSpec } : {}) } }));
+                          setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.modelId ?? model.id, ...(model.providerSpec ? { providerSpec: model.providerSpec } : {}) } }));
                           setModelModality(model.modality);
                           setComposerMenu(null);
                           setNotice(`已选择 ${model.name}`);
@@ -6000,13 +6099,16 @@ export function CanvasPage({
                         }}>
                           <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{model.name.slice(0, 1)}</span>
                           <span className="model-copy">
-                            <span className="model-name"><b>{model.name}</b>{runtimeModels.some((item) => item.id === model.id) && <em className="model-connected-badge">已连接</em>}{model.premium && <span className="model-membership-mark" role="button" tabIndex={0} aria-label={`查看 ${model.name} 的会员积分方案`} onClick={(event) => { event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setComposerMenu(null); setMembershipOpen(true); } }}><MembershipMark /></span>}</span>
+                            <span className="model-name"><b>{model.name}</b><em className="model-connected-badge">已连接</em></span>
                             <small>{model.description}</small>
                           </span>
                           <Plus size={16} />
                         </button>
                       </div>
                     ))}
+                    {runtimeModelsState === "ready" && !selectableModelGroups[modelModality].length && (
+                      <p className="model-runtime-empty">后端当前未开放{CANVAS_MODALITY_LABELS[modelModality]}模型。</p>
+                    )}
                   </div>
                 </div>
               )}
@@ -6303,7 +6405,7 @@ export function CanvasPage({
         nodeId={standaloneWorkflow?.nodeId ?? null}
         workflow={standaloneWorkflow?.workflow ?? null}
         onClose={() => setStandaloneWorkflow(null)}
-        onComplete={completeStandaloneWorkflow}
+        onRun={runStandaloneWorkflow}
       />
 
       <MembershipDialog open={membershipOpen} onClose={() => setMembershipOpen(false)} onPurchase={(label) => { setMembershipOpen(false); setNotice(`已选择${label}，支付服务接入后即可购买`); }} />

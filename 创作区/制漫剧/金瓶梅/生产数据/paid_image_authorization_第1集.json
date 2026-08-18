@@ -1,19 +1,42 @@
 {
   "kind": "n2d_paid_image_authorization",
-  "version": 1,
+  "version": 2,
   "episode": "第1集",
   "status": "approved",
-  "authorized_at": "2026-08-11T06:04:32Z",
+  "authorized_at": "2026-08-17T11:04:09+08:00",
   "authorized_by": "user:workspace_owner",
-  "source_quote": "批准付费生图，上限140次",
+  "source_quote": "要继续实际出图，请明确追加本次允许的调用次数。调用次数 无上限，",
   "backend": "codex",
   "model_label": "GPT Image 2",
-  "call_cap": 140,
+  "unlimited_calls": true,
+  "call_cap": null,
+  "authorization_unit": "episode",
+  "authorized_episode": "第1集",
+  "per_image_reconfirmation_required": false,
+  "episode_authorization_quote": "下一张为 Clip02_first.png do 按照集数 为粒度 不用一张张 授权",
   "retries_count_toward_cap": true,
-  "actual_calls": 119,
-  "remaining_calls": 21,
-  "usage_updated_at": "2026-08-14T17:09:00+08:00",
-  "usage_note": "包含所有失败、拒绝与重试；实时计划当前可用图 95/179。第117次 PROP_DOOR 木门比例参考已验收；第118次反面图因复制正面门闩被拒绝；修复反面专用生成约束后，第119次重抽已完成机器 QC、实际像素目视和 SHA 绑定验收，背侧上下加固横档、六块竖板与侧边榫接清楚，无现代五金、人物、文字或水印。",
+  "actual_calls": 176,
+  "remaining_calls": null,
+  "usage_updated_at": "2026-08-18T11:59:52+08:00",
+  "usage_note": "包含所有失败、拒绝与重试；用户于 2026-08-17 显式追加授权“调用次数无上限”，并进一步明确按第1集整集授权、无需逐张确认。第 163–174 次完成并验收镜头 2 余下三帧与镜头 3 全部四帧，期间拒收并重抽赏银形状错误及两张阳谷街死虎回流错误。第 175–176 次为 Clip04_first 的两次有界尝试：第 175 次脸部余弦仅 0.2076；第 176 次仍仅 0.2245，且将应在 S04B 才出现的潘金莲提前画入 S04A 街下起幅。两张均已按精确 SHA 拒收并归档废料，触发该首帧 2 次重抽预算止损，未计入进度。当前可用图仍为 136/179。",
+  "authorization_history": [
+    {
+      "authorized_at": "2026-08-17T14:33:17+08:00",
+      "authorized_by": "user:workspace_owner",
+      "source_quote": "下一张为 Clip02_first.png do 按照集数 为粒度 不用一张张 授权",
+      "authorization_unit": "episode",
+      "authorized_episode": "第1集",
+      "per_image_reconfirmation_required": false
+    },
+    {
+      "authorized_at": "2026-08-11T06:04:32Z",
+      "authorized_by": "user:workspace_owner",
+      "source_quote": "批准付费生图，上限140次",
+      "call_cap": 140,
+      "actual_calls_at_close": 140,
+      "closed_reason": "superseded_by_unlimited_authorization"
+    }
+  ],
   "planned_calls": {
     "mandatory_shared_assets": 82,
     "episode_frames": 55,
@@ -24,7 +47,6 @@
     "reason": "不属于必要生产物料；为控制费用默认关闭"
   },
   "stop_conditions": [
-    "generation_calls_reach_140",
     "rights_or_compliance_state_changes",
     "backend_requests_new_external_authority",
     "repeated_quality_failure_triggers_stop_loss"

@@ -1,0 +1,13 @@
+{
+  "kind": "n2d_contact_graph_index",
+  "version": 1,
+  "episode": "第1集",
+  "canonical_source": "脚本/第1集/storyboard.json",
+  "contacts": [
+    {"clip_id": "EP01_CLIP02", "source_pointer": "clips[1].interaction_graph[0].contact_points", "release_pointer": "clips[1].interaction_graph[0].release_frame"},
+    {"clip_id": "EP01_CLIP05", "source_pointer": "clips[4].interaction_graph[0].contact_points", "release_pointer": "clips[4].interaction_graph[0].release_frame"},
+    {"clip_id": "EP01_CLIP09", "source_pointer": "clips[8].interaction_graph[0].contact_points", "release_pointer": "clips[8].interaction_graph[0].release_frame"},
+    {"clip_id": "EP01_CLIP11", "source_pointer": "clips[10].interaction_graph[0].contact_points", "release_pointer": "clips[10].interaction_graph[0].release_frame"},
+    {"clip_id": "EP01_CLIP14", "source_pointer": "clips[13].interaction_graph[0].contact_points", "release_pointer": "clips[13].interaction_graph[0].release_frame"}
+  ]
+}

@@ -1,7 +1,7 @@
 # 无成本图片生产包
 
 - episode: 第1集
-- reference_generation_tasks: 87
+- reference_generation_tasks: 80
 - keyshot_candidate_tasks: 15
 - regional_construct_manifests: 15
 - shot_packages: 15
@@ -11,9 +11,6 @@
 | Task | Priority | Owner | Slot | Output |
 |---|---|---|---|---|
 | REF_010 | P0 | CHAR_WUSONG/28岁打虎态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_WUSONG_28岁打虎态_action_pose_pack.png |
-| REF_012 | P0 | BEAST_TIGER/常态 | three_quarter | 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png |
-| REF_013 | P0 | BEAST_TIGER/常态 | side | 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png |
-| REF_014 | P0 | BEAST_TIGER/常态 | rear_three_quarter | 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png |
 | REF_015 | P0 | BEAST_TIGER/常态 | back | 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png |
 | REF_018 | P0 | BEAST_TIGER/常态 | expression_bank | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png |
 | REF_019 | P0 | BEAST_TIGER/常态 | action_pose_pack | 出图/共享/图片/定妆_BEAST_TIGER_常态_action_pose_pack.png |
@@ -83,18 +80,14 @@
 | REF_102 | P1 | PROP_BRAZIER | detail_closeup | 出图/共享/图片/定妆_PROP_BRAZIER_detail_closeup.png |
 | REF_105 | P1 | PROP_WINE_CUP | detail_closeup | 出图/共享/图片/定妆_PROP_WINE_CUP_detail_closeup.png |
 | REF_108 | P1 | PROP_SPILLED_WINE | detail_closeup | 出图/共享/图片/定妆_PROP_SPILLED_WINE_detail_closeup.png |
-| REF_110 | P1 | PROP_LUGGAGE | scale_reference | 出图/共享/图片/定妆_道具_素布行李_比例.png |
 | REF_111 | P1 | PROP_LUGGAGE | detail_closeup | 出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png |
 | REF_114 | P1 | PROP_DOOR | detail_closeup | 出图/共享/图片/定妆_PROP_DOOR_detail_closeup.png |
 | REF_117 | P1 | LOC_COUNTY_YAMEN | empty_plate | 出图/共享/图片/定妆_LOC_COUNTY_YAMEN_empty_plate.png |
 | REF_118 | P1 | LOC_COUNTY_YAMEN | lighting_plate | 出图/共享/图片/定妆_LOC_COUNTY_YAMEN_lighting_plate.png |
-| REF_120 | P1 | PROP_OFFICIAL_DOC | scale_reference | 出图/共享/图片/定妆_道具_公文_比例.png |
 | REF_121 | P1 | PROP_OFFICIAL_DOC | detail_closeup | 出图/共享/图片/定妆_PROP_OFFICIAL_DOC_detail_closeup.png |
-| REF_123 | P1 | PROP_GIFT_LOAD | scale_reference | 出图/共享/图片/定妆_道具_东京礼担_比例.png |
 | REF_124 | P1 | PROP_GIFT_LOAD | detail_closeup | 出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png |
 | REF_127 | P1 | LOC_CITY_GATE | empty_plate | 出图/共享/图片/定妆_LOC_CITY_GATE_empty_plate.png |
 | REF_128 | P1 | LOC_CITY_GATE | lighting_plate | 出图/共享/图片/定妆_LOC_CITY_GATE_lighting_plate.png |
-| REF_130 | P1 | PROP_WINDOW_CURTAIN | scale_reference | 出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png |
 | REF_131 | P1 | PROP_WINDOW_CURTAIN | detail_closeup | 出图/共享/图片/定妆_PROP_WINDOW_CURTAIN_detail_closeup.png |
 | REF_134 | P1 | PROP_CURTAIN_FORK | detail_closeup | 出图/共享/图片/定妆_PROP_CURTAIN_FORK_detail_closeup.png |
 

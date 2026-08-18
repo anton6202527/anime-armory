@@ -1,54 +1,29 @@
+import { apiJson } from "../lib/api";
 import type { SkillDefinition } from "./types";
 
 const BUILTIN_SERIES_IDS = new Set(["novel", "n2d", "comic", "ad", "mv", "song"]);
-const ALL_SKILL_FILE_LOADERS = import.meta.glob<string>(
-  "../../../../skills/**/*.{md,mdx,txt,json,jsonl,yaml,yml,py,sh,js,cjs,mjs,ts,tsx,css,html,toml,ini,csv}",
-  { query: "?raw", import: "default" },
-);
+const MAX_SOURCE_LIST_BYTES = 2 * 1024 * 1024;
+const MAX_SOURCE_FILE_BYTES = 1024 * 1024;
 
-type RawSkillFileLoader = () => Promise<string>;
-
-type ParsedSkillPath = {
-  skillName: string;
-  directoryPath: string;
-  relativePath: string;
-};
-
-function parseSkillPath(path: string): ParsedSkillPath | null {
-  const match = path.match(/\/skills\/(.+)$/);
-  if (!match) return null;
-
-  const [line, possibleChild, ...rest] = match[1].split("/");
-  if (!line || !possibleChild || !BUILTIN_SERIES_IDS.has(line)) return null;
-
-  if (possibleChild.startsWith(`${line}-`) && rest.length) {
-    return {
-      skillName: possibleChild,
-      directoryPath: `skills/${line}/${possibleChild}`,
-      relativePath: rest.join("/"),
-    };
-  }
-
-  return {
-    skillName: line,
-    directoryPath: `skills/${line}`,
-    relativePath: [possibleChild, ...rest].join("/"),
-  };
+function record(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : null;
 }
 
-function seriesSkillNames(skill: SkillDefinition) {
-  if (!BUILTIN_SERIES_IDS.has(skill.id)) return [];
-  return [...new Set(Object.keys(ALL_SKILL_FILE_LOADERS).flatMap((path) => {
-    const parsed = parseSkillPath(path);
-    if (!parsed) return [];
-    return parsed.skillName === skill.line || parsed.skillName.startsWith(`${skill.line}-`)
-      ? [parsed.skillName]
-      : [];
-  }))].sort((left, right) => {
-    if (left === skill.line) return -1;
-    if (right === skill.line) return 1;
-    return left.localeCompare(right);
-  });
+function unwrap(value: unknown, property: string): unknown {
+  const outer = record(value);
+  if (!outer) return value;
+  if (outer[property] !== undefined) return outer[property];
+  const data = record(outer.data);
+  return data?.[property] ?? outer.data ?? value;
+}
+
+function safeRelativePath(value: unknown): value is string {
+  if (typeof value !== "string" || !value || value.length > 1_024 || value.startsWith("/") || value.includes("\\")) {
+    return false;
+  }
+  return !value.split("/").some((segment) => !segment || segment === "." || segment === "..");
 }
 
 function compareFiles(left: SkillSourceFile, right: SkillSourceFile) {
@@ -98,7 +73,10 @@ export type SkillSourceFile = {
   name: string;
   path: string;
   relativePath: string;
-  load: RawSkillFileLoader;
+  skillId: string;
+  sourcePath: string;
+  inlineSource?: string;
+  size?: number;
 };
 
 export type SkillSourceGroup = {
@@ -108,46 +86,89 @@ export type SkillSourceGroup = {
   files: SkillSourceFile[];
 };
 
-export function listSkillSourceGroups(skill: SkillDefinition): SkillSourceGroup[] {
-  const names = seriesSkillNames(skill);
-  if (!names.length) {
-    const path = `my-skills/${skill.skill}/SKILL.md`;
-    return [{
-      id: skill.skill,
-      name: skill.skill,
-      path: `my-skills/${skill.skill}`,
-      files: [{
-        id: path,
-        name: "SKILL.md",
-        path,
-        relativePath: "SKILL.md",
-        load: async () => userSkillSource(skill),
-      }],
-    }];
-  }
-
-  return names.map((skillName) => {
-    const files = Object.entries(ALL_SKILL_FILE_LOADERS).flatMap(([path, load]) => {
-      const parsed = parseSkillPath(path);
-      if (!parsed || parsed.skillName !== skillName) return [];
-      return [{
-        id: `${parsed.directoryPath}/${parsed.relativePath}`,
-        name: parsed.relativePath.split("/").at(-1) ?? parsed.relativePath,
-        path: `${parsed.directoryPath}/${parsed.relativePath}`,
-        relativePath: parsed.relativePath,
-        load,
-      } satisfies SkillSourceFile];
-    }).sort(compareFiles);
-
-    return {
-      id: skillName,
-      name: skillName,
-      path: skillName === skill.line ? `skills/${skill.line}` : `skills/${skill.line}/${skillName}`,
-      files,
-    };
-  });
+function localSkillSourceGroups(skill: SkillDefinition): SkillSourceGroup[] {
+  const directoryPath = `my-skills/${skill.skill}`;
+  const path = `${directoryPath}/SKILL.md`;
+  return [{
+    id: skill.skill,
+    name: skill.skill,
+    path: directoryPath,
+    files: [{
+      id: path,
+      name: "SKILL.md",
+      path,
+      relativePath: "SKILL.md",
+      skillId: skill.id,
+      sourcePath: "SKILL.md",
+      inlineSource: userSkillSource(skill),
+    }],
+  }];
 }
 
-export async function loadSkillSourceFile(file: SkillSourceFile) {
-  return file.load();
+export async function listSkillSourceGroups(skill: SkillDefinition): Promise<SkillSourceGroup[]> {
+  if (!BUILTIN_SERIES_IDS.has(skill.id)) return localSkillSourceGroups(skill);
+
+  const value = await apiJson<unknown>(`/v1/skills/${encodeURIComponent(skill.id)}/sources`, {
+    method: "GET",
+    timeoutMs: 15_000,
+    maxResponseBytes: MAX_SOURCE_LIST_BYTES,
+  });
+  const sources = unwrap(value, "sources");
+  if (!Array.isArray(sources)) throw new Error("后端返回的 Skill 源文件列表格式无效");
+
+  const rootPath = `skills/${skill.line}`;
+  const groups = new Map<string, SkillSourceGroup>();
+  for (const item of sources) {
+    const source = record(item);
+    if (!source || !safeRelativePath(source.path)) continue;
+    const sourcePath = source.path;
+    const segments = sourcePath.split("/");
+    const possibleChild = segments[0] ?? "";
+    const isChild = possibleChild.startsWith(`${skill.line}-`) && segments.length > 1;
+    const groupId = isChild ? possibleChild : skill.id;
+    const groupPath = isChild ? `${rootPath}/${possibleChild}` : rootPath;
+    const relativePath = isChild ? segments.slice(1).join("/") : sourcePath;
+    const group = groups.get(groupId) ?? {
+      id: groupId,
+      name: groupId,
+      path: groupPath,
+      files: [],
+    };
+    group.files.push({
+      id: `${skill.id}:${sourcePath}`,
+      name: relativePath.split("/").at(-1) ?? relativePath,
+      path: `${groupPath}/${relativePath}`,
+      relativePath,
+      skillId: skill.id,
+      sourcePath,
+      ...(typeof source.size === "number" && Number.isSafeInteger(source.size) && source.size >= 0
+        ? { size: source.size }
+        : {}),
+    });
+    groups.set(groupId, group);
+  }
+
+  return [...groups.values()]
+    .map((group) => ({ ...group, files: group.files.sort(compareFiles) }))
+    .sort((left, right) => {
+      if (left.id === skill.id) return -1;
+      if (right.id === skill.id) return 1;
+      return left.id.localeCompare(right.id);
+    });
+}
+
+export async function loadSkillSourceFile(file: SkillSourceFile): Promise<string> {
+  if (file.inlineSource !== undefined) return file.inlineSource;
+  const value = await apiJson<unknown>(
+    `/v1/skills/${encodeURIComponent(file.skillId)}/source?path=${encodeURIComponent(file.sourcePath)}`,
+    {
+      method: "GET",
+      timeoutMs: 15_000,
+      maxResponseBytes: MAX_SOURCE_FILE_BYTES,
+    },
+  );
+  if (typeof value === "string") return value;
+  const source = record(unwrap(value, "source")) ?? record(value);
+  if (typeof source?.content !== "string") throw new Error("后端返回的 Skill 源文件格式无效");
+  return source.content;
 }

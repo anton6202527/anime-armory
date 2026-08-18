@@ -84,101 +84,101 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "channel": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
-      "value": true
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "value": false
     },
     "exact_model_id": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
-      "value": ""
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "value": "gpt-image-2"
     },
     "max_reference_images": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": 24
     },
     "model": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "GPT Image 2"
     },
     "model_precision": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
-      "value": "normalized_family"
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "value": "provider_model"
     },
     "negative_strategy": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "inline_constraints"
     },
     "official": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "output": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "prompt_language": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "zh"
     },
     "prompt_profile": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": [
         "aspect_ratio",
         "quality",
@@ -186,63 +186,62 @@
       ]
     },
     "reference_mode": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "cli_help+official_docs",
-      "observed_text": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
-      "source": "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-      "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "evidence_kind": "official_docs",
+      "observed_text": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
+      "source": "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     }
   },
-  "evidence_kind": "cli_help+official_docs",
+  "evidence_kind": "official_docs",
   "kind": "n2d_image_backend_refresh_evidence",
   "model_evidence": {
-    "exact_model_id": "",
+    "exact_model_id": "gpt-image-2",
     "normalized_model_label": "GPT Image 2",
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
-    "precision": "normalized_family"
+    "precision": "provider_model"
   },
-  "note": "本机 Codex CLI 可用，-i/--image 支持多图片输入；官方图像指南记录文本生成、图片编辑及多图输入能力。当前 Codex 访问层按 text2image + multi-reference 规划，不宣称持久主体 ID，不宣称 mask/edit 通道；确切 provider model id、单价与账户剩余额度未由本机 help 暴露，付费调用前仍以集中审批与实际返回为准。",
+  "note": "Official page confirms GPT Image 2 supports text input, image input/output, generation and image-edit endpoints, flexible sizes and high-fidelity image inputs; local Codex CLI confirms repeatable --image attachments, --json and output-schema. Current ordered multi-reference PNG adapter remains valid; no persistent subject-id claim and no backend mixing.",
   "source_urls": [
-    "https://developers.openai.com/api/docs/guides/image-generation"
+    "https://developers.openai.com/api/docs/models/gpt-image-2"
   ],
   "sources": [
-    "local codex-cli 0.147.0 --version/--help (-i/--image accepts repeated image inputs)",
-    "OpenAI official Image generation guide"
+    "OpenAI GPT Image 2 official model page checked 2026-08-18; local codex-cli 0.147.0 exec --help"
   ],
-  "verified_at": "2026-08-11"
+  "verified_at": "2026-08-18"
 }

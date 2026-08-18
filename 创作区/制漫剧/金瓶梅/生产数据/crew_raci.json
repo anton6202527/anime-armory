@@ -1,0 +1,126 @@
+{
+  "generated_at": "2026-08-15T12:09:31+00:00",
+  "kind": "n2d_crew_raci",
+  "roles": {
+    "assistant_director": {
+      "approves": [
+        "shooting_schedule"
+      ],
+      "consulted": [
+        "picture_lock"
+      ],
+      "responsible": [
+        "ai_call_sheet",
+        "ai_shooting_schedule",
+        "batch_queue"
+      ]
+    },
+    "compliance": {
+      "approves": [
+        "paid_distribution",
+        "delivery_lock"
+      ],
+      "consulted": [
+        "source_lock"
+      ],
+      "responsible": [
+        "rights",
+        "voice_authorization",
+        "platform_review",
+        "localization",
+        "ai_labeling"
+      ]
+    },
+    "director": {
+      "approves": [
+        "storyboard_lock",
+        "rough_cut_lock",
+        "picture_lock"
+      ],
+      "consulted": [
+        "script_lock",
+        "delivery_lock"
+      ],
+      "responsible": [
+        "director_blocking_pack",
+        "storyboard",
+        "animatic_packet",
+        "shot_progression_plan"
+      ]
+    },
+    "post_supervisor": {
+      "approves": [
+        "rough_cut_lock",
+        "picture_lock",
+        "delivery_lock"
+      ],
+      "consulted": [
+        "storyboard_lock"
+      ],
+      "responsible": [
+        "rough_cut",
+        "rough_cut_lock",
+        "picture_lock",
+        "sound_mix",
+        "subtitles",
+        "delivery_matrix"
+      ]
+    },
+    "producer": {
+      "approves": [
+        "source_lock",
+        "script_lock",
+        "storyboard_lock",
+        "delivery_lock"
+      ],
+      "consulted": [
+        "all_unlocks"
+      ],
+      "responsible": [
+        "development_pack",
+        "ai_shooting_schedule",
+        "budget",
+        "batch_governance"
+      ]
+    },
+    "script_supervisor": {
+      "approves": [
+        "continuity_bible",
+        "storyboard_lock"
+      ],
+      "consulted": [
+        "picture_lock",
+        "delivery_lock"
+      ],
+      "responsible": [
+        "continuity_breakdown",
+        "continuity_bible",
+        "entity_schedule",
+        "state_transition_manifest"
+      ]
+    },
+    "writer": {
+      "approves": [
+        "script_lock"
+      ],
+      "consulted": [
+        "storyboard_lock",
+        "continuity_bible"
+      ],
+      "responsible": [
+        "source_comprehension",
+        "voiceover",
+        "adaptation_delta",
+        "script_quality_contract"
+      ]
+    }
+  },
+  "status": "confirmed",
+  "unlock_policy": {
+    "decision_log": "生产数据/creative_decisions.jsonl",
+    "requires_affected_artifacts": true,
+    "requires_decision_log": true,
+    "requires_minimal_rerun_scope": true
+  },
+  "version": 1
+}

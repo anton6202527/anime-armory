@@ -162,10 +162,10 @@ export function CanvasPage({ work, onHome }: { work: WebWork; onHome: () => void
           <div className="agent-timeline">
             <div className="done"><i>✓</i><span><b>作品已创建</b><small>画布工作流已准备</small></span></div>
             <div className={job?.state === "succeeded" ? "done" : "current"}><i>{job?.state === "succeeded" ? "✓" : "2"}</i><span><b>提交创作任务</b><small>{job?.message ?? (gateway ? `已连接${gateway.label}` : "正在检测本地 Agent…")}</small></span></div>
-            <div className={job?.state === "succeeded" ? "current" : ""}><i>3</i><span><b>生成与审阅</b><small>{gateway?.mode === "local" ? "本地 CLI 完成后刷新作品画布" : "云端模型返回结果后更新画布"}</small></span></div>
+            <div className={job?.state === "succeeded" ? "current" : ""}><i>3</i><span><b>生成与审阅</b><small>后端模型返回结果后更新作品画布</small></span></div>
           </div>
           {job?.output && <pre className="agent-output" title="本地 Agent 最新输出">{job.output.slice(-4000)}</pre>}
-          <div className="agent-security-note"><b>{gateway?.mode === "local" ? "本地桥接已隔离" : "密钥只放服务端"}</b><span>{gateway?.mode === "local" ? "仅在你确认后，将任务发送到本机受控作品目录。" : "浏览器仅提交任务，不会接触模型 API Key。"}</span></div>
+          <div className="agent-security-note"><b>密钥只放服务端</b><span>浏览器仅提交 REST 任务，不会接触模型 API Key。</span></div>
         </aside>
       )}
 

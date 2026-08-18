@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-08-14T09:09:32+00:00",
+  "generated_at": "2026-08-15T02:37:49+00:00",
   "assets": [
     {
       "id": "LOC_JINGYANGGANG",
@@ -437,20 +437,28 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-12T02:33:08.947474+00:00"
+            "reviewed_at": "2026-08-15T10:37:55.053012+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:37:55.053129+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_反面.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:37:55.053145+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -522,7 +530,8 @@
         ],
         "status": "active"
       },
-      "self_check_at": "2026-08-12T02:33:08+00:00",
+      "weapon_like_role": "prop_only",
+      "self_check_at": "2026-08-15T10:37:55+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
       "face_consistency": {
@@ -849,20 +858,28 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-12T03:35:59.760072+00:00"
+            "reviewed_at": "2026-08-15T10:49:34.279861+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:49:34.279980+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_反面.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:49:34.279996+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -934,7 +951,7 @@
         ],
         "status": "active"
       },
-      "self_check_at": "2026-08-12T03:35:59+00:00",
+      "self_check_at": "2026-08-15T10:49:34+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
       "face_consistency": {
@@ -1526,20 +1543,28 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-12T07:27:54.222081+00:00"
+            "reviewed_at": "2026-08-15T02:29:16.342183+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T02:29:16.342316+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_道具_DOORFRAME_反面.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-08-15T02:29:16.342332+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -1611,7 +1636,7 @@
         ],
         "status": "active"
       },
-      "self_check_at": "2026-08-12T07:27:54+00:00",
+      "self_check_at": "2026-08-15T02:29:16+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
       "face_consistency": {
@@ -2042,24 +2067,30 @@
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:40:54.446922+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:40:54.447056+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png",
-          "status": "planned",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:40:54.447073+00:00"
           }
         }
       },
@@ -2117,7 +2148,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "SPILLED WINE",
@@ -2129,6 +2160,9 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-15T10:40:54+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "e554296ef79a3874ead671c0d89112527bae9eb3c1e77d1d3e0603a58b4848c7",
       "face_consistency": {
         "source": "machine_pixel",
         "checker": "face_consistency.verify_faceless",
@@ -2159,21 +2193,31 @@
           "path": "出图/共享/图片/定妆_道具_素布行李.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:21:45.879933+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
-          "status": "planned",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:21:45.880061+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_素布行李_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:21:45.880077+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -2230,7 +2274,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "只含武松个人物品，绳结与背负方向固定。",
@@ -2242,6 +2286,9 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-15T10:21:45+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "e3cdc5344ecf1a1d9966f0b19db560a7dd0e3c82be4fea4280d8ff01be6de805",
       "face_consistency": {
         "source": "machine_pixel",
         "checker": "face_consistency.verify_faceless",
@@ -2364,6 +2411,9 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-14T09:09:33+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
       "face_consistency": {
         "source": "machine_pixel",
         "checker": "face_consistency.verify_faceless",
@@ -2376,10 +2426,7 @@
             "max_ratio": 0.0
           }
         ]
-      },
-      "artifact_sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
-      "self_check_at": "2026-08-14T09:09:33+00:00",
-      "self_check_by": "image_qc.mark_finalized"
+      }
     },
     {
       "id": "LOC_COUNTY_YAMEN",
@@ -2559,17 +2606,31 @@
           "path": "出图/共享/图片/定妆_道具_公文.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:32:22.039614+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_公文_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:32:22.039735+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_公文_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:32:22.039749+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -2626,7 +2687,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "印章与纸张可见，正文全部后期 overlay 或保持不可读。",
@@ -2638,6 +2699,9 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-15T10:32:22+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "5cf63c225aed32779ed5b5b27275451402f3fc4a50affd337c87afade8af983b",
       "face_consistency": {
         "source": "machine_pixel",
         "checker": "face_consistency.verify_faceless",
@@ -2661,17 +2725,31 @@
           "path": "出图/共享/图片/定妆_道具_东京礼担.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-15T02:37:49.970089+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T02:37:49.970219+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_东京礼担_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-15T02:37:49.970235+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -2728,7 +2806,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "数量与捆扎方式在 CLIP13–15 保持一致。",
@@ -2740,6 +2818,9 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-15T02:37:49+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "47d374cc47a4d7f07fb7c675b51b8b2340691b3e87641be89dc5bcbc75dbfe29",
       "face_consistency": {
         "source": "machine_pixel",
         "checker": "face_consistency.verify_faceless",
@@ -2932,17 +3013,31 @@
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:46:15.089455+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:46:15.089578+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-08-15T10:46:15.089592+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -2999,7 +3094,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "WINDOW CURTAIN",
@@ -3011,6 +3106,9 @@
         ],
         "status": "active"
       },
+      "self_check_at": "2026-08-15T10:46:15+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "20b77b9553c83ca9276bcc4f122d2f5681ff3522dd2a5359b5553e95376d1a86",
       "face_consistency": {
         "source": "machine_pixel",
         "checker": "face_consistency.verify_faceless",

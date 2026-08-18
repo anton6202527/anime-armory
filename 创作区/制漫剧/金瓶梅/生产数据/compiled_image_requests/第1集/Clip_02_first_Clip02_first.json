@@ -1,0 +1,139 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=multi_subject; mode=firstframe; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_Clip_02_first_Clip02_first.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成一张正式多人剧情关键帧：本锚只呈现 storyboard 子镜头：虎冲、武松侧闪；虎掀、武松后撤 主体：浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕；BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装 主体布局：SLOT_1: CHAR_WUSONG/28岁打虎态 -> 画右/中景，primary 星标，区分锚点：浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕；SLOT_2: BEAST_TIGER/常态 -> 画左/桌边，区分锚点：BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装 动作瞬间：虎冲、武松侧闪；虎掀、武松后撤。；两次明确攻防分拍完成，虎保持上方，武松保持下方，不交换左右 构图：本锚专属景别/机位：50mm；继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别 场景：景阳冈夜间空地；梢棒；景阳冈冷青月色与土褐；阳谷街市灰暖；武大家室内由灶火暖橙逐步被雪夜冷蓝侵入；衙门与城门回到冷灰。；光位锚=LOC_JINGYANGGANG 月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。 LOC_YANGGU_STREET 冬日漫射天光自画面上方，店铺灶火作低位暖补光。 LOC_WUDA_HOME 窗雪冷光从画右后进入，炭盆暖光从画左下托脸… 光影：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸… 情绪焦点：本镜戏剧功能是完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。，观众应获得先因断棒惊一下，再因赤手迎虎得到昂扬爽感 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为CHAR_WUSONG/28岁打虎态的character参考 图2作为BEAST_TIGER/常态的character参考 图3作为CHAR_WUSONG/28岁打虎态的character参考 图4作为LOC_JINGYANGGANG的asset参考 图5作为PROP_QUARTERSTAFF的asset参考 保持一致：武松 CHAR_WUSONG/28岁打虎态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色…；无特殊资产拓扑；按 保持结构、数量、材质和归属；CHAR_WUSONG: 景阳冈酒后战损、梢棒断裂。；BEAST_TIGER: 完整扑击态；{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青… 帧动作唯一真值：first @ 0.0s 只表现 `虎冲、武松侧闪；虎掀、武松后撤。`；不得混入同一 Clip 的其它子镜头动作 物理关键帧版式铁律：只生成一个连续相机画面；禁止分屏、三联画、多格漫画、拼贴、接触表或把跳切/蒙太奇的多个时刻同时画进一张图；剪辑变化只由视频阶段完成 本帧当前状态硬约束：武松在画右半跪回望，猛虎转身准备再扑。；不得使用同 Clip 后续状态替代 专项连续性硬约束：继承猛虎转身再扑；梢棒先完整后断裂；武松末帧赤手未命中 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 2694,
+  "actual_submit_prompt_sha256": "498c68ef5d6b7fe6e22a2f877e1d4c99a94e14e886beb30b1ba04b17ab59e197",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=multi_subject; mode=firstframe; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_Clip_02_first_Clip02_first.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成一张正式多人剧情关键帧：本锚只呈现 storyboard 子镜头：虎冲、武松侧闪；虎掀、武松后撤 主体：浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕；BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装 主体布局：SLOT_1: CHAR_WUSONG/28岁打虎态 -> 画右/中景，primary 星标，区分锚点：浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕；SLOT_2: BEAST_TIGER/常态 -> 画左/桌边，区分锚点：BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装 动作瞬间：虎冲、武松侧闪；虎掀、武松后撤。；两次明确攻防分拍完成，虎保持上方，武松保持下方，不交换左右 构图：本锚专属景别/机位：50mm；继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别 场景：景阳冈夜间空地；梢棒；景阳冈冷青月色与土褐；阳谷街市灰暖；武大家室内由灶火暖橙逐步被雪夜冷蓝侵入；衙门与城门回到冷灰。；光位锚=LOC_JINGYANGGANG 月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。 LOC_YANGGU_STREET 冬日漫射天光自画面上方，店铺灶火作低位暖补光。 LOC_WUDA_HOME 窗雪冷光从画右后进入，炭盆暖光从画左下托脸… 光影：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸… 情绪焦点：本镜戏剧功能是完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。，观众应获得先因断棒惊一下，再因赤手迎虎得到昂扬爽感 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为CHAR_WUSONG/28岁打虎态的character参考 图2作为BEAST_TIGER/常态的character参考 图3作为CHAR_WUSONG/28岁打虎态的character参考 图4作为LOC_JINGYANGGANG的asset参考 图5作为PROP_QUARTERSTAFF的asset参考 保持一致：武松 CHAR_WUSONG/28岁打虎态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色…；无特殊资产拓扑；按 保持结构、数量、材质和归属；CHAR_WUSONG: 景阳冈酒后战损、梢棒断裂。；BEAST_TIGER: 完整扑击态；{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青… 帧动作唯一真值：first @ 0.0s 只表现 `虎冲、武松侧闪；虎掀、武松后撤。`；不得混入同一 Clip 的其它子镜头动作 物理关键帧版式铁律：只生成一个连续相机画面；禁止分屏、三联画、多格漫画、拼贴、接触表或把跳切/蒙太奇的多个时刻同时画进一张图；剪辑变化只由视频阶段完成 本帧当前状态硬约束：武松在画右半跪回望，猛虎转身准备再扑。；不得使用同 Clip 后续状态替代 专项连续性硬约束：继承猛虎转身再扑；梢棒先完整后断裂；武松末帧赤手未命中 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01"
+      },
+      {
+        "index": 2,
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUSONG__28岁打虎态_半身__5fef4c56eb8e_529x941_to_1024x1822.png",
+        "role": "character",
+        "sha256": "da1a2ae2a993079da3775ece4bb748ae5ac7fa738c54203ee9483c8ba482c57e"
+      },
+      {
+        "index": 4,
+        "owner": "LOC_JINGYANGGANG",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_景阳冈夜间空地__be4f71b6df2b_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "606ca1aab713e5bf9972d68e3757a2b744c4fb13416d7c0a9999861e6b324968"
+      },
+      {
+        "index": 5,
+        "owner": "PROP_QUARTERSTAFF",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_梢棒__717c7446a911_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "22d959b3f52a38c25abef44cdded9a4a123c5aff2c1ebf48da17f65a203ac200"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "47180e0a37770581433e266f991e3230746c19f415963a98117de16b8b9a6c18",
+    "compiler_decisions": [],
+    "execution_context_sha256": "bac1797e010c5265436ceb1dd110cf5b57dcc00f3a230e3bb282bb31f588cb00",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_verbose:2210>1500",
+        "submit_prompt_many_clauses:67>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 67,
+      "constraint_compression": {
+        "policy_guard_input": 8,
+        "policy_guard_output": 8,
+        "preserve_input": 4,
+        "preserve_output": 4
+      },
+      "estimated_text_tokens": 553,
+      "negative_chars": 0,
+      "prompt_chars": 2210,
+      "reference_count": 5
+    },
+    "mode": "firstframe",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成一张正式多人剧情关键帧：本锚只呈现 storyboard 子镜头：虎冲、武松侧闪；虎掀、武松后撤 主体：浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕；BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装 主体布局：SLOT_1: CHAR_WUSONG/28岁打虎态 -> 画右/中景，primary 星标，区分锚点：浓直眉深目·方颌短髭·宽肩精壮·深靛都头窄袖·旧皮护腕；SLOT_2: BEAST_TIGER/常态 -> 画左/桌边，区分锚点：BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装 动作瞬间：虎冲、武松侧闪；虎掀、武松后撤。；两次明确攻防分拍完成，虎保持上方，武松保持下方，不交换左右 构图：本锚专属景别/机位：50mm；继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别 场景：景阳冈夜间空地；梢棒；景阳冈冷青月色与土褐；阳谷街市灰暖；武大家室内由灶火暖橙逐步被雪夜冷蓝侵入；衙门与城门回到冷灰。；光位锚=LOC_JINGYANGGANG 月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。 LOC_YANGGU_STREET 冬日漫射天光自画面上方，店铺灶火作低位暖补光。 LOC_WUDA_HOME 窗雪冷光从画右后进入，炭盆暖光从画左下托脸… 光影：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸… 情绪焦点：本镜戏剧功能是完成三扑规则、制造断棒绝境，再用赤手反击抬高英雄值。，观众应获得先因断棒惊一下，再因赤手迎虎得到昂扬爽感 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为CHAR_WUSONG/28岁打虎态的character参考 图2作为BEAST_TIGER/常态的character参考 图3作为CHAR_WUSONG/28岁打虎态的character参考 图4作为LOC_JINGYANGGANG的asset参考 图5作为PROP_QUARTERSTAFF的asset参考 保持一致：武松 CHAR_WUSONG/28岁打虎态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色…；无特殊资产拓扑；按 保持结构、数量、材质和归属；CHAR_WUSONG: 景阳冈酒后战损、梢棒断裂。；BEAST_TIGER: 完整扑击态；{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青… 帧动作唯一真值：first @ 0.0s 只表现 `虎冲、武松侧闪；虎掀、武松后撤。`；不得混入同一 Clip 的其它子镜头动作 物理关键帧版式铁律：只生成一个连续相机画面；禁止分屏、三联画、多格漫画、拼贴、接触表或把跳切/蒙太奇的多个时刻同时画进一张图；剪辑变化只由视频阶段完成 本帧当前状态硬约束：武松在画右半跪回望，猛虎转身准备再扑。；不得使用同 Clip 后续状态替代 专项连续性硬约束：继承猛虎转身再扑；梢棒先完整后断裂；武松末帧赤手未命中 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01"
+      },
+      {
+        "index": 2,
+        "owner": "BEAST_TIGER/常态",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_WUSONG__28岁打虎态_半身__5fef4c56eb8e_529x941_to_1024x1822.png",
+        "role": "character",
+        "sha256": "da1a2ae2a993079da3775ece4bb748ae5ac7fa738c54203ee9483c8ba482c57e"
+      },
+      {
+        "index": 4,
+        "owner": "LOC_JINGYANGGANG",
+        "path": "生产数据/reference_enhanced/第1集/定妆_场景_景阳冈夜间空地__be4f71b6df2b_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "606ca1aab713e5bf9972d68e3757a2b744c4fb13416d7c0a9999861e6b324968"
+      },
+      {
+        "index": 5,
+        "owner": "PROP_QUARTERSTAFF",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_梢棒__717c7446a911_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "22d959b3f52a38c25abef44cdded9a4a123c5aff2c1ebf48da17f65a203ac200"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "4aaaa781f93a3570659d245b7573f5aea2e3e1302caf488c0da87b1f90e288a0",
+    "source_contract_text_sha256": "776a911634eb6694e3f7a5c51c5430c242ceedb6ced0f1ad2771d7aadd87fd8f",
+    "task_type": "multi_subject",
+    "version": 1
+  },
+  "created_at": "2026-08-17T06:34:49+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "a48cb82baa854cc7671e4d4033f28f9cc15637c74fe2969082dfc8c9ed3ba68b",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "Clip_02_first",
+  "target": "出图/第1集/图片/Clip02_first.png",
+  "version": 1
+}

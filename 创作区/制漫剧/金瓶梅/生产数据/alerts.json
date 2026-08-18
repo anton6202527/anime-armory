@@ -3,26 +3,26 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 17 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 27 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 17
+      "value": 27
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 17 项",
+      "message": "第1集 QA 阻断 27 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 17
+      "value": 27
     }
   ],
   "counts": {
     "critical": 1,
     "warn": 1
   },
-  "generated_at": "2026-08-14T09:11:55+00:00",
+  "generated_at": "2026-08-18T03:57:19+00:00",
   "kind": "n2d_production_alerts",
   "root": "创作区/制漫剧/金瓶梅",
   "thresholds": {

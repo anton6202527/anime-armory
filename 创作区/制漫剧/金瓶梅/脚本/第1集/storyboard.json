@@ -378,6 +378,16 @@
       "spectacle_story_function": "用清晰拆招而非混战，证明武松临危判断与意志。",
       "audience_effect": "先因断棒惊一下，再因赤手迎虎得到昂扬爽感。",
       "description": "三次攻防沿同一轴线逐步加速；梢棒劈下却折断，声场抽空后武松丢掉断棒握拳。",
+      "interaction_graph": [{
+        "participants": ["CHAR_WUSONG", "BEAST_TIGER", "PROP_QUARTERSTAFF"],
+        "contact_points": ["S02B-S02C: CHAR_WUSONG 双手分居 PROP_QUARTERSTAFF 棒身下段与中段", "S02C: PROP_QUARTERSTAFF 前段与树干边缘硬点单次接触后断裂", "BEAST_TIGER 只与泥地接触，不与 CHAR_WUSONG 或梢棒穿插"],
+        "body_part_ownership": {"CHAR_WUSONG": "双手属武松；抓棒、抛下断棒后改为双拳架起", "BEAST_TIGER": "四爪与虎尾均属猛虎"},
+        "holder_state": {"PROP_QUARTERSTAFF": "ground/unheld -> CHAR_WUSONG/both_hands -> broken_two_segments -> ground/unheld"},
+        "occlusion_order": ["CHAR_WUSONG 与 PROP_QUARTERSTAFF 在画面下方前中景", "断点与木屑在中层且不遮脸", "BEAST_TIGER 保持画面上方后层"],
+        "force_direction": "CHAR_WUSONG 从画面下方向上方抛棒，断木沿击打切线向两侧分离",
+        "release_frame": "S02D 起始：武松看清断棒后同时松手，两段落在画左脚边",
+        "transfer_event": "PROP_QUARTERSTAFF ground/unheld -> CHAR_WUSONG/both_hands at S02B; CHAR_WUSONG/both_hands -> ground/unheld at S02D"
+      }],
       "entity_schedule": {
         "characters": [
           "CHAR_WUSONG/酒后战损态",
@@ -951,6 +961,15 @@
       "dramatic_function": "先给兄弟重逢的真情，再让潘金莲的观察改变场景温度。",
       "audience_effect": "短暂放松后意识到新的欲望线已经开启。",
       "description": "武大放下担子抱住武松；武松扶稳哥哥。楼梯向上转场，潘金莲的视线先扫腰牌再停在武松脸上。",
+      "interaction_graph": [{
+        "participants": ["CHAR_WUSONG", "CHAR_WUDA", "CHAR_PANJINLIAN", "PROP_CAKE_POLE"],
+        "contact_points": ["S05A: CHAR_WUDA 双臂短暂环住 CHAR_WUSONG 躯干中段", "S05A: CHAR_WUSONG 右手扶 CHAR_WUDA 上臂，左手稳住 PROP_CAKE_POLE 担杆", "CHAR_PANJINLIAN 仅在楼上以视线接触腰牌与武松面部，无肢体接触"],
+        "body_part_ownership": {"CHAR_WUDA": "双臂属武大，拥抱后立即松开并转身领路", "CHAR_WUSONG": "右手扶兄长，左手只扶担杆；上楼前双手均释放"},
+        "holder_state": {"PROP_CAKE_POLE": "CHAR_WUDA/shoulder -> temporarily_stabilized_by_CHAR_WUSONG/left_hand -> street_ground/with_load"},
+        "occlusion_order": ["CHAR_WUSONG 街面中景主轴", "CHAR_WUDA 画右前层拥抱后退开", "PROP_CAKE_POLE 低位侧层不穿过躯干", "CHAR_PANJINLIAN 楼上后层、只在 S05C 进入主焦"],
+        "release_frame": "S05A 末拍：兄弟拥抱与扶担同时结束",
+        "transfer_event": "support_contact begins and releases within S05A; PROP_CAKE_POLE remains downstairs"
+      }],
       "entity_schedule": {
         "characters": [
           "CHAR_WUSONG/都头态",
@@ -1729,6 +1748,16 @@
       "dramatic_function": "把试探升级为明确越线，再以摔杯和警告完成武松的主动拒绝。",
       "audience_effect": "在酒盏越线的压迫后得到清晰、克制而有力的拒绝爽点。",
       "description": "半杯酒ECU越过中线；武松手背一挡，酒盏翻落，酒泼炭边爆响。武松起身占据竖屏高位，潘仍坐在左下。",
+      "interaction_graph": [{
+        "participants": ["CHAR_PANJINLIAN", "CHAR_WUSONG", "PROP_WINE_CUP", "PROP_BRAZIER", "PROP_SPILLED_WINE"],
+        "contact_points": ["S09A: CHAR_PANJINLIAN 右手握 PROP_WINE_CUP 杯身并由画左推过桌面中线", "S09B: CHAR_WUSONG 右手背与 PROP_WINE_CUP 杯沿单次短促接触", "PROP_SPILLED_WINE 只接触地面与 PROP_BRAZIER 炭盆边，不泼到人物"],
+        "body_part_ownership": {"CHAR_PANJINLIAN": "右手属潘金莲，杯翻后停在画左", "CHAR_WUSONG": "右手背属武松，只挡杯不握杯；起身后双手不碰潘金莲"},
+        "holder_state": {"PROP_WINE_CUP": "CHAR_PANJINLIAN/right_hand -> deflected/unheld -> floor/overturned", "PROP_SPILLED_WINE": "inside_PROP_WINE_CUP -> floor_and_brazier_edge"},
+        "occlusion_order": ["PROP_WINE_CUP 与两只手在前景插入层", "桌沿与 PROP_BRAZIER 在中央低层", "CHAR_PANJINLIAN 画左低位", "CHAR_WUSONG 画右起身高位"],
+        "force_direction": "CHAR_WUSONG 手背由画右向左短挡，杯子向中央下方翻落，酒液受重力下落",
+        "release_frame": "S09B 挡杯接触后立即：潘金莲松杯，武松不接手",
+        "transfer_event": "PROP_WINE_CUP holder CHAR_PANJINLIAN/right_hand -> unheld/overturned floor; no handoff to CHAR_WUSONG"
+      }],
       "entity_schedule": {
         "characters": [
           "CHAR_WUSONG/愤怒克制态",
@@ -2157,6 +2186,16 @@
       "spectacle_story_function": "行李、门槛和人物位移只服务于兄弟保护关系断裂，不把搬离拍成无意义动作展示。",
       "audience_effect": "感到他赢了当场伦理，却输掉对哥哥的保护位置。",
       "description": "行李绳ECU收紧，武松背起包袱；武大追一步发问。武松在门槛前说完，手不去碰门闩。",
+      "interaction_graph": [{
+        "participants": ["CHAR_WUSONG", "CHAR_WUDA", "CHAR_PANJINLIAN", "PROP_LUGGAGE", "PROP_DOOR_LATCH"],
+        "contact_points": ["S11A: CHAR_WUSONG 双手拉紧 PROP_LUGGAGE 行李绳后，背带接触其双肩", "S11B-S11C: CHAR_WUDA 与 CHAR_WUSONG 保持一臂距离，不拉扯不阻拦", "S11C: CHAR_WUSONG 只看 PROP_DOOR_LATCH，手与门闩保持可见空隙"],
+        "body_part_ownership": {"CHAR_WUSONG": "双手只用于系自己的行李；背起后手离绳，跨门槛时不碰门闩", "CHAR_WUDA": "双手属武大且不伸手拦人", "CHAR_PANJINLIAN": "后景静止，无肢体接触"},
+        "holder_state": {"PROP_LUGGAGE": "floor/unheld -> CHAR_WUSONG/both_hands_tightening -> CHAR_WUSONG/back_carried", "PROP_DOOR_LATCH": "door_mounted/untouched"},
+        "occlusion_order": ["PROP_LUGGAGE 绳结前景插入", "CHAR_WUSONG 画右中景至门槛主焦", "CHAR_WUDA 屋内中层", "CHAR_PANJINLIAN 画左后景焦外", "PROP_DOOR_LATCH 末拍插入且无手部遮挡"],
+        "force_direction": "无攻击力；CHAR_WUSONG 只将行李绳向自身收紧，CHAR_WUDA 不阻拦、不推拉",
+        "release_frame": "S11A 绳结收紧后武松松开绳头，行李由背带承重",
+        "transfer_event": "PROP_LUGGAGE floor/unheld -> CHAR_WUSONG/back_carried; PROP_DOOR_LATCH remains untouched"
+      }],
       "entity_schedule": {
         "characters": [
           "CHAR_WUSONG/搬离态",
@@ -2725,6 +2764,15 @@
       "dramatic_function": "武松把能想到的防线都交给哥哥，却不知道危险就在门内与窗外。",
       "audience_effect": "因‘我会回来’产生反讽性担忧，并期待他何时回返。",
       "description": "门外85mm双人反打，武松替武大整一下衣领后立即放手，叮嘱早闭门户；楼窗帘影在上方不抢焦。",
+      "interaction_graph": [{
+        "participants": ["CHAR_WUSONG", "CHAR_WUDA", "PROP_DOOR", "PROP_BADGE"],
+        "contact_points": ["S14A: CHAR_WUSONG 右手指腹只接触 CHAR_WUDA 领口布料，不触及颈部皮肤", "S14A 末: CHAR_WUSONG 右手离开领口，兄弟之间恢复非接触距离", "PROP_BADGE 始终固定在 CHAR_WUSONG 腰间"],
+        "body_part_ownership": {"CHAR_WUSONG": "右手属武松，单次整理武大衣领后立即收回身侧", "CHAR_WUDA": "领口与衣服属武大；武大只点头，不回抱、不抓手"},
+        "holder_state": {"PROP_BADGE": "CHAR_WUSONG/waist_fixed", "PROP_DOOR": "location_fixed/unheld"},
+        "occlusion_order": ["CHAR_WUDA 画左中景", "CHAR_WUSONG 右手与武大领口为中央接触层", "CHAR_WUSONG 画右中景", "PROP_DOOR 与礼担在后层"],
+        "release_frame": "S14A 整平领口的同拍末立即放手，S14B 开始时双方无肢体接触",
+        "transfer_event": "brief collar-adjustment contact begins and releases within S14A; no object handoff"
+      }],
       "entity_schedule": {
         "characters": [
           "CHAR_WUSONG/出城行装态",

@@ -1,0 +1,110 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_DOORFRAME_定妆_道具_DOORFRAME_反面_定妆_道具_DOORFRAME_反面.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_DOORFRAME_反面.png；本次目标是同一空门框的真实背面结构参考：摄影机移到门框背侧，完整展示两根立柱、双层上横梁、底槛、背侧榫接、墙体安装面和木构连接；门洞中央必须从上到下保持完全通透，尺寸、净空、木色、磨损与主参考一致。这是门框资产，不是门扇资产：绝对禁止在门洞内生成门扇、门板、栅板、帘子、横撑、门闩、把手或任何填充物… 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开；结构锁: 武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开；归属/用途: 剧情资产… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DOORFRAME的asset参考 图3作为PROP_DOORFRAME的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DOORFRAME结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1406,
+  "actual_submit_prompt_sha256": "0f9149ef0f46fe78f24f7be7801f73a08d386c8cacfdba22a41e49a9e5c65328",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_DOORFRAME_定妆_道具_DOORFRAME_反面_定妆_道具_DOORFRAME_反面.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_DOORFRAME_反面.png；本次目标是同一空门框的真实背面结构参考：摄影机移到门框背侧，完整展示两根立柱、双层上横梁、底槛、背侧榫接、墙体安装面和木构连接；门洞中央必须从上到下保持完全通透，尺寸、净空、木色、磨损与主参考一致。这是门框资产，不是门扇资产：绝对禁止在门洞内生成门扇、门板、栅板、帘子、横撑、门闩、把手或任何填充物… 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开；结构锁: 武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开；归属/用途: 剧情资产… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DOORFRAME的asset参考 图3作为PROP_DOORFRAME的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DOORFRAME结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_DOORFRAME",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DOORFRAME__ea91f08c672f_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "a623e1a512dbcee9b9100692277d0f61beb42d95fdcea98904de3fa78afb31cd"
+      },
+      {
+        "index": 3,
+        "owner": "PROP_DOORFRAME",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DOORFRAME_比例__8290ad629c77_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "f4062caabef8c4240435cf5a3428a6f95f5a64795acacfc53a6b38298e6c8d3f"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "35b05905c3456d814d1aeb4ae3ed29a26794ed2b1434231fa76cbebb21f6055f",
+    "compiler_decisions": [],
+    "execution_context_sha256": "60ff75d38eb954574f3c81cbbecf36169b75b05ee6b733a0a2494aff55769a5d",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:32>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 32,
+      "constraint_compression": {
+        "policy_guard_input": 3,
+        "policy_guard_output": 3,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 226,
+      "negative_chars": 0,
+      "prompt_chars": 903,
+      "reference_count": 3
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成独立生产级资产参考图：图片/定妆_道具_DOORFRAME_反面.png；本次目标是同一空门框的真实背面结构参考：摄影机移到门框背侧，完整展示两根立柱、双层上横梁、底槛、背侧榫接、墙体安装面和木构连接；门洞中央必须从上到下保持完全通透，尺寸、净空、木色、磨损与主参考一致。这是门框资产，不是门扇资产：绝对禁止在门洞内生成门扇、门板、栅板、帘子、横撑、门闩、把手或任何填充物… 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开；结构锁: 武大家屋内右后出入口的素木门框：两根暗褐老木立柱、一根横楣与低石/木门槛，榫卯固定于土墙；无拱券、无雕花、无牌匾，配同源粗板木门向内开；归属/用途: 剧情资产… 视觉风格：写实电影感·北宋市井国风漫剧；北宋市井的粗粝写实质感，人物比例自然，皮肤、麻布、木构、雪与炭火有真实材质；保留章回气韵但不用戏曲脸谱化表演；所有光有现实来源；冷月、冬日天光、窗雪与灶火/炭火对照，危险升级时减少暖色面积 图1作为STYLE_ANCHOR的style参考 图2作为PROP_DOORFRAME的asset参考 图3作为PROP_DOORFRAME的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 画幅：9:16 限制：仙侠化光效；艳情媚俗打光；现代妆容与塑料皮肤；清宫服饰；网红脸；猎奇血浆；随机霓虹；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让DOORFRAME结构/颜色/尺寸漂移；现代物件；结构漂移；数量漂移",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_北宋市井写实电影感__d9dd40df7bfe_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "b87edd69973bada957f2f6081e4616bf1a15fa4bf84653c00f466ce8f485f508"
+      },
+      {
+        "index": 2,
+        "owner": "PROP_DOORFRAME",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DOORFRAME__ea91f08c672f_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "a623e1a512dbcee9b9100692277d0f61beb42d95fdcea98904de3fa78afb31cd"
+      },
+      {
+        "index": 3,
+        "owner": "PROP_DOORFRAME",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_DOORFRAME_比例__8290ad629c77_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "f4062caabef8c4240435cf5a3428a6f95f5a64795acacfc53a6b38298e6c8d3f"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "5580b27c2867cb2c183ad0f3e7b4228a4cbba492472e719b7c33bbc2ebe444d2",
+    "source_contract_text_sha256": "fb05b1e7908e9553f76e439c48f83bdc8a00b8b958f58976886ac3795fe930e8",
+    "task_type": "prop_asset",
+    "version": 1
+  },
+  "created_at": "2026-08-15T02:25:09+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "5ac6e26e6e67fc5f82a39dce0e3dc0250c7cf7e6bbd8f2eeb33e6e773b87a96f",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "PROP_DOORFRAME::定妆_道具_DOORFRAME_反面",
+  "target": "出图/共享/图片/定妆_道具_DOORFRAME_反面.png",
+  "version": 1
+}

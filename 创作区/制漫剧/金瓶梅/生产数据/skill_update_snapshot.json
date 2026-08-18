@@ -1,11 +1,11 @@
 {
-  "created_at": "2026-08-14T09:10:32+00:00",
+  "created_at": "2026-08-15T02:29:32+00:00",
   "episodes": [
     "第1集"
   ],
   "files": {
     "skills/n2d/Q&A.md": "e35dc174333907c0dd9a99a2190691ec5b0a940ccf97e509697eb31d151db995",
-    "skills/n2d/SKILL.md": "a1a5f6a558844e92eae94dbfffa6af2cd227e9abaf5792aac9ed60247b6e94fe",
+    "skills/n2d/SKILL.md": "36a9c22afa2c4cce811364f411052d250a3a0ede6ca2c74de12b9a30f7f5c0a6",
     "skills/n2d/_lib/autonomy_policy.py": "3b307bc59a17a51e694bea22e421bee00fb1d2d099ebcfae6e7353b2583bf837",
     "skills/n2d/_lib/backend_smoke.py": "e350c97c3a686add93e8b6c919fadc8a7965ae76c72f4997f879a72c7ad3acbf",
     "skills/n2d/_lib/bgm_contract.py": "1ec1f68bcc9c6ed2e138354153a9079bee655f1d5a81c66749ce21cea425fb03",
@@ -105,7 +105,7 @@
     "skills/n2d/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d/n2d-image/scripts/candidate_select.py": "35ce58221bdd5aae1aeb0feab6e78431b18472ced1c3fb7a613ad8c6e7bf14d3",
     "skills/n2d/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d/n2d-image/scripts/codex_image_runner.py": "08ca69ae9a744e11d3434b2c863d8195f1a2abb2468098378b11960576549d02",
+    "skills/n2d/n2d-image/scripts/codex_image_runner.py": "530df0fdc5a3fdd60701063c62c4dd94854eb591f9f66ec41615d45b23016278",
     "skills/n2d/n2d-image/scripts/cover_pack.py": "307d68d9976d7f9995977a9a981ce0134fe134729b693578c44f20a9d818e536",
     "skills/n2d/n2d-image/scripts/derive_makeup_pack.py": "7035e566713b776c60d68c828e4869d89f076875b6a5f096df7beca2f1d7d0e6",
     "skills/n2d/n2d-image/scripts/derive_scene_views.py": "2fd54e45b22f225e394e3fe050973daf0fa32f0fa7f4d17ebef69720f6db7ba9",

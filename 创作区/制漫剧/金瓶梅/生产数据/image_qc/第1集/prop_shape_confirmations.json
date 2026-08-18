@@ -33,6 +33,134 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_BADGE",
+      "asset_name": "都头腰牌",
+      "confirmed_at": "2026-08-18T02:24:49+00:00",
+      "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
+      "reason": "已查看当前原像素并按首帧显现时点复核：都头腰牌与赏银尚未入画，未提前泄露且无错误替代物；同一梢棒仅以两段断木留在前景，数量与断口继承镜头2，无完整新棒、第三段或结构漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+      "shape_contract": [
+        "旧铜",
+        "木质克制质感",
+        "文字不烤入画面",
+        "约一掌高（12至16厘米）",
+        "宽度略窄于成年男子手掌",
+        "可单手完整握持"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_BADGE",
+      "asset_name": "都头腰牌",
+      "confirmed_at": "2026-08-18T02:40:38+00:00",
+      "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a1.png",
+      "png_sha256": "bb7d5b5bc3041c37454712e08d66607b118cd450c6ca37714918f7cd1bbf2a82",
+      "reason": "已查看当前重抽原像素：赏银为单枚掌心大小粗铸船形银铤，两端微翘、中部浅凹、锤铸银色质感明确，由猎户双手承接，不是布袋、现代金条或镜面首饰；都头腰牌在本时点尚未出现；断棒只作前景边缘的断裂木段残留，无完整新棒或额外结构。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+      "shape_contract": [
+        "旧铜",
+        "木质克制质感",
+        "文字不烤入画面",
+        "约一掌高（12至16厘米）",
+        "宽度略窄于成年男子手掌",
+        "可单手完整握持"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a1_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_BADGE",
+      "asset_name": "都头腰牌",
+      "confirmed_at": "2026-08-18T03:04:19+00:00",
+      "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a2.png",
+      "png_sha256": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
+      "reason": "已查看当前重抽原像素：旧铜矩形都头腰牌约一掌高、略窄于手掌，边框铆钉与克制磨损明确，无烤字或现代结构；赏银与两段断棒在阳谷街切点后均已退出画面，没有错误残留或替代物。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+      "shape_contract": [
+        "旧铜",
+        "木质克制质感",
+        "文字不烤入画面",
+        "约一掌高（12至16厘米）",
+        "宽度略窄于成年男子手掌",
+        "可单手完整握持"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a2_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_BADGE",
+      "asset_name": "都头腰牌",
+      "confirmed_at": "2026-08-18T03:26:05+00:00",
+      "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a3.png",
+      "png_sha256": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
+      "reason": "已查看当前重抽原始像素；武松右手下垂握持旧铜矩形都头腰牌，尺寸约一掌且无现代文字/标识；梢棒和赏银在家门前本时点均已退出画面，未出现数量或结构漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
+      "shape_contract": [
+        "旧铜",
+        "木质克制质感",
+        "文字不烤入画面",
+        "约一掌高（12至16厘米）",
+        "宽度略窄于成年男子手掌",
+        "可单手完整握持"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a3_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_BRAZIER",
       "asset_name": "炭盆",
       "confirmed_at": "2026-08-13T03:55:10+00:00",
@@ -372,6 +500,267 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T02:11:55+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip02_end.png",
+      "png_sha256": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
+      "reason": "已查看当前原像素：同一梢棒的两段断木保持在前景，恰为两段，武松双手均为空拳；无完整新棒、第三段、分叉或额外结构，继承 a3 弃棒状态。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_Clip02_end_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-17T06:39:31+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip02_first.png",
+      "png_sha256": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
+      "reason": "已查看当前原像素：武松右手握持单根直木梢棒，杆体连续、粗细合理，无分叉、无双棒、无额外刃口或现代结构；握持点与手腕连接自然。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_Clip02_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T02:24:49+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
+      "reason": "已查看当前原像素并按首帧显现时点复核：都头腰牌与赏银尚未入画，未提前泄露且无错误替代物；同一梢棒仅以两段断木留在前景，数量与断口继承镜头2，无完整新棒、第三段或结构漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-17T06:59:20+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP02_a1.png",
+      "png_sha256": "116401263082ce8ae1be0d3af054d26eac4554c647046eb3e6cb95e75177cfdd",
+      "reason": "已查看当前原像素：武松双手握持同一根完整直木梢棒，杆体连续、数量唯一、无分叉或额外结构；左右手各自自然连接同侧前臂，符合本时点抓棒状态。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a1_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T01:49:15+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP02_a2.png",
+      "png_sha256": "e9db4b83a9b1a39d1d4cf9309de92e8298fb24b1635b12e495ae3b4bafd52bfd",
+      "reason": "已查看当前原像素：同一根梢棒撞树后从中折断为两段，唯一断裂点和木屑明确；两段分别由武松左右手握持，未新增第二根完整梢棒、无分叉或额外结构，符合 a2 断棒瞬间。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a2_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T01:57:45+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP02_a3.png",
+      "png_sha256": "943c7e19fafa46a91f9ed116e934b1aaeae3bff43e51a8b80ec50e64bcc6b35b",
+      "reason": "已查看当前原像素：武松双手均已空手握拳；同一梢棒的两段断木落在前景，恰为两段、断口明确，无完整新棒、第三段、分叉或额外结构，符合弃断棒后的状态。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a3_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T02:40:38+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a1.png",
+      "png_sha256": "bb7d5b5bc3041c37454712e08d66607b118cd450c6ca37714918f7cd1bbf2a82",
+      "reason": "已查看当前重抽原像素：赏银为单枚掌心大小粗铸船形银铤，两端微翘、中部浅凹、锤铸银色质感明确，由猎户双手承接，不是布袋、现代金条或镜面首饰；都头腰牌在本时点尚未出现；断棒只作前景边缘的断裂木段残留，无完整新棒或额外结构。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a1_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T03:04:19+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a2.png",
+      "png_sha256": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
+      "reason": "已查看当前重抽原像素：旧铜矩形都头腰牌约一掌高、略窄于手掌，边框铆钉与克制磨损明确，无烤字或现代结构；赏银与两段断棒在阳谷街切点后均已退出画面，没有错误残留或替代物。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a2_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_QUARTERSTAFF",
+      "asset_name": "梢棒",
+      "confirmed_at": "2026-08-18T03:26:05+00:00",
+      "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a3.png",
+      "png_sha256": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
+      "reason": "已查看当前重抽原始像素；武松右手下垂握持旧铜矩形都头腰牌，尺寸约一掌且无现代文字/标识；梢棒和赏银在家门前本时点均已退出画面，未出现数量或结构漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "整棒与断棒两态",
+        "木纹",
+        "长度与断口保持一致"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a3_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_REWARD_SILVER",
       "asset_name": "REWARD SILVER",
       "confirmed_at": "2026-08-12T02:33:08+00:00",
@@ -406,6 +795,154 @@
       "shot": "shared_primary",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_shared_primary_定妆_道具_REWARD_SILVER_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_REWARD_SILVER",
+      "asset_name": "REWARD SILVER",
+      "confirmed_at": "2026-08-18T02:24:49+00:00",
+      "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
+      "reason": "已查看当前原像素并按首帧显现时点复核：都头腰牌与赏银尚未入画，未提前泄露且无错误替代物；同一梢棒仅以两段断木留在前景，数量与断口继承镜头2，无完整新棒、第三段或结构漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+      "shape_contract": [
+        "北宋官府赏银用粗铸银铤：低矮长方船形",
+        "马蹄形",
+        "两端微翘",
+        "中部浅凹",
+        "边缘与表面保留锤铸不规则质感",
+        "一枚约掌心可托",
+        "不得做成现代标准金条",
+        "纪念元宝或镜面首饰",
+        "单枚约成年男子掌心大小",
+        "可一手托住",
+        "不得大于整只手掌或小成硬币"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_REWARD_SILVER",
+      "asset_name": "REWARD SILVER",
+      "confirmed_at": "2026-08-18T02:40:38+00:00",
+      "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a1.png",
+      "png_sha256": "bb7d5b5bc3041c37454712e08d66607b118cd450c6ca37714918f7cd1bbf2a82",
+      "reason": "已查看当前重抽原像素：赏银为单枚掌心大小粗铸船形银铤，两端微翘、中部浅凹、锤铸银色质感明确，由猎户双手承接，不是布袋、现代金条或镜面首饰；都头腰牌在本时点尚未出现；断棒只作前景边缘的断裂木段残留，无完整新棒或额外结构。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+      "shape_contract": [
+        "北宋官府赏银用粗铸银铤：低矮长方船形",
+        "马蹄形",
+        "两端微翘",
+        "中部浅凹",
+        "边缘与表面保留锤铸不规则质感",
+        "一枚约掌心可托",
+        "不得做成现代标准金条",
+        "纪念元宝或镜面首饰",
+        "单枚约成年男子掌心大小",
+        "可一手托住",
+        "不得大于整只手掌或小成硬币"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a1_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_REWARD_SILVER",
+      "asset_name": "REWARD SILVER",
+      "confirmed_at": "2026-08-18T03:04:19+00:00",
+      "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a2.png",
+      "png_sha256": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
+      "reason": "已查看当前重抽原像素：旧铜矩形都头腰牌约一掌高、略窄于手掌，边框铆钉与克制磨损明确，无烤字或现代结构；赏银与两段断棒在阳谷街切点后均已退出画面，没有错误残留或替代物。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+      "shape_contract": [
+        "北宋官府赏银用粗铸银铤：低矮长方船形",
+        "马蹄形",
+        "两端微翘",
+        "中部浅凹",
+        "边缘与表面保留锤铸不规则质感",
+        "一枚约掌心可托",
+        "不得做成现代标准金条",
+        "纪念元宝或镜面首饰",
+        "单枚约成年男子掌心大小",
+        "可一手托住",
+        "不得大于整只手掌或小成硬币"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a2_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_REWARD_SILVER",
+      "asset_name": "REWARD SILVER",
+      "confirmed_at": "2026-08-18T03:26:05+00:00",
+      "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP03_a3.png",
+      "png_sha256": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
+      "reason": "已查看当前重抽原始像素；武松右手下垂握持旧铜矩形都头腰牌，尺寸约一掌且无现代文字/标识；梢棒和赏银在家门前本时点均已退出画面，未出现数量或结构漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
+      "shape_contract": [
+        "北宋官府赏银用粗铸银铤：低矮长方船形",
+        "马蹄形",
+        "两端微翘",
+        "中部浅凹",
+        "边缘与表面保留锤铸不规则质感",
+        "一枚约掌心可托",
+        "不得做成现代标准金条",
+        "纪念元宝或镜面首饰",
+        "单枚约成年男子掌心大小",
+        "可一手托住",
+        "不得大于整只手掌或小成硬币"
+      ],
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a3_compare.png",
       "verdict": "ok"
     },
     {
@@ -606,6 +1143,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-08-14T01:53:32+00:00",
+  "updated_at": "2026-08-18T03:26:05+00:00",
   "version": 1
 }

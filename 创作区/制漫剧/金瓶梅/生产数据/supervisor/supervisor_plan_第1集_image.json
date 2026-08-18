@@ -1,0 +1,693 @@
+{
+  "dispatch": {
+    "action_contract": {
+      "owner": "n2d-image",
+      "paid_or_irreversible": true,
+      "prework_steps": [
+        "episode_graph",
+        "doctor",
+        "production_breakdown",
+        "reference_slot_gate",
+        "identity",
+        "reference_plan",
+        "image_preflight_gate",
+        "compliance"
+      ],
+      "requires_context_pack": true,
+      "requires_creative_loop": false,
+      "requires_human_approval": true,
+      "requires_trace": true,
+      "schema_version": 2,
+      "specialist": "n2d-visual-agent",
+      "stage_key": "image",
+      "stop_policy": "needs_payment_confirm",
+      "supervisor_contract": {
+        "may_auto_run_deterministic_prework": true,
+        "may_call_specialist": true,
+        "may_change_backend_without_adapter": false,
+        "may_execute_paid_work": false,
+        "may_write_progress_without_stage_verification": false
+      }
+    },
+    "allowed_operations": [
+      "run deterministic prework already declared by run.py",
+      "read context_pack before opening full references",
+      "call the selected specialist for draft/evaluation when should_call_specialist=true",
+      "write supervisor plan under 生产数据/supervisor"
+    ],
+    "context_pack": {
+      "command": "python3 skills/n2d/scripts/context_pack.py 创作区/制漫剧/金瓶梅 第1集 image --write --json",
+      "relpath": "生产数据/context_packs/context_pack_第1集_image.json",
+      "rule": "先读 context pack，再按缺口打开完整 references，避免把整套 n2d 文档塞进上下文。"
+    },
+    "creative_loop": null,
+    "forbidden_operations": [
+      "execute paid generation",
+      "override compliance or gate blocks",
+      "change backend without adapter evidence",
+      "write _进度.md directly",
+      "replace stage skill contracts"
+    ],
+    "human_gate": {
+      "reason": "repair_or_decision_required",
+      "required": true
+    },
+    "runtime_guardrails": {
+      "carried_constraints": {
+        "forbidden_operations": [
+          "execute paid generation",
+          "override compliance or gate blocks",
+          "change backend without adapter evidence",
+          "write _进度.md directly",
+          "replace stage skill contracts"
+        ],
+        "human_gate": {
+          "reason": "repair_or_decision_required",
+          "required": true
+        }
+      },
+      "constraints_fingerprint": "ef67cd4ae145b4dd",
+      "loop_budget_exhausted": false,
+      "max_dispatch_rounds": 6,
+      "on_exhaustion": "loop_budget_exhausted=true → 停止自动派发、升级人工决策（不得继续自动重试烧成本）",
+      "outputs_require_gate_recheck": true,
+      "round_index": 0,
+      "specialist_timeout_seconds": 600,
+      "tool_use_policy": "只调 run.py 声明的确定性 prework 与选定 specialist；未声明工具调用视为越界（工具误用护栏）"
+    },
+    "should_call_specialist": false,
+    "specialist": {
+      "allowed_stage_keys": [
+        "image_prompt",
+        "image",
+        "video_prompt",
+        "video"
+      ],
+      "may_execute_paid_work": false,
+      "may_write_progress": false,
+      "must_use": [
+        "context_pack",
+        "creative_loop for prompt stages",
+        "model_router"
+      ],
+      "name": "n2d-visual-agent",
+      "scope": "出图 prompt、视频 prompt、模型路由、身份/资产/运动契约继承"
+    },
+    "stage_key": "image",
+    "stop_reason": "prework_failed"
+  },
+  "episode": "第1集",
+  "kind": "n2d_supervisor_plan",
+  "next_action": {
+    "action_card": {
+      "block_reason": "引用槽位合同结构已确认；当前缺的是共享定妆/场景/道具的真实图片，不是合同文本。保持逐镜付费生图阻断，先完成共享资产自举：风格锚 → 主角正面 → 五角独立图/turnaround/六联表，每张机器 QC + 实际查看通过后才下一张。当前无付费授权时只可 dry-run；获明确授权且确认 style_identity_lock 后，首张命令：`python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"创作区/制漫剧/金瓶梅\" 第1集 --shared-targets all --max-shared-targets 1`。 修复该前置脚本/产物后再继续；不能把 warn/skip 当放行。；stage=image_preflight；return_to=image_prompt；先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；findings=创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_preflight_第1集.json",
+      "blocking_bundle": {
+        "blocked": true,
+        "category": "contract_or_gate",
+        "graph_hash": "e6c3d15e85183e39b1af804152e61a3397e1a80d2f4d2879e65e9d3ca14036de",
+        "path": "创作区/制漫剧/金瓶梅/生产数据/blocking_bundles/blocking_第1集_image.json"
+      },
+      "context_pack": {
+        "command": "python3 skills/n2d/scripts/context_pack.py 创作区/制漫剧/金瓶梅 第1集 image --write --json",
+        "relpath": "生产数据/context_packs/context_pack_第1集_image.json",
+        "rule": "先读 context pack，再按缺口打开完整 references，避免把整套 n2d 文档塞进上下文。"
+      },
+      "exact_command": "n2d-image 创作区/制漫剧/金瓶梅 第1集",
+      "headline": "第1集 出图：确定性前置失败",
+      "prework_blocks": [
+        {
+          "message": "引用槽位合同结构已确认；当前缺的是共享定妆/场景/道具的真实图片，不是合同文本。保持逐镜付费生图阻断，先完成共享资产自举：风格锚 → 主角正面 → 五角独立图/turnaround/六联表，每张机器 QC + 实际查看通过后才下一张。当前无付费授权时只可 dry-run；获明确授权且确认 style_identity_lock 后，首张命令：`python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"创作区/制漫剧/金瓶梅\" 第1集 --shared-targets all --max-shared-targets 1`。",
+          "step": "preventive_contracts"
+        }
+      ],
+      "prework_status_summary": {
+        "counts": {
+          "block": 2,
+          "ok": 3,
+          "pass": 14,
+          "skip": 0,
+          "warn": 0
+        },
+        "steps": [
+          {
+            "status": "pass",
+            "step": "episode_graph"
+          },
+          {
+            "status": "pass",
+            "step": "context_pack"
+          },
+          {
+            "status": "pass",
+            "step": "genre_pack_context"
+          },
+          {
+            "status": "ok",
+            "step": "doctor"
+          },
+          {
+            "status": "pass",
+            "step": "autonomy_signoff_p3"
+          },
+          {
+            "status": "pass",
+            "step": "production_breakdown"
+          },
+          {
+            "status": "block",
+            "step": "preventive_contracts"
+          },
+          {
+            "status": "pass",
+            "step": "production_locks"
+          },
+          {
+            "status": "ok",
+            "step": "identity"
+          },
+          {
+            "status": "pass",
+            "step": "memory_anchor_plan"
+          },
+          {
+            "status": "pass",
+            "step": "reference_plan"
+          },
+          {
+            "status": "pass",
+            "step": "identity_eval_pack"
+          },
+          {
+            "status": "pass",
+            "step": "no_cost_reference_pack"
+          },
+          {
+            "status": "pass",
+            "step": "scene_reference_plan"
+          },
+          {
+            "status": "pass",
+            "step": "keyshot_candidates"
+          },
+          {
+            "status": "pass",
+            "step": "no_cost_image_pack"
+          },
+          {
+            "status": "pass",
+            "step": "series_consistency"
+          },
+          {
+            "status": "block",
+            "step": "gate"
+          },
+          {
+            "status": "ok",
+            "step": "compliance"
+          }
+        ]
+      },
+      "specialist": {
+        "allowed_stage_keys": [
+          "image_prompt",
+          "image",
+          "video_prompt",
+          "video"
+        ],
+        "may_execute_paid_work": false,
+        "may_write_progress": false,
+        "must_use": [
+          "context_pack",
+          "creative_loop for prompt stages",
+          "model_router"
+        ],
+        "name": "n2d-visual-agent",
+        "scope": "出图 prompt、视频 prompt、模型路由、身份/资产/运动契约继承"
+      },
+      "to_user": "引用槽位合同结构已确认；当前缺的是共享定妆/场景/道具的真实图片，不是合同文本。保持逐镜付费生图阻断，先完成共享资产自举：风格锚 → 主角正面 → 五角独立图/turnaround/六联表，每张机器 QC + 实际查看通过后才下一张。当前无付费授权时只可 dry-run；获明确授权且确认 style_identity_lock 后，首张命令：`python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"创作区/制漫剧/金瓶梅\" 第1集 --shared-targets all --max-shared-targets 1`。 修复该前置脚本/产物后再继续；不能把 warn/skip 当放行。"
+    },
+    "action_contract": {
+      "owner": "n2d-image",
+      "paid_or_irreversible": true,
+      "prework_steps": [
+        "episode_graph",
+        "doctor",
+        "production_breakdown",
+        "reference_slot_gate",
+        "identity",
+        "reference_plan",
+        "image_preflight_gate",
+        "compliance"
+      ],
+      "requires_context_pack": true,
+      "requires_creative_loop": false,
+      "requires_human_approval": true,
+      "requires_trace": true,
+      "schema_version": 2,
+      "specialist": "n2d-visual-agent",
+      "stage_key": "image",
+      "stop_policy": "needs_payment_confirm",
+      "supervisor_contract": {
+        "may_auto_run_deterministic_prework": true,
+        "may_call_specialist": true,
+        "may_change_backend_without_adapter": false,
+        "may_execute_paid_work": false,
+        "may_write_progress_without_stage_verification": false
+      }
+    },
+    "auto_continue": false,
+    "entry_checks": [
+      {
+        "detail": "DRIFT={\"status\":\"clean\"}",
+        "status": "clean",
+        "step": "source_check"
+      },
+      {
+        "detail": "episode=第1集; rebuild_needed=False; changed_skills=0; changed_files=0; source_drift=clean",
+        "episode": "第1集",
+        "plan": {
+          "baseline_bootstrapped": false,
+          "changed_files": [],
+          "changed_skills": [],
+          "commands": [],
+          "contract_inheritance": null,
+          "created_at": "2026-08-15T02:19:03+00:00",
+          "current_stage": "image",
+          "current_todo": {
+            "column": "出图",
+            "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集",
+            "label": "出图",
+            "note": "",
+            "skill": "n2d-image",
+            "stage_key": "image",
+            "status": "95/179"
+          },
+          "episode": "第1集",
+          "execution_steps": [],
+          "gate_refresh_needed": false,
+          "gate_refresh_stages": [],
+          "image_consistency": {
+            "advisory": 5,
+            "consistent": true,
+            "degraded": true,
+            "freshness": "fresh",
+            "hard_blocks": 0,
+            "precision_level": "full",
+            "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md",
+            "samples": [
+              "reference_slot_gate: 道具/场景 PROP_DOORFRAME 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_DOORFRAME_反面.png 不存在",
+              "reference_slot_gate: 道具/场景 PROP_GIFT_LOAD 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_东京礼担_比例.png 不存在；出图/共享/图片/定妆_道具_东京礼担_手持.png 不存在"
+            ],
+            "status": "ok",
+            "verdict": "review"
+          },
+          "image_qc_environment": {
+            "advisory": 5,
+            "degraded": true,
+            "finding_samples": [
+              "reference_slot_gate: 道具/场景 PROP_DOORFRAME 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_DOORFRAME_反面.png 不存在",
+              "reference_slot_gate: 道具/场景 PROP_GIFT_LOAD 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_东京礼担_比例.png 不存在；出图/共享/图片/定妆_道具_东京礼担_手持.png 不存在"
+            ],
+            "freshness": "fresh",
+            "hard_blocks": 0,
+            "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+            "jump_to_stage": "video",
+            "precision_level": "full",
+            "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+            "recommended_install": "",
+            "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.json",
+            "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md",
+            "status": "ok",
+            "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+            "verdict": "review"
+          },
+          "kind": "n2d_skill_update_plan",
+          "needs_record": false,
+          "newly_relevant_skills": [],
+          "notes": [
+            "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 28 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP02_a2.png, 出图/第1集/图片/EP01_CLIP02_a3.png"
+          ],
+          "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/skill_update_plan_第1集.json",
+          "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/skill_update_plan_第1集.md",
+          "rebuild_needed": false,
+          "regen_mode": "最小",
+          "relevant_skills": [
+            "n2d",
+            "n2d-batch",
+            "n2d-dashboard",
+            "n2d-image",
+            "n2d-lora",
+            "n2d-review",
+            "n2d-script",
+            "n2d-update",
+            "n2d-voice"
+          ],
+          "rerun_from": null,
+          "rerun_until": "image",
+          "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+          "shared_lock_changed_files": [],
+          "shared_lock_reuse": false,
+          "smart_suggestions": [],
+          "snapshot_changed_files": [],
+          "source_drift": {
+            "status": "clean"
+          },
+          "strict_image_refresh": false,
+          "three_frame_compliance": {
+            "backend": null,
+            "compliant": false,
+            "enforced": true,
+            "exempt_clips": 0,
+            "missing_endframe_clips": [],
+            "missing_frame_files": [
+              {
+                "clip_id": "EP01_CLIP01",
+                "path": "出图/第1集/图片/EP01_CLIP01_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP02",
+                "path": "出图/第1集/图片/EP01_CLIP02_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP02",
+                "path": "出图/第1集/图片/EP01_CLIP02_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP02",
+                "path": "出图/第1集/图片/EP01_CLIP02_a3.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP03",
+                "path": "出图/第1集/图片/EP01_CLIP03_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP03",
+                "path": "出图/第1集/图片/EP01_CLIP03_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP03",
+                "path": "出图/第1集/图片/EP01_CLIP03_a3.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP04",
+                "path": "出图/第1集/图片/EP01_CLIP04_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP05",
+                "path": "出图/第1集/图片/EP01_CLIP05_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP05",
+                "path": "出图/第1集/图片/EP01_CLIP05_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP06",
+                "path": "出图/第1集/图片/EP01_CLIP06_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP06",
+                "path": "出图/第1集/图片/EP01_CLIP06_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP07",
+                "path": "出图/第1集/图片/EP01_CLIP07_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP07",
+                "path": "出图/第1集/图片/EP01_CLIP07_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP08",
+                "path": "出图/第1集/图片/EP01_CLIP08_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP09",
+                "path": "出图/第1集/图片/EP01_CLIP09_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP09",
+                "path": "出图/第1集/图片/EP01_CLIP09_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP09",
+                "path": "出图/第1集/图片/EP01_CLIP09_a3.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP10",
+                "path": "出图/第1集/图片/EP01_CLIP10_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP10",
+                "path": "出图/第1集/图片/EP01_CLIP10_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP11",
+                "path": "出图/第1集/图片/EP01_CLIP11_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP11",
+                "path": "出图/第1集/图片/EP01_CLIP11_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP12",
+                "path": "出图/第1集/图片/EP01_CLIP12_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP13",
+                "path": "出图/第1集/图片/EP01_CLIP13_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP13",
+                "path": "出图/第1集/图片/EP01_CLIP13_a2.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP14",
+                "path": "出图/第1集/图片/EP01_CLIP14_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP15",
+                "path": "出图/第1集/图片/EP01_CLIP15_a1.png",
+                "role": "midframe"
+              },
+              {
+                "clip_id": "EP01_CLIP15",
+                "path": "出图/第1集/图片/EP01_CLIP15_a2.png",
+                "role": "midframe"
+              }
+            ],
+            "policy_mode": "risk_only",
+            "required_anchor_clips": [
+              "EP01_CLIP01",
+              "EP01_CLIP02",
+              "EP01_CLIP03",
+              "EP01_CLIP04",
+              "EP01_CLIP05",
+              "EP01_CLIP06",
+              "EP01_CLIP07",
+              "EP01_CLIP08",
+              "EP01_CLIP09",
+              "EP01_CLIP10",
+              "EP01_CLIP11",
+              "EP01_CLIP12",
+              "EP01_CLIP13",
+              "EP01_CLIP14",
+              "EP01_CLIP15"
+            ],
+            "total_clips": 15,
+            "violating_clips": []
+          }
+        },
+        "stage_key": "image",
+        "status": "ok",
+        "step": "update_plan"
+      }
+    ],
+    "frontier": {
+      "ep": "第1集",
+      "label": "出图",
+      "owner": "n2d-image",
+      "stage_key": "image"
+    },
+    "gate": {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "blocked": true,
+      "findings_path": "创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_preflight_第1集.json",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "stage": "image_preflight"
+    },
+    "prework": [
+      {
+        "detail": "nodes=16 gaps=0",
+        "path": "创作区/制漫剧/金瓶梅/生产数据/episode_graph_第1集.json",
+        "status": "pass",
+        "step": "episode_graph"
+      },
+      {
+        "detail": "episode=第1集; stage=image; files=7; missing=1",
+        "status": "pass",
+        "step": "context_pack"
+      },
+      {
+        "detail": "genres=- activation=genre_unset active=0",
+        "status": "pass",
+        "step": "genre_pack_context"
+      },
+      {
+        "image_backend": "ok",
+        "status": "ok",
+        "step": "doctor",
+        "voice": {
+          "heavy_env": false,
+          "say": true
+        }
+      },
+      {
+        "detail": "already_approved · owner-delegated · hash-bound",
+        "status": "pass",
+        "step": "autonomy_signoff_p3"
+      },
+      {
+        "check_path": "创作区/制漫剧/金瓶梅/生产数据/production_breakdown_check_第1集.json",
+        "detail": "9/9 checks passed",
+        "status": "pass",
+        "step": "production_breakdown"
+      },
+      {
+        "block_type": "shared_asset_bootstrap_required",
+        "bootstrap_command": "python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"创作区/制漫剧/金瓶梅\" 第1集 --shared-targets all --max-shared-targets 1",
+        "check_path": "生产数据/preventive_contracts_image_第1集.json",
+        "contract_path": "脚本/第1集/preventive_contracts.json",
+        "detail": "道具/场景 PROP_DOORFRAME 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_DOORFRAME_反面.png 不存在",
+        "requires_payment_confirm": true,
+        "stage": "image",
+        "status": "block",
+        "step": "preventive_contracts"
+      },
+      {
+        "check_path": null,
+        "detail": "status=pass; episode=第1集; stage=image; summary(block=0)",
+        "stage": "image",
+        "status": "pass",
+        "step": "production_locks"
+      },
+      {
+        "status": "ok",
+        "step": "identity"
+      },
+      {
+        "_cached": true,
+        "detail": "status=ready; episode=第1集; path=创作区/制漫剧/金瓶梅/生产数据/memory_anchor_plan_第1集.json",
+        "status": "pass",
+        "step": "memory_anchor_plan"
+      },
+      {
+        "_cached": true,
+        "detail": "镜头 15 ｜ 弱后端×大变化镜 15 ｜ 待注册主体 0 ｜ 待升LoRA 2",
+        "status": "pass",
+        "step": "reference_plan"
+      },
+      {
+        "_cached": true,
+        "detail": "summary(failed=0)",
+        "status": "pass",
+        "step": "identity_eval_pack"
+      },
+      {
+        "_cached": true,
+        "detail": "episode=第1集; summary(total=164)",
+        "status": "pass",
+        "step": "no_cost_reference_pack"
+      },
+      {
+        "detail": "episode=第1集",
+        "status": "pass",
+        "step": "scene_reference_plan"
+      },
+      {
+        "_cached": true,
+        "detail": "episode=第1集; summary(keyshot_count=15, planned_candidates=79)",
+        "status": "pass",
+        "step": "keyshot_candidates"
+      },
+      {
+        "_cached": true,
+        "detail": "episode=第1集; summary(clips=15, reference_generation_tasks=87, keyshot_candidate_tasks=15, regional_construct_manifests=15, shot_packages=15)",
+        "status": "pass",
+        "step": "no_cost_image_pack"
+      },
+      {
+        "detail": "status=pass; required=True; issues=0; path=创作区/制漫剧/金瓶梅/设定库/series_consistency.json",
+        "status": "pass",
+        "step": "series_consistency"
+      },
+      {
+        "stage": "image_preflight",
+        "status": "block",
+        "step": "gate"
+      },
+      {
+        "status": "ok",
+        "step": "compliance"
+      }
+    ],
+    "stop_reason": "prework_failed",
+    "trace": {
+      "action": "prework_failed",
+      "episode": "第1集",
+      "idempotency_key": "",
+      "kind": "n2d_trace_context",
+      "parent_trace_id": "",
+      "root_hash": "4626aefca587",
+      "span_id": "3e0bef242d235592",
+      "stage_key": "image",
+      "trace_id": "tr_image_4626aefca587_20260815T021914Z_23c98f9e",
+      "version": 1
+    }
+  },
+  "root": "创作区/制漫剧/金瓶梅",
+  "summary": {
+    "constraints_drift": false,
+    "human_gate_required": true,
+    "loop_budget_exhausted": false,
+    "round_index": 0,
+    "should_call_specialist": false,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_reason": "prework_failed"
+  },
+  "version": 1
+}

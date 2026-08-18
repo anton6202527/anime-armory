@@ -1,7 +1,7 @@
 # 无成本图片增强参考档
 
 - episode: 第1集
-- total: 164 ｜ ready: 77 ｜ planned: 87
+- total: 164 ｜ ready: 84 ｜ planned: 80
 - multi_subject_clips: EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09、EP01_CLIP10、EP01_CLIP11、EP01_CLIP12、EP01_CLIP13、EP01_CLIP14、EP01_CLIP15
 
 | Scope | Owner | Slot | Status | Path | Reason |
@@ -17,9 +17,9 @@
 | character | CHAR_WUSONG/28岁打虎态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_WUSONG/28岁打虎态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_WUSONG_28岁打虎态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
 | character | BEAST_TIGER/常态 | front | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | BEAST_TIGER/常态 | three_quarter | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | BEAST_TIGER/常态 | side | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | BEAST_TIGER/常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | BEAST_TIGER/常态 | three_quarter | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | BEAST_TIGER/常态 | side | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | BEAST_TIGER/常态 | rear_three_quarter | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | back | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
 | character | BEAST_TIGER/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
@@ -115,7 +115,7 @@
 | asset | PROP_SPILLED_WINE | scale_reference | ready | 出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_SPILLED_WINE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_SPILLED_WINE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_LUGGAGE | primary | ready | 出图/共享/图片/定妆_道具_素布行李.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_LUGGAGE | scale_reference | planned | 出图/共享/图片/定妆_道具_素布行李_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_LUGGAGE | scale_reference | ready | 出图/共享/图片/定妆_道具_素布行李_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_LUGGAGE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_DOOR | primary | ready | 出图/共享/图片/定妆_道具_场景木门.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_DOOR | scale_reference | ready | 出图/共享/图片/定妆_道具_场景木门_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
@@ -125,17 +125,17 @@
 | asset | LOC_COUNTY_YAMEN | empty_plate | planned | 出图/共享/图片/定妆_LOC_COUNTY_YAMEN_empty_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_COUNTY_YAMEN | lighting_plate | planned | 出图/共享/图片/定妆_LOC_COUNTY_YAMEN_lighting_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | PROP_OFFICIAL_DOC | primary | ready | 出图/共享/图片/定妆_道具_公文.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_OFFICIAL_DOC | scale_reference | planned | 出图/共享/图片/定妆_道具_公文_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_OFFICIAL_DOC | scale_reference | ready | 出图/共享/图片/定妆_道具_公文_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_OFFICIAL_DOC | detail_closeup | planned | 出图/共享/图片/定妆_PROP_OFFICIAL_DOC_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_GIFT_LOAD | primary | ready | 出图/共享/图片/定妆_道具_东京礼担.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_GIFT_LOAD | scale_reference | planned | 出图/共享/图片/定妆_道具_东京礼担_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_GIFT_LOAD | scale_reference | ready | 出图/共享/图片/定妆_道具_东京礼担_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_GIFT_LOAD | detail_closeup | planned | 出图/共享/图片/定妆_PROP_GIFT_LOAD_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | LOC_CITY_GATE | wide_plate | ready | 出图/共享/图片/定妆_场景_阳谷城门清晨.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_CITY_GATE | reverse_angle | ready | 出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_CITY_GATE | empty_plate | planned | 出图/共享/图片/定妆_LOC_CITY_GATE_empty_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_CITY_GATE | lighting_plate | planned | 出图/共享/图片/定妆_LOC_CITY_GATE_lighting_plate.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | PROP_WINDOW_CURTAIN | primary | ready | 出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_WINDOW_CURTAIN | scale_reference | planned | 出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_WINDOW_CURTAIN | scale_reference | ready | 出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_WINDOW_CURTAIN | detail_closeup | planned | 出图/共享/图片/定妆_PROP_WINDOW_CURTAIN_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_CURTAIN_FORK | primary | ready | 出图/共享/图片/定妆_道具_叉竿.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_CURTAIN_FORK | scale_reference | ready | 出图/共享/图片/定妆_道具_叉竿_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |

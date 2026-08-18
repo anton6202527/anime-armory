@@ -17,6 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "vite.config.ts", "vite.canvasGeneration.ts"],
+  "include": ["src", "vite.config.ts"],
   "references": []
 }

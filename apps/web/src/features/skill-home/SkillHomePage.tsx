@@ -30,8 +30,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BrandIcon } from "../../components/BrandIcon";
 import { ComposerAssetPicker } from "../../components/ComposerAssetPicker";
 import { LineIcon } from "../../components/LineIcon";
-import { MembershipMark } from "../../components/MembershipMark";
-import { MODEL_GROUPS } from "../../catalog/models";
+import { RUNTIME_MODEL_MODALITIES, runtimeModelDefinitions } from "../../catalog/runtimeModels";
 import {
   listSkillSourceGroups,
   loadSkillSourceFile,
@@ -41,6 +40,8 @@ import {
 import { SKILLS } from "../../catalog/skills";
 import type { ModelDefinition, ModelModality, SkillCategory, SkillDefinition } from "../../catalog/types";
 import { getMySettings, signInOrSignUpWithEmail, signOut, subscribeAuth, updateMySettings, type AuthUser } from "../../lib/auth";
+import { isAuthConfigured } from "../../lib/cloud";
+import { discoverCanvasModels } from "../../lib/generation";
 import type { ThemeMode } from "../../lib/theme";
 import { createUserSkill, deleteUserSkill, listUserSkills, type UserSkillRecord } from "../../lib/userSkills";
 import { createWebWork, saveWork } from "../../lib/work";
@@ -141,10 +142,6 @@ function userSkillToDefinition(skill: UserSkillRecord, ownerEmail: string): Skil
   };
 }
 
-function authIsConfigured() {
-  return Boolean(import.meta.env.VITE_SUPABASE_URL?.trim() && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim());
-}
-
 export function SkillHomePage({
   onCreate,
   theme,
@@ -154,18 +151,22 @@ export function SkillHomePage({
   theme: ThemeMode;
   onThemeChange: (theme: ThemeMode) => void;
 }) {
+  const authConfigured = isAuthConfigured();
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const [prompt, setPrompt] = useState("");
   const [localAssets, setLocalAssets] = useState<PendingAttachment[]>([]);
   const [composerAttachmentIds, setComposerAttachmentIds] = useState<string[]>([]);
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
-  const [modality, setModality] = useState<ModelModality>("image");
+  const [modality, setModality] = useState<ModelModality>("text");
   const [selectedModels, setSelectedModels] = useState<Record<ModelModality, string>>(() => ({
-    text: MODEL_GROUPS.text[0]?.id ?? "",
-    image: MODEL_GROUPS.image[0]?.id ?? "",
-    video: MODEL_GROUPS.video[0]?.id ?? "",
-    audio: MODEL_GROUPS.audio[0]?.id ?? "",
+    text: "",
+    image: "",
+    video: "",
+    audio: "",
   }));
+  const [runtimeModels, setRuntimeModels] = useState<ModelDefinition[]>([]);
+  const [runtimeModelsState, setRuntimeModelsState] = useState<"loading" | "ready" | "unavailable">("loading");
+  const [runtimeModelsRefresh, setRuntimeModelsRefresh] = useState(0);
   const [selectedSkillId, setSelectedSkillId] = useState(SKILLS[0]?.id ?? "");
   const [generationMode, setGenerationMode] = useState<"manual" | "auto">("auto");
   const [skillTab, setSkillTab] = useState<SkillTab>("common");
@@ -209,8 +210,12 @@ export function SkillHomePage({
     [allSkills, selectedSkillId],
   );
   const selectedModel = useMemo(
-    () => MODEL_GROUPS[modality].find((model) => model.id === selectedModels[modality]),
-    [modality, selectedModels],
+    () => runtimeModels.find((model) => model.modality === modality && model.id === selectedModels[modality]),
+    [modality, runtimeModels, selectedModels],
+  );
+  const visibleRuntimeModels = useMemo(
+    () => runtimeModels.filter((model) => model.modality === modality),
+    [modality, runtimeModels],
   );
   const detailPreview = useMemo(() => detailSkill ? getSkillPreview(detailSkill) : undefined, [detailSkill]);
   const activeSourceGroup = useMemo(
@@ -258,6 +263,40 @@ export function SkillHomePage({
       return `${skill.title} ${skill.description} ${skill.creator}`.toLocaleLowerCase().includes(normalizedQuery);
     });
   }, [allSkills, catalogCategory, catalogQuery, catalogTab, customSkillIds, favorites]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setRuntimeModelsState("loading");
+    setRuntimeModels([]);
+    void discoverCanvasModels(controller.signal)
+      .then((models) => {
+        if (controller.signal.aborted) return;
+        const discovered = runtimeModelDefinitions(models);
+        setRuntimeModels(discovered);
+        setSelectedModels((current) => ({
+          text: discovered.some((model) => model.modality === "text" && model.id === current.text)
+            ? current.text
+            : discovered.find((model) => model.modality === "text")?.id ?? "",
+          image: discovered.some((model) => model.modality === "image" && model.id === current.image)
+            ? current.image
+            : discovered.find((model) => model.modality === "image")?.id ?? "",
+          video: "",
+          audio: "",
+        }));
+        setModality((current) => discovered.some((model) => model.modality === current)
+          ? current
+          : discovered.some((model) => model.modality === "text") ? "text" : "image");
+        setRuntimeModelsState("ready");
+      })
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setRuntimeModels([]);
+        setSelectedModels({ text: "", image: "", video: "", audio: "" });
+        setModality("text");
+        setRuntimeModelsState("unavailable");
+      });
+    return () => controller.abort();
+  }, [runtimeModelsRefresh]);
 
   useEffect(() => subscribeAuth((user) => { setAuthUser(user); setAuthReady(true); }), []);
 
@@ -310,19 +349,35 @@ export function SkillHomePage({
   useEffect(() => setFailedPreviewSkillId(null), [detailSkill?.id]);
 
   useEffect(() => {
+    let cancelled = false;
     if (!detailSkill) {
       setDetailSkillSourceGroups([]);
       setActiveSourceGroupId("");
       setActiveSourceFileId("");
       setActiveSourceText("");
+      setSourceLoading(false);
       return undefined;
     }
-    const groups = listSkillSourceGroups(detailSkill);
-    const firstGroup = groups[0];
-    setDetailSkillSourceGroups(groups);
-    setActiveSourceGroupId(firstGroup?.id ?? "");
-    setActiveSourceFileId(firstGroup?.files[0]?.id ?? "");
-    return undefined;
+    setDetailSkillSourceGroups([]);
+    setActiveSourceGroupId("");
+    setActiveSourceFileId("");
+    setActiveSourceText("");
+    setSourceLoading(true);
+    void listSkillSourceGroups(detailSkill)
+      .then((groups) => {
+        if (cancelled) return;
+        const firstGroup = groups[0];
+        setDetailSkillSourceGroups(groups);
+        setActiveSourceGroupId(firstGroup?.id ?? "");
+        setActiveSourceFileId(firstGroup?.files[0]?.id ?? "");
+        if (!firstGroup?.files.length) setSourceLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setSourceLoading(false);
+        setToast("Skill 源文件暂时无法读取");
+      });
+    return () => { cancelled = true; };
   }, [detailSkill]);
 
   useEffect(() => {
@@ -381,6 +436,14 @@ export function SkillHomePage({
     window.setTimeout(() => promptRef.current?.focus(), 0);
   }
 
+  function toggleModelMenu() {
+    const opening = openMenu !== "model";
+    setOpenMenu(opening ? "model" : null);
+    if (opening && runtimeModelsState === "unavailable") {
+      setRuntimeModelsRefresh((current) => current + 1);
+    }
+  }
+
   function uploadComposerAssets(files: File[]) {
     const next = files.map(toAttachment);
     if (!next.length) return [];
@@ -392,16 +455,21 @@ export function SkillHomePage({
   function submit() {
     if (!ready) return;
     const effectiveSkill = selectedSkill ?? allSkills[0] ?? SKILLS[0];
-    const effectiveModel = selectedModel ?? MODEL_GROUPS[modality][0];
-    if (!effectiveSkill || !effectiveModel) return;
+    if (!effectiveSkill) return;
+    if (runtimeModelsState !== "ready" || !selectedModel) {
+      setToast(runtimeModelsState === "unavailable" ? "后端模型服务不可用，请稍后重试" : "正在读取后端可用模型，请稍候");
+      setOpenMenu("model");
+      return;
+    }
+    const effectiveModel = selectedModel;
     const customRecord = userSkillRecords.find((skill) => `user:${skill.id}` === effectiveSkill.id);
     const work = createWebWork(effectiveSkill.line, prompt, attachments, {
       skillId: effectiveSkill.id,
       ...(customRecord ? { skillDefinition: { title: effectiveSkill.title, description: effectiveSkill.description, guide: effectiveSkill.guide, steps: effectiveSkill.steps, useCases: effectiveSkill.useCases } } : {}),
       generationMode,
       model: {
-        modality,
-        modelId: effectiveModel.id,
+        modality: effectiveModel.modality,
+        modelId: effectiveModel.modelId ?? effectiveModel.id,
         ...(effectiveModel.providerSpec ? { providerSpec: effectiveModel.providerSpec } : {}),
       },
     });
@@ -412,6 +480,10 @@ export function SkillHomePage({
   function openAuth() {
     setOpenMenu(null);
     setAccountOpen(false);
+    if (!authConfigured) {
+      setToast("账号能力正在迁移到后端 REST API，本地模式暂不可用");
+      return;
+    }
     setAuthOpen(true);
   }
 
@@ -533,7 +605,7 @@ export function SkillHomePage({
                 {(authUser.email?.[0] ?? "创").toLocaleUpperCase()}
               </button>
             ) : (
-              <button className="auth-entry" type="button" onClick={openAuth}>注册/登录</button>
+              <button className="auth-entry" type="button" disabled={!authConfigured} onClick={openAuth}>{authConfigured ? "注册/登录" : "账号待接入"}</button>
             )}
 
             {accountOpen && authUser && (
@@ -597,7 +669,7 @@ export function SkillHomePage({
               )}
               {selectedModel && (
                 <div className="composer-selected-token">
-                  <button className="token-main" type="button" title="更换模型" onClick={() => setOpenMenu(openMenu === "model" ? null : "model")}>
+                  <button className="token-main" type="button" title="更换模型" onClick={toggleModelMenu}>
                     <Box size={15} /><span>{selectedModel.name}</span>
                   </button>
                   <button className="token-remove" type="button" title="移除模型" aria-label={`移除 ${selectedModel.name}`} onClick={removeSelectedModel}><X size={12} /></button>
@@ -626,27 +698,37 @@ export function SkillHomePage({
 
             <div className="composer-inline-choices" aria-label="创作设置">
               <div className="composer-menu-wrap model-menu-wrap">
-                <button className={openMenu === "model" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择模型" aria-label="选择模型" aria-expanded={openMenu === "model"} onClick={() => setOpenMenu(openMenu === "model" ? null : "model")}>
+                <button className={openMenu === "model" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择模型" aria-label="选择模型" aria-expanded={openMenu === "model"} onClick={toggleModelMenu}>
                   <Box size={18} strokeWidth={1.6} />
                 </button>
                 {openMenu === "model" && (
                   <div className="floating-panel model-picker" role="dialog" aria-label="选择模型">
                     <div className="floating-panel-title"><strong>选择模型</strong></div>
                     <div className="segmented-tabs" role="tablist">
-                      {(Object.keys(MODALITY_LABELS) as ModelModality[]).map((item) => (
+                      {RUNTIME_MODEL_MODALITIES.map((item) => (
                         <button key={item} className={modality === item ? "active" : ""} type="button" role="tab" aria-selected={modality === item} onClick={() => setModality(item)}>{MODALITY_LABELS[item]}</button>
                       ))}
                     </div>
                     <div className="model-section-label">{MODALITY_LABELS[modality]}</div>
+                    <div className={`model-runtime-status state-${runtimeModelsState}`}>
+                      <i />
+                      {runtimeModelsState === "loading"
+                        ? "正在读取后端开放模型…"
+                        : runtimeModelsState === "unavailable"
+                          ? "后端模型服务不可用，当前没有可选模型"
+                          : visibleRuntimeModels.length
+                            ? `后端已开放 ${visibleRuntimeModels.length} 个可调用模型`
+                            : `后端当前未开放${MODALITY_LABELS[modality]}模型`}
+                    </div>
+                    <p className="model-runtime-note">Skill 编排当前使用 GPT 文本/视觉；图片模型仅用于画布直接生图。</p>
                     <div className="model-list">
-                      {MODEL_GROUPS[modality].map((model) => (
+                      {visibleRuntimeModels.map((model) => (
                         <div key={model.id} className="model-row">
-                          <button className="model-row-main" type="button" onClick={() => { setSelectedModels((current) => ({ ...current, [modality]: model.id })); setOpenMenu(null); }}>
+                          <button className="model-row-main" type="button" onClick={() => { setSelectedModels((current) => ({ ...current, [model.modality]: model.id })); setModality(model.modality); setOpenMenu(null); }}>
                             <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{modelMark(model)}</span>
                             <span className="model-copy">
                               <span className="model-name">
                                 <b>{model.name}</b>
-                                {model.premium && <span className="model-membership-mark" role="button" tabIndex={0} aria-label={`查看 ${model.name} 的会员积分方案`} onClick={(event) => { event.stopPropagation(); setOpenMenu(null); setMembershipOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setOpenMenu(null); setMembershipOpen(true); } }}><MembershipMark /></span>}
                               </span>
                               <small>{model.description}</small>
                             </span>
@@ -654,6 +736,9 @@ export function SkillHomePage({
                           </button>
                         </div>
                       ))}
+                      {runtimeModelsState === "ready" && !visibleRuntimeModels.length && (
+                        <p className="model-runtime-empty">暂无可用{MODALITY_LABELS[modality]}模型。</p>
+                      )}
                     </div>
                   </div>
                 )}
@@ -762,9 +847,9 @@ export function SkillHomePage({
           {pageTab === "mine" && !authUser ? (
             <div className="mine-gate">
               <span><UserRound size={24} /></span>
-              <strong>登录后管理你的 Skill</strong>
-              <p>输入邮箱和密码，首次登录会自动创建账号。</p>
-              <div><button type="button" onClick={openAuth}>登录</button></div>
+              <strong>{authConfigured ? "登录后管理你的 Skill" : "账号 REST 能力待接入"}</strong>
+              <p>{authConfigured ? "输入邮箱和密码，首次登录会自动创建账号。" : "本地模式已禁止浏览器直连账号服务；后端资源落地后恢复。"}</p>
+              <div><button type="button" disabled={!authConfigured} onClick={openAuth}>{authConfigured ? "登录" : "暂不可用"}</button></div>
             </div>
           ) : userSkillsLoading && pageTab === "mine" ? (
             <div className="empty-skills"><LoaderCircle className="spinning" size={28} /><strong>正在加载我的 Skill</strong><span>从云端同步你的个人工作流</span></div>
@@ -945,7 +1030,7 @@ export function SkillHomePage({
 
       <AuthDialog
         open={authOpen}
-        configured={authIsConfigured()}
+        configured={authConfigured}
         onClose={() => setAuthOpen(false)}
         onContinue={async (email, password) => {
           const result = await signInOrSignUpWithEmail({ email, password, emailRedirectTo: window.location.origin });
