@@ -1,7 +1,7 @@
 # 无成本图片生产包
 
 - episode: 第1集
-- reference_generation_tasks: 80
+- reference_generation_tasks: 68
 - keyshot_candidate_tasks: 15
 - regional_construct_manifests: 15
 - shot_packages: 15
@@ -11,24 +11,12 @@
 | Task | Priority | Owner | Slot | Output |
 |---|---|---|---|---|
 | REF_010 | P0 | CHAR_WUSONG/28岁打虎态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_WUSONG_28岁打虎态_action_pose_pack.png |
-| REF_015 | P0 | BEAST_TIGER/常态 | back | 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png |
 | REF_018 | P0 | BEAST_TIGER/常态 | expression_bank | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png |
 | REF_019 | P0 | BEAST_TIGER/常态 | action_pose_pack | 出图/共享/图片/定妆_BEAST_TIGER_常态_action_pose_pack.png |
-| REF_022 | P0 | CHAR_WUDA/日常卖饼态 | side | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png |
-| REF_023 | P0 | CHAR_WUDA/日常卖饼态 | rear_three_quarter | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png |
-| REF_024 | P0 | CHAR_WUDA/日常卖饼态 | back | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png |
 | REF_028 | P0 | CHAR_WUDA/日常卖饼态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_WUDA_日常卖饼态_action_pose_pack.png |
 | REF_038 | P0 | CHAR_PANJINLIAN/25岁武大家常态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_PANJINLIAN_25岁武大家常态_action_pose_pack.png |
-| REF_040 | P0 | CHAR_MAGISTRATE/常态 | three_quarter | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png |
-| REF_041 | P0 | CHAR_MAGISTRATE/常态 | side | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png |
-| REF_042 | P0 | CHAR_MAGISTRATE/常态 | rear_three_quarter | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png |
-| REF_043 | P0 | CHAR_MAGISTRATE/常态 | back | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png |
 | REF_044 | P0 | CHAR_MAGISTRATE/常态 | turnaround | 出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_turnaround.png |
 | REF_048 | P0 | CHAR_MAGISTRATE/常态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_action_pose_pack.png |
-| REF_050 | P0 | CHAR_XIMENQING/常态 | three_quarter | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png |
-| REF_051 | P0 | CHAR_XIMENQING/常态 | side | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png |
-| REF_052 | P0 | CHAR_XIMENQING/常态 | rear_three_quarter | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png |
-| REF_053 | P0 | CHAR_XIMENQING/常态 | back | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png |
 | REF_056 | P0 | CHAR_XIMENQING/常态 | expression_bank | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png |
 | REF_057 | P0 | CHAR_XIMENQING/常态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_XIMENQING_常态_action_pose_pack.png |
 | REF_135 | P0 | EP01_CLIP01 | regional_construct_plate | 出图/第1集/区域构建/EP01_CLIP01/empty_plate.png |

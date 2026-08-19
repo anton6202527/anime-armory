@@ -191,7 +191,7 @@
     {
       "asset": "PROP_CAKE_POLE",
       "asset_name": "炊饼担",
-      "confirmed_at": "2026-08-12T03:23:53+00:00",
+      "confirmed_at": "2026-08-18T09:43:14+00:00",
       "contract_fingerprint": "206f1920fea0711992fe15a947e92eadf9ecce17f826d6556dbbbcf2f8e7c729",
       "human_signoff": false,
       "must_not_have": [
@@ -202,7 +202,7 @@
       ],
       "png": "出图/共享/图片/定妆_道具_炊饼担.png",
       "png_sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
-      "reason": "当前像素已审：一根木担杆、左右各一只同类藤筐、四绳悬挂、素麻布盖与双侧蒸汽，结构完整且无多余容器、现代件或文字。",
+      "reason": "已查看当前像素与道具参考：单根担杆、左右双筐、两侧绳结、布盖与蒸汽结构正确，无单筐断绳或现代构件",
       "review_kind": "executor_visual",
       "reviewer": "Codex视觉执行者",
       "reviewer_role": "ai_visual_executor",
@@ -215,6 +215,35 @@
       "shot": "shared_primary",
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_shared_primary_定妆_道具_炊饼担_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_CAKE_POLE",
+      "asset_name": "炊饼担",
+      "confirmed_at": "2026-08-18T09:43:14+00:00",
+      "contract_fingerprint": "206f1920fea0711992fe15a947e92eadf9ecce17f826d6556dbbbcf2f8e7c729",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip04_first.png",
+      "png_sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
+      "reason": "已查看当前像素与道具参考：单根担杆、左右双筐、两侧绳结、布盖与蒸汽结构正确，无单筐断绳或现代构件",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "担杆",
+        "双筐",
+        "布盖与蒸汽结构固定"
+      ],
+      "shot": "Clip_04",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_04_Clip04_first_compare.png",
       "verdict": "ok"
     },
     {
@@ -1143,6 +1172,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-08-18T03:26:05+00:00",
+  "updated_at": "2026-08-18T09:43:14+00:00",
   "version": 1
 }

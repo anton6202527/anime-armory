@@ -101,8 +101,6 @@
           "raw_intra_floor": 0.4558
         },
         "CHAR_PANJINLIAN__25岁武大家常态": {
-          "ep_mean_score": 0.2245,
-          "ep_n_shots": 1,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -111,7 +109,7 @@
           "raw_intra_floor": 0.3325
         },
         "CHAR_WUDA__日常卖饼态": {
-          "ep_mean_score": 0.7456,
+          "ep_mean_score": 0.7867,
           "ep_n_shots": 1,
           "floor": 0.5052,
           "floor_calibrated": true,
@@ -217,34 +215,15 @@
           "verdict": "ok"
         },
         {
-          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUDA__日常卖饼态",
           "face_idx": 0,
-          "face_swap": {
-            "assignments": [
-              {
-                "char": "CHAR_WUDA__日常卖饼态",
-                "face_idx": 0,
-                "score": 0.7692
-              },
-              {
-                "char": "CHAR_WUDA__日常卖饼态",
-                "face_idx": 1,
-                "score": 0.2494
-              }
-            ],
-            "duplicate_chars": [
-              "CHAR_WUDA__日常卖饼态"
-            ],
-            "missing_chars": [
-              "CHAR_PANJINLIAN__25岁武大家常态"
-            ],
-            "swap_suspected": true
-          },
-          "floor": 0.5,
+          "floor": 0.5052,
           "floor_calibrated": true,
           "png": "图片/Clip04_first.png",
-          "score": 0.2245,
-          "verdict": "block"
+          "score": 0.8316,
+          "score_vs_main": 0.7867,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_WUSONG__28岁打虎态",
@@ -414,11 +393,17 @@
         },
         {
           "abs_verdict": "block",
-          "char": "CHAR_PANJINLIAN__25岁武大家常态",
-          "floor": 0.55,
+          "char": "CHAR_WUDA__日常卖饼态",
+          "floor": 0.9795,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/hair_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-08-18T09:43:52+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已并排查看当前像素与武大定妆：棕灰包头巾轮廓、露发位置与侧结一致，街景冷光仅改变亮度",
+          "manual_reviewer": "Codex视觉执行者",
           "png": "图片/Clip04_first.png",
-          "score": 0.3577,
-          "verdict": "warn"
+          "score": 0.5089,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "block",
@@ -699,23 +684,23 @@
       "episode": "第1集",
       "groups": {
         "LOC_CITY_GATE": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "LOC_COUNTY_YAMEN": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "LOC_JINGYANGGANG": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "LOC_WUDA_HOME": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "LOC_YANGGU_STREET": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "PROP_BADGE": {
@@ -723,7 +708,7 @@
           "skipped": "组<3镜"
         },
         "PROP_BRAZIER": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "PROP_CAKE_POLE": {
@@ -731,7 +716,7 @@
           "skipped": "组<3镜"
         },
         "PROP_DOOR_LATCH": {
-          "median_dist": 0.472,
+          "median_dist": 0.412,
           "shots": 4
         },
         "PROP_QUARTERSTAFF": {
@@ -833,11 +818,17 @@
         },
         {
           "abs_verdict": "block",
-          "char": "CHAR_PANJINLIAN__25岁武大家常态",
-          "floor": 0.85,
+          "char": "CHAR_WUDA__日常卖饼态",
+          "floor": 0.9907,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-08-18T09:43:52+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已并排查看当前像素与武大定妆：赭褐旧外袄、灰褐围巾、深灰交领内衫、腰带裤靴均一致",
+          "manual_reviewer": "Codex视觉执行者",
           "png": "图片/Clip04_first.png",
-          "score": 0.2964,
-          "verdict": "warn"
+          "score": 0.534,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "block",
@@ -1021,7 +1012,7 @@
   "cross_episode_face_drift": {
     "available": true,
     "entries": [],
-    "history_chars": 3
+    "history_chars": 2
   },
   "episode": "第1集",
   "face_anchor_lighting": {
@@ -1577,11 +1568,20 @@
     "verdict": "ok"
   },
   "hair_manual_confirmations": {
-    "applied": 0,
+    "applied": 1,
     "available": true,
-    "configured": 4,
+    "configured": 5,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/hair_confirmations.json",
-    "rows": []
+    "rows": [
+      {
+        "char": "CHAR_WUDA__日常卖饼态",
+        "original_verdict": "warn",
+        "png": "图片/Clip04_first.png",
+        "reason": "已并排查看当前像素与武大定妆：棕灰包头巾轮廓、露发位置与侧结一致，街景冷光仅改变亮度",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.5089
+      }
+    ]
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -1621,7 +1621,7 @@
       "出图/第1集/图片/Clip02_end.png": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
       "出图/第1集/图片/Clip02_first.png": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
       "出图/第1集/图片/Clip03_first.png": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
-      "出图/第1集/图片/Clip04_first.png": "f727bce027d7ab685770e87f9ad012e03a7d49aa30bdc11ca5b94c71cde37baf",
+      "出图/第1集/图片/Clip04_first.png": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
       "出图/第1集/图片/EP01_CLIP01_a1.png": "d3d8fb1d2a0e1fd872d92c2d325120fe06aa510314bc6f67bd2d7adf040c6645",
       "出图/第1集/图片/EP01_CLIP02_a1.png": "116401263082ce8ae1be0d3af054d26eac4554c647046eb3e6cb95e75177cfdd",
       "出图/第1集/图片/EP01_CLIP02_a2.png": "e9db4b83a9b1a39d1d4cf9309de92e8298fb24b1635b12e495ae3b4bafd52bfd",
@@ -1630,13 +1630,13 @@
       "出图/第1集/图片/EP01_CLIP03_a2.png": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
       "出图/第1集/图片/EP01_CLIP03_a3.png": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
       "生产数据/image_qc/第1集/face_confirmations.json": "c18cc99f3cc2a8cd7b9df525ca945f495c98b3fe09a600e612e56b50353bd70d",
-      "生产数据/image_qc/第1集/hair_confirmations.json": "299afd0cf115ae33ad98f1e3f3157e82b872563cfefd03c37fd31e5dec3cb015",
+      "生产数据/image_qc/第1集/hair_confirmations.json": "618f2709d10e9301eb97f5e71a9c4a02aecf891f70809ba3e9c5aec80ee8652f",
       "生产数据/image_qc/第1集/human_image_review.json": null,
-      "生产数据/image_qc/第1集/outfit_confirmations.json": "43a2c800921761e0b95ab035aa60eb6321d7d115195cb2cee5bfdc2eed57e14a",
-      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "173e93ddc383918e0078ef2c41a16d488eb574ef769106b54312367d5360c932",
+      "生产数据/image_qc/第1集/outfit_confirmations.json": "8ecaa58c0ccb90a8a0622aaa0066adbe5be9cfa8e294e5447731281f3d55aeeb",
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "ed1d972c9dac3f237ee707652d34a668fa998d25c41907c1c53294b54471844f",
       "脚本/第1集/storyboard.json": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
     },
-    "sha": "8050684ba1b4aa386140f5a59983fa6ff842f275e42d546d5d59fb2cc647d419"
+    "sha": "291ae73cb7e400dfbedfb2d9d86fd6f9c39dd6bbd77a0161dc332dab11cd7e86"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2247,11 +2247,20 @@
     "shots_linted": 15
   },
   "outfit_manual_confirmations": {
-    "applied": 0,
+    "applied": 1,
     "available": true,
-    "configured": 4,
+    "configured": 5,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
-    "rows": []
+    "rows": [
+      {
+        "char": "CHAR_WUDA__日常卖饼态",
+        "original_verdict": "warn",
+        "png": "图片/Clip04_first.png",
+        "reason": "已并排查看当前像素与武大定妆：赭褐旧外袄、灰褐围巾、深灰交领内衫、腰带裤靴均一致",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.534
+      }
+    ]
   },
   "prohibited_face_patch": {
     "available": true,
@@ -2264,8 +2273,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 36,
-    "pending": 2,
+    "confirmed": 30,
+    "pending": 0,
     "targets": [
       {
         "asset": "PROP_BADGE",
@@ -3030,38 +3039,6 @@
           "结构漂移",
           "数量漂移"
         ],
-        "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip03_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_都头腰牌.png",
-        "scale": "约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "旧铜",
-          "木质克制质感",
-          "文字不烤入画面",
-          "约一掌高（12至16厘米）",
-          "宽度略窄于成年男子手掌",
-          "可单手完整握持"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_Clip03_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_BADGE",
-        "asset_name": "都头腰牌",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "069c1eacc9bbe3605d4a41dd6cf442de0fe38b45b72e82e3533492a883da60bd",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
         "png": "图片/EP01_CLIP03_a1.png",
         "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a1.png",
         "reason": "registered_asset_must_not_have",
@@ -3158,35 +3135,6 @@
           "结构漂移",
           "数量漂移"
         ],
-        "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip03_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "整棒与断棒两态",
-          "木纹",
-          "长度与断口保持一致"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_Clip03_first_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_QUARTERSTAFF",
-        "asset_name": "梢棒",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
         "png": "图片/EP01_CLIP03_a1.png",
         "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a1.png",
         "reason": "registered_asset_must_not_have",
@@ -3200,101 +3148,6 @@
         ],
         "shot": "Clip_03",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a1_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_QUARTERSTAFF",
-        "asset_name": "梢棒",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/EP01_CLIP03_a2.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a2.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "整棒与断棒两态",
-          "木纹",
-          "长度与断口保持一致"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a2_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_QUARTERSTAFF",
-        "asset_name": "梢棒",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "4d2b4d78853ba66aa3cb6dfdd95f7be03b66330d8bca4afee36ff739582e14ad",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/EP01_CLIP03_a3.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a3.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_梢棒.png",
-        "scale": "None",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "整棒与断棒两态",
-          "木纹",
-          "长度与断口保持一致"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a3_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_REWARD_SILVER",
-        "asset_name": "REWARD SILVER",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip03_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "北宋官府赏银用粗铸银铤：低矮长方船形",
-          "马蹄形",
-          "两端微翘",
-          "中部浅凹",
-          "边缘与表面保留锤铸不规则质感",
-          "一枚约掌心可托",
-          "不得做成现代标准金条",
-          "纪念元宝或镜面首饰",
-          "单枚约成年男子掌心大小",
-          "可一手托住",
-          "不得大于整只手掌或小成硬币"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_Clip03_first_compare.png",
         "stitched": true
       },
       {
@@ -3335,85 +3188,11 @@
         "stitched": true
       },
       {
-        "asset": "PROP_REWARD_SILVER",
-        "asset_name": "REWARD SILVER",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/EP01_CLIP03_a2.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a2.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "北宋官府赏银用粗铸银铤：低矮长方船形",
-          "马蹄形",
-          "两端微翘",
-          "中部浅凹",
-          "边缘与表面保留锤铸不规则质感",
-          "一枚约掌心可托",
-          "不得做成现代标准金条",
-          "纪念元宝或镜面首饰",
-          "单枚约成年男子掌心大小",
-          "可一手托住",
-          "不得大于整只手掌或小成硬币"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a2_compare.png",
-        "stitched": true
-      },
-      {
-        "asset": "PROP_REWARD_SILVER",
-        "asset_name": "REWARD SILVER",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
-        "contract_fingerprint": "c0dcc997d3c4c445cdc8813fad73b121fa6b5a2ce2f691ae1df86e7bdb01214e",
-        "label": "镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/EP01_CLIP03_a3.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP03_a3.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
-        "scale": "单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "北宋官府赏银用粗铸银铤：低矮长方船形",
-          "马蹄形",
-          "两端微翘",
-          "中部浅凹",
-          "边缘与表面保留锤铸不规则质感",
-          "一枚约掌心可托",
-          "不得做成现代标准金条",
-          "纪念元宝或镜面首饰",
-          "单枚约成年男子掌心大小",
-          "可一手托住",
-          "不得大于整只手掌或小成硬币"
-        ],
-        "shot": "Clip_03",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a3_compare.png",
-        "stitched": true
-      },
-      {
         "asset": "PROP_CAKE_POLE",
         "asset_name": "炊饼担",
         "asset_type": "prop",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "contract_fingerprint": "206f1920fea0711992fe15a947e92eadf9ecce17f826d6556dbbbcf2f8e7c729",
         "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
         "must_not_have": [
@@ -3436,56 +3215,19 @@
         "shot": "Clip_04",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_04_Clip04_first_compare.png",
         "stitched": true
-      },
-      {
-        "asset": "PROP_WINDOW_LATTICE",
-        "asset_name": "WINDOW LATTICE",
-        "asset_type": "prop",
-        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": false,
-        "contract_fingerprint": "1b38dd14482b4156fa950801a2d99d6d79eb881d2f521ff0a229c238000cfb6d",
-        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ],
-        "png": "图片/Clip04_first.png",
-        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip04_first.png",
-        "reason": "registered_asset_must_not_have",
-        "ref": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
-        "scale": "窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。",
-        "scope": "episode_shot",
-        "shape_contract": [
-          "北宋县城民宅二层木制格窗：单扇窄高长方形窗框",
-          "暗褐老木",
-          "细密正方格棂",
-          "内侧糊素色无纹窗纸",
-          "侧轴向内开合",
-          "是墙上固定建筑构件",
-          "不是手持小物",
-          "窗框约高 110–130 厘米",
-          "宽 55–70 厘米",
-          "窗台约在成年人腰至胸下",
-          "人站立可单手推开窗扇"
-        ],
-        "shot": "Clip_04",
-        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_Clip_04_Clip04_first_compare.png",
-        "stitched": true
       }
     ],
-    "total": 38
+    "total": 30
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-    "jump_to_stage": "image",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
   "semantic_drift": {
@@ -3621,7 +3363,7 @@
     }
   },
   "summary": {
-    "advisory": 26,
+    "advisory": 24,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -3630,9 +3372,9 @@
         "warn": 0
       },
       "face": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
-        "ok": 12,
+        "ok": 13,
         "warn": 0
       },
       "face_reference_coverage_unclassified": {
@@ -3644,8 +3386,8 @@
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 12,
-        "warn": 1
+        "ok": 13,
+        "warn": 0
       },
       "human_anatomy": {
         "block": 0,
@@ -3668,17 +3410,11 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 12,
-        "warn": 1
+        "ok": 13,
+        "warn": 0
       },
       "prohibited_face_patch": {
         "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
-      "prop_shape_review": {
-        "block": 2,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -3709,9 +3445,9 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 3,
+    "hard_blocks": 0,
     "unavailable_visual_checks": [],
-    "verdict": "block"
+    "verdict": "review"
   },
   "tone_light_contract": {
     "available": true,

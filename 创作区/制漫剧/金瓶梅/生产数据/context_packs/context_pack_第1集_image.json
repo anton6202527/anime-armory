@@ -39,21 +39,21 @@
       "sha256": "cdd056bc67af799591f5cd5e8f0e497eefe29b76d73925eb2b5f4494e39243d6"
     },
     {
-      "bytes": 1612,
+      "bytes": 4681,
       "exists": true,
-      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 110/179 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 137/179 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 最近进展\n- 2026-08-18：已修正 S04A 编译合同，使 `Clip04_first.png` 仅消费街下武大、炊饼担与阳谷街景，排除潘金莲、楼窗特写和室内状态。第 177 次调用已生成并按精确 SHA 验收；武大脸部余弦 0.8316（地板 0.5052），full QC 硬阻断 0。当前出图 **137/179**。\n- 2026-08-18：第 175–176 次调用对 `Clip04_first.png` 做两次有界尝试；武大脸部余弦分别仅 0.2076 / 0.2245，第二抽还将应在 S04B 才切入的潘金莲提前画进 S04A 街下起幅。两张均已按当前 SHA 拒收并归档废料；首帧 2 次重抽预算用尽，触发止损，当前出图仍为 **136/179**。\n- 2026-08-18：第 163–174 次调用完成并验收镜头 2 余下三帧与镜头 3 全部四帧。实际像素复核拒收并重抽了三项硬错：赏银布袋改为北宋粗铸银锭，以及 `EP01_CLIP03_a2` / `EP01_CLIP03_a3` 两张阳谷街帧中误回流的死虎均移除。已接受帧全部通过 full QC、实际像素目视及当前 SHA 验收；当前出图 **136/179**。\n- 2026-08-17：第 158–159 次调用完成并验收 `Clip02_first.png`、`EP01_CLIP02_a1.png`；武松、猛虎、梢棒、动作相位、手部人体与景阳冈冷月夜景通过 full QC、实际像素目视及当前 SHA 验收。第 160–162 次尝试生成 `EP01_CLIP02_a2.png`，三次均因 Codex timeout 失败且未落 PNG，触发同目标基础设施止损；当前出图 **129/179**。\n- 2026-08-17：用户进一步明确付费生图按**集数**授权；第1集剩余分镜图不再逐张询问授权。执行仍保持“一次一张 → full QC → 实际像素目视 → 当前 SHA 验收”，自动连续推进至本集完成或触发硬阻断/止损条件。\n- 2026-08-17：用户将第1集付费生图调用授权明确追加为**无上限**。第 141–154 次调用补齐共享参考库至 **124/124**；第 155–157 次完成并验收镜头 1 的 `Clip01_first`、`EP01_CLIP01_a1`、`Clip01_end`。全部经过 full QC、实际像素目视与精确 SHA 仪表盘验收，当前出图 **127/179**。\n- 2026-08-17：刷新身份适配矩阵、漂移报告、记忆锚点计划、身份评估包和参考规划消费收据，修复身份登记更新带来的派生证据陈旧；当前 `image_preflight` 通过，可继续逐张生成第1集镜头帧。\n- 2026-08-17：第1集补齐 EP01_CLIP02/05/09/11/14 的结构化交互/接触图，新建 `设定库/location_spatial_memory.json`，I1 交互连续、I2 结构化交互、FP1 场景空间定向均为 0 阻塞。\n- 2026-08-17：已重建剧级 B\n...",
       "relpath": "_进度.md",
-      "sha256": "27a9ab7cf9f1209b29d001789351ca8706e1a77691dc4f17ff888d30a79da93b"
+      "sha256": "bb7ef31ddf4be5e17c6af71a6d8b744eaccf938f4119d7515bb995ff8d2d97f2"
     },
     {
-      "bytes": 505672,
+      "bytes": 507403,
       "exists": true,
       "preview": "# 第1集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第1集.json`；content_hash=aae3e0d787c5e0ac\n- 核心看点：audience_payoff=开场兑现打虎爽点，中段兑现武松守界与摔杯拒诱，后段用反咬、搬离和东京差遣把危险留在家门内。；category=英雄奇观 + 家门伦理困局 + 欲望反转；why_watch=武松能赤手打虎，却无法用拳头解决嫂嫂越界、反咬和哥哥的软弱；外在英雄与内在无力形成强反差。\n- 首屏钩子：content_promise=本集先给出打虎高光，再揭示拳头解决不了的人心困局。；content_proposition=一个能打死猛虎的人，为什么后来守不住哥哥的家门？；expected_metric=primary=retention_3s；target=0.8；hook_type=危机；muted_readable=True；muted_safe=True；muted_safe_proof=关声仍能从贴脸虎爪、地面武松和极限闪避动作读懂生死危机。；onscreen_duration_sec=1.4…\n  - Pacing: primary=94% compressed=0%；主时长=EP01_CLIP01,EP01_CLIP02,EP01_CLIP03,EP01_CLIP04,EP01_CLIP05,EP01_CLIP06,EP01_CLIP07,EP01_CLIP08；compression_strategy=不为每句旁白单开视频；同场相邻节拍并成 story clip，内部用 shots[] 表达剪辑镜位。；highlight_budget_note=打虎动作、叔嫂火盆对峙、反咬与离城悬念吃主时长；身份背景、一个月流逝和差遣信息用蒙太奇、插入镜及声桥承载。…\n  - R01: bait_risk=low；hook_id=OPEN_TIGER；opened_at=EP01_CLIP01；payoff_clip=EP01_CLIP03；payoff_due=EP01_CLIP03；payoff_evidence=武松赤手打虎并获都头腰牌；payoff_status=paid；promise=武松能否从贴脸虎扑下活下来；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=HUMAN_HEART；opened_at=EP01_CLIP03；payoff_clip=EP01_CLIP10；payoff_due=EP01_CLIP10；payoff_evidence=潘金莲越界未成后倒置真相反咬武松；payoff_status=paid；promise=家门里的人心是否比猛虎更难对付；promise_type=thematic_question\n  - R03: bait_risk=low；hook_id=BOUNDARY_TEST；opened_at=EP01_CLIP06；payoff_clip=EP01_CLIP09；payoff_due=EP01_CLIP09；payoff_evidence=半杯邀饮升级为摔杯拒诱和明确警告；payoff_status=paid；promise=潘金莲会怎样逼近武松的伦理边界；promise_type=desire_hook\n  - R04: bait_risk=medium；delayed_payoff_ep=第2集；hook_id=TAIL_OTHER_EYES；opened_at=EP01_CLIP15；payoff_due=第2集；payoff_status=open；promise=武松离城后，楼窗外走近的另一双眼是谁、会带来什么；promise_type=cliffhanger\n  - Q01: expected_next_handling=本集兑现/推进；question_context=[镜头24·旁白·压迫] 武大回家时，她先红了眼，也先把真相藏了起来。 [镜头25·潘金莲·委屈·快] 你那好兄弟，；question_id=Q01；signal=真相；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=逼近。 ### EP01_CLIP10｜先红眼的人改写真相｜1:37.689–1:48.388 武大带雪推门，主；question_id=Q02；signal=真相；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=content_proposition 一个能打死猛虎的人，为什么后来守不住哥哥的家门？ content_promise；question_id=Q03；signal=为什么；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=EP01_CLIP10 payoff_evidence 潘金莲越界未成后倒置真相反咬武松 bait_risk low hook_id BOUNDARY_TEST；question_id=Q04；signal=真相；status=paid_or_progressed\n  - Q05: expected_next_handli\n...",
       "relpath": "出图/第1集/prompt/01_分镜出图.md",
-      "sha256": "67665fd86b50afd49e4a0d091c0049fcf62f366a275a56c053c1828e96ab4540"
+      "sha256": "ece602994247f74a4f10f6caa0b2f470ebb4a98f99a91f9c025543183e86ef37"
     },
     {
-      "bytes": 288001,
+      "bytes": 418379,
       "exists": true,
       "preview": {
         "kind": "n2d_identity_registry",
@@ -67,7 +67,7 @@
         "version": 1
       },
       "relpath": "出图/共享/identity_registry.json",
-      "sha256": "51579a6110c677dce88474fd754dbcf8d463491df5b7b236bb67609213741f75"
+      "sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d"
     },
     {
       "bytes": 127476,
@@ -125,7 +125,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "a4cc8ad32ef583ddccc72202debfe034b10cdc2f64febdd60ec3451ea2e4733b"
+      "sha256": "3906dd10495521cd3966afe3b8d470397a1074ed4f8258308928f0fb820c32ff"
     }
   ],
   "genre_pack_context": {
@@ -139,7 +139,7 @@
     },
     "active_scene_archetypes": [],
     "episode": "第1集",
-    "generated_at": "2026-08-17T02:48:30+00:00",
+    "generated_at": "2026-08-18T09:55:14+00:00",
     "genre": {
       "genre_key": "",
       "label": "",

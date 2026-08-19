@@ -32,7 +32,7 @@ import math
 import os
 import re
 import sys
-from typing import Dict, List, Mapping, Optional, Sequence, Set, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 from pillow_compat import pixel_data
 
@@ -1032,12 +1032,70 @@ def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:
                     chars.append(ref)
         if chars:
             for png in target_pngs:
+                submitted = compiled_receipt_character_assets(root, ep, png)
+                if submitted is not None:
+                    if submitted:
+                        out[png] = submitted
+                    continue
                 focus = storyboard_anchor_focus_assets(root, ep, png, chars)
                 if focus is None:
                     out[png] = chars
                 elif focus:
                     out[png] = focus
     return out
+
+
+def compiled_receipt_character_assets(root: str, ep: str, png: str) -> Optional[List[str]]:
+    """Resolve the exact character identities submitted for one physical PNG.
+
+    The Markdown section is Clip-wide, while a compiled first/mid anchor can
+    intentionally isolate one timed sub-shot.  Prefer the latest compiler
+    receipt's real reference owners so face QC never compares that PNG against
+    an adjacent beat's character.  Missing legacy receipts retain the existing
+    storyboard/section fallback.
+    """
+    receipt_dir = os.path.join(root, "生产数据", "compiled_image_requests", ep)
+    if not os.path.isdir(receipt_dir):
+        return None
+    png_key = episode_image_rel(str(png or ""), ep) or str(png or "")
+    matches: List[Tuple[float, Dict[str, Any]]] = []
+    for name in os.listdir(receipt_dir):
+        if not name.endswith(".json"):
+            continue
+        path = os.path.join(receipt_dir, name)
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception:
+            continue
+        target_key = episode_image_rel(str(data.get("target") or ""), ep) or str(data.get("target") or "")
+        if target_key != png_key:
+            continue
+        try:
+            stamp = os.path.getmtime(path)
+        except OSError:
+            stamp = 0.0
+        matches.append((stamp, data))
+    if not matches:
+        return None
+    data = max(matches, key=lambda row: row[0])[1]
+    compiler = data.get("compiler") if isinstance(data.get("compiler"), Mapping) else {}
+    refs = compiler.get("reference_inputs") if isinstance(compiler, Mapping) else None
+    if not isinstance(refs, list):
+        submit = data.get("actual_submit_request") if isinstance(data.get("actual_submit_request"), Mapping) else {}
+        refs = submit.get("reference_inputs") if isinstance(submit, Mapping) else None
+    if not isinstance(refs, list):
+        return None
+    asset_by_ref = identity_asset_map(root)
+    registered = registered_character_assets(root)
+    assets: List[str] = []
+    for row in refs:
+        if not isinstance(row, Mapping) or str(row.get("role") or "") != "character":
+            continue
+        owner = normalize_identity_ref(str(row.get("owner") or ""))
+        asset = asset_by_ref.get(owner) or asset_by_ref.get(owner.split("/", 1)[0])
+        if asset and (not registered or asset in registered) and asset not in assets:
+            assets.append(asset)
+    return assets
 
 
 def storyboard_anchor_focus_assets(

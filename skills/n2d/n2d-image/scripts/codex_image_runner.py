@@ -2792,6 +2792,29 @@ def codex_reference_inputs_for_target(
                 continue
             character_counts[owner] = count + 1
         pruned.append(item)
+    # The complete bundle is Clip-wide, but a physical storyboard anchor can
+    # depict only one of several timed subjects/asset groups.  Filter before
+    # the five-image backend budget is allocated so an adjacent sub-shot cannot
+    # consume a real attachment slot or leak its identity into this render.
+    anchor_beat = storyboard_anchor_beat(root, episode, target)
+    if anchor_beat.get("focus_ids") and anchor_beat.get("excluded_names"):
+        focus_ids = set(anchor_beat.get("focus_ids") or [])
+        allowed_assets = {
+            str(anchor_beat.get("location_id") or ""),
+            *[str(value or "") for value in (anchor_beat.get("visible_object_ids") or [])],
+        }
+        allowed_assets.discard("")
+        pruned = [
+            item for item in pruned
+            if not (
+                str(item.get("role") or "") == "character"
+                and str(item.get("owner") or "").split("/", 1)[0] not in focus_ids
+            )
+            and not (
+                str(item.get("owner") or "").startswith(("LOC_", "PROP_", "WEAPON_", "VFX_"))
+                and str(item.get("owner") or "").split("/", 1)[0] not in allowed_assets
+            )
+        ]
     return select_codex_reference_inputs(target, pruned, MAX_CODEX_REFERENCE_IMAGES)
 
 
@@ -3656,7 +3679,11 @@ def model_facing_policy_guards(
             ),
         ]
 
-    if str(getattr(target, "shot", "") or "") == "Clip_04_first":
+    if (
+        str(getattr(target, "shot", "") or "") == "Clip_04_first"
+        and "姜月初" in body
+        and ("伪死虎妖" in body or "未伤右臂搀扶" in body or "交易落槌" in body)
+    ):
         guards[:0] = [
             (
                 "交易落槌首帧状态：50mm双人中景，姜月初保持画左站立、裴长青保持画右半跪，"
@@ -3960,7 +3987,19 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
     focus = [(cid, name) for cid, name in names if name in desc]
     focus_ids = [cid for cid, _name in focus]
     focus_names = [name for _cid, name in focus]
-    excluded_names = [name for cid, name in names if cid in (clip.get("character_ids") or []) and cid not in focus_ids]
+    # Storyboards bind a concrete costume/form as ``CHAR_ID/form`` while the
+    # identity registry owns the stable base ``CHAR_ID``.  Compare base IDs so
+    # a selected sub-shot can actually exclude the other character beats in
+    # the same Clip.
+    clip_character_ids = {
+        str(value or "").strip().split("/", 1)[0]
+        for value in (clip.get("character_ids") or [])
+        if str(value or "").strip()
+    }
+    excluded_names = [
+        name for cid, name in names
+        if cid in clip_character_ids and cid not in focus_ids
+    ]
     is_single_reaction = bool(
         len(focus_names) == 1
         and re.search(r"CU|ECU|特写|近景", lens, re.I)
@@ -3998,27 +4037,44 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         if target.mode == "firstframe"
         else desc
     )
+    # A Clip start_state may describe the incoming transition rather than the
+    # first physical sub-shot.  If it names only a different character, using
+    # it here leaks the previous/next beat into the first-frame contract.
+    if target.mode == "firstframe" and focus_names and current_state:
+        named_in_start = [name for _cid, name in names if name in current_state]
+        if named_in_start and not any(name in focus_names for name in named_in_start):
+            current_state = desc
     visibility_text = "；".join(filter(None, (desc, current_state)))
     asset_registry = load_json_file(root / "出图" / "共享" / "asset_registry.json")
     clip_object_ids = {str(value or "").strip() for value in clip.get("object_ids") or []}
     visible_objects: List[str] = []
+    visible_object_ids: List[str] = []
     excluded_objects: List[str] = []
+    excluded_object_ids: List[str] = []
     excluded_object_aliases: List[str] = []
     prop_nouns = ("扁担", "木牌", "水桶", "桶", "盆", "碗", "瓶", "壶", "灯", "剑", "刀", "枪", "鞋", "包")
+    location_id = str(clip.get("location_id") or "").strip()
+    location_light = ""
     for asset in asset_registry.get("assets") or []:
         if not isinstance(asset, dict):
             continue
         asset_id = str(asset.get("id") or "").strip()
+        if asset_id == location_id:
+            location_light = str((asset.get("constraints") or {}).get("light_anchor") or "").strip()
         if asset_id not in clip_object_ids:
             continue
         name = str(asset.get("name") or asset_id).strip()
         aliases = [asset_id, name]
         aliases.extend(noun for noun in prop_nouns if noun in name)
+        if "担" in name:
+            aliases.extend(["挑担", "担子", "炊饼"])
         aliases = list(dict.fromkeys(alias for alias in aliases if alias))
         if any(alias in visibility_text for alias in aliases):
             visible_objects.append(name)
+            visible_object_ids.append(asset_id)
         else:
             excluded_objects.append(name)
+            excluded_object_ids.append(asset_id)
             excluded_object_aliases.extend(aliases)
     return {
         "anchor_index": anchor_index + 1,
@@ -4028,6 +4084,7 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         "end_sec": end,
         "desc": desc,
         "lens": lens,
+        "camera": re.sub(r"\s+", " ", str(row.get("camera") or "")).strip(),
         "video_prompt": video_prompt,
         "focus_ids": focus_ids,
         "focus_names": focus_names,
@@ -4040,8 +4097,12 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         "character_knowledge": character_knowledge,
         "current_state": current_state,
         "visible_objects": visible_objects,
+        "visible_object_ids": visible_object_ids,
         "excluded_objects": excluded_objects,
+        "excluded_object_ids": excluded_object_ids,
         "excluded_object_aliases": list(dict.fromkeys(excluded_object_aliases)),
+        "location_id": location_id,
+        "location_light": location_light,
     }
 
 
@@ -4181,8 +4242,18 @@ def compile_target_image_request(
         contract["action"] = beat_action
         contract["composition"] = (
             f"本锚专属景别/机位：{anchor_beat.get('lens') or '继承 storyboard'}；"
+            f"{anchor_beat.get('camera') or ''}；"
             "继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别"
         )
+        if anchor_beat.get("location_id"):
+            visible = "、".join(anchor_beat.get("visible_objects") or [])
+            contract["scene"] = "；".join(filter(None, (
+                str(anchor_beat.get("location_id") or ""),
+                str(anchor_beat.get("camera") or ""),
+                f"当前可见道具：{visible}" if visible else "",
+            )))
+            contract["lighting"] = str(anchor_beat.get("location_light") or contract.get("lighting") or "")
+        contract["mood"] = f"只服务本 storyboard 子镜头：{beat_desc or beat_action}"
         excluded_objects = list(anchor_beat.get("excluded_objects") or [])
         excluded_object_aliases = list(anchor_beat.get("excluded_object_aliases") or [])
         if excluded_object_aliases:
@@ -4281,12 +4352,14 @@ def compile_target_image_request(
             focus = "、".join(anchor_beat.get("focus_names") or []) or "本锚焦点角色"
             excluded = "、".join(anchor_beat.get("excluded_names") or []) or "前一动作人物"
             focus_ids = set(anchor_beat.get("focus_ids") or [])
+            excluded_refs = [
+                cid for cid in _shot_character_refs(body)
+                if cid.split("/", 1)[0] not in focus_ids
+            ]
             excluded_tokens = [
                 *(anchor_beat.get("excluded_names") or []),
-                *[
-                    cid for cid in _shot_character_refs(body)
-                    if cid.split("/", 1)[0] not in focus_ids
-                ],
+                *excluded_refs,
+                *[cid.split("/", 1)[0] for cid in excluded_refs],
             ]
             slot_parts = re.split(r"\s*；(?=SLOT_\d+\s*:)", str(contract.get("subject_slots") or ""))
             focus_slots = [
@@ -4322,6 +4395,56 @@ def compile_target_image_request(
             guards.insert(0, (
                 f"本锚是单人反应特写：清晰主体只保留{focus}；{excluded}及其手臂完全出画，"
                 "前一子镜头的身体接触动作已结束，不得继续入画"
+            ))
+        elif anchor_beat.get("focus_ids") and anchor_beat.get("excluded_names"):
+            # Not every isolated sub-shot is a reaction close-up.  Establishing
+            # or action beats still need the same subject-slot isolation, or a
+            # merged Clip section can silently reintroduce the adjacent beat.
+            focus = "、".join(anchor_beat.get("focus_names") or []) or "本锚焦点角色"
+            excluded = "、".join(anchor_beat.get("excluded_names") or [])
+            focus_ids = set(anchor_beat.get("focus_ids") or [])
+            excluded_refs = [
+                cid for cid in _shot_character_refs(body)
+                if cid.split("/", 1)[0] not in focus_ids
+            ]
+            excluded_tokens = [
+                *(anchor_beat.get("excluded_names") or []),
+                *excluded_refs,
+                *[cid.split("/", 1)[0] for cid in excluded_refs],
+            ]
+            slot_parts = re.split(r"\s*；(?=SLOT_\d+\s*:)", str(contract.get("subject_slots") or ""))
+            focus_slots = [
+                part for part in slot_parts
+                if any(cid in part for cid in focus_ids)
+            ]
+            if focus_slots:
+                contract["subject_slots"] = "；".join(focus_slots)
+                focus_descriptions = [
+                    match.group(1).strip()
+                    for part in focus_slots
+                    if (match := re.search(r"区分锚点[：:]\s*(.+)$", part))
+                ]
+                contract["subject"] = "；".join(focus_descriptions) or focus
+            visible = "、".join(anchor_beat.get("visible_objects") or [])
+            contract["preserve"] = [
+                f"{focus}身份、脸型五官、发型、服装与本锚主体描述保持一致",
+                f"本帧当前状态：{anchor_beat.get('current_state') or anchor_beat.get('desc') or ''}",
+                *([f"当前可见道具{visible}的结构、数量、材质和归属保持一致"] if visible else []),
+            ]
+            contract["exclude"] = list(dict.fromkeys([
+                *[
+                    item for item in (contract.get("exclude") or [])
+                    if not any(name and name in str(item) for name in (anchor_beat.get("excluded_names") or []))
+                ],
+                *[f"{token}入画" for token in excluded_tokens if token],
+            ]))
+            guards = [
+                guard for guard in guards
+                if not any(token and token in str(guard) for token in excluded_tokens)
+            ]
+            guards.insert(0, (
+                f"本锚主体隔离硬约束：只保留{focus}；{excluded}属于同 Clip 的其它子镜头，"
+                "本帧完全出画，不得合并楼上/楼下或前后剪辑时刻"
             ))
         contract["policy_guards"] = guards
     gaze_exclusions = camera_gaze_negatives_for(body) if any(

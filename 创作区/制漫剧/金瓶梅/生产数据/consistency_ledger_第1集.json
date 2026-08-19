@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 2,
+    "block": 5,
     "high": 0,
-    "medium": 37
+    "medium": 34
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 2,
+      "block": 5,
       "high": 0
     },
     "required_domains": [
@@ -28,23 +28,23 @@
     "path": "创作区/制漫剧/金瓶梅/生产数据/consistency_dependency_graph_第1集.json",
     "summary": {
       "clips": 15,
-      "edges": 178,
-      "images": 0,
-      "nodes": 50,
+      "edges": 192,
+      "images": 13,
+      "nodes": 64,
       "videos": 0
     }
   },
   "domain_counts": {
-    "block": 2,
+    "block": 5,
     "high": 0,
-    "medium": 6
+    "medium": 3
   },
   "domains": [
     {
       "counts": {
-        "block": 0,
+        "block": 1,
         "high": 0,
-        "medium": 4
+        "medium": 5
       },
       "findings": [
         {
@@ -74,23 +74,52 @@
           "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "节奏密度(Rhythm) [production一致性升级:关键场景] 连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确",
+          "severity": "block",
+          "source": "gate:image"
         }
       ],
       "key": "story",
       "label": "剧情",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ]
     },
     {
       "counts": {
-        "block": 0,
+        "block": 4,
         "high": 0,
-        "medium": 52
+        "medium": 87
       },
       "findings": [
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "发型(H1)",
+          "loc": "",
+          "message": "CHAR_WUDA__日常卖饼态 发型(H1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "表情连续(EXP1)",
           "loc": "",
@@ -128,40 +157,27 @@
         },
         {
           "dimension": "character_consistency",
-          "loc": "CHAR_MAGISTRATE__常态",
-          "message": "character_consistency  CHAR_MAGISTRATE__常态 锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_PANJINLIAN__25岁武大家常态",
-          "message": "character_consistency  CHAR_PANJINLIAN__25岁武大家常态 锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_WUDA__日常卖饼态",
-          "message": "character_consistency  CHAR_WUDA__日常卖饼态 锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断） ",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
           "severity": "warn",
           "source": "detect"
         }
       ],
       "key": "character",
       "label": "角色",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ]
     },
     {
       "counts": {
-        "block": 5,
+        "block": 0,
         "high": 0,
-        "medium": 58
+        "medium": 84
       },
       "findings": [
         {
@@ -196,13 +212,6 @@
           "dimension": "结构化交互图谱(I2)",
           "loc": "",
           "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "",
-          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -217,26 +226,69 @@
           "dimension": "结构化交互图谱(I2)",
           "loc": "",
           "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
-          "severity": "block",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
           "source": "detect"
         }
       ],
       "key": "asset",
       "label": "资产",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ]
     },
     {
       "counts": {
-        "block": 0,
+        "block": 8,
         "high": 0,
-        "medium": 38
+        "medium": 90
       },
       "findings": [
+        {
+          "dimension": "场景(O2)",
+          "loc": "",
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip01_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.015 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip01_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.006 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip02_end.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.389 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP02_a3.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.383 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "实体记忆(EMB)",
           "loc": "",
@@ -245,23 +297,9 @@
           "source": "detect"
         },
         {
-          "dimension": "场景平面(FP1)",
+          "dimension": "视频证据完整性(EVID)",
           "loc": "",
-          "message": " 场景平面(FP1)   场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": "",
-          "message": " 场景平面(FP1)   场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": "",
-          "message": " 场景平面(FP1)   场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。 ",
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -271,43 +309,23 @@
           "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ]
     },
     {
       "counts": {
-        "block": 0,
+        "block": 8,
         "high": 0,
-        "medium": 13
+        "medium": 16
       },
       "findings": [
         {
@@ -369,11 +387,12 @@
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ]
     },
     {
@@ -416,7 +435,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 3
+        "medium": 4
       },
       "findings": [
         {
@@ -428,7 +447,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -439,6 +458,13 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ],
       "key": "compliance",
@@ -448,6 +474,7 @@
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
+        "gate:image",
         "compliance"
       ]
     },
@@ -455,9 +482,44 @@
       "counts": {
         "block": 1,
         "high": 0,
-        "medium": 23
+        "medium": 33
       },
       "findings": [
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "",
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "",
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理事件图(PHY)",
+          "loc": "",
+          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "成本路由(K1)",
           "loc": "",
@@ -478,41 +540,6 @@
           "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ],
       "key": "ops",
@@ -522,6 +549,7 @@
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
+        "gate:image",
         "score",
         "expression_state_consistency"
       ]
@@ -546,6 +574,281 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
+      "anchor": "leitmotif_registry.json",
+      "dimensions": [
+        "音乐母题(LM1)"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_WUSONG 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7a12f8",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_WUSONG 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_has",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_JINLIAN 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=bb63a",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_JINLIAN 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_ha",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_THRESHOLD 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=280",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_THRESHOLD 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_EVIDENCE 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=a2b1",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_EVIDENCE 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_h",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "表情连续(EXP1)"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；f",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_h",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "自动审片总分"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "自动审片总分",
+          "loc": "生产数据/score_第1集.json",
+          "message": "缺 score JSON；验收总账无法闭环",
+          "severity": "block",
+          "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "location_spatial_memory.json",
+      "dimensions": [
+        "场景平面(FP1)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": "设定库/location_spatial_memory.json",
+          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 acc",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": "设定库/location_spatial_memory.json",
+          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 ac",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": "设定库/location_spatial_memory.json",
+          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accept",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "结构化交互图谱(I2)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "语义谱系(P0)",
+        "节奏密度(Rhythm)"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "节奏密度(Rhythm) [production一致性升级:关键场景] 连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "asset",
       "dimensions": [
         "打斗撞点(SPEC-APEX)",
@@ -555,7 +858,7 @@
         "系统面板(UI1)"
       ],
       "domain": "asset",
-      "severity": "block",
+      "severity": "warn",
       "sources": [
         "detect"
       ],
@@ -593,13 +896,6 @@
           "dimension": "结构化交互图谱(I2)",
           "loc": null,
           "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": null,
-          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -614,29 +910,43 @@
           "dimension": "结构化交互图谱(I2)",
           "loc": null,
           "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
-          "severity": "block",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
           "source": "detect"
         }
       ]
     },
     {
-      "anchor": "score_第1集.json",
+      "anchor": "storyboard.json",
       "dimensions": [
-        "自动审片总分"
+        "打斗撞点(SPEC-APEX)"
       ],
-      "domain": "ops",
-      "severity": "block",
+      "domain": "asset",
+      "severity": "warn",
       "sources": [
-        "score"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "自动审片总分",
-          "loc": "生产数据/score_第1集.json",
-          "message": "缺 score JSON；验收总账无法闭环",
-          "severity": "block",
-          "source": "score"
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "打斗撞点(SPEC-APEX) Clip_01（fight_exchange）：impact 剪辑峰值（hit_stop/screen_shake/impact_sfx/闪白…）的 when 取不到秒数——template_contract.impact_frame/collision_or_apex_frame 需写成带 `<秒>s` 的命中帧（如「命中 ",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "打斗撞点(SPEC-APEX) Clip_02（fight_exchange）：impact 剪辑峰值（hit_stop/screen_shake/impact_sfx/闪白…）的 when 取不到秒数——template_contract.impact_frame/collision_or_apex_frame 需写成带 `<秒>s` 的命中帧（如「命中 ",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -648,16 +958,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 县衙案厅（`LOC_COUNTY_YAMEN`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 县衙案厅（`LOC_COUNTY_YAMEN`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 县衙案厅（`LOC_COUNTY_YAMEN`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -669,16 +987,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 景阳冈夜间空地（`LOC_JINGYANGGANG`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 景阳冈夜间空地（`LOC_JINGYANGGANG`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 景阳冈夜间空地（`LOC_JINGYANGGANG`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -690,16 +1016,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 武大家楼屋雪夜（`LOC_WUDA_HOME`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 武大家楼屋雪夜（`LOC_WUDA_HOME`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 武大家楼屋雪夜（`LOC_WUDA_HOME`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -711,16 +1045,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷城门清晨（`LOC_CITY_GATE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷城门清晨（`LOC_CITY_GATE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷城门清晨（`LOC_CITY_GATE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -732,16 +1074,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷街面与武大家楼窗（`LOC_YANGGU_STREET`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷街面与武大家楼窗（`LOC_YANGGU_STREET`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷街面与武大家楼窗（`LOC_YANGGU_STREET`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -753,16 +1103,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DINING TABLE（`PROP_DINING_TABLE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DINING TABLE（`PROP_DINING_TABLE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:24>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DINING TABLE（`PROP_DINING_TABLE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:24>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -774,16 +1132,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DOORFRAME（`PROP_DOORFRAME`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DOORFRAME（`PROP_DOORFRAME`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DOORFRAME（`PROP_DOORFRAME`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -795,16 +1161,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## REWARD SILVER（`PROP_REWARD_SILVER`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## REWARD SILVER（`PROP_REWARD_SILVER`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## REWARD SILVER（`PROP_REWARD_SILVER`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -816,16 +1190,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## SPILLED WINE（`PROP_SPILLED_WINE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## SPILLED WINE（`PROP_SPILLED_WINE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## SPILLED WINE（`PROP_SPILLED_WINE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -837,16 +1219,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## STAIR RAIL（`PROP_STAIR_RAIL`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## STAIR RAIL（`PROP_STAIR_RAIL`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## STAIR RAIL（`PROP_STAIR_RAIL`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -858,16 +1248,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## TEA CUP（`PROP_TEA_CUP`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## TEA CUP（`PROP_TEA_CUP`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:24>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## TEA CUP（`PROP_TEA_CUP`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:24>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -879,16 +1277,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW CURTAIN（`PROP_WINDOW_CURTAIN`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW CURTAIN（`PROP_WINDOW_CURTAIN`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW CURTAIN（`PROP_WINDOW_CURTAIN`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -900,16 +1306,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW LATTICE（`PROP_WINDOW_LATTICE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW LATTICE（`PROP_WINDOW_LATTICE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW LATTICE（`PROP_WINDOW_LATTICE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -921,16 +1335,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 东京礼担（`PROP_GIFT_LOAD`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 东京礼担（`PROP_GIFT_LOAD`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 东京礼担（`PROP_GIFT_LOAD`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -942,16 +1364,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 公文（`PROP_OFFICIAL_DOC`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 公文（`PROP_OFFICIAL_DOC`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:28>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 公文（`PROP_OFFICIAL_DOC`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:28>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -963,16 +1393,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 半杯酒（`PROP_WINE_CUP`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 半杯酒（`PROP_WINE_CUP`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 半杯酒（`PROP_WINE_CUP`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -984,16 +1422,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 叉竿（`PROP_CURTAIN_FORK`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 叉竿（`PROP_CURTAIN_FORK`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 叉竿（`PROP_CURTAIN_FORK`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1005,16 +1451,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 梢棒（`PROP_QUARTERSTAFF`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 梢棒（`PROP_QUARTERSTAFF`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 梢棒（`PROP_QUARTERSTAFF`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1026,16 +1480,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 武大家木门（`PROP_DOOR`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 武大家木门（`PROP_DOOR`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 武大家木门（`PROP_DOOR`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1047,16 +1509,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炊饼担（`PROP_CAKE_POLE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炊饼担（`PROP_CAKE_POLE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炊饼担（`PROP_CAKE_POLE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1068,16 +1538,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炭盆（`PROP_BRAZIER`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炭盆（`PROP_BRAZIER`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炭盆（`PROP_BRAZIER`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1089,16 +1567,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 素布行李（`PROP_LUGGAGE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 素布行李（`PROP_LUGGAGE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 素布行李（`PROP_LUGGAGE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1110,16 +1596,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 都头腰牌（`PROP_BADGE`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 都头腰牌（`PROP_BADGE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 都头腰牌（`PROP_BADGE`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1131,16 +1625,24 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 门闩（`PROP_DOOR_LATCH`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 门闩（`PROP_DOOR_LATCH`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 门闩（`PROP_DOOR_LATCH`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1217,6 +1719,34 @@
       ]
     },
     {
+      "anchor": "voiceover.txt",
+      "dimensions": [
+        "配音情绪弧(VEA)"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": "脚本/第1集/voiceover.txt",
+          "message": "配音情绪弧(VEA) 镜头1·旁白：台词含强情绪但配音标注「紧张」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": "脚本/第1集/voiceover.txt",
+          "message": "配音情绪弧(VEA) 镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "第1集",
       "dimensions": [
         "时间基准"
@@ -1225,7 +1755,8 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1242,6 +1773,13 @@
           "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第1集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1253,23 +1791,38 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1750>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1750>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1281,23 +1834,38 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1724>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1724>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1309,16 +1877,24 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 潘金莲（`CHAR_PANJINLIAN/25岁武大家常态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 潘金莲（`CHAR_PANJINLIAN/25岁武大家常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 潘金莲（`CHAR_PANJINLIAN/25岁武大家常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1330,16 +1906,24 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武松（`CHAR_WUSONG/28岁打虎态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武松（`CHAR_WUSONG/28岁打虎态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武松（`CHAR_WUSONG/28岁打虎态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1351,7 +1935,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1361,6 +1946,13 @@
           "message": "character_consistency  CHAR_MAGISTRATE__常态 锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_MAGISTRATE__常态",
+          "message": "character_consistency 锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1372,7 +1964,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1382,6 +1975,13 @@
           "message": "character_consistency  CHAR_PANJINLIAN__25岁武大家常态 锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_PANJINLIAN__25岁武大家常态",
+          "message": "character_consistency 锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1393,7 +1993,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1403,6 +2004,13 @@
           "message": "character_consistency  CHAR_WUDA__日常卖饼态 锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_WUDA__日常卖饼态",
+          "message": "character_consistency 锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1414,7 +2022,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1424,11 +2033,47 @@
           "message": "character_consistency  CHAR_WUSONG__28岁打虎态 锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_WUSONG__28岁打虎态",
+          "message": "character_consistency 锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
     {
       "anchor": "CHAR_XIMENQING__常态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_XIMENQING__常态",
+          "message": "character_consistency  CHAR_XIMENQING__常态 锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_XIMENQING__常态",
+          "message": "character_consistency 锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip01_end.png",
       "dimensions": [
         "character_consistency"
       ],
@@ -1441,8 +2086,29 @@
       "symptoms": [
         {
           "dimension": "character_consistency",
-          "loc": "CHAR_XIMENQING__常态",
-          "message": "character_consistency  CHAR_XIMENQING__常态 锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断） ",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip02_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_end.png",
+          "message": "character_consistency  图片/Clip02_end.png 疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
           "severity": "warn",
           "source": "detect"
         }
@@ -1462,14 +2128,14 @@
       "symptoms": [
         {
           "dimension": "生图后端适配",
-          "loc": "创作区/制漫剧/金瓶梅/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/_设置.md",
           "message": "生图后端适配 统一标准已按「Codex」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图后端适配",
-          "loc": "创作区/制漫剧/金瓶梅/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/_设置.md",
           "message": "生图后端适配 适配层评分建议升档：当前「Codex」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1479,6 +2145,8 @@
     {
       "anchor": "character",
       "dimensions": [
+        "服装配色(N1)",
+        "发型(H1)",
         "表情连续(EXP1)",
         "真值源(TRUTH)",
         "image_prompt_lint"
@@ -1486,10 +2154,25 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "发型(H1)",
+          "loc": null,
+          "message": "CHAR_WUDA__日常卖饼态 发型(H1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "表情连续(EXP1)",
           "loc": null,
@@ -1531,20 +2214,27 @@
           "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
           "severity": "warn",
           "source": "detect"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_MAGISTRATE/常态「face_anchor」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–5",
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 一致性审计精度为 degraded；机检通过不等于脸部/像素一致性已完整验证，正式定稿前应在 full 环境复跑。（已通过项目设置 internal_only + demo放行）",
           "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_XIMENQING/常态「face_anchor」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%",
-          "severity": "warn",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -1556,7 +2246,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1565,7 +2255,7 @@
           "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1577,7 +2267,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1586,7 +2276,7 @@
           "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1598,7 +2288,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1607,7 +2297,7 @@
           "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1619,7 +2309,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1628,7 +2318,7 @@
           "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1640,16 +2330,24 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_BEAST_TIGER__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+          "message": "定妆对账 定妆图 定妆_BEAST_TIGER__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1661,7 +2359,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1670,7 +2368,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1682,7 +2380,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1691,7 +2389,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1703,7 +2401,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1712,7 +2410,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1724,7 +2422,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1733,7 +2431,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1745,16 +2443,24 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_CHAR_MAGISTRATE__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_MAGISTRATE__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1766,7 +2472,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1775,7 +2481,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1787,7 +2493,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1796,7 +2502,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1808,7 +2514,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1817,7 +2523,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1829,7 +2535,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1838,7 +2544,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1850,7 +2556,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1859,7 +2565,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1871,7 +2577,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1880,7 +2586,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1892,7 +2598,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1901,7 +2607,7 @@
           "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
           "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "gate:image"
         }
       ]
     },
@@ -1913,16 +2619,24 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_CHAR_XIMENQING__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_XIMENQING__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1934,37 +2648,66 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## BEAST_TIGER（`BEAST_TIGER/常态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## BEAST_TIGER（`BEAST_TIGER/常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## Hunters（`CROWD_HUNTERS/常态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## Hunters（`CROWD_HUNTERS/常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 知县（`CHAR_MAGISTRATE/常态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 知县（`CHAR_MAGISTRATE/常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 西门庆（`CHAR_XIMENQING/常态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 西门庆（`CHAR_XIMENQING/常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## BEAST_TIGER（`BEAST_TIGER/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## Hunters（`CROWD_HUNTERS/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 知县（`CHAR_MAGISTRATE/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 西门庆（`CHAR_XIMENQING/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1976,16 +2719,24 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武大（`CHAR_WUDA/日常卖饼态`）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武大（`CHAR_WUDA/日常卖饼态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武大（`CHAR_WUDA/日常卖饼态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -1998,7 +2749,8 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2015,6 +2767,13 @@
           "message": "脸漂预案 本集脸漂风险 high（分72.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "武大（CHAR_WUDA）",
+          "message": "脸漂预案 本集脸漂风险 high（分72.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2027,7 +2786,8 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2044,6 +2804,13 @@
           "message": "脸漂预案 本集脸漂风险 high（分80.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "武松（CHAR_WUSONG）",
+          "message": "脸漂预案 本集脸漂风险 high（分80.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2056,7 +2823,8 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2073,6 +2841,13 @@
           "message": "脸漂预案 本集脸漂风险 high（分58.0·multi_reference）：已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "潘金莲（CHAR_PANJINLIAN）",
+          "message": "脸漂预案 本集脸漂风险 high（分58.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2106,13 +2881,14 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2123,6 +2899,13 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2134,7 +2917,8 @@
       "domain": "ops",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2144,6 +2928,13 @@
           "message": "景别阶梯 15 个镜写了 lens 但抽不出景别分级（EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…）——景别阶梯单调性机检对它们失效；把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "景别阶梯",
+          "loc": "EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…",
+          "message": "景别阶梯 15 个镜写了 lens 但抽不出景别分级（EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…）——景别阶梯单调性机检对它们失效；把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2211,8 +3002,53 @@
       ]
     },
     {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 另有 15 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_truth_map.json",
+      "dimensions": [
+        "真值源(TRUTH)"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "真值源(TRUTH)",
+          "loc": "设定库/consistency_truth_map.json",
+          "message": "真值源(TRUTH) 项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "ops",
       "dimensions": [
+        "风格(S1)",
+        "糊/低质(N4)",
+        "物理事件图(PHY)",
         "成本路由(K1)",
         "人审校准集(CAL)",
         "一致性探针包(PROBE)"
@@ -2224,6 +3060,41 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": null,
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": null,
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理事件图(PHY)",
+          "loc": null,
+          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "成本路由(K1)",
           "loc": null,
@@ -2244,41 +3115,48 @@
           "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "vlm_canonical_第1集.json",
+      "dimensions": [
+        "fidelity-gate"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/vlm_canonical_第1集.json",
+          "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
           "severity": "warn",
-          "source": "detect"
-        },
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集",
+      "dimensions": [
+        "一致性满档账"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "dimension": "一致性满档账",
+          "loc": "第1集",
+          "message": "一致性满档账 本集本次 gate 凭 1 条降级 QC waiver 放行：维度 一致性总审。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
           "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2290,16 +3168,24 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "物理尺寸对账",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（武大、武松、潘金莲）中 武大「三人中最矮；潘金莲高于他，武松高出约一个头以上；同框镜头避免俯视羞辱构图。」；武松「三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。」；潘金莲「高于武大、比武松矮约一个头；与武松同框时保持明确身量差但不做威压式情色构图。」 在 registry 声明了相对身量(relative_scale)，但",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "物理尺寸对账",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
+          "message": "物理尺寸对账 多人同框镜头（武大、武松、潘金莲）中 武大「三人中最矮；潘金莲高于他，武松高出约一个头以上；同框镜头避免俯视羞辱构图。」；武松「三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。」；潘金莲「高于武大、比武松矮约一个头；与武松同框时保持明确身量差但不做威压式情色构图。」 在 registry 声明了相对身量(relative_scale)，但",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2311,23 +3197,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1637>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1637>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2339,23 +3240,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1757>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1757>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2367,23 +3283,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1735>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1735>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2395,23 +3326,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1820>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1820>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2423,23 +3369,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1619>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:58>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1619>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:58>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2451,23 +3412,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1816>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1816>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2479,23 +3455,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1796>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1796>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2507,23 +3498,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1900>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1900>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2535,23 +3541,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1627>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:56>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1627>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:56>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2563,23 +3584,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1781>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1781>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2591,23 +3627,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1632>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1632>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2619,23 +3670,38 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1614>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1614>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2647,32 +3713,44 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "gate:image_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1657>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
           "severity": "warn",
           "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1657>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
     {
-      "anchor": "shot",
+      "anchor": "EP01_CLIP03_a2.png",
       "dimensions": [
-        "实体记忆(EMB)",
-        "场景平面(FP1)",
-        "成本路由(K1)",
         "scene_consistency"
       ],
       "domain": "shot",
@@ -2683,6 +3761,112 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
+          "dimension": "scene_consistency",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "scene_consistency  图片/EP01_CLIP03_a2.png 场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "entity_memory_bank.json",
+      "dimensions": [
+        "实体记忆(EMB)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": "生产数据/entity_memory_bank.json",
+          "message": "实体记忆(EMB) 本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINLIAN, CHAR_PANJINLIAN__, CHAR_PANJINLIAN__25岁武大家常态, CHAR_WUDA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "possession_ledger_第1集.json",
+      "dimensions": [
+        "持有账本(POS)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "持有账本(POS)",
+          "loc": "生产数据/possession_ledger_第1集.json",
+          "message": "持有账本(POS) PROP_BADGE 在 Clip_02 有持有状态，但 possession_ledger 未登记本镜状态。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "shot",
+      "dimensions": [
+        "场景(O2)",
+        "色温调色(GRADE1)",
+        "实体记忆(EMB)",
+        "视频证据完整性(EVID)",
+        "成本路由(K1)",
+        "multimodal_continuity",
+        "style_consistency",
+        "scene_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景(O2)",
+          "loc": null,
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip01_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.015 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip01_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.006 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip02_end.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.389 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP02_a3.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.383 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
           "dimension": "实体记忆(EMB)",
           "loc": null,
           "message": " 实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINLIAN, CHAR_PANJINLIAN__, CHAR_PANJINLIAN__25岁武大家常态, CHAR_WUDA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
@@ -2690,23 +3874,9 @@
           "source": "detect"
         },
         {
-          "dimension": "场景平面(FP1)",
+          "dimension": "视频证据完整性(EVID)",
           "loc": null,
-          "message": " 场景平面(FP1)   场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": null,
-          "message": " 场景平面(FP1)   场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": null,
-          "message": " 场景平面(FP1)   场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。 ",
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -2716,27 +3886,27 @@
           "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "world_consistency_score_第1集.json",
+      "dimensions": [
+        "世界一致性(WCS)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "dimension": "世界一致性(WCS)",
+          "loc": "生产数据/world_consistency_score_第1集.json",
+          "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
           "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2749,7 +3919,8 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image_prompt_preflight"
+        "gate:image_prompt_preflight",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2766,6 +3937,13 @@
           "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "物料漂移预案",
+          "loc": "武大家楼屋雪夜（LOC_WUDA_HOME）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2803,27 +3981,6 @@
           "message": " 状态转场视频证据(ST1)   检测到 15 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json",
-      "dimensions": [
-        "语义谱系(P0)"
-      ],
-      "domain": "story",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image_preflight"
         }
       ]
     },
@@ -2909,9 +4066,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINL",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png 生成事件缺 cost/provi",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png 生成事件缺 cost/p"
+        "[warn] CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
+        "[warn] CHAR_WUDA__日常卖饼态 发型(H1)    ",
+        "[warn]  实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINL"
       ],
       "id": "CHAR_WUDA",
       "kind": "character",
@@ -2965,7 +4122,6 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  场景平面(FP1)   场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png 生成事件缺 cost/provider 记账；无法计算重"
       ],
@@ -3017,7 +4173,6 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  场景平面(FP1)   场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png 生成事件缺 cost/provider 记账；无法计算重",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png 生成事件缺 cost/provider 记账；无法"
       ],
@@ -3053,10 +4208,8 @@
     },
     {
       "contract": "ok",
-      "detect": "warn",
-      "hits": [
-        "[warn]  场景平面(FP1)   场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视"
-      ],
+      "detect": "ok",
+      "hits": [],
       "id": "LOC_WUDA_HOME",
       "kind": "scene",
       "name": "武大家楼屋雪夜",
@@ -3257,29 +4410,35 @@
     }
   },
   "unattributed": [
+    "[warn]  场景(O2)    ",
     "[warn]  打斗撞点(SPEC-APEX)    Clip_01（fight_exchange）：impact 剪辑峰值（hit_stop/scree",
     "[warn]  打斗撞点(SPEC-APEX)    Clip_02（fight_exchange）：impact 剪辑峰值（hit_stop/scree",
+    "[warn]  风格(S1)    ",
+    "[warn]  风格(S1)    ",
+    "[warn]  色温调色(GRADE1)   图片/Clip01_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.015 v",
+    "[warn]  色温调色(GRADE1)   图片/Clip01_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.00",
+    "[warn]  色温调色(GRADE1)   图片/Clip02_end.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.389 v",
+    "[warn]  色温调色(GRADE1)   图片/EP01_CLIP02_a3.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.3",
+    "[warn]  糊/低质(N4)    ",
+    "[warn]  糊/低质(N4)    ",
     "[warn]  配音情绪弧(VEA)   镜头1·旁白：台词含强情绪但配音标注「紧张」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒",
     "[warn]  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
     "[warn]  节奏密度(Rhythm)   连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_C",
     "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
     "[warn]  状态转场视频证据(ST1)   检测到 15 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 ",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[block]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[block]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[block]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[block]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
-    "[block]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/obj",
     "[warn]  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系",
+    "[warn]  视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没",
     "[warn]  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
     "[warn]  成本路由(K1)   出图/共享/图片/风格锚_北宋市井写实电影感.png 生成事件缺 cost/provider 记账；无法计算重试性价",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_REWARD_SILVER.png 生成事件缺 cost/provider 记账；无法",
@@ -3303,7 +4462,11 @@
     "[warn]  环境声(AMB)   本集涉 7 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境",
     "[warn]  文字渲染(OCR1)   Clip_04 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
     "[warn]  文字渲染(OCR1)   Clip_11 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
-    "[warn] scene_consistency  None 接缝接力 未执行：无 /Users/wesley/learn/anime-armory/创作"
+    "[warn] style_consistency  None 风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥",
+    "[warn] character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出",
+    "[warn] character_consistency  图片/Clip02_end.png 疑似漏分类角色镜：图片/Clip02_end.png 检出",
+    "[warn] scene_consistency  图片/EP01_CLIP03_a2.png 场景 O2 初筛：图片/EP01_CLIP03_a2.pn",
+    "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
   ],
   "version": 1
 }

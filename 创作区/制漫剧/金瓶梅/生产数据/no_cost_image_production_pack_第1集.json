@@ -139,12 +139,6 @@
       {
         "kind": "reference_anchor",
         "owner": "BEAST_TIGER/常态",
-        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-        "slot": "back"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "BEAST_TIGER/常态",
         "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
         "slot": "expression_bank"
       },
@@ -157,26 +151,32 @@
       {
         "kind": "reference_anchor",
         "owner": "CHAR_WUDA/日常卖饼态",
-        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-        "slot": "side"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-        "slot": "rear_three_quarter"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-        "slot": "back"
-      },
-      {
-        "kind": "reference_anchor",
-        "owner": "CHAR_WUDA/日常卖饼态",
         "path": "出图/共享/图片/定妆_CHAR_WUDA_日常卖饼态_action_pose_pack.png",
         "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN_25岁武大家常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_MAGISTRATE/常态",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_turnaround.png",
+        "slot": "turnaround"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_MAGISTRATE/常态",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_XIMENQING/常态",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+        "slot": "expression_bank"
       }
     ],
     "episode": "第1集",
@@ -534,42 +534,6 @@
       "task_id": "REF_010"
     },
     {
-      "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-      "owner": "BEAST_TIGER/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "BEAST_TIGER/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "BEAST_TIGER/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "4225a05a7a6f213d",
-      "satisfies": [
-        {
-          "owner": "BEAST_TIGER/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_015"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
       "owner": "BEAST_TIGER/常态",
       "priority": "P0",
@@ -640,114 +604,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_019"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0d832a9994f5aa49",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_022"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "75444cbe654b5543",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_023"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-      "owner": "CHAR_WUDA/日常卖饼态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_WUDA/日常卖饼态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_WUDA/日常卖饼态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "a43299522ef96fc1",
-      "satisfies": [
-        {
-          "owner": "CHAR_WUDA/日常卖饼态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_024"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_WUDA_日常卖饼态_action_pose_pack.png",
@@ -822,150 +678,6 @@
       "task_id": "REF_038"
     },
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "89a19ad8e1dfa68c",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_040"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "60f264c89c205891",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_041"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5d707f7cee1925c0",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_042"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
-      "owner": "CHAR_MAGISTRATE/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_MAGISTRATE/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_MAGISTRATE/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7a27fbfec9d4867c",
-      "satisfies": [
-        {
-          "owner": "CHAR_MAGISTRATE/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_043"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_turnaround.png",
       "owner": "CHAR_MAGISTRATE/常态",
       "priority": "P0",
@@ -1036,150 +748,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_048"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
-      "owner": "CHAR_XIMENQING/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_XIMENQING/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "29a2c5251890e936",
-      "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_050"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
-      "owner": "CHAR_XIMENQING/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_XIMENQING/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "edf655156f0779bb",
-      "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_051"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
-      "owner": "CHAR_XIMENQING/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_XIMENQING/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "40b37d88915b97e5",
-      "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_052"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
-      "owner": "CHAR_XIMENQING/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_XIMENQING/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_XIMENQING/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5daa135039b1ac83",
-      "satisfies": [
-        {
-          "owner": "CHAR_XIMENQING/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_053"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
@@ -7958,7 +7526,7 @@
   "summary": {
     "clips": 15,
     "keyshot_candidate_tasks": 15,
-    "reference_generation_tasks": 80,
+    "reference_generation_tasks": 68,
     "regional_construct_manifests": 15,
     "shot_packages": 15
   },

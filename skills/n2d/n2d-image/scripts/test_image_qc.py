@@ -376,6 +376,47 @@ def test_prop_shape_review_ignores_future_asset_guard_ids(tmp_path: Path) -> Non
     assert targets[0]["png"] == "图片/Clip02_first.png"
 
 
+def test_prop_shape_review_uses_compiled_receipt_for_timed_subshot_assets(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({"assets": [
+        {
+            "id": "PROP_CAKE_POLE", "type": "prop", "name": "炊饼担",
+            "constraints": {"must_not_have": ["单筐", "断绳"]},
+        },
+        {
+            "id": "PROP_WINDOW_LATTICE", "type": "prop", "name": "窗格",
+            "constraints": {"must_not_have": ["现代玻璃窗"]},
+        },
+    ]}, ensure_ascii=False), encoding="utf-8")
+    prompt = tmp_path / "出图" / "第1集" / "prompt"
+    prompt.mkdir(parents=True)
+    (prompt / "01_分镜出图.md").write_text(
+        "## 镜头 4（EP01_CLIP04 街下与楼窗）\n"
+        "**目标落档**：`出图/第1集/图片/Clip04_first.png`\n"
+        "**资产引用注册层**：`PROP_CAKE_POLE`, `PROP_WINDOW_LATTICE`。\n",
+        encoding="utf-8",
+    )
+    image = tmp_path / "出图" / "第1集" / "图片" / "Clip04_first.png"
+    image.parent.mkdir(parents=True)
+    image.write_bytes(b"not-a-real-png")
+    receipt = tmp_path / "生产数据" / "compiled_image_requests" / "第1集" / "Clip_04_first_Clip04_first.json"
+    receipt.parent.mkdir(parents=True)
+    receipt.write_text(json.dumps({
+        "target": "出图/第1集/图片/Clip04_first.png",
+        "compiler": {"reference_inputs": [
+            {"owner": "CHAR_VENDOR/卖饼态", "role": "character"},
+            {"owner": "PROP_CAKE_POLE", "role": "asset"},
+        ]},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+
+    assert [(row["asset"], row["png"]) for row in targets] == [
+        ("PROP_CAKE_POLE", "图片/Clip04_first.png"),
+    ]
+
+
 def test_prop_shape_review_skips_declared_target_until_png_exists(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)

@@ -1,9 +1,9 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第1集
-- 总判定: **block** · 硬阻断 3（必须修） · 非阻断初筛 26 · 视觉降级 0
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 24 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
-- 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
+- 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
 ## 本集图片命名空间（硬闸）
 - 🟢 当前 prompt 声明目标 55 张；未声明 live Clip PNG 0 张
@@ -12,9 +12,9 @@
 - 🟢 active rejects 0 · review `/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/human_image_review.json`
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🔴 block 1 · warn 0
-- 发型 H1: 🟡 block 0 · warn 1
-- 服装 N1: 🟡 block 0 · warn 1
+- 崩脸 G1: 🟢 block 0 · warn 0
+- 发型 H1: 🟢 block 0 · warn 0
+- 服装 N1: 🟢 block 0 · warn 0
 - 场景 O2: 🟡 block 0 · warn 1
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 人体解剖 N5: 🟢 block 0 · warn 0
@@ -32,7 +32,7 @@
 - 像素头顶/脚底/中心线/身高与脸框只作 WARN 级可复算证据；硬条件仅是当前 PNG 的逐视图 pass 收据。
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
-- 🟢 已累积 3 个角色历史，暂无趋势性漂移。
+- 🟢 已累积 2 个角色历史，暂无趋势性漂移。
 
 ## 本地贴脸修复禁用（硬闸）
 - 🟢 未发现最新落档事件来自本地贴脸修复。
@@ -53,7 +53,7 @@
   - scene Clip_03（景阳冈夜间空地）：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/asset_review/scene_Clip_03_compare.png
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 38 · pending 2 · confirmed 36
+- total 30 · pending 0 · confirmed 30
 - 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json`
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_都头腰牌.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_shared_primary_定妆_道具_都头腰牌_compare.png
   - 🟢 shared_primary 出图/共享/图片/定妆_道具_炭盆.png（PROP_BRAZIER 炭盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BRAZIER_shared_primary_定妆_道具_炭盆_compare.png
@@ -79,19 +79,11 @@
   - 🟢 Clip_02 图片/EP01_CLIP02_a1.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a1_compare.png
   - 🟢 Clip_02 图片/EP01_CLIP02_a2.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a2_compare.png
   - 🟢 Clip_02 图片/EP01_CLIP02_a3.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_02_EP01_CLIP02_a3_compare.png
-  - 🟢 Clip_03 图片/Clip03_first.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_Clip03_first_compare.png
   - 🟢 Clip_03 图片/EP01_CLIP03_a1.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a1_compare.png
   - 🟢 Clip_03 图片/EP01_CLIP03_a2.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a2_compare.png
   - 🟢 Clip_03 图片/EP01_CLIP03_a3.png（PROP_BADGE 都头腰牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=约一掌高（12至16厘米），宽度略窄于成年男子手掌；可单手完整握持。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_BADGE_Clip_03_EP01_CLIP03_a3_compare.png
-  - 🟢 Clip_03 图片/Clip03_first.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_Clip03_first_compare.png
   - 🟢 Clip_03 图片/EP01_CLIP03_a1.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a1_compare.png
-  - 🟢 Clip_03 图片/EP01_CLIP03_a2.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a2_compare.png
-  - 🟢 Clip_03 图片/EP01_CLIP03_a3.png（PROP_QUARTERSTAFF 梢棒） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_QUARTERSTAFF_Clip_03_EP01_CLIP03_a3_compare.png
-  - 🟢 Clip_03 图片/Clip03_first.png（PROP_REWARD_SILVER REWARD SILVER） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_Clip03_first_compare.png
   - 🟢 Clip_03 图片/EP01_CLIP03_a1.png（PROP_REWARD_SILVER REWARD SILVER） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a1_compare.png
-  - 🟢 Clip_03 图片/EP01_CLIP03_a2.png（PROP_REWARD_SILVER REWARD SILVER） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a2_compare.png
-  - 🟢 Clip_03 图片/EP01_CLIP03_a3.png（PROP_REWARD_SILVER REWARD SILVER） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=单枚约成年男子掌心大小，可一手托住；不得大于整只手掌或小成硬币。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_REWARD_SILVER_Clip_03_EP01_CLIP03_a3_compare.png
-  - 🔴 Clip_04 图片/Clip04_first.png（PROP_CAKE_POLE 炊饼担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_04_Clip04_first_compare.png
-  - 🔴 Clip_04 图片/Clip04_first.png（PROP_WINDOW_LATTICE WINDOW LATTICE） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_Clip_04_Clip04_first_compare.png
+  - 🟢 Clip_04 图片/Clip04_first.png（PROP_CAKE_POLE 炊饼担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_04_Clip04_first_compare.png
 
 落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

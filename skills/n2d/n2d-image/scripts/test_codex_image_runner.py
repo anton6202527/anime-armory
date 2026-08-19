@@ -1710,6 +1710,112 @@ def test_midframe_anchor_uses_subshot_starting_at_exact_edit_boundary(tmp_path: 
     assert "道具总数量、拓扑与归属严格不变" in prompt
 
 
+def test_firstframe_isolates_form_suffixed_street_subshot_contract(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP04",
+        "location_id": "LOC_STREET",
+        "character_ids": ["CHAR_VENDOR/卖饼态", "CHAR_WOMAN/楼窗态"],
+        "object_ids": ["PROP_CAKE_POLE", "PROP_WINDOW_LATTICE"],
+        "continuity": {"start_state": "护卫已经走进街口，楼屋在前方阴影中。"},
+        "shots": [
+            {
+                "id": "S04A", "t": "0-4.5s", "lens": "35mm→50mm", "camera": "街面低位跟",
+                "desc": "武大挑担穿过比他更高的人群，炊饼蒸汽遮一下画。",
+                "video_prompt": "武大步伐稳定但吃力，担子轻晃，行人只作侧背层次。",
+            },
+            {
+                "id": "S04B", "t": "4.5-10s", "lens": "85mm", "camera": "窗格后慢推",
+                "desc": "潘金莲手扶窗格，看街下却不看武大。",
+            },
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_VENDOR", "name": "武大"},
+        {"id": "CHAR_WOMAN", "name": "潘金莲"},
+        {"id": "CHAR_GUARD", "name": "护卫"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    (shared / "asset_registry.json").write_text(json.dumps({"assets": [
+        {"id": "LOC_STREET", "type": "scene", "name": "县城街面", "constraints": {"light_anchor": "冬日漫射天光"}},
+        {"id": "PROP_CAKE_POLE", "type": "prop", "name": "炊饼担"},
+        {"id": "PROP_WINDOW_LATTICE", "type": "prop", "name": "WINDOW LATTICE"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_04", title="## 镜头4",
+        body=(
+            "**目标落档**：`出图/第1集/图片/Clip04_first.png`\n"
+            "**剧本描述**：武大挑担穿行。潘金莲手扶窗格。\n"
+            "**多人同框身份槽位**：SLOT_1: `CHAR_VENDOR/卖饼态` -> 画中，区分锚点：温厚短脸·旧短袄·炊饼担；"
+            "SLOT_2: `CHAR_WOMAN/楼窗态` -> 楼窗，区分锚点：鹅蛋脸·低髻·长裙\n"
+            "**本镜状态锁**：`CHAR_VENDOR`: 街下卖饼；`CHAR_WOMAN`: 楼窗压抑观察。\n"
+            "**专项镜头模板**：continuity_must=[\"炊饼担随武大移动\", \"潘金莲不离楼窗\", \"心声镜只保留潘为清晰主体\"]。\n"
+            "### 正向 prompt（中文）\n"
+            "锚点句：温厚短脸·旧短袄·炊饼担；鹅蛋脸·低髻·长裙\n"
+            "动作瞬间：武大挑担穿行。潘金莲手扶窗格。\n"
+            "场景光影：县城街面；武大家楼屋；WINDOW LATTICE；炊饼担\n"
+            "情绪张力：街下劳作与楼上受困并置。\n"
+        ),
+        target_line="`出图/第1集/图片/Clip04_first.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_04_first", clip="Clip_04", mode="firstframe",
+        rel_path="出图/第1集/图片/Clip04_first.png", section=section,
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="codex",
+        model="GPT Image 2", channel="Codex CLI",
+    )
+    prompt = str(compiled.get("prompt") or "")
+    reference_paths = [
+        "出图/共享/图片/vendor_脸部特写.png",
+        "出图/共享/图片/vendor_半身.png",
+        "出图/共享/图片/vendor_front.png",
+        "出图/共享/图片/woman_脸部特写.png",
+        "出图/共享/图片/street.png",
+        "出图/共享/图片/cake_pole.png",
+        "出图/共享/图片/window.png",
+        "出图/共享/图片/home.png",
+    ]
+    for rel in reference_paths:
+        path = tmp_path / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"fixture")
+    selected_refs = codex_image_runner.codex_reference_inputs_for_target(
+        tmp_path, "第1集", target, {"items": [
+            {"id": "CHAR_VENDOR", "form": "卖饼态", "kind": "character", "paths": reference_paths[:3]},
+            {"id": "CHAR_WOMAN", "form": "楼窗态", "kind": "character", "paths": [reference_paths[3]]},
+            {"id": "LOC_STREET", "kind": "asset", "paths": [reference_paths[4]]},
+            {"id": "PROP_CAKE_POLE", "kind": "asset", "paths": [reference_paths[5]]},
+            {"id": "PROP_WINDOW_LATTICE", "kind": "asset", "paths": [reference_paths[6]]},
+            {"id": "LOC_HOME", "kind": "asset", "paths": [reference_paths[7]]},
+        ]},
+    )
+
+    assert beat["focus_names"] == ["武大"]
+    assert beat["excluded_names"] == ["潘金莲"]
+    assert beat["current_state"] == "武大挑担穿过比他更高的人群，炊饼蒸汽遮一下画。"
+    assert beat["visible_objects"] == ["炊饼担"]
+    assert beat["excluded_objects"] == ["WINDOW LATTICE"]
+    assert "SLOT_1: CHAR_VENDOR/卖饼态" in prompt
+    assert "SLOT_2" not in prompt
+    assert "当前可见道具：炊饼担" in prompt
+    assert "潘金莲属于同 Clip 的其它子镜头" in prompt
+    assert "护卫已经走进街口" not in prompt
+    assert "潘金莲不离楼窗" not in prompt
+    assert "心声镜只保留潘" not in prompt
+    assert "姜月初" not in prompt
+    assert "裴长青" not in prompt
+    assert [row["owner"] for row in selected_refs] == [
+        "CHAR_VENDOR/卖饼态", "CHAR_VENDOR/卖饼态", "CHAR_VENDOR/卖饼态",
+        "LOC_STREET", "PROP_CAKE_POLE",
+    ]
+
+
 def test_untimed_storyboard_subshots_map_first_and_midframe_deterministically(tmp_path: Path) -> None:
     storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
     storyboard.parent.mkdir(parents=True)

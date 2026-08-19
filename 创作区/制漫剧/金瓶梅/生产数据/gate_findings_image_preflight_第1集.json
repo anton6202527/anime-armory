@@ -3344,7 +3344,7 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-08-18T03:44:32+00:00",
+  "generated_at": "2026-08-18T09:01:39+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811",

@@ -3,11 +3,11 @@
   "blocked": true,
   "blockers": [
     {
-      "message": "确认后再生成；出图是最贵环节之一，放行 ≠ 安全。 已启用全局逐图验收闸门，本次不重复询问生成粒度；仍需单独确认本次付费生成。 ⚠️ 当前存在 critical 告警：QA 阻断 26 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 —— 建议先处理再放行付费生成。",
-      "step": "needs_payment_confirm"
+      "message": "先按 return_to_stage=image_prompt 补齐再来；细节见 创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_第1集.json。",
+      "step": "blocked_by_gate"
     }
   ],
-  "category": "paid_confirmation",
+  "category": "contract_or_gate",
   "episode": "第1集",
   "episode_graph": {
     "graph_hash": "1dfdb592558157c6463b596e1ecd87d45f3a2d4fa431299559642a6443e65057",
@@ -15,19 +15,26 @@
     "status": "pass"
   },
   "gate": {
-    "affected_artifacts": [],
-    "findings_path": "创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_preflight_第1集.json",
-    "return_to_stage": null,
-    "stage": "image_preflight"
+    "affected_artifacts": [
+      "合规/compliance_manifest.json",
+      "脚本/第1集/storyboard.json",
+      "出图/共享/identity_registry.json",
+      "出图/共享/prompt",
+      "出图/第1集/prompt",
+      "出图/第1集/图片"
+    ],
+    "findings_path": "创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_第1集.json",
+    "return_to_stage": "image_prompt",
+    "stage": "image"
   },
-  "generated_at": "2026-08-17T10:48:41+0800",
-  "headline": "第1集 出图（花钱·不可逆，需你放行）",
+  "generated_at": "2026-08-18T17:55:48+0800",
+  "headline": "第1集 出图：gate「image」阻断",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-image",
   "repair_commands": [
     "n2d-image 创作区/制漫剧/金瓶梅 第1集"
   ],
   "stage_key": "image",
-  "stop_reason": "needs_payment_confirm",
+  "stop_reason": "blocked_by_gate",
   "version": 1
 }

@@ -1,6 +1,23 @@
 {
   "confirmations": [
     {
+      "char": "CHAR_WUDA__日常卖饼态",
+      "confirmed_at": "2026-08-18T09:43:52+00:00",
+      "floor": 0.9795,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/Clip04_first.png",
+      "png_sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
+      "reason": "已并排查看当前像素与武大定妆：棕灰包头巾轮廓、露发位置与侧结一致，街景冷光仅改变亮度",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.5089,
+      "shot": "Clip_04",
+      "source": "image_qc:executor_visual_hair_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_WUSONG__28岁打虎态",
       "confirmed_at": "2026-08-17T04:29:05+00:00",
       "floor": 0.9754,
@@ -70,6 +87,6 @@
     }
   ],
   "kind": "n2d_hair_confirmations",
-  "updated_at": "2026-08-17T06:59:17+00:00",
+  "updated_at": "2026-08-18T09:43:52+00:00",
   "version": 1
 }

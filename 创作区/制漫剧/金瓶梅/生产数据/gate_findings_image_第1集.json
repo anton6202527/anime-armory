@@ -245,9 +245,9 @@
           "dimension": "定妆对账",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+          "message": "定妆图 定妆_BEAST_TIGER__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_BEAST_TIGER__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -269,9 +269,9 @@
           "dimension": "定妆对账",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+          "message": "定妆图 定妆_CHAR_MAGISTRATE__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_CHAR_MAGISTRATE__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -293,225 +293,9 @@
           "dimension": "定妆对账",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt",
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+          "message": "定妆图 定妆_CHAR_XIMENQING__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_CHAR_XIMENQING__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -1002,8 +786,8 @@
           "episode": "第1集",
           "gate_stage": "image",
           "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
-          "message": "另有 15 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
-          "msg": "另有 15 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "另有 26 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "msg": "另有 26 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -1013,241 +797,6 @@
       ],
       "return_to_stage": "review",
       "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第1集/prompt、出图/第1集/图片"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/possession_ledger_第1集.json"
-      ],
-      "affected_shots": [
-        "Clip_02",
-        "Clip_05",
-        "Clip_09",
-        "Clip_11",
-        "Clip_14",
-        "Clip_01",
-        "Clip_03",
-        "Clip_04",
-        "Clip_06"
-      ],
-      "dimensions": [
-        "interaction_continuity"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_02"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_05"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_09"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_11"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_14"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/possession_ledger_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_02"
-          ],
-          "dim": "持有账本(POS)",
-          "dim_key": "interaction_continuity",
-          "dimension": "持有账本(POS)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "生产数据/possession_ledger_第1集.json",
-          "message": "PROP_BADGE 在 Clip_02 有持有状态，但 possession_ledger 未登记本镜状态。",
-          "msg": "PROP_BADGE 在 Clip_02 有持有状态，但 possession_ledger 未登记本镜状态。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_01"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_03"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_04"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_06"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_02、Clip_05、Clip_09、Clip_11、Clip_14、Clip_01、Clip_03、Clip_04、Clip_06；定位产物：脚本/第1集/storyboard.json、生产数据/possession_ledger_第1集.json"
     },
     {
       "affected_artifacts": [
@@ -1422,6 +971,330 @@
     },
     {
       "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dimensions": [
+        "outfit_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片"
+          ],
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dim": "服装配色(N1)",
+          "dim_key": "outfit_consistency",
+          "dimension": "服装配色(N1)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。；定位镜头：Clip_04；定位产物：出图/第1集/图片"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片"
+          ],
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dim": "发型(H1)",
+          "dim_key": "character_consistency",
+          "dimension": "发型(H1)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip01_end.png",
+          "message": "疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "msg": "疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip02_end.png",
+          "message": "疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "msg": "疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "CHAR_MAGISTRATE__常态",
+          "message": "锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）",
+          "msg": "锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "CHAR_PANJINLIAN__25岁武大家常态",
+          "message": "锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）",
+          "msg": "锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "CHAR_WUDA__日常卖饼态",
+          "message": "锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）",
+          "msg": "锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "CHAR_WUSONG__28岁打虎态",
+          "message": "锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）",
+          "msg": "锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "character_consistency",
+          "dim_key": "character_consistency",
+          "dimension": "character_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "CHAR_XIMENQING__常态",
+          "message": "锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）",
+          "msg": "锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。；疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。；锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）；定位镜头：Clip_04；定位产物：出图/第1集/图片"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/共享/asset_registry.json"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/共享/asset_registry.json"
+          ],
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "场景(O2)",
+          "dim_key": "scene_consistency",
+          "dimension": "场景(O2)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "scene_consistency",
+          "dim_key": "scene_consistency",
+          "dimension": "scene_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断）",
+          "msg": "场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断）；定位镜头：Clip_03；定位产物：出图/第1集/图片、出图/共享/asset_registry.json"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/第1集/图片/Clip03_first.png",
+        "出图/第1集/图片/EP01_CLIP03_a1.png"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dimensions": [
+        "style_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/第1集/图片/Clip03_first.png"
+          ],
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "糊/低质(N4)",
+          "dim_key": "style_consistency",
+          "dimension": "糊/低质(N4)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/第1集/图片/EP01_CLIP03_a1.png"
+          ],
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "糊/低质(N4)",
+          "dim_key": "style_consistency",
+          "dimension": "糊/低质(N4)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "style_consistency",
+          "dim_key": "style_consistency",
+          "dimension": "style_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。",
+          "msg": "风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。；风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。；定位镜头：Clip_03；定位产物：出图/第1集/图片、出图/第1集/图片/Clip03_first.png、出图/第1集/图片/EP01_CLIP03_a1.png"
+    },
+    {
+      "affected_artifacts": [
         "设定库/consistency_truth_map.json"
       ],
       "affected_shots": [],
@@ -1485,10 +1358,235 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a2.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a2.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a3.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a3.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/entity_memory_bank.json、出图/共享/entity_memory_bank.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json"
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a2.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a3.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a3.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。；定位产物：生产数据/entity_memory_bank.json、出图/共享/entity_memory_bank.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/possession_ledger_第1集.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_02"
+      ],
+      "dimensions": [
+        "interaction_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "生产数据/possession_ledger_第1集.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_02"
+          ],
+          "dim": "持有账本(POS)",
+          "dim_key": "interaction_continuity",
+          "dimension": "持有账本(POS)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "生产数据/possession_ledger_第1集.json",
+          "message": "PROP_BADGE 在 Clip_02 有持有状态，但 possession_ledger 未登记本镜状态。",
+          "msg": "PROP_BADGE 在 Clip_02 有持有状态，但 possession_ledger 未登记本镜状态。",
+          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_02；定位产物：生产数据/possession_ledger_第1集.json、脚本/第1集/storyboard.json"
     },
     {
       "affected_artifacts": [
@@ -1528,8 +1626,7 @@
         "合成/第1集/配音/emotion_flow.json"
       ],
       "affected_shots": [
-        "Clip_01",
-        "Clip_29"
+        "Clip_01"
       ],
       "dimensions": [
         "voice_consistency"
@@ -1556,32 +1653,10 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/voiceover.txt",
-            "合成/第1集/配音/emotion_flow.json"
-          ],
-          "affected_shots": [
-            "Clip_29"
-          ],
-          "dim": "配音情绪弧(VEA)",
-          "dim_key": "voice_consistency",
-          "dimension": "配音情绪弧(VEA)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "脚本/第1集/voiceover.txt",
-          "message": "镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-          "msg": "镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-          "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
-          "return_to_stage": "voice",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "voice",
-      "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。；定位镜头：Clip_01、Clip_29；定位产物：脚本/第1集/voiceover.txt、合成/第1集/配音/emotion_flow.json"
+      "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。；定位镜头：Clip_01；定位产物：脚本/第1集/voiceover.txt、合成/第1集/配音/emotion_flow.json"
     },
     {
       "affected_artifacts": [
@@ -1656,84 +1731,6 @@
       ],
       "return_to_stage": "script_stage2",
       "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。；定位镜头：EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09、EP01_CLIP10、EP01_CLIP11、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_08、Clip_09、Clip_10、Clip_11；定位产物：脚本/第1集/storyboard.json"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/location_spatial_memory.json",
-        "设定库/scene_floorplan.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "设定库/location_spatial_memory.json",
-            "设定库/scene_floorplan.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "场景平面(FP1)",
-          "dim_key": "scene_consistency",
-          "dimension": "场景平面(FP1)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "设定库/location_spatial_memory.json",
-          "message": "[production一致性升级:重复同维度] 场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=eb5c039c79fa，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=eb5c039c79fa，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "设定库/location_spatial_memory.json",
-            "设定库/scene_floorplan.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "场景平面(FP1)",
-          "dim_key": "scene_consistency",
-          "dimension": "场景平面(FP1)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "设定库/location_spatial_memory.json",
-          "message": "[production一致性升级:重复同维度] 场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=581ed50dbcae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=581ed50dbcae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "设定库/location_spatial_memory.json",
-            "设定库/scene_floorplan.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "场景平面(FP1)",
-          "dim_key": "scene_consistency",
-          "dimension": "场景平面(FP1)",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "设定库/location_spatial_memory.json",
-          "message": "[production一致性升级:重复同维度] 场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=662d86d807d5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=662d86d807d5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位产物：设定库/location_spatial_memory.json、设定库/scene_floorplan.json、脚本/第1集/storyboard.json"
     },
     {
       "affected_artifacts": [
@@ -2011,130 +2008,6 @@
       "affected_artifacts": [],
       "affected_shots": [],
       "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "scene_consistency",
-          "dim_key": "scene_consistency",
-          "dimension": "scene_consistency",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "",
-          "message": "接缝接力 未执行：无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
-          "msg": "接缝接力 未执行：无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "接缝接力 未执行：无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。"
-    },
-    {
-      "affected_artifacts": [],
-      "affected_shots": [],
-      "dimensions": [
-        "character_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "character_consistency",
-          "dim_key": "character_consistency",
-          "dimension": "character_consistency",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "CHAR_MAGISTRATE__常态",
-          "message": "锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）",
-          "msg": "锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "character_consistency",
-          "dim_key": "character_consistency",
-          "dimension": "character_consistency",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "CHAR_PANJINLIAN__25岁武大家常态",
-          "message": "锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）",
-          "msg": "锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "character_consistency",
-          "dim_key": "character_consistency",
-          "dimension": "character_consistency",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "CHAR_WUDA__日常卖饼态",
-          "message": "锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）",
-          "msg": "锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "character_consistency",
-          "dim_key": "character_consistency",
-          "dimension": "character_consistency",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "CHAR_WUSONG__28岁打虎态",
-          "message": "锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）",
-          "msg": "锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "character_consistency",
-          "dim_key": "character_consistency",
-          "dimension": "character_consistency",
-          "episode": "第1集",
-          "gate_stage": "image",
-          "loc": "CHAR_XIMENQING__常态",
-          "message": "锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）",
-          "msg": "锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）"
-    },
-    {
-      "affected_artifacts": [],
-      "affected_shots": [],
-      "dimensions": [
         "image_prompt_lint"
       ],
       "findings": [
@@ -2215,8 +2088,59 @@
           "episode": "第1集",
           "gate_stage": "image",
           "loc": "",
-          "message": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
-          "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "message": "多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "msg": "多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "msg": "多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
+          "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
           "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "warn",
@@ -2225,7 +2149,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CHAR_MAGISTRATE/常态「face_anchor」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CHAR_XIMENQING/常态「face_anchor」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；多视图对齐初筛异常 CHAR_WUSONG/28岁打虎态：视平线不齐：three_quarter(0.16) vs back(0.68)，跨视图脸中心高度差 52%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。；多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      "scope": "脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CHAR_MAGISTRATE/常态「face_anchor」（出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CHAR_XIMENQING/常态「face_anchor」（出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；多视图对齐初筛异常 CHAR_WUSONG/28岁打虎态：视平线不齐：three_quarter(0.16) vs back(0.68)，跨视图脸中心高度差 52%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。；多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。；多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。；多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。；VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
     }
   ],
   "episode": "第1集",
@@ -3020,366 +2944,6 @@
       "return_to_stage": "image_prompt",
       "sev": "info",
       "severity": "info",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt",
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -5061,111 +4625,6 @@
     },
     {
       "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_09"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_11"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_14"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "脚本/第1集/storyboard.json",
         "生产数据/expression_第1集.json",
         "出图/第1集/prompt/01_分镜出图.md"
@@ -5302,6 +4761,114 @@
     },
     {
       "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "服装配色(N1)",
+      "dim_key": "outfit_consistency",
+      "dimension": "服装配色(N1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "发型(H1)",
+      "dim_key": "character_consistency",
+      "dimension": "发型(H1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/共享/asset_registry.json"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "场景(O2)",
+      "dim_key": "scene_consistency",
+      "dimension": "场景(O2)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/第1集/图片/Clip03_first.png"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "糊/低质(N4)",
+      "dim_key": "style_consistency",
+      "dimension": "糊/低质(N4)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/第1集/图片/EP01_CLIP03_a1.png"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "糊/低质(N4)",
+      "dim_key": "style_consistency",
+      "dimension": "糊/低质(N4)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
         "设定库/consistency_truth_map.json"
       ],
       "affected_shots": [],
@@ -5406,112 +4973,6 @@
     },
     {
       "affected_artifacts": [
-        "脚本/第1集/voiceover.txt",
-        "合成/第1集/配音/emotion_flow.json"
-      ],
-      "affected_shots": [
-        "Clip_29"
-      ],
-      "dim": "配音情绪弧(VEA)",
-      "dim_key": "voice_consistency",
-      "dimension": "配音情绪弧(VEA)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/voiceover.txt",
-      "message": "镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-      "msg": "镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-      "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
-      "return_to_stage": "voice",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "脚本/第1集/storyboard.json"
       ],
       "affected_shots": [
@@ -5545,69 +5006,6 @@
       "message": "[production一致性升级:关键场景] 连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=4b0a014fd90b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
       "msg": "[production一致性升级:关键场景] 连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=4b0a014fd90b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
       "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/location_spatial_memory.json",
-        "设定库/scene_floorplan.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "场景平面(FP1)",
-      "dim_key": "scene_consistency",
-      "dimension": "场景平面(FP1)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "设定库/location_spatial_memory.json",
-      "message": "[production一致性升级:重复同维度] 场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=eb5c039c79fa，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=eb5c039c79fa，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/location_spatial_memory.json",
-        "设定库/scene_floorplan.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "场景平面(FP1)",
-      "dim_key": "scene_consistency",
-      "dimension": "场景平面(FP1)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "设定库/location_spatial_memory.json",
-      "message": "[production一致性升级:重复同维度] 场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=581ed50dbcae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=581ed50dbcae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/location_spatial_memory.json",
-        "设定库/scene_floorplan.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "场景平面(FP1)",
-      "dim_key": "scene_consistency",
-      "dimension": "场景平面(FP1)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "设定库/location_spatial_memory.json",
-      "message": "[production一致性升级:重复同维度] 场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=662d86d807d5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=662d86d807d5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
       "return_to_stage": "script_stage2",
       "sev": "block",
       "severity": "block",
@@ -5789,8 +5187,8 @@
       "episode": "第1集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
-      "message": "3 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_02(4维/2族/4条·最坏block)；Clip_09(3维/2族/4条·最坏block)；Clip_01(3维/2族/3条·最坏warn)",
-      "msg": "3 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_02(4维/2族/4条·最坏block)；Clip_09(3维/2族/4条·最坏block)；Clip_01(3维/2族/3条·最坏warn)",
+      "message": "5 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_02(3维/2族/3条·最坏block)；Clip_03(3维/2族/4条·最坏block)；Clip_04(3维/3族/3条·最坏block)；Clip_09(2维/2族/3条·最坏block)；Clip_01(2维/2族/2条·最坏warn)",
+      "msg": "5 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_02(3维/2族/3条·最坏block)；Clip_03(3维/2族/4条·最坏block)；Clip_04(3维/3族/3条·最坏block)；Clip_09(2维/2族/3条·最坏block)；Clip_01(2维/2族/2条·最坏warn)",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "info",
@@ -5861,8 +5259,8 @@
       "episode": "第1集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
-      "message": "另有 15 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
-      "msg": "另有 15 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+      "message": "另有 26 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+      "msg": "另有 26 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "warn",
@@ -5896,14 +5294,269 @@
     {
       "affected_artifacts": [],
       "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.06 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.08 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a2.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a2.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a3.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP02_a3.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a3.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/EP01_CLIP03_a3.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "style_consistency",
+      "dim_key": "style_consistency",
+      "dimension": "style_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。",
+      "msg": "风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip01_end.png",
+      "message": "疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+      "msg": "疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip02_end.png",
+      "message": "疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+      "msg": "疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
       "dim": "scene_consistency",
       "dim_key": "scene_consistency",
       "dimension": "scene_consistency",
       "episode": "第1集",
       "gate_stage": "image",
-      "loc": "",
-      "message": "接缝接力 未执行：无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
-      "msg": "接缝接力 未执行：无 /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片——出图后再跑接缝机检。；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
+      "loc": "图片/EP01_CLIP03_a2.png",
+      "message": "场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断）",
+      "msg": "场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断）",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "warn",
@@ -6072,8 +5725,59 @@
       "episode": "第1集",
       "gate_stage": "image",
       "loc": "",
-      "message": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
-      "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "message": "多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "msg": "多视图对齐初筛异常 BEAST_TIGER/常态：头顶线不齐：rear_three_quarter(0.047) vs side(0.114)，差 0.067>0.045；脚底线不齐：side(0.917) vs front(0.953)，差 0.036>0.035；身体中心线不齐：rear_three_quarter(0.471) vs front(0.546)，差 0.075>0.055；全身高度不一：rear_three_quarter 是 side 的 1.104 倍（>1.1）；视平线不齐：front(0.33) vs three_quarter(0.70)，跨视图脸中心高度差 37%>6%；比例不一：front 脸高是 three_quarter 的 7.95 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "msg": "多视图对齐初筛异常 CHAR_WUDA/日常卖饼态：视平线不齐：front(0.53) vs three_quarter(0.82)，跨视图脸中心高度差 29%>6%；比例不一：three_quarter 脸高是 side 的 3.89 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "msg": "多视图对齐初筛异常 CHAR_MAGISTRATE/常态：视平线不齐：three_quarter(0.15) vs side(0.78)，跨视图脸中心高度差 63%>6%；比例不一：front 脸高是 side 的 4.04 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
+      "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "warn",
@@ -6099,11 +5803,12 @@
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-08-15T11:02:02+00:00",
+  "generated_at": "2026-08-18T09:55:48+00:00",
   "inputs_fingerprint": {
     "files": {
+      "出图/共享/asset_registry.json": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811",
       "出图/共享/entity_memory_bank.json": null,
-      "出图/共享/identity_registry.json": "27c6303ff7c5d5e8fd1bf2e12fb40dfe3169537e700637169a0cf2a92c8fa889",
+      "出图/共享/identity_registry.json": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
       "出图/共享/prompt": null,
       "出图/共享/prompt/00_索引.md": "60c803a8b684f3f26f007ac866f57d7b0402d0b2105db28a4d2ec5747cb09984",
       "出图/共享/prompt/场景定妆.md": "52dc41c3552e627ff6b33ac5357752a550b96496e91811de61e9df02c35932aa",
@@ -6112,11 +5817,19 @@
       "出图/共享/prompt/道具定妆.md": "ab1a689bcc17d562b0c8c1811991680b73daafe94d4f5ca385ff7a94b507f0f5",
       "出图/共享/prompt/风格锚.md": "2f4504692da9d522065cbc2d8f4899927833af4d232eeb228230e635a8a3c4dd",
       "出图/共享/图片/定妆_BEAST_TIGER__常态.png": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+      "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+      "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
       "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+      "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png": "b5e3fccdcf6188f4022dae1fa9175282d9a3aaafbac837e2cff55cc010f2b72b",
+      "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png": "d305b0f738ef162c2f7c6b49f46dad9e082972e1619b9d3ea1f6f02489a7b51d",
       "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png": "19ae3f729f0e0d1d4e3fc70b86696ae9cb16cf1c160c067314ab37fdd1f08e83",
       "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
       "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+      "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+      "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
       "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+      "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png": "62985d76bb7848772ecb3d04ae9cb4073314a5260af096615147d7dfe88e8e38",
+      "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png": "243f10b3a1dad7a3ffdeff4d27fc2d0b7ec747a796a03f73e7f3c8f2895249f7",
       "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png": "7e7126b263f2d01677073d87c58cc23a84dac57f09e2b64f97352c478c0178f4",
       "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
       "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c",
@@ -6128,9 +5841,14 @@
       "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png": "5c3104a291502cd8932096b50bf00a609d8fa9126c93107c0a956931e5b27df4",
       "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png": "c8cc45c2514f160643d0186388341639a1404b86f3a1dee3e47197e7488a1c8a",
       "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png": "07663bbb3120bfe97c2eb573514382071565b211e40036429878dcb39b0db96a",
+      "出图/共享/图片/定妆_CHAR_PANJINLIAN__常态.png": "bd523606c43e3c9c38726e7400098409caaafa82b31c7b96efdc16edbb601bce",
+      "出图/共享/图片/定妆_CHAR_WUDA__常态.png": "4ef84e19e0a66de565647a2bba6b31b0df836c3a5923786b26f4e1689d46e5a2",
       "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
       "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+      "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png": "58f40d6e6e96a78ba2940be2217f6a32d74cc0ec236312575fb21d2a5c83ef6a",
       "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+      "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png": "43f07d2704c5ca283a6a4fa157f378260a0fa045d3ab5ab3b7723fa4ab68d5f4",
+      "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png": "5aa96a58d26ccd90e49a395e13d80fffde9d708e75f9a685d0712ad1495758dd",
       "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
       "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
       "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png": "a6702a565e0c69efb3d6814bb98a7b59b7e0294bc8e29261c09e443711ac0be9",
@@ -6144,7 +5862,11 @@
       "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png": "6fae69a5bca80460db286b573d1db9a710cbbce0a6d80eb51a966138dcc03a1d",
       "出图/共享/图片/定妆_CHAR_WUSONG__常态.png": "27665ccb40f8b46b5ef4b3b9eebe87dbe32fedb70a982e6806693576674fe17b",
       "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+      "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+      "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
       "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+      "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png": "2ee9b70961d5901f7e886a2a13ae5bf2d8739bad3c710043dc7fe54b5d297450",
+      "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png": "16907bc469c95ea5faed0859c6f8016d725eb49b101d55bc79c8068f0cd9d4c5",
       "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png": "e6ed90aed2f78eb99a4f14b4639f31d717864706469b307c00c731be14ca3f67",
       "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
       "出图/共享/图片/定妆_CROWD_HUNTERS__常态.png": "ac559def295416b0fd499defc30edb0927486c9da49ba1813e13937cf7d621a4",
@@ -6227,8 +5949,21 @@
       "出图/共享/图片/风格锚_北宋市井写实电影感.png": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
       "出图/第1集/prompt": null,
       "出图/第1集/prompt/00_总览.md": "30107c542631447917fa38bdfe0592dcfa648f24714100adbab6ac55673ecad4",
-      "出图/第1集/prompt/01_分镜出图.md": "75d92c2b2c949dc79f4486621c492a4e05b788a6b0c4cc3638ab5437c037c2a1",
+      "出图/第1集/prompt/01_分镜出图.md": "ece602994247f74a4f10f6caa0b2f470ebb4a98f99a91f9c025543183e86ef37",
       "出图/第1集/图片": null,
+      "出图/第1集/图片/Clip01_end.png": "cb45f9575816763638dbdf1405a1e69e7cbc490d67c661db0f18d5a22e06db9f",
+      "出图/第1集/图片/Clip01_first.png": "6b6d492f9c408b818ec011f2ef6778f02d52fb4eb5dfb45abb70d7803cdb7e92",
+      "出图/第1集/图片/Clip02_end.png": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
+      "出图/第1集/图片/Clip02_first.png": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
+      "出图/第1集/图片/Clip03_first.png": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
+      "出图/第1集/图片/Clip04_first.png": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
+      "出图/第1集/图片/EP01_CLIP01_a1.png": "d3d8fb1d2a0e1fd872d92c2d325120fe06aa510314bc6f67bd2d7adf040c6645",
+      "出图/第1集/图片/EP01_CLIP02_a1.png": "116401263082ce8ae1be0d3af054d26eac4554c647046eb3e6cb95e75177cfdd",
+      "出图/第1集/图片/EP01_CLIP02_a2.png": "e9db4b83a9b1a39d1d4cf9309de92e8298fb24b1635b12e495ae3b4bafd52bfd",
+      "出图/第1集/图片/EP01_CLIP02_a3.png": "943c7e19fafa46a91f9ed116e934b1aaeae3bff43e51a8b80ec50e64bcc6b35b",
+      "出图/第1集/图片/EP01_CLIP03_a1.png": "bb7d5b5bc3041c37454712e08d66607b118cd450c6ca37714918f7cd1bbf2a82",
+      "出图/第1集/图片/EP01_CLIP03_a2.png": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
+      "出图/第1集/图片/EP01_CLIP03_a3.png": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
       "出视频/第1集/prompt": null,
       "合成/第1集/配音/emotion_flow.json": null,
       "合规/compliance_manifest.json": "c2ffa9c156379c69c4f0b34f61a3e21d1b6b2c571c53cecd8b05040d15f49a34",
@@ -6237,17 +5972,15 @@
       "生产数据/expression_第1集.json": null,
       "生产数据/possession_ledger_第1集.json": "b3aa8d1bc12717b91d4dfd5d64be27595fc0818829274cc148be181e569ca2e2",
       "生产数据/world_consistency_score_第1集.json": null,
-      "脚本/第1集/storyboard.json": "47e5cc4b94a3698437448c156e8f9f8c817b96758c0234811b30e19c6eee4cde",
+      "脚本/第1集/storyboard.json": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0",
       "脚本/第1集/voiceover.txt": "629f9b563d5f887fd9b548252d7f946de230737174a73ce6b351ab03ffad53cf",
       "设定库/characters/武大.md": "569cdc56c0dcca87b8f56462b64384368724a545a5274430acee78bd44258f5b",
       "设定库/characters/武松.md": "f0eab70626f87ef268c3a4ac6e7081ebc60d6c9249854200db0388774fc70e56",
       "设定库/characters/潘金莲.md": "604cf0a24aecdb28d9a986dafd94b06fc57b55b7d6624d24d89e53383ea68ae8",
       "设定库/consistency_truth_map.json": null,
-      "设定库/leitmotif_registry.json": "14550066514ccc2f50f38d0e95e18a2f6b829045339905f0988caa1af7530748",
-      "设定库/location_spatial_memory.json": null,
-      "设定库/scene_floorplan.json": "b1e37a21534f510bd48bf515e7ed719ab5c32d488f40d3794cd59015019a6743"
+      "设定库/leitmotif_registry.json": "14550066514ccc2f50f38d0e95e18a2f6b829045339905f0988caa1af7530748"
     },
-    "sha": "fc144df648163d6079f2c457c198acb32d88f6133244d79a7a26345142d0230d"
+    "sha": "e971ab15707241c54459ac73373d1db98c09bdc76b14156de0a0a8dce0053d28"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/金瓶梅",
@@ -6260,7 +5993,7 @@
       "character_consistency": {
         "block": 0,
         "info": 0,
-        "warn": 5
+        "warn": 7
       },
       "fidelity-gate": {
         "block": 0,
@@ -6275,7 +6008,12 @@
       "image_prompt_lint": {
         "block": 0,
         "info": 0,
-        "warn": 5
+        "warn": 8
+      },
+      "multimodal_continuity": {
+        "block": 0,
+        "info": 0,
+        "warn": 12
       },
       "scene_consistency": {
         "block": 0,
@@ -6286,6 +6024,11 @@
         "block": 0,
         "info": 1,
         "warn": 0
+      },
+      "style_consistency": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
       },
       "一致性总审": {
         "block": 0,
@@ -6312,20 +6055,25 @@
         "info": 1,
         "warn": 0
       },
+      "发型(H1)": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
       "合规前置": {
         "block": 0,
         "info": 3,
         "warn": 1
       },
-      "场景平面(FP1)": {
-        "block": 3,
+      "场景(O2)": {
+        "block": 0,
         "info": 0,
-        "warn": 0
+        "warn": 1
       },
       "定妆对账": {
         "block": 0,
         "info": 0,
-        "warn": 18
+        "warn": 3
       },
       "实体记忆(EMB)": {
         "block": 0,
@@ -6352,6 +6100,11 @@
         "info": 0,
         "warn": 1
       },
+      "服装配色(N1)": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
       "物料漂移预案": {
         "block": 0,
         "info": 23,
@@ -6372,10 +6125,10 @@
         "info": 0,
         "warn": 1
       },
-      "结构化交互图谱(I2)": {
-        "block": 5,
+      "糊/低质(N4)": {
+        "block": 0,
         "info": 0,
-        "warn": 4
+        "warn": 2
       },
       "脸漂预案": {
         "block": 0,
@@ -6405,7 +6158,7 @@
       "配音情绪弧(VEA)": {
         "block": 0,
         "info": 0,
-        "warn": 2
+        "warn": 1
       },
       "音乐母题(LM1)": {
         "block": 8,
@@ -6414,11 +6167,11 @@
       }
     },
     "severity": {
-      "block": 21,
+      "block": 13,
       "info": 32,
-      "warn": 115
+      "warn": 118
     },
-    "total": 168
+    "total": 163
   },
   "version": 1
 }

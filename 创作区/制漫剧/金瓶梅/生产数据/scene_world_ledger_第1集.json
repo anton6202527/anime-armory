@@ -2,10 +2,261 @@
   "kind": "n2d_scene_world_ledger",
   "episode": "第1集",
   "available": true,
-  "timeline": [],
-  "scenes": {},
+  "timeline": [
+    {
+      "png": "Clip01_first.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 34.1,
+      "warmth": -0.001,
+      "daypart": "night",
+      "light_cx": 0.405,
+      "light_az": "center",
+      "light_cy": 0.354,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。\", \"LOC_COUNTY_YAMEN\": \"高窗冷光从画左，案上纸面暖反光克制。\", \"LOC_CITY_GATE\": \"清晨逆光从城门外画面上方进入，楼窗内保持暗暖。\"}",
+      "weather": "snow",
+      "season": "winter",
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_end.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 27.0,
+      "warmth": 0.002,
+      "daypart": "night",
+      "light_cx": 0.331,
+      "light_az": "left",
+      "light_cy": 0.319,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_first.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 35.1,
+      "warmth": -0.037,
+      "daypart": "night",
+      "light_cx": 0.313,
+      "light_az": "left",
+      "light_cy": 0.336,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。\", \"LOC_COUNTY_YAMEN\": \"高窗冷光从画左，案上纸面暖反光克制。\", \"LOC_CITY_GATE\": \"清晨逆光从城门外画面上方进入，楼窗内保持暗暖。\"}",
+      "weather": "snow",
+      "season": "winter",
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_end.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 25.3,
+      "warmth": -0.041,
+      "daypart": "night",
+      "light_cx": 0.311,
+      "light_az": "left",
+      "light_cy": 0.349,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_first.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 32.6,
+      "warmth": -0.027,
+      "daypart": "night",
+      "light_cx": 0.335,
+      "light_az": "left",
+      "light_cy": 0.267,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。\", \"LOC_COUNTY_YAMEN\": \"高窗冷光从画左，案上纸面暖反光克制。\", \"LOC_CITY_GATE\": \"清晨逆光从城门外画面上方进入，楼窗内保持暗暖。\"}",
+      "weather": "snow",
+      "season": "winter",
+      "time_transition": false
+    },
+    {
+      "png": "Clip04_first.png",
+      "scene": "场景_阳谷街面与武大家楼窗.png",
+      "luma": 66.1,
+      "warmth": -0.01,
+      "daypart": "night",
+      "light_cx": 0.444,
+      "light_az": "center",
+      "light_cy": 0.15,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_JINGYANGGANG\": \"月光自画左上侧逆，地面薄雾冷青；拳击高光不闪白、不夸张血浆。\", \"LOC_YANGGU_STREET\": \"冬日漫射天光自画面上方，店铺灶火作低位暖补光。\", \"LOC_WUDA_HOME\": \"窗雪冷光从画右后进入，炭盆暖光从画左下托脸；门闩落下后冷暖边界更硬。\", \"LOC_COUNTY_YAMEN\": \"高窗冷光从画左，案上纸面暖反光克制。\", \"LOC_CITY_GATE\": \"清晨逆光从城门外画面上方进入，楼窗内保持暗暖。\"}",
+      "weather": "snow",
+      "season": "winter",
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP01_a1.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 31.0,
+      "warmth": -0.006,
+      "daypart": "night",
+      "light_cx": 0.355,
+      "light_az": "left",
+      "light_cy": 0.347,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP02_a1.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 29.5,
+      "warmth": -0.044,
+      "daypart": "night",
+      "light_cx": 0.337,
+      "light_az": "left",
+      "light_cy": 0.326,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP02_a2.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 27.1,
+      "warmth": -0.036,
+      "daypart": "night",
+      "light_cx": 0.295,
+      "light_az": "left",
+      "light_cy": 0.316,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP02_a3.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 26.1,
+      "warmth": -0.042,
+      "daypart": "night",
+      "light_cx": 0.309,
+      "light_az": "left",
+      "light_cy": 0.364,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP03_a1.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 27.4,
+      "warmth": -0.023,
+      "daypart": "night",
+      "light_cx": 0.324,
+      "light_az": "left",
+      "light_cy": 0.248,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP03_a2.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 62.2,
+      "warmth": -0.01,
+      "daypart": "night",
+      "light_cx": 0.311,
+      "light_az": "left",
+      "light_cy": 0.223,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "EP01_CLIP03_a3.png",
+      "scene": "场景_景阳冈夜间空地.png",
+      "luma": 47.7,
+      "warmth": -0.022,
+      "daypart": "night",
+      "light_cx": 0.266,
+      "light_az": "left",
+      "light_cy": 0.281,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    }
+  ],
+  "scenes": {
+    "场景_景阳冈夜间空地.png": {
+      "shots": [
+        "Clip01_first.png",
+        "Clip01_end.png",
+        "Clip02_first.png",
+        "Clip02_end.png",
+        "Clip03_first.png",
+        "EP01_CLIP01_a1.png",
+        "EP01_CLIP02_a1.png",
+        "EP01_CLIP02_a2.png",
+        "EP01_CLIP02_a3.png",
+        "EP01_CLIP03_a1.png",
+        "EP01_CLIP03_a2.png",
+        "EP01_CLIP03_a3.png"
+      ],
+      "dayparts": {
+        "night": 12
+      },
+      "light_azimuths": {
+        "center": 1,
+        "left": 11
+      },
+      "light_elevations": {
+        "top": 12
+      },
+      "weathers": {
+        "snow": 3
+      },
+      "seasons": {
+        "winter": 3
+      },
+      "findings": []
+    },
+    "场景_阳谷街面与武大家楼窗.png": {
+      "shots": [
+        "Clip04_first.png"
+      ],
+      "dayparts": {
+        "night": 1
+      },
+      "light_azimuths": {
+        "center": 1
+      },
+      "light_elevations": {
+        "top": 1
+      },
+      "weathers": {
+        "snow": 1
+      },
+      "seasons": {
+        "winter": 1
+      },
+      "findings": []
+    }
+  },
   "summary": {
-    "scene_count": 0,
+    "scene_count": 2,
     "finding_count": 0,
     "block_count": 0,
     "warn_count": 0

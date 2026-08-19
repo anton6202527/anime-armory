@@ -3177,6 +3177,49 @@ def _prop_shape_asset_ids_from_block(body: str) -> List[str]:
     return sorted(set(ASSET_ID_RE.findall(source)))
 
 
+def _compiled_active_asset_ids(root: Path, ep: str, png: str) -> Optional[Set[str]]:
+    """Return exact asset owners submitted for one generated PNG, if receipted.
+
+    A prompt block is Clip-wide and may register assets belonging to adjacent
+    timed sub-shots.  The compiler receipt is the narrower B14 truth: its
+    reference inputs record which concrete assets were actually selected for
+    this physical image.  Legacy/unreceipted images keep the block fallback.
+    """
+    receipt_dir = production_dir(root) / "compiled_image_requests" / ep
+    if not receipt_dir.is_dir():
+        return None
+    target_key = _coverage_png_key(png)
+    matches: List[Tuple[float, Path, Dict[str, Any]]] = []
+    for path in receipt_dir.glob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if _coverage_png_key(data.get("target")) != target_key:
+            continue
+        try:
+            stamp = path.stat().st_mtime
+        except OSError:
+            stamp = 0.0
+        matches.append((stamp, path, data))
+    if not matches:
+        return None
+    data = max(matches, key=lambda row: row[0])[2]
+    compiler = data.get("compiler") if isinstance(data.get("compiler"), Mapping) else {}
+    refs = compiler.get("reference_inputs") if isinstance(compiler, Mapping) else None
+    if not isinstance(refs, list):
+        submit = data.get("actual_submit_request") if isinstance(data.get("actual_submit_request"), Mapping) else {}
+        refs = submit.get("reference_inputs") if isinstance(submit, Mapping) else None
+    if not isinstance(refs, list):
+        return None
+    return {
+        str(row.get("owner") or "").split("/", 1)[0]
+        for row in refs
+        if isinstance(row, Mapping)
+        and str(row.get("owner") or "").startswith(("PROP_", "WEAPON_", "OUTFIT_", "VFX_"))
+    }
+
+
 def prop_shape_review_targets(root: Path, ep: str,
                               asset_index: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     """高风险物料（PROP/WEAPON/OUTFIT/VFX + must_not_have）逐图禁形/尺寸复核目标。
@@ -3264,6 +3307,9 @@ def prop_shape_review_targets(root: Path, ep: str,
                 continue
             ref = _resolve_asset_ref(root, pm, aid) or _resolve_asset_ref(root, pm, str(entry.get("name") or ""))
             for png in _clip_pngs_on_disk(root, ep, shot, fallback_png):
+                active_assets = _compiled_active_asset_ids(root, ep, png)
+                if active_assets is not None and aid not in active_assets:
+                    continue
                 key = (aid, png)
                 if key in seen:
                     continue

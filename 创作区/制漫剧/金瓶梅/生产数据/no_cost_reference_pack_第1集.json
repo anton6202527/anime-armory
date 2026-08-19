@@ -24,8 +24,8 @@
     "asset_targets": 77,
     "character_targets": 57,
     "multi_subject_targets": 30,
-    "planned": 80,
-    "ready": 84,
+    "planned": 68,
+    "ready": 96,
     "total": 164
   },
   "targets": [
@@ -147,7 +147,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "back",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "BEAST_TIGER/常态",
@@ -203,7 +203,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "side",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_WUDA/日常卖饼态",
@@ -211,7 +211,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "rear_three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_WUDA/日常卖饼态",
@@ -219,7 +219,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "back",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_WUDA/日常卖饼态",
@@ -347,7 +347,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_MAGISTRATE/常态",
@@ -355,7 +355,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "side",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_MAGISTRATE/常态",
@@ -363,7 +363,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "rear_three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_MAGISTRATE/常态",
@@ -371,7 +371,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "back",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_MAGISTRATE/常态",
@@ -427,7 +427,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_XIMENQING/常态",
@@ -435,7 +435,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "side",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_XIMENQING/常态",
@@ -443,7 +443,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "rear_three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_XIMENQING/常态",
@@ -451,7 +451,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "back",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_XIMENQING/常态",

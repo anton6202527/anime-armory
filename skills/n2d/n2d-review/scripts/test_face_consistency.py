@@ -593,6 +593,42 @@ def test_shot_character_map_uses_timed_reaction_anchor_focus(tmp_path):
     assert shot_map["图片/EP01_CLIP02_a2.png"] == ["贺平生_常态"]
 
 
+def test_shot_character_map_prefers_compiled_subshot_reference_owners(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_VENDOR", "forms": [{"form": "卖饼态", "asset_key": "摊主_卖饼态"}]},
+        {"id": "CHAR_WOMAN", "forms": [{"form": "楼窗态", "asset_key": "女子_楼窗态"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    (prompt_dir / "01_分镜出图.md").write_text("\n".join([
+        "## Clip 04",
+        "目标：出图/第1集/图片/Clip04_first.png",
+        "**资产身份注册层**：`CHAR_VENDOR/卖饼态`, `CHAR_WOMAN/楼窗态`；二人都登记。",
+        "**多人同框身份槽位**：SLOT_1: `CHAR_WOMAN/楼窗态` -> primary 星标；"
+        "SLOT_2: `CHAR_VENDOR/卖饼态`。",
+    ]), encoding="utf-8")
+    receipt = root / "生产数据" / "compiled_image_requests" / ep / "Clip_04_first_Clip04_first.json"
+    receipt.parent.mkdir(parents=True)
+    receipt.write_text(json.dumps({
+        "target": "出图/第1集/图片/Clip04_first.png",
+        "compiler": {"reference_inputs": [
+            {"owner": "CHAR_VENDOR/卖饼态", "role": "character"},
+            {"owner": "LOC_STREET", "role": "asset"},
+        ]},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    shot_map = fc.shot_character_map(str(root), ep)
+
+    assert shot_map["图片/Clip04_first.png"] == ["摊主_卖饼态"]
+
+
 def test_shot_character_map_skips_prop_detail_insert_face(tmp_path):
     import json
     import face_consistency as fc

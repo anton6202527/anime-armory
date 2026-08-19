@@ -1,7 +1,7 @@
 # 无成本图片增强参考档
 
 - episode: 第1集
-- total: 164 ｜ ready: 84 ｜ planned: 80
+- total: 164 ｜ ready: 96 ｜ planned: 68
 - multi_subject_clips: EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09、EP01_CLIP10、EP01_CLIP11、EP01_CLIP12、EP01_CLIP13、EP01_CLIP14、EP01_CLIP15
 
 | Scope | Owner | Slot | Status | Path | Reason |
@@ -20,16 +20,16 @@
 | character | BEAST_TIGER/常态 | three_quarter | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | side | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | rear_three_quarter | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | BEAST_TIGER/常态 | back | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | BEAST_TIGER/常态 | back | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | BEAST_TIGER/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
 | character | BEAST_TIGER/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
 | character | BEAST_TIGER/常态 | expression_bank | planned | 出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | BEAST_TIGER/常态 | action_pose_pack | planned | 出图/共享/图片/定妆_BEAST_TIGER_常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
 | character | CHAR_WUDA/日常卖饼态 | front | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_WUDA/日常卖饼态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUDA/日常卖饼态 | side | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUDA/日常卖饼态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_WUDA/日常卖饼态 | back | planned | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUDA/日常卖饼态 | side | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUDA/日常卖饼态 | rear_three_quarter | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_WUDA/日常卖饼态 | back | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_WUDA/日常卖饼态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
 | character | CHAR_WUDA/日常卖饼态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
 | character | CHAR_WUDA/日常卖饼态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
@@ -45,20 +45,20 @@
 | character | CHAR_PANJINLIAN/25岁武大家常态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_PANJINLIAN/25岁武大家常态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_PANJINLIAN_25岁武大家常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
 | character | CHAR_MAGISTRATE/常态 | front | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_MAGISTRATE/常态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_MAGISTRATE/常态 | side | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_MAGISTRATE/常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_MAGISTRATE/常态 | back | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_MAGISTRATE/常态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_MAGISTRATE/常态 | side | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_MAGISTRATE/常态 | rear_three_quarter | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_MAGISTRATE/常态 | back | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_MAGISTRATE/常态 | turnaround | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_turnaround.png | 核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。 |
 | character | CHAR_MAGISTRATE/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
 | character | CHAR_MAGISTRATE/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
 | character | CHAR_MAGISTRATE/常态 | expression_bank | ready | 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_MAGISTRATE/常态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_MAGISTRATE_常态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
 | character | CHAR_XIMENQING/常态 | front | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_XIMENQING/常态 | three_quarter | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_XIMENQING/常态 | side | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_XIMENQING/常态 | rear_three_quarter | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
-| character | CHAR_XIMENQING/常态 | back | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_XIMENQING/常态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_XIMENQING/常态 | side | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_XIMENQING/常态 | rear_three_quarter | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
+| character | CHAR_XIMENQING/常态 | back | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png | 基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。 |
 | character | CHAR_XIMENQING/常态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
 | character | CHAR_XIMENQING/常态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
 | character | CHAR_XIMENQING/常态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |

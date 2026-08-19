@@ -876,6 +876,76 @@
       "to": "clip:Clip_15"
     },
     {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_first.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_end.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_first.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_first.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_first.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP01_a1.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP02_a1.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP02_a2.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP02_a3.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP03_a1.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP03_a2.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP03_a3.png"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第1集.json"
+    },
+    {
       "from": "episode:第1集",
       "relation": "has_evidence",
       "to": "evidence:audio_space_consistency_第1集.json"
@@ -1213,6 +1283,12 @@
       "path": "生产数据/audio_space_consistency_第1集.json"
     },
     {
+      "id": "evidence:consistency_ledger_第1集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第1集.json",
+      "path": "生产数据/consistency_ledger_第1集.json"
+    },
+    {
       "id": "evidence:expression_state_consistency_第1集.json",
       "kind": "evidence",
       "label": "expression_state_consistency_第1集.json",
@@ -1223,14 +1299,92 @@
       "kind": "evidence",
       "label": "motion_grammar_consistency_第1集.json",
       "path": "生产数据/motion_grammar_consistency_第1集.json"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_end.png",
+      "kind": "image",
+      "label": "Clip01_end.png",
+      "path": "出图/第1集/图片/Clip01_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_first.png",
+      "kind": "image",
+      "label": "Clip01_first.png",
+      "path": "出图/第1集/图片/Clip01_first.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_end.png",
+      "kind": "image",
+      "label": "Clip02_end.png",
+      "path": "出图/第1集/图片/Clip02_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_first.png",
+      "kind": "image",
+      "label": "Clip02_first.png",
+      "path": "出图/第1集/图片/Clip02_first.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_first.png",
+      "kind": "image",
+      "label": "Clip03_first.png",
+      "path": "出图/第1集/图片/Clip03_first.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_first.png",
+      "kind": "image",
+      "label": "Clip04_first.png",
+      "path": "出图/第1集/图片/Clip04_first.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP01_a1.png",
+      "kind": "image",
+      "label": "EP01_CLIP01_a1.png",
+      "path": "出图/第1集/图片/EP01_CLIP01_a1.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP02_a1.png",
+      "kind": "image",
+      "label": "EP01_CLIP02_a1.png",
+      "path": "出图/第1集/图片/EP01_CLIP02_a1.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP02_a2.png",
+      "kind": "image",
+      "label": "EP01_CLIP02_a2.png",
+      "path": "出图/第1集/图片/EP01_CLIP02_a2.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP02_a3.png",
+      "kind": "image",
+      "label": "EP01_CLIP02_a3.png",
+      "path": "出图/第1集/图片/EP01_CLIP02_a3.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP03_a1.png",
+      "kind": "image",
+      "label": "EP01_CLIP03_a1.png",
+      "path": "出图/第1集/图片/EP01_CLIP03_a1.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP03_a2.png",
+      "kind": "image",
+      "label": "EP01_CLIP03_a2.png",
+      "path": "出图/第1集/图片/EP01_CLIP03_a2.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP03_a3.png",
+      "kind": "image",
+      "label": "EP01_CLIP03_a3.png",
+      "path": "出图/第1集/图片/EP01_CLIP03_a3.png"
     }
   ],
   "root": "创作区/制漫剧/金瓶梅",
   "summary": {
     "clips": 15,
-    "edges": 178,
-    "images": 0,
-    "nodes": 50,
+    "edges": 192,
+    "images": 13,
+    "nodes": 64,
     "videos": 0
   },
   "version": 1

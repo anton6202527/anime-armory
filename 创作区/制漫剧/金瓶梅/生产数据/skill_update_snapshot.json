@@ -1,11 +1,11 @@
 {
-  "created_at": "2026-08-15T02:29:32+00:00",
+  "created_at": "2026-08-18T09:38:06+00:00",
   "episodes": [
     "第1集"
   ],
   "files": {
     "skills/n2d/Q&A.md": "e35dc174333907c0dd9a99a2190691ec5b0a940ccf97e509697eb31d151db995",
-    "skills/n2d/SKILL.md": "36a9c22afa2c4cce811364f411052d250a3a0ede6ca2c74de12b9a30f7f5c0a6",
+    "skills/n2d/SKILL.md": "e56ce09bc3b839b9dbe88f3704f044dbfde119d38bb23d588131a2acd649f26c",
     "skills/n2d/_lib/autonomy_policy.py": "3b307bc59a17a51e694bea22e421bee00fb1d2d099ebcfae6e7353b2583bf837",
     "skills/n2d/_lib/backend_smoke.py": "e350c97c3a686add93e8b6c919fadc8a7965ae76c72f4997f879a72c7ad3acbf",
     "skills/n2d/_lib/bgm_contract.py": "1ec1f68bcc9c6ed2e138354153a9079bee655f1d5a81c66749ce21cea425fb03",
@@ -105,7 +105,7 @@
     "skills/n2d/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d/n2d-image/scripts/candidate_select.py": "35ce58221bdd5aae1aeb0feab6e78431b18472ced1c3fb7a613ad8c6e7bf14d3",
     "skills/n2d/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d/n2d-image/scripts/codex_image_runner.py": "530df0fdc5a3fdd60701063c62c4dd94854eb591f9f66ec41615d45b23016278",
+    "skills/n2d/n2d-image/scripts/codex_image_runner.py": "037ee7c73d17bdfd7c0a4a00bdf59f630af9079f7305192cdd414d9b51d84d11",
     "skills/n2d/n2d-image/scripts/cover_pack.py": "307d68d9976d7f9995977a9a981ce0134fe134729b693578c44f20a9d818e536",
     "skills/n2d/n2d-image/scripts/derive_makeup_pack.py": "7035e566713b776c60d68c828e4869d89f076875b6a5f096df7beca2f1d7d0e6",
     "skills/n2d/n2d-image/scripts/derive_scene_views.py": "2fd54e45b22f225e394e3fe050973daf0fa32f0fa7f4d17ebef69720f6db7ba9",
@@ -113,7 +113,7 @@
     "skills/n2d/n2d-image/scripts/face_drift_risk.py": "fe2de7475674f3984b32ea2410f9a9d5fb0b3b6ea646f17716e30d76e69a4085",
     "skills/n2d/n2d-image/scripts/image_prompt_metrics.py": "dbf846f0ec43962f4b87300fdd352374cf3f8594f8a0ac299e3077441d938eaf",
     "skills/n2d/n2d-image/scripts/image_prompt_pack.py": "db18bfc84b4030712cc0f617af206244098cbccd8ab80dc43c4627842460b63f",
-    "skills/n2d/n2d-image/scripts/image_qc.py": "1c3059d9ea40418216c2972324659e218051735ced594a25b715333ac670b890",
+    "skills/n2d/n2d-image/scripts/image_qc.py": "7b872b11e0cb5a69d2401569f158785a8347862e45eba228fd1d8770f848c24c",
     "skills/n2d/n2d-image/scripts/keyshot_candidate_runner.py": "ebcbe85f28cf5e5df441ccf1e932539047703bff7247a3b4073deb967f6bb1af",
     "skills/n2d/n2d-image/scripts/keyshot_candidates.py": "ef32dbf664e1416526e7e382eae36fdd25096fd83b5c0aea76090eed344c636e",
     "skills/n2d/n2d-image/scripts/migrate_character_library.py": "8dcce0417d2cac7d06440d166b2a966195609f206e9638b8296f564ab1303462",
@@ -181,7 +181,7 @@
     "skills/n2d/n2d-review/scripts/expression_verification.py": "515afb21b9ad339724073fad138db3c2f0bd2f5279608e61f48473c1c60b851b",
     "skills/n2d/n2d-review/scripts/extended_consistency.py": "45ab7f02078036a2f3223d45d10e5df55a27a3205b25cdf7a33af89956dec843",
     "skills/n2d/n2d-review/scripts/face_compare_stitch.py": "43026f3b6ad037d0e665ed79a696eb80f8e0bcc552fdfad05f2e179ef607bec1",
-    "skills/n2d/n2d-review/scripts/face_consistency.py": "c13af8e247918b2b86f9aa7019f268a5179cde2c993453044e6f398e8572e4a4",
+    "skills/n2d/n2d-review/scripts/face_consistency.py": "b29650746f963eaf59fb432bcaff440f184171e8378700c8117537387720404e",
     "skills/n2d/n2d-review/scripts/gate.py": "ea6cd37866d30951ac306e9b7d12bc5c94b643ab6bd75ed80321cb88a81ace29",
     "skills/n2d/n2d-review/scripts/gate_core.py": "8d425500ec49dd3566c6570829d86a161ea6916219a0c17ff34e68b91b0911f2",
     "skills/n2d/n2d-review/scripts/gates/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
