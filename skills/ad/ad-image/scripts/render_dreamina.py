@@ -25,6 +25,12 @@ if str(AD_LIB) not in sys.path:
     sys.path.insert(0, str(AD_LIB))
 import io_utils  # noqa: E402  本线 _lib 原子写（账本落盘不可半写）
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+import image_job_receipt  # noqa: E402  ad-image 自维护的逐图 B14 收据
+import product_qc  # noqa: E402  当前像素落地后立即跑本线最完整 QC
+
 KEY_SECTIONS = (
     "画面 prompt",
     "身份锁定句",
@@ -248,6 +254,21 @@ def enforce_gate(root: Path) -> None:
         raise RuntimeError("storyboard stage acceptance blocked paid image generation")
 
 
+def prepare_image_receipt(root: Path, manifest: Mapping[str, Any], job: Dict[str, Any], index: int) -> Dict[str, Any]:
+    """Hard preflight wrapper kept injectable for unit tests; no runtime bypass flag."""
+    return image_job_receipt.preflight(root, manifest, job, index)
+
+
+def finish_image_receipt(root: Path, job: Dict[str, Any]) -> Dict[str, Any]:
+    """Run full current-image QC and bind it to the output pixel SHA."""
+    product_qc.run_qc(root / "出图" / "分镜", strict=True, refresh_vlm_tasks=True)
+    return image_job_receipt.postflight(root, job)
+
+
+def accepted_image_receipt(root: Path, job: Mapping[str, Any]) -> tuple[bool, str]:
+    return image_job_receipt.current_accepted(root, job)
+
+
 def render_jobs(
     root: Path,
     *,
@@ -271,10 +292,10 @@ def render_jobs(
     if not isinstance(jobs, list):
         raise RuntimeError("image_jobs_manifest.json 缺 jobs[]")
 
-    rendered = skipped = failed = 0
+    rendered = skipped = failed = awaiting_review = qc_blocked = 0
     budget_halt: Optional[Dict[str, Any]] = None
     events_path = root / "生产数据" / "production_events.jsonl"
-    for job in jobs:
+    for job_index, job in enumerate(jobs):
         if not isinstance(job, dict) or not job_matches(job, only):
             continue
         if limit is not None and rendered >= limit:
@@ -286,21 +307,43 @@ def render_jobs(
         out_path = root / out_rel
         prompt_path = root / prompt_rel
         if out_path.exists() and not force:
-            job["status"] = "done"
-            job.setdefault("backend", "Dreamina/即梦官方 CLI")
-            job.setdefault("model", f"Dreamina Image {model_version}")
-            job.setdefault("channel", "Dreamina/即梦官方 CLI/API")
-            job.setdefault("output", out_rel.as_posix())
-            skipped += 1
-            continue
+            accepted, _ = accepted_image_receipt(root, job)
+            if accepted:
+                job["status"] = "done"
+                job.setdefault("backend", "Dreamina/即梦官方 CLI")
+                job.setdefault("model", f"Dreamina Image {model_version}")
+                job.setdefault("channel", "Dreamina/即梦官方 CLI/API")
+                job.setdefault("output", out_rel.as_posix())
+                skipped += 1
+                continue
+            # 文件存在不等于通过：旧图/刚落地图先补当前 preflight + postflight，
+            # 收据未显式签收前绝不继续下一张。
+            try:
+                prepare_image_receipt(root, manifest, job, job_index)
+                receipt = finish_image_receipt(root, job)
+                if receipt.get("status") == "accepted":  # 仅测试注入可达；正式 postflight 必须等人工签核
+                    job["status"] = "done"
+                    skipped += 1
+                    continue
+                job["status"] = "awaiting_human_signoff"
+                awaiting_review += 1
+                print(f"[review] {job.get('job_id')} 已完成机器 QC，须按当前像素 SHA 人工并排签收", flush=True)
+            except image_job_receipt.ReceiptBlocked as exc:
+                job["status"] = "qc_blocked"
+                job["error"] = str(exc)
+                failed += 1
+                qc_blocked += 1
+                print(f"[block] {job.get('job_id')} {exc}", file=sys.stderr, flush=True)
+            write_json(manifest_path, manifest)
+            break
         existing_submit_id = str(job.get("submit_id") or "")
-        if existing_submit_id and not force:
+        if existing_submit_id:
             # 已付费未落图：免费取回，绝不重新提交（与兄弟脚本 existing_submit_id 语义一致）
             try:
                 collected = collect_existing_image(job, out_path)
                 image = collected.get("image") or {}
                 job.update({
-                    "status": "done",
+                    "status": "output_ready",
                     "backend": "Dreamina/即梦官方 CLI",
                     "model": f"Dreamina Image {model_version}",
                     "channel": "Dreamina/即梦官方 CLI/API",
@@ -311,6 +354,19 @@ def render_jobs(
                 job.pop("error", None)
                 rendered += 1
                 print(f"[ok] {job.get('job_id')} -> {out_rel} submit_id={existing_submit_id} (免费取回)", flush=True)
+                try:
+                    prepare_image_receipt(root, manifest, job, job_index)
+                    receipt = finish_image_receipt(root, job)
+                    if receipt.get("status") == "accepted":
+                        job["status"] = "done"
+                    else:
+                        job["status"] = "awaiting_human_signoff"
+                        awaiting_review += 1
+                except image_job_receipt.ReceiptBlocked as exc:
+                    job["status"] = "qc_blocked"
+                    job["error"] = str(exc)
+                    failed += 1
+                    qc_blocked += 1
             except Exception as exc:
                 failed += 1
                 job["status"] = "collect_pending"
@@ -321,7 +377,8 @@ def render_jobs(
             finally:
                 write_json(manifest_path, manifest)
                 time.sleep(0.2)
-            continue
+            # 免费取回也必须在当前图完成签收；不批量越过这张继续提交后续付费 job。
+            break
         if max_credits is not None:
             spent = spent_credits(jobs)
             if spent >= max_credits:
@@ -330,11 +387,14 @@ def render_jobs(
                       f"停止在 {job.get('job_id')} 之前，不再提交付费任务", file=sys.stderr, flush=True)
                 break
         try:
+            # B14 前闸：真实参考非空、可解码、带用途/owner/SHA；上一张必须仍按当前
+            # 像素 SHA accepted。--force 只允许重抽当前图，不能跳过前闸。
+            prepare_image_receipt(root, manifest, job, job_index)
             prompt = build_prompt(prompt_path)
             refs = [root / str(p) for p in (job.get("reference_inputs") or [])]
             missing_refs = [str(p) for p in refs if not p.is_file()]
-            if job.get("requires_image_input") and (not refs or missing_refs):
-                raise RuntimeError(f"产品镜缺真实参考图输入：{missing_refs or 'reference_inputs=[]'}")
+            if not refs or missing_refs:
+                raise RuntimeError(f"逐图生成缺真实参考图输入：{missing_refs or 'reference_inputs=[]'}")
             payload = run_dreamina_image(
                 prompt,
                 [str(p) for p in refs],
@@ -361,7 +421,7 @@ def render_jobs(
             retry_call(lambda: download(str(image["image_url"]), out_path),
                        describe=f"download {job.get('job_id')}")
             job.update({
-                "status": "done",
+                "status": "output_ready",
                 "output": out_rel.as_posix(),
                 "width": image.get("width"),
                 "height": image.get("height"),
@@ -383,6 +443,24 @@ def render_jobs(
             })
             rendered += 1
             print(f"[ok] {job.get('job_id')} -> {out_rel} submit_id={payload.get('submit_id')}", flush=True)
+            receipt = finish_image_receipt(root, job)
+            if receipt.get("status") == "accepted":
+                job["status"] = "done"
+            else:
+                job["status"] = "awaiting_human_signoff"
+                awaiting_review += 1
+                print(f"[review] {job.get('job_id')} 已完成机器 QC，须按当前像素 SHA 人工并排签收", flush=True)
+            # 正式 postflight 只会到 awaiting_human_signoff；当前图未签收，不得生成下一张。
+            if job["status"] != "done":
+                write_json(manifest_path, manifest)
+                break
+        except image_job_receipt.ReceiptBlocked as exc:
+            failed += 1
+            qc_blocked += 1
+            job["status"] = "qc_blocked" if out_path.exists() else "preflight_blocked"
+            job["error"] = str(exc)
+            print(f"[block] {job.get('job_id')} {exc}", file=sys.stderr, flush=True)
+            break
         except Exception as exc:
             failed += 1
             # 已有 submit_id ⇒ 已付费，落可续跑状态；重跑走免费取回，不再二次付费
@@ -402,6 +480,8 @@ def render_jobs(
         "rendered": rendered,
         "skipped": skipped,
         "failed": failed,
+        "awaiting_human_signoff": awaiting_review,
+        "qc_blocked": qc_blocked,
         "updated_at": now_iso(),
     }
     if max_credits is not None:
@@ -449,8 +529,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     except Exception as exc:
         print(f"[block] {exc}", file=sys.stderr, flush=True)
         return 2
-    print(f"# Dreamina image render rendered={summary['rendered']} skipped={summary['skipped']} failed={summary['failed']}", flush=True)
-    return 1 if summary["failed"] else 0
+    print(
+        f"# Dreamina image render rendered={summary['rendered']} skipped={summary['skipped']} "
+        f"failed={summary['failed']} awaiting_human_signoff={summary['awaiting_human_signoff']}",
+        flush=True,
+    )
+    return 1 if summary["failed"] or summary["awaiting_human_signoff"] else 0
 
 
 if __name__ == "__main__":

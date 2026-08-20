@@ -260,6 +260,53 @@ class InitMetadataTest(unittest.TestCase):
             self.assertIn("文学/传统小说允许", outline)
             self.assertNotIn("金手指必须有代价", bible)
 
+    def test_create_cli_persists_explicit_craft_profile_independent_of_platform(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = os.path.join(tmp, "create_literary")
+            subprocess.run(
+                [
+                    sys.executable, CREATE_INIT,
+                    "--title", "潮湿的墙",
+                    "--genre", "现实主义",
+                    "--premise", "三代人在拆迁前最后一次粉刷旧屋",
+                    "--scale", "short",
+                    "--purpose", "传统小说",
+                    "--platform", "番茄",
+                    "--craft-profile", "literary",
+                    "--out", root,
+                ],
+                cwd=REPO,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+
+            self.assertIn("创作工艺档：literary", settings)
+            self.assertIn("目标平台：番茄", settings)
+
+    def test_derived_init_cli_preserves_explicit_custom_profile(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src = write_source(tmp)
+            root = os.path.join(tmp, "expand_experimental")
+            subprocess.run(
+                [
+                    sys.executable, EXPAND_INIT, src,
+                    "--out", root,
+                    "--target-chapters", "3",
+                    "--craft-profile", "my_ritual_form",
+                ],
+                cwd=REPO,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+
+            self.assertIn("创作工艺档**：my_ritual_form", settings)
+
     def test_create_purpose_drives_manga_draft_mode_without_explicit_mode(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = os.path.join(tmp, "create_manga")

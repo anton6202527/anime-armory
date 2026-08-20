@@ -1,6 +1,6 @@
 ---
 name: novel-create
-description: Cold-start ORIGINAL novel creation from scratch — when the user has only a few words / a vague idea / a partial style / scattered notes / a half-draft (NO finished source novel), guide them step-by-step through an interview → 创作蓝图(premise spec) → 设定圣经/角色卡/世界观 → 书名 → 章纲 → Demo 章 → 逐章写作 + 质检 + 导出. Differs from the rest of the novel-* family, which all REQUIRE an existing source (fetch/spinoff/rewrite/continue/expand/condense/review). Defaults output to 创作区/写小说/<项目>/ and tracks state in _进度.md. Use when asked to 写本小说 / 从零写 / 帮我写个原创 / 我有个想法 / 我想写...(只有几个字) / 有点设定想写成书. Triggers 原创小说, 从零写小说, 写本新书, 立项, 创作蓝图, 我有个想法写成小说, 帮我把这个点子写成小说, write original novel from scratch, novel from an idea.
+description: Cold-start ORIGINAL novel creation from scratch — when the user has only a few words / a vague idea / a partial style / scattered notes / a half-draft (NO finished source novel), preserve the human-first seed, optionally run non-canon character/scene/POV exploration, then guide them through interview → 创作蓝图(premise spec) → 设定圣经/角色卡/世界观 → 书名 → 章纲 → Demo 章 → 逐章写作 + 质检 + 导出. Differs from the rest of the novel-* family, which all REQUIRE an existing source. Defaults output to 创作区/写小说/项目名/ and tracks formal state in _进度.md; exploration stays outside that state. Triggers 原创小说, 从零写小说, 写本新书, 立项, 创作蓝图, 探索型写作, 角色试镜, 场景试写, 我有个想法写成小说, 帮我把这个点子写成小说, write original novel from scratch, novel from an idea.
 ---
 
 # novel-create — 原创从零 · 引导式创作编排
@@ -13,10 +13,12 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 
 本 skill 的可选项**不写死在源码里**，按 `../skills/novel/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
-本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`创作工艺档`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。`创作工艺档` 在 human-first seed 冻结后首次问一次；直接跑 CLI 可传 `--craft-profile`，未传则继承 novel 全局默认或回退 `genre_novel`，不得根据目标平台推断。
 
 ## 核心原则
 
+- **作者原始种子先于 AI 与市场建议**：展示爆款、市场基准、AI premise 候选或替用户补故事前，先逐字冻结作者自己的意象、执念、问题、禁区和余味到 `探索/种子/`。只有作者明确确认“形成于建议出现前”才标 human-first；工艺与命令见 `novel-craft/references/exploration-workflow.md`。
+- **探索稿不等于正史**：角色试镜、关键场景、不同 POV、声音/结构实验、错误结局只写 `探索/`，不填 `state_delta`、不改 `_进度.md`、不进正式 gate。选中版本必须以当前 SHA + 复核人 + 理由登记为晋升候选，再回对应正式阶段吸收和重签，禁止直接覆盖章节。
 - **访谈先行，别替用户决定故事**：从"几个字"问出 logline / 主角 / 核心机制或人物困境 / 主要阅读快感 / 冲突，**一次问一组、给建议让用户确认**，不把金手指、打脸爽点强加给文学/传统小说。详见 `references/interview.md`。
 - **创作蓝图 = 这部书的宪法**：`设定/创作蓝图.md` 锁定 logline / 题材与用途 / 主角 / 核心机制或人物困境 / 阅读承诺 / 主线冲突 / 风格卡。金手指、爽点只在对应类型项目填写，不是通用小说必选项。后续每章都受蓝图约束；蓝图没敲定不进设定、不进章纲。
 - **读者契约 = 不偏题 + 好看 + 文学性的执行锚**：蓝图通过后补 `设定/读者契约.md`（模板见 `novel-craft/references/reader-contract.md`），锁定核心题旨、读者承诺、好看机制、文学质感和禁偏清单；Demo 通过后同步到 `审稿/demo_gate.json.reader_contract`，后续每章任务包都必须携带。
@@ -36,7 +38,8 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 ## 工作流（八步，每步末用户审 gate）
 
 ### 0. 立项访谈（核心 · 把"几个字"补全成可写的蓝图）—— 必读 `references/interview.md`
-> **先看自有差异化候选（选题闭环读端）**：若 `<repo>/生产战绩/差异化候选.json` 存在（由外部投放侧从战绩反推回灌），立项时**先读它**，把高分「题材×开场×结尾」白空间组合作为推荐方向之一报给用户（"我们做过的里这类还没做烂，且复用了已验证有效的节奏轴"）。这是 选题→生产→投放→**反哺选题** 闭环的上游落地；没有该文件就正常按用户想法走。
+> **开场先冻结 human-first seed**：在读取外部差异化候选、市场基准或生成 AI 方向之前，先保留用户未经润色的原话；只问建目录所需的中性元数据，不先补故事。第 1 步初始化时用 `--human-seed` / `--human-seed-file` + `--human-seed-author` + `--human-first-confirmed` 原子落到 `探索/种子/`，再继续下面的访谈和建议。若 AI/市场建议已经出现，不倒签 human-first；把后来的发现登记为普通探索稿。
+> **human seed 冻结后再看自有差异化候选（选题闭环读端）**：若 `<repo>/生产战绩/差异化候选.json` 存在（由外部投放侧从战绩反推回灌），把高分「题材×开场×结尾」白空间组合作为推荐方向之一报给用户（"我们做过的里这类还没做烂，且复用了已验证有效的节奏轴"）。这是 选题→生产→投放→**反哺选题** 闭环的上游落地；没有该文件就正常按用户想法走。
 > **商业/平台项目先落市场基准**：若用户选择 `商业连载` / `漫剧源书` / `微短剧源书`，或目标平台含红果/抖音/番茄/晋江/起点，本轮先确定要采集的平台；第 1 步建出作品根后立即采集或补人工证据，再填蓝图：
 ```bash
 python3 skills/novel/novel-score/scripts/collect_market_baseline.py "<作品根>/评分" \
@@ -48,7 +51,7 @@ python3 skills/novel/novel-score/scripts/collect_market_baseline.py "<作品根>
 > **生活观察素材库**：若题材依赖现实质感（县城、医院、学校、打工、家庭、职场、行业日常等），同步跑 `novel-observe` 初始化素材库；没有现成观察时先列“需观察/需采访”任务，不用空泛形容词硬写真实感。
 
 从用户的只言片语 + 碎片，问清这几组（一次一组、带默认建议）：
-- **题材类型 + 小说用途 + 目标平台**（决定交付形态/篇幅档/爽点节奏）
+- **题材类型 + 小说用途 + 目标平台 + 创作工艺档**（前三者决定交付/市场假设；工艺档独立决定场景合同，不由平台代选）
 - **主角**：是谁 + 核心资源/能力/关系/困境 + 动机/心结；若有超常能力，补边界与后果
 - **核心阅读承诺**（悬念/情感/主题/幽默/爽感等）+ **主线冲突/阻力**
 - **规模档**（microstory(短故事)/short/medium/long/微短剧/漫剧 —— 见 `novel-craft/references/split.md` 字数分档）+ **人称视角** + 目标读者
@@ -62,13 +65,18 @@ python3 <skill>/scripts/init_project.py \
     --title "<书名或'待定'>" --genre "<题材类型>" \
     --premise "<一句话故事>" --scale short|medium|long|微短剧|漫剧 \
     --purpose "<小说用途>" --platform "<目标平台或跨平台>" \
+    [--craft-profile commercial_serial|genre_novel|literary|experimental|<自定义>] \
     [--person third-limited] [--target-chapters N] \
-    [--ingest <碎片路径>]...
+    [--ingest <碎片路径>]... \
+    [--human-seed-file <作者原始种子.md> \
+     --human-seed-author "<作者>" --human-first-confirmed]
 ```
-→ `创作区/写小说/<项目>/`（设定/{创作蓝图,设定圣经,角色卡,世界观,章纲} + 素材/(碎片) + 章节/ + 审稿/ + 导出/ + _meta + _进度）。
+→ `创作区/写小说/<项目>/`（设定/{创作蓝图,设定圣经,角色卡,世界观,章纲} + 素材/(碎片) + `探索/`（非正史）+ 章节/ + 审稿/ + 导出/ + _meta + _进度）。未传 human seed 的旧用法完全兼容；已有项目也可独立跑 `novel-craft/scripts/exploration.py`。
 > `_meta.json` 会固化作品卡片字段：`synopsis` 由 `--premise`（logline）映射并裁剪 ≤240 字（premise 留空时 synopsis 也留空待回填，不阻断立项）；写小说是纯文本线、无图片产物，`cover` 恒为 `null`，桌面卡片自动用产线图标占位（不新增出图步骤）。
 
 ### 2. 填创作蓝图.md + 读者契约.md（最重要 · 这部的宪法）
+**允许先试写再锁蓝图**：人物驱动、文学向、实验性或作者仍在寻找声音时，可先按 `novel-craft/references/exploration-workflow.md` 做 2-3 个角色/场景/POV 试镜。每稿只回答一个问题；登记到 `探索/` 后由作者以 hash-bound 决策挑出值得吸收的发现。探索候选只能改变“我们对故事的理解”，不能自动改正式蓝图；吸收后仍须执行本步 blueprint 人审批准。
+
 **先发散再收敛（创意闸 · 蓝图三方案）**：锁定蓝图前必须先给出 **3 个差异化方向**（不是同一方案的三种措辞），每个方向从不同切口发散——如题材/类型混搭、非常规主角视角、结构性玩法（时间线/叙事框架）、金手指的反向设计（代价先行/限制即爽点）。**发散不靠灵感碰运气**：`novel-craft/references/premise-divergence.md` 给了六个撬棍（金手指反向/视角错位/类型杂交/场域平移/前提取反/约束逼创意）+「生成≥5→三项打分→挑或杂交」的可操作步骤；命中高频套路时，`novel-review/scripts/trope_cliche.py` 会在开写前提示，按 premise-divergence 的"命中之后怎么真差异化"处理。每个方向写三行：① 一句话 logline；② **差异化记忆点**（读者能一句话转述传播的"别人没有的东西"）；③ 最像的既有爆款 + 与它的关键差异。然后做**套路自查**：老读者能否从 logline 直接预测前 10 章走向和结局？能 → 该方向回炉或杂交。把选定方向（或杂交结果）与被否方向的一句话理由一起写进蓝图的「差异化决策」小节——留下否稿理由，score 的 novelty 维度与后续 spinoff 选题都会回读。**候选须结构化落盘**：三方向写入 `设定/premise_candidates.json`（`{candidates:[{id,logline,memory_point,closest_hit,key_diff}],chosen}`），随后跑 `python3 skills/novel/novel-create/scripts/premise_divergence_audit.py "<作品根>"` 做"真差异化"机检——候选 <3、两方向字面近似（同一方案换措辞）、共享同一套路锚（措辞不同骨架相同）都会被点名（advisory 不阻断；此前"不是三种措辞"只是 prose 指令，LLM 交三条换汤不换药的 logline 无人拦）。**发散采样口径（对抗 mode collapse）**：生成候选时用 Verbalized Sampling——让模型一次给 ≥5 个候选并各自标注"这个方向的典型度/概率"，**刻意从低典型度尾部取 2-3 个**进入三方向池；直接连问三次"再来一个"只会掉进同一个高概率模式（arXiv 2510.01171 实证：典型性偏差是套路化根因，VS 纯提示词即可提升发散 1.6-2 倍）。→ **用户选一或杂交**。
 把访谈结论写实写细：logline / 主角 / 核心机制或困境 / 阅读承诺 / 主线冲突 / 基调 / 风格卡（若有样本）。商业/平台项目把 `评分/market_baseline_<日期>.json` 或人工证据的“热度、拥挤度、差异化缺口”写进“市场假设/差异化”小节，并标明采集日期；没证据的判断只写“待验证假设”。→ **用户审**。审过后记录与当前文件 hash 绑定的批准：
 ```bash
@@ -169,6 +177,7 @@ python3 skills/novel/novel-craft/scripts/ai_usage.py "<作品根>" \
 
 ## 详细参考
 - **立项访谈引导（几个字→蓝图 / 吃碎片 / 不轰炸用户）**：`references/interview.md`
+- **human-first seed / 非正史角色·场景·POV 试写 / hash-bound 晋升候选**：`novel-craft/references/exploration-workflow.md`
 - **章纲 / 单章 / 拆分工艺**：`novel-craft/references/{outline,chapter,split}.md`
 - **起名**：`novel-title`　**质检**：`novel-review`　**跨家族经验沉淀 + 路由**：`novel`
 
@@ -177,6 +186,8 @@ python3 skills/novel/novel-craft/scripts/ai_usage.py "<作品根>" \
 | 错误 | 纠正 |
 |---|---|
 | 上来就替用户编故事 | 先访谈问清 logline/主角/核心机制或困境/阅读承诺/冲突，给候选让用户确认 |
+| 先给 AI/市场候选，再把用户选择倒签成原始种子 | 展示任何建议前先冻结作者原文；已受建议影响的内容只能作普通探索稿 |
+| 把角色试镜直接写成正式章或自动“转正” | 只放 `探索/`；当前 hash 经明确晋升后，回正式阶段吸收并重签 |
 | 让用户重答已给过的碎片 | 先复述理解 + 吃 `素材/`，只补缺口 |
 | 蓝图没敲定就建设定/章纲 | 蓝图是宪法，未审不下推 |
 | 高杠杆机制无边界 / 设定前后矛盾 | 设定圣经登记边界与后果 + 回扫逐条核 |

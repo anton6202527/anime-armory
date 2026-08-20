@@ -20,7 +20,11 @@ from typing import Any
 NOVEL_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "_lib"))
 if NOVEL_LIB not in sys.path:
     sys.path.insert(0, NOVEL_LIB)
+from craft_profile import resolve_craft_profile, validate_craft_contract_snapshot  # noqa: E402
+from authenticity_contract import evaluate_authenticity_read  # noqa: E402
 from novel_pipeline import human_stage_approval_status, stage_by_key  # noqa: E402
+from project_io import load_project_settings  # noqa: E402
+from exploration import ExplorationError, exploration_status as read_exploration_status  # noqa: E402
 
 
 WORKFLOW_KIND = "novel_author_workflow"
@@ -75,6 +79,87 @@ def rel_exists(root: str, relpath: str) -> bool:
 
 def any_glob(root: str, pattern: str) -> bool:
     return bool(glob.glob(os.path.join(root, pattern)))
+
+
+def exploration_evidence_status(root: str) -> dict[str, Any]:
+    """Summarize optional non-canon exploration evidence for author navigation.
+
+    Absence is optional and never blocks.  Once a manifest exists, corruption
+    is a blocker because the workflow must not recommend formal absorption from
+    stale seed/draft/sidecar/candidate evidence.  This helper is read-only and
+    deliberately does not treat a candidate as formal stage completion.
+    """
+    exploration_root = os.path.join(root, "探索")
+    if not os.path.lexists(exploration_root):
+        return {
+            "initialized": False,
+            "integrity_ok": True,
+            "human_first_seed_count": 0,
+            "draft_count": 0,
+            "candidate_count": 0,
+            "decision_counts": {},
+            "blockers": [],
+            "warnings": ["未建立非正史探索区（可选，不阻断正式成书流程）"],
+        }
+    try:
+        status = read_exploration_status(root)
+    except (ExplorationError, OSError, TypeError, ValueError) as exc:
+        return {
+            "initialized": True,
+            "integrity_ok": False,
+            "human_first_seed_count": 0,
+            "draft_count": 0,
+            "candidate_count": 0,
+            "decision_counts": {},
+            "blockers": [f"探索区无法验证：{exc}"],
+            "warnings": [],
+        }
+    if not status.get("initialized"):
+        return {
+            "initialized": False,
+            "integrity_ok": True,
+            "human_first_seed_count": 0,
+            "draft_count": 0,
+            "candidate_count": 0,
+            "decision_counts": {},
+            "blockers": [],
+            "warnings": ["探索目录尚无 manifest（可选，不阻断；不会自动推进正式阶段）"],
+        }
+
+    decisions = status.get("decisions") or []
+    decision_counts: dict[str, int] = {}
+    for item in decisions:
+        if not isinstance(item, dict):
+            continue
+        key = str(item.get("decision") or "unknown")
+        decision_counts[key] = decision_counts.get(key, 0) + 1
+    candidate_count = sum(
+        1 for item in decisions
+        if isinstance(item, dict) and item.get("decision") == "promote_candidate"
+    )
+    seed_count = len(status.get("seeds") or [])
+    draft_count = len(status.get("drafts") or [])
+    integrity_ok = bool(status.get("integrity_ok"))
+    warnings = [
+        f"非正史探索证据：human-first seed={seed_count}，探索稿={draft_count}，"
+        f"晋升候选={candidate_count}；候选不会自动完成蓝图、Demo 或正式章节阶段。"
+    ]
+    if seed_count == 0:
+        warnings.append("探索区没有 human-first seed；允许用于建议后试写，但不得倒签作者原始种子。")
+    blockers = [] if integrity_ok else [
+        "探索区完整性损坏：seed/draft/sidecar/decision/candidate 至少一项 hash 不匹配；"
+        "先修复或作为新快照重新登记，禁止据此吸收进正式流程。"
+    ]
+    return {
+        "initialized": True,
+        "integrity_ok": integrity_ok,
+        "human_first_seed_count": seed_count,
+        "draft_count": draft_count,
+        "candidate_count": candidate_count,
+        "decision_counts": decision_counts,
+        "blockers": blockers,
+        "warnings": warnings,
+    }
 
 
 def blueprint_artifacts(meta: dict[str, Any]) -> list[str]:
@@ -211,13 +296,27 @@ def author_intent_status(root: str) -> tuple[bool, list[str]]:
 def manuscript_map_status(root: str) -> tuple[bool, list[str]]:
     check = load_json(os.path.join(root, "设定", "manuscript_map_check.json"), {}) or {}
     if isinstance(check, dict) and check.get("kind") == "novel_manuscript_map_check":
-        return bool(check.get("passed")), [
+        snapshot_status = validate_craft_contract_snapshot(
+            root,
+            check.get("source_snapshot"),
+            resolve_craft_profile(load_project_settings(root)),
+        )
+        if not snapshot_status["fresh"]:
+            return False, [
+                "manuscript_map_check 已过期（"
+                + ", ".join(snapshot_status["issues"])
+                + "）；请重跑 manuscript_map.py --write，旧通过记录不能放行"
+            ]
+        blockers = [
             str(item.get("message") or item.get("id"))
             for item in check.get("findings") or []
             if isinstance(item, dict) and item.get("severity") == "blocking"
         ]
+        if check.get("passed") is not True and not blockers:
+            blockers.append("manuscript_map_check 未明确通过；请重跑结构地图检查")
+        return not blockers and check.get("passed") is True, blockers
     if rel_exists(root, "设定/manuscript_map.json"):
-        return True, []
+        return False, ["已有 manuscript_map 但缺少可验证的新鲜 check；请重跑 manuscript_map.py --write"]
     return False, ["缺少 manuscript_map；中长篇 review 缺结构地图基准"]
 
 
@@ -299,6 +398,29 @@ def edit_task_counts(root: str) -> tuple[int, int, int]:
         else:
             open_p2_plus += 1
     return open_p0_p1, open_p2_plus, total_open
+
+
+def authenticity_blockers(root: str) -> tuple[list[str], list[str]]:
+    """Check an opted-in authenticity read without judging its conclusions.
+
+    The workflow blocks only when the project itself set
+    ``required_for_release``.  Otherwise the same incomplete/stale conditions
+    remain visible as editorial warnings.
+    """
+    report = evaluate_authenticity_read(root)
+    if not report.get("applicable"):
+        return [], []
+    blockers = [
+        str(item.get("message") or item.get("id"))
+        for item in report.get("findings") or []
+        if item.get("severity") == "blocking"
+    ]
+    warnings = [
+        f"{item.get('message') or item.get('id')}（可选咨询，不阻断普通发布）"
+        for item in report.get("findings") or []
+        if item.get("severity") != "blocking"
+    ]
+    return blockers, warnings
 
 
 def release_blockers(root: str) -> tuple[list[str], list[str]]:
@@ -437,6 +559,14 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     if query_count:
         edit_blocking.append(f"仍有 {query_count} 个 editor query 未回答/关闭")
     edit_warnings = [f"edit_plan 仍有 {edit_open_p2_plus} 个 P2+ 未关闭任务"] if edit_open_p2_plus else []
+    authenticity_blocking, authenticity_warnings = authenticity_blockers(root)
+    edit_blocking.extend(authenticity_blocking)
+    edit_warnings.extend(authenticity_warnings)
+    edit_command = (
+        f'python3 skills/novel/novel-edit/scripts/authenticity_read.py check "{root}" --write'
+        if authenticity_blocking
+        else f'python3 skills/novel/novel-edit/scripts/edit_plan.py "{root}"'
+    )
     intent_ok, intent_blocking = author_intent_status(root)
     map_ok, map_blocking = manuscript_map_status(root)
     ai_ok, ai_blocking = ai_usage_ready(root)
@@ -464,6 +594,7 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         else f'python3 skills/novel/novel-craft/scripts/manuscript_map.py "{root}" --write'
     )
     draft_complete, draft_warnings = draft_progress(root, meta)
+    exploration_evidence = exploration_evidence_status(root)
     steps: list[dict[str, Any]] = [
         {
             "key": "setup",
@@ -474,6 +605,37 @@ def build_steps(root: str) -> list[dict[str, Any]]:
             "blockers": [],
             "warnings": [],
             "command": f'python3 skills/novel/novel-settings/scripts/settings_cli.py "{root}" audit',
+        },
+        {
+            "key": "exploration",
+            "label": "Human-first seed 与非正史探索证据",
+            "status": (
+                "pending" if exploration_evidence["blockers"] else
+                "done" if exploration_evidence["initialized"] else
+                "warning"
+            ),
+            "why": "先看作者原始种子与探索候选是否完整；候选只帮助理解故事，绝不自动推进正式蓝图、Demo、章节或进度。",
+            "evidence": [
+                "探索/manifest.json",
+                "探索/种子/*",
+                "探索/草稿/*",
+                "探索/决策/*",
+                "探索/晋升候选/*",
+            ],
+            "blockers": exploration_evidence["blockers"],
+            "warnings": exploration_evidence["warnings"],
+            "summary": {
+                key: exploration_evidence[key]
+                for key in (
+                    "initialized",
+                    "integrity_ok",
+                    "human_first_seed_count",
+                    "draft_count",
+                    "candidate_count",
+                    "decision_counts",
+                )
+            },
+            "command": f'python3 skills/novel/novel-craft/scripts/exploration.py "{root}" status --json',
         },
         {
             "key": "blueprint",
@@ -574,12 +736,12 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         {
             "key": "edit",
             "label": "分层专业编辑",
-            "status": done(edit_deliverables and edit_open_p0_p1 == 0 and query_count == 0),
-            "why": "先 editorial/developmental，再 line edit，最后 copyedit/proofread。",
-            "evidence": ["修订/edit_plan.json", "修订/editorial_letter.md", "修订/style_sheet.md", "修订/proof_checklist.md"],
+            "status": done(edit_deliverables and not edit_blocking),
+            "why": "先 editorial/developmental，再 line edit，最后 copyedit/proofread；真实性/文化审读按项目显式选择接入。",
+            "evidence": ["修订/edit_plan.json", "修订/editorial_letter.md", "修订/style_sheet.md", "修订/proof_checklist.md", "修订/authenticity_read.json"],
             "blockers": edit_blocking,
             "warnings": edit_warnings,
-            "command": f'python3 skills/novel/novel-edit/scripts/edit_plan.py "{root}"',
+            "command": edit_command,
         },
         {
             "key": "publish_pack",

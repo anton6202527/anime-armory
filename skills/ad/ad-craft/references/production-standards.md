@@ -1,4 +1,4 @@
-# ad 生产阶段标准（2026-07-11）
+# ad 生产阶段标准（2026-08-20）
 
 机器真值是 `scripts/contract.py:STAGE_CRITERIA`，执行器是 `scripts/stage_acceptance.py`。本文件说明每一阶段为什么这样验、证据是什么、失败回哪里；不得只凭“看起来完成”手填 `_进度.md`。
 
@@ -15,16 +15,16 @@
 | 阶段 | 入场条件 | 完成标准 | 证据/通过线 | 失败回退 |
 |---|---|---|---|---|
 | `brief` | 客户目标可访谈 | 品牌、产品、USP、受众、广告目标齐；花钱前 KPI/转化事件齐 | `brief_check.missing_required=0`；测量字段非占位 | `ad-concept` 补访谈 |
-| `concept` | brief 最小集齐 | Big Idea、key message、目标、创意假设、强制项落档 | 五组结构字段存在；ABCD/平台创意建议只作 WARN | `ad-concept` 重做策略 |
+| `concept` | brief 最小集齐 | `concept.json` 的 Big Idea、key message、目标、创意假设、强制项结构完整且 formal 目标与 brief 一致 | JSON 缺失/空/畸形/结构错误 block；Markdown 仅人读视图 | `ad-concept` 补写/重做机器合同 |
 | `script` | concept 当前有效 | 脚本、VO、时间轴可解析；广告法报告当前且 0 block | 三文件非空；`广告法机检报告.summary.block=0` | `ad-script` 删改/补法务依据 |
 | `voice` | voiceover 锁定 | 每句真实音频、voice key、实测秒数和整轨一致 | formal 无占位；`voice_qc` full precision、0 block | `ad-voice` 重录/重导 |
 | `storyboard` | 真 VO 时长可用 | 唯一镜号、正时长、总时长、VO、强制项、接缝和 claim 披露通过 | `镜头时长.json` 0 block；claim_id 与披露呈现合同闭合 | `ad-script` 重排分镜/披露 |
-| `image` | storyboard 已验；付费确认 | 全部 job 完成，具体模型/渠道、真实参考输入与输出可追溯 | manifest 非取消 job 全 done；`product_qc` full、0 block | `ad-image` 补参考/重出 |
-| `video` | image 已验；付费确认 | prompt 编译、输入帧、模型路由、输出可追溯，clip 技术/接缝通过 | `contract_inheritance`、`video_qc` full、0 block | `ad-video` 修 clip/接缝 |
-| `compose` | video 已验 | 每个未取消交付件通过技术、色彩、最终像素文字、ASR 四路、无障碍和实际 provenance 检查 | `delivery/color/rendered_text/asr/accessibility/provenance` 均 0 block | `ad-compose` 对应版本重导或补具名证据 |
-| `handoff` | 全部交付件已定 | locale 与逐变体链闭合：媒体 SHA→placement→locale→jurisdiction→claims/disclosures→rights→AI label receipt | locale/provenance/release variant 0 block；`compliance_manifest.release_ready=true` 且内部 SHA 当前 | 发布方/法务/本地化负责人补证 |
+| `image` | storyboard 已验；付费确认 | 逐 job 串行完成 preflight→真实提交/收集→full product QC→绑定当前输出 SHA 的六项具名人审 | 每个非取消 job `image_job_receipt.status=accepted`；下一 job 不得越过未签收前序 | `ad-image` 补参考/QC/人审或重出当前图 |
+| `video` | image 已验；付费确认 | prompt、输入帧、模型路由与实际请求绑定当前 render profile；回收媒体实测；clip 技术/接缝通过 | job/profile SHA 当前；requested 与 ffprobe `observed_output` 均符合 `source_generation`；`contract_inheritance`、`video_qc` full、0 block | `ad-video` 修规格、clip/接缝 |
+| `compose` | video 已验 | adaptation approved 且 actual execution receipt 当前；每件符合 `master_render` 并通过技术、色彩、最终像素文字、ASR、无障碍和 provenance | adaptation plan/item + actual mode + 输入/输出/profile SHA 对账；delivery QC 绑定当前 plan/media/profile/adaptation；容器放大只能写 `container_upscale_only`，原生要求不足则 block | 原生重剪/重做、获准机械裁切或对应版本重导 |
+| `handoff` | 全部交付件已定 | locale 与逐变体链闭合；AI 标识/商业披露双收据和 formal campaign readiness 均当前 | locale/provenance/release variant/readiness 0 block；`compliance_manifest.release_ready=true` 且全部证据 SHA 当前 | 发布方/法务/本地化/measurement 负责人补证 |
 | `review` | handoff 已验 | M0 当前；最终 clip/交付件逐镜首中尾帧 contact sheet 与机器不可判项由具名人员逐项签收 | M0 0 block；全部媒体、逐资产 contact sheet、人工证据 SHA 当前；上游依赖收据 current | 只回 stale 节点或补审片 |
-| `feedback` | 投放前计划存在 | 同版位/受众/预算、单变量、KPI/窗口/样本门槛预注册；报告绑定原始数据 | plan approved + SHA 当前；不可比/区间不足只能 `inconclusive` | 延长实验或重做设计 |
+| `feedback` | 当前 formal campaign readiness + 投放前 canonical 计划存在 | 同版位/受众/预算、单变量、KPI、baseline/MDE/alpha/power、固定停止规则和多重比较预注册；validation 从计划重算；报告绑定当前 brief/readiness/素材/平台配置与结果回执/证据/canonical raw | 只有 `analysis_status=complete` 可验收；平台原生正式结果优先；本地二项分析只有功效样本与停止条件完成、比较校正通过才可 qualified，否则 directional/interim | 延长实验、补平台回执或重做设计 |
 
 ## claim 引证依据合同
 
@@ -91,17 +91,25 @@
 
 未知版位写 `placement_specs.<平台:版位>`，至少有 `aspect|allowed_aspects / safe_area / source / checked_at`。平台级模板不能自动证明每个 placement；release 阶段要求 placement-specific 证据。
 
-多版位项目还必须写 `deliverable_placements`，例如 `master → YouTube:in_stream`、`reframe_9x16 → TikTok:auction_in_feed`。每个交付件只消费自己的版位约束；缺映射、未知版位或有版位无交付件均 block。这样不会让横版主片被竖版规则误挡，也允许明确的 sound-off OOH 版本在字幕/视觉信息完整时无音轨交付。
+多版位项目还必须写 `deliverable_placements`，例如 `master → YouTube:in_stream`、`reframe_9x16 → TikTok:auction_in_feed`。每个交付件只消费自己的版位约束；缺映射、未知版位或有版位无交付件均 block。`reframe_9x16` 只是历史交付件 ID，不等于批准机械裁切；执行模式只认 `placement_adaptation.json`。
 
-### 竖版信息流安全区快照（2026-07 采集·会过期，release 证据仍以官方当期模板为准）
+### 统一 render profile 与 placement adaptation
 
-设计首帧/字幕/CTA 排版时的起点参考；数值随平台 UI 改版漂移（如 2026-01 TikTok 新增播放列表按钮使右侧死区扩 ~20px），**不得**代替 `platform_safe_zone_evidence` 的当期官方模板证据：
+`render_profile.json` 把 `source_generation` 与 `master_render` 分开：route/job/runner 绑定源请求，compose/delivery 绑定母版。720p 源装入 1080p/4K 容器只能标 `container_upscale_only`；客户/版位要求原生细节而源不足时 fail-closed。
 
-- 通用耐用规则（不易过期）：**80/60 规则**——关键文字/视觉放在画面中央 80% 宽 × 60% 高内；重要内容避开底部 25% 与右侧 15%。1080x1920 竖版的通用安全区约为居中 900x1400。
-- TikTok（9:16）：避开顶部 ~130px、底部 ~484px、右侧 ~140px、左侧 ~44px；**买量广告**底部还要给 "Shop Now/Learn More" 按钮加 ~50px（合计 ~370px+ 底边距）。
-- Instagram Reels：底部 ~25% 被 UI 遮挡（2025 末音频署名条又加高 ~50px）；Sponsored 标签 + Learn More 再吃 ~80px。
-- YouTube Shorts：底部 ~30% 遮挡（订阅按钮 2025 末加大 30%，左下死区更大）；广告位底部有 Skip Ad / Visit Site。
-- 三平台 2026 起默认开启 AI 自动字幕——成片若烧录字幕，位置要与平台自动字幕区错开，避免双字幕叠印（`rendered_text_qc` 管烧录字幕可读性，版位遮挡靠本快照 + 证据模板）。
+跨比例交付逐件选择 `native_master/native_recrop/native_reedit/native_variant/mechanical_reframe`。原生 reedit/variant 的 shot plan 须逐镜绑定 `source_path(s)` 与当前 SHA，execution receipt 必须实际消费这些源素材；recrop/mechanical 使用 focus plan。机械路径必须有具名批准、当前 placement 安全区证据、逐镜 focus plan，存在结构风险时另有 risk acceptance。中心网格与能跑通的 ffmpeg 命令都不是发布证据。
+
+手工 NLE 原生重剪的 execution receipt 是具名执行人的可审计签收，不是从最终像素反推出编辑时间线的密码学证明；需要对抗恶意伪报时，应把 NLE timeline/OTIO/受控导出 runner 纳入项目证据。当前自动化只声称能阻断缺源素材、错模式、错计划或 SHA 漂移，不声称能识别刻意伪造的人工签收。
+
+### 竖版信息流安全区快照（2026-08-20 核验·会过期，release 仍以当期版位证据为准）
+
+设计首帧/字幕/CTA 可用中心网格做草图，但不保存易漂移的“万能像素边距”。当前一手口径是：
+
+- TikTok In-Feed 的 safe zone 会随横竖比例、caption 长度及 anchor/add-on 改变；必须下载与本交付件相符的模板并在预览工具复核。
+- Meta Reels 优先 9:16、有音频且关键信息位于 safe zone；使用 Meta 当前 safe-zone checker，而不是项目内固定百分比。
+- YouTube Shorts 优先 9:16；横版/方版是否支持与具体 campaign/format 有关，须用 Google Ads 当前预览和规格页核验。
+- TikTok Out of Phone 属于 sound-off 环境，应独立做字幕/画面可懂版本；billboard 指引为约 10–15 秒，仍以实际媒体 owner 模板为准。
+- 烧录字幕须与平台 caption/CTA/互动覆盖层错开；`rendered_text_qc` 管最终像素可读性，`platform_safe_zone_evidence` 证明实际版位遮挡。
 
 ## 发行辖区
 
@@ -115,7 +123,9 @@
 
 `合规/locale_matrix.json` 逐语言登记 `language / jurisdictions / currency / unit_system / cta / legal_lines / voiceover_path / subtitle_path / translation_review / typography_review`，并用 `deliverable_locales` 把每个未取消交付件映射到 locale。源语言可标 `source_language`，翻译与最终排版必须有具名、可查询证据；不能用“一份英文字幕”推定所有地区已本地化。
 
-`release_variant_manifest.json` 是发布单一真值：每件记录最终文件 SHA、placement、locale、具体 jurisdiction、保留的 claim+disclosure、授权 media scope、法律复核与逐素材 AI label receipt。重新编码后 SHA 改变，平台/AI label/法务回执自动失效。
+`release_variant_manifest.json` 是发布单一真值：每件记录最终文件 SHA、placement、locale、具体 jurisdiction、保留的 claim+disclosure、授权 media scope、法律复核，以及逐 placement 独立的 AI label receipt 与 commercial/paid-partnership disclosure receipt。二者不可互代；媒体或证据哈希改变后回执自动失效。
+
+`campaign_readiness.json` 是投放单一真值：formal 须核落地页最终 URL/跳转、offer/claim/CTA/价格、行业×平台×辖区准入、conversion event 与 tag/pixel/SDK/CAPI diagnostics、归因/UTM/deep-link、consent/privacy，且只接受项目内证据。sample 可以保留 WARN 做样片，但永远不能 release-ready。
 
 ## 最终文字、ASR、无障碍与 provenance
 
@@ -138,9 +148,14 @@
 ## 当前一手来源
 
 - 市场监管总局《广告引证内容执法指南》：<https://policy.mofcom.gov.cn/claw/clawContent.shtml?id=106104>
-- TikTok Creative Best Practices：<https://ads.tiktok.com/help/article/creative-best-practices?lang=en>
-- TikTok Out of Phone：<https://ads.tiktok.com/help/article/creative-guidelines-for-tiktok-out-of-phone>
-- Google Demand Gen video specs：<https://support.google.com/google-ads/answer/17141078>
+- TikTok Auction In-Feed specs：<https://ads.tiktok.com/resources/help/article/tiktok-auction-in-feed-ads?lang=en>
+- TikTok Out of Phone：<https://ads.tiktok.com/resources/help/article/creative-guidelines-for-tiktok-out-of-phone?lang=en>
+- TikTok landing-page review：<https://ads.tiktok.com/help/article/ad-review-checklist-landing-page?lang=en>
+- TikTok commercial content disclosure：<https://ads.tiktok.com/resources/help/article/about-the-commercial-content-disclosure-setting-for-advertisers?lang=en>
+- Google video ad specs：<https://support.google.com/google-ads/answer/17091270?hl=en-GB>
+- Google Demand Gen specs：<https://support.google.com/google-ads/answer/17091672?hl=en>
+- Google destination requirements：<https://support.google.com/adspolicy/answer/6368661?hl=en-GB>
+- Google enhanced-conversion diagnostics：<https://support.google.com/google-ads/answer/13258081?hl=en>
 - Meta Reels ads：<https://www.facebook.com/business/ads/facebook-instagram-reels-ads>
 - W3C WCAG captions：<https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded>
 - W3C WCAG flashes：<https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold>

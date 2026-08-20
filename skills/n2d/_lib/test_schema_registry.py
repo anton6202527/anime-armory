@@ -317,8 +317,391 @@ def test_scan_artifacts_skips_kindless_shot_duration_map(tmp_path: Path) -> None
     payload = reg.scan_artifacts(str(tmp_path))
 
     assert payload["status"] == "pass"
-    assert payload["checked_count"] == 1
-    assert payload["checked"][0]["kind"] == "non_routable_json"
+    assert payload["scanned_count"] == 0
+    assert payload["skipped_count"] == 1
+    assert payload["skipped"][0]["classifier_reason"] == "support_json"
+    assert payload["skipped"][0]["skip_reason"]["code"] == "support_json"
+
+
+def test_scan_artifacts_skips_real_support_json_shapes(tmp_path: Path) -> None:
+    source = tmp_path / "小说"
+    source.mkdir()
+    (source / "_源指纹.json").write_text('{"sha256":"abc"}', encoding="utf-8")
+    (tmp_path / ".prework_cache_image_prompt.json").write_text('{"cached":true}', encoding="utf-8")
+    voice = tmp_path / "合成" / "第1集" / "配音"
+    voice.mkdir(parents=True)
+    (voice / "时长清单.json").write_text('[{"clip":"Clip_01","duration":1.0}]', encoding="utf-8")
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "face_ep_means.json").write_text('{"第1集":[0.1,0.2]}', encoding="utf-8")
+    views = tmp_path / "开发包" / "views"
+    views.mkdir(parents=True)
+    (views / "shot_view.json").write_text('{"rows":[]}', encoding="utf-8")
+    config = tmp_path / "工具" / "config.json"
+    config.parent.mkdir()
+    config.write_text('{"theme":"dark"}', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True)
+
+    assert payload["status"] == "pass"
+    assert payload["discovered_count"] == 6
+    assert payload["scanned_count"] == 0
+    assert payload["skipped_count"] == 6
+    assert {row["classifier_reason"] for row in payload["skipped"]} == {
+        "source_fingerprint",
+        "prework_cache",
+        "list_support",
+        "embedding_support",
+        "view_json",
+        "config_json",
+    }
+
+
+def test_legacy_emotion_flow_is_explicitly_migrated_while_neighbor_list_skips(tmp_path: Path) -> None:
+    voice = tmp_path / "合成" / "第1集" / "配音"
+    voice.mkdir(parents=True)
+    (voice / "emotion_flow.json").write_text('[{"emotion":"tense"}]', encoding="utf-8")
+    (voice / "时长清单.json").write_text('[{"duration":1.0}]', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True)
+
+    assert payload["status"] == "warn"
+    assert payload["scanned_count"] == 1
+    assert payload["skipped_count"] == 1
+    assert payload["scanned"][0]["classifier_reason"] == "boundary_registry_path"
+    assert payload["scanned"][0]["classification"]["legacy_migration"]["from_version"] == 0
+    assert payload["skipped"][0]["classifier_reason"] == "list_support"
+    assert not any(item["severity"] == "block" for item in payload["issues"])
+    assert any("legacy v0" in item["message"] for item in payload["issues"])
+
+
+def test_malformed_legacy_emotion_flow_still_blocks(tmp_path: Path) -> None:
+    voice = tmp_path / "合成" / "第1集" / "配音"
+    voice.mkdir(parents=True)
+    (voice / "emotion_flow.json").write_text('["not-an-emotion-row"]', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "fail"
+    assert any(item["severity"] == "block" and "expected object" in item["message"] for item in payload["issues"])
+
+
+def test_manifest_does_not_promote_ordinary_json_artifact_entries(tmp_path: Path) -> None:
+    script = tmp_path / "脚本" / "第1集"
+    script.mkdir(parents=True)
+    helper = script / "时长清单.json"
+    helper.write_text('[{"duration":1.0}]', encoding="utf-8")
+    (script / "manifest.json").write_text(json.dumps({
+        "kind": "n2d_episode_manifest",
+        "schema_version": 2,
+        "episode": "第1集",
+        "stage": "all",
+        "artifacts": [{
+            "stage": "voice",
+            "path": "脚本/第1集/时长清单.json",
+            "exists": True,
+            "kind": "file",
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True)
+
+    assert payload["status"] == "pass"
+    assert payload["scanned_count"] == 1
+    assert payload["skipped_count"] == 1
+    assert payload["scanned"][0]["classifier_reason"] == "boundary_registry_path"
+    assert payload["skipped"][0]["relative_path"] == "脚本/第1集/时长清单.json"
+
+
+def test_self_declared_unknown_kind_still_fails_in_strict_scan(tmp_path: Path) -> None:
+    path = tmp_path / "生产数据" / "future_output.json"
+    path.parent.mkdir()
+    path.write_text('{"kind":"n2d_future_output","version":1}', encoding="utf-8")
+
+    relaxed = reg.scan_artifacts(str(tmp_path), strict_unknown=False)
+    strict = reg.scan_artifacts(str(tmp_path), strict_unknown=True)
+
+    assert relaxed["status"] == "pass"
+    assert relaxed["scanned"][0]["classifier_reason"] == "declared_kind"
+    assert strict["status"] == "fail"
+    assert any(item["severity"] == "block" and "no schema registered" in item["message"] for item in strict["issues"])
+
+
+def test_self_declared_unknown_kind_without_version_blocks_even_relaxed_scan(tmp_path: Path) -> None:
+    path = tmp_path / "future_output.json"
+    path.write_text('{"kind":"n2d_future_output"}', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=False)
+
+    assert payload["status"] == "fail"
+    assert any(item["severity"] == "block" and "missing artifact version" in item["message"] for item in payload["issues"])
+
+
+def test_release_scope_is_strict_only_for_boundary_and_manifest(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "batch_queue.json").write_text(
+        json.dumps({"kind": "n2d_batch_queue", "version": 1, "root": str(tmp_path), "tasks": []}),
+        encoding="utf-8",
+    )
+    (prod / "future_output.json").write_text('{"kind":"n2d_future_output","version":1}', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "pass"
+    assert payload["scanned_count"] == 1
+    assert payload["skipped_count"] == 1
+    assert payload["skipped"][0]["classifier_reason"] == "declared_kind"
+    assert payload["skipped"][0]["skip_reason"]["code"] == "outside_release_boundary"
+
+
+def test_unknown_manifest_kind_fails_in_strict_release_scan(tmp_path: Path) -> None:
+    path = tmp_path / "合规" / "future_manifest.json"
+    path.parent.mkdir()
+    path.write_text('{"kind":"n2d_future_manifest","version":1}', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "fail"
+    assert payload["scanned"][0]["classifier_reason"] == "manifest_file"
+    assert any(item["severity"] == "block" and "no schema registered" in item["message"] for item in payload["issues"])
+
+
+def test_boundary_only_kind_requires_artifact_version(tmp_path: Path) -> None:
+    path = tmp_path / "出图" / "共享" / "asset_registry.json"
+    path.parent.mkdir(parents=True)
+    path.write_text('{"kind":"n2d_asset_reference_registry","assets":[]}', encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "fail"
+    assert any("missing artifact version" in item["message"] for item in payload["issues"])
+
+
+def test_release_contracts_are_in_global_boundary_registry_and_strict_schema(tmp_path: Path) -> None:
+    assert reg.BOUNDARY_PRODUCT_KINDS["n2d_acceptance_receipt"]["path"] == "生产数据/acceptance_receipt_{ep}.json"
+    assert reg.BOUNDARY_PRODUCT_KINDS["n2d_release_manifest"]["path"] == "合规/release_manifest_{ep}.json"
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "acceptance_receipt_第1集.json").write_text(json.dumps({
+        "kind": "n2d_acceptance_receipt",
+        "version": 1,
+        "episode": "第1集",
+        "decision": "approved",
+        "reviewer": "qa",
+        "accepted_at": "2026-08-20T00:00:00+00:00",
+        "bindings": {},
+        "evidence_digest": "abc",
+        "receipt_id": "receipt-1",
+    }, ensure_ascii=False), encoding="utf-8")
+    compliance = tmp_path / "合规"
+    compliance.mkdir()
+    (compliance / "release_manifest_第1集.json").write_text(json.dumps({
+        "kind": "n2d_release_manifest",
+        "version": 1,
+        "episode": "第1集",
+        "root": str(tmp_path),
+        "stage": "review",
+        "asset": {},
+        "compliance": {},
+        "review": {},
+        "provenance": {},
+        "readiness": {},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "pass"
+    assert payload["scanned_count"] == 2
+    assert {row["kind"] for row in payload["scanned"]} == {
+        "n2d_acceptance_receipt",
+        "n2d_release_manifest",
+    }
+
+
+def test_video_eval_manifest_known_schema_positive_and_negative() -> None:
+    payload = {
+        "kind": "n2d_video_eval_manifest",
+        "version": 1,
+        "root": "/tmp/work",
+        "episode": "第1集",
+        "generated_at": "2026-08-20T00:00:00+00:00",
+        "media": ["出视频/第1集/视频/Clip_01.mp4"],
+        "sidecar_targets": {"video_vlm": "生产数据/video_vlm_consistency_第1集.json"},
+        "judge_schema_required": ["judge_model", "rubric_version"],
+        "tasks": [{
+            "clip": "Clip_01",
+            "media": ["出视频/第1集/视频/Clip_01.mp4"],
+            "frame_sampling": {"strategy": "start_mid_end"},
+            "risk_kinds": ["subject"],
+            "questions": [{"kind": "subject", "question": "identity stable?"}],
+        }],
+    }
+    assert reg.validate_payload(payload) == []
+    invalid = dict(payload)
+    invalid.pop("tasks")
+    assert any("tasks" in item["message"] for item in reg.validate_payload(invalid))
+
+
+def test_character_asset_bundle_known_schema_positive_and_negative() -> None:
+    payload = {
+        "kind": "n2d_project_character_asset_bundle",
+        "version": 1,
+        "character_id": "CHAR_01",
+        "name": "姜月初",
+        "library_tier": "core_full",
+        "directories": {"reference": "角色库/CHAR_01/reference"},
+        "truth_sources": {"identity_registry": "出图/共享/identity_registry.json"},
+        "updated_at": "2026-08-20T00:00:00+00:00",
+    }
+    assert reg.validate_payload(payload) == []
+    invalid = dict(payload)
+    invalid.pop("truth_sources")
+    assert any("truth_sources" in item["message"] for item in reg.validate_payload(invalid))
+
+
+def test_visual_reference_manifest_known_schema_positive_and_negative() -> None:
+    payload = {
+        "kind": "n2d_visual_reference_manifest",
+        "version": 1,
+        "status": "confirmed_for_analysis_only",
+        "updated_at": "2026-08-20",
+        "references": [{
+            "reference_id": "USER_REF_01",
+            "name": "气质参考",
+            "path": "设定库/参考资料/ref.jpg",
+            "sha256": "abc",
+            "source": "user_provided_local_file",
+            "use_policy": "identity_analysis_only",
+            "rights_status": "pending_rights_review",
+            "eligible_for_generation": False,
+            "backend_upload_allowed": False,
+        }],
+        "rules": {"raw_references_are_generation_inputs": False},
+    }
+    assert reg.validate_payload(payload) == []
+    invalid = dict(payload)
+    invalid.pop("rules")
+    assert any("rules" in item["message"] for item in reg.validate_payload(invalid))
+
+
+def test_identity_voice_print_legacy_kind_is_explicit_boundary_alias(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "identity_voice_print_第1集.json").write_text(
+        '{"kind":"n2d_identity_voice_print","version":1,"available":false}',
+        encoding="utf-8",
+    )
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "pass"
+    row = payload["scanned"][0]
+    assert row["classification"]["expected_kind"] == "n2d_identity_voice_print_report"
+    assert row["classification"]["accepted_kind_aliases"] == ["n2d_identity_voice_print"]
+
+
+def test_versionless_contract_inheritance_uses_exact_legacy_migration(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    path = prod / "contract_inheritance_第1集.json"
+    payload = {
+        "kind": "n2d_contract_inheritance",
+        "episode": "第1集",
+        "image_overview": "出图/第1集/prompt/00_总览.md",
+        "video_overview": "出视频/第1集/prompt/00_总览.md",
+        "fields": [],
+        "summary": {"block": 0},
+        "identity_handoff": {},
+        "asset_handoff": {},
+        "pixel_contract": {},
+        "verdict": "pass",
+        "generated_at": "2026-08-20T00:00:00Z",
+        "inputs_fingerprint": {},
+    }
+    path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    migrated = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+    assert migrated["status"] == "warn"
+    assert migrated["scanned"][0]["classification"]["legacy_migration"]["rule"] == (
+        "legacy_v0_n2d_contract_inheritance"
+    )
+    assert not any(item["severity"] == "block" for item in migrated["issues"])
+
+    payload.pop("verdict")
+    path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    invalid = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+    assert invalid["status"] == "fail"
+    assert any("verdict" in item["message"] for item in invalid["issues"] if item["severity"] == "block")
+
+
+def test_versionless_voice_print_report_uses_exact_legacy_migration(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    path = prod / "identity_voice_print_第1集.json"
+    payload = {
+        "kind": "n2d_identity_voice_print_report",
+        "episode": "第1集",
+        "available": False,
+        "mode": "no_speaker_backend",
+        "precision": "insufficient_precision",
+        "groups": {},
+        "total_drift": 0,
+    }
+    path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    migrated = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+    assert migrated["status"] == "warn"
+    assert migrated["scanned"][0]["classification"]["legacy_migration"]["rule"] == (
+        "legacy_v0_n2d_identity_voice_print_report"
+    )
+    assert not any(item["severity"] == "block" for item in migrated["issues"])
+
+    payload.pop("episode")
+    path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    invalid = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+    assert invalid["status"] == "fail"
+    assert any("episode" in item["message"] for item in invalid["issues"] if item["severity"] == "block")
+
+
+def test_gate_findings_uses_registered_consistency_findings_payload_contract(tmp_path: Path) -> None:
+    assert reg.BOUNDARY_PRODUCT_KINDS["n2d_gate_findings"]["accepted_kinds"] == [
+        "n2d_consistency_findings"
+    ]
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "gate_findings_video_preflight_第1集.json").write_text(json.dumps({
+        "kind": "n2d_consistency_findings",
+        "version": 1,
+        "episode": "第1集",
+        "findings": [],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "pass"
+    assert payload["scanned_count"] == 1
+    assert payload["scanned"][0]["classification"]["expected_kind"] == "n2d_gate_findings"
+    assert payload["scanned"][0]["classification"]["accepted_kind_aliases"] == [
+        "n2d_consistency_findings"
+    ]
+
+
+def test_review_ui_findings_name_is_not_misclassified_as_review_ui_boundary(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "review_ui_findings_第1集.json").write_text(
+        '{"kind":"n2d_consistency_findings","version":1,"episode":"第1集","findings":[]}',
+        encoding="utf-8",
+    )
+
+    payload = reg.scan_artifacts(str(tmp_path), strict_unknown=True, scope="release")
+
+    assert payload["status"] == "pass"
+    assert payload["scanned_count"] == 0
+    assert payload["skipped_count"] == 1
+    assert payload["skipped"][0]["classifier_reason"] == "declared_kind"
+    assert payload["skipped"][0]["skip_reason"]["code"] == "outside_release_boundary"
 
 
 def test_scan_artifacts_validates_json_and_jsonl(tmp_path: Path) -> None:

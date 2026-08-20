@@ -24,7 +24,12 @@ class ProductionControlsTest(unittest.TestCase):
         with open(os.path.join(root, "分镜", "timeline_manifest.json"), "w", encoding="utf-8") as f:
             json.dump({"title": "Test", "clips": [{"clip_id": "Clip_001", "duration": 2.0,
                                                        "video_path": "出视频/视频/Clip_001.mp4"}]}, f)
-        for rel in ("节拍/beatgrid.json", "生产数据/image_qc/image_qc.json"):
+        for rel in (
+            "节拍/beatgrid.json", "生产数据/image_qc/image_qc.json",
+            "评分/pacing_prescore.json", "分镜/semantic_prompts.json",
+            "字幕/alignment_report.json",
+        ):
+            os.makedirs(os.path.dirname(os.path.join(root, rel)), exist_ok=True)
             with open(os.path.join(root, rel), "w", encoding="utf-8") as f: f.write("{}")
         for rel in ("歌/song.wav", "分镜/animatic.mp4", "出图/段落/图片/Clip_001.png"):
             with open(os.path.join(root, rel), "wb") as f: f.write(b"asset")
@@ -46,6 +51,21 @@ class ProductionControlsTest(unittest.TestCase):
             self.assertIn("出图/段落/图片/Clip_001.png", payload["inputs_sha256"])
             self.assertEqual(payload["editorial_timeline_sha256"], payload["otio_timeline_sha256"])
 
+    def test_demo_meta_cannot_skip_semantic_picture_lock_evidence(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.make_project(root)
+            os.remove(os.path.join(root, "分镜", "semantic_prompts.json"))
+            with self.assertRaisesRegex(RuntimeError, "semantic_prompts"):
+                picture_lock.build_lock(root, "导演甲", "逐镜确认叙事和节奏")
+
+    def test_picture_lock_rejects_ai_reviewer_or_blank_notes(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.make_project(root)
+            with self.assertRaisesRegex(RuntimeError, "真实具名"):
+                picture_lock.build_lock(root, "Codex agent", "approved")
+            with self.assertRaisesRegex(RuntimeError, "审片说明"):
+                picture_lock.build_lock(root, "导演甲", "")
+
     def test_otio_contains_timed_external_clip(self):
         with tempfile.TemporaryDirectory() as root:
             self.make_project(root)
@@ -53,7 +73,12 @@ class ProductionControlsTest(unittest.TestCase):
             clip = payload["tracks"]["children"][0]["children"][0]
             self.assertEqual(clip["name"], "Clip_001")
             self.assertEqual(clip["source_range"]["duration"]["value"], 48.0)
+            self.assertIsInstance(clip["source_range"]["duration"]["value"], int)
             self.assertEqual(payload["tracks"]["children"][1]["kind"], "Audio")
+
+    def test_fractional_seconds_quantize_to_integral_frames(self):
+        self.assertEqual(export_otio.rational(1.001, 24)["value"], 24)
+        self.assertIsInstance(export_otio.rational(1.001, 24)["value"], int)
 
     @unittest.skipUnless(shutil.which("ffmpeg"), "ffmpeg unavailable")
     def test_renders_real_animatic(self):

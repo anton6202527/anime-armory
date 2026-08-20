@@ -103,6 +103,12 @@ import {
   type StandaloneWorkflowKind,
 } from "./StandaloneSkillWorkflows";
 import {
+  APP_CANVAS_SKILL_IDS,
+  canonicalAppSkillId,
+  canonicalAppSkillPath,
+  canonicalAppSkillText,
+} from "./appSkillIds";
+import {
   ScriptWorkflowOverlay as ControlledScriptWorkflowOverlay,
   type ScriptAssetBatchRequest,
   type ScriptAssetBatchResult,
@@ -684,7 +690,12 @@ const CANVAS_MODALITY_LABELS: Record<ModelModality, string> = {
 
 function loadCanvasFavoriteSkills() {
   try {
-    return new Set<string>(JSON.parse(localStorage.getItem("anime-armory.web.favorite-skills") ?? "[]") as string[]);
+    const stored = JSON.parse(localStorage.getItem("anime-armory.web.favorite-skills") ?? "[]") as unknown;
+    if (!Array.isArray(stored)) return new Set<string>();
+    return new Set<string>(stored.flatMap((value) => {
+      const canonical = typeof value === "string" ? canonicalAppSkillId(value) : null;
+      return canonical ? [canonical] : [];
+    }));
   } catch {
     return new Set<string>();
   }
@@ -892,8 +903,8 @@ const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
   {
     id: "story-script",
     title: "故事脚本生成",
-    skill: "n2d-script-workbench",
-    skillPath: "skills/n2d-script-workbench/SKILL.md",
+    skill: APP_CANVAS_SKILL_IDS.scriptWorkbench,
+    skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.scriptWorkbench}/SKILL.md`,
     cover: "/skill-covers/n2d.jpg",
     nodes: [
       {
@@ -915,8 +926,8 @@ const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
   {
     id: "character-turnaround",
     title: "角色三视图",
-    skill: "n2d-character-turnaround",
-    skillPath: "skills/n2d-character-turnaround/SKILL.md",
+    skill: APP_CANVAS_SKILL_IDS.characterTurnaround,
+    skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.characterTurnaround}/SKILL.md`,
     cover: "/skill-covers/song.jpg",
     nodes: [
       { kind: "image", title: "角色图", description: "上传、选择或生成角色主参考图", data: { imageMode: "图片输入" } },
@@ -932,8 +943,8 @@ const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
   {
     id: "first-frame-video",
     title: "首帧图生视频",
-    skill: "n2d-first-frame-video",
-    skillPath: "skills/n2d-first-frame-video/SKILL.md",
+    skill: APP_CANVAS_SKILL_IDS.firstFrameVideo,
+    skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.firstFrameVideo}/SKILL.md`,
     cover: "/skill-covers/mv.jpg",
     nodes: [
       { kind: "image", title: "首帧图片", description: "上传、选择或生成视频的首帧画面", data: { imageMode: "图片输入" } },
@@ -943,8 +954,8 @@ const CANVAS_STARTER_PRESETS: readonly CanvasStarterPreset[] = [
   {
     id: "audio-video",
     title: "音频生视频",
-    skill: "n2d-audio-video",
-    skillPath: "skills/n2d-audio-video/SKILL.md",
+    skill: APP_CANVAS_SKILL_IDS.audioVideo,
+    skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.audioVideo}/SKILL.md`,
     cover: "/skill-covers/comic.jpg",
     nodes: [
       { kind: "audio", title: "音频输入", description: "上传或选择成品音频，提取节拍、段落和能量变化", data: { model: "音频分析" } },
@@ -1869,20 +1880,33 @@ export function CanvasPage({
     if (!storedDocument.nodes.length) return { nodes: [], edges: [] };
     const storedNodes: WorkflowNode[] = storedDocument.nodes.map((node): WorkflowNode => {
       const storedData = node.data as WorkflowNodeData;
-      let data = storedData;
-      if (storedData.skillId === "n2d-script") {
-        data = {
+      const canonicalStoredSkillId = canonicalAppSkillId(storedData.skillId);
+      const canonicalStoredSkillPath = canonicalAppSkillPath(canonicalStoredSkillId)
+        ?? canonicalAppSkillText(storedData.skillPath);
+      const canonicalStoredAssetName = canonicalAppSkillText(storedData.assetName);
+      let data = (
+        canonicalStoredSkillId !== (storedData.skillId ?? null)
+        || canonicalStoredSkillPath !== storedData.skillPath
+        || canonicalStoredAssetName !== storedData.assetName
+      ) ? {
           ...storedData,
-          assetName: storedData.assetName === "Skill · n2d-script" ? "Skill · n2d-script-workbench" : storedData.assetName,
-          skillId: "n2d-script-workbench",
-          skillPath: "skills/n2d-script-workbench/SKILL.md",
+          ...(canonicalStoredSkillId ? { skillId: canonicalStoredSkillId } : {}),
+          ...(canonicalStoredSkillPath ? { skillPath: canonicalStoredSkillPath } : {}),
+          ...(canonicalStoredAssetName ? { assetName: canonicalStoredAssetName } : {}),
+        } : storedData;
+      if (data.skillId === "n2d-script") {
+        data = {
+          ...data,
+          assetName: data.assetName === "Skill · n2d-script" ? `Skill · ${APP_CANVAS_SKILL_IDS.scriptWorkbench}` : data.assetName,
+          skillId: APP_CANVAS_SKILL_IDS.scriptWorkbench,
+          skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.scriptWorkbench}/SKILL.md`,
         };
-      } else if (storedData.skillId === "comic-identity" && ["角色图", "角色三视图"].includes(storedData.title)) {
-        data = { ...storedData, ...(storedData.title === "角色三视图" ? { variant: "character-workflow" as const } : {}), assetName: "Skill · n2d-character-turnaround", skillId: "n2d-character-turnaround", skillPath: "skills/n2d-character-turnaround/SKILL.md" };
-      } else if (storedData.skillId === "n2d-video" && ["首帧图片", "首帧图生视频"].includes(storedData.title)) {
-        data = { ...storedData, ...(storedData.title === "首帧图生视频" ? { variant: "first-frame-video-workflow" as const } : {}), assetName: "Skill · n2d-first-frame-video", skillId: "n2d-first-frame-video", skillPath: "skills/n2d-first-frame-video/SKILL.md" };
-      } else if (storedData.skillId === "mv" && ["音频输入", "图片", "音频生视频"].includes(storedData.title)) {
-        data = { ...storedData, ...(storedData.title === "音频生视频" ? { variant: "audio-video-workflow" as const } : {}), assetName: "Skill · n2d-audio-video", skillId: "n2d-audio-video", skillPath: "skills/n2d-audio-video/SKILL.md" };
+      } else if (data.skillId === "comic-identity" && ["角色图", "角色三视图"].includes(data.title)) {
+        data = { ...data, ...(data.title === "角色三视图" ? { variant: "character-workflow" as const } : {}), assetName: `Skill · ${APP_CANVAS_SKILL_IDS.characterTurnaround}`, skillId: APP_CANVAS_SKILL_IDS.characterTurnaround, skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.characterTurnaround}/SKILL.md` };
+      } else if (data.skillId === "n2d-video" && ["首帧图片", "首帧图生视频"].includes(data.title)) {
+        data = { ...data, ...(data.title === "首帧图生视频" ? { variant: "first-frame-video-workflow" as const } : {}), assetName: `Skill · ${APP_CANVAS_SKILL_IDS.firstFrameVideo}`, skillId: APP_CANVAS_SKILL_IDS.firstFrameVideo, skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.firstFrameVideo}/SKILL.md` };
+      } else if (data.skillId === "mv" && ["音频输入", "图片", "音频生视频"].includes(data.title)) {
+        data = { ...data, ...(data.title === "音频生视频" ? { variant: "audio-video-workflow" as const } : {}), assetName: `Skill · ${APP_CANVAS_SKILL_IDS.audioVideo}`, skillId: APP_CANVAS_SKILL_IDS.audioVideo, skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.audioVideo}/SKILL.md` };
       }
       if (data.variant === "director") {
         data = {
@@ -1899,7 +1923,7 @@ export function CanvasPage({
       if (
         data.kind === "video"
         && data.status === "done"
-        && data.skillId === "n2d-first-frame-video"
+        && data.skillId === APP_CANVAS_SKILL_IDS.firstFrameVideo
         && typeof data.scriptSourceNodeId === "string"
         && !data.resultAttachmentId
       ) {
@@ -1982,7 +2006,7 @@ export function CanvasPage({
           },
         };
       }
-      if (scriptSourceIds.has(node.id) && node.data.kind === "text" && node.data.skillId === "n2d-script-workbench") {
+      if (scriptSourceIds.has(node.id) && node.data.kind === "text" && node.data.skillId === APP_CANVAS_SKILL_IDS.scriptWorkbench) {
         return {
           ...node,
           data: {
@@ -2096,8 +2120,14 @@ export function CanvasPage({
   ]);
   const [includeCanvasContext, setIncludeCanvasContext] = useState(storedDocument?.preferences.includeCanvasContext ?? true);
   const [followLatestRun, setFollowLatestRun] = useState(storedDocument?.preferences.followLatestRun ?? true);
-  const [activeSkill, setActiveSkill] = useState<string | null>(storedDocument?.activeSkill ?? work.creationConfig?.skillId ?? null);
-  const [creationConfig, setCreationConfig] = useState<WorkCreationConfig>(() => defaultCreationConfig(storedDocument?.work ?? work));
+  const [activeSkill, setActiveSkill] = useState<string | null>(
+    canonicalAppSkillId(storedDocument?.activeSkill ?? work.creationConfig?.skillId ?? null),
+  );
+  const [creationConfig, setCreationConfig] = useState<WorkCreationConfig>(() => {
+    const initial = defaultCreationConfig(storedDocument?.work ?? work);
+    const skillId = canonicalAppSkillId(initial.skillId);
+    return skillId && skillId !== initial.skillId ? { ...initial, skillId } : initial;
+  });
   const [composerMenu, setComposerMenu] = useState<ComposerMenuKind>(null);
   const [composerAttachmentIds, setComposerAttachmentIds] = useState<string[]>(() => (storedDocument?.work.attachments ?? work.attachments).map((attachment) => attachment.id));
   const [membershipOpen, setMembershipOpen] = useState(false);
@@ -3616,8 +3646,8 @@ export function CanvasPage({
       generationProgress: 4,
       generationError: undefined,
       generationRequestId: requestId,
-      skillId: "n2d-script-workbench",
-      skillPath: "skills/n2d-script-workbench/SKILL.md",
+      skillId: APP_CANVAS_SKILL_IDS.scriptWorkbench,
+      skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.scriptWorkbench}/SKILL.md`,
     };
     const runningNodes = nodesRef.current.map((candidate) => candidate.id === node.id
       ? { ...candidate, data: { ...candidate.data, ...runningPatch } }
@@ -3626,11 +3656,11 @@ export function CanvasPage({
     setNodes(runningNodes);
     void persistGeneratorNodeSnapshot(node.id, runningPatch, attachmentsRef.current, runningNodes, edgesRef.current, { writeCloud: false });
     addActivity(`开始通过后端 Skill 拆解「${latestSource.data.title}」`);
-    setNotice("正在通过 n2d-script-workbench 生成可编辑镜头…");
+    setNotice(`正在通过 ${APP_CANVAS_SKILL_IDS.scriptWorkbench} 生成可编辑镜头…`);
 
     try {
       const generation = await runBackendSkillText(
-        "n2d-script-workbench",
+        APP_CANVAS_SKILL_IDS.scriptWorkbench,
         [
           "你是专业漫剧故事脚本与分镜导演。把用户故事拆成可直接编辑、可生图、可生视频的三步工作台数据。",
           "要求：通常生成 8–20 个镜头；每镜 5–15 秒；镜头描述具体可视；资产去重并覆盖主要角色、场景、关键道具；不要复制不在原故事中的受版权保护内容。",
@@ -3657,8 +3687,8 @@ export function CanvasPage({
         status: "done",
         eyebrow: "脚本",
         variant: "script-workflow",
-        skillId: "n2d-script-workbench",
-        skillPath: "skills/n2d-script-workbench/SKILL.md",
+        skillId: APP_CANVAS_SKILL_IDS.scriptWorkbench,
+        skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.scriptWorkbench}/SKILL.md`,
         assetName: `${workbench.shots.length}个镜头`,
         scriptWorkbench: workbench,
         generatedWithModel: generation.model,
@@ -4083,8 +4113,8 @@ export function CanvasPage({
         referenceNodeIds: references.nodeIds,
         referenceImageUrls: references.imageUrls,
         scriptAssetIds: references.assetIds,
-        skillId: "n2d-first-frame-video",
-        skillPath: "skills/n2d-first-frame-video/SKILL.md",
+        skillId: APP_CANVAS_SKILL_IDS.firstFrameVideo,
+        skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.firstFrameVideo}/SKILL.md`,
         scriptSourceNodeId: scriptNodeId,
         scriptShotId: shot.id,
       },
@@ -5404,7 +5434,7 @@ export function CanvasPage({
       let current = await submissionGateway.submit({
         work: submittedWork,
         prompt: contextParts.join("\n\n"),
-        skillId: activeSkill ?? creationConfig.skillId ?? work.line,
+        skillId: canonicalAppSkillId(activeSkill ?? creationConfig.skillId) ?? work.line,
         ...(selectedUserSkillDefinition ? { skillDefinition: selectedUserSkillDefinition } : {}),
       });
       if (!mountedRef.current) return;

@@ -19,6 +19,12 @@ import sys
 from pathlib import Path
 
 
+COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from progress import update_stage as update_progress
+
+
 STAGES = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
 # 缩略分镜/name board 现在是 layout 的强制编辑合同，不再随“传统原稿流程”关闭而跳过。
 TRADITIONAL_STAGES = {"原稿收尾"}
@@ -187,21 +193,7 @@ def print_editorial_wait(root: Path, chapter: str, stage: str, status: str) -> N
 
 
 def update_progress_stage(root: Path, chapter: str, stage: str, value: str) -> None:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return
-    headers: list[str] = []
-    out: list[str] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip().startswith("|"):
-            cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and cells and cells[0] == chapter and stage in headers and len(cells) >= len(headers):
-                cells[headers.index(stage)] = value
-                line = "| " + " | ".join(cells) + " |"
-        out.append(line)
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    update_progress(root, chapter, stage, value, actor="comic-batch")
 
 
 def check_approved_editorial_stage(repo: Path, root: Path, chapter: str, stage: str) -> int:

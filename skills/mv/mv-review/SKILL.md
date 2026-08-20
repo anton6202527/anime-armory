@@ -27,21 +27,25 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 	  - **图生视频继承 / 视频QC**：报告存在、hash 对应当前 plan/jobs/video；正式项目缺报告或语义签收直接阻断。
 	  - **正式版 readiness**：`生产数据/formal_readiness/formal_readiness.json` 存在时读取状态；demo 项目只作为信息提示，正式项目 blocked/review 会暴露。
 	  - **clip 节奏**（需 `ffprobe`，缺则显式跳过）：每个 `出视频/视频/*.mp4` 时长、**clip 是否疑似等长（不卡点）**、clip 总时长 ≈ 歌长。
-	  - **卡拉OK字幕**：LRC/ASS 解析、占位/越界/重叠/行数；alignment report 是否绑定当前歌/歌词/对齐音轨，低置信度人工放行是否具名。
+	  - **卡拉OK字幕**：LRC/ASS 解析、占位/越界/重叠/行数；alignment report 是否为当前 schema v5 并绑定当前歌/歌词/对齐音轨/ASS/LRC；正式验收只接受 calibrated、singing-specific、eligible 的逐行声学证据，或绑定当前内容的具名逐行听审；stem→master offset/drift 必须有效。
 	  - **音画合成/交付**（需 `ffprobe`）：母版和 MP4、音画差、画幅/音轨、BT.709/H.264/48kHz；delivery QC 对比输入母带与输出响度/真峰值/时长，provenance 是否齐。
-  - **AI 视觉使用披露**：已有成片时检查 `合规/ai_usage.json` 是否留痕、枚举是否有效。
+  - **AI 披露 / C2PA**：已有成片时检查 `合规/ai_usage.json` 是否当前。C2PA requested 时分别报告 embedded、structural validity、signature validity、trust anchors / trusted、test certificate、`timestamp_validated` 与 `timestamp_trusted`；`signature_info.time` 不是 TSA 证明，结构或签名有效也不等于生产可信。**C2PA/Content Credentials 绝不替代目标平台的 AI 内容声明**。
   - **完整性/对账**：词/歌/beatgrid/出图/clip/成片 产物快照、`_meta.has_song/has_lyrics` vs 实际文件、段落数 vs `_meta.structure`。
   ```bash
   python3 <skill>/scripts/consistency_findings.py <制MV作品根> --write
   python3 <skill>/scripts/mv_check.py <制MV作品根>          # 人读
   python3 <skill>/scripts/mv_check.py <制MV作品根> --json   # 喂回 LLM 汇总
+  # 完成人审后才显式写具名收据（不可用 AI/agent 作 reviewer）
+  python3 <skill>/scripts/mv_check.py <制MV作品根> --write-receipt \
+    --reviewer "王晓明" --notes "已逐项审片，同意当前版本交付"
   ```
-  `consistency_findings.py` 写 `生产数据/consistency_findings.{json,md}`，把 `identity_registry` / `reference_plan` / `shot_variety` / `craft_audit` / `drift_risk` / `image_qc` / `verifier_coverage` / `inherit_contract` / `video_qc` / `alignment_report` 收成一个统一一致性证据面，供审片和返修排序使用。另含**止损轻量件**（stop_loss lite，按 MV 单曲工位裁剪）：读 `生产数据/production_events.jsonl` 算出图重画率（>35% → warn `image_redraw_rate_high`）、读 `出视频/jobs_manifest.json` 算平均每 clip take 数（>3 → warn `takes_per_clip_high`）——同一张图反复重抽/一个 clip 抽一堆 take 挑不出，是积分烧穿前兆，该回头修 prompt 锚点/参考图而不是硬抽。image_qc 的降级人工放行只认**具名 + 绑定报告 hash** 的 `manual_review`（旧式裸布尔不再当有效证据）。
+  默认的人读 / JSON 命令都**严格只读**，不会顺手把 review 标完成。只有显式 `--write-receipt`、`--reviewer` 为真实姓名、`--notes` 非空，且机检 `hard_blocks=0`，并由 completion 复算 compose / disclosure / provenance 及已进入的 image / video_jobs / video 健康度均无错误，才写 `生产数据/review/review_receipt.json`。收据必须同时绑定当前 `成片_MV.mp4`、`成片_MV_master.mov`、`delivery_qc.json`、`provenance.json`、`ai_usage.json` 的 SHA-256；任一文件变化后旧收据自动过期。
+  `consistency_findings.py` 写 `生产数据/consistency_findings.{json,md}`，把 `identity_registry` / `reference_plan` / `shot_variety` / `craft_audit` / `drift_risk` / `image_qc` / B14 ledger / `verifier_coverage` / `inherit_contract` / `video_qc` / `alignment_report` 收成一个统一一致性证据面，供审片和返修排序使用。另含**止损轻量件**（stop_loss lite，按 MV 单曲工位裁剪）：读 `生产数据/production_events.jsonl` 算出图重画率（>35% → warn `image_redraw_rate_high`）、读 `出视频/jobs_manifest.json` 算平均每 clip take 数（>3 → warn `takes_per_clip_high`）——同一张图反复重抽/一个 clip 抽一堆 take 挑不出，是积分烧穿前兆，该回头修 prompt 锚点/参考图而不是硬抽。degraded/manual review/旧 `--accept-degraded` 均不能替代 B14 的 full machine QC 与逐图当前验收。
 - **视觉多样性事前机检（出图前跑，最便宜的点）**：`scripts/shot_variety_audit.py <制MV作品根> --write` —— 读 `分镜/clip_plan.json` 的 `shot_design`，在花积分出图前拦「同构图反复 / 景别单调 / 副歌静镜 / 场景滞留 / 大变化镜头缺参考锚」。report-only（最高 warn，永不 block），写 `生产数据/shot_variety/shot_variety.{json,md}`，被 gate（image 阶段）、`consistency_findings` 与 `mv_check` 消费。补 `mv-score`/`pacing.py` 纯数值卡点引擎**从不读画面字段**的盲区——MV 命门除了卡点就是**视觉不重复**。出图后由 `mv-image` 的 `image_qc` dHash 做像素级现实核对；MV 无台词，因此只采用视觉信号。
 - **VLM 并排裁决任务包（出图后跑·内容级判官·2026-07-17 参照漫画线复裁闭环）**：`scripts/vlm_judge.py <制MV作品根> --write` —— mv 的数值机检（脸余弦/dHash/ΔE）不看内容，"主角是不是同一个人 / 接缝首末帧接不接得上"此前只有人判。任务包两轴：lead_identity（已出图 clip 首帧 vs reference_inputs 身份定妆组）、seam_continuity（need_end_frame 的 clip 末帧 vs 下一 clip 首帧）。多模态 agent 逐条看图打分回填 `生产数据/vlm_judge/vlm_judge_verdicts.json`，裁决必须原样复制 image_sha256/task_sha256/references_sha256 且带 evaluator{model,version}——重抽后旧裁决自动作废、空壳裁决被丢弃。gate（image/video_jobs/compose）消费两个文件做覆盖率对账：缺任务包→建议跑；任务包存在但 0 有效裁决→**机检空转 warn**（漫画线实证过该空档：93 条任务 0 裁决、画错主体照样放行）；部分裁决→覆盖率不足 warn；suspect/score<=2→逐条 warn 交人审。advisory 铁律：永不 block。
 - **传统 MV 手法机检（出图前跑·craft audit）**：`scripts/craft_audit.py <制MV作品根> --write` —— 把真人 MV 片场沉淀的**结构律**做成计划期机检：①副歌复现升级律（第 k 次副歌无新场景/新景别/新母题/更高运镜能量/更多镜 → warn `chorus_no_escalation`；末副歌该给全曲最大 payoff）；②动静对比律（副歌平均运镜能量 ≤ 主歌 → warn `no_dynamics_contrast`；主歌拉满 → info headroom 耗尽）；③hook 上脸律（副歌无对镜演唱近景 → warn；全曲无表演线 → info 自检纯叙事意图）；④冷开场律（首钩信号前 >8s → warn，竖屏前 3 秒定生死）；⑤关键镜候选律（key 镜候选 <2 → warn/未计划 → info，「shoot options for the edit」片场惯例）；⑥bridge 换气律（音乐转折画面不转 → info）；⑦词画呼应（歌词意象与画面零重合 → info 弱信号自检）。写 `生产数据/craft_audit/craft_audit.{json,md}`，report-only（最高 warn），被 gate（image/video_jobs）与 `consistency_findings` 消费。配套：`mv-craft/pacing.py` 新增**晚切偏置** `late_cut_bias`（对齐切点中晚于拍点 >0.04s 的比例——剪辑手法是压拍或提前 1-3 帧落刀，晚切读感拖；mv-score 打印 >0.3 提示）。
 - **现实验证器覆盖账本（fail-closed）**：`consistency_findings` 的 `verifier_coverage` 维度——声明每个现实验证器（出图脸检 insightface / 主色 palette / 构图 dHash / 视频脸检 / 视频抽帧感知）是否**适用**（项目登记了要查的数据）且**真跑过**（后端真出活）。治「跑了 QC 数据却没真执行一致性」：insightface/Pillow 缺失时最强检测器静默降级休眠，报告看着"跑过 QC"其实全程空转——适用但休眠 → warn 现形（正式项目 image 脸检休眠已由 gate 的 precision≠full 硬拦，本层不重复造 block）。
-- **一致性 Charter 防静默降级（流程自检·不读项目）**：`scripts/consistency_charter.py` —— mv load-bearing 闸（版权闸/脸崩 HARD/定妆 readiness/picture_lock/降级具名放行/响度 block…共 17 gate 闸+4 组 QC 硬闸）的 enforcement 单一意图源：每闸声明**守护片段**（源码必须仍包含，防检查被删/改名静默失效）+ **is_demo 引用冻结基线**（mv 没有 profile 系统，`is_demo` 豁免就是静默降级向量；新增豁免分支必须先来 charter 显式改一行留痕）。配套 `test_consistency_charter.py` introspect 真实源码守护；`python3 scripts/consistency_charter.py` 退非 0=有违规。新增 load-bearing 闸必须登记（完整性扫描揪出用了 is_demo 却未登记的 gate 函数）。
+- **一致性 Charter 防静默降级（流程自检·不读项目）**：`scripts/consistency_charter.py` —— mv load-bearing 闸的 enforcement 单一意图源，现同时守版权/节拍/歌词声学与 stem 时基/B14/身份/picture lock、model×channel 真实提交、具名 cut map、整数帧 OTIO、逐输入色彩、最终 PCM、C2PA 分层、review/handoff 收据与可移植路径。每闸声明**守护片段**与 **is_demo 引用冻结基线**；新增豁免或删掉承重检查会让测试变红，必须先显式更新裁决与日期。`python3 scripts/consistency_charter.py` 退非 0 即违规。
   > `ffprobe` 缺失时，clip/成片 的时长·分辨率·音轨检查**显式标「跳过」**，绝不静默略过。`song.wav` 时长优先走标准库 `wave`，mp3/m4a/flac 走 ffprobe。
 
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。
@@ -57,7 +61,8 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 1. **跑机检** → 确定性问题清单（卡点 + clip + 字幕 + 合成 + 对账）。
 2. **人判**：对照 `references/checklist.md` 逐维，**只记真问题**，每条带证据（Clip / 段落 / 时间码 / 图路径）。崩脸并排读图。
 3. **汇总报告** → 写 `创作区/制MV/<曲名>/_质检.md`：按严重度排序，每条 = 位置（`Clip07` / `[chorus]@时间码` / 文件）+ 维度 + 问题 + **修法** + 证据。附"健康度概览"表。
-4. **修复回流（关键）**：MV 的修法**回源头改、重跑回流**，不在成片 MP4 上硬剪。报告里每条修法都指明**回哪个 skill 重跑**（如"崩脸→回 `mv-image` 重出该镜""clip 不卡点→回 `mv-video` 按 beatgrid 重定 clip 时长""字幕越界→回 `mv-lyric-sync` 重对齐""成片无音轨→回 `mv-compose` 重铺歌轨"）。
+4. **具名验收**：真实复核人看完当前成片与清单后，显式跑 `--write-receipt --reviewer ... --notes ...`。机器绿灯本身不会写收据，C2PA 也不能代替此人审或平台披露。
+5. **修复回流（关键）**：MV 的修法**回源头改、重跑回流**，不在成片 MP4 上硬剪。报告里每条修法都指明**回哪个 skill 重跑**（如"崩脸→回 `mv-image` 重出该镜""clip 不卡点→回 `mv-video` 按 beatgrid 重定 clip 时长""字幕越界→回 `mv-lyric-sync` 重对齐""成片无音轨→回 `mv-compose` 重铺歌轨"）。
 
 ## 严重度（定级 + 容错铁律）
 

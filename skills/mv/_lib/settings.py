@@ -29,7 +29,7 @@ DEFAULTS = {
     "生图模型": "GPT Image 2",
     "生图渠道": "Codex",
     "MV一致性增强": "共享定妆+锚点",
-    "生视频模型": "Seedance 2.0",
+    "生视频模型": "Seedance 2.5",
     "生视频渠道": "即梦/Dreamina",
     # Legacy combined key. New projects should write `生视频模型` + `生视频渠道`.
     "生视频AI": "即梦",
@@ -93,7 +93,8 @@ def _video_aliases() -> Dict[str, str]:
 VIDEO_BACKEND_SETTING_ALIASES = _video_aliases()
 
 VIDEO_MODEL_CHOICES = (
-    "Seedance 2.0", "Seedance",
+    "Seedance 2.5", "Seedance 2.0", "Seedance",
+    "Gemini Omni Flash Preview", "Gemini Omni Flash", "Omni",
     "Veo 3.1", "Veo",
     "Kling 3.0", "Kling",
     "Hailuo 02", "Hailuo 2.3", "Hailuo",
@@ -110,6 +111,7 @@ VIDEO_MODEL_CHOICES = (
 VIDEO_CHANNEL_CHOICES = (
     "即梦/Dreamina", "即梦", "Dreamina",
     "豆包",
+    "火山方舟/Volcengine API",
     "海螺AI", "Hailuo",
     "可灵/Kling", "可灵", "Kling",
     "Google Gemini API",

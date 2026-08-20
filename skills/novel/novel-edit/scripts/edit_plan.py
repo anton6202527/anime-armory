@@ -11,7 +11,25 @@ import glob
 import json
 import os
 import re
+import sys
 from datetime import date
+
+import authenticity_read
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_NOVEL_LIB = os.path.abspath(os.path.join(_HERE, "..", "..", "_lib"))
+if _NOVEL_LIB not in sys.path:
+    sys.path.insert(0, _NOVEL_LIB)
+from craft_profile import (  # noqa: E402
+    NARRATIVE_FUNCTION_LABELS,
+    is_supported_craft_profile,
+    missing_required_scene_fields,
+    narrative_functions,
+    requires_traditional_turn,
+    resolve_craft_profile,
+)
+from project_io import load_project_settings  # noqa: E402
+from reader_probe import reader_probe_freshness  # noqa: E402
 
 
 PHASE_ORDER = {
@@ -257,28 +275,47 @@ def collect_reader_panel(tasks, root):
         return
     chapters = payload.get("chapters_read") or []
     chapter = chapters[0] if len(chapters) == 1 else None
-    retention = payload.get("retention_prior")
-    hook = payload.get("hook_strength")
+    freshness = reader_probe_freshness(root, payload)
+    if freshness["status"] != "fresh":
+        unknown = freshness["status"] == "unknown"
+        add_task(
+            tasks,
+            phase="editorial_assessment",
+            priority="P2",
+            chapter=chapter,
+            title=("旧版合成叙事探针新鲜度未知" if unknown else "合成叙事探针已过期，需重跑"),
+            reason=(
+                f"{freshness['reason']} 当前信号值不进入编辑计划；重跑 novel-simulate 后再逐项回正文复核。"
+            ),
+            source="评分/reader_panel_signals.json",
+            return_stage="simulate",
+            recommended_skill="novel-simulate",
+        )
+        return
     if payload.get("signal_only") is True or payload.get("analysis_mode") == "signal_only":
+        surface = payload.get("surface_signals") or {}
+        if surface:
+            hook = surface.get("hook_tail_markers") or {}
+            lexical = surface.get("lexical_4gram") or {}
+            cliche = surface.get("cliche_terms") or {}
+            reason = (
+                f"synthetic/context-only；章尾标记字面命中 {hook.get('literal_marker_hits', 0)} 次，"
+                f"4-gram 去重 {lexical.get('unique_cjk_4gram_count', 0)}/"
+                f"{lexical.get('cjk_4gram_count', 0)}，套路词字面命中 {cliche.get('literal_hits', 0)} 次。"
+                "分量未经校准、无统一方向，只能回正文逐项复核。"
+            )
+        else:
+            reason = (
+                "synthetic/context-only；这是旧 schema 或仅有定性骨架的合成探针。"
+                "旧聚合留存字段已弃用并忽略，不能据其阈值触发改稿。"
+            )
         add_task(
             tasks,
             phase="editorial_assessment",
             priority="P2",
             chapter=chapter,
             title="合成叙事探针仅作人工复核假设",
-            reason="synthetic/context-only；人格心声补完前后都不能当真实读者或留存证据。",
-            source="评分/reader_panel_signals.json",
-            return_stage="simulate",
-            recommended_skill="novel-simulate",
-        )
-    if isinstance(retention, (int, float)) and retention < 0.45:
-        add_task(
-            tasks,
-            phase="developmental_edit",
-            priority="P2",
-            chapter=chapter,
-            title=f"合成留存代理偏低，需人工复核：{retention}",
-            reason=f"hook_strength={hook}; 该值来自关键词/表面结构代理，不得直接触发改稿；先由编辑读正文验证假设。",
+            reason=reason,
             source="评分/reader_panel_signals.json",
             return_stage="simulate",
             recommended_skill="novel-simulate",
@@ -287,18 +324,49 @@ def collect_reader_panel(tasks, root):
 
 def collect_scene_cards(tasks, root):
     payload = load_json(os.path.join(root, "设定", "scene_cards.json"), {}) or {}
+    craft_profile = resolve_craft_profile(load_project_settings(root))
+    if not is_supported_craft_profile(craft_profile):
+        add_task(
+            tasks,
+            phase="developmental_edit",
+            priority="P1",
+            title=f"创作工艺档缺编辑适配：{craft_profile}",
+            reason=(
+                "项目明确选择了自定义创作工艺档，但 scene-card/edit adapter 尚不存在。"
+                "先定义该档的结构合同；不得静默套用传统六字段或其它档。"
+            ),
+            source="_设置.md",
+            return_stage="settings",
+            recommended_skill="novel-settings",
+        )
+        return
     for card in payload.get("scenes") or []:
-        missing = [k for k in ("pov", "desire", "obstacle", "conflict", "turn", "value_shift") if not str(card.get(k) or "").strip()]
+        missing = missing_required_scene_fields(card, craft_profile)
         if missing:
             add_task(
                 tasks,
                 phase="developmental_edit",
                 priority="P1",
                 chapter=card.get("chapter"),
-                title=f"场景卡缺关键戏剧功能：{card.get('id') or 'scene'}",
-                reason="缺字段：" + "、".join(missing),
+                title=f"场景卡缺本工艺档契约字段：{card.get('id') or 'scene'}",
+                reason=f"创作工艺档={craft_profile}；缺字段：" + "、".join(missing),
                 source="设定/scene_cards.json",
                 return_stage="outline",
+                recommended_skill="novel-craft",
+            )
+        if not requires_traditional_turn(craft_profile) and not narrative_functions(card):
+            add_task(
+                tasks,
+                phase="developmental_edit",
+                priority="P2",
+                chapter=card.get("chapter"),
+                title=f"人工复核场景叙事功能：{card.get('id') or 'scene'}",
+                reason=(
+                    f"创作工艺档={craft_profile}；尚未登记揭示、关系微移、感知变化、意象复现、"
+                    "有意停滞或其它功能。这是启发式复核，不要求强造传统转折。"
+                ),
+                source="设定/scene_cards.json",
+                return_stage="scene_cards",
                 recommended_skill="novel-craft",
             )
         character_missing = [
@@ -317,6 +385,35 @@ def collect_scene_cards(tasks, root):
                 return_stage="scene_cards",
                 recommended_skill="novel-craft",
             )
+
+
+def collect_authenticity_read(tasks, root):
+    """Turn an opted-in authenticity read into editor-visible follow-up.
+
+    Authenticity findings are consultative and never become P0.  An explicit
+    ``required_for_release`` setting promotes unresolved workflow issues to P1;
+    optional reads stay P2 so the author retains the final creative decision.
+    """
+    report = authenticity_read.check(root)
+    if not report.get("applicable"):
+        return
+    for item in report.get("findings") or []:
+        if not isinstance(item, dict):
+            continue
+        required = bool(report.get("required_for_release"))
+        add_task(
+            tasks,
+            phase="developmental_edit",
+            priority="P1" if required and item.get("severity") == "blocking" else "P2",
+            title=f"真实性/文化审读闭环：{item.get('id') or 'AUTH'}",
+            reason=(
+                f"{item.get('message') or ''} "
+                "审读者提供语境，作者可接受、调整、拒绝或追问；工具不替作者裁决表达。"
+            ).strip(),
+            source="修订/authenticity_read.json",
+            return_stage="edit",
+            recommended_skill="novel-edit",
+        )
 
 
 def dedupe_tasks(tasks):
@@ -345,6 +442,7 @@ def build_plan(root):
     collect_reader_feedback(tasks, root)
     collect_reader_panel(tasks, root)
     collect_scene_cards(tasks, root)
+    collect_authenticity_read(tasks, root)
     tasks.sort(key=lambda t: (PHASE_ORDER.get(t["phase"], 9), t["priority"], t.get("chapter") or 10**9, t["id"]))
     tasks = dedupe_tasks(tasks)
     for idx, task in enumerate(tasks, 1):
@@ -362,6 +460,7 @@ def build_plan(root):
             "reader_telemetry_summary": os.path.exists(os.path.join(root, "评分", "reader_telemetry_summary.json")),
             "reader_panel_signals": os.path.exists(os.path.join(root, "评分", "reader_panel_signals.json")),
             "scene_cards": os.path.exists(os.path.join(root, "设定", "scene_cards.json")),
+            "authenticity_read": os.path.exists(os.path.join(root, "修订", "authenticity_read.json")),
         },
         "phases": list(PHASE_ORDER),
         "tasks": tasks,
@@ -570,6 +669,7 @@ def write_proof_checklist(path, plan):
         "| AI 使用披露完整 | ⬜ | `python3 skills/novel/novel-craft/scripts/ai_usage.py <作品根> ...` | 发布/平台/出海必做 |",
         "| 合规 profile 最新 | ⬜ | `python3 skills/novel/novel-craft/scripts/compliance_profile.py <作品根> --write` | KDP/中国公开发布/微短剧/出海必做 |",
         "| reader test plan / 真实反馈已处理 | ⬜ | `评分/reader_test_plan.json` / `评分/reader_telemetry_summary.json` | 普通发布为市场验证建议；data_validated_launch 才要求 telemetry 或 scoped waiver |",
+        "| 真实性/文化审读已闭环（若启用） | ⬜ | `python3 skills/novel/novel-edit/scripts/authenticity_read.py check <作品根> --write` | 默认咨询、不阻断；仅显式 `--required` 时作为发布门禁 |",
         "| release manifest 就绪 | ⬜ | `python3 skills/novel/novel-craft/scripts/release_manifest.py <作品根> --release-name v1` |  |",
         "",
         "## 校样原则",
@@ -610,12 +710,17 @@ def write_line_edit_packet(root, plan, chapter):
     aesthetic = load_json(os.path.join(root, "设定", "aesthetic_bank.json"), {}) or {}
     aesthetic_samples = (aesthetic.get("samples") or [])[:5]
     observations = _read_jsonl(os.path.join(root, "素材", "观察札记.jsonl"), limit=8)
+    craft_profile = resolve_craft_profile(load_project_settings(root))
+    profile_supported = is_supported_craft_profile(craft_profile)
+    traditional = profile_supported and requires_traditional_turn(craft_profile)
     chapter_tasks = [t for t in plan["tasks"] if t.get("chapter") in (chapter, str(chapter), None)]
     out = os.path.join(root, "修订", f"第{chapter:02d}章_line_edit_packet.md")
     lines = [
         f"# 第{chapter:02d}章 Line Edit Packet",
         "",
         "## 本章编辑目标",
+        f"- 当前创作工艺档：`{craft_profile}`；场景功能按该档复核，不为过检查强造转折。",
+        *([] if profile_supported else ["- ⚠️ 当前自定义工艺档缺 editor adapter；先定义合同，不得借用传统六字段继续精修。"]),
         "- 先确认结构任务是否已处理；若仍有 P0/P1 结构问题，暂停行文润色。",
         "- 本轮只做会提升人物、场景、对白、五感、语言辨识度的改动；每处改动写明理由。",
         "",
@@ -629,15 +734,28 @@ def write_line_edit_packet(root, plan, chapter):
     lines.extend(["", "## 场景卡检查"])
     if scenes:
         for scene in scenes:
-            lines.extend([
+            registered = narrative_functions(scene)
+            function_text = "；".join(
+                f"{NARRATIVE_FUNCTION_LABELS.get(key, key)}={value}"
+                for key, value in registered.items()
+            ) or "待人工复核（不等于必须补传统转折）"
+            scene_lines = [
                 f"### {scene.get('id')}",
-                f"- POV/地点：{scene.get('pov') or '待补'} / {scene.get('location') or '待补'}",
-                f"- 欲望/阻碍：{scene.get('desire') or '待补'} / {scene.get('obstacle') or '待补'}",
-                f"- 转折/价值变化：{scene.get('turn') or '待补'} / {scene.get('value_shift') or '待补'}",
-                f"- 人物引擎：want={scene.get('want') or '待补'}；need={scene.get('need') or '待补'}；fear={scene.get('fear') or '待补'}；tactic={scene.get('tactic') or '待补'}；cost={scene.get('choice_cost') or '待补'}",
+                f"- POV/viewpoint/地点：{scene.get('pov') or scene.get('viewpoint') or ('未指定（实验档可合法省略）' if craft_profile == 'experimental' else '待补')} / {scene.get('location') or '待补'}",
+                f"- 人物欲望/阻碍（若适用）：{scene.get('desire') or '未登记'} / {scene.get('obstacle') or '未登记'}",
+            ]
+            if not profile_supported:
+                scene_lines.append("- 结构合同：当前自定义工艺档缺 adapter；仅展示原始登记，不作传统转折推断。")
+            elif traditional:
+                scene_lines.append(f"- 转折/价值变化：{scene.get('turn') or '待补'} / {scene.get('value_shift') or '待补'}")
+            else:
+                scene_lines.append(f"- 已登记叙事功能：{function_text}")
+            scene_lines.extend([
+                f"- 人物引擎（若适用）：want={scene.get('want') or '未登记'}；need={scene.get('need') or '未登记'}；fear={scene.get('fear') or '未登记'}；tactic={scene.get('tactic') or '未登记'}；cost={scene.get('choice_cost') or '未登记'}",
                 f"- 潜台词/五感：{scene.get('subtext') or '待补'} / {scene.get('sensory_anchor') or '待补'}",
                 "",
             ])
+            lines.extend(scene_lines)
     else:
         lines.append("- 未找到本章 scene cards；建议先跑 `scene_cards.py scaffold/check`。")
     lines.extend(["", "## 可用观察素材"])

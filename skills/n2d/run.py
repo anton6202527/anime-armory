@@ -25,6 +25,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 _N2D_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -65,9 +66,34 @@ except Exception:  # pragma: no cover - derived views never replace state/gates
     _n2d_blocking = None
 
 try:
-    from settings import get_setting, get_setting_spec, load_settings, project_setting_source
+    import acceptance_contract as _acceptance_contract
+except Exception:  # pragma: no cover - terminal master completion must fail closed
+    _acceptance_contract = None
+
+try:
+    from settings import (
+        AUTOPILOT_CHOICE_POLICY_KEY,
+        ONE_CLICK_RECOMMENDED_KEYS,
+        apply_recommended_choices,
+        get_setting,
+        get_setting_spec,
+        load_settings,
+        ordinary_choice_autopilot_enabled,
+        project_setting_source,
+        recommended_choice_plan,
+    )
 except ImportError:  # pragma: no cover - 包式导入兜底
-    from n2d_settings import get_setting, get_setting_spec, load_settings, project_setting_source
+    from n2d_settings import (
+        AUTOPILOT_CHOICE_POLICY_KEY,
+        ONE_CLICK_RECOMMENDED_KEYS,
+        apply_recommended_choices,
+        get_setting,
+        get_setting_spec,
+        load_settings,
+        ordinary_choice_autopilot_enabled,
+        project_setting_source,
+        recommended_choice_plan,
+    )
 
 try:
     from n2d_platform_profiles import video_backend_capability_confidence
@@ -191,10 +217,10 @@ ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写�
 IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
 IMAGE_QC_STRICT_STAGES = {"video_prompt", "video", "compose", "review"}
 SCRIPT_TEXT_AUDIT_STAGES = {"image_prompt"}
-FIRST_RUN_CHOICES = ("制作模式", "基础视觉风格")
+FIRST_RUN_CHOICES = ONE_CLICK_RECOMMENDED_KEYS
 REFERENCE_MEDIA_STYLE_OPTION = STYLE_INTAKE_OPTIONS[0]
-EXPLICIT_SETTING_SOURCES = {"explicit_user", "cli", "manual", "user"}
-# 各生成阶段"放行前必问"的选择点（菜单随动作卡一起给，不另起一次 needs_choice）
+EXPLICIT_SETTING_SOURCES = {"explicit_user", "cli", "manual", "user", "auto_recommended"}
+# 各生成阶段随付费卡展示的可覆盖选择点；自动策略采用推荐值，不另起 needs_choice。
 STAGE_MENU = {
     "voice": ("配音后端", False),    # (选择点, 是否每次必问)
     "image": ("生成粒度", True),
@@ -232,7 +258,8 @@ class Probes:
     review_acceptance_block: Optional[str] = None  # 最终验收证据未过
     gate: Optional[Dict[str, Any]] = None        # {stage,blocked,return_to_stage,affected_artifacts,rerun_scope,findings_path}
     compliance_gap: Optional[bool] = None        # True=有缺口；None=未检/检不了
-    pending_choices: List[str] = field(default_factory=list)  # 首跑必给但尚未显式记录的选择点
+    pending_choices: List[str] = field(default_factory=list)  # 仅“逐项询问”策略下尚未确认的选择点
+    auto_decisions: List[Dict[str, str]] = field(default_factory=list)  # 普通选择自动采用的推荐值（可审计）
     entry_checks: List[Dict[str, Any]] = field(default_factory=list)
     prework: List[Dict[str, Any]] = field(default_factory=list)  # 本轮自动跑掉的确定性步骤记录
     prework_blocks: List[Dict[str, str]] = field(default_factory=list)  # 同轮收集到的全部前置硬阻断
@@ -305,7 +332,12 @@ def stage_key_of(route: Dict[str, Any]) -> Optional[str]:
 def _missing_progress_action(root: str, ep: Optional[str] = None) -> Dict[str, Any]:
     target = normalize_episode(ep) if ep else "第1集"
     return {
-        "frontier": None,
+        "frontier": {
+            "ep": target,
+            "stage_key": "entry",
+            "label": "项目入口恢复",
+            "owner": "n2d-script",
+        },
         "prework": [],
         "stop_reason": "blocked_by_entry_check",
         "action_card": {
@@ -348,6 +380,16 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
                 card["block_reason"] = block_reason
         if probes.prework:
             card.setdefault("prework_status_summary", _prework_status_summary(probes.prework))
+        if probes.auto_decisions:
+            card.setdefault("auto_decisions", [dict(row) for row in probes.auto_decisions])
+            card.setdefault(
+                "auto_decision_policy",
+                {
+                    "setting": AUTOPILOT_CHOICE_POLICY_KEY,
+                    "value": "推荐方案自动继续",
+                    "override": "随时在 _设置.md 覆盖；不会授权付款、合规、公开发布、破坏性变更或最终验收",
+                },
+            )
         card.setdefault("context_pack", _context_pack_card(root, ep, stage_key))
         if action_contract.get("requires_creative_loop"):
             card.setdefault("creative_loop", _creative_loop_card(root, ep, stage_key))
@@ -442,14 +484,15 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "exact_command": f"python3 skills/n2d/n2d-compliance/scripts/compliance.py {root} {ep} --check",
         })
 
-    # 4. 首跑必给但尚未显式选过的选择点（制作模式/基础视觉风格）
+    # 4. 仅在用户显式选择「逐项询问」时暂停；默认一键策略已在 probe 阶段
+    #    自动采用、落档推荐值，并把理由带进 action card。
     if probes.pending_choices:
         return na("needs_choice", {
-            "headline": f"{ep} 开局必给选择包（之后沉默沿用，随时可改）",
+            "headline": f"{ep} 开局选择包（本项目要求逐项询问）",
             "to_user": (
-                "新作品首跑必须显式选一次以下选项，再继续："
+                "本项目设置了 普通选择策略=逐项询问，请确认以下选项："
                 + "、".join(probes.pending_choices)
-                + "。生视频后端选择已后移到 n2d-video；开局只记录用户主动指定的固定后端/账号硬约束。"
+                + "。若希望以后直接采用推荐值，可改为 普通选择策略=推荐方案自动继续。"
             ),
             "menu": [_menu(root, cp) for cp in probes.pending_choices],
             "exact_command": cmd,
@@ -479,7 +522,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "recommended_backend": "纯文本估时（不调用 TTS）",
         })
 
-    # 6. 花钱/重活生成 —— 停下，附该阶段"放行前必问"菜单
+    # 6. 花钱/重活生成 —— 只为付款/不可逆边界停下；普通选择附在同一张卡里。
     #    （G9 轻量闭环：alerts 是观测面不是闸门，但 critical 告警必须在花钱决策点被看到）
     if stage_key in GENERATION_STAGES:
         cp, _every = STAGE_MENU.get(stage_key, (None, False))
@@ -499,7 +542,18 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
                 f"确认后再合成；合成前建议先跑审查包，确认视频、接缝、身份和字幕没有把问题带进终片。"
             )
         if cp and not strict_image_review:
-            card["menu"] = [_menu(root, cp)]
+            menu = _menu(root, cp)
+            card["menu"] = [menu]
+            if ordinary_choice_autopilot_enabled(root):
+                card["recommended_choice"] = {
+                    "choice_point": cp,
+                    "selected": menu.get("default_preselect"),
+                    "policy": "recommended_default_unless_overridden_before_spend",
+                }
+                card["to_user"] += (
+                    f" 普通选择「{cp}」无需另停一次，付款确认即采用推荐值"
+                    f"「{menu.get('default_preselect')}」；要改可在付款前覆盖。"
+                )
         elif strict_image_review:
             card["execution_policy"] = {
                 "generation_granularity": "逐个",
@@ -670,14 +724,127 @@ def _delivery_states_card(root: str, ep: Optional[str]) -> Dict[str, Any]:
     states = payload.get("delivery_states") if isinstance(payload, dict) else {}
     if not isinstance(states, dict):
         return {"status": "legacy_verdict_without_delivery_states", "path": path}
+    acceptance: Dict[str, Any] = {"status": "not_required"}
+    master_complete = False
+    if compose_stage_enabled(root):
+        if _acceptance_contract is None:
+            acceptance = {"status": "fail", "issues": ["canonical acceptance_contract unavailable"]}
+        else:
+            try:
+                acceptance = _acceptance_contract.check_acceptance(Path(root).resolve(), ep)
+            except Exception as exc:  # pragma: no cover
+                acceptance = {"status": "fail", "issues": [f"{type(exc).__name__}: {exc}"]}
+        master_complete = acceptance.get("status") == "pass" and acceptance.get("valid") is True
     return {
         "status": "evaluated",
         "path": path,
         "clip_delivery_complete": bool((states.get("clip_delivery_complete") or {}).get("complete")),
-        "master_delivery_complete": bool((states.get("master_delivery_complete") or {}).get("complete")),
+        "master_technical_complete": bool((states.get("master_technical_complete") or {}).get("complete")),
+        "master_delivery_complete": master_complete,
+        "acceptance": {
+            "status": acceptance.get("status"),
+            "path": acceptance.get("path"),
+            "receipt_id": acceptance.get("receipt_id"),
+            "issues": acceptance.get("issues") or [],
+        },
         "publish_ready_cn": bool((states.get("publish_ready_cn") or {}).get("complete")),
         "publish_ready_overseas": bool((states.get("publish_ready_overseas") or {}).get("complete")),
         "publish_ready_commercial": bool((states.get("publish_ready_commercial") or {}).get("complete")),
+    }
+
+
+def _terminal_completion_block(root: str, ep: Optional[str]) -> Optional[Dict[str, Any]]:
+    """Reconcile a progress-terminal route with the canonical delivery predicate.
+
+    ``_进度.md`` locates work, but a checked 验收 cell is not authority.  When the optional
+    compose/review tail is active, ``done`` exists iff every selected episode still has a valid
+    acceptance receipt whose release verdict and content fingerprint are current.
+    """
+    try:
+        _header, rows = parse_progress(root)
+    except Exception as exc:
+        return _missing_progress_action(root, ep) | {
+            "action_card": {
+                **_missing_progress_action(root, ep)["action_card"],
+                "to_user": f"无法读取进度表：{type(exc).__name__}: {exc}",
+            }
+        }
+    requested = normalize_episode(ep) if ep else ""
+    targets = [
+        str(row.get("_ep") or row.get("集") or "")
+        for row in rows
+        if not requested or str(row.get("_ep") or row.get("集") or "") == requested
+    ]
+    targets = [target for target in targets if target]
+    if requested and not targets:
+        return {
+            "frontier": {
+                "ep": requested,
+                "stage_key": "entry",
+                "label": "项目入口恢复",
+                "owner": "n2d-script",
+            },
+            "prework": [],
+            "stop_reason": "blocked_by_entry_check",
+            "action_card": {
+                "headline": f"进度表没有 {requested}",
+                "to_user": "先初始化该集或修正集选择；不存在的集不能被判为 done。",
+                "block_reason": "missing_episode_progress_row",
+            },
+            "gate": None,
+            "auto_continue": False,
+        }
+    if not compose_stage_enabled(root):
+        return None
+    failures: List[Dict[str, Any]] = []
+    for target in targets:
+        if _acceptance_contract is None:
+            result: Dict[str, Any] = {
+                "status": "fail",
+                "issues": ["canonical acceptance_contract unavailable"],
+                "path": f"生产数据/acceptance_receipt_{target}.json",
+            }
+        else:
+            try:
+                result = _acceptance_contract.check_acceptance(Path(root).resolve(), target)
+            except Exception as exc:  # pragma: no cover - fail closed on damaged evidence
+                result = {
+                    "status": "fail",
+                    "issues": [f"acceptance check failed: {type(exc).__name__}: {exc}"],
+                    "path": f"生产数据/acceptance_receipt_{target}.json",
+                }
+        if not isinstance(result, dict) or result.get("status") != "pass" or result.get("valid") is not True:
+            failures.append({
+                "episode": target,
+                "path": str(result.get("path") or f"生产数据/acceptance_receipt_{target}.json")
+                if isinstance(result, dict) else f"生产数据/acceptance_receipt_{target}.json",
+                "issues": [str(item) for item in ((result.get("issues") or []) if isinstance(result, dict) else ["invalid result"])[:8]],
+            })
+    if not failures:
+        return None
+    first = failures[0]
+    target = str(first["episode"])
+    return {
+        "frontier": {
+            "ep": target,
+            "stage_key": "review",
+            "label": "审查验收",
+            "owner": "n2d-review",
+        },
+        "prework": [],
+        "stop_reason": "blocked_by_review_acceptance",
+        "action_card": {
+            "headline": f"{target} 进度已到尾部，但 canonical 完成证据无效",
+            "to_user": (
+                "`验收=✅` 只是进度视图，不能自证完成。请重建/复核 release verdict，"
+                "再由当前 reviewer 签 canonical acceptance receipt；不要继续把该集当 done。"
+            ),
+            "block_reason": "terminal_acceptance_invalid",
+            "acceptance_failures": failures,
+            "exact_command": f"python3 skills/n2d/_lib/acceptance_contract.py check '{root}' {target} --json",
+        },
+        "gate": None,
+        "auto_continue": False,
     }
 
 
@@ -932,6 +1099,8 @@ def _run_review_acceptance_outputs(root: str, ep: str, p: Probes) -> None:
         ("episode_app", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "episode_app.py"), [root, "--episode", ep, "--write", "--index"], False),
         ("n2d_board", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "board.py"), [root, "--write", "--markdown"], False),
         ("failure_taxonomy", os.path.join(SKILLS_DIR, "scripts", "failure_taxonomy.py"), [root, ep, "--write"], True),
+        ("event_ledger_audit", os.path.join(SKILLS_DIR, "n2d-dashboard", "scripts", "event_ledger.py"), ["audit", root, "--write", "--json", "--strict-trace"], True),
+        ("artifact_validation", os.path.join(SKILLS_DIR, "scripts", "validate_artifacts.py"), [root, "--strict-unknown", "--scope", "release", "--write", "--json"], True),
         ("release_verdict", os.path.join(SKILLS_DIR, "scripts", "release_verdict.py"), [root, ep, "--write"], True),
     )
     for step, script, args, required in commands:
@@ -1718,11 +1887,18 @@ def gather_preview_probes(root: str, route: Dict[str, Any], stage_key: str) -> P
         if issue:
             p.review_acceptance_block = issue
             p.prework.append({"step": "review_acceptance", "status": "block", "detail": issue[:160]})
-    if stage_key == "script_stage1":
-        try:
+    try:
+        if ordinary_choice_autopilot_enabled(root):
+            p.auto_decisions = [
+                {**row, "status": "planned_preview"}
+                for row in recommended_choice_plan(
+                    root, (AUTOPILOT_CHOICE_POLICY_KEY, *FIRST_RUN_CHOICES)
+                )
+            ]
+        else:
             p.pending_choices = [k for k in FIRST_RUN_CHOICES if _explicit_choice_missing(root, k)]
-        except Exception:  # pragma: no cover
-            p.pending_choices = []
+    except Exception:  # pragma: no cover
+        p.pending_choices = []
     return p
 
 
@@ -1732,6 +1908,27 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     spec = stage_for_key(stage_key) or {}
     p = Probes()
     ep = route.get("ep")
+    unresolved_ordinary_choices: List[str] = []
+    try:
+        if ordinary_choice_autopilot_enabled(root):
+            # 旧项目可从任何前沿被接手，不能只在 script_stage1 补值；
+            # 在任何会读取这些选择的 prework/付费边界前先落档。
+            p.auto_decisions = apply_recommended_choices(
+                root, (AUTOPILOT_CHOICE_POLICY_KEY, *FIRST_RUN_CHOICES)
+            )
+        else:
+            unresolved_ordinary_choices = [
+                key for key in FIRST_RUN_CHOICES if _explicit_choice_missing(root, key)
+            ]
+    except Exception as exc:
+        # 自动推荐写入失败不是“那就继续用内存默认”；它会使后续 stage 的输入哈希
+        # 与实际设置脱钩，必须停在可修复的 prework failure。
+        _record_prework_block(p, "auto_decision", f"推荐选择无法落档：{type(exc).__name__}: {exc}")
+        p.prework.append({
+            "step": "auto_decision",
+            "status": "block",
+            "detail": str(exc)[:160],
+        })
     _stage_prework_cache = None
     if ep:
         # Cache every safe report-only planner, not only image_prompt.  The key
@@ -1752,13 +1949,6 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             if p.entry_check_block and repair_note:
                 p.entry_check_block = f"{p.entry_check_block} {repair_note}"
     p.capability_block = _video_capability_block(root, stage_key)
-    script_stage1_missing_choices: List[str] = []
-    if stage_key == "script_stage1":
-        try:
-            script_stage1_missing_choices = [k for k in FIRST_RUN_CHOICES if _explicit_choice_missing(root, k)]
-        except Exception:  # pragma: no cover
-            script_stage1_missing_choices = []
-
     # Episode graph 是现有 storyboard/route/job/media/gate 的派生索引，不是新状态机。
     # 先物化再做 context pack，使 specialist 能从一张图追到当前事实与血缘。
     if ep and _episode_graph is not None:
@@ -1934,7 +2124,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     "detail": f"{summary.get('pass', 0)}/{summary.get('required', 6)} checks passed",
                     "check_path": report.get("check_path") or os.path.join(root, "生产数据", "development_pack_check.json"),
                 })
-                if status != "pass" and not script_stage1_missing_choices:
+                if status != "pass" and not unresolved_ordinary_choices:
                     _record_prework_block(p, "development_pack", (
                         "P-1 开发包未确认；先补齐 开发包/series_bible.md、adaptation_strategy.json、"
                         "season_arc.json、production_feasibility.json、pilot_greenlight.md，删除待补/TODO，"
@@ -1964,7 +2154,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     ),
                     "check_path": report.get("check_path") or os.path.join(root, "生产数据", "story_spine_check.json"),
                 })
-                if status == "block" and not script_stage1_missing_choices:
+                if status == "block" and not unresolved_ordinary_choices:
                     _record_prework_block(p, "story_spine", (
                         "主线剪枝档要求先过 story_spine：提炼主线 spine、登记每条支线 class/decision，"
                         "所有 compress/fold/cut 线程写 connectivity(payoff_reroute + no_orphan_proof)，"
@@ -2598,9 +2788,9 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     if stage_key == "review" and ep and not (p.gate and p.gate.get("blocked")) and not p.prework_block:
         _run_review_acceptance_outputs(root, ep, p)
 
-    # 首跑必给：仅在 script_stage1 前沿，挑出尚未显式记录的选择点
-    if stage_key == "script_stage1":
-        p.pending_choices = script_stage1_missing_choices
+    # 手动策略的选择包；自动策略已在本轮开头采用推荐值并留痕。
+    # 任何前沿都要生效，否则半途接手的旧项目会绕过选择合同。
+    p.pending_choices = unresolved_ordinary_choices
 
     if _stage_prework_cache is not None:
         _stage_prework_cache.save()
@@ -2629,10 +2819,13 @@ def _next_action_impl(root: str, ep: Optional[str] = None, auto: bool = False, p
         except FileNotFoundError:
             return _missing_progress_action(root, ep)
         if route is None:
+            terminal_block = _terminal_completion_block(root, ep)
+            if terminal_block is not None:
+                return terminal_block
             delivery_hint = (
-                "合成阶段已启用，当前没有未完成的合成/验收前沿；若 release/readiness 通过，可视为 master_delivery_complete。"
+                "合成阶段已启用，且 canonical release verdict + acceptance receipt 当前有效；该集为 master_delivery_complete。"
                 if compose_stage_enabled(root)
-                else "默认主流程到「视频」列完成只表示 clip_delivery_complete（镜头交付完成），不是可投放母版；如需 master_delivery_complete，需要把 `_设置.md` 的「合成阶段」设为「启用」并运行 n2d-compose / review / release readiness。"
+                else "本项目显式选择了 `合成阶段=跳过`，所以「视频」列完成只表示 clip_delivery_complete；改回「启用」即可继续母版、review 与 release readiness。"
             )
             action_card = {
                 "headline": "该作品/该集当前阶段已完成，无下一步",

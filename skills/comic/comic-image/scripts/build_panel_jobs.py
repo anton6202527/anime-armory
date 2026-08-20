@@ -15,6 +15,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 import reference_planner  # noqa: E402
+import codex_panel_runner as panel_gate  # noqa: E402
 
 COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
@@ -25,6 +26,7 @@ except Exception:  # pragma: no cover - keep job building usable in partially-co
     ImageBackendCapabilities = Any  # type: ignore
     resolve_capabilities = None  # type: ignore
 from comic_image_prompt_compiler import compile_prompt
+from progress import update_stage
 
 
 PRESERVE_GENERATION_KEYS = {
@@ -42,6 +44,7 @@ PRESERVE_GENERATION_KEYS = {
     "generated_from_contract_sha256",
     "generated_from_submit_prompt_sha256",
     "post_qc",
+    "accepted_at",
     "last_error",
     "generated_from_execution_input_sha256",
     "resolution_provenance",
@@ -897,6 +900,10 @@ def preserve_ready_jobs(root: Path, chapter: str, jobs: dict) -> tuple[int, list
             result = root / result
         if not result.is_file():
             continue
+        acceptance = panel_gate.panel_acceptance_status(root, old)
+        if not acceptance.get("accepted"):
+            stale.append(str(job.get("panel_id")))
+            continue
         if job_is_stale(old, job):
             stale.append(str(job.get("panel_id")))
             continue
@@ -984,26 +991,6 @@ def write_reference_index(root: Path, chapter: str, jobs: dict) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def update_progress(root: Path, chapter: str, stage: str, value: str) -> None:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return
-    lines = path.read_text(encoding="utf-8").splitlines()
-    headers: list[str] = []
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("|"):
-            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and len(cells) >= len(headers) and cells[0] == chapter and stage in headers:
-                cells[headers.index(stage)] = value
-                line = "| " + " | ".join(cells) + " |"
-        out.append(line)
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成漫画逐格出图任务包")
     parser.add_argument("project_root")
@@ -1050,7 +1037,14 @@ def main() -> int:
     out_path.write_text(json.dumps(jobs, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     write_reference_index(root, args.chapter, jobs)
     if not args.no_progress:
-        update_progress(root, args.chapter, "出图包", "✅")
+        update_stage(
+            root,
+            args.chapter,
+            "出图包",
+            "✅",
+            evidence=str(out_path.relative_to(root)),
+            actor="comic-image.build_panel_jobs",
+        )
     suffix = f" preserved_ready={preserved}" if preserved else ""
     if stale:
         suffix += f" stale_reset_to_planned={','.join(stale)}"

@@ -106,6 +106,24 @@ def test_compose_and_review_are_enforced(tmp_path):
     assert not v.ok and v.stage == "compose"
 
 
+def test_review_completion_uses_only_canonical_acceptance(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        gr.acceptance_contract,
+        "check_acceptance",
+        lambda root, ep: {"status": "fail", "issues": ["canonical acceptance receipt missing"]},
+    )
+    rejected = gr.check_advance(str(tmp_path), "第1集", "验收", "✅")
+    assert not rejected.ok and rejected.code == "canonical_acceptance_invalid"
+
+    monkeypatch.setattr(
+        gr.acceptance_contract,
+        "check_acceptance",
+        lambda root, ep: {"status": "pass", "receipt_id": "receipt-1", "issues": []},
+    )
+    accepted = gr.check_advance(str(tmp_path), "第1集", "验收", "✅")
+    assert accepted.ok and accepted.code == "canonical_acceptance_verified"
+
+
 def test_unresolved_waiver_clears_after_fresh_receipt(tmp_path):
     root = str(tmp_path)
     v = gr.check_advance(root, "第1集", "出图", "✅")

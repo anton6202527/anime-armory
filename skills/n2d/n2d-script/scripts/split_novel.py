@@ -52,7 +52,14 @@ if COMMON not in sys.path:
 
 from n2d_const import GENRE_MIN_HITS, boundary_buckets, boundary_lexicon
 from n2d_contract import PROGRESS_COLUMNS
-from n2d_settings import DEFAULTS, get_setting, project_setting_source
+from n2d_settings import (
+    AUTOPILOT_CHOICE_POLICY_KEY,
+    DEFAULTS,
+    ONE_CLICK_RECOMMENDED_KEYS,
+    apply_recommended_choices,
+    get_setting,
+    project_setting_source,
+)
 from n2d_visual_styles import (
     format_style_contract_markdown,
     format_style_recommendation_markdown,
@@ -1892,7 +1899,19 @@ def main():
         spine_pruning=spine_pruning,
     )
 
+    # 新项目在任何开发包签收/内容哈希产生前就固化一键成片的普通选择。
+    # 这里只补缺失值，已有项目/全局默认/用户显式设置永不被覆盖。
+    applied_recommendations = apply_recommended_choices(
+        root, (AUTOPILOT_CHOICE_POLICY_KEY, *ONE_CLICK_RECOMMENDED_KEYS)
+    )
+
     print(f"作品根: {root}")
+    if applied_recommendations:
+        print(
+            "一键成片推荐值已落档："
+            + "；".join(f"{row['key']}={row['value']}" for row in applied_recommendations)
+            + "（普通选择可随时覆盖；付款/合规/最终验收仍停审）"
+        )
     if dev_pack:
         print("P-1 开发包：已创建/刷新 开发包/（默认 draft；阶段1 写词前需补齐并置 confirmed）")
     target_note = f"；字数参考 {args.target}（仅报告，不参与切点）" if args.target else "；未设置字数参考"

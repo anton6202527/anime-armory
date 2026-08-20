@@ -8,6 +8,7 @@
 #   python3 progress.py audit-placeholders <作品根> [--fix] # 扫/修旧项目「配音=✅ 但清单仍占位」
 #   python3 progress.py audit-dag <作品根> [--json]         # 扫状态 DAG：下游已动但上游非法直接红灯
 import contextlib, sys, os, re, time, json
+from pathlib import Path
 
 try:
     import fcntl
@@ -137,27 +138,33 @@ def _verify_gate_receipt(root, ep, col, val):
         gated_done = col in _GATED_COLUMNS_FALLBACK and cell_state(val) == "done"
         if not gated_done:
             return
-        if os.environ.get(_PROGRESS_ALLOW_ENV) == "1":
+        if col != "验收" and os.environ.get(_PROGRESS_ALLOW_ENV) == "1":
             wpath = _append_unverified_waiver_fallback(root, ep, col, val, f"gate_receipt 不可加载（{e}）")
             print(f"⚠️ gate_receipt 不可加载，但 {_PROGRESS_ALLOW_ENV}=1 强行回写「{col}」✅；"
                   f"已留痕欠债 → {os.path.relpath(wpath, root)}（验收 reconcile 会复核）。")
             return
         print(f"⛔ 拒绝回写 {ep}「{col}」= {val}：gate_receipt 凭据模块不可加载（{e}）；"
               f"受闸列不静默放行（H1 fail-closed·一致性只收紧不松动）。")
-        print(f"   修复模块后重试；确属离线兜底可设 {_PROGRESS_ALLOW_ENV}=1 强行回写并留痕。")
+        if col == "验收":
+            print("   验收完成不能用 waiver 代替 canonical acceptance receipt；请修复合同模块后重试。")
+        else:
+            print(f"   修复模块后重试；确属离线兜底可设 {_PROGRESS_ALLOW_ENV}=1 强行回写并留痕。")
         sys.exit(2)
     verdict = check_advance(root, ep, col, val)
     if verdict.ok:
         if verdict.code == "verified":
             print(f"  🔒 {verdict.message}")
         return
-    if allow_override():
+    if col != "验收" and allow_override():
         path = record_waiver(root, ep, col, verdict)
         print(f"⚠️ 未验证强行回写「{col}」✅（{verdict.code}）：{verdict.message}")
         print(f"   已留痕 waiver → {os.path.relpath(path, root)}（这是欠下的一致性债，验收会汇总）。")
         return
     print(f"⛔ 拒绝回写 {ep}「{col}」= {val}：{verdict.message}")
-    print("   （确属误判/离线兜底可设 N2D_PROGRESS_ALLOW_UNVERIFIED=1 强行回写并留痕，但默认不松动一致性。）")
+    if col == "验收":
+        print("   验收完成无 waiver：先生成可接受 release verdict，再由真实 reviewer 签 canonical acceptance receipt。")
+    else:
+        print("   （确属误判/离线兜底可设 N2D_PROGRESS_ALLOW_UNVERIFIED=1 强行回写并留痕，但默认不松动一致性。）")
     sys.exit(2)
 
 
@@ -320,11 +327,22 @@ def _acceptance_state_issues(root, header, rows):
     required = [c for c in header if c not in meta and c != "验收"]
     issues = []
     native_av = is_native_av(root)
+    try:
+        import acceptance_contract
+    except Exception:
+        acceptance_contract = None
     for row in rows:
         ep = row.get("_ep") or row.get("集") or ""
         if cell_state(row.get("验收", "")) != "done":
             continue
         missing = []
+        if acceptance_contract is None:
+            missing.append("canonical acceptance contract 不可加载")
+        else:
+            acceptance = acceptance_contract.check_acceptance(Path(root).resolve(), ep)
+            if acceptance.get("status") != "pass":
+                detail = "；".join(str(item) for item in (acceptance.get("issues") or [])[:3])
+                missing.append("canonical acceptance receipt" + (f"（{detail}）" if detail else ""))
         for col in required:
             # 原生音画的逐句配音是可选旁白层；其他制作模式下，验收必须是真配音完成，
             # video-first 的 ⏳rough 只允许推进到视频，不能算最终验收完成。

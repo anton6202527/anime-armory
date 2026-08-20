@@ -184,7 +184,7 @@ def report(root, out):
     elif is_native_av(root):
         out.append("制作模式: 原生音画(native AV)·说话镜由视频后端一次出同步音画；配音=可选旁白层，不卡路由")
     if not show_optional_delivery and any(c in header for c in OPTIONAL_DELIVERY_COLUMNS):
-        out.append("可选阶段: 合成/验收默认跳过；出完视频即主流程完成，需要母带/BGM/字幕时再启用合成阶段")
+        out.append("clip-only 模式: 本项目显式跳过合成/验收；改为 合成阶段=启用 后继续生成最终母版")
 
     full = sum(1 for r in dict_rows if is_flow_complete(root, r, flow))
     out.append(f"行数: {len(dict_rows)} | 主流程完成: {full}/{len(dict_rows)}")

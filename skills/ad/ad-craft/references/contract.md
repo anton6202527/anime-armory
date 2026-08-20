@@ -14,11 +14,16 @@
 │   ├── producer_pack.json   制片前控包（PPM/producer packet 机器版）
 │   ├── producer_pack.md     制片前控包（人读审批版）
 │   ├── platform_pack.json   平台+实际 placement 交付包（安全区/分辨率/时长/cutdown矩阵）
+│   ├── render_profile.json  源生成与母版渲染唯一规格（比例/分辨率/FPS/upscale）
+│   ├── placement_adaptation.json  逐交付件原生/机械适配模式、批准与证据
+│   ├── placement_adaptation_receipts/  跨比例实际模式 + 输入/输出/profile/plan SHA
+│   ├── campaign_readiness.json    正式投放落地页/准入/measurement/routing/privacy 闸门
 │   ├── artifact_dependency_graph.json + dependency_receipts.json
 │   ├── final_media_consistency.json + final_media_frames/ + final_media_contact_sheets/
 │   └── stage_acceptance/    每阶段统一验收报告；完成状态的证据
 ├── 创意/
-│   ├── concept.md          big idea / 主张 / mood&reference / KV方向
+│   ├── concept.json        big idea / 主张 /目标/假设/KV 的机器真值
+│   ├── concept.md          人读创意提案
 │   └── 创意脚本.md          creative treatment（故事线/节奏）
 ├── 脚本/
 │   ├── 广告脚本.md          画面+台词+VO+秒级时间轴（0-3s/3-8s…）
@@ -30,11 +35,11 @@
 │   └── 广告法机检报告.json   ad_law_check.py 产物（命中=block）
 ├── 设定库/                  global_style + 角色卡 + 场景卡 + 产品卡 + voicemap.json
 ├── 配音/                    line_NN.wav + vo.wav + 时长清单.json + voice_qc.json + _voicecache/
-├── 出图/共享/ 出图/分镜/     prompt/ + 图片/（三层定妆库 + 逐镜首尾帧）
+├── 出图/共享/ 出图/分镜/     prompt/ + 图片/ + 逐 job 提交/输出/参考/QC/人审哈希收据
 ├── 出视频/分镜/             prompt/ + 视频/（每 Clip MP4 + video_model_routes.json + video_qc.json）
 ├── 合成/                    成片/cutdown/多比例 + delivery/color/rendered_text/asr/accessibility QC
-├── 合规/                    locale_matrix + release_variant_manifest + provenance_qc + compliance + M0 + human_signoff
-├── 投放反馈/                experiment_plan.json + experiment_plan_validation.json + raw/ + feedback_report.json
+├── 合规/                    locale + release variant（AI/商业双收据）+ provenance + compliance + M0 + human_signoff
+├── 投放反馈/                experiment_plan/validation + platform receipts/results + raw/ + feedback_report
 └── 成片_主片.mp4
 ```
 
@@ -57,16 +62,16 @@
 | key | 阶段 | owner | gate |
 |---|---|---|---|
 | `brief` | 客户需求立项 | `ad` | brief.json |
-| `concept` | 创意策划 | `ad-concept` | concept.md + 创意脚本 |
+| `concept` | 创意策划 | `ad-concept` | `concept.json` 结构与 brief 目标一致；Markdown 只作人读视图 |
 | `script` | 广告脚本+VO+时间轴 | `ad-script` | 广告法机检 + voiceover.txt |
 | `voice` | VO配音 | `ad-voice` | 时长清单.json |
 | `storyboard` | 分镜（实测时长驱动） | `ad-script` | storyboard.json + 镜头时长 |
-| `image` | 定妆库+出图 | `ad-image` | visual identity + 首尾帧 + product_qc（高风险闸门）|
-| `video` | 图生视频 | `ad-video` | 契约继承 + clip videos + video_qc（高风险闸门）|
-| `compose` | 剪辑包装+交付 | `ad-compose` | 成片 + cutdown + 技术/色彩/最终文字/ASR/无障碍 QC（高风险闸门）|
-| `handoff` | AI披露/发布合规 | `ad-craft` | locale + 实际 provenance + release variant + compliance release-ready |
+| `image` | 定妆库+出图 | `ad-image` | visual identity + 每张图 accepted job receipt + product_qc（高风险闸门）|
+| `video` | 图生视频 | `ad-video` | render profile + 契约继承 + clip jobs + video_qc（高风险闸门）|
+| `compose` | 剪辑包装+交付 | `ad-compose` | placement adaptation approved + 成片/cutdown + 技术/色彩/最终文字/ASR/无障碍 QC（高风险闸门）|
+| `handoff` | 发布合规+投放就绪 | `ad-craft` | locale + provenance + AI/商业双收据 + campaign readiness + compliance release-ready |
 | `review` | 质检自审 | `ad-review` | 最终媒体 contact sheet + M0 + 具名逐项 SHA 绑定签收 + 上游依赖收据 current |
-| `feedback` | 投放反馈（可选） | `ad-feedback` | 预注册单变量实验 + 原始数据绑定 + 有边界的统计读取 |
+| `feedback` | 投放反馈（可选） | `ad-feedback` | formal readiness + 可重算功效/停止规则/多重比较预注册 + 平台原生结果优先 + 当前 brief/素材/配置/结果证据/canonical raw 血缘；仅 complete 可验收 |
 
 > **不拆集**：一条主片是整体；`_进度.md` 用「阶段进度表」而非逐集矩阵。
 > **音频先行**：VO 实测时长驱动镜头时长，`script` 跑两遍（脚本 pass → 配音后 `storyboard` pass）。广告常是「音乐床 + VO」混合驱动，音乐床作为节奏锚一并记录。
@@ -97,7 +102,8 @@ python3 skills/ad/ad-craft/scripts/stage_acceptance.py "<作品根>" --stage rev
 一条主片派生多个**交付件 deliverable**，登记在 `_进度.md` 的「交付版本矩阵」：
 - `kind`：`master`（主片）/ `cutdown`（多时长 30→15→6s）/ `reframe`（多比例 16:9/9:16/4:5/1:1）/ `ab_variant`（A/B）。
 - 字段：`deliverable_id / label / duration / aspect / kind / spec / status / path`。
-- `ad-compose` 据此重剪 cutdown、reframe 比例、按 `交付规格` 归一响度（LUFS）和安全框。
+- `reframe` 只是跨比例交付件的历史 `kind` 名，不代表机械裁切已获批准；实际模式只认 `placement_adaptation.json.selected_mode`。
+- `ad-compose` 据此重剪 cutdown，并按逐 placement 计划做原生 recrop/re-edit/variant 或受控机械裁切，再按 `交付规格` 归一响度（LUFS）。
 - `交付规格=自定义` 时必须在 `brief.delivery_profiles.自定义` 留 `loudness_lufs/true_peak_db/source/checked_at/approved_by`；不得把内部 -16 LUFS 悄悄当客户自定义值。
 
 ## 关键选择点（详见 `skills/ad/ad-craft/references/选择点与偏好.md` 拍广告节）
@@ -149,11 +155,19 @@ python3 skills/ad/ad-craft/scripts/platform_pack.py "<拍广告作品根>"
 - findings：只有平台名而无 placement 记 warn，并在 release 阶段升级为 block；未知版位或无出处的自定义规格直接 block；自定义规格至少填 `aspect|allowed_aspects/safe_area/source/checked_at`。安全区证据必须 placement-specific。
 - deliverable mapping：多版位项目用 `brief.deliverable_placements.{deliverable_id}` 显式映射；每件只验自己的 placement，缺映射或版位无交付件直接 block。
 
+## 统一渲染规格与版位适配
+
+`render_profile.py` 的权威顺序是 `brief.render_profile → placement/platform requirement → _设置.md → contract default`。产物分列 `source_generation` 与 `master_render`，记录比例、有效源分辨率、母版容器分辨率、FPS 转换、upscale 事实、authority 与稳定 `profile_sha256`。源分辨率不足时只能声明 `container_upscale_only`；客户要求原生分辨率时直接 block。
+
+`placement_adaptation.py` 读取 `brief.placement_adaptation_modes.<deliverable_id>`。原生 reedit/variant 使用 shot plan，且每镜须写 `source_path`/`source_paths` 并绑定当前源素材 SHA；recrop/mechanical 使用逐镜 focus plan。机械路径另须具名批准、当前 placement 安全区证据，并在存在文字/CTA/法律声明/产品结构风险时写 `risk_acceptance`。`reframe.py` 只是已批准机械路径的执行器。跨比例输出完成后必须用 `--record-execution` 生成逐件收据，绑定 `actual_mode`、真实输入/输出 SHA、当前 render profile SHA 与 adaptation plan/item digest；native 收据必须消费 shot plan 的全部当前源素材，delivery QC 同时核实际模式和输入集合。
+
 ## locale、发布变体与内容哈希
 
-`locale_matrix.json` 逐 locale 统一翻译、币种、单位、CTA、法律声明、VO、字幕和文字布局，并把每个 deliverable 显式映射到 locale。`release_variant_manifest.json` 再把每个实际文件串成：`deliverable → SHA → placement → locale → jurisdiction → claims/disclosures → rights → AI label receipt`。
+`locale_matrix.json` 逐 locale 统一翻译、币种、单位、CTA、法律声明、VO、字幕和文字布局，并把每个 deliverable 显式映射到 locale。`release_variant_manifest.json` 再把每个实际文件串成：`deliverable → SHA → placement → locale → jurisdiction → claims/disclosures → rights → AI label receipt + commercial/paid-partnership disclosure receipt`。两类回执逐 placement 独立、不可互代，媒体或证据哈希变化即失效。
 
 `compliance_manifest.py` 不再把「海外」当法律配置。中国大陆读取当前广告法报告；非大陆逐个 `release_regions` 消费 `brief.legal_reviews[]`，集合地区还须列 `jurisdictions`。每条复核必须由具名批准人绑定当前脚本、storyboard、主片和 delivery plan 的 `release_content_sha256`；创意或成片变化后旧法务意见自动失效。
+
+`campaign_readiness.py` 与媒体合规并列而非替代：formal 模式须闭合落地页最终 URL/跳转本地证据、offer/claims/CTA/价格对账、行业×平台×辖区准入、conversion event 与 tag/pixel/SDK/CAPI diagnostics、归因、UTM/deep-link、consent/privacy；sample 只把缺口降为 WARN，但永远 `release_ready=false`。脚本不联网、不调用广告平台，只核项目内证据。
 
 ## 最终媒体、文字、音频、无障碍与 provenance
 

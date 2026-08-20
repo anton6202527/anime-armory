@@ -299,7 +299,7 @@ def build_payload(root, threshold=None, dim_scores=None):
         "schema_version": 3,
         "kind": "mv_pacing_prescore",
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "inputs_sha256": inputs_sha256,
         "song_len": round(song_len, 3) if song_len else None,
         "song_len_source": song_src,
@@ -332,7 +332,7 @@ def write_enqueue(root, payload):
     queue = {
         "schema_version": 1,
         "kind": "mv_score_rework_queue",
-        "project_root": root,
+        "root_rel": ".",
         "blocked": payload.get("blocked", False),
         "threshold": payload.get("threshold"),
         "block_reasons": payload.get("block_reasons", []),

@@ -3,7 +3,6 @@
 """Assess whether an MV project is ready to be treated as a formal full MV."""
 import argparse
 import importlib.util
-import json
 import os
 import sys
 from datetime import date
@@ -23,6 +22,7 @@ mv_utils = load_mv_utils()
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 import gate as mv_gate
+import contract as mv_contract
 
 
 def lyric_line_count(root):
@@ -76,6 +76,8 @@ def summarize_reference_requirements(root):
 
 
 def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
+    # Persist copy/pasteable templates, never this workstation's absolute path.
+    project = "<作品根>"
     visual_style = settings.get("MV视觉风格") or "电影叙事"
     needs_lyric_timeline = (
         settings.get("字幕语言", "中文") != "无字幕"
@@ -84,13 +86,13 @@ def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
     return [
         {
             "step": "1. 正式歌入库",
-            "action": "替换 `歌/song.wav` 为完整定稿歌曲，并确认 `_meta.is_demo=false`、`分镜/clip_plan.json` 不再是 demo_excerpt。",
+            "action": "替换 `歌/song.wav` 为完整定稿歌曲，并用 mv-settings 将 `_设置.md` 的 `MV用途` 设为正式用途；`_meta.json` 只由 state_contract.py sync 更新兼容镜像，且 `分镜/clip_plan.json` 不再是 demo_excerpt。",
             "command": "",
         },
         {
             "step": "2. 重跑真实卡点",
             "action": "用正式定稿歌重算 BPM、beats 和局部 tempo；人工确认拍号、小节相位与段落时间。",
-            "command": f'conda run -n cosyvoice python skills/mv/mv-beat/scripts/beat_detect.py "{root}" --downbeat-phase <0-based相位> --confirm-timing --reviewer <name>',
+            "command": f'conda run -n cosyvoice python skills/mv/mv-beat/scripts/beat_detect.py "{project}" --downbeat-phase <0-based相位> --confirm-timing --reviewer <name>',
         },
         {
             "step": "3. 建歌词/唱演时间轴",
@@ -99,24 +101,24 @@ def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
                 if needs_lyric_timeline else "纯器乐且无字幕/口型：本阶段按设置合法跳过。"
             ),
             "command": (
-                f'conda run -n cosyvoice python skills/mv/mv-lyric-sync/scripts/align.py "{root}"'
+                f'conda run -n cosyvoice python skills/mv/mv-lyric-sync/scripts/align.py "{project}"'
                 if needs_lyric_timeline else ""
             ),
         },
         {
             "step": "4. 重拆正式 timeline",
             "action": "按已确认的歌曲结构重拆 clip/timeline；镜头数由歌曲时长、段落能量和剪辑策略决定。",
-            "command": f'python3 skills/mv/mv-plan/scripts/plan_clips.py "{root}" --granularity 标准 --strategy 副歌强卡点 --visual-style "{visual_style}"',
+            "command": f'python3 skills/mv/mv-plan/scripts/plan_clips.py "{project}" --granularity 标准 --strategy 副歌强卡点 --visual-style "{visual_style}"',
         },
         {
             "step": "5. 补语义镜头设计",
             "action": "让每个 clip 都有动作、景别、运镜、身份合约和参考输入。",
-            "command": f'python3 skills/mv/mv-plan/scripts/compose_prompts.py "{root}"',
+            "command": f'python3 skills/mv/mv-plan/scripts/compose_prompts.py "{project}"',
         },
         {
             "step": "6. 刷新身份/资产/参考需求",
             "action": f"重建 reference pack 缺口；当前未 ready：{reference_summary.get('missing', 0)}/{reference_summary.get('total', 0)}。",
-            "command": f'python3 skills/mv/mv-craft/scripts/identity_registry.py "{root}"',
+            "command": f'python3 skills/mv/mv-craft/scripts/identity_registry.py "{project}"',
         },
         {
             "step": "7. 补正式 reference pack",
@@ -126,29 +128,58 @@ def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
         {
             "step": "8. 节奏预检",
             "action": "生成绑定当前 plan/beatgrid/song 的节奏证据；只有项目明确选择阈值时才用启发式分数阻断。",
-            "command": f'python3 skills/mv/mv-score/scripts/score_pacing.py "{root}"',
+            "command": f'python3 skills/mv/mv-score/scripts/score_pacing.py "{project}"',
         },
         {
             "step": "9. 出图、逐图收据与 QC",
-            "action": "每张正式首/尾帧登记 model/channel/实际 prompt/reference/asset hash，再跑全量 image_qc。",
-            "command": f'python3 skills/mv/mv-image/scripts/image_qc.py "{root}" --strict',
+            "action": "每张正式资产花费前冻结 B14 preflight，登记实际 model/channel/prompt/references/hash，跑 full image_qc，再做具名 postflight；旧 degraded 人工记录不能放行。",
+            "command": f'python3 skills/mv/mv-image/scripts/image_qc.py "{project}" && python3 skills/mv/mv-image/scripts/image_receipts.py status "{project}" --json',
         },
         {
             "step": "10. OTIO、Animatic 与 Picture Lock",
             "action": "生成 V1+A1 OTIO/receipt，用完整歌曲渲 animatic；审叙事、切点、接缝、轴线和安全区后具名绑定 hash。",
-            "command": f'python3 skills/mv/mv-craft/scripts/production_pack.py "{root}" && python3 skills/mv/mv-craft/scripts/render_animatic.py "{root}" && python3 skills/mv/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>',
+            "command": f'python3 skills/mv/mv-craft/scripts/production_pack.py "{project}" && python3 skills/mv/mv-craft/scripts/render_animatic.py "{project}" && python3 skills/mv/mv-craft/scripts/picture_lock.py "{project}" --reviewer <name> --notes "逐镜确认当前 animatic 与剪辑决定"',
         },
         {
             "step": "11. 视频登记、评分、继承与 QC",
             "action": "每个 take 具名评动作/身份/卡点/清晰度；连续镜加 seam_fit、唱演镜加 lip_sync；逐缝语义签收。",
-            "command": f'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" && python3 skills/mv/mv-video/scripts/video_qc.py "{root}" --accept-semantic --reviewer <name>',
+            "command": f'python3 skills/mv/mv-video/scripts/video_jobs.py "{project}" && python3 skills/mv/mv-video/scripts/video_qc.py "{project}" --accept-semantic --reviewer <name>',
         },
         {
-            "step": "12. 母版、交付与总审",
-            "action": "按锁定 timeline 合成 ProRes/PCM 母版和 BT.709 MP4，运行 delivery QC/provenance，再跑 mv-review。",
-            "command": f'bash skills/mv/mv-compose/mv_compose.sh "{root}" {aspect} && python3 skills/mv/mv-review/scripts/mv_check.py "{root}"',
+            "step": "12. 合成与交付 QC",
+            "action": "按锁定 timeline 合成 ProRes/PCM 与 BT.709 MP4，并通过逐输入色彩与 final/master PCM delivery QC。",
+            "command": f'bash skills/mv/mv-compose/mv_compose.sh "{project}" {aspect}',
+        },
+        {
+            "step": "13. 具名 AI 使用披露",
+            "action": "按当前设置、模型/渠道、目标平台与法域写披露；不得把 C2PA 当平台声明的替代品。",
+            "command": f'python3 skills/mv/mv-craft/scripts/ai_usage.py "{project}" --visual-mode <AI-generated|AI-assisted|未使用AI视觉> --video-mode <AI-generated|AI-assisted|未使用AI视觉> --publish-target <平台> --territory <法域> --realism <stylized|photorealistic|mixed> --real-person <none|authorized> --music-mode <human|AI-assisted|AI-generated> --human-contribution "<人工贡献>" --reviewer <真实姓名>',
+        },
+        {
+            "step": "14. 来源链与 C2PA（如需）",
+            "action": "绑定当前成片、母版、披露与完整资产/供应商证据全集；请求 C2PA 时使用生产签名、信任锚与 TSA。",
+            "command": f'python3 skills/mv/mv-craft/scripts/provenance.py "{project}" --final 成片_MV.mp4 --master 成片_MV_master.mov',
+        },
+        {
+            "step": "15. 总审具名签收",
+            "action": "重新运行完整机检；只有 0 BLOCK 且所有输入当前时写 review receipt。",
+            "command": f'python3 skills/mv/mv-review/scripts/mv_check.py "{project}" --write-receipt --reviewer <真实姓名> --notes "逐项复核当前母版、交付件、披露与来源链"',
+        },
+        {
+            "step": "16. 平台发布决策与 handoff",
+            "action": "按平台/法域规则完成声明、机器标签与真实上传回执，再由 completion 写具名 handoff receipt；回执结构见 release-evidence-schema.md。",
+            "command": f'python3 skills/mv/mv-craft/scripts/release_decision.py "{project}" <按 release-evidence-schema.md 填完整参数> && python3 skills/mv/mv-craft/scripts/completion.py complete "{project}" handoff --reviewer <真实姓名> --notes "已核验上传回执与发布页"',
         },
     ]
+
+
+def _portable_message(value, root):
+    """Remove workstation-specific project roots from persisted gate findings."""
+    text = str(value)
+    for candidate in {os.path.abspath(root), os.path.realpath(root)}:
+        if candidate:
+            text = text.replace(candidate, "<作品根>")
+    return text
 
 
 def build_report(root):
@@ -162,7 +193,8 @@ def build_report(root):
     alignment = mv_utils.load_json(os.path.join(root, "字幕", "alignment_report.json"), {}) or {}
     reference_summary = summarize_reference_requirements(root)
     settings = mv_utils.parse_settings(root)
-    aspect = meta.get("aspect") or settings.get("合成画幅") or "16:9"
+    runtime = mv_contract.runtime_state_from_settings(settings)
+    aspect = runtime["aspect"]
 
     song = mv_utils.find_song(root)
     song_duration = mv_utils.audio_duration(song) if song else None
@@ -184,6 +216,8 @@ def build_report(root):
     stage_contracts = []
     for stage in ("plan", "image", "video_jobs", "compose"):
         stage_errors, stage_warnings = mv_gate.check(root, stage)
+        stage_errors = [_portable_message(row, root) for row in stage_errors]
+        stage_warnings = [_portable_message(row, root) for row in stage_warnings]
         stage_contracts.append({
             "stage": stage,
             "status": "block" if stage_errors else ("review" if stage_warnings else "pass"),
@@ -191,9 +225,9 @@ def build_report(root):
             "warnings": stage_warnings,
         })
 
-    if meta.get("is_demo") or plan.get("scope") == "demo_excerpt" or alignment.get("scope") == "demo_excerpt":
+    if runtime["is_demo"] or plan.get("scope") == "demo_excerpt" or alignment.get("scope") == "demo_excerpt":
         blockers.append("当前项目标记为 demo_excerpt，不能作为正式整首 MV 发布。")
-        next_actions.append("替换/确认正式整首歌后，清除 _meta.is_demo 或改为 false，并重跑 mv-beat + mv-plan。")
+        next_actions.append("替换/确认正式整首歌后，用 mv-settings 将 `_设置.md` 的 `MV用途` 改为正式用途，再运行 state_contract.py sync 并重跑 mv-beat + mv-plan。")
     if song_duration is None:
         blockers.append("缺正式歌/song.* 或无法读取时长。")
     if song_duration and clips:
@@ -212,18 +246,12 @@ def build_report(root):
         blockers.append(f"视频挑版未覆盖全部 clip：{len(selected_jobs)}/{len(clips)} selected。")
     if image_qc.get("summary", {}).get("verdict") == "block":
         blockers.append("image_qc 仍有 hard block。")
-    # 与 gate 同口径：降级放行必须具名 + 绑定当前报告 hash；旧式 manual_review_accepted 裸布尔不再放行。
-    manual = image_qc.get("manual_review") or {}
-    stripped_report = {k: v for k, v in image_qc.items()
-                       if k not in ("manual_review", "json_path", "markdown_path")}
-    manual_ok = bool(
-        manual.get("accepted")
-        and str(manual.get("reviewer") or "").strip()
-        and manual.get("bound_report_sha256") == mv_utils.json_hash(stripped_report)
-    )
-    if image_qc.get("summary", {}).get("degraded") and not manual_ok:
-        blockers.append("image_qc 降级且无具名+绑定当前报告 hash 的人工放行"
-                        "（`image_qc.py --accept-degraded --reviewer <name> --notes <说明>`；旧式布尔留痕不算）。")
+    precision = (image_qc.get("qc_environment") or {}).get("precision_level")
+    if image_qc and precision != "full":
+        blockers.append(
+            f"image_qc precision_level={precision!r}；B14 正式完成态只接受 full machine QC，"
+            "具名 degraded 目视记录也不能替代。"
+        )
     if inherit.get("summary", {}).get("hard_blocks"):
         blockers.append("video inherit contract 仍有 hard block。")
     if video_qc.get("summary", {}).get("hard_blocks"):
@@ -266,7 +294,7 @@ def build_report(root):
         "schema_version": 2,
         "kind": "mv_formal_readiness",
         "generated_at": date.today().isoformat(),
-        "root": root,
+        "root_rel": ".",
         "summary": {
             "status": status,
             "blockers": len(blockers),

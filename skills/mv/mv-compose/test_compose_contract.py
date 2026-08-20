@@ -36,11 +36,21 @@ def test_internal_edit_pipeline_stays_mezzanine_until_delivery_derivative() -> N
     assert "libx264" not in before_delivery
 
 
-def test_formal_delivery_runs_qc_provenance_and_progress() -> None:
+def test_formal_delivery_runs_qc_then_defers_final_provenance_until_disclosure() -> None:
     text = SCRIPT.read_text(encoding="utf-8")
     assert 'delivery_qc.py" "$ROOT" "$OUT" --master "$MASTER"' in text
-    assert 'provenance.py" "$ROOT" --final "$OUT" --master "$MASTER"' in text
+    assert 'provenance.py" "$ROOT" --final "$OUT" --master "$MASTER"' not in text
+    assert "先生成 AI 使用披露，再生成最终 provenance" in text
     assert 'progress_set.py" "$ROOT" compose' in text
+
+
+def test_compose_uses_locked_aspect_fps_and_fails_closed_for_required_subtitles() -> None:
+    text = SCRIPT.read_text(encoding="utf-8")
+    assert 'settings.get("合成画幅")' in text
+    assert 'settings.get("字幕语言")' in text
+    assert '.get("rate")' in text
+    assert "正式合成不得静默交付无字幕版" in text
+    assert 'color_input_manifest.py" "$ROOT"' in text
 
 
 @pytest.mark.skipif(not shutil.which("ffmpeg") or not shutil.which("ffprobe"), reason="ffmpeg unavailable")

@@ -17,6 +17,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+import contract
+
 
 KIND = "ad_artifact_dependency_graph"
 RECEIPT_KIND = "ad_dependency_receipts"
@@ -57,9 +59,193 @@ def _value_token(name: str, value: Any) -> dict[str, Any]:
     return {"kind": "value", "name": name, "sha256": stable_sha(value)}
 
 
+def _strict_project_file_token(root: Path, name: str, value: Any) -> dict[str, Any]:
+    """Hash a dynamic path only when it is confined to ``root``.
+
+    Feedback paths come from user-authored plans and receipts.  Treating
+    ``root / value`` as sufficient would allow absolute paths, ``../`` and an
+    in-project symlink to make the graph read bytes outside the project.  An
+    invalid reference is therefore represented by a stable value sentinel;
+    its target is never opened.
+    """
+    raw = str(value or "").strip()
+    path = Path(raw)
+    reason = ""
+    if not raw:
+        reason = "missing"
+    elif path.is_absolute():
+        reason = "absolute"
+    elif ".." in path.parts:
+        reason = "parent_traversal"
+    else:
+        base = root.resolve()
+        try:
+            resolved = (base / path).resolve()
+            resolved.relative_to(base)
+        except (OSError, RuntimeError, ValueError):
+            reason = "symlink_or_resolve_escape"
+    if reason:
+        return _value_token(
+            f"invalid_project_path:{name}",
+            {"path": raw, "reason": reason},
+        )
+    return _file_token(root, path.as_posix())
+
+
+EVIDENCE_REF_KEYS = {
+    "evidence_file", "status_evidence_file", "redirect_evidence_file",
+    "diagnostics_evidence_file", "license_file", "basis_file", "conversion_evidence",
+}
+
+
+def _evidence_records(value: Any, prefix="brief"):
+    """Yield evidence refs embedded in brief, including nested creator receipts."""
+    if isinstance(value, Mapping):
+        claimed = value.get("evidence_sha256")
+        for key, child in value.items():
+            name = f"{prefix}.{key}"
+            if key in EVIDENCE_REF_KEYS and child:
+                yield name, str(child), claimed
+            elif key == "platform_safe_zone_evidence" and isinstance(child, Mapping):
+                for placement, ref in child.items():
+                    if ref:
+                        yield f"{name}.{placement}", str(ref), ""
+            else:
+                yield from _evidence_records(child, name)
+    elif isinstance(value, list):
+        for pos, child in enumerate(value):
+            yield from _evidence_records(child, f"{prefix}[{pos}]")
+
+
+def _evidence_token(root: Path, name: str, ref: str, claimed: Any = ""):
+    if ref.startswith(("https://", "http://", "record:", "doi:")):
+        return _value_token(f"evidence:{name}", {"ref": ref, "claimed_sha256": str(claimed or "")})
+    path = Path(ref)
+    if path.is_absolute():
+        try:
+            rel = path.resolve().relative_to(root).as_posix()
+        except ValueError:
+            return _value_token(f"external_evidence:{name}", {"path": str(path), "sha256": file_sha(path)})
+    else:
+        rel = path.as_posix()
+    return _file_token(root, rel)
+
+
+def brief_evidence_tokens(root: Path, brief: Mapping[str, Any]):
+    tokens = []
+    seen = set()
+    for name, ref, claimed in _evidence_records(brief):
+        key = (ref, str(claimed or ""))
+        if key in seen:
+            continue
+        seen.add(key)
+        tokens.append(_evidence_token(root, name, ref, claimed))
+    return tokens
+
+
+def _feedback_brief_evidence_tokens(root: Path, brief: Mapping[str, Any]):
+    """Strict project-local variant of ``brief_evidence_tokens`` for feedback.
+
+    The general production graph preserves legacy external evidence references
+    as value tokens.  Feedback acceptance is a formal statistical receipt, so
+    every local evidence dependency must instead pass the same traversal and
+    symlink confinement rule as raw exports and media assets.
+    """
+    tokens = []
+    seen = set()
+    for name, ref, _claimed in _evidence_records(brief):
+        if ref in seen:
+            continue
+        seen.add(ref)
+        tokens.append(_strict_project_file_token(root, f"feedback_brief_evidence:{name}", ref))
+    return tokens
+
+
+def _feedback_inputs(root: Path, brief: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Discover the complete, project-confined analysis basis for feedback."""
+    plan = load(root / "投放反馈" / "experiment_plan.json", {}) or {}
+    report = load(root / "投放反馈" / "feedback_report.json", {}) or {}
+    inputs = [
+        _file_token(root, "需求/brief.json"),
+        _file_token(root, "生产数据/campaign_readiness.json"),
+        _file_token(root, "投放反馈/experiment_plan.json"),
+        _file_token(root, "投放反馈/experiment_plan_validation.json"),
+    ]
+    inputs.extend(_feedback_brief_evidence_tokens(root, brief))
+
+    variants = plan.get("variants") if isinstance(plan, Mapping) else []
+    for pos, row in enumerate(variants or [], 1):
+        if not isinstance(row, Mapping):
+            inputs.append(_value_token(
+                f"invalid_feedback_variant:{pos}", {"value": row, "reason": "not_object"}))
+            continue
+        variant_id = str(row.get("variant_id") or pos)
+        inputs.append(_strict_project_file_token(
+            root, f"feedback_variant_asset:{variant_id}", row.get("asset_path")))
+
+    receipts = report.get("analysis_receipts") if isinstance(report, Mapping) else {}
+    receipts = receipts if isinstance(receipts, Mapping) else {}
+    raw_receipt = receipts.get("raw_source") if isinstance(receipts.get("raw_source"), Mapping) else {}
+    source = report.get("source_data") if isinstance(report, Mapping) else {}
+    source = source if isinstance(source, Mapping) else {}
+    raw_path = raw_receipt.get("path") or source.get("path")
+    inputs.append(_strict_project_file_token(root, "feedback_raw_source", raw_path))
+
+    design_mode = str(plan.get("design_mode") or "").strip().lower() if isinstance(plan, Mapping) else ""
+    if design_mode == "platform_native":
+        platform = plan.get("platform_experiment") if isinstance(plan.get("platform_experiment"), Mapping) else {}
+        config = platform.get("config_receipt") if isinstance(platform.get("config_receipt"), Mapping) else {}
+        config_path = config.get("evidence_path") or config.get("evidence_file")
+        inputs.append(_strict_project_file_token(
+            root, "feedback_platform_config_evidence", config_path))
+
+        result_rel = "投放反馈/platform_experiment_result.json"
+        inputs.append(_file_token(root, result_rel))
+        result = load(root / result_rel, {}) or {}
+        result_path = (result.get("evidence_path") or result.get("evidence_file")) \
+            if isinstance(result, Mapping) else ""
+        inputs.append(_strict_project_file_token(
+            root, "feedback_platform_result_evidence", result_path))
+    return inputs
+
+
+def brief_evidence_paths(root: Path, brief: Mapping[str, Any] | None = None):
+    """Absolute local evidence paths for mtime-based legacy review checks."""
+    brief = brief if isinstance(brief, Mapping) else (load(root / "需求" / "brief.json", {}) or {})
+    paths = []
+    seen = set()
+    for _name, ref, _claimed in _evidence_records(brief):
+        if ref.startswith(("https://", "http://", "record:", "doi:")):
+            continue
+        path = Path(ref)
+        if not path.is_absolute():
+            path = root / path
+        value = str(path)
+        if value not in seen:
+            seen.add(value)
+            paths.append(value)
+    return paths
+
+
 def _digest(tokens: Iterable[Mapping[str, Any]]) -> str:
     rows = sorted((dict(row) for row in tokens), key=lambda row: (str(row.get("path") or ""), str(row.get("name") or "")))
     return stable_sha(rows)
+
+
+def _compose_receipt_value(root: Path) -> dict[str, Any]:
+    """Return only compose receipts, avoiding a dependency on our own receipt file.
+
+    The whole ``dependency_receipts.json`` cannot safely be an input token because
+    accepting handoff/review mutates that same file.  A value token over the
+    compose subset gives downstream stages an exact, cycle-free acceptance edge.
+    """
+    doc = load(root / "生产数据" / "dependency_receipts.json", {}) or {}
+    receipts = doc.get("receipts") if isinstance(doc.get("receipts"), Mapping) else {}
+    return {
+        str(node_id): dict(row)
+        for node_id, row in receipts.items()
+        if str(node_id).startswith("compose:") and isinstance(row, Mapping)
+    }
 
 
 def _outputs(root: Path, paths: Iterable[str]):
@@ -176,9 +362,10 @@ def discover(root: Path) -> list[dict[str, Any]]:
     nodes.append(_node(root, "brief", "brief", [_file_token(root, "需求/brief.json")], ["需求/brief.json"]))
     nodes.append(_node(root, "concept", "concept", [
         _value_token("brief_strategy", {key: brief.get(key) for key in ("brand", "product", "usp", "audience", "campaign_objective", "tone", "key_message", "mandatories")}),
-    ], ["创意/concept.md", "创意/创意脚本.md"]))
+    ], ["创意/concept.json", "创意/concept.md", "创意/创意脚本.md"]))
     nodes.append(_node(root, "script", "script", [
-        _file_token(root, "创意/concept.md"), _file_token(root, "创意/创意脚本.md"),
+        _file_token(root, "创意/concept.json"), _file_token(root, "创意/concept.md"),
+        _file_token(root, "创意/创意脚本.md"),
         _value_token("brief_script", {key: brief.get(key) for key in ("claims", "mandatories", "must_avoid", "campaign_objective")}),
     ], ["脚本/广告脚本.md", "脚本/voiceover.txt", "脚本/时间轴.json", "脚本/广告法机检报告.json"]))
     nodes.append(_node(root, "voice", "voice", [
@@ -188,7 +375,8 @@ def discover(root: Path) -> list[dict[str, Any]]:
         _file_token(root, "设定库/voicemap.json"),
     ], ["配音/时长清单.json", "配音/vo.wav", "配音/voice_qc.json"]))
     nodes.append(_node(root, "storyboard", "storyboard", [
-        _file_token(root, "脚本/广告脚本.md"), _file_token(root, "脚本/时间轴.json"),
+        _file_token(root, "创意/concept.json"), _file_token(root, "脚本/广告脚本.md"),
+        _file_token(root, "脚本/时间轴.json"),
         _file_token(root, "配音/时长清单.json"),
         _value_token("brief_storyboard", {key: brief.get(key) for key in ("claims", "mandatories", "deliverables")}),
     ], ["脚本/storyboard.json", "脚本/镜头时长.json", "脚本/字幕_zh.srt"]))
@@ -221,8 +409,20 @@ def discover(root: Path) -> list[dict[str, Any]]:
         mapped = [str(value) for value in mapped if str(value)]
         locale_slice = {"default_locale": locale.get("default_locale"), "deliverable_id": did,
                         "locales": {key: locale_rows.get(key) for key in mapped}}
-        compose_inputs = [_value_token(f"delivery:{did}", item),
-                          _value_token(f"locale_contract:{did}", locale_slice)]
+        compose_inputs = [
+            _value_token(f"delivery:{did}", item),
+            _value_token(f"locale_contract:{did}", locale_slice),
+            _file_token(root, "合成/delivery_plan.json"),
+            _file_token(root, "合成/delivery_qc.json"),
+            _file_token(root, "生产数据/render_profile.json"),
+            _file_token(root, "生产数据/placement_adaptation.json"),
+            # The exact final bytes are both a compose output and a release/QC
+            # input.  Recording both edges makes post-QC media replacement stale.
+            _file_token(root, str(item.get("expected_path") or "")),
+        ]
+        if item.get("kind") == "reframe":
+            compose_inputs.append(_file_token(
+                root, f"生产数据/placement_adaptation_receipts/{did}.json"))
         for sid, vnode in video_by_shot.items():
             if kept is None or sid in kept:
                 compose_inputs.extend(vnode["outputs"])
@@ -241,19 +441,27 @@ def discover(root: Path) -> list[dict[str, Any]]:
             compose_inputs.append(_file_token(root, rel))
         nodes.append(_node(root, f"compose:{did}", "compose", compose_inputs, [str(item.get("expected_path") or "")]))
     handoff_inputs = [_file_token(root, "需求/brief.json"), _file_token(root, "合规/ai_usage.json"),
-                      _file_token(root, "合规/locale_matrix.json"), _file_token(root, "合规/provenance_qc.json")]
+                      _file_token(root, "合规/locale_matrix.json"), _file_token(root, "合规/provenance_qc.json"),
+                      _file_token(root, "生产数据/stage_acceptance/compose.json"),
+                      _value_token("compose_dependency_receipts", _compose_receipt_value(root))]
+    handoff_inputs.extend(brief_evidence_tokens(root, brief))
     handoff_inputs.extend(row for node in nodes if node["stage"] == "compose" for row in node["outputs"])
     nodes.append(_node(root, "handoff", "handoff", handoff_inputs,
-                       ["合规/locale_matrix_validation.json", "合规/release_variant_manifest.json", "合规/compliance_manifest.json"]))
+                       ["生产数据/campaign_readiness.json", "合规/locale_matrix_validation.json",
+                        "合规/release_variant_manifest.json", "合规/compliance_manifest.json"]))
     review_inputs = [_file_token(root, rel) for rel in (
-        "合规/compliance_manifest.json", "合规/release_variant_manifest.json", "合成/delivery_qc.json",
+        "生产数据/campaign_readiness.json", "合规/compliance_manifest.json",
+        "合规/release_variant_manifest.json", "合成/delivery_qc.json",
         "合成/accessibility_qc.json", "合成/rendered_text_qc.json", "合成/asr_consistency.json",
-        "生产数据/final_media_consistency.json", "生产数据/consistency_findings.json")]
+        "生产数据/final_media_consistency.json", "生产数据/consistency_findings.json",
+        "生产数据/stage_acceptance/compose.json", "生产数据/render_profile.json",
+        "生产数据/placement_adaptation.json")]
+    review_inputs.append(_value_token("compose_dependency_receipts", _compose_receipt_value(root)))
+    review_inputs.extend(brief_evidence_tokens(root, brief))
     review_inputs.extend(row for node in nodes if node["stage"] == "compose" for row in node["outputs"])
     nodes.append(_node(root, "review", "review", review_inputs, ["合规/ad_review_m0.json", "合规/human_signoff.json"]))
-    nodes.append(_node(root, "feedback", "feedback", [
-        _file_token(root, "投放反馈/experiment_plan.json"), _file_token(root, "投放反馈/experiment_plan_validation.json")
-    ], ["投放反馈/feedback_report.json"]))
+    nodes.append(_node(root, "feedback", "feedback", _feedback_inputs(root, brief),
+                       ["投放反馈/feedback_report.json"]))
     return nodes
 
 
@@ -299,6 +507,65 @@ def write_graph(root: Path):
     return payload, out
 
 
+def stage_snapshot(root: Path, stage: str) -> dict[str, Any]:
+    """Deterministic dependency snapshot bound into a stage acceptance report."""
+    if stage not in STAGES:
+        raise ValueError(f"unknown stage: {stage}")
+    rows = [{
+        "node_id": node["node_id"],
+        "input_sha256": node["input_sha256"],
+        "output_sha256": node["output_sha256"],
+        "missing_outputs": list(node["missing_outputs"]),
+    } for node in discover(root.resolve()) if node["stage"] == stage]
+    rows.sort(key=lambda row: row["node_id"])
+    return {"stage": stage, "nodes": rows, "sha256": stable_sha(rows)}
+
+
+def stage_snapshot_sha256(root: Path, stage: str) -> str:
+    return stage_snapshot(root, stage)["sha256"]
+
+
+def _current_formal_compose_report(report: Mapping[str, Any], expected_snapshot: str) -> bool:
+    findings = report.get("findings") if isinstance(report.get("findings"), list) else []
+    return (
+        report.get("schema_version") == 1
+        and report.get("kind") == "ad_stage_acceptance"
+        and report.get("contract_version") == contract.CONTRACT_VERSION
+        and report.get("acceptance_version") == contract.STAGE_ACCEPTANCE_VERSION
+        and report.get("stage") == "compose"
+        and report.get("mode") == "formal"
+        and bool((report.get("summary") or {}).get("accepted"))
+        and int((report.get("summary") or {}).get("block") or 0) == 0
+        and not any(isinstance(row, Mapping) and row.get("severity") == "block" for row in findings)
+        and report.get("dependency_snapshot_sha256") == expected_snapshot
+    )
+
+
+def compose_acceptance_status(root: Path) -> dict[str, Any]:
+    """Verify the formal compose report and every compose dependency receipt."""
+    root = root.resolve()
+    report_path = root / "生产数据" / "stage_acceptance" / "compose.json"
+    report = load(report_path, {}) or {}
+    expected_snapshot = stage_snapshot_sha256(root, "compose")
+    report_valid = _current_formal_compose_report(report, expected_snapshot)
+    analyzed = analyze(root)
+    nodes = [node for node in analyzed["nodes"] if node["stage"] == "compose"]
+    receipts_current = bool(nodes) and all(node.get("status") == "current" for node in nodes)
+    return {
+        "accepted": report_valid and receipts_current,
+        "report_path": "生产数据/stage_acceptance/compose.json",
+        "report_sha256": file_sha(report_path),
+        "dependency_snapshot_sha256": expected_snapshot,
+        "reported_dependency_snapshot_sha256": report.get("dependency_snapshot_sha256"),
+        "report_valid": report_valid,
+        "receipts_current": receipts_current,
+        "compose_nodes": [{"node_id": node["node_id"], "status": node.get("status"),
+                           "input_sha256": node["input_sha256"],
+                           "output_sha256": node["output_sha256"]} for node in nodes],
+        "receipt_sha256": stable_sha(_compose_receipt_value(root)),
+    }
+
+
 def accept_stage(root: Path, stage: str, *, allow_unchanged_output=False):
     root = root.resolve()
     if stage not in STAGES:
@@ -309,6 +576,14 @@ def accept_stage(root: Path, stage: str, *, allow_unchanged_output=False):
     selected = [node for node in discover(root) if node["stage"] == stage]
     if not selected:
         raise ValueError(f"no dependency nodes for stage {stage}")
+    if stage == "compose":
+        report = load(root / "生产数据" / "stage_acceptance" / "compose.json", {}) or {}
+        expected_snapshot = stage_snapshot_sha256(root, "compose")
+        if not _current_formal_compose_report(report, expected_snapshot):
+            raise ValueError(
+                "compose receipt requires current formal accepted "
+                "生产数据/stage_acceptance/compose.json bound to the dependency snapshot"
+            )
     for node in selected:
         if node["missing_outputs"]:
             raise ValueError(f"{node['node_id']} missing outputs: {', '.join(node['missing_outputs'])}")

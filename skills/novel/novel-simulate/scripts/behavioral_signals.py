@@ -1,45 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""behavioral_signals.py — 行为式读者模拟的确定性度量层（advisory·纯标准库）。
+"""behavioral_signals.py — 合成视角行为产物的中性表面比较层。
 
-为什么：传统"扮演读者发感想"的模拟只能产主观定性；2024-2026 研究给了**行为式**替代
-（arXiv 2412.15239 想象续写预测 engagement；arXiv 2604.09854 Spoiler Alert：以结局预测
-偏离率量化张力——目前唯一能把人类小说正确排在 LLM 产出之上的自动指标，抓的是评分模型
-抓不到的"可预测性"维度）。协议：AI 读者面板在章末各写一条"下一章会发生什么"的短预测
-（10-20 条），本脚本对已收集的预测做两个确定性度量：
+输入仍兼容：
 
-  悬念值 guess_diversity  预测两两 char-2gram 相异度均值——读者猜的方向越散，悬念越足；
-                          全员猜同一个方向 = 悬念塌缩（只剩一条明线）。
-  意外度 surprise         1 - 预测与**真实下一章**的最大相似度——真实剧情离最像的预测
-                          越远越"想不到"；意外度过低 = 剧情太顺/可预测（套路化预警）。
+* ``评分/reader_predictions_第NN章.json``：合成阅读视角对下一章的短预测；
+* ``评分/reader_survey_第NN章.json``：合成视角填写的 bored/confused/
+  disbelief/favorite/annoying/recall 问卷骨架。
 
-输入（面板产出·LLM 按 SKILL 协议落盘）：`评分/reader_predictions_第NN章.json`
-    {"schema_version":1, "kind":"novel_reader_predictions", "chapter":NN,
-     "predictions":[{"persona":"rookie","text":"主角会当场反杀"}, …]}
-
-口径纪律：相似度是字面 2-gram 近似（confidence=heuristic）——换词同义预测会高估意外度，
-所以**只报低分候选**（明显猜中/明显同向），不认证"高分=真悬念"；advisory 恒不阻断。
-
-2026-07 增补：beta reader 标准问卷聚合（业界六问，Jane Friedman/FoxPrint 口径）。
-面板按 SKILL 协议落盘 `评分/reader_survey_第NN章.json`（bored/confused/disbelief/
-favorite/annoying/recall），本脚本做确定性聚合：
-  reader_bored_run        连续 ≥N 章过半读者报 bored → 弃书风险段（带 span 供修订工单定位）
-  reader_confusion_spike  单章过半读者报 confused → 信息管理事故（该露的没露/时序乱）
-  reader_disbelief        任一读者报 disbelief 且点名人物 → OOC 候选（与一致性审计互补）
-  recall_failure          recall 复述对上一章正文的 2-gram 包含度过半读者低于阈值 →
-                          该章信息未留存（写了但没进读者脑子）。recall 是读者自己的话，
-                          换词会压低包含度——阈值放宽、只报过半共识，单人低分不报。
+本脚本只报告可复算事实：预测之间的 char-2gram 表面差异、预测与下一章开头的
+最大字面重合、问卷中被标注的句段，以及 recall 文本与上一章的字面重合。它不把
+这些数值命名为“悬念值/意外度/留存”，不从多数合成角色推断真实人群，也不生成
+“弃书风险/OOC/信息事故/必须反转”等创作约束。所有产物均为 synthetic、
+context-only，只能转成回正文核对的问题。
 
 用法：
     python3 behavioral_signals.py <作品根> [--json]
-测试：cd skills/novel/novel-simulate/scripts && python3 -m pytest test_behavioral_signals.py
 """
+from __future__ import annotations
+
 import argparse
 import glob
 import json
 import os
 import re
 import sys
+from typing import Any
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _WIKI = os.path.abspath(os.path.join(_HERE, "..", "..", "novel-wiki", "scripts"))
@@ -51,134 +37,146 @@ except Exception:
     def list_chapters(project, *a, **k):  # type: ignore
         return []
 
+
 PREDICTIONS_GLOB = os.path.join("评分", "reader_predictions_第*章.json")
 SURVEY_GLOB = os.path.join("评分", "reader_survey_第*章.json")
-MIN_PREDICTIONS = int(os.environ.get("NOVEL_BEHAV_MIN_PREDICTIONS", "5"))
-SURPRISE_WARN = float(os.environ.get("NOVEL_BEHAV_SURPRISE_WARN", "0.35"))
-DIVERSITY_WARN = float(os.environ.get("NOVEL_BEHAV_DIVERSITY_WARN", "0.55"))  # 短中文预测 2-gram 相异度天然偏高，换措辞同向约 0.4-0.55
+MIN_PREDICTIONS_FOR_PAIRWISE = 2
 ACTUAL_HEAD_CHARS = int(os.environ.get("NOVEL_BEHAV_ACTUAL_HEAD", "1200"))
-BORED_RUN = int(os.environ.get("NOVEL_BEHAV_BORED_RUN", "2"))          # 连续多少章过半 bored 才报
-MAJORITY = float(os.environ.get("NOVEL_BEHAV_MAJORITY", "0.5"))        # "过半"口径（含端点）
-RECALL_MIN = float(os.environ.get("NOVEL_BEHAV_RECALL_MIN", "0.25"))   # recall 对上一章 2-gram 包含度下限
-MIN_SURVEY_RESPONSES = int(os.environ.get("NOVEL_BEHAV_MIN_SURVEY", "2"))  # 过半类信号最少答卷数
 NGRAM = 2
-PROVENANCE = "internal-heuristic·confidence=low"
+PROVENANCE = "synthetic-surface-comparison·uncalibrated·context-only"
 
 _NOISE_RE = re.compile(r"[\s，。！？、；：…—\-\|,.!?;:\"'“”‘’()（）\[\]【】《》]+")
 
 
-def clean(text):
+def clean(text: Any) -> str:
     return _NOISE_RE.sub("", str(text or ""))
 
 
-def shingles(text, n=NGRAM):
-    c = clean(text)
-    if len(c) < n:
-        return {c} if c else set()
-    return {c[i:i + n] for i in range(len(c) - n + 1)}
+def shingles(text: Any, n: int = NGRAM) -> set[str]:
+    cleaned = clean(text)
+    if len(cleaned) < n:
+        return {cleaned} if cleaned else set()
+    return {cleaned[idx:idx + n] for idx in range(len(cleaned) - n + 1)}
 
 
-def jaccard(a, b):
+def jaccard(a: set[str], b: set[str]) -> float:
     if not a or not b:
         return 0.0
-    inter = len(a & b)
-    return inter / (len(a) + len(b) - inter) if inter else 0.0
+    intersection = len(a & b)
+    return intersection / (len(a) + len(b) - intersection) if intersection else 0.0
 
 
-def guess_diversity(predictions):
-    """预测两两相异度（1-Jaccard）均值 ∈ [0,1]，越高悬念越足。<2 条返回 None。纯函数。"""
-    sets = [shingles(p) for p in predictions if clean(p)]
-    if len(sets) < 2:
+def pairwise_surface_difference(predictions: list[str]) -> float | None:
+    """预测文本两两 ``1-Jaccard`` 均值；只表示字面差异，不表示悬念。"""
+    sets = [shingles(item) for item in predictions if clean(item)]
+    if len(sets) < MIN_PREDICTIONS_FOR_PAIRWISE:
         return None
-    total, pairs = 0.0, 0
-    for i in range(len(sets)):
-        for j in range(i + 1, len(sets)):
-            total += 1.0 - jaccard(sets[i], sets[j])
-            pairs += 1
-    return round(total / pairs, 3) if pairs else None
+    values = [
+        1.0 - jaccard(sets[left], sets[right])
+        for left in range(len(sets))
+        for right in range(left + 1, len(sets))
+    ]
+    return round(sum(values) / len(values), 3) if values else None
 
 
-def surprise_score(predictions, actual_text):
-    """1 - max(预测对真实下一章开头的**包含度**) ∈ [0,1]，越高越"想不到"。纯函数。
-
-    用包含度（inter/|预测 shingles|）而非对称 Jaccard：真实章远长于一条短预测，
-    对称 Jaccard 会被长度稀释——预测哪怕逐字命中也只有 |pred|/|actual| 的上限，
-    "猜中了"永远测不出来。包含度问的是"这条预测有多少被真实剧情覆盖"，与长度无关。"""
+def max_next_chapter_surface_overlap(predictions: list[str], actual_text: str | None) -> float | None:
+    """任一预测被下一章开头覆盖的最大 2-gram 比率；重合不等于陈词滥调。"""
     actual = shingles(str(actual_text or "")[:ACTUAL_HEAD_CHARS])
     if not actual:
         return None
-    sims = []
-    for p in predictions:
-        ps = shingles(p)
-        if ps:
-            sims.append(len(ps & actual) / len(ps))
-    if not sims:
+    overlaps = []
+    for prediction in predictions:
+        tokens = shingles(prediction)
+        if tokens:
+            overlaps.append(len(tokens & actual) / len(tokens))
+    return round(max(overlaps), 3) if overlaps else None
+
+
+def recall_surface_overlap(recall_text: str, previous_text: str | None) -> float | None:
+    """recall 文本被上一章覆盖的 2-gram 比率；不能据此推断记忆或留存。"""
+    recall_tokens = shingles(recall_text)
+    previous_tokens = shingles(str(previous_text or ""))
+    if not recall_tokens or not previous_tokens:
         return None
-    return round(1.0 - max(sims), 3)
+    return round(len(recall_tokens & previous_tokens) / len(recall_tokens), 3)
 
 
-def _pred_texts(payload):
-    out = []
-    for p in payload.get("predictions") or []:
-        if isinstance(p, dict):
-            t = str(p.get("text") or "").strip()
+def _perspective_id(row: dict[str, Any]) -> str:
+    return str(row.get("perspective") or row.get("persona") or "unknown").strip() or "unknown"
+
+
+def _prediction_rows(payload: dict[str, Any]) -> list[dict[str, str]]:
+    rows = []
+    for item in payload.get("predictions") or []:
+        if isinstance(item, dict):
+            text = str(item.get("text") or "").strip()
+            perspective = _perspective_id(item)
         else:
-            t = str(p or "").strip()
-        if t:
-            out.append(t)
-    return out
+            text = str(item or "").strip()
+            perspective = "unknown"
+        if text:
+            rows.append({"perspective": perspective, "text": text})
+    return rows
 
 
-def recall_containment(recall_text, prev_text):
-    """recall 复述对上一章正文的 2-gram 包含度 ∈ [0,1]；任一侧为空返回 None。纯函数。
-
-    与 surprise_score 同理用包含度而非对称 Jaccard：复述远短于整章正文，问的是
-    "复述里有多少内容真出现在上一章"——专名与关键动作会命中，纯编造/张冠李戴命不中。"""
-    rs = shingles(recall_text)
-    prev = shingles(str(prev_text or ""))
-    if not rs or not prev:
-        return None
-    return round(len(rs & prev) / len(rs), 3)
-
-
-def _field_span(value):
-    """问卷答案归一：dict 取 span/note、字符串原样、空值→None。返回定位用短文本或 None。"""
+def _field_span(value: Any) -> str | None:
     if isinstance(value, dict):
-        t = str(value.get("span") or value.get("note") or "").strip()
-        return t or None
-    t = str(value or "").strip()
-    return t or None
+        text = str(value.get("span") or value.get("note") or "").strip()
+        return text or None
+    text = str(value or "").strip()
+    return text or None
 
 
-def _survey_responses(payload):
-    """归一 responses：[{persona, bored, confused, disbelief, disbelief_characters, recall}]。"""
-    out = []
-    for r in payload.get("responses") or []:
-        if not isinstance(r, dict):
+def _character_answer(value: Any) -> dict[str, str] | None:
+    if not isinstance(value, dict):
+        return None
+    name = str(value.get("name") or "").strip()
+    reason = str(value.get("reason") or "").strip()
+    if not name and not reason:
+        return None
+    return {"name": name, "reason": reason}
+
+
+def _survey_responses(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = []
+    for raw in payload.get("responses") or []:
+        if not isinstance(raw, dict):
             continue
-        dis = r.get("disbelief")
-        chars = []
-        if isinstance(dis, dict):
-            chars = [str(c).strip() for c in (dis.get("characters") or []) if str(c).strip()]
-        out.append({
-            "persona": str(r.get("persona") or "").strip() or "unknown",
-            "bored": _field_span(r.get("bored")),
-            "confused": _field_span(r.get("confused")),
-            "disbelief": _field_span(dis),
-            "disbelief_characters": chars,
-            "recall": str(r.get("recall") or "").strip(),
+        disbelief = raw.get("disbelief")
+        characters = []
+        if isinstance(disbelief, dict):
+            characters = [
+                str(item).strip() for item in disbelief.get("characters") or []
+                if str(item).strip()
+            ]
+        rows.append({
+            "perspective": _perspective_id(raw),
+            "bored": _field_span(raw.get("bored")),
+            "confused": _field_span(raw.get("confused")),
+            "disbelief": _field_span(disbelief),
+            "disbelief_characters": characters,
+            "favorite_character": _character_answer(raw.get("favorite_character")),
+            "annoying_character": _character_answer(raw.get("annoying_character")),
+            "recall": str(raw.get("recall") or "").strip(),
         })
-    return out
+    return rows
 
 
-def _majority(count, total):
-    return total >= MIN_SURVEY_RESPONSES and count / total >= MAJORITY
+def _question(kind: str, chapter: int, question: str, *, evidence: Any = None) -> dict[str, Any]:
+    return {
+        "type": kind,
+        "chapter": chapter,
+        "question": question,
+        "evidence": evidence,
+        "evidence_type": "synthetic_probe",
+        "decision_authority": "context_only",
+        "automatic_action": None,
+    }
 
 
-def _analyze_surveys(project, chapters):
-    """聚合问卷文件 → (survey_rows, alerts)。文件缺失/坏 JSON/旧 schema 一律跳过。"""
-    alerts, rows = [], []
-    bored_by_ch = {}   # ch -> {"spans": […], "flagged": bool}
+def _analyze_surveys(project: str, chapters: dict[int, str]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    rows = []
+    questions = []
     for path in sorted(glob.glob(os.path.join(project, SURVEY_GLOB))):
         try:
             with open(path, encoding="utf-8") as f:
@@ -186,162 +184,185 @@ def _analyze_surveys(project, chapters):
         except (OSError, ValueError):
             continue
         try:
-            ch = int(payload.get("chapter"))
+            chapter = int(payload.get("chapter"))
         except (TypeError, ValueError):
             continue
-        resp = _survey_responses(payload)
-        if not resp:
+        responses = _survey_responses(payload)
+        if not responses:
             continue
-        n = len(resp)
-        bored = [r for r in resp if r["bored"]]
-        confused = [r for r in resp if r["confused"]]
-        disbelief = [r for r in resp if r["disbelief"] and r["disbelief_characters"]]
-        recalls = [(r["persona"], recall_containment(r["recall"], chapters.get(ch - 1)))
-                   for r in resp if r["recall"]]
-        recalls = [(p, c) for p, c in recalls if c is not None]
-        low_recall = [(p, c) for p, c in recalls if c < RECALL_MIN]
-        row = {"chapter": ch, "responses": n, "bored": len(bored), "confused": len(confused),
-               "disbelief": len(disbelief),
-               "recall_containment": {p: c for p, c in recalls} or None}
+        bored = [
+            {"perspective": row["perspective"], "span": row["bored"]}
+            for row in responses if row["bored"]
+        ]
+        confused = [
+            {"perspective": row["perspective"], "span": row["confused"]}
+            for row in responses if row["confused"]
+        ]
+        disbelief = [
+            {
+                "perspective": row["perspective"],
+                "span": row["disbelief"],
+                "characters": row["disbelief_characters"],
+            }
+            for row in responses if row["disbelief"]
+        ]
+        recalls = {
+            row["perspective"]: recall_surface_overlap(row["recall"], chapters.get(chapter - 1))
+            for row in responses if row["recall"]
+        }
+        recalls = {key: value for key, value in recalls.items() if value is not None}
+        favorites = [
+            {"perspective": row["perspective"], **row["favorite_character"]}
+            for row in responses if row["favorite_character"]
+        ]
+        annoying = [
+            {"perspective": row["perspective"], **row["annoying_character"]}
+            for row in responses if row["annoying_character"]
+        ]
+        row = {
+            "chapter": chapter,
+            "response_count": len(responses),
+            "annotations": {
+                "bored": bored,
+                "confused": confused,
+                "disbelief": disbelief,
+                "favorite_character": favorites,
+                "annoying_character": annoying,
+            },
+            "recall_previous_chapter_surface_overlap": recalls or None,
+            "interpretation": "synthetic_annotations_and_literal_overlap_only",
+        }
         rows.append(row)
-        bored_by_ch[ch] = {"spans": [r["bored"] for r in bored][:3],
-                           "flagged": _majority(len(bored), n)}
-        if _majority(len(confused), n):
-            spans = "；".join(f"{r['persona']}「{r['confused']}」" for r in confused[:3])
-            alerts.append({
-                "type": "reader_confusion_spike", "severity": "建议级", "auto": True, "chapter": ch,
-                "note": (f"第{ch}章 {len(confused)}/{n} 名模拟读者困惑到需要回读（{spans}）——"
-                         f"信息管理事故候选：该露的没露/时序乱/指代不清，对照知情面与章间承接检查"
-                         f"（{PROVENANCE}）"),
-            })
-        for r in disbelief:
-            alerts.append({
-                "type": "reader_disbelief", "severity": "建议级", "auto": True, "chapter": ch,
-                "characters": r["disbelief_characters"],
-                "note": (f"第{ch}章读者({r['persona']})对 {'、'.join(r['disbelief_characters'])} "
-                         f"不再相信：「{r['disbelief']}」——OOC/强行剧情候选，与一致性审计互补"
-                         f"（{PROVENANCE}）"),
-            })
-        if recalls and _majority(len(low_recall), len(recalls)) and (ch - 1) in chapters:
-            detail = "、".join(f"{p}={c:.0%}" for p, c in low_recall[:4])
-            alerts.append({
-                "type": "recall_failure", "severity": "建议级", "auto": True, "chapter": ch - 1,
-                "note": (f"第{ch - 1}章信息未留存：过半读者凭记忆复述该章时与正文包含度低于 "
-                         f"{RECALL_MIN:.0%}（{detail}）——事件密度过高或全程平铺都会让读者"
-                         f"『读了但没记住』，考虑压缩支线信息或给关键事件加落点"
-                         f"（{PROVENANCE}·复述是读者自己的话，换词会压低分数，只报过半共识）"),
-            })
-    # bored 连续段：章号断档清零（同 hook_endings 序列口径）
-    run = []
-    for ch in sorted(bored_by_ch):
-        if bored_by_ch[ch]["flagged"] and (not run or ch == run[-1] + 1):
-            run.append(ch)
-            continue
-        if len(run) >= BORED_RUN:
-            _emit_bored_run(alerts, run, bored_by_ch)
-        run = [ch] if bored_by_ch[ch]["flagged"] else []
-    if len(run) >= BORED_RUN:
-        _emit_bored_run(alerts, run, bored_by_ch)
-    return rows, alerts
+        if bored:
+            questions.append(_question(
+                "review_bored_annotations", chapter,
+                "这些合成视角标注的走神句段是否真的存在目标停滞、无效重复或阅读意图上的必要停顿？须回正文判断，不因标注数量自动删改。",
+                evidence=bored[:6],
+            ))
+        if confused:
+            questions.append(_question(
+                "review_confused_annotations", chapter,
+                "这些困惑标注来自指代/时序/知情面缺口，还是作品有意延迟信息？须引用上下文核对。",
+                evidence=confused[:6],
+            ))
+        if disbelief:
+            questions.append(_question(
+                "review_disbelief_annotations", chapter,
+                "标注句段与人物既有动机、状态账或叙事视角是否存在可证矛盾？合成视角的不信不自动等于 OOC。",
+                evidence=disbelief[:6],
+            ))
+        if recalls:
+            questions.append(_question(
+                "review_recall_surface_overlap", chapter - 1,
+                "recall 与上一章的字面重合差异来自同义改写、选择性概括、专名遗漏还是事实错记？该比率不能推断真实记忆或留存。",
+                evidence=recalls,
+            ))
+    return rows, questions
 
 
-def _emit_bored_run(alerts, run, bored_by_ch):
-    spans = "；".join(s for ch in run for s in bored_by_ch[ch]["spans"][:1])
-    alerts.append({
-        "type": "reader_bored_run", "severity": "建议级", "auto": True,
-        "chapters": list(run),
-        "note": (f"第{run[0]}-{run[-1]}章连续 {len(run)} 章过半模拟读者报『想放下』"
-                 f"（走神点：{spans or '未定位'}）——弃书风险段，按 span 定位到场景级修订工单"
-                 f"（{PROVENANCE}）"),
-    })
-
-
-def analyze(project):
-    """扫预测+问卷文件，算悬念/意外度并聚合六问 advisory。{ran, alerts, chapters, blocking(=0)}。"""
+def analyze(project: str) -> dict[str, Any]:
     paths = sorted(glob.glob(os.path.join(project, PREDICTIONS_GLOB)))
     has_survey = bool(glob.glob(os.path.join(project, SURVEY_GLOB)))
     if not paths and not has_survey:
-        return {"ran": False,
-                "skipped": ("无 评分/reader_predictions_第NN章.json 或 reader_survey_第NN章.json——"
-                            "行为式协议：AI 读者面板在章末写『下一章会发生什么』短预测（≥5 条）"
-                            "与六问问卷落盘后再跑本度量")}
-    chapters = {cid: text for cid, _p, text in list_chapters(project)}
-    alerts, rows = [], []
+        return {
+            "ran": False,
+            "skipped": (
+                "无 评分/reader_predictions_第NN章.json 或 reader_survey_第NN章.json——"
+                "合成视角完成预测/问卷后可生成 context-only 表面比较"
+            ),
+        }
+
+    chapters = {chapter_id: text for chapter_id, _path, text in list_chapters(project)}
+    prediction_rows = []
+    questions = []
     for path in paths:
         try:
             with open(path, encoding="utf-8") as f:
                 payload = json.load(f)
         except (OSError, ValueError):
             continue
-        ch = payload.get("chapter")
         try:
-            ch = int(ch)
+            chapter = int(payload.get("chapter"))
         except (TypeError, ValueError):
             continue
-        preds = _pred_texts(payload)
-        row = {"chapter": ch, "predictions": len(preds)}
-        if len(preds) < MIN_PREDICTIONS:
-            row["insufficient"] = True
-            rows.append(row)
-            continue
-        div = guess_diversity(preds)
-        sup = surprise_score(preds, chapters.get(ch + 1))
-        row.update({"guess_diversity": div, "surprise": sup,
-                    "next_chapter_available": (ch + 1) in chapters})
-        rows.append(row)
-        if div is not None and div < DIVERSITY_WARN:
-            alerts.append({
-                "type": "suspense_collapse", "severity": "建议级", "auto": True, "chapter": ch,
-                "note": (f"第{ch}章末读者预测同质度过高（发散度 {div:.0%} < {DIVERSITY_WARN:.0%}）——"
-                         f"全员只猜到一个方向，说明只剩一条明线在走；埋第二悬念线或制造歧义"
-                         f"（{PROVENANCE}）"),
-            })
-        if sup is not None and sup < SURPRISE_WARN:
-            alerts.append({
-                "type": "predictable_plot", "severity": "建议级", "auto": True, "chapter": ch + 1,
-                "note": (f"第{ch + 1}章走向被章末预测猜中（意外度 {sup:.0%} < {SURPRISE_WARN:.0%}）——"
-                         f"剧情太顺=套路化预警；老读者能预测的展开考虑做一次预期颠覆"
-                         f"（{PROVENANCE}·字面近似，换词猜中会漏）"),
-            })
-    survey_rows, survey_alerts = _analyze_surveys(project, chapters)
-    alerts.extend(survey_alerts)
+        predictions = _prediction_rows(payload)
+        texts = [item["text"] for item in predictions]
+        difference = pairwise_surface_difference(texts)
+        overlap = max_next_chapter_surface_overlap(texts, chapters.get(chapter + 1))
+        row = {
+            "chapter": chapter,
+            "prediction_count": len(predictions),
+            "pairwise_surface_difference": difference,
+            "next_chapter_max_surface_overlap": overlap,
+            "next_chapter_available": (chapter + 1) in chapters,
+            "insufficient_for_pairwise": len(predictions) < MIN_PREDICTIONS_FOR_PAIRWISE,
+            "prediction_examples": predictions[:8],
+            "interpretation": "literal_2gram_comparison_only",
+        }
+        prediction_rows.append(row)
+        if predictions:
+            questions.append(_question(
+                "review_prediction_surface_difference", chapter,
+                "这些预测在剧情方向上真的相同/不同，还是只因措辞造成表面差异？它们覆盖了上一章哪些显性承诺？",
+                evidence={"pairwise_surface_difference": difference, "examples": predictions[:6]},
+            ))
+        if overlap is not None:
+            questions.append(_question(
+                "review_prediction_next_chapter_overlap", chapter + 1,
+                "预测与下一章的重合是有效伏笔兑现、类型承诺、偶然同词还是过度明示？重合本身不等于陈词滥调，也不要求强行反转。",
+                evidence={"max_surface_overlap": overlap, "source_prediction_chapter": chapter},
+            ))
+
+    survey_rows, survey_questions = _analyze_surveys(project, chapters)
+    questions.extend(survey_questions)
     return {
+        "schema_version": 2,
+        "kind": "novel_synthetic_behavior_probe",
         "ran": True,
-        "thresholds": {"min_predictions": MIN_PREDICTIONS, "surprise_warn": SURPRISE_WARN,
-                       "diversity_warn": DIVERSITY_WARN, "ngram": NGRAM,
-                       "bored_run": BORED_RUN, "majority": MAJORITY, "recall_min": RECALL_MIN,
-                       "min_survey_responses": MIN_SURVEY_RESPONSES, "provenance": PROVENANCE,
-                       "note": "advisory：只报低分候选，不认证高分=真悬念；恒不阻断。"},
-        "chapters": rows,
+        "evidence_type": "synthetic_probe",
+        "validation_status": "unvalidated",
+        "decision_authority": "context_only",
+        "numeric_score_eligible": False,
+        "automatic_constraint_eligible": False,
+        "measurement": {
+            "ngram": NGRAM,
+            "actual_head_chars": ACTUAL_HEAD_CHARS,
+            "min_predictions_for_pairwise": MIN_PREDICTIONS_FOR_PAIRWISE,
+            "provenance": PROVENANCE,
+            "note": "数值只描述字面差异/重合；无优劣方向、无阈值、无群体推断。",
+        },
+        "prediction_chapters": prediction_rows,
         "survey_chapters": survey_rows,
-        "alerts": alerts,
-        "total": len(alerts),
+        "questions": questions,
+        "question_count": len(questions),
+        "alerts": [],
+        "alerts_policy": "deprecated_always_empty_no_automatic_creative_constraints",
         "blocking": 0,
     }
 
 
-def main(argv=None):
-    ap = argparse.ArgumentParser(description="行为式读者模拟确定性度量（advisory）")
-    ap.add_argument("project_path")
-    ap.add_argument("--json", action="store_true")
-    args = ap.parse_args(argv)
-    res = analyze(args.project_path)
-    if res.get("ran"):
-        out = os.path.join(args.project_path, "评分", "behavioral_signals.json")
-        os.makedirs(os.path.dirname(out), exist_ok=True)
-        with open(out, "w", encoding="utf-8") as f:
-            json.dump(res, f, ensure_ascii=False, indent=2)
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="合成视角行为产物的中性表面比较（context-only）")
+    parser.add_argument("project_path")
+    parser.add_argument("--json", action="store_true")
+    args = parser.parse_args(argv)
+    result = analyze(args.project_path)
+    if result.get("ran"):
+        output = os.path.join(args.project_path, "评分", "behavioral_signals.json")
+        os.makedirs(os.path.dirname(output), exist_ok=True)
+        with open(output, "w", encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
     if args.json:
-        print(json.dumps(res, ensure_ascii=False, indent=2))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
-    if not res.get("ran"):
-        print("ℹ️ " + res.get("skipped", "skipped"))
+    if not result.get("ran"):
+        print("ℹ️ " + result.get("skipped", "skipped"))
         return 0
-    icon = "⚠️" if res["total"] else "✅"
-    print(f"{icon} 行为式读者度量：{len(res['chapters'])} 个章末预测点，"
-          f"{len(res.get('survey_chapters') or [])} 个问卷点，{res['total']} 条提示")
-    for a in res["alerts"]:
-        print(f"  - [{a['severity']}] {a['type']}: {a['note']}")
+    print(
+        f"ℹ️ 合成行为表面比较：{len(result['prediction_chapters'])} 个预测点，"
+        f"{len(result['survey_chapters'])} 个问卷点，{result['question_count']} 个正文复核问题"
+    )
+    print("  所有结果均为 context-only，不生成悬念/意外/留存结论，也不自动约束创作。")
     return 0
 
 

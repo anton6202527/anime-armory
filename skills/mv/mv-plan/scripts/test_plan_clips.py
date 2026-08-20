@@ -19,12 +19,17 @@ PLAN = os.path.join(HERE, "plan_clips.py")
 
 
 def make_project(root):
-    for sub in ("词", "节拍", "歌"):
+    for sub in ("词", "节拍", "歌", "字幕"):
         os.makedirs(os.path.join(root, sub), exist_ok=True)
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump({"title": "测试MV", "structure": ["verse1", "chorus"], "is_demo": True}, f, ensure_ascii=False)
     with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
-        f.write("# _设置\n\n## 选择\n- MV规划粒度: 标准\n- 卡点策略: 副歌强卡点\n- MV视觉风格: 国风写意\n")
+        f.write(
+            "# _设置\n\n## 选择\n"
+            "- MV用途: 歌曲Demo\n- 歌曲输入时序: 先传音乐\n"
+            "- MV规划粒度: 标准\n- 卡点策略: 副歌强卡点\n"
+            "- MV视觉风格: 国风写意\n- 字幕语言: 中文\n- 演唱口型: 关闭\n"
+        )
     with open(os.path.join(root, "视觉蓝图.md"), "w", encoding="utf-8") as f:
         f.write("# 视觉蓝图\n少年下山。\n")
     with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
@@ -33,6 +38,7 @@ def make_project(root):
         f.write(b"fake mp3")
     bg = {
         "duration": 16.0,
+        "source_audio_sha256": hashlib.sha256(b"fake mp3").hexdigest(),
         "bpm": 120,
         "meter": 4,
         "beats": [x * 0.5 for x in range(1, 32)],
@@ -41,9 +47,27 @@ def make_project(root):
             {"section": "verse1", "start": 0, "end": 8},
             {"section": "chorus", "start": 8, "end": 16},
         ],
+        "timing_verified": True,
+        "downbeats_verified": True,
+        "sections_verified": True,
+        "sections_complete": True,
+        "timing_review": {
+            "accepted": True,
+            "reviewer": "test editor",
+            "notes": "fixture downbeats, meter and full section boundaries reviewed",
+        },
     }
     with open(os.path.join(root, "节拍", "beatgrid.json"), "w", encoding="utf-8") as f:
         json.dump(bg, f, ensure_ascii=False)
+    with open(os.path.join(root, "字幕", "alignment_report.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 3,
+            "kind": "mv_lyric_alignment_report",
+            "lines": [
+                {"line": "山门外风起", "start": 0.25, "end": 6.75},
+                {"line": "仗剑下山闯人间", "start": 8.25, "end": 15.5},
+            ],
+        }, f, ensure_ascii=False)
 
 
 class PlanClipsTest(unittest.TestCase):
@@ -62,8 +86,9 @@ class PlanClipsTest(unittest.TestCase):
             with open(timeline_path, encoding="utf-8") as f:
                 timeline = json.load(f)
             self.assertEqual(timeline["song_path"], "歌/song.mp3")
-            self.assertEqual(plan["schema_version"], 2)
+            self.assertEqual(plan["schema_version"], 3)
             self.assertTrue(all(len(value) == 64 for value in plan["inputs_sha256"].values()))
+            self.assertNotIn(tmp, json.dumps(plan, ensure_ascii=False))
             self.assertEqual(
                 timeline["source_clip_plan_sha256"],
                 hashlib.sha256(open(plan_path, "rb").read()).hexdigest(),
@@ -77,8 +102,15 @@ class PlanClipsTest(unittest.TestCase):
             self.assertTrue(first["need_end_frame"])
             self.assertAlmostEqual(first["action_peak"], first["action_peak_downbeat"], places=3)
             self.assertEqual(first["action_peak_anchor_kind"], "downbeat")
+            self.assertEqual(first["lyric_hint"], "山门外风起")
+            self.assertEqual(first["lyric_timing_source"], "alignment_report")
             self.assertTrue(os.path.exists(os.path.join(tmp, first["image_prompt_path"])))
             self.assertTrue(os.path.exists(os.path.join(tmp, first["video_prompt_path"])))
+            self.assertEqual(timeline["schema_version"], 3)
+            self.assertTrue(timeline["timebase"]["quantized"])
+            self.assertTrue(all(isinstance(row["start_frame"], int) for row in timeline["clips"]))
+            self.assertTrue(all(left["end_frame"] == right["start_frame"]
+                                for left, right in zip(timeline["clips"], timeline["clips"][1:])))
 
     def test_sparse_downbeats_fall_back_to_real_beats_not_fixed_seconds(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -109,13 +141,28 @@ class PlanClipsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
             os.remove(os.path.join(tmp, "词", "lyrics.md"))
-            with open(os.path.join(tmp, "_设置.md"), "a", encoding="utf-8") as f:
-                f.write("- 字幕语言: 无字幕\n- 演唱口型: 关闭\n")
+            os.remove(os.path.join(tmp, "字幕", "alignment_report.json"))
+            settings_path = os.path.join(tmp, "_设置.md")
+            with open(settings_path, encoding="utf-8") as f:
+                settings_text = f.read()
+            with open(settings_path, "w", encoding="utf-8") as f:
+                f.write(settings_text.replace("- 字幕语言: 中文", "- 字幕语言: 无字幕"))
             subprocess.run([sys.executable, PLAN, tmp], capture_output=True, text=True, check=True)
             with open(os.path.join(tmp, "分镜", "clip_plan.json"), encoding="utf-8") as f:
                 plan = json.load(f)
             self.assertEqual(plan["inputs_sha256"]["lyrics"], "")
+            self.assertEqual(plan["inputs_sha256"]["alignment"], "")
             self.assertTrue(plan["clips"])
+
+    def test_without_alignment_does_not_rotate_lyrics_into_clips(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.remove(os.path.join(tmp, "字幕", "alignment_report.json"))
+            subprocess.run([sys.executable, PLAN, tmp], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), encoding="utf-8") as f:
+                plan = json.load(f)
+            self.assertTrue(all(clip["lyric_hint"] == "" for clip in plan["clips"]))
+            self.assertEqual(plan["lyric_timing"]["source"], "none")
 
 
 if __name__ == "__main__":

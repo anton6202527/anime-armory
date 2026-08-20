@@ -22,6 +22,7 @@ if str(LIB) not in sys.path:
     sys.path.insert(0, str(LIB))
 
 from n2d_const import ARTIFACT_LINEAGE_MANIFEST_KIND, PRODUCTION_DIR  # noqa: E402
+import acceptance_contract  # noqa: E402
 
 
 VERSION = 1
@@ -131,8 +132,8 @@ def build_lineage(root: Path, episode: str, *, asset: Optional[str] = None) -> D
     add_file(files, root, production_dir(root) / f"score_{episode}.json", role="score", required=False)
     add_file(files, root, production_dir(root) / f"consistency_ledger_{episode}.json", role="consistency_ledger", required=False)
     add_file(files, root, production_dir(root) / f"review_ui_{episode}.json", role="review_ui", required=False)
-    add_file(files, root, production_dir(root) / f"review_signoff_{episode}.json", role="human_signoff", required=False)
-    add_file(files, root, production_dir(root) / f"acceptance_signoff_{episode}.json", role="human_signoff", required=False)
+    add_file(files, root, acceptance_contract.verdict_path(root, episode), role="release_verdict", required=True)
+    add_file(files, root, acceptance_contract.receipt_path(root, episode), role="acceptance_receipt", required=True)
     add_file(files, root, production_dir(root) / "batch_queue.json", role="batch_queue", required=False)
     add_file(files, root, production_dir(root) / "job_reconcile.json", role="job_reconcile", required=False)
     add_file(files, root, production_dir(root) / "dead_letter_queue.json", role="dead_letter_queue", required=False)
@@ -152,12 +153,28 @@ def build_lineage(root: Path, episode: str, *, asset: Optional[str] = None) -> D
     missing_required = [item for item in files if item.get("required") and not item.get("exists")]
     evidence_issues: List[str] = []
     for rel, label in (
+        ("生产数据/production_events_audit.json", "event_ledger_audit"),
+        ("生产数据/artifact_validation.json", "artifact_validation"),
         (f"生产数据/generation_recipe_manifest_{episode}.json", "generation_recipe_manifest"),
         (f"生产数据/gate_policy_coverage_{episode}.json", "gate_policy_coverage"),
     ):
         data = load_json(root / rel)
-        if isinstance(data, dict) and data.get("status") != "pass":
-            evidence_issues.append(f"{label} status={data.get('status')}")
+        status = data.get("status") if isinstance(data, dict) else "missing"
+        if status != "pass":
+            evidence_issues.append(f"{label} status={status}")
+    acceptance = acceptance_contract.check_acceptance(root, episode)
+    if acceptance.get("status") != "pass":
+        evidence_issues.extend(
+            f"acceptance_receipt: {issue}" for issue in (acceptance.get("issues") or ["invalid"])
+        )
+    elif master is not None:
+        bindings = acceptance.get("bindings") if isinstance(acceptance.get("bindings"), dict) else {}
+        accepted_master = bindings.get("master_asset") if isinstance(bindings.get("master_asset"), dict) else {}
+        if (
+            str(accepted_master.get("path") or "") != relpath(root, master)
+            or str(accepted_master.get("sha256") or "") != sha256_file(master)
+        ):
+            evidence_issues.append("master_asset does not match canonical acceptance binding")
     payload = {
         "kind": ARTIFACT_LINEAGE_MANIFEST_KIND,
         "version": VERSION,
@@ -266,6 +283,23 @@ def check_lineage(root: Path, episode: str) -> Dict[str, Any]:
                 issues.append(f"{item.get('role')} invalid JSON: {rel}")
             elif payload.get("status") != "pass":
                 issues.append(f"{item.get('role')} status is {payload.get('status')}: {rel}")
+    acceptance = acceptance_contract.check_acceptance(root, episode)
+    if acceptance.get("status") != "pass":
+        issues.extend(
+            f"acceptance_receipt: {item}" for item in (acceptance.get("issues") or ["invalid"])
+        )
+    else:
+        bindings = acceptance.get("bindings") if isinstance(acceptance.get("bindings"), dict) else {}
+        accepted_master = bindings.get("master_asset") if isinstance(bindings.get("master_asset"), dict) else {}
+        lineage_master = next(
+            (item for item in data.get("files") or [] if isinstance(item, dict) and item.get("role") == "master_asset"),
+            {},
+        )
+        if (
+            str(lineage_master.get("path") or "") != str(accepted_master.get("path") or "")
+            or str(lineage_master.get("sha256") or "") != str(accepted_master.get("sha256") or "")
+        ):
+            issues.append("master_asset does not match canonical acceptance binding")
     return {"status": "fail" if issues else "pass", "issues": issues, "path": str(path)}
 
 

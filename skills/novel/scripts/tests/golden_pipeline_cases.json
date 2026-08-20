@@ -46,6 +46,12 @@
         "chapters": []
       },
       "设定/manuscript_map.md": "# Manuscript Map\n",
+      "设定/manuscript_map_check.json": {
+        "kind": "novel_manuscript_map_check",
+        "passed": true,
+        "blocking": 0,
+        "findings": []
+      },
       "资料/research_jobs.json": {
         "kind": "novel_research_jobs",
         "jobs": []
@@ -120,6 +126,12 @@
         "chapters": []
       },
       "设定/manuscript_map.md": "# Manuscript Map\n",
+      "设定/manuscript_map_check.json": {
+        "kind": "novel_manuscript_map_check",
+        "passed": true,
+        "blocking": 0,
+        "findings": []
+      },
       "资料/research_jobs.json": {
         "kind": "novel_research_jobs",
         "jobs": []
@@ -243,6 +255,12 @@
         "chapters": []
       },
       "设定/manuscript_map.md": "# Manuscript Map\n",
+      "设定/manuscript_map_check.json": {
+        "kind": "novel_manuscript_map_check",
+        "passed": true,
+        "blocking": 0,
+        "findings": []
+      },
       "资料/research_jobs.json": {
         "kind": "novel_research_jobs",
         "jobs": []

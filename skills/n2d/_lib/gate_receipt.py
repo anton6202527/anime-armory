@@ -18,7 +18,9 @@ fingerprint. We add the missing coupling: advancement consults the receipt.
 Fail-closed by design (design law: missing evidence = inconclusive = BLOCK, never silent pass):
 no receipt / stale receipt / fingerprint-less receipt all REFUSE the ✅. The single, loud,
 audited escape hatch is `N2D_PROGRESS_ALLOW_UNVERIFIED=1`, which records a waiver (accruing
-debt) instead of silently passing.
+debt) instead of silently passing.  Review completion is the deliberate exception to that
+escape hatch: it is proved only by the canonical hash-bound acceptance receipt and cannot be
+waived into existence.
 
 Pure stdlib + same-`_lib` imports only (no cross-skill import) so it runs on the user's
 machine with no VCS and Chinese paths, exactly like the rest of n2d/_lib.
@@ -28,6 +30,7 @@ from __future__ import annotations
 import json
 import os
 from collections import Counter
+from pathlib import Path
 from typing import Any, Dict, NamedTuple, Optional
 
 from n2d_route import cell_state, normalize_episode
@@ -36,6 +39,11 @@ try:
     from skill_snapshot import fingerprint_is_fresh
 except Exception:  # pragma: no cover - snapshot helper should always be present
     fingerprint_is_fresh = None  # type: ignore[assignment]
+
+try:
+    import acceptance_contract
+except Exception:  # pragma: no cover - fail closed in verify_acceptance_receipt
+    acceptance_contract = None  # type: ignore[assignment]
 
 # 生产数据目录 + gate findings 命名，与 n2d-dashboard 的 production_dir / GATE_FINDINGS_PREFIX
 # 保持一致（跨线不 import，故在此复刻这两个稳定常量）。
@@ -116,6 +124,9 @@ def verify_receipt(root: str, ep: str, stage: str) -> ReceiptVerdict:
     rollup, series ledger) can ask the same question and tell whether an earlier
     unverified ✅ has since been销账（销债=对当前产物重跑闸门并通过）。
     """
+    if stage == "review":
+        return verify_acceptance_receipt(root, ep)
+
     path = gate_findings_path(root, ep, stage)
     payload = _load_findings(path)
     if payload is None:
@@ -155,6 +166,36 @@ def verify_receipt(root: str, ep: str, stage: str) -> ReceiptVerdict:
     return ReceiptVerdict(True, True, "verified", stage, f"闸门凭据已验证（{stage} 绿且指纹新鲜）。")
 
 
+def verify_acceptance_receipt(root: str, ep: str) -> ReceiptVerdict:
+    """Review completion has one authority: the canonical acceptance receipt."""
+    if acceptance_contract is None:
+        return ReceiptVerdict(
+            False,
+            True,
+            "acceptance_contract_unavailable",
+            "review",
+            "无法加载 acceptance_contract；不能证明整集验收完成，fail-closed 拒绝。",
+        )
+    result = acceptance_contract.check_acceptance(Path(root).resolve(), normalize_episode(ep))
+    if result.get("status") != "pass":
+        issues = [str(item) for item in result.get("issues") or ["canonical acceptance receipt missing or invalid"]]
+        return ReceiptVerdict(
+            False,
+            True,
+            "canonical_acceptance_invalid",
+            "review",
+            "canonical 验收收据无效：" + "；".join(issues[:5])
+            + f"。先重生成 release verdict，再由真实 reviewer 运行 acceptance_contract.py approve。",
+        )
+    return ReceiptVerdict(
+        True,
+        True,
+        "canonical_acceptance_verified",
+        "review",
+        f"canonical 验收收据已验证（receipt_id={result.get('receipt_id') or 'unknown'}，证据哈希新鲜）。",
+    )
+
+
 def is_receipt_valid(root: str, ep: str, stage: str) -> bool:
     """True iff a fresh, passing receipt exists for (ep, stage) — used to销账 old waivers."""
     return verify_receipt(root, ep, stage).ok
@@ -182,7 +223,7 @@ def reconcile_progress(root: str, ep: str) -> list:
         for col, stage in ENFORCED_COLUMN_GATE_STAGE.items():
             if cell_state(row.get(col, "")) != "done":
                 continue  # 只查标完成(✅)的受闸列
-            verdict = verify_receipt(root, ep, stage)
+            verdict = check_advance(root, ep, col, "✅")
             if not verdict.ok:
                 violations.append({
                     "column": col, "gate_stage": stage,

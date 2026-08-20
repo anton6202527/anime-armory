@@ -49,6 +49,181 @@ def test_manuscript_map_blocks_missing_turn_in_scene_card():
         assert any(item["id"] == "MANUSCRIPT-MAP-TURN-MISSING" for item in check["findings"])
 
 
+def _write_profile(root, profile=None, platform=None):
+    lines = ["# 设置"]
+    if profile:
+        lines.append(f"- 创作工艺档：{profile}")
+    if platform:
+        lines.append(f"- 目标平台：{platform}")
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+def _write_profile_scene(root, **fields):
+    os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+    scene = {"id": "S1", "chapter": 1, "scene_no": 1}
+    scene.update(fields)
+    with open(os.path.join(root, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+        json.dump({"kind": "novel_scene_cards", "scenes": [scene]}, f, ensure_ascii=False)
+
+
+def test_literary_map_accepts_revelation_without_turn_or_value_shift(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="literary")
+    _write_profile_scene(
+        root,
+        viewpoint="贴近女儿的限知叙述",
+        revelation="读者终于看见旧照片被裁掉的人",
+    )
+
+    report = manuscript_map.build_map(root)
+    check = manuscript_map.check_map(report)
+
+    assert report["craft_profile"] == "literary"
+    assert report["chapters"][0]["narrative_functions"] == ["revelation"]
+    assert check["passed"] is True
+    assert not any(item["id"].endswith("TURN-MISSING") for item in check["findings"])
+
+
+def test_experimental_map_accepts_deliberate_stasis(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="experimental")
+    _write_profile_scene(
+        root,
+        deliberate_stasis="重复等车让读者体会制度性停滞，下一章的离开因此有重量",
+    )
+
+    check = manuscript_map.check_map(manuscript_map.build_map(root))
+
+    assert check["passed"] is True
+    assert check["blocking"] == 0
+
+
+def test_literary_map_missing_all_functions_warns_without_blocking(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="literary")
+    _write_profile_scene(root, viewpoint="合唱式村庄视点")
+
+    check = manuscript_map.check_map(manuscript_map.build_map(root))
+
+    finding = next(
+        item for item in check["findings"]
+        if item["id"] == "MANUSCRIPT-MAP-NARRATIVE-FUNCTION-MISSING"
+    )
+    assert check["passed"] is True
+    assert check["blocking"] == 0
+    assert finding["severity"] == "warning"
+    assert finding["confidence"] == "heuristic"
+
+
+def test_literary_map_requires_attributable_pov_or_viewpoint(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="literary")
+    _write_profile_scene(root, motif_return="同一只空碗第三次出现")
+
+    check = manuscript_map.check_map(manuscript_map.build_map(root))
+
+    assert check["passed"] is False
+    finding = next(
+        item for item in check["findings"]
+        if item["id"] == "MANUSCRIPT-MAP-VIEWPOINT-MISSING"
+    )
+    assert finding["severity"] == "blocking"
+    assert finding["confidence"] == "contract"
+
+
+def test_literary_map_requires_attribution_for_each_scene(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="literary")
+    os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+    with open(os.path.join(root, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "kind": "novel_scene_cards",
+            "scenes": [
+                {"id": "S1", "chapter": 1, "scene_no": 1, "viewpoint": "祖母", "motif_return": "旧钟"},
+                {"id": "S2", "chapter": 1, "scene_no": 2, "deliberate_stasis": "空房间保持不变"},
+            ],
+        }, f, ensure_ascii=False)
+
+    report = manuscript_map.build_map(root)
+    check = manuscript_map.check_map(report)
+
+    assert report["chapters"][0]["unattributed_scene_ids"] == ["S2"]
+    finding = next(item for item in check["findings"] if item["id"] == "MANUSCRIPT-MAP-VIEWPOINT-MISSING")
+    assert "S2" in finding["message"]
+    assert check["passed"] is False
+
+
+def test_manuscript_map_check_is_stale_after_profile_change(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="genre_novel")
+    _write_profile_scene(
+        root,
+        pov="阿遥",
+        desire="离开",
+        obstacle="封锁",
+        conflict="争执",
+        turn="门开了",
+        value_shift="困住到可走",
+    )
+    report = manuscript_map.build_map(root)
+    assert manuscript_map.check_map(report)["passed"] is True
+
+    _write_profile(root, profile="literary")
+    check = manuscript_map.check_map(report)
+
+    assert check["passed"] is False
+    assert check["source_fresh"] is False
+    stale = next(item for item in check["findings"] if item["id"] == "MANUSCRIPT-MAP-SOURCE-STALE")
+    assert "craft_profile_changed" in stale["message"]
+
+
+def test_manuscript_map_check_stays_fresh_after_unrelated_platform_change(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="literary", platform="跨平台")
+    _write_profile_scene(root, viewpoint="无名旁观者", revelation="门牌号码从未存在")
+    report = manuscript_map.build_map(root)
+    assert manuscript_map.check_map(report)["passed"] is True
+
+    _write_profile(root, profile="literary", platform="晋江")
+    check = manuscript_map.check_map(report)
+
+    assert check["source_fresh"] is True
+    assert check["passed"] is True
+    assert not any(item["id"] == "MANUSCRIPT-MAP-SOURCE-STALE" for item in check["findings"])
+
+
+def test_manuscript_map_check_is_stale_after_scene_cards_change(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, profile="experimental")
+    _write_profile_scene(root, deliberate_stasis="等待没有结果")
+    report = manuscript_map.build_map(root)
+    assert manuscript_map.check_map(report)["passed"] is True
+
+    _write_profile_scene(root, perceptual_shift="钟声忽然不再来自塔楼")
+    check = manuscript_map.check_map(report)
+
+    assert check["passed"] is False
+    assert check["source_fresh"] is False
+    stale = next(item for item in check["findings"] if item["id"] == "MANUSCRIPT-MAP-SOURCE-STALE")
+    assert "scene_cards_changed" in stale["message"]
+
+
+def test_target_platform_does_not_select_literary_profile(tmp_path):
+    root = str(tmp_path)
+    _write_profile(root, platform="晋江")
+    _write_profile_scene(root, revelation="只登记了揭示")
+
+    report = manuscript_map.build_map(root)
+    check = manuscript_map.check_map(report)
+
+    assert report["craft_profile"] == "genre_novel"
+    assert check["passed"] is False
+    ids = {item["id"] for item in check["findings"]}
+    assert "MANUSCRIPT-MAP-TURN-MISSING" in ids
+    assert "MANUSCRIPT-MAP-VALUE-SHIFT-MISSING" in ids
+
+
 def test_analyze_adapts_to_review_detector_contract(tmp_path):
     # review 链适配：结构缺口降 advisory（blocking 语义留给 author_workflow 结构闸）
     import json, os

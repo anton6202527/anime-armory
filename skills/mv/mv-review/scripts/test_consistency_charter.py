@@ -75,3 +75,24 @@ def test_hard_qc_token_missing_detected(tmp_path: Path) -> None:
     violations = mod.audit_hard_qc(str(tmp_path))
     kinds = {v["kind"] for v in violations}
     assert "hard_qc_token_missing" in kinds or "missing_file" in kinds
+
+
+def test_hard_qc_forbidden_token_detected(tmp_path: Path) -> None:
+    mod = load_module()
+    fake = tmp_path / "mv-video" / "scripts"
+    fake.mkdir(parents=True)
+    (fake / "video_jobs.py").write_text(
+        'payload = {"root_rel": ".", "project_root": root}\n', encoding="utf-8"
+    )
+    original = mod.HARD_QC_INVARIANTS
+    try:
+        mod.HARD_QC_INVARIANTS = [{
+            "file": "mv-video/scripts/video_jobs.py",
+            "dim": "portable root",
+            "tokens": ['"root_rel": "."'],
+            "forbidden_tokens": ['"project_root": root'],
+        }]
+        violations = mod.audit_hard_qc(str(tmp_path))
+    finally:
+        mod.HARD_QC_INVARIANTS = original
+    assert any(v["kind"] == "hard_qc_forbidden_token_present" for v in violations)

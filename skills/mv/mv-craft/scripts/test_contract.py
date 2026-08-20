@@ -43,6 +43,10 @@ class MvContractTest(unittest.TestCase):
             self.assertIn(key, points)
         self.assertIn("Kling 3.0", points["生视频模型"])
         self.assertIn("Runway Gen-4.5", points["生视频模型"])
+        self.assertIn("Seedance 2.5", points["生视频模型"])
+        self.assertIn("Gemini Omni Flash Preview", points["生视频模型"])
+        self.assertIn("Luma Ray3.2", points["生视频模型"])
+        self.assertIn("Seedance 2.0", contract.MV_LEGACY_VIDEO_MODELS)
         self.assertNotIn("Sora 2", points["生视频模型"])
         self.assertIn("Sora 2", contract.MV_LEGACY_VIDEO_MODELS)
         self.assertIn("即梦/Dreamina", points["生视频渠道"])
@@ -54,10 +58,20 @@ class MvContractTest(unittest.TestCase):
         self.assertEqual(contract.plan_granularity_profile("标准")["chorus_bars"], 1)
         self.assertEqual(contract.normalize_video_model("Runway"), "Runway Gen-4.5")
         self.assertEqual(contract.normalize_video_model("Seedance"), "Seedance 2.0")
+        self.assertEqual(contract.normalize_video_model("Omni"), "Gemini Omni Flash Preview")
         self.assertEqual(contract.normalize_video_channel("dreamina"), "Dreamina")
         self.assertTrue(contract.video_model_profile("Kling")["multi_shot"])
         self.assertEqual(contract.legacy_video_route("即梦"), ("Seedance 2.0", "即梦"))
         self.assertEqual(contract.legacy_video_route("可灵"), ("Kling 3.0", "可灵"))
+        self.assertEqual(contract.legacy_video_route("omni"), ("Gemini Omni Flash Preview", "Google Gemini API"))
+
+    def test_current_default_and_plan_setting_digest(self):
+        self.assertEqual(contract.DEFAULT_SETTINGS["生视频模型"], "Seedance 2.5")
+        base = {key: contract.DEFAULT_SETTINGS[key] for key in contract.MV_PLAN_SETTING_KEYS}
+        first = contract.plan_settings_digest(base)
+        self.assertEqual(first, contract.plan_settings_digest(dict(reversed(list(base.items())))))
+        self.assertEqual(first, contract.plan_settings_digest({**base, "发行目标平台": "YouTube"}))
+        self.assertNotEqual(first, contract.plan_settings_digest({**base, "合成画幅": "9:16"}))
 
     def test_workflow_stage_order_by_song_timing(self):
         first = [s["key"] for s in contract.workflow_stage_table("先传音乐")]
@@ -65,6 +79,8 @@ class MvContractTest(unittest.TestCase):
         self.assertLess(first.index("song_ingest"), first.index("beat"))
         self.assertLess(first.index("beat"), first.index("lyric_sync"))
         self.assertLess(first.index("lyric_sync"), first.index("script"))
+        self.assertLess(first.index("plan"), first.index("semantic_plan"))
+        self.assertLess(first.index("semantic_plan"), first.index("pacing_check"))
         self.assertLess(first.index("pacing_check"), first.index("image"))
         self.assertLess(first.index("image"), first.index("picture_lock"))
         self.assertLess(first.index("picture_lock"), first.index("video_jobs"))
@@ -72,8 +88,26 @@ class MvContractTest(unittest.TestCase):
         self.assertLess(later.index("song_ingest"), later.index("beat"))
         self.assertLess(later.index("beat"), later.index("script_review"))
         self.assertLess(later.index("script_review"), later.index("plan"))
+        self.assertLess(later.index("compose"), later.index("disclosure"))
+        self.assertLess(later.index("disclosure"), later.index("provenance"))
+        self.assertLess(later.index("provenance"), later.index("review"))
+        self.assertLess(later.index("review"), later.index("handoff"))
         instrumental = [s["key"] for s in contract.workflow_stage_table("先传音乐", "无字幕", "关闭")]
         self.assertNotIn("lyric_sync", instrumental)
+        self.assertEqual(contract.validate_stage_table(), [])
+
+    def test_runtime_fields_are_derived_from_settings(self):
+        state = contract.runtime_state_from_settings({
+            "MV用途": "投放版", "歌曲输入时序": "后配歌曲",
+            "合成画幅": "9:16", "发行目标平台": "抖音",
+        })
+        self.assertFalse(state["is_demo"])
+        self.assertEqual(state["song_timing"], "后配歌曲")
+        self.assertEqual(state["aspect"], "9:16")
+        self.assertEqual(state["publish_target"], "抖音")
+        legacy = contract.runtime_state_from_settings({"生视频AI": "可灵"})
+        self.assertEqual(legacy["video_model"], "Kling 3.0")
+        self.assertEqual(legacy["video_channel"], "可灵")
 
     def test_settings_markdown(self):
         md = contract.settings_markdown("测试MV", {"合成画幅": "9:16"})

@@ -126,3 +126,102 @@ def test_review_fingerprint_binds_manifest_pages_not_only_rendered(tmp_path: Pat
     page.write_bytes(b"page-v2")
     after = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
     assert before["sha256"] != after["sha256"]
+
+
+def test_review_fingerprint_follows_panel_qc_review_packet_files(tmp_path: Path) -> None:
+    panel = tmp_path / "出图" / "第1话" / "panels" / "P001.png"
+    reference = tmp_path / "出图" / "共享" / "图片" / "CHAR_A_front.png"
+    contact = tmp_path / "生产数据" / "panel_qc" / "第1话" / "review_packets" / "P001_contact.png"
+    for path, content in (
+        (panel, b"panel-v1"),
+        (reference, b"reference-v1"),
+        (contact, b"contact-v1"),
+    ):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    qc = tmp_path / "生产数据" / "panel_qc" / "第1话" / "P001.json"
+    qc.write_text(
+        json.dumps(
+            {
+                "artifact_path": "出图/第1话/panels/P001.png",
+                "visual_review_packet": {
+                    "contact_sheet_path": "生产数据/panel_qc/第1话/review_packets/P001_contact.png",
+                    "comparison_inputs": [
+                        {"role": "current_panel", "path": "出图/第1话/panels/P001.png"},
+                        {"role": "character_reference", "path": "出图/共享/图片/CHAR_A_front.png"},
+                    ],
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    before = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
+    contact.write_bytes(b"contact-v2")
+    after_contact = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
+    assert before["sha256"] != after_contact["sha256"]
+    assert not contracts.receipt_is_current(
+        {"inputs_fingerprint_sha256": before["sha256"]},
+        after_contact,
+    )
+    reference.write_bytes(b"reference-v2")
+    after_reference = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
+    assert after_contact["sha256"] != after_reference["sha256"]
+
+
+def test_review_fingerprint_follows_identity_acceptance_packet_files(tmp_path: Path) -> None:
+    identity = tmp_path / "出图" / "共享" / "图片" / "CHAR_A_front.png"
+    derivation = tmp_path / "出图" / "共享" / "图片" / "CHAR_A_seed.png"
+    contact = tmp_path / "生产数据" / "identity_qc" / "review_packets" / "CHAR_A_front_contact.png"
+    receipt = tmp_path / "生产数据" / "identity_qc" / "CHAR_A" / "front.json"
+    for path, content in (
+        (identity, b"identity-v1"),
+        (derivation, b"seed-v1"),
+        (contact, b"contact-v1"),
+    ):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    receipt.parent.mkdir(parents=True, exist_ok=True)
+    receipt.write_text(
+        json.dumps(
+            {
+                "artifact_path": "出图/共享/图片/CHAR_A_front.png",
+                "review_packet": {
+                    "contact_sheet_path": "生产数据/identity_qc/review_packets/CHAR_A_front_contact.png",
+                    "comparison_inputs": [
+                        {"role": "current_image", "path": "出图/共享/图片/CHAR_A_front.png"},
+                        {"role": "derivation_source", "path": "出图/共享/图片/CHAR_A_seed.png"},
+                    ],
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    registry = tmp_path / "出图" / "共享" / "identity_registry.json"
+    registry.parent.mkdir(parents=True, exist_ok=True)
+    registry.write_text(
+        json.dumps(
+            {
+                "assets": {
+                    "CHAR_A": {
+                        "views": {"front": "出图/共享/图片/CHAR_A_front.png"},
+                        "per_image_acceptance": {
+                            "front": {"receipt_path": "生产数据/identity_qc/CHAR_A/front.json"}
+                        },
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    before_review = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
+    before_image = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "image")
+    contact.write_bytes(b"contact-v2")
+    after_contact_review = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
+    after_contact_image = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "image")
+    assert before_review["sha256"] != after_contact_review["sha256"]
+    assert before_image["sha256"] != after_contact_image["sha256"]
+    derivation.write_bytes(b"seed-v2")
+    after_derivation = contracts.stage_inputs_fingerprint(tmp_path, "第1话", "review")
+    assert after_contact_review["sha256"] != after_derivation["sha256"]

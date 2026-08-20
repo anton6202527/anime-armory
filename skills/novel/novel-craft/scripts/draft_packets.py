@@ -26,6 +26,14 @@ if _COMMON not in sys.path:
 from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
 import sweep_schedule  # noqa: E402  小批回扫 due 点单一真值源（含中段防守加密）
 from project_io import load_project_settings  # noqa: E402
+from craft_profile import (  # noqa: E402
+    NARRATIVE_FUNCTION_FIELDS,
+    NARRATIVE_FUNCTION_LABELS,
+    is_supported_craft_profile,
+    narrative_functions,
+    requires_traditional_turn,
+    resolve_craft_profile,
+)
 try:
     from retrieval import relevant_chapters  # noqa: E402  跨窗口语义检索（检索增强长程一致性）
 except Exception:  # pragma: no cover
@@ -1046,12 +1054,12 @@ def ai_tic_section(root, limit=6):
 
 
 def predicted_plot_section(root, chapter, limit=8):
-    """模拟读者预测回灌（"扔掉第一想法"的生成期筛子）：novel-simulate 面板在第 N-1 章末
-    写下"下一章会发生什么"的预测（评分/reader_predictions_第NN章.json，schema 见
-    behavioral_signals.py 头注）——那正是对**本章**的预测。此前这批预测只在事后算意外度
-    （surprise 低了才报），写作端从没见过；等于放着"读者已经猜到什么"的清单不用，写完再
-    追悔。这里把它注入写章包当负面约束：与 top 预测正面撞车的走向 = 第一想法 = 陈词滥调层。
-    只认恰好第 N-1 章的预测（更早的预测对象是已写完的旧章，注了只会误导）；缺文件零成本。"""
+    """把上一章的合成预测作为 context-only 问题附录，不作为剧情负约束。
+
+    只认恰好第 N-1 章的预测（更早预测对象已经过期）。字面或剧情重合可能来自有效伏笔、
+    类型承诺、作者有意的必然性，也可能来自过度明示；必须结合正文判断，不能把“任何重合”
+    自动判成第一想法/陈词滥调，更不能要求作者为避预测强行反转。缺文件时返回空串。
+    """
     for name in (f"reader_predictions_第{chapter - 1:02d}章.json",
                  f"reader_predictions_第{chapter - 1}章.json"):
         payload = load_json(os.path.join(root, "评分", name), {}) or {}
@@ -1064,14 +1072,15 @@ def predicted_plot_section(root, chapter, limit=8):
     for p in preds:
         text = str((p or {}).get("text") or "").strip() if isinstance(p, dict) else ""
         if text:
-            rows.append((str(p.get("persona") or "读者"), text))
+            rows.append((str(p.get("perspective") or p.get("persona") or "合成视角"), text))
     if not rows:
         return ""
     lines = [
-        "\n## 模拟读者已猜到的走向（写前必读·负面约束）",
-        "- 以下是模拟读者面板读完上一章后对**本章**的预测。与其中任何一条正面重合的方案"
-        "＝读者的第一想法，写出来就是「果然如此」。要么换方案，要么保留终点但在抵达前"
-        "加一次真拐弯（意料之外、情理之中——违背预期线，回看伏笔成立）。",
+        "\n## 合成视角的下一章预测假设（context-only·不构成写作约束）",
+        "- 以下文本由合成视角在上一章末提出，只用于追问：它对应了哪些显性承诺/伏笔？"
+        "重合是合理兑现、类型契约、偶然同词，还是确有过度明示？",
+        "- **不得**把任何重合自动判成陈词滥调，不得据多数合成视角推断真实读者，也不得为了"
+        "避开预测强行换方案或加反转。人物因果、作品意图和已批准章纲优先。",
     ]
     for persona, text in rows[:limit]:
         lines.append(f"- [{persona}] {clip(text, 80)}")
@@ -1227,35 +1236,114 @@ def scene_cards_for_chapter(root, chapter):
     return out
 
 
-def scene_cards_section(cards):
+def scene_cards_section(cards, craft_profile="genre_novel"):
     if not cards:
         return ""
+    craft_profile = resolve_craft_profile(craft_profile)
+    if not is_supported_craft_profile(craft_profile):
+        raise RuntimeError(
+            f"创作工艺档={craft_profile} 尚无 draft adapter；不会静默套用其它档，"
+            "请先补适配或用 novel-settings 选择已支持档位。"
+        )
+    traditional = requires_traditional_turn(craft_profile)
     lines = [
         "\n## 场景卡（Scene Cards · 写时逐场兑现）",
         f"- 参考全文：`{SCENE_CARDS_REFERENCE}`",
-        "- 每个场景必须有目标、阻碍、冲突、转折和价值变化；没有转折的场景要合并、删除或重写。",
-        "- Scene-Sequel 工艺：turn（高压拍）之后按需给 aftermath（落地拍：反应→两难→决定）——"
-        "高潮连打不喘会麻木；连续多章全无落地拍会被结构地图提示（`references/scene-sequel.md`）。",
+        f"- 当前创作工艺档：`{craft_profile}`（独立于目标平台）。",
+        (
+            "- 每个场景必须有目标、阻碍、冲突、转折和价值变化；没有转折的场景要合并、删除或重写。"
+            if traditional
+            else (
+                "- 文学档只硬要求可归属的 POV/viewpoint；目标、阻碍、冲突可按场景实际省略。"
+                "开放式复核本场实际叙事功能：turn/value_shift 可由揭示、关系微移、感知变化、"
+                "意象复现或有意停滞替代；功能缺失仅作 B10 人工复核，不强造转折。"
+                if craft_profile == "literary"
+                else "- 实验档不以 POV/目标/阻碍/冲突/转折等主观字段缺失硬挡；"
+                     "开放式复核实际叙事功能；若有意拒绝传统功能，由作者/编辑结合全文判断，"
+                     "功能缺失仅作 B10 提醒。"
+            )
+        ),
+        (
+            "- Scene-Sequel 工艺：turn（高压拍）之后按需给 aftermath（落地拍：反应→两难→决定）——"
+            "高潮连打不喘会麻木；连续多章全无落地拍会被结构地图提示（`references/scene-sequel.md`）。"
+            if traditional
+            else "- Scene-Sequel 仅作可选工具：若本场自然形成高压 turn，可按需给 aftermath；"
+                 "无 turn/aftermath 不作为文学/实验档缺陷。"
+        ),
     ]
     for card in cards:
         lines.append(f"\n### {card.get('id') or 'SCENE'} · 第{card.get('scene_no') or '?'}场")
         for key, label in (
             ("pov", "POV"),
+            ("viewpoint", "叙述视点/归属"),
             ("location", "地点"),
             ("time", "时间"),
             ("desire", "目标"),
             ("obstacle", "阻碍"),
             ("conflict", "冲突"),
-            ("turn", "转折"),
-            ("value_shift", "价值变化"),
             ("aftermath", "落地拍（反应→两难→决定，可留空=续压）"),
-            ("reveal_or_payoff", "揭示/兑现"),
             ("subtext", "潜台词"),
             ("sensory_anchor", "五感锚点"),
         ):
             value = str(card.get(key) or "").strip()
-            lines.append(f"- {label}：{value or '（待补；写前先补 scene card）'}")
+            if key in {"location", "time", "aftermath", "subtext", "sensory_anchor"}:
+                empty = "（可留空）"
+            elif not traditional and key in {"desire", "obstacle", "conflict"}:
+                empty = "（可留空；按场景实际登记，不为过闸伪填）"
+            elif craft_profile == "experimental" and key in {"pov", "viewpoint"}:
+                empty = "（可留空；实验档不硬设叙述归属）"
+            elif craft_profile == "literary" and key in {"pov", "viewpoint"}:
+                empty = "（两者至少登记一项）"
+            elif key == "viewpoint":
+                empty = "（可留空；传统角色 POV 已登记时无需重复）"
+            else:
+                empty = "（待补；写前先补 scene card）"
+            lines.append(f"- {label}：{value or empty}")
+        registered = narrative_functions(card)
+        if traditional:
+            for key in ("turn", "value_shift"):
+                value = str(card.get(key) or "").strip()
+                lines.append(
+                    f"- {NARRATIVE_FUNCTION_LABELS[key]}："
+                    f"{value or '（必填；写前先补 scene card）'}"
+                )
+            reveal = str(card.get("reveal_or_payoff") or "").strip()
+            lines.append(f"- 揭示/兑现：{reveal or '（可留空）'}")
+        else:
+            if registered:
+                shown = "；".join(
+                    f"{NARRATIVE_FUNCTION_LABELS.get(key, key)}={value}"
+                    for key, value in registered.items()
+                )
+                lines.append(f"- 已登记叙事功能：{shown}")
+            else:
+                choices = " / ".join(NARRATIVE_FUNCTION_FIELDS)
+                lines.append(
+                    f"- 开放式功能复核：当前未预先登记。可从 {choices} 中按实际选择，"
+                    "也可说明本场有意拒绝传统功能；仅作 B10 人工复核，不强造转折。"
+                )
     return "\n".join(lines) + "\n"
+
+
+def craft_writing_requirements(craft_profile):
+    """Profile-specific semantic guidance; flexible profiles stay B10 advisory."""
+    craft_profile = resolve_craft_profile(craft_profile)
+    if not is_supported_craft_profile(craft_profile):
+        raise RuntimeError(
+            f"创作工艺档={craft_profile} 尚无 draft adapter；不会静默套用其它档，"
+            "请先补适配或用 novel-settings 选择已支持档位。"
+        )
+    if requires_traditional_turn(craft_profile):
+        return """- 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
+- 若已批准章纲给本章登记了意外性设计位，按人物因果与既有伏笔兑现；未登记时不要为了逃避合成预测强加微意外或反转。合成预测只用于复核承诺是否过度明示，不覆盖作者意图、人物必然选择或类型契约。
+- 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。"""
+    if craft_profile == "literary":
+        return """- 工艺复核（B10 建议级）：检查本章的叙事位置与实际功能是否成立；可推进、深化、延宕、变调、复现意象或有意留白，不强制钩子、传统转折或价值翻转。
+- 意外性不是配额：人物选择、潜台词或细节偏移可自然发生，也可维持有意义的预期；不要为了“微意外”破坏语调和观察精度。
+- 开放式复核本章与 `读者契约` 的关系：允许推进、深化、质疑、延宕或有意偏离；记录选择与阅读效果，功能判断只作人工建议，不硬阻断。"""
+    return """- 实验档工艺复核（B10 建议级）：按本章形式实验自定功能合同；允许重复、停滞、断裂、游移视点或无传统转折，并记录这种选择预期造成的阅读效果。
+- 不设置钩子、反转或“微意外”配额；形式上的拒绝本身可以是有效选择，不用公式化惊奇补丁掩盖它。
+- 开放式复核本章与 `读者契约` 的关系：可推进、重写、抵抗、悬置或暴露契约本身；语义成效留给作者/编辑判断，不由启发式硬挡。"""
 
 
 def parse_chapter_range(value):
@@ -1461,6 +1549,12 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     meta = load_json(os.path.join(root, "_meta.json"), {})
     if not meta:
         raise RuntimeError("缺少 _meta.json")
+    craft_profile = resolve_craft_profile(load_project_settings(root))
+    if not is_supported_craft_profile(craft_profile):
+        raise RuntimeError(
+            f"创作工艺档={craft_profile} 尚无 draft adapter；不会静默套用其它档，"
+            "请先补适配或用 novel-settings 选择已支持档位。"
+        )
     outline = parse_outline(root)
     gate = load_demo_gate(root, allow_missing=allow_missing_demo)
     demo_waiver = None
@@ -1672,7 +1766,8 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 {clip(contract_text, 1600) if contract_text else "（缺 `设定/读者契约.md`；至少按 reader-contract.md 模板补齐题旨、读者承诺、文学质感和禁偏清单。）"}
 """
     special_scene_sections = scene_guide_sections(scene_matches)
-    scene_card_section = scene_cards_section(scene_cards)
+    scene_card_section = scene_cards_section(scene_cards, craft_profile)
+    craft_requirements = craft_writing_requirements(craft_profile)
     arc_mem_section = arc_memory_section(arc_memories, emotional_progress)
     female_section = female_fiction_section() if female_active else ""
     research_section = research_pack_section(research_packs)
@@ -1684,8 +1779,8 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     ai_tic = ai_tic_section(root)
     if ai_tic and MECHANICAL_FINDINGS_REL not in source_paths:
         source_paths.append(MECHANICAL_FINDINGS_REL)
-    # 模拟读者预测回灌：AI 腔账单管"怎么写"（文风惯犯），这个管"写什么"（剧情第一想法）——
-    # 两者同属"下游检测搬上游当负面约束"的闭环。
+    # 合成视角预测只作为 context-only 问题附录：不能升级成“剧情第一想法”负约束，
+    # 更不能因字面/走向重合自动要求换方案或反转。
     predicted_section = predicted_plot_section(root, chapter)
     if predicted_section:
         pred_rel = f"评分/reader_predictions_第{chapter - 1:02d}章.json"
@@ -1859,10 +1954,8 @@ python3 skills/novel/novel-review/scripts/mechanical_check.py "{root}" --range {
 ## 写作要求
 - 默认输出一章正文，第一行必须是 `# 第{chapter}章 {title or "<标题>"}`；若文本主创模式为 `人类主创`，则输出本章写作/编辑指导和关键段落建议，不直接生成可投稿正文。
 - 第二行写 meta 注释：`<!-- meta: demo=false; packet=写作任务/第{chapter:02d}章.md; step={step} -->`。
-- 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
-- 若章纲给本章登记了意外性设计位（预期违背），必须兑现"意料之外、情理之中"：违背读者预期线但回看伏笔成立；未登记设计位的章，至少留一处微意外（人物选择、对白潜台词或细节反第一直觉），不许整章顺撇可预测。
+{craft_requirements}
 - 若文本主创模式为 `人类主创`，最终正文由人类作者改写和定稿，AI 只做结构、检查、局部建议和非替代性辅助。
-- 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
 - 若本章确实回答了读者契约的核心戏剧问题（解决主线核心冲突），必须把状态增量的 `core_conflict_resolved` 置 `true` 如实声明——非终局章节的该声明会被弧段 gate 硬阻断（反向刹车），瞒报则只剩关键词提醒、失去硬保护。
 - 写完后填写 `{delta_path}`，再跑 `python3 skills/novel/novel-review/scripts/mechanical_check.py "{root}"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，同步填写 `{concl_path}`，继续跑 `python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章 --conclusion "{root}/{concl_path}"`。

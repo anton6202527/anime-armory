@@ -7,9 +7,10 @@
 - `_meta.json` 存在，含 `kind/target_chapters/target_words_per_chapter/target_wordcount_min_max/demo_chapters`。`target_chapters` 必须由 init 脚本写入或用户显式改入元数据；不能只写在 `_设置.md` / `_进度.md` 的人类文案里。旧项目缺 `target_wordcount_min_max` 时，review 会按 scale/target_words 推导，但新项目必须显式写入。
 - `设定/章纲.md` 已经用户确认。
 - `设定/读者契约.md` 已经写明核心题旨、读者承诺、好看机制、文学质感和禁偏清单。旧项目缺失时可先按 `references/reader-contract.md` 补一版，再继续批量写章。
-- 高质量/商业项目建议先建 `设定/scene_cards.json`：`python3 skills/novel/novel-craft/scripts/scene_cards.py scaffold "<作品根>" --range 1-5`，再由 AI/人工补 POV、目标、阻碍、冲突、转折和价值变化。缺场景卡不会阻断普通草稿，但会在商业/长篇导出 gate 里提示。
+- 高质量/商业项目建议先建 `设定/scene_cards.json`：`python3 skills/novel/novel-craft/scripts/scene_cards.py scaffold "<作品根>" --range 1-5`。先读 `_设置.md` 的 `创作工艺档`：`commercial_serial / genre_novel` 补 POV、目标、阻碍、冲突、转折和价值变化；`literary` 只硬要求 POV/viewpoint 可归属，`experimental` 不以这些主观字段缺失硬挡；后两档可用揭示、关系微移、感知变化、意象复现或有意停滞替代传统 `turn/value_shift`。缺场景卡不会阻断普通草稿，但会在商业/长篇导出 gate 里提示；工艺档不由目标平台推断。
 - `审稿/demo_gate.json.status == passed`。未通过时只能写 Demo 或准备包，不能批量写余章。
-- `_设置.md` 已落 `小说生成模式` 与 `章节生成粒度`；缺则按 `skills/novel/novel-craft/references/选择点与偏好.md` 问一次或用全局默认预填。
+- `_设置.md` 已落 `小说生成模式`、`章节生成粒度` 与 `创作工艺档`；缺则按 `skills/novel/novel-craft/references/选择点与偏好.md` 问一次或用全局默认预填。旧项目缺 `创作工艺档` 时运行期安全回退 `genre_novel`。
+- `manuscript_map.py --write` 的 check 会快照规范工艺档与 `scene_cards.json` 指纹，并记录 `_设置.md` 来源；改档或改卡后先重跑结构地图，旧通过记录不会被成书工作流或 pipeline 继续信任，目标平台等无关设置变化不会误触发 stale。
 - `scale=long` / `target_chapters>=30` / 商业连载 / 系统流 / 修仙 / 群像 / 复杂世界观项目，批量写章前建议先跑 `python3 skills/novel/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>"`；若 `verdict=block_pre_draft`，先补角色目标、世界规则、地理势力、时间线、章纲压力或读者契约，不进入 draft。
 
 ## 四档小说生成模式

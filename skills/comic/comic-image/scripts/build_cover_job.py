@@ -30,6 +30,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 import build_panel_jobs as bpj  # noqa: E402
 import reference_planner  # noqa: E402
+from progress import update_checklist  # noqa: E402
 
 
 COVER_DIR = Path("出图") / "封面"
@@ -235,21 +236,6 @@ def refresh_meta_synopsis(root: Path) -> str:
     return synopsis
 
 
-def update_progress(root: Path, prefix: str, mark: str = "[x]") -> None:
-    """回写 _进度.md 里以 prefix 开头的作品封面复选项（B5）。"""
-    path = root / "_进度.md"
-    if not path.is_file():
-        return
-    lines = path.read_text(encoding="utf-8").splitlines()
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("- [ ] ") and prefix in stripped:
-            line = line.replace("- [ ] ", f"- {mark} ", 1)
-        out.append(line)
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
-
-
 def do_build(root: Path) -> int:
     filled = refresh_meta_synopsis(root)
     if filled:
@@ -258,7 +244,7 @@ def do_build(root: Path) -> int:
     out_path = root / COVER_JOB_REL
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(job, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    update_progress(root, "竖版封面 prompt/job 包")
+    update_checklist(root, {"竖版封面 prompt/job 包（出图/封面/prompt/cover_job.json）": True})
     print(f"[ok] {COVER_JOB_REL}")
     print(f"     生成模型={job['生成模型']}（渠道={job['生成渠道']}）尺寸={job['size']['width']}x{job['size']['height']}")
     print("[note] 纯净机降级：cover 仍为 null。渲染出竖版 PNG 后运行：")
@@ -287,7 +273,7 @@ def do_backfill(root: Path, png: Path) -> int:
         return 2
     rel = str(png.relative_to(root))
     update_meta_cover(root, rel)
-    update_progress(root, "竖版封面 PNG 渲染并回填")
+    update_checklist(root, {"竖版封面 PNG 渲染并回填 _meta.json cover": True})
     # 生成留痕：由哪个具体模型产出这张封面（C5）。
     job_path = root / COVER_JOB_REL
     model = channel = ""

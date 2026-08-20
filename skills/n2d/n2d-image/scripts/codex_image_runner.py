@@ -42,6 +42,8 @@ if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
 
 from image_backend_adapter import current_image_backend_selection  # noqa: E402
+from content_fingerprint import canonical_sha256  # noqa: E402
+from paid_execution_contract import enforce_expected_paid_request  # noqa: E402
 from settings import get_setting  # noqa: E402
 from image_prompt_compiler import (  # noqa: E402
     COMPILED_HEADING,
@@ -4601,6 +4603,29 @@ def build_codex_command(repo: Path, prompt: str, reference_inputs: Sequence[Dict
     return cmd
 
 
+def codex_exact_submit_request(
+    repo: Path,
+    prompt: str,
+    reference_inputs: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Producer-owned digest of the exact argv/prompt/attachment order sent to Codex."""
+    argv = build_codex_command(repo, prompt, reference_inputs)
+    attachments = [
+        reference_input_attachment_path(item)
+        for item in reference_inputs
+        if reference_input_attachment_path(item)
+    ]
+    payload = {
+        "kind": "codex_image_generation_exact_submit",
+        "version": 1,
+        "actual_submit_prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+        "argv": argv,
+        "attachments": attachments,
+    }
+    payload["sha256"] = "sha256:" + canonical_sha256(payload)
+    return payload
+
+
 TRANSIENT_CODEX_FAILURE_MARKERS = (
     "tls handshake eof",
     "stream disconnected",
@@ -4901,6 +4926,7 @@ def record_event(
     submitted_prompt: str = "",
     compiled_request: Optional[Mapping[str, Any]] = None,
     compiled_receipt: Optional[Path] = None,
+    input_fingerprint: str = "",
     error: str = "",
 ) -> None:
     event = "redraw" if os.environ.get("N2D_REASON") == "rerun" else "generation"
@@ -4964,19 +4990,10 @@ def record_event(
     adapter_version = f"codex_image_runner.py@{optional_file_sha256(Path(__file__))[:12]}"
     qc_version = f"image_qc.py@{optional_file_sha256(repo_root() / IMAGE_QC)[:12]}"
     backend_version = codex_backend_version()
-    input_fingerprint = sha256_text(json.dumps({
-        "asset": target.rel_path,
-        "mode": target.mode,
-        "prompt_sha256": prompt_sha,
-        "source_prompt_section_sha256": source_prompt_sha,
-        "compiled_request_sha256": compiled_sha,
-        "reference_bundle_sha256": ref_sha,
-        "route_hash": route_hash,
-        "settings_sha256": settings_sha,
-        "identity_registry_sha256": identity_registry_sha,
-        "asset_registry_sha256": asset_registry_sha,
-        "logical_seed": seed,
-    }, ensure_ascii=False, sort_keys=True))
+    input_fingerprint = str(input_fingerprint or image_generation_input_fingerprint(
+        root, episode, target, seed=seed,
+        compiled_request=compiled_request, reference_inputs=reference_inputs,
+    ))
     recipe_hash = sha256_text(json.dumps({
         "input_fingerprint": input_fingerprint,
         "artifact_sha256": artifact_sha,
@@ -5735,11 +5752,11 @@ def status_after_shared_generation(rel_path: str, target: Optional[Target] = Non
     return "ready"
 
 
-def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
+def latest_recorded_generation(root: Path, task_id: str, rel_path: str) -> Dict[str, str]:
     path = root / "生产数据" / "production_events.jsonl"
     if not path.is_file():
-        return ""
-    status = ""
+        return {}
+    latest: Dict[str, str] = {}
     with path.open(encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
@@ -5756,8 +5773,73 @@ def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
             if not isinstance(generation, dict) or not isinstance(meta, dict):
                 continue
             if generation.get("asset") == rel_path and str(meta.get("task") or "") == task_id:
-                status = str(generation.get("status") or "")
-    return status.lower()
+                latest = {
+                    "status": str(generation.get("status") or "").lower(),
+                    "input_fingerprint": str(meta.get("input_fingerprint") or ""),
+                    "artifact_sha256": str(meta.get("artifact_sha256") or ""),
+                }
+    return latest
+
+
+def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
+    return latest_recorded_generation(root, task_id, rel_path).get("status", "")
+
+
+def image_generation_input_fingerprint(
+    root: Path,
+    episode: str,
+    target: Target,
+    *,
+    seed: str,
+    compiled_request: Mapping[str, Any],
+    reference_inputs: Sequence[Mapping[str, Any]],
+    backend_key: str = "codex",
+) -> str:
+    """Canonical paid-image hash shared by idempotency and event receipts."""
+    reference_files: List[Dict[str, Any]] = []
+    for row in reference_inputs:
+        raw = reference_input_actual_path(row)
+        path = Path(raw)
+        if not path.is_absolute():
+            path = root / path
+        reference_files.append({"path": str(raw), "sha256": optional_file_sha256(path)})
+    capability_path = root / "生产数据" / "image_backend_capabilities" / f"{backend_key}.json"
+    return canonical_sha256({
+        "contract": "n2d_image_paid_submit/v1",
+        "backend": backend_key,
+        "episode": episode,
+        "asset": target.rel_path,
+        "shot": target.shot,
+        "mode": target.mode,
+        "logical_seed": seed,
+        "model": str(compiled_request.get("model") or os.environ.get("N2D_IMAGE_MODEL") or "GPT Image 2"),
+        "channel": str(compiled_request.get("channel") or "Codex CLI"),
+        "compiled_request_sha256": str(compiled_request.get("compiled_request_sha256") or ""),
+        "source_contract_sha256": str(compiled_request.get("source_contract_sha256") or ""),
+        "execution_context_sha256": str(compiled_request.get("execution_context_sha256") or ""),
+        "reference_inputs": reference_files,
+        "settings_sha256": optional_file_sha256(root / "_设置.md"),
+        "identity_registry_sha256": optional_file_sha256(root / "出图" / "共享" / "identity_registry.json"),
+        "asset_registry_sha256": optional_file_sha256(root / "出图" / "共享" / "asset_registry.json"),
+        "capability_profile_sha256": optional_file_sha256(capability_path),
+    })
+
+
+def generation_reuse_allowed(
+    previous_generation: Mapping[str, Any],
+    current_input_fingerprint: str,
+    *,
+    artifact_valid: bool,
+    current_artifact_sha256: str,
+) -> bool:
+    return bool(
+        artifact_valid
+        and str(previous_generation.get("status") or "").lower() == "pass"
+        and str(previous_generation.get("input_fingerprint") or "")
+        == str(current_input_fingerprint or "")
+        and str(previous_generation.get("artifact_sha256") or "")
+        == str(current_artifact_sha256 or "")
+    )
 
 
 def target_generation_lock(root: Path, rel_path: str) -> Path:
@@ -5819,7 +5901,8 @@ def process_target(
         temp_path.unlink()
 
     existing_shared_image = target.mode == "shared" and raster_valid(final)
-    previous_status = latest_recorded_status(root, task_id, target.rel_path)
+    previous_generation = latest_recorded_generation(root, task_id, target.rel_path)
+    previous_status = previous_generation.get("status", "")
     reference_bundle = reference_bundle_for_target(root, episode, target)
     reference_inputs = codex_reference_inputs_for_target(root, episode, target, reference_bundle)
     reference_inputs = prepare_reference_inputs(root, episode, reference_inputs, write=not dry_run)
@@ -5840,6 +5923,28 @@ def process_target(
             file=sys.stderr,
         )
         return False
+    current_input_fingerprint = image_generation_input_fingerprint(
+        root,
+        episode,
+        target,
+        seed=seed,
+        compiled_request=compiled_request,
+        reference_inputs=reference_inputs,
+    )
+    fingerprint_matches = bool(
+        previous_generation.get("input_fingerprint") == current_input_fingerprint
+    )
+    current_artifact_sha256 = optional_file_sha256(final)
+    artifact_matches = bool(
+        current_artifact_sha256
+        and previous_generation.get("artifact_sha256") == current_artifact_sha256
+    )
+    reusable_pass = generation_reuse_allowed(
+        previous_generation,
+        current_input_fingerprint,
+        artifact_valid=png_valid(final),
+        current_artifact_sha256=current_artifact_sha256,
+    )
 
     if dry_run:
         print(json.dumps({
@@ -5860,12 +5965,17 @@ def process_target(
                 )
             },
             "compiled_prompt_chars": (compiled_request.get("metrics") or {}).get("prompt_chars"),
-            "skip_existing_pass": (not force and previous_status == "pass" and png_valid(final)),
-            "skip_existing_file": (not force and existing_shared_image),
+            "input_fingerprint": current_input_fingerprint,
+            "skip_existing_pass": (not force and reusable_pass),
+            "skip_existing_file": (
+                not force
+                and existing_shared_image
+                and reusable_pass
+            ),
         }, ensure_ascii=False))
         return True
 
-    if not force and existing_shared_image:
+    if not force and existing_shared_image and reusable_pass:
         if is_style_anchor_path(target.rel_path):
             # Existing pixels are not a visual signoff. Keep the registry's
             # review_pending/approved state; a skip must never auto-promote.
@@ -5890,7 +6000,7 @@ def process_target(
         })
         return True
 
-    if not force and previous_status == "pass" and png_valid(final):
+    if not force and reusable_pass:
         print(f"[skip] {target.shot} already has pass record for {task_id}: {target.rel_path}")
         append_log(root, {
             "ts": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
@@ -5903,6 +6013,11 @@ def process_target(
             "seed_effective": "unsupported",
         })
         return True
+    if not force and previous_status == "pass" and png_valid(final) and not fingerprint_matches:
+        print(
+            f"[stale] {target.shot}: prior pass input_fingerprint changed; regenerating {target.rel_path}",
+            file=sys.stderr,
+        )
 
     if (
         target.mode == "shared"
@@ -5959,6 +6074,14 @@ def process_target(
         reference_manifest,
         retry_guidance=retry_guidance,
         compiled_request=compiled_request,
+    )
+    exact_submit = codex_exact_submit_request(repo_root(), prompt, reference_inputs)
+    enforce_expected_paid_request(
+        stage="image",
+        identity=str(target.shot),
+        target=str(target.rel_path),
+        input_fingerprint=current_input_fingerprint,
+        submit_request_sha256=str(exact_submit["sha256"]),
     )
     compiled_receipt = write_compiled_request_receipt(root, episode, target, compiled_request, prompt)
     generation_lock = acquire_target_generation_lock(root, target.rel_path, timeout_sec)
@@ -6022,6 +6145,7 @@ def process_target(
         submitted_prompt=prompt,
         compiled_request=compiled_request,
         compiled_receipt=compiled_receipt,
+        input_fingerprint=current_input_fingerprint,
         error=error,
     )
     append_log(root, {

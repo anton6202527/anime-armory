@@ -10,6 +10,17 @@ const MAX_SOURCE_BYTES = 512 * 1024
 const MAX_SOURCE_FILES = 5_000
 const MAX_SOURCE_DEPTH = 8
 const CREATION_LINES = new Set<CreationLine>(['novel', 'n2d', 'comic', 'ad', 'mv', 'song'])
+const APP_SKILL_NAMESPACE = 'app'
+const LEGACY_APP_SKILL_ALIASES: Readonly<Record<string, string>> = {
+  'n2d-script-workbench': 'app-script-workbench',
+  'app-n2d-script-workbench': 'app-script-workbench',
+  'n2d-character-turnaround': 'app-character-turnaround',
+  'app-n2d-character-turnaround': 'app-character-turnaround',
+  'n2d-first-frame-video': 'app-first-frame-video',
+  'app-n2d-first-frame-video': 'app-first-frame-video',
+  'n2d-audio-video': 'app-audio-video',
+  'app-n2d-audio-video': 'app-audio-video',
+}
 const TEXT_EXTENSIONS = new Set([
   '.css', '.csv', '.html', '.js', '.json', '.md', '.mjs', '.py', '.sh', '.srt', '.toml', '.ts', '.txt', '.yaml', '.yml',
 ])
@@ -72,6 +83,11 @@ function inferredLine(id: string, firstSegment: string): CreationLine | undefine
   return undefined
 }
 
+/** Keep pre-app-prefix Web clients readable while discovery exposes only canonical IDs. */
+export function canonicalSkillId(id: string): string {
+  return LEGACY_APP_SKILL_ALIASES[id] ?? id
+}
+
 function contained(root: string, candidate: string): boolean {
   const relative = path.relative(root, candidate)
   return relative === '' || (!relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative))
@@ -122,7 +138,7 @@ export class SkillRegistry {
       if (!entry.isDirectory() || entry.isSymbolicLink() || entry.name.startsWith('.')) continue
       const directory = path.join(this.root, entry.name)
       candidates.push({ directory, segments: [entry.name] })
-      if (!CREATION_LINES.has(entry.name as CreationLine)) continue
+      if (!CREATION_LINES.has(entry.name as CreationLine) && entry.name !== APP_SKILL_NAMESPACE) continue
       const children = await fsp.readdir(directory, { withFileTypes: true })
       for (const child of children) {
         if (child.isDirectory() && !child.isSymbolicLink() && !child.name.startsWith('.')) {
@@ -148,9 +164,9 @@ export class SkillRegistry {
       const line = inferredLine(id, firstSegment)
       const title = metadata.title?.trim() || id
       const description = (metadata.description?.trim() || '').slice(0, 4_000)
-      const kind = candidate.segments.length === 2
-        ? 'child'
-        : CREATION_LINES.has(firstSegment as CreationLine) ? 'line' : 'independent'
+      const kind = CREATION_LINES.has(firstSegment as CreationLine)
+        ? candidate.segments.length === 2 ? 'child' : 'line'
+        : 'independent'
       result.set(id, {
         id,
         title,
@@ -172,17 +188,19 @@ export class SkillRegistry {
   }
 
   async get(id: string): Promise<RegisteredSkill> {
-    if (!SKILL_ID_PATTERN.test(id)) throw new ApiError(400, 'invalid_skill_id', 'skill ID 无效')
-    const skill = (await this.discover()).get(id)
-    if (!skill) throw new ApiError(404, 'skill_not_found', `找不到 skill：${id}`)
+    const canonical = canonicalSkillId(id)
+    if (!SKILL_ID_PATTERN.test(canonical)) throw new ApiError(400, 'invalid_skill_id', 'skill ID 无效')
+    const skill = (await this.discover()).get(canonical)
+    if (!skill) throw new ApiError(404, 'skill_not_found', `找不到 skill：${canonical}`)
     const { directory: _directory, ...publicSkill } = skill
     return publicSkill
   }
 
   private async internal(id: string): Promise<InternalSkill> {
-    if (!SKILL_ID_PATTERN.test(id)) throw new ApiError(400, 'invalid_skill_id', 'skill ID 无效')
-    const skill = (await this.discover()).get(id)
-    if (!skill) throw new ApiError(404, 'skill_not_found', `找不到 skill：${id}`)
+    const canonical = canonicalSkillId(id)
+    if (!SKILL_ID_PATTERN.test(canonical)) throw new ApiError(400, 'invalid_skill_id', 'skill ID 无效')
+    const skill = (await this.discover()).get(canonical)
+    if (!skill) throw new ApiError(404, 'skill_not_found', `找不到 skill：${canonical}`)
     return skill
   }
 

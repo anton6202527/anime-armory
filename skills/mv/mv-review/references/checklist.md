@@ -73,12 +73,18 @@
 | OTIO/锁版 | 机+判 | `timeline.otio` 有 V1 画面+A1正式歌+段落/接缝 markers，receipt/edit hash 新鲜；picture lock 绑定 animatic、帧、prompt、时间线 | 正式版 🔴 |
 | 母带未被截短/改响 | 机 | 输出 vs 输入歌时长 ≤100ms；integrated loudness 漂移 ≤0.5 LU；真峰值 >0 dBTP 阻断、>-1 dBTP 复核 | 越阈 🔴/🟡 |
 | 交付编码 | 机 | ProRes 422 HQ/PCM 48k 母版；BT.709 H.264 High yuv420p/AAC 48k/faststart 交付版 | 正式版 🔴 |
+| 审片收据 | 机+判 | 默认机检只读；只有真实 reviewer 完成人审并给出非空 notes 后显式写收据。收据绑定当前 final / master / delivery QC / provenance / AI disclosure 五个 SHA-256 | 缺签收或任一绑定过期 🔴 |
 
 ## E. 合规（非交涉项，每次必查）
 
 | 维度 | 机/判 | 定级 |
 |---|---|---|
-| AI 视觉使用披露 | 判 | 成片有 `合规/ai_usage.json` 留痕、枚举有效 | 缺 🟡 |
+| AI 视觉使用披露 | 机+判 | 成片有当前 `合规/ai_usage.json`，枚举、生图/视频模型与渠道、目标平台均与 `_设置.md` 一致；上传时仍独立完成平台 AI 声明 | 发布/签收前缺失或过期 🔴 |
+| C2PA 结构 | 机 | requested 时 `embedded=true` 且 `structurally_valid=true`；只证明 manifest 结构可解析 | 失败 🔴 |
+| C2PA 签名 | 机 | `signature_valid=true`；签名数学有效不等于发布方可信 | 失败 🔴 |
+| C2PA 信任链 / 测试证书 | 机 | 分开核 `trust_checked` / `trusted` / `certificate_profile`；test certificate 只能开发验证，不得当生产可信凭证 | 未查信任链、untrusted 或 test 🔴 |
+| C2PA 时间戳 | 机 | 分开报告 `signed_at`、`timestamp_validated`、`timestamp_trusted`；`signature_info.time` 只是签署时间，不能冒充 TSA。无可信 TSA 仅在 `timestamp_exception_allowed=true` 的具名交付例外下为 🟡 | 无例外且缺可信 TSA 🔴；显式例外 🟡 |
+| C2PA 与平台披露边界 | 判 | Content Credentials 是可选来源凭证，**不替代** `ai_usage.json` 或目标平台上传界面的 AI 内容声明 | 用 C2PA 替代披露 🔴 |
 | 输入歌权利 | 判 | 歌的词曲版权随歌（自有/授权/原创）；mv 只做视觉不改属性 | 🔴 |
 
 ## F. 完整性 / 对账（机检）

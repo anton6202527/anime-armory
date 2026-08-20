@@ -741,6 +741,7 @@ def record_event(
     compiled_request: Optional[Mapping[str, Any]] = None,
     submitted_prompt: str = "",
     compiled_receipt: Optional[Path] = None,
+    input_fingerprint: str = "",
     error: str = "",
 ) -> None:
     compiled = dict(compiled_request or {})
@@ -780,18 +781,12 @@ def record_event(
     asset_registry_sha = base.optional_file_sha256(root / "出图" / "共享" / "asset_registry.json")
     adapter_version = f"dreamina_image_runner.py@{base.optional_file_sha256(Path(__file__))[:12]}"
     qc_version = f"image_qc.py@{base.optional_file_sha256(base.repo_root() / base.IMAGE_QC)[:12]}"
-    input_fingerprint = base.sha256_text(json.dumps({
-        "asset": target.rel_path,
-        "mode": target.mode,
-        "prompt_sha256": prompt_sha,
-        "compiled_request_sha256": compiled.get("compiled_request_sha256") or "",
-        "reference_bundle_sha256": reference_bundle_sha,
-        "route_hash": route_hash,
-        "settings_sha256": settings_sha,
-        "identity_registry_sha256": identity_registry_sha,
-        "asset_registry_sha256": asset_registry_sha,
-        "requested_seed": seed,
-    }, ensure_ascii=False, sort_keys=True))
+    if not input_fingerprint:
+        fingerprint_inputs = dreamina_reference_inputs(root, target, refs, episode)
+        input_fingerprint = dreamina_generation_input_fingerprint(
+            root, episode, target, seed=seed,
+            compiled_request=compiled, reference_inputs=fingerprint_inputs,
+        )
     recipe_hash = base.sha256_text(json.dumps({
         "input_fingerprint": input_fingerprint,
         "artifact_sha256": artifact_sha,
@@ -937,11 +932,11 @@ def record_event(
     subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
+def latest_recorded_generation(root: Path, task_id: str, rel_path: str) -> Dict[str, str]:
     path = root / "生产数据" / "production_events.jsonl"
     if not path.is_file():
-        return ""
-    status = ""
+        return {}
+    latest: Dict[str, str] = {}
     with path.open(encoding="utf-8") as fh:
         for line in fh:
             try:
@@ -955,8 +950,37 @@ def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
             if not isinstance(generation, dict) or not isinstance(meta, dict):
                 continue
             if generation.get("asset") == rel_path and str(meta.get("task") or "") == task_id:
-                status = str(generation.get("status") or "")
-    return status.lower()
+                latest = {
+                    "status": str(generation.get("status") or "").lower(),
+                    "input_fingerprint": str(meta.get("input_fingerprint") or ""),
+                    "artifact_sha256": str(meta.get("artifact_sha256") or ""),
+                }
+    return latest
+
+
+def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
+    return latest_recorded_generation(root, task_id, rel_path).get("status", "")
+
+
+def dreamina_generation_input_fingerprint(
+    root: Path,
+    episode: str,
+    target: base.Target,
+    *,
+    seed: str,
+    compiled_request: Mapping[str, Any],
+    reference_inputs: Sequence[Mapping[str, Any]],
+) -> str:
+    """Use the same canonical paid-image contract as the Codex backend."""
+    return base.image_generation_input_fingerprint(
+        root,
+        episode,
+        target,
+        seed=seed,
+        compiled_request=compiled_request,
+        reference_inputs=reference_inputs,
+        backend_key="dreamina",
+    )
 
 
 def process_target(
@@ -979,7 +1003,8 @@ def process_target(
     temp_dir = Path(tempfile.gettempdir()) / "n2d_dreamina_image_runner" / (task_id or "manual")
     temp_dir.mkdir(parents=True, exist_ok=True)
     temp_path = temp_dir / f"{episode}_{base.temp_token(target.shot)}_{Path(target.rel_path).stem}.png"
-    previous_status = latest_recorded_status(root, task_id, target.rel_path)
+    previous_generation = latest_recorded_generation(root, task_id, target.rel_path)
+    previous_status = str(previous_generation.get("status") or "")
     if canonical_reset and not base.latest_hash_bound_executor_visual_rejection(root, target):
         print(
             f"[fail] {target.shot}: --canonical-reset 只允许当前 PNG 的当前 hash 已有 executor_visual qa rejected 收据时使用",
@@ -1014,6 +1039,21 @@ def process_target(
         compiled_request=compiled_request,
         retry_guidance=retry_guidance,
     )
+    current_input_fingerprint = dreamina_generation_input_fingerprint(
+        root,
+        episode,
+        target,
+        seed=seed,
+        compiled_request=compiled_request,
+        reference_inputs=reference_inputs,
+    )
+    current_artifact_sha256 = base.optional_file_sha256(final)
+    reusable_pass = base.generation_reuse_allowed(
+        previous_generation,
+        current_input_fingerprint,
+        artifact_valid=base.png_valid(final),
+        current_artifact_sha256=current_artifact_sha256,
+    )
     if dry_run:
         print(json.dumps({
             "shot": target.shot,
@@ -1022,7 +1062,8 @@ def process_target(
             "references": [str(p) for p in refs],
             "reference_count": len(refs),
             "logical_seed": seed,
-            "skip_existing_pass": (not force and previous_status == "pass" and base.png_valid(final)),
+            "input_fingerprint": current_input_fingerprint,
+            "skip_existing_pass": (not force and reusable_pass),
             "prompt_compiler": {
                 "profile_version": compiled_request.get("profile_version"),
                 "profile": compiled_request.get("profile"),
@@ -1034,9 +1075,14 @@ def process_target(
             },
         }, ensure_ascii=False))
         return True
-    if not force and previous_status == "pass" and base.png_valid(final):
+    if not force and reusable_pass:
         print(f"[skip] {target.shot} already has Dreamina pass record for {task_id}: {target.rel_path}")
         return True
+    if not force and previous_status == "pass" and base.png_valid(final):
+        print(
+            f"[stale] {target.shot}: prior Dreamina pass fingerprint/output changed; regenerating {target.rel_path}",
+            file=sys.stderr,
+        )
 
     # Pre-spend interlock (same as the Codex backend): a plate that depicts a
     # character must attach a real face anchor, else it renders a new drifting face.
@@ -1060,6 +1106,14 @@ def process_target(
         )
         base.log_unanchored_friction(root, episode, target.shot, bundle.get("carried_identity"), "Dreamina")
         return False
+
+    base.enforce_expected_paid_request(
+        stage="image",
+        identity=str(target.shot),
+        target=str(target.rel_path),
+        input_fingerprint=current_input_fingerprint,
+        submit_request_sha256=str(compiled_request.get("compiled_request_sha256") or ""),
+    )
 
     started = time.monotonic()
     archive_path: Optional[Path] = None
@@ -1118,6 +1172,7 @@ def process_target(
         compiled_request=compiled_request,
         submitted_prompt=submitted_prompt,
         compiled_receipt=compiled_receipt,
+        input_fingerprint=current_input_fingerprint,
         error=error,
     )
     append_log(root, {

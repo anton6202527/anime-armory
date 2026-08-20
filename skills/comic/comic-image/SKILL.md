@@ -23,7 +23,7 @@ description: 画漫画出图阶段。Builds strict per-panel production contract
 - `出图/第N话/panels/P001.png` 等面板图。
 - `出图/第N话/masters/P001.png` 等后端最高原生分辨率母图；`panels/` 只能是由对应 master 等比裁切并向下采样得到的排版工作图，不得反向放大。
 - `生产数据/codex_reference_bundles/第N话/Pxxx.json`：Codex 真实图片参考入参证据。
-- `生产数据/panel_qc/第N话/Pxxx.json`：每格落盘后即时 deterministic QC，记录 PNG/尺寸/参考输入/疑似烘焙气泡问题；人工视觉判断仍需现场复核。
+- `生产数据/panel_qc/第N话/Pxxx.json`：每格落盘后即时 deterministic QC、比较输入与 contact sheet；正式签收同时绑定当前 panel SHA、比较包 SHA、审核人和理由。
 - `_进度.md`：job 包完成标 `出图包=✅`；面板图齐全标 `出图=✅`。
 - `出图/封面/prompt/cover_job.json`：作品级竖版封面（约 9:16 / 5:7）prompt/job 包，复用项目风格锚 + 角色定妆同源参考。
 - `_meta.json` 的 `cover`：作品卡片封面，作品根相对路径；渲染出竖版 PNG 后才确定性回填，否则恒为 `null`。
@@ -71,7 +71,7 @@ python3 skills/comic/comic-image/scripts/build_panel_jobs.py "创作区/画漫�
 
 脚本只写 `panel_jobs.json` 和 `出图/共享/prompt/00_索引.md`，不调用任何生图后端；它会把本话 `出图包` 标为 `✅`，但不会把 `出图` 标完成。
 
-重建出图包时，已 ready 的格只有在提交契约未变（`submit_prompt_sha256` 与画布尺寸一致）时才保留生成状态；改了 `panel_script`/`finishing_plan`/风格设置后重建，受影响格自动回 `planned` 并在输出里列为 `stale_reset_to_planned`，必须重抽，不允许旧图按新契约蒙混过 gate。参考图集合的扩充（补视图）不算契约变化——参考图内容变化由 `comic-identity report` 的 sha 比对触发重抽。加 `--check` 可只读对比当前契约与已落盘出图包（输出 JSON，不写任何文件），`comic-review gate --stage image_preflight` 会自动跑这一检查并对陈旧格阻断。
+重建出图包时，已 `ready` 的格只有在提交契约未变，且当前像素、post-QC、比较包与具名人审签收仍完全匹配时才保留；旧版无 SHA 签收、手改 `ready`、重抽后的旧签收都自动回 `planned`。改了 `panel_script`/`finishing_plan`/风格设置后重建，受影响格会列为 `stale_reset_to_planned`，必须重抽。参考图集合的扩充（补视图）不算提交词变化，但已签收比较输入的内容变化会立即使该格 acceptance 与后续 stage receipt stale。加 `--check` 可只读对比当前契约与已落盘出图包，`comic-review gate --stage image_preflight` 会自动检查。
 
 正式逐格出图前，先用 `comic-identity` 补齐共享锚点并回填路径：
 
@@ -81,16 +81,16 @@ python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作
 
 若报告显示 `missing_refs`，先补定妆或用已采纳面板种临时锚点，再出图。
 
-若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出。`--skip-gate` 只可复用 `生产数据/gate_receipts/image_preflight_第N话.json` 中同时绑定当前完整 preflight 输入指纹、当前 `panel_jobs` SHA、真实 gate report SHA 且 `execution_authorized=true` 的无 block receipt（`warn` 可带建议放行）；否则必须同时传 `--waiver-reason`，runner 会写 `生产数据/gate_waivers/` 持久审计 receipt，不能只打印跳过：
+若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出。`--skip-gate` 只可复用 `生产数据/gate_receipts/image_preflight_第N话.json` 中同时绑定当前完整 preflight 输入指纹、当前 `panel_jobs` SHA、真实 gate report SHA 且 `execution_authorized=true` 的 pass/明确授权 warn receipt；不存在 waiver 路径，任何陈旧、block 或缺证据 receipt 都不能启动正式生成：
 
 ```bash
 python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --skip-gate --waiver-reason "人工复核确认本次为已知误报"
+  --skip-gate --targets P001
 ```
 
 实机可执行附件上限的唯一真值在 comic `_lib/image_backend_adapter` 的 `executable_attachment_limit`（Codex `image_generation` 当前为 5，Dreamina image2image 为 10），runner 只解引用、不得另写数字。声明参考数超上限时，runner 先用 `reference_composite` 把**同一 ID 的多视图折叠为一张网格拼板**（不同主体绝不同图拼接，防串脸；拼板带 layout 版本与逐部件 SHA 血统，缓存于 `出图/共享/composites/`），再按“每具名主体一锚 → 场景/道具 → **风格锚保底一槽** → 次要视图”分配物理槽位。风格锚被省略是历史整话风格漂移的根因，选择器已保底；若仍被挤出（如手动 `--reference-limit` 过低），gate 的 `style_anchor_not_executed` 会在一致性硬闸开启时阻断。被省略附件必须写入 reference bundle 的 `omitted_attachments`，其完整约束继续保留在文字生产合同中，禁止静默丢约束或让工具超限后反复空耗。
 
-若只是参考预算或 QC 规则升级导致一张已生成且人工检查良好的图被旧规则标成 `qc_block`，用 `--recheck-existing --targets Pxxx` 对原 PNG 重跑 post-QC；该模式不得调用模型、归档或重抽。检测器升级不能成为删除好图和重复付费的理由。
+若只是 QC 规则升级，用 `--recheck-existing --targets Pxxx` 对原 PNG 重跑 post-QC；该模式不得调用模型、归档或重抽，也不会把旧的人审结论自动迁到新证据上。重检为 pass/warn 后仍须查看新 contact sheet 并重新签收；确定性 block 只能修复/重抽。
 
 ```bash
 python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话
@@ -100,7 +100,7 @@ python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫
 
 ```bash
 python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --max-attempts 2 --timeout-sec 600 --resolution-type 4k --continue-on-qc-block
+  --targets P001 --max-attempts 2 --timeout-sec 600 --resolution-type 4k
 ```
 
 `comic-batch` 会读取本项目 `_设置.md` 的生图模型/渠道，在 Codex 与 Dreamina runner 之间自动分派；已明确选定的渠道不可被批跑器静默改写。
@@ -117,10 +117,18 @@ python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画
   --correction "保留两位具名角色和场景锚，动作关系清楚。"
 ```
 
-建议先 `--targets P001 --limit 1` 做 smoke test；通过后再批跑。生成完成会更新 `panel_jobs.json` 的 `result_path/status`，全部面板就绪时把本话 `出图` 标为 `✅`。
-每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=block` 时该 job 标为 `qc_block` 而不是 `ready`，默认立即停止批跑，不能进入合成；修复后用 `--force --targets Pxxx` 重抽。`verdict=warn` 可继续登记，但 `comic-review gate --stage image` 会要求人审签收或重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
+逐格 runner 每次最多生成一张，并在该张获得当前证据签收前拒绝生成下一张。落盘后立刻写 `生产数据/panel_qc/第N话/Pxxx.json` 和 contact sheet：机器 `pass` 对应 `awaiting_review`，启发式 `warn` 对应 `qc_warn`，确定性缺件/损坏/参考覆盖/分辨率血统等问题对应 `qc_block`。三者都不会自动成为 `ready`；`skipped/unverifiable` 也不能授权生产。
 
-带 `references` 的格子默认要求 reference path 存在。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；只有明确需要纯文生图试验时才加 `--allow-missing-refs`。
+实际查看 contact sheet 后，对唯一当前格具名签收。机器 pass 写 `accepted`；启发式 warn 可在说明具体判断理由后写 `accepted_with_warnings`，并保留 warning codes；确定性 block 永不可人工豁免：
+
+```bash
+python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
+  --targets P001 --accept-reviewed --reviewer "责任编辑" --review-notes "逐轴检查身份、动作、场景与留白；启发式边带可接受"
+```
+
+Dreamina 使用完全相同的 `--accept-reviewed` 合同。签收绑定当前像素 SHA、on-disk/job post-QC、机器 findings、contact sheet、比较包及每个比较输入 SHA；任一项变化都会使签收 stale，并阻断 `comic-review gate --stage image`。只有全部格逐张签收后才把本话 `出图` 标为 `✅`。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要被其它系列 import。
+
+带 `references` 的正式格要求每个 reference path 存在且实际进入附件/比较证据。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；缺引用必须先回 `comic-identity` 修复。纯文生图试验只能写入隔离候选目录，不得通过正式 runner 改 job、进度或 `ready`。
 
 换装格在该角色自己的 `character_bindings[].outfit_id` 与相符 `state_id` 中声明：build_panel_jobs 从 registry 的 `assets[角色].outfits[该ID]` 取服装描述、禁漂移项和真实服装参考图；未登记或 state 与 outfit 冲突时直接拒绝建立正式 job。
 
@@ -157,9 +165,9 @@ python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫
 python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
   --targets P001 --limit 1 --force --model-version 5.0 --resolution-type 4k
 
-# smoke test 人审通过后继续全部未完成格
+# 查看 contact sheet 并签收；此后 runner 才允许处理下一格
 python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --model-version 5.0 --resolution-type 4k
+  --targets P001 --accept-reviewed --reviewer "责任编辑" --review-notes "当前像素与比较包逐轴复核通过"
 ```
 
 即梦 runner 与 Codex runner 使用同一个 `image_preflight`、编译合同校验、旧图归档、逐格 QC 和进度条件，但各自写独立 reference bundle；切后端后必须整话保持单一生成配方，旧后端成功图只能保留为候选/视觉复核材料，不能混在最终 ready 集合里。
@@ -185,14 +193,14 @@ python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画
 7. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 8. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
 9. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装，不能在执行期再次静默改写已哈希的提交词。
-10. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器，以及下面的原生清晰度血统；`block` 先修当前格，不把坏图继续传给排版合成。
+10. 每生成一格立刻做落盘 QC，并停下来完成该格的人审：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器，以及下面的原生清晰度血统。机器 pass/warn 都不是 `ready`；只有当前 SHA 的具名签收可放行下一格，`block/unverifiable/skipped` 不可签收。
     - `_设置.md` 默认 `生图分辨率策略=后端最高可达`。runner 必须在提交前读取当前模型/渠道的实时能力或本机 CLI `--help`，请求其可实际返回的最高原生档；具体 `2k/4k/尺寸枚举` 会变化，不得把旧版本上限永久写死。后端没有显式分辨率参数时，执行包装仍要明确要求最高原生输出，并在 manifest 标记 `maximum_verified=false`，不得声称已达到最高档。
     - **一格一次原生生成**：正式 panel 必须各自拥有独立生成的 master。禁止先生成整页/整话/多格拼图，再从 864px、1024px 等合成图裁出多格并放大冒充逐格高清；同一个 master 被多个无明确分区合成合同的 panel 复用，属于确定性 BLOCK。
     - 原始服务端文件必须无损保存在 `出图/第N话/masters/Pxxx.png`（或后端 runner 已有的等价 raw candidate），记录 `requested_resolution_tier / maximum_verified / native_size / native_sha256 / master_path`。`panels/Pxxx.png` 只可由该 master 等比安全裁切并**向下采样**到 layout 画布；任一轴需要放大、先缩小再放大、只留导出图不留 master，均为确定性 BLOCK。
     - “水墨、柔焦、像素漫画”等是画风，不是降低像素尺寸的许可。像素风也应以最高原生画布生成/归档，需要硬边时用 nearest-neighbor 制作派生图，但不得降低 master 分辨率。
 11. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
-12. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
-13. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无 `qc_block` 或待重抽目标后把 `出图` 标 `✅`。
+12. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/` 后，用唯一目标的 `--recheck-existing` 建立当前 post-QC/比较包，再走 `--accept-reviewed`；不得手改 `status=ready`。
+13. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 都有当前像素、当前比较包与具名签收，且无待重抽目标后，才把 `出图` 标 `✅`。
 14. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
 
 ## Prompt 要点

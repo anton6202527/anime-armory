@@ -390,12 +390,12 @@ def stage_for_changed_file(relpath: str) -> str | None:
 def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any]]:
     steps: list[dict[str, Any]] = []
     if not plan.get("rebuild_needed"):
-        steps.append({"type": "command", "purpose": "查看当前前沿", "command": f'python3 skills/mv/mv-progress/scan.py "{root}"'})
+        steps.append({"type": "command", "purpose": "查看当前前沿", "command": 'python3 skills/mv/mv-progress/scan.py "<作品根>"'})
         if plan.get("changed_skills") or plan.get("baseline_bootstrapped"):
             steps.append({
                 "type": "command",
                 "purpose": "接受当前产物后记录新基线",
-                "command": f'python3 skills/mv/mv-update/scripts/update_plan.py record "{root}"',
+                "command": 'python3 skills/mv/mv-update/scripts/update_plan.py record "<作品根>"',
                 "run_when": "用户确认无需返工",
             })
         return steps
@@ -410,11 +410,11 @@ def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any
             "purpose": "保留当前 MV 产物",
             "instruction": "返工可能触及蓝图、分镜、出图或视频；执行前先保留当前关键 JSON、PNG、MP4 和成片。",
         })
-    steps.append({"type": "command", "purpose": "查看生产前沿", "command": f'python3 skills/mv/mv-progress/scan.py "{root}"', "run_when": "返工前后"})
+    steps.append({"type": "command", "purpose": "查看生产前沿", "command": 'python3 skills/mv/mv-progress/scan.py "<作品根>"', "run_when": "返工前后"})
     steps.append({
         "type": "command",
         "purpose": "验收后记录新基线",
-        "command": f'python3 skills/mv/mv-update/scripts/update_plan.py record "{root}"',
+        "command": 'python3 skills/mv/mv-update/scripts/update_plan.py record "<作品根>"',
         "run_when": "返工产物验收通过",
     })
     return steps
@@ -431,7 +431,7 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
     if baseline is None:
         if bootstrap:
             baseline = snapshot_for_skills(relevant_skills, status="bootstrap")
-            baseline["project_root"] = root
+            baseline["root_rel"] = "."
             baseline["current_stage"] = current_stage
             write_json(snapshot_path(root), baseline)
             bootstrapped = True
@@ -466,7 +466,7 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
         "kind": KIND_PLAN,
         "schema_version": SCHEMA_VERSION,
         "generated_at": now_iso(),
-        "project_root": root,
+        "root_rel": ".",
         "project_title": load_meta(root).get("title") or os.path.basename(root),
         "progress": progress,
         "current_stage": current_stage,
@@ -565,7 +565,7 @@ def command_record(args: argparse.Namespace) -> int:
     progress = progress_context(root)
     current_stage = progress.get("current_stage") or "setup"
     snapshot = snapshot_for_skills(relevant_skills_for_stage(current_stage), status="recorded")
-    snapshot["project_root"] = root
+    snapshot["root_rel"] = "."
     snapshot["current_stage"] = current_stage
     snapshot["current_stage_label"] = stage_label(current_stage)
     write_json(snapshot_path(root), snapshot)

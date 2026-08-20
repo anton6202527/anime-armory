@@ -14,8 +14,14 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set
+
+CRAFT_SCRIPTS = Path(__file__).resolve().parents[2] / "ad-craft" / "scripts"
+if str(CRAFT_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(CRAFT_SCRIPTS))
+import render_profile as ad_render_profile  # noqa: E402
 
 
 KIND = "ad_video_qc"
@@ -257,6 +263,53 @@ def batch_consistency_findings(tech_facts: Mapping[str, Mapping[str, Any]]) -> L
     return out
 
 
+def render_profile_source_findings(root: Path, tech_facts: Mapping[str, Mapping[str, Any]],
+                                   jobs: Mapping[str, Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """Compare every observed clip with source_generation, not with its peers."""
+    path = root / "生产数据" / "render_profile.json"
+    if not path.is_file():
+        return []  # legacy diagnostic projects; formal stage acceptance fails closed separately
+    profile = load_json(path, {}) or {}
+    current = ad_render_profile.compile_profile(root)
+    if (not profile.get("profile_sha256")
+            or profile.get("profile_sha256") != current.get("profile_sha256")):
+        return [finding("block", "-", "render_profile_source_stale",
+                        "render_profile 未绑定当前设置/brief/platform pack；须先重建 route/job。")]
+    source = profile.get("source_generation") if isinstance(profile.get("source_generation"), Mapping) else {}
+    expected = (int(source.get("width") or 0), int(source.get("height") or 0))
+    expected_fps = float(source.get("fps") or 0)
+    out: List[Dict[str, Any]] = []
+    if profile.get("kind") != "ad_render_profile" or not all((*expected, expected_fps)):
+        return [finding("block", "-", "render_profile_source_invalid",
+                        "render_profile 缺有效 source_generation，无法核对真实回收媒体。")]
+    for clip, facts in tech_facts.items():
+        if not facts:
+            out.append(finding("block", clip, "observed_source_unverified", "clip 缺 ffprobe 实测规格。"))
+            continue
+        observed = (int(facts.get("width") or 0), int(facts.get("height") or 0))
+        observed_fps = float(facts.get("fps") or 0)
+        if observed != expected:
+            out.append(finding(
+                "block", clip, "observed_source_resolution_mismatch",
+                f"实测 {observed[0]}x{observed[1]}，未兑现 source_generation={expected[0]}x{expected[1]}；"
+                "请求值不能冒充实际输出。",
+            ))
+        if not observed_fps or abs(observed_fps - expected_fps) > 0.15:
+            out.append(finding(
+                "block", clip, "observed_source_fps_mismatch",
+                f"实测 {observed_fps:g}fps，未兑现 source_generation={expected_fps:g}fps。",
+            ))
+        job = jobs.get(clip) if isinstance(jobs.get(clip), Mapping) else {}
+        receipt = job.get("observed_output") if isinstance(job.get("observed_output"), Mapping) else {}
+        if job and (int(receipt.get("width") or 0), int(receipt.get("height") or 0)) != observed:
+            out.append(finding("block", clip, "observed_source_receipt_stale",
+                               "job observed_output 与本次 ffprobe 结果不一致。"))
+        if job and abs(float(receipt.get("fps") or 0) - observed_fps) > 0.01:
+            out.append(finding("block", clip, "observed_source_receipt_stale",
+                               "job observed_output FPS 与本次 ffprobe 结果不一致。"))
+    return out
+
+
 def _load_imaging():
     try:
         from PIL import Image, ImageDraw  # type: ignore
@@ -378,7 +431,7 @@ def prompt_handoff_findings(root: Path, clip: str, shot: Mapping[str, Any]) -> L
     safe = shot.get("safe_area") or shot.get("安全区") or {}
     if (products or brand_assets(shot) or any(mark in combined for mark in ("CTA", "cta", "片尾", "logo"))) and not safe:
         out.append(finding("warn", clip, "safe_area",
-                           "产品/品牌/CTA clip 缺中心构图余量声明，多比例 reframe 可能裁切核心信息；仍须实际 placement 模板人审。"))
+                           "产品/品牌/CTA clip 缺构图余量声明，跨版位适配可能损失核心信息；仍须按实际 placement 模板和适配模式人审。"))
     elif isinstance(safe, Mapping) and safe.get("core_in_center_4x4") is False:
         out.append(finding("warn", clip, "safe_area",
                            "core_in_center_4x4=false：跨比例裁切风险高；中心网格不是平台安全区，最终按实际 placement 模板人审。"))
@@ -482,6 +535,9 @@ def run_qc(root: Path) -> Dict[str, Any]:
                              "confidence": "heuristic"},
                         ))
     findings.extend(batch_consistency_findings({c: f for c, f in tech_facts.items() if f}))
+    findings.extend(render_profile_source_findings(
+        root, {c: f for c, f in tech_facts.items() if f}, jobs,
+    ))
     inheritance = load_json(root / "出视频" / "分镜" / "contract_inheritance.json")
     if not inheritance:
         findings.append(finding("warn", "-", "contract_inheritance", "缺 contract_inheritance.json，建议先跑 ad-video/scripts/inherit_contract.py。"))

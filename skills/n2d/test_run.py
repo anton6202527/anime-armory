@@ -299,6 +299,12 @@ def test_next_action_missing_progress_returns_recovery_card():
     root = tempfile.mkdtemp()
     na = run.next_action(root, "第2集")
     assert na["stop_reason"] == "blocked_by_entry_check"
+    assert na["frontier"] == {
+        "ep": "第2集",
+        "stage_key": "entry",
+        "label": "项目入口恢复",
+        "owner": "n2d-script",
+    }
     assert na["action_card"]["block_reason"] == "missing_progress"
     assert "split_novel.py" in na["action_card"]["recovery_command"]
 
@@ -318,16 +324,19 @@ def test_resolve_frontier_done():
     assert run.resolve_frontier(root) is None
 
 
-def test_video_done_is_default_done_without_compose_opt_in():
+def test_video_done_routes_to_compose_by_default_for_final_product():
     root = make_work(ALL_DONE_TO["compose"])
-    assert run.resolve_frontier(root) is None
-
-
-def test_video_done_routes_to_compose_when_opted_in():
-    root = make_work(ALL_DONE_TO["compose"], settings="# _设置\n- 制作模式: 配音先行\n- 合成阶段: 启用\n")
     route = run.resolve_frontier(root)
     assert route["col"] == "成片"
     assert run.stage_key_of(route) == "compose"
+
+
+def test_video_done_is_clip_only_terminal_when_compose_explicitly_skipped():
+    root = make_work(
+        ALL_DONE_TO["compose"],
+        settings="# _设置\n- 制作模式: 配音先行\n- 合成阶段: 跳过\n",
+    )
+    assert run.resolve_frontier(root) is None
 
 
 def test_resolve_frontier_review_after_compose():
@@ -352,10 +361,66 @@ def test_old_progress_without_review_column_routes_to_review():
 
 def test_next_action_done_after_review_signoff():
     cells = ["✅"] * 15
-    root = make_work(cells)
+    root = make_work(cells, settings="# _设置\n- 合成阶段: 跳过\n")
     na = run.next_action(root, "第1集")
     assert na["stop_reason"] == "done"
     assert "clip_delivery_complete" in na["action_card"]["to_user"]
+
+
+def test_progress_terminal_cannot_bypass_canonical_acceptance(monkeypatch):
+    root = make_work(
+        ["✅"] * 15,
+        settings="# _设置\n- 制作模式: 配音先行\n- 合成阶段: 启用\n",
+    )
+    monkeypatch.setattr(
+        run._acceptance_contract,
+        "check_acceptance",
+        lambda _root, _ep: {
+            "status": "fail",
+            "valid": False,
+            "path": "生产数据/acceptance_receipt_第1集.json",
+            "issues": ["canonical acceptance receipt missing"],
+        },
+    )
+
+    na = run.next_action(root, "第1集", preview=True)
+
+    assert na["stop_reason"] == "blocked_by_review_acceptance"
+    assert na["frontier"]["stage_key"] == "review"
+    assert na["action_card"]["block_reason"] == "terminal_acceptance_invalid"
+
+
+def test_progress_terminal_is_done_only_when_canonical_acceptance_is_current(monkeypatch):
+    root = make_work(
+        ["✅"] * 15,
+        settings="# _设置\n- 制作模式: 配音先行\n- 合成阶段: 启用\n",
+    )
+    monkeypatch.setattr(
+        run._acceptance_contract,
+        "check_acceptance",
+        lambda _root, _ep: {
+            "status": "pass",
+            "valid": True,
+            "path": "生产数据/acceptance_receipt_第1集.json",
+            "receipt_id": "receipt-current",
+            "issues": [],
+        },
+    )
+
+    na = run.next_action(root, "第1集", preview=True)
+
+    assert na["stop_reason"] == "done"
+    assert na["frontier"] is None
+    assert "master_delivery_complete" in na["action_card"]["to_user"]
+
+
+def test_unknown_episode_is_never_reported_done():
+    root = make_work(["✅"] * 15)
+
+    na = run.next_action(root, "第99集", preview=True)
+
+    assert na["stop_reason"] == "blocked_by_entry_check"
+    assert na["action_card"]["block_reason"] == "missing_episode_progress_row"
 
 
 def test_production_mode_menu_defaults_to_hybrid_auto_routing():
@@ -501,6 +566,12 @@ def test_decide_payment_confirm_image_carries_granularity_menu():
     na = run.decide(root, _route("image"), "image", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "生成粒度"
+    assert na["action_card"]["recommended_choice"] == {
+        "choice_point": "生成粒度",
+        "selected": "逐个",
+        "policy": "recommended_default_unless_overridden_before_spend",
+    }
+    assert "无需另停一次" in na["action_card"]["to_user"]
 
 
 def test_decide_payment_confirm_image_honors_persistent_per_image_review_gate():
@@ -543,6 +614,23 @@ def test_decide_voice_first_payment_menu_is_backend():
     na = run.decide(root, _route("voice"), "voice", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "配音后端"
+    assert na["action_card"]["recommended_choice"]["selected"] == "CosyVoice"
+
+
+def test_manual_choice_policy_does_not_claim_payment_menu_is_auto_selected():
+    root = make_work(
+        ALL_DONE_TO["voice"],
+        settings=(
+            "# _设置\n"
+            "- 制作模式: 配音先行\n"
+            "- 普通选择策略: 逐项询问  # source=explicit_user\n"
+        ),
+    )
+
+    na = run.decide(root, _route("voice"), "voice", run.Probes())
+
+    assert na["stop_reason"] == "needs_payment_confirm"
+    assert "recommended_choice" not in na["action_card"]
 
 
 def test_voice_first_compliance_gap_blocks_before_paid_tts():
@@ -758,7 +846,7 @@ def test_decide_first_run_choice_package():
     assert na["stop_reason"] == "needs_choice"
     cps = [m["choice_point"] for m in na["action_card"]["menu"]]
     assert "制作模式" in cps and "基础视觉风格" in cps
-    assert "生视频后端选择已后移到 n2d-video" in na["action_card"]["to_user"]
+    assert "普通选择策略=逐项询问" in na["action_card"]["to_user"]
 
 
 def test_gather_probes_blocks_script_stage1_on_unreviewed_boundary_risk():
@@ -774,7 +862,20 @@ def test_gather_probes_blocks_script_stage1_on_unreviewed_boundary_risk():
 
 
 def test_gather_probes_does_not_block_short_episode_with_strong_hook():
-    root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    root = make_work(
+        ALL_DONE_TO["script_stage1"],
+        settings=(
+            "- 普通选择策略: 推荐方案自动继续\n"
+            "- 制作模式: 原生音画\n"
+            "- 项目规模: 单集\n"
+            "- 基础视觉风格: 写实电影感\n"
+            "- 脚本批次: 小批\n"
+            "- 生成优先序: 关键镜优先\n"
+            "- 生成粒度: 逐个\n"
+            "- BGM来源: 无\n"
+            "- 合成阶段: 启用\n"
+        ),
+    )
     _write_confirmed_development_pack(root)
     ep_dir = os.path.join(root, "脚本", "第1集")
     os.makedirs(ep_dir, exist_ok=True)
@@ -800,7 +901,20 @@ def test_gather_probes_blocks_legacy_markdown_boundary_review():
 
 
 def test_gather_probes_allows_script_stage1_when_boundary_review_json_valid():
-    root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    root = make_work(
+        ALL_DONE_TO["script_stage1"],
+        settings=(
+            "- 普通选择策略: 推荐方案自动继续\n"
+            "- 制作模式: 原生音画\n"
+            "- 项目规模: 单集\n"
+            "- 基础视觉风格: 写实电影感\n"
+            "- 脚本批次: 小批\n"
+            "- 生成优先序: 关键镜优先\n"
+            "- 生成粒度: 逐个\n"
+            "- BGM来源: 无\n"
+            "- 合成阶段: 启用\n"
+        ),
+    )
     _write_confirmed_development_pack(root)
     ep_dir = os.path.join(root, "脚本", "第1集")
     os.makedirs(ep_dir, exist_ok=True)
@@ -848,7 +962,10 @@ def test_gather_probes_blocks_script_stage1_without_source_comprehension_contrac
 
 
 def test_gather_probes_prioritizes_first_run_choices_before_development_pack():
-    root = make_work(ALL_DONE_TO["script_stage1"])
+    root = make_work(
+        ALL_DONE_TO["script_stage1"],
+        settings="- 普通选择策略: 逐项询问  # source=explicit_user\n",
+    )
     ep_dir = os.path.join(root, "脚本", "第1集")
     os.makedirs(ep_dir, exist_ok=True)
     open(os.path.join(ep_dir, "raw.txt"), "w", encoding="utf-8").write("第一章\n她被逼到宫墙下。\n门外突然传来脚步声！\n")
@@ -859,6 +976,60 @@ def test_gather_probes_prioritizes_first_run_choices_before_development_pack():
     assert probes.pending_choices
     assert not probes.prework_block
     assert na["stop_reason"] == "needs_choice"
+
+
+def test_preview_plans_recommended_choices_without_mutating_project():
+    root = make_work(ALL_DONE_TO["script_stage1"])
+
+    probes = run.gather_preview_probes(root, _route("script_stage1"), "script_stage1")
+    na = run.decide(root, _route("script_stage1"), "script_stage1", probes)
+
+    assert probes.pending_choices == []
+    planned = {row["key"]: row["value"] for row in probes.auto_decisions}
+    assert planned["普通选择策略"] == "推荐方案自动继续"
+    assert planned["制作模式"] == "混合自动路由"
+    assert planned["项目规模"] == "单集"
+    assert planned["脚本批次"] == "小批"
+    assert planned["生成优先序"] == "关键镜优先"
+    assert planned["生成粒度"] == "逐个"
+    assert planned["BGM来源"] == "无"
+    assert planned["合成阶段"] == "启用"
+    assert not os.path.exists(os.path.join(root, "_设置.md"))
+    assert na["stop_reason"] == "needs_agent_gen"
+    assert na["action_card"]["auto_decision_policy"]["value"] == "推荐方案自动继续"
+
+
+def test_preview_plans_missing_recommendations_when_adopting_old_project_mid_pipeline():
+    root = make_work(ALL_DONE_TO["compose"])
+
+    probes = run.gather_preview_probes(root, _route("compose"), "compose")
+
+    planned = {row["key"]: row["value"] for row in probes.auto_decisions}
+    assert planned["制作模式"] == "混合自动路由"
+    assert planned["合成阶段"] == "启用"
+    assert planned["BGM来源"] == "无"
+    assert not os.path.exists(os.path.join(root, "_设置.md"))
+
+
+def test_manual_choice_policy_preserves_needs_choice_preview():
+    root = make_work(
+        ALL_DONE_TO["script_stage1"],
+        settings="- 普通选择策略: 逐项询问  # source=explicit_user\n",
+    )
+
+    probes = run.gather_preview_probes(root, _route("script_stage1"), "script_stage1")
+
+    assert set(probes.pending_choices) == {
+        "制作模式",
+        "项目规模",
+        "基础视觉风格",
+        "脚本批次",
+        "生成优先序",
+        "生成粒度",
+        "BGM来源",
+        "合成阶段",
+    }
+    assert probes.auto_decisions == []
 
 
 def test_gather_probes_blocks_script_stage2_without_confirmed_director_pack():

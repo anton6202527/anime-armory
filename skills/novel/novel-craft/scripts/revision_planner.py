@@ -12,6 +12,11 @@ import sys
 from datetime import date
 from typing import Any
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_NOVEL_LIB = os.path.abspath(os.path.join(_HERE, "..", "..", "_lib"))
+if _NOVEL_LIB not in sys.path:
+    sys.path.insert(0, _NOVEL_LIB)
+from reader_probe import reader_probe_freshness  # noqa: E402
 from store import atomic_write_json, atomic_write_text, file_lock
 
 
@@ -145,6 +150,18 @@ def tasks_from_simulate(root: str) -> list[dict[str, Any]]:
     payload = load_json(os.path.join(root, "评分", "reader_panel_signals.json"), {}) or {}
     if not isinstance(payload, dict):
         return []
+    freshness = reader_probe_freshness(root, payload)
+    if freshness["status"] != "fresh":
+        unknown = freshness["status"] == "unknown"
+        return [_task(
+            "SIMULATE-FRESHNESS-UNKNOWN" if unknown else "SIMULATE-STALE",
+            "reader_panel_signals",
+            "旧版合成叙事探针新鲜度未知" if unknown else "合成叙事探针已过期，需重跑",
+            priority="P2",
+            skill="novel-simulate",
+            stage="simulate",
+            reason=f"{freshness['reason']} 当前信号值不进入修订计划。",
+        )]
     if payload.get("signal_only") is True or payload.get("analysis_mode") == "signal_only":
         return [_task(
             "SIMULATE-SIGNAL-ONLY",
@@ -153,7 +170,7 @@ def tasks_from_simulate(root: str) -> list[dict[str, Any]]:
             priority="P2",
             skill="novel-simulate",
             stage="simulate",
-            reason="synthetic/context-only；补完人格反馈后仍不能当真实读者或统计留存证据。",
+            reason="synthetic/context-only；补完阅读视角证据后仍不能当真实读者或统计留存证据。",
         )]
     return []
 

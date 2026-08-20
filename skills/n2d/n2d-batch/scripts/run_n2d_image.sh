@@ -37,10 +37,22 @@ if [[ -z "${N2D_IMAGE_COMMAND:-}" ]]; then
   exit 2
 fi
 
+# A batch invocation must carry the complete producer-owned paid-boundary expectation.  This
+# wrapper is the only supported indirection and must preserve it into the direct producer.
+if [[ -n "${N2D_TASK_ID:-}${N2D_IDEMPOTENCY_KEY:-}${N2D_STAGE:-}" ]]; then
+  if [[ -z "${N2D_EXPECTED_PAID_REQUESTS_JSON:-}" || \
+        -z "${N2D_EXPECTED_PAID_REQUESTS_DIGEST:-}" || \
+        -z "${N2D_EXPECTED_AUTHORIZATION_DIGEST:-}" ]]; then
+    echo "Batch paid-execution markers are present but the canonical paid expectation is incomplete." >&2
+    exit 2
+  fi
+fi
+
 export N2D_ROOT="$ROOT"
 export N2D_EPISODE="$EP"
 export N2D_STAGE="image"
 
-bash -lc "$N2D_IMAGE_COMMAND"
+# Avoid a login shell: profile startup code is outside the authorized argv/environment contract.
+bash -c "$N2D_IMAGE_COMMAND"
 
 python3 "$REPO_DIR/skills/n2d/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage image

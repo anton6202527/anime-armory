@@ -20,7 +20,14 @@
 | `N/M` | 部分完成；仅 `N >= M` 算完成 |
 | `—` / `N/A` / `无` | 本集不适用，路由视为已满足 |
 
-`raw` 是源文本展示列，不计入生产完成度。`成片` / `验收` 是可选尾段列：默认 `合成阶段=跳过` 时不计入镜头交付完成判定，`视频` 列完成表示 `clip_delivery_complete`，不是可发布母版；当 `_设置.md` 写 `合成阶段: 启用`，或某集已经开始 `成片/验收`，才继续路由到 compose/review/readiness，最终通过人工签收后才形成 `master_delivery_complete`。
+`raw` 是源文本展示列，不计入生产完成度。`成片` / `验收` 是默认交付尾段：`合成阶段=启用` 时，`视频` 完成后继续路由到 compose/review/readiness，最终通过人工签收后才形成 `master_delivery_complete`。只有显式 `合成阶段=跳过` 才以 `clip_delivery_complete` 结束，它不是可发布母版。
+
+### 收敛合同
+
+- **一个执行状态**：`_进度.md` 是持久阶段记录，`run.py next --json` 给出的当前 `frontier.stage_key` 是任务准入的唯一裁决。queue、dashboard、manifest 都是派生视图；排队不等于准入，更不等于付款授权。即使有人手写整行 `✅`，terminal 仍会重验当前 verdict + acceptance receipt；证据缺失或过期时只能回到 review，不能返回 `done`。
+- **一个内容哈希**：正式边界统一使用 `n2d_content_fingerprint`。它把全部直接输入、glob 展开结果、缺失输入、路由、模型/渠道、能力档和引用素材规范化后计算一个 SHA；生产收据必须保存可重算的明细，不能只记文件名或 mtime。release hash 还消费经过 schema、来源 SHA 与当前内容重验的事件审计和正式制品报告，并只投影目标集依赖；时间戳、mtime 等非语义字段不进入完成哈希。哈希不相等时旧 prompt、图片、视频或回执均不可复用。
+- **一个 worker 完成定义**：batch task 只有依次达到 `command_succeeded → artifact_verified → gate_passed` 才能提交为 `done`；真正花钱前 producer 必须现场重算并匹配授权 expectation，落 paid-boundary receipt；提交锁内再对当前产物逐个做存在性、SHA 与解码重验，生成唯一 `n2d_batch_completion_commit.digest`。runner 状态/exit code/执行边界相互矛盾、产物在 verify 后漂移、commit 被改写或 post gate 阻断时都不能成为 `done`；进入 `qa_blocked` 并按是否已越过付费边界结算预算，dry-run 只读且不 claim、不回写。
+- **一个整集完成定义**：`master_delivery_complete = acceptable canonical release_verdict + fresh canonical acceptance_receipt`。receipt 只接受显式传入的当前 reviewer 与 `approved/accepted`，并绑定统一 resolver 选出的 canonical 母版、verdict、score、ledger、review-ui/findings 的当前 SHA；复核时会重新用 ffprobe 验证母版可播放及真实时长。事件链审计与 release-scope、strict、completion-input artifact validation 是 verdict required component，必须携带 kind/version/root/source/content 证据并与当前目标集制品相符；裸 `{status: pass}` 无效。旧 `review_signoff` 只作迁移诊断，绝不能继承 reviewer/decision 来签新母版；advisory/rejected/已删除或哈希过期的签收一律不能证明完成。
 
 ## 2. 阶段图
 
@@ -36,10 +43,10 @@
 | `image` | 出图 | `n2d-image` | `出图` | `image` | `image` |
 | `video_prompt` | 视频prompt | `n2d-video` | `视频prompt` | `video_preflight` | `video_prompt` |
 | `video` | 图生视频 | `n2d-video` | `视频` | `video` | `video` |
-| `compose` | 合成成片（可选） | `n2d-compose` | `成片` | `compose` | `compose` |
-| `review` | 审查验收（可选尾段） | `n2d-review` | `验收` | `review` | `review` |
+| `compose` | 合成成片（默认交付尾段） | `n2d-compose` | `成片` | `compose` | `compose` |
+| `review` | 审查验收（默认最终尾段） | `n2d-review` | `验收` | `review` | `review` |
 
-`skills/n2d/_lib/n2d_route.py` 从这张表派生旧的 `STAGES` 路由元组，供 `n2d/progress.py` 和 `n2d-progress/scan.py` 复用。不要再在别处手写另一张阶段表。`compose`/`review` 虽在 `STAGE_GRAPH` 中保留，但路由前会先读 `合成阶段`：默认跳过；显式启用或本集已有成片/验收进度时才参与前沿。
+`skills/n2d/_lib/n2d_route.py` 从这张表派生旧的 `STAGES` 路由元组，供 `n2d/progress.py` 和 `n2d-progress/scan.py` 复用。不要再在别处手写另一张阶段表。`compose`/`review` 默认参与前沿；只有项目显式设 `合成阶段=跳过` 且本集未开始成片/验收时才裁掉尾段。
 
 `source` 阶段除 `脚本/第N集/raw.txt` 外，还会由 `split_novel.py` 自动落 P-1 开发包草稿：`开发包/series_bible.md`、`adaptation_strategy.json`、`season_arc.json`、`production_feasibility.json`、`pilot_greenlight.md`。这些文件不新增 `_进度.md` 列；它们由 `run.py` 在 `script_stage1` 前置 `development_pack` gate 校验，必须全部 `confirmed` 后才进入正式剧本改编。
 

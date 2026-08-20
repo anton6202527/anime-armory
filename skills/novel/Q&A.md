@@ -327,12 +327,13 @@ novel-supervisor critic-loop / qa_gate 演进规划。
   3 章正文零命中）。
 - **beta reader 标准六问（Jane Friedman/FoxPrint 口径）**：novel-simulate 问卷协议
   `评分/reader_survey_第NN章.json`（bored/confused/disbelief/favorite/prediction/recall），
-  behavioral_signals 聚合出 reader_bored_run / reader_confusion_spike / reader_disbelief /
-  recall_failure（复述留存=2-gram 包含度，防长度稀释同 surprise 口径）。
-- **"扔掉第一想法"（brainstorm 实务：first idea = lowest-hanging cliché）**：
-  `draft_packets.predicted_plot_section`——把上一章模拟读者预测注入写章包当负面约束
-  （"读者已猜到的走向禁止照写，或抵达同一终点前加拐弯"）。事后意外度检测搬到生成期当筛子，
-  与 AI 腔账单同属"下游检测搬上游"闭环：账单管怎么写，这个管写什么。
+  behavioral_signals schema v2 只保留 bored/confused/disbelief 的 span、预测 2-gram 表面差异/
+  重合与 recall 字面重合，再转成正文复核问题；不按合成角色多数推断弃书/OOC/信息留存，
+  固定 `automatic_constraint_eligible=false`。
+- **合成预测不是“扔掉第一想法”裁决器**：`draft_packets.predicted_plot_section` 可把上一章预测
+  作为 context-only 问题附录，但任何重合都可能是有效伏笔兑现、类型承诺或人物必然选择，
+  不能自动判成 lowest-hanging cliché，不能禁止照写，也不能要求为避预测强加反转；作者意图、
+  人物因果与已批准章纲优先。
 
 ### 有意未做（评估过、按住）
 

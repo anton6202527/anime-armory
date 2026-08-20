@@ -30,3 +30,31 @@ def test_real_workspace_path_lint_allows_generic_tmp_project_path():
 
 def test_skill_stats_sync_is_registered():
     assert "F7" in validate_skills.CHECKS
+
+
+def test_bare_skill_ref_regex_covers_web_app_skill_prefix():
+    match = validate_skills.SLASH_RE.search("下一步调用 /app-script-workbench")
+    assert match
+    assert match.group(0) == "/app-script-workbench"
+
+
+def test_app_namespace_skills_are_counted_as_standalone():
+    names = {path.name for path in validate_skills.update_skill_stats.skill_dirs_for("standalone")}
+    assert {"app-script-workbench", "app-character-turnaround", "app-first-frame-video", "app-audio-video"} <= names
+
+
+def test_app_namespace_rejects_skill_without_app_prefix(tmp_path, monkeypatch):
+    skills = tmp_path / "skills"
+    skill = skills / "app" / "canvas-tool"
+    skill.mkdir(parents=True)
+    (skill / "SKILL.md").write_text(
+        "---\nname: canvas-tool\ndescription: test\n---\n",
+        encoding="utf-8",
+    )
+    readme = skills / "README.md"
+    readme.write_text("| `canvas-tool` | test |\n", encoding="utf-8")
+    monkeypatch.setattr(validate_skills, "SKILLS", skills)
+    monkeypatch.setattr(validate_skills, "README", readme)
+
+    issues = validate_skills.check_readme_index()
+    assert any("skills/app/ 下的 skill 名必须以 app- 开头" in issue for issue in issues)

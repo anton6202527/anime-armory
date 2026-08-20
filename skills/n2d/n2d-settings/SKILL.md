@@ -14,16 +14,19 @@ python3 skills/n2d/n2d-settings/scripts/settings_cli.py audit <作品根>
 python3 skills/n2d/n2d-settings/scripts/settings_cli.py set <作品根> <选择点> <值>
 python3 skills/n2d/n2d-settings/scripts/settings_cli.py reset <作品根> <选择点>
 python3 skills/n2d/n2d-settings/scripts/settings_cli.py sync-global <作品根> --all
+python3 skills/n2d/n2d-settings/scripts/settings_cli.py apply-recommended <作品根>
 ```
 
 - `audit`：解析 `_设置.md`，按 `skills/n2d/_lib/settings.py` 的 schema 校验，默认有 error 返回非零。
 - `set`：调用 `set_project_setting()`，保留原格式，自动追加 `## 记录`。未知/实验值需要 `--force`。
 - `reset`：调用 `reset_project_setting()`，删除指定选择点并记录。
 - `sync-global`：调用 `sync_global_settings()`，把当前项目可同步选择写入全局默认；可用 `--all` 或传 `选择点=值`。
+- `apply-recommended`：只补齐缺失的普通选择，默认落混合路由、自动项目规模、视觉风格、5 集脚本小批、关键镜优先、逐个生成/QC、安全的无 BGM 回退和 `合成阶段=启用`；永不覆盖已有项目值。
 
 ## 边界
 
 - 本 skill 只管理设置，不启动任何出图、出视频、配音、合成或重制。
 - 合规/花钱/不可逆选择即使已写入 `_设置.md`，对应 stage 开跑前仍要再次确认。
+- `普通选择策略=推荐方案自动继续` 只影响普通、可逆选择；不能代替付费授权、公开发布或最终人工验收。
 - 用户显式改选择点时，应立即用 `set` 落档；不要等下次阶段才写。
 - `自定义` / `manual` / 实验后端不应被 schema 永久挡住；确认是用户明确选择时用 `--force`，并用 `--message` 写清原因。

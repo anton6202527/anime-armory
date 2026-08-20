@@ -1,53 +1,87 @@
 ---
 name: mv-lyric-sync
-description: 制MV 卡拉OK字幕 — 用 whisperx 把已知歌词强制对齐到成品歌或 vocals 人声轨，按字符级时间戳和原歌词行映射，产自适应画幅的 karaoke.ass、lyrics.lrc 与字符时间轴覆盖报告。Use when asked to 卡拉OK字幕 / 歌词对齐 / 字符级时间戳 / 生成LRC/ASS / 对齐报告. Triggers 卡拉OK, 歌词字幕, 歌词对齐, 字符级对齐, LRC, ASS字幕, 对齐报告, mv-lyric-sync.
+description: 制 MV 卡拉 OK 字幕与正式对齐签收：用 WhisperX 将已知歌词映射为字符时间戳，生成 ASS/LRC，并以当前 hash 绑定的歌声声学证据或具名逐行听审验收。Use when asked to 卡拉OK字幕 / 歌词对齐 / 字符级时间戳 / 生成LRC/ASS / 对齐报告. Triggers 卡拉OK, 歌词字幕, 歌词对齐, 字符级对齐, LRC, ASS字幕, 对齐报告, mv-lyric-sync.
 ---
 
-# mv-lyric-sync — 卡拉OK字幕（制MV 线）
+# mv-lyric-sync — 卡拉 OK 字幕（制 MV 线）
 
-把 `词/lyrics.md` 的歌词**强制对齐**到 `歌/song.*`（或更干净的 vocals 人声轨），产 `字幕/karaoke.ass`（逐字 `\k` 高亮）+ `字幕/lyrics.lrc`（逐行）+ `字幕/alignment_report.json`（QA 对账）。它不只服务最终字幕：正面唱演镜也应在视觉蓝图/分镜前读到真实词句时长。**自包含**，只用通用工具 whisperx。
+把 `词/lyrics.md` 的已知歌词强制对齐到最终 `歌/song.*` 或 vocals stem，生成 `字幕/karaoke.ass`、`字幕/lyrics.lrc` 与 schema 5 `字幕/alignment_report.json`。本阶段是条件阶段：仅当项目同时关闭字幕与演唱口型时可跳过。
 
-本阶段是**条件阶段**：`字幕语言=无字幕` 且 `演唱口型=关闭` 的纯器乐/纯视觉 MV 可合法跳过；其它情况前置执行。
+## 不变量
 
-## 偏好（私有 · 用户选择，不写死在本 skill）
+- `character_coverage_ratio` 只回答“歌词字符是否取得时间戳”，不是声学置信度。schema 5 不写 `alignment_confidence`。
+- 保留 WhisperX 的 char/word raw score，但报告固定标记 `calibrated=false`、`singing_specific=false`、`acceptance_eligible=false`；它们不能自行放行。
+- 首次生成只产 `acceptance.status=pending`，退出码为 3，且不推进 `_进度.md`。检查产物后必须另跑一次正式签收。
+- 正式签收严格二选一：当前 hash-bound 的歌声/逐音素声学证据，或具名完整逐行 listening review。任一输入、ASS、LRC 或报告前置内容变化都会使签收失效。
+- 低文本覆盖不是放行开关：必须先提供覆盖每个弱行的 corrections（master 时间秒）和完整校正版 ASS/LRC，再走上述二选一签收。
+- 对齐音频不是 master 时，先自动以 ffmpeg 解码后的多窗口相关性验证并换算 stem→master offset/drift；验证不了就阻断。也可提供具名、带 notes 的显式 offset/drift 声明。
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+声学证据、corrections 和绑定字段见 [references/alignment-evidence-schema.md](references/alignment-evidence-schema.md)。
 
-本 skill 涉及的选择点：`字幕语言`、`卡拉OK样式`（颜色/字体偏好）、`强制对齐引擎`（本地 cpu/gpu 或 API，如果扩展支持的话）。
+## 依赖与偏好
 
-## 依赖
 ```bash
-pip install whisperx   # 首次下 wav2vec2 对齐模型；CPU 可跑(慢)，有 CUDA 更快
+pip install whisperx
 ```
 
-## 用法
+首次执行前读 `<作品根>/_设置.md`；缺失时按 MV 线的设置流程补齐。相关选择点是字幕语言、卡拉 OK 样式、强制对齐引擎。最终歌曲尚未就位时停下，不得用 rough 音频伪造正式收据。
+
+## 两步 CLI
+
+生成待签收时间轴：
+
 ```bash
-python3 <skill>/scripts/align.py 创作区/制MV/<曲名> [--lang zh] [--device cpu]
-python3 <skill>/scripts/align.py 创作区/制MV/<曲名> --audio 创作区/制MV/<曲名>/歌/vocals.wav
-# 只有逐行听审并确认过低覆盖结果时才可人工放行
-python3 <skill>/scripts/align.py 创作区/制MV/<曲名> --allow-low-confidence --reviewer <name> --notes "逐行校正说明"
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> --lang zh --device cpu
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> --audio <作品根>/歌/vocals.wav
 ```
-- 读 `歌/song.*`（或 `--audio` 指定 vocals）+ `词/lyrics.md`（剥段落标签/占位）→ 强制对齐（拿**已知歌词**当 transcript，不靠转写猜词）→ 写 `字幕/karaoke.ass` + `lyrics.lrc` + `alignment_report.json`。
 
-## 工作流
-1. 确认 `歌/song.*` + `词/lyrics.md`（定稿）就位。
-   - 若 `_设置.md` 为 `歌曲输入时序=后配歌曲` 且最终 `歌/song.*` 未入库，先停下：本阶段不能对 rough 蓝图或估算歌词做正式对齐。
-2. （可选）人声更干净：先用 demucs 分离出 vocals，再用 `--audio 歌/vocals.wav` 对齐（对齐更准）。
-3. 跑 align.py。脚本入口会先过 `mv-craft/scripts/gate.py lyric_sync`：缺最终 `歌/song.*`、`词/lyrics.md` 或歌词行为空时直接阻断。
-4. 看 `character_coverage_ratio`（旧别名 `alignment_confidence`）与逐行 `line_character_coverage`。它们是“已知歌词获得字符时间戳的覆盖率”，不是声学概率；全局低于 90%、任一行低于 85%、时间重叠/倒序时只落报告、不推进阶段。
-5. ASS 分辨率、字号和安全区从目标画幅生成；确需带低覆盖进入人工流程时显式 `--allow-low-confidence` 留痕。
+若 stem 自动相关性不足，但已由音频工程师确认 DAW 时间基准：
 
-## 产物
-- `karaoke.ass`：逐字高亮（mv-compose 有 libass 时 `subtitles=` 烧）。
-- `lyrics.lrc`：逐行（mv-compose 无 libass 时走自带 `render_lyrics.py` Pillow overlay）。
-- `alignment_report.json`：字符覆盖率、逐行覆盖率、时间问题、当前 master/song/lyrics SHA-256 和人工复核签名，供 gate / `mv-review` 引用。歌曲、歌词或对齐音轨任一变化都会令收据失效。
+```bash
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> --audio <stem> \
+  --stem-timing-reviewer "<姓名>" --stem-timing-notes "<测量方法>" \
+  --stem-master-offset-seconds 0.125 --stem-master-drift-seconds 0.004
+```
 
-## 常见错误
-| 错误 | 纠正 |
-|---|---|
-| 歌词与实唱不一致致对齐乱 | lyrics.md 改成与实际演唱一致再跑 |
-| 伴奏太响对齐不准 | 先 demucs 分离 vocals 再对齐 |
-| 低覆盖直接 `--allow-low-confidence` | 必须同时给 `--reviewer` 与非空 `--notes` 逐行听审说明；这不是跳过检查的开关 |
-| 有字幕但 review 提示缺对齐报告 | 重跑新版 align.py，产 `alignment_report.json` |
-| 没填词就跑 | 先补齐本项目 `词/lyrics.md` |
-| 后配歌曲还没最终歌就对齐字幕 | 等用户补入最终 `歌/song.*` 后再跑 |
+低覆盖须在生成时应用校正包；旧参数 `--allow-low-confidence`、`--reviewer`、`--notes` 仅作兼容别名：
+
+```bash
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> --allow-low-coverage \
+  --correction-reviewer "<姓名>" --correction-notes "<逐行校正依据>" \
+  --corrections-file corrections.json --corrected-ass corrected.ass --corrected-lrc corrected.lrc
+```
+
+生成后先试听/检查。声学工具可取得必须原样复制的绑定对象：
+
+```bash
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> \
+  --accept-existing --show-required-binding
+```
+
+然后二选一正式签收：
+
+```bash
+# A：具名、版本化、歌声专用且已校准的逐行/逐音素声学证据
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> \
+  --accept-existing --acoustic-evidence acoustic_evidence.json
+
+# B：人实际逐行对照 master/stem/ASS/LRC/report 前置内容后的具名听审
+python3 skills/mv/mv-lyric-sync/scripts/align.py <作品根> --accept-existing \
+  --listening-reviewer "<姓名>" --listening-notes "<完整逐行听审结论>"
+```
+
+签收命令成功后才写 `acceptance.status=accepted` 并推进 `lyric_sync`。不要把首次生成的退出码 3 或 pending 报告转换成成功完成态。
+
+## 检查重点
+
+- ASS 必须保留原歌词全部字形和标点；未匹配字符用 `\k0`，不得静默删字。
+- 全局字符覆盖低于 90%、任一行低于 85%、缺行、重叠或倒序都属于低文本覆盖路径。
+- `stem_master_timing.bindings` 必须仍匹配当前 master 与 alignment audio；自动证据需通过相关性和 drift 阈值，显式证据需具名 reviewer、offset、drift、notes。
+- 声学证据需有 model name/version、`singing_specific=true`、`calibrated=true`、`acceptance_eligible=true`、metric/threshold/confidence、覆盖全部歌词行的 `per_line[]` 或 `phonemes[]`，并绑定当前五类资产与 report 前置内容。
+- listening review 由 `--accept-existing` 写入，绑定当前 master、alignment audio、lyrics、ASS、LRC、报告前置内容以及签收前报告文件 SHA。
+
+测试：
+
+```bash
+python3 -m pytest -q skills/mv/mv-lyric-sync/scripts/test_align.py
+```

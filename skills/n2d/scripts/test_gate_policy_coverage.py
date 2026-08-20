@@ -56,7 +56,12 @@ def test_gate_policy_coverage_fails_missing_release_evidence(tmp_path: Path) -> 
     payload = gate_policy_coverage.build_coverage(tmp_path, "第1集")
 
     assert payload["status"] == "fail"
-    assert any(row["group"] == "human_review" and "release_evidence" in row["missing"] for row in payload["groups"])
+    completion_rows = {
+        row["group"]: row for row in payload["groups"]
+        if row["group"] in {"human_review", "release_verdict"}
+    }
+    assert all(row["completion_output"] for row in completion_rows.values())
+    assert all("release_evidence" not in row["missing"] for row in completion_rows.values())
 
 
 def test_gate_policy_coverage_write_check_passes_complete_fixture(tmp_path: Path) -> None:

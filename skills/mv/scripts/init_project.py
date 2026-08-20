@@ -209,6 +209,11 @@ def main():
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
+    stage_contract_issues = contract.validate_stage_table()
+    if stage_contract_issues:
+        print("[err] MV 阶段契约损坏：" + "; ".join(stage_contract_issues), file=sys.stderr)
+        return 2
+
     out_root = os.path.abspath(args.out or os.path.join("创作区", "制MV", slug(args.title)))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}（换 --title/--out 或先删）", file=sys.stderr)
@@ -252,45 +257,6 @@ def main():
         has_lyrics = True
 
     publish_target = args.platform
-    meta = {
-        "schema_version": 1,
-        "kind": "mv",
-        "project_id": f"mv_{uuid.uuid4().hex[:16]}",
-        "line": "mv",
-        "title": args.title,
-        "target_platform": args.platform,
-        "publish_target": publish_target,
-        "aspect": args.aspect,
-        "structure": structure,
-        "use_case": args.use_case,
-        "synopsis": build_synopsis(args.title, args.visual_style, args.use_case),
-        "cover": None,
-        "song_timing": song_timing,
-        "visual_style": args.visual_style,
-        "plan_granularity": args.plan_granularity,
-        "beat_strategy": args.beat_strategy,
-        "image_model": args.image_model,
-        "image_channel": args.image_channel,
-        "image_backend": args.image_channel,
-        "video_model": video_model,
-        "video_channel": video_channel,
-        "video_backend": video_channel,
-        "video_spec": args.video_spec,
-        "lip_sync_mode": args.lip_sync,
-        "subtitle_language": args.subtitle_language,
-        "ai_visual_usage": args.ai_visual_usage,
-        "song_rights_status": args.song_rights_status,
-        "source_song": source_song_rel,
-        "source_song_origin": ({
-            "original_name": os.path.basename(args.song),
-            "imported_copy_rel": source_song_rel,
-            "sha256": source_song_sha256,
-        } if source_song_rel else None),
-        "has_song": has_song,
-        "has_lyrics": has_lyrics,
-        "is_demo": args.use_case in {"短视频Hook", "歌曲Demo"},
-        "created_at": date.today().isoformat(),
-    }
     settings = {
         "MV用途": args.use_case,
         "歌曲输入时序": song_timing,
@@ -300,6 +266,7 @@ def main():
         "生图AI": args.image_channel,
         "生图模型": args.image_model,
         "生图渠道": args.image_channel,
+        "MV一致性增强": contract.DEFAULT_SETTINGS["MV一致性增强"],
         "生视频模型": video_model,
         "生视频渠道": video_channel,
         "出视频规格": args.video_spec,
@@ -309,6 +276,28 @@ def main():
         "AI视觉使用披露": args.ai_visual_usage,
         "发行目标平台": publish_target,
     }
+    runtime = contract.runtime_state_from_settings(settings)
+    meta = {
+        "schema_version": 1,
+        "kind": "mv",
+        "project_id": f"mv_{uuid.uuid4().hex[:16]}",
+        "line": "mv",
+        "title": args.title,
+        "structure": structure,
+        "synopsis": build_synopsis(args.title, args.visual_style, args.use_case),
+        "cover": None,
+        "song_rights_status": args.song_rights_status,
+        "source_song": source_song_rel,
+        "source_song_origin": ({
+            "original_name": os.path.basename(args.song),
+            "imported_copy_rel": source_song_rel,
+            "sha256": source_song_sha256,
+        } if source_song_rel else None),
+        "has_song": has_song,
+        "has_lyrics": has_lyrics,
+        "created_at": date.today().isoformat(),
+    }
+    meta.update(runtime)
     with open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
     os.makedirs(os.path.join(out_root, "生产数据"), exist_ok=True)
@@ -330,10 +319,10 @@ def main():
     print(f"     _meta: kind=mv 平台={args.platform} 画幅={args.aspect} 风格={args.visual_style} 歌曲输入时序={song_timing}")
     lyric_step = " → mv-lyric-sync" if args.subtitle_language != "无字幕" or args.lip_sync != "关闭" else ""
     if song_timing == "后配歌曲" and not has_song:
-        print(f"[next] mv-script rough视觉蓝图 → 补入成品歌 → mv-beat{lyric_step} → mv-script复核 → mv-plan → mv-score → mv-image → picture lock → mv-video → mv-compose")
+        print(f"[next] mv-script rough视觉蓝图 → 补入成品歌 → mv-beat{lyric_step} → mv-script复核 → mv-plan → semantic_plan → mv-score → mv-image → picture lock → mv-video → mv-compose → disclosure → provenance → mv-review → handoff")
     else:
-        print(f"[next] 放入/确认成品歌 → mv-beat{lyric_step} → mv-script → mv-plan → mv-score → mv-image → picture lock → video_jobs.py → mv-video → mv-compose")
+        print(f"[next] 放入/确认成品歌 → mv-beat{lyric_step} → mv-script → mv-plan → semantic_plan → mv-score → mv-image → picture lock → video_jobs.py → mv-video → mv-compose → disclosure → provenance → mv-review → handoff")
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main() or 0)

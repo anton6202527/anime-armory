@@ -31,6 +31,23 @@ def test_find_media_url_nested_payload():
     assert rd._find_media_url(payload) == "https://example.com/a.mp4"
 
 
+def test_probe_video_output_records_observed_dimensions_fps_and_sha(tmp_path, monkeypatch):
+    media = tmp_path / "clip.mp4"
+    media.write_bytes(b"returned-media")
+    monkeypatch.setattr(rd.shutil, "which", lambda name: "/usr/bin/ffprobe" if name == "ffprobe" else None)
+    monkeypatch.setattr(rd.subprocess, "run", lambda *args, **kwargs: subprocess.CompletedProcess(
+        args[0], 0, json.dumps({"streams": [{
+            "width": 1280, "height": 720, "avg_frame_rate": "24000/1001",
+        }]}), "",
+    ))
+
+    observed = rd.probe_video_output(media)
+
+    assert observed["resolution"] == "1280x720"
+    assert observed["fps"] == pytest.approx(23.976024)
+    assert observed["output_sha256"] == rd.sha256_file(media)
+
+
 def test_build_prompt_submits_only_compiled_block(tmp_path):
     p = tmp_path / "镜头01.md"
     compiled = compile_prompt({
@@ -97,6 +114,12 @@ def test_render_jobs_with_fake_backend(tmp_path, monkeypatch):
     monkeypatch.setattr(rd, "download_result", fake_download)
     monkeypatch.setattr(rd, "enforce_gate", lambda root_arg: None)
     monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
+    source_profile = rd.ad_render_profile.compile_profile(root)["source_generation"]
+    monkeypatch.setattr(rd, "probe_video_output", lambda path: {
+        "width": source_profile["width"], "height": source_profile["height"],
+        "resolution": source_profile["resolution"], "fps": float(source_profile["fps"]),
+        "output_sha256": rd.sha256_file(path), "probe": "ffprobe",
+    })
     summary = rd.render_jobs(
         root,
         only=set(),
@@ -157,6 +180,61 @@ def test_render_jobs_records_pending_submission(tmp_path, monkeypatch):
     assert summary["failed"] == 0
     assert out["jobs"][0]["status"] == "submitted"
     assert out["jobs"][0]["submit_id"] == "sub_pending"
+    assert out["jobs"][0]["render_profile_sha256"] == out["jobs"][0]["render_profile"]["sha256"]
+    assert out["jobs"][0]["submit_prompt_sha256"]
+
+
+def test_render_jobs_uses_render_profile_resolution_when_cli_override_is_omitted(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01", "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+    }])
+    (root / "_设置.md").write_text(
+        "- 出视频规格: 预算充足\n- 视频分辨率: 1080p\n- 交付比例: 16:9\n", encoding="utf-8")
+    _quiet_video_env(monkeypatch)
+    seen = {}
+
+    def fake_run(job, root_arg, **kwargs):
+        seen.update(kwargs)
+        return {"gen_status": "success", "submit_id": "sub_1080", "credit_count": 1,
+                "_submitted_duration": 4, "_mode": "image2video"}
+
+    def fake_download(payload, target):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0" * 100001)
+
+    monkeypatch.setattr(rd, "run_dreamina_video", fake_run)
+    monkeypatch.setattr(rd, "download_result", fake_download)
+    summary = rd.render_jobs(
+        root, only=set(), limit=None, force=False, model_version="seedance2.0fast",
+        video_resolution=None, poll=1,
+    )
+
+    assert seen["video_resolution"] == "1080p"
+    assert summary["video_resolution"] == "1080p"
+    assert summary["source_fps"] == 30
+    manifest = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["render_profile"]["source_generation"]["resolution"] == "1920x1080"
+
+
+def test_render_jobs_rejects_cli_resolution_that_disagrees_with_profile(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01", "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+    }])
+    (root / "_设置.md").write_text(
+        "- 出视频规格: 预算充足\n- 视频分辨率: 1080p\n- 交付比例: 16:9\n", encoding="utf-8")
+    _quiet_video_env(monkeypatch)
+
+    with pytest.raises(RuntimeError, match="唯一规格"):
+        rd.render_jobs(
+            root, only=set(), limit=None, force=False, model_version="seedance2.0fast",
+            video_resolution="720p", poll=1,
+        )
 
 
 def test_run_dreamina_video_rechecks_submit_id_when_initial_status_fail(tmp_path, monkeypatch):
@@ -229,8 +307,90 @@ def test_collect_only_query_error_keeps_job_submitted(tmp_path, monkeypatch):
     out = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(encoding="utf-8"))
     assert summary["pending"] == 1
     assert summary["failed"] == 0
-    assert out["jobs"][0]["status"] == "submitted"
+    assert out["jobs"][0]["status"] == "submitted_stale_profile"
+    assert "job_render_profile_stale" in out["jobs"][0]["stale_reasons"]
     assert out["jobs"][0]["last_query_error"] == "timeout"
+
+
+def test_existing_output_is_not_relabelled_done_after_render_profile_changes(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01", "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+    }])
+    _quiet_video_env(monkeypatch)
+    monkeypatch.setattr(rd, "run_dreamina_video", lambda job, root_arg, **kwargs: {
+        "gen_status": "success", "submit_id": "sub_current", "credit_count": 1,
+        "_submitted_duration": 4, "_mode": "image2video",
+    })
+
+    def fake_download(payload, target):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0" * 100001)
+
+    monkeypatch.setattr(rd, "download_result", fake_download)
+    first = rd.render_jobs(
+        root, only=set(), limit=None, force=False, model_version="seedance2.0fast",
+        video_resolution=None, poll=1,
+    )
+    assert first["rendered"] == 1
+
+    (root / "_设置.md").write_text(
+        "- 出视频规格: 预算充足\n- 视频分辨率: 1080p\n- 交付比例: 16:9\n",
+        encoding="utf-8",
+    )
+    second = rd.render_jobs(
+        root, only=set(), limit=None, force=False, model_version="seedance2.0fast",
+        video_resolution=None, poll=1,
+    )
+    job = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"))["jobs"][0]
+
+    assert second["skipped"] == 1
+    assert job["status"] == "collected_stale_profile"
+    assert "job_render_profile_stale" in job["stale_reasons"]
+
+
+def test_collected_output_is_rechecked_after_download_before_done(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01", "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+    }])
+    _quiet_video_env(monkeypatch)
+    monkeypatch.setattr(rd, "run_dreamina_video", lambda job, root_arg, **kwargs: {
+        "gen_status": "querying", "_pending_status": "querying",
+        "submit_id": "sub_mismatch", "credit_count": 1,
+        "_submitted_duration": 4, "_mode": "image2video",
+    })
+    first = rd.render_jobs(
+        root, only=set(), limit=None, force=False, model_version="seedance2.0fast",
+        video_resolution=None, poll=0, submit_only=True,
+    )
+    assert first["submitted"] == 1
+
+    monkeypatch.setattr(rd, "query_dreamina_result", lambda submit_id: {
+        "gen_status": "success", "submit_id": submit_id,
+    })
+    monkeypatch.setattr(rd, "download_result", lambda payload, target: (
+        target.parent.mkdir(parents=True, exist_ok=True), target.write_bytes(b"x" * 100001)
+    ))
+    monkeypatch.setattr(rd, "probe_video_output", lambda path: {
+        "width": 1280, "height": 720, "resolution": "1280x720", "fps": 30.0,
+        "output_sha256": rd.sha256_file(path), "probe": "ffprobe",
+    })
+    rd.render_jobs(
+        root, only=set(), limit=None, force=False, model_version="seedance2.0fast",
+        video_resolution=None, poll=0, collect_only=True,
+    )
+    job = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"))["jobs"][0]
+
+    assert job["observed_output"]["fps"] == 30.0
+    assert job["status"] == "collected_profile_mismatch"
+    assert "observed_output_profile_mismatch" in job["stale_reasons"]
 
 
 # ── 资金安全：submit_id 先落盘 / 下载失败可续跑 / 预算封顶 ────────────────────
@@ -255,6 +415,16 @@ def _quiet_video_env(monkeypatch):
     monkeypatch.setattr(rd, "enforce_gate", lambda root: None)
     monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
     monkeypatch.setattr(rd.time, "sleep", lambda s: None)
+    def current_observed(path):
+        root = path.resolve().parents[3]
+        profile = json.loads((root / "生产数据" / "render_profile.json").read_text(encoding="utf-8"))
+        source = profile["source_generation"]
+        return {
+            "width": source["width"], "height": source["height"],
+            "resolution": source["resolution"], "fps": float(source["fps"]),
+            "output_sha256": rd.sha256_file(path), "probe": "ffprobe",
+        }
+    monkeypatch.setattr(rd, "probe_video_output", current_observed)
 
 
 def _render(root, **kwargs):

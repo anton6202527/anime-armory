@@ -11,10 +11,11 @@ import {
 import { Terminal, type IDecoration, type IMarker } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { WebglAddon } from "@xterm/addon-webgl";
-import { onAppEvent } from "../platform/bridge";
+import { onAppEvent, writeClipboardText } from "../platform/bridge";
 import "@xterm/xterm/css/xterm.css";
 import { pickDefaultAgent, ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
 import { scheduleWindowResizeEvent } from "../paneLayout";
+import { copySelectedTerminalText } from "../terminalClipboard";
 import { useI18n } from "../i18n";
 import type { AgentInfo } from "../types";
 import { AgentBar } from "./AgentBar";
@@ -407,6 +408,11 @@ function TerminalSessionView({
       term.onData((d) => {
         const id = ptyIdRef.current;
         if (id != null) ptyWrite(id, d).catch(() => {});
+      }),
+    );
+    disposables.push(
+      term.onSelectionChange(() => {
+        copySelectedTerminalText(term, writeClipboardText);
       }),
     );
     disposables.push(term.onCursorMove(refreshInputHighlight));

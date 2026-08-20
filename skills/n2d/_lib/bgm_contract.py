@@ -60,7 +60,9 @@ def scaffold(root: str | Path, episode: str) -> Dict[str, Any]:
         "kind": KIND,
         "version": VERSION,
         "episode": episode,
-        "status": "draft",
+        # 明确选择 none 不需要版权或生成来源，可作为安全、可逆的
+        # one-click 交付默认。其他策略仍保持 draft，等待真实文件/来源证据。
+        "status": "confirmed" if strategy == "none" else "draft",
         "strategy": strategy,
         "source": {
             "file": "",

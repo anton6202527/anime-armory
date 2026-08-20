@@ -202,8 +202,8 @@
 | 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享定妆库 + 本集分镜） |
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
 | 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数`；默认到这里是 `clip_delivery_complete`，不是可发布母版 |
-| 成片 | n2d-compose | 可选尾段：剪辑合成 + BGM + 烧字幕 → 成片完成；默认不参与 clip 完成判定 |
-| 验收 | n2d-review | 可选尾段：review gate + score + consistency ledger + review-ui + release/readiness + production locks + creative governance 全部通过，并经人工显式签收 |
+| 成片 | n2d-compose | 默认交付尾段：剪辑合成 + BGM + 烧字幕 → 成片完成；只有显式跳过才停在 clip |
+| 验收 | n2d-review | 默认最终尾段：review gate + score + consistency ledger + review-ui + release/readiness + production locks + creative governance 全部通过，并经人工显式签收 |
 
 **调度规则**：任一必经列为 ⬜ 时，对应 skill 可以接手该集；列已 ✅ 时，下游 skill 才能继续。`成片/验收` 只有在 `_设置.md` 写 `合成阶段: 启用`，或本集已经开始这两个列时才参与路由。完整逐列路由判断见调度器 `SKILL.md`。
 
@@ -298,7 +298,7 @@ n2d-image →
 def dispatch(work_root):
     progress = read(f"{work_root}/_进度.md")
     mode = read_setting(work_root, "制作模式", default="混合自动路由")
-    compose_enabled = read_setting(work_root, "合成阶段", default="跳过") == "启用"
+    compose_enabled = read_setting(work_root, "合成阶段", default="启用") == "启用"
     for episode in episodes_sorted_by_number(progress):
         compose_tail = compose_enabled or any_started(episode, ["成片", "验收"])
         if any(episode[c] != "✅" for c in ["剧本改编", "bgm", "封面"]):

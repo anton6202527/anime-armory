@@ -37,6 +37,11 @@ if str(AD_LIB) not in sys.path:
 from ad_video_prompt_compiler import parse_markdown  # noqa: E402
 from ad_video_prompt_compiler import normalize_backend  # noqa: E402
 import io_utils  # noqa: E402  本线 _lib 原子写（账本落盘不可半写）
+
+CRAFT_SCRIPTS = Path(__file__).resolve().parents[2] / "ad-craft" / "scripts"
+if str(CRAFT_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(CRAFT_SCRIPTS))
+import render_profile as ad_render_profile  # noqa: E402
 SUCCESS_STATUSES = {"success", "succeeded", "completed", "done"}
 PENDING_STATUSES = {"querying", "queueing", "queued", "processing", "running", "pending", "submitted", "created"}
 RETRY_ATTEMPTS = 3
@@ -98,6 +103,112 @@ def build_prompt(prompt_file: Path) -> str:
     if compiled and str(compiled.get("prompt") or "").strip():
         return str(compiled["prompt"]).strip()
     raise RuntimeError("缺后端编译提交 prompt；拒绝把完整生产合同回退提交给模型")
+
+
+def sha256_file(path: Path) -> Optional[str]:
+    if not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def probe_video_output(path: Path) -> Dict[str, Any]:
+    """Measure returned media; requested values are never treated as observed."""
+    ffprobe = shutil.which("ffprobe")
+    if not ffprobe or not path.is_file():
+        return {}
+    proc = subprocess.run([
+        ffprobe, "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "stream=width,height,avg_frame_rate,r_frame_rate",
+        "-of", "json", str(path),
+    ], capture_output=True, text=True)
+    try:
+        stream = (json.loads(proc.stdout).get("streams") or [])[0] if proc.returncode == 0 else {}
+    except (json.JSONDecodeError, IndexError, TypeError):
+        stream = {}
+    width, height = int(stream.get("width") or 0), int(stream.get("height") or 0)
+    raw_fps = str(stream.get("avg_frame_rate") or stream.get("r_frame_rate") or "0")
+    try:
+        if "/" in raw_fps:
+            numerator, denominator = raw_fps.split("/", 1)
+            fps = float(numerator) / float(denominator)
+        else:
+            fps = float(raw_fps)
+    except (ValueError, ZeroDivisionError):
+        fps = 0.0
+    if not width or not height or fps <= 0:
+        return {}
+    return {
+        "width": width, "height": height, "resolution": f"{width}x{height}",
+        "fps": round(fps, 6), "output_sha256": sha256_file(path), "probe": "ffprobe",
+    }
+
+
+def existing_job_staleness(job: Mapping[str, Any], root: Path, target: Path,
+                           render_ref: Mapping[str, Any], planned_source: Mapping[str, Any]) -> list[str]:
+    """Detect drift for a submitted/rendered job without discarding paid output."""
+    issues: list[str] = []
+    current_sha = str(render_ref.get("sha256") or "")
+    bound = job.get("render_profile") if isinstance(job.get("render_profile"), Mapping) else {}
+    if not current_sha or str(bound.get("sha256") or "") != current_sha:
+        issues.append("job_render_profile_stale")
+    if str(job.get("render_profile_sha256") or "") != current_sha:
+        issues.append("actual_request_profile_stale")
+
+    requested = ad_render_profile.parse_resolution(
+        job.get("video_resolution"), str(planned_source.get("aspect") or "16:9"),
+    )
+    requested_dims = ((int(requested["width"]), int(requested["height"])) if requested else None)
+    planned_dims = (int(planned_source.get("width") or 0), int(planned_source.get("height") or 0))
+    if requested_dims != planned_dims:
+        issues.append("actual_request_resolution_stale")
+    try:
+        requested_fps = float(job.get("requested_source_fps"))
+        legacy_fps = float(job.get("source_fps"))
+        fps_current = (
+            abs(requested_fps - float(planned_source.get("fps"))) <= 0.01
+            and abs(legacy_fps - requested_fps) <= 0.01
+        )
+    except (TypeError, ValueError):
+        fps_current = False
+    if not fps_current:
+        issues.append("actual_request_fps_stale")
+
+    prompt_rel = str(job.get("prompt") or "")
+    expected_prompt = str(job.get("submit_prompt_sha256") or "")
+    try:
+        actual_prompt = hashlib.sha256(build_prompt(root / prompt_rel).encode("utf-8")).hexdigest()
+    except Exception:
+        actual_prompt = ""
+    if not expected_prompt or expected_prompt != actual_prompt:
+        issues.append("submit_prompt_stale")
+
+    frame_hashes = job.get("input_frame_sha256") if isinstance(job.get("input_frame_sha256"), Mapping) else {}
+    for label, key in (("first", "first_frame"), ("end", "end_frame")):
+        rel = str(job.get(key) or "")
+        if rel and (not frame_hashes.get(label) or sha256_file(root / rel) != frame_hashes.get(label)):
+            issues.append(f"{label}_frame_stale")
+    if target.is_file() and (not job.get("output_sha256") or job.get("output_sha256") != sha256_file(target)):
+        issues.append("output_receipt_stale")
+    if target.is_file():
+        observed = probe_video_output(target)
+        recorded = job.get("observed_output") if isinstance(job.get("observed_output"), Mapping) else {}
+        if not observed or any(recorded.get(key) != observed.get(key)
+                               for key in ("width", "height", "resolution", "fps", "output_sha256")):
+            issues.append("observed_output_receipt_stale")
+        elif ((int(observed.get("width") or 0), int(observed.get("height") or 0)) != planned_dims
+              or abs(float(observed.get("fps") or 0) - float(planned_source.get("fps") or 0)) > 0.15):
+            issues.append("observed_output_profile_mismatch")
+    return sorted(set(issues))
+
+
+def collected_status(issues: Sequence[str]) -> str:
+    if "observed_output_profile_mismatch" in issues:
+        return "collected_profile_mismatch"
+    return "collected_stale_profile" if issues else "done"
 
 
 def submit_duration(seconds: float, model_version: str) -> int:
@@ -286,7 +397,7 @@ def render_jobs(
     limit: Optional[int],
     force: bool,
     model_version: str,
-    video_resolution: str,
+    video_resolution: Optional[str],
     poll: int,
     submit_only: bool = False,
     collect_only: bool = False,
@@ -302,6 +413,30 @@ def render_jobs(
     jobs = manifest.get("jobs")
     if not isinstance(jobs, list):
         raise RuntimeError("video_jobs_manifest.json 缺 jobs[]")
+    render_profile = ad_render_profile.write_profile(root)
+    render_ref = ad_render_profile.compact_ref(render_profile)
+    planned_source = render_profile["source_generation"]
+    needs_new_submission = any(
+        isinstance(job, Mapping) and job_matches(job, only)
+        and not job.get("submit_id")
+        and not (root / str(job.get("expected_output") or "")).exists()
+        for job in jobs
+    )
+    if render_profile["summary"]["block"] and needs_new_submission and not collect_only:
+        codes = ", ".join(row["code"] for row in render_profile["findings"] if row["severity"] == "block")
+        raise RuntimeError(f"render_profile 有 block（{codes}）；拒绝提交付费视频任务")
+    planned_resolution = str(planned_source["backend_request_resolution"])
+    if video_resolution:
+        requested = ad_render_profile.parse_resolution(video_resolution, str(planned_source["aspect"]))
+        planned_dims = (int(planned_source["width"]), int(planned_source["height"]))
+        requested_dims = ((int(requested["width"]), int(requested["height"])) if requested else None)
+        if requested_dims != planned_dims and needs_new_submission and not collect_only:
+            raise RuntimeError(
+                f"--video-resolution={video_resolution} 与 render_profile source_generation="
+                f"{planned_source['resolution']} 不一致；先改 _设置.md/brief 并重建 job，不能临时覆盖唯一规格"
+            )
+    video_resolution = video_resolution or planned_resolution
+    manifest["render_profile"] = render_ref
     rendered = skipped = failed = submitted = pending = 0
     budget_halt: Optional[Dict[str, Any]] = None
     events_path = root / "生产数据" / "production_events.jsonl"
@@ -311,19 +446,27 @@ def render_jobs(
         if limit is not None and rendered >= limit:
             break
         target = root / str(job.get("expected_output"))
+        existing_submit_id = str(job.get("submit_id") or "")
+        currentness = (existing_job_staleness(job, root, target, render_ref, planned_source)
+                       if target.exists() or existing_submit_id else [])
         if target.exists() and not force:
-            job["status"] = "done"
+            if currentness:
+                job["status"] = collected_status(currentness)
+                job["stale_reasons"] = currentness
+            else:
+                job["status"] = "done"
             job.setdefault("backend", "Dreamina/即梦官方 CLI")
             job.setdefault("output", str(job.get("expected_output")))
             skipped += 1
             continue
-        existing_submit_id = str(job.get("submit_id") or "")
         if existing_submit_id and not force:
             try:
                 payload = retry_call(lambda: query_dreamina_result(existing_submit_id),
                                      describe=f"query_result submit_id={existing_submit_id}")
                 if payload.get("_pending_status"):
-                    job["status"] = "submitted"
+                    job["status"] = "submitted_stale_profile" if currentness else "submitted"
+                    if currentness:
+                        job["stale_reasons"] = currentness
                     job["pending_status"] = payload.get("_pending_status")
                     pending += 1
                     print(f"[pending] {job.get('job_id')} submit_id={existing_submit_id} status={payload.get('_pending_status')}", flush=True)
@@ -331,20 +474,28 @@ def render_jobs(
                 retry_call(lambda: download_result(payload, target),
                            describe=f"download submit_id={existing_submit_id}")
                 job.update({
-                    "status": "done",
                     "backend": "Dreamina/即梦官方 CLI",
-                    "model_version": model_version,
-                    "video_resolution": video_resolution,
                     "output": str(job.get("expected_output")),
+                    "output_sha256": sha256_file(target),
+                    "observed_output": probe_video_output(target),
                     "generated_at": now_iso(),
                 })
+                currentness = existing_job_staleness(job, root, target, render_ref, planned_source)
+                job["status"] = collected_status(currentness)
+                if currentness:
+                    job["stale_reasons"] = currentness
+                else:
+                    job.pop("stale_reasons", None)
+                    job.update({"model_version": model_version, "video_resolution": video_resolution})
                 rendered += 1
                 print(f"[ok] {job.get('job_id')} -> {job.get('expected_output')} submit_id={existing_submit_id}", flush=True)
                 continue
             except Exception as exc:
                 if collect_only:
                     pending += 1
-                    job["status"] = "submitted"
+                    job["status"] = "submitted_stale_profile" if currentness else "submitted"
+                    if currentness:
+                        job["stale_reasons"] = currentness
                     job["last_query_error"] = str(exc)
                     print(f"[pending] {job.get('job_id')} query_error={exc}", flush=True)
                     continue
@@ -384,6 +535,15 @@ def render_jobs(
             actual_backend = "seedance" if "seedance" in model_version.lower() else "dreamina"
             if expected_backend not in {actual_backend, "generic"}:
                 raise RuntimeError(f"路由 primary={expected_backend} 与 Dreamina runner 实际模型={actual_backend} 不一致")
+            job_profile = job.get("render_profile") if isinstance(job.get("render_profile"), Mapping) else {}
+            if job_profile.get("sha256") and job_profile.get("sha256") != render_ref.get("sha256"):
+                raise RuntimeError("render_profile 已变化但 video_jobs_manifest 未重建")
+            job["render_profile"] = render_ref
+            job["input_frame_sha256"] = {
+                label: sha256_file(root / str(job.get(key)))
+                for label, key in (("first", "first_frame"), ("end", "end_frame"))
+                if job.get(key)
+            }
             payload = run_dreamina_video(
                 job,
                 root,
@@ -398,6 +558,12 @@ def render_jobs(
                     "backend": "Dreamina/即梦官方 CLI",
                     "model_version": model_version,
                     "video_resolution": video_resolution,
+                    "source_fps": planned_source.get("fps"),
+                    "requested_source_fps": planned_source.get("fps"),
+                    "fps_request_mode": "backend_default_verified_on_collect",
+                    "render_profile_sha256": render_ref.get("sha256"),
+                    "actual_model_backend": actual_backend,
+                    "submit_prompt_sha256": actual_prompt_sha,
                     "submit_id": payload.get("submit_id"),
                     "credit_count": payload.get("credit_count"),
                     "submitted_duration": payload.get("_submitted_duration"),
@@ -416,6 +582,8 @@ def render_jobs(
                         "submit_id": payload.get("submit_id"),
                         "model_version": model_version,
                         "video_resolution": video_resolution,
+                        "source_fps": planned_source.get("fps"),
+                        "render_profile_sha256": render_ref.get("sha256"),
                         "duration": payload.get("_submitted_duration"),
                         "credit_count": payload.get("credit_count"),
                         "pending_status": payload.get("_pending_status"),
@@ -430,6 +598,10 @@ def render_jobs(
                 "backend": "Dreamina/即梦官方 CLI",
                 "model_version": model_version,
                 "video_resolution": video_resolution,
+                "source_fps": planned_source.get("fps"),
+                "requested_source_fps": planned_source.get("fps"),
+                "fps_request_mode": "backend_default_verified_on_collect",
+                "render_profile_sha256": render_ref.get("sha256"),
                 "actual_model_backend": actual_backend,
                 "submit_id": payload.get("submit_id"),
                 "credit_count": payload.get("credit_count"),
@@ -441,10 +613,17 @@ def render_jobs(
             retry_call(lambda: download_result(payload, target),
                        describe=f"download submit_id={payload.get('submit_id')}")
             job.update({
-                "status": "done",
                 "output": str(job.get("expected_output")),
+                "output_sha256": sha256_file(target),
+                "observed_output": probe_video_output(target),
                 "generated_at": now_iso(),
             })
+            currentness = existing_job_staleness(job, root, target, render_ref, planned_source)
+            job["status"] = collected_status(currentness)
+            if currentness:
+                job["stale_reasons"] = currentness
+            else:
+                job.pop("stale_reasons", None)
             append_jsonl(events_path, {
                 "ts": now_iso(),
                 "stage": "video",
@@ -457,8 +636,10 @@ def render_jobs(
                     "end_frame": job.get("end_frame"),
                     "submit_id": payload.get("submit_id"),
                     "model_version": model_version,
-                "video_resolution": video_resolution,
-                "actual_model_backend": actual_backend,
+                    "video_resolution": video_resolution,
+                    "source_fps": planned_source.get("fps"),
+                    "render_profile_sha256": render_ref.get("sha256"),
+                    "actual_model_backend": actual_backend,
                     "duration": payload.get("_submitted_duration"),
                     "credit_count": payload.get("credit_count"),
                     "submit_prompt_sha256": actual_prompt_sha,
@@ -481,6 +662,9 @@ def render_jobs(
         "backend": "Dreamina/即梦官方 CLI",
         "model_version": model_version,
         "video_resolution": video_resolution,
+        "source_fps": planned_source.get("fps"),
+        "requested_source_fps": planned_source.get("fps"),
+        "render_profile": render_ref,
         "rendered": rendered,
         "skipped": skipped,
         "submitted": submitted,
@@ -512,7 +696,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--model-version", default="seedance2.0fast")
-    ap.add_argument("--video-resolution", default="720p")
+    ap.add_argument("--video-resolution", default=None,
+                    help="兼容显式参数；默认严格读取 生产数据/render_profile.json 的 source_generation")
     ap.add_argument("--poll", type=int, default=900)
     ap.add_argument("--submit-only", action="store_true", help="只提交并登记 submit_id，不等待下载")
     ap.add_argument("--collect-only", action="store_true", help="只查询已登记 submit_id 并下载完成结果，不提交新任务")

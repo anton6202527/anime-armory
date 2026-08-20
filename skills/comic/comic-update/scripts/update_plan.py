@@ -41,7 +41,18 @@ def _load_progress_scanner():
     return module
 
 
+def _load_dependency_index():
+    path = os.path.join(REPO_SKILLS, "_lib", "dependency_index.py")
+    spec = importlib.util.spec_from_file_location("comic_dependency_index", path)
+    if not spec or not spec.loader:
+        raise RuntimeError(f"cannot load comic dependency index: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 PROGRESS_SCAN = _load_progress_scanner()
+DEPENDENCY_INDEX = _load_dependency_index()
 
 LINE = "comic"
 LINE_LABEL = "画漫画"
@@ -174,6 +185,13 @@ def load_meta(root: str) -> dict[str, Any]:
 def skill_name_for_relpath(path: str) -> str | None:
     parts = path.split("/")
     if len(parts) >= 2 and parts[0] == "skills":
+        # The six production lines keep their historical sub-skills below the
+        # line directory (for example ``skills/comic/comic-compose``), while
+        # newer standalone skills live directly below ``skills``.  Prefer the
+        # registered nested skill when present; otherwise shared ``_lib`` and
+        # line-level references correctly belong to the line entry skill.
+        if len(parts) >= 3 and parts[2] in SKILL_DEFAULT_STAGE:
+            return parts[2]
         return parts[1]
     return None
 
@@ -541,6 +559,46 @@ def affected_chapters(progress: dict[str, Any], rerun_from: str | None, *, force
     return chapters
 
 
+def merge_panel_impacts(
+    chapters: list[dict[str, Any]],
+    panel_impacts: list[dict[str, Any]],
+    progress: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Attach exact targets without weakening the existing stage replay plan."""
+    by_chapter = {str(item.get("chapter")): dict(item) for item in chapters}
+    progress_by_chapter = {
+        str(row.get("chapter")): row for row in progress.get("rows") or [] if isinstance(row, dict)
+    }
+    for impact in panel_impacts:
+        chapter = str(impact.get("chapter") or "")
+        if not chapter:
+            continue
+        row = by_chapter.get(chapter)
+        if row is None:
+            current = progress_by_chapter.get(chapter, {})
+            from_stage = str(impact.get("from_stage") or "image")
+            current_stage = str(current.get("current_stage") or from_stage)
+            row = {
+                "chapter": chapter,
+                "current_stage": current_stage,
+                "current_stage_label": stage_label(current_stage),
+                "rerun_from": from_stage,
+                "rerun_from_label": stage_label(from_stage),
+                "rerun_until": current_stage,
+                "rerun_until_label": stage_label(current_stage),
+                "gaps": [],
+            }
+            by_chapter[chapter] = row
+        if stage_index(str(impact.get("from_stage") or "review")) < stage_index(str(row.get("rerun_from") or "review")):
+            row["rerun_from"] = impact.get("from_stage")
+            row["rerun_from_label"] = stage_label(impact.get("from_stage"))
+        row["panel_targets"] = list(impact.get("panel_targets") or [])
+        row["page_targets"] = list(impact.get("page_targets") or [])
+        row["panel_impacts"] = list(impact.get("panels") or [])
+        row["rendered_outputs_changed"] = bool(impact.get("rendered_outputs_changed"))
+    return sorted(by_chapter.values(), key=lambda item: str(item.get("chapter") or ""))
+
+
 def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any]]:
     steps: list[dict[str, Any]] = []
     traditional_off = PROGRESS_SCAN.read_setting(Path(root), "传统原稿流程", "启用").strip() in {
@@ -565,6 +623,7 @@ def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any
     for chapter in plan.get("affected_chapters") or []:
         ch = chapter.get("chapter")
         rerun_from = chapter.get("rerun_from") or plan.get("rerun_from")
+        panel_targets = [str(value) for value in chapter.get("panel_targets") or [] if str(value)]
         chapter_gaps = [item for item in chapter.get("gaps") or [] if isinstance(item, dict)]
         receipt_only: list[str] = []
         all_receipt_only = bool(chapter_gaps)
@@ -620,8 +679,24 @@ def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any
             steps.append({
                 "type": "agent_step",
                 "purpose": f"{ch} 评估是否重出图",
-                "instruction": "正式重出 PNG 前确认模型、渠道、预算和目标格；若只改便宜结构层，先跑 image gate 判断旧图是否可保留。",
+                "instruction": (
+                    "正式重出 PNG 前确认模型、渠道、预算和目标格；若只改便宜结构层，先跑 image gate 判断旧图是否可保留。"
+                    + (f" 当前依赖索引锁定目标格：{','.join(panel_targets)}。" if panel_targets else "")
+                ),
             })
+            if (
+                panel_targets
+                and stage_index("image_jobs") <= stage_index(rerun_from) <= stage_index("image")
+            ):
+                steps.append({
+                    "type": "command",
+                    "purpose": f"{ch} 仅重抽受影响格",
+                    "command": (
+                        f'python3 skills/comic/comic-batch/scripts/run.py "{root}" --chapter {ch} '
+                        f'--targets {",".join(panel_targets)} --force'
+                    ),
+                    "run_when": "模型、渠道、预算和当前像素双闸均已确认",
+                })
             steps.append({"type": "command", "purpose": f"{ch} 成图 gate", "command": f'python3 skills/comic/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage image'})
         if stage_index(chapter.get("current_stage")) >= stage_index("compose"):
             steps.append({
@@ -646,6 +721,7 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
     current_stage = progress.get("current_stage") or "source"
     relevant_skills = relevant_skills_for_stage(current_stage)
     baseline = load_snapshot(root)
+    project_dependency_index = DEPENDENCY_INDEX.build_index(Path(root))
     bootstrapped = False
     needs_record = False
     if baseline is None:
@@ -653,11 +729,13 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
             baseline = snapshot_for_skills(relevant_skills, status="bootstrap")
             baseline["project_root"] = root
             baseline["current_stage"] = current_stage
+            baseline["project_dependency_index"] = project_dependency_index
             write_json(snapshot_path(root), baseline)
             bootstrapped = True
         else:
             needs_record = True
     current_snapshot = snapshot_for_skills(relevant_skills, status="current")
+    current_snapshot["project_dependency_index"] = project_dependency_index
     diff = changed_files_since(baseline, current_snapshot) if baseline else {
         "legacy_snapshot": False,
         "changed_files": [],
@@ -666,6 +744,12 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
     }
     changed_files = diff["changed_files"]
     changed_skills = sorted({skill_name_for_relpath(path) for path in changed_files if skill_name_for_relpath(path)})
+    baseline_dependency_index = (baseline or {}).get("project_dependency_index")
+    panel_impacts = (
+        DEPENDENCY_INDEX.compare_indices(baseline_dependency_index, project_dependency_index)
+        if isinstance(baseline_dependency_index, dict)
+        else []
+    )
     baseline_skills = set((baseline or {}).get("relevant_skills") or [])
     newly_relevant_skills = sorted(set(relevant_skills) - baseline_skills)
     observe_only_changed = sorted(skill for skill in changed_skills if skill in OBSERVE_ONLY_SKILLS)
@@ -682,6 +766,7 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
             future_stage_changes.append({"file": path, "stage": stage, "stage_label": stage_label(stage)})
     structural_gaps = progress.get("artifact_gaps") or []
     candidate_stages.extend(gap["stage"] for gap in structural_gaps if gap.get("stage"))
+    candidate_stages.extend(str(item.get("from_stage")) for item in panel_impacts if item.get("from_stage"))
     rerun_from = min(candidate_stages, key=stage_index) if candidate_stages else None
     rebuild_needed = bool(rerun_from) and not needs_record and not diff.get("legacy_snapshot")
     plan: dict[str, Any] = {
@@ -708,6 +793,7 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
         "future_stage_changes": future_stage_changes,
         "deleted_files": diff.get("deleted_files") or [],
         "structural_gaps": structural_gaps,
+        "panel_impacts": panel_impacts,
         "rebuild_needed": rebuild_needed,
         "rerun_from": rerun_from,
         "rerun_from_label": stage_label(rerun_from),
@@ -715,7 +801,8 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
         "rerun_until_label": stage_label(current_stage) if rebuild_needed else "",
         "notes": [],
     }
-    plan["affected_chapters"] = affected_chapters(progress, rerun_from, force_project_scope=bool(production_changed_files)) if rebuild_needed else []
+    base_affected = affected_chapters(progress, rerun_from, force_project_scope=bool(production_changed_files)) if rebuild_needed else []
+    plan["affected_chapters"] = merge_panel_impacts(base_affected, panel_impacts, progress) if rebuild_needed else []
     if needs_record:
         plan["notes"].append("当前项目没有内容基线；先 record，或去掉 --no-bootstrap 建立临时基线。")
     if bootstrapped:
@@ -728,6 +815,9 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
         plan["notes"].append("部分变化只影响尚未开始的未来阶段，本次不要求重制。")
     if observe_only_changed and not production_changed_files and not structural_gaps:
         plan["notes"].append("本次变化只影响控制面，不要求漫画产物重制。")
+    if panel_impacts:
+        target_count = sum(len(item.get("panel_targets") or []) for item in panel_impacts)
+        plan["notes"].append(f"内容依赖快照发现 {target_count} 个精确受影响格；执行步骤已优先给出 panel targets。")
     plan["execution_steps"] = build_execution_steps(root, plan)
     plan["commands"] = [step["command"] for step in plan["execution_steps"] if step.get("type") == "command"]
     return plan
@@ -778,6 +868,15 @@ def write_plan(root: str, plan: dict[str, Any]) -> tuple[str, str]:
             )
         if len(plan["structural_gaps"]) > 80:
             lines.append(f"- ... 另 {len(plan['structural_gaps']) - 80} 个")
+    if plan.get("panel_impacts"):
+        lines.extend(["", "## 精确受影响格"])
+        for impact in plan["panel_impacts"]:
+            targets = "、".join(impact.get("panel_targets") or []) or "无"
+            pages = "、".join(impact.get("page_targets") or []) or "未映射"
+            lines.append(
+                f"- `{impact.get('chapter')}` 从 `{stage_label(impact.get('from_stage'))}` 回放；"
+                f"格：{targets}；页/段：{pages}"
+            )
     if plan.get("changed_files"):
         lines.extend(["", "## 变更文件"])
         lines.extend(f"- `{path}`" for path in plan["changed_files"][:80])
@@ -806,6 +905,7 @@ def command_record(args: argparse.Namespace) -> int:
     snapshot["project_root"] = root
     snapshot["current_stage"] = current_stage
     snapshot["current_stage_label"] = stage_label(current_stage)
+    snapshot["project_dependency_index"] = DEPENDENCY_INDEX.build_index(Path(root))
     write_json(snapshot_path(root), snapshot)
     print(f"[ok] recorded {LINE} skill snapshot: {snapshot_path(root)} ({snapshot['file_count']} files)")
     return 0

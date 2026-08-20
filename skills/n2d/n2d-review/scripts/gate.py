@@ -39,6 +39,7 @@ from seam_contract import (  # noqa: E402
     normalize_seam_mode,
     requires_boundary_frame,
 )
+import prompt_consumption_contract  # noqa: E402
 from gates.evidence import *  # noqa: F401,F403  证据族 check_（增量3）
 from gates.consistency import *  # noqa: F401,F403  证据族 check_（增量3）
 from gates.backend import *  # noqa: F401,F403  证据族 check_（增量3）
@@ -3519,6 +3520,11 @@ def check_prompt_consumed_contracts(root: str, ep: str, stage: str) -> None:
         issues.append(f"scope={data.get('scope')!r}，应为 {scope!r}")
     if data.get("accepted") is not True:
         issues.append("accepted 不是 true")
+    fingerprint_problems = prompt_consumption_contract.fingerprint_issues(
+        root, ep, scope, data.get("input_fingerprint")
+    )
+    if fingerprint_problems:
+        issues.append("统一 input_fingerprint 无效：" + ",".join(fingerprint_problems))
 
     contracts = data.get("contracts") if isinstance(data.get("contracts"), list) else []
     by_name = {str(row.get("name") or ""): row for row in contracts if isinstance(row, Mapping)}

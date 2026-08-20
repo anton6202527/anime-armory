@@ -1,8 +1,8 @@
 ---
 name: novel
-description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
+description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / exploratory draft / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实性文化审读 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/项目名/ when no action is specified, or resumes an in-progress 创作区/写小说/项目名/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 探索型写作, 角色试镜, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 真实性审读, 文化审读, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3238 | 目录文本总行数 77734
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3307 | 目录文本总行数 83191
 
 # novel — 小说工坊调度入口
 
@@ -14,7 +14,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 **当前默认口径保持不变**：`写小说` 默认进入 novel 纯文本小说生产线，但不默认等于“专门制作漫剧的小说”。新建原创项目时先定 `小说用途`，且该选择点**无默认值**；用户可选 `传统小说 / 漫剧源书 / 微短剧源书 / 短读/短篇 / 出海译制底稿 / 自定义`。只有用户明确选择 `漫剧源书` 或 `微短剧源书`，才启用对应的短章、强钩子、市场基准和后续转制检查；否则按普通小说/网文项目推进。
 
-**默认成书工作流**：已有作品根时，优先跑 `python3 skills/novel/novel-craft/scripts/author_workflow.py "<作品根>" --write`。它会按作者视角检查“入口设置 → 作者意图/蓝图/读者契约 → 资料/观察/审美与事实落场景 → 设定/场景卡/结构地图 → Demo 双闸门 → 分章写作 → review/score → 真实读者验证 → 分层编辑与 editor query → AI/合规/发布元数据 → release manifest”，输出当前步骤、真实 blocker/warning 和下一步命令；`flow.py`、`pipeline_runner.py`、`novel-dashboard` 都以这套默认流程作为可落地的导航层。
+**默认成书工作流**：已有作品根时，优先跑 `python3 skills/novel/novel-craft/scripts/author_workflow.py "<作品根>" --write`。它会按作者视角检查“入口设置与 human-first seed / 非正史探索 → 作者意图/蓝图/读者契约 → 资料/观察/审美与事实落场景 → 按创作工艺档建立场景卡/结构地图 → Demo 双闸门 → 分章写作 → review/score → 真实读者验证 → 分层编辑、editor query 与按需真实性/文化审读 → AI/合规/发布元数据 → release manifest”，输出当前步骤、真实 blocker/warning 和下一步命令；`flow.py`、`pipeline_runner.py`、`novel-dashboard` 都以这套默认流程作为可落地的导航层。
 
 **Prompt 分层裁决（2026-07）**：小说线不新增“把完整写作合同压成短 prompt”的 provider compiler。蓝图、设定圣经、状态账本、读者契约、章纲、场景卡、上一章窗口与修订项本来就是正文生成所需上下文，擅自精简会造成设定/人物/伏笔漂移。正确边界由 `draft_packets.py` 的逐章/逐 pass 任务包、static/dynamic context、检索命中、source/state hash、语义任务绑定和 `prompt_cache_metrics.py` 提供；只有某个实际文本后端出现独立结构字段时，才在小说线 `_lib` 内新增对应 adapter，不能为了与其它媒介形式统一而强造 compiler。
 
@@ -24,7 +24,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/novel/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`权利辖区`、`发行地区`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`创作工艺档`、`权利来源`、`权利辖区`、`发行地区`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。
 
 > 作为入口：路由到子 skill 前，若已有项目则读其 `<作品根>/_设置.md`，新项目按全局默认初始化。
 
@@ -34,7 +34,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 | 用户输入形态 | 路由到 |
 |---|---|
-| **只有几个字 / 一个想法 / 部分风格 / 零散笔记 / 半成品片段**，没有成型源文 → 要写一本**原创新书** | `novel-create`（访谈→蓝图→设定→章纲→Demo→成书） |
+| **只有几个字 / 一个想法 / 部分风格 / 零散笔记 / 半成品片段**，没有成型源文 → 要写一本**原创新书** | `novel-create`（先保留 human-first seed；可先非正史探索，再访谈→蓝图→设定→章纲→Demo→成书） |
 | 拖进来一本**本地小说文件/目录/file:///URL**，但没说下一步动作，只是要先建档 | `novel/scripts/import_novel.py` → `创作区/写小说/<书名>/` |
 | 给了**书名 / 作者 / URL**，明确要把公版书"取回来" | `novel-fetch` |
 | 已有原作 + 想**起一个好书名** | `novel-title` |
@@ -43,7 +43,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 已有原作 + 要**接着末章往后写新章节**（时间向前推） | `novel-continue` |
 | 已有一段较短的文本，要**扩写章节内细节**（时间不动 / 加厚） | `novel-expand` |
 | 已有长篇，要**压缩为短版 / 漫剧脚本量级** | `novel-condense` |
-| 自己手写小说时要**工艺指南**（章纲 / 单章 / 扩 / 缩 / 续 的原则） | `novel-craft` |
+| 自己手写小说时要**工艺指南**，或先做**不进入正史的角色/场景/POV/声音/结构试写** | `novel-craft`（探索稿走 `exploration.py`，hash-bound 晋升也只生成候选） |
 | 要补**生活观察 / 采访纪要 / 人物行为 / 场景五感 / 烟火气素材库** | `novel-observe` |
 | 要建**正向审美样本库 / 拆解为什么这段好 / 高光场景标尺 / 精品化审美对照** | `novel-aesthetic` |
 | 已有在建项目，要看**当前进度 / 全线看板 / 下一步该跑哪个 skill** | `novel-progress` |
@@ -56,7 +56,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 要把**多章节审稿、评分、dashboard 刷新、修订任务**排队给多个 worker 并发处理 | `novel-batch`（本地 flock 队列，claim/lease/reclaim/dead-letter，不直接执行模型） |
 | 已有成品或准成品小说，准备交给视觉生产线前要**检查文本、权利、审稿、评分、AI 披露、改编潜力是否齐** | `python3 skills/novel/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
-| 已有审稿/评分/读者反馈后，要做**专业编辑 / 发展性编辑 / 行文编辑 / 拷贝编辑 / 校样 / 主编轮次 / 投稿前精修计划** | `novel-edit`（分层编辑计划：editorial assessment → developmental edit → line edit → copyedit/proofread） |
+| 已有审稿/评分/读者反馈后，要做**专业编辑 / 发展性编辑 / 行文编辑 / 拷贝编辑 / 校样 / 真实性或文化审读 / 投稿前精修计划** | `novel-edit`（分层编辑；真实性审读默认咨询，只有项目显式 required 才进发布硬闸） |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
 | 要写或审**专业、真实、行业感、别外行**的场景（医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文），或商业投稿/出海/改编前要事实证据层 | `novel-research`（产 `资料/专业资料包_<主题>.md` + `research_sources.json` + `research_scene_usage.json`；写章包自动引用，review 查证据缺口） |
 | **跑过 score、想据评分弱项直接开改写**（评分→改写串法） | `novel-rewrite --score-source 评分/score_report.json`（读 scores/verdict/deductions 预填 改动spec②，建议·待与用户要求对账） |
@@ -74,25 +74,27 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 - **视角续写** = **换 POV** 写同一段时间、**事件锁定不改** → novel-spinoff
 - **改写** = **改主线 / 换设定 / 加原创材料**（事件可改、可新增设定，与视角续写正相反）→ novel-rewrite
 
-⚠️ **QA 不是五个对等裁决，而是「3 个裁决 + 2 个分析仪」**（用户给"已写好的若干章 + 一个评估诉求"时按诉求**性质**分流）：
+⚠️ **QA 不是若干个对等裁决，而是「裁决 + 经验数据 + 分析仪」**（用户给“已写好的若干章 + 一个评估诉求”时按诉求**性质**分流）：
 
 **裁决型（直接出结论，可入 gate）**
 - **写得对不对**（人设崩/视角穿帮/设定矛盾/原文照搬/题旨偏移）→ `novel-review`（挑硬伤）
 - **值不值得做 / 能不能火**（题材热度/爽点/留存/文学性 → 总分+判定+改写ROI）→ `novel-score`
-- **从多种合成读者视角找待验证的弃书点/可预测性假设** → `novel-simulate`；真实留存判断走 `novel-feedback`
+
+**经验数据（真实行为，不和合成输出混权重）**
 - **真实读者在哪里流失**（平台后台/内测表单/评论导出、完读率、弃读点）→ `novel-feedback`
 
 **分析仪型（产出数据/台账，喂给上面的裁决，不单独当验收结论）**
+- **从多种合成阅读视角找待验证的中断点/理解障碍/可预测性假设** → `novel-simulate`；只保留未校准表面分量与正文复核问题，不预测真实留存
 - **逻辑/设定一致性 + 动态百科 + 伏笔台账**（角色生死、伏笔 planted→payoff 逾期、关系温度、设定自洽）→ `novel-wiki`。它是 `novel-review` 的一致性引擎（由 review 的 `consistency_audit.py` 一键串跑），也是 `设定/动态百科.json` 与 `设定/foreshadowing_ledger.json` 的权威存储。
 - **节奏热力图**（注水、断章、高潮密集度）→ `novel-balance`；其「烂尾预警」读 `novel-wiki` 的伏笔台账回收率。
 
-- 速记：问"能不能火/要不要继续写"=score；"哪里写崩了"=review；"读者爱不爱看"=simulate；"设定/伏笔有没有漏"=wiki；"节奏拖不拖"=balance。
-- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 验留存；已有真实读者数据时先跑 `novel-feedback`，score 会优先读真实反馈。多份报告都跑过后，用 `novel-craft/scripts/revision_planner.py` 合并成统一修订计划 `修订/revision_plan.json`，避免各报告各自回流；该计划会被 `draft_packets.py`/`arc_packets.py` 读回，命中章/弧段的修订项自动注入下一轮写章包，闭环回流。
+- 速记：问"能不能火/要不要继续写"=score；"哪里写崩了"=review；"哪些阅读中断/可预测性假设值得复核"=simulate；"真实读者在哪里流失"=feedback；"设定/伏笔有没有漏"=wiki；"节奏拖不拖"=balance。
+- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 提出多视角正文复核假设；已有真实读者数据时先跑 `novel-feedback`，score 会优先读真实反馈。多份报告都跑过后，用 `novel-craft/scripts/revision_planner.py` 合并成统一修订计划 `修订/revision_plan.json`，避免各报告各自回流；该计划会被 `draft_packets.py`/`arc_packets.py` 读回，命中章/弧段的修订项自动注入下一轮写章包，闭环回流。
 - 投稿/出版级精修：score/review/balance/feedback 都跑过后，再跑 `novel-edit` 生成分层编辑计划；结构级任务先改，行文级任务后改，校样最后做。
 - 专业事实串用：先 `novel-research` 建资料包 → `novel-craft` 写章任务包自动引用 → `novel-review` 检查专业事实是否有证据支持；证据缺口回 `novel-research`，不要靠 prompt 记忆硬写。
 - 生活质感串用：先 `novel-observe` 建观察素材库 → 写章/编辑时选素材注入任务包 → `novel-review`/`novel-edit` 检查人物是否仍悬浮。事实归 `novel-research`，生活细节归 `novel-observe`。
 - 审美标尺串用：Demo 或授权/公版样本进 `novel-aesthetic` → `novel-style` 抽统计/语义风格 → `novel-edit` line packet 引用 transfer_rule → `novel-score` 品质向维度引用正向样本，避免只会扣分不会判断“好在哪里”。
-- **score→rewrite 串法**：若 score 判 `小改/大改`（非 `弃稿重立`）且用户要据评分开改写，把报告喂给 `novel-rewrite --score-source 评分/score_report.json`——弱项/扣分雷点会预填进新项目 `设定/改动spec.md` 的②栏，作为**建议待对账**（与用户要求冲突时以用户要求为准）。评分判 `弃稿重立` 时改写未必合适，先确认是否走 `novel-create` 另起。改写后可回跑 score 做 before/after 对照。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（留存）是常被漏掉的三项，建议一并提示用户。
+- **score→rewrite 串法**：若 score 判 `小改/大改`（非 `弃稿重立`）且用户要据评分开改写，把报告喂给 `novel-rewrite --score-source 评分/score_report.json`——弱项/扣分雷点会预填进新项目 `设定/改动spec.md` 的②栏，作为**建议待对账**（与用户要求冲突时以用户要求为准）。评分判 `弃稿重立` 时改写未必合适，先确认是否走 `novel-create` 另起。改写后可回跑 score 做 before/after 对照。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（可预测性/中断假设）是常被漏掉的三项，建议一并提示用户。
 
 ⚠️ **"文风漂移"双触发仲裁**：提取/分析文风指纹、查笔力一致 → `novel-style`（文风是它的主责）；只有当诉求是"**作为质检项**报告某章偏离全书文风"且同时要查别的硬伤时，才并入 `novel-review`。单看文风一律走 style。
 

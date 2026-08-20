@@ -12,7 +12,7 @@
 from copy import deepcopy
 
 
-CONTRACT_VERSION = 4
+CONTRACT_VERSION = 5
 
 # ── 选择点取值域 ───────────────────────────────────────────────────────────
 AD_TYPES = ("TVC", "信息流短视频", "品牌片", "产品demo", "电商详情视频", "直播切片", "自定义")
@@ -25,15 +25,15 @@ DELIVERY_ASPECTS = ("16:9", "9:16", "4:5", "1:1", "多比例")
 CUTDOWN_PLANS = ("主片+15s+6s", "主片+15s", "仅主片", "自定义")
 CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
 # 生视频模型/渠道候选快照（高频变动，freshness.py 据 采集日期 判过期）。
-# 生视频候选采集日期：2026-07-11  来源：BytePlus Seedance 2.0 API、Google Veo 3.1 API、项目实际 CLI probe；范围=默认/适配内后端，其余候选执行时仍须 probe
+# 生视频候选采集日期：2026-08-20  来源：BytePlus Seedance 2.0、Google Veo 3.1、Kling 3.0、MiniMax Hailuo、Runway、Luma、Pika 与官方开源仓；范围=候选存在性/关键能力，实际账号与 CLI 仍须执行时 probe
 AD_VIDEO_BACKENDS_VERIFIED = {
-    "date": "2026-07-11",
-    "source": "https://docs.byteplus.com/en/docs/modelark/1520757 ; https://ai.google.dev/gemini-api/docs/video",
+    "date": "2026-08-20",
+    "source": "https://docs.byteplus.com/en/docs/modelark/1520757 ; https://ai.google.dev/gemini-api/docs/video ; https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide ; https://platform.minimax.io/docs/api-reference/api-overview ; https://docs.dev.runwayml.com/guides/models/ ; https://lumalabs.ai/news/introducing-ray-3-2 ; https://dev.pika.art/models/pika/pika-2.5/image-to-video",
     "scope": "default_and_adapter_backends",
 }
 VIDEO_MODELS = (
     "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
-    "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
+    "Runway Gen-4.5", "Luma Ray3.2", "Pika 2.5",
     "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
 )
 # 渠道的「规范菜单」——每个渠道一行，用于选择点展示 / init 提示（不含别名，避免重复项）。
@@ -344,7 +344,7 @@ AD_STAGE_TABLE = [
     {"key": "feedback",   "label": "投放反馈(可选)", "owner": "ad-feedback", "gate": "test-learn-refresh report"},
 ]
 
-STAGE_ACCEPTANCE_VERSION = 3
+STAGE_ACCEPTANCE_VERSION = 4
 # 每阶段标准必须说明证据性质：deterministic=机器事实；official=法律/平台；
 # house=内部生产标准；human=只能由具名人员签收；heuristic=仅建议，不能伪装硬事实。
 # `threshold` 写清通过线，`authority` 写依据层级，`on_fail` 写回退工位；避免只写抽象口号。
@@ -381,19 +381,19 @@ STAGE_CRITERIA = {
     ),
     "image": (
         {"id": "image_provenance", "evidence": "deterministic", "authority": "project_generation_contract",
-         "standard": "所有 job 完成、具体模型/渠道、真实输出与实际参考输入可追溯", "threshold": "非取消 job 全 done 且文件存在", "on_fail": "ad-image 补落档/重出"},
+         "standard": "逐 job 串行完成 preflight、真实提交/收集、full product QC 与绑定当前输出 SHA 的具名人审", "threshold": "非取消 job 均有 current accepted image_job_receipt；前序未签收不得启动后序", "on_fail": "ad-image 补参考/QC/签收或重出当前图"},
         {"id": "product_qc", "evidence": "deterministic", "authority": "house_visual_qc",
          "standard": "product_qc full precision 且 0 block；视觉启发式只 WARN", "threshold": "precision=full, block=0", "on_fail": "ad-image 修受影响图"},
     ),
     "video": (
         {"id": "video_provenance", "evidence": "deterministic", "authority": "project_generation_contract",
-         "standard": "compiled prompt/输入帧/模型路由/输出均可追溯", "threshold": "非取消 job 全 done 且输出存在", "on_fail": "ad-video 补落档/重出"},
+         "standard": "compiled prompt/输入帧/模型路由/实际请求/输出均绑定当前 render profile", "threshold": "非取消 job 全 done；profile SHA 当前且请求符合 source_generation", "on_fail": "ad-video 重建 route/job 或重出"},
         {"id": "video_qc", "evidence": "deterministic", "authority": "house_video_qc",
          "standard": "ffprobe+三帧+接缝实测 full precision，0 block", "threshold": "precision=full, block=0", "on_fail": "ad-video 修 clip/接缝"},
     ),
     "compose": (
         {"id": "delivery_matrix", "evidence": "deterministic", "authority": "house_or_project_delivery_profile",
-         "standard": "所有未取消交付件存在并通过时长/比例/编解码/音轨/响度/版位 QC", "threshold": "每件 delivery_qc.passed=true", "on_fail": "ad-compose 重导对应版本"},
+         "standard": "所有未取消交付件有获准 placement adaptation，存在并通过时长/比例/FPS/编解码/音轨/响度/版位 QC", "threshold": "adaptation 0 block；每件符合 master_render 且 delivery_qc.passed=true", "on_fail": "ad-compose 原生重构、补签核或重导对应版本"},
         {"id": "color_delivery", "evidence": "deterministic", "authority": "house_SDR_master_profile",
          "standard": "SDR 母版 BT.709/yuv420p/progressive；HDR/混色源须显式转换方案", "threshold": "色彩预检与交付元数据 0 block", "on_fail": "ad-compose 统一色彩管理后重导"},
         {"id": "accessibility_delivery", "evidence": "house", "authority": "WCAG_2_2_plus_house_caption_qc",
@@ -405,13 +405,13 @@ STAGE_CRITERIA = {
     ),
     "handoff": (
         {"id": "release_compliance", "evidence": "official", "authority": "release_jurisdiction_and_platform_rules",
-         "standard": "AI/授权/平台声明/版位安全区/元数据证据 release_ready", "threshold": "compliance_manifest.release_ready=true", "on_fail": "发布方/法务补证"},
+         "standard": "AI 标识、商业内容披露、授权、平台声明、版位安全区、元数据与投放就绪证据 release_ready", "threshold": "compliance_manifest.release_ready=true 且 campaign_readiness.release_ready=true", "on_fail": "发布方/法务/measurement 负责人补证"},
         {"id": "jurisdiction_coverage", "evidence": "official", "authority": "jurisdiction_specific_review",
          "standard": "非大陆投放逐辖区绑定当前成片的法律复核，不以泛称“海外”代替", "threshold": "每个 release region 有具名、带哈希复核", "on_fail": "补目标辖区法务复核"},
         {"id": "locale_release", "evidence": "deterministic", "authority": "project_locale_contract",
          "standard": "逐 locale 统一翻译、币种、单位、CTA、法律声明、配音、字幕与文字布局", "threshold": "locale_matrix_validation 0 block 且交付件均映射有效 locale", "on_fail": "补本地化与具名语言/排版复核"},
         {"id": "variant_release", "evidence": "deterministic", "authority": "project_release_contract",
-         "standard": "每个最终交付件绑定当前 SHA、placement、locale、jurisdiction、claims/disclosures、rights 与 AI label receipt", "threshold": "release_variant_manifest 0 block，逐交付件映射完整", "on_fail": "补发布变体证据或重建 manifest"},
+         "standard": "每个最终交付件绑定当前 SHA、placement、locale、jurisdiction、claims/disclosures、rights、AI label 与 commercial disclosure 独立回执", "threshold": "release_variant_manifest 0 block，逐 placement 精确映射完整", "on_fail": "补发布变体证据或重建 manifest"},
         {"id": "provenance_release", "evidence": "official", "authority": "C2PA_2_3_plus_applicable_AI_label_rules",
          "standard": "直接探测最终文件的 C2PA/隐式元数据；容器不承载时以绑定当前 SHA 的可查询平台/供应商回执补证", "threshold": "provenance_qc 0 block；metadata_status 字符串不能单独通过", "on_fail": "重新嵌入标识或补当前文件回执"},
     ),
@@ -419,15 +419,15 @@ STAGE_CRITERIA = {
         {"id": "machine_review", "evidence": "deterministic", "authority": "project_release_contract",
          "standard": "M0 机器报告 0 block 且未陈旧", "threshold": "summary.block=0 且 SHA/mtime 当前", "on_fail": "回对应生产工位修复"},
         {"id": "human_signoff", "evidence": "human", "authority": "named_release_reviewer",
-         "standard": "产品/品牌/人物/场景/道具/字幕/音画/安全区/视觉真实性/闪烁/locale/AI 标识由具名人员逐项签收", "threshold": "全部检查 approved，证据、交付件与逐资产最终 contact sheet 哈希当前", "on_fail": "补具名审片和逐项证据"},
+         "standard": "产品/品牌/人物/场景/道具/字幕/音画/安全区/真实性/闪烁/locale/AI 与商业披露/campaign readiness 由具名人员逐项签收", "threshold": "全部检查 approved，证据、交付件、readiness 与逐资产 contact sheet 哈希当前", "on_fail": "补具名审片和逐项证据"},
         {"id": "dependency_lineage", "evidence": "deterministic", "authority": "content_addressed_project_graph",
          "standard": "逐阶段、逐镜头、逐交付件的输入输出哈希收据当前；局部输入变化只失效其依赖节点", "threshold": "所有上游 dependency node=current", "on_fail": "只返工 stale 节点并重新验收"},
     ),
     "feedback": (
         {"id": "experiment_design", "evidence": "house", "authority": "platform_experiment_guidance_plus_house_preregistration",
-         "standard": "同版位同受众同预算、单变量、预注册 KPI/窗口/样本门槛", "threshold": "validation.approved=true 且 plan SHA 当前", "on_fail": "重做实验设计"},
+         "standard": "同版位/受众/预算、单变量，预注册 KPI、baseline/MDE/alpha/power、固定停止规则与多重比较", "threshold": "formal readiness 当前；validation.approved=true 且 plan/素材/配置 SHA 当前", "on_fail": "补投放就绪或重做实验设计"},
         {"id": "statistical_read", "evidence": "deterministic", "authority": "raw_platform_data",
-         "standard": "无充分区间或不可比层时不得宣布胜者", "threshold": "原始数据哈希当前；不满足则 inconclusive", "on_fail": "延长实验或仅报观察"},
+         "standard": "平台原生结果优先；本地二项分析只有功效样本、停止条件和校正检验均完成才宣布 qualified winner", "threshold": "当前素材/回执/原始数据哈希一致；interim/directional 不得完成阶段", "on_fail": "延长实验、补平台回执或仅报方向"},
     ),
 }
 
@@ -439,7 +439,7 @@ DELIVERABLE_FIELDS = ("deliverable_id", "label", "duration", "aspect", "kind", "
 DELIVERABLE_KINDS = ("master", "cutdown", "reframe", "ab_variant")
 
 
-# 「多比例」展开成的具体交付比例（中心裁切/加边由 ad-compose reframe 产出）。
+# 「多比例」展开成的具体交付比例；实际适配模式由 placement_adaptation 决定，不能据此推定中心裁切。
 MULTI_ASPECT_RATIOS = ("16:9", "9:16", "4:5", "1:1")
 
 

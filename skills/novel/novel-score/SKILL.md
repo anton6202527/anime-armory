@@ -68,10 +68,12 @@ python3 skills/novel/novel-feedback/scripts/ingest_reader_events.py "<作品根>
 - 无该文件正常退化；尚未发布/内测时可先跑 `novel-simulate`。
 
 ### 1.7 读「合成叙事探针」提出复核问题（选做 · context-only）
-若作品根有 `评分/reader_panel_signals.json`（`novel-simulate` 产），`score.py` 会显示其 `retention_proxy`（兼容字段 `retention_prior`）、`hook_strength` 与 `cliche_density_per_kchar`，并在 `score_report.reader_panel_path` 留痕：
-- schema v2 明确 `evidence_type=synthetic_probe`、`validation_status=unvalidated`、`decision_authority=context_only`、`numeric_score_eligible=false`。
-- 这些值只提出“应回正文检查钩子、套路、信息负担吗”的问题，不是抽样读者、留存概率或统计证据，**不会自动上调/下调总分**。
-- 补完人格心声/弃书点后仍是合成证据；若要判断真实留存，走 `novel-feedback` 导入真人/平台数据。
+若作品根有 `评分/reader_panel_signals.json`（`novel-simulate` 产），`score.py` 会显示 schema v3 的章尾标记原始命中/覆盖、CJK 4-gram 去重计数与比率、套路词和各阅读视角关注词的字面密度，并在 `score_report.reader_panel_path` 留痕：
+- schema v3 明确 `evidence_type=synthetic_probe`、`validation_status=unvalidated`、`decision_authority=context_only`、`numeric_score_eligible=false`，且不产聚合留存分。
+- schema v3 必须用 `source_snapshot` 绑定本次实际 scope；score 消费前重算 scope 文件集与 SHA。stale 时只提示重跑并隐藏旧值，不能把旧分量塞进当前评分 prompt。
+- 这些分量未经校准、没有统一方向，只提出“应回正文检查钩子、重复、套路和信息负担吗”的问题，不是抽样读者、留存概率或统计证据，**不会自动上调/下调总分**。
+- v1/v2 旧文件仍能读取，但因缺 scope snapshot 明确标为“新鲜度未知”；旧值与聚合字段一律隐藏、不触发阈值，建议重跑 `novel-simulate` 迁移 v3。
+- 补完阅读视角的证据问题后仍是合成证据；若要判断真实留存，走 `novel-feedback` 导入真人/平台数据。
 - 无该文件正常退化；需要多视角编辑假设时才提示运行 `novel-simulate`。
 
 ### 1.8 参考分布百分位(选做 · 合规样本)

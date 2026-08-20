@@ -59,7 +59,8 @@ def base_payload(
         "schema_version": 1,
         "kind": kind,
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        # Compliance artifacts are designed to move with the work directory.
+        "project_root": ".",
         "title": title or meta.get("title") or os.path.basename(root),
         "publish_target": publish_target,
         "human_contribution": human_contribution,

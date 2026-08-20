@@ -20,6 +20,7 @@ for _p in (_CRAFT, _AD_LIB):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 import contract as craft_contract  # noqa: E402
+import dependency_graph  # noqa: E402
 import progress_md  # noqa: E402
 
 # 逐阶段验收凭证的新鲜度参照物（相对路径）：凭证早于这些核心产物 = 验收后又动过料，
@@ -32,9 +33,12 @@ STAGE_ACCEPTANCE_SOURCES = {
     "storyboard": ["脚本/storyboard.json", "脚本/镜头时长.json"],
     "image": ["出图/分镜", "出图/共享/asset_registry.json", "设定库/asset_registry.json"],
     "video": ["出视频/分镜"],
-    "compose": ["合成"],
+    "compose": ["合成", "生产数据/render_profile.json", "生产数据/placement_adaptation.json"],
     "handoff": ["合规/ai_usage.json", "合规/compliance_manifest.json",
-                "合规/release_variant_manifest.json", "合规/locale_matrix_validation.json"],
+                "生产数据/campaign_readiness.json", "合规/release_variant_manifest.json",
+                "合规/locale_matrix_validation.json", "合成/delivery_qc.json",
+                "生产数据/render_profile.json", "生产数据/placement_adaptation.json",
+                "生产数据/stage_acceptance/compose.json"],
     "review": ["合规/ad_review_m0.json", "合规/human_signoff.json"],
     "feedback": ["投放反馈"],
 }
@@ -160,6 +164,9 @@ def stage_acceptance_findings(root, progress_text, progress_path):
 def review(root):
     root = os.path.abspath(root)
     findings = []
+    brief_path = os.path.join(root, "需求", "brief.json")
+    brief = load_json(brief_path, {}) or {}
+    evidence_sources = dependency_graph.brief_evidence_paths(Path(root), brief)
 
     master = os.path.join(root, "合成", "成片_主片.mp4")
     if not os.path.isfile(master):
@@ -236,7 +243,6 @@ def review(root):
     if usage is None:
         findings.append(finding("block", "ai_usage_missing", "缺 AI 使用/授权披露", ai_usage))
     else:
-        brief = load_json(os.path.join(root, "需求", "brief.json"), {}) or {}
         rights = brief.get("rights") if isinstance(brief.get("rights"), dict) else {}
         # 用了真人/代言人但披露里 talent_status 仍占位或写「未使用真人」= 矛盾，block。
         if _right_used(rights.get("talent")):
@@ -275,10 +281,14 @@ def review(root):
                                     "AI/平台声明、版位安全区或元数据责任尚未闭合，不能标记发布就绪", compliance))
         else:
             stale = stale_finding(compliance, [
-                ai_usage, os.path.join(root, "需求", "brief.json"),
+                ai_usage, brief_path,
                 os.path.join(root, "脚本", "广告脚本.md"), os.path.join(root, "脚本", "storyboard.json"),
                 master, os.path.join(root, "合成", "delivery_plan.json"),
-            ],
+                os.path.join(root, "合成", "delivery_qc.json"),
+                os.path.join(root, "生产数据", "render_profile.json"),
+                os.path.join(root, "生产数据", "placement_adaptation.json"),
+                os.path.join(root, "生产数据", "stage_acceptance", "compose.json"),
+            ] + evidence_sources,
                                   "compliance_manifest_stale", "compliance_manifest")
             if stale:
                 findings.append(stale)
@@ -297,7 +307,10 @@ def review(root):
         if warns:
             findings.append(finding("warn", "delivery_qc_warn", f"交付件技术 QC warn={warns}", delivery_qc))
         stale = stale_finding(delivery_qc, [master, os.path.join(root, "合成", "cutdown"),
-                                            os.path.join(root, "合成", "多比例")],
+                                            os.path.join(root, "合成", "多比例"),
+                                            os.path.join(root, "合成", "delivery_plan.json"),
+                                            os.path.join(root, "生产数据", "render_profile.json"),
+                                            os.path.join(root, "生产数据", "placement_adaptation.json")],
                               "delivery_qc_stale", "delivery_qc")
         if stale:
             findings.append(stale)
@@ -316,6 +329,9 @@ def review(root):
             master, os.path.join(root, "配音", "vo.wav"), os.path.join(root, "脚本", "voiceover.txt"),
             os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
         ]),
+        ("生产数据/campaign_readiness.json", "campaign_readiness", "正式投放准备度", [
+            brief_path, *evidence_sources,
+        ]),
         ("合规/provenance_qc.json", "provenance_qc", "最终文件 AI 元数据/C2PA 探测", [
             master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"), ai_usage,
         ]),
@@ -324,8 +340,14 @@ def review(root):
             os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
         ]),
         ("合规/release_variant_manifest.json", "release_variant_manifest", "逐交付版本发布清单", [
-            os.path.join(root, "合成", "delivery_plan.json"), os.path.join(root, "合规", "locale_matrix.json"),
+            brief_path, os.path.join(root, "合成", "delivery_plan.json"),
+            os.path.join(root, "合成", "delivery_qc.json"),
+            os.path.join(root, "生产数据", "render_profile.json"),
+            os.path.join(root, "生产数据", "placement_adaptation.json"),
+            os.path.join(root, "生产数据", "stage_acceptance", "compose.json"),
+            os.path.join(root, "合规", "locale_matrix.json"),
             master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+            *evidence_sources,
         ]),
         ("生产数据/final_media_consistency.json", "final_media_consistency", "最终媒体逐资产 contact sheet", [
             master, os.path.join(root, "出视频", "分镜", "视频"),
@@ -342,6 +364,9 @@ def review(root):
             findings.append(finding("block", f"{code}_malformed", f"{label}缺 summary.block/warn", path))
         elif blocks:
             findings.append(finding("block", f"{code}_block", f"{label} block={blocks}", path))
+        elif code == "campaign_readiness" and not bool((report.get("summary") or {}).get("release_ready")):
+            findings.append(finding("block", "campaign_readiness_not_release_ready",
+                                    "campaign readiness 未明确通过正式投放 fail-closed 检查", path))
         if warns:
             findings.append(finding("warn", f"{code}_warn", f"{label} warn={warns}，须在具名审片中闭合", path))
         stale = stale_finding(path, sources, f"{code}_stale", label)

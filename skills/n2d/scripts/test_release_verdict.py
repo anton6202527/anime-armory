@@ -34,6 +34,21 @@ def _write_bytes(path: Path, payload: bytes) -> str:
     return release_verdict.sha256_file(path)
 
 
+def _refresh_operational_evidence(root: Path) -> None:
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "production_events.jsonl").touch(exist_ok=True)
+    release_verdict.acceptance_contract._event_ledger_module().audit(
+        str(root), write=True, strict_trace=True
+    )
+    registry = release_verdict.acceptance_contract.n2d_schema_registry
+    report = registry.scan_artifacts(
+        str(root), strict_unknown=True, scope=registry.SCAN_SCOPE_RELEASE,
+        completion_inputs_only=True,
+    )
+    _write_json(prod / "artifact_validation.json", report)
+
+
 def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     (root / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (root / "_进度.md").write_text(f"""# demo
@@ -102,7 +117,7 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     clip1_hash = _write_bytes(root / "出视频" / episode / "Clip01.mp4", b"pilot clip 1")
     clip2_hash = _write_bytes(root / "出视频" / episode / "Clip02.mp4", b"pilot clip 2")
     _write_bytes(root / "出视频" / episode / "视频" / "Clip_01.mp4", b"accepted take 1")
-    _write_json(root / "出视频" / episode / "prompt" / "video_model_routes.json", {"kind": "n2d_video_model_routes", "status": "pass"})
+    _write_json(root / "出视频" / episode / "prompt" / "video_model_routes.json", {"kind": "n2d_video_model_routes", "version": 1, "status": "pass", "routes": []})
     _write_json(root / "合成" / episode / "_work" / "timeline.json", {"kind": "n2d_rough_cut_timeline", "episode": episode, "segments": []})
     (root / "合成" / episode / "rough_cut_preview.html").write_text("<html>rough</html>", encoding="utf-8")
     _write_json(root / "生产数据" / f"final_timeline_probe_{episode}.json", {"kind": "n2d_final_timeline_probe", "episode": episode, "status": "pass", "segments": []})
@@ -151,6 +166,7 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     })
     _write_json(root / "生产数据" / f"video_qc_{episode}.json", {"kind": "n2d_video_qc", "status": "pass"})
     release_verdict.production_locks.scaffold(root, episode, confirmed=True, reviewer="qa", force=True)
+    _refresh_operational_evidence(root)
 
 
 def test_release_verdict_internal_only_when_all_components_pass(tmp_path: Path) -> None:
@@ -163,8 +179,14 @@ def test_release_verdict_internal_only_when_all_components_pass(tmp_path: Path) 
     assert {c["name"]: c["status"] for c in payload["components"]}["image_qc"] == "pass"
     assert {c["name"]: c["status"] for c in payload["components"]}["pilot_release_gate"] == "pass"
     assert payload["delivery_states"]["clip_delivery_complete"]["complete"] is True
-    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is True
+    assert payload["delivery_states"]["master_technical_complete"]["complete"] is True
+    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is False
+    assert payload["delivery_states"]["master_delivery_complete"]["status"] == "pending_acceptance"
     assert payload["delivery_states"]["publish_ready_cn"]["complete"] is False
+    bindings = payload["evidence_bindings"]
+    assert bindings["digest"]
+    assert all(bindings["records"][role]["sha256"] for role in release_verdict.acceptance_contract.REQUIRED_EVIDENCE_ROLES)
+    assert payload["acceptance_contract"]["required"] is True
 
 
 def test_release_verdict_blocks_stale_image_qc(tmp_path: Path) -> None:
@@ -277,6 +299,67 @@ def test_release_verdict_blocks_missing_final_master(tmp_path: Path) -> None:
     assert payload["delivery_states"]["master_delivery_complete"]["complete"] is False
 
 
+def test_release_verdict_blocks_failed_operational_evidence(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    _write_json(
+        tmp_path / "生产数据" / "production_events_audit.json",
+        {"status": "fail", "issues": ["broken event chain"]},
+    )
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+    components = {row["name"]: row for row in payload["components"]}
+
+    assert components["event_ledger_audit"]["status"] == "block"
+    assert components["artifact_validation"]["status"] == "pass"
+    assert payload["status"] == "blocked"
+
+
+@pytest.mark.parametrize(
+    ("filename", "component_name"),
+    [
+        ("production_events_audit.json", "event_ledger_audit"),
+        ("artifact_validation.json", "artifact_validation"),
+    ],
+)
+def test_release_verdict_rejects_status_only_operational_green(
+    tmp_path: Path, filename: str, component_name: str
+) -> None:
+    _release_ready_project(tmp_path)
+    _write_json(tmp_path / "生产数据" / filename, {"status": "pass"})
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+    component = next(row for row in payload["components"] if row["name"] == component_name)
+
+    assert component["status"] == "block"
+    assert component["details"]["issues"]
+    assert payload["status"] == "blocked"
+
+
+def test_final_master_uses_same_canonical_resolver_as_acceptance(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    canonical = tmp_path / "合成" / "第1集" / "成片_第1集_zh.mp4"
+    rough = canonical.with_name("rough_cut.mp4")
+    rough.write_bytes(b"newer rough cut")
+    future = time.time() + 10
+    os.utime(rough, (future, future))
+
+    result = release_verdict.check_final_master(tmp_path, "第1集")
+
+    assert result["status"] == "pass"
+    assert result["path"] == canonical.relative_to(tmp_path).as_posix()
+    assert result["details"]["selected"] == canonical.relative_to(tmp_path).as_posix()
+
+
+def test_final_master_blocks_when_playability_cannot_be_proven(monkeypatch, tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    monkeypatch.setattr(release_verdict.script_supervisor_log, "ffprobe_duration", lambda _path: None)
+
+    result = release_verdict.check_final_master(tmp_path, "第1集")
+
+    assert result["status"] == "block"
+    assert "无法证明可播放" in result["message"]
+
+
 def test_public_ai_label_gap_does_not_erase_technical_master_delivery(tmp_path: Path) -> None:
     _release_ready_project(tmp_path)
     path = tmp_path / "合规" / "compliance_manifest.json"
@@ -284,10 +367,12 @@ def test_public_ai_label_gap_does_not_erase_technical_master_delivery(tmp_path: 
     data["ai_labeling"]["explicit_label"]["status"] = "pending"
     data["ai_labeling"]["implicit_metadata"]["applied"] = False
     _write_json(path, data)
+    _refresh_operational_evidence(tmp_path)
 
     payload = release_verdict.build_verdict(tmp_path, "第1集", profile="cn_public")
 
-    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is True
+    assert payload["delivery_states"]["master_technical_complete"]["complete"] is True
+    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is False
     assert payload["delivery_states"]["publish_ready_cn"]["complete"] is False
     assert payload["status"] == "blocked"
 

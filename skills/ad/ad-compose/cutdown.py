@@ -288,14 +288,22 @@ def render_cutdown(root, kept, total, target_label, out_path=None, aspect="16:9"
                             "-show_entries", "stream=index", "-of", "csv=p=0", master],
                            capture_output=True, text=True)
     has_audio = probe.returncode == 0 and bool(probe.stdout.strip())
-    ow, oh = _aspect_size(aspect)
+    render_profile = load_json(os.path.join(root, "生产数据", "render_profile.json"), {}) or {}
+    master_profile = render_profile.get("master_render") if isinstance(render_profile.get("master_render"), dict) else {}
+    if not master_profile.get("width") or not master_profile.get("height") or not master_profile.get("fps"):
+        return False, "缺统一 生产数据/render_profile.json；先重建交付计划/主片，不能用隐含 1920x1080@30 默认值", None
+    profile_aspect = str(master_profile.get("aspect") or "")
+    if profile_aspect and profile_aspect != aspect:
+        return False, f"cutdown 比例 {aspect} 与 render_profile 母版比例 {profile_aspect} 不一致；跨比例请先走 placement adaptation，再按获准模式制作", None
+    ow, oh = int(master_profile["width"]), int(master_profile["height"])
+    fps = float(master_profile["fps"])
     args = [ff, "-y", "-i", master]
     n = len(chosen_spans)
     pre = []
     for k, (start, end) in enumerate(chosen_spans):
         pre.append(f"[0:v]trim=start={start}:end={end},setpts=PTS-STARTPTS,"
                    f"scale={ow}:{oh}:force_original_aspect_ratio=decrease,"
-                   f"pad={ow}:{oh}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=30[v{k}]")
+                   f"pad={ow}:{oh}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps={fps:g}[v{k}]")
         if has_audio:
             pre.append(f"[0:a]atrim=start={start}:end={end},asetpts=PTS-STARTPTS[a{k}]")
     concat_in = "".join(f"[v{k}]" for k in range(n))
@@ -315,19 +323,6 @@ def render_cutdown(root, kept, total, target_label, out_path=None, aspect="16:9"
     if rc.returncode != 0:
         return False, f"cutdown 渲染失败：{rc.stderr[-600:]}", None
     return True, f"cutdown 成片：{out_path}", out_path
-
-
-def _aspect_size(aspect, out_long=1920):
-    a, _, b = aspect.replace("x", ":").partition(":")
-    try:
-        av = float(a) / float(b)
-    except (ValueError, ZeroDivisionError):
-        av = 16 / 9
-    if av >= 1:
-        ow, oh = out_long, round(out_long / av)
-    else:
-        oh, ow = out_long, round(out_long * av)
-    return ow - ow % 2, oh - oh % 2
 
 
 def main():

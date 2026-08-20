@@ -2,7 +2,7 @@
 name: mv
 description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续补入定稿歌，再重跑卡点与正式 timeline）。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1149 | 目录文本总行数 28813
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1302 | 目录文本总行数 47076
 
 # mv — 制MV 生产线 · 总调度
 
@@ -16,7 +16,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`MV用途`、`歌曲输入时序`、`MV视觉风格`、`MV规划粒度`、`卡点策略`、`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`生图模型`、`生图渠道`（旧 `生图AI` 仅兼容）、`MV一致性增强`、`出视频规格`、`演唱口型`、`字幕语言`、`合成画幅`、`AI视觉使用披露`、`发行目标平台`。
 
@@ -36,8 +36,8 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 ├── 出图/                mv-image：共享定妆 + 分段分镜 PNG
 ├── 出视频/              jobs_manifest.json + takes/ + 视频/（mv-video 产）
 ├── 制片/                shot list + picture lock + finishing checklist
-├── 生产数据/            animatic/otio/image_qc/video_qc/delivery_qc/consistency findings
-├── 合规/                AI视觉使用披露（mv-craft 产）
+├── 生产数据/            image_acceptance/animatic/otio/color/image_qc/video_qc/delivery_qc/review
+├── 合规/                ai_usage/provenance/C2PA/release_decision/handoff_receipt
 └── 成片_MV_master.mov + 成片_MV.mp4
 ```
 
@@ -51,12 +51,14 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 歌词时间轴（条件） | **`mv-lyric-sync`** | hash-bound 字符覆盖 `alignment_report` + karaoke.ass/lrc | ✅ 字幕或唱演口型启用时前置；纯器乐无字幕可跳过 |
 | 剧本创作 | **`mv-script`** | `视觉蓝图.md` + 角色/场景设定 | ✅ 已建 |
 | clip/timeline 规划 | **`mv-plan`** | `分镜/clip_plan.json` + `timeline_manifest.json` + prompt 包 | ✅ 已建 |
+| 语义分镜消费 | **`mv-plan`** | 全量 clip 的语义 prompt + 当前输入/模型/版本收据 | ✅ 独立完成态；不得以占位或 mock 冒充 |
 | 节奏预检 | **`mv-score`** | 绑定 plan/beatgrid/song 的 deterministic receipt | ✅ 正式付费前必有；主观阈值仅显式选择时生效 |
 | 出图 | **`mv-image`** | `出图/`（共享定妆 + 分段分镜 PNG） | ✅ 已建（生图 CLI） |
 | Animatic/Picture Lock | **`mv-craft`** | 可播放 animatic + OTIO + 绑定 hash 的人工锁版 | ✅ 已建（正式出视频前强制） |
 | 出视频 | **`mv-video`** | `出视频/jobs_manifest.json` + `sequence_units` + `takes/` + `视频/`（按段落+卡点挑版） | ✅ 已建（生视频 CLI/登记脚本） |
-| 合成/交付 | **`mv-compose`** | ProRes/PCM 母版 + BT.709 MP4 + delivery QC + provenance/C2PA 接口 | ✅ 已建（自包含 ffmpeg） |
-| 质检/自审(横切) | **`mv-review`** | `consistency_findings.json` + 双模 QA：作品质检（视觉一致性/卡点/字幕/音画合成/合规）+ 流程自审 | ✅ 已建（机检+人判，不生产只审） |
+| 合成/交付 | **`mv-compose`** | ProRes/PCM 母版 + 逐输入色彩解释/变换 + BT.709 MP4 + PCM 音轨同一性 delivery QC | ✅ 已建（自包含 ffmpeg） |
+| 披露/来源链 | **`mv-craft`** | `ai_usage.json` → `provenance.json` / C2PA 2.4（可选生产签名） | ✅ 严格按顺序、SHA 绑定 |
+| 质检/发布 | **`mv-review`** + **`mv-craft`** | 具名 review receipt → 版本化 release decision + 上传证据 → handoff receipt | ✅ 平台动作不伪装自动上传 |
 
 | 用户输入 | 路由到 |
 |---|---|
@@ -73,7 +75,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 改了某个 clip 的图/prompt/剪辑决定，问下游要重做什么 | `python3 skills/mv/run.py impact <作品根> --clip Clip_00N --change image\|prompt\|edit`（确定性返工级联清单，只读） |
 | 问 skill 更新是否影响本 MV / 要返工计划 / 重审重评前先看范围 | `mv-update`（只写更新影响计划和基线，不改素材/视频/进度） |
 
-> **先传音乐推荐顺序**：成品歌（及按需歌词）入库 → 立项 → 卡点并具名确认 timing → 按需歌词强制对齐 → 视觉蓝图 → timeline + 全量语义分镜 → 节奏预检 → 出图/QC/生成收据 → 真实 animatic/OTIO/picture lock → 视频评分挑版/逐缝语义签收 → 母版/派生交付 → provenance/总审。纯器乐且设置为“无字幕+关闭口型”时跳过歌词时间轴。
+> **先传音乐推荐顺序**：成品歌（及按需歌词）入库 → 立项 → 卡点并具名确认 timing → 按需歌词强制对齐 → 视觉蓝图 → timeline + 全量语义分镜 → 节奏预检 → 逐图 B14 双闸验收 → 真实 animatic/OTIO/picture lock → 能力路由/真实提交回执/视频挑版 → 母版/派生交付 → AI 使用披露 → provenance/C2PA → 具名总审 → 平台/法域发布决策与真实上传回执 → handoff。纯器乐且设置为“无字幕+关闭口型”时跳过歌词时间轴。
 
 > **后配歌曲推荐顺序**：mv-craft 立项/选择 → mv-script rough 视觉蓝图/设定 → 用户补入成品歌+歌词 → mv-beat + mv-lyric-sync → mv-script 按真实 beatgrid 复核 → mv-plan 全量语义时间线 → mv-score → 出图/QC → animatic/OTIO/picture lock → 视频任务/挑版 → 合成 → AI使用披露/质检。**未补最终音频前不得跑 mv-plan / mv-image / mv-video / mv-compose 的正式产物**。
 
@@ -93,7 +95,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 ## 合法性
 - 仓库内用户直接提供/创作的歌曲默认同源原创、权利人自有；明确为第三方、翻唱、克隆嗓音或外部参考时，必须切换到对应授权路径并留证。
 - 正式付费生成前用 `mv-craft/scripts/rights_manifest.py` 记录歌曲、视觉参考、真人肖像、品牌、场地和编舞权利状态；该记录不替代平台/地区专业审查。
-- AI 标识/AI 披露/水印不再由本流水线处理：mv-compose 出成片即收尾，不生成可见水印、不调用任何 watermark skill；若投放地区/平台需要 AI 标识或披露，由使用方在工具之外按当地法规自行处理。
+- 本线不伪装平台上传，也不擅自烧可见水印；但会在 `compose → disclosure → provenance → review → release_decision → handoff` 中生成版本化决策、C2PA/机器标识状态、平台声明/可见标识/音乐元数据待办和项目内上传回执。C2PA 不能替代平台声明或法域要求的显式标识。
 
 ## 持续改进
 工艺/翻车 → 写进对应 mv-* skill 的 `references/`。**新增/改 mv-* skill 后同步更新 `skills/README.md`。**
@@ -105,4 +107,4 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 后配歌曲路线在未定稿音频前就正式拆 timeline/出视频 | 只能先做 rough 视觉蓝图；最终歌入库后必须跑 `mv-beat` + `mv-plan` |
 | 将半成品或尚未完成创作的音频当成先传音乐路线送入制MV管线 | 先传音乐路线要求音频是最终成品；若还会改歌，请选后配歌曲 |
 | 跳过视觉蓝图直接批量生成片段 | 分镜与生成必须要有总体视觉规划和卡点策略引导，不要无脑调用 `mv-video` |
-| 交付前遗漏 AI 使用留痕 | 在交付最终 MP4 之前通过 `mv-craft` 完成 AI 使用说明和披露登记（项目留痕）；AI 标识/披露/水印不由本流水线处理，按各平台/地区法规自行处理 |
+| 交付前遗漏 AI 使用/平台动作证据 | 成片后依次完成 `ai_usage.py`、`provenance.py`、具名 `mv_check --write-receipt`、`release_decision.py` 与 handoff；平台声明/标识仍由人实际操作并把证据复制进项目 |

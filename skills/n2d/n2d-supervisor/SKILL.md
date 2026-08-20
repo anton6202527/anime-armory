@@ -10,7 +10,7 @@ description: Supervisor agent layer for n2d. Use when asked to run/coordinate th
 1. 调 `python3 skills/n2d/run.py next <作品根> [第N集] --json` 取得 NextAction。
 2. 自动使用 NextAction 里的 `context_pack` / `creative_loop` / `action_contract`。
 3. 按 stage 派发少量 specialist：`n2d-script-agent`、`n2d-visual-agent`、`n2d-qc-agent`、`n2d-producer-agent`。
-4. 遇到 `needs_choice` / `needs_payment_confirm` / `needs_compliance` / gate block 时停下交给用户或原 stage skill。
+4. 普通、可逆选择默认消费 `run.py` 已落档的推荐值；`needs_stage_execution` 直接派发对应 specialist。只在项目显式设为逐项询问才对 `needs_choice` 停下，而 `needs_payment_confirm` / `needs_compliance` / `needs_acceptance_signoff` / gate block 始终交给用户或原 stage skill。
 5. 绝不自行花钱、绝不绕过 gate、绝不直接改 `_进度.md`、绝不自作主张换后端。
 6. 读取 `episode_graph_<集>.json` 追踪 storyboard→route→job→media→粗剪→母版→发布裁决，并读取 `blocking_bundles/latest_<集>.json` 判断当前停因；两者都是派生视图，不能覆盖状态机或 gate。
 

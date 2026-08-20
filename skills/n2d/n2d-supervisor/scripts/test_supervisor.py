@@ -51,6 +51,20 @@ def test_dispatch_for_agent_generation_uses_script_specialist():
     assert "execute paid generation" in dispatch["forbidden_operations"]
 
 
+def test_unpaid_stage_execution_is_dispatched_without_human_choice():
+    next_action = {
+        "frontier": {"ep": "第1集", "stage_key": "voice"},
+        "stop_reason": "needs_stage_execution",
+        "action_card": {},
+    }
+
+    dispatch = supervisor.dispatch_for(next_action)
+
+    assert dispatch["human_gate"]["required"] is False
+    assert dispatch["should_call_specialist"] is True
+    assert dispatch["specialist"]["name"] == "n2d-producer-agent"
+
+
 def test_build_plan_wraps_run_next(tmp_path: Path):
     _progress(tmp_path)
     plan = supervisor.build_plan(str(tmp_path), "第1集")
@@ -161,3 +175,24 @@ def test_dispatch_fails_closed_on_next_action_schema_drift():
     # 完整 NextAction 不触发
     ok = supervisor.dispatch_for({"frontier": {"stage_key": "image"}, "stop_reason": "needs_agent_gen", "action_card": {}})
     assert ok["stop_reason"] == "needs_agent_gen"
+
+
+def test_done_is_canonical_terminal_state_and_does_not_consume_round(tmp_path: Path, monkeypatch):
+    terminal = {
+        "frontier": None,
+        "stop_reason": "done",
+        "action_card": {"headline": "complete"},
+    }
+    assert supervisor.next_action_schema_gaps(terminal) == []
+    assert supervisor.dispatch_for(terminal)["stop_reason"] == "done"
+
+    class Run:
+        @staticmethod
+        def next_action(_root, _ep, auto=False):
+            return dict(terminal)
+
+    monkeypatch.setattr(supervisor, "_load_run_module", lambda: Run)
+    plan = supervisor.build_plan(str(tmp_path), "第1集", track_rounds=True)
+    assert plan["summary"]["stop_reason"] == "done"
+    assert plan["summary"]["round_index"] == 0
+    assert not supervisor.round_state_path(str(tmp_path)).exists()

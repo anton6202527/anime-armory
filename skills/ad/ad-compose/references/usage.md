@@ -6,7 +6,7 @@
 |---|---|
 | 主片拼接 + end card + 字幕烧录 + 混音 + 响度归一 | **自动**（`compose.sh` 调 ffmpeg 出 MP4）|
 | 多时长 cutdown | **自动**（`cutdown.py --render`，无 ffmpeg 时降级只出 plan）|
-| 多比例 reframe | **自动**（`reframe.py --render`，无 ffmpeg 时降级只出滤镜串）|
+| 多比例 placement adaptation | **先决策再执行**：原生模式输出制作指令；仅已批准 `mechanical_reframe` 自动调用 `reframe.py --render` |
 | A/B 版本 | **操作者手工**（`deliver.py` 只给 expected_path，不代生成）|
 
 ## 脚本一览
@@ -17,11 +17,13 @@
 | `endcard.py --out … (--size WxH \| --aspect 9:16) …` | 品牌包装片尾 PNG；尺寸按 `--size`/`--aspect` 推（不再写死 1920x1080），版式用实测文字高度堆叠 |
 | `render_subs.py <srt> --out-dir … --png-input-base 1` | SRT → 字幕 PNG + `overlay_table.json` + `inputs.txt` + `vfilter.txt`（compose.sh 直接消费 vfilter）|
 | `cutdown.py <作品根> --target 15s [--render]` | 先选镜，再从主片 trim/concat；claim 镜与对应 disclosure 镜按 ID 原子保留 |
-| `reframe.py … [--focus-plan plan.json]` | 固定或分时焦点裁切；动态主体可按镜头移动裁切窗 |
+| `ad-craft/scripts/render_profile.py <作品根>` | 编译唯一 `source_generation`/`master_render` 比例、分辨率、FPS 与 upscale 事实 |
+| `ad-craft/scripts/placement_adaptation.py <作品根>` | 逐交付件选择 placement-native 模式或具名批准的机械路径并校验证据；制作完成后用 `--record-execution <id> --actual-mode … --input … --output … --executed-by …` 签实际执行收据 |
+| `reframe.py … [--focus-plan plan.json]` | 仅执行已批准的 `mechanical_reframe`；固定/分时焦点裁切是底层能力，不构成交付批准 |
 | `rendered_text_qc.py <作品根> --init-plan` | 从最终交付件抽取文字帧；OCR/对比度只定位，具名人确认精确文字、对比度、时长、遮挡 |
 | `asr_consistency.py <作品根> [--run-asr]` | voiceover → 实际 VO → 字幕 → 最终音轨四路对账，关键文案精确匹配 |
 | `provenance_qc.py <作品根>` | 逐最终文件实测 C2PA/容器隐式标识，或验证绑定当前 SHA 的外部探测回执 |
-| `deliver.py <作品根> --mark-existing [--run-asr]` | 先写当前 plan，再生成 delivery/rendered text/ASR/provenance/accessibility QC；全部 0 block 才回写 ✅ |
+| `deliver.py <作品根> --mark-existing [--run-asr]` | 写入 render profile/adaptation refs，把两者 block 汇入 plan，再生成 delivery/rendered text/ASR/provenance/accessibility QC；全部 0 block 才回写 ✅ |
 
 ## 交付规格（响度归一）
 
@@ -36,7 +38,7 @@
 
 ## 安全框
 
-竖版/方版 reframe 会裁掉两侧；标题/logo/CTA 须在 title-safe（≈90%），主体/产品在 action-safe（≈93%）。出图出视频阶段已留余量。`reframe.py` 默认**中心裁切**（偏置主体会被裁掉，脚本会提示）；主体不在中心时用 `--crop-x/--crop-y` 指定归一焦点（0..1），裁切窗会对到主体并夹进画内。
+跨比例交付默认只生成 placement adaptation 计划。原生 reedit/variant 按逐镜带 `source_path(s)` 的 shot plan 重构，签收时重复 `--input` 覆盖全部绑定源素材；只有具名批准、当前 placement 安全区证据、逐镜 focus plan 与必要风险签收齐全时才允许 `mechanical_reframe`。`reframe.py` 的中心/焦点裁切只是底层工具行为，不能单独证明该版本可交付；交付 QC 还会核 `placement_adaptation_receipts/<id>.json` 的 actual mode、输入/输出 SHA、profile SHA、当前 plan/item digest 与 native 源素材集合。
 
 title/action safe 是内部构图辅助，不是平台证据。最终按 `platform_pack.placement_specs` 逐个版位消费当前模板；只有平台级截图不能 release-ready。
 
@@ -73,4 +75,4 @@ python3 skills/ad/ad-compose/deliver.py "<作品根>" --mark-existing
 
 `ad-craft/scripts/ai_usage.py` 记 AI 使用 + 授权（音乐/代言人/字体/素材）。
 
-随后完成 `locale_matrix.json`、`release_variant_manifest.json` 与 `compliance_manifest.json`；平台声明/标识由发布方实际执行并逐交付件回写当前 SHA 证据，未完成不能通过最终 review。
+随后完成 `locale_matrix.json`、`release_variant_manifest.json`、`campaign_readiness.json` 与 `compliance_manifest.json`；AI 来源标识和商业/付费合作披露分别由发布方实际执行并逐交付件回写当前 SHA 证据，未完成不能通过最终 review。

@@ -21,6 +21,8 @@ python3 skills/novel/novel-settings/scripts/settings_cli.py sync-global <作品�
 - `reset`：调用 `reset_project_setting()`，删除指定选择点并记录。
 - `sync-global`：调用 `sync_global_settings()`，把当前项目可同步选择写入私有全局默认；可用 `--all` 或传 `选择点=值`。
 
+`创作工艺档` 使用规范值 `commercial_serial / genre_novel / literary / experimental`；中文别名会归一。它独立于 `目标平台`，改档后应重跑 `scene_cards.py check` 与 `manuscript_map.py --write`。
+
 ## 边界
 
 - 本 skill 只管理设置，不启动写作、审稿、评分、导出或本地化。

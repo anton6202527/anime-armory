@@ -1,13 +1,13 @@
 ---
 name: n2d-compose
-description: Optional post-video stage of n2d — maintain an OpenTimelineIO editorial handoff from animatic through accepted clips/rough cut/final master, then assemble a finished episode from video, dialogue/narration, ambience/foley, BGM and subtitles. Default video completion is clip_delivery_complete, not publishable master; use when the user enables 合成阶段 or asks for OTIO/剪辑时间线/成片/BGM/subtitles/release packaging/master delivery. Mixes voice with BGM ducking and burns subtitles via Pillow+overlay. Triggers OTIO, OpenTimelineIO, 剪辑时间线, 合成, 成片, 加BGM, 烧字幕, 混音, 导出, compose, 剪映, 母版, 发布.
+description: Default final-delivery stage of n2d — maintain an OpenTimelineIO editorial handoff from animatic through accepted clips/rough cut/final master, then assemble a finished episode from video, dialogue/narration, ambience/foley, BGM and subtitles. New projects default to 合成阶段=启用; explicit clip-only projects may skip it. Use for OTIO/剪辑时间线/成片/BGM/subtitles/release packaging/master delivery. Mixes voice with BGM ducking and burns subtitles via Pillow+overlay. Triggers OTIO, OpenTimelineIO, 剪辑时间线, 合成, 成片, 加BGM, 烧字幕, 混音, 导出, compose, 剪映, 母版, 发布.
 ---
 
 # n2d-compose — 合成成片（剪映那步的脚本化替代）
 
 把一集的 `视频/`(clips) + `配音/voice_*.wav`(可选) + BGM(可选) + 字幕 烧成 `成片_第N集_{mode}.mp4`。
 
-> **可选尾段**：n2d 默认在 `视频` 列完成后收为 `clip_delivery_complete`；本 skill 只在用户显式要成片、BGM、烧字幕、母带、交付矩阵、发布证据包，或 `_设置.md` 写 `合成阶段: 启用` 时进入。直接调用本 skill 等同于用户选择启用本集的合成尾段。`master_delivery_complete` 还需要后续 release/readiness、production locks、creative governance 和人工验收通过，不能把单个 MP4 存在误当可发布。
+> **默认成片尾段**：新项目默认 `合成阶段=启用`，视频齐片后继续合成、review 与最终签收；只有用户显式写 `合成阶段=跳过` 的 clip-only 项目才停在 `clip_delivery_complete`。`master_delivery_complete` 仍需要后续 release/readiness、production locks、creative governance 和人工验收通过，不能把单个 MP4 存在误当可发布。
 
 > **视频阶段后的真实粗剪代理 + OTIO**：animatic 创建 working `editorial_timeline.otio` 与签收专用 `animatic_timeline.otio` 快照；每个 Clip 验收后只刷新 working 时间线，齐片后 `post_video_proxy.py --render` 生成 `actual_rough_cut.mp4`。只认 manifest `status=accepted`。final voice 未生成时，OTIO 的 A1 用 `MissingReference` 建 planned audio slots，时长和文本来自 `timing_estimate.json`；它们是编辑槽位，不是假音频。final voice 到位后刷新为真实媒体引用。OTIO 同时保留声音 route、casting 状态、V1、旁白/对白、环境/拟音、BGM、字幕 marker、媒体哈希、缺料槽位和 `seam_mode`。
 
@@ -17,7 +17,7 @@ description: Optional post-video stage of n2d — maintain an OpenTimelineIO edi
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则由 producer-owned 推荐器选一个安全默认并以 `source=auto_recommended` 写回，同项目之后沉默沿用；仅 `普通选择策略=逐项询问` 时才展示菜单。合规、不可逆、付费与最终验收仍每次确认。
 
 本 skill涉及的选择点：`合成阶段`、`合成缓存保留`、`BGM来源`、`画幅`、`制作模式`、`视频原生音轨`、`后期拟音策略`、`目标平台`、`发行地区`、`合规用途`。混合模式还必须消费逐镜 `audio_strategy/final_voice_stage/post_lipsync_required`，不能只凭项目级模式决定音轨。平台与合规仍以 `合规/compliance_manifest.json` 为准。
 
@@ -146,10 +146,9 @@ python3 skills/n2d/n2d-compose/release_manifest.py check <作品根> 第N集
 | 字幕遮挡关键画面或风格不符 | 字幕渲染应按 `render_subs.py` 约束，确需调整则修改渲染策略 |
 | 合成后未回写 `合规/compliance_manifest.json` 的最终资产路径 | 导致 `review` gate 阻断，无法进行质检 |
 
-## 加 BGM —— 给用户更丰富选项 + 接受自定义
-到 BGM 环节，提示用户：
-> 「BGM 怎么来？ⓐ 已授权素材/本地文件 ⓑ 指定生成模型+渠道并落真实文件 ⓒ 本集明确不用 BGM ⓓ 仅内部粗剪使用占位。也可以直接说你的想法；我会校验文件、时长、版权和来源后写进机器合同。」
-运行 `bgm_contract.py --write-missing` 后填写 `strategy/source/cues/status`。不能只靠临时 `BGMFILE`，也不能把未签收占位带进 review。
+## 加 BGM —— 默认安全继续，用户可覆盖
+
+缺少项目值、已授权文件或已配置生成后端时，推荐器自动落 `BGM来源=无`，`bgm_contract.py --write-missing` 生成可交付的 `strategy=none/status=confirmed` 合同，流水线继续产出无 BGM 母版。若用户已选本地授权文件、生成模型/渠道或内部粗剪占位，则严格按该选择校验文件、时长、版权和来源；生成付费与权利缺口仍停审。不能只靠临时 `BGMFILE`，也不能把未签收占位带进 review。
 
 ## 转场音效（可选层）
 clip 已带即梦原生音效。额外「2~5 个转场音效」做成可选：用户给 SFX 文件就在 clip 边界铺，不给跳过。

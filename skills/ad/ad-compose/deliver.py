@@ -18,7 +18,9 @@ if _CRAFT not in sys.path:
     sys.path.insert(0, _CRAFT)
 import contract  # noqa: E402
 import platform_pack  # noqa: E402
+import placement_adaptation  # noqa: E402
 import progress_set  # noqa: E402
+import render_profile as ad_render_profile  # noqa: E402
 import delivery_qc  # noqa: E402
 import accessibility_qc  # noqa: E402
 import provenance_qc  # noqa: E402
@@ -84,7 +86,7 @@ def deliverable_id(row):
     return _safe_name(row["label"])
 
 
-def planned_command(row, root):
+def planned_command(row, root, render_profile=None, adaptation=None):
     quoted = json.dumps(root, ensure_ascii=False)
     out = expected_relpath(row)
     if row["kind"] == "master":
@@ -102,12 +104,42 @@ def planned_command(row, root):
                 f"--out {json.dumps(outp, ensure_ascii=False)} "
                 f"--json {json.dumps(plan, ensure_ascii=False)}")
     if row["kind"] == "reframe":
+        adaptation = adaptation or {}
+        selected = str(adaptation.get("selected_mode") or "")
+        if adaptation.get("status") != "approved":
+            return f"# BLOCK placement adaptation 未批准：{deliverable_id(row)}"
+        if selected != "mechanical_reframe":
+            evidence = adaptation.get("evidence") if isinstance(adaptation.get("evidence"), dict) else {}
+            plan = (evidence.get("shot_plan") or {}).get("path") or "待补原生镜头计划"
+            sources = [str(item.get("path")) for item in evidence.get("native_sources") or []
+                       if isinstance(item, dict) and item.get("path")]
+            input_args = " ".join(
+                f"--input {json.dumps(source, ensure_ascii=False)}" for source in sources
+            ) or "--input <shot_plan绑定的实际源镜头相对路径>"
+            return (f"# {selected or 'native adaptation'}：按 {plan} 从源镜头原生重构 → {out}；完成后运行 "
+                    f"placement_adaptation.py {quoted} --record-execution {deliverable_id(row)} "
+                    f"--actual-mode {selected} {input_args} --output {out} --executed-by <具名执行人>")
         src = os.path.join(root, "合成", "成片_主片.mp4")
         outp = os.path.join(root, out)
+        master = (render_profile or {}).get("master_render") or {}
+        src_size = f"{int(master.get('width') or 1280)}x{int(master.get('height') or 720)}"
+        target_w, target_h = ad_render_profile.dimensions_for_short_edge(
+            row["aspect"], min(int(master.get("width") or 1280), int(master.get("height") or 720)))
+        out_long = max(target_w, target_h)
+        focus_rel = str((((adaptation.get("evidence") or {}).get("focus_plan") or {}).get("path") or ""))
+        focus_arg = (f"--focus-plan {json.dumps(os.path.join(root, focus_rel), ensure_ascii=False)} "
+                     if focus_rel else "")
         # reframe --render 实际跑 ffmpeg crop/pad 输出 MP4（主体偏置时补 --crop-x/--crop-y）
-        return (f"python3 skills/ad/ad-compose/reframe.py --src 1920x1080 --target {row['aspect']} "
+        return (f"python3 skills/ad/ad-compose/reframe.py --src {src_size} --target {row['aspect']} "
+                f"--out-long {out_long} "
+                f"{focus_arg}"
                 f"--in {json.dumps(src, ensure_ascii=False)} --render "
-                f"--out {json.dumps(outp, ensure_ascii=False)}")
+                f"--out {json.dumps(outp, ensure_ascii=False)} && "
+                f"python3 skills/ad/ad-craft/scripts/placement_adaptation.py {quoted} "
+                f"--record-execution {deliverable_id(row)} --actual-mode mechanical_reframe "
+                f"--input {json.dumps('合成/成片_主片.mp4', ensure_ascii=False)} "
+                f"--output {json.dumps(out, ensure_ascii=False)} "
+                f"--executed-by automation:ad-compose/reframe.py")
     return f"# A/B 版本需操作者手工生成 → {out}"
 
 
@@ -131,12 +163,21 @@ def build_plan(root, progress_text):
     except Exception:
         brief = {}
     custom_profiles = brief.get("delivery_profiles") if isinstance(brief.get("delivery_profiles"), dict) else {}
-    delivery_pack = platform_pack.build_pack(Path(root))
+    # Materialise the exact placement snapshot consumed by render_profile so
+    # downstream QC can revalidate its logical digest, not merely trust a ref.
+    delivery_pack = platform_pack.write_pack(Path(root))
+    rows = parse_deliverables(progress_text)
+    adaptation_report = placement_adaptation.write_report(
+        Path(root), deliverables=[{"deliverable_id": deliverable_id(row), **row} for row in rows]
+    )
+    adaptation_by_id = {str(item.get("deliverable_id")): item
+                        for item in adaptation_report.get("items") or [] if isinstance(item, dict)}
+    render_profile = ad_render_profile.write_profile(Path(root), pack=delivery_pack)
+    render_ref = ad_render_profile.compact_ref(render_profile)
     placement_specs = delivery_pack.get("placement_specs") or {}
     delivery_mapping = delivery_pack.get("deliverable_placements") or {}
     legacy_constraints = [dict(spec, platform=platform)
                           for platform, spec in (delivery_pack.get("specs") or {}).items()]
-    rows = parse_deliverables(progress_text)
     items = []
     for row in rows:
         did = deliverable_id(row)
@@ -166,6 +207,7 @@ def build_plan(root, progress_text):
             profile_error = str(exc)
             profile = {"loudness_lufs": None, "true_peak_db": None,
                        "authority": "invalid_project_override", "source": profile_error}
+        adaptation = adaptation_by_id.get(did) or {}
         items.append({
             "deliverable_id": did,
             "label": row["label"],
@@ -175,19 +217,30 @@ def build_plan(root, progress_text):
             "spec": row["spec"],
             "expected_path": rel,
             "exists": os.path.isfile(abs_path),
-            "command": planned_command(row, root),
+            "command": planned_command(row, root, render_profile, adaptation),
             "loudness_lufs": profile["loudness_lufs"],
             "true_peak_db": profile["true_peak_db"],
             "delivery_profile": profile,
             "delivery_profile_error": profile_error,
             "technical_profile": contract.house_master_profile(),
+            "render_profile": render_ref,
+            "placement_adaptation": adaptation,
             "target_placements": list(targets),
             "placement_mapping_error": mapping_error,
             "platform_constraints": platform_constraints,
         })
-    return {"schema_version": 3, "kind": "ad_delivery_plan", "project_root": root,
+    return {"schema_version": 5, "kind": "ad_delivery_plan", "project_root": root,
             "platform_pack_summary": delivery_pack.get("summary") or {},
-            "summary": {"block": sum(bool(item.get("placement_mapping_error")) for item in items)},
+            "render_profile": render_ref,
+            "render_profile_findings": render_profile.get("findings") or [],
+            "placement_adaptation": {
+                "path": "生产数据/placement_adaptation.json",
+                "sha256": adaptation_report.get("plan_sha256"),
+                "summary": adaptation_report.get("summary") or {},
+            },
+            "summary": {"block": (sum(bool(item.get("placement_mapping_error")) for item in items)
+                                    + int((render_profile.get("summary") or {}).get("block") or 0)
+                                    + int((adaptation_report.get("summary") or {}).get("block") or 0))},
             "deliverables": items}
 
 

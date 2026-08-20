@@ -29,6 +29,7 @@ from novel_contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAF
                             infer_novel_purpose, normalize_novel_purpose,
                             resolve_novel_draft_mode, resolve_novel_draft_workflow)
 from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
+from craft_profile import normalize_craft_profile
 
 
 def chapter_plan(target_chars, target, outputs, target_chapters=None):
@@ -55,6 +56,8 @@ def main():
                     help="原作题材；命中力量题材（穿越/系统流/修仙/玄幻…）时 seed power_system_registry 脚手架")
     ap.add_argument("--purpose", default=None,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
+    ap.add_argument("--craft-profile", default=None,
+                    help="创作工艺档：commercial_serial/genre_novel/literary/experimental 或自定义；缺省继承全局默认再回落 genre_novel，不由平台推断")
     ap.add_argument("--target-chapters", type=int, default=None,
                     help="覆盖精简后目标章数；缺省按目标总量/用途估算")
     ap.add_argument("--out", default=None)
@@ -157,6 +160,7 @@ def main():
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
     write_settings(out_root, {
+        **({"创作工艺档": normalize_craft_profile(args.craft_profile)} if args.craft_profile else {}),
         "目标用途": args.target,
         "小说用途": purpose,
         "权利来源": rights,

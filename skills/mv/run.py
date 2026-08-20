@@ -40,11 +40,14 @@ mv_utils = _load("mv_run_utils", os.path.join(CRAFT_SCRIPTS, "mv_utils.py"))
 gate = _load("mv_run_gate", os.path.join(CRAFT_SCRIPTS, "gate.py"))
 contract = _load("mv_run_contract", os.path.join(CRAFT_SCRIPTS, "contract.py"))
 progress = _load("mv_run_progress", os.path.join(CRAFT_SCRIPTS, "progress.py"))
+completion = _load("mv_run_completion", os.path.join(CRAFT_SCRIPTS, "completion.py"))
+state_contract = _load("mv_run_state_contract", os.path.join(CRAFT_SCRIPTS, "state_contract.py"))
 
 
 # ── 停因登记制枚举（单一真值；na() 拒绝未登记停因，消费端 switch 不会静默漏分支）──
 STOP_REASONS = frozenset({
     "missing_progress",        # 无 _进度.md/阶段表 → 先 init_project
+    "state_inconsistent",      # _设置/_meta/_进度 三者不一致或阶段契约不完整
     "all_stages_done",         # 全部阶段 done → 收尾/发布
     "stale_receipts",          # 已 done 的付费阶段 hash 链失效（假 done）→ 先按 receipt_health 回流
     "blocked_by_gate",         # 前沿阶段 gate 有确定性 error → 按 errors 补前置
@@ -66,7 +69,8 @@ STAGE_ACTIONS = {
     "script": ("needs_agent_generation", "mv-script", False),
     "script_review": ("needs_agent_generation", "mv-script", False),
     "plan": ("ready_to_run", 'python3 skills/mv/mv-plan/scripts/plan_clips.py "{root}" && '
-                             'python3 skills/mv/mv-plan/scripts/compose_prompts.py "{root}"', False),
+                             'python3 skills/mv/mv-craft/scripts/progress_set.py "{root}" plan', False),
+    "semantic_plan": ("needs_agent_generation", "mv-plan", False),
     "pacing_check": ("ready_to_run", 'python3 skills/mv/mv-score/scripts/score_pacing.py "{root}"', False),
     "image": ("needs_agent_generation", "mv-image", True),
     "picture_lock": ("needs_human_signoff",
@@ -78,12 +82,45 @@ STAGE_ACTIONS = {
               'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --register <文件> --clip <N> --take <N> '
               '[--seed <seed>] → --score … --reviewer <name> → --select …', True),
     "compose": ("ready_to_run", 'bash skills/mv/mv-compose/mv_compose.sh "{root}"', True),
-    "review": ("ready_to_run", 'python3 skills/mv/mv-review/scripts/mv_check.py "{root}"', False),
-    "handoff": ("needs_human_signoff", 'python3 skills/mv/mv-craft/scripts/ai_usage.py "{root}"', False),
+    "disclosure": (
+        "ready_to_run",
+        'python3 skills/mv/mv-craft/scripts/ai_usage.py "{root}" '
+        '--visual-mode "{visual_mode}" --video-mode "{visual_mode}" --publish-target "{platform}" '
+        '--territory <CN|EU|US|逗号分隔> --realism <stylized|photorealistic|mixed> '
+        '--real-person <none|authorized> --music-mode <human|AI-assisted|AI-generated> '
+        '--human-contribution <具体人工贡献> --reviewer <name>',
+        False,
+    ),
+    "provenance": (
+        "ready_to_run",
+        'python3 skills/mv/mv-craft/scripts/provenance.py "{root}" '
+        '--final "{root}/成片_MV.mp4" --master "{root}/成片_MV_master.mov"',
+        False,
+    ),
+    "review": (
+        "needs_human_signoff",
+        'python3 skills/mv/mv-review/scripts/mv_check.py "{root}" '
+        '--write-receipt --reviewer <name> --notes <完整审片说明>',
+        False,
+    ),
+    "handoff": (
+        "needs_human_signoff",
+        'python3 skills/mv/mv-craft/scripts/release_decision.py "{root}" '
+        '--platform "{platform}" --territory <CN|EU|US|逗号分隔> --operator <name> --notes <发布核验> '
+        '--platform-policy-review-status completed --platform-declaration-status <completed|not_applicable> '
+        '--visible-label-status <completed|not_applicable> --music-metadata-status <completed|not_applicable> '
+        '--machine-label-method <c2pa|platform_metadata|other> '
+        '--platform-evidence <项目内平台披露证据> --machine-evidence <项目内机器标识证据> '
+        '--submission-status uploaded '
+        '--upload-receipt <项目内上传回执> --published-url <真实发布URL> && '
+        'python3 skills/mv/mv-craft/scripts/completion.py complete "{root}" handoff '
+        '--reviewer <name> --notes <发布确认>',
+        False,
+    ),
 }
 
 # 已 done 也要巡检收据健康度的付费阶段（假 done 主动现形，而非等下次付费 gate 被动报错）。
-RECEIPT_HEALTH_STAGES = ("image", "video_jobs", "compose")
+RECEIPT_HEALTH_STAGES = completion.OUTPUT_HEALTH_STAGES
 
 
 def na(payload):
@@ -92,7 +129,7 @@ def na(payload):
     if reason not in STOP_REASONS:
         raise ValueError(f"unregistered stop_reason: {reason!r}（先在 run.py STOP_REASONS 登记并补消费者分支）")
     payload.setdefault("kind", "mv_next_action")
-    payload.setdefault("schema_version", 1)
+    payload.setdefault("schema_version", 2)
     return payload
 
 
@@ -129,15 +166,20 @@ def compute_frontier(states):
 
 
 def receipt_health(root, states, frontier_key):
-    """已 done 的付费阶段跑 gate：错误=hash 链失效的假 done。"""
+    """Validate completed stage outputs (not the preflight needed to start them)."""
     done_keys = {row["key"] for row in states if row["state"] == "done" and row["key"]}
     findings = []
     for stage in RECEIPT_HEALTH_STAGES:
         if stage not in done_keys or stage == frontier_key:
             continue
-        errors, _warnings = gate.check(root, stage)
-        if errors:
-            findings.append({"stage": stage, "errors": errors})
+        health = completion.stage_health(root, stage)
+        if not health["ok"]:
+            findings.append({
+                "stage": stage,
+                "errors": health["errors"],
+                "warnings": health.get("warnings") or [],
+                "evidence": health.get("evidence") or {},
+            })
     return findings
 
 
@@ -158,18 +200,46 @@ def build_next_action(root):
             },
             "stages": [],
         })
+    state_audit = state_contract.audit(root, STAGE_ACTIONS)
+    runtime = state_audit["derived"]
+    if not state_audit["ok"]:
+        sync_suffix = "" if state_audit.get("settings_present") else " --bootstrap-settings-from-meta"
+        return na({
+            "root": root,
+            "song_timing": runtime.get("song_timing"),
+            "frontier": None,
+            "stop_reason": "state_inconsistent",
+            "gate": None,
+            "receipt_health": [],
+            "state_consistency": state_audit,
+            "action_card": {
+                "headline": "_设置.md / _meta.json / _进度.md 运行时状态不一致",
+                "exact_command": (
+                    'python3 skills/mv/mv-craft/scripts/state_contract.py sync "{root}"{suffix}'
+                ).format(root=root, suffix=sync_suffix),
+                "to_user": "先显式同步单一真值和完整阶段表；同步会保留可证明的完成态，并把受设置变更影响的下游阶段退回待办。",
+                "paid_or_irreversible": False,
+            },
+            "stages": states,
+        })
     frontier = compute_frontier(states)
     if frontier is None:
+        health = receipt_health(root, states, None)
+        stale = bool(health)
         return na({
             "root": root,
             "frontier": None,
-            "stop_reason": "all_stages_done",
+            "stop_reason": "stale_receipts" if stale else "all_stages_done",
             "gate": None,
-            "receipt_health": receipt_health(root, states, None),
+            "receipt_health": health,
+            "state_consistency": state_audit,
             "action_card": {
-                "headline": "全部阶段完成",
-                "exact_command": 'python3 skills/mv/mv-review/scripts/mv_check.py "{root}"'.format(root=root),
-                "to_user": "可跑 mv-review 总审，或按发行目标平台走发布流程。",
+                "headline": "已标完成的阶段存在过期/缺失收据" if stale else "全部阶段完成且完成态收据有效",
+                "exact_command": "" if stale else 'python3 skills/mv/mv-craft/scripts/completion.py health "{root}" --json'.format(root=root),
+                "to_user": (
+                    "按 receipt_health 从最早失效阶段回流，不能把阶段表的 [x] 当成产物证据。"
+                    if stale else "交付、披露、来源链、总审和具名发布确认均已绑定当前文件。"
+                ),
                 "paid_or_irreversible": False,
             },
             "stages": states,
@@ -207,16 +277,24 @@ def build_next_action(root):
         to_user = f"由 agent 按 {command if not command.startswith('python3') else frontier['owner']} 的 SKILL.md 执行创作；付费生成前会再过 gate。"
     elif paid:
         to_user = "本阶段花钱/不可逆：执行前与用户确认额度与后端选择。"
+    formatted_command = command
+    if command:
+        formatted_command = command.format(
+            root=root,
+            visual_mode=runtime.get("ai_visual_usage") or "AI-generated",
+            platform=runtime.get("publish_target") or "未定",
+        )
     return na({
         "root": root,
-        "song_timing": (mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}).get("song_timing"),
+        "song_timing": runtime.get("song_timing"),
         "frontier": frontier,
         "stop_reason": stop,
         "gate": gate_result,
         "receipt_health": health,
+        "state_consistency": state_audit,
         "action_card": {
             "headline": headline,
-            "exact_command": command.format(root=root) if "{root}" in command else command,
+            "exact_command": formatted_command,
             "to_user": to_user,
             "paid_or_irreversible": paid,
         },
@@ -272,9 +350,12 @@ def build_impact(root, clip_id, change):
             f'python3 skills/mv/mv-craft/scripts/render_animatic.py "{root}" && '
             f'python3 skills/mv/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>')
     if job:
-        registered = [t for t in job.get("takes") or [] if t.get("video_sha256")]
+        registered = [
+            t for t in job.get("takes") or []
+            if t.get("submit_receipt") or t.get("video_sha256")
+        ]
         if registered:
-            add("video", f"{clip_id} 已登记 take 的首帧绑定（first_frame_sha256）将失效：重出该 clip 视频并重新 --register",
+            add("video", f"{clip_id} 已登记 take 的实际 submitted_refs/controls 收据将失效：重出该 clip 视频并重新 --register",
                 f'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --register <新视频> --clip {clip_id} --take <N>')
             add("video", "重新具名评分并挑版（重登记会自动作废旧 selected）",
                 f'python3 skills/mv/mv-video/scripts/video_jobs.py "{root}" --score {clip_id} --take <N> … --reviewer <name> '
@@ -283,9 +364,16 @@ def build_impact(root, clip_id, change):
                 f'python3 skills/mv/mv-video/scripts/inherit_contract.py "{root}" && '
                 f'python3 skills/mv/mv-video/scripts/video_qc.py "{root}" --accept-semantic --reviewer <name>')
     if has_master:
-        add("compose", "重合成母版/交付版并重跑 delivery QC + provenance",
+        add("compose", "重合成母版/交付版并重跑色彩与 delivery QC",
             f'bash skills/mv/mv-compose/mv_compose.sh "{root}"')
-        add("review", "重跑总审对账", f'python3 skills/mv/mv-review/scripts/mv_check.py "{root}"')
+        add("disclosure", "成片变化后刷新具名 AI 使用披露（按当前设置填写）",
+            f'python3 skills/mv/mv-craft/scripts/ai_usage.py "{root}" --visual-mode <模式> --video-mode <模式> '
+            '--publish-target <平台> --territory <法域> --human-contribution <人工贡献> --reviewer <name>')
+        add("provenance", "披露后重建当前 final/master 来源链",
+            f'python3 skills/mv/mv-craft/scripts/provenance.py "{root}" --final 成片_MV.mp4 --master 成片_MV_master.mov')
+        add("review", "重跑总审并重新具名写 review receipt",
+            f'python3 skills/mv/mv-review/scripts/mv_check.py "{root}" --write-receipt --reviewer <name> --notes <说明>')
+        add("handoff", "旧 release decision / handoff receipt 已随成片变化失效；重新核平台动作和上传回执")
     return {
         "kind": "mv_clip_impact",
         "schema_version": 1,
@@ -331,6 +419,8 @@ def print_next(action):
     if action["action_card"].get("paid_or_irreversible"):
         print("[提醒] 本阶段花钱/不可逆，执行前确认。")
     gate_result = action.get("gate") or {}
+    for msg in (action.get("state_consistency") or {}).get("errors") or []:
+        print(f"  [state err] {msg}")
     for msg in gate_result.get("errors") or []:
         print(f"  [gate err] {msg}")
     for msg in (gate_result.get("warnings") or [])[:8]:

@@ -1,40 +1,21 @@
 #!/usr/bin/env python3
-"""mv-image 出图落档机检 image_qc —— MV 的「出图落档一致性机检」。
+"""MV image machine QC for the B14 per-image postflight gate.
 
-MV 是单主角跨 16-64 个 clip 的脸一致性重灾区，但 mv-image 此前**没有任何机检脚本**——
-视觉一致性 100% 靠 SKILL.md + references/visual_consistency.md 的散文规则。本脚本把
-「主角脸是否漂、主色是否漂、锚点句是否真的拼进了 prompt」三件事在**刚出完一批图、还没继续**的
-最便宜的点机检初筛，省下等 mv-review 审片才发现的返工。
+The report covers every currently materialized shared costume/location image,
+clip first/end frame, candidate and cover.  It checks current-pixel decodability
+and SHA-256, face identity (InsightFace when applicable), palette, prompt anchor
+consumption, visual repetition/static takes, prohibited local face patching and
+the model/channel/prompt/reference generation chain.  Missing future clip assets
+are handled by ``image_receipts.py status`` so image 1 can be accepted before
+image 2 is generated.
 
-**mv 线自包含**：本文件内置脸 embedding QC、Pillow 降级、prompt lint 与报告 schema，
-不读取或导入其它创作系列的实现。
+``block`` exits 1.  ``review`` (including warn/noface/unverifiable/degraded)
+cannot be accepted by B14 postflight.  ``ok`` only completes the machine half;
+``image_receipts.py postflight`` still requires a named current-pixel visual
+review.  Demo/profile never downgrades the B14 provenance floor.
 
-三类检查：
-1. 主角脸漂移 G1（需 insightface · 缺则优雅降级）：
-   主角共享定妆组内部互相余弦 → 自标定「同人下限」floor；本曲每个 clip 首帧/尾帧脸 vs 主角主参考，
-   落 ok/warn/block 三档。**风格化 MV 脸跨图余弦整体偏低**，所以用本曲自己的定妆组做地板，不写死阈值。
-   缺 insightface 时降级到 Pillow（只验 图损坏/分辨率/清晰度，绝不臆造相似度），更缺 Pillow 时整项跳过——
-   都在报告里明示，永不静默报「通过」。
-2. 主色漂移 palette（确定性·不需要脸栈）：每个 clip 首帧的主色调色板 vs palette_anchor 主色，
-   计算最近主色距离，超阈值 → warn（MV 段落本就允许加亮/变暗，故 palette 是 advisory，不硬拦）。
-3. 锚点句落地 lint（确定性·便宜）：按 clip_plan.json 逐 clip 检查其 image_prompt_path 指向的 prompt
-   文件，是否真的含 visual_consistency 规定的『身份锚点 / 视觉锚点 / 禁止漂移』锚点块——
-   此前没有任何东西校验锚点句有没有抄进 prompt。缺关键锚点块 → warn（提示回 mv-image 补锚点句）。
-
-落档判定：block=主角脸崩，必须重抽；warn=人判二次；ok=放行。退出码恒 0（建议性闸门）。
-mv 的『筛选宽容铁律』：只有脸/画风漂到识别不出才硬拦，主色/锚点轻微偏差是 advisory。
-
-报告写 `生产数据/image_qc/image_qc.json`(+`.md`)，schema 由本文件维护。
-
-用法：
-  python3 image_qc.py <作品根> [--json]
-  python3 image_qc.py <作品根> --no-pixel   # 只跑 prompt 锚点 lint（无 Pillow/insightface 时）
-
-完整脸机检需 Pillow + cv2 + insightface + onnxruntime + buffalo_l。报告会写
-`qc_environment.precision_level=full|degraded|none`，缺依赖时应补装重跑，不应直接进 mv-video。
-
-测试（从本目录跑）：
-  cd skills/mv/mv-image/scripts && python3 -m pytest test_image_qc.py
+Report: ``生产数据/image_qc/image_qc.{json,md}``.
+Full face QC: Pillow + cv2 + insightface + onnxruntime + buffalo_l.
 """
 from __future__ import annotations
 
@@ -50,6 +31,18 @@ import sys
 from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from image_receipts import (  # noqa: E402
+    audit_ledger as audit_b14_ledger,
+    discover_image_assets,
+    preflight_hash,
+    provider_evidence_findings,
+    submission_hash,
+)
 
 
 def _sha256_path(path: Path) -> str:
@@ -73,7 +66,7 @@ def _project_settings(root: Path) -> Dict[str, str]:
             out[match.group(1).strip()] = re.split(r"\s+#", match.group(2), maxsplit=1)[0].strip()
     return out
 
-# verdict 严重度；noface=图里没脸，介于 ok 与 warn。
+# verdict 严重度；noface=机器无法确认主体脸，必须进入 review，不能静默汇总成 ok。
 SEVERITY = {"ok": 0, "info": 0, "noface": 1, "warn": 2, "block": 3}
 
 DEFAULT_MARGIN = 0.08
@@ -429,6 +422,12 @@ def _load_pillow():
         return None
 
 
+def _image_flat_data(image) -> List[Any]:
+    """Pillow 14-compatible flat pixel access with an older-version fallback."""
+    getter = getattr(image, "get_flattened_data", None)
+    return list(getter() if callable(getter) else image.getdata())
+
+
 def _embed(app, png: str) -> Optional[List[float]]:
     """检出图中最大脸的 normed embedding；无脸/读图失败 → None。"""
     try:
@@ -453,7 +452,7 @@ def _pillow_probe(image_mod, png: str) -> Optional[Tuple[int, int, float]]:
             gray = im.convert("L")
             gray.thumbnail((PILLOW_PROBE_MAX_SIDE, PILLOW_PROBE_MAX_SIDE))
             sw, sh = gray.size
-            pixels = list(gray.getdata())
+            pixels = _image_flat_data(gray)
         return w, h, laplacian_variance(pixels, sw, sh)
     except Exception:
         return None
@@ -552,6 +551,56 @@ def discover_clip_frames(root: Path) -> List[Tuple[str, str]]:
     return out
 
 
+def discover_all_image_assets(root: Path) -> List[Tuple[str, str, str]]:
+    """Every currently materialized B14-governed image.
+
+    Returns ``[(asset_kind, project_relative_path, absolute_path)]`` and covers
+    clip first/end frames, shared costume/location assets, candidates and cover.
+    Waste/rejected folders are deliberately excluded by ``image_receipts``.
+    Missing future plan assets belong to the acceptance-ledger completion audit,
+    not the current image's machine QC; otherwise the first image could never
+    pass while later planned images have not been generated yet.
+    """
+    return [
+        (kind, rel, str((root / rel).resolve()))
+        for rel, kind in discover_image_assets(root, include_missing_planned=False).items()
+    ]
+
+
+def discover_face_targets(root: Path) -> List[Tuple[str, str]]:
+    """Clip frames plus B14 assets explicitly declared to carry identity."""
+    ledger_path = root / "生产数据" / "image_acceptance" / "image_acceptance.json"
+    try:
+        ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+    except Exception:
+        ledger = {}
+    ledger_assets = ledger.get("assets") if isinstance(ledger, dict) else {}
+    # B14 ledger makes applicability explicit.  Legacy projects without it keep
+    # the conservative historical behavior of checking every clip frame.
+    out = [] if isinstance(ledger_assets, dict) and ledger_assets else list(discover_clip_frames(root))
+    seen = {str(Path(path).resolve()) for _cid, path in out}
+    for rel, record in (ledger_assets or {}).items() if isinstance(ledger_assets, dict) else []:
+        if not isinstance(record, dict) or record.get("identity_scope") != "contains_identity":
+            continue
+        absolute = str((root / str(rel)).resolve())
+        if absolute in seen:
+            continue
+        seen.add(absolute)
+        out.append((Path(str(rel)).stem, absolute))
+    out.sort(key=lambda row: row[0])
+    return out
+
+
+def discover_palette_targets(root: Path) -> List[Tuple[str, str]]:
+    """Images whose dramatic palette is meaningful (neutral shared archives excluded)."""
+    out: List[Tuple[str, str]] = []
+    for kind, rel, absolute in discover_all_image_assets(root):
+        if kind.startswith("shared_"):
+            continue
+        out.append((Path(rel).stem, absolute))
+    return out
+
+
 # ── 像素机检（脸漂移 G1 + 主色 palette） ──────────────────────────────────────
 
 def run_face_check(root: Path, margin: float = DEFAULT_MARGIN) -> Dict[str, Any]:
@@ -562,7 +611,12 @@ def run_face_check(root: Path, margin: float = DEFAULT_MARGIN) -> Dict[str, Any]
     result: Dict[str, Any] = {"available": False, "mode": None, "margin": margin,
                               "lead_floor": None, "lead_calibrated": False, "shots": [], "notes": []}
     lead_set = discover_lead_costume_set(root)
-    frames = discover_clip_frames(root)
+    frames = discover_face_targets(root)
+    if not frames:
+        result["available"] = True
+        result["mode"] = "not_applicable"
+        result["notes"].append("B14 ledger 中没有 identity_scope=contains_identity 的资产；脸一致性检查不适用。")
+        return result
     if not lead_set:
         result["notes"].append("共享定妆未找到主角定妆图（出图/共享|common/图片/定妆_<主角>.png）——脸漂移机检跳过，交人判。")
     app = _load_embedder()
@@ -588,6 +642,10 @@ def run_face_check(root: Path, margin: float = DEFAULT_MARGIN) -> Dict[str, Any]
         result["intra_by_variant"] = {v: round(s, 4) for v, s in intra_by_variant.items()}
         outliers = costume_set_outliers(intra_by_variant)
         result["costume_outliers"] = outliers
+        result["costume_outlier_assets"] = [
+            Path(lead_set[variant]).resolve().relative_to(root.resolve()).as_posix()
+            for variant in outliers if variant in lead_set
+        ]
         if outliers:
             result["notes"].append(
                 f"定妆组离群：变体 {'/'.join(outliers)} 与主参考相似度显著低于组内其它定妆——"
@@ -664,7 +722,7 @@ def run_palette_check(root: Path, threshold: float = PALETTE_DRIFT_THRESHOLD) ->
         result["notes"].append("未装 Pillow——主色漂移机检跳过（确定性主色提取需 Pillow）。")
         return result
     result["available"] = True
-    for cid, ap in discover_clip_frames(root):
+    for cid, ap in discover_palette_targets(root):
         rel = os.path.relpath(ap, str(root))
         if not os.path.exists(ap):
             result["shots"].append({"clip": cid, "png": rel, "verdict": "noface", "checks": ["clip PNG 不存在"]})
@@ -683,7 +741,7 @@ def _pillow_dhash(image_mod, png: str, hash_size: int = 8) -> Optional[int]:
         img = image_mod.open(png).convert("L").resize((hash_size + 1, hash_size))
     except Exception:
         return None
-    px = list(img.getdata())
+    px = _image_flat_data(img)
     w = hash_size + 1
     bits = 0
     for row in range(hash_size):
@@ -865,14 +923,14 @@ def prohibited_local_patch_outputs(root: Path) -> Dict[str, Any]:
     outputs.sort(key=lambda r: (str(r.get("clip") or ""), str(r.get("png") or "")))
     return {
         "available": bool(_production_events_path(root).exists()),
-        "event_path": str(_production_events_path(root)),
+        "event_path": "生产数据/production_events.jsonl",
         "outputs": outputs,
         "summary": {"block": len(outputs), "warn": 0, "ok": 0},
     }
 
 
 def generation_provenance(root: Path) -> Dict[str, Any]:
-    """Audit model/channel/prompt/reference receipts for every planned frame."""
+    """Audit receipts for every B14 image (frames/shared/candidates/cover)."""
     latest: Dict[str, Tuple[int, Dict[str, Any]]] = {}
     for idx, event in enumerate(_load_production_events(root), start=1):
         if str(event.get("stage") or "") != "image":
@@ -881,6 +939,13 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
         if rel:
             latest[rel] = (idx, event)
     settings = _project_settings(root)
+    try:
+        b14_ledger = json.loads(
+            (root / "生产数据" / "image_acceptance" / "image_acceptance.json").read_text(encoding="utf-8"))
+        if not isinstance(b14_ledger, dict) or b14_ledger.get("kind") != "mv_image_acceptance_ledger":
+            b14_ledger = {}
+    except Exception:
+        b14_ledger = {}
     plan = load_clip_plan(root) or {}
     plan_by_id = {
         str(clip.get("clip_id")): clip
@@ -891,16 +956,28 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
     rows = []
     pairs = set()
     blocks = 0
-    for cid, absolute in discover_clip_frames(root):
-        rel = Path(absolute).resolve().relative_to(root.resolve()).as_posix()
+    for asset_kind, rel, absolute in discover_all_image_assets(root):
+        cid = Path(rel).stem
         item = latest.get(rel)
-        findings = []
+        findings: List[str] = []
+        actual_hash = _sha256_path(root / rel)
+        provider_job_id = ""
+        provider_evidence: Mapping[str, Any] = {}
+        prompt_rel = ""
+        prompt_hash = ""
+        reference_rows: List[Any] = []
+        subject_rows: List[Any] = []
+        generation: Mapping[str, Any] = {}
         if not item:
             findings.append("missing_generation_event")
             model = channel = ""
+            b14_attempt_id = b14_preflight_sha256 = b14_submission_sha256 = ""
         else:
             line_no, event = item
             generation = _event_mapping(event, "generation")
+            b14_attempt_id = str(generation.get("b14_attempt_id") or "")
+            b14_preflight_sha256 = str(generation.get("b14_preflight_sha256") or "")
+            b14_submission_sha256 = str(generation.get("b14_submission_sha256") or "")
             model = str(generation.get("model") or event.get("model") or "").strip()
             channel = str(generation.get("channel") or generation.get("provider") or event.get("channel") or event.get("provider") or "").strip()
             if not model:
@@ -908,15 +985,18 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
             if not channel:
                 findings.append("missing_channel")
             recorded_asset_hash = str(generation.get("asset_sha256") or event.get("asset_sha256") or "")
-            actual_hash = _sha256_path(root / rel)
             if not recorded_asset_hash:
                 findings.append("missing_asset_sha256")
             elif recorded_asset_hash != actual_hash:
                 findings.append("asset_changed_after_generation_event")
+            provider_job_id = str(generation.get("provider_job_id") or "").strip()
+            raw_provider_evidence = generation.get("provider_evidence")
+            provider_evidence = (raw_provider_evidence
+                                 if isinstance(raw_provider_evidence, Mapping) else {})
             prompt_hash = str(generation.get("source_prompt_sha256") or event.get("source_prompt_sha256") or "")
             prompt_rel = str(generation.get("source_prompt") or event.get("source_prompt") or "").strip()
-            reference_rows = generation.get("reference_inputs")
-            subject_rows = generation.get("subject_inputs")
+            raw_reference_rows = generation.get("reference_inputs")
+            raw_subject_rows = generation.get("subject_inputs")
             if not prompt_rel:
                 findings.append("missing_source_prompt")
             if not prompt_hash:
@@ -927,11 +1007,12 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
                     findings.append("source_prompt_missing")
                 elif prompt_hash and _sha256_path(prompt_path) != prompt_hash:
                     findings.append("source_prompt_changed_after_generation_event")
-            if not isinstance(reference_rows, list):
+            if not isinstance(raw_reference_rows, list):
                 findings.append("missing_reference_inputs_receipt")
-                reference_rows = []
-            if not isinstance(subject_rows, list):
-                subject_rows = []
+            else:
+                reference_rows = raw_reference_rows
+            if isinstance(raw_subject_rows, list):
+                subject_rows = raw_subject_rows
             for reference in reference_rows:
                 if not isinstance(reference, dict):
                     findings.append("invalid_reference_input_receipt")
@@ -976,10 +1057,80 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
                 findings.append("model_differs_from_project_setting")
             if expected_channel and channel and channel != expected_channel:
                 findings.append("channel_differs_from_project_setting")
+
+        # A production event is only a projection.  The B14 ledger is the
+        # authoritative actual-submit receipt; missing ledger is always a hard
+        # provenance failure, including demo projects.
+        ledger_record = ((b14_ledger.get("assets") or {}).get(rel)
+                         if isinstance(b14_ledger, dict) else None)
+        if not isinstance(ledger_record, dict):
+            findings.append("missing_b14_ledger_record")
+        else:
+            ledger_current = (ledger_record.get("current")
+                              if isinstance(ledger_record.get("current"), dict) else {})
+            ledger_preflight = (ledger_current.get("preflight")
+                                if isinstance(ledger_current.get("preflight"), dict) else {})
+            ledger_submission = (ledger_current.get("submission")
+                                 if isinstance(ledger_current.get("submission"), dict) else {})
+            if (ledger_preflight.get("status") != "ready"
+                    or ledger_preflight.get("receipt_sha256") != preflight_hash(ledger_preflight)):
+                findings.append("invalid_b14_preflight_receipt")
+            if (ledger_submission.get("status") != "recorded"
+                    or ledger_submission.get("receipt_sha256") != submission_hash(ledger_submission)):
+                findings.append("invalid_b14_submission_receipt")
+            if ledger_submission.get("bound_preflight_sha256") != ledger_preflight.get("receipt_sha256"):
+                findings.append("b14_submission_preflight_binding_mismatch")
+            findings.extend(provider_evidence_findings(
+                root, ledger_submission, not_before=str(ledger_preflight.get("created_at") or "")))
+            if item:
+                if not b14_attempt_id or not b14_preflight_sha256 or not b14_submission_sha256:
+                    findings.append("missing_b14_event_binding")
+                elif (b14_attempt_id != str(ledger_current.get("attempt_id") or "")
+                      or b14_preflight_sha256 != str(ledger_preflight.get("receipt_sha256") or "")
+                      or b14_submission_sha256 != str(ledger_submission.get("receipt_sha256") or "")):
+                    findings.append("b14_event_binding_stale")
+
+                # Compare every semantic field written by record_generation,
+                # not merely the three hashes copied into the event.
+                ledger_prompt = (ledger_submission.get("prompt")
+                                 if isinstance(ledger_submission.get("prompt"), Mapping) else {})
+                exact_fields = {
+                    "asset": (str(generation.get("asset") or ""), rel),
+                    "asset_sha256": (
+                        str(generation.get("asset_sha256") or ""),
+                        str(ledger_submission.get("asset_sha256") or "")),
+                    "model": (model, str(ledger_submission.get("model") or "")),
+                    "channel": (channel, str(ledger_submission.get("channel") or "")),
+                    "source_prompt": (prompt_rel, str(ledger_prompt.get("path") or "")),
+                    "source_prompt_sha256": (
+                        prompt_hash, str(ledger_prompt.get("sha256") or "")),
+                    "reference_inputs": (
+                        reference_rows, ledger_submission.get("actual_references") or []),
+                    "subject_inputs": (
+                        subject_rows, ledger_submission.get("actual_subject_ids") or []),
+                }
+                for field, (actual_value, expected_value) in exact_fields.items():
+                    if actual_value != expected_value:
+                        findings.append(f"{field}_differs_from_b14_submission")
+                if provider_job_id != str(ledger_submission.get("provider_job_id") or ""):
+                    findings.append("provider_job_id_differs_from_b14_submission")
+                ledger_evidence = (ledger_submission.get("provider_evidence")
+                                   if isinstance(ledger_submission.get("provider_evidence"), Mapping) else {})
+                if dict(provider_evidence) != dict(ledger_evidence):
+                    findings.append("provider_evidence_differs_from_b14_submission")
+        # Avoid inflated counts when one malformed field trips the same check
+        # through both local and authoritative validation paths.
+        findings = list(dict.fromkeys(findings))
         blocks += len(findings)
         rows.append({
-            "clip": cid, "asset": rel, "model": model, "channel": channel,
+            "clip": cid, "asset_kind": asset_kind, "asset": rel, "model": model, "channel": channel,
             "source_prompt": prompt_rel if item else "",
+            "b14_attempt_id": b14_attempt_id,
+            "b14_preflight_sha256": b14_preflight_sha256,
+            "b14_submission_sha256": b14_submission_sha256,
+            "provider_job_id": provider_job_id,
+            "provider_evidence_path": str(provider_evidence.get("path") or ""),
+            "provider_evidence_sha256": str(provider_evidence.get("sha256") or ""),
             "reference_count": len(reference_rows) if item else 0,
             "subject_count": len(subject_rows) if item else 0,
             "event_line": item[0] if item else None, "findings": findings,
@@ -988,7 +1139,7 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
     if len(pairs) > 1:
         blocks += 1
     return {
-        "event_path": str(_production_events_path(root)),
+        "event_path": "生产数据/production_events.jsonl",
         "expected_model": expected_model,
         "expected_channel": expected_channel,
         "model_channel_pairs": [{"model": model, "channel": channel} for model, channel in sorted(pairs)],
@@ -997,6 +1148,42 @@ def generation_provenance(root: Path) -> Dict[str, Any]:
         "rows": rows,
         "summary": {"block": blocks, "ok": sum(1 for row in rows if row["verdict"] == "ok")},
     }
+
+
+def run_asset_integrity_check(root: Path) -> Dict[str, Any]:
+    """Decode and inspect every B14 image, not only clip first/end frames."""
+    assets = discover_all_image_assets(root)
+    result: Dict[str, Any] = {"available": False, "rows": [], "notes": [],
+                              "covered_kinds": sorted({kind for kind, _rel, _abs in assets})}
+    image_mod = _load_pillow()
+    if image_mod is None:
+        result["notes"].append("未装 Pillow——逐资产当前像素不可解码验证，B14 postflight 不得 accepted。")
+        for kind, rel, _absolute in assets:
+            result["rows"].append({"asset_kind": kind, "asset": rel, "png": rel,
+                                   "verdict": "noface", "checks": ["pixel_decode_unverifiable"]})
+        return result
+    result["available"] = True
+    for kind, rel, absolute in assets:
+        path = Path(absolute)
+        if not path.is_file():
+            result["rows"].append({"asset_kind": kind, "asset": rel, "png": rel,
+                                   "verdict": "block", "checks": ["planned_asset_missing"]})
+            continue
+        probe = _pillow_probe(image_mod, absolute)
+        if probe is None:
+            verdict, checks = pillow_shot_verdict(False)
+            row: Dict[str, Any] = {"asset_kind": kind, "asset": rel, "png": rel,
+                                   "verdict": verdict, "checks": checks}
+        else:
+            width, height, sharpness = probe
+            verdict, checks = pillow_shot_verdict(True, width, height, sharpness)
+            row = {"asset_kind": kind, "asset": rel, "png": rel, "verdict": verdict,
+                   "width": width, "height": height, "sharpness": round(sharpness, 3),
+                   "checks": checks}
+        row["asset_sha256"] = _sha256_path(path)
+        result["rows"].append(row)
+    result["summary"] = count_verdicts(result["rows"])
+    return result
 
 
 def run_pixel_checks(root: Path, margin: float = DEFAULT_MARGIN,
@@ -1053,9 +1240,13 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
         rows_by_check[key] = cnt
         if key in HARD_CHECKS:
             hard += cnt["block"]
-            advisory += cnt["warn"]
+            # noface is machine-unverifiable, never a silent ok.  It remains a
+            # review finding because a shot may intentionally contain no face;
+            # the per-asset B14 postflight decides applicability from
+            # identity_scope and refuses acceptance when identity was required.
+            advisory += cnt["warn"] + cnt["noface"]
         else:
-            advisory += cnt["block"] + cnt["warn"]   # palette 初筛即便 block 也只人判
+            advisory += cnt["block"] + cnt["warn"] + cnt["noface"]
     lint = payload.get("lint") or {}
     lint_findings = [f for f in lint.get("findings", []) if isinstance(f, dict)]
     contract_critical = [f for f in lint_findings if f.get("code") in FORMAL_HARD_LINT_CODES]
@@ -1077,15 +1268,20 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     if patch_outputs:
         rows_by_check["prohibited_local_patch"] = {"block": len(patch_outputs), "warn": 0, "noface": 0, "ok": 0}
         hard += len(patch_outputs)
+    integrity = payload.get("asset_integrity") or {}
+    integrity_counts = count_verdicts(integrity.get("rows") or [])
+    if sum(integrity_counts.values()):
+        rows_by_check["asset_integrity"] = integrity_counts
+        hard += integrity_counts["block"]
+        advisory += integrity_counts["warn"] + integrity_counts["noface"]
     provenance_blocks = int(((payload.get("generation_provenance") or {}).get("summary") or {}).get("block") or 0)
     if provenance_blocks:
-        if payload.get("formal_project"):
-            hard += provenance_blocks
-        else:
-            advisory += provenance_blocks
+        # B14 is a load-bearing per-image floor: demo/profile never turns an
+        # actual-submit/reference/hash mismatch into an advisory.
+        hard += provenance_blocks
         rows_by_check["generation_provenance"] = {
-            "block": provenance_blocks if payload.get("formal_project") else 0,
-            "warn": 0 if payload.get("formal_project") else provenance_blocks,
+            "block": provenance_blocks,
+            "warn": 0,
             "noface": 0,
             "ok": int(((payload.get("generation_provenance") or {}).get("summary") or {}).get("ok") or 0),
         }
@@ -1130,9 +1326,9 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
     elif verdict == "block":
         jump_to, reason = "image", "image_qc 有硬阻断（主角脸崩），需修复/重抽受影响 clip 后重跑"
     elif verdict == "review":
-        jump_to, reason = "video", "full image_qc 仅有非阻断初筛项（主色/锚点）；不阻断进入 mv-video"
+        jump_to, reason = "image", "image_qc 含 warn/noface/unverifiable；B14 逐图 postflight 前须处理或重抽"
     else:
-        jump_to, reason = "video", "full QC 未见阻断"
+        jump_to, reason = "image_postflight", "full machine QC 未见阻断；仍须逐图具名目视 accepted"
     install = QC_INSTALL_RECOMMENDATION if level != "full" else ""
     return {
         "precision_level": level, "python": sys.executable, "face_mode": face_mode or None,
@@ -1161,8 +1357,9 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                                "本轮图片一致性为降级判定，需补依赖后重跑或人工复核。"))
     for s in (checks.get("face") or {}).get("shots", []):
         v = s.get("verdict")
-        if v in ("block", "warn"):
-            out.append(_qc_finding(v, "character_consistency", s.get("png"),
+        if v in ("block", "warn", "noface"):
+            sev = "warn" if v == "noface" else v
+            out.append(_qc_finding(sev, "character_consistency", s.get("png"),
                                    f"主角脸漂移 G1 {v}：{s.get('png')}"
                                    f"（score={s.get('score')} floor={s.get('floor')}）"))
     for variant in (checks.get("face") or {}).get("costume_outliers", []):
@@ -1186,10 +1383,18 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                                f"生产事件账本显示该 MV 帧来自本地贴脸/换脸/混合修复：{row.get('png')} "
                                f"（line={row.get('line')} method={row.get('method')}）。"
                                "不得用本地身份像素贴回画面来通过一致性 QC，需回 mv-image 重抽。"))
+    for row in (payload.get("asset_integrity") or {}).get("rows", []):
+        if row.get("verdict") != "ok":
+            out.append(_qc_finding(
+                "block" if row.get("verdict") == "block" else "warn",
+                "image_asset_integrity", row.get("asset"),
+                f"逐资产像素检查 {row.get('verdict')}：{row.get('asset')} · "
+                f"{', '.join(row.get('checks') or [])}",
+            ))
     for row in (payload.get("generation_provenance") or {}).get("rows", []):
         if row.get("findings"):
             out.append(_qc_finding(
-                "block" if payload.get("formal_project") else "warn",
+                "block",
                 "image_generation_provenance", row.get("asset"),
                 f"出图生成收据不完整：{row.get('asset')} · {', '.join(row.get('findings') or [])}",
             ))
@@ -1229,6 +1434,9 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             add(s.get("png") or s.get("clip"), "主角脸崩 G1")
     for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
         add(row.get("png") or row.get("clip"), "本地贴脸/换脸修复产物禁入")
+    for row in (payload.get("asset_integrity") or {}).get("rows", []):
+        if row.get("verdict") == "block":
+            add(row.get("asset") or row.get("png"), "图片缺失/损坏，当前像素不可用")
     return sorted(by_clip.values(), key=lambda d: d["clip"])
 
 
@@ -1258,19 +1466,22 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             add(f.get("msg"), f"strict:anchor:{f.get('code') or f.get('level')}")
     for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
         add(row.get("png") or row.get("clip"), "strict:本地贴脸/换脸修复产物禁入")
+    for row in (payload.get("asset_integrity") or {}).get("rows", []):
+        if row.get("verdict") != "ok":
+            add(row.get("asset") or row.get("png"), f"strict:逐资产像素 {row.get('verdict')}")
     return sorted(by_clip.values(), key=lambda d: d["clip"])
 
 
-# ── 降级机检人工放行（具名 + hash 绑定） ─────────────────────────────────────
+# ── 降级机检目视留痕（具名 + hash 绑定） ─────────────────────────────────────
 
 MANUAL_REVIEW_EXCLUDED_KEYS = ("manual_review", "json_path", "markdown_path")
 
 
 def manual_review_binding(report: Mapping[str, Any]) -> str:
-    """人工放行绑定摘要：报告剥离 manual_review 后的稳定 JSON sha256。
+    """降级目视留痕绑定摘要：报告剥离 manual_review 后的稳定 JSON sha256。
 
     裸布尔 manual_review_accepted 无法证明「人看的就是这份报告」——重跑 QC 后旧留痕
-    还能继续放行。绑定到报告内容 hash 后：报告一重跑，绑定即失效，必须重新具名放行。
+    仍会看似有效。绑定到报告内容 hash 后：报告一重跑，绑定即失效，必须重新具名视觉确认。
     与 mv-craft gate 的核对算法一致（json.dumps sort_keys+separators → sha256）。纯函数·可测。"""
     stripped = {k: v for k, v in report.items() if k not in MANUAL_REVIEW_EXCLUDED_KEYS}
     encoded = json.dumps(stripped, ensure_ascii=False, sort_keys=True,
@@ -1279,7 +1490,7 @@ def manual_review_binding(report: Mapping[str, Any]) -> str:
 
 
 def manual_review_valid(report: Mapping[str, Any]) -> bool:
-    """报告中的 manual_review 是否有效：accepted + 具名 reviewer + 绑定 hash 与当前报告一致。纯函数·可测。"""
+    """Validate a legacy manual-review hash binding; never a formal pass signal."""
     manual = report.get("manual_review") or {}
     if not (manual.get("accepted") and str(manual.get("reviewer") or "").strip()):
         return False
@@ -1287,10 +1498,16 @@ def manual_review_valid(report: Mapping[str, Any]) -> bool:
 
 
 def accept_degraded(root: Path, reviewer: str, notes: str) -> int:
-    """在已有降级报告上记录具名人工放行（绑定报告内容 hash）。报告重跑后需重新放行。"""
+    """Record named visual confirmation without pretending degraded machine QC passed.
+
+    Kept as a compatibility CLI for existing projects.  B14 permits a named
+    human to complete the subjective visual portion, but never to fabricate the
+    missing deterministic/embedding result, so this command intentionally
+    returns non-zero and ``manual_review_valid`` remains false.
+    """
     json_path = production_dir(root) / "image_qc" / "image_qc.json"
     if not json_path.is_file():
-        print(f"[err] 缺 {json_path}；先跑 image_qc 再人工放行", file=sys.stderr)
+        print(f"[err] 缺 {json_path}；先跑 image_qc 再记录降级目视留痕", file=sys.stderr)
         return 2
     try:
         report = json.loads(json_path.read_text(encoding="utf-8"))
@@ -1299,29 +1516,31 @@ def accept_degraded(root: Path, reviewer: str, notes: str) -> int:
         return 2
     level = str((report.get("qc_environment") or {}).get("precision_level") or "")
     if level == "full":
-        print("[err] 机检精度已是 full，无需降级人工放行", file=sys.stderr)
+        print("[err] 机检精度已是 full，无需降级目视留痕", file=sys.stderr)
         return 2
     if not reviewer.strip():
-        print("[err] 降级放行必须具名：--reviewer <name>", file=sys.stderr)
+        print("[err] 降级目视留痕必须具名：--reviewer <name>", file=sys.stderr)
         return 2
     if not notes.strip():
-        print("[err] 降级放行必须写复核说明（看了什么、怎么确认的）：--notes <text>", file=sys.stderr)
+        print("[err] 降级目视留痕必须写视觉确认说明（看了什么、怎么确认的）：--notes <text>", file=sys.stderr)
         return 2
     report.pop("manual_review", None)
     report["manual_review"] = {
-        "accepted": True,
+        "accepted": False,
+        "visual_confirmed": True,
         "reviewer": reviewer.strip(),
         "notes": notes.strip(),
-        "accepted_at": date.today().isoformat(),
+        "reviewed_at": date.today().isoformat(),
         "scope": "degraded_precision_visual_checks",
+        "b14_effect": "visual_evidence_only_machine_qc_still_required",
         "bound_report_sha256": manual_review_binding(report),
     }
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
                          encoding="utf-8")
     md_path = json_path.with_suffix(".md")
     md_path.write_text(render_markdown(report), encoding="utf-8")
-    print(f"[ok] 降级机检人工放行已记录（reviewer={reviewer.strip()}，绑定当前报告 hash）→ {json_path}")
-    return 0
+    print(f"[block] 降级机检目视留痕已记录（reviewer={reviewer.strip()}），但不能替代 full machine QC → {json_path}")
+    return 1
 
 
 # ── 报告落档 ──────────────────────────────────────────────────────────────────
@@ -1352,21 +1571,28 @@ def run_qc(root: Path, with_pixel: bool = True, margin: float = DEFAULT_MARGIN,
         meta = json.loads((root / "_meta.json").read_text(encoding="utf-8"))
     except Exception:
         pass
-    payload: Dict[str, Any] = {"kind": "mv_image_qc", "version": 2, "root": str(root),
+    payload: Dict[str, Any] = {"kind": "mv_image_qc", "version": 3, "root_rel": ".",
                                "formal_project": meta.get("is_demo") is False,
                                "checks": {}, "lint": {}}
     if with_pixel:
         with contextlib.redirect_stdout(sys.stderr):
             payload["checks"] = run_pixel_checks(root, margin, palette_threshold)
             payload["shot_variety"] = run_shot_variety_check(root)
+            payload["asset_integrity"] = run_asset_integrity_check(root)
+    else:
+        payload["asset_integrity"] = {
+            "available": False, "rows": [],
+            "notes": ["pixel checks disabled by --no-pixel；B14 postflight 不得 accepted"],
+        }
     payload["lint"] = lint_prompts(root)
     payload["prohibited_local_patch_outputs"] = prohibited_local_patch_outputs(root)
     payload["generation_provenance"] = generation_provenance(root)
+    payload["b14_acceptance"] = audit_b14_ledger(root)
     # 被检图片的内容收据：gate 用它做确定性新鲜度核对（图片重生成 → hash 变 → 报告过期），
     # 取代按 mtime 判过期（mtime 会被恢复旧图/跨机复制骗过，与全线 inputs_sha256 口径不一致）。
     payload["assets_sha256"] = {
-        Path(absolute).resolve().relative_to(root.resolve()).as_posix(): _sha256_path(Path(absolute))
-        for _cid, absolute in discover_clip_frames(root)
+        rel: _sha256_path(Path(absolute))
+        for _kind, rel, absolute in discover_all_image_assets(root)
     }
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
@@ -1397,7 +1623,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     lines = [
         "# mv-image QC（出图落档机检）",
         "",
-        f"- 总判定: **{summary.get('verdict', 'ok')}** · 硬阻断 {summary.get('hard_blocks', 0)}（主角脸崩，必须重抽）"
+        f"- 总判定: **{summary.get('verdict', 'ok')}** · 硬阻断 {summary.get('hard_blocks', 0)}（脸/像素/来源链，必须修复）"
         f" · 非阻断初筛 {summary.get('advisory', 0)} · 视觉降级 {len(summary.get('unavailable_visual_checks') or [])}",
     ]
     env = payload.get("qc_environment", {}) or {}
@@ -1410,10 +1636,18 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"- 建议安装: {env.get('recommended_install')}")
     manual = payload.get("manual_review") or {}
     if manual:
-        bound = "✅ 绑定当前报告" if manual_review_valid(payload) else "❌ 绑定失效（报告已重跑，需重新放行）"
-        lines.append(f"- 降级人工放行: reviewer={manual.get('reviewer')} · {manual.get('accepted_at')} · {bound}")
+        if manual.get("visual_confirmed") and not manual.get("accepted"):
+            bound = ("🟡 目视绑定当前报告；只完成主观部分，仍须 full machine QC"
+                     if manual.get("bound_report_sha256") == manual_review_binding(payload)
+                     else "❌ 目视绑定失效（报告已重跑）")
+        else:
+            bound = ("🟡 旧记录 hash 仍匹配；仅供审计，不构成正式放行"
+                     if manual_review_valid(payload)
+                     else "❌ 旧记录绑定失效（报告已重跑）")
+        reviewed_at = manual.get("reviewed_at") or manual.get("accepted_at")  # 旧报告只读兼容
+        lines.append(f"- 降级目视留痕: reviewer={manual.get('reviewer')} · {reviewed_at} · {bound}")
         if manual.get("notes"):
-            lines.append(f"  - 复核说明: {manual.get('notes')}")
+            lines.append(f"  - 视觉确认说明: {manual.get('notes')}")
     lines.extend([
         "",
         "## 像素机检（主角脸=硬阻断，主色=非阻断初筛）",
@@ -1434,6 +1668,20 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     for key in ("face", "palette"):
         for n in (checks.get(key) or {}).get("notes", []):
             lines.append(f"  - note: {n}")
+    integrity = payload.get("asset_integrity") or {}
+    icnt = by.get("asset_integrity", {})
+    lines.extend(["", "## B14 逐资产当前像素（共享/clip/候选/封面）"])
+    if not integrity.get("available"):
+        lines.append(f"- 🔴 不可用：{'；'.join(integrity.get('notes', [])) or '未跑'}")
+    else:
+        flag = "🔴" if icnt.get("block") else ("🟡" if icnt.get("warn") or icnt.get("noface") else "🟢")
+        lines.append(f"- {flag} 检 {len(integrity.get('rows') or [])} 张 · "
+                     f"block {icnt.get('block', 0)} · warn {icnt.get('warn', 0)} · "
+                     f"unverifiable {icnt.get('noface', 0)}")
+        for row in integrity.get("rows") or []:
+            if row.get("verdict") != "ok":
+                lines.append(f"  - {row.get('verdict')}: {row.get('asset')} · "
+                             f"{', '.join(row.get('checks') or [])}")
     lines.extend(["", "## 锚点句落地 lint（逐 clip prompt）"])
     lint = payload.get("lint", {})
     lcnt = by.get("lint", {})
@@ -1487,11 +1735,18 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             f"{row.get('model') or '?'} / {row.get('channel') or '?'} · "
             f"refs={row.get('reference_count', 0)} · subjects={row.get('subject_count', 0)} · {detail}"
         )
+    b14 = (payload.get("b14_acceptance") or {}).get("summary") or {}
+    lines.extend(["", "## B14 逐图最终验收 ledger"])
+    lines.append(
+        f"- accepted {b14.get('accepted', 0)}/{b14.get('expected', 0)} · "
+        f"stale {b14.get('stale', 0)} · untracked {b14.get('untracked', 0)} · "
+        f"all_current_accepted={str(bool(b14.get('all_current_accepted'))).lower()}"
+    )
     lines.append("")
-    lines.append("落档判定：**verdict=block** → 主角脸崩（崩脸/图损坏）或正式项目身份锚点/禁止漂移块缺失"
-                 "（身份合同未进 prompt，B12 合同消费闸），必须修复后重跑；"
-                 "**verdict=review** → 只有主色/参考类锚点等非阻断初筛或视觉降级时不挡 mv-video（按阶段跳转补依赖/复核）；"
-                 "**verdict=ok** → 放行。主色与参考/视觉锚点是像素初筛/确定性 lint，非硬失败（MV 筛选宽容铁律）。")
+    lines.append("机器判定：**verdict=block** → 修复/重抽后重跑，CLI 退出 1；"
+                 "**verdict=review** → 含 warn/noface/unverifiable/降级，只能复核或补依赖，本张 B14 postflight 不得 accepted；"
+                 "**verdict=ok** → 仅表示机器层可进入逐图具名目视。最终是否可生成下一张，以 "
+                 "image_acceptance ledger 当前像素 accepted 为准；demo 不降低此门槛。")
     return "\n".join(lines) + "\n"
 
 
@@ -1506,15 +1761,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--findings", action="store_true", help="打印与 mv-review/gate 同形的 findings")
     ap.add_argument("--regen-list", action="store_true", help="打印「要重抽」的 clip（普通落档 QC；warn 不进）")
     ap.add_argument("--strict", action="store_true", help="严审刷新：block/warn/降级都进候选重出清单")
-    ap.add_argument("--accept-degraded", action="store_true",
-                    help="不重跑机检；在已有降级报告上记录具名人工放行（绑定报告 hash，报告重跑即失效）")
-    ap.add_argument("--reviewer", default="", help="人工放行具名（--accept-degraded 必填）")
-    ap.add_argument("--notes", default="", help="人工复核说明（--accept-degraded 必填）")
+    ap.add_argument("--record-degraded-visual-review", "--accept-degraded",
+                    dest="record_degraded_visual_review", action="store_true",
+                    help="在降级报告记录具名目视证据；仍返回非零且不能替代 full machine QC（旧名 --accept-degraded）")
+    ap.add_argument("--reviewer", default="", help="人工复核具名（记录降级目视时必填）")
+    ap.add_argument("--notes", default="", help="人工复核说明（记录降级目视时必填）")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     if not root.is_dir():
         ap.error(f"找不到作品根：{root}")
-    if ns.accept_degraded:
+    if ns.record_degraded_visual_review:
         return accept_degraded(root, ns.reviewer, ns.notes)
     payload = run_qc(root, with_pixel=not ns.no_pixel, margin=ns.margin,
                      palette_threshold=ns.palette_threshold)
@@ -1527,7 +1783,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
     else:
         print(payload["markdown_path"])
-    return 0
+    # A hard QC verdict is a real command failure.  Callers must not infer
+    # success from a report path being printed while pixels/provenance block.
+    return 1 if (payload.get("summary") or {}).get("verdict") == "block" else 0
 
 
 if __name__ == "__main__":

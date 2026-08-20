@@ -614,6 +614,56 @@ class QAGateTest(unittest.TestCase):
             status = qa_gate.collect_gate_status(tmp)
             self.assertTrue(any(b["id"] == "SCENE-CARD-MISSING-FIELDS" for b in status["blockers"]))
 
+    def test_literary_scene_card_alternative_function_does_not_reblock_in_total_gate(self):
+        """scene_cards.py 放行后，总 QA gate 必须使用同一工艺档合同，不能再次按 turn 硬挡。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 创作工艺档：literary\n- 目标平台：晋江\n")
+            os.makedirs(os.path.join(tmp, "设定"), exist_ok=True)
+            with open(os.path.join(tmp, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "kind": "novel_scene_cards",
+                    "scenes": [{
+                        "id": "SC001-01", "chapter": 1, "scene_no": 1,
+                        "viewpoint": "镇上所有等信人的合唱视角",
+                        "motif_return": "空信箱第三次出现，锈迹比上次更深",
+                    }],
+                }, f, ensure_ascii=False)
+
+            status = qa_gate.collect_gate_status(tmp)
+
+            self.assertFalse(any(b["id"] == "SCENE-CARD-MISSING-FIELDS" for b in status["blockers"]))
+            self.assertFalse(any(w["id"] == "SCENE-CARD-NARRATIVE-FUNCTION-MISSING" for w in status["warnings"]))
+            self.assertTrue(any(w["id"] == "SCENE-CARD-LITERARY-DYNAMICS-OMITTED" for w in status["warnings"]))
+
+    def test_literary_scene_card_without_registered_function_is_b10_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 创作工艺档：experimental\n")
+            os.makedirs(os.path.join(tmp, "设定"), exist_ok=True)
+            with open(os.path.join(tmp, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "kind": "novel_scene_cards",
+                    "scenes": [{
+                        "id": "SC001-01", "chapter": 1, "scene_no": 1,
+                        "pov": "林越", "desire": "等待", "obstacle": "时间",
+                        "conflict": "留下还是走",
+                    }],
+                }, f, ensure_ascii=False)
+
+            status = qa_gate.collect_gate_status(tmp)
+
+            self.assertFalse(any(b["id"] == "SCENE-CARD-NARRATIVE-FUNCTION-MISSING" for b in status["blockers"]))
+            finding = next(
+                w for w in status["warnings"]
+                if w["id"] == "SCENE-CARD-NARRATIVE-FUNCTION-MISSING"
+            )
+            self.assertEqual(finding.get("confidence"), "heuristic")
+
     def test_missing_scene_cards_warn_for_long_project(self):
         with tempfile.TemporaryDirectory() as tmp:
             _write_meta(tmp, scale="long", target_chapters=80)
@@ -750,6 +800,42 @@ class QAGateTest(unittest.TestCase):
             status = qa_gate.collect_gate_status(tmp)
             self.assertTrue(status["blocking"])
             self.assertTrue(any(b["id"] == "RIGHTS-PD-REGION-GAP" for b in status["blockers"]))
+
+
+class AuthenticityGateTest(unittest.TestCase):
+    def _write_record(self, root, payload):
+        path = os.path.join(root, "修订", "authenticity_read.json")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False)
+
+    def test_export_gate_blocks_only_explicit_required_workflow(self):
+        with tempfile.TemporaryDirectory() as root:
+            payload = {
+                "schema_version": 1,
+                "kind": "novel_authenticity_read",
+                "required_for_release": True,
+                "status": "planned",
+                "scope": [],
+                "reviewer": {},
+                "findings": [],
+            }
+            self._write_record(root, payload)
+            required_status = qa_gate.collect_gate_status(
+                root, export_formats=["txt"], require_state_closure=False
+            )
+            required = next(item for item in required_status["reports"] if item["kind"] == "authenticity_read")
+            self.assertTrue(required["blocking"])
+            self.assertTrue(any(item["id"] == "AUTH-SCOPE-MISSING" for item in required["blockers"]))
+
+            payload["required_for_release"] = False
+            self._write_record(root, payload)
+            optional_status = qa_gate.collect_gate_status(
+                root, export_formats=["txt"], require_state_closure=False
+            )
+            optional = next(item for item in optional_status["reports"] if item["kind"] == "authenticity_read")
+            self.assertFalse(optional["blocking"])
+            self.assertTrue(any(item["id"] == "AUTH-SCOPE-MISSING" for item in optional["warnings"]))
 
 
 if __name__ == "__main__":

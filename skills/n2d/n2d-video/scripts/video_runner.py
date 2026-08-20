@@ -36,6 +36,8 @@ if str(COMMON_DIR) not in sys.path:
     sys.path.insert(0, str(COMMON_DIR))
 
 from n2d_const import PRODUCTION_MODE_DEFAULT
+from content_fingerprint import build_content_fingerprint, canonical_sha256, fingerprint_issues
+from paid_execution_contract import enforce_expected_paid_request
 
 try:
     from n2d_route import normalize_episode, parse_progress
@@ -142,6 +144,139 @@ def batch_id(start: int, end: int) -> str:
 
 def manifest_path(root: Path, episode: str, start: int, end: int) -> Path:
     return production_dir(root) / f"video_batch_{episode}_{batch_id(start, end)}.json"
+
+
+def video_manifest_input_fingerprint(
+    root: Path,
+    episode: str,
+    *,
+    backend: str,
+    channel: str,
+    model_version: str,
+    resolution: str,
+    ratio: str,
+    budget_tier: str,
+    batch_key: str = "",
+    item_inputs: Sequence[str] = (),
+    item_request_specs: Sequence[Mapping[str, Any]] = (),
+) -> Dict[str, Any]:
+    """Hash every production input that may change a paid video request.
+
+    The prompt pack is the direct source, while the remaining paths bind the
+    transitive route/identity/audio/frame state that produced it.  Missing
+    optional files remain part of the fingerprint and therefore invalidate a
+    prepared manifest if they appear later.
+    """
+    patterns = [
+        "_设置.md",
+        f"脚本/{episode}/storyboard.json",
+        f"脚本/{episode}/continuity_chain.json",
+        f"脚本/{episode}/shot_reverse_contract.json",
+        f"生产数据/production_mode_route_{episode}.json",
+        f"生产数据/mouth_visible_audit_{episode}.json",
+        f"生产数据/script_quality_contract_{episode}.json",
+        f"生产数据/director_camera_plan_{episode}.json",
+        f"生产数据/reference_plan_{episode}.json",
+        f"生产数据/dialogue_fact_contract_{episode}.json",
+        "生产数据/video_execution_adapters.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        f"出图/{episode}/prompt/00_总览.md",
+        f"出图/{episode}/图片/*.png",
+        f"出视频/{episode}/prompt/video_model_routes.json",
+        f"出视频/{episode}/prompt/00_总览.md",
+        f"出视频/{episode}/prompt/01_clips.md",
+    ]
+    if batch_key:
+        patterns.append(f"生产数据/video_batches/{episode}/{batch_key}/prompts/*.prompt.txt")
+    patterns.extend(str(value) for value in item_inputs if str(value).strip())
+    return build_content_fingerprint(
+        root,
+        scope="video_paid_submit",
+        source_patterns=patterns,
+        values={
+            "episode": episode,
+            "batch_id": batch_key,
+            "backend": backend,
+            "channel": channel,
+            "model_version": model_version,
+            "resolution": resolution,
+            "ratio": ratio,
+            "budget_tier": budget_tier,
+            "item_request_specs": list(item_request_specs),
+        },
+    )
+
+
+_VIDEO_ITEM_REQUEST_KEYS = (
+    "clip", "story_clip", "relay_parent", "video_shot_segment", "target",
+    "model_version", "submit_duration", "edit_target_duration", "story_duration",
+    "duration_plan", "speed_mode", "frame_strategy", "frame_control_mode",
+    "anchor_consumption_mode", "multiframe_segment_durations", "multiframe_segment_prompts",
+    "prepared_prompt_sha256", "prompt_source_kind", "prompt_compiler", "force_multimodal",
+    "require_audio", "mode_backend", "mode", "negative_prompt", "route_clip_id",
+    "route_hash", "route_execution_recipe_hash", "post_video_qc",
+)
+
+
+def video_item_request_spec(root: Path, item: Mapping[str, Any]) -> Dict[str, Any]:
+    spec = {key: item.get(key) for key in _VIDEO_ITEM_REQUEST_KEYS if key in item}
+    normalized_paths: List[str] = []
+    for raw in _submit_input_paths(item):
+        path = Path(raw).expanduser()
+        if path.is_absolute():
+            try:
+                normalized_paths.append(path.resolve(strict=False).relative_to(root.resolve()).as_posix())
+            except ValueError as exc:
+                raise ValueError(f"video submit input escapes project root: {path}") from exc
+        else:
+            normalized_paths.append(path.as_posix())
+    spec["input_paths"] = normalized_paths
+    return spec
+
+
+def current_video_manifest_input_fingerprint(root: Path, manifest: Mapping[str, Any]) -> Dict[str, Any]:
+    """Rebuild the one exact paid-submit contract for a prepared manifest."""
+    item_inputs: List[str] = []
+    item_request_specs: List[Dict[str, Any]] = []
+    for item in manifest.get("items") or []:
+        if not isinstance(item, Mapping):
+            continue
+        item_request_specs.append(video_item_request_spec(root, item))
+        for raw in _submit_input_paths(item):
+            path = Path(raw).expanduser()
+            if path.is_absolute():
+                try:
+                    rel = path.resolve(strict=False).relative_to(root.resolve()).as_posix()
+                except ValueError as exc:
+                    raise ValueError(f"video submit input escapes project root: {path}") from exc
+            else:
+                rel = path.as_posix()
+            if rel not in item_inputs:
+                item_inputs.append(rel)
+    return video_manifest_input_fingerprint(
+        root,
+        str(manifest.get("episode") or ""),
+        backend=str(manifest.get("backend") or ""),
+        channel=str(manifest.get("channel") or ""),
+        model_version=str(manifest.get("model_version") or ""),
+        resolution=str(manifest.get("video_resolution") or ""),
+        ratio=str(manifest.get("ratio") or ""),
+        budget_tier=str(manifest.get("video_budget_tier") or ""),
+        batch_key=str(manifest.get("batch_id") or ""),
+        item_inputs=item_inputs,
+        item_request_specs=item_request_specs,
+    )
+
+
+def video_manifest_fingerprint_issues(root: Path, manifest: Mapping[str, Any]) -> List[str]:
+    """Reject both stale fingerprints and self-consistent fingerprints for another scope."""
+    recorded = manifest.get("input_fingerprint")
+    issues = fingerprint_issues(root, recorded)
+    expected = current_video_manifest_input_fingerprint(root, manifest)
+    if not isinstance(recorded, Mapping) or str(recorded.get("sha256") or "") != expected["sha256"]:
+        issues.append("input_fingerprint_not_exact_video_submit_contract")
+    return list(dict.fromkeys(issues))
 
 
 def stable_prompt_dir(root: Path, episode: str, start: int, end: int) -> Path:
@@ -860,20 +995,46 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                      model_version: Optional[str], force: bool = False) -> Dict[str, Any]:
     episode = normalize_episode(episode)
     path = manifest_path(root, episode, start, end)
-    if path.exists() and not force:
-        return load_json(path)
-    prompts_dir = stable_prompt_dir(root, episode, start, end)
-    prompts_dir.mkdir(parents=True, exist_ok=True)
-    anchors_by_clip = clip_anchor_index(root, episode)
     budget_tier = video_budget_tier(root)
     resolved_resolution = resolve_video_resolution(root, resolution, budget_tier)
     resolved_model_version = resolve_base_dreamina_model_version(root, model_version, budget_tier)
+    video_channel = _project_setting(root, "生视频渠道", "")
+    current_input_fingerprint = video_manifest_input_fingerprint(
+        root,
+        episode,
+        backend=backend,
+        channel=video_channel,
+        model_version=resolved_model_version,
+        resolution=resolved_resolution,
+        ratio=aspect_ratio(root),
+        budget_tier=budget_tier,
+        batch_key=batch_id(start, end),
+    )
+    if path.exists() and not force:
+        existing = load_json(path)
+        issues = video_manifest_fingerprint_issues(root, existing)
+        if not issues:
+            return existing
+        active = [
+            str(item.get("clip") or "?")
+            for item in existing.get("items") or []
+            if isinstance(item, Mapping)
+            and str(item.get("status") or "prepared").lower()
+            not in {"", "prepared", "failed", "rejected", "cancelled"}
+        ]
+        if active:
+            raise RuntimeError(
+                "video batch input_fingerprint is stale while it contains submitted/downloaded/accepted work "
+                f"({', '.join(active[:8])}); do not reuse it. Prepare a new batch or explicitly archive/force after review."
+            )
+    prompts_dir = stable_prompt_dir(root, episode, start, end)
+    prompts_dir.mkdir(parents=True, exist_ok=True)
+    anchors_by_clip = clip_anchor_index(root, episode)
     # Keep the concrete generation model/backend separate from its access path.
     # A Seedance route executed through the official Dreamina CLI must use the
     # Dreamina frame-control and adapter capabilities without rewriting the
     # compiled prompt's backend/model identity.
-    video_channel = _project_setting(root, "生视频渠道", "")
-    
+
     # 获取后端能力档案；不要用 mode 字符串猜命令名，统一读能力字段。
     capability = video_backend_frame_control(backend, video_channel)
     supports_mf = bool(capability.get("supports_native_mid_anchors"))
@@ -1201,9 +1362,13 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         "requested_video_resolution": str(resolution or "auto"),
         "ratio": aspect_ratio(root),
         "execution_adapter": execution_adapter_v2.execution_status(root, backend, video_channel),
+        "input_fingerprint": current_input_fingerprint,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "items": items,
     }
+    # Stable prompt files are written during prepare and are direct paid-request
+    # inputs.  Freeze the fingerprint only after those files exist.
+    payload["input_fingerprint"] = current_video_manifest_input_fingerprint(root, payload)
     atomic_write_json(path, payload)
     return payload
 
@@ -1753,6 +1918,8 @@ def _adapter_invocation(
     item: Dict[str, Any],
     adapter: Mapping[str, Any],
     operation: str,
+    *,
+    query_download_dir: Optional[Path] = None,
 ) -> Tuple[List[str], Optional[Path]]:
     """Build an embedded or wrapper-command adapter invocation.
 
@@ -1767,15 +1934,26 @@ def _adapter_invocation(
             raise RuntimeError(f"adapter {adapter.get('adapter_id') or adapter.get('provider')} missing {builder_key}")
         if operation == "submit":
             return list(builder(item, {**manifest, "_root": str(root)})), None
-        download_dir = formal_video_dir(root, str(manifest.get("episode") or "")) / "_downloads"
+        download_dir = query_download_dir or (
+            formal_video_dir(root, str(manifest.get("episode") or "")) / "_downloads"
+        )
         return list(builder(str(item.get("submit_id") or ""), download_dir)), None
 
+    extra: Optional[Mapping[str, Any]] = None
+    if operation == "query" and query_download_dir is not None:
+        extra = {
+            "output": {
+                "directory": str(query_download_dir.resolve()),
+                "target": str(item.get("target") or ""),
+            }
+        }
     request = execution_adapter_v2.build_request(
         operation=operation,
         root=root,
         manifest=manifest,
         item=item,
         adapter=adapter,
+        extra=extra,
     )
     request_path = execution_adapter_v2.write_request(
         root,
@@ -1948,6 +2126,113 @@ def enforce_sequential_qc_interlock(
         )
 
 
+def _submit_input_paths(item: Mapping[str, Any]) -> List[str]:
+    values: List[str] = []
+    for key in (
+        "image", "end_image", "prompt_file", "multiframe_images", "multimodal_images",
+        "reference_inputs", "control_inputs", "audio_inputs",
+    ):
+        raw = item.get(key)
+        rows = raw if isinstance(raw, list) else [raw]
+        for row in rows:
+            if isinstance(row, Mapping):
+                candidate = next((row.get(name) for name in ("path", "file", "image", "audio") if row.get(name)), "")
+            else:
+                candidate = row
+            text = str(candidate or "").strip()
+            if text and text not in values:
+                values.append(text)
+    return values
+
+
+def _submit_file_binding(root: Path, raw: Any) -> Dict[str, Any]:
+    path = _resolve_path_for_root(root, raw)
+    exists = path.is_file()
+    return {
+        "path": _rel_path(root, path),
+        "exists": exists,
+        "sha256": _sha256_file(path) if exists else "",
+        "bytes": path.stat().st_size if exists else 0,
+    }
+
+
+def build_submit_snapshot(
+    root: Path,
+    manifest: Mapping[str, Any],
+    item: Mapping[str, Any],
+    adapter: Mapping[str, Any],
+    args: Sequence[str],
+    request_path: Optional[Path],
+) -> Dict[str, Any]:
+    """Freeze the exact paid request before crossing the provider boundary."""
+    prompt_path = _resolve_path_for_root(root, item.get("prompt_file"))
+    prompt = prompt_path.read_text(encoding="utf-8").strip() if prompt_path.is_file() else ""
+    prompt = _append_dialogue_fact_contract(
+        prompt,
+        dict(item),
+        {**dict(manifest), "_root": str(root)},
+        enforce_submit_guard=False,
+    )
+    files = [_submit_file_binding(root, value) for value in _submit_input_paths(item)]
+    adapter_view = {
+        str(key): value
+        for key, value in adapter.items()
+        if not callable(value) and key not in {"submit_args", "query_args"}
+    }
+    batch_fp = manifest.get("input_fingerprint") if isinstance(manifest.get("input_fingerprint"), Mapping) else {}
+    request_binding = _submit_file_binding(root, request_path) if request_path else None
+    body = {
+        "episode": str(manifest.get("episode") or ""),
+        "batch_id": str(manifest.get("batch_id") or ""),
+        "clip": str(item.get("clip") or ""),
+        "batch_input_fingerprint_sha256": str(batch_fp.get("sha256") or ""),
+        "prompt_sha256": _sha256_text(prompt),
+        "input_files": files,
+        "reference_bundle_sha256": canonical_sha256(files),
+        "adapter": adapter_view,
+        "argv_sha256": canonical_sha256([str(value) for value in args]),
+        "request_file": request_binding,
+        "request_sha256": (
+            str((request_binding or {}).get("sha256") or "")
+            if request_binding else canonical_sha256([str(value) for value in args])
+        ),
+        "settings_sha256": _file_sha_or_empty(root, "_设置.md"),
+        "identity_registry_sha256": _file_sha_or_empty(root, "出图/共享/identity_registry.json"),
+        "asset_registry_sha256": _file_sha_or_empty(root, "出图/共享/asset_registry.json"),
+        "route_sha256": _route_hash(root, str(manifest.get("episode") or "")),
+        "dialogue_fact_sha256": _file_sha_or_empty(
+            root, f"生产数据/dialogue_fact_contract_{manifest.get('episode')}.json"
+        ),
+        "execution_adapter_registry_sha256": _file_sha_or_empty(root, "生产数据/video_execution_adapters.json"),
+    }
+    return {
+        "kind": "n2d_video_submit_snapshot",
+        "version": 1,
+        **body,
+        "sha256": canonical_sha256(body),
+    }
+
+
+def submit_snapshot_issues(root: Path, manifest: Mapping[str, Any], item: Mapping[str, Any]) -> List[str]:
+    """Validate the frozen request against the current canonical batch contract."""
+    issues = video_manifest_fingerprint_issues(root, manifest)
+    snapshot = item.get("submit_snapshot")
+    submitted = bool(item.get("submit_id") or item.get("submitted_at"))
+    if submitted and not isinstance(snapshot, Mapping):
+        issues.append("submit_snapshot_missing")
+        return list(dict.fromkeys(issues))
+    if isinstance(snapshot, Mapping):
+        body = {key: value for key, value in snapshot.items() if key not in {"kind", "version", "sha256"}}
+        if snapshot.get("kind") != "n2d_video_submit_snapshot" or int(snapshot.get("version") or 0) != 1:
+            issues.append("submit_snapshot_contract_invalid")
+        if str(snapshot.get("sha256") or "") != canonical_sha256(body):
+            issues.append("submit_snapshot_digest_invalid")
+        batch_sha = str((manifest.get("input_fingerprint") or {}).get("sha256") or "")
+        if str(snapshot.get("batch_input_fingerprint_sha256") or "") != batch_sha:
+            issues.append("submit_snapshot_batch_fingerprint_mismatch")
+    return list(dict.fromkeys(issues))
+
+
 def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False,
                 skip_preflight: bool = False) -> Dict[str, Any]:
     manifest = load_json(manifest_file)
@@ -1983,6 +2268,12 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
         )
     if not dry_run:
         enforce_sequential_qc_interlock(root, manifest_file, manifest, item)
+    freshness = video_manifest_fingerprint_issues(root, manifest)
+    if freshness:
+        raise RuntimeError(
+            "paid video submission blocked: batch input_fingerprint is missing or stale "
+            f"({','.join(freshness)}); rerun video_runner prepare so prompt/route/reference changes cannot reuse old work"
+        )
     backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
     item["cost_provider"] = adapter["provider"]
     args, request_path = _adapter_invocation(root, manifest, item, adapter, "submit")
@@ -1991,10 +2282,12 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
         [args[0], command, "--request", str(request_path)]
         if request_path else [args[0], command, "…(args elided)…"]
     )
+    preview_snapshot = build_submit_snapshot(root, manifest, item, adapter, args, request_path)
     if dry_run:
         return {"dry_run": True, "cmd_argv": safe_args, "clip": item["clip"],
                 "backend": backend_key, "backend_command": command,
                 "adapter_id": adapter.get("adapter_id"), "adapter_version": adapter.get("version", 2),
+                "submit_request_sha256": preview_snapshot["sha256"],
                 "execution_request": str(request_path) if request_path else "embedded"}
     _ensure_adapter_command_ready(adapter, args)
     # "每次都跑一遍": cheap live --help check before spending credits — fail fast if the CLI
@@ -2009,6 +2302,24 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
         # （face-lock guard 上面已硬跑不可跳；此处仅放行更广的 preflight，且让这次松动可审计）。
         record_waiver(root, episode, "video_preflight", "skip-preflight",
                       "submit_clip --skip-preflight bypassed video_preflight consistency gate")
+    # Recheck immediately before the paid boundary: preflight must not authorize
+    # an input set different from the one frozen into this request.
+    freshness = video_manifest_fingerprint_issues(root, manifest)
+    if freshness:
+        raise RuntimeError(
+            "paid video submission blocked: canonical input changed during preflight "
+            f"({','.join(freshness)}); prepare and preflight again"
+        )
+    item["submit_snapshot"] = build_submit_snapshot(root, manifest, item, adapter, args, request_path)
+    item["submit_request_sha256"] = item["submit_snapshot"]["sha256"]
+    current_batch_fingerprint = current_video_manifest_input_fingerprint(root, manifest)
+    enforce_expected_paid_request(
+        stage="video",
+        identity=str(item.get("clip") or ""),
+        target=str(item.get("target") or ""),
+        input_fingerprint=str(current_batch_fingerprint.get("sha256") or ""),
+        submit_request_sha256=str(item["submit_request_sha256"] or ""),
+    )
     item.update({"status": "submitting", "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%S%z")})
     item.pop("fail_reason", None)
     update_manifest(manifest_file, manifest)
@@ -2064,21 +2375,48 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     return item
 
 
-def _mp4_set(directory: Path) -> set[Path]:
+def _file_snapshot(path: Path) -> Optional[Tuple[int, int, str]]:
+    try:
+        stat = path.stat()
+        return stat.st_size, stat.st_mtime_ns, _sha256_file(path)
+    except OSError:
+        return None
+
+
+def _mp4_snapshot(directory: Path) -> Dict[Path, Tuple[int, int, str]]:
     directory.mkdir(parents=True, exist_ok=True)
-    return {p.resolve() for p in directory.glob("*.mp4")}
+    rows: Dict[Path, Tuple[int, int, str]] = {}
+    for path in directory.glob("*.mp4"):
+        snapshot = _file_snapshot(path)
+        if snapshot is not None:
+            rows[path.resolve()] = snapshot
+    return rows
 
 
-def _newest_mp4(directory: Path, before: set[Path], *, submit_id: str = "", since: float = 0.0) -> Optional[Path]:
-    candidates = [p for p in directory.glob("*.mp4") if p.resolve() not in before]
-    if submit_id:
-        for path in directory.glob(f"{submit_id}*.mp4"):
-            try:
-                if path.stat().st_mtime + 0.001 >= since and path not in candidates:
-                    candidates.append(path)
-            except OSError:
-                continue
+def _newest_mp4(
+    directory: Path,
+    before: Mapping[Path, Tuple[int, int, str]],
+    *,
+    since: float = 0.0,
+) -> Optional[Path]:
+    candidates: List[Path] = []
+    for path in directory.glob("*.mp4"):
+        snapshot = _file_snapshot(path)
+        if snapshot is None or before.get(path.resolve()) == snapshot:
+            continue
+        try:
+            if path.stat().st_mtime + 0.001 >= since:
+                candidates.append(path)
+        except OSError:
+            continue
     return max(candidates, key=lambda p: p.stat().st_mtime) if candidates else None
+
+
+def _submit_download_dir(root: Path, episode: str, submit_id: str) -> Path:
+    safe_id = re.sub(r"[^A-Za-z0-9_.-]+", "_", submit_id).strip("._")
+    if not safe_id:
+        raise RuntimeError("submit_id cannot be normalized into an isolated download directory")
+    return formal_video_dir(root, episode) / "_downloads" / safe_id
 
 
 def _preserve_existing_target(target: Path, item: Dict[str, Any], *, force: bool = False) -> bool:
@@ -2113,7 +2451,7 @@ def _valid_downloaded_mp4(path: Path) -> bool:
             check=False,
         )
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        return True
+        return False
     if proc.returncode != 0 or not proc.stdout.strip():
         return False
     try:
@@ -2126,7 +2464,7 @@ def _valid_downloaded_mp4(path: Path) -> bool:
             check=False,
         )
     except FileNotFoundError:
-        return True
+        return False
     except subprocess.TimeoutExpired:
         return False
     return decode.returncode == 0
@@ -2266,6 +2604,8 @@ def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], foun
         item["status"] = "downloaded_existing_target"
         item["downloaded_path"] = str(found)
         item["target_path"] = str(target)
+        _enforce_silent_video_stream(root, episode, target, item, None)
+        _stamp_download_provenance(target, item)
         return True
     if _preserve_existing_target(target, item, force=force):
         item["status"] = "downloaded_existing_target"
@@ -2279,17 +2619,34 @@ def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], foun
         item["status"] = "downloaded"
         item["target_path"] = str(target)
     _enforce_silent_video_stream(root, episode, target, item, None)
+    _stamp_download_provenance(target, item)
     return True
 
 
-def _record_existing_target_if_valid(root: Path, episode: str, item: Dict[str, Any]) -> bool:
+def _stamp_download_provenance(target: Path, item: Dict[str, Any]) -> None:
+    item["download_submit_id"] = str(item.get("submit_id") or "")
+    item["download_artifact_sha256"] = _sha256_file(target)
+    execution_request = item.get("execution_request")
+    if isinstance(execution_request, Mapping) and execution_request.get("operation") == "query":
+        item["download_query_request_sha256"] = str(execution_request.get("sha256") or "")
+
+
+def _record_existing_target_if_valid(
+    root: Path,
+    episode: str,
+    item: Dict[str, Any],
+    *,
+    before: Optional[Tuple[int, int, str]],
+) -> bool:
     target = formal_video_dir(root, episode) / item["target"]
-    if not target.is_file() or not _valid_downloaded_mp4(target):
+    current = _file_snapshot(target)
+    if current is None or current == before or not _valid_downloaded_mp4(target):
         return False
     item["status"] = "downloaded_existing_target"
     item["downloaded_path"] = str(target)
     item["target_path"] = str(target)
     _enforce_silent_video_stream(root, episode, target, item, None)
+    _stamp_download_provenance(target, item)
     return True
 
 
@@ -2301,9 +2658,18 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
     if not submit_id:
         raise RuntimeError(f"{item['clip']} has no submit_id")
     _backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
-    download_dir = formal_video_dir(root, episode) / "_downloads"
-    before = _mp4_set(download_dir)
-    args, request_path = _adapter_invocation(root, manifest, item, adapter, "query")
+    download_dir = _submit_download_dir(root, episode, str(submit_id))
+    before = _mp4_snapshot(download_dir)
+    target = formal_video_dir(root, episode) / item["target"]
+    target_before = _file_snapshot(target)
+    args, request_path = _adapter_invocation(
+        root,
+        manifest,
+        item,
+        adapter,
+        "query",
+        query_download_dir=download_dir,
+    )
     _ensure_adapter_command_ready(adapter, args)
     query_started_at = time.time()
     proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
@@ -2318,7 +2684,7 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
         "failure": execution_adapter_v2.classify_failure(proc.returncode, normalized, proc.stderr or ""),
     }
     if proc.returncode != 0:
-        found = _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at) if download else None
+        found = _newest_mp4(download_dir, before, since=query_started_at) if download else None
         if found and _record_downloaded_file(root, episode, item, found, force=force):
             item["query_warning"] = proc.stderr.strip() or f"query_result exit {proc.returncode}"
             item.pop("fail_reason", None)
@@ -2335,24 +2701,49 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
                                failure_class=(item.get("last_query_adapter") or {}).get("failure", {}).get("class"))
         return item
     item.pop("fail_reason", None)
+    response_submit_id = str(normalized.get("submit_id") or "").strip()
+    if response_submit_id and response_submit_id != str(submit_id):
+        item["status"] = "query_failed"
+        item["fail_reason"] = (
+            f"provider response submit_id mismatch: {response_submit_id} != {submit_id}"
+        )
+        update_manifest(manifest_file, manifest)
+        return item
     query_status = str(normalized.get("status") or (item.get("last_query") or {}).get("gen_status") or "").lower()
     success_statuses = {"success", "succeeded", "completed", "done", "ready"}
     if query_status in success_statuses:
         item.pop("query_warning", None)
     wrapper_output = Path(str(normalized.get("output_path") or ""))
+    wrapper_output_is_bound = False
     if download and wrapper_output.is_file() and wrapper_output.suffix.lower() == ".mp4":
+        resolved_output = wrapper_output.resolve()
+        try:
+            wrapper_output_is_bound = resolved_output.is_relative_to(download_dir.resolve())
+        except ValueError:
+            wrapper_output_is_bound = False
+        if resolved_output == target.resolve() and _file_snapshot(target) != target_before:
+            wrapper_output_is_bound = True
+    if wrapper_output_is_bound:
         found = wrapper_output
     else:
         found = (
-            _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at)
+            _newest_mp4(download_dir, before, since=query_started_at)
             if download and query_status in success_statuses else None
         )
     if found:
         if not _record_downloaded_file(root, episode, item, found, force=force):
             item["status"] = "query_failed"
             item["fail_reason"] = f"downloaded mp4 is invalid or incomplete: {found}"
-    elif download and query_status in success_statuses and _record_existing_target_if_valid(root, episode, item):
+    elif download and query_status in success_statuses and _record_existing_target_if_valid(
+        root, episode, item, before=target_before
+    ):
         item.pop("fail_reason", None)
+    elif download and query_status in success_statuses:
+        item["status"] = "query_failed"
+        item["fail_reason"] = (
+            "provider reported success but produced no new submit-bound MP4; "
+            "an unchanged pre-existing target cannot prove this job's output"
+        )
     else:
         item["status"] = "queried"
     update_manifest(manifest_file, manifest)
@@ -2717,6 +3108,12 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
     target_path = _item_target_path(root, episode, item)
     artifact_sha256 = _artifact_sha(root, target_path)
     mode = str(route.get("mode") or item.get("mode_backend") or item.get("mode") or "accepted_existing_video")
+    submit_snapshot = item.get("submit_snapshot") if isinstance(item.get("submit_snapshot"), Mapping) else {}
+    submitted_files = submit_snapshot.get("input_files") if isinstance(submit_snapshot.get("input_files"), list) else []
+    submitted_image_rels = [
+        str(row.get("path") or "") for row in submitted_files
+        if isinstance(row, Mapping) and str(row.get("path") or "").lower().endswith((".png", ".jpg", ".jpeg", ".webp"))
+    ]
     meta = {
         "provider": item.get("cost_provider") or backend,
         "model": f"{backend}:{model_version}",
@@ -2724,14 +3121,14 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "channel": backend,
         "route_hash": route_hash,
         "capability_evidence_id": _capability_evidence_id(root),
-        "prompt_sha256": _sha256_text(prompt),
-        "reference_bundle_sha256": reference_bundle_sha256,
+        "prompt_sha256": str(submit_snapshot.get("prompt_sha256") or _sha256_text(prompt)),
+        "reference_bundle_sha256": str(submit_snapshot.get("reference_bundle_sha256") or reference_bundle_sha256),
         "backend_version": model_version,
         "quality_tier": video_resolution,
-        "actual_image_inputs": image_rels,
-        "settings_sha256": settings_sha256,
-        "identity_registry_sha256": identity_registry_sha256,
-        "asset_registry_sha256": asset_registry_sha256,
+        "actual_image_inputs": submitted_image_rels or image_rels,
+        "settings_sha256": str(submit_snapshot.get("settings_sha256") or settings_sha256),
+        "identity_registry_sha256": str(submit_snapshot.get("identity_registry_sha256") or identity_registry_sha256),
+        "asset_registry_sha256": str(submit_snapshot.get("asset_registry_sha256") or asset_registry_sha256),
         "artifact_sha256": artifact_sha256,
         "route_execution_recipe_hash": _sha256_text(json.dumps(recipe, ensure_ascii=False, sort_keys=True)) if recipe else "",
         "post_video_qc": post_qc,
@@ -2743,16 +3140,21 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "frame_control_mode": item.get("frame_control_mode") or "",
         "anchor_consumption_mode": item.get("anchor_consumption_mode") or "",
         "submit_id": item.get("submit_id") or "",
+        "submit_request_sha256": str(submit_snapshot.get("sha256") or ""),
+        "batch_input_fingerprint_sha256": str(
+            submit_snapshot.get("batch_input_fingerprint_sha256")
+            or ((manifest.get("input_fingerprint") or {}).get("sha256") if isinstance(manifest.get("input_fingerprint"), Mapping) else "")
+        ),
     }
     fingerprint_payload = {
         "asset": _rel_path(root, target_path),
         "mode": mode,
         "route_hash": route_hash,
         "prompt_sha256": meta["prompt_sha256"],
-        "reference_bundle_sha256": reference_bundle_sha256,
-        "settings_sha256": settings_sha256,
-        "identity_registry_sha256": identity_registry_sha256,
-        "asset_registry_sha256": asset_registry_sha256,
+        "reference_bundle_sha256": meta["reference_bundle_sha256"],
+        "settings_sha256": meta["settings_sha256"],
+        "identity_registry_sha256": meta["identity_registry_sha256"],
+        "asset_registry_sha256": meta["asset_registry_sha256"],
         "artifact_sha256": artifact_sha256,
     }
     meta["input_fingerprint"] = _sha256_text(json.dumps(fingerprint_payload, ensure_ascii=False, sort_keys=True))
@@ -2767,14 +3169,16 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "backend_version": meta["backend_version"],
         "quality_tier": meta["quality_tier"],
         "actual_image_inputs": meta["actual_image_inputs"],
-        "settings_sha256": settings_sha256,
-        "identity_registry_sha256": identity_registry_sha256,
-        "asset_registry_sha256": asset_registry_sha256,
+        "settings_sha256": meta["settings_sha256"],
+        "identity_registry_sha256": meta["identity_registry_sha256"],
+        "asset_registry_sha256": meta["asset_registry_sha256"],
         "artifact_sha256": artifact_sha256,
         "route_execution_recipe_hash": meta["route_execution_recipe_hash"],
         "post_video_qc": post_qc,
         "input_fingerprint": meta["input_fingerprint"],
         "submit_id": meta["submit_id"],
+        "submit_request_sha256": meta["submit_request_sha256"],
+        "batch_input_fingerprint_sha256": meta["batch_input_fingerprint_sha256"],
     }
     meta["recipe_hash"] = _sha256_text(json.dumps(recipe_payload, ensure_ascii=False, sort_keys=True))
     return meta
@@ -2954,6 +3358,8 @@ def stamp_acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any],
         "route_hash",
         "route_execution_recipe_hash",
         "input_fingerprint",
+        "submit_request_sha256",
+        "batch_input_fingerprint_sha256",
         "artifact_sha256",
         "post_video_qc",
         "seed_effective",
@@ -2971,6 +3377,12 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     manifest = load_json(manifest_file)
     episode = manifest["episode"]
     item = find_item(manifest, clip)
+    freshness = submit_snapshot_issues(root, manifest, item)
+    if freshness:
+        raise RuntimeError(
+            f"{item['clip']} acceptance blocked: submitted video is not bound to the current canonical input "
+            f"({','.join(freshness)}); do not stamp old pixels with new prompt/route/reference hashes"
+        )
     target = _item_target_path(root, episode, item)
     if not target.exists():
         raise FileNotFoundError(target)

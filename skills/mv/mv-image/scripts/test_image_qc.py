@@ -7,8 +7,10 @@ CI-safe：全部走纯函数 / 降级路径 / fixtures，不依赖 insightface/c
 """
 from __future__ import annotations
 
+import base64
 import importlib.util
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -17,6 +19,7 @@ spec = importlib.util.spec_from_file_location("mv_image_qc", SCRIPT)
 image_qc = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(image_qc)
+import image_receipts  # noqa: E402  # image_qc 已把本 scripts 目录加入 sys.path
 
 
 # ── 纯数学：cosine / floor / band ────────────────────────────────────────────
@@ -209,6 +212,19 @@ def test_summarize_face_block_is_hard() -> None:
     assert s["verdict"] == "block"
 
 
+def test_summarize_noface_is_review_not_silent_ok() -> None:
+    payload = {"checks": {"face": {"available": True, "mode": "insightface",
+                                      "shots": [{"png": "Clip_001.png", "verdict": "noface"}]}},
+               "lint": {"available": True, "findings": []}}
+    summary = image_qc.summarize(payload)
+    assert summary["hard_blocks"] == 0
+    assert summary["advisory"] == 1
+    assert summary["by_check"]["face"]["noface"] == 1
+    assert summary["verdict"] == "review"
+    findings = image_qc.to_findings(payload)
+    assert findings[0]["sev"] == "warn" and "noface" in findings[0]["msg"]
+
+
 def test_summarize_palette_block_is_only_review() -> None:
     # 主色初筛即便 block 也只算 review（人判），不强制重抽——MV 段落允许加亮/变暗
     payload = {"checks": {"palette": {"available": True, "shots": [{"verdict": "block"}]}},
@@ -262,6 +278,8 @@ def test_run_qc_records_assets_sha256(tmp_path: Path) -> None:
     (root / "分镜" / "clip_plan.json").write_text(json.dumps({
         "clips": [{"clip_id": "Clip_001", "image_path": "出图/Clip_001.png"}]}), encoding="utf-8")
     payload = image_qc.run_qc(root, with_pixel=False)
+    assert payload["root_rel"] == "."
+    assert "root" not in payload
     recorded = payload["assets_sha256"]
     assert recorded["出图/Clip_001.png"] == image_qc._sha256_path(root / "出图" / "Clip_001.png")
 
@@ -272,6 +290,15 @@ def test_summarize_local_patch_is_hard() -> None:
     s = image_qc.summarize(payload)
     assert s["hard_blocks"] == 1
     assert s["verdict"] == "block"
+
+
+def test_b14_generation_provenance_is_hard_even_for_demo() -> None:
+    payload = {"formal_project": False, "checks": {}, "lint": {"findings": []},
+               "generation_provenance": {"summary": {"block": 1, "ok": 0}}}
+    summary = image_qc.summarize(payload)
+    assert summary["hard_blocks"] == 1
+    assert summary["by_check"]["generation_provenance"]["block"] == 1
+    assert summary["verdict"] == "block"
 
 
 def test_summarize_clean_is_ok() -> None:
@@ -308,7 +335,7 @@ def test_qc_environment_levels() -> None:
                        "palette": {"available": True, "shots": []}},
             "summary": {"verdict": "ok"}}
     env = image_qc.qc_environment(full)
-    assert env["precision_level"] == "full" and env["jump_to_stage"] == "video"
+    assert env["precision_level"] == "full" and env["jump_to_stage"] == "image_postflight"
     assert env["recommended_install"] == ""
 
     degraded = {"checks": {"face": {"available": True, "mode": "pillow_fallback", "shots": []},
@@ -445,6 +472,11 @@ def test_run_qc_no_pixel_writes_report(tmp_path: Path) -> None:
     assert payload["summary"]["verdict"] == "review"   # 锚点缺 → advisory
     on_disk = json.loads(Path(payload["json_path"]).read_text(encoding="utf-8"))
     assert on_disk["kind"] == "mv_image_qc"
+    assert on_disk["root_rel"] == "."
+    assert "root" not in on_disk
+    assert str(root) not in json.dumps(on_disk, ensure_ascii=False)
+    assert on_disk["generation_provenance"]["event_path"] == "生产数据/production_events.jsonl"
+    assert on_disk["prohibited_local_patch_outputs"]["event_path"] == "生产数据/production_events.jsonl"
 
 
 def test_prohibited_local_patch_outputs_reads_event_log(tmp_path: Path) -> None:
@@ -465,17 +497,54 @@ def test_prohibited_local_patch_outputs_reads_event_log(tmp_path: Path) -> None:
 def test_generation_provenance_binds_model_channel_prompt_and_asset(tmp_path: Path) -> None:
     asset_rel = "出图/段落/图片/Clip_001.png"
     prompt_rel = "出图/段落/prompt/Clip_001.md"
-    reference_rel = "出图/共享/图片/定妆_主唱.png"
+    # User/reference input lives outside generated output folders; generated
+    # shared costume assets are themselves B14-governed and need their own event.
+    reference_rel = "设定/reference_images/主唱.png"
     root = _make_project(tmp_path, [{
         "clip_id": "Clip_001", "image_path": asset_rel, "image_prompt_path": prompt_rel,
         "reference_inputs": [{"path": reference_rel, "use": "lead_identity"}],
     }], {prompt_rel: "prompt"})
     asset = root / asset_rel
-    asset.parent.mkdir(parents=True, exist_ok=True)
-    asset.write_bytes(b"image")
     reference = root / reference_rel
-    reference.parent.mkdir(parents=True, exist_ok=True)
-    reference.write_bytes(b"reference")
+    _make_png(asset, "hgrad")
+    _make_png(reference, "vgrad")
+    preflight = image_receipts.create_preflight(
+        root, asset=asset_rel, asset_kind="auto", owner="lead:主唱", use="clip_start",
+        identity_scope="contains_identity", model="GPT Image 2", channel="Codex",
+        prompt=prompt_rel,
+        reference_specs=[f"{reference_rel}::lead:主唱::lead_identity"])
+    job_id = "img-job-000001"
+    raw_rel = "生产数据/provider_evidence/raw/img-job-000001.response.json"
+    raw_path = root / raw_rel
+    raw_path.parent.mkdir(parents=True, exist_ok=True)
+    raw_path.write_text(json.dumps({
+        "id": "resp-image-000001",
+        "created_at": int(datetime.now(timezone.utc).timestamp()),
+        "model": "GPT Image 2",
+        "status": "completed",
+        "output": [{
+            "type": "image_generation_call", "id": job_id, "status": "completed",
+            "result": base64.b64encode(asset.read_bytes()).decode("ascii"),
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    evidence_rel = "生产数据/provider_evidence/img-job-000001.json"
+    evidence_path = root / evidence_rel
+    evidence_path.parent.mkdir(parents=True, exist_ok=True)
+    evidence_path.write_text(json.dumps({
+        "kind": "mv_image_provider_evidence",
+        "schema_version": image_receipts.PROVIDER_EVIDENCE_SCHEMA_VERSION,
+        "source": "api_response_json",
+        "adapter_id": "openai_responses_image_v1",
+        "attempt_id": preflight["attempt_id"],
+        "preflight_sha256": preflight["preflight"]["receipt_sha256"],
+        "raw_capture": {"path": raw_rel, "sha256": image_qc._sha256_path(raw_path)},
+        "output_selector": 0,
+    }, ensure_ascii=False), encoding="utf-8")
+    submitted = image_receipts.record_submission(
+        root, asset=asset_rel, model="GPT Image 2", channel="Codex",
+        prompt=prompt_rel, references=[reference_rel], provider_job_id=job_id,
+        provider_evidence=evidence_rel)
+    submission = submitted["submission"]
     (root / "_设置.md").write_text("- 生图模型: GPT Image 2\n- 生图渠道: Codex\n", encoding="utf-8")
     events = root / "生产数据" / "production_events.jsonl"
     events.parent.mkdir(parents=True, exist_ok=True)
@@ -483,12 +552,17 @@ def test_generation_provenance_binds_model_channel_prompt_and_asset(tmp_path: Pa
         "stage": "image", "event": "generation",
         "generation": {
             "asset": asset_rel,
-            "asset_sha256": image_qc._sha256_path(asset),
-            "model": "GPT Image 2", "channel": "Codex",
-            "source_prompt": prompt_rel,
-            "source_prompt_sha256": image_qc._sha256_path(root / prompt_rel),
-            "reference_inputs": [{"path": reference_rel, "sha256": image_qc._sha256_path(reference)}],
-            "subject_inputs": [],
+            "asset_sha256": submission["asset_sha256"],
+            "model": submission["model"], "channel": submission["channel"],
+            "source_prompt": submission["prompt"]["path"],
+            "source_prompt_sha256": submission["prompt"]["sha256"],
+            "reference_inputs": submission["actual_references"],
+            "subject_inputs": submission["actual_subject_ids"],
+            "provider_job_id": submission["provider_job_id"],
+            "provider_evidence": submission["provider_evidence"],
+            "b14_attempt_id": submitted["attempt_id"],
+            "b14_preflight_sha256": submitted["preflight_sha256"],
+            "b14_submission_sha256": submission["receipt_sha256"],
         },
     }, ensure_ascii=False) + "\n", encoding="utf-8")
     report = image_qc.generation_provenance(root)
@@ -501,6 +575,13 @@ def test_generation_provenance_binds_model_channel_prompt_and_asset(tmp_path: Pa
     assert "source_prompt_changed_after_generation_event" in stale["rows"][0]["findings"]
 
     (root / prompt_rel).write_text("prompt", encoding="utf-8")
+    original_evidence = evidence_path.read_text(encoding="utf-8")
+    evidence_path.write_text(original_evidence + " \n", encoding="utf-8")
+    stale_evidence = image_qc.generation_provenance(root)
+    assert stale_evidence["complete"] is False
+    assert "provider_evidence_receipt_mismatch" in stale_evidence["rows"][0]["findings"]
+    evidence_path.write_text(original_evidence, encoding="utf-8")
+
     event = json.loads(events.read_text(encoding="utf-8"))
     event["generation"]["reference_inputs"] = []
     events.write_text(json.dumps(event, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -509,6 +590,25 @@ def test_generation_provenance_binds_model_channel_prompt_and_asset(tmp_path: Pa
         finding.startswith("required_reference_not_submitted:")
         for finding in missing_ref["rows"][0]["findings"]
     )
+    assert "reference_inputs_differs_from_b14_submission" in missing_ref["rows"][0]["findings"]
+
+
+def test_generation_provenance_rejects_event_without_b14_ledger(tmp_path: Path) -> None:
+    asset_rel = "出图/段落/图片/Clip_001.png"
+    root = _make_project(tmp_path, [{"clip_id": "Clip_001", "image_path": asset_rel}], {})
+    _make_png(root / asset_rel, "hgrad")
+    events = root / "生产数据/production_events.jsonl"
+    events.parent.mkdir(parents=True, exist_ok=True)
+    events.write_text(json.dumps({
+        "stage": "image", "event": "generation",
+        "generation": {"asset": asset_rel, "asset_sha256": image_qc._sha256_path(root / asset_rel),
+                       "model": "GPT Image 2", "channel": "Codex",
+                       "source_prompt": "claimed.md", "source_prompt_sha256": "0" * 64,
+                       "reference_inputs": [], "subject_inputs": []},
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+    report = image_qc.generation_provenance(root)
+    assert report["complete"] is False
+    assert "missing_b14_ledger_record" in report["rows"][0]["findings"]
 
 
 # ── 帧级视觉多样性 dHash（P1） ────────────────────────────────────────────────
@@ -609,7 +709,7 @@ def test_summarize_counts_costume_outliers_as_advisory() -> None:
     assert any("定妆组离群" in f["msg"] and f["sev"] == "warn" for f in findings)
 
 
-# ── 降级机检人工放行（具名 + hash 绑定） ─────────────────────────────────────
+# ── 降级机检目视留痕（具名 + hash 绑定） ─────────────────────────────────────
 
 def test_manual_review_binding_invalidates_on_report_change() -> None:
     report = {"kind": "mv_image_qc", "summary": {"advisory": 1},
@@ -629,7 +729,7 @@ def test_manual_review_requires_named_reviewer() -> None:
     assert image_qc.manual_review_valid(report) is False
 
 
-def test_accept_degraded_cli_writes_bound_manual_review(tmp_path: Path) -> None:
+def test_accept_degraded_cli_records_visual_only_and_remains_blocked(tmp_path: Path) -> None:
     out = tmp_path / "生产数据" / "image_qc"
     out.mkdir(parents=True)
     report = {"kind": "mv_image_qc", "summary": {"hard_blocks": 0, "advisory": 0, "verdict": "review"},
@@ -637,11 +737,15 @@ def test_accept_degraded_cli_writes_bound_manual_review(tmp_path: Path) -> None:
     (out / "image_qc.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
     assert image_qc.accept_degraded(tmp_path, "", "看过") == 2          # 必须具名
     assert image_qc.accept_degraded(tmp_path, "审图人", "") == 2        # 必须写说明
-    assert image_qc.accept_degraded(tmp_path, "审图人", "逐图并排看过") == 0
+    assert image_qc.accept_degraded(tmp_path, "审图人", "逐图并排看过") == 1
     saved = json.loads((out / "image_qc.json").read_text(encoding="utf-8"))
-    assert image_qc.manual_review_valid(saved) is True
+    assert image_qc.manual_review_valid(saved) is False
+    assert saved["manual_review"]["visual_confirmed"] is True
+    assert saved["manual_review"]["accepted"] is False
     assert saved["manual_review"]["reviewer"] == "审图人"
-    assert "降级人工放行" in (out / "image_qc.md").read_text(encoding="utf-8")
+    assert saved["manual_review"]["reviewed_at"]
+    assert "accepted_at" not in saved["manual_review"]
+    assert "仍须 full machine QC" in (out / "image_qc.md").read_text(encoding="utf-8")
 
 
 def test_accept_degraded_rejects_full_precision(tmp_path: Path) -> None:
@@ -650,3 +754,10 @@ def test_accept_degraded_rejects_full_precision(tmp_path: Path) -> None:
     report = {"kind": "mv_image_qc", "qc_environment": {"precision_level": "full"}}
     (out / "image_qc.json").write_text(json.dumps(report), encoding="utf-8")
     assert image_qc.accept_degraded(tmp_path, "审图人", "看过") == 2
+
+
+def test_main_returns_nonzero_for_block_report(tmp_path: Path, monkeypatch) -> None:
+    payload = {"summary": {"verdict": "block"}, "checks": {}, "lint": {},
+               "markdown_path": str(tmp_path / "生产数据/image_qc/image_qc.md")}
+    monkeypatch.setattr(image_qc, "run_qc", lambda *_args, **_kwargs: payload)
+    assert image_qc.main([str(tmp_path), "--json"]) == 1

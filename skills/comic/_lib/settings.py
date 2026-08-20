@@ -42,6 +42,8 @@ DEFAULTS = {
     "文字语言": "中文",
     "嵌字方式": "后期嵌字",
     "导出格式": "webp+png",
+    "交付介质": "web_images",
+    "交付用途": "internal",
     "发行地区": "未指定",
     "合规用途": "demo学习",
 }
@@ -272,6 +274,22 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     ),
     SettingSpec("嵌字方式", ("comic",), ("后期嵌字", "手工嵌字", "图像内文字"), sensitive=True),
     SettingSpec("导出格式", ("comic",), ("webp+png", "png", "webp", "jpg", "pdf", "自定义"), parameterized=True),
+    SettingSpec(
+        "交付介质",
+        ("comic",),
+        ("web_images", "print_pdf", "epub_fxl", "自定义"),
+        key_aliases=("delivery_medium",),
+        parameterized=True,
+        sensitive=True,
+    ),
+    SettingSpec(
+        "交付用途",
+        ("comic",),
+        ("internal", "public", "commercial", "自定义"),
+        key_aliases=("delivery_usage",),
+        parameterized=True,
+        sensitive=True,
+    ),
     SettingSpec("发行地区", ("comic",), ("未指定", "中国大陆", "港澳台", "北美", "全球", "自定义"), parameterized=True, sensitive=True),
     SettingSpec("合规用途", ("comic",), ("demo学习", "自用草稿", "发布候选", "商用", "授权交付", "自定义"), parameterized=True, sensitive=True),
 )
@@ -729,6 +747,18 @@ def normalize_setting_value(key: str, value: str) -> str:
         }
         if lowered in aliases:
             return aliases[lowered]
+    if key == "交付介质":
+        return {
+            "数字图片": "web_images", "web": "web_images", "digital": "web_images",
+            "印刷pdf": "print_pdf", "print": "print_pdf", "pdf": "print_pdf",
+            "无障碍epub": "epub_fxl", "epub": "epub_fxl", "accessible": "epub_fxl",
+        }.get(_norm(normalized), normalized)
+    if key == "交付用途":
+        return {
+            "内部": "internal", "internal": "internal",
+            "公开": "public", "发布": "public", "public": "public",
+            "商用": "commercial", "commercial": "commercial",
+        }.get(_norm(normalized), normalized)
     return normalized
 
 

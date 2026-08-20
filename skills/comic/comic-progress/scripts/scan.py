@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -17,6 +18,14 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from contracts import stage_inputs_fingerprint  # noqa: E402
+
+
+FINDING_DISPOSITIONS = (
+    Path(__file__).resolve().parents[2]
+    / "comic-review"
+    / "scripts"
+    / "finding_dispositions.py"
+)
 
 
 ROUTE = {
@@ -1088,6 +1097,7 @@ def summarize_project(root: Path) -> dict:
         "fronts": fronts,
         "under_claim_disclosures": under_claim,
         "review_verdict_disclosures": review_verdict_disclosures(root, parsed["rows"]),
+        "warning_disposition_disclosures": warning_disposition_disclosures(root, parsed["rows"]),
     }
 
 
@@ -1121,6 +1131,62 @@ def review_verdict_disclosures(root: Path, rows: list[dict[str, str]]) -> list[d
                     f"{chapter} 审查已勾 ✅ 但机检结论为 {verdict}"
                     + (f"（block {block_count} / warn {warn_count}）" if isinstance(warn_count, int) else "")
                     + "；进度叙事必须引用机检计数与签收依据，不得只写 pass。"
+                ),
+            }
+        )
+    return out
+
+
+def warning_disposition_disclosures(root: Path, rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    """披露已经勾选审查、但尚未有当前有效人审处置的 warning。
+
+    该信息不改变内部制作完成度；它回答的是更窄的发布问题：当前 review
+    warning 是否都有具名审阅人、理由，以及与当前 finding/像素 SHA 绑定的
+    ``false_positive`` 或 ``risk_accepted`` 记录。
+    """
+    if not FINDING_DISPOSITIONS.is_file():
+        return []
+    spec = importlib.util.spec_from_file_location("comic_finding_dispositions_for_progress", FINDING_DISPOSITIONS)
+    if spec is None or spec.loader is None:
+        return []
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except (ImportError, OSError, SyntaxError):
+        return []
+
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        chapter = row.get("话", "")
+        if not chapter or row_stage_state(row, "审查") != "done":
+            continue
+        summary = module.summarize(root, chapter)
+        unresolved = int(summary.get("unresolved_count") or 0)
+        stale = int(summary.get("stale_count") or 0)
+        reopened = int(summary.get("reopened_count") or 0)
+        integrity_errors = int(summary.get("ledger_integrity_error_count") or 0)
+        if unresolved <= 0 and integrity_errors <= 0:
+            continue
+        codes = sorted(
+            {str(item.get("code") or "unknown") for item in summary.get("unresolved") or []}
+        )
+        out.append(
+            {
+                "chapter": chapter,
+                "total": int(summary.get("total") or 0),
+                "currently_resolved": int(summary.get("currently_resolved") or 0),
+                "unresolved_count": unresolved,
+                "stale_count": stale,
+                "reopened_count": reopened,
+                "ledger_integrity_error_count": integrity_errors,
+                "unresolved_codes": codes,
+                "ledger": str(summary.get("ledger") or ""),
+                "hint": (
+                    f"{chapter} 仍有 {unresolved} 条 review warning 未获当前有效处置"
+                    + (f"（其中 {stale} 条旧处置已因 finding/像素变化失效）" if stale else "")
+                    + (f"（其中 {reopened} 条已由审阅人主动重开）" if reopened else "")
+                    + (f"（处置账另有 {integrity_errors} 个完整性错误，当前结论不可采信）" if integrity_errors else "")
+                    + "；内部制作可保持完成，但公开/商业发布前需用 finding_dispositions.py 逐条具名处置。"
                 ),
             }
         )
@@ -1176,6 +1242,8 @@ def main() -> int:
             print(f"  [进度对账] {item['hint']}")
         for item in summary.get("review_verdict_disclosures") or []:
             print(f"  [叙事对账] {item['hint']}")
+        for item in summary.get("warning_disposition_disclosures") or []:
+            print(f"  [风险处置] {item['hint']}")
     return 0
 
 

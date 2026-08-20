@@ -13,6 +13,7 @@ import platform_pack
 import producer_pack
 import locale_matrix
 import release_variant_manifest
+import campaign_readiness
 
 
 PENDING = {"", "待补", "未记录", "未定", "tbd", "pending"}
@@ -46,6 +47,8 @@ def release_content_sha256(root: Path) -> str:
     h = hashlib.sha256()
     rels = ["脚本/广告脚本.md", "脚本/storyboard.json", "脚本/voiceover.txt",
             "脚本/字幕_zh.srt", "脚本/字幕_en.srt", "合成/成片_主片.mp4", "合成/delivery_plan.json",
+            "合成/delivery_qc.json", "生产数据/render_profile.json",
+            "生产数据/placement_adaptation.json", "生产数据/stage_acceptance/compose.json",
             "合规/locale_matrix.json", "合规/ai_usage.json"]
     plan = load(root / "合成" / "delivery_plan.json", {}) or {}
     for item in plan.get("deliverables") or []:
@@ -224,6 +227,7 @@ def build(root: Path, declaration_status="pending", declaration_evidence="",
     delivery_pack = platform_pack.build_pack(root)
     locale_report = locale_matrix.validate(root)
     variant_report = release_variant_manifest.build(root)
+    readiness_report = campaign_readiness.evaluate(root)
     provenance_report = load(root / "合规" / "provenance_qc.json", {}) or {}
     if not usage:
         findings.append({"severity": "block", "code": "ai_usage_missing", "msg": "缺 ai_usage.json"})
@@ -255,6 +259,18 @@ def build(root: Path, declaration_status="pending", declaration_evidence="",
     if variant_report.get("summary", {}).get("block") or not variant_report.get("summary", {}).get("release_ready"):
         findings.append({"severity": "block", "code": "release_variant_manifest_not_ready",
                          "msg": f"逐交付版本发布清单 block={variant_report.get('summary', {}).get('block', 'missing')}"})
+    for item in readiness_report.get("findings") or []:
+        severity = item.get("severity") if item.get("severity") in {"block", "warn"} else "warn"
+        findings.append({
+            "severity": severity,
+            "code": f"campaign_{item.get('code') or 'readiness_gap'}",
+            "msg": str(item.get("msg") or "campaign readiness 未闭合"),
+        })
+    if not bool((readiness_report.get("summary") or {}).get("release_ready")):
+        findings.append({
+            "severity": "block", "code": "campaign_not_launch_ready",
+            "msg": f"campaign_mode={readiness_report.get('mode') or 'unknown'} 尚未通过落地页、准入、测量与隐私投放就绪检查",
+        })
     provenance_blocks = ((provenance_report.get("summary") or {}).get("block") if provenance_report else None)
     if uses_ai and (provenance_blocks is None or int(provenance_blocks or 0) > 0):
         findings.append({"severity": "block", "code": "provenance_qc_not_ready",
@@ -293,6 +309,9 @@ def build(root: Path, declaration_status="pending", declaration_evidence="",
         "metadata": {"status": metadata_status},
         "locale_matrix_summary": locale_report.get("summary") or {},
         "release_variant_summary": variant_report.get("summary") or {},
+        "release_variant_manifest_sha256": release_variant_manifest.logical_manifest_sha(variant_report),
+        "release_chain": variant_report.get("release_chain") or {},
+        "campaign_readiness_summary": readiness_report.get("summary") or {},
         "provenance_qc_summary": provenance_report.get("summary") or {},
         "standards": [{
             "authority": "official_regulation", "territory": "中国大陆",
@@ -314,9 +333,14 @@ def build(root: Path, declaration_status="pending", declaration_evidence="",
             "scope": "机器可读标记与 deepfake/特定 AI 内容显式披露",
         }, {
             "authority": "official_platform_guidance", "territory": "Google Ads",
-            "title": "Use AI content label settings and disclosures", "checked_at": "2026-07-11",
+            "title": "Use AI content label settings and disclosures", "checked_at": "2026-08-20",
             "source": "https://support.google.com/google-ads/editor/answer/17231795?hl=en",
             "scope": "逐素材 AI label 状态、可见 overlay 与 C2PA/SynthID 说明",
+        }, {
+            "authority": "official_platform_policy", "territory": "TikTok",
+            "title": "Commercial Content Disclosure setting for advertisers", "checked_at": "2026-08-20",
+            "source": "https://ads.tiktok.com/resources/help/article/about-the-commercial-content-disclosure-setting-for-advertisers?lang=en",
+            "scope": "推广品牌/产品/服务时的商业内容或付费合作披露；与 AI 来源标识分开",
         }, {
             "authority": "open_technical_standard", "territory": "global",
             "title": "C2PA Technical Specification 2.3", "checked_at": "2026-07-11",
@@ -356,6 +380,7 @@ def main(argv=None):
     variant_payload = release_variant_manifest.build(root)
     variant_out = root / "合规" / "release_variant_manifest.json"
     variant_out.write_text(json.dumps(variant_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    campaign_readiness.write_report(root)
     out = root / "合规" / "compliance_manifest.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

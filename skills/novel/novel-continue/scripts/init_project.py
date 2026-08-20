@@ -29,6 +29,7 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             infer_novel_purpose, normalize_novel_purpose,
                             resolve_novel_draft_mode, resolve_novel_draft_workflow,
                             words_per_chapter_for_context)
+from craft_profile import normalize_craft_profile
 
 
 def words_per_chapter_for(target_platform, purpose=None):
@@ -46,6 +47,8 @@ def main():
     ap.add_argument("--target-platform", default="跨平台")
     ap.add_argument("--purpose", default=None,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
+    ap.add_argument("--craft-profile", default=None,
+                    help="创作工艺档：commercial_serial/genre_novel/literary/experimental 或自定义；缺省继承全局默认再回落 genre_novel，不由平台推断")
     ap.add_argument("--out", default=None)
     ap.add_argument("--outputs", default="txt,docx,outline",
                     help="逗号分隔，可含 txt,docx,outline")
@@ -160,6 +163,7 @@ def main():
               ensure_ascii=False, indent=2)
     
     write_project_settings(out_root, {
+        **({"创作工艺档": normalize_craft_profile(args.craft_profile)} if args.craft_profile else {}),
         "目标平台": args.target_platform,
         "小说用途": purpose,
         "权利来源": rights,

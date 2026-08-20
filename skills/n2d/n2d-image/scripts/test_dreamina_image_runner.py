@@ -67,6 +67,66 @@ def test_dreamina_merges_carried_face_anchor_despite_prose_placeholder(tmp_path:
     assert names.index("定妆_沈念_脸部特写.png") < names.index("占位图.png")
 
 
+def test_dreamina_reuse_binds_current_inputs_and_output_pixels(tmp_path: Path) -> None:
+    target = _project(tmp_path)
+    (tmp_path / "_设置.md").write_text("生图AI：Dreamina\n", encoding="utf-8")
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+    reference_inputs = dreamina.dreamina_reference_inputs(tmp_path, target, refs, "第1集")
+    compiled = dreamina.build_dreamina_compiled_request(
+        tmp_path,
+        "第1集",
+        target,
+        reference_inputs,
+        model_version="seedream-5",
+        resolution_type="2k",
+    )
+    fingerprint = dreamina.dreamina_generation_input_fingerprint(
+        tmp_path,
+        "第1集",
+        target,
+        seed="seed-1",
+        compiled_request=compiled,
+        reference_inputs=reference_inputs,
+    )
+    artifact = tmp_path / target.rel_path
+    previous = {
+        "status": "pass",
+        "input_fingerprint": fingerprint,
+        "artifact_sha256": base.file_sha256(artifact),
+    }
+    assert base.generation_reuse_allowed(
+        previous,
+        fingerprint,
+        artifact_valid=True,
+        current_artifact_sha256=base.file_sha256(artifact),
+    )
+
+    artifact.write_bytes(b"\x89PNG\r\n\x1a\n" + b"replacement" * 8)
+    assert not base.generation_reuse_allowed(
+        previous,
+        fingerprint,
+        artifact_valid=True,
+        current_artifact_sha256=base.file_sha256(artifact),
+    )
+    changed = dreamina.build_dreamina_compiled_request(
+        tmp_path,
+        "第1集",
+        target,
+        reference_inputs,
+        model_version="seedream-5-new",
+        resolution_type="2k",
+    )
+    changed_fingerprint = dreamina.dreamina_generation_input_fingerprint(
+        tmp_path,
+        "第1集",
+        target,
+        seed="seed-1",
+        compiled_request=changed,
+        reference_inputs=reference_inputs,
+    )
+    assert changed_fingerprint != fingerprint
+
+
 def test_dreamina_image_runner_requires_signed_exception(tmp_path: Path) -> None:
     try:
         dreamina.require_dreamina_image_signoff(tmp_path)
@@ -185,6 +245,7 @@ def test_dreamina_record_event_writes_release_grade_recipe_evidence(tmp_path: Pa
             "request_params": {"model_version": "5.0", "resolution_type": "2k"},
         },
         submitted_prompt="test prompt",
+        input_fingerprint="pre-spend-fingerprint",
     )
 
     cmd = captured["cmd"]
@@ -201,6 +262,7 @@ def test_dreamina_record_event_writes_release_grade_recipe_evidence(tmp_path: Pa
         assert meta[key]
     assert meta["reference_bundle_sha256"] == "refs-sha"
     assert meta["seed_effective"] == "false"
+    assert meta["input_fingerprint"] == "pre-spend-fingerprint"
 
 
 def test_dreamina_midframe_pass_records_generation_self_check(tmp_path: Path, monkeypatch) -> None:

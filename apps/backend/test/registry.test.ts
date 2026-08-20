@@ -18,6 +18,12 @@ async function fixture(): Promise<string> {
   await writeFile(path.join(root, 'n2d', 'n2d-fixture', 'references', 'guide.md'), '# Guide\n')
   await writeFile(path.join(root, 'n2d', 'n2d-fixture', 'references', 'secret.bin'), 'not exposed')
   await symlink(path.join(root, 'n2d', 'SKILL.md'), path.join(root, 'n2d', 'n2d-fixture', 'references', 'link.md'))
+  await mkdir(path.join(root, 'app', 'app-character-turnaround', 'references'), { recursive: true })
+  await writeFile(
+    path.join(root, 'app', 'app-character-turnaround', 'SKILL.md'),
+    '---\nname: app-character-turnaround\ndescription: canvas app fixture\n---\n# App skill\n',
+  )
+  await writeFile(path.join(root, 'app', 'app-character-turnaround', 'references', 'guide.md'), '# App guide\n')
   return root
 }
 
@@ -25,7 +31,14 @@ test('discovers line, child, and safe text sources without exposing paths', asyn
   const root = await fixture()
   const registry = new SkillRegistry(root)
   const skills = await registry.list()
-  assert.deepEqual(skills.map((skill) => skill.id), ['n2d', 'n2d-fixture'])
+  assert.deepEqual(skills.map((skill) => skill.id), ['app-character-turnaround', 'n2d', 'n2d-fixture'])
+  const appSkill = await registry.get('app-character-turnaround')
+  assert.equal(appSkill.kind, 'independent')
+  assert.equal(appSkill.line, undefined)
+  const aliasedAppSkill = await registry.get('n2d-character-turnaround')
+  assert.equal(aliasedAppSkill.id, 'app-character-turnaround')
+  assert.equal((await registry.get('app-n2d-character-turnaround')).id, 'app-character-turnaround')
+  assert.equal((await registry.readSource('app-n2d-character-turnaround', 'references/guide.md')).content, '# App guide\n')
   const fixtureSkill = await registry.get('n2d-fixture')
   assert.equal(fixtureSkill.line, 'n2d')
   assert.match(fixtureSkill.definition, /Real instructions/)

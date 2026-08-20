@@ -14,6 +14,7 @@ for path in (LIB, CRAFT, HERE):
         sys.path.insert(0, path)
 
 import pipeline_runner  # noqa: E402
+from craft_profile import build_craft_contract_snapshot  # noqa: E402
 from novel_pipeline import (  # noqa: E402
     applicable_stages,
     artifact_graph,
@@ -126,6 +127,36 @@ def test_source_import_accepts_original_text_without_manifest():
         assert evaluated["status"] == "done"
 
 
+def test_pipeline_rejects_stale_manuscript_map_check(tmp_path):
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("# 设置\n- 创作工艺档：genre_novel\n")
+    with open(os.path.join(root, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+        json.dump({"kind": "novel_scene_cards", "scenes": []}, f)
+    with open(os.path.join(root, "设定", "manuscript_map.json"), "w", encoding="utf-8") as f:
+        json.dump({"kind": "novel_manuscript_map"}, f)
+    with open(os.path.join(root, "设定", "manuscript_map.md"), "w", encoding="utf-8") as f:
+        f.write("# map\n")
+    with open(os.path.join(root, "设定", "manuscript_map_check.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "kind": "novel_manuscript_map_check",
+            "passed": True,
+            "blocking": 0,
+            "findings": [],
+            "source_snapshot": build_craft_contract_snapshot(root, "genre_novel"),
+        }, f)
+    stage = next(s for s in applicable_stages({"kind": "create"}) if s["key"] == "manuscript_map")
+    assert evaluate_stage(root, stage)["status"] == "done"
+
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("# 设置\n- 创作工艺档：experimental\n")
+    stale = evaluate_stage(root, stage)
+
+    assert stale["status"] == "blocked"
+    assert any("来源已过期" in item for item in stale["gate_blockers"])
+
+
 def test_blueprint_requires_hash_bound_human_approval_and_reapproval_after_edit():
     with tempfile.TemporaryDirectory() as root:
         os.makedirs(os.path.join(root, "设定"), exist_ok=True)
@@ -219,6 +250,47 @@ def test_setting_approval_expires_when_approved_blueprint_changes():
         stale = evaluate_stage(root, stage)
         assert stale["status"] == "ready"
         assert "输入已变化" in stale["human_approval"]["message"]
+
+
+def test_edit_stage_blocks_only_explicitly_required_authenticity_read():
+    with tempfile.TemporaryDirectory() as root:
+        for rel in (
+            "修订/edit_plan.json",
+            "修订/editorial_letter.md",
+            "修订/style_sheet.md",
+            "修订/proof_checklist.md",
+        ):
+            path = os.path.join(root, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            if path.endswith(".json"):
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump({"tasks": []}, f)
+            else:
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write("ok\n")
+        auth_path = os.path.join(root, "修订", "authenticity_read.json")
+        with open(auth_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "kind": "novel_authenticity_read",
+                "required_for_release": True,
+                "status": "planned",
+                "findings": [],
+            }, f)
+        stage = next(s for s in applicable_stages({"kind": "create"}) if s["key"] == "edit")
+
+        blocked = evaluate_stage(root, stage)
+        assert blocked["status"] == "blocked"
+        assert any("authenticity_read" in item for item in blocked["gate_blockers"])
+
+        with open(auth_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "kind": "novel_authenticity_read",
+                "required_for_release": False,
+                "status": "planned",
+                "findings": [],
+            }, f)
+        optional = evaluate_stage(root, stage)
+        assert optional["status"] == "done"
 
 
 def test_pipeline_run_state_machine_claims_and_completes_stage():

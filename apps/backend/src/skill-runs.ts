@@ -3,7 +3,7 @@ import { createHash, randomUUID } from 'node:crypto'
 import type { AiGenerationRequest, CreationLine, SkillDefinitionInput, SkillRun, SkillRunAttachmentInput } from './contracts.ts'
 import type { AiProvider } from './ai-provider.ts'
 import { ApiError } from './errors.ts'
-import { isCreationLine, SkillRegistry } from './skill-registry.ts'
+import { canonicalSkillId, isCreationLine, SkillRegistry } from './skill-registry.ts'
 import { WorkFileStore } from './work-files.ts'
 
 const BUILTIN_SKILL_ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,79}$/
@@ -126,10 +126,11 @@ export function parseCreateSkillRunRequest(value: unknown): CreateSkillRunInput 
     throw new ApiError(400, 'invalid_skill_run_request', 'skill run 请求格式无效')
   }
   const input = value as Record<string, unknown>
-  const skillId = stringField(input.skillId, 'skillId', 133) as string
-  if (!BUILTIN_SKILL_ID_PATTERN.test(skillId) && !USER_SKILL_ID_PATTERN.test(skillId)) {
+  const requestedSkillId = stringField(input.skillId, 'skillId', 133) as string
+  if (!BUILTIN_SKILL_ID_PATTERN.test(requestedSkillId) && !USER_SKILL_ID_PATTERN.test(requestedSkillId)) {
     throw new ApiError(400, 'invalid_skill_run_request', 'skillId 无效')
   }
+  const skillId = requestedSkillId.startsWith('user:') ? requestedSkillId : canonicalSkillId(requestedSkillId)
   const workIdValue = input.workId ?? input.projectId
   const workId = stringField(workIdValue, 'workId/projectId', 128) as string
   if (!SAFE_REFERENCE_PATTERN.test(workId)) throw new ApiError(400, 'invalid_skill_run_request', 'workId/projectId 无效')

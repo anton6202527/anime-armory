@@ -7,6 +7,7 @@ V1, musical-section and seam markers, and a sidecar that proves which manifest
 and media the document describes.  No OTIO Python package is required.
 """
 import argparse
+import math
 import os
 from datetime import date
 
@@ -16,7 +17,9 @@ import mv_utils
 def rational(seconds, rate):
     return {
         "OTIO_SCHEMA": "RationalTime.1",
-        "value": round(float(seconds) * float(rate), 6),
+        # Editorial time is integral frames.  Fractional RationalTime values
+        # make adapter round-trips and NLE cut positions ambiguous.
+        "value": int(math.floor(float(seconds) * float(rate) + 0.5)),
         "rate": float(rate),
     }
 
@@ -123,7 +126,9 @@ def build_bundle(root, rate=None):
     missing_media = []
     rows = timeline.get("clips") or []
     for index, row in enumerate(rows):
-        duration = float(row.get("duration") or 0)
+        duration_frames = row.get("duration_frames")
+        duration = (float(duration_frames) / rate
+                    if isinstance(duration_frames, int) else float(row.get("duration") or 0))
         rel = str(row.get("video_path") or "")
         seam = row.get("seam_contract") or {}
         item = clip_item(
@@ -133,6 +138,9 @@ def build_bundle(root, rate=None):
                 "section": row.get("section"),
                 "timeline_start": row.get("start"),
                 "timeline_end": row.get("end"),
+                "start_frame": row.get("start_frame"),
+                "end_frame": row.get("end_frame"),
+                "duration_frames": row.get("duration_frames"),
                 "transition": row.get("transition"),
                 "speed_mode": row.get("speed_mode"),
                 "seam_contract": seam,
@@ -149,7 +157,8 @@ def build_bundle(root, rate=None):
         if index < len(rows) - 1:
             seam_markers.append(marker(
                 f"SEAM {row.get('clip_id')} → {rows[index + 1].get('clip_id')}",
-                float(row.get("end") or 0), 1.0 / rate, rate, "YELLOW",
+                (float(row.get("end_frame")) / rate if isinstance(row.get("end_frame"), int)
+                 else float(row.get("end") or 0)), 1.0 / rate, rate, "YELLOW",
                 {"kind": "seam", "contract": seam},
             ))
 
@@ -163,7 +172,11 @@ def build_bundle(root, rate=None):
         for row in (beatgrid.get("sections") or []) if isinstance(row, dict)
     ]
 
-    total_duration = sum(float(row.get("duration") or 0) for row in rows)
+    total_duration = sum(
+        (float(row.get("duration_frames")) / rate if isinstance(row.get("duration_frames"), int)
+         else float(row.get("duration") or 0))
+        for row in rows
+    )
     song_rel = str(timeline.get("song_path") or "")
     song_duration = mv_utils.audio_duration(os.path.join(root, song_rel)) if song_rel else None
     audio_item = clip_item(
@@ -200,10 +213,11 @@ def build_bundle(root, rate=None):
         },
     }
     sidecar = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "mv_otio_export_receipt",
         "generated_at": date.today().isoformat(),
         "rate": rate,
+        "timebase": {"unit": "frame", "integral_rational_time": True},
         "timeline_edit_sha256": mv_utils.timeline_edit_hash(timeline),
         "inputs_sha256": {
             "分镜/timeline_manifest.json": mv_utils.content_hash(timeline_path),
@@ -220,6 +234,21 @@ def build_bundle(root, rate=None):
     return payload, sidecar
 
 
+def official_roundtrip(path):
+    """Validate with the official OTIO parser when its supported env is present."""
+    try:
+        import opentimelineio as otio
+    except ImportError:
+        return {"status": "unavailable", "reason": "install opentimelineio in supported Python 3.9-3.12 env"}
+    try:
+        timeline = otio.adapters.read_from_file(path)
+        serialized = otio.adapters.write_to_string(timeline, adapter_name="otio_json")
+    except Exception as exc:
+        return {"status": "failed", "error": str(exc)}
+    return {"status": "ok", "library_version": getattr(otio, "__version__", "unknown"),
+            "roundtrip_bytes": len(serialized.encode("utf-8"))}
+
+
 def build(root, rate=24.0):
     """Compatibility wrapper used by production_pack and tests."""
     return build_bundle(root, rate)[0]
@@ -231,6 +260,7 @@ def write_export(root, rate=None):
     receipt = os.path.join(root, "生产数据", "otio", "otio_receipt.json")
     mv_utils.write_json(out, payload)
     sidecar["otio_sha256"] = mv_utils.content_hash(out)
+    sidecar["official_roundtrip"] = official_roundtrip(out)
     mv_utils.write_json(receipt, sidecar)
     return out, receipt
 

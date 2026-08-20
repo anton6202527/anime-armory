@@ -26,3 +26,11 @@ def test_imported_song_uses_relative_receipt_and_bootstrap_catalog(tmp_path: Pat
     assert str(tmp_path) not in json.dumps(meta, ensure_ascii=False)
     assert catalog["status"] == "bootstrap"
     assert catalog["project"]["project_id"] == meta["project_id"]
+    progress = (root / "_进度.md").read_text(encoding="utf-8")
+    assert "语义分镜注入" in progress
+    assert progress.index("时间线合成") < progress.index("AI使用披露")
+    assert progress.index("AI使用披露") < progress.index("来源链锁定")
+    assert progress.index("来源链锁定") < progress.index("质检")
+    assert meta["use_case"] == "歌曲Demo"
+    assert meta["is_demo"] is True
+    assert meta["publish_target"] == "跨平台"

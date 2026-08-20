@@ -14,6 +14,8 @@ def make_project(root):
         os.makedirs(os.path.join(root, sub), exist_ok=True)
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump({"title": "测试MV", "is_demo": True}, f, ensure_ascii=False)
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("# MV 设置\n\n- **MV用途**：歌曲Demo\n")
     with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
         f.write("[chorus]\n一句歌词\n第二句歌词\n")
     clips = [
@@ -56,6 +58,31 @@ class FormalProductionTest(unittest.TestCase):
             report = formal_readiness.build_report(tmp)
             self.assertEqual(report["summary"]["status"], "blocked")
             self.assertGreaterEqual(report["summary"]["blockers"], 1)
+            self.assertEqual(report["root_rel"], ".")
+            self.assertNotIn("root", report)
+            serialized = json.dumps(report, ensure_ascii=False)
+            self.assertNotIn(tmp, serialized)
+            commands = "\n".join(row["command"] for row in report["formal_upgrade_plan"])
+            self.assertIn("ai_usage.py", commands)
+            self.assertIn("provenance.py", commands)
+            self.assertIn("--write-receipt", commands)
+            self.assertIn("release_decision.py", commands)
+
+    def test_settings_are_truth_when_meta_demo_mirror_is_stale(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# MV 设置\n\n- **MV用途**：正式MV草稿\n")
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "r", encoding="utf-8") as f:
+                plan = json.load(f)
+            plan["scope"] = "full"
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump(plan, f, ensure_ascii=False)
+
+            report = formal_readiness.build_report(tmp)
+
+            self.assertFalse(any("当前项目标记为 demo_excerpt" in item for item in report["blockers"]))
+            self.assertTrue(any("_meta.is_demo" in item for item in report["warnings"]))
 
     def test_production_pack_builds_shot_list_and_animatic(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -86,9 +113,9 @@ class DegradedImageQcManualReviewTest(unittest.TestCase):
             make_project(tmp)
             self._write_image_qc(tmp, {"manual_review_accepted": True})
             report = formal_readiness.build_report(tmp)
-            self.assertTrue(any("绑定当前报告 hash" in b for b in report["blockers"]))
+            self.assertTrue(any("只接受 full machine QC" in b for b in report["blockers"]))
 
-    def test_bound_manual_review_clears_degraded_blocker(self):
+    def test_bound_manual_review_cannot_clear_degraded_blocker(self):
         import importlib.util as _ilu
         spec = _ilu.spec_from_file_location(
             "mv_utils_fr_test", os.path.join(os.path.dirname(os.path.abspath(__file__)), "mv_utils.py"))
@@ -103,7 +130,7 @@ class DegradedImageQcManualReviewTest(unittest.TestCase):
             with open(os.path.join(tmp, "生产数据", "image_qc", "image_qc.json"), "w", encoding="utf-8") as f:
                 json.dump(report, f, ensure_ascii=False)
             result = formal_readiness.build_report(tmp)
-            self.assertFalse(any("绑定当前报告 hash" in b for b in result["blockers"]))
+            self.assertTrue(any("只接受 full machine QC" in b for b in result["blockers"]))
 
 
 if __name__ == "__main__":

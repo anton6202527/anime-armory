@@ -52,3 +52,12 @@ def test_default_profile_is_serial_and_consistency_gate_is_on(tmp_path: Path) ->
 def test_builtin_imagegen_channel_is_a_valid_explicit_choice() -> None:
     assert validate_setting("生图渠道", "内置 imagegen", family="comic")["level"] == "ok"
     assert validate_setting("生图AI", "Codex内置imagegen", family="comic")["level"] == "ok"
+
+
+def test_delivery_medium_and_usage_are_separate_choice_points(tmp_path: Path) -> None:
+    root = tmp_path / "empty"
+    root.mkdir()
+    assert get_setting(str(root), "交付介质") == "web_images"
+    assert get_setting(str(root), "交付用途") == "internal"
+    assert validate_setting("交付介质", "print_pdf", family="comic")["level"] == "ok"
+    assert validate_setting("交付用途", "commercial", family="comic")["level"] == "ok"

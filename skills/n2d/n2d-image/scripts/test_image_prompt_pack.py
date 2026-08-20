@@ -2178,6 +2178,17 @@ def test_write_consumed_contracts_receipt_records_image_prompt_inputs(tmp_path: 
     }
     assert all(row["exists"] and row["sha256"] for row in data["contracts"])
     assert all(row["exists"] and row["sha256"] for row in data["prompt_files"])
+    assert data["input_fingerprint"]["kind"] == "n2d_content_fingerprint"
+    assert data["input_fingerprint"]["sha256"]
+
+    (tmp_path / "_设置.md").write_text("- 基础视觉风格: 水墨\n", encoding="utf-8")
+    registry = tmp_path / "出图" / "共享" / "identity_registry.json"
+    registry.parent.mkdir(parents=True, exist_ok=True)
+    registry.write_text('{"kind":"n2d_identity_registry","version":1,"characters":[]}', encoding="utf-8")
+    changed = json.loads(image_prompt_pack.write_consumed_contracts_receipt(tmp_path, ep).read_text(encoding="utf-8"))
+    assert changed["input_fingerprint"]["sha256"] != data["input_fingerprint"]["sha256"]
+    assert "_设置.md" in changed["input_fingerprint"]["source_patterns"]
+    assert "出图/共享/identity_registry.json" in changed["input_fingerprint"]["source_patterns"]
 
 
 def test_future_asset_guard_inherits_hidden_asset_forbidden_terms() -> None:

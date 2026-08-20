@@ -2,14 +2,16 @@
 """Shared per-project settings helpers.
 
 The user-facing convention lives in `skills/n2d/references/选择点与偏好.md`. This module only
-implements deterministic read/write helpers for `_设置.md`; it does not ask
-questions or infer preferences.
+implements deterministic read/write helpers for `_设置.md`. It also owns the
+auditable recommendation policy for ordinary reversible choices; interactive
+prompts remain the caller's responsibility.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 import contextlib
 import glob
+import json
 import os
 import re
 import threading
@@ -40,11 +42,18 @@ except Exception:  # pragma: no cover - keep generic settings usable outside n2d
 
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
+    # 普通、可逆、可覆盖的创作/流程选择默认由 n2d 采用推荐值并留痕；用户若希望
+    # 每项都亲自选择，可在项目内显式改成「逐项询问」。该策略不覆盖付费、合规、
+    # 声音克隆、公开发布、破坏性变更和最终母版验收。
+    "普通选择策略": "推荐方案自动继续",
     # 默认保持传统逐节点人工批准；仅在项目负责人明确一次性授权并落
     # autonomy_authorization.json 后，才可切到“仅高风险停审”。
     "人工批准策略": "逐节点人工批准",
     "基础视觉风格": "冷灰写实3D国风漫剧",
     "拆集节奏": "前长后短",
+    "脚本批次": "小批",
+    "生成优先序": "关键镜优先",
+    "生成粒度": "逐个",
     # 原生多镜生成默认「自动」：后端支持时 single_take_multishot 一次 co-generate 成一个长 clip（少出很多 clip）。
     "原生多镜生成": "自动",
     # 生成轴=具体模型（设计宪法 C5：指代必须落到模型，不写 agent/渠道）。`生图AI` 退化为访问入口/渠道。
@@ -65,7 +74,12 @@ DEFAULTS = {
     "视频分辨率": "720p",
     "视频生成音频策略": "无声视频流",
     "后端Smoke硬闸": "否",
-    "合成阶段": "跳过",
+    # n2d 的默认交付目标是最终成片，不再把「视频 Clip 齐」当作默认终点。
+    # 显式选择「跳过」的旧项目/快速样片仍保持 clip-only 路线。
+    "合成阶段": "启用",
+    # 没有已授权文件或已配置生成后端时，宁可交付无 BGM 母版，
+    # 也不把占位音频或来源不明音乐混入成片。用户可在 compose 前覆盖。
+    "BGM来源": "无",
     "视频原生音轨": "丢弃",
     "对口型": "关闭",
     "后期拟音策略": "自动",
@@ -195,6 +209,20 @@ BASE_VISUAL_STYLE_CHOICES = (
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("制作模式", ("n2d",), _PRODUCTION_MODE_KEYS, sensitive=True),
     SettingSpec(
+        "普通选择策略",
+        ("n2d",),
+        ("推荐方案自动继续", "逐项询问"),
+        aliases={
+            "自动": "推荐方案自动继续",
+            "autopilot": "推荐方案自动继续",
+            "一键成片": "推荐方案自动继续",
+            "手动": "逐项询问",
+            "每次询问": "逐项询问",
+        },
+        key_aliases=("自动决策策略", "选择策略", "流程决策策略"),
+        syncable=False,
+    ),
+    SettingSpec(
         "人工批准策略",
         ("n2d",),
         ("逐节点人工批准", "仅高风险停审"),
@@ -304,7 +332,13 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("N2D_STYLEID_MODEL", ("n2d",), ("kwanY/styleid", "自定义"), key_aliases=("StyleID模型", "StyleID model"), parameterized=True, syncable=False),
     SettingSpec("妖类脸部规则", ("n2d",), parameterized=True),
     SettingSpec("更新重制策略", ("n2d",), ("最小", "严审刷新")),
-    SettingSpec("BGM来源", ("n2d",), ("占位", "文件", "Suno"), parameterized=True),
+    SettingSpec(
+        "BGM来源",
+        ("n2d",),
+        ("无", "文件", "Suno", "占位"),
+        aliases={"none": "无", "不要": "无", "不使用": "无"},
+        parameterized=True,
+    ),
     SettingSpec("接缝兜底", ("n2d",), ("硬切", "微溶解", "报警"), parameterized=True),
     SettingSpec("目标平台", ("n2d",), ("抖音", "快手", "B站", "小红书", "红果", "YouTube", "TikTok", "ReelShort", "视频号", "跨平台", "未定"), parameterized=True, sensitive=True),
     SettingSpec("发行地区", ("n2d",), ("中国大陆", "港澳台", "北美", "东南亚", "全球", "自定义"), parameterized=True, sensitive=True),
@@ -1216,6 +1250,189 @@ def project_setting_source(work_root: str, key: str, family: Optional[str] = Non
     if spec and spec.key in meta:
         return meta[spec.key].get("source", "")
     return ""
+
+
+AUTOPILOT_CHOICE_POLICY_KEY = "普通选择策略"
+AUTOPILOT_CHOICE_POLICY_VALUE = "推荐方案自动继续"
+ONE_CLICK_RECOMMENDED_KEYS: Tuple[str, ...] = (
+    "制作模式",
+    "项目规模",
+    "基础视觉风格",
+    "脚本批次",
+    "生成优先序",
+    "生成粒度",
+    "BGM来源",
+    "合成阶段",
+)
+
+
+def ordinary_choice_autopilot_enabled(work_root: str) -> bool:
+    """Whether reversible choice points should use recorded recommendations.
+
+    This is deliberately narrower than ``人工批准策略``: it may choose ordinary
+    settings, but it cannot approve spend, compliance, biometric use, release,
+    destructive work, or final acceptance.
+    """
+    return get_setting(
+        work_root,
+        AUTOPILOT_CHOICE_POLICY_KEY,
+        DEFAULTS[AUTOPILOT_CHOICE_POLICY_KEY],
+    ) == AUTOPILOT_CHOICE_POLICY_VALUE
+
+
+def _project_has_setting(work_root: str, key: str) -> bool:
+    family = detect_family(work_root)
+    spec = get_setting_spec(key, family)
+    candidates = {key}
+    if spec:
+        candidates.update((spec.key, *spec.key_aliases))
+    return any(candidate in load_settings(work_root) for candidate in candidates)
+
+
+def _estimated_project_episode_count(work_root: str) -> int:
+    """Best-effort project scale signal without importing the routing layer."""
+    estimates: List[int] = []
+    split_plan = os.path.join(work_root.rstrip("/"), "脚本", "split_plan.json")
+    try:
+        payload = json.loads(_read_text(split_plan))
+        if isinstance(payload, dict):
+            for key in ("estimated_total_episode_count", "total_episode_count", "episode_count"):
+                value = payload.get(key)
+                if isinstance(value, int) and value > 0:
+                    estimates.append(value)
+            summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+            for key in ("estimated_total_episode_count", "total_episode_count", "episode_count"):
+                value = summary.get(key)
+                if isinstance(value, int) and value > 0:
+                    estimates.append(value)
+    except Exception:
+        pass
+    progress_text = _read_text(os.path.join(work_root.rstrip("/"), "_进度.md"))
+    progress_rows = len(re.findall(r"^\|\s*第[^|]+集\s*\|", progress_text, re.M))
+    if progress_rows:
+        estimates.append(progress_rows)
+    return max(estimates or [1])
+
+
+def _visual_style_from_project_contract(work_root: str) -> str:
+    """Read the producer-owned style recommendation already materialized by split.
+
+    ``split_novel.py`` writes the topic-aware recommendation into
+    ``设定库/global_style.md`` before ordinary choices are materialized.  Reusing
+    that value here prevents the settings ledger from silently falling back to
+    the generic style while the actual style contract names another preset.
+    """
+    text = _read_text(os.path.join(work_root.rstrip("/"), "设定库", "global_style.md"))
+    match = re.search(r"^## 基础视觉风格\s*\n+([^\n]+)", text, re.M)
+    if not match:
+        return ""
+    candidate = match.group(1).strip().split("（", 1)[0].strip()
+    if not candidate or candidate in {"待定", "（待定）", "TODO"}:
+        return ""
+    checked = validate_setting("基础视觉风格", candidate, family="n2d")
+    return candidate if checked.get("level") != "error" else ""
+
+
+def _bgm_choice_from_existing_contract(work_root: str) -> str:
+    """Preserve an older project's already-declared per-episode BGM intent."""
+    paths = glob.glob(os.path.join(work_root.rstrip("/"), "合成", "第*集", "bgm_contract.json"))
+    paths.sort(key=lambda path: os.path.getmtime(path), reverse=True)
+    mapping = {
+        "none": "无",
+        "licensed_file": "文件",
+        "generated": "Suno",
+        "placeholder": "占位",
+    }
+    for path in paths:
+        try:
+            payload = json.loads(_read_text(path))
+        except Exception:
+            continue
+        if isinstance(payload, dict) and payload.get("kind") == "n2d_bgm_contract":
+            value = mapping.get(str(payload.get("strategy") or "").strip())
+            if value:
+                return value
+    return ""
+
+
+def recommended_choice(work_root: str, key: str) -> Dict[str, str]:
+    """Return one deterministic recommendation plus its auditable rationale."""
+    canonical = canonical_setting_key(key, detect_family(work_root))
+    if canonical == AUTOPILOT_CHOICE_POLICY_KEY:
+        value = AUTOPILOT_CHOICE_POLICY_VALUE
+        reason = "n2d 默认由推荐方案处理普通、可逆选择"
+    elif canonical == "项目规模":
+        inherited = get_setting(work_root, canonical, "")
+        if inherited:
+            value = inherited
+            reason = "沿用全局默认的项目规模"
+        else:
+            episodes = _estimated_project_episode_count(work_root)
+            value = "长篇量产" if episodes >= 20 else ("多集长线" if episodes >= 2 else "单集")
+            reason = f"按 split/progress 估计 {episodes} 集自动归档"
+    elif canonical == "基础视觉风格":
+        contracted = _visual_style_from_project_contract(work_root)
+        value = contracted or get_setting(work_root, canonical, DEFAULTS[canonical])
+        reason = (
+            "沿用拆集阶段的题材感知风格合同"
+            if contracted
+            else "沿用全局默认或 n2d 稳定基线，后续仍可覆盖"
+        )
+    elif canonical == "BGM来源":
+        contracted = _bgm_choice_from_existing_contract(work_root)
+        value = contracted or get_setting(work_root, canonical, DEFAULTS[canonical])
+        reason = (
+            "沿用已有分集 BGM 合同，不用新默认覆盖旧项目意图"
+            if contracted
+            else "未知授权/生成后端时交付无 BGM 母版，避免占位或不明来源音频"
+        )
+    else:
+        value = get_setting(work_root, canonical, DEFAULTS.get(canonical, ""))
+        reason = {
+            "制作模式": "混合自动路由按镜头选择声音/画面路径，覆盖面最好",
+            "脚本批次": "每 5 集一批平衡跨集一致性与吞吐",
+            "生成优先序": "先验证关键镜的风格、身份与运动稳定性",
+            "生成粒度": "逐个生成并立即 QC，质量风险最低",
+            "合成阶段": "默认目标是最终母版，继续 compose/review 尾段",
+        }.get(canonical, "沿用当前 n2d 推荐值")
+    if not value:
+        raise ValueError(f"选择点 {canonical} 没有可用推荐值")
+    return {"key": canonical, "value": str(value), "reason": reason, "source": "auto_recommended"}
+
+
+def recommended_choice_plan(
+    work_root: str,
+    keys: Iterable[str] = ONE_CLICK_RECOMMENDED_KEYS,
+) -> List[Dict[str, str]]:
+    """Plan only missing project-local choices; explicit/legacy values always win."""
+    plan: List[Dict[str, str]] = []
+    for key in keys:
+        if _project_has_setting(work_root, key):
+            continue
+        plan.append(recommended_choice(work_root, key))
+    return plan
+
+
+def apply_recommended_choices(
+    work_root: str,
+    keys: Iterable[str] = ONE_CLICK_RECOMMENDED_KEYS,
+) -> List[Dict[str, str]]:
+    """Materialize missing reversible choices with provenance, never overwriting user values."""
+    plan = recommended_choice_plan(work_root, keys)
+    applied: List[Dict[str, str]] = []
+    for row in plan:
+        set_project_setting(
+            work_root,
+            row["key"],
+            row["value"],
+            record=False,
+            source=row["source"],
+        )
+        applied.append({**row, "status": "applied"})
+    if applied:
+        summary = "；".join(f"{row['key']}={row['value']}" for row in applied)
+        append_record(work_root, f"一键成片普通选择自动落档：{summary}（均可随时覆盖；高风险边界未授权）")
+    return applied
 
 
 def production_mode(work_root: str) -> str:

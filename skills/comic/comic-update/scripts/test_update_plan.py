@@ -172,6 +172,21 @@ def prepare_repo(tmp_path: Path) -> Path:
     return tmp_path
 
 
+def test_nested_comic_skill_path_is_attributed_to_subskill() -> None:
+    assert update_plan.skill_name_for_relpath(
+        "skills/comic/comic-compose/scripts/export_longstrip.py"
+    ) == "comic-compose"
+    assert update_plan.skill_name_for_relpath(
+        "skills/comic/comic-image/SKILL.md"
+    ) == "comic-image"
+    assert update_plan.skill_name_for_relpath(
+        "skills/comic/_lib/platform_profiles.py"
+    ) == "comic"
+    assert update_plan.skill_name_for_relpath(
+        "skills/comic/SKILL.md"
+    ) == "comic"
+
+
 def test_legacy_complete_project_rebuilds_from_script(tmp_path: Path) -> None:
     prepare_repo(tmp_path)
     project = make_project(tmp_path)
@@ -356,3 +371,63 @@ def test_traditional_off_replay_keeps_name_but_skips_finishing(tmp_path: Path) -
     assert "comic-finishing/scripts/build_finishing_plan.py" not in commands
     assert plan["progress"]["rows"][0]["stage_states"]["finishing"]["state"] == "not_applicable"
     assert "finishing" not in plan["progress"]["missing_stage_columns"]
+
+
+def test_panel_impact_is_consumed_by_targeted_batch_command(tmp_path: Path) -> None:
+    project = tmp_path / "漫画"
+    (project / "_设置.md").parent.mkdir(parents=True, exist_ok=True)
+    (project / "_设置.md").write_text("- 传统原稿流程：关闭\n", encoding="utf-8")
+    progress = {
+        "rows": [{"chapter": "第1话", "current_stage": "review"}],
+    }
+    chapters = update_plan.merge_panel_impacts(
+        [],
+        [{
+            "chapter": "第1话",
+            "from_stage": "image",
+            "panel_targets": ["P003", "P007"],
+            "page_targets": ["page_2"],
+            "panels": [
+                {"panel_id": "P003", "from_stage": "image", "reasons": ["reference_or_registry_asset_changed"]},
+                {"panel_id": "P007", "from_stage": "image", "reasons": ["panel_pixels_changed"]},
+            ],
+            "rendered_outputs_changed": False,
+        }],
+        progress,
+    )
+    plan = {"rebuild_needed": True, "affected_chapters": chapters}
+
+    steps = update_plan.build_execution_steps(str(project), plan)
+    target_commands = [item["command"] for item in steps if item.get("purpose") == "第1话 仅重抽受影响格"]
+
+    assert target_commands == [
+        f'python3 skills/comic/comic-batch/scripts/run.py "{project}" --chapter 第1话 --targets P003,P007 --force'
+    ]
+
+
+def test_lettering_only_panel_impact_does_not_reroll_image(tmp_path: Path) -> None:
+    project = tmp_path / "漫画"
+    (project / "_设置.md").parent.mkdir(parents=True, exist_ok=True)
+    (project / "_设置.md").write_text("- 传统原稿流程：关闭\n", encoding="utf-8")
+    chapters = update_plan.merge_panel_impacts(
+        [],
+        [{
+            "chapter": "第1话",
+            "from_stage": "compose",
+            "panel_targets": ["P003"],
+            "page_targets": ["page_2"],
+            "panels": [{
+                "panel_id": "P003",
+                "from_stage": "compose",
+                "reasons": ["lettering_changed"],
+            }],
+            "rendered_outputs_changed": False,
+        }],
+        {"rows": [{"chapter": "第1话", "current_stage": "review"}]},
+    )
+
+    steps = update_plan.build_execution_steps(
+        str(project), {"rebuild_needed": True, "affected_chapters": chapters}
+    )
+
+    assert not any(item.get("purpose") == "第1话 仅重抽受影响格" for item in steps)

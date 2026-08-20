@@ -20,7 +20,7 @@
 
 - **A1 六线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。novel 与 n2d 之间必须零交接、零数据耦合；其它跨线交付只能是用户显式选择的成品文件交接，交接缺失必须**优雅降级**，不能让本线主流程跑不起来。**独立性延伸到散文**：`skills/<line>/**.md` 不得提别线名/别线根标签/别线 skill —— 这条 strict-docs 门已是 `check_independence.py` 的**默认行为**（`--lenient-docs` 仅在确有需要时降级为只查代码级耦合）。机检：`tools/independence-audit/scripts/check_independence.py`，novel/n2d 另跑 `tools/independence-audit/scripts/check_novel_n2d_zero_coupling.py`。
 - **A2 仓库级 meta 工具放 `tools/`，不放 `skills/`** — 不是某条创作线能力的单副本维护工具（independence-audit、shared-cleanup、validate_skills、打包/发布脚本等）留 `tools/` 或独立单副本，不混进 `skills/` 的创作线命名空间。**例外**：属于某条线用户工作流的一线能力（如 `n2d-progress`）仍是该线 skill，可以留在 `skills/`。
-- **A3 新 skill 顶层独立、既有系列兼容** ✅ — 六条线保留可发现的 `skills/<line>/SKILL.md` 总入口与现有 `skills/<line>/<line>-*/SKILL.md` 子 skill；从现在起新建 skill 默认放在 `skills/<skill-name>/SKILL.md`，与系列目录同层。顶层独立 skill 可以参考系列流程、契约与经验，但必须自带入口、脚本、schema 和状态，默认不 import、调用或依赖系列实现。目录名必须等于 frontmatter `name`，不得嵌套到第三级。Web、统计与校验工具必须同时识别系列两级结构和顶层独立结构。机检：`tools/validate_skills.py --only F1`。
+- **A3 新 skill 独立、既有系列兼容** ✅ — 六条线保留可发现的 `skills/<line>/SKILL.md` 总入口与现有 `skills/<line>/<line>-*/SKILL.md` 子 skill；普通独立 skill 默认放在 `skills/<skill-name>/SKILL.md`。现阶段仅供画布/Web App 使用的独立 skill 统一放在 `skills/app/<app-skill-name>/SKILL.md`，且名称必须以 `app-` 开头；`app-` 表示交互表面，不表示系列归属。独立 skill 可以参考系列流程、契约与经验，但必须自带入口、脚本、schema 和状态，默认不 import、调用或依赖系列实现。实际 skill 目录名必须等于 frontmatter `name`，除 `skills/app/` 这一显式命名空间外不得新增第三级。Web、统计与校验工具必须同时识别系列两级结构、普通独立结构和 app 命名空间结构。机检：`tools/validate_skills.py --only F1`。
 
 ## B. Skill 编写法
 
@@ -74,7 +74,7 @@
 - **F4 实战回流铁律** — 真实作品生产是一线验证场。凡在创作、改编、分镜、配音、出图、出视频、合成、审查或批跑中暴露出可复现的 skill 缺陷，必须回流到对应 skill / `_lib` / 契约 / gate / schema / references，而不能只在单个作品目录里临时绕过。临时 workaround 只为保护当前交付，不能替代 skill 层修复；回流必须基于证据（gate 缺口、stop_reason、人工复核、batch dead letter、成本异常、用户选择摩擦、返工记录等），先保证作品可续跑，再做最小范围修正。若问题涉及题材场景、镜头契约、生成配方、产物结构或质量闸门，应补相应 fixture / golden project / 回归测试或 readiness 检查；若影响旧项目，必须提供兼容、迁移、doctor 或 n2d-update 路径。改动触及职责、路由、跨线引用或入口摘要时，按 F1/F2/F3 同步索引并跑对应机检。
 - **F5 运行期自主微优化铁律** — 跑数据、批跑或真实作品生产时，agent 发现**非铁律、非合规、非高成本、非跨线架构**的小问题，可以在不中断当前交付的前提下当场做最小修复，不必等用户逐项确认。判准：只修可复现、低风险、局部、可验证的问题（脚本兼容、错误提示、日志留痕、fixture、轻量 gate 降噪、文档缺口、适配层明显 bug 等）；不得放松、绕过或重定义 B6-B11 / C1-C6 / D1-D4 里的铁律与选择点、load-bearing gate、合规授权、用户偏好、付费/联网/重依赖动作、跨线独立性、发布质量标准或 skill 职责路由。修完必须留下证据（触发条件、命令、失败到通过、测试或机检结果），并在交付说明里列明；若本线已有 friction / self_audit / 优化信号机制，不能当场修的缺陷要写入信号，能当场修的也要保留可追溯记录。影响范围不确定、会迁移旧数据、会改变成片内容或会增加成本时，先停下说明并等用户裁决。
 - **F6 测试 fixture 独立于真实作品目录** ✅ — 测试可以用 `tmp_path` / `tempfile` 构造 `创作区/<线>/<测试项目>`，也可以把稳定样例放入 `tests/fixtures/**`；但不得在测试文件中硬编码引用当前仓库 `创作区/**` 下的真实作品名、绝对路径或废料/产物路径。真实作品和 `废料/` 可被清理、迁移或重跑，不能成为回归测试的隐式依赖。机器覆盖：`tools/validate_skills.py --only T1`。
-- **F7 skill 规模统计同步** ✅ — 改任何系列或顶层独立 skill 的 `SKILL.md`、脚本、references、测试或示例文本后，必须运行 `python3 tools/update_skill_stats.py`。它会同步 `skills/README.md` 的六系列、顶层独立 skill 与合计规模，并把系列统计写入六个总领 skill frontmatter 后第一行。机器覆盖：`tools/validate_skills.py --only F7`；发布/全量检查会自动发现统计过期。
+- **F7 skill 规模统计同步** ✅ — 改任何系列或独立 skill（含 `skills/app/`）的 `SKILL.md`、脚本、references、测试或示例文本后，必须运行 `python3 tools/update_skill_stats.py`。它会同步 `skills/README.md` 的六系列、独立 skill 与合计规模，并把系列统计写入六个总领 skill frontmatter 后第一行。机器覆盖：`tools/validate_skills.py --only F7`；发布/全量检查会自动发现统计过期。
 
 ---
 

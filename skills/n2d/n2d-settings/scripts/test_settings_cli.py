@@ -56,6 +56,85 @@ def test_autonomy_approval_setting_is_project_scoped_and_valid(tmp_path: Path, c
     assert "- 人工批准策略：仅高风险停审" in (root / "_设置.md").read_text(encoding="utf-8")
 
 
+def test_apply_recommended_materializes_one_click_defaults_without_overwriting(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    (root / "_进度.md").write_text(
+        "| 集 | raw |\n|---|---|\n| 第1集 | ✅ |\n| 第2集 | ✅ |\n",
+        encoding="utf-8",
+    )
+
+    rc = cli.main(["apply-recommended", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    applied = {row["key"]: row["value"] for row in out["applied"]}
+    assert applied == {
+        "普通选择策略": "推荐方案自动继续",
+        "项目规模": "多集长线",
+        "基础视觉风格": "冷灰写实3D国风漫剧",
+        "脚本批次": "小批",
+        "生成优先序": "关键镜优先",
+        "生成粒度": "逐个",
+        "BGM来源": "无",
+        "合成阶段": "启用",
+    }
+    text = (root / "_设置.md").read_text(encoding="utf-8")
+    assert "- **制作模式**：先出视频后配音" in text
+    assert "- 合成阶段：启用  # source=auto_recommended" in text
+    assert "一键成片普通选择自动落档" in text
+    assert "final_master_acceptance" in out["hard_stops_preserved"]
+
+
+def test_apply_recommended_respects_manual_choice_policy_and_explicit_compose_skip(
+    tmp_path: Path, capsys
+) -> None:
+    root = make_project(tmp_path)
+    path = root / "_设置.md"
+    text = path.read_text(encoding="utf-8").replace(
+        "## 记录",
+        "- 普通选择策略：逐项询问  # source=explicit_user\n"
+        "- 合成阶段：跳过  # source=explicit_user\n\n"
+        "## 记录",
+    )
+    path.write_text(text, encoding="utf-8")
+
+    rc = cli.main(["apply-recommended", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert all(row["key"] not in {"普通选择策略", "合成阶段"} for row in out["applied"])
+    text = (root / "_设置.md").read_text(encoding="utf-8")
+    assert "普通选择策略：逐项询问" in text
+    assert "合成阶段：跳过" in text
+
+
+def test_apply_recommended_preserves_existing_episode_bgm_contract_intent(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    contract = root / "合成" / "第1集" / "bgm_contract.json"
+    contract.parent.mkdir(parents=True)
+    contract.write_text(
+        json.dumps(
+            {
+                "kind": "n2d_bgm_contract",
+                "version": 1,
+                "episode": "第1集",
+                "status": "confirmed",
+                "strategy": "licensed_file",
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    rc = cli.main(["apply-recommended", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    applied = {row["key"]: row for row in out["applied"]}
+    assert applied["BGM来源"]["value"] == "文件"
+    assert "沿用已有分集 BGM 合同" in applied["BGM来源"]["reason"]
+
+
 def test_audit_flags_invalid_values(tmp_path: Path, capsys) -> None:
     root = make_project(tmp_path)
     (root / "_设置.md").write_text("- 更新重制策略：坏值\n", encoding="utf-8")

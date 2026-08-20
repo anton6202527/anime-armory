@@ -138,6 +138,10 @@ def main():
     if args.focus_plan:
         with open(args.focus_plan, encoding="utf-8") as fh:
             focus_plan = json.load(fh)
+        if isinstance(focus_plan, dict):
+            focus_plan = focus_plan.get("shots")
+        if not isinstance(focus_plan, list) or not focus_plan:
+            raise SystemExit("--focus-plan 须为非空数组，或含非空 shots[] 的对象")
     vf = reframe_filter(args.src, args.target, args.mode, args.out_long,
                         args.crop_x, args.crop_y, focus_plan)
     ow, oh = out_resolution(args.target, args.out_long)

@@ -60,7 +60,9 @@ def test_plan_writes_video_prompts_and_manifest(tmp_path):
     assert "PROD_STARBOX_APP" not in compiled["prompt"]
     assert len(compiled["prompt"]) < 650
     assert manifest["summary"] == {"clips": 1, "frames2video": 1, "image2video": 0}
-    assert manifest["schema_version"] == 2
+    assert manifest["schema_version"] == 3
+    assert manifest["render_profile"]["path"] == "生产数据/render_profile.json"
+    assert manifest["jobs"][0]["render_profile"]["source_generation"]["resolution"] == "1280x720"
     assert manifest["jobs"][0]["mode"] == "frames2video"
     assert manifest["jobs"][0]["prompt_source_kind"] == "compiled_submit_prompt"
     assert manifest["jobs"][0]["submit_prompt"] == compiled["prompt"]

@@ -26,7 +26,7 @@
 | 信息密度 | 4-gram 词汇多样性（去重比），高=新信息多 | 0.50→0.95 映射到 1→10 |
 | 爽点密度 | 爽点关键词命中 / 千字（`PAYOFF_KW`，**与 `novel-simulate` rookie 人格 `kw` 同一口径**） | 千字密度 0→10 映射到 1→10 |
 
-> 口径单点：`novel-simulate` 的兼容字段 `retention_prior` 在 schema v2 中只是 `retention_proxy` 表面代理，与本表 `爽点密度` 共用同一爽点关键词集；它不是留存预测。`novel-score` 的 `payoff_density` 是另一层 LLM 语义判断，也只作 advisory。
+> 口径单点：`novel-simulate` schema v3 不再把爽点、章尾标记、4-gram 去重和套路词加权成聚合留存数；其 `rookie.keyword_surface` 与本表 `爽点密度` 共用同一爽点关键词集，但只报告原始命中/千字密度且不设统一方向。`novel-score` 的 `payoff_density` 是另一层 LLM 语义判断，也只作 advisory。
 
 ## 与家族联动
 

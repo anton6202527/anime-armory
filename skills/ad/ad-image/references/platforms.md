@@ -22,4 +22,4 @@
 - **产品/logo/代言人** = 最严，优先用**多参考 + 原生主体库**（Seedream/可灵）或多参考后端，单参考后端（Codex）靠强锚点 + 身份锁定句。
 - **品牌色**：逐镜 prompt 带主色 HEX，避免环境光染偏。
 - **关键 logo/包装文字镜**：AI 文字不稳 → 出图占位，`ad-compose` 用真 logo/包装贴图合成最稳。
-- **多比例**：按 `交付比例` 主比例出图，其它比例 `ad-compose` reframe；构图留 title-safe / action-safe 余量，别贴边。
+- **多版位**：主比例出图后由 `ad-craft/scripts/placement_adaptation.py` 逐交付件选择原生构图、原生重剪/重做或经签核的机械裁切；不能把统一 reframe 当默认。前期仍留 title-safe / action-safe 余量，但中心网格不替代具体版位模板。

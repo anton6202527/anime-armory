@@ -34,11 +34,19 @@ except Exception:  # pragma: no cover - review must still run if optional charac
 COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
+COMIC_IMAGE_SCRIPTS = Path(__file__).resolve().parents[2] / "comic-image" / "scripts"
+if str(COMIC_IMAGE_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(COMIC_IMAGE_SCRIPTS))
+try:
+    import codex_panel_runner as panel_acceptance
+except Exception:  # pragma: no cover
+    panel_acceptance = None
 try:
     from platform_profiles import profile_for_platform, validate_manifest as validate_platform_manifest
 except Exception:  # pragma: no cover
     profile_for_platform = None
     validate_platform_manifest = None
+from progress import update_stage as update_progress_stage
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
@@ -699,20 +707,21 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
             if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
                 recorded_sha = str(item.get("artifact_sha256") or "").strip()
                 panel_path = find_panel_image(root / "出图" / chapter / "panels", panel_id)
-                if recorded_sha:
-                    current_sha = hashlib.sha256(panel_path.read_bytes()).hexdigest() if panel_path else ""
-                    if current_sha != recorded_sha:
-                        continue
+                current_sha = hashlib.sha256(panel_path.read_bytes()).hexdigest() if panel_path else ""
+                accepted_by = str(item.get("accepted_by") or data.get("accepted_by") or "").strip()
+                reason = str(item.get("reason") or "").strip()
+                authorized = bool(recorded_sha and recorded_sha == current_sha and accepted_by and reason)
                 accepted[panel_id] = {
                     "panel_id": panel_id,
                     "code": code,
-                    "status": "accepted",
-                    "accepted_by": str(item.get("accepted_by") or data.get("accepted_by") or "manual_review"),
+                    "status": "accepted" if authorized else "legacy_unbound_or_stale",
+                    "authorized": authorized,
+                    "accepted_by": accepted_by,
                     "accepted_at": str(item.get("accepted_at") or data.get("accepted_at") or ""),
-                    "reason": str(item.get("reason") or ""),
+                    "reason": reason,
                     "evidence": str(item.get("evidence") or ""),
                     "artifact_sha256": recorded_sha,
-                    "sha_bound": bool(recorded_sha),
+                    "sha_bound": authorized,
                     "source": display_path(root, path),
                 }
         for panel_id in data.get("accepted_panels") or []:
@@ -721,35 +730,39 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
                 accepted[pid] = {
                     "panel_id": pid,
                     "code": "raw_bubble_candidate",
-                    "status": "accepted",
-                    "accepted_by": str(data.get("accepted_by") or "manual_review"),
+                    "status": "legacy_unbound_or_stale",
+                    "authorized": False,
+                    "accepted_by": str(data.get("accepted_by") or ""),
                     "accepted_at": str(data.get("accepted_at") or ""),
                     "reason": "accepted by panel list",
                     "evidence": "",
                     "sha_bound": False,
                     "source": display_path(root, path),
                 }
-    qc_dir = root / "生产数据" / "panel_qc" / chapter
-    if not qc_dir.is_dir():
+    jobs = load_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", {})
+    if panel_acceptance is None or not isinstance(jobs, dict):
         return accepted
-    for qc_path in sorted(qc_dir.glob("*.json")):
-        qc = load_json(qc_path, {})
-        if not isinstance(qc, dict):
+    for job in jobs.get("jobs") or []:
+        if not isinstance(job, dict):
             continue
-        panel_id = str(qc.get("panel_id") or qc_path.stem).strip()
+        panel_id = str(job.get("panel_id") or "").strip()
+        status = panel_acceptance.panel_acceptance_status(root, job)
+        if not panel_id or not status.get("accepted"):
+            continue
+        qc = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
         manual = qc.get("manual_review") if isinstance(qc.get("manual_review"), dict) else {}
-        verdict = str(manual.get("verdict") or "").strip().lower()
-        if not panel_id or verdict not in {"pass", "accepted", "accept"}:
-            continue
+        qc_path = root / "生产数据" / "panel_qc" / chapter / f"{panel_id}.json"
         accepted[panel_id] = {
             "panel_id": panel_id,
             "code": "raw_bubble_candidate",
             "status": "accepted",
-            "accepted_by": str(manual.get("reviewed_by") or manual.get("accepted_by") or "manual_review"),
+            "authorized": True,
+            "accepted_by": str(manual.get("reviewed_by") or ""),
             "accepted_at": str(manual.get("reviewed_at") or manual.get("accepted_at") or ""),
             "reason": str(manual.get("reason") or ""),
             "evidence": display_path(root, qc_path),
-            "sha_bound": bool(str(manual.get("artifact_sha256") or "").strip()),
+            "artifact_sha256": str(status.get("artifact_sha256") or ""),
+            "sha_bound": True,
             "source": display_path(root, qc_path),
         }
     return accepted
@@ -835,27 +848,7 @@ def refresh_contact_sheet(root: Path, chapter: str, panel_ids: list[str], panel_
 
 
 def update_progress(root: Path, chapter: str, stage: str, value: str) -> bool:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return False
-    lines = path.read_text(encoding="utf-8").splitlines()
-    headers: list[str] = []
-    updated = False
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("|"):
-            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and len(cells) >= len(headers) and cells[0] == chapter and stage in headers:
-                cells[headers.index(stage)] = value
-                line = "| " + " | ".join(cells) + " |"
-                updated = True
-        out.append(line)
-    if updated:
-        path.write_text("\n".join(out) + "\n", encoding="utf-8")
-    return updated
+    return update_progress_stage(root, chapter, stage, value, actor="comic-review")
 
 
 def verdict_for(issues: list[dict[str, str]]) -> str:
@@ -1144,8 +1137,14 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         if components:
             raw_bubble_hits.append({"panel_id": pid, "path": str(image_path.relative_to(root)), "components": components[:3]})
     raw_bubble_acceptance = load_raw_bubble_acceptance(root, chapter)
-    accepted_raw_bubble_hits = [hit for hit in raw_bubble_hits if hit["panel_id"] in raw_bubble_acceptance]
-    unresolved_raw_bubble_hits = [hit for hit in raw_bubble_hits if hit["panel_id"] not in raw_bubble_acceptance]
+    accepted_raw_bubble_hits = [
+        hit for hit in raw_bubble_hits
+        if raw_bubble_acceptance.get(hit["panel_id"], {}).get("authorized")
+    ]
+    unresolved_raw_bubble_hits = [
+        hit for hit in raw_bubble_hits
+        if not raw_bubble_acceptance.get(hit["panel_id"], {}).get("authorized")
+    ]
     if unresolved_raw_bubble_hits:
         add_issue(
             issues,
@@ -1168,18 +1167,20 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
             "image",
         )
     unbound_raw_bubble_hits = [
-        hit for hit in accepted_raw_bubble_hits
-        if not raw_bubble_acceptance.get(hit["panel_id"], {}).get("sha_bound")
+        hit for hit in raw_bubble_hits
+        if hit["panel_id"] in raw_bubble_acceptance
+        and not raw_bubble_acceptance.get(hit["panel_id"], {}).get("authorized")
     ]
     if unbound_raw_bubble_hits:
         add_issue(
             issues,
             "warn",
             "出图/" + chapter + "/panels",
-            "以下烘焙气泡签收未绑定 artifact_sha256，重抽/改图后不会自动失效，可能永久掩盖真实的空白气泡问题："
+            "以下 legacy 烘焙气泡签收缺当前 artifact_sha256、具名审核人/理由，或已随重抽失效；"
+            "这里只披露为 WARN，不视为有效签收："
             + ", ".join(hit["panel_id"] for hit in unbound_raw_bubble_hits[:18]),
             "comic-review",
-            "在 raw_bubble_acceptance 记录里为每条签收补 artifact_sha256（当前图 SHA），或改用 panel_qc.manual_review 并记录 SHA。",
+            "改用当前 panel_qc comparison packet 完成逐图具名签收；不要沿用 accepted_panels 列表。",
             "image",
         )
 

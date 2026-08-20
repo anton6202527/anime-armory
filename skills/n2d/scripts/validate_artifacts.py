@@ -13,17 +13,28 @@ LIB = Path(__file__).resolve().parents[1] / "_lib"
 if str(LIB) not in sys.path:
     sys.path.insert(0, str(LIB))
 
-from n2d_schema_registry import render_markdown, scan_artifacts, write_validation  # noqa: E402
+from n2d_schema_registry import SCAN_SCOPES, render_markdown, scan_artifacts, write_validation  # noqa: E402
 
 
 def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser(description="validate n2d artifacts by schema registry")
     ap.add_argument("root")
     ap.add_argument("--strict-unknown", action="store_true", help="treat unknown artifact kind as block")
+    ap.add_argument(
+        "--scope",
+        choices=SCAN_SCOPES,
+        default="all",
+        help="all=routable declarations; release=canonical boundary paths and manifest files only",
+    )
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
-    payload = scan_artifacts(ns.root.rstrip("/"), strict_unknown=ns.strict_unknown)
+    payload = scan_artifacts(
+        ns.root.rstrip("/"),
+        strict_unknown=ns.strict_unknown,
+        scope=ns.scope,
+        completion_inputs_only=ns.scope == "release",
+    )
     if ns.write:
         payload["outputs"] = write_validation(ns.root.rstrip("/"), payload)
     if ns.json:

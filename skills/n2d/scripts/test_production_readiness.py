@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -17,6 +18,24 @@ spec.loader.exec_module(production_readiness)
 @pytest.fixture(autouse=True)
 def _stable_ffprobe(monkeypatch):
     monkeypatch.setattr(production_readiness.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
+
+
+def _write_test_mp4(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        proc = subprocess.run(
+            [
+                "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
+                "color=c=black:s=16x16:d=0.2", "-an", "-c:v", "mpeg4", str(path),
+            ],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=30,
+        )
+    except FileNotFoundError:
+        pytest.skip("ffmpeg unavailable")
+    assert proc.returncode == 0, proc.stderr.decode("utf-8", errors="replace")
 
 
 def _release_ready_project(root: Path, episode: str) -> None:
@@ -43,8 +62,7 @@ def _release_ready_project(root: Path, episode: str) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     asset = root / "合成" / episode / f"成片_{episode}_zh.mp4"
-    asset.parent.mkdir(parents=True)
-    asset.write_bytes(b"mp4")
+    _write_test_mp4(asset)
 
     prod = root / "生产数据"
     prod.mkdir()
@@ -113,8 +131,6 @@ def _release_ready_project(root: Path, episode: str) -> None:
     }, ensure_ascii=False), encoding="utf-8")
     (prod / f"review_ui_{episode}.json").write_text('{"kind":"n2d_review_ui","version":1,"status":"pass"}', encoding="utf-8")
     (prod / f"review_ui_findings_{episode}.json").write_text(json.dumps({"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []}, ensure_ascii=False), encoding="utf-8")
-    (prod / f"release_verdict_{episode}.json").write_text('{"kind":"n2d_release_verdict","version":1,"status":"internal-only"}', encoding="utf-8")
-
     def event(stage: str, asset_rel: str) -> dict:
         return {
             "kind": "n2d_production_event",
@@ -178,6 +194,61 @@ def _release_ready_project(root: Path, episode: str) -> None:
     }
     (prod / "creative_decisions.jsonl").write_text(json.dumps(decision, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
 
+    # Producer-owned release evidence exists before the immutable verdict is
+    # issued.  A later readiness audit may recompute it, but must not introduce
+    # the first version after human acceptance.
+    production_readiness.run_event_ledger(root, write=True, strict_trace=True)
+    production_readiness.run_generation_recipe(root, episode, write=True)
+    production_readiness.run_gate_policy_coverage(root, episode, write=True)
+    production_readiness.run_genre_packs(root, episode, write=True)
+    production_readiness.run_artifact_validation(root, write=True)
+
+    # Completion is proved by one canonical, hash-bound verdict/acceptance
+    # pair.  The legacy review_signoff above remains migration input only.
+    acceptance = production_readiness.release_manifest.acceptance_contract
+    components = [
+        {"name": name, "status": "pass", "message": f"{name} passed"}
+        for name in sorted(acceptance.REQUIRED_VERDICT_COMPONENTS)
+    ]
+    master = acceptance.resolve_final_master(root, episode)
+    assert master is not None
+    master_rel = master.relative_to(root).as_posix()
+    final_master = next(row for row in components if row["name"] == "final_master")
+    final_master.update({
+        "path": master_rel,
+        "details": {
+            "selected": master_rel,
+            "selected_sha256": acceptance.sha256_file(master),
+            "duration_sec": acceptance.probe_master_duration(master),
+        },
+    })
+    verdict = {
+        "kind": "n2d_release_verdict",
+        "version": 2,
+        "episode": episode,
+        "profile": "internal",
+        "generated_at": "2026-06-26T00:00:00+00:00",
+        "status": "internal-only",
+        "summary": {"block": 0, "warn": 0, "pass": len(components)},
+        "components": components,
+        "blocking_reasons": [],
+        "warnings": [],
+        "evidence_bindings": acceptance.current_evidence_bindings(root, episode),
+        "content_fingerprint": acceptance.release_content_fingerprint(root, episode, "internal"),
+    }
+    (prod / f"release_verdict_{episode}.json").write_text(
+        json.dumps(verdict, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    receipt = acceptance.build_receipt(
+        root,
+        episode,
+        reviewer="qa",
+        decision="approved",
+        accepted_at="2026-06-26T00:00:00+00:00",
+    )
+    acceptance.write_receipt(root, episode, receipt)
+
 
 def test_production_readiness_writes_unified_gate(monkeypatch, tmp_path: Path) -> None:
     episode = "第1集"
@@ -204,6 +275,33 @@ def test_production_readiness_writes_unified_gate(monkeypatch, tmp_path: Path) -
     assert (tmp_path / "生产数据" / f"generation_recipe_manifest_{episode}.json").is_file()
     assert (tmp_path / "生产数据" / f"gate_policy_coverage_{episode}.json").is_file()
     assert (tmp_path / "合规" / f"release_manifest_{episode}.json").is_file()
+
+
+def test_readiness_artifact_validation_skips_support_json_but_reports_counts(tmp_path: Path) -> None:
+    source = tmp_path / "小说"
+    source.mkdir()
+    (source / "_源指纹.json").write_text('{"sha256":"abc"}', encoding="utf-8")
+    (tmp_path / ".prework_cache_image_prompt.json").write_text('{"cached":true}', encoding="utf-8")
+
+    row = production_readiness.run_artifact_validation(tmp_path, write=False)
+
+    assert row["status"] == "pass"
+    assert row["scanned_count"] == 0
+    assert row["skipped_count"] == 2
+    assert "scanned=0 skipped=2 block=0 warn=0" == row["message"]
+
+
+def test_readiness_artifact_validation_strictly_rejects_unknown_manifest(tmp_path: Path) -> None:
+    manifest = tmp_path / "合规" / "future_manifest.json"
+    manifest.parent.mkdir()
+    manifest.write_text('{"kind":"n2d_future_manifest","version":1}', encoding="utf-8")
+
+    row = production_readiness.run_artifact_validation(tmp_path, write=False)
+
+    assert row["status"] == "fail"
+    assert row["scanned_count"] == 1
+    assert row["skipped_count"] == 0
+    assert "block=1" in row["message"]
 
 
 def test_reviewer_calibration_missing_fails_for_scale_up(tmp_path: Path) -> None:

@@ -317,3 +317,54 @@ def test_summarize_surfaces_under_claim(tmp_path: Path) -> None:
     summary = scan.summarize_project(tmp_path)
     assert summary["under_claim_disclosures"]
     assert summary["under_claim_disclosures"][0]["chapter"] == "第1话"
+
+
+def test_warning_disposition_disclosure_surfaces_unresolved_review_warn(tmp_path: Path) -> None:
+    write_json(
+        tmp_path / "生产数据" / "gate_findings_review_第1话.json",
+        {
+            "stage": "review",
+            "findings": [
+                {
+                    "severity": "warn",
+                    "code": "lettering_balance_needs_editorial_review",
+                    "artifact": "排版/第1话/P001.png",
+                    "reason": "末格气泡平衡需要人工确认",
+                }
+            ],
+        },
+    )
+    disclosures = scan.warning_disposition_disclosures(tmp_path, [{"话": "第1话", "审查": "✅"}])
+    assert len(disclosures) == 1
+    assert disclosures[0]["unresolved_count"] == 1
+    assert disclosures[0]["unresolved_codes"] == ["lettering_balance_needs_editorial_review"]
+    assert "公开/商业发布前" in disclosures[0]["hint"]
+
+
+def test_warning_disposition_disclosure_ignores_unfinished_review(tmp_path: Path) -> None:
+    write_json(
+        tmp_path / "生产数据" / "gate_findings_review_第1话.json",
+        {"stage": "review", "findings": [{"severity": "warn", "code": "needs_review"}]},
+    )
+    assert scan.warning_disposition_disclosures(tmp_path, [{"话": "第1话", "审查": "⬜"}]) == []
+
+
+def test_warning_disposition_disclosure_surfaces_ledger_integrity_error(tmp_path: Path) -> None:
+    ledger = tmp_path / "生产数据" / "finding_dispositions" / "第1话.jsonl"
+    ledger.parent.mkdir(parents=True, exist_ok=True)
+    ledger.write_text(
+        json.dumps({
+            "kind": "comic_finding_disposition",
+            "schema_version": 1,
+            "chapter": "第2话",
+            "finding_id": "CF-tampered",
+            "status": "risk_accepted",
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    disclosures = scan.warning_disposition_disclosures(tmp_path, [{"话": "第1话", "审查": "✅"}])
+
+    assert len(disclosures) == 1
+    assert disclosures[0]["ledger_integrity_error_count"] == 1
+    assert "完整性错误" in disclosures[0]["hint"]

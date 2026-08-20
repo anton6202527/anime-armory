@@ -18,6 +18,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "mv_utils.py")
 MV_LIB = os.path.join(REPO, "skills", "mv", "_lib")
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
 if MV_LIB not in sys.path:
     sys.path.insert(0, MV_LIB)
 from mv_video_prompt_compiler import (  # noqa: E402
@@ -27,6 +29,8 @@ from mv_video_prompt_compiler import (  # noqa: E402
     normalize_backend,
     parse_markdown,
 )
+import video_capabilities  # noqa: E402
+import provider_evidence  # noqa: E402
 
 
 def load_mv_utils():
@@ -59,13 +63,100 @@ def reference_lookup(reference_plan):
     return {c.get("clip_id"): c for c in reference_plan.get("clips", []) if isinstance(c, dict)}
 
 
+def check_provider_evidence(root, receipt, route, expected_output_sha256=""):
+    """Revalidate the immutable provider artifact after registration."""
+    findings = []
+    try:
+        schema = int((receipt or {}).get("schema_version") or 0)
+    except (TypeError, ValueError):
+        schema = 0
+    if provider_evidence.route_requires_evidence(route):
+        if schema != provider_evidence.RECEIPT_SCHEMA_VERSION:
+            findings.append({
+                "level": "block", "code": "provider_evidence_receipt_schema_required",
+            })
+        normalized, errors = provider_evidence.validate_provider_evidence(
+            root, route, receipt, expected_output_sha256
+        )
+        findings.extend({"level": "block", "code": code} for code in errors)
+        if not errors and (receipt or {}).get("provider_evidence") != normalized:
+            findings.append({
+                "level": "block", "code": "provider_evidence_normalization_mismatch",
+            })
+    elif schema not in {1, provider_evidence.RECEIPT_SCHEMA_VERSION}:
+        findings.append({"level": "block", "code": "submit_receipt_schema_invalid"})
+    return findings
+
+
+def check_manifest_freshness(root, manifest):
+    if int(manifest.get("schema_version") or 0) < 4:
+        return [{"level": "warn", "code": "legacy_manifest_freshness_not_bound"}]
+    snapshot = manifest.get("freshness") or {}
+    if not snapshot:
+        return [{"level": "block", "code": "missing_manifest_freshness_snapshot"}]
+    findings = []
+    for path, expected in (snapshot.get("project_files") or {}).items():
+        if mv_utils.content_hash(os.path.join(root, path)) != expected:
+            findings.append({"level": "block", "code": "manifest_project_input_changed", "path": path})
+    for path, expected in (snapshot.get("implementation_files") or {}).items():
+        if mv_utils.content_hash(os.path.join(REPO, path)) != expected:
+            findings.append({"level": "block", "code": "manifest_compiler_or_capability_changed", "path": path})
+    if snapshot.get("capability_graph_sha256") != video_capabilities.graph_sha256():
+        findings.append({"level": "block", "code": "manifest_capability_graph_changed"})
+    for unit in manifest.get("sequence_units") or []:
+        if unit.get("status") != "split_registered":
+            continue
+        receipt = unit.get("submit_receipt") or {}
+        receipt_body = dict(receipt) if isinstance(receipt, dict) else {}
+        receipt_hash = str(receipt_body.pop("receipt_sha256", ""))
+        if (
+            receipt.get("kind") != "mv_video_sequence_submit_receipt"
+            or receipt_hash != video_capabilities.stable_hash(receipt_body)
+            or receipt.get("template_only") is not False
+            or not str(receipt.get("provider_job_id") or "").strip()
+            or not str(receipt.get("submitted_at") or "").strip()
+            or receipt.get("request_controls") != unit.get("compiled_request_controls")
+            or receipt.get("compiled_request_controls_sha256") != unit.get("compiled_request_controls_sha256")
+            or receipt.get("provider_id") != (unit.get("provider_route") or {}).get("provider_id")
+        ):
+            findings.append({
+                "level": "block", "code": "sequence_submit_receipt_invalid",
+                "unit_id": unit.get("unit_id"),
+            })
+        try:
+            provider_evidence.validate_submitted_at(receipt.get("submitted_at"))
+        except ValueError as exc:
+            findings.append({
+                "level": "block", "code": str(exc), "unit_id": unit.get("unit_id"),
+            })
+        for finding in check_provider_evidence(
+            root, receipt, unit.get("provider_route") or {}, unit.get("source_sha256") or ""
+        ):
+            finding.setdefault("unit_id", unit.get("unit_id"))
+            findings.append(finding)
+        cut_map = unit.get("verified_cut_map") or {}
+        cut_body = dict(cut_map) if isinstance(cut_map, dict) else {}
+        cut_hash = str(cut_body.pop("cut_map_sha256", ""))
+        if (
+            cut_map.get("kind") != "mv_video_sequence_cut_map"
+            or cut_hash != video_capabilities.stable_hash(cut_body)
+            or cut_map.get("source_sha256") != unit.get("source_sha256")
+            or not str(cut_map.get("reviewer") or "").strip()
+        ):
+            findings.append({
+                "level": "block", "code": "sequence_cut_map_invalid",
+                "unit_id": unit.get("unit_id"),
+            })
+    return findings
+
+
 def prompt_text(root, rel):
     if not rel:
         return ""
     return mv_utils.read_text(os.path.join(root, rel))
 
 
-def check_compiled_prompt(text, take, expected_backend):
+def check_compiled_prompt(text, take, expected_backend, allow_legacy=False):
     parsed = parse_markdown(text or "")
     if not parsed:
         return [{
@@ -73,11 +164,22 @@ def check_compiled_prompt(text, take, expected_backend):
             "message": "完整 MV 合同不得直接作为模型 prompt",
         }]
     findings = []
-    if parsed.get("kind") != COMPILER_KIND or parsed.get("version") != COMPILER_VERSION:
+    if parsed.get("kind") != COMPILER_KIND:
         findings.append({
             "level": "block", "code": "incompatible_prompt_compiler",
             "actual": {"kind": parsed.get("kind"), "version": parsed.get("version")},
         })
+    elif parsed.get("version") != COMPILER_VERSION:
+        if allow_legacy and parsed.get("version") == 1:
+            findings.append({
+                "level": "warn", "code": "legacy_prompt_compiler_v1",
+                "message": "旧项目可继续审计；重建任务包才会显式升级 v2 controls/receipt",
+            })
+        else:
+            findings.append({
+                "level": "block", "code": "incompatible_prompt_compiler",
+                "actual": {"kind": parsed.get("kind"), "version": parsed.get("version")},
+            })
     source_hash = str(parsed.get("source_contract_sha256") or "")
     if not re.fullmatch(r"[0-9a-f]{64}", source_hash):
         findings.append({"level": "block", "code": "invalid_prompt_source_hash"})
@@ -96,10 +198,109 @@ def check_compiled_prompt(text, take, expected_backend):
         findings.append({"level": "block", "code": "manifest_submit_prompt_mismatch"})
     if str(take.get("source_contract_sha256") or "") != source_hash:
         findings.append({"level": "block", "code": "manifest_source_contract_hash_mismatch"})
+    compiled_controls = take.get("compiled_request_controls")
+    compiled_hash = str(take.get("compiled_request_controls_sha256") or "")
+    if compiled_controls is not None:
+        if compiled_hash != video_capabilities.stable_hash(compiled_controls):
+            findings.append({"level": "block", "code": "manifest_compiled_controls_hash_mismatch"})
+        if str(parsed.get("compiled_request_controls_sha256") or "") != compiled_hash:
+            findings.append({"level": "block", "code": "prompt_compiled_controls_hash_mismatch"})
+    planned_controls = take.get("planned_request_controls")
+    planned_hash = str(take.get("planned_request_controls_sha256") or "")
+    if planned_controls is not None:
+        if planned_hash != video_capabilities.stable_hash(planned_controls):
+            findings.append({"level": "block", "code": "manifest_planned_controls_hash_mismatch"})
+        if str(parsed.get("planned_request_controls_sha256") or "") != planned_hash:
+            findings.append({"level": "block", "code": "prompt_planned_controls_hash_mismatch"})
     return findings
 
 
-def check_clip(root, clip, job, ref_row, identity_registry):
+def check_submit_receipt(root, take, job):
+    receipt = take.get("submit_receipt")
+    if not isinstance(receipt, dict):
+        return [{
+            "level": "block", "code": "missing_actual_submit_receipt",
+            "take_id": take.get("take_id"),
+            "message": "计划引用或裸 SHA 不能证明 provider 实际收到哪些输入",
+        }]
+    findings = []
+    receipt_body = dict(receipt)
+    receipt_hash = str(receipt_body.pop("receipt_sha256", ""))
+    if receipt_hash != video_capabilities.stable_hash(receipt_body):
+        findings.append({"level": "block", "code": "submit_receipt_hash_mismatch"})
+    if receipt.get("kind") not in {"mv_video_submit_receipt", "mv_video_sequence_derived_receipt"}:
+        findings.append({"level": "block", "code": "submit_receipt_kind_invalid"})
+    if receipt.get("template_only") is not False:
+        findings.append({"level": "block", "code": "submit_receipt_is_template"})
+    if str(receipt.get("job_id") or "") != f"{job.get('clip_id')}/{take.get('take_id')}":
+        findings.append({"level": "block", "code": "submit_receipt_job_id_mismatch"})
+    if str(receipt.get("take_id") or "") != str(take.get("take_id") or ""):
+        findings.append({"level": "block", "code": "submit_receipt_take_id_mismatch"})
+    if str(receipt.get("model") or "") != str(job.get("video_model") or ""):
+        findings.append({"level": "block", "code": "submit_receipt_model_mismatch"})
+    if str(receipt.get("channel") or "") != str(job.get("backend") or ""):
+        findings.append({"level": "block", "code": "submit_receipt_channel_mismatch"})
+    if (
+        not str(receipt.get("provider_id") or "").strip()
+        or not str(receipt.get("provider_job_id") or "").strip()
+        or not str(receipt.get("submitted_at") or "").strip()
+    ):
+        findings.append({"level": "block", "code": "submit_receipt_provider_binding_missing"})
+    else:
+        try:
+            provider_evidence.validate_submitted_at(receipt.get("submitted_at"))
+        except ValueError as exc:
+            findings.append({"level": "block", "code": str(exc)})
+    route = take.get("provider_route") or job.get("provider_route") or {}
+    if str(receipt.get("provider_id") or "") != str(route.get("provider_id") or ""):
+        findings.append({"level": "block", "code": "submit_receipt_provider_id_mismatch"})
+    expected_output_sha256 = (
+        str(take.get("video_sha256") or "")
+        if receipt.get("kind") == "mv_video_submit_receipt" else ""
+    )
+    findings.extend(check_provider_evidence(
+        root, receipt, route, expected_output_sha256
+    ))
+    if receipt.get("kind") == "mv_video_submit_receipt":
+        expected_controls = take.get("compiled_request_controls") or {}
+        expected_hash = str(take.get("compiled_request_controls_sha256") or "")
+        if receipt.get("request_controls") != expected_controls:
+            findings.append({"level": "block", "code": "submit_receipt_controls_mismatch"})
+        if str(receipt.get("compiled_request_controls_sha256") or "") != expected_hash:
+            findings.append({"level": "block", "code": "submit_receipt_controls_hash_mismatch"})
+        expected_refs = {
+            (str(row.get("role") or ""), str(row.get("path") or "")): str(row.get("sha256") or "")
+            for row in expected_controls.get("input_roles") or [] if isinstance(row, dict)
+        }
+        receipt_refs = {
+            (str(row.get("role") or ""), str(row.get("path") or "")): str(row.get("sha256") or "")
+            for row in receipt.get("submitted_refs") or [] if isinstance(row, dict)
+        }
+        if receipt_refs != expected_refs:
+            findings.append({"level": "block", "code": "submit_receipt_refs_mismatch"})
+    elif not str(receipt.get("parent_unit_id") or "") or not str(receipt.get("parent_job_id") or ""):
+        findings.append({"level": "block", "code": "sequence_submit_receipt_parent_missing"})
+    for row in receipt.get("submitted_refs") or []:
+        path = str(row.get("path") or "")
+        sha = str(row.get("sha256") or "")
+        if row.get("confirmed_submitted") is not True:
+            findings.append({"level": "block", "code": "submit_receipt_ref_not_attested", "path": path})
+            continue
+        absolute = os.path.abspath(os.path.join(root, path))
+        if os.path.commonpath((root, absolute)) != root:
+            findings.append({"level": "block", "code": "submit_receipt_ref_outside_project", "path": path})
+            continue
+        current = mv_utils.content_hash(absolute)
+        if not video_capabilities.SHA256_RE.fullmatch(sha) or sha != current:
+            findings.append({"level": "block", "code": "submitted_reference_changed", "path": path})
+    if str(route.get("channel_kind") or "") == "manual" or str(job.get("backend") or "") == "manual":
+        attest = receipt.get("manual_attestation") or {}
+        if not str(attest.get("reviewer") or "").strip() or not str(attest.get("notes") or "").strip():
+            findings.append({"level": "block", "code": "manual_submit_receipt_not_named"})
+    return findings
+
+
+def check_clip(root, clip, job, ref_row, identity_registry, manifest_schema_version=0):
     cid = clip.get("clip_id")
     findings = []
     c = clip.get("continuity") or {}
@@ -139,27 +340,19 @@ def check_clip(root, clip, job, ref_row, identity_registry):
         findings.append({"level": "block", "code": "missing_video_job"})
         return findings
 
-    # 出图→出视频像素级绑定核对：已登记 take 记录了登记时首/尾帧内容 SHA；
-    # 当前 PNG 与登记值不一致 = 图在出视频后被替换，该 take 不再证明来自当前首帧 → block。
-    # 旧 manifest 无该字段：无法证真也无法证伪，warn 提示重登记升级合同（不追溯硬拦旧项目）。
+    # Only an actual provider submit receipt is evidence.  A hash copied from
+    # the plan at registration time proves current pixels, not provider input.
     for take in job.get("takes", []):
         if not take.get("video_sha256"):
             continue  # 未登记实际视频的 take 无绑定义务
-        for field, rel in (("first_frame_sha256", image_path),
-                           ("end_frame_sha256", clip.get("end_frame_path") if clip.get("need_end_frame") else None)):
-            if not rel:
-                continue
-            recorded = take.get(field)
-            if recorded is None:
-                findings.append({"level": "warn", "code": "missing_frame_registration_hash",
-                                 "take_id": take.get("take_id"), "field": field,
-                                 "msg": "旧版登记缺首/尾帧内容收据；重新 --register 升级为像素级绑定"})
-                continue
-            current = mv_utils.content_hash(os.path.join(root, rel))
-            if recorded and current and recorded != current:
-                findings.append({"level": "block", "code": "frame_changed_after_registration",
-                                 "take_id": take.get("take_id"), "field": field, "path": rel,
-                                 "msg": "首/尾帧在该 take 登记后被替换；重出该 clip 视频或重跑 image_qc+重登记"})
+        if int(manifest_schema_version or 0) >= 4:
+            findings.extend(check_submit_receipt(root, take, job))
+        elif not isinstance(take.get("submit_receipt"), dict):
+            findings.append({
+                "level": "warn", "code": "legacy_registration_has_no_submit_receipt",
+                "take_id": take.get("take_id"),
+                "msg": "旧 manifest 保持兼容，但裸 first/end SHA 不再被当作 provider 提交证据；重建任务包升级",
+            })
 
     take_prompts = []
     for take in job.get("takes", []):
@@ -196,7 +389,10 @@ def check_clip(root, clip, job, ref_row, identity_registry):
             if marker not in text:
                 findings.append({"level": "warn", "code": "prompt_missing_marker", "take_id": take_id, "marker": marker})
         take = next((row for row in job.get("takes", []) if row.get("take_id") == take_id), {})
-        for finding in check_compiled_prompt(text, take, job.get("video_model") or job.get("backend")):
+        for finding in check_compiled_prompt(
+            text, take, job.get("video_model") or job.get("backend"),
+            allow_legacy=int(manifest_schema_version or 0) < 4,
+        ):
             finding.setdefault("take_id", take_id)
             finding.setdefault("path", rel)
             findings.append(finding)
@@ -217,11 +413,15 @@ def build_report(root):
     jobs = {j.get("clip_id"): j for j in manifest.get("jobs", []) if isinstance(j, dict)}
     refs = reference_lookup(reference_plan)
     rows = []
-    hard_blocks = 0
-    warnings = 0
+    manifest_findings = check_manifest_freshness(root, manifest)
+    hard_blocks = sum(1 for f in manifest_findings if f.get("level") == "block")
+    warnings = sum(1 for f in manifest_findings if f.get("level") == "warn")
     for clip in plan_clips:
         cid = clip.get("clip_id")
-        findings = check_clip(root, clip, jobs.get(cid), refs.get(cid), identity)
+        findings = check_clip(
+            root, clip, jobs.get(cid), refs.get(cid), identity,
+            manifest_schema_version=manifest.get("schema_version") or 0,
+        )
         hard_blocks += sum(1 for f in findings if f.get("level") == "block")
         warnings += sum(1 for f in findings if f.get("level") == "warn")
         rows.append({"clip_id": cid, "findings": findings, "verdict": "block" if any(f.get("level") == "block" for f in findings) else ("review" if findings else "ok")})
@@ -230,7 +430,7 @@ def build_report(root):
         "schema_version": 2,
         "kind": "mv_video_inherit_contract",
         "generated_at": date.today().isoformat(),
-        "root": root,
+        "root_rel": ".",
         "inputs": {
             "clip_plan": "分镜/clip_plan.json",
             "jobs_manifest": "出视频/jobs_manifest.json",
@@ -244,6 +444,7 @@ def build_report(root):
             "warnings": warnings,
             "verdict": "block" if hard_blocks else ("review" if warnings else "ok"),
         },
+        "manifest_findings": manifest_findings,
         "clips": rows,
     }
     return report
@@ -261,6 +462,14 @@ def write_report(root, report):
         f"- warnings: {report['summary']['warnings']}",
         "",
     ]
+    if report.get("manifest_findings"):
+        lines.append("## manifest freshness")
+        for finding in report["manifest_findings"]:
+            lines.append(
+                f"- {finding.get('level')}: {finding.get('code')} "
+                + json.dumps({k: v for k, v in finding.items() if k not in {"level", "code"}}, ensure_ascii=False)
+            )
+        lines.append("")
     for row in report.get("clips", []):
         lines.append(f"## {row.get('clip_id')} · {row.get('verdict')}")
         for f in row.get("findings", []):

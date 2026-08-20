@@ -13,6 +13,16 @@ def _write_cards(root, scenes):
         json.dump({"kind": "novel_scene_cards", "scenes": scenes}, f, ensure_ascii=False)
 
 
+def _write_settings(root, profile=None, platform=None):
+    lines = ["# 设置"]
+    if profile:
+        lines.append(f"- 创作工艺档：{profile}")
+    if platform:
+        lines.append(f"- 目标平台：{platform}")
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
 def _full_card(**over):
     card = {
         "id": "SC001-01", "chapter": 1, "scene_no": 1,
@@ -75,3 +85,142 @@ def test_scaffold_includes_turn_source(tmp_path):
         data = json.load(f)
     assert "turn_source" in data["scenes"][0]
     assert "turn_source" in scene_cards.OPTIONAL_FIELDS
+
+
+def test_literary_profile_accepts_registered_nontraditional_function(tmp_path):
+    root = str(tmp_path)
+    _write_settings(root, profile="literary")
+    _write_cards(root, [_full_card(turn="", value_shift="", perceptual_shift="她第一次把沉默听成拒绝")])
+
+    result = scene_cards.check(root)
+
+    assert result["craft_profile"] == "literary"
+    assert result["blocking"] == 0
+    ids = {item["id"] for item in result["findings"]}
+    assert "SCENE-CARD-MISSING-FIELDS" not in ids
+    assert "SCENE-CARD-NARRATIVE-FUNCTION-MISSING" not in ids
+
+
+def test_literary_profile_missing_all_functions_is_heuristic_warning(tmp_path):
+    root = str(tmp_path)
+    _write_settings(root, profile="文学小说")  # 中文别名经适配层归一
+    _write_cards(root, [_full_card(turn="", value_shift="")])
+
+    result = scene_cards.check(root)
+
+    finding = next(
+        item for item in result["findings"]
+        if item["id"] == "SCENE-CARD-NARRATIVE-FUNCTION-MISSING"
+    )
+    assert result["craft_profile"] == "literary"
+    assert result["blocking"] == 0
+    assert finding["severity"] == "warning"
+    assert finding["confidence"] == "heuristic"
+
+
+def test_literary_allows_viewpoint_and_advises_missing_conventional_dynamics(tmp_path):
+    root = str(tmp_path)
+    _write_settings(root, profile="literary")
+    _write_cards(root, [{
+        "id": "SC001-01",
+        "chapter": 1,
+        "scene_no": 1,
+        "viewpoint": "村中众人的合唱式视角",
+        "motif_return": "每个人都记得不同颜色的河水",
+    }])
+
+    result = scene_cards.check(root)
+
+    assert result["blocking"] == 0
+    finding = next(
+        item for item in result["findings"]
+        if item["id"] == "SCENE-CARD-LITERARY-DYNAMICS-OMITTED"
+    )
+    assert finding["confidence"] == "heuristic"
+    assert "desire" in finding["reason"] and "conflict" in finding["reason"]
+
+
+def test_experimental_does_not_block_missing_conventional_scene_fields(tmp_path):
+    root = str(tmp_path)
+    _write_settings(root, profile="experimental")
+    _write_cards(root, [{
+        "id": "SC001-01",
+        "chapter": 1,
+        "scene_no": 1,
+        "deliberate_stasis": "三页只记录灯影移动，让等待本身成为形式",
+    }])
+
+    result = scene_cards.check(root)
+
+    assert result["blocking"] == 0
+    ids = {item["id"] for item in result["findings"]}
+    assert "SCENE-CARD-MISSING-FIELDS" not in ids
+    assert "SCENE-CARD-NARRATIVE-FUNCTION-MISSING" not in ids
+
+
+def test_literary_requires_only_attributable_pov_or_viewpoint(tmp_path):
+    root = str(tmp_path)
+    _write_settings(root, profile="literary")
+    _write_cards(root, [{
+        "id": "SC001-01",
+        "chapter": 1,
+        "scene_no": 1,
+        "motif_return": "河水再次变色",
+    }])
+
+    result = scene_cards.check(root)
+
+    finding = next(item for item in result["findings"] if item["id"] == "SCENE-CARD-MISSING-FIELDS")
+    assert result["blocking"] == 1
+    assert "pov|viewpoint" in finding["reason"]
+
+
+def test_commercial_and_legacy_profiles_keep_turn_value_contract(tmp_path):
+    for profile in ("commercial_serial", None):
+        root = tmp_path / (profile or "legacy")
+        root.mkdir()
+        _write_settings(str(root), profile=profile, platform="晋江")
+        _write_cards(
+            str(root),
+            [_full_card(turn="", value_shift="", revelation="旧信上的落款属于母亲")],
+        )
+
+        result = scene_cards.check(str(root))
+
+        assert result["blocking"] == 1
+        finding = next(item for item in result["findings"] if item["id"] == "SCENE-CARD-MISSING-FIELDS")
+        assert "turn" in finding["reason"] and "value_shift" in finding["reason"]
+        if profile is None:
+            # 目标平台不替代独立工艺选择点；旧项目安全保持 genre_novel。
+            assert result["craft_profile"] == "genre_novel"
+
+
+def test_scaffold_includes_flexible_narrative_function_fields(tmp_path):
+    root = str(tmp_path)
+    scene_cards.scaffold(root, chapters=[1])
+    with open(os.path.join(root, "设定", "scene_cards.json"), encoding="utf-8") as f:
+        card = json.load(f)["scenes"][0]
+    for field in (
+        "viewpoint",
+        "revelation",
+        "relation_drift",
+        "perceptual_shift",
+        "motif_return",
+        "deliberate_stasis",
+    ):
+        assert field in card
+
+
+def test_unsupported_custom_profile_blocks_instead_of_silent_fallback(tmp_path):
+    root = str(tmp_path)
+    _write_settings(root, profile="hybrid_lyric")
+    _write_cards(root, [_full_card()])
+
+    result = scene_cards.check(root)
+
+    assert result["craft_profile"] == "hybrid_lyric"
+    assert any(
+        item["id"] == "SCENE-CARD-CRAFT-PROFILE-UNSUPPORTED"
+        for item in result["findings"]
+    )
+    assert result["blocking"] >= 1

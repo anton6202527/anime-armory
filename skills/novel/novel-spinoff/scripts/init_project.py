@@ -35,6 +35,7 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             rights_metadata, DRAFT_WORKFLOWS,
                             infer_novel_purpose, normalize_novel_purpose,
                             resolve_novel_draft_mode, resolve_novel_draft_workflow)
+from craft_profile import normalize_craft_profile
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
@@ -144,6 +145,8 @@ def main():
                     help="目标平台（第 3 步书名候选用）：起点/晋江/抖音漫剧/番茄/红果/历史向/跨平台")
     ap.add_argument("--purpose", default=None,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
+    ap.add_argument("--craft-profile", default=None,
+                    help="创作工艺档：commercial_serial/genre_novel/literary/experimental 或自定义；缺省继承全局默认再回落 genre_novel，不由平台推断")
     ap.add_argument("--draft-mode", default=None, choices=["极速初稿", "稳妥初稿", "商业连载", "漫剧源书"],
                     help="小说生成模式：决定速度/质量 gate 密度")
     ap.add_argument("--draft-workflow", default=None, choices=DRAFT_WORKFLOWS,
@@ -263,6 +266,7 @@ def main():
               ensure_ascii=False, indent=2)
     
     write_project_settings(out_root, {
+        **({"创作工艺档": normalize_craft_profile(args.craft_profile)} if args.craft_profile else {}),
         "目标平台": args.target_platform,
         "小说用途": purpose,
         "权利来源": rights_status,

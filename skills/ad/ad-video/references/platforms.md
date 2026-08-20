@@ -1,5 +1,7 @@
 # 生视频模型/渠道 + 模型路由（ad-video · 本线自持）
 
+> 候选与关键能力最后核验：2026-08-20。当前一手来源包括 [BytePlus Seedance 2.0 API](https://docs.byteplus.com/en/docs/modelark/1520757)、[Google Veo 3.1](https://ai.google.dev/gemini-api/docs/video)、[Kling VIDEO 3.0 指南](https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide)、[MiniMax video API](https://platform.minimax.io/docs/api-reference/api-overview)、[Runway 模型列表](https://docs.dev.runwayml.com/guides/models/)、[Luma Ray3.2](https://lumalabs.ai/news/introducing-ray-3-2) 与 [Pika 2.5 API](https://dev.pika.art/models/pika/pika-2.5/image-to-video)。菜单只表示候选存在；执行仍以项目账号、地区、模型 ID 和 CLI/API probe 为准。
+
 `生视频模型` + `生视频渠道` 读项目 `_设置.md`，但新广告立项不再强制首跑选择具体后端。模型只作默认/普通镜兜底建议，渠道只作调用入口偏好。`视频模型路由=自动按镜头路由` 时按镜头**能力**、CLI/API 探测和账号约束选 primary/fallback；否则固定 `生视频模型`。只有客户/投放/账号要求固定后端、用户明确指定或 router/probe 找不到可执行后端时才问具体模型/渠道。旧 `生视频AI` 兼容读取。模型/渠道能力随版本变，正文写能力不绑版本。
 
 ## 路由是工程化产物（不是 prose 表）
@@ -11,7 +13,7 @@
 
 | 镜头类型 | 需要的能力 | primary（能力优先） | fallback | 为什么 |
 |---|---|---|---|---|
-| 产品展示 / hero 环绕 / 绑定 `PROD_*` | 主体一致性强 | Seedance / 可灵主体库 | 即梦 | 包装/logo 不能抖花，要稳 |
+| 产品展示 / hero 环绕 / 绑定 `PROD_*` | 主体一致性强 | Seedance / Kling 3.0 Element | 即梦 | 包装/logo 不能抖花，要稳 |
 | 情绪 / 人物特写 | 电影感 | 可灵 / Veo | 即梦 | 表演与质感 |
 | demo 实拍质感 / 手持 | 真实运动 | Seedance / 即梦 | 即梦 | 拟真手持、自然动态 |
 | 痛点情境 / 叙事镜 | 通用 | 即梦 / `生视频模型` | 通用 | 普通叙事 |
@@ -26,10 +28,10 @@
 |---|---|
 | 即梦 image2video | ≤ 8s |
 | Seedance | ≤ 15s |
-| 可灵 Kling | ≈ 10s |
+| 可灵 Kling 3.0 | ≤ 15s |
 | Veo | ≈ 8s |
 
-广告镜短，一般够；能一镜到底就别切碎。超 primary 上限就换更长后端（Seedance）或拆镜/缩时长。
+广告镜短，一般够；能一镜到底就别切碎。超 primary 上限就换支持更长时长的后端（Seedance/Kling 3.0）或拆镜/缩时长。
 
 ## 上游视觉契约单一真值源（契约继承用）
 
@@ -50,11 +52,14 @@
 - `render_dreamina.py` 只读取编译块。旧 Markdown 仅保留迁移期 fallback；新 prompt 缺编译块会被 `inherit_contract.py` block，不能进入付费生成。
 - 精确 CTA、slogan、价格、法律声明和 UI 文案不由视频模型重绘，在 `ad-compose` 以可控文字层完成。
 
-## 出视频规格（`出视频规格`）
+## 统一渲染规格（`render_profile.json`）
 
-- 预算充足：1080p30fps，关键镜多跑挑稳。
-- 预算一般：720p24–30fps（默认）。
-- 预算不够：720p24fps 一条过。
+`ad-craft/scripts/render_profile.py` 是比例、源生成分辨率、母版容器分辨率和 FPS 的唯一解释层。`出视频规格` 仍表达预算/质量意图，但不能在 route、runner、compose 各自推导一套参数：
+
+- `source_generation` 记录模型实际请求与能力上限；`master_render` 记录合成/交付编码尺寸。
+- 源小于母版时明确标 `master_render.requires_upscale=true` 与 `quality_claim=container_upscale_only`；delivery QC 不得把大容器写成“原生 1080p/4K”。
+- 后端只支持固定 FPS/时长/比例时，以当前官方能力为准并在 profile 中留证；不允许静默改参。
+- 多版位先跑 `placement_adaptation.py`，原生重剪/重做与机械裁切是不同的审计路径。
 
 ## 三条硬约束
 

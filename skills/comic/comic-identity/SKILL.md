@@ -42,7 +42,7 @@ description: 画漫画角色/场景/服装/饰品/道具一致性流程。Use wh
 - 分辨率优先级：`生图分辨率策略=后端最高可达` 时，每张都请求该模型/渠道可实际返回的最高原生档，并无损保存服务端原始 master、原始格式、`native_size/native_sha256/requested_resolution_tier/maximum_verified`。后端没有显式档位时仍要求最高质量输出，但必须记 `maximum_verified=false`，不能宣称已核验最高档。
 - 统一格式与画布：共享定妆默认使用 PNG、sRGB、3:4 全身母版；face/表情可用项目统一的 1:1 子规格。项目改用其它格式或尺寸必须经 `comic-settings` 落档，并使旧 model-pack/signoff stale。后端不支持目标画幅时，只允许从最高原生 master 做 `contain_and_pad_no_crop` 或向下采样派生；不得拉伸、裁掉身份部位或逐张采用不同补边规则。
 - 禁止伪高清：不得先用低档/低分辨率生成，再用插值放大、超分或重编码后的像素尺寸冒充最高原生 master；若为排版兼容需要上采样，只能保存为明确标注的 derivative，且不得采纳为正式身份锚、不得覆盖原始 master、不得把 `maximum_verified` 写为 true。
-- 单张双闸：生成前验证上述配方及真实参考输入，生成后立即验证文件可解码、格式、色彩模式、原生尺寸、画幅、SHA 和视觉一致性。任一张不符合统一合同就停在候选/待修状态，不得继续用它派生下一视图。
+- 单张双闸：生成前验证上述配方及真实参考输入；生成后立即写 `生产数据/comic_identity_image_qc/<ASSET>/<VARIANT>.json` 与 contact sheet，验证文件可解码、格式、原生尺寸、画幅、SHA 和派生输入。机器 pass 仍只是 `awaiting_review`，必须由实际看过当前比较包的具名审核人用 `accept-image` 签收；确定性 block 不可豁免。签收绑定当前像素、contact sheet、比较包及每个派生输入 SHA，任一变化即 stale。未签收图片不得登记为正式 ready，也不得派生下一视图/换装/表情。
 
 ## 快速命令
 
@@ -95,8 +95,12 @@ python3 skills/comic/comic-identity/scripts/registry_v2.py "创作区/画漫画/
 
 ```bash
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 seed \
-  --map CHAR_JYC=P002 --map CHAR_PEI=P005 --map MON_TIGER=P004 --overwrite
+  --map CHAR_JYC=P002 --overwrite
+python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 accept-image \
+  --asset CHAR_JYC --variant anchor --reviewer "美术总监" --reason "派生锚与源 panel、角色身份和裁切逐轴复核通过"
 ```
+
+`seed` 的源 panel 本身必须已有当前双闸签收，但复制出的 identity 锚仍是新的派生合同：一次只能 seed 一张，先停在 `awaiting_review`，不得自动继承源 panel 的 reviewer 变成正式 ready。
 
 已有 `panel_jobs.json` 后，生成一致性报告并回填可解析路径：
 
@@ -104,12 +108,21 @@ python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 report --write
 ```
 
-按长线口径生成常驻角色专门定妆多视图：
+按长线口径逐张生成常驻角色专门定妆；runner 每次只产出当前序列中的一张并返回待审，签收后再运行相同命令继续下一张：
 
 ```bash
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
   --backend auto --characters CHAR_JYC,CHAR_PEI --views front,three_quarter,side,back,face
 ```
+
+查看该张 `comic_identity_image_qc` contact sheet 后，按真实 variant 逐图签收：
+
+```bash
+python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 accept-image \
+  --asset CHAR_JYC --variant front --reviewer "美术总监" --reason "身份、视图、服装、比例和风格逐轴复核通过"
+```
+
+同样的 `accept-image` 用于正式 `anchor`、`OUTFIT_*` 与 `EXPR_*`；签收命令会在验证当前 SHA/比较输入后才把该图写入 registry。生成脚本提前中止码 4 表示等待人审，不是失败，也不能靠重跑或手改 registry 跳过。
 
 服饰道合同已应用且角色有已采纳 front 后，为不同换装单独生成全身参考：
 
@@ -186,23 +199,22 @@ python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作
 ```bash
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
   --backend dreamina --model-version 5.0 --resolution-type 4k \
-  --refs STYLE_CLASSIC_V1 --candidate-count 2 --ratio 4:5 --max-attempts 2
+  --refs STYLE_CLASSIC_V1 --candidate-count 1 --ratio 4:5 --max-attempts 2
 ```
 
 即梦首张风格锚没有图片附件时走官方 CLI `text2image`；后续场景/道具锚已有正式风格锚时走
 `image2image` 并把风格锚作为真实 `style_only` 附件。官方比例不含 4:5 时，适配层提交 3:4，
 落图后只做 `contain_and_pad_no_crop` 恢复目标画布，并在 manifest 同时记录 requested/submitted ratio。
 
-风格锚或其它共享资产需要先并排选稿时，用候选批次模式；它只写入
-`出图/共享/candidates/` 与候选 manifest，不会把未审核图片登记成正式锚点：
+风格锚或其它共享资产需要先选稿时，用隔离候选模式；每次只能生成一张，它只写入
+`出图/共享/candidates/`、候选 per-image QC 与 manifest，不会改正式 registry/进度：
 
 ```bash
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
-  --refs STYLE_CLASSIC_V1 --candidate-count 3 --ratio 4:5 --max-attempts 2
+  --refs STYLE_CLASSIC_V1 --candidate-count 1 --ratio 4:5 --max-attempts 2
 ```
 
-`--max-attempts` 对每个候选分别构成硬上限。候选须经人工或已授权制作代理审阅选中后，才能采纳为
-`出图/共享/图片/<REF_ID>__anchor.png` 并继续生成依赖该锚的角色 front。
+`--max-attempts` 对当前候选构成硬上限。候选必须先通过机器 QC，再由人工或已授权制作代理审阅选中，才能采纳为 `出图/共享/图片/<REF_ID>__anchor.png` 并继续生成依赖该锚的角色 front。机器 block 的候选不可采纳。
 
 人工选中候选后，用专用采纳命令绑定候选 SHA、审核人与审核角色；`CHAR_` 自动从其 `front/` 候选采纳为正式 front，其他资产从 `anchor/` 采纳为正式锚：
 
@@ -212,18 +224,16 @@ python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作
   --reviewer "出品人姓名" --role "出品人" --reason "采纳B"
 ```
 
-风格锚采纳后，可生成角色 front 选角候选。每张都把正式风格锚作为真实
+风格锚采纳后，可逐张生成角色 front 选角候选。当前候选把正式风格锚作为真实
 `style_only` 附件，但不会把未审核角色图写进 registry：
 
 ```bash
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
-  --backend codex --characters CHAR_A,CHAR_B --views front --allow-text-anchor \
-  --candidate-count 3 --ratio 3:4 --max-attempts 2
+  --backend codex --characters CHAR_A --views front --allow-text-anchor \
+  --candidate-count 1 --candidate-indices 1 --ratio 3:4 --max-attempts 2
 ```
 
-中断后用 `--candidate-indices 2,3` 只续跑指定序号；`--candidate-count` 仍记录该角色
-目标候选总数。不同序号剩余额度不同时应分两次调用，并分别传对应的 `--max-attempts`，
-不得重跑已耗尽的候选。
+候选同样服从逐图顺序闸：一次调用只能命中一个角色和一个 candidate index；查看候选 QC 后用 `adopt-anchor` 签收采纳，才能作为正式 front 派生其它视图。中断恢复不得重跑已耗尽的候选。
 
 Codex 图像通道不可用或需要真实图生图后端时，可显式走即梦官方 CLI：
 
@@ -257,7 +267,7 @@ python3 skills/comic/comic-identity/scripts/library.py "创作区/画漫画/作�
 ## 工作流
 
 1. 先判定题材的服饰道路线。有明确历史时空默认 `historical_traceable`，架空历史用 `historical_inspired`/`hybrid`，现代和幻想分别用 `contemporary`/`fictional`；按 `wardrobe_props.py check --strict` 后再定妆或生成关键道具。若本话还没有 `出图/第N话/prompt/panel_jobs.json`，再用 `comic-image` 的 `build_panel_jobs.py` 生成并跑 `report --write`。若有 `missing_refs`，先补共享参考，不要合成。
-2. 对常驻角色和关键资产建立锚点。短 demo 可从已采纳面板种 `__anchor.png`；默认长线口径应换成正面/45度/侧面/背面和关键表情的专门定妆图。用 `views` 子命令从当前 anchor 生成并登记多视图；`--backend auto` 会优先用可用后端，必要时可显式指定 `dreamina`。
+2. 对常驻角色和关键资产逐图建立锚点。短 demo 可从已有当前 SHA 双闸签收的面板种 `__anchor.png`；默认长线口径应换成正面/45度/侧面/背面和关键表情的专门定妆图。用 `views` 生成一张、检查 per-image contact sheet、`accept-image` 签收，再继续下一视图；`--backend auto` 严格沿用项目已选后端。
    - `STYLE_` 风格锚必须生成单幅非叙事校准画，同时可读人物脸/手、线条层级、肤色、衣料与场景材质、三值明暗和特效边缘；不得用含义不明的抽象图、拼贴或角色卡代替。`FX_`/`VFX_` 锚则单独校准形状语言、运动方向、色域和留白关系。
    - 从源小说、源剧本或古文直接开画时，若还没有任何可采纳角色图：项目已有当前有效的模型/渠道/费用范围授权时可沉默沿用；否则先由用户确认图像生成成本。之后显式传 `--allow-text-anchor`，让当前已选后端根据 `story_bible.md` 和 `identity_registry.json` 生成第一张 `front` 定妆；Codex 以文字设定配合真实 `style_only` 附件起种，即梦以正式风格锚作为 `image2image` 的真实 `style_only` 种子。后续视图统一改用该角色 front 锁身份。
    - 若项目已有可用 `STYLE_` 风格锚，文字生成首张 `front` 时必须把它作为真实 `style_only` 图片附件，并记录路径与 SHA-256；提示中明确禁止继承风格锚人物的脸、发型、服装、体态、姿态和构图。风格锚不能冒充角色身份锚。
@@ -266,7 +276,7 @@ python3 skills/comic/comic-identity/scripts/library.py "创作区/画漫画/作�
    - `LOC_`、`PROP_`、`VFX_` 等非人物资产用 `anchors` 生成 `__anchor.png` 并回写 registry。`MON_` 一次性限制主体可用单锚；`recurring_standard` 的老虎、蛇等连续动作生物要用 `views --characters MON_X --views front,three_quarter,face`，生物专用提示会锁四足承重/连续脊柱，不套人立全身定妆。这些锚点必须先通过 `report --write` 绑定到 `panel_jobs.json`，再进入逐格出图。
    - `LOC_` 场景锚必须保持为无人物的纯场景资产；合同即使记录人物站位，也只在对应位置预留空白与走位空间，不得把具体人物、无身份剪影或角色表演固化进长期场景参考。人物由逐格任务另附已签收角色定妆图。
    - 除 `STYLE_` 本身外，非人物锚生成时若项目已有风格锚，必须把它作为真实 `style_only` 图片附件并记录 SHA；只继承线条、上色、明暗、材质、色域和墨晕，禁止复制风格锚人物、服装、物件、场景布局或构图。
-3. 重新跑 `report --write`，确认每个带 reference 的格子都有真实图片路径。
+3. 重新跑 `report --write`，确认每个带 reference 的格子只绑定当前逐图签收有效的真实图片路径；legacy `ready`、缺 receipt 或派生输入已变化的图不得回填。
 4. 对 `rerun_targets` 用 `comic-image` 的 `--force --targets ...` 重抽。runner 会把参考图作为 `codex exec --image` 真实附件传入，并写 `生产数据/codex_reference_bundles/`。
 5. 重抽后再跑一次 `report --write`。`missing_refs=[]` 且 `rerun_targets=[]` 后，才进入 `comic-compose`。
 6. 长线项目在 registry 有新增/改名/分级后运行 `library.py --write`，刷新 `设定库/共享资产索引.md`；只改 registry，不手工修改自动索引。

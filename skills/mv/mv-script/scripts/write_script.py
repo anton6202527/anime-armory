@@ -6,6 +6,7 @@ write_script.py — MV 剧本创作脚本（听歌识影）。
 从歌词 + 节拍分析 (beatgrid) 创作 MV 的【视觉蓝图】与角色/场景设定。
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -47,11 +48,28 @@ def write_text(path, text):
         f.write(text)
 
 
+def _settings_digest(settings):
+    """Hash only choices that can change the visual blueprint."""
+    keys = ("MV用途", "MV视觉风格", "合成画幅", "发行目标平台", "演唱口型", "字幕语言")
+    payload = {key: settings.get(key) for key in keys if settings.get(key) is not None}
+    encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _section_names(beatgrid, meta):
+    rows = (beatgrid or {}).get("sections") or []
+    names = [str(row.get("section") or row.get("name") or row.get("label") or "").strip()
+             for row in rows if isinstance(row, dict)]
+    names = [name for name in names if name]
+    # A measured beatgrid is the timing truth.  _meta.structure remains only a
+    # rough-project fallback and must not silently override reviewed sections.
+    if names:
+        return names
+    return [str(value) for value in (meta.get("structure") or []) if str(value).strip()]
+
+
 def build_script_prompt(root, lyrics, beatgrid, meta, settings):
-    # 提取歌曲基本结构
-    sections = meta.get("structure", [])
-    if not sections and beatgrid:
-        sections = [s["label"] for s in beatgrid.get("sections", [])]
+    sections = _section_names(beatgrid, meta)
     
     section_str = ", ".join(sections)
     
@@ -137,17 +155,35 @@ def main():
         if not content.strip():
             print("[err] --content-file 为空", file=sys.stderr)
             sys.exit(2)
-        write_text(os.path.join(root, "视觉蓝图.md"), content)
+        blueprint_path = os.path.join(root, "视觉蓝图.md")
+        write_text(blueprint_path, content)
+        song_path = mv_utils.find_song(root)
         state = {
-            "schema_version": 1,
+            "schema_version": 2,
             "kind": "mv_script_state",
-            "source": os.path.abspath(args.content_file),
-            "song_timing": meta.get("song_timing") or settings.get("歌曲输入时序") or "先传音乐",
-            "has_song": mv_utils.find_song(root) is not None,
+            "source": {
+                "original_name": os.path.basename(args.content_file),
+                "sha256": mv_utils.content_hash(args.content_file),
+            },
+            "song_timing": settings.get("歌曲输入时序") or meta.get("song_timing") or "先传音乐",
+            "has_song": song_path is not None,
             "has_beatgrid": beatgrid is not None,
+            "sections_verified": bool((beatgrid or {}).get("sections_verified")),
+            "sections_complete": bool((beatgrid or {}).get("sections_complete")),
+            "section_names": _section_names(beatgrid, meta),
+            "inputs_sha256": {
+                "song": mv_utils.content_hash(song_path),
+                "beatgrid": mv_utils.content_hash(os.path.join(root, "节拍", "beatgrid.json")),
+                "lyrics": mv_utils.content_hash(os.path.join(root, "词", "lyrics.md")),
+                "settings_script": _settings_digest(settings),
+            },
+            "output_sha256": mv_utils.content_hash(blueprint_path),
         }
         write_text(os.path.join(root, "设定", "mv_script_state.json"), json.dumps(state, ensure_ascii=False, indent=2) + "\n")
-        stage_key = "script_review" if state["has_song"] and state["has_beatgrid"] else "script"
+        stage_key = "script_review" if (
+            state["has_song"] and state["has_beatgrid"]
+            and state["sections_verified"] and state["sections_complete"]
+        ) else "script"
         mv_utils.update_progress_stage(root, stage_key)
         print(f"[ok] 视觉蓝图.md 已写入；_进度.md 标记 {stage_key}")
     

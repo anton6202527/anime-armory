@@ -114,10 +114,52 @@ def migrate_brief(brief: Mapping[str, Any], settings: Mapping[str, str]):
         out["schema_version"] = 2; changes.append("brief schema_version → 2")
     if not out.get("campaign_objective"):
         out["campaign_objective"] = _settings_campaign(settings); changes.append("补 campaign_objective（来自项目设置；仍需确认）")
+    if not out.get("campaign_mode"):
+        out["campaign_mode"] = "待补"; changes.append("补 campaign_mode=待补（须明确 formal/sample）")
+    for key, default in (
+        ("landing_page", "待补"), ("industry_category", "待补"),
+        ("eligibility_reviews", []), ("placement_adaptation_modes", {}),
+        ("ai_label_receipts", []), ("commercial_disclosure_receipts", []),
+    ):
+        if key not in out:
+            out[key] = default; changes.append(f"补 {key} pending 骨架")
+    if not isinstance(out.get("landing_page_readiness"), Mapping):
+        out["landing_page_readiness"] = {
+            "status": "", "checked_at": "", "final_url": "", "redirect_status": "",
+            "evidence_file": "", "redirect_evidence_file": "",
+        }
+        changes.append("补 landing_page_readiness pending 骨架")
+    if not isinstance(out.get("message_reconciliation"), Mapping):
+        out["message_reconciliation"] = {
+            "status": "", "landing_page_url": "", "checked_items": [],
+            "not_applicable_items": [], "evidence_file": "", "approved_by": "", "reviewed_at": "",
+        }
+        changes.append("补 message_reconciliation pending 骨架")
+    if not isinstance(out.get("commercial_content"), Mapping):
+        out["commercial_content"] = {
+            "relationship_type": "待补", "creator_involved": None, "account_owner": "待补",
+        }
+        changes.append("补 commercial_content pending 骨架")
     measurement = out.get("measurement") if isinstance(out.get("measurement"), dict) else {}
     for key in ("primary_kpi", "conversion_event"):
         if not measurement.get(key):
             measurement[key] = "待补"; changes.append(f"补 measurement.{key}=待补")
+    for key, default in (
+        ("attribution_window", "待补"), ("media_budget", "待补"), ("tracking_integrations", []),
+    ):
+        if key not in measurement:
+            measurement[key] = default; changes.append(f"补 measurement.{key} pending 骨架")
+    for key, default in (
+        ("utm", {"status": "", "source": "", "medium": "", "campaign": "",
+                 "example_url": "", "evidence_file": "", "approved_by": ""}),
+        ("deep_link", {"status": "", "url": "", "fallback_url": "",
+                       "evidence_file": "", "approved_by": ""}),
+        ("consent_privacy", {"status": "", "consent_status": "", "privacy_status": "",
+                             "privacy_notice_url": "", "evidence_file": "", "approved_by": "",
+                             "reviewed_at": ""}),
+    ):
+        if not isinstance(measurement.get(key), Mapping):
+            measurement[key] = default; changes.append(f"补 measurement.{key} pending 骨架")
     out["measurement"] = measurement
     raw_claims = out.get("claims") or []
     if isinstance(raw_claims, Mapping):
@@ -191,11 +233,11 @@ def _existing_stage_rows(raw: str):
 
 def _stage_has_artifact(root: Path, stage: str):
     candidates = {
-        "brief": ["需求/brief.json"], "concept": ["创意/concept.md"], "script": ["脚本/广告脚本.md"],
+        "brief": ["需求/brief.json"], "concept": ["创意/concept.json", "创意/concept.md"], "script": ["脚本/广告脚本.md"],
         "voice": ["配音/时长清单.json"], "storyboard": ["脚本/storyboard.json"],
         "image": ["出图/分镜/image_jobs_manifest.json"], "video": ["出视频/分镜/video_jobs_manifest.json"],
         "compose": ["合成/delivery_plan.json", "合成/成片_主片.mp4"],
-        "handoff": ["合规/compliance_manifest.json"], "review": ["合规/ad_review_m0.json"],
+        "handoff": ["合规/compliance_manifest.json", "生产数据/campaign_readiness.json"], "review": ["合规/ad_review_m0.json"],
         "feedback": ["投放反馈/experiment_plan.json"],
     }
     return any((root / rel).exists() for rel in candidates.get(stage, []))

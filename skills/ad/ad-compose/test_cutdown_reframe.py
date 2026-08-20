@@ -235,6 +235,10 @@ class DeliverTest(unittest.TestCase):
         plan = deliver.build_plan("/tmp/ad-test", md)
         self.assertEqual(plan["deliverables"][0]["deliverable_id"], "master")
         self.assertIn("compose.sh", plan["deliverables"][0]["command"])
+        self.assertEqual(plan["schema_version"], 5)
+        self.assertEqual(plan["render_profile"]["path"], "生产数据/render_profile.json")
+        self.assertEqual(plan["deliverables"][0]["render_profile"]["sha256"],
+                         plan["render_profile"]["sha256"])
 
     def test_cutdown_command_renders(self):
         md = """## 交付版本矩阵
@@ -246,10 +250,24 @@ class DeliverTest(unittest.TestCase):
         plan = deliver.build_plan("/tmp/ad-test", md)
         cut = next(d for d in plan["deliverables"] if d["kind"] == "cutdown")
         ref = next(d for d in plan["deliverables"] if d["kind"] == "reframe")
-        # cutdown / reframe 命令现在真正 --render 出 MP4，不再是 "# 手工..." 注释
+        # cutdown 可直接渲染；跨比例未签 adaptation plan 时不得自动中心裁切。
         self.assertIn("--render", cut["command"])
-        self.assertIn("--render", ref["command"])
-        self.assertNotIn("#", ref["command"])
+        self.assertIn("# BLOCK", ref["command"])
+
+    def test_mechanical_reframe_command_uses_approved_focus_plan_and_render_profile(self):
+        row = {"label": "竖版", "duration": "30s", "aspect": "9:16", "kind": "reframe",
+               "spec": "平台默认", "status": "⬜", "path": ""}
+        command = deliver.planned_command(
+            row, "/tmp/ad-test",
+            {"master_render": {"width": 1280, "height": 720}},
+            {"status": "approved", "selected_mode": "mechanical_reframe",
+             "evidence": {"focus_plan": {"path": "证据/focus.json"}}},
+        )
+        self.assertIn("--render", command)
+        self.assertIn("--focus-plan", command)
+        self.assertIn("focus.json", command)
+        self.assertNotIn("--src 1920x1080", command)
+        self.assertIn("--out-long 1280", command)
 
     def test_delivery_constraints_are_scoped_to_each_mapped_placement(self):
         md = """## 交付版本矩阵

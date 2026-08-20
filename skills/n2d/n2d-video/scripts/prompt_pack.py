@@ -33,6 +33,7 @@ from n2d_platform_profiles import (
 )
 from seam_contract import needs_end_anchor, normalize_seam_mode
 from n2d_logic import normalize_signature_effect
+import prompt_consumption_contract
 
 KIND = "n2d_video_prompt_pack"
 CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
@@ -1410,12 +1411,21 @@ def write_outputs(root: Path, ep: str, overview: str, clips: str) -> Tuple[Path,
 
 def consumed_contract_inputs(ep: str) -> List[Tuple[str, Path]]:
     return [
+        ("settings", Path("_设置.md")),
         ("storyboard", Path("脚本") / ep / "storyboard.json"),
         ("continuity_chain", Path("脚本") / ep / "continuity_chain.json"),
         ("shot_reverse_contract", Path("脚本") / ep / "shot_reverse_contract.json"),
         ("script_quality_contract", Path("生产数据") / f"script_quality_contract_{ep}.json"),
         ("director_camera_plan", Path("生产数据") / f"director_camera_plan_{ep}.json"),
         ("reference_plan", Path("生产数据") / f"reference_plan_{ep}.json"),
+        # Direct/transitive execution inputs: optional at some modes, but their
+        # absence is still hashed so appearing later invalidates this receipt.
+        ("production_mode_route", Path("生产数据") / f"production_mode_route_{ep}.json"),
+        ("mouth_visible_audit", Path("生产数据") / f"mouth_visible_audit_{ep}.json"),
+        ("video_model_routes", Path("出视频") / ep / "prompt" / "video_model_routes.json"),
+        ("identity_registry", Path("出图") / "共享" / "identity_registry.json"),
+        ("asset_registry", Path("出图") / "共享" / "asset_registry.json"),
+        ("image_overview", Path("出图") / ep / "prompt" / "00_总览.md"),
     ]
 
 
@@ -1438,6 +1448,7 @@ def write_consumed_contracts_receipt(root: Path, ep: str, prompt_paths: Sequence
             "sha256": sha256_file(path) if path.is_file() else "",
         })
     out = root / "生产数据" / f"consumed_contracts_video_prompt_{ep}.json"
+    input_fingerprint = prompt_consumption_contract.build_fingerprint(root, ep, "video_prompt")
     write_json_atomic(out, {
         "kind": CONSUMED_CONTRACTS_KIND,
         "version": CONSUMED_CONTRACTS_VERSION,
@@ -1447,6 +1458,7 @@ def write_consumed_contracts_receipt(root: Path, ep: str, prompt_paths: Sequence
         "reviewer": "Codex n2d-video prompt pack",
         "generated_by": "skills/n2d/n2d-video/scripts/prompt_pack.py",
         "generated_at": now_iso(),
+        "input_fingerprint": input_fingerprint,
         "contracts": contracts,
         "prompt_files": prompt_files,
     })

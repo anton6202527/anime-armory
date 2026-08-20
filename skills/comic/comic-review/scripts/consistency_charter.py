@@ -75,6 +75,12 @@ CHARTER: Dict[str, Dict[str, Any]] = {
         "rationale": "lettering_out_of_canvas 渲染必然裁字，坐标事实无条件拦；其余几何仅 warn",
         "decided": "2026-07-20",
     },
+    "run_lettering_contract_check": {
+        "dim": "嵌字版本血统(脚本/翻译/人工改写)", "required_severity": "block",
+        "may_be_setting_gated": False, "review_status": "stable",
+        "rationale": "旧脚本文字、失效翻译或无 SHA 收据的静默改写进入成品是可复算的派生合同断裂，compose/review 必须无条件拦",
+        "decided": "2026-08-20",
+    },
     # ── 锁定·BLOCK 但允许被「角色一致性硬闸」设置门控 ───────────────────────
     "check_identity": {
         "dim": "身份报告/缺参考/重抽目标/换装缺口", "required_severity": "block",

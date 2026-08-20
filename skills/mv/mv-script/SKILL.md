@@ -15,7 +15,7 @@ description: 制MV 剧本创作 — 听歌识影。从 歌词 + 节拍分析(bea
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md`；再缺则**首次问一次**。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md`；再缺则**首次问一次**。
 
 涉及的选择点：`歌曲输入时序`、`MV视觉风格`、`MV叙事模式`（写实叙事/意识流隐喻/纯舞台/混剪）、`MV一致性增强`。
 
@@ -30,7 +30,7 @@ description: 制MV 剧本创作 — 听歌识影。从 歌词 + 节拍分析(bea
     *   向用户提供 2-3 个不同方向的视觉概念（Concept Sketches）。
 3.  **蓝图落地**：
     *   先用 `write_script.py --save` 保存本次创作 prompt 到 `设定/mv_script_prompt.md`。
-    *   AI 生成蓝图 Markdown 后，用 `write_script.py --content-file <生成稿.md>` 写回 `视觉蓝图.md`；脚本会落 `设定/mv_script_state.json` 并按当前状态回写 `_进度.md` 的 `script` 或 `script_review` 行。
+    *   AI 生成蓝图 Markdown 后，用 `write_script.py --content-file <生成稿.md>` 写回 `视觉蓝图.md`；脚本会落 `设定/mv_script_state.json`，绑定当前歌曲、beatgrid、歌词、脚本相关设置和蓝图 SHA。只有 beatgrid 段落已完整具名签收才推进 `script_review`，不能凭“文件存在”冒充复核。
     *   在 `设定/characters/` 和 `设定/locations/` 下生成最初的角色卡和场景卡文本（含定妆词）。
 4.  **更新进度**：由 `--content-file` 写回时自动处理。后配歌曲 rough 蓝图完成后，下一步是 `歌曲入库/定稿`，不是 `mv-plan`；最终歌和 beatgrid 入库后再次复核，完成后标 `script_review`。
 
@@ -38,7 +38,7 @@ description: 制MV 剧本创作 — 听歌识影。从 歌词 + 节拍分析(bea
 
 - `视觉蓝图.md`：深度导演脚本，包含段落↔画面映射。
 - `设定/mv_script_prompt.md`：本次蓝图创作 prompt（`--save` 时）。
-- `设定/mv_script_state.json`：蓝图来源、歌曲时序、是否已有歌和 beatgrid 的状态留痕。
+- `设定/mv_script_state.json`：蓝图来源 basename/hash、歌曲时序、段落签收状态和完整输入/输出 hash 收据；不持久化本机绝对路径。
 - `设定/characters/*.md`：主角形象定稿。
 - `设定/locations/*.md`：主场景定稿。
 

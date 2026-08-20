@@ -21,6 +21,10 @@ from typing import Any
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in __import__("sys").path:
     __import__("sys").path.insert(0, str(SCRIPT_DIR))
+COMIC_IMAGE_SCRIPTS = SCRIPT_DIR.parents[1] / "comic-image" / "scripts"
+if str(COMIC_IMAGE_SCRIPTS) not in __import__("sys").path:
+    __import__("sys").path.insert(0, str(COMIC_IMAGE_SCRIPTS))
+import codex_panel_runner as panel_gate  # noqa: E402
 from model_pack import apply_character_readiness, png_dimensions  # noqa: E402
 from registry_v2 import migrate_registry, validate_registry  # noqa: E402
 
@@ -429,6 +433,379 @@ def adopt_generated_png(
     return archived
 
 
+def identity_qc_path(root: Path, asset_id: str, variant: str) -> Path:
+    safe_asset = re.sub(r"[^A-Za-z0-9_.-]+", "_", asset_id).strip("_") or "asset"
+    safe_variant = re.sub(r"[^A-Za-z0-9_.-]+", "_", variant).strip("_") or "image"
+    return root / "生产数据" / "comic_identity_image_qc" / safe_asset / f"{safe_variant}.json"
+
+
+def identity_comparison_inputs_sha256(inputs: list[dict[str, Any]]) -> str:
+    return hashlib.sha256(
+        json.dumps(inputs, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def write_identity_image_qc(
+    root: Path,
+    chapter: str,
+    asset_id: str,
+    variant: str,
+    path: Path,
+    *,
+    registration_kind: str,
+    source: dict[str, Any],
+    reference_paths: list[Path] | None = None,
+    expected_ratio: str = "",
+) -> dict[str, Any]:
+    """Create the per-image machine receipt and comparison sheet.
+
+    This receipt intentionally leaves human review pending.  Generated identity
+    pixels are not registered as formal ready assets until ``accept-image``
+    records a review bound to this exact artifact and all derivation inputs.
+    """
+    reference_paths = reference_paths or []
+    issues: list[dict[str, str]] = []
+    if not png_valid(path):
+        issues.append({"severity": "block", "code": "identity_png_invalid", "reason": "image is not a valid PNG"})
+    dims = png_dimensions(path)
+    if not dims or dims[0] < 64 or dims[1] < 64:
+        issues.append({"severity": "block", "code": "identity_canvas_invalid", "reason": f"invalid image dimensions: {dims}"})
+    if dims and expected_ratio:
+        try:
+            expected_canvas = target_canvas_for_ratio(dims, expected_ratio)
+        except ValueError:
+            expected_canvas = dims
+            issues.append({"severity": "block", "code": "identity_ratio_contract_invalid", "reason": expected_ratio})
+        if expected_canvas != dims:
+            issues.append(
+                {
+                    "severity": "block",
+                    "code": "identity_ratio_mismatch",
+                    "reason": f"current canvas {dims[0]}x{dims[1]} does not match {expected_ratio}",
+                }
+            )
+    inputs: list[dict[str, str]] = []
+    for role, input_path in [("current_image", path), *[("derivation_reference", item) for item in reference_paths]]:
+        if not input_path.is_file():
+            issues.append(
+                {
+                    "severity": "block",
+                    "code": "identity_reference_missing",
+                    "reason": rel_to_root(root, input_path),
+                }
+            )
+            continue
+        inputs.append(
+            {
+                "role": role,
+                "path": rel_to_root(root, input_path),
+                "sha256": file_sha256(input_path),
+            }
+        )
+    fingerprint = identity_comparison_inputs_sha256(inputs)
+    contact_sheet_path = root / "生产数据" / "comic_identity_image_qc" / asset_id / f"{variant}_contact_sheet.png"
+    try:
+        from PIL import Image, ImageDraw
+
+        opened: list[tuple[dict[str, str], Any]] = []
+        for item in inputs:
+            opened.append((item, Image.open(resolve_path(root, item["path"])).convert("RGB")))
+        if not opened:
+            raise ValueError("no decodable current image")
+        cell_w, cell_h, caption_h = 380, 440, 34
+        canvas = Image.new("RGB", (cell_w * len(opened), cell_h + caption_h), (36, 36, 40))
+        draw = ImageDraw.Draw(canvas)
+        for index, (item, image) in enumerate(opened):
+            image.thumbnail((cell_w - 12, cell_h - 12), Image.Resampling.LANCZOS)
+            canvas.paste(image, (index * cell_w + (cell_w - image.width) // 2, (cell_h - image.height) // 2))
+            draw.text(
+                (index * cell_w + 8, cell_h + 8),
+                f"{item['role']} | {Path(item['path']).name} | {item['sha256'][:12]}",
+                fill=(235, 235, 235),
+            )
+        contact_sheet_path.parent.mkdir(parents=True, exist_ok=True)
+        canvas.save(contact_sheet_path, "PNG")
+    except (ImportError, OSError, ValueError) as exc:
+        issues.append(
+            {
+                "severity": "block",
+                "code": "identity_contact_sheet_unavailable",
+                "reason": str(exc),
+            }
+        )
+    verdict = "block" if any(item["severity"] == "block" for item in issues) else "pass"
+    payload: dict[str, Any] = {
+        "schema_version": 1,
+        "kind": "comic_identity_image_qc",
+        "chapter": chapter,
+        "asset_id": asset_id,
+        "variant": variant,
+        "registration_kind": registration_kind,
+        "path": rel_to_root(root, path),
+        "artifact_sha256": file_sha256(path) if path.is_file() else "",
+        "expected_ratio": expected_ratio,
+        "dimensions": list(dims or ()),
+        "verdict": verdict,
+        "machine_review": {"status": verdict, "coverage": ["decode", "canvas", "ratio", "derivation_sha"]},
+        "comparison_inputs": inputs,
+        "comparison_inputs_sha256": fingerprint,
+        "contact_sheet_path": rel_to_root(root, contact_sheet_path) if contact_sheet_path.is_file() else "",
+        "contact_sheet_sha256": file_sha256(contact_sheet_path) if contact_sheet_path.is_file() else "",
+        "human_review": {"status": "pending"},
+        "required_axes": [
+            "identity_or_asset_structure",
+            "view_label_and_pose",
+            "hair_outfit_body_state",
+            "style_light_color",
+            "derivation_continuity",
+        ],
+        "source": source,
+        "issues": issues,
+        "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+    }
+    write_json(identity_qc_path(root, asset_id, variant), payload)
+    return payload
+
+
+def identity_image_acceptance_status(root: Path, asset_id: str, variant: str, path: Path | None = None) -> dict[str, Any]:
+    receipt_path = identity_qc_path(root, asset_id, variant)
+    try:
+        receipt = load_json(receipt_path)
+    except (OSError, json.JSONDecodeError):
+        return {"accepted": False, "reason": "per_image_qc_missing"}
+    image_path = path or resolve_path(root, str(receipt.get("path") or ""))
+    if not png_valid(image_path):
+        return {"accepted": False, "reason": "identity_image_missing_or_invalid"}
+    current_sha = file_sha256(image_path)
+    if str(receipt.get("artifact_sha256") or "") != current_sha:
+        return {"accepted": False, "reason": "identity_pixel_sha_changed", "artifact_sha256": current_sha}
+    if str(receipt.get("verdict") or "") != "pass":
+        return {"accepted": False, "reason": "identity_machine_qc_not_pass", "artifact_sha256": current_sha}
+    review = receipt.get("human_review") if isinstance(receipt.get("human_review"), dict) else {}
+    if review.get("status") != "accepted" or str(review.get("artifact_sha256") or "") != current_sha:
+        return {"accepted": False, "reason": "identity_human_review_pending", "artifact_sha256": current_sha}
+    if str(review.get("comparison_inputs_sha256") or "") != str(receipt.get("comparison_inputs_sha256") or ""):
+        return {"accepted": False, "reason": "identity_review_packet_stale", "artifact_sha256": current_sha}
+    comparison_inputs = [item for item in receipt.get("comparison_inputs") or [] if isinstance(item, dict)]
+    if (
+        not comparison_inputs
+        or identity_comparison_inputs_sha256(comparison_inputs) != str(receipt.get("comparison_inputs_sha256") or "")
+    ):
+        return {"accepted": False, "reason": "identity_comparison_packet_invalid", "artifact_sha256": current_sha}
+    current_inputs = [
+        item
+        for item in comparison_inputs
+        if str(item.get("role") or "") == "current_image"
+        and resolve_path(root, str(item.get("path") or "")).resolve() == image_path.resolve()
+        and str(item.get("sha256") or "") == current_sha
+    ]
+    if len(current_inputs) != 1:
+        return {"accepted": False, "reason": "identity_current_image_not_bound", "artifact_sha256": current_sha}
+    contact_raw = str(receipt.get("contact_sheet_path") or "").strip()
+    contact_sheet = resolve_path(root, contact_raw) if contact_raw else root / "__missing_contact_sheet__"
+    contact_sha = str(receipt.get("contact_sheet_sha256") or "")
+    if not contact_sheet.is_file() or file_sha256(contact_sheet) != contact_sha:
+        return {"accepted": False, "reason": "identity_contact_sheet_changed", "artifact_sha256": current_sha}
+    if str(review.get("contact_sheet_sha256") or "") != contact_sha:
+        return {"accepted": False, "reason": "identity_human_review_contact_sheet_stale", "artifact_sha256": current_sha}
+    for item in comparison_inputs:
+        compare_path = resolve_path(root, str(item.get("path") or ""))
+        if not compare_path.is_file() or file_sha256(compare_path) != str(item.get("sha256") or ""):
+            return {"accepted": False, "reason": "identity_derivation_input_changed", "changed_path": item.get("path")}
+    return {"accepted": True, "artifact_sha256": current_sha, "receipt_path": rel_to_root(root, receipt_path)}
+
+
+def source_accepts_current_pixel(root: Path, source: dict[str, Any], path: Path) -> bool:
+    acceptance = source.get("per_image_acceptance") if isinstance(source.get("per_image_acceptance"), dict) else {}
+    receipt_raw = str(acceptance.get("receipt_path") or "").strip()
+    if (
+        acceptance.get("status") != "accepted"
+        or not png_valid(path)
+        or str(acceptance.get("artifact_sha256") or "") != file_sha256(path)
+        or not receipt_raw
+    ):
+        return False
+    try:
+        receipt = load_json(resolve_path(root, receipt_raw))
+    except (OSError, json.JSONDecodeError):
+        return False
+    receipt_path = resolve_path(root, str(receipt.get("path") or ""))
+    if receipt_path.resolve() != path.resolve() or str(receipt.get("artifact_sha256") or "") != file_sha256(path):
+        return False
+    review = receipt.get("human_review") if isinstance(receipt.get("human_review"), dict) else {}
+    if review.get("status") != "accepted" or str(review.get("artifact_sha256") or "") != file_sha256(path):
+        return False
+    if str(review.get("comparison_inputs_sha256") or "") != str(receipt.get("comparison_inputs_sha256") or ""):
+        return False
+    contact_raw = str(receipt.get("contact_sheet_path") or "").strip()
+    contact_sheet = resolve_path(root, contact_raw) if contact_raw else root / "__missing_contact_sheet__"
+    if (
+        not contact_sheet.is_file()
+        or file_sha256(contact_sheet) != str(receipt.get("contact_sheet_sha256") or "")
+        or str(review.get("contact_sheet_sha256") or "") != str(receipt.get("contact_sheet_sha256") or "")
+    ):
+        return False
+    comparison_inputs = [item for item in receipt.get("comparison_inputs") or [] if isinstance(item, dict)]
+    if (
+        not comparison_inputs
+        or identity_comparison_inputs_sha256(comparison_inputs) != str(receipt.get("comparison_inputs_sha256") or "")
+    ):
+        return False
+    for item in comparison_inputs:
+        compare_path = resolve_path(root, str(item.get("path") or ""))
+        if not compare_path.is_file() or file_sha256(compare_path) != str(item.get("sha256") or ""):
+            return False
+    return True
+
+
+def mark_identity_variant_pending(
+    registry: dict[str, Any],
+    root: Path,
+    asset_id: str,
+    variant: str,
+    path: Path,
+    *,
+    registration_kind: str,
+    qc: dict[str, Any],
+) -> None:
+    """Invalidate any formal ready label as soon as new pixels replace a variant."""
+    assets = registry.setdefault("assets", {})
+    asset = assets.get(asset_id) if isinstance(assets.get(asset_id), dict) else {}
+    asset.setdefault("id", asset_id)
+    asset.setdefault("type", ref_type(asset_id))
+    asset["status"] = "needs_approval"
+    asset["pending_per_image_review"] = {
+        "variant": variant,
+        "registration_kind": registration_kind,
+        "path": rel_to_root(root, path),
+        "artifact_sha256": str(qc.get("artifact_sha256") or ""),
+        "receipt_path": rel_to_root(root, identity_qc_path(root, asset_id, variant)),
+        "status": "awaiting_review" if qc.get("verdict") == "pass" else "qc_block",
+    }
+    if registration_kind == "character_view":
+        readiness = asset.get("view_readiness") if isinstance(asset.get("view_readiness"), dict) else {}
+        readiness["ready"] = [item for item in readiness.get("ready") or [] if str(item) != variant]
+        readiness["complete"] = False
+        asset["view_readiness"] = readiness
+        if variant == "front":
+            binding = asset.get("default_binding") if isinstance(asset.get("default_binding"), dict) else {}
+            outfit_id = str(binding.get("outfit_id") or "").strip()
+            outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
+            if outfit_id and isinstance(outfits.get(outfit_id), dict):
+                outfits[outfit_id]["status"] = "needs_approval"
+    elif registration_kind == "outfit":
+        outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
+        if isinstance(outfits.get(variant), dict):
+            outfits[variant]["status"] = "needs_approval"
+    elif registration_kind == "expression":
+        expressions = asset.get("expressions") if isinstance(asset.get("expressions"), dict) else {}
+        if isinstance(expressions.get(variant), dict):
+            expressions[variant]["status"] = "needs_approval"
+    assets[asset_id] = asset
+
+
+def clear_identity_variant_pending(registry: dict[str, Any], asset_id: str, variant: str) -> None:
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    asset = assets.get(asset_id) if isinstance(assets.get(asset_id), dict) else None
+    if asset is None:
+        return
+    pending = asset.get("pending_per_image_review")
+    if isinstance(pending, dict) and str(pending.get("variant") or "") == variant:
+        asset.pop("pending_per_image_review", None)
+
+
+def accept_identity_image(args: argparse.Namespace) -> int:
+    root = Path(args.project_root).expanduser().resolve()
+    asset_id = str(args.asset).strip()
+    variant = str(args.variant).strip()
+    receipt_path = identity_qc_path(root, asset_id, variant)
+    try:
+        receipt = load_json(receipt_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"missing/unreadable per-image QC receipt: {receipt_path}") from exc
+    path = resolve_path(root, str(receipt.get("path") or ""))
+    if not png_valid(path) or file_sha256(path) != str(receipt.get("artifact_sha256") or ""):
+        raise SystemExit("identity image changed after QC; regenerate or rebuild the per-image QC receipt")
+    if str(receipt.get("verdict") or "") != "pass":
+        raise SystemExit("machine QC block/unverifiable cannot be human-waived; fix and regenerate this image")
+    if str(receipt.get("registration_kind") or "") not in {"asset_anchor", "character_view", "outfit", "expression"}:
+        raise SystemExit("candidate images must be reviewed/adopted with adopt-anchor; accept-image only registers formal variants")
+    if not str(args.reviewer).strip() or not str(args.reason).strip():
+        raise SystemExit("--reviewer and --reason are required")
+    contact_raw = str(receipt.get("contact_sheet_path") or "").strip()
+    contact_sheet = resolve_path(root, contact_raw) if contact_raw else root / "__missing_contact_sheet__"
+    if not contact_sheet.is_file() or file_sha256(contact_sheet) != str(receipt.get("contact_sheet_sha256") or ""):
+        raise SystemExit("identity contact sheet changed or is missing; regenerate/recheck before accepting")
+    comparison_inputs = [item for item in receipt.get("comparison_inputs") or [] if isinstance(item, dict)]
+    if (
+        not comparison_inputs
+        or identity_comparison_inputs_sha256(comparison_inputs) != str(receipt.get("comparison_inputs_sha256") or "")
+    ):
+        raise SystemExit("identity comparison packet fingerprint is invalid; regenerate/recheck before accepting")
+    if len(
+        [
+            item for item in comparison_inputs
+            if str(item.get("role") or "") == "current_image"
+            and resolve_path(root, str(item.get("path") or "")).resolve() == path.resolve()
+            and str(item.get("sha256") or "") == str(receipt.get("artifact_sha256") or "")
+        ]
+    ) != 1:
+        raise SystemExit("identity comparison packet does not bind the current image")
+    for item in comparison_inputs:
+        compare_path = resolve_path(root, str(item.get("path") or ""))
+        if not compare_path.is_file() or file_sha256(compare_path) != str(item.get("sha256") or ""):
+            raise SystemExit(f"comparison input changed: {item.get('path')}; regenerate/recheck before accepting")
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    receipt["human_review"] = {
+        "status": "accepted",
+        "artifact_sha256": receipt["artifact_sha256"],
+        "comparison_inputs_sha256": receipt["comparison_inputs_sha256"],
+        "contact_sheet_sha256": receipt.get("contact_sheet_sha256", ""),
+        "reviewed_by": str(args.reviewer).strip(),
+        "reviewed_at": now,
+        "reason": str(args.reason).strip(),
+        "confirmations": {axis: True for axis in receipt.get("required_axes") or []},
+        "policy": "subjective visual gate only; deterministic machine blocks cannot be waived",
+    }
+    write_json(receipt_path, receipt)
+    source = dict(receipt.get("source") or {})
+    source["per_image_acceptance"] = {
+        "status": "accepted",
+        "artifact_sha256": receipt["artifact_sha256"],
+        "receipt_path": rel_to_root(root, receipt_path),
+        "reviewed_by": str(args.reviewer).strip(),
+        "reviewed_at": now,
+    }
+    registry = load_registry(root)
+    kind = str(receipt.get("registration_kind") or "")
+    if kind == "asset_anchor":
+        register_asset_anchor(registry, root, asset_id, path, source=source)
+    elif kind == "character_view":
+        register_character_view(registry, root, asset_id, variant, path, source=source)
+    elif kind == "outfit":
+        register_outfit_reference(registry, root, asset_id, variant, path, source=source)
+    elif kind == "expression":
+        register_expression_reference(registry, root, asset_id, variant, path, source=source)
+    else:
+        raise SystemExit(f"unsupported identity registration kind: {kind}")
+    clear_identity_variant_pending(registry, asset_id, variant)
+    write_json(registry_path(root), registry)
+    append_event(
+        root,
+        {
+            "ts": now,
+            "status": "identity_image_accepted",
+            "ref_id": asset_id,
+            "variant": variant,
+            "path": rel_to_root(root, path),
+            "sha256": receipt["artifact_sha256"],
+            "reviewer": str(args.reviewer).strip(),
+        },
+    )
+    print(f"[accepted] {asset_id}/{variant} sha256={receipt['artifact_sha256']}")
+    return 0
+
+
 def normalize_full_body_canvas(path: Path, target: tuple[int, int]) -> bool:
     """Fit a generated full-body PNG onto the adopted front canvas without cropping."""
     dims = png_dimensions(path)
@@ -484,6 +861,53 @@ def normalize_png_to_ratio(path: Path, ratio: str) -> dict[str, Any]:
     }
 
 
+def candidate_machine_qc_status(root: Path, asset_id: str, candidate: Path) -> dict[str, Any]:
+    """Find a current machine-pass candidate receipt bound to this exact PNG."""
+    qc_dir = identity_qc_path(root, asset_id, "candidate").parent
+    if not qc_dir.is_dir():
+        return {"eligible": False, "reason": "candidate_per_image_qc_missing"}
+    candidate_sha = file_sha256(candidate) if png_valid(candidate) else ""
+    for receipt_path in sorted(qc_dir.glob("*.json"), reverse=True):
+        try:
+            receipt = load_json(receipt_path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        if str(receipt.get("registration_kind") or "") != "candidate":
+            continue
+        receipt_image = resolve_path(root, str(receipt.get("path") or ""))
+        if receipt_image.resolve() != candidate.resolve():
+            continue
+        if str(receipt.get("artifact_sha256") or "") != candidate_sha:
+            return {"eligible": False, "reason": "candidate_pixel_sha_changed"}
+        if str(receipt.get("verdict") or "") != "pass":
+            return {"eligible": False, "reason": "candidate_machine_qc_block"}
+        contact_raw = str(receipt.get("contact_sheet_path") or "").strip()
+        contact_sheet = resolve_path(root, contact_raw) if contact_raw else root / "__missing_contact_sheet__"
+        if not contact_sheet.is_file() or file_sha256(contact_sheet) != str(receipt.get("contact_sheet_sha256") or ""):
+            return {"eligible": False, "reason": "candidate_contact_sheet_changed"}
+        comparison_inputs = [item for item in receipt.get("comparison_inputs") or [] if isinstance(item, dict)]
+        if (
+            not comparison_inputs
+            or identity_comparison_inputs_sha256(comparison_inputs)
+            != str(receipt.get("comparison_inputs_sha256") or "")
+        ):
+            return {"eligible": False, "reason": "candidate_comparison_packet_invalid"}
+        for item in comparison_inputs:
+            compare_path = resolve_path(root, str(item.get("path") or ""))
+            if not compare_path.is_file() or file_sha256(compare_path) != str(item.get("sha256") or ""):
+                return {
+                    "eligible": False,
+                    "reason": "candidate_comparison_input_changed",
+                    "changed_path": item.get("path"),
+                }
+        return {
+            "eligible": True,
+            "receipt": receipt,
+            "receipt_path": rel_to_root(root, receipt_path),
+        }
+    return {"eligible": False, "reason": "candidate_per_image_qc_missing"}
+
+
 def adopt_anchor_candidate(args: argparse.Namespace) -> int:
     """Adopt a human-selected shared anchor or character front candidate."""
     root = Path(args.project_root).expanduser().resolve()
@@ -503,6 +927,15 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
         raise SystemExit(f"candidate must be under {expected_root}: {candidate}") from exc
     if not png_valid(candidate):
         raise SystemExit(f"candidate is not a valid PNG: {candidate}")
+    if not str(args.reviewer).strip() or not str(args.reason).strip():
+        raise SystemExit("--reviewer and --reason are required for candidate adoption")
+    candidate_qc_status = candidate_machine_qc_status(root, ref_id, candidate)
+    if not candidate_qc_status.get("eligible"):
+        raise SystemExit(
+            f"candidate is not eligible for adoption: {candidate_qc_status.get('reason')}; "
+            "generate/recheck it through the per-image candidate QC path"
+        )
+    candidate_qc = candidate_qc_status["receipt"]
 
     candidate_rel = rel_to_root(root, candidate)
     candidate_sha = file_sha256(candidate)
@@ -528,13 +961,52 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
         "reviewed_at": now,
         "backend": CODEX_CHANNEL,
         "model": CODEX_MODEL,
+        "candidate_per_image_qc": str(candidate_qc_status.get("receipt_path") or ""),
     }
     if archived:
         source["archived_previous_path"] = archived
+    qc = write_identity_image_qc(
+        root,
+        args.chapter,
+        ref_id,
+        variant,
+        dest,
+        registration_kind="character_view" if is_character_front else "asset_anchor",
+        source=source,
+        reference_paths=[
+            candidate,
+            *[
+                resolve_path(root, str(item.get("path") or ""))
+                for item in candidate_qc.get("comparison_inputs") or []
+                if str(item.get("role") or "") != "current_image"
+            ],
+        ],
+    )
+    if qc.get("verdict") != "pass":
+        raise SystemExit(f"adopted candidate failed deterministic per-image QC: {identity_qc_path(root, ref_id, variant)}")
+    qc["human_review"] = {
+        "status": "accepted",
+        "artifact_sha256": qc["artifact_sha256"],
+        "comparison_inputs_sha256": qc["comparison_inputs_sha256"],
+        "contact_sheet_sha256": qc.get("contact_sheet_sha256", ""),
+        "reviewed_by": source["reviewer"],
+        "reviewed_at": now,
+        "reason": source["reason"],
+        "confirmations": {axis: True for axis in qc.get("required_axes") or []},
+    }
+    write_json(identity_qc_path(root, ref_id, variant), qc)
+    source["per_image_acceptance"] = {
+        "status": "accepted",
+        "artifact_sha256": qc["artifact_sha256"],
+        "receipt_path": rel_to_root(root, identity_qc_path(root, ref_id, variant)),
+        "reviewed_by": source["reviewer"],
+        "reviewed_at": now,
+    }
     if is_character_front:
         register_character_view(registry, root, ref_id, "front", dest, source=source)
     else:
         register_asset_anchor(registry, root, ref_id, dest, source=source)
+    clear_identity_variant_pending(registry, ref_id, variant)
     write_json(registry_path(root), registry)
     row = {
         "ts": now,
@@ -1442,8 +1914,12 @@ def character_generation_anchor(
     fallback = resolve_path(root, raw_anchor) if raw_anchor else shared_dir / f"{character_id}__anchor.png"
     if prefer_front_anchor and view != "front":
         front = shared_dir / f"{character_id}__front.png"
-        if png_valid(front):
+        if png_valid(front) and identity_image_acceptance_status(root, character_id, "front", front).get("accepted"):
             return front, "front_view_anchor"
+    if png_valid(fallback):
+        variant = "anchor" if fallback.name.endswith("__anchor.png") else "front"
+        if not identity_image_acceptance_status(root, character_id, variant, fallback).get("accepted"):
+            return shared_dir / f".{character_id}__unaccepted_anchor", "unaccepted_anchor"
     return fallback, "registry_anchor"
 
 
@@ -1465,14 +1941,16 @@ def project_style_anchor(root: Path, registry: dict) -> Path | None:
     )
     for rid in style_ids:
         asset = assets.get(rid) if isinstance(assets.get(rid), dict) else {}
+        if str(asset.get("status") or "") != "ready":
+            continue
         for key in ("anchor_path", "primary_path", "path"):
             raw = str(asset.get(key) or "").strip()
             if raw:
                 candidate = resolve_path(root, raw)
-                if png_valid(candidate):
+                if png_valid(candidate) and identity_image_acceptance_status(root, rid, "anchor", candidate).get("accepted"):
                     return candidate
         fallback = root / "出图" / "共享" / "图片" / f"{rid}__anchor.png"
-        if png_valid(fallback):
+        if png_valid(fallback) and identity_image_acceptance_status(root, rid, "anchor", fallback).get("accepted"):
             return fallback
     return None
 
@@ -1586,7 +2064,8 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
     # The canonical front is also the default outfit's first real visual
     # reference.  Register it once so downstream planning does not report a
     # false clothing gap after a valid front has already been adopted.
-    if view == "front" and str(asset.get("type") or "character").strip().lower() == "character":
+    pixel_accepted = source_accepts_current_pixel(root, source, path)
+    if view == "front" and pixel_accepted and str(asset.get("type") or "character").strip().lower() == "character":
         binding = asset.get("default_binding") if isinstance(asset.get("default_binding"), dict) else {}
         outfit_id = str(binding.get("outfit_id") or "").strip()
         outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
@@ -1663,7 +2142,7 @@ def register_outfit_reference(
     })
     outfit.update({
         "reference_images": refs,
-        "status": "ready",
+        "status": "ready" if source_accepts_current_pixel(root, source, path) else "needs_approval",
         "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
     })
     outfits[outfit_id] = outfit
@@ -1694,7 +2173,7 @@ def register_asset_anchor(registry: dict, root: Path, ref_id: str, path: Path, *
         {
             "id": ref_id,
             "type": asset.get("type") or ref_type(ref_id),
-            "status": "ready",
+            "status": "ready" if source_accepts_current_pixel(root, source, path) else "needs_approval",
             "anchor_path": rel,
             "primary_path": rel,
             "reference_images": refs,
@@ -1835,24 +2314,34 @@ def resolve_reference_path(root: Path, ref_id: str, registry: dict, view: str = 
             views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
             raw_view = views.get(view) if isinstance(views, dict) else ""
             if isinstance(raw_view, str) and raw_view.strip():
-                candidates.append(resolve_path(root, raw_view))
+                candidate = resolve_path(root, raw_view)
+                if identity_image_acceptance_status(root, ref_id, view, candidate).get("accepted"):
+                    candidates.append(candidate)
             for item in asset.get("reference_images") or []:
                 if not isinstance(item, dict) or str(item.get("view") or "") != view:
                     continue
                 raw = item.get("path")
                 if isinstance(raw, str) and raw.strip():
-                    candidates.append(resolve_path(root, raw))
+                    candidate = resolve_path(root, raw)
+                    if identity_image_acceptance_status(root, ref_id, view, candidate).get("accepted"):
+                        candidates.append(candidate)
         for key in ("anchor_path", "primary_path", "path"):
             raw = asset.get(key)
             if isinstance(raw, str) and raw.strip():
-                candidates.append(resolve_path(root, raw))
+                candidate = resolve_path(root, raw)
+                if identity_image_acceptance_status(root, ref_id, "anchor", candidate).get("accepted"):
+                    candidates.append(candidate)
         for item in asset.get("reference_images") or []:
             raw = item.get("path") if isinstance(item, dict) else item
             if isinstance(raw, str) and raw.strip():
-                candidates.append(resolve_path(root, raw))
+                candidate = resolve_path(root, raw)
+                item_view = str(item.get("view") or "anchor") if isinstance(item, dict) else "anchor"
+                if identity_image_acceptance_status(root, ref_id, item_view, candidate).get("accepted"):
+                    candidates.append(candidate)
     shared = root / "出图" / "共享" / "图片"
-    for suffix in ("__anchor.png", ".png", ".jpg", ".jpeg", ".webp"):
-        candidates.append(shared / f"{ref_id}{suffix}")
+    fallback = shared / f"{ref_id}__anchor.png"
+    if identity_image_acceptance_status(root, ref_id, "anchor", fallback).get("accepted"):
+        candidates.append(fallback)
     for path in candidates:
         if path.is_file():
             return rel_to_root(root, path)
@@ -1869,18 +2358,20 @@ def character_view_paths(root: Path, ref_id: str, registry: dict) -> dict[str, s
                 continue
             view = str(item.get("view") or "").strip()
             raw = str(item.get("path") or "").strip()
-            if view and raw and resolve_path(root, raw).is_file():
-                found[view] = rel_to_root(root, resolve_path(root, raw))
+            candidate = resolve_path(root, raw) if raw else Path()
+            if view and raw and candidate.is_file() and identity_image_acceptance_status(root, ref_id, view, candidate).get("accepted"):
+                found[view] = rel_to_root(root, candidate)
         views = asset.get("views")
         if isinstance(views, dict):
             for view, raw in views.items():
-                if isinstance(raw, str) and raw.strip() and resolve_path(root, raw).is_file():
-                    found[str(view)] = rel_to_root(root, resolve_path(root, raw))
+                candidate = resolve_path(root, raw) if isinstance(raw, str) and raw.strip() else Path()
+                if candidate.is_file() and identity_image_acceptance_status(root, ref_id, str(view), candidate).get("accepted"):
+                    found[str(view)] = rel_to_root(root, candidate)
     shared = root / "出图" / "共享" / "图片"
     for view in REQUIRED_CHARACTER_VIEWS:
         for suffix in (".png", ".jpg", ".jpeg", ".webp"):
             path = shared / f"{ref_id}__{view}{suffix}"
-            if path.is_file():
+            if path.is_file() and identity_image_acceptance_status(root, ref_id, view, path).get("accepted"):
                 found.setdefault(view, rel_to_root(root, path))
                 break
     return found
@@ -1931,12 +2422,14 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
                 asset = assets.get(rid) if isinstance(assets, dict) else None
                 outfits = asset.get("outfits") if isinstance(asset, dict) and isinstance(asset.get("outfits"), dict) else {}
                 outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else {}
+                if str(outfit.get("status") or "") != "ready":
+                    outfit = {}
                 for item in outfit.get("reference_images") or []:
                     raw = item.get("path") if isinstance(item, dict) else item
                     if not isinstance(raw, str) or not raw.strip():
                         continue
                     candidate = resolve_path(root, raw)
-                    if candidate.is_file():
+                    if candidate.is_file() and identity_image_acceptance_status(root, rid, outfit_id, candidate).get("accepted"):
                         path = rel_to_root(root, candidate)
                         break
             elif lookup_view.startswith("expression:"):
@@ -1949,12 +2442,14 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
                     else {}
                 )
                 expression = expressions.get(expression_id) if isinstance(expressions.get(expression_id), dict) else {}
+                if str(expression.get("status") or "") != "ready":
+                    expression = {}
                 for item in expression.get("reference_images") or []:
                     raw = item.get("path") if isinstance(item, dict) else item
                     if not isinstance(raw, str) or not raw.strip():
                         continue
                     candidate = resolve_path(root, raw)
-                    if candidate.is_file():
+                    if candidate.is_file() and identity_image_acceptance_status(root, rid, expression_id, candidate).get("accepted"):
                         path = rel_to_root(root, candidate)
                         break
             if not path and not lookup_view.startswith(("outfit:", "expression:")):
@@ -2137,6 +2632,8 @@ def seed(args: argparse.Namespace) -> int:
     mapping = parse_map(args.map)
     if not mapping:
         raise SystemExit("provide at least one --map REF_ID=PANEL_ID_OR_PATH")
+    if len(mapping) != 1:
+        raise SystemExit("B14 逐图双闸要求 seed 每次只能 --map 一张；签收当前派生锚后再处理下一张")
 
     registry = load_registry(root)
     assets = registry.setdefault("assets", {})
@@ -2144,6 +2641,11 @@ def seed(args: argparse.Namespace) -> int:
         raise SystemExit("identity_registry.json assets must be an object")
 
     panels = panel_lookup(root, chapter, jobs)
+    jobs_by_id = {
+        str(item.get("panel_id") or ""): item
+        for item in jobs.get("jobs") or []
+        if isinstance(item, dict) and item.get("panel_id")
+    }
     shared_dir = root / "出图" / "共享" / "图片"
     shared_dir.mkdir(parents=True, exist_ok=True)
     now = dt.datetime.now().isoformat(timespec="seconds")
@@ -2152,43 +2654,86 @@ def seed(args: argparse.Namespace) -> int:
         src = source_path(root, chapter, panels, raw)
         if not png_valid(src):
             raise SystemExit(f"source for {rid} is not a valid PNG: {src}")
+        source_job = jobs_by_id.get(raw)
+        if source_job is None:
+            source_job = next(
+                (
+                    item
+                    for item in jobs_by_id.values()
+                    if str(item.get("result_path") or "")
+                    and resolve_path(root, str(item.get("result_path"))).resolve() == src.resolve()
+                ),
+                None,
+            )
+        if not isinstance(source_job, dict):
+            raise SystemExit(f"seed source must be a panel in current panel_jobs with per-image acceptance: {raw}")
+        source_sha = file_sha256(src)
+        post_qc = source_job.get("post_qc") if isinstance(source_job.get("post_qc"), dict) else {}
+        manual = post_qc.get("manual_review") if isinstance(post_qc.get("manual_review"), dict) else {}
+        panel_acceptance = panel_gate.panel_acceptance_status(root, source_job)
+        if source_job.get("status") != "ready" or not panel_acceptance.get("accepted"):
+            raise SystemExit(
+                f"seed source panel {raw} lacks current-pixel machine QC + named human acceptance: "
+                f"{panel_acceptance.get('reason')}"
+            )
         dest = shared_dir / f"{rid}__anchor.png"
         if dest.exists() and not args.overwrite:
             raise SystemExit(f"{dest} already exists; pass --overwrite to replace it")
-        shutil.copy2(src, dest)
+        pending = dest.with_name(f".{dest.stem}__seed_pending.png")
+        pending.unlink(missing_ok=True)
+        shutil.copy2(src, pending)
+        archived = adopt_generated_png(root, pending, dest, asset_id=rid, variant="anchor")
         rel = rel_to_root(root, dest)
         seeded[rid] = rel
-        assets[rid] = {
-            **(assets.get(rid) if isinstance(assets.get(rid), dict) else {}),
-            "id": rid,
-            "type": ref_type(rid),
-            "status": "partial" if rid.startswith(("CHAR_", "MON_", "BEAST_", "ANIMAL_")) else "ready",
-            "anchor_path": rel,
-            "source": {
-                "kind": "accepted_panel_anchor",
-                "chapter": chapter,
-                "source": raw,
-                "source_path": rel_to_root(root, src),
-            },
-            "sha256": file_sha256(dest),
-            "updated_at": now,
-            "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.",
+        source = {
+            "kind": "accepted_panel_anchor",
+            "chapter": chapter,
+            "source": raw,
+            "source_path": rel_to_root(root, src),
+            "source_sha256": source_sha,
         }
+        if archived:
+            source["archived_previous_path"] = archived
+        qc = write_identity_image_qc(
+            root,
+            chapter,
+            rid,
+            "anchor",
+            dest,
+            registration_kind="asset_anchor",
+            source=source,
+            reference_paths=[src],
+        )
+        if qc.get("verdict") != "pass":
+            raise SystemExit(f"seeded anchor failed per-image QC: {identity_qc_path(root, rid, 'anchor')}")
+        mark_identity_variant_pending(
+            registry,
+            root,
+            rid,
+            "anchor",
+            dest,
+            registration_kind="asset_anchor",
+            qc=qc,
+        )
         append_event(root, {
             "ts": now,
-            "status": "reference_anchor_ready",
+            "status": "reference_anchor_awaiting_review",
             "ref_id": rid,
             "path": rel,
             "source": raw,
-            "sha256": assets[rid]["sha256"],
+            "sha256": file_sha256(dest),
+            "per_image_qc": rel_to_root(root, identity_qc_path(root, rid, "anchor")),
         })
 
     write_json(registry_path(root), registry)
     changed = bind_job_references(root, jobs, registry)
     write_json(jobs_path(root, chapter), jobs)
     write_reference_index(root, chapter, jobs)
-    print(f"[ok] seeded {len(seeded)} anchors; updated {changed} job references")
-    return 0
+    print(
+        f"[review-required] seeded {len(seeded)} anchor candidate(s); updated {changed} job references；"
+        "查看 per-image contact sheet 后运行 accept-image，未签收锚不会进入正式 registry/binding"
+    )
+    return 4
 
 
 def job_reference_status(root: Path, job: dict[str, Any]) -> tuple[list[str], list[dict[str, str]]]:
@@ -2512,6 +3057,7 @@ def generate_anchor_candidates(
     batch_id = dt.datetime.now().strftime("%Y%m%dT%H%M%S")
     ready_count = 0
     failed_count = 0
+    pending_review = False
     items: list[dict[str, Any]] = []
     channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
     model = f"Dreamina {model_version}" if backend == "dreamina" else CODEX_MODEL
@@ -2631,9 +3177,30 @@ def generate_anchor_candidates(
                     raw_canvas_path = rel_to_root(root, raw)
                     canvas_normalization = normalize_png_to_ratio(pending, ratio)
                 pending.replace(out_path)
+                candidate_variant = f"anchor_candidate_{batch_id}_{candidate_index:02d}"
+                candidate_source = {
+                    "kind": "generated_anchor_candidate",
+                    "chapter": chapter,
+                    "candidate_index": candidate_index,
+                    "backend": channel,
+                    "model": model,
+                    "prompt_path": prompt_path,
+                    "prompt_sha256": prompt_sha256,
+                }
+                qc = write_identity_image_qc(
+                    root,
+                    chapter,
+                    ref_id,
+                    candidate_variant,
+                    out_path,
+                    registration_kind="candidate",
+                    source=candidate_source,
+                    reference_paths=[style_reference] if use_style_reference and style_reference else [],
+                    expected_ratio=ratio,
+                )
                 row = {
                     "ts": dt.datetime.now().isoformat(timespec="seconds"),
-                    "status": "reference_anchor_candidate_ready",
+                    "status": "reference_anchor_candidate_awaiting_review" if qc.get("verdict") == "pass" else "reference_anchor_candidate_qc_block",
                     "ref_id": ref_id,
                     "candidate_index": candidate_index,
                     "candidate_count": candidate_count,
@@ -2648,6 +3215,7 @@ def generate_anchor_candidates(
                     "prompt_path": prompt_path,
                     "prompt_sha256": prompt_sha256,
                     "adopted": False,
+                    "per_image_qc": rel_to_root(root, identity_qc_path(root, ref_id, candidate_variant)),
                 }
                 if submit_id:
                     row["submit_id"] = submit_id
@@ -2675,9 +3243,17 @@ def generate_anchor_candidates(
                     artifact_path=rel_to_root(root, out_path),
                     artifact_sha256=file_sha256(out_path),
                 )
-                ready_count += 1
+                if qc.get("verdict") == "pass":
+                    ready_count += 1
+                    pending_review = True
+                else:
+                    failed_count += 1
                 ready = True
-                print(f"[ok] {ref_id} candidate {candidate_index} -> {row['path']}", flush=True)
+                print(
+                    f"[{'review-required' if qc.get('verdict') == 'pass' else 'qc-block'}] "
+                    f"{ref_id} candidate {candidate_index} -> {row['path']}",
+                    flush=True,
+                )
                 break
             if not ready:
                 failed_count += 1
@@ -2723,7 +3299,7 @@ def generate_anchor_candidates(
     write_json(out, manifest)
     print(f"[ok] candidate manifest: {out}", flush=True)
     print(f"[summary] generated={ready_count} failed={failed_count} adopted=0", flush=True)
-    return 1 if failed_count else 0
+    return 4 if pending_review else (1 if failed_count else 0)
 
 
 def generate_anchors(args: argparse.Namespace) -> int:
@@ -2760,6 +3336,11 @@ def generate_anchors(args: argparse.Namespace) -> int:
     model = f"Dreamina {model_version}" if backend == "dreamina" else CODEX_MODEL
     candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
     if candidate_count:
+        if len(refs) != 1 or candidate_count != 1:
+            raise SystemExit(
+                "B14 逐图双闸要求候选每次只生成一张：--refs 只能一个且 --candidate-count 必须为 1；"
+                "签收/采纳当前候选后再发起下一张"
+            )
         return generate_anchor_candidates(
             root=root,
             repo=repo,
@@ -2781,33 +3362,30 @@ def generate_anchors(args: argparse.Namespace) -> int:
     generated = 0
     skipped = 0
     failed = 0
+    review_pending = False
+    image_qc_blocked = False
     manifest_items: list[dict[str, Any]] = []
 
     for ref_id in refs:
         asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
         dest = shared_dir / f"{ref_id}__anchor.png"
         if png_valid(dest) and not args.overwrite:
-            source = existing_anchor_source(root, asset, dest) or {
-                "kind": "existing_text_anchor",
-                "chapter": args.chapter,
-                "backend": channel,
-                "model": model,
-            }
-            source = dict(source)
+            acceptance = identity_image_acceptance_status(root, ref_id, "anchor", dest)
+            if not acceptance.get("accepted"):
+                print(
+                    f"[review-required] {ref_id}/anchor 尚未逐图签收（{acceptance.get('reason')}）；"
+                    f"查看 {identity_qc_path(root, ref_id, 'anchor')} 后运行 accept-image。",
+                    flush=True,
+                )
+                return 4
             dims = png_dimensions(dest)
             if dims and target_canvas_for_ratio(dims, requested_ratio) != dims:
-                pending = dest.with_name(f".{dest.stem}__ratio_pending.png")
-                shutil.copy2(dest, pending)
-                canvas_normalization = normalize_png_to_ratio(pending, requested_ratio)
-                archived = adopt_generated_png(root, pending, dest, asset_id=ref_id, variant="anchor")
-                source.update({
-                    "requested_ratio": requested_ratio,
-                    "canvas_normalization": canvas_normalization,
-                })
-                if archived:
-                    source["raw_canvas_path"] = archived
-                    source["raw_canvas_sha256"] = file_sha256(resolve_path(root, archived))
-            register_asset_anchor(registry, root, ref_id, dest, source=source)
+                print(
+                    f"[block] {ref_id}/anchor 已签收像素不能在复用时改画布；"
+                    "改用 --overwrite 生成新候选并重新逐图签收。",
+                    flush=True,
+                )
+                return 3
             skipped += 1
             manifest_items.append(
                 {
@@ -2816,10 +3394,10 @@ def generate_anchors(args: argparse.Namespace) -> int:
                     "ref_id": ref_id,
                     "path": rel_to_root(root, dest),
                     "sha256": file_sha256(dest),
-                    "backend": source.get("backend", ""),
-                    "model": source.get("model", ""),
-                    "requested_ratio": source.get("requested_ratio", requested_ratio),
-                    "canvas_normalization": source.get("canvas_normalization", {}),
+                    "backend": "",
+                    "model": "",
+                    "requested_ratio": requested_ratio,
+                    "canvas_normalization": {},
                 }
             )
             print(f"[skip] {ref_id}: {rel_to_root(root, dest)}", flush=True)
@@ -2952,12 +3530,30 @@ def generate_anchors(args: argparse.Namespace) -> int:
             archived = adopt_generated_png(root, candidate, dest, asset_id=ref_id, variant="anchor")
             if archived:
                 source["archived_previous_path"] = archived
-            register_asset_anchor(registry, root, ref_id, dest, source=source)
-            write_json(registry_path(root), registry)
+            qc = write_identity_image_qc(
+                root,
+                args.chapter,
+                ref_id,
+                "anchor",
+                dest,
+                registration_kind="asset_anchor",
+                source=source,
+                reference_paths=[style_reference] if use_style_reference and style_reference else [],
+                expected_ratio=requested_ratio,
+            )
+            mark_identity_variant_pending(
+                registry,
+                root,
+                ref_id,
+                "anchor",
+                dest,
+                registration_kind="asset_anchor",
+                qc=qc,
+            )
             generated += 1
             row = {
                 "ts": dt.datetime.now().isoformat(timespec="seconds"),
-                "status": "reference_anchor_ready",
+                "status": "reference_anchor_awaiting_review" if qc.get("verdict") == "pass" else "reference_anchor_qc_block",
                 "ref_id": ref_id,
                 "path": rel_to_root(root, dest),
                 "sha256": file_sha256(dest),
@@ -2969,6 +3565,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "prompt_sha256": prompt_sha256,
                 "requested_ratio": requested_ratio,
                 "submitted_ratio": submitted_ratio,
+                "per_image_qc": rel_to_root(root, identity_qc_path(root, ref_id, "anchor")),
             }
             if submit_id:
                 row["submit_id"] = submit_id
@@ -2994,7 +3591,18 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 artifact_path=rel_to_root(root, dest),
                 artifact_sha256=file_sha256(dest),
             )
-            print(f"[ok] {ref_id} -> {rel_to_root(root, dest)}", flush=True)
+            if qc.get("verdict") != "pass":
+                print(f"[qc-block] {ref_id}/anchor -> {rel_to_root(root, dest)}", flush=True)
+                failed += 1
+                image_qc_blocked = True
+                ready = True
+                break
+            print(
+                f"[review-required] {ref_id}/anchor -> {rel_to_root(root, dest)}；"
+                "当前像素未 accepted，不会生成/派生下一张。",
+                flush=True,
+            )
+            review_pending = True
             ready = True
             break
         if not ready:
@@ -3012,6 +3620,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
             manifest_items.append(row)
             append_event(root, row)
             print(f"[fail] {ref_id}: {last_error}", flush=True)
+        if review_pending or image_qc_blocked:
+            break
 
     write_json(registry_path(root), registry)
     out = root / "生产数据" / f"comic_identity_anchors_{args.chapter}.json"
@@ -3040,7 +3650,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
     write_json(out, manifest)
     print(f"[ok] anchor manifest: {out}", flush=True)
     print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
-    return 1 if failed else 0
+    return 4 if review_pending else (1 if failed else 0)
 
 
 def generate_front_view_candidates(
@@ -3064,6 +3674,7 @@ def generate_front_view_candidates(
     batch_id = dt.datetime.now().strftime("%Y%m%dT%H%M%S")
     generated = 0
     failed = 0
+    pending_review = False
     items: list[dict[str, Any]] = []
     style_rel = rel_to_root(root, style_reference)
     style_sha = file_sha256(style_reference)
@@ -3170,9 +3781,34 @@ def generate_front_view_candidates(
                     )
                     continue
                 pending.replace(out_path)
+                candidate_variant = f"front_candidate_{batch_id}_{candidate_index:02d}"
+                candidate_source = {
+                    "kind": "generated_character_front_candidate",
+                    "chapter": chapter,
+                    "candidate_index": candidate_index,
+                    "backend": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "prompt_path": prompt_path,
+                    "prompt_sha256": prompt_sha256,
+                }
+                qc = write_identity_image_qc(
+                    root,
+                    chapter,
+                    character_id,
+                    candidate_variant,
+                    out_path,
+                    registration_kind="candidate",
+                    source=candidate_source,
+                    reference_paths=[style_reference],
+                    expected_ratio=ratio,
+                )
                 row = {
                     "ts": dt.datetime.now().isoformat(timespec="seconds"),
-                    "status": "character_view_candidate_ready",
+                    "status": (
+                        "character_view_candidate_awaiting_review"
+                        if qc.get("verdict") == "pass"
+                        else "character_view_candidate_qc_block"
+                    ),
                     "ref_id": character_id,
                     "view": "front",
                     "candidate_index": candidate_index,
@@ -3189,14 +3825,23 @@ def generate_front_view_candidates(
                     "style_reference_role": "style_only",
                     "prompt_path": prompt_path,
                     "prompt_sha256": prompt_sha256,
+                    "per_image_qc": rel_to_root(root, identity_qc_path(root, character_id, candidate_variant)),
                     "adopted": False,
                 }
                 items.append(row)
                 append_event(root, row)
-                generated += 1
+                if qc.get("verdict") == "pass":
+                    generated += 1
+                    pending_review = True
+                else:
+                    failed += 1
                 ready = True
                 write_batch_manifest("running")
-                print(f"[ok] {character_id} front candidate {candidate_index} -> {row['path']}", flush=True)
+                print(
+                    f"[{'review-required' if qc.get('verdict') == 'pass' else 'qc-block'}] "
+                    f"{character_id} front candidate {candidate_index} -> {row['path']}",
+                    flush=True,
+                )
                 break
             if not ready:
                 failed += 1
@@ -3224,7 +3869,7 @@ def generate_front_view_candidates(
     write_batch_manifest("complete")
     print(f"[ok] front candidate manifest: {out}", flush=True)
     print(f"[summary] generated={generated} failed={failed} adopted=0", flush=True)
-    return 1 if failed else 0
+    return 4 if pending_review else (1 if failed else 0)
 
 
 def parse_outfit_bindings(raw: str) -> list[tuple[str, str]]:
@@ -3288,7 +3933,7 @@ def register_expression_reference(
             "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
         }
     ]
-    expression["status"] = "ready"
+    expression["status"] = "ready" if source_accepts_current_pixel(root, source, path) else "needs_approval"
 
 
 def generate_expression_references(args: argparse.Namespace) -> int:
@@ -3314,6 +3959,7 @@ def generate_expression_references(args: argparse.Namespace) -> int:
     shared_dir = root / "出图" / "共享" / "图片"
     shared_dir.mkdir(parents=True, exist_ok=True)
     generated = skipped = failed = 0
+    review_pending = False
     items: list[dict[str, Any]] = []
     model = f"Dreamina {args.model_version}" if backend == "dreamina" else CODEX_MODEL
     channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
@@ -3331,15 +3977,28 @@ def generate_expression_references(args: argparse.Namespace) -> int:
         anchor = face if png_valid(face) else front
         if not png_valid(anchor):
             raise SystemExit(f"{character_id} 缺可用 face/front 身份锚")
+        anchor_variant = "face" if anchor == face else "front"
+        anchor_acceptance = identity_image_acceptance_status(root, character_id, anchor_variant, anchor)
+        if not anchor_acceptance.get("accepted"):
+            raise SystemExit(
+                f"{character_id}/{anchor_variant} 尚未逐图 accepted（{anchor_acceptance.get('reason')}），"
+                "不能派生表情锚"
+            )
         dest = shared_dir / f"{character_id}__{expression_id}.png"
         if png_valid(dest) and not args.overwrite:
+            acceptance = identity_image_acceptance_status(root, character_id, expression_id, dest)
+            if not acceptance.get("accepted"):
+                print(
+                    f"[review-required] {character_id}/{expression_id} 尚未逐图签收（{acceptance.get('reason')}）",
+                    flush=True,
+                )
+                return 4
             source = {
                 "kind": "existing_expression_reference",
                 "character_id": character_id,
                 "expression_id": expression_id,
                 "identity_anchor_path": rel_to_root(root, anchor),
             }
-            register_expression_reference(registry, root, character_id, expression_id, dest, source=source)
             skipped += 1
             items.append({"status": "expression_reference_reused", "character_id": character_id,
                           "expression_id": expression_id, "path": rel_to_root(root, dest),
@@ -3438,12 +4097,31 @@ def generate_expression_references(args: argparse.Namespace) -> int:
             )
             if archived:
                 source["archived_previous_path"] = archived
-            register_expression_reference(registry, root, character_id, expression_id, dest, source=source)
-            write_json(registry_path(root), registry)
+            qc = write_identity_image_qc(
+                root,
+                args.chapter,
+                character_id,
+                expression_id,
+                dest,
+                registration_kind="expression",
+                source=source,
+                reference_paths=[anchor],
+                expected_ratio=str(args.ratio or "1:1"),
+            )
+            mark_identity_variant_pending(
+                registry,
+                root,
+                character_id,
+                expression_id,
+                dest,
+                registration_kind="expression",
+                qc=qc,
+            )
             row = {"ts": dt.datetime.now().isoformat(timespec="seconds"),
-                   "status": "expression_reference_ready", "character_id": character_id,
+                   "status": "expression_reference_awaiting_review" if qc.get("verdict") == "pass" else "expression_reference_qc_block", "character_id": character_id,
                    "expression_id": expression_id, "path": rel_to_root(root, dest),
-                   "sha256": file_sha256(dest), **source}
+                   "sha256": file_sha256(dest),
+                   "per_image_qc": rel_to_root(root, identity_qc_path(root, character_id, expression_id)), **source}
             items.append(row)
             append_event(root, row)
             finish_generation_attempt(
@@ -3452,7 +4130,16 @@ def generate_expression_references(args: argparse.Namespace) -> int:
             )
             generated += 1
             ready = True
-            print(f"[ok] {character_id}/{expression_id} -> {rel_to_root(root, dest)}", flush=True)
+            if qc.get("verdict") != "pass":
+                failed += 1
+                print(f"[qc-block] {character_id}/{expression_id} -> {rel_to_root(root, dest)}", flush=True)
+            else:
+                review_pending = True
+                print(
+                    f"[review-required] {character_id}/{expression_id} -> {rel_to_root(root, dest)}；"
+                    "当前像素未 accepted，不会生成/派生下一张。",
+                    flush=True,
+                )
             break
         if not ready:
             failed += 1
@@ -3464,6 +4151,8 @@ def generate_expression_references(args: argparse.Namespace) -> int:
             items.append(row)
             append_event(root, row)
             print(f"[fail] {character_id}/{expression_id}: {last_error}", flush=True)
+        if review_pending or failed:
+            break
 
     write_json(registry_path(root), registry)
     out = root / "生产数据" / f"comic_identity_expressions_{args.chapter}.json"
@@ -3489,7 +4178,7 @@ def generate_expression_references(args: argparse.Namespace) -> int:
     write_json(out, manifest)
     print(f"[ok] expression manifest: {out}", flush=True)
     print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
-    return 1 if failed else 0
+    return 4 if review_pending else (1 if failed else 0)
 
 
 def outfit_attempts_used(manifest: dict[str, Any], character_id: str, outfit_id: str) -> int:
@@ -3592,6 +4281,7 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
     generated = 0
     skipped = 0
     failed = 0
+    review_pending = False
     items: list[dict[str, Any]] = []
     out = root / "生产数据" / f"comic_identity_outfits_{args.chapter}.json"
     try:
@@ -3613,15 +4303,26 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
         front = shared_dir / f"{character_id}__front.png"
         if not png_valid(front):
             raise SystemExit(f"{character_id} 缺可用 front 身份锚：{front}")
+        front_acceptance = identity_image_acceptance_status(root, character_id, "front", front)
+        if not front_acceptance.get("accepted"):
+            raise SystemExit(
+                f"{character_id}/front 尚未逐图 accepted（{front_acceptance.get('reason')}），不能派生换装参考"
+            )
         dest = shared_dir / f"{character_id}__{outfit_id}.png"
         if png_valid(dest) and not args.overwrite:
+            acceptance = identity_image_acceptance_status(root, character_id, outfit_id, dest)
+            if not acceptance.get("accepted"):
+                print(
+                    f"[review-required] {character_id}/{outfit_id} 尚未逐图签收（{acceptance.get('reason')}）",
+                    flush=True,
+                )
+                return 4
             source = {
                 "kind": "existing_outfit_reference",
                 "character_id": character_id,
                 "outfit_id": outfit_id,
                 "identity_anchor_path": rel_to_root(root, front),
             }
-            register_outfit_reference(registry, root, character_id, outfit_id, dest, source=source)
             skipped += 1
             items.append({"status": "outfit_reference_reused", "character_id": character_id,
                           "outfit_id": outfit_id, "path": rel_to_root(root, dest), "sha256": file_sha256(dest)})
@@ -3769,15 +4470,34 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
             archived = adopt_generated_png(root, pending, dest, asset_id=character_id, variant=outfit_id)
             if archived:
                 source["archived_previous_path"] = archived
-            register_outfit_reference(registry, root, character_id, outfit_id, dest, source=source)
-            write_json(registry_path(root), registry)
+            qc = write_identity_image_qc(
+                root,
+                args.chapter,
+                character_id,
+                outfit_id,
+                dest,
+                registration_kind="outfit",
+                source=source,
+                reference_paths=[front],
+                expected_ratio=requested_ratio,
+            )
+            mark_identity_variant_pending(
+                registry,
+                root,
+                character_id,
+                outfit_id,
+                dest,
+                registration_kind="outfit",
+                qc=qc,
+            )
             row = {
                 "ts": dt.datetime.now().isoformat(timespec="seconds"),
-                "status": "outfit_reference_ready",
+                "status": "outfit_reference_awaiting_review" if qc.get("verdict") == "pass" else "outfit_reference_qc_block",
                 "character_id": character_id,
                 "outfit_id": outfit_id,
                 "path": rel_to_root(root, dest),
                 "sha256": file_sha256(dest),
+                "per_image_qc": rel_to_root(root, identity_qc_path(root, character_id, outfit_id)),
                 **source,
             }
             items.append(row)
@@ -3792,7 +4512,16 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
                 artifact_path=rel_to_root(root, dest),
                 artifact_sha256=file_sha256(dest),
             )
-            print(f"[ok] {character_id}/{outfit_id} -> {rel_to_root(root, dest)}", flush=True)
+            if qc.get("verdict") != "pass":
+                failed += 1
+                print(f"[qc-block] {character_id}/{outfit_id} -> {rel_to_root(root, dest)}", flush=True)
+            else:
+                review_pending = True
+                print(
+                    f"[review-required] {character_id}/{outfit_id} -> {rel_to_root(root, dest)}；"
+                    "当前像素未 accepted，不会生成/派生下一张。",
+                    flush=True,
+                )
             break
         if not ready:
             failed += 1
@@ -3803,6 +4532,8 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
             items.append(row)
             append_event(root, row)
             print(f"[fail] {character_id}/{outfit_id}: {last_error}", flush=True)
+        if review_pending or failed:
+            break
 
     write_json(registry_path(root), registry)
     previous_manifest_archive, previous_manifest_sha256 = archive_json_before_replace(root, out)
@@ -3830,7 +4561,7 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
     write_json(out, manifest)
     print(f"[ok] outfit manifest: {out}", flush=True)
     print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
-    return 1 if failed else 0
+    return 4 if review_pending else (1 if failed else 0)
 
 
 def generate_views(args: argparse.Namespace) -> int:
@@ -3884,6 +4615,11 @@ def generate_views(args: argparse.Namespace) -> int:
                 raise SystemExit("--candidate-indices must not contain duplicates")
         else:
             candidate_indices = list(range(1, candidate_count + 1))
+        if len(characters) != 1 or len(candidate_indices) != 1:
+            raise SystemExit(
+                "B14 逐图双闸要求候选每次只生成一张：--characters 与 --candidate-indices 都只能命中一个；"
+                "签收/采纳当前候选后再发起下一张"
+            )
         return generate_front_view_candidates(
             root=root,
             repo=repo,
@@ -3902,6 +4638,7 @@ def generate_views(args: argparse.Namespace) -> int:
     generated = 0
     skipped = 0
     failed = 0
+    review_pending = False
     manifest_items: list[dict[str, Any]] = []
 
     for character_id in characters:
@@ -3919,6 +4656,14 @@ def generate_views(args: argparse.Namespace) -> int:
                 prefer_front_anchor=args.prefer_front_anchor,
             )
             if png_valid(dest) and not args.overwrite:
+                acceptance = identity_image_acceptance_status(root, character_id, view, dest)
+                if not acceptance.get("accepted"):
+                    print(
+                        f"[review-required] {character_id}/{view} 尚未逐图签收（{acceptance.get('reason')}）；"
+                        "未签收前不会生成下一视图。",
+                        flush=True,
+                    )
+                    return 4
                 preserved_source = existing_view_source(asset, view)
                 anchor_rel = rel_to_root(root, anchor) if png_valid(anchor) else ""
                 source = preserved_source or source_from_event(
@@ -3936,14 +4681,6 @@ def generate_views(args: argparse.Namespace) -> int:
                         "view": view,
                         "chapter": args.chapter,
                     }
-                register_character_view(
-                    registry,
-                    root,
-                    character_id,
-                    view,
-                    dest,
-                    source=source,
-                )
                 skipped += 1
                 row = {
                     "ts": dt.datetime.now().isoformat(timespec="seconds"),
@@ -4236,12 +4973,35 @@ def generate_views(args: argparse.Namespace) -> int:
                     )
                     if archived:
                         source["archived_previous_path"] = archived
-                    register_character_view(registry, root, character_id, view, dest, source=source)
-                    write_json(registry_path(root), registry)
+                    reference_inputs: list[Path] = []
+                    if anchor_is_valid:
+                        reference_inputs.append(anchor)
+                    elif use_text_anchor and style_reference and png_valid(style_reference):
+                        reference_inputs.append(style_reference)
+                    qc = write_identity_image_qc(
+                        root,
+                        args.chapter,
+                        character_id,
+                        view,
+                        dest,
+                        registration_kind="character_view",
+                        source=source,
+                        reference_paths=reference_inputs,
+                        expected_ratio=str(args.face_ratio if view == "face" else args.ratio),
+                    )
+                    mark_identity_variant_pending(
+                        registry,
+                        root,
+                        character_id,
+                        view,
+                        dest,
+                        registration_kind="character_view",
+                        qc=qc,
+                    )
                     generated += 1
                     row = {
                         "ts": dt.datetime.now().isoformat(timespec="seconds"),
-                        "status": "character_view_ready",
+                        "status": "character_view_awaiting_review" if qc.get("verdict") == "pass" else "character_view_qc_block",
                         "ref_id": character_id,
                         "view": view,
                         "path": rel_to_root(root, dest),
@@ -4251,6 +5011,7 @@ def generate_views(args: argparse.Namespace) -> int:
                         "backend": source.get("backend", ""),
                         "model": source.get("model", ""),
                         "attempt": attempt,
+                        "per_image_qc": rel_to_root(root, identity_qc_path(root, character_id, view)),
                     }
                     for key in (
                         "backend_version",
@@ -4281,7 +5042,16 @@ def generate_views(args: argparse.Namespace) -> int:
                         artifact_path=rel_to_root(root, dest),
                         artifact_sha256=file_sha256(dest),
                     )
-                    print(f"[ok] {character_id} {view} -> {rel_to_root(root, dest)}", flush=True)
+                    if qc.get("verdict") != "pass":
+                        failed += 1
+                        print(f"[qc-block] {character_id} {view} -> {rel_to_root(root, dest)}", flush=True)
+                    else:
+                        review_pending = True
+                        print(
+                            f"[review-required] {character_id} {view} -> {rel_to_root(root, dest)}；"
+                            "当前像素未 accepted，不会生成下一视图。",
+                            flush=True,
+                        )
                     ready = True
                     break
                 if ready:
@@ -4303,6 +5073,10 @@ def generate_views(args: argparse.Namespace) -> int:
                 manifest_items.append(row)
                 append_event(root, row)
                 print(f"[fail] {character_id} {view}: {last_error}", flush=True)
+            if review_pending or failed:
+                break
+        if review_pending or failed:
+            break
 
     write_json(registry_path(root), registry)
     contact_sheet = write_character_view_contact_sheet(root, args.chapter, characters, views)
@@ -4331,7 +5105,7 @@ def generate_views(args: argparse.Namespace) -> int:
     write_json(out, manifest)
     print(f"[ok] view manifest: {out}", flush=True)
     print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
-    return 1 if failed else 0
+    return 4 if review_pending else (1 if failed else 0)
 
 
 def main() -> int:
@@ -4399,6 +5173,13 @@ def main() -> int:
     p_adopt_anchor.add_argument("--role", default="", help="审核角色")
     p_adopt_anchor.add_argument("--reason", default="人工选定候选", help="采纳理由")
     p_adopt_anchor.set_defaults(func=adopt_anchor_candidate)
+
+    p_accept_image = sub.add_parser("accept-image", help="逐图签收一个当前 SHA 的共享身份/资产图片")
+    p_accept_image.add_argument("--asset", required=True, help="资产 ID，如 CHAR_A / STYLE_A")
+    p_accept_image.add_argument("--variant", required=True, help="front/face/anchor/OUTFIT_x/EXPR_x")
+    p_accept_image.add_argument("--reviewer", required=True, help="实际查看 per-image contact sheet 的审核人")
+    p_accept_image.add_argument("--reason", required=True, help="逐轴视觉复核结论")
+    p_accept_image.set_defaults(func=accept_identity_image)
 
     p_outfits = sub.add_parser("outfits", help="基于已采纳 front 生成专门换装参考")
     p_outfits.add_argument(

@@ -41,7 +41,8 @@ def test_cross_cutting_glob_reports_episode_coverage(tmp_path: Path) -> None:
     assert "(n2d-update) ○0/3" in report
 
 
-def test_video_done_counts_complete_when_compose_not_opted_in(tmp_path: Path) -> None:
+def test_video_done_counts_complete_when_compose_explicitly_skipped(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 合成阶段: 跳过\n", encoding="utf-8")
     (tmp_path / "_进度.md").write_text(
         "\n".join(
             [
@@ -57,9 +58,29 @@ def test_video_done_counts_complete_when_compose_not_opted_in(tmp_path: Path) ->
     scan.report(str(tmp_path), out)
     report = "\n".join(out)
 
-    assert "可选阶段: 合成/验收默认跳过" in report
+    assert "clip-only 模式: 本项目显式跳过合成/验收" in report
     assert "主流程完成: 1/1" in report
     assert "前沿:" not in report
+
+
+def test_video_done_still_routes_to_compose_by_default(tmp_path: Path) -> None:
+    (tmp_path / "_进度.md").write_text(
+        "\n".join(
+            [
+                "| 集 | raw | 剧本改编 | 配音 | 分镜设计 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
+                "|---|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ |",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    out: list[str] = []
+    scan.report(str(tmp_path), out)
+    report = "\n".join(out)
+
+    assert "主流程完成: 0/1" in report
+    assert "成片" in report
 
 
 def test_one_broken_work_does_not_blank_whole_board(tmp_path, monkeypatch, capsys) -> None:

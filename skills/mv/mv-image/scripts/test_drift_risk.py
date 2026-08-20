@@ -154,5 +154,8 @@ def test_write_and_exit_zero(tmp_path: Path) -> None:
     assert rc == 0
     payload = json.loads((tmp_path / "生产数据" / "drift_risk" / "drift_risk.json").read_text(encoding="utf-8"))
     assert payload["kind"] == "mv_drift_risk"
+    assert payload["root_rel"] == "."
+    assert "project_root" not in payload
+    assert str(tmp_path) not in json.dumps(payload, ensure_ascii=False)
     assert payload["summary"]["block"] == 0
     assert (tmp_path / "生产数据" / "drift_risk" / "drift_risk.md").exists()

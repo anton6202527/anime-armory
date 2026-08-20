@@ -36,3 +36,13 @@ def test_generated_bgm_requires_model_channel_and_file(tmp_path):
     bgm.contract_path(tmp_path, "第1集").write_text(__import__("json").dumps(payload, ensure_ascii=False), encoding="utf-8")
     codes = {row["code"] for row in bgm.validate(tmp_path, "第1集", payload)}
     assert codes == {"bgm_generation_receipt_missing"}
+
+
+def test_explicit_no_bgm_is_a_confirmed_deliverable_default(tmp_path):
+    (tmp_path / "_设置.md").write_text("- BGM来源: 无  # source=auto_recommended\n", encoding="utf-8")
+
+    payload = bgm.scaffold(tmp_path, "第1集")
+
+    assert payload["strategy"] == "none"
+    assert payload["status"] == "confirmed"
+    assert bgm.validate(tmp_path, "第1集", payload, allow_placeholder=False) == []

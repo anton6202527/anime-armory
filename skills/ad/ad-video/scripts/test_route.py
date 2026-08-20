@@ -111,7 +111,7 @@ class BuildRoutesTest(unittest.TestCase):
         sb = {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 12.0,
                          "assets": {"PROD_main": True}}]}
         routes, summary = rt.build_routes(sb)
-        # 产品镜路由到 Seedance(15s)/可灵(10s) 系——primary 应能容 12s 或仅 warn，不 block
+        # 产品镜路由到 Seedance/Kling 3.0（均 15s）——primary 应能容 12s 或仅 warn，不 block
         self.assertEqual(summary["block"], 0)
 
     def test_semantic_product_without_prod_asset_blocks(self):
@@ -152,6 +152,8 @@ class EndToEndTest(unittest.TestCase):
             with open(out, encoding="utf-8") as f:
                 disk = json.load(f)
             self.assertEqual(disk["routes"][0]["clip"], "镜头01")
+            self.assertEqual(disk["render_profile"]["path"], "生产数据/render_profile.json")
+            self.assertTrue(os.path.isfile(os.path.join(td, "生产数据", "render_profile.json")))
 
     def test_main_exit_code_block_on_too_long(self):
         with tempfile.TemporaryDirectory() as td:

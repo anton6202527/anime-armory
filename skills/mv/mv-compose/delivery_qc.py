@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Technical QC for the mezzanine master and SDR delivery file."""
 import argparse
+import array
 import json
+import math
 import os
 import subprocess
 import sys
@@ -12,6 +14,18 @@ CRAFT = os.path.abspath(os.path.join(HERE, "..", "mv-craft", "scripts"))
 if CRAFT not in sys.path:
     sys.path.insert(0, CRAFT)
 import mv_utils
+
+
+AUDIO_IDENTITY_KIND = "mv_delivery_audio_identity"
+AUDIO_IDENTITY_SCHEMA_VERSION = 1
+AUDIO_IDENTITY_CONTRACT = "decoded_pcm_start_middle_end_correlation_v2"
+AUDIO_IDENTITY_THRESHOLDS = {
+    "minimum_correlation": 0.85,
+    "maximum_abs_offset_ms": 50.0,
+    "maximum_drift_ms": 30.0,
+    "maximum_duration_delta_seconds": 0.10,
+}
+AUDIO_OUTPUT_ROLES = ("final", "master")
 
 
 def probe(path):
@@ -51,7 +65,157 @@ def _duration(data):
         return None
 
 
-def inspect_delivery(path, master=False, song_duration=None, source_loudness=None):
+def _decode_pcm(path, sample_rate=8000):
+    proc = subprocess.run([
+        "ffmpeg", "-v", "error", "-i", path, "-vn", "-ac", "1", "-ar", str(sample_rate),
+        "-f", "f32le", "-",
+    ], capture_output=True)
+    if proc.returncode or not proc.stdout:
+        return []
+    values = array.array("f")
+    values.frombytes(proc.stdout)
+    if sys.byteorder != "little":
+        values.byteswap()
+    return list(values)
+
+
+def _correlation(left, right):
+    count = min(len(left), len(right))
+    if count < 64:
+        return None
+    left, right = left[:count], right[:count]
+    lm, rm = sum(left) / count, sum(right) / count
+    numerator = sum((a - lm) * (b - rm) for a, b in zip(left, right))
+    ld = math.sqrt(sum((a - lm) ** 2 for a in left))
+    rd = math.sqrt(sum((b - rm) ** 2 for b in right))
+    if ld < 1e-9 or rd < 1e-9:
+        return None
+    return numerator / (ld * rd)
+
+
+def audio_identity(source, output, sample_rate=8000):
+    """Compare decoded PCM at start/middle/end, including offset and drift."""
+    src, dst = _decode_pcm(source, sample_rate), _decode_pcm(output, sample_rate)
+    source_duration = round(len(src) / sample_rate, 6) if src else None
+    output_duration = round(len(dst) / sample_rate, 6) if dst else None
+    duration_delta = (
+        round(output_duration - source_duration, 6)
+        if source_duration is not None and output_duration is not None else None
+    )
+    base = {
+        "contract": AUDIO_IDENTITY_CONTRACT,
+        "sample_rate_hz": sample_rate,
+        "thresholds": dict(AUDIO_IDENTITY_THRESHOLDS),
+        "source_duration_seconds": source_duration,
+        "output_duration_seconds": output_duration,
+        "duration_delta_seconds": duration_delta,
+    }
+    if not src or not dst:
+        return {**base, "status": "unavailable", "anchors": []}
+    maximum_shift = round(
+        sample_rate * AUDIO_IDENTITY_THRESHOLDS["maximum_abs_offset_ms"] / 1000.0
+    )
+    common_samples = min(len(src), len(dst))
+    window = min(sample_rate * 2, common_samples - (2 * maximum_shift))
+    if window < sample_rate // 2:
+        return {**base, "status": "too_short", "anchors": []}
+    positions = (
+        ("start", maximum_shift),
+        ("middle", (common_samples - window) // 2),
+        ("end", common_samples - window - maximum_shift),
+    )
+    anchors = []
+    for label, source_start in positions:
+        output_start = source_start
+        source_window = src[source_start:source_start + window:8]
+        best = (None, 0)
+        for shift in range(-maximum_shift, maximum_shift + 1, 8):
+            shifted = output_start + shift
+            if shifted < 0 or shifted + window > len(dst):
+                continue
+            score = _correlation(source_window, dst[shifted:shifted + window:8])
+            if score is not None and (best[0] is None or score > best[0]):
+                best = (score, shift)
+        anchors.append({"anchor": label, "correlation": round(best[0], 5) if best[0] is not None else None,
+                        "offset_ms": round(best[1] * 1000.0 / sample_rate, 3)})
+    valid = [row for row in anchors if row["correlation"] is not None]
+    if len(valid) != len(anchors):
+        return {**base, "status": "unverifiable", "anchors": anchors}
+    correlations = [row["correlation"] for row in valid]
+    offsets = [row["offset_ms"] for row in valid]
+    minimum_correlation = min(correlations)
+    maximum_abs_offset = max(abs(value) for value in offsets)
+    drift = round(max(offsets) - min(offsets), 3)
+    duration_ok = (
+        duration_delta is not None
+        and abs(duration_delta) <= AUDIO_IDENTITY_THRESHOLDS["maximum_duration_delta_seconds"]
+    )
+    return {
+        **base,
+        "status": "ok" if (
+            minimum_correlation >= AUDIO_IDENTITY_THRESHOLDS["minimum_correlation"]
+            and maximum_abs_offset <= AUDIO_IDENTITY_THRESHOLDS["maximum_abs_offset_ms"]
+            and drift <= AUDIO_IDENTITY_THRESHOLDS["maximum_drift_ms"]
+            and duration_ok
+        ) else "mismatch",
+        "anchors": anchors,
+        "min_correlation": minimum_correlation,
+        "max_abs_offset_ms": maximum_abs_offset,
+        "drift_ms": drift,
+    }
+
+
+def build_audio_identity_ledger(root, source, outputs, sample_rate=8000):
+    """Bind independent PCM comparisons for both required delivery outputs."""
+    source_rel = mv_utils.relpath(root, source) if source else ""
+    source_sha = mv_utils.content_hash(source) if source else ""
+    records = {}
+    for role in AUDIO_OUTPUT_ROLES:
+        path = outputs.get(role)
+        if not source:
+            result = {
+                "contract": AUDIO_IDENTITY_CONTRACT,
+                "sample_rate_hz": sample_rate,
+                "thresholds": dict(AUDIO_IDENTITY_THRESHOLDS),
+                "status": "missing_source",
+                "source_duration_seconds": None,
+                "output_duration_seconds": None,
+                "duration_delta_seconds": None,
+                "anchors": [],
+            }
+        elif not path:
+            result = {
+                "contract": AUDIO_IDENTITY_CONTRACT,
+                "sample_rate_hz": sample_rate,
+                "thresholds": dict(AUDIO_IDENTITY_THRESHOLDS),
+                "status": "missing_output",
+                "source_duration_seconds": None,
+                "output_duration_seconds": None,
+                "duration_delta_seconds": None,
+                "anchors": [],
+            }
+        else:
+            result = audio_identity(source, path, sample_rate=sample_rate)
+        records[role] = {
+            "role": role,
+            "path": mv_utils.relpath(root, path) if path else "",
+            "sha256": mv_utils.content_hash(path) if path else "",
+            **result,
+        }
+    return {
+        "schema_version": AUDIO_IDENTITY_SCHEMA_VERSION,
+        "kind": AUDIO_IDENTITY_KIND,
+        "contract": AUDIO_IDENTITY_CONTRACT,
+        "source": {"path": source_rel, "sha256": source_sha},
+        "required_roles": list(AUDIO_OUTPUT_ROLES),
+        "outputs": records,
+        "status": "ok" if source_sha and all(
+            records[role].get("status") == "ok" for role in AUDIO_OUTPUT_ROLES
+        ) else "block",
+    }
+
+
+def inspect_delivery(path, master=False, song_duration=None, source_loudness=None, expected_dimensions=None):
     data = probe(path)
     streams = data.get("streams") or []
     video = next((x for x in streams if x.get("codec_type") == "video"), {})
@@ -61,6 +225,10 @@ def inspect_delivery(path, master=False, song_duration=None, source_loudness=Non
         blocks.append("missing_video_stream")
     if not audio:
         blocks.append("missing_audio_stream")
+    if expected_dimensions and video:
+        expected_width, expected_height = expected_dimensions
+        if int(video.get("width") or 0) != expected_width or int(video.get("height") or 0) != expected_height:
+            blocks.append(f"dimensions_not_expected_{expected_width}x{expected_height}")
     if master:
         if video.get("codec_name") not in {"prores", "dnxhd"}:
             blocks.append("master_not_mezzanine_codec")
@@ -122,26 +290,68 @@ def main():
     parser.add_argument("--master")
     args = parser.parse_args()
     root = os.path.abspath(args.project_root)
+    delivery = os.path.abspath(args.delivery if os.path.isabs(args.delivery) else os.path.join(root, args.delivery))
+    master = (
+        os.path.abspath(args.master if os.path.isabs(args.master) else os.path.join(root, args.master))
+        if args.master else None
+    )
+    root_real = os.path.realpath(root)
+    for label, path in (("delivery", delivery), ("master", master)):
+        if not path:
+            continue
+        try:
+            contained = os.path.commonpath((root_real, os.path.realpath(path))) == root_real
+        except ValueError:
+            contained = False
+        if not contained:
+            print(f"[err] {label} 必须位于作品根内：{path}", file=sys.stderr)
+            return 2
     song = mv_utils.find_song(root)
     song_duration = mv_utils.audio_duration(song) if song else None
     source_loudness = loudness(song) if song else {}
-    rows = [inspect_delivery(args.delivery, song_duration=song_duration, source_loudness=source_loudness)]
-    if args.master:
-        rows.append(inspect_delivery(args.master, master=True, song_duration=song_duration, source_loudness=source_loudness))
+    settings = mv_utils.parse_settings(root)
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+    aspect = settings.get("合成画幅") or meta.get("aspect") or "16:9"
+    expected_dimensions = {"16:9": (1920, 1080), "9:16": (1080, 1920), "1:1": (1080, 1080)}.get(aspect)
+    rows = [inspect_delivery(delivery, song_duration=song_duration, source_loudness=source_loudness,
+                             expected_dimensions=expected_dimensions)]
+    rows[0]["role"] = "final"
+    if master:
+        rows.append(inspect_delivery(master, master=True, song_duration=song_duration,
+                                     source_loudness=source_loudness, expected_dimensions=expected_dimensions))
+        rows[-1]["role"] = "master"
     if song and song_duration is None:
         rows[0]["blocks"].append("source_song_duration_scan_unavailable")
     if song and not source_loudness:
         rows[0]["blocks"].append("source_song_loudness_scan_unavailable")
+    identity = build_audio_identity_ledger(
+        root, song, {"final": delivery, "master": master},
+    )
+    rows_by_role = {row.get("role"): row for row in rows}
+    for role in AUDIO_OUTPUT_ROLES:
+        status = (identity.get("outputs") or {}).get(role, {}).get("status") or "missing"
+        row = rows_by_role.get(role) or rows[0]
+        if status != "ok":
+            row["blocks"].append(f"audio_identity_{role}_{status}")
     blocks = sum(len(row["blocks"]) for row in rows)
     warnings = sum(len(row["warnings"]) for row in rows)
-    report = {"schema_version": 2, "kind": "mv_delivery_qc", "generated_at": date.today().isoformat(),
-              "audio_policy": "preserve_master_song_loudness; no automatic loudness normalization",
+    output_paths = {"final": delivery, "master": master}
+    for row in rows:
+        output_path = output_paths[row["role"]]
+        row["path"] = mv_utils.relpath(root, output_path)
+        row["sha256"] = mv_utils.content_hash(output_path)
+    report = {"schema_version": 3, "kind": "mv_delivery_qc", "generated_at": date.today().isoformat(),
+              "audio_policy": "preserve_master_song_loudness; verify decoded PCM identity for final and master",
+              "expected_delivery": {"aspect": aspect, "dimensions": expected_dimensions},
               "source_song": mv_utils.relpath(root, song) if song else "",
               "source_song_loudness": source_loudness,
+              "audio_identity": identity,
               "summary": {"hard_blocks": blocks, "warnings": warnings,
                           "verdict": "block" if blocks else ("review" if warnings else "ok")},
               "files": rows,
-              "inputs_sha256": {mv_utils.relpath(root, row["path"]): mv_utils.content_hash(row["path"]) for row in rows}}
+              "inputs_sha256": {
+                  row["path"]: mv_utils.content_hash(output_paths[row["role"]]) for row in rows
+              }}
     if song:
         report["inputs_sha256"][mv_utils.relpath(root, song)] = mv_utils.content_hash(song)
     out = os.path.join(root, "生产数据", "delivery_qc", "delivery_qc.json")

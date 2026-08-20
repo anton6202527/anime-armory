@@ -9,8 +9,10 @@
   },
   "env": {
     "NO_PROXY": "127.0.0.1,localhost",
-    "no_proxy": "127.0.0.1,localhost"
+    "no_proxy": "127.0.0.1,localhost",
+    "N2D_IMAGE_COMMAND": "python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"$N2D_ROOT\" \"$N2D_EPISODE\" --shots \"$N2D_AFFECTED_SHOTS\""
   },
+  "production_authorizations": {},
   "auto_gate": true,
   "next_preflight": true
 }

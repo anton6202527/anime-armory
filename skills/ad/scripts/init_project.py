@@ -31,6 +31,9 @@ SUBDIRS = [
 BRIEF_TEMPLATE = {
     "schema_version": 2,
     "kind": "ad_brief",
+    # 投放准备模式必须在执行 campaign_readiness.py 前显式选定；空值按正式投放 fail-closed，
+    # 避免纯样片的宽松检查被误当成可发布结论。
+    "campaign_mode": "",
     "brand": "",
     "product": "",
     "usp": [],
@@ -38,7 +41,18 @@ BRIEF_TEMPLATE = {
     "campaign_objective": "",
     "funnel_stage": "",
     "offer": "",
+    "price": "",
     "landing_page": "",
+    "industry_category": "",
+    "landing_page_readiness": {
+        "status": "", "checked_at": "", "final_url": "", "redirect_status": "",
+        "evidence_file": "", "redirect_evidence_file": "",
+    },
+    "message_reconciliation": {
+        "status": "", "landing_page_url": "", "checked_items": [],
+        "not_applicable_items": [], "evidence_file": "", "approved_by": "", "reviewed_at": "",
+    },
+    "eligibility_reviews": [],
     "tone": "",
     "key_message": "",
     "mandatories": {"logo": "", "slogan": "", "legal_lines": [], "endcard_cta": ""},
@@ -51,10 +65,19 @@ BRIEF_TEMPLATE = {
     "placement_specs": {},
     "platform_safe_zone_evidence": {},
     "deliverable_placements": {},
+    # 多比例交付必须逐件选择 native_recrop/native_reedit/native_variant 或具名签核的
+    # mechanical_reframe；不再把“reframe”行自动解释为中心裁切许可。
+    "placement_adaptation_modes": {},
     "release_regions": [],
     "legal_reviews": [],
     "default_locale": "",
     "ai_label_receipts": [],
+    # 与 AI 标识分开：每个最终 placement 的广告/赞助/付费合作披露独立绑定媒体 SHA、
+    # 平台记录 ID 与证据。AI label 永远不能替代商业关系披露。
+    "commercial_content": {
+        "relationship_type": "", "creator_involved": False, "account_owner": "",
+    },
+    "commercial_disclosure_receipts": [],
     "provenance_receipts": [],
     "accessibility": {
         "target_level": "",
@@ -80,6 +103,19 @@ BRIEF_TEMPLATE = {
         "conversion_event": "",
         "attribution_window": "",
         "media_budget": "",
+        "tracking_integrations": [],
+        "utm": {
+            "status": "", "source": "", "medium": "", "campaign": "",
+            "example_url": "", "evidence_file": "", "approved_by": "",
+        },
+        "deep_link": {
+            "status": "", "url": "", "fallback_url": "",
+            "evidence_file": "", "approved_by": "",
+        },
+        "consent_privacy": {
+            "status": "", "consent_status": "", "privacy_status": "",
+            "privacy_notice_url": "", "evidence_file": "", "approved_by": "", "reviewed_at": "",
+        },
     },
 }
 

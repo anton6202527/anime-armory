@@ -80,7 +80,7 @@ def test_current_official_tiktok_youtube_meta_specs_are_provenanced(tmp_path):
     for name in ("TikTok", "YouTube", "Instagram Reels", "Facebook Reels"):
         spec = pp.spec_for(name)
         assert spec["authority"].startswith("official_platform")
-        assert spec["checked_at"] == "2026-07-11"
+        assert spec["checked_at"] == "2026-08-20"
         assert str(spec["source"]).startswith("https://")
         assert spec["safe_zone_asset"] == "download_current_official_template"
     assert pp.spec_for("TikTok")["min_resolution"] == "540x960"

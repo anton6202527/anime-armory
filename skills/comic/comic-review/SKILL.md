@@ -9,7 +9,7 @@ comic-review 负责证明“当前版本是否可以继续”，不负责代写�
 
 ## 证据规则
 
-- **可 block 的确定性事实**：缺文件、非法 schema、合同必填字段缺失、章节/source/panel 覆盖不闭合、角色 binding 或 registry 状态不可解析、真实参考缺失、审批/签收缺失、SHA stale、job 与当前合同不一致、缺 panel、post-QC 确定性失败、manifest 或渲染物缺失、目标发布 profile 的权利条件不满足。
+- **可 block 的确定性事实**：缺文件、非法 schema、合同必填字段缺失、章节/source/panel 覆盖不闭合、角色 binding 或 registry 状态不可解析、真实参考缺失、审批/签收缺失、SHA stale、job 与当前合同不一致、lettering 未绑定当前脚本/layout/finishing/翻译表或逐条源文字、无有效 editorial override 的静默台词分叉、manifest 未绑定当前 lettering、缺 panel、post-QC 确定性失败、manifest 或渲染物缺失、目标发布 profile 的权利条件不满足。
 - **只能 warn/info 的启发式信号**：节拍关键词、台词/构图重复相似度、CCIP/embedding、face/hair/outfit 色彩指纹、dHash、黑白灰/线宽代理、场景布局指纹、调色离群和多模态模型判断。即使来源报告标成 block，gate 也应按启发式置信度降级。
 - **人审签收不能覆盖确定性缺件**：可签收计划内光效、遮挡、低机位、换装、蒙太奇或像素代理误报；不能批准不存在的图片、缺参考、错误 schema、失效合同或明显使用了错误人物/服装。
 - **所有签收绑定当前证据**：图片、任务或上游内容变化后，旧 SHA receipt 自动失效。
@@ -60,8 +60,8 @@ python3 skills/comic/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --st
 | `finishing` | 已签收 name/layout；逐格/逐页同序覆盖；上游 SHA 当前 | 黑场、网点、效果线、拟声词的审美作用 |
 | `image_preflight` | registry v2；结构化 bindings；model pack 技术齐套且当前人审签收；reference plan/job 当前；真实引用闭合；后端/profile/compiler 一致 | 节拍、话内冗余、追更再入前情、去 AI 味直白率、构图重复和像素代理只 warn |
 | `image` | preflight 通过；必需 panel 文件存在；job `ready`；生成合同 SHA 当前；确定性 post-QC 无 block | 风格/角色/场景/道具/画面相似度告警需看原图 |
-| `compose` | image 通过；lettering/manifest 存在；无 missing panels；有真实渲染物；平台 profile 可验证 | 文字密度、留白与疑似气泡需逐页人审 |
-| `review` | compose 通过；综合报告无确定性 block | 阅读、表演、审美、改编效果和告警处置 |
+| `compose` | image 通过；lettering v2 的四类输入 SHA 与逐条 `content_ref/source_text_sha256` 当前；翻译/人工改写可追溯；manifest 绑定当前 lettering；无 missing panels；有真实渲染物；平台 profile 可验证 | 旧原文 key 翻译、文字密度、留白与疑似气泡需逐页人审 |
+| `review` | 完整复跑 compose（含文字版本合同）；综合报告无确定性 block | 阅读、表演、审美、改编效果和告警处置 |
 
 gate 即使 block 也会写 receipt，因此“文件存在”不等于通过。消费者必须同时检查：`verdict != block` 且 `inputs_fingerprint_sha256` 与当前 stage 输入一致。任一输入变化后重跑相应 stage，不复制旧收据。
 
@@ -122,6 +122,16 @@ python3 skills/comic/comic-review/scripts/calibrate_thresholds.py "$ROOT" --writ
 
 ## 人审告警签收
 
+公开交付使用统一、追加式 warning 处置账；先列出当前 review finding：
+
+```bash
+python3 skills/comic/comic-review/scripts/finding_dispositions.py "$ROOT" --chapter 第1话 list
+python3 skills/comic/comic-review/scripts/finding_dispositions.py "$ROOT" --chapter 第1话 dispose \
+  --finding-id CF-... --status false_positive --reviewer "责任编辑" --reason "当前像素并排复核通过"
+```
+
+处置记录绑定 finding fingerprint 和当前 artifact/panel SHA；同一 artifact 上的多个宽泛 warning 也会获得独立 ID。事件按 sequence/previous-event hash/event hash 追加，并复核 schema/chapter/status/具名理由；删除中间事件、手改章节或 SHA 会使账本完整性失败。重抽图片、finding 理由或证据变化后自动 stale；撤回结论追加 `reopened`，不原地改历史。确定性 `block` 永远不能通过该账降级。数字、印刷或商用发布前，每条当前 warning 必须明确为 `false_positive` 或 `risk_accepted` 且账本完整；internal 只报告风险。
+
 三类兼容签收文件：
 
 - `生产数据/style_consistency_acceptance_第N话.json`
@@ -130,7 +140,7 @@ python3 skills/comic/comic-review/scripts/calibrate_thresholds.py "$ROOT" --writ
 
 每个 accepted finding 至少写 `code`、`panel_id` 或 artifact、`reason`、`evidence`，并应写当前 `artifact_sha256`；角色告警可再写 `character_id`。带 SHA 的签收在重抽后自动失效。不带 SHA 的旧签收只作兼容记录，应补齐证据。
 
-`panel_qc.manual_review.verdict=pass` 只覆盖该格 post-QC 的启发式 warn；不能改变文件损坏、缺参考或合同 stale。
+`panel_qc.manual_review.verdict=accepted_with_warnings` 只承接该格 post-QC 的启发式 warn；机器 pass 也需当前比较包的 `accepted`。两者都不能改变文件损坏、缺参考或合同 stale。
 
 ## 综合审查与进度
 
@@ -168,15 +178,21 @@ python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile digita
 python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile digital --write --json
 python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile print --write --json
 python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile commercial --write --json
+# 新合同：技术介质与用途解耦，可表达商业印刷或公开 accessible EPUB
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --medium print_pdf --usage commercial --write --json
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --medium epub_fxl --usage public --write --json
 ```
 
 裁决含：
 
 - `technical_complete`：manifest 和当前真实渲染物完整。
 - `production_complete`：technical complete，且当前 review gate receipt 非 block。
-- `publish_ready_internal/digital/print/commercial`：按 profile 追加权利与最终人审签收。
+- `medium=web_images|print_pdf|epub_fxl` 是技术交付轴，`usage=internal|public|commercial` 是用途轴；旧 `--profile internal|digital|print|commercial` 仍映射到兼容组合，`commercial` 不再被当成与 PDF 并列的文件格式。
+- `print_pdf` 还要求真实 PDF、trim/bleed/safe/DPI/页序装订/字体/ICC/透明度合同，以及绑定当前合同/PDF SHA 的印前人审 receipt；普通图片包不能通过。
+- `epub_fxl` 当前没有自动 renderer；会解析外部 EPUB 的 mimetype/container/OPF/manifest/spine/nav/XHTML、`rendition:layout`、包内 accessibility metadata 与 img alt 属性，再核对具名 human-attested 合同。机器不判断 alt 文案质量，不能宣称 EPUB Accessibility/WCAG 认证。
+- WEBTOON/Tapas 等 profile 明确有双端预览证据时，公开交付还要绑定 `preview_source=actual_platform_preview` 的 PC/mobile 截图，以及当前 manifest SHA 和有序 page/segment/role；local simulation 或交换页面顺序都不能沿用旧预览。
 
-`digital/print/commercial` 必须由真实签收人显式执行 `--accept --reviewer ... --reason ...`。命令先排除 acceptance 自身之外的发布阻断，再写 `生产数据/release_acceptance_第N话.json`；其 `status/reviewer/approved_at` 有效，`artifacts[]` 与当前全部导出物 `path/sha256` 完全一致，`review_receipt` 也精确绑定当前 review gate receipt。它只记录明确的人审决定，不自动决定、不发布、不回写进度。
+`usage=public|commercial` 必须由真实签收人显式执行 `--accept --reviewer ... --reason ...`。命令先排除 acceptance 自身之外的发布阻断，再写 `生产数据/release_acceptance_第N话.json`；其 `medium+usage`、全部导出物 SHA、可重算 review receipt、平台有序 preview、finding disposition summary/ledger，以及 print/accessibility 介质合同与 readiness receipt 都精确绑定当前证据。任一项变化都使旧 acceptance 失效。它只记录明确的人审决定，不自动决定、不发布、不回写进度。
 
 ## 不做什么
 

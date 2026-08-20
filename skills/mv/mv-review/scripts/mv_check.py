@@ -19,15 +19,27 @@ WAV 时长走标准库 wave，不依赖 ffprobe。
 
 用法：
     python3 mv_check.py <制MV作品根> [--json] [--tol 2.0]
+    python3 mv_check.py <制MV作品根> --write-receipt --reviewer <真实姓名> --notes <审片结论>
+
+默认严格只读。只有显式 ``--write-receipt`` 且机器无阻断，并由 completion 复算
+compose / disclosure / provenance 及已进入的 image / video_jobs / video 健康度均无错误时，
+才写具名 ``生产数据/review/review_receipt.json``。
 退出码：有 🔴 阻断级 → 1，否则 0。
 """
+import argparse
+from datetime import datetime
 import sys, os, re, json, glob, wave, subprocess, shutil
 import importlib.util
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "mv_utils.py")
 PACING_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "pacing.py")
+CONTRACT_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "contract.py")
+COMPLETION_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "completion.py")
+ALIGNMENT_PATH = os.path.join(REPO, "skills", "mv", "mv-lyric-sync", "scripts", "align.py")
+IMAGE_RECEIPTS_PATH = os.path.join(REPO, "skills", "mv", "mv-image", "scripts", "image_receipts.py")
 
 def _load_module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -40,6 +52,37 @@ def load_mv_utils():
 
 mv_utils = load_mv_utils()
 pacing = _load_module("mv_pacing", PACING_PATH)   # 共享卡点/节奏/时长确定性引擎（与 mv-score 同源）
+contract = _load_module("mv_review_contract", CONTRACT_PATH)
+_ALIGNMENT_MODULE = None
+_IMAGE_RECEIPTS_MODULE = None
+_COMPLETION_MODULE = None
+
+
+def _load_alignment_module():
+    """Load the producer's schema validator so review cannot drift from schema v5."""
+    global _ALIGNMENT_MODULE
+    if _ALIGNMENT_MODULE is None:
+        _ALIGNMENT_MODULE = _load_module("mv_review_alignment_schema", ALIGNMENT_PATH)
+    return _ALIGNMENT_MODULE
+
+
+def _load_image_receipts():
+    """Load the authoritative B14 ledger auditor (read-only in mv-review)."""
+    global _IMAGE_RECEIPTS_MODULE
+    if _IMAGE_RECEIPTS_MODULE is None:
+        _IMAGE_RECEIPTS_MODULE = _load_module("mv_review_image_receipts", IMAGE_RECEIPTS_PATH)
+    return _IMAGE_RECEIPTS_MODULE
+
+
+def _load_completion_module():
+    """Load the authoritative stage-health controller only when sign-off needs it."""
+    global _COMPLETION_MODULE
+    if _COMPLETION_MODULE is None:
+        craft_scripts = os.path.dirname(COMPLETION_PATH)
+        if craft_scripts not in sys.path:
+            sys.path.insert(0, craft_scripts)
+        _COMPLETION_MODULE = _load_module("mv_completion_from_review", COMPLETION_PATH)
+    return _COMPLETION_MODULE
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 DUR_TOL = pacing.DUR_TOL    # 时长一致允许差（秒，或按 10% 取大）—— 单一真相源在 pacing.py
@@ -48,6 +91,15 @@ EQUAL_CV = pacing.EQUAL_CV  # clip 时长极差/均值 低于此 → 疑似等�
 
 findings = []  # (sev, dim, loc, msg)
 def add(sev, dim, loc, msg): findings.append((sev, dim, loc, msg))
+
+REVIEW_RECEIPT_REL = "生产数据/review/review_receipt.json"
+REVIEW_INPUTS = (
+    "成片_MV.mp4",
+    "成片_MV_master.mov",
+    "生产数据/delivery_qc/delivery_qc.json",
+    "合规/provenance.json",
+    "合规/ai_usage.json",
+)
 
 _HAVE_FFPROBE = None
 def have_ffprobe():
@@ -240,8 +292,25 @@ def check_subtitles(root, songlen, lyric_lines):
 def check_alignment_report(root):
     path = os.path.join(root, "字幕", "alignment_report.json")
     if not os.path.exists(path):
-        if os.path.exists(os.path.join(root, "字幕", "lyrics.lrc")) or os.path.exists(os.path.join(root, "字幕", "karaoke.ass")):
-            add(WARN, "字幕", "字幕/alignment_report.json", "有字幕但缺对齐报告——建议重跑新版 mv-lyric-sync 便于 QA")
+        meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+        runtime = contract.runtime_state_from_settings(mv_utils.parse_settings(root))
+        formal_alignment_required = bool(
+            not meta.get("is_demo")
+            and (
+                runtime.get("subtitle_language") != "无字幕"
+                or runtime.get("lip_sync_mode") != "关闭"
+            )
+        )
+        has_subtitle_output = bool(
+            os.path.exists(os.path.join(root, "字幕", "lyrics.lrc"))
+            or os.path.exists(os.path.join(root, "字幕", "karaoke.ass"))
+        )
+        if formal_alignment_required:
+            add(BLOCK, "字幕", "字幕/alignment_report.json",
+                "正式字幕/演唱口型缺当前 schema v5 对齐报告；不能进入正式审片签收")
+        elif has_subtitle_output:
+            add(WARN, "字幕", "字幕/alignment_report.json",
+                "有字幕但缺对齐报告——建议重跑新版 mv-lyric-sync 便于 QA")
         return
     report = load_json_safe(path)
     if report is None:
@@ -250,15 +319,129 @@ def check_alignment_report(root):
     warnings = report.get("warnings") or []
     for warning in warnings:
         add(WARN, "字幕", "字幕/alignment_report.json", f"对齐报告提示：{warning}")
-    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
-    confidence = report.get("alignment_confidence")
-    if not meta.get("is_demo"):
+    errors = []
+    if report.get("kind") != "mv_lyric_alignment_report" or report.get("schema_version") != 5:
+        errors.append("alignment_report 必须是当前 schema v5 mv_lyric_alignment_report")
+    if "alignment_confidence" in report:
+        errors.append("schema v5 禁止 alignment_confidence；character_coverage_ratio 只表示文本覆盖")
+    if report.get("coverage_metric") != "text_character_mapping_ratio_not_acoustic_confidence":
+        errors.append("schema v5 必须明确字符覆盖率不是声学置信度")
+    acceptance = report.get("acceptance") or {}
+    if acceptance.get("status") != "accepted" or acceptance.get("accepted") is not True:
+        errors.append("alignment_report 尚未正式接受；pending/旧报告不能进入正式验收")
+    try:
+        alignment = _load_alignment_module()
+        errors.extend(alignment.acceptance_errors(root, report))
+        gate = alignment.mv_gate
         if report.get("alignment_unit") != "character":
-            add(BLOCK, "字幕", "字幕/alignment_report.json", "正式项目仍是旧 word-count 切行报告，需重跑字符级对齐")
-        if isinstance(confidence, (int, float)) and confidence < 0.9:
-            add(BLOCK, "字幕", "字幕/alignment_report.json", f"字符对齐置信度 {confidence:.1%} < 90%")
+            errors.append("alignment_report 不是字符级强制对齐")
+        errors.extend(gate._alignment_stem_timing_errors(root, report))
+        expected_binding = gate._alignment_acceptance_binding(root, report)
+        if acceptance.get("binding") != expected_binding:
+            errors.append("alignment_report 尚未以当前 master/stem/lyrics/ASS/LRC/report binding 正式接受")
+        route = acceptance.get("route")
+        if route == "singing_acoustic_evidence":
+            lyric_lines = report.get("lyric_lines")
+            if isinstance(lyric_lines, bool) or not isinstance(lyric_lines, int):
+                lyric_lines = 0
+            if not gate._alignment_acoustic_valid(report, expected_binding, lyric_lines):
+                errors.append("singing acoustic evidence 未校准、非 singing-specific、不可正式验收、"
+                              "未逐行覆盖或未绑定当前 inputs/outputs")
+        elif route == "named_listening_review":
+            manual = report.get("manual_review") or {}
+            manual_current = bool(
+                manual.get("accepted") is True
+                and manual.get("kind") == "named_full_listening_review"
+                and manual.get("verdict") == "pass"
+                and gate._valid_named_reviewer(manual.get("reviewer"))
+                and str(manual.get("notes") or "").strip()
+                and manual.get("bound_inputs_sha256") == report.get("inputs_sha256")
+                and manual.get("bound_outputs_sha256") == report.get("outputs_sha256")
+                and manual.get("binding") == expected_binding
+                and manual.get("bound_report_preaccept_sha256")
+                == expected_binding.get("report_preaccept_content_sha256")
+            )
+            if not manual_current:
+                errors.append("具名逐行 listening review 未绑定当前 inputs/outputs/report 前置内容")
+    except Exception as exc:
+        errors.append(f"schema v5 验收复算失败：{exc}")
+    for message in dict.fromkeys(str(item) for item in errors if str(item).strip()):
+        add(BLOCK, "字幕", "字幕/alignment_report.json", message)
+    coverage = report.get("character_coverage_ratio")
     add(INFO, "字幕", "字幕/alignment_report.json",
-        f"对齐快照：{report.get('aligned_lines', 0)}/{report.get('lyric_lines', 0)} 行 · confidence={confidence}")
+        f"对齐快照：{report.get('aligned_lines', 0)}/{report.get('lyric_lines', 0)} 行 · "
+        f"character_coverage_ratio={coverage}（仅文本字符映射覆盖率，不是声学置信度） · "
+        f"acceptance={((report.get('acceptance') or {}).get('status') or 'missing')}")
+
+
+def check_image_acceptance(root):
+    """Recompute B14 from current pixels, full image QC and the authoritative ledger."""
+    plan_path = os.path.join(root, "分镜", "clip_plan.json")
+    qc_rel = "生产数据/image_qc/image_qc.json"
+    ledger_rel = "生产数据/image_acceptance/image_acceptance.json"
+    qc_path = os.path.join(root, qc_rel)
+    ledger_path = os.path.join(root, ledger_rel)
+    if not (os.path.exists(plan_path) or os.path.exists(qc_path) or os.path.exists(ledger_path)):
+        return
+    qc = load_json_safe(qc_path) if os.path.exists(qc_path) else None
+    if not isinstance(qc, dict) or qc.get("kind") != "mv_image_qc":
+        add(BLOCK, "一致性", qc_rel, "缺或损坏当前 mv_image_qc 聚合报告；B14 不接受降级人工替代")
+        qc = {}
+    version = qc.get("version", qc.get("schema_version"))
+    try:
+        version_ok = not isinstance(version, bool) and int(version) >= 3
+    except (TypeError, ValueError):
+        version_ok = False
+    if not version_ok:
+        add(BLOCK, "一致性", qc_rel, "image_qc 必须是当前 v3+ 聚合报告")
+    summary = qc.get("summary") or {}
+    if summary.get("hard_blocks") != 0 or summary.get("verdict") != "ok":
+        add(BLOCK, "一致性", qc_rel,
+            f"image_qc 未以 full/ok 通过：verdict={summary.get('verdict')!r} · hard_blocks={summary.get('hard_blocks')!r}")
+    precision = (qc.get("qc_environment") or {}).get("precision_level")
+    if precision != "full":
+        add(BLOCK, "一致性", qc_rel,
+            f"image_qc precision_level={precision!r}；degraded/manual_review/--accept-degraded 均不能放行 B14")
+    assets_sha = qc.get("assets_sha256") or {}
+    if not isinstance(assets_sha, dict) or not assets_sha:
+        add(BLOCK, "一致性", qc_rel, "image_qc 缺 assets_sha256，不能证明检查的是当前像素")
+        assets_sha = {}
+    for rel, recorded in assets_sha.items():
+        if mv_utils.content_hash(os.path.join(root, str(rel))) != recorded:
+            add(BLOCK, "一致性", qc_rel, f"image_qc 当前像素绑定已过期：{rel}")
+    provenance = qc.get("generation_provenance") or {}
+    if provenance.get("complete") is not True or (provenance.get("summary") or {}).get("block") != 0:
+        add(BLOCK, "一致性", qc_rel, "image_qc generation_provenance 必须 complete 且 block=0")
+    if not os.path.isfile(ledger_path):
+        add(BLOCK, "一致性", ledger_rel, "缺权威 image_acceptance ledger；旧 image_qc/manual_review 不能证明逐图验收")
+        return
+    ledger = load_json_safe(ledger_path)
+    if not isinstance(ledger, dict) or ledger.get("kind") != "mv_image_acceptance_ledger":
+        add(BLOCK, "一致性", ledger_rel, "image_acceptance ledger kind/schema 损坏")
+        return
+    try:
+        audit = _load_image_receipts().audit_ledger(Path(root), ledger=ledger)
+    except Exception as exc:
+        add(BLOCK, "一致性", ledger_rel, f"image_acceptance ledger 无法按当前像素复算：{exc}")
+        return
+    rows = audit.get("rows") or []
+    audit_summary = audit.get("summary") or {}
+    if audit_summary.get("all_current_accepted") is not True:
+        add(BLOCK, "一致性", ledger_rel,
+            f"B14 未完成：accepted={audit_summary.get('accepted', 0)}/{audit_summary.get('expected', 0)} · "
+            f"stale={audit_summary.get('stale', 0)}")
+    for row in rows:
+        if row.get("status") != "accepted":
+            add(BLOCK, "一致性", ledger_rel,
+                f"逐图验收失效：{row.get('asset')} ({','.join(str(x) for x in row.get('findings') or []) or 'unknown'})")
+    audited_assets = {str(row.get("asset")) for row in rows if row.get("asset")}
+    if set(map(str, assets_sha)) != audited_assets:
+        add(BLOCK, "一致性", qc_rel, "image_qc 资产全集与 image_acceptance 动态审计全集不一致")
+    if (audit_summary.get("all_current_accepted") is True and precision == "full"
+            and summary.get("verdict") == "ok" and summary.get("hard_blocks") == 0
+            and set(map(str, assets_sha)) == audited_assets):
+        add(INFO, "一致性", ledger_rel,
+            f"B14 当前像素逐图验收有效：{audit_summary.get('accepted', 0)}/{audit_summary.get('expected', 0)}")
 
 
 def check_plan_manifests(root, songlen):
@@ -518,6 +701,113 @@ def check_final(root, meta, songlen):
         f"快照：{dur:.1f}s · {w}x{h} · {'有音轨' if has_audio else '无音轨'}")
 
 
+def c2pa_status_dimensions(provenance):
+    """Return C2PA dimensions without collapsing valid/trusted/timestamped.
+
+    A structurally valid claim may still be signed with a test certificate,
+    untrusted, or missing a timestamp.  Keeping these booleans separate avoids
+    presenting "c2patool returned 0" as production trust.
+    """
+    c2pa = (provenance or {}).get("c2pa") or {}
+    profile = str(c2pa.get("certificate_profile") or "")
+    return {
+        "requested": c2pa.get("requested") is True,
+        "embedded": c2pa.get("embedded") is True,
+        "structurally_valid": c2pa.get("structurally_valid") is True,
+        "signature_valid": c2pa.get("signature_valid") is True,
+        "trust_checked": c2pa.get("trust_checked") is True,
+        "trusted": c2pa.get("trusted") is True,
+        "test_certificate": profile.lower().startswith("test"),
+        "certificate_profile": profile or None,
+        "timestamp_validated": c2pa.get("timestamp_validated") is True,
+        "timestamp_trusted": c2pa.get("timestamp_trusted") is True,
+        "timestamped": c2pa.get("timestamped") is True,
+        "timestamp_exception_allowed": c2pa.get("timestamp_exception_allowed") is True,
+        "output": c2pa.get("output"),
+        "output_sha256": c2pa.get("output_sha256"),
+    }
+
+
+def c2pa_release_errors(root, provenance):
+    """Hard failures when C2PA was explicitly requested for this delivery."""
+    status = c2pa_status_dimensions(provenance)
+    if not status["requested"]:
+        return []
+    errors = []
+    for key, label in (
+        ("embedded", "未嵌入 signed asset"),
+        ("structurally_valid", "结构校验未通过"),
+        ("signature_valid", "签名校验未通过"),
+    ):
+        if not status[key]:
+            errors.append(f"C2PA {label}")
+    if status["test_certificate"]:
+        errors.append("C2PA 使用 test certificate，只能开发验证，不能作为生产可信凭证")
+    if not status["trust_checked"]:
+        errors.append("C2PA 未执行 trust anchors 校验，不能声称 trusted")
+    elif not status["trusted"]:
+        errors.append("C2PA 签名未获信任链验证")
+    if status["timestamped"] != status["timestamp_trusted"]:
+        errors.append("C2PA timestamped 与 timestamp_trusted 不一致")
+    if status["timestamp_trusted"] and not status["timestamp_validated"]:
+        errors.append("C2PA timestamp_trusted=true 但缺 timestamp_validated 证据")
+    if not status["timestamp_trusted"] and not status["timestamp_exception_allowed"]:
+        errors.append("C2PA 缺可信 TSA 时间戳，且未记录显式 no-timestamp 例外")
+    output = str(status.get("output") or "")
+    if not output:
+        errors.append("C2PA requested 但 provenance 未记录 signed output")
+    else:
+        output_path = os.path.abspath(os.path.join(root, output))
+        try:
+            inside = os.path.commonpath((os.path.abspath(root), output_path)) == os.path.abspath(root)
+        except ValueError:
+            inside = False
+        current = mv_utils.content_hash(output_path) if inside else ""
+        if not inside:
+            errors.append("C2PA signed output 指向作品根之外")
+        elif not current or current != status.get("output_sha256"):
+            errors.append("C2PA signed output 不存在或当前 SHA-256 与验证记录不符")
+    return errors
+
+
+def check_c2pa_status(root, provenance):
+    status = c2pa_status_dimensions(provenance)
+    if not status["requested"]:
+        add(INFO, "C2PA", "合规/provenance.json", "C2PA 未请求（可选）；平台 AI 披露仍由 ai_usage 独立检查")
+        return status
+    add(INFO if status["embedded"] else BLOCK, "C2PA", "embedded",
+        f"embedded={status['embedded']}")
+    add(INFO if status["structurally_valid"] else BLOCK, "C2PA", "structural",
+        f"structurally_valid={status['structurally_valid']}")
+    add(INFO if status["signature_valid"] else BLOCK, "C2PA", "signature",
+        f"signature_valid={status['signature_valid']}")
+    if status["test_certificate"]:
+        add(BLOCK, "C2PA", "certificate_profile",
+            "certificate_profile=test_untrusted；仅开发验证，绝不等于 production trusted")
+    else:
+        add(INFO, "C2PA", "certificate_profile",
+            f"certificate_profile={status['certificate_profile'] or 'not_recorded'} · test_certificate=false")
+    if not status["trust_checked"]:
+        add(BLOCK, "C2PA", "trust", "trust_checked=false；未核 trust anchors，不能声称 trusted")
+    elif not status["trusted"]:
+        add(BLOCK, "C2PA", "trust", "trusted=false；签名有效也不等于发布方可信")
+    else:
+        add(INFO, "C2PA", "trust", "trust_checked=true · trusted=true")
+    timestamp_ok = status["timestamp_validated"] and status["timestamp_trusted"] and status["timestamped"]
+    timestamp_severity = INFO if timestamp_ok else (WARN if status["timestamp_exception_allowed"] else BLOCK)
+    add(timestamp_severity, "C2PA", "timestamp",
+        f"validated={status['timestamp_validated']} · trusted={status['timestamp_trusted']} · "
+        f"exception={status['timestamp_exception_allowed']}"
+        + ("" if timestamp_ok else "；普通 signature_info.time 不等于可信 TSA 时间戳"))
+    for message in c2pa_release_errors(root, provenance):
+        # The dimension-specific messages above own structural/signature/trust.
+        if "signed output" in message:
+            add(BLOCK, "C2PA", "signed_output", message)
+    add(INFO, "C2PA", "披露边界",
+        "C2PA/Content Credentials 不能替代目标平台的 AI 内容声明；ai_usage 与平台开关仍须独立有效")
+    return status
+
+
 def check_delivery_artifacts(root):
     final = os.path.join(root, "成片_MV.mp4")
     if not os.path.exists(final):
@@ -554,6 +844,7 @@ def check_delivery_artifacts(root):
             add(BLOCK, "交付", provenance_path, "provenance 未绑定当前最终 MP4")
         if os.path.exists(master) and assets.get("成片_MV_master.mov") != mv_utils.content_hash(master):
             add(BLOCK, "交付", provenance_path, "provenance 未绑定当前 mezzanine master")
+        check_c2pa_status(root, provenance)
 
 
 def check_ai_usage(root):
@@ -576,6 +867,249 @@ def check_ai_usage(root):
         add(BLOCK if formal else WARN, "合规", "合规/ai_usage.json", f"visual_mode 不在约定枚举内：{mode}")
     else:
         add(INFO, "合规", "合规/ai_usage.json", f"AI 视觉使用披露：visual_mode={mode}")
+
+
+def _read_json_for_receipt(root, rel, errors):
+    path = os.path.join(root, rel)
+    if not os.path.isfile(path):
+        errors.append(f"缺 {rel}")
+        return None
+    try:
+        with open(path, encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"{rel} 不可解析：{exc}")
+        return None
+    if not isinstance(payload, dict):
+        errors.append(f"{rel} 顶层必须是 JSON object")
+        return None
+    return payload
+
+
+def _binding_errors(root, recorded, *, label, required=()):
+    """Validate every recorded binding plus an explicit required subset."""
+    if not isinstance(recorded, dict):
+        return [f"{label} 缺 inputs_sha256"]
+    errors = []
+    for rel in required:
+        current = mv_utils.content_hash(os.path.join(root, rel))
+        if not current:
+            errors.append(f"{label} 必需输入不存在：{rel}")
+        elif recorded.get(rel) != current:
+            errors.append(f"{label} 未绑定当前 {rel}")
+    for rel, digest in recorded.items():
+        rel = str(rel)
+        path = os.path.abspath(os.path.join(root, rel))
+        try:
+            inside = os.path.commonpath((os.path.abspath(root), path)) == os.path.abspath(root)
+        except ValueError:
+            inside = False
+        if not inside:
+            errors.append(f"{label} 含作品根外绑定：{rel}")
+            continue
+        current = mv_utils.content_hash(path)
+        if not current or current != digest:
+            errors.append(f"{label} 已过期：{rel}")
+    return errors
+
+
+def review_receipt_prerequisite_errors(root):
+    """Return every reason the current delivery cannot receive human sign-off.
+
+    This re-audits source receipts at write time.  It intentionally does not
+    trust an earlier mv_check result or a cached summary.
+    """
+    errors = []
+    for rel in REVIEW_INPUTS:
+        if not os.path.isfile(os.path.join(root, rel)):
+            errors.append(f"审片收据必需输入不存在：{rel}")
+
+    qc = _read_json_for_receipt(
+        root, "生产数据/delivery_qc/delivery_qc.json", errors,
+    )
+    if qc is not None:
+        if qc.get("kind") != "mv_delivery_qc":
+            errors.append("delivery_qc kind 不是 mv_delivery_qc")
+        hard_blocks = (qc.get("summary") or {}).get("hard_blocks")
+        if isinstance(hard_blocks, bool) or not isinstance(hard_blocks, (int, float)):
+            errors.append("delivery_qc.summary.hard_blocks 缺失或不是数值")
+        elif hard_blocks != 0:
+            errors.append(f"delivery_qc 仍有 hard_blocks={hard_blocks}")
+        errors.extend(_binding_errors(
+            root, qc.get("inputs_sha256"), label="delivery_qc",
+            required=("成片_MV.mp4", "成片_MV_master.mov"),
+        ))
+
+    ai_rel = "合规/ai_usage.json"
+    ai_usage = _read_json_for_receipt(root, ai_rel, errors)
+    if ai_usage is not None:
+        if ai_usage.get("kind") != "mv_ai_usage" or ai_usage.get("complete") is not True:
+            errors.append("ai_usage 不是 complete mv_ai_usage")
+        mode = ai_usage.get("visual_mode")
+        video_mode = ai_usage.get("video_mode")
+        if mode not in contract.AI_VISUAL_USAGE_MODES:
+            errors.append(f"ai_usage.visual_mode 无效：{mode}")
+        if video_mode not in contract.AI_VISUAL_USAGE_MODES:
+            errors.append(f"ai_usage.video_mode 无效：{video_mode}")
+        errors.extend(_binding_errors(
+            root, ai_usage.get("inputs_sha256"), label="ai_usage",
+            required=("_设置.md", "_meta.json"),
+        ))
+        runtime = contract.runtime_state_from_settings(mv_utils.parse_settings(root))
+        expected = {
+            "visual_mode": runtime["ai_visual_usage"],
+            "publish_target": runtime["publish_target"],
+            "image_model": runtime["image_model"],
+            "image_channel": runtime["image_channel"],
+            "video_model": runtime["video_model"],
+            "video_channel": runtime["video_channel"],
+        }
+        for key, value in expected.items():
+            if ai_usage.get(key) != value:
+                errors.append(
+                    f"ai_usage.{key}={ai_usage.get(key)!r} 与当前 _设置.md={value!r} 不一致"
+                )
+        if runtime["publish_target"] in ("", "未定"):
+            errors.append("_设置.md 的发行目标平台仍为未定")
+
+    provenance = _read_json_for_receipt(root, "合规/provenance.json", errors)
+    if provenance is not None:
+        if provenance.get("kind") != "mv_provenance" or provenance.get("complete") is not True:
+            errors.append("provenance 不是 complete mv_provenance")
+        errors.extend(_binding_errors(
+            root, provenance.get("inputs_sha256"), label="provenance",
+        ))
+        assets = {
+            str(row.get("path")): row.get("sha256")
+            for row in (provenance.get("assets") or []) if isinstance(row, dict)
+        }
+        errors.extend(_binding_errors(
+            root, assets, label="provenance assets",
+            required=("成片_MV.mp4", "成片_MV_master.mov", ai_rel),
+        ))
+        current_ai_hash = mv_utils.content_hash(os.path.join(root, ai_rel))
+        if provenance.get("ai_usage_sha256") != current_ai_hash:
+            errors.append("provenance.ai_usage_sha256 未绑定当前 ai_usage")
+        if ai_usage is not None and provenance.get("ai_usage") != ai_usage:
+            errors.append("provenance 内嵌的 ai_usage 快照与当前披露不一致")
+        errors.extend(c2pa_release_errors(root, provenance))
+
+    # A review receipt is a release-bearing acceptance record, so it must not
+    # reimplement a weaker copy of the stage schemas.  Reuse completion's
+    # authoritative health validators at the instant of sign-off.  The three
+    # delivery stages are unconditional; a downstream delivery artifact proves
+    # that image/video production has already been entered, so those stages are
+    # also re-audited instead of being silently treated as optional.
+    try:
+        completion = _load_completion_module()
+    except Exception as exc:
+        errors.append(f"无法加载 completion 权威健康检查：{type(exc).__name__}: {exc}")
+    else:
+        health_stages = ["compose", "disclosure", "provenance"]
+        downstream_markers = REVIEW_INPUTS + (
+            "生产数据/review/review_receipt.json",
+            "合规/release_decision.json",
+        )
+        entered_delivery = any(os.path.exists(os.path.join(root, rel)) for rel in downstream_markers)
+        stage_markers = {
+            "image": (
+                "生产数据/image_qc/image_qc.json",
+                "生产数据/image_acceptance/image_acceptance.json",
+                "出图",
+            ),
+            "video_jobs": (
+                "出视频/jobs_manifest.json", "出视频/receipts", "出视频/cut_maps",
+            ),
+            "video": (
+                "生产数据/video_qc/video_qc.json",
+                "生产数据/video_inherit_contract/inherit_contract.json",
+                "出视频/视频",
+            ),
+        }
+        for stage, markers in stage_markers.items():
+            if entered_delivery or any(os.path.exists(os.path.join(root, rel)) for rel in markers):
+                health_stages.append(stage)
+        for stage in health_stages:
+            try:
+                health = completion.stage_health(root, stage)
+            except Exception as exc:
+                errors.append(f"completion.{stage} 健康检查异常：{type(exc).__name__}: {exc}")
+                continue
+            if not isinstance(health, dict):
+                errors.append(f"completion.{stage} 健康检查返回无效 payload")
+                continue
+            stage_errors = health.get("errors") or []
+            if not isinstance(stage_errors, list):
+                errors.append(f"completion.{stage}.errors 不是 list")
+                continue
+            errors.extend(f"completion.{stage}: {message}" for message in stage_errors)
+            if health.get("ok") is not True and not stage_errors:
+                errors.append(f"completion.{stage}: ok=false 且未给出错误原因")
+    return list(dict.fromkeys(errors))
+
+
+_REVIEWER_PLACEHOLDER = re.compile(
+    r"^(?:<.*>|ai|unknown|待填|待定|匿名)$|(?:codex|chatgpt|claude|agent|bot|机器人|自动化)",
+    re.IGNORECASE,
+)
+
+
+def validate_human_signoff(reviewer, notes):
+    errors = []
+    reviewer = str(reviewer or "").strip()
+    notes = str(notes or "").strip()
+    if len(reviewer) < 2 or _REVIEWER_PLACEHOLDER.search(reviewer):
+        errors.append("--reviewer 必须是真实具名复核人，不能是占位符或 AI/agent")
+    if not notes or mv_utils.PLACEHOLDER.search(notes):
+        errors.append("--notes 必须非空且是完成的人审结论")
+    return reviewer, notes, errors
+
+
+def write_review_receipt(root, reviewer, notes):
+    """Write the hash-bound receipt; caller must have run all guards."""
+    reviewed_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    inputs = {
+        rel: mv_utils.content_hash(os.path.join(root, rel)) for rel in REVIEW_INPUTS
+    }
+    provenance = mv_utils.load_json(os.path.join(root, "合规", "provenance.json"), {}) or {}
+    machine_findings = [
+        {"sev": s, "dim": d, "loc": l, "msg": m}
+        for s, d, l, m in findings
+    ]
+    payload = {
+        "schema_version": 1,
+        "kind": "mv_review_receipt",
+        "accepted": True,
+        "reviewed_at": reviewed_at,
+        "inputs_sha256": inputs,
+        "machine_review": {
+            "hard_blocks": 0,
+            "warnings": sum(1 for row in findings if row[0] == WARN),
+            "infos": sum(1 for row in findings if row[0] == INFO),
+            "findings": machine_findings,
+            "findings_sha256": mv_utils.json_hash(machine_findings),
+            "c2pa": c2pa_status_dimensions(provenance),
+        },
+        "human_signoff": {
+            "accepted": True,
+            "reviewer": reviewer,
+            "notes": notes,
+            "reviewed_at": reviewed_at,
+            "confirmation": {
+                "kind": "explicit_current_delivery_acceptance",
+                "accepted_current_delivery": True,
+            },
+        },
+    }
+    out = os.path.join(root, REVIEW_RECEIPT_REL)
+    mv_utils.write_json(out, payload)
+    return out
+
+
+def _mark_review_complete(root):
+    """Let the central completion controller own progress mutation."""
+    completion = _load_completion_module()
+    completion.mark_stage_complete(root, "review")
 
 
 def check_lyrics_and_meta(root, meta):
@@ -607,17 +1141,8 @@ def check_lyrics_and_meta(root, meta):
     return lyric_lines
 
 
-def main():
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    opts = [a for a in sys.argv[1:] if a.startswith("--")]
-    if len(args) < 1:
-        print("用法：python3 mv_check.py <制MV作品根> [--json] [--tol 2.0]"); sys.exit(2)
-    root = args[0]
-    global DUR_TOL
-    DUR_TOL = next((float(o.split("=")[1]) for o in opts if o.startswith("--tol=")), DUR_TOL)
-    if not os.path.isdir(root):
-        print(f"作品根不存在：{root}"); sys.exit(2)
-
+def run_checks(root):
+    """Run the full deterministic review without mutating the project."""
     meta = load_json_safe(os.path.join(root, "_meta.json"))
     song_path = mv_utils.find_song(root)
     songlen = mv_utils.audio_duration(song_path) if song_path else None
@@ -628,6 +1153,7 @@ def main():
     check_plan_manifests(root, songlen)
     check_video_jobs(root)
     check_consistency_artifacts(root, meta)
+    check_image_acceptance(root)
     check_production_pack(root, meta)
     check_formal_readiness(root, meta)
     check_clips(root, songlen)
@@ -638,23 +1164,78 @@ def main():
     check_ai_usage(root)
     if songlen:
         add(INFO, "音画", mv_utils.relpath(root, song_path), f"歌长基准：{songlen:.2f}s")
+    return list(findings)
 
-    if "--json" in opts:
+
+def _print_findings(root, as_json):
+    if as_json:
         print(json.dumps([{"sev": s, "dim": d, "loc": l, "msg": m}
                           for s, d, l, m in findings], ensure_ascii=False, indent=2))
-    else:
-        order = {BLOCK: 0, WARN: 1, INFO: 2}
-        nb = sum(1 for f in findings if f[0] == BLOCK)
-        nw = sum(1 for f in findings if f[0] == WARN)
-        ni = sum(1 for f in findings if f[0] == INFO)
-        print(f"\n=== mv-review 机检：{root} ===")
-        print(f"🔴 阻断 {nb} · 🟡 建议 {nw} · 🟢 信息 {ni}"
-              + ("" if have_ffprobe() else "　（未装 ffprobe：clip/成片 时长·画幅·音轨 = 跳过）") + "\n")
-        for s, d, l, m in sorted(findings, key=lambda f: order[f[0]]):
-            print(f"{s} [{d}] {l}: {m}")
-        print("\n（语义维度——崩脸/场景漂移/画风/运镜服务节奏/卡点体感——见 references/checklist.md 人判清单）")
-    sys.exit(1 if any(f[0] == BLOCK for f in findings) else 0)
+        return
+    order = {BLOCK: 0, WARN: 1, INFO: 2}
+    nb = sum(1 for f in findings if f[0] == BLOCK)
+    nw = sum(1 for f in findings if f[0] == WARN)
+    ni = sum(1 for f in findings if f[0] == INFO)
+    print(f"\n=== mv-review 机检：{root} ===")
+    print(f"🔴 阻断 {nb} · 🟡 建议 {nw} · 🟢 信息 {ni}"
+          + ("" if have_ffprobe() else "　（未装 ffprobe：clip/成片 时长·画幅·音轨 = 跳过）") + "\n")
+    for s, d, l, m in sorted(findings, key=lambda f: order[f[0]]):
+        print(f"{s} [{d}] {l}: {m}")
+    print("\n（语义维度——崩脸/场景漂移/画风/运镜服务节奏/卡点体感——见 references/checklist.md 人判清单）")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="MV 确定性机检；默认只读，显式参数才能写具名 review receipt",
+    )
+    parser.add_argument("project_root")
+    parser.add_argument("--json", action="store_true")
+    parser.add_argument("--tol", type=float, default=pacing.DUR_TOL)
+    parser.add_argument("--write-receipt", action="store_true")
+    parser.add_argument("--reviewer", default="")
+    parser.add_argument("--notes", default="")
+    args = parser.parse_args(argv)
+    root = os.path.abspath(args.project_root)
+    if not os.path.isdir(root):
+        print(f"作品根不存在：{root}", file=sys.stderr)
+        return 2
+    if not args.write_receipt and (args.reviewer or args.notes):
+        print("[err] --reviewer/--notes 仅与显式 --write-receipt 同用", file=sys.stderr)
+        return 2
+
+    global DUR_TOL
+    DUR_TOL = args.tol
+    findings.clear()
+    reviewer = notes = ""
+    if args.write_receipt:
+        reviewer, notes, signoff_errors = validate_human_signoff(args.reviewer, args.notes)
+        if signoff_errors:
+            for message in signoff_errors:
+                add(BLOCK, "审片收据", "human_signoff", message)
+
+    run_checks(root)
+    if args.write_receipt:
+        for message in review_receipt_prerequisite_errors(root):
+            add(BLOCK, "审片收据", REVIEW_RECEIPT_REL, message)
+
+    has_blocks = any(row[0] == BLOCK for row in findings)
+    receipt_path = ""
+    if args.write_receipt and not has_blocks:
+        receipt_path = write_review_receipt(root, reviewer, notes)
+        try:
+            _mark_review_complete(root)
+        except (ImportError, OSError, RuntimeError, ValueError) as exc:
+            # The receipt stays valid for standalone/legacy projects whose
+            # progress table has not yet adopted the current stage contract.
+            print(f"[warn] 审片收据已写，但进度表未更新：{exc}", file=sys.stderr)
+
+    _print_findings(root, args.json)
+    if receipt_path:
+        print(f"[ok] 具名审片收据 → {receipt_path}", file=sys.stderr)
+    elif args.write_receipt:
+        print("[block] 未写审片收据：机检或当前证据链存在阻断", file=sys.stderr)
+    return 1 if has_blocks else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

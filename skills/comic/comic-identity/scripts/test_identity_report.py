@@ -26,6 +26,84 @@ PNG_1X1 = base64.b64decode(
 )
 
 
+def write_png(path: Path, width: int = 96, height: int = 128, color: tuple[int, int, int] = (70, 90, 110)) -> None:
+    from PIL import Image
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (width, height), color).save(path)
+
+
+def accept_fixture(
+    root: Path,
+    asset_id: str,
+    variant: str,
+    path: Path,
+    *,
+    kind: str,
+    reference_paths: list[Path] | None = None,
+) -> dict:
+    qc = identity.write_identity_image_qc(
+        root,
+        "第1话",
+        asset_id,
+        variant,
+        path,
+        registration_kind=kind,
+        source={"kind": "test_fixture"},
+        reference_paths=reference_paths or [],
+    )
+    assert qc["verdict"] == "pass"
+    qc["human_review"] = {
+        "status": "accepted",
+        "artifact_sha256": qc["artifact_sha256"],
+        "comparison_inputs_sha256": qc["comparison_inputs_sha256"],
+        "contact_sheet_sha256": qc["contact_sheet_sha256"],
+        "reviewed_by": "test-reviewer",
+        "reviewed_at": "2026-08-20T00:00:00",
+        "reason": "fixture reviewed",
+    }
+    receipt = identity.identity_qc_path(root, asset_id, variant)
+    identity.write_json(receipt, qc)
+    return {
+        "kind": "test_fixture",
+        "per_image_acceptance": {
+            "status": "accepted",
+            "artifact_sha256": qc["artifact_sha256"],
+            "receipt_path": identity.rel_to_root(root, receipt),
+        },
+    }
+
+
+def test_identity_per_image_acceptance_stales_after_pixel_or_derivation_change(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    reference = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
+    view = root / "出图" / "共享" / "图片" / "CHAR_A__front.png"
+    write_png(reference, color=(10, 20, 30))
+    write_png(view, color=(40, 50, 60))
+    accept_fixture(
+        root,
+        "CHAR_A",
+        "front",
+        view,
+        kind="character_view",
+        reference_paths=[reference],
+    )
+    assert identity.identity_image_acceptance_status(root, "CHAR_A", "front", view)["accepted"] is True
+
+    write_png(reference, color=(11, 21, 31))
+    stale_reference = identity.identity_image_acceptance_status(root, "CHAR_A", "front", view)
+    assert stale_reference["accepted"] is False
+    assert stale_reference["reason"] == "identity_derivation_input_changed"
+
+    second_view = root / "出图" / "共享" / "图片" / "CHAR_B__front.png"
+    write_png(second_view, color=(70, 80, 90))
+    accept_fixture(root, "CHAR_B", "front", second_view, kind="character_view")
+    write_png(second_view, color=(71, 81, 91))
+    stale_pixel = identity.identity_image_acceptance_status(root, "CHAR_B", "front", second_view)
+    assert stale_pixel["accepted"] is False
+    assert stale_pixel["reason"] == "identity_pixel_sha_changed"
+
+
 def test_report_does_not_force_rerun_when_current_refs_expand_after_acceptance(tmp_path: Path) -> None:
     root = tmp_path / "项目"
     chapter = "第1话"
@@ -207,9 +285,12 @@ def test_bind_job_references_preserves_registered_outfit_reference(tmp_path: Pat
     front_rel = "出图/共享/图片/CHAR_A__front.png"
     face_rel = "出图/共享/图片/CHAR_A__face.png"
     outfit_rel = "出图/共享/图片/CHAR_A__OUTFIT_TRAVEL.png"
-    (root / front_rel).write_bytes(PNG_1X1)
-    (root / face_rel).write_bytes(PNG_1X1)
-    (root / outfit_rel).write_bytes(PNG_1X1)
+    write_png(root / front_rel)
+    write_png(root / face_rel, 96, 96)
+    write_png(root / outfit_rel)
+    accept_fixture(root, "CHAR_A", "front", root / front_rel, kind="character_view")
+    accept_fixture(root, "CHAR_A", "face", root / face_rel, kind="character_view")
+    accept_fixture(root, "CHAR_A", "OUTFIT_TRAVEL", root / outfit_rel, kind="outfit", reference_paths=[root / front_rel])
     registry = {
         "assets": {
             "CHAR_A": {
@@ -262,8 +343,10 @@ def test_bind_job_references_resolves_outfit_from_multi_character_binding(tmp_pa
     shared.mkdir(parents=True)
     face_rel = "出图/共享/图片/CHAR_A__face.png"
     outfit_rel = "出图/共享/图片/CHAR_A__OUTFIT_TRAVEL.png"
-    (root / face_rel).write_bytes(PNG_1X1)
-    (root / outfit_rel).write_bytes(PNG_1X1)
+    write_png(root / face_rel, 96, 96)
+    write_png(root / outfit_rel)
+    accept_fixture(root, "CHAR_A", "face", root / face_rel, kind="character_view")
+    accept_fixture(root, "CHAR_A", "OUTFIT_TRAVEL", root / outfit_rel, kind="outfit")
     registry = {
         "assets": {
             "CHAR_A": {
@@ -313,17 +396,20 @@ def test_bind_job_references_preserves_registered_expression_reference(tmp_path:
     shared.mkdir(parents=True)
     face_rel = "出图/共享/图片/CHAR_A__face.png"
     expression_rel = "出图/共享/图片/CHAR_A__EXPR_STUNNED.png"
-    (root / face_rel).write_bytes(PNG_1X1)
-    (root / expression_rel).write_bytes(PNG_1X1)
+    write_png(root / face_rel, 96, 96)
+    write_png(root / expression_rel, 96, 96)
+    accept_fixture(root, "CHAR_A", "face", root / face_rel, kind="character_view")
+    accept_fixture(root, "CHAR_A", "EXPR_STUNNED", root / expression_rel, kind="expression", reference_paths=[root / face_rel])
     registry = {
         "assets": {
             "CHAR_A": {
                 "id": "CHAR_A",
                 "reference_images": [{"view": "face", "path": face_rel}],
                 "expressions": {
-                    "EXPR_STUNNED": {
-                        "id": "EXPR_STUNNED",
-                        "reference_images": [{"path": expression_rel}],
+                        "EXPR_STUNNED": {
+                            "id": "EXPR_STUNNED",
+                            "status": "ready",
+                            "reference_images": [{"path": expression_rel}],
                     }
                 },
             }
@@ -355,7 +441,7 @@ def test_bind_job_references_preserves_registered_expression_reference(tmp_path:
     assert jobs["jobs"][0]["references"][0]["path"] == expression_rel
 
 
-def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatch) -> None:
+def test_views_refuses_to_register_existing_view_without_per_image_acceptance(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     shared = root / "出图" / "共享" / "图片"
     shared.mkdir(parents=True)
@@ -392,20 +478,9 @@ def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatc
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
-    assert registry["assets"]["CHAR_A"]["views"]["front"].endswith("CHAR_A__front.png")
-    assert registry["assets"]["CHAR_A"]["status"] == "needs_fix"
-    assert registry["assets"]["CHAR_A"]["view_readiness"] == {
-        "required": ["front", "three_quarter", "side", "back", "face"],
-        "tier": "core_full",
-        "ready": ["front"],
-        "missing": ["three_quarter", "side", "back", "face"],
-        "complete": False,
-    }
-    manifest = json.loads((root / "生产数据" / "comic_identity_views_第1话.json").read_text(encoding="utf-8"))
-    assert manifest["items"][0]["status"] == "character_view_reused"
-    assert manifest["items"][0]["sha256"] == identity.file_sha256(shared / "CHAR_A__front.png")
+    assert registry["assets"]["CHAR_A"]["views"] == {}
 
 
 def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) -> None:
@@ -414,7 +489,8 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
     (root / "出图" / "共享" / "图片").mkdir(parents=True)
     (root / "设定库").mkdir(parents=True)
     style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
-    style_path.write_bytes(PNG_1X1)
+    write_png(style_path, 96, 120)
+    accept_fixture(root, "STYLE_A", "anchor", style_path, kind="asset_anchor")
     (root / "出图" / "共享" / "identity_registry.json").write_text(
         json.dumps(
             {
@@ -422,6 +498,7 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
                     "STYLE_A": {
                         "id": "STYLE_A",
                         "type": "style",
+                        "status": "ready",
                         "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                     },
                     "CHAR_A": {
@@ -445,8 +522,7 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
         return subprocess.CompletedProcess(["codex"], 0, stdout="{}", stderr="")
 
     def fake_decode_image_event(stdout: str, out_path: Path) -> bool:
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path)
         return True
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/codex" if name == "codex" else None)
@@ -478,7 +554,7 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     assert calls
     prompt, image_paths = calls[0]
     assert image_paths == [style_path]
@@ -487,7 +563,10 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
     assert "不得继承其中人物的脸、发型、服装" in prompt
     assert "不生成临时剧情手持物" in prompt
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
-    source = registry["assets"]["CHAR_A"]["reference_images"][0]["source"]
+    assert registry["assets"]["CHAR_A"]["reference_images"] == []
+    qc = identity.load_json(identity.identity_qc_path(root, "CHAR_A", "front"))
+    assert qc["human_review"]["status"] == "pending"
+    source = qc["source"]
     assert source["kind"] == "generated_character_view_text_seed"
     assert source["anchor_kind"] == "text_prompt_seed"
     assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
@@ -495,14 +574,15 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
     assert source["style_reference_role"] == "style_only"
     assert source["prompt_sha256"]
     assert (root / source["prompt_path"]).is_file()
-    assert registry["assets"]["CHAR_A"]["status"] == "needs_fix"
+    assert qc["verdict"] == "pass"
 
 
 def test_views_can_generate_dreamina_front_from_style_only_seed(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
     style_path.parent.mkdir(parents=True)
-    style_path.write_bytes(PNG_1X1)
+    write_png(style_path, 96, 120)
+    accept_fixture(root, "STYLE_A", "anchor", style_path, kind="asset_anchor")
     registry_path = root / "出图" / "共享" / "identity_registry.json"
     registry_path.write_text(
         json.dumps(
@@ -511,6 +591,7 @@ def test_views_can_generate_dreamina_front_from_style_only_seed(tmp_path: Path, 
                     "STYLE_A": {
                         "id": "STYLE_A",
                         "type": "style",
+                        "status": "ready",
                         "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                     },
                     "CHAR_A": {
@@ -541,8 +622,7 @@ def test_views_can_generate_dreamina_front_from_style_only_seed(tmp_path: Path, 
         ratio: str,
     ) -> tuple[bool, str, str]:
         calls.append((anchor, prompt))
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path)
         return True, "submit-char-a", ""
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
@@ -574,24 +654,28 @@ def test_views_can_generate_dreamina_front_from_style_only_seed(tmp_path: Path, 
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     assert calls and calls[0][0] == style_path
     assert "本次没有已采纳角色图片作为附件" in calls[0][1]
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
-    source = registry["assets"]["CHAR_A"]["reference_images"][0]["source"]
+    assert registry["assets"]["CHAR_A"]["reference_images"] == []
+    qc = identity.load_json(identity.identity_qc_path(root, "CHAR_A", "front"))
+    source = qc["source"]
     assert source["anchor_kind"] == "style_only_text_prompt_seed"
     assert source["backend"] == identity.DREAMINA_CHANNEL
     assert source["model"] == "Dreamina 5.0"
     assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
     assert source["style_reference_role"] == "style_only"
     assert source["submit_id"] == "submit-char-a"
+    assert qc["human_review"]["status"] == "pending"
 
 
 def test_outfits_can_generate_with_dreamina_and_keep_channel_provenance(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     front = root / "出图" / "共享" / "图片" / "CHAR_A__front.png"
     front.parent.mkdir(parents=True)
-    front.write_bytes(PNG_1X1)
+    write_png(front)
+    accept_fixture(root, "CHAR_A", "front", front, kind="character_view")
     registry_path = root / "出图" / "共享" / "identity_registry.json"
     registry_path.write_text(
         json.dumps(
@@ -631,8 +715,7 @@ def test_outfits_can_generate_with_dreamina_and_keep_channel_provenance(tmp_path
         ratio: str,
     ) -> tuple[bool, str, str]:
         calls.append((anchor, ratio))
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path)
         return True, "submit-outfit-a", ""
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
@@ -659,14 +742,17 @@ def test_outfits_can_generate_with_dreamina_and_keep_channel_provenance(tmp_path
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     assert calls == [(front, "3:4")]
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
-    source = registry["assets"]["CHAR_A"]["outfits"]["OUTFIT_WINTER"]["reference_images"][0]["source"]
+    assert registry["assets"]["CHAR_A"]["outfits"]["OUTFIT_WINTER"]["reference_images"] == []
+    qc = identity.load_json(identity.identity_qc_path(root, "CHAR_A", "OUTFIT_WINTER"))
+    source = qc["source"]
     assert source["backend"] == identity.DREAMINA_CHANNEL
     assert source["model"] == "Dreamina 5.0"
     assert source["submit_id"] == "submit-outfit-a"
     assert source["identity_anchor_path"] == "出图/共享/图片/CHAR_A__front.png"
+    assert qc["human_review"]["status"] == "pending"
     manifest = json.loads((root / "生产数据" / "comic_identity_outfits_第1话.json").read_text(encoding="utf-8"))
     assert manifest["execution_mode"] == "dreamina_official_cli"
     assert manifest["backend"] == identity.DREAMINA_CHANNEL
@@ -677,7 +763,8 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
     (root / "出图" / "共享").mkdir(parents=True)
     style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
     style_path.parent.mkdir(parents=True)
-    style_path.write_bytes(PNG_1X1)
+    write_png(style_path, 96, 120)
+    accept_fixture(root, "STYLE_A", "anchor", style_path, kind="asset_anchor")
     (root / "出图" / "共享" / "identity_registry.json").write_text(
         json.dumps(
             {
@@ -685,6 +772,7 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
                     "STYLE_A": {
                         "id": "STYLE_A",
                         "type": "style",
+                        "status": "ready",
                         "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                     },
                     "PROP_A": {
@@ -707,8 +795,7 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
         return subprocess.CompletedProcess(["codex"], 0, stdout="{}", stderr="")
 
     def fake_decode_image_event(stdout: str, out_path: Path) -> bool:
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path, 96, 120)
         return True
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/codex" if name == "codex" else None)
@@ -731,7 +818,7 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     assert calls
     prompt, image_paths = calls[0]
     assert image_paths == [style_path]
@@ -739,20 +826,24 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
     assert "只用于继承线条、上色、明暗、材质、色域和墨晕语言" in prompt
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
     asset = registry["assets"]["PROP_A"]
-    assert asset["anchor_path"].endswith("PROP_A__anchor.png")
-    source = asset["reference_images"][0]["source"]
+    assert not asset.get("anchor_path")
+    assert asset["reference_images"] == []
+    qc = identity.load_json(identity.identity_qc_path(root, "PROP_A", "anchor"))
+    source = qc["source"]
     assert source["kind"] == "generated_text_anchor"
     assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
     assert source["style_reference_role"] == "style_only"
     assert source["prompt_sha256"]
     assert (root / source["prompt_path"]).is_file()
+    assert qc["human_review"]["status"] == "pending"
 
 
 def test_anchors_generate_non_character_with_dreamina_style_reference(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
     style_path.parent.mkdir(parents=True)
-    style_path.write_bytes(PNG_1X1)
+    write_png(style_path, 96, 120)
+    accept_fixture(root, "STYLE_A", "anchor", style_path, kind="asset_anchor")
     registry_path = root / "出图" / "共享" / "identity_registry.json"
     registry_path.write_text(
         json.dumps(
@@ -761,6 +852,7 @@ def test_anchors_generate_non_character_with_dreamina_style_reference(tmp_path: 
                     "STYLE_A": {
                         "id": "STYLE_A",
                         "type": "style",
+                        "status": "ready",
                         "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                     },
                     "PROP_A": {
@@ -790,8 +882,7 @@ def test_anchors_generate_non_character_with_dreamina_style_reference(tmp_path: 
         ratio: str,
     ) -> tuple[bool, str, str]:
         calls.append((anchor, ratio))
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path)
         return True, "submit-prop-a", ""
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
@@ -819,15 +910,18 @@ def test_anchors_generate_non_character_with_dreamina_style_reference(tmp_path: 
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     assert calls == [(style_path, "3:4")]
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
-    source = registry["assets"]["PROP_A"]["reference_images"][0]["source"]
+    assert registry["assets"]["PROP_A"]["reference_images"] == []
+    qc = identity.load_json(identity.identity_qc_path(root, "PROP_A", "anchor"))
+    source = qc["source"]
     assert source["backend"] == identity.DREAMINA_CHANNEL
     assert source["model"] == "Dreamina 5.0"
     assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
     assert source["submit_id"] == "submit-prop-a"
     assert source["submitted_ratio"] == "3:4"
+    assert qc["human_review"]["status"] == "pending"
 
 
 def test_monster_anchor_prompt_consumes_character_dna_and_does_not_force_tail() -> None:
@@ -874,8 +968,7 @@ def test_anchor_candidate_batch_does_not_adopt_unreviewed_images(tmp_path: Path,
         return subprocess.CompletedProcess(["codex"], 0, stdout="{}", stderr="")
 
     def fake_decode_image_event(stdout: str, out_path: Path) -> bool:
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path, 96, 120)
         return True
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/codex" if name == "codex" else None)
@@ -892,7 +985,7 @@ def test_anchor_candidate_batch_does_not_adopt_unreviewed_images(tmp_path: Path,
                 "chapter": "第1话",
                 "refs": "STYLE_A",
                 "overwrite": False,
-                "candidate_count": 3,
+                "candidate_count": 1,
                 "ratio": "4:5",
                 "max_attempts": 2,
                 "timeout_sec": 1,
@@ -900,20 +993,22 @@ def test_anchor_candidate_batch_does_not_adopt_unreviewed_images(tmp_path: Path,
         )()
     )
 
-    assert rc == 0
-    assert len(calls) == 3
+    assert rc == 4
+    assert len(calls) == 1
     assert all("画幅固定为 4:5" in prompt for prompt in calls)
     candidates = sorted((root / "出图" / "共享" / "candidates" / "STYLE_A" / "anchor").rglob("candidate_*.png"))
-    assert len(candidates) == 3
+    assert len(candidates) == 1
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     assert "anchor_path" not in registry["assets"]["STYLE_A"]
     assert registry["assets"]["STYLE_A"]["reference_images"] == []
     manifests = list((root / "生产数据").glob("comic_identity_anchor_candidates_第1话_*.json"))
     assert len(manifests) == 1
     manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
-    assert manifest["generated"] == 3
+    assert manifest["generated"] == 1
     assert manifest["failed"] == 0
     assert manifest["adopted"] is False
+    assert manifest["items"][0]["status"] == "reference_anchor_candidate_awaiting_review"
+    assert (root / manifest["items"][0]["per_image_qc"]).is_file()
 
 
 def test_anchor_candidate_batch_uses_dreamina_text2image_and_records_ratio_adapter(
@@ -952,8 +1047,7 @@ def test_anchor_candidate_batch_uses_dreamina_text2image_and_records_ratio_adapt
         ratio: str,
     ) -> tuple[bool, str, str]:
         calls.append((prompt, model_version, resolution_type, ratio))
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path)
         return True, "submit-style-a", ""
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
@@ -981,7 +1075,7 @@ def test_anchor_candidate_batch_uses_dreamina_text2image_and_records_ratio_adapt
         )()
     )
 
-    assert rc == 0
+    assert rc == 4
     assert len(calls) == 1
     assert calls[0][1:] == ("5.0", "2k", "3:4")
     manifest_path = next((root / "生产数据").glob("comic_identity_anchor_candidates_第1话_*.json"))
@@ -1007,7 +1101,18 @@ def test_adopt_anchor_candidate_binds_human_review_and_sha(tmp_path: Path) -> No
     )
     candidate = root / "出图" / "共享" / "candidates" / "STYLE_A" / "anchor" / "batch" / "candidate_02.png"
     candidate.parent.mkdir(parents=True)
-    candidate.write_bytes(PNG_1X1)
+    write_png(candidate, 96, 120)
+    candidate_qc = identity.write_identity_image_qc(
+        root,
+        "第1话",
+        "STYLE_A",
+        "anchor_candidate_batch_02",
+        candidate,
+        registration_kind="candidate",
+        source={"kind": "test_candidate"},
+        expected_ratio="4:5",
+    )
+    assert candidate_qc["verdict"] == "pass"
 
     rc = identity.adopt_anchor_candidate(
         type(
@@ -1029,7 +1134,7 @@ def test_adopt_anchor_candidate_binds_human_review_and_sha(tmp_path: Path) -> No
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     asset = registry["assets"]["STYLE_A"]
     adopted = root / asset["anchor_path"]
-    assert adopted.read_bytes() == PNG_1X1
+    assert identity.file_sha256(adopted) == identity.file_sha256(candidate)
     assert candidate.is_file()
     source = asset["reference_images"][0]["source"]
     assert source["kind"] == "human_selected_candidate_anchor"
@@ -1047,7 +1152,8 @@ def test_front_candidate_batch_uses_style_only_and_does_not_register_views(tmp_p
     shared = root / "出图" / "共享"
     style_path = shared / "图片" / "STYLE_A__anchor.png"
     style_path.parent.mkdir(parents=True)
-    style_path.write_bytes(PNG_1X1)
+    write_png(style_path, 96, 120)
+    accept_fixture(root, "STYLE_A", "anchor", style_path, kind="asset_anchor")
     registry_path = shared / "identity_registry.json"
     registry_path.write_text(
         json.dumps(
@@ -1056,6 +1162,7 @@ def test_front_candidate_batch_uses_style_only_and_does_not_register_views(tmp_p
                     "STYLE_A": {
                         "id": "STYLE_A",
                         "type": "style",
+                        "status": "ready",
                         "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                         "reference_images": [],
                     },
@@ -1078,8 +1185,7 @@ def test_front_candidate_batch_uses_style_only_and_does_not_register_views(tmp_p
         return subprocess.CompletedProcess(["codex"], 0, stdout="{}", stderr="")
 
     def fake_decode_image_event(stdout: str, out_path: Path) -> bool:
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(PNG_1X1)
+        write_png(out_path)
         return True
 
     monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/codex" if name == "codex" else None)
@@ -1097,7 +1203,8 @@ def test_front_candidate_batch_uses_style_only_and_does_not_register_views(tmp_p
                 "characters": "CHAR_A",
                 "views": "front",
                 "backend": "codex",
-                "candidate_count": 3,
+                "candidate_count": 1,
+                "candidate_indices": "1",
                 "allow_text_anchor": True,
                 "ratio": "3:4",
                 "max_attempts": 2,
@@ -1106,23 +1213,25 @@ def test_front_candidate_batch_uses_style_only_and_does_not_register_views(tmp_p
         )()
     )
 
-    assert rc == 0
-    assert len(calls) == 3
+    assert rc == 4
+    assert len(calls) == 1
     assert all(paths == [style_path] for _, paths in calls)
     assert all("画幅固定为 3:4" in prompt for prompt, _ in calls)
     assert all("不得继承其中人物的脸、发型、服装" in prompt for prompt, _ in calls)
     candidates = sorted((shared / "candidates" / "CHAR_A" / "front").rglob("candidate_*.png"))
-    assert len(candidates) == 3
+    assert len(candidates) == 1
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     assert "views" not in registry["assets"]["CHAR_A"]
     assert registry["assets"]["CHAR_A"]["reference_images"] == []
     manifests = list((root / "生产数据").glob("comic_identity_front_candidates_第1话_*.json"))
     assert len(manifests) == 1
     manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
-    assert manifest["generated"] == 3
+    assert manifest["generated"] == 1
     assert manifest["failed"] == 0
     assert manifest["style_reference_role"] == "style_only"
     assert manifest["adopted"] is False
+    assert manifest["items"][0]["status"] == "character_view_candidate_awaiting_review"
+    assert (root / manifest["items"][0]["per_image_qc"]).is_file()
 
 
 def test_front_candidate_batch_persists_interrupted_manifest(tmp_path: Path, monkeypatch) -> None:

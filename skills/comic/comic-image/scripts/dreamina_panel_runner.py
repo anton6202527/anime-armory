@@ -396,7 +396,6 @@ def main() -> int:
     parser.add_argument("--max-attempts", type=int, default=1)
     parser.add_argument("--reference-limit", type=int, default=DREAMINA_REFERENCE_LIMIT)
     parser.add_argument("--force", action="store_true")
-    parser.add_argument("--allow-missing-refs", action="store_true")
     parser.add_argument("--timeout-sec", type=int, default=600)
     parser.add_argument("--poll-sec", type=int, default=120)
     parser.add_argument("--model-version", default="5.0")
@@ -426,36 +425,24 @@ def main() -> int:
         action="store_true",
         help="只复核并恢复现有 panel PNG 的状态，不归档、不调用 Dreamina，也不消耗新的生成尝试",
     )
-    parser.add_argument("--no-post-qc", action="store_true")
-    parser.add_argument("--continue-on-qc-block", action="store_true")
-    parser.add_argument("--skip-gate", action="store_true")
-    parser.add_argument("--waiver-reason", default="")
+    parser.add_argument(
+        "--accept-reviewed",
+        action="store_true",
+        help="对唯一当前 panel 写入 SHA 绑定签收；pass 或启发式 warn 可用，确定性 block 不可用",
+    )
+    parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人")
+    parser.add_argument("--review-notes", default="", help="--accept-reviewed 必填：逐轴目检结论与理由")
+    parser.add_argument(
+        "--skip-gate",
+        action="store_true",
+        help="仅复用绑定当前完整输入与 panel_jobs SHA 的已授权非 block receipt；不能用 waiver 绕过 preflight",
+    )
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
     jobs_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
     if not jobs_path.is_file():
         print(f"[err] missing panel jobs: {jobs_path}", file=sys.stderr)
-        return 2
-    if args.skip_gate:
-        receipt_status = shared.validate_gate_receipt(root, args.chapter, jobs_path)
-        if receipt_status.get("status") == "current_pass":
-            print(f"[ok] --skip-gate 复用当前 pass receipt：{receipt_status['path']}", flush=True)
-        elif not args.waiver_reason.strip():
-            print("[err] --skip-gate receipt 已失效；必须提供 --waiver-reason", file=sys.stderr)
-            return 2
-        else:
-            waiver = shared.write_gate_waiver(
-                root, args.chapter, jobs_path, args.waiver_reason, args.targets, receipt_status
-            )
-            print(f"[warn] --skip-gate 显式豁免已留痕：{shared.rel_to_root(root, waiver)}", flush=True)
-    else:
-        rc = shared.run_preflight_gate(root, args.chapter)
-        if rc != 0:
-            return rc
-
-    if not shutil.which("dreamina"):
-        print("[err] dreamina not found in PATH", file=sys.stderr)
         return 2
     data = shared.load_json(jobs_path)
     if (
@@ -469,24 +456,113 @@ def main() -> int:
         )
         return 2
     targets = {item.strip() for item in args.targets.split(",") if item.strip()}
-    jobs = shared.selected_jobs(data.get("jobs") or [], targets, args.limit, args.force)
+    if args.accept_reviewed:
+        if args.recheck_existing or args.force:
+            print("[err] --accept-reviewed 不能与 --recheck-existing/--force 同用", file=sys.stderr)
+            return 2
+        if len(targets) != 1:
+            print("[err] --accept-reviewed 每次必须且只能 --targets 一个 panel", file=sys.stderr)
+            return 2
+        panel_id = next(iter(targets))
+        try:
+            accepted = shared.accept_panel_review(
+                root,
+                args.chapter,
+                data,
+                jobs_path,
+                panel_id,
+                args.reviewer,
+                args.review_notes,
+            )
+        except ValueError as exc:
+            print(f"[err] {exc}", file=sys.stderr)
+            return 3
+        if shared.all_ready(root, data.get("jobs") or []):
+            shared.update_stage(
+                root,
+                args.chapter,
+                "出图",
+                "✅",
+                evidence=f"生产数据/panel_qc/{args.chapter}",
+                actor="comic-image.panel_acceptance",
+            )
+        print(f"[accepted] {panel_id} sha256={accepted['artifact_sha256']}", flush=True)
+        return 0
+    if args.recheck_existing and len(targets) != 1:
+        print("[err] --recheck-existing 每次必须且只能 --targets 一个 panel", file=sys.stderr)
+        return 2
+
+    all_jobs = [job for job in data.get("jobs") or [] if isinstance(job, dict)]
+    barrier, barrier_status = shared.first_sequence_barrier(root, all_jobs)
+    if barrier is None:
+        if not args.force:
+            print("[ok] no pending jobs")
+            return 0
+    elif not args.recheck_existing:
+        barrier_id = str(barrier.get("panel_id") or "")
+        if args.force:
+            if len(targets) != 1:
+                print("[err] --force 在逐图双闸模式下每次必须且只能 --targets 一个 panel", file=sys.stderr)
+                return 2
+            forced_id = next(iter(targets))
+            forced_index = next((i for i, row in enumerate(all_jobs) if str(row.get("panel_id") or "") == forced_id), -1)
+            if forced_index < 0:
+                print(f"[err] unknown target: {forced_id}", file=sys.stderr)
+                return 2
+            prior_unaccepted = [
+                str(row.get("panel_id") or "")
+                for row in all_jobs[:forced_index]
+                if not shared.panel_acceptance_status(root, row).get("accepted")
+            ]
+            if prior_unaccepted:
+                print(f"[err] 不能重抽 {forced_id}：此前图片尚未 accepted：{prior_unaccepted[0]}", file=sys.stderr)
+                return 3
+        else:
+            if targets and barrier_id not in targets:
+                print(f"[err] 逐图顺序闸要求先处理 {barrier_id}，不能越过它生成后续格", file=sys.stderr)
+                return 3
+            barrier_rel = str(barrier.get("result_path") or "").strip()
+            if barrier_rel and shared.png_valid(shared.resolve_path(root, barrier_rel)):
+                print(
+                    f"[review-required] {barrier_id} 尚未 accepted（{barrier_status.get('reason')}）；"
+                    f"先查看 panel_qc contact sheet，再用 --accept-reviewed --targets {barrier_id}，"
+                    "启发式 warn 可具名带警告签收，确定性 block 才须修复/重抽。",
+                    file=sys.stderr,
+                )
+                return 4
+
+    if not args.recheck_existing:
+        if args.skip_gate:
+            receipt_status = shared.validate_gate_receipt(root, args.chapter, jobs_path)
+            if receipt_status.get("status") != "current_pass":
+                print("[err] --skip-gate 只允许复用绑定当前完整输入的已授权非 block receipt；不接受 waiver", file=sys.stderr)
+                return 2
+            print(f"[ok] --skip-gate 复用当前已授权 receipt：{receipt_status['path']}", flush=True)
+        else:
+            rc = shared.run_preflight_gate(root, args.chapter)
+            if rc != 0:
+                return rc
+        if not shutil.which("dreamina"):
+            print("[err] dreamina not found in PATH", file=sys.stderr)
+            return 2
+
+    jobs = shared.selected_jobs(data.get("jobs") or [], targets, args.limit, args.force or args.recheck_existing)
     if not jobs:
         print("[ok] no pending jobs")
         return 0
-    if not args.allow_missing_refs:
-        missing = {
-            str(job.get("panel_id")): shared.missing_reference_ids(root, job)
-            for job in jobs
-        }
-        missing = {panel_id: refs for panel_id, refs in missing.items() if refs}
-        if missing:
-            for panel_id, refs in missing.items():
-                print(f"[err] {panel_id} missing shared references: {', '.join(refs)}", file=sys.stderr)
-            return 2
+    missing = {
+        str(job.get("panel_id")): shared.missing_reference_ids(root, job)
+        for job in jobs
+    }
+    missing = {panel_id: refs for panel_id, refs in missing.items() if refs}
+    if missing:
+        for panel_id, refs in missing.items():
+            print(f"[err] {panel_id} missing accepted shared references: {', '.join(refs)}", file=sys.stderr)
+        return 2
 
     max_attempts = max(1, int(args.max_attempts))
     reference_limit = max(1, min(DREAMINA_REFERENCE_LIMIT, int(args.reference_limit)))
-    backend_version = dreamina_version()
+    backend_version = dreamina_version() if not args.recheck_existing else str(data.get("backend_version") or "")
     panel_dir = root / "出图" / args.chapter / "panels"
     candidate_root = root / "出图" / args.chapter / "candidates"
     failures = 0
@@ -540,7 +616,7 @@ def main() -> int:
             )
             shared.write_json(jobs_path, data)
             print(f"[fail] {panel_id}: {job['error']}", file=sys.stderr, flush=True)
-            continue
+            return 1
 
         reference_manifest = write_reference_manifest(
             root, args.chapter, panel_id, records, omitted, reference_limit
@@ -553,16 +629,20 @@ def main() -> int:
                 shared.write_json(jobs_path, data)
                 print(f"[fail] {panel_id}: {job['error']}", file=sys.stderr, flush=True)
                 continue
-            post_qc = (
-                {}
-                if args.no_post_qc
-                else shared.post_qc_panel(root, args.chapter, job, final, records, omitted)
+            post_qc = shared.post_qc_panel(
+                root,
+                args.chapter,
+                job,
+                final,
+                records,
+                omitted,
+                adjacent_paths=shared.previous_accepted_panel_paths(root, all_jobs, panel_id),
             )
-            post_qc_verdict = str(post_qc.get("verdict") or "skipped")
+            post_qc_verdict = str(post_qc.get("verdict") or "block")
             checked_at = dt.datetime.now().isoformat(timespec="seconds")
             job.update(
                 {
-                    "status": "qc_block" if post_qc_verdict == "block" else "ready",
+                    "status": shared.status_after_post_qc(post_qc),
                     "result_path": shared.rel_to_root(root, final),
                     "artifact_sha256": shared.file_sha256(final),
                     "reference_manifest": shared.rel_to_root(root, reference_manifest),
@@ -572,6 +652,8 @@ def main() -> int:
                 }
             )
             job.pop("error", None)
+            if shared.panel_acceptance_status(root, job).get("accepted"):
+                job["status"] = "ready"
             shared.append_event(
                 root,
                 {
@@ -589,14 +671,12 @@ def main() -> int:
                 },
             )
             shared.write_json(jobs_path, data)
-            if post_qc_verdict == "block":
-                qc_blocked += 1
-                print(f"[qc-block] {panel_id} existing -> {job['result_path']}", file=sys.stderr, flush=True)
-                if not args.continue_on_qc_block:
-                    return 3
-            else:
-                print(f"[recheck] {panel_id} -> {job['result_path']} (post_qc={post_qc_verdict})", flush=True)
-            continue
+            print(
+                f"[recheck] {panel_id} -> {job['result_path']} "
+                f"(post_qc={post_qc_verdict}, status={job['status']})",
+                flush=True,
+            )
+            return 0 if job["status"] == "ready" else (4 if post_qc_verdict in {"pass", "warn"} else 3)
 
         ratio = nearest_supported_ratio(job.get("size") or {})
         prompt_mode = "concise_recovery" if args.concise_recovery else "compiled_full"
@@ -673,14 +753,18 @@ def main() -> int:
                 "normalization_scale": normalization.get("normalization_scale"),
                 "upscaled": bool(normalization.get("upscaled")),
             }
-            post_qc = (
-                {}
-                if args.no_post_qc
-                else shared.post_qc_panel(root, args.chapter, job, final, records, omitted)
+            post_qc = shared.post_qc_panel(
+                root,
+                args.chapter,
+                job,
+                final,
+                records,
+                omitted,
+                adjacent_paths=shared.previous_accepted_panel_paths(root, all_jobs, panel_id),
             )
-            post_qc_verdict = str(post_qc.get("verdict") or "skipped")
+            post_qc_verdict = str(post_qc.get("verdict") or "block")
             generated_at = dt.datetime.now().isoformat(timespec="seconds")
-            status = "qc_block" if post_qc_verdict == "block" else "ready"
+            status = shared.status_after_post_qc(post_qc)
             history = job.get("history") if isinstance(job.get("history"), list) else []
             if archived_existing:
                 history.append({"kind": "archived_previous", "path": archived_existing})
@@ -739,27 +823,44 @@ def main() -> int:
                 },
             )
             shared.write_json(jobs_path, data)
-            if post_qc_verdict == "block":
-                qc_blocked += 1
-                print(f"[qc-block] {panel_id} -> {job['result_path']}", file=sys.stderr, flush=True)
-                if not args.continue_on_qc_block:
-                    return 3
-            else:
+            if post_qc_verdict in {"pass", "warn"}:
+                warning_note = (
+                    f"；须在 review notes 中处置 warning codes={','.join(item['code'] for item in shared.warning_findings(post_qc))}"
+                    if post_qc_verdict == "warn"
+                    else ""
+                )
                 print(
-                    f"[ok] {panel_id} -> {job['result_path']} "
-                    f"(attempt {attempt}/{max_attempts}, post_qc={post_qc_verdict})",
+                    f"[review-required] {panel_id} -> {job['result_path']}; machine post-QC={post_qc_verdict}，"
+                    f"查看 {post_qc['visual_review_packet']['contact_sheet_path']} 后逐图签收{warning_note}；"
+                    "未签收前不会生成下一张。",
+                    file=sys.stderr,
                     flush=True,
                 )
-            break
+                return 4
+            print(
+                f"[qc-{post_qc_verdict}] {panel_id} -> {job['result_path']}; "
+                "确定性 block 不可人工豁免，必须修复并 --force 重抽",
+                file=sys.stderr,
+                flush=True,
+            )
+            return 3
         else:
             failures += 1
             job["status"] = "failed"
             job["error"] = last_error or "generation failed"
             shared.write_json(jobs_path, data)
             print(f"[fail] {panel_id}: {job['error']}", file=sys.stderr, flush=True)
+            return 1
 
     if shared.all_ready(root, data.get("jobs") or []):
-        shared.update_progress(root, args.chapter, "出图", "✅")
+        shared.update_stage(
+            root,
+            args.chapter,
+            "出图",
+            "✅",
+            evidence=f"出图/{args.chapter}/prompt/panel_jobs.json",
+            actor="comic-image.dreamina_panel_runner",
+        )
     if qc_blocked:
         return 3
     return 1 if failures else 0

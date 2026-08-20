@@ -8,8 +8,15 @@ import copy
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
+
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from progress import update_stage as update_progress_stage
 
 
 class FinishingError(ValueError):
@@ -474,26 +481,7 @@ def write_markdown(root: Path, chapter: str, plan: dict[str, Any]) -> Path:
 
 
 def update_progress(root: Path, chapter: str, value: str) -> None:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return
-    lines = path.read_text(encoding="utf-8").splitlines()
-    headers: list[str] = []
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("|"):
-            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and len(cells) >= len(headers) and cells[0] == chapter:
-                for stage in ("原稿收尾", "传统收尾"):
-                    if stage in headers:
-                        cells[headers.index(stage)] = value
-                        line = "| " + " | ".join(cells) + " |"
-                        break
-        out.append(line)
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    update_progress_stage(root, chapter, "原稿收尾", value, actor="comic-finishing")
 
 
 def main() -> int:

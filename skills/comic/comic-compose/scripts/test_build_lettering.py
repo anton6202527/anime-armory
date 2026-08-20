@@ -174,8 +174,25 @@ def test_translation_todo_created_and_cleared(tmp_path: Path) -> None:
     lettering = {
         "language_mode": "中上英下",
         "items": [
-            {"item_id": "L001", "panel_id": "P001", "type": "dialogue", "text": "你是谁？", "text_zh": "你是谁？"},
-            {"item_id": "L002", "panel_id": "P001", "type": "dialogue", "text": "报上名来。", "text_zh": "报上名来。", "text_en": "State your name."},
+            {
+                "item_id": "L001",
+                "content_ref": "panel:P001.dialogue:1",
+                "panel_id": "P001",
+                "type": "dialogue",
+                "source_text": "你是谁？",
+                "source_text_sha256": "current-sha",
+                "text": "你是谁？",
+                "text_zh": "你是谁？",
+            },
+            {
+                "item_id": "L002",
+                "content_ref": "panel:P001.dialogue:2",
+                "panel_id": "P001",
+                "type": "dialogue",
+                "text": "报上名来。",
+                "text_zh": "报上名来。",
+                "text_en": "State your name.",
+            },
         ],
     }
 
@@ -186,7 +203,11 @@ def test_translation_todo_created_and_cleared(tmp_path: Path) -> None:
 
     payload = json.loads(todo.read_text(encoding="utf-8"))
     assert payload["pending_count"] == 1
+    assert payload["schema_version"] == 2
+    assert payload["pending"][0]["content_ref"] == "panel:P001.dialogue:1"
+    assert payload["pending"][0]["source_text_sha256"] == "current-sha"
     assert payload["pending"][0]["text_zh"] == "你是谁？"
+    assert '"source_text_sha256"' in payload["instructions"]
 
     # 补齐译文后重跑 → todo 清除
     lettering["items"][0]["text_en"] = "Who are you?"

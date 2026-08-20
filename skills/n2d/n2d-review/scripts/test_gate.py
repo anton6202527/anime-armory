@@ -202,6 +202,64 @@ def test_prompt_consumed_contracts_block_when_upstream_stale(tmp_path):
     assert hits and "storyboard 已变更" in hits[0]["msg"]
 
 
+def test_prompt_consumed_contracts_rejects_self_consistent_narrow_fingerprint(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_prompt_consumed_inputs(root, ep)
+    contracts = []
+    for name, resolver in gate.PROMPT_CONSUMED_EXPECTED.items():
+        rel = resolver(ep)
+        contracts.append({"name": name, "path": rel, "exists": True, "sha256": _sha(root / rel)})
+    prompts = [resolver(ep) for resolver in gate.PROMPT_CONSUMED_PROMPTS["image_prompt"]]
+    receipt = {
+        "kind": "n2d_prompt_consumed_contracts", "scope": "image_prompt", "accepted": True,
+        "input_fingerprint": gate.prompt_consumption_contract.build_content_fingerprint(
+            root, source_patterns=[], values={}, scope="unrelated"
+        ),
+        "contracts": contracts,
+        "prompt_files": [{"path": rel, "exists": True, "sha256": _sha(root / rel)} for rel in prompts],
+    }
+    out = root / "生产数据" / f"consumed_contracts_image_prompt_{ep}.json"
+    out.write_text(json.dumps(receipt, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_prompt_consumed_contracts(str(root), ep, "image_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "Prompt消费收据" and f["sev"] == gate.BLOCK]
+    assert hits and "not_exact_prompt_consumption_contract" in hits[0]["msg"]
+
+
+def test_video_prompt_receipt_turns_stale_when_settings_change(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_prompt_consumed_inputs(root, ep)
+    video_prompt_dir = root / "出视频" / ep / "prompt"
+    video_prompt_dir.mkdir(parents=True, exist_ok=True)
+    (video_prompt_dir / "00_总览.md").write_text("# overview\n", encoding="utf-8")
+    (video_prompt_dir / "01_clips.md").write_text("# clips\n", encoding="utf-8")
+    (root / "_设置.md").write_text("- 画幅: 9:16\n", encoding="utf-8")
+    contracts = []
+    for name, resolver in gate.PROMPT_CONSUMED_EXPECTED.items():
+        rel = resolver(ep)
+        contracts.append({"name": name, "path": rel, "exists": True, "sha256": _sha(root / rel)})
+    prompts = [resolver(ep) for resolver in gate.PROMPT_CONSUMED_PROMPTS["video_prompt"]]
+    receipt = {
+        "kind": "n2d_prompt_consumed_contracts", "scope": "video_prompt", "accepted": True,
+        "input_fingerprint": gate.prompt_consumption_contract.build_fingerprint(root, ep, "video_prompt"),
+        "contracts": contracts,
+        "prompt_files": [{"path": rel, "exists": True, "sha256": _sha(root / rel)} for rel in prompts],
+    }
+    out = root / "生产数据" / f"consumed_contracts_video_prompt_{ep}.json"
+    out.write_text(json.dumps(receipt, ensure_ascii=False), encoding="utf-8")
+    (root / "_设置.md").write_text("- 画幅: 16:9\n", encoding="utf-8")
+
+    gate.check_prompt_consumed_contracts(str(root), ep, "video_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "Prompt消费收据" and f["sev"] == gate.BLOCK]
+    assert hits and "input_fingerprint" in hits[0]["msg"]
+
+
 def test_seam_hard_contract_blocks_relay_missing_hash_and_next_frame(tmp_path):
     gate.findings.clear()
     root = tmp_path / "work"

@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, webUtils } from 'electron'
+import { clipboard, contextBridge, ipcRenderer, webUtils } from 'electron'
 import {
   IPC_INVOKE_CHANNEL,
   type ArmoryBridge,
@@ -18,6 +18,9 @@ const bridge: ArmoryBridge = {
     return () => ipcRenderer.removeListener(event, listener)
   },
   platform: process.platform,
+  writeClipboardText(text: string) {
+    clipboard.writeText(text)
+  },
   getPathForFile(file: File) {
     return webUtils.getPathForFile(file)
   },

@@ -37,7 +37,7 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 - 通过合同后把最终画面精确 hold 到歌曲尾；不使用 `-shortest` 截掉母带尾音。
 - 正解仍是上游对齐：mv-plan/mv-video 按已签收 beatgrid 和 picture lock 生成/挑选镜头，compose 不替剪辑师重新发明节奏。
 
-内部画幅统一、裁切/尾帧 hold 和拼接使用 ProRes 422 HQ/10-bit 临时中间件，避免在母版前先压一代 H.264；临时文件只存在作品 `_mvwork/`，正式完成后可由清理工具处理。
+内部画幅统一、裁切/尾帧 hold 和拼接使用 ProRes 422 HQ/10-bit 临时中间件，避免在母版前先压一代 H.264；每次运行用 `mktemp` 在作品根建立唯一 `.mvwork.*` 临时目录，并由退出 trap 精确清理，避免覆盖并发任务或递归误删固定目录。
 
 `歌曲输入时序=后配歌曲` 时，compose 只接受最终成品歌后的正式 timeline；rough 视觉蓝图阶段不合成。
 
@@ -46,4 +46,4 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 - Pillow（无 libass 时 `render_lyrics.py` 用）。
 
 ## 进度回写
-只有正式母版、交付 MP4、delivery QC 与 provenance 全通过后才回写 `_进度.md`「合成成片」行。fallback 预览永不推进进度。
+正式母版、交付 MP4、逐输入色彩清单与 delivery QC 全部通过后，`completion.py` 才回写 `_进度.md` 的「合成成片」行。之后按独立阶段依次生成 AI 使用披露与 provenance；它们各有自己的完成收据，不能反向冒充 compose 证据。fallback 预览永不推进任何正式阶段。

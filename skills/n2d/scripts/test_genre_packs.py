@@ -73,6 +73,25 @@ def test_genre_pack_context_passes_complete_motion_contract(tmp_path: Path) -> N
     assert (tmp_path / "生产数据" / f"genre_pack_context_{episode}_review.json").is_file()
 
 
+def test_write_context_is_semantically_idempotent_across_clock_changes(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    episode = "第1集"
+    (tmp_path / "_设置.md").write_text("- 题材: 仙侠\n", encoding="utf-8")
+    monkeypatch.setattr(genre_packs, "now_iso", lambda: "2026-08-20T00:00:00+00:00")
+    first = genre_packs.build_context(tmp_path, episode, "review")
+    path = genre_packs.write_context(tmp_path, episode, "review", first)
+    first_bytes = path.read_bytes()
+
+    monkeypatch.setattr(genre_packs, "now_iso", lambda: "2026-08-21T00:00:00+00:00")
+    second = genre_packs.build_context(tmp_path, episode, "review")
+    genre_packs.write_context(tmp_path, episode, "review", second)
+
+    assert path.read_bytes() == first_bytes
+    assert json.loads(path.read_text(encoding="utf-8"))["generated_at"] == "2026-08-20T00:00:00+00:00"
+
+
 def test_system_panel_overlay_template_satisfies_chuanyue_motion_contract(tmp_path: Path) -> None:
     episode = "第1集"
     (tmp_path / "_设置.md").write_text("- 题材: 穿越\n", encoding="utf-8")

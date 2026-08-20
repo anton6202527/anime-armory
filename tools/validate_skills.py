@@ -11,7 +11,7 @@
   - N1  novel runtime 不得裸 import contract：避免 shim 被 sys.path 顺序误解析。
   - N2  novel 易变市场断言必须绑定 market baseline / research sources。
   - T1  测试文件不得硬编码引用真实 `创作区/**` 作品路径；需要样例应使用 tmp_path 或 tests/fixtures。
-  - F1  改了 skill 集合必须同步 skills/README.md 索引：系列入口、既有嵌套子 skill 与顶层独立 skill 都要在 README 出现。
+  - F1  改了 skill 集合必须同步 skills/README.md 索引：系列入口、既有嵌套子 skill、顶层独立 skill 与 app 命名空间 skill 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
   - F7  skill 规模统计同步：skills/README.md 与六个总领 skill 第一行统计不得过期。
 
@@ -35,8 +35,8 @@ SKILLS = REPO / "skills"
 README = SKILLS / "README.md"
 ENTRY_DOCS = ("AGENTS.md", "GEMINI.md", "CLAUDE.md")
 
-# 创作线的 skill 名前缀（用于 B2 斜杠命令检测）
-LINE_PREFIXES = ("n2d", "comic", "song", "mv", "ad")
+# skill 名前缀（用于 B2 斜杠命令检测；app-* 是画布/Web App 专用入口）
+SKILL_PREFIXES = ("n2d", "comic", "song", "mv", "ad", "app")
 
 # E1 grandfathered 例外清单 —— 现已清空。
 # n2d-update 历史上用 git 基线比对，2026-06 已重构为纯内容 SHA256 快照
@@ -53,7 +53,7 @@ GIT_RE = re.compile(
 
 # B2: 斜杠命令式引用 /n2d-image —— slash 前不接 word/./- 以排除路径(skills/n2d/n2d-image)。
 SLASH_RE = re.compile(
-    r"(?<![\w./-])/(?:" + "|".join(LINE_PREFIXES) + r")(?:-[a-z]+)*\b"
+    r"(?<![\w./-])/(?:" + "|".join(SKILL_PREFIXES) + r")(?:-[a-z0-9]+)*\b"
 )
 
 ENTRY_REQUIRED_ALL = (
@@ -64,6 +64,10 @@ ENTRY_REQUIRED_ALL = (
 
 ROUTING_DOCS = ("AGENTS.md", "GEMINI.md")
 ROUTING_SNIPPETS = (
+    "`app-script-workbench`",
+    "`app-character-turnaround`",
+    "`app-first-frame-video`",
+    "`app-audio-video`",
     "`n2d`",
     "`comic`",
     "`song`",
@@ -327,20 +331,28 @@ def check_bare_skill_refs() -> list[str]:
 
 
 def check_readme_index() -> list[str]:
-    """F1: every series or top-level standalone skill must match its folder and be indexed."""
+    """F1: every series, top-level, or app-namespace skill must match its folder and be indexed."""
     text = README.read_text("utf-8", "ignore")
     bad: list[str] = []
     for skill_md in sorted(SKILLS.rglob("SKILL.md")):
         d = skill_md.parent
         rel_dir = d.relative_to(SKILLS)
         if len(rel_dir.parts) not in (1, 2):
-            bad.append(f"{_rel(skill_md)}: skill 只能位于 skills/<name>/ 或既有 skills/<line>/<name>/（F1）")
+            bad.append(
+                f"{_rel(skill_md)}: skill 只能位于 skills/<name>/、"
+                "skills/app/<app-name>/ 或既有 skills/<line>/<name>/（F1）"
+            )
             continue
-        if len(rel_dir.parts) == 2 and rel_dir.parts[0] not in update_skill_stats.SERIES:
-            bad.append(f"{_rel(skill_md)}: 非系列 skill 必须直接放在 skills/<name>/，不能嵌套（F1）")
+        if (
+            len(rel_dir.parts) == 2
+            and rel_dir.parts[0] not in (*update_skill_stats.SERIES, update_skill_stats.APP_NAMESPACE)
+        ):
+            bad.append(f"{_rel(skill_md)}: 非系列 skill 只能直接放在 skills/<name>/ 或 skills/app/<app-name>/（F1）")
             continue
 
         name = d.name
+        if len(rel_dir.parts) == 2 and rel_dir.parts[0] == update_skill_stats.APP_NAMESPACE and not name.startswith("app-"):
+            bad.append(f"{_rel(skill_md)}: skills/app/ 下的 skill 名必须以 app- 开头（F1）")
         frontmatter = skill_md.read_text("utf-8", "ignore").split("---", 2)
         name_match = re.search(r"(?m)^name:\s*([^\s#]+)\s*$", frontmatter[1] if len(frontmatter) > 2 else "")
         declared_name = name_match.group(1).strip("'\"") if name_match else ""

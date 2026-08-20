@@ -183,6 +183,8 @@ export interface ArmoryBridge {
   invoke<C extends IpcChannel>(channel: C, args: IpcArgs<C>): Promise<IpcResult<C>>
   on<E extends IpcEventName>(event: E, cb: (payload: IpcEvents[E]) => void): () => void
   platform: NodeJS.Platform
+  /** Write-only OS clipboard bridge; renderer code cannot read clipboard contents. */
+  writeClipboardText(text: string): void
   /** Absolute path for a File dropped from the OS (Electron webUtils). */
   getPathForFile(file: File): string
 }

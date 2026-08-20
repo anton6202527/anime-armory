@@ -23,6 +23,14 @@ def test_new_project_starts_with_locale_and_accessibility_release_contracts(tmp_
     brief = json.loads((root / "需求" / "brief.json").read_text(encoding="utf-8"))
     locale = json.loads((root / "合规" / "locale_matrix.json").read_text(encoding="utf-8"))
     assert brief["ai_label_receipts"] == [] and brief["provenance_receipts"] == []
+    assert brief["commercial_disclosure_receipts"] == []
+    assert brief["placement_adaptation_modes"] == {}
+    assert brief["campaign_mode"] == "" and brief["industry_category"] == ""
+    assert brief["landing_page_readiness"]["status"] == ""
+    assert brief["message_reconciliation"]["checked_items"] == []
+    assert brief["eligibility_reviews"] == []
+    assert brief["measurement"]["tracking_integrations"] == []
+    assert {"utm", "deep_link", "consent_privacy"} <= set(brief["measurement"])
     assert "audio_description" in brief["accessibility"]
     assert locale["deliverable_locales"]
     assert locale["locales"][locale["default_locale"]]["typography_review"]["status"] == "pending"

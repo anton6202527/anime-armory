@@ -356,3 +356,81 @@ def test_release_manifest_blocks_stale_compliance_fingerprint_for_publish_profil
         manifest = release_manifest.build_manifest(root, release_name="v1")
         ids = [item["id"] for item in manifest["release_readiness"]["blockers"]]
         assert "RELEASE-COMPLIANCE-FINGERPRINT-STALE" in ids
+
+
+def test_release_manifest_honors_explicit_authenticity_read_requirement():
+    with tempfile.TemporaryDirectory() as root:
+        make_project(root)
+        write_ready_evidence(root)
+        auth_path = os.path.join(root, "修订", "authenticity_read.json")
+        payload = {
+            "schema_version": 1,
+            "kind": "novel_authenticity_read",
+            "required_for_release": True,
+            "status": "planned",
+            "scope": ["目标文化场景"],
+            "reviewer": {"reviewer_id": "reader-a", "fit_statement": "熟悉目标语境"},
+            "findings": [],
+        }
+        write_json(auth_path, payload)
+
+        required = release_manifest.build_manifest(root, release_name="required-auth-read")
+        blocker_ids = [item["id"] for item in required["release_readiness"]["blockers"]]
+        assert "RELEASE-AUTHENTICITY-READ" in blocker_ids
+        assert required["release_ready"] is False
+
+        payload["required_for_release"] = False
+        write_json(auth_path, payload)
+        optional = release_manifest.build_manifest(root, release_name="optional-auth-read")
+        warning_ids = [item["id"] for item in optional["release_readiness"]["warnings"]]
+        assert "RELEASE-AUTHENTICITY-READ" in warning_ids
+        assert optional["release_ready"] is True, optional["release_readiness"]
+
+        payload.update({
+            "required_for_release": True,
+            "status": "completed",
+            "source_snapshot": release_manifest.snapshot_chapters(root, mode="review:authenticity"),
+        })
+        write_json(auth_path, payload)
+        completed = release_manifest.build_manifest(root, release_name="completed-auth-read")
+        assert completed["release_ready"] is True, completed["release_readiness"]
+        assert completed["evidence"]["authenticity_read"]["exists"] is True
+
+
+def test_release_manifest_rejects_fake_closed_authenticity_major():
+    with tempfile.TemporaryDirectory() as root:
+        make_project(root)
+        write_ready_evidence(root)
+        auth_path = os.path.join(root, "修订", "authenticity_read.json")
+        payload = {
+            "schema_version": 1,
+            "kind": "novel_authenticity_read",
+            "required_for_release": True,
+            "status": "completed",
+            "scope": ["目标场景"],
+            "reviewer": {"reviewer_id": "reader-a", "fit_statement": "熟悉目标语境"},
+            "source_snapshot": release_manifest.snapshot_chapters(root, mode="review:authenticity"),
+            "findings": [{
+                "id": "AUTH-001",
+                "category": "agency",
+                "severity": "major",
+                "status": "closed",
+                "author_decision": "",
+                "author_note": "",
+                "decided_by": "",
+            }],
+        }
+        write_json(auth_path, payload)
+        fake = release_manifest.build_manifest(root, release_name="fake-closed-auth")
+        assert fake["release_ready"] is False
+        check = next(item for item in fake["release_readiness"]["checks"] if item["id"] == "authenticity_read")
+        assert "手改状态" in check["message"]
+
+        payload["findings"][0].update({
+            "author_decision": "declined",
+            "author_note": "保留虚构设定，并在前文明确与现实文化无关。",
+            "decided_by": "author-a",
+        })
+        write_json(auth_path, payload)
+        closed = release_manifest.build_manifest(root, release_name="real-closed-auth")
+        assert closed["release_ready"] is True, closed["release_readiness"]

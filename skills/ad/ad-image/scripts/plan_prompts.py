@@ -348,10 +348,67 @@ def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]
     jobs: List[Dict[str, Any]] = []
     registry = load_json(root / "出图" / "共享" / "asset_registry.json", {}) or load_json(root / "设定库" / "asset_registry.json", {}) or {}
     entries = registry_entry_map(registry)
+    brand_id = str(brand_entry(registry).get("id") or "")
+    previous_output = ""
+    previous_job_id = ""
+
+    def references_for(required_ids: Sequence[str]) -> tuple[List[str], List[Dict[str, str]]]:
+        selected: List[str] = []
+        descriptors: List[Dict[str, str]] = []
+        # 普通空镜也必须带真实视觉锚；优先用品牌母图。若项目连品牌母图都没有，
+        # manifest 如实留下空清单，formal runner 会在花费前 BLOCK，绝不伪造参考。
+        ids = list(dict.fromkeys(str(v) for v in required_ids if str(v)))
+        if not ids and brand_id:
+            ids = [brand_id]
+        for aid in ids:
+            purpose = "product_identity" if aid.startswith("PROD_") else (
+                "brand_identity" if aid.startswith("BRAND_") else "asset_identity"
+            )
+            for path in reference_paths(entries.get(aid, {})):
+                if path in selected:
+                    continue
+                selected.append(path)
+                descriptors.append({"path": path, "owner": aid, "purpose": purpose})
+        return selected, descriptors
+
+    def append_job(*, job_id: str, label: str, kind: str, prompt: str, output: str,
+                   required: Sequence[str], seed: int, seed_basis: Mapping[str, Any],
+                   requires_image_input: bool) -> None:
+        nonlocal previous_output, previous_job_id
+        refs, descriptors = references_for(required)
+        if previous_output:
+            refs.append(previous_output)
+            descriptors.append({
+                "path": previous_output,
+                "owner": previous_job_id,
+                "purpose": "adjacent_accepted_frame",
+            })
+        jobs.append({
+            "job_id": job_id,
+            "shot": label,
+            "kind": kind,
+            "prompt": prompt,
+            "expected_output": output,
+            "requires_assets": list(required),
+            "reference_inputs": refs,
+            "reference_descriptors": descriptors,
+            # 产品镜仍单列此字段给后端/旧 gate；B14 逐图 receipt 对所有镜头都要求
+            # 非空、可解码、带 owner/purpose/SHA 的实际参考输入。
+            "requires_image_input": requires_image_input,
+            "planned_seed": seed,
+            "seed_basis": dict(seed_basis),
+            "status": "planned",
+        })
+        previous_output = output
+        previous_job_id = job_id
+
     for index, shot in enumerate(shots(storyboard), start=1):
         label = shot_label(shot, index)
-        required = asset_ids(shot, PROD_RE) + asset_ids(shot, BRAND_RE)
-        refs = list(dict.fromkeys(path for aid in required for path in reference_paths(entries.get(aid, {}))))
+        products = asset_ids(shot, PROD_RE)
+        required = products + asset_ids(shot, BRAND_RE)
+        if products and brand_id and brand_id not in required:
+            required.append(brand_id)
+        required = list(dict.fromkeys(required))
         # 稳定 seed：主资产 = 产品优先的首个资产 ID（同一资产跨镜同 seed）；
         # 无资产的空镜退化为按镜头标签派生（该镜自身可复现即可）。
         primary_asset = required[0] if required else ""
@@ -359,33 +416,19 @@ def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]
         seed = planned_seed_for(root.name, seed_key)
         seed_basis = {"project": root.name, "seed_key": seed_key,
                       "derivation": "zlib.crc32(project|seed_key) % 2^31"}
-        jobs.append({
-            "job_id": f"{label}_first",
-            "shot": label,
-            "kind": "first_frame",
-            "prompt": f"出图/分镜/prompt/{label}.md",
-            "expected_output": f"出图/分镜/图片/{label}.png",
-            "requires_assets": required,
-            "reference_inputs": refs,
-            "requires_image_input": bool(asset_ids(shot, PROD_RE)),
-            "planned_seed": seed,
-            "seed_basis": seed_basis,
-            "status": "planned",
-        })
+        append_job(
+            job_id=f"{label}_first", label=label, kind="first_frame",
+            prompt=f"出图/分镜/prompt/{label}.md",
+            output=f"出图/分镜/图片/{label}.png", required=required,
+            seed=seed, seed_basis=seed_basis, requires_image_input=bool(products),
+        )
         if needs_end_frame(shot):
-            jobs.append({
-                "job_id": f"{label}_end",
-                "shot": label,
-                "kind": "end_frame",
-                "prompt": f"出图/分镜/prompt/{label}_end.md",
-                "expected_output": f"出图/分镜/图片/{label}_end.png",
-                "requires_assets": required,
-                "reference_inputs": refs,
-                "requires_image_input": bool(asset_ids(shot, PROD_RE)),
-                "planned_seed": seed,
-                "seed_basis": dict(seed_basis),
-                "status": "planned",
-            })
+            append_job(
+                job_id=f"{label}_end", label=label, kind="end_frame",
+                prompt=f"出图/分镜/prompt/{label}_end.md",
+                output=f"出图/分镜/图片/{label}_end.png", required=required,
+                seed=seed, seed_basis=seed_basis, requires_image_input=bool(products),
+            )
     return jobs
 
 
@@ -437,7 +480,7 @@ def run(root: Path) -> Dict[str, Any]:
         prompt_path = root / str(job["prompt"])
         job["prompt_sha256"] = hashlib.sha256(prompt_path.read_bytes()).hexdigest()
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": KIND,
         "project_root": str(root),
         "generated_at": datetime.now(timezone.utc).isoformat(),

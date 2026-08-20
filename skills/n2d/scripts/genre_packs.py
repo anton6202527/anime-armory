@@ -551,12 +551,28 @@ def render_context_markdown(payload: Dict[str, Any]) -> str:
 def write_context(root: Path, episode: str, stage_key: str, payload: Dict[str, Any]) -> Path:
     path = context_path(root, episode, stage_key)
     path.parent.mkdir(parents=True, exist_ok=True)
+    stable_payload = dict(payload)
+    if path.is_file():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            existing = None
+        if isinstance(existing, dict):
+            existing_semantic = {key: value for key, value in existing.items() if key != "generated_at"}
+            current_semantic = {key: value for key, value in stable_payload.items() if key != "generated_at"}
+            if existing_semantic == current_semantic:
+                # A regenerated diagnostic with identical semantics must not revoke an already
+                # accepted release merely because the wall clock advanced.
+                stable_payload["generated_at"] = existing.get("generated_at")
+    text = json.dumps(stable_payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    if path.is_file() and path.read_text(encoding="utf-8") == text:
+        return path
     tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
-    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.write_text(text, encoding="utf-8")
     os.replace(tmp, path)
     md_path = context_md_path(root, episode, stage_key)
     md_path.parent.mkdir(parents=True, exist_ok=True)
-    md_path.write_text(render_context_markdown(payload), encoding="utf-8")
+    md_path.write_text(render_context_markdown(stable_payload), encoding="utf-8")
     return path
 
 

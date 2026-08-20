@@ -32,8 +32,13 @@ class ReviewTest(unittest.TestCase):
         self._write_json(root, "合规/provenance_qc.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "合规/locale_matrix_validation.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "合规/release_variant_manifest.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "生产数据/campaign_readiness.json",
+                         {"summary": {"block": 0, "warn": 0, "release_ready": True}})
         self._write_json(root, "生产数据/final_media_consistency.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "生产数据/consistency_findings.json", {"summary": {"block": 0, "warn": 0}})
+        # Compliance is a downstream consumer of delivery QC/profile/adaptation;
+        # regenerate it after those sources in this passing fixture.
+        self._write_json(root, "合规/compliance_manifest.json", {"summary": {"release_ready": True, "block": 0}})
         with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as f:
             f.write("""## 交付版本矩阵
 | 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |
@@ -76,6 +81,33 @@ class ReviewTest(unittest.TestCase):
             os.remove(os.path.join(root, "出视频", "分镜", "video_qc.json"))
             payload = review.review(root)
             self.assertTrue(any(f["code"] == "video_qc_missing" for f in payload["findings"]))
+
+    def test_review_blocks_when_readiness_evidence_bytes_change(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base(root)
+            evidence = os.path.join(root, "证据", "commercial-disclosure.png")
+            os.makedirs(os.path.dirname(evidence), exist_ok=True)
+            with open(evidence, "wb") as f:
+                f.write(b"receipt-v1")
+            self._write_json(root, "需求/brief.json", {
+                "commercial_disclosure_receipts": [{"evidence_file": "证据/commercial-disclosure.png"}],
+            })
+            # Reports are regenerated after the receipt is established.
+            self._write_json(root, "生产数据/campaign_readiness.json",
+                             {"summary": {"block": 0, "warn": 0, "release_ready": True}})
+            self._write_json(root, "合规/release_variant_manifest.json",
+                             {"summary": {"block": 0, "warn": 0, "release_ready": True}})
+            self._write_json(root, "合规/compliance_manifest.json",
+                             {"summary": {"block": 0, "warn": 0, "release_ready": True}})
+            time.sleep(0.002)
+            with open(evidence, "ab") as f:
+                f.write(b"-mutated")
+
+            payload = review.review(root)
+            codes = {f["code"] for f in payload["findings"]}
+
+            self.assertIn("campaign_readiness_stale", codes)
+            self.assertIn("release_variant_manifest_stale", codes)
 
     def test_ad_law_malformed_blocks(self):
         with tempfile.TemporaryDirectory() as root:

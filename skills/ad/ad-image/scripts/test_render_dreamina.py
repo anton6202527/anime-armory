@@ -104,6 +104,14 @@ def test_require_dreamina_image_signoff_accepts_signed_exception(tmp_path):
 def _image_project(tmp_path, jobs):
     root = tmp_path / "项目"
     (root / "出图" / "分镜").mkdir(parents=True)
+    for job in jobs:
+        job.setdefault("reference_inputs", ["设定库/ref.png"])
+        for rel in job["reference_inputs"]:
+            path = root / rel
+            # 相邻输出由前一 job 生成；静态母图在测试夹具里先落盘。
+            if not str(rel).startswith("出图/分镜/图片/"):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"r" * 2048)
     (root / "出图" / "分镜" / "image_jobs_manifest.json").write_text(
         json.dumps({"jobs": jobs}, ensure_ascii=False), encoding="utf-8")
     return root
@@ -113,6 +121,8 @@ def _quiet_render_env(monkeypatch):
     monkeypatch.setattr(rd, "require_dreamina_image_signoff", lambda root: None)
     monkeypatch.setattr(rd, "enforce_gate", lambda root: None)
     monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
+    monkeypatch.setattr(rd, "prepare_image_receipt", lambda root, manifest, job, index: {"status": "preflight_passed"})
+    monkeypatch.setattr(rd, "finish_image_receipt", lambda root, job: {"status": "accepted"})
     monkeypatch.setattr(rd.time, "sleep", lambda s: None)
 
 
@@ -239,4 +249,33 @@ def test_max_credits_halts_before_next_paid_submission(tmp_path, monkeypatch):
     assert summary["budget"]["halted"] is True
     assert summary["budget"]["spent_credits"] == 2.0
     assert summary["budget"]["unrun_jobs"] == ["镜头02"]
+    assert manifest["jobs"][1].get("submit_id") is None
+
+
+def test_runner_stops_after_one_output_until_current_pixel_is_signed(tmp_path, monkeypatch):
+    root = _image_project(tmp_path, [
+        {"job_id": "镜头01", "prompt": "出图/分镜/prompt/镜头01.md",
+         "expected_output": "出图/分镜/图片/镜头01.png", "reference_inputs": ["设定库/ref.png"]},
+        {"job_id": "镜头02", "prompt": "出图/分镜/prompt/镜头02.md",
+         "expected_output": "出图/分镜/图片/镜头02.png", "reference_inputs": ["出图/分镜/图片/镜头01.png"]},
+    ])
+    _quiet_render_env(monkeypatch)
+    monkeypatch.setattr(rd, "finish_image_receipt", lambda root, job: {"status": "awaiting_human_signoff"})
+    submit = mock.Mock(return_value={
+        "submit_id": "sid", "credit_count": 1, "gen_status": "success",
+        "result_json": {"images": [{"image_url": "https://example.test/a.png"}]},
+    })
+    monkeypatch.setattr(rd, "run_dreamina_image", submit)
+
+    def fake_download(url, target):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0" * 2048)
+
+    monkeypatch.setattr(rd, "download", fake_download)
+    summary = _render(root)
+    manifest = _read_manifest(root)
+
+    assert submit.call_count == 1
+    assert summary["awaiting_human_signoff"] == 1
+    assert manifest["jobs"][0]["status"] == "awaiting_human_signoff"
     assert manifest["jobs"][1].get("submit_id") is None

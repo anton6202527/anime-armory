@@ -197,6 +197,16 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     shot_reverse = next(row for row in data["contracts"] if row["name"] == "shot_reverse_contract")
     assert shot_reverse["exists"] is True and shot_reverse["sha256"]
     assert all(row["exists"] and row["sha256"] for row in data["prompt_files"])
+    first_fingerprint = data["input_fingerprint"]["sha256"]
+    assert data["input_fingerprint"]["kind"] == "n2d_content_fingerprint"
+    route_path = root / "出视频" / ep / "prompt" / "video_model_routes.json"
+    route_path.write_text(
+        json.dumps({"kind": "n2d_video_model_routes", "version": 1, "routes": [], "backend": "changed"}),
+        encoding="utf-8",
+    )
+    changed_receipt = prompt_pack.write_consumed_contracts_receipt(root, ep, (p0, p1))
+    changed = json.loads(changed_receipt.read_text(encoding="utf-8"))
+    assert changed["input_fingerprint"]["sha256"] != first_fingerprint
     assert "执行配方 / Execution Recipe" in clips
     assert "frame_inputs=" in clips and "reference_inputs=" in clips and "anchor_consumption=" in clips
     assert "### 后端编译提交 prompt" in clips

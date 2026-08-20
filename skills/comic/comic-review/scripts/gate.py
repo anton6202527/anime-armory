@@ -49,6 +49,13 @@ except Exception:  # pragma: no cover
 COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
+COMIC_IMAGE_SCRIPTS = Path(__file__).resolve().parents[2] / "comic-image" / "scripts"
+if str(COMIC_IMAGE_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(COMIC_IMAGE_SCRIPTS))
+try:
+    import codex_panel_runner as panel_acceptance
+except Exception:  # pragma: no cover - missing validator must fail closed in check_panel_jobs_ready
+    panel_acceptance = None
 try:
     from image_backend_adapter import resolve_capabilities
 except Exception:  # pragma: no cover
@@ -306,15 +313,16 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
         if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
             recorded_sha = str(item.get("artifact_sha256") or "").strip()
             panel_path = find_panel_image(root, chapter, panel_id)
-            if recorded_sha:
-                current_sha = hashlib.sha256(panel_path.read_bytes()).hexdigest() if panel_path else ""
-                if current_sha != recorded_sha:
-                    continue
+            current_sha = hashlib.sha256(panel_path.read_bytes()).hexdigest() if panel_path else ""
+            accepted_by = str(item.get("accepted_by") or data.get("accepted_by") or "").strip()
+            reason = str(item.get("reason") or "").strip()
+            authorized = bool(recorded_sha and recorded_sha == current_sha and accepted_by and reason)
             accepted[panel_id] = {
-                "status": "accepted",
-                "accepted_by": str(item.get("accepted_by") or data.get("accepted_by") or "manual_review"),
+                "status": "accepted" if authorized else "legacy_unbound_or_stale",
+                "authorized": authorized,
+                "accepted_by": accepted_by,
                 "accepted_at": str(item.get("accepted_at") or data.get("accepted_at") or ""),
-                "reason": str(item.get("reason") or ""),
+                "reason": reason,
                 "evidence": str(item.get("evidence") or ""),
                 "artifact_sha256": recorded_sha,
                 "source": rel(root, path),
@@ -323,8 +331,9 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
         pid = str(panel_id).strip()
         if pid and pid not in accepted:
             accepted[pid] = {
-                "status": "accepted",
-                "accepted_by": str(data.get("accepted_by") or "manual_review"),
+                "status": "legacy_unbound_or_stale",
+                "authorized": False,
+                "accepted_by": str(data.get("accepted_by") or ""),
                 "accepted_at": str(data.get("accepted_at") or ""),
                 "reason": "accepted by panel list",
                 "evidence": "",
@@ -334,26 +343,35 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
 
 
 def load_panel_post_qc_acceptance(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
-    accepted = load_raw_bubble_acceptance(root, chapter)
-    qc_dir = root / "生产数据" / "panel_qc" / chapter
-    if not qc_dir.is_dir():
+    """Return only current two-gate acceptances from the formal panel job/receipt pair.
+
+    Legacy ``raw_bubble_acceptance`` records are disclosure evidence, not
+    authorization for a panel to become production-ready.
+    """
+    accepted: dict[str, dict[str, Any]] = {}
+    jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    jobs = load_json(jobs_path, {})
+    if panel_acceptance is None or not isinstance(jobs, dict):
         return accepted
-    for path in sorted(qc_dir.glob("*.json")):
-        data = load_json(path, {})
-        if not isinstance(data, dict):
+    for job in jobs.get("jobs") or []:
+        if not isinstance(job, dict):
             continue
-        panel_id = str(data.get("panel_id") or path.stem).strip()
+        panel_id = str(job.get("panel_id") or "").strip()
+        status = panel_acceptance.panel_acceptance_status(root, job)
+        if not panel_id or not status.get("accepted"):
+            continue
+        data = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
         manual = data.get("manual_review") if isinstance(data.get("manual_review"), dict) else {}
-        verdict = str(manual.get("verdict") or "").strip().lower()
-        if not panel_id or verdict not in {"pass", "accepted", "accept"}:
-            continue
+        path = root / "生产数据" / "panel_qc" / chapter / f"{panel_id}.json"
         accepted[panel_id] = {
             "status": "accepted",
-            "accepted_by": str(manual.get("reviewed_by") or manual.get("accepted_by") or "manual_review"),
+            "accepted_by": str(manual.get("reviewed_by") or ""),
             "accepted_at": str(manual.get("reviewed_at") or manual.get("accepted_at") or ""),
             "reason": str(manual.get("reason") or ""),
             "evidence": rel(root, path),
             "source": rel(root, path),
+            "artifact_sha256": str(status.get("artifact_sha256") or ""),
+            "disposition": str(status.get("disposition") or ""),
         }
     return accepted
 
@@ -1158,6 +1176,7 @@ def check_panel_jobs_stale(root: Path, chapter: str, findings: list[dict[str, An
 
 def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
     post_qc_acceptance = load_panel_post_qc_acceptance(root, chapter)
+    raw_bubble_disclosures = load_raw_bubble_acceptance(root, chapter)
     for job in jobs.get("jobs") or []:
         if not isinstance(job, dict):
             continue
@@ -1165,6 +1184,18 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
         status = str(job.get("status") or "")
         panel_path = find_panel_image(root, chapter, pid)
         generated_from = str(job.get("generated_from_submit_prompt_sha256") or "")
+        raw_disclosure = raw_bubble_disclosures.get(pid)
+        if raw_disclosure and not raw_disclosure.get("authorized"):
+            add(
+                findings,
+                "warn",
+                "legacy_raw_bubble_acceptance_unbound",
+                str(raw_disclosure.get("source") or f"生产数据/raw_bubble_acceptance_{chapter}.json"),
+                f"{pid} 的 legacy raw-bubble 签收缺当前像素 SHA、具名审核人/理由，或已随重抽失效；仅作披露，不能授权 ready。",
+                "review",
+                "改用当前 panel_qc comparison packet 完成逐图具名签收；不要沿用 accepted_panels 列表。",
+                evidence_family="human_acceptance",
+            )
         if status == "ready" and generated_from and generated_from != str(job.get("submit_prompt_sha256") or ""):
             add(
                 findings,
@@ -1190,6 +1221,25 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
                 "重跑 build_panel_jobs.py 后 force 重抽该格；submit_prompt 文本不含参考图 SHA，只靠它判过期会漏掉换参考图的改动。",
             )
             continue
+        if status == "ready":
+            acceptance_status = (
+                panel_acceptance.panel_acceptance_status(root, job)
+                if panel_acceptance is not None
+                else {"accepted": False, "reason": "panel_acceptance_validator_unavailable"}
+            )
+            if not acceptance_status.get("accepted"):
+                add(
+                    findings,
+                    "block",
+                    "panel_ready_without_current_acceptance",
+                    str(job.get("result_path") or f"出图/{chapter}/panels/{pid}.png"),
+                    f"{pid} 虽标为 ready，但逐图双闸签收无效：{acceptance_status.get('reason')}。"
+                    "手改 status/manual、重抽后复用旧签收、或比较参考变化都不能授权进入合成。",
+                    "image",
+                    "对当前像素重跑 post-QC，查看 SHA 绑定 comparison packet，并由具名审核人重新签收。",
+                    evidence_family="human_acceptance",
+                )
+                continue
         post_qc = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
         post_verdict = str(post_qc.get("verdict") or "")
         if status == "qc_block" or post_verdict == "block":
@@ -1859,14 +1909,94 @@ def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: l
 def run_compose(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:
     run_image(root, chapter, findings, notes, no_refresh=no_refresh)
     paths = check_required(root, chapter, findings, ("lettering", "manifest"))
+    run_lettering_contract_check(root, chapter, findings, notes)
     manifest = load_json(paths["manifest"], {})
     if isinstance(manifest, dict):
         if manifest.get("missing_panels"):
             add(findings, "block", "manifest_missing_panels", rel(root, paths["manifest"]), "export_manifest 仍记录缺图。", "compose", "补图并重新导出。")
         if not manifest.get("rendered"):
             add(findings, "block", "manifest_not_rendered", rel(root, paths["manifest"]), "尚未登记实际渲染导出物。", "compose", "运行 export_longstrip.py --render。")
+        if paths["lettering"].is_file():
+            current_lettering_sha256 = hashlib.sha256(paths["lettering"].read_bytes()).hexdigest()
+            if str(manifest.get("lettering_sha256") or "") != current_lettering_sha256:
+                add(
+                    findings,
+                    "block",
+                    "manifest_lettering_stale",
+                    rel(root, paths["manifest"]),
+                    "export_manifest 未绑定当前 lettering.json；脚本/翻译/人工改写重建后，旧渲染物不能重新验收。",
+                    "compose",
+                    "按当前 lettering.json 重跑 export_longstrip.py --render，并复核导出物。",
+                    evidence_family="text_contract",
+                )
         check_manifest_profile(root, chapter, manifest, findings)
     run_lettering_geometry_qc(root, chapter, findings, notes)
+
+
+def run_lettering_contract_check(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """Require lettering to prove current upstream text and translation lineage."""
+
+    script = SKILLS_ROOT / "comic-compose" / "scripts" / "lettering_contract.py"
+    if not script.is_file():
+        add(
+            findings,
+            "block",
+            "lettering_contract_checker_missing",
+            rel(root, script),
+            "lettering 版本合同检查器缺失，无法证明脚本改动已传播到嵌字。",
+            "compose",
+            "恢复 comic-compose/scripts/lettering_contract.py 后重跑 gate。",
+            evidence_family="text_contract",
+        )
+        return
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(script), str(root), chapter, "--json", "--write"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+    except Exception as exc:
+        add(
+            findings,
+            "block",
+            "lettering_contract_check_failed",
+            rel(root, script),
+            f"lettering 版本合同检查器运行失败：{exc}",
+            "compose",
+            "修复检查器或输入 JSON 后重跑 gate；不得跳过文本版本核验。",
+            evidence_family="text_contract",
+        )
+        return
+    if not isinstance(payload, dict) or not isinstance(payload.get("findings"), list):
+        add(
+            findings,
+            "block",
+            "lettering_contract_check_invalid_output",
+            rel(root, script),
+            "lettering 版本合同检查器未返回可解析 findings。",
+            "compose",
+            "修复检查器后重跑 gate。",
+            evidence_family="text_contract",
+        )
+        return
+    notes.append(
+        "lettering contract: "
+        f"verdict={payload.get('verdict')} block={(payload.get('summary') or {}).get('block', 0)} "
+        f"warn={(payload.get('summary') or {}).get('warn', 0)}"
+    )
+    for item in payload.get("findings") or []:
+        add(
+            findings,
+            str(item.get("severity") or "block"),
+            str(item.get("code") or "lettering_contract"),
+            str(item.get("artifact") or f"排版/{chapter}/lettering.json"),
+            str(item.get("reason") or "lettering 版本合同未通过。"),
+            "compose",
+            str(item.get("suggested_fix") or "重跑 build_lettering.py 与 export_longstrip.py。"),
+            evidence_family="text_contract",
+        )
 
 
 def run_lettering_geometry_qc(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:

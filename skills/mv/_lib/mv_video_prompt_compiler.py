@@ -7,10 +7,12 @@ import json
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
+import video_capabilities
+
 
 KIND = "mv_compiled_video_prompt"
-VERSION = 1
-PROFILE_VERSION = "2026-07-10.1"
+VERSION = 2
+PROFILE_VERSION = "2026-08-20.1"
 HEADING = "### 后端编译提交 prompt"
 _NEGATIVE_RE = re.compile(r"\b(?:no|not|never|avoid|without|don't|do not)\b|不要|禁止|不得|避免", re.I)
 _CJK_RE = re.compile(r"[\u3400-\u9fff]")
@@ -102,6 +104,22 @@ def compile_prompt(contract: Mapping[str, Any]) -> Dict[str, Any]:
             parts.append("避免：" + "、".join(negative_elements) + "。")
     prompt = " ".join(part for part in parts if part).strip()
     negative_prompt = ", ".join(negative_elements) if profile["negative"] == "separate" else ""
+    provider_route = contract.get("provider_route")
+    planned_controls = contract.get("planned_request_controls")
+    if isinstance(provider_route, Mapping) and isinstance(planned_controls, Mapping):
+        request_controls = video_capabilities.compile_request_controls(provider_route, planned_controls)
+        planned_controls_sha256 = video_capabilities.stable_hash(planned_controls)
+        compiled_controls_sha256 = video_capabilities.stable_hash(request_controls)
+    else:
+        # Compatibility-only path for old prompt fixtures.  New jobs always
+        # compile through a resolved provider route and structured controls.
+        request_controls = {
+            "frame_inputs": list(contract.get("frame_inputs") or []),
+            "reference_inputs": list(contract.get("reference_inputs") or []),
+            "generate_audio": False,
+        }
+        planned_controls_sha256 = video_capabilities.stable_hash(request_controls)
+        compiled_controls_sha256 = planned_controls_sha256
     payload: Dict[str, Any] = {
         "kind": KIND,
         "version": VERSION,
@@ -114,11 +132,9 @@ def compile_prompt(contract: Mapping[str, Any]) -> Dict[str, Any]:
         "native_audio_policy": "external_song_track",
         "prompt": prompt,
         "negative_prompt": negative_prompt,
-        "request_controls": {
-            "frame_inputs": list(contract.get("frame_inputs") or []),
-            "reference_inputs": list(contract.get("reference_inputs") or []),
-            "generate_audio": False,
-        },
+        "request_controls": request_controls,
+        "planned_request_controls_sha256": planned_controls_sha256,
+        "compiled_request_controls_sha256": compiled_controls_sha256,
         "source_contract_sha256": _hash(contract),
     }
     payload["lint"] = lint(payload)
@@ -138,6 +154,15 @@ def lint(payload: Mapping[str, Any]) -> Dict[str, List[str]]:
         errors.append("missing_camera_motion")
     if str(payload.get("native_audio_policy")) != "external_song_track":
         errors.append("mv_audio_policy_must_use_external_song_track")
+    controls = payload.get("request_controls") or {}
+    if isinstance(controls, Mapping) and "audio" in controls:
+        audio = controls.get("audio") or {}
+        if audio.get("mv_policy") != "external_song_track":
+            errors.append("request_controls_audio_policy_invalid")
+        if audio.get("provider_can_disable") and audio.get("provider_parameter_generate_audio") is not False:
+            errors.append("disableable_provider_audio_must_be_disabled")
+        if not audio.get("provider_can_disable") and audio.get("provider_parameter_generate_audio") is not None:
+            errors.append("non_disableable_provider_audio_must_not_receive_false_control")
     if backend == "runway" and _NEGATIVE_RE.search(prompt):
         errors.append("runway_prompt_contains_negative_command")
     if backend == "runway" and one_line(payload.get("negative_prompt")):
@@ -156,7 +181,8 @@ def render_markdown(payload: Mapping[str, Any]) -> str:
         f"{key}={payload.get(key)}"
         for key in (
             "kind", "version", "profile_version", "profile", "backend", "mode", "language",
-            "native_audio_policy", "source_contract_sha256",
+            "native_audio_policy", "planned_request_controls_sha256",
+            "compiled_request_controls_sha256", "source_contract_sha256",
         )
     )
     lines = [HEADING, f"**编译元数据**：{meta}", "```text", str(payload.get("prompt") or "").strip(), "```"]

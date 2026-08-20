@@ -16,6 +16,89 @@ def codes(findings: list[dict]) -> set[str]:
     return {str(item.get("code")) for item in findings}
 
 
+def accepted_panel_job(root: Path, chapter: str, *, warning: bool = False, with_reference: bool = False) -> tuple[dict, Path, Path | None]:
+    from PIL import Image
+
+    panel = root / "出图" / chapter / "panels" / "P001.png"
+    panel.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (100, 100), (40, 80, 120)).save(panel)
+    contact = root / "生产数据" / "panel_qc" / chapter / "P001_contact_sheet.png"
+    contact.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (200, 100), (30, 30, 35)).save(contact)
+    comparison_inputs = [
+        {
+            "role": "current_panel",
+            "label": "P001",
+            "path": str(panel.relative_to(root)),
+            "sha256": gate.panel_acceptance.file_sha256(panel),
+        }
+    ]
+    reference: Path | None = None
+    if with_reference:
+        reference = root / "出图" / "共享" / "图片" / "CHAR_A__front.png"
+        reference.parent.mkdir(parents=True, exist_ok=True)
+        Image.new("RGB", (80, 100), (120, 50, 20)).save(reference)
+        comparison_inputs.append(
+            {
+                "role": "reference",
+                "label": "CHAR_A:front",
+                "path": str(reference.relative_to(root)),
+                "sha256": gate.panel_acceptance.file_sha256(reference),
+            }
+        )
+    comparison_sha = gate.hashlib.sha256(
+        gate.json.dumps(comparison_inputs, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    issues = (
+        [{"severity": "warn", "category": "baked_text_container", "reason": "heuristic bright region"}]
+        if warning
+        else []
+    )
+    verdict = "warn" if warning else "pass"
+    artifact_sha = gate.panel_acceptance.file_sha256(panel)
+    machine_sha = gate.panel_acceptance.machine_review_sha256(artifact_sha, verdict, issues, comparison_sha)
+    post_qc = {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": chapter,
+        "panel_id": "P001",
+        "verdict": verdict,
+        "path": str(panel.relative_to(root)),
+        "artifact_sha256": artifact_sha,
+        "machine_review": {"status": verdict, "sha256": machine_sha},
+        "machine_review_sha256": machine_sha,
+        "visual_review_packet": {
+            "status": "ready_for_human_review",
+            "comparison_inputs": comparison_inputs,
+            "comparison_inputs_sha256": comparison_sha,
+            "contact_sheet_path": str(contact.relative_to(root)),
+            "contact_sheet_sha256": gate.panel_acceptance.file_sha256(contact),
+            "required_axes": ["identity", "continuity"],
+            "human_review_status": "pending",
+        },
+        "issues": issues,
+        "manual_review_required": True,
+    }
+    qc_path = root / "生产数据" / "panel_qc" / chapter / "P001.json"
+    gate.panel_acceptance.write_json(qc_path, post_qc)
+    job = {
+        "panel_id": "P001",
+        "status": gate.panel_acceptance.status_after_post_qc(post_qc),
+        "result_path": str(panel.relative_to(root)),
+        "artifact_sha256": artifact_sha,
+        "submit_prompt_sha256": "a" * 64,
+        "generated_from_submit_prompt_sha256": "a" * 64,
+        "post_qc": post_qc,
+    }
+    jobs = {"jobs": [job]}
+    jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    gate.panel_acceptance.write_json(jobs_path, jobs)
+    gate.panel_acceptance.accept_panel_review(
+        root, chapter, jobs, jobs_path, "P001", "visual-qc", "current comparison packet reviewed"
+    )
+    return job, panel, reference
+
+
 def test_visual_contract_missing_blocks_character_and_scene_panels(tmp_path: Path) -> None:
     panel_script = {
         "panels": [
@@ -181,33 +264,8 @@ def test_traditional_contract_missing_warns_not_blocks(tmp_path: Path) -> None:
 def test_panel_post_qc_warn_acceptance_downgrades_to_info(tmp_path: Path) -> None:
     root = tmp_path
     chapter = "第1话"
-    panel_dir = root / "出图" / chapter / "panels"
-    panel_dir.mkdir(parents=True)
-    (panel_dir / "P001.png").write_bytes(b"placeholder")
-    acceptance_dir = root / "生产数据" / "panel_qc" / chapter
-    acceptance_dir.mkdir(parents=True)
-    (acceptance_dir / "P001.json").write_text(
-        """{
-          "panel_id": "P001",
-          "verdict": "warn",
-          "manual_review": {
-            "reviewed_at": "2026-07-09T12:00:00",
-            "verdict": "pass",
-            "reason": "亮部是计划内雾光，不是空白气泡。"
-          }
-        }""",
-        encoding="utf-8",
-    )
-    jobs = {
-        "jobs": [
-            {
-                "panel_id": "P001",
-                "status": "ready",
-                "result_path": f"出图/{chapter}/panels/P001.png",
-                "post_qc": {"verdict": "warn"},
-            }
-        ]
-    }
+    job, _panel, _reference = accepted_panel_job(root, chapter, warning=True)
+    jobs = {"jobs": [job]}
     findings: list[dict] = []
 
     gate.check_panel_jobs_ready(root, chapter, jobs, findings)
@@ -217,6 +275,7 @@ def test_panel_post_qc_warn_acceptance_downgrades_to_info(tmp_path: Path) -> Non
     assert findings[0]["severity"] == "info"
     assert findings[0]["machine_severity"] == "warn"
     assert findings[0]["manual_acceptance"]["status"] == "accepted"
+    assert findings[0]["manual_acceptance"]["disposition"] == "accepted_with_warnings"
 
 
 def test_ready_panel_generated_under_stale_contract_blocks(tmp_path: Path) -> None:
@@ -273,7 +332,7 @@ def test_ready_panel_generated_under_stale_reference_contract_blocks(tmp_path: P
     assert all(item["severity"] == "block" for item in findings)
 
 
-def test_ready_panel_with_matching_generation_hash_passes(tmp_path: Path) -> None:
+def test_hand_edited_ready_without_double_gate_blocks(tmp_path: Path) -> None:
     root = tmp_path
     chapter = "第1话"
     panel_dir = root / "出图" / chapter / "panels"
@@ -294,7 +353,43 @@ def test_ready_panel_with_matching_generation_hash_passes(tmp_path: Path) -> Non
 
     gate.check_panel_jobs_ready(root, chapter, jobs, findings)
 
+    assert "panel_ready_without_current_acceptance" in codes(findings)
+
+
+def test_ready_panel_with_current_double_gate_passes(tmp_path: Path) -> None:
+    job, _panel, _reference = accepted_panel_job(tmp_path, "第1话")
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(tmp_path, "第1话", {"jobs": [job]}, findings)
+
     assert findings == []
+
+
+def test_old_manual_stales_after_rerender(tmp_path: Path) -> None:
+    from PIL import Image
+
+    job, panel, _reference = accepted_panel_job(tmp_path, "第1话")
+    Image.new("RGB", (100, 100), (5, 10, 15)).save(panel)
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(tmp_path, "第1话", {"jobs": [job]}, findings)
+
+    assert "panel_ready_without_current_acceptance" in codes(findings)
+    assert any("job_artifact_sha_mismatch" in item["reason"] for item in findings)
+
+
+def test_comparison_reference_change_invalidates_ready(tmp_path: Path) -> None:
+    from PIL import Image
+
+    job, _panel, reference = accepted_panel_job(tmp_path, "第1话", with_reference=True)
+    assert reference is not None
+    Image.new("RGB", (80, 100), (5, 130, 30)).save(reference)
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(tmp_path, "第1话", {"jobs": [job]}, findings)
+
+    assert "panel_ready_without_current_acceptance" in codes(findings)
+    assert any("comparison_input_changed" in item["reason"] for item in findings)
 
 
 def test_page_format_with_longstrip_geometry_blocks(tmp_path: Path) -> None:

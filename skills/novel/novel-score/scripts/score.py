@@ -30,6 +30,7 @@ from report_snapshot import (  # noqa: E402  章号/哈希纯函数走 _lib，�
     chapter_sort_key,
     sha256_file,
 )
+from reader_probe import reader_probe_freshness, sanitized_reader_probe  # noqa: E402
 
 try:
     import novel_contract as contract
@@ -707,8 +708,8 @@ AB_TAKE_RESULTS_REL_PATH = os.path.join("评分", "ab_take_results.json")
 def load_reader_panel_signals(root):
     """读 novel-simulate 产的 评分/reader_panel_signals.json（合成叙事探针）。
 
-    缺文件正常退化为 None。retention_prior 是 schema v1 兼容字段，语义仅为 retention_proxy；
-    该文件不得作为真实读者证据或进入自动数值调分。
+    缺文件正常退化为 None。schema v3 读取未校准表面分量；v1/v2 仍可加载，
+    但旧聚合留存字段一律忽略且不展示。该文件不得进入自动数值调分。
     """
     path = os.path.join(root, READER_PANEL_REL_PATH)
     if not os.path.isfile(path):
@@ -718,9 +719,28 @@ def load_reader_panel_signals(root):
             data = json.load(f)
     except (OSError, json.JSONDecodeError):
         return None
-    if not isinstance(data, dict) or "retention_prior" not in data:
+    if not isinstance(data, dict):
         return None
-    return data
+    if data.get("kind") not in (None, "novel_synthetic_reader_probe"):
+        return None
+    has_v3_signals = isinstance(data.get("surface_signals"), dict)
+    has_legacy_signals = any(key in data for key in (
+        "retention_prior", "retention_proxy", "hook_strength",
+        "lexical_diversity", "cliche_density_per_kchar",
+    ))
+    if not has_v3_signals and not has_legacy_signals and not data.get("signal_only"):
+        return None
+    freshness = reader_probe_freshness(root, data)
+    try:
+        schema_version = int(data.get("schema_version") or 0)
+    except (TypeError, ValueError):
+        schema_version = 0
+    if schema_version >= 3 and not has_v3_signals:
+        freshness = {
+            "status": "stale",
+            "reason": "reader_panel_signals schema v3 缺少 surface_signals；需重跑 novel-simulate。",
+        }
+    return sanitized_reader_probe(data, freshness)
 
 
 def load_reader_telemetry_summary(root):
@@ -907,17 +927,51 @@ def reader_panel_text(signals):
     if not signals:
         return ("无（尚无合成叙事探针；可跑 novel-simulate 产 评分/reader_panel_signals.json，"
                 "仅用于提出人工复核假设）")
-    rp = signals.get("retention_proxy", signals.get("retention_prior"))
-    hook = signals.get("hook_strength")
-    cliche = signals.get("cliche_density_per_kchar")
+    freshness = signals.get("freshness") or {
+        "status": "unknown",
+        "reason": "合成叙事探针未经过 source_snapshot 新鲜度校验。",
+    }
+    freshness_status = freshness.get("status")
+    if freshness_status != "fresh":
+        label = "已过期" if freshness_status == "stale" else "新鲜度未知"
+        return (
+            f"合成叙事探针{label}：{freshness.get('reason') or '无法确认绑定当前正文'}"
+            " 当前信号值已隐藏，不得作为本次评分上下文；请重跑 novel-simulate。"
+        )
     chs = signals.get("chapters_read") or signals.get("scope") or "?"
     mode = "signal-only" if signals.get("signal_only", True) else "qualitative-completed"
     qualitative = "已补全定性反馈" if signals.get("qualitative_completed") else "未补全定性反馈"
+    surface = signals.get("surface_signals") or {}
+    if surface:
+        hook = surface.get("hook_tail_markers") or {}
+        lexical = surface.get("lexical_4gram") or {}
+        cliche = surface.get("cliche_terms") or {}
+        perspective_bits = []
+        for item in (signals.get("perspectives") or {}).values():
+            if not isinstance(item, dict):
+                continue
+            keyword = item.get("keyword_surface") or {}
+            density = keyword.get("density_per_kchar")
+            density_text = "unavailable" if density is None else f"{density}/千字"
+            perspective_bits.append(f"{item.get('name') or '未命名视角'}关注词 {density_text}")
+        components = (
+            f"章尾标记字面命中 {hook.get('literal_marker_hits', 0)} 次/"
+            f"{hook.get('chapter_tails_observed', 0)} 个章尾，"
+            f"CJK 4-gram 去重 {lexical.get('unique_cjk_4gram_count', 0)}/"
+            f"{lexical.get('cjk_4gram_count', 0)}（比率 {lexical.get('unique_cjk_4gram_ratio', 0)}），"
+            f"套路词字面命中 {cliche.get('literal_hits', 0)} 次"
+        )
+        if perspective_bits:
+            components += "；" + "，".join(perspective_bits[:6])
+        schema_note = "source_snapshot=fresh；"
+    else:
+        components = "无可解释的当前分量信号"
+        schema_note = ""
     return (
         f"合成叙事探针（novel-simulate，范围 {chs}，{mode}，{qualitative}）："
-        f"retention_proxy {rp}、钩子标记代理 {hook}、套路关键词密度 {cliche}/千字。"
-        "（这是未经外部验证的表面代理，只能提出复核问题；不得当作真实读者、真实留存或统计证据，"
-        "不得自动上调/下调分数。即使补完人格心声，证据类型仍为 synthetic/context-only。）"
+        f"{components}。{schema_note}"
+        "（这些是未经外部验证、没有统一方向的表面观察，只能提出复核问题；不得当作真实读者、"
+        "真实留存或统计证据，不得自动上调/下调分数。即使补完视角反馈，证据类型仍为 synthetic/context-only。）"
     )
 
 

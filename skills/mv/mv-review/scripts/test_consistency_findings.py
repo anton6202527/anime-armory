@@ -42,7 +42,7 @@ def test_mv_consistency_blocks_on_degraded_image_qc_and_inherit(tmp_path: Path) 
     assert any(f["code"] == "image_qc_precision" for f in report["findings"])
 
 
-def test_bound_manual_review_downgrades_precision_block_to_warn(tmp_path: Path) -> None:
+def test_bound_manual_review_cannot_release_degraded_b14(tmp_path: Path) -> None:
     mod = load_module()
     root = tmp_path
     write_json(root / "分镜" / "clip_plan.json", {"clips": [{"clip_id": "Clip_01"}]})
@@ -58,8 +58,10 @@ def test_bound_manual_review_downgrades_precision_block_to_warn(tmp_path: Path) 
     write_json(root / "生产数据" / "image_qc" / "image_qc.json", report)
 
     out = mod.build_report(str(root))
-    assert not any(f["code"] == "image_qc_precision" for f in out["findings"])
-    assert any(f["code"] == "image_qc_precision_manual" for f in out["findings"])
+    hits = [f for f in out["findings"] if f["code"] == "image_qc_precision"]
+    assert hits and hits[0]["severity"] == "block"
+    assert "--accept-degraded" in hits[0]["message"] and "不能放行" in hits[0]["message"]
+    assert not any(f["code"] == "image_qc_precision_manual" for f in out["findings"])
 
 
 def test_legacy_boolean_manual_review_stays_block(tmp_path: Path) -> None:
@@ -73,7 +75,112 @@ def test_legacy_boolean_manual_review_stays_block(tmp_path: Path) -> None:
     })
     out = mod.build_report(str(root))
     hits = [f for f in out["findings"] if f["code"] == "image_qc_precision"]
-    assert hits and "旧式布尔留痕" in hits[0]["message"]
+    assert hits and "不能放行 B14" in hits[0]["message"]
+
+
+def test_current_full_qc_and_authoritative_b14_ledger_are_clean(tmp_path: Path) -> None:
+    mod = load_module()
+    receipts = mod._load_image_receipts()
+    from PIL import Image
+
+    root = tmp_path
+    asset_rel = "出图/段落/图片/Clip_001.png"
+    ref_rel = "设定/reference_images/lead.png"
+    prompt_rel = "出图/段落/prompt/Clip_001.md"
+    (root / prompt_rel).parent.mkdir(parents=True, exist_ok=True)
+    (root / prompt_rel).write_text("身份锚点与镜头描述", encoding="utf-8")
+    (root / ref_rel).parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (32, 32), (10, 20, 30)).save(root / ref_rel)
+    write_json(root / "分镜" / "clip_plan.json", {
+        "kind": "mv_clip_plan",
+        "clips": [{"clip_id": "Clip_001", "image_path": asset_rel,
+                   "image_prompt_path": prompt_rel}],
+    })
+    receipts.create_preflight(
+        root, asset=asset_rel, asset_kind="auto", owner="lead:主唱", use="clip_start",
+        identity_scope="contains_identity", model="local:fixture-model", channel="local",
+        prompt=prompt_rel, reference_specs=[f"{ref_rel}::lead:主唱::identity_anchor"],
+    )
+    (root / asset_rel).parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (32, 32), (40, 50, 60)).save(root / asset_rel)
+    receipts.record_submission(
+        root, asset=asset_rel, model="local:fixture-model", channel="local",
+        prompt=prompt_rel, references=[ref_rel],
+    )
+    current = receipts.load_ledger(root)["assets"][asset_rel]["current"]
+    qc_rel = receipts.QC_REL.as_posix()
+    qc = {
+        "kind": "mv_image_qc",
+        "version": 3,
+        "summary": {"hard_blocks": 0, "advisory": 0, "verdict": "ok"},
+        "assets_sha256": {asset_rel: receipts.sha256_path(root / asset_rel)},
+        "qc_environment": {"precision_level": "full"},
+        "asset_integrity": {"rows": [{"asset": asset_rel, "png": asset_rel, "verdict": "ok"}]},
+        "checks": {
+            "face": {"available": True, "mode": "insightface",
+                     "shots": [{"asset": asset_rel, "png": asset_rel, "verdict": "ok"}]},
+            "palette": {"available": True,
+                        "shots": [{"asset": asset_rel, "png": asset_rel, "verdict": "ok"}]},
+        },
+        "shot_variety": {"available": True, "findings": []},
+        "lint": {"available": True, "findings": []},
+        "generation_provenance": {
+            "complete": True, "uniform": True, "summary": {"block": 0},
+            "rows": [{
+                "asset": asset_rel, "verdict": "ok",
+                "b14_attempt_id": current["attempt_id"],
+                "b14_preflight_sha256": current["preflight"]["receipt_sha256"],
+                "b14_submission_sha256": current["submission"]["receipt_sha256"],
+            }],
+        },
+        "prohibited_local_patch_outputs": {"outputs": []},
+    }
+    write_json(root / qc_rel, qc)
+    result = receipts.record_postflight(
+        root, asset=asset_rel, qc_report=qc_rel, reviewer="审图人",
+        visual_verdict="pass", notes="逐图与当前参考并排核对后通过",
+    )
+    assert result["accepted"] is True
+
+    report = mod.build_report(str(root))
+    image_codes = {f["code"] for f in report["findings"] if f["dimension"] == "visual_identity"}
+    assert "image_qc_clean" in image_codes
+    assert not any(
+        f["severity"] == "block" and f["dimension"] == "visual_identity"
+        for f in report["findings"]
+    )
+
+
+def test_consistency_timing_blocks_old_or_pending_alignment_receipt(tmp_path: Path) -> None:
+    mod = load_module()
+    write_json(tmp_path / "字幕" / "alignment_report.json", {
+        "kind": "mv_lyric_alignment_report",
+        "schema_version": 5,
+        "alignment_confidence": 0.99,
+        "coverage_metric": "text_character_mapping_ratio_not_acoustic_confidence",
+        "character_coverage_ratio": 1.0,
+        "acceptance": {"status": "pending", "accepted": False},
+    })
+    findings: list[dict] = []
+    mod.timing_checks(findings, str(tmp_path))
+    assert any(f["severity"] == "block" and "禁止 alignment_confidence" in f["message"]
+               for f in findings)
+    assert any(f["severity"] == "block" and "尚未正式接受" in f["message"]
+               for f in findings)
+
+
+def test_consistency_timing_blocks_missing_alignment_for_formal_subtitles(tmp_path: Path) -> None:
+    mod = load_module()
+    write_json(tmp_path / "_meta.json", {"is_demo": False})
+    (tmp_path / "_设置.md").write_text(
+        "# 设置\n\n- 字幕语言：中文\n- 演唱口型：关闭\n", encoding="utf-8",
+    )
+    findings: list[dict] = []
+    mod.timing_checks(findings, str(tmp_path))
+    assert any(
+        row["severity"] == "block" and row["code"] == "alignment_missing"
+        for row in findings
+    )
 
 
 def test_production_stats_flags_high_redraw_and_takes(tmp_path: Path) -> None:

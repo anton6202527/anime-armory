@@ -9,9 +9,16 @@ import hashlib
 import html
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from progress import update_stage as update_progress_stage
 
 
 HEAVY_TOKENS = ("hook", "cliff", "reveal", "peak", "turn", "breakthrough", "冲击", "揭示", "钩子", "高潮", "动作")
@@ -707,23 +714,7 @@ def write_svg(root: Path, chapter: str, board: dict[str, Any]) -> Path:
 
 
 def update_progress(root: Path, chapter: str, stage: str, value: str) -> None:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return
-    lines = path.read_text(encoding="utf-8").splitlines()
-    headers: list[str] = []
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("|"):
-            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and len(cells) >= len(headers) and cells[0] == chapter and stage in headers:
-                cells[headers.index(stage)] = value
-                line = "| " + " | ".join(cells) + " |"
-        out.append(line)
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    update_progress_stage(root, chapter, stage, value, actor="comic-name")
 
 
 def main() -> int:

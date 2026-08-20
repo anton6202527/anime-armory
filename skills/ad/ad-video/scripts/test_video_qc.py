@@ -151,6 +151,44 @@ def test_video_qc_no_batch_warn_when_uniform(tmp_path, monkeypatch):
     assert "batch_resolution_mix" not in checks
 
 
+def test_uniform_24fps_clips_block_when_render_profile_source_is_30(tmp_path, monkeypatch):
+    root = _project(tmp_path)
+    (root / "_设置.md").write_text(
+        "- 出视频规格: 预算充足\n- 视频分辨率: 720p\n- 交付比例: 16:9\n",
+        encoding="utf-8",
+    )
+    vq.ad_render_profile.write_profile(root)
+    monkeypatch.setattr(vq, "_probe", lambda path: {
+        "streams": [{"codec_type": "video", "width": 1280, "height": 720,
+                     "avg_frame_rate": "24/1"}],
+        "format": {"duration": "4" if "01" in path.stem else "3"},
+    })
+
+    payload = vq.run_qc(root)
+
+    assert any(row["check"] == "observed_source_fps_mismatch" and row["severity"] == "block"
+               for row in payload["findings"])
+
+
+def test_actual_720p_blocks_requested_1080p_even_when_batch_is_uniform(tmp_path, monkeypatch):
+    root = _project(tmp_path)
+    (root / "_设置.md").write_text(
+        "- 出视频规格: 预算充足\n- 视频分辨率: 1080p\n- 交付比例: 16:9\n",
+        encoding="utf-8",
+    )
+    vq.ad_render_profile.write_profile(root)
+    monkeypatch.setattr(vq, "_probe", lambda path: {
+        "streams": [{"codec_type": "video", "width": 1280, "height": 720,
+                     "avg_frame_rate": "30/1"}],
+        "format": {"duration": "4" if "01" in path.stem else "3"},
+    })
+
+    payload = vq.run_qc(root)
+
+    assert any(row["check"] == "observed_source_resolution_mismatch" and row["severity"] == "block"
+               for row in payload["findings"])
+
+
 def _color_project(tmp_path, declared_transition):
     root = _project(tmp_path)
     sb = json.loads((root / "脚本" / "storyboard.json").read_text(encoding="utf-8"))

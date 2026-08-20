@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1546 | 目录文本总行数 49412
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1620 | 目录文本总行数 56532
 
 # comic — 画漫画生产线总调度
 
@@ -88,6 +88,8 @@ python3 skills/comic/comic-identity/scripts/registry_v2.py "创作区/画漫画/
 python3 skills/comic/comic-identity/scripts/registry_v2.py "创作区/画漫画/作品名" migrate --write --json
 python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
   --backend auto --characters CHAR_A --views front,three_quarter,side,back,face
+python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 accept-image \
+  --asset CHAR_A --variant front --reviewer "责任编辑" --reason "当前比较包逐轴复核通过"
 python3 skills/comic/comic-identity/scripts/model_pack.py "创作区/画漫画/作品名" check --write --json
 python3 skills/comic/comic-identity/scripts/model_pack.py "创作区/画漫画/作品名" signoff \
   --characters CHAR_A --confirm-all --reviewer "责任编辑" --reason "并排复核通过" --json
@@ -96,7 +98,7 @@ python3 skills/comic/comic-identity/scripts/model_pack.py "创作区/画漫画/�
 - `identity_registry.json` schema v2 是角色、形态、服装、表情、状态及 LOC/PROP/STYLE/VFX 的机器真值；真实参考图只放 `出图/共享/图片/`。
 - 新项目由 `init_project.py` 先写入无伪造资产/无伪造 ready 状态的合法空 v2 registry；角色定名后再由 `comic-identity` upsert 稳定 ID 与结构化形态/服装/表情/状态。
 - 多视图按 `library_tier` 验收：`core_full` 为 front / three_quarter / side / back / face，`recurring_standard` 为 front / three_quarter / face，`named_minimal` 为 front / face。角色 DNA 和禁漂移项不因档位降低。
-- “文件齐”不等于“可生产”。确定性技术检查通过后，仍要由人并排确认同一角色、视图标签、比例基线、服装标志和中性姿态；签收绑定全部必需视图 SHA，任一视图变化即 stale。
+- “文件齐”不等于“可生产”。identity 先逐张生成并停在 `awaiting_review`，每张用 `accept-image` 绑定当前像素、contact sheet、比较包与派生输入 SHA；签收前不得写 registry ready，也不得派生下一张。重复 `views → accept-image` 直到必需视图齐全后，再做 model-pack 并排总签收。任一像素、比较输入或 contact sheet 变化都会使逐图与 model-pack 签收 stale；确定性 block 不可人工豁免。
 - 所有风格锚、人物/生物定妆、多视图、场景/道具锚、候选图、封面和逐格 master 必须统一消费 `_设置.md` 的模型/渠道/格式/画幅/分辨率合同：执行时核验并使用该后端当前最高质量正式模型与最高可用原生分辨率档，同类资产保持相同 PNG/sRGB 画布；原始 master 无损保留。低分图插值放大只能是显式 derivative，不能冒充正式 master 或身份锚；完整规则由 `comic-identity` 和 `comic-image` 分别执行。
 
 ### 5. 缩略分镜/name board 与排版的 draft → review → approved
@@ -135,8 +137,10 @@ python3 skills/comic/comic-image/scripts/build_panel_jobs.py "创作区/画漫�
 ```bash
 python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image_preflight
 python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P001 --limit 1
+python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P001 \
+  --accept-reviewed --reviewer "责任编辑" --review-notes "当前 panel 与比较包逐轴复核通过"
 # 项目选择 Dreamina/即梦官方 CLI 时：
-python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --max-attempts 2
+python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P001 --max-attempts 2
 python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image
 python3 skills/comic/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render --qc-slots
 python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage compose
@@ -145,6 +149,8 @@ python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名
 ```
 
 每次 gate 都会写 `生产数据/gate_receipts/<stage>_第N话.json`，其中有 `inputs_fingerprint_sha256`、verdict、报告 SHA 和当前 `panel_jobs` SHA。receipt 只能证明“这次判定对应这些输入”；上游或产物变化后必须重跑，不能复制旧 receipt。
+
+逐格 runner 是严格 B14 顺序闸：一次只生成当前格，机器 pass/warn 都先停在待审；只有绑定当前像素、post-QC、contact sheet、比较包及每个输入 SHA 的具名 `accepted` / `accepted_with_warnings` 才允许下一格。确定性 block、unverifiable、skipped、legacy 无 SHA 签收和手改 `ready` 都不能放行。Codex 与 Dreamina 共用这一验收判定；重抽或比较参考变化后旧签收自动失效。
 
 `comic-batch` 可编排可复算步骤，但会在 name/layout draft 或 review 状态正常停下等人工或用户授权制作代理签收，也不能绕过 stale 合同和 image preflight。
 
@@ -155,11 +161,13 @@ python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 
 python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --profile digital \
   --accept --reviewer "责任编辑" --reason "最终导出物与审查证据复核通过" --write --json
 python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --profile digital --write --json
+python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --medium print_pdf --usage commercial --write --json
 ```
 
 - `technical_complete`：导出 manifest 有真实渲染物、文件存在且 SHA 可计算、无缺图或渲染错误。
 - `production_complete`：技术完成，且 `review` gate receipt 当前有效、verdict 不是 `block`。
-- `publish_ready_digital / print / commercial`：再要求 `_meta.json.rights` 的 source/font/asset 三项均显式为原创、自有、公版、已授权、开源许可或不适用；缺失、`pending`、`original_or_user_provided` 等模糊值都不算已清权。之后还需人工 `release_acceptance_第N话.json` 精确绑定当前全部导出物路径/SHA 和当前 review receipt。
+- 新 schema 把 `medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦；旧 `--profile` 继续兼容。`print_pdf` 必须有真实 PDF + 印刷合同/readiness receipt；`epub_fxl` 当前无自动 renderer，但会解析外部 EPUB 的 mimetype/container/OPF/spine/nav/XHTML、固定版式、包内 metadata/alt 属性，再核对具名 human-attested 合同，普通图片包不能冒充。
+- 公开/商用还要求 `_meta.json.rights` 明确清权、目标平台实际缩略图/后台预览（profile 有一手证据时）、当前 warning disposition ledger 全结案且哈希链完整。`release_acceptance_第N话.json` 精确绑定全部导出物、review receipt、有序平台 preview、处置账，以及当前印刷/EPUB 介质合同和收据；任一项变化均需重签。
 - `--accept` 必须显式提供 reviewer/reason；它在其它发布预检通过后替人留存 SHA 收据，但不替代人的实际复核。脚本不发布、不改 `_进度.md`。
 
 ## 失效传播与返工边界
@@ -168,11 +176,12 @@ python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 
 
 - 开发包、源范围或 chapter contract 变化 → 重跑 source trace、分格脚本审计及后续全部阶段 gate。
 - `panel_script.json` 或 `_设置.md` 变化 → name/layout 审批可能 stale；重新检查并按需重建、重签。
-- identity registry、定妆图、服装/状态或 style anchor 变化 → model-pack signoff、reference plan、panel jobs 和已生成格的参考收据重新判断；受影响格重抽。
+- identity registry、定妆图、服装/状态、style anchor 或逐图比较包变化 → 逐图/model-pack signoff、reference plan、panel jobs 和真实消费它的格重新判断。
 - name/layout 变化 → finishing plan、panel jobs、合成和审查失效。
 - finishing/reference plan/job 变化 → image preflight 和相关 panel 失效。
-- panel 图变化 → post-QC、视觉审查签收、compose/review receipt 和 release acceptance 失效。
-- lettering/layout/export 变化 → compose/review receipt 与 release acceptance 失效。
+- panel 图或其 comparison/contact sheet 变化 → post-QC、视觉审查签收、compose/review receipt 和 release acceptance 失效。
+- 原句/翻译/lettering/layout/export 变化 → 由逐格依赖索引定位消费它的格/页，compose/review receipt 与 release acceptance 失效。
+- 平台顺序/preview、PDF/EPUB、介质合同或 readiness receipt 变化 → 对应 preview/medium binding 与 release acceptance 失效。
 
 `comic-update` 负责生成最小返工计划；不要直接把整话全部重做，也不要保留已被 SHA 证明过期的批准。
 

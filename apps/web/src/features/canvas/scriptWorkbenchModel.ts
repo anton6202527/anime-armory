@@ -1,5 +1,7 @@
-export const SCRIPT_WORKBENCH_SCHEMA = "n2d-script-workbench/v1" as const;
-export const SCRIPT_WORKBENCH_SKILL = "n2d-script-workbench" as const;
+import { APP_CANVAS_SKILL_IDS } from "./appSkillIds";
+
+export const SCRIPT_WORKBENCH_SCHEMA = "app-script-workbench/v1" as const;
+export const SCRIPT_WORKBENCH_SKILL = APP_CANVAS_SKILL_IDS.scriptWorkbench;
 
 export const SCRIPT_WORKBENCH_DEFAULT_TITLE = "未命名故事脚本";
 export const SCRIPT_WORKBENCH_DEFAULT_STYLE = "电影级画面，主体一致，细节清晰";

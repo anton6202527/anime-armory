@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import inherit_contract
 import route
+import render_profile as ad_render_profile
 
 AD_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(AD_LIB) not in sys.path:
@@ -292,6 +293,8 @@ def plan(root: Path) -> Dict[str, Any]:
     storyboard = load_json(root / "脚本" / "storyboard.json", {}) or {}
     contract, source = inherit_contract.load_contract(str(root))
     routes = _route_by_clip(root)
+    render_profile = ad_render_profile.write_profile(root)
+    render_ref = ad_render_profile.compact_ref(render_profile)
     prompt_dir = root / "出视频" / "分镜" / "prompt"
     jobs: List[Dict[str, Any]] = []
     for index, shot in enumerate(_shots(storyboard), 1):
@@ -301,13 +304,15 @@ def plan(root: Path) -> Dict[str, Any]:
         prompt_path = prompt_dir / f"{label}.md"
         prompt_path.parent.mkdir(parents=True, exist_ok=True)
         prompt_path.write_text(prompt, encoding="utf-8")
+        job["render_profile"] = render_ref
         jobs.append(job)
     manifest = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "ad_video_prompt_plan",
         "project_root": str(root),
         "generated_at": now_iso(),
         "contract_source": source,
+        "render_profile": render_ref,
         "jobs": jobs,
         "summary": {
             "clips": len(jobs),

@@ -6,8 +6,15 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+
+_CRAFT = Path(__file__).resolve().parents[2] / "ad-craft" / "scripts"
+if str(_CRAFT) not in sys.path:
+    sys.path.insert(0, str(_CRAFT))
+import dependency_graph  # noqa: E402
 
 
 CHECKS = {
@@ -89,11 +96,16 @@ def build(root: Path, reviewer: str, approved, note="", evidence=None, evidence_
         "master": root / "合成" / "成片_主片.mp4",
         "delivery_plan": root / "合成" / "delivery_plan.json",
         "delivery_qc": root / "合成" / "delivery_qc.json",
+        "render_profile": root / "生产数据" / "render_profile.json",
+        "placement_adaptation": root / "生产数据" / "placement_adaptation.json",
+        "compose_acceptance": root / "生产数据" / "stage_acceptance" / "compose.json",
         "accessibility_qc": root / "合成" / "accessibility_qc.json",
         "color_preflight": root / "合成" / "color_preflight.json",
         "rendered_text_qc": root / "合成" / "rendered_text_qc.json",
         "asr_consistency": root / "合成" / "asr_consistency.json",
         "provenance_qc": root / "合规" / "provenance_qc.json",
+        "campaign_readiness": root / "生产数据" / "campaign_readiness.json",
+        "compliance_manifest": root / "合规" / "compliance_manifest.json",
         "release_variants": root / "合规" / "release_variant_manifest.json",
         "locale_validation": root / "合规" / "locale_matrix_validation.json",
         "final_media_consistency": root / "生产数据" / "final_media_consistency.json",
@@ -101,6 +113,11 @@ def build(root: Path, reviewer: str, approved, note="", evidence=None, evidence_
         "machine_review": report_path,
     }
     hashes = {key: sha(path) for key, path in sources.items()}
+    compose_status = dependency_graph.compose_acceptance_status(root)
+    hashes["compose_receipts"] = compose_status["receipt_sha256"]
+    if not compose_status["accepted"]:
+        findings.append({"severity": "block", "code": "compose_acceptance_not_current",
+                         "msg": "人工签收要求当前 formal compose acceptance 与 dependency receipts"})
     try:
         plan = json.loads(sources["delivery_plan"].read_text(encoding="utf-8"))
     except Exception:

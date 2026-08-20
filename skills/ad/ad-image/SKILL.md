@@ -26,7 +26,7 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 建角色/场�
 python3 skills/ad/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--storyboard PATH] [--strict] [--no-vlm]
 ```
 
-**逐图即时 QC（ad 线自维护）**：每生成并落档 1 张定妆、首帧或尾帧 PNG，先跑广告线自己的最小 QC，再继续下一张。产品/KV/品牌露出/代言人关键镜必须立即跑 `product_qc.py`（当前脚本以阶段目录全量扫描为主，就全量跑一次并重点处理新图 finding）；普通痛点/空镜也要做 ad-image 本线落档自检（PNG 有效、主比例/安全框、是否有不该出现的 logo/文字/产品变形、是否符合 storyboard 资产声明），并在生产事件或返修记录中留痕。`summary.block>0` 或关键镜未能确认时先重抽/改 prompt/补产品参考，不把坏图传给 `ad-video`。不得抽成公共实现，也不得复用其它系列的 QC 脚本。
+**逐图即时 QC（B14，ad 线自维护）**：`image_jobs_manifest.json` 中每张图都是独立签收单元。`image_job_receipt.py` 在花费前核对 prompt SHA、非空且可解码的实际参考像素、每份参考的项目内路径/owner/purpose/SHA，以及上一张仍按当前像素 SHA accepted；尾帧和后续镜把上一张已签收图作为真实相邻帧输入。runner 实际提交清单必须与前闸完全一致。落图后立即跑 full `product_qc.py` 并把机器报告、当前输出 SHA 与参考清单写进 `生产数据/image_job_receipts/`；任何 block/warn/unverifiable、精度降级或参考覆盖缺口都停在本张。机器通过后仍须由用户/具名审片人把**当前输出 SHA**和六项目视检查写入项目内 review JSON，再运行 `image_job_receipt.py signoff`。未 accepted 不生成下一张；`--force`、`--only`、批处理或后端切换都不能绕过。不得抽成跨线公共实现。
 
 增强后的落档检（自包含；缺 Pillow/numpy 优雅降级，只跑结构化/prompt-lint 并在报告标降级）：
 1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`，或镜头语义含 App/UI/包装/logo/品牌/CTA/end card）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 结构化 `PROD_*` 资产 ID + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。
@@ -55,7 +55,7 @@ python3 skills/ad/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--
    ```bash
    python3 skills/ad/ad-image/scripts/plan_prompts.py "<作品根>"
    ```
-   产物：`出图/共享/asset_registry.json`、共享/逐镜 prompt 和 `image_jobs_manifest.json`。产品 job 写 `reference_inputs` / `requires_image_input` / prompt hash；正式 runner 必须把真实参考图传给 image-to-image API，并记录 `actual_reference_inputs`，否则 gate 阻断。每个 job 还落 **`planned_seed`**（同一主资产跨镜同 seed、项目名+资产 ID 确定性派生，重抽单镜不引入新随机源）与 **`seed_capability`**（适配层三态：后端支持才真传 seed，unknown/unavailable 如实标注不假装生效）——无主体库路线下固定 seed 是少数能稳住跨镜产品/代言人的廉价锚。
+   产物：`出图/共享/asset_registry.json`、共享/逐镜 prompt 和 `image_jobs_manifest.json`。每个 job 写 `reference_inputs` + 与之同序的 `reference_descriptors(path/owner/purpose)` + prompt hash；不只产品镜，所有正式图都必须有真实像素参考。后续 job 自动把前一张输出加入 `adjacent_accepted_frame`，只有前一张当前收据仍 accepted 才能花费。正式 runner 记录完全一致的 `actual_reference_inputs`，否则 postflight 阻断。每个 job 还落 **`planned_seed`**（同一主资产跨镜同 seed、项目名+资产 ID 确定性派生，重抽单镜不引入新随机源）与 **`seed_capability`**（适配层三态：后端支持才真传 seed，unknown/unavailable 如实标注不假装生效）——无主体库路线下固定 seed 是少数能稳住跨镜产品/代言人的廉价锚。
 1. **建三层定妆库**（`出图/共享/`）：
    - 角色：每个出正/侧/背三视图 → `定妆_<角色>_三视图.png`。
    - 场景：关键场景四视图。
@@ -66,7 +66,9 @@ python3 skills/ad/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--
    2. **写视觉契约总览**（`出图/分镜/prompt/00_总览.md`）：继承 `storyboard.json.visual_contract`（品牌色/光位锚/画风/构图），逐镜带视线方向/光位/起幅余量。
    3. **跨比例构图余量对账**：8x8 中心网格只为多画幅裁切预留边缘；不得把它写成平台官方安全区或最终通过证据。
 
-4. **逐图落档 QC**：每张定妆/首帧/尾帧 PNG 落档后立即跑上节的 ad-image QC；产品/KV/代言人/品牌镜先过 `product_qc.py`，普通镜至少完成本线落档自检并记录。单张不过先修单张，不继续批量出后续图。只有 prompt 包而无 PNG 时，`product_qc.py` 只能证明 prompt-lint 通过，不能放行出视频。
+4. **逐图落档 QC + 当前像素签收**：runner 每次最多推进到一张 `awaiting_human_signoff`。审片人并排查看参考、当前图和相邻已签收帧，在 review JSON 填 `reviewer/decision/output_sha256/notes/checks`；`checks` 六项为 `subject_identity/product_brand_text/state_scene_props/style_light_color/composition_safe_area/continuity`，接受时全部须为 `pass`。执行：
+   `python3 skills/ad/ad-image/scripts/image_job_receipt.py "<作品根>" signoff --job <job_id> --review-file <项目内review.json>`。
+   媒体、prompt、参考或 review 文件任一字节变化都会让旧签收失效。只有 prompt 包而无 PNG 时，`product_qc.py` 只能证明 prompt-lint，不能放行出视频。
 5. **批次/全片收尾 QC**：一批或全部分镜出完后再跑一次 `product_qc.py`，确认报告时间晚于所有关键 PNG，`summary.block==0` 且无待确认关键镜后才进入 `ad-video`。
 6. 回写 `_进度.md` 出图 ✅：`python3 skills/ad/ad-craft/scripts/progress_set.py set-stage "<作品根>" image --status ✅ --artifact 出图/分镜`，提示 `ad-video`。
 
@@ -92,7 +94,7 @@ python3 skills/ad/ad-craft/scripts/meta_card.py cover "<作品根>" --png 出图
 - **产品定妆 = 最严一致性**：包装文字/logo/品牌色/比例不能漂。绝不文生图产品（必 image2image + 产品参考图）。品牌色锁 HEX，logo 锁位置与最小留白。
 - **品牌色锁**：`visual_contract.品牌色` 是硬约束，逐镜 prompt 带品牌主色，避免环境光把品牌色染偏。
 - **KV 对齐**：`ad-concept` 的 KV 方向是主视觉锚，定妆库与关键镜要对住 KV。
-- **多比例不重复出图**：按 `交付比例` 主比例出图，其它比例 `ad-compose` reframe（留够安全框余量，构图别贴边）。
+- **多比例先定适配模式**：出图前跑 `placement_adaptation.py`。原生母版只服务绑定版位；其它比例按逐件计划选择 `native_recrop` / `native_reedit` / `native_variant`。只有具名批准、当前 placement 安全区、逐镜 focus plan 和风险签收齐全时才允许 `mechanical_reframe`；结构性文字/产品风险默认推荐原生重构，不能假设一张主比例图机械裁切到处通用。
 
 ## 一致性梯子（出图）
 ①参考图派生（默认）→ ②后端原生主体ID/主体库（Seedream/可灵/Sora Cameo·opt-in）→ ③LoRA（仅核心长线代言人）。锚点句（锁特征词）+ 身份锁定句（锁"同一张脸/同一个包装"）叠加用。产品/logo 用后端原生主体库或多参考最稳。
@@ -158,7 +160,7 @@ high 镜不在 `ad_pilot_matrix` 打样集 → warn `high_risk_unpiloted`（高�
 | **预算充足**（默认） | 严格自检，产品/logo/品牌色/代言人脸零漂移容忍；不满意就继续重抽/改 prompt/换参考，直到满意落档 | 同样严格自检；普通镜也不将就，直到满意落档 | 满意为止 |
 | **预算一般** | **只关键图片严格自检**；产品 hero、KV、封面候选、卖点特写、代言人/主模特 CU 不满意就继续重抽/改 prompt/换参考，直到满意落档 | 普通镜走筛选宽容：无核心错位、无产品/logo/品牌色硬伤、无合规禁忌即可落档，不追小瑕疵 | 关键图满意；普通图可用 |
 
-**关键图片判定**：产品定妆、包装/logo/材质细节、KV 主视觉、首镜/尾镜、封面候选、卖点特写、强品牌露出、代言人/主模特 CU/ECU、需要尾帧接力的连续动作镜、多比例 reframe 会反复引用的安全框基准图。
+**关键图片判定**：产品定妆、包装/logo/材质细节、KV 主视觉、首镜/尾镜、封面候选、卖点特写、强品牌露出、代言人/主模特 CU/ECU、需要尾帧接力的连续动作镜、多版位适配会反复引用的安全框基准图。
 
 ## 常见错误
 
@@ -166,8 +168,8 @@ high 镜不在 `ad_pilot_matrix` 打样集 → warn `high_risk_unpiloted`（高�
 |---|---|
 | 文生图产品（包装/logo 全靠描述） | 必 image2image + 产品定妆参考；文生图必漂 |
 | 品牌色被环境光染偏 | 锁 `visual_contract.品牌色` HEX，逐镜 prompt 带品牌主色 |
-| 每个交付比例都重新出图 | 按主比例出图，其它比例 ad-compose reframe，构图留安全框 |
+| 多比例一律中心裁切，或一律重复整片出图 | 先跑 placement adaptation；低风险可签核 recrop，高风险按 shot plan 原生重构，只重做受影响镜头 |
 | 项目内混用生图后端 | 一个项目锁一个后端；切换要记录并重出受影响图 |
 | logo 摆错位/被裁 | 产品 checklist 锁 logo 位置与最小留白 |
 | 把 `预算一般` 当成广告产品图也能差不多 | 错。产品/KV/代言人/品牌露出都属于关键图片，预算一般也要严格自检直到满意 |
-| 出完一批才发现产品/logo 漂 | 违反逐图即时 QC；每张产品/KV/品牌镜落档后立刻跑 ad-image 的 `product_qc.py`，不过先修当前图 |
+| 出完一批才发现产品/logo 漂 | runner 必须逐张 preflight→full QC→当前像素人工签收；上一张未 accepted 时下一张根本不能提交 |

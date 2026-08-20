@@ -8,9 +8,26 @@ import glob
 import json
 import os
 import re
+import sys
 from datetime import date
 from typing import Any
 
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_NOVEL_LIB = os.path.abspath(os.path.join(_HERE, "..", "..", "_lib"))
+if _NOVEL_LIB not in sys.path:
+    sys.path.insert(0, _NOVEL_LIB)
+from craft_profile import (  # noqa: E402
+    NARRATIVE_FUNCTION_FIELDS,
+    NARRATIVE_FUNCTION_LABELS,
+    build_craft_contract_snapshot,
+    is_supported_craft_profile,
+    narrative_functions,
+    requires_traditional_turn,
+    resolve_craft_profile,
+    validate_craft_contract_snapshot,
+)
+from project_io import load_project_settings  # noqa: E402
 
 MAP_KIND = "novel_manuscript_map"
 CHECK_KIND = "novel_manuscript_map_check"
@@ -92,6 +109,7 @@ def _first_nonempty(values: list[Any]) -> str:
 
 def build_map(root: str) -> dict[str, Any]:
     root = os.path.abspath(root)
+    craft_profile = resolve_craft_profile(load_project_settings(root))
     outline = parse_outline(root)
     files = chapter_files(root)
     scene_payload = load_json(os.path.join(root, "设定", "scene_cards.json"), {}) or {}
@@ -114,11 +132,26 @@ def build_map(root: str) -> dict[str, Any]:
             "chapter_path": files.get(chapter, ""),
             "outline_beat": outline.get(chapter, {}).get("outline_beat", ""),
             "scene_count": len(chapter_scenes),
-            "povs": sorted({str(s.get("pov")) for s in chapter_scenes if str(s.get("pov") or "").strip()}),
+            "povs": sorted({
+                str(s.get(field)).strip()
+                for s in chapter_scenes
+                for field in ("pov", "viewpoint")
+                if str(s.get(field) or "").strip()
+            }),
+            "unattributed_scene_ids": [
+                str(s.get("id") or f"scene-{s.get('scene_no') or '?'}")
+                for s in chapter_scenes
+                if not str(s.get("pov") or "").strip() and not str(s.get("viewpoint") or "").strip()
+            ],
             "primary_desire": _first_nonempty([s.get("desire") for s in chapter_scenes]),
             "primary_obstacle": _first_nonempty([s.get("obstacle") for s in chapter_scenes]),
             "value_shift": _first_nonempty([s.get("value_shift") for s in chapter_scenes]),
             "turn": _first_nonempty([s.get("turn") for s in chapter_scenes]),
+            "revelation": _first_nonempty([s.get("revelation") for s in chapter_scenes]),
+            "relation_drift": _first_nonempty([s.get("relation_drift") for s in chapter_scenes]),
+            "perceptual_shift": _first_nonempty([s.get("perceptual_shift") for s in chapter_scenes]),
+            "motif_return": _first_nonempty([s.get("motif_return") for s in chapter_scenes]),
+            "deliberate_stasis": _first_nonempty([s.get("deliberate_stasis") for s in chapter_scenes]),
             "aftermath": _first_nonempty([s.get("aftermath") for s in chapter_scenes]),
             "reveal_or_payoff": [
                 str(s.get("reveal_or_payoff")).strip()
@@ -132,13 +165,22 @@ def build_map(root: str) -> dict[str, Any]:
             ],
             "scene_ids": [str(s.get("id") or "") for s in chapter_scenes if s.get("id")],
         }
-        row["review_use"] = "确认本章是否推进读者承诺、人物选择和价值转折；若缺 turn/value_shift，先回章纲或场景卡。"
+        row["narrative_functions"] = list(narrative_functions(row))
+        if requires_traditional_turn(craft_profile):
+            row["review_use"] = "确认本章是否推进读者承诺、人物选择和价值转折；若缺 turn/value_shift，先回章纲或场景卡。"
+        else:
+            row["review_use"] = (
+                "确认本章登记的叙事功能是否真实成立；turn/value_shift 可由揭示、关系微移、"
+                "感知变化、意象复现或有意停滞替代，不因缺传统转折自动判失败。"
+            )
         rows.append(row)
     return {
         "schema_version": 1,
         "kind": MAP_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": root,
+        "craft_profile": craft_profile,
+        "source_snapshot": build_craft_contract_snapshot(root, craft_profile),
         "chapter_count": len(rows),
         "source": {
             "outline": os.path.exists(os.path.join(root, "设定", "章纲.md")),
@@ -149,8 +191,40 @@ def build_map(root: str) -> dict[str, Any]:
     }
 
 
-def check_map(report: dict[str, Any]) -> dict[str, Any]:
+def check_map(report: dict[str, Any], project_root: str | None = None) -> dict[str, Any]:
     findings: list[dict[str, Any]] = []
+    root = os.path.abspath(project_root or str(report.get("project_root") or "")) if (project_root or report.get("project_root")) else ""
+    current_settings = load_project_settings(root) if root and os.path.isdir(root) else {}
+    craft_profile = resolve_craft_profile(current_settings if root else report.get("craft_profile"))
+    snapshot_validation = (
+        validate_craft_contract_snapshot(root, report.get("source_snapshot"), craft_profile)
+        if root and os.path.isdir(root)
+        else {"fresh": False, "issues": ["project_root_missing"], "current": None}
+    )
+    source_fresh = bool(snapshot_validation.get("fresh"))
+    if not source_fresh:
+        findings.append({
+            "id": "MANUSCRIPT-MAP-SOURCE-STALE",
+            "severity": "blocking",
+            "confidence": "contract",
+            "message": (
+                "manuscript_map 的创作工艺/场景卡来源已变化或缺少快照（"
+                + ", ".join(snapshot_validation.get("issues") or ["unknown"])
+                + "）；请重跑 manuscript_map.py \"<作品根>\" --write，旧检查不得继续放行。"
+            ),
+        })
+    profile_supported = is_supported_craft_profile(craft_profile)
+    traditional = profile_supported and requires_traditional_turn(craft_profile)
+    if not profile_supported:
+        findings.append({
+            "id": "MANUSCRIPT-MAP-CRAFT-PROFILE-UNSUPPORTED",
+            "severity": "blocking",
+            "confidence": "contract",
+            "message": (
+                f"创作工艺档={craft_profile} 尚无结构地图适配；请改用 commercial_serial / "
+                "genre_novel / literary / experimental，或先补自定义适配。"
+            ),
+        })
     if report.get("kind") != MAP_KIND:
         findings.append({"id": "MANUSCRIPT-MAP-MISSING", "severity": "blocking", "message": "manuscript_map.json 缺失或格式错误"})
     if not report.get("chapters"):
@@ -159,16 +233,59 @@ def check_map(report: dict[str, Any]) -> dict[str, Any]:
         chapter = row.get("chapter")
         if not row.get("outline_beat") and not row.get("scene_ids"):
             findings.append({"id": "MANUSCRIPT-MAP-CHAPTER-UNPLANNED", "severity": "warning", "chapter": chapter, "message": "本章缺章纲和场景卡来源。"})
-        if row.get("scene_count") and not row.get("turn"):
-            findings.append({"id": "MANUSCRIPT-MAP-TURN-MISSING", "severity": "blocking", "chapter": chapter, "message": "本章场景卡缺 turn，无法判断价值转折。"})
-        if row.get("scene_count") and not row.get("value_shift"):
-            findings.append({"id": "MANUSCRIPT-MAP-VALUE-SHIFT-MISSING", "severity": "blocking", "chapter": chapter, "message": "本章场景卡缺 value_shift，review 无法判定推进。"})
+        if source_fresh and traditional and row.get("scene_count") and not row.get("turn"):
+            findings.append({
+                "id": "MANUSCRIPT-MAP-TURN-MISSING",
+                "severity": "blocking",
+                "confidence": "contract",
+                "chapter": chapter,
+                "message": f"创作工艺档={craft_profile}：本章场景卡缺 turn，无法完成传统转折合同。",
+            })
+        if source_fresh and traditional and row.get("scene_count") and not row.get("value_shift"):
+            findings.append({
+                "id": "MANUSCRIPT-MAP-VALUE-SHIFT-MISSING",
+                "severity": "blocking",
+                "confidence": "contract",
+                "chapter": chapter,
+                "message": f"创作工艺档={craft_profile}：本章场景卡缺 value_shift，无法完成传统价值变化合同。",
+            })
+        unattributed = row.get("unattributed_scene_ids")
+        if unattributed is None and row.get("scene_count") and not row.get("povs"):
+            unattributed = ["unknown"]
+        if source_fresh and craft_profile == "literary" and unattributed:
+            findings.append({
+                "id": "MANUSCRIPT-MAP-VIEWPOINT-MISSING",
+                "severity": "blocking",
+                "confidence": "contract",
+                "chapter": chapter,
+                "message": (
+                    "创作工艺档=literary：以下场景缺可归属的 POV/viewpoint："
+                    + ", ".join(str(item) for item in unattributed)
+                    + "；请明确叙述位置，不要求伪填欲望或冲突。"
+                ),
+            })
+        if source_fresh and profile_supported and not traditional and row.get("scene_count") and not narrative_functions(row):
+            findings.append({
+                "id": "MANUSCRIPT-MAP-NARRATIVE-FUNCTION-MISSING",
+                "severity": "warning",
+                "confidence": "heuristic",
+                "chapter": chapter,
+                "message": (
+                    f"创作工艺档={craft_profile}：本章未登记叙事功能；可填写 "
+                    + " / ".join(NARRATIVE_FUNCTION_FIELDS)
+                    + " 中至少一项。是否确实无功能需人工复核，不硬阻断。"
+                ),
+            })
     blockers = [item for item in findings if item["severity"] == "blocking"]
     return {
         "schema_version": 1,
         "kind": CHECK_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": report.get("project_root"),
+        "craft_profile": craft_profile,
+        "source_snapshot": report.get("source_snapshot"),
+        "validated_snapshot": snapshot_validation.get("current"),
+        "source_fresh": source_fresh,
         "blocking": len(blockers),
         "warnings": len(findings) - len(blockers),
         "passed": not blockers,
@@ -182,10 +299,11 @@ def render_markdown(report: dict[str, Any], check: dict[str, Any] | None = None)
         "",
         f"- 生成日期：{report.get('generated_at')}",
         f"- 章节数：{report.get('chapter_count')}",
+        f"- 创作工艺档：{resolve_craft_profile(report.get('craft_profile'))}",
         f"- 来源：{report.get('source')}",
         "",
-        "| 章 | 标题 | 场景 | POV | 欲望/阻碍 | 转折 | 价值变化 | 揭示/回收 | 正文 |",
-        "|---:|---|---:|---|---|---|---|---|---|",
+        "| 章 | 标题 | 场景 | POV | 欲望/阻碍 | 转折 | 价值变化 | 其它叙事功能 | 揭示/回收 | 正文 |",
+        "|---:|---|---:|---|---|---|---|---|---|---|",
     ]
     for row in report.get("chapters") or []:
         lines.append(
@@ -198,6 +316,7 @@ def render_markdown(report: dict[str, Any], check: dict[str, Any] | None = None)
                 _cell(f"{row.get('primary_desire') or ''} / {row.get('primary_obstacle') or ''}"),
                 _cell(row.get("turn")),
                 _cell(row.get("value_shift")),
+                _cell(_narrative_function_summary(row)),
                 _cell("；".join(row.get("reveal_or_payoff") or [])),
                 _cell(row.get("chapter_path")),
             ])
@@ -213,6 +332,15 @@ def render_markdown(report: dict[str, Any], check: dict[str, Any] | None = None)
 
 def _cell(value: Any) -> str:
     return str(value or "").replace("|", "\\|").replace("\n", " ").strip()
+
+
+def _narrative_function_summary(row: dict[str, Any]) -> str:
+    parts = []
+    for field, value in narrative_functions(row).items():
+        if field in {"turn", "value_shift", "reveal_or_payoff"}:
+            continue
+        parts.append(f"{NARRATIVE_FUNCTION_LABELS.get(field, field)}={value}")
+    return "；".join(parts)
 
 
 SEQUEL_GAP_RUN = 3  # 连续几章"有 turn 无 aftermath"算高压不落地
@@ -278,11 +406,17 @@ def analyze(root: str) -> dict[str, Any]:
     for f in check.get("findings") or []:
         if f.get("id") == "MANUSCRIPT-MAP-MISSING":
             continue  # build_map 现算的 report 不会缺 kind；该项只对读盘态有意义
-        sev = "建议级" if f.get("severity") == "blocking" else "info"
+        sev = (
+            "建议级"
+            if f.get("severity") == "blocking"
+            or f.get("id") == "MANUSCRIPT-MAP-NARRATIVE-FUNCTION-MISSING"
+            else "info"
+        )
         alerts.append({"type": f.get("id"), "severity": sev, "auto": True,
                        "chapter": f.get("chapter"),
-                       "note": f"{f.get('message')}（结构地图·价值转变 lint：每章该有 turn/value_shift，"
-                               f"传统手艺是『无转折的场景删掉或合并』）"})
+                       "confidence": f.get("confidence") or "heuristic",
+                       "note": f"{f.get('message')}（结构地图按创作工艺档检查；这是规划信号，"
+                               f"进入审稿链后一律交人工/语义复核，不凭字段启发式硬挡。）"})
     alerts.extend(detect_sequel_gaps(report.get("chapters") or []))
     alerts.extend(detect_dropped_anchors(root, report.get("chapters") or []))
     scenes = _ordered_scenes(root)

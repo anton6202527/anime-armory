@@ -5,12 +5,16 @@ import os
 import tempfile
 
 import revision_planner as rp
+from reader_probe import build_reader_probe_snapshot
 
 
 def test_revision_plan_merges_review_score_feedback_and_simulate():
     with tempfile.TemporaryDirectory() as root:
         os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
         os.makedirs(os.path.join(root, "评分"), exist_ok=True)
+        os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+        with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+            f.write("第一章正文。")
         with open(os.path.join(root, "审稿", "review_report.json"), "w", encoding="utf-8") as f:
             json.dump({"findings": [{
                 "problem": "第1章钩子弱",
@@ -31,7 +35,16 @@ def test_revision_plan_merges_review_score_feedback_and_simulate():
                 }]},
             }, f, ensure_ascii=False)
         with open(os.path.join(root, "评分", "reader_panel_signals.json"), "w", encoding="utf-8") as f:
-            json.dump({"signal_only": True, "analysis_mode": "signal_only"}, f)
+            json.dump({
+                "schema_version": 3,
+                "kind": "novel_synthetic_reader_probe",
+                "scope": "opening",
+                "chapters_read": [1],
+                "source_snapshot": build_reader_probe_snapshot(root, "opening"),
+                "surface_signals": {},
+                "signal_only": True,
+                "analysis_mode": "surface_signals_only",
+            }, f)
 
         plan = rp.build_plan(root)
         ids = {task["id"] for task in plan["tasks"]}
@@ -39,6 +52,50 @@ def test_revision_plan_merges_review_score_feedback_and_simulate():
         json_path, md_path = rp.write_plan(root, plan)
         assert os.path.exists(json_path)
         assert os.path.exists(md_path)
+
+
+def test_revision_plan_stale_simulate_only_requests_rerun():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "评分"), exist_ok=True)
+        os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+        chapter_path = os.path.join(root, "章节", "第01章.md")
+        with open(chapter_path, "w", encoding="utf-8") as f:
+            f.write("第一版正文。")
+        with open(os.path.join(root, "评分", "reader_panel_signals.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 3,
+                "kind": "novel_synthetic_reader_probe",
+                "scope": "chapter",
+                "scope_chapter": 1,
+                "chapters_read": [1],
+                "source_snapshot": build_reader_probe_snapshot(root, "chapter", 1),
+                "surface_signals": {"cliche_terms": {"literal_hits": 88}},
+                "signal_only": True,
+            }, f)
+        with open(chapter_path, "a", encoding="utf-8") as f:
+            f.write("正文已修改。")
+        tasks = rp.tasks_from_simulate(root)
+        assert len(tasks) == 1
+        assert tasks[0]["id"] == "SIMULATE-STALE"
+        assert "当前信号值不进入修订计划" in tasks[0]["reason"]
+        assert "88" not in tasks[0]["reason"]
+
+
+def test_revision_plan_legacy_simulate_freshness_unknown():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "评分"), exist_ok=True)
+        with open(os.path.join(root, "评分", "reader_panel_signals.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 2,
+                "kind": "novel_synthetic_reader_probe",
+                "signal_only": True,
+                "retention_prior": 0.1,
+            }, f)
+        tasks = rp.tasks_from_simulate(root)
+        assert len(tasks) == 1
+        assert tasks[0]["id"] == "SIMULATE-FRESHNESS-UNKNOWN"
+        assert "新鲜度未知" in tasks[0]["title"]
+        assert "0.1" not in tasks[0]["reason"]
 
 
 def test_revision_plan_consumes_pacing_signals_schema():

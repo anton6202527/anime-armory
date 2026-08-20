@@ -19,6 +19,16 @@ _COMMON = os.path.join(_SKILLS, "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import load_project_settings  # noqa: E402
+from authenticity_contract import evaluate_authenticity_read  # noqa: E402
+from craft_profile import (  # noqa: E402
+    NARRATIVE_FUNCTION_FIELDS,
+    is_supported_craft_profile,
+    missing_literary_dynamics,
+    missing_required_scene_fields,
+    narrative_functions,
+    requires_traditional_turn,
+    resolve_craft_profile,
+)
 
 _RESEARCH = os.path.join(_SKILLS, "novel-research", "scripts")
 if _RESEARCH not in sys.path:
@@ -468,14 +478,14 @@ def _reader_panel_gate(project_root):
             "SIMULATE-SIGNAL-ONLY",
             "score",
             "novel-simulate",
-            "reader_panel_signals.json 是合成叙事探针，不能当真实读者或留存证据；score 不得据此自动调分，revision 只能把它当人工复核假设。",
+            "reader_panel_signals.json 是合成叙事探针；其中未校准的表面分量不能当真实读者或留存证据，score 不得据此自动调分，revision 只能把它当人工复核假设。",
         ))
     if payload.get("qualitative_completed") is False:
         report["next_actions"].append({
             "priority": "P2",
             "return_to_stage": "simulate",
             "recommended_skill": "novel-simulate",
-            "action": "补完人格心声/弃书点等定性面板，或导入 novel-feedback 的真实读者数据。",
+            "action": "补完各阅读视角的正文证据/中断点候选，或导入 novel-feedback 的真实读者数据。",
         })
     return report
 
@@ -1290,23 +1300,45 @@ def _demo_gate(project_root):
 def _scene_cards_gate(project_root):
     path = os.path.join(project_root, "设定", "scene_cards.json")
     payload = _load_json(path)
+    craft_profile = resolve_craft_profile(_load_settings(project_root))
+    profile_supported = is_supported_craft_profile(craft_profile)
     report = {
         "kind": "scene_cards",
         "path": path,
+        "craft_profile": craft_profile,
         "exists": isinstance(payload, dict),
         "blocking": False,
         "blockers": [],
         "warnings": [],
         "next_actions": [],
     }
-    required_fields = ("pov", "desire", "obstacle", "conflict", "turn", "value_shift")
+    if not profile_supported:
+        report["blockers"].append(_warning(
+            "SCENE-CARD-CRAFT-PROFILE-UNSUPPORTED",
+            "outline",
+            "novel-settings",
+            f"创作工艺档={craft_profile} 尚无场景结构适配；请改用已支持规范值，或先补该自定义档的适配规则。",
+        ))
+        report["next_actions"].append({
+            "priority": "P0",
+            "return_to_stage": "settings",
+            "recommended_skill": "novel-settings",
+            "action": "确认创作工艺档并补齐适配；不得静默改用另一档。",
+        })
     if not isinstance(payload, dict):
         if _score_required(project_root) or _arc_long_project(project_root):
+            if craft_profile in {"commercial_serial", "genre_novel"}:
+                scene_contract = "POV/目标/阻碍/冲突/转折/价值变化"
+            elif craft_profile == "literary":
+                scene_contract = "POV/viewpoint 与实际叙事功能"
+            else:
+                scene_contract = "作品自定形式与实际叙事功能"
             report["warnings"].append(_warning(
                 "SCENE-CARDS-MISSING",
                 "outline",
                 "novel-craft",
-                "商业/长篇项目建议建立 设定/scene_cards.json，把章节拆到 POV/目标/阻碍/冲突/转折/价值变化的场景级打磨单位。",
+                f"商业/长篇项目建议建立 设定/scene_cards.json，按创作工艺档={craft_profile} "
+                f"把章节拆到场景级打磨单位（{scene_contract}）。",
             ))
             report["next_actions"].append({
                 "priority": "P1",
@@ -1314,6 +1346,7 @@ def _scene_cards_gate(project_root):
                 "recommended_skill": "novel-craft",
                 "action": "运行 scene_cards.py scaffold 后补齐场景卡，再重出 draft packets。",
             })
+        report["blocking"] = bool(report["blockers"])
         return report
     if payload.get("kind") != "novel_scene_cards":
         report["warnings"].append(_warning(
@@ -1322,24 +1355,48 @@ def _scene_cards_gate(project_root):
             "novel-craft",
             "scene_cards.json kind 不是 novel_scene_cards；请用 scene_cards.py scaffold/check 重建或迁移。",
         ))
+        report["blocking"] = bool(report["blockers"])
         return report
     for scene in payload.get("scenes") or []:
         if not isinstance(scene, dict):
             continue
-        missing = [field for field in required_fields if not str(scene.get(field) or "").strip()]
+        missing = missing_required_scene_fields(scene, craft_profile) if profile_supported else []
         if missing:
             report["blockers"].append(_warning(
                 "SCENE-CARD-MISSING-FIELDS",
                 "outline",
                 "novel-craft",
-                f"{scene.get('id') or 'scene'} 缺关键字段：{'、'.join(missing)}；没有目标/阻碍/转折/价值变化的场景不能进入高质量定稿。",
+                f"{scene.get('id') or 'scene'} 在创作工艺档={craft_profile} 下缺契约字段："
+                f"{'、'.join(missing)}；补齐后再进入定稿。",
             ))
+        literary_missing = missing_literary_dynamics(scene, craft_profile) if profile_supported else []
+        if literary_missing:
+            item = _warning(
+                "SCENE-CARD-LITERARY-DYNAMICS-OMITTED",
+                "outline",
+                "novel-craft",
+                f"{scene.get('id') or 'scene'} 未登记常规动力字段：{'、'.join(literary_missing)}。"
+                "文学场景可有意省略；请人工确认不是漏填，此项不硬阻断。",
+            )
+            item["confidence"] = "heuristic"
+            report["warnings"].append(item)
+        if profile_supported and not requires_traditional_turn(craft_profile) and not narrative_functions(scene):
+            item = _warning(
+                "SCENE-CARD-NARRATIVE-FUNCTION-MISSING",
+                "outline",
+                "novel-craft",
+                f"{scene.get('id') or 'scene'} 未登记叙事功能；可按实际场景填写 "
+                + " / ".join(NARRATIVE_FUNCTION_FIELDS)
+                + " 中至少一项。文学/实验场景是否有效需人工结合语境复核，此项不硬阻断。",
+            )
+            item["confidence"] = "heuristic"
+            report["warnings"].append(item)
     if report["blockers"]:
         report["next_actions"].append({
             "priority": "P1",
             "return_to_stage": "outline",
             "recommended_skill": "novel-craft",
-            "action": "补齐 scene_cards.json 后重跑 scene_cards.py check，并重新生成对应章节任务包。",
+            "action": f"按创作工艺档={craft_profile} 补齐 scene_cards.json 后重跑 scene_cards.py check，并重新生成对应章节任务包。",
         })
     report["blocking"] = bool(report["blockers"])
     return report
@@ -1371,6 +1428,43 @@ def _source_language_gate(project_root):
             "return_to_stage": "source_language",
             "recommended_skill": "novel-rewrite",
             "action": "建并确认源理解层（现代白话理解 + 古今词/术语对照 + 文化注释 + 改写边界），再改写成白话文。",
+        })
+    return report
+
+
+def _authenticity_gate(project_root):
+    """Enforce only an explicitly required authenticity-read workflow at export."""
+    evaluated = evaluate_authenticity_read(project_root)
+    report = {
+        "kind": "authenticity_read",
+        "path": "修订/authenticity_read.json",
+        "exists": bool(evaluated.get("applicable")),
+        "required_for_release": bool(evaluated.get("required_for_release")),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if not evaluated.get("applicable"):
+        return report
+    for item in evaluated.get("findings") or []:
+        target = report["blockers"] if item.get("severity") == "blocking" else report["warnings"]
+        target.append(_warning(
+            item.get("id") or "AUTHENTICITY-READ",
+            "edit",
+            "novel-edit",
+            item.get("message") or "真实性/文化审读流程未闭环",
+        ))
+    report["blocking"] = bool(report["blockers"])
+    if report["blockers"] or report["warnings"]:
+        report["next_actions"].append({
+            "priority": "P1" if report["blockers"] else "P2",
+            "return_to_stage": "edit",
+            "recommended_skill": "novel-edit",
+            "action": (
+                "运行 authenticity_read.py check --write；required 流程须补范围、审读者匹配、"
+                "当前正文快照及带裁决主体/理由的 major 意见闭环。"
+            ),
         })
     return report
 
@@ -1412,6 +1506,8 @@ def collect_gate_status(project_root, *, require_review_report=False, require_sc
     if require_ai_usage or export_formats:
         reports.append(_ai_usage_gate(root, require=require_ai_usage))
         reports.append(_compliance_gate(root, require=bool(export_formats)))
+    if export_formats is not None:
+        reports.append(_authenticity_gate(root))
     blockers = []
     warnings = []
     next_actions = []

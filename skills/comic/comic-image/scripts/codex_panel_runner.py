@@ -37,6 +37,7 @@ from comic_image_prompt_compiler import (  # noqa: E402
 )
 from contracts import stage_inputs_fingerprint  # noqa: E402
 from image_backend_adapter import resolve_capabilities  # noqa: E402
+from progress import update_stage  # noqa: E402
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
@@ -59,11 +60,11 @@ def run_preflight_gate(root: Path, chapter: str) -> int:
     """付费出图入口自带闸门：跑 comic-review image_preflight gate。
 
     gate 脚本缺失也按阻断处理——离钱最近的入口不能把"没闸"当"通过"；
-    确认误报或特殊场景用 --skip-gate 显式豁免（豁免会打印在输出里留痕）。
+    ``--skip-gate`` 也只能复用绑定当前输入的真实已授权非 block receipt，不能创建豁免。
     """
     gate_script = SKILLS_ROOT / "comic-review" / "scripts" / "gate.py"
     if not gate_script.is_file():
-        print(f"[err] preflight gate 不可用（缺 {gate_script}）；如确要跳过请显式传 --skip-gate", file=sys.stderr)
+        print(f"[err] preflight gate 不可用（缺 {gate_script}）", file=sys.stderr)
         return 2
     proc = subprocess.run(
         [sys.executable, str(gate_script), str(root), "--chapter", chapter, "--stage", "image_preflight"],
@@ -71,7 +72,7 @@ def run_preflight_gate(root: Path, chapter: str) -> int:
         check=False,
     )
     if proc.returncode != 0:
-        print("[err] image_preflight gate blocked；先按 gate 报告返修，或确认误报后显式传 --skip-gate", file=sys.stderr)
+        print("[err] image_preflight gate blocked；先按 gate 报告返修并重新取得当前 receipt", file=sys.stderr)
         return 2
     return 0
 
@@ -207,30 +208,6 @@ def validate_gate_receipt(root: Path, chapter: str, jobs_path: Path) -> dict[str
             "and bind the current full preflight fingerprint plus panel_jobs SHA"
         ),
     }
-
-
-def write_gate_waiver(root: Path, chapter: str, jobs_path: Path, reason: str, targets: str, receipt_status: dict[str, Any]) -> Path:
-    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
-    payload = {
-        "schema_version": 1,
-        "kind": "comic_gate_waiver",
-        "stage": "image_preflight",
-        "chapter": chapter,
-        "decision": "waive_for_this_runner_invocation",
-        "reason": reason.strip(),
-        "created_at": now.isoformat(),
-        "panel_jobs_path": rel_to_root(root, jobs_path),
-        "panel_jobs_sha256": file_sha256(jobs_path),
-        "targets": [item.strip() for item in targets.split(",") if item.strip()],
-        "prior_gate_receipt": receipt_status,
-        "scope": "current panel_jobs SHA only; any rebuild invalidates this waiver",
-    }
-    out_dir = root / "生产数据" / "gate_waivers"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    path = out_dir / f"image_preflight_{chapter}_{now.strftime('%Y%m%dT%H%M%SZ')}.json"
-    write_json(path, payload)
-    write_json(out_dir / f"image_preflight_{chapter}_latest.json", payload)
-    return path
 
 
 def rel_to_root(root: Path, path: Path) -> str:
@@ -629,6 +606,130 @@ def image_size(path: Path) -> tuple[int, int]:
         return (0, 0)
 
 
+def _review_input_record(root: Path, path: Path, role: str, label: str) -> dict[str, str] | None:
+    try:
+        if not path.is_file():
+            return None
+        return {
+            "role": role,
+            "label": label,
+            "path": rel_to_root(root, path),
+            "sha256": file_sha256(path),
+        }
+    except OSError:
+        return None
+
+
+def comparison_inputs_sha256(inputs: list[dict[str, Any]]) -> str:
+    return hashlib.sha256(
+        json.dumps(inputs, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def build_visual_review_packet(
+    root: Path,
+    chapter: str,
+    job: dict[str, Any],
+    panel_path: Path,
+    reference_records: list[dict[str, str]],
+    adjacent_paths: list[Path] | None = None,
+) -> dict[str, Any]:
+    """Build a SHA-bound refs/current/adjacent contact sheet for one panel.
+
+    The packet is deliberately per-image.  It is not a human verdict: it only
+    makes the exact pixels that must be reviewed auditable before the runner can
+    promote the job to ``ready``.
+    """
+    adjacent_paths = adjacent_paths or []
+    inputs: list[dict[str, str]] = []
+    current = _review_input_record(root, panel_path, "current_panel", str(job.get("panel_id") or panel_path.stem))
+    if current:
+        inputs.append(current)
+    seen = {str(panel_path.resolve())}
+    for record in reference_records:
+        raw = str(record.get("abs_path") or record.get("path") or "").strip()
+        if not raw:
+            continue
+        path = Path(raw) if Path(raw).is_absolute() else root / raw
+        key = str(path.resolve())
+        if key in seen:
+            continue
+        seen.add(key)
+        item = _review_input_record(
+            root,
+            path,
+            "reference",
+            f"{record.get('id') or path.stem}:{record.get('role') or 'reference'}",
+        )
+        if item:
+            inputs.append(item)
+    for index, path in enumerate(adjacent_paths, start=1):
+        key = str(path.resolve())
+        if key in seen:
+            continue
+        seen.add(key)
+        item = _review_input_record(root, path, "adjacent_accepted_panel", f"adjacent_{index}:{path.stem}")
+        if item:
+            inputs.append(item)
+
+    fingerprint = comparison_inputs_sha256(inputs)
+    packet: dict[str, Any] = {
+        "status": "unverifiable",
+        "comparison_inputs": inputs,
+        "comparison_inputs_sha256": fingerprint,
+        "required_axes": [
+            "subject_identity_and_face",
+            "hair_outfit_body_and_state",
+            "location_prop_structure",
+            "style_light_color",
+            "composition_axis_and_adjacent_continuity",
+        ],
+        "human_review_status": "pending",
+    }
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError:
+        packet["reason"] = "Pillow unavailable; cannot build the mandatory per-image visual review packet"
+        return packet
+
+    opened: list[tuple[dict[str, str], Any]] = []
+    for item in inputs:
+        try:
+            image = Image.open(resolve_path(root, item["path"])).convert("RGB")
+        except (OSError, ValueError):
+            packet["reason"] = f"review input cannot be decoded: {item['path']}"
+            return packet
+        opened.append((item, image))
+    if not opened or not current:
+        packet["reason"] = "current panel is missing from the visual review packet"
+        return packet
+
+    cell_w, cell_h, caption_h = 360, 360, 34
+    columns = min(4, max(1, len(opened)))
+    rows = (len(opened) + columns - 1) // columns
+    canvas = Image.new("RGB", (columns * cell_w, rows * (cell_h + caption_h)), (35, 35, 38))
+    draw = ImageDraw.Draw(canvas)
+    for index, (item, image) in enumerate(opened):
+        col, row = index % columns, index // columns
+        image.thumbnail((cell_w - 12, cell_h - 12), Image.Resampling.LANCZOS)
+        x = col * cell_w + (cell_w - image.width) // 2
+        y = row * (cell_h + caption_h) + (cell_h - image.height) // 2
+        canvas.paste(image, (x, y))
+        label = f"{item['role']} | {item['label']} | {item['sha256'][:12]}"
+        draw.text((col * cell_w + 8, row * (cell_h + caption_h) + cell_h + 8), label[:54], fill=(235, 235, 235))
+    out = root / "生产数据" / "panel_qc" / chapter / f"{job.get('panel_id') or panel_path.stem}_contact_sheet.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(out, "PNG")
+    packet.update(
+        {
+            "status": "ready_for_human_review",
+            "contact_sheet_path": rel_to_root(root, out),
+            "contact_sheet_sha256": file_sha256(out),
+        }
+    )
+    return packet
+
+
 def declared_reference_attachment_count(root: Path, job: dict[str, Any]) -> int:
     """Count executable attachments, not semantic bindings.
 
@@ -651,6 +752,39 @@ def declared_reference_attachment_count(root: Path, job: dict[str, Any]) -> int:
     return len(keys)
 
 
+def warning_findings(post_qc: dict[str, Any]) -> list[dict[str, str]]:
+    """Return stable warning codes/reasons that a named reviewer must acknowledge."""
+    findings: list[dict[str, str]] = []
+    for issue in post_qc.get("issues") or []:
+        if not isinstance(issue, dict) or str(issue.get("severity") or "").lower() != "warn":
+            continue
+        findings.append(
+            {
+                "code": str(issue.get("code") or issue.get("category") or "unspecified_warning"),
+                "reason": str(issue.get("reason") or ""),
+            }
+        )
+    return findings
+
+
+def machine_review_sha256(
+    artifact_sha256: str,
+    verdict: str,
+    issues: list[dict[str, Any]],
+    comparison_inputs_sha256: str,
+) -> str:
+    """Bind a human disposition to the exact deterministic/heuristic findings."""
+    payload = {
+        "artifact_sha256": artifact_sha256,
+        "verdict": verdict,
+        "issues": issues,
+        "comparison_inputs_sha256": comparison_inputs_sha256,
+    }
+    return hashlib.sha256(
+        json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def post_qc_panel(
     root: Path,
     chapter: str,
@@ -658,10 +792,12 @@ def post_qc_panel(
     path: Path,
     reference_records: list[dict[str, str]],
     omitted_reference_records: list[dict[str, str]] | None = None,
+    adjacent_paths: list[Path] | None = None,
 ) -> dict[str, Any]:
     omitted_reference_records = omitted_reference_records or []
     issues: list[dict[str, str]] = []
     pid = str(job.get("panel_id") or path.stem)
+    artifact_sha256 = file_sha256(path) if path.is_file() else ""
     if not png_valid(path):
         issues.append(
             {
@@ -750,12 +886,35 @@ def post_qc_panel(
             }
         )
 
+    visual_review_packet = build_visual_review_packet(
+        root,
+        chapter,
+        job,
+        path,
+        reference_records,
+        adjacent_paths=adjacent_paths,
+    )
+    if visual_review_packet.get("status") != "ready_for_human_review":
+        issues.append(
+            {
+                "severity": "block",
+                "category": "visual_review_packet_unavailable",
+                "reason": str(visual_review_packet.get("reason") or "mandatory visual review packet unavailable"),
+            }
+        )
+
     verdict = "pass"
     if any(issue["severity"] == "block" for issue in issues):
         verdict = "block"
     elif any(issue["severity"] == "warn" for issue in issues):
         verdict = "warn"
 
+    review_fingerprint = machine_review_sha256(
+        artifact_sha256,
+        verdict,
+        issues,
+        str(visual_review_packet.get("comparison_inputs_sha256") or ""),
+    )
     payload = {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
@@ -764,6 +923,7 @@ def post_qc_panel(
         "created_at": dt.datetime.now().isoformat(timespec="seconds"),
         "verdict": verdict,
         "path": rel_to_root(root, path),
+        "artifact_sha256": artifact_sha256,
         "size": {"width": actual_w, "height": actual_h},
         "expected_size": {"width": expected_w, "height": expected_h},
         "resolution_policy": resolution_policy or "legacy_unspecified",
@@ -777,12 +937,275 @@ def post_qc_panel(
         "omitted_attachment_ids": [record.get("id", "") for record in omitted_reference_records],
         "blank_region_candidates": blank_regions,
         "large_edge_blank_band_candidates": edge_blank_bands,
+        "machine_review": {
+            "status": verdict,
+            "sha256": review_fingerprint,
+            "coverage": [
+                "artifact_decode",
+                "canvas_size",
+                "resolution_lineage",
+                "reference_execution_coverage",
+                "baked_text_container_heuristics",
+            ],
+            "semantic_axes_require_visual_review": True,
+        },
+        "visual_review_packet": visual_review_packet,
         "issues": issues,
-        "manual_review_required": verdict != "pass",
+        "machine_review_sha256": review_fingerprint,
+        "manual_review_required": True,
     }
+    previous: dict[str, Any] = {}
     out = root / "生产数据" / "panel_qc" / chapter / f"{pid}.json"
+    if out.is_file():
+        try:
+            previous = load_json(out)
+        except (OSError, json.JSONDecodeError):
+            previous = {}
+    old_review = previous.get("manual_review") if isinstance(previous.get("manual_review"), dict) else {}
+    if (
+        verdict in {"pass", "warn"}
+        and str(old_review.get("verdict") or "").lower()
+        == ("accepted_with_warnings" if verdict == "warn" else "accepted")
+        and str(old_review.get("artifact_sha256") or "") == artifact_sha256
+        and str(old_review.get("comparison_inputs_sha256") or "")
+        == str(visual_review_packet.get("comparison_inputs_sha256") or "")
+        and str(old_review.get("machine_review_sha256") or "") == review_fingerprint
+    ):
+        payload["manual_review"] = old_review
+        payload["visual_review_packet"]["human_review_status"] = str(old_review.get("verdict") or "accepted")
     write_json(out, payload)
     return payload
+
+
+def panel_acceptance_status(root: Path, job: dict[str, Any]) -> dict[str, Any]:
+    """Validate that ``ready`` means exact current pixels passed both gates.
+
+    Deterministic ``block``/unverifiable results can never be accepted.  A
+    heuristic ``warn`` is eligible only for a named, reasoned
+    ``accepted_with_warnings`` disposition bound to the same machine findings.
+    """
+    rel = str(job.get("result_path") or "").strip()
+    if not rel:
+        return {"accepted": False, "reason": "result_path_missing"}
+    path = resolve_path(root, rel)
+    if not png_valid(path):
+        return {"accepted": False, "reason": "result_png_missing_or_invalid"}
+    current_sha = file_sha256(path)
+    if str(job.get("artifact_sha256") or "") != current_sha:
+        return {"accepted": False, "reason": "job_artifact_sha_mismatch", "artifact_sha256": current_sha}
+    post_qc = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
+    if str(post_qc.get("artifact_sha256") or "") != current_sha:
+        return {"accepted": False, "reason": "post_qc_artifact_sha_mismatch", "artifact_sha256": current_sha}
+    chapter = str(post_qc.get("chapter") or "").strip()
+    panel_id = str(post_qc.get("panel_id") or job.get("panel_id") or "").strip()
+    receipt_path = root / "生产数据" / "panel_qc" / chapter / f"{panel_id}.json"
+    try:
+        receipt = load_json(receipt_path)
+    except (OSError, json.JSONDecodeError):
+        return {"accepted": False, "reason": "post_qc_receipt_missing", "artifact_sha256": current_sha}
+    embedded_sha = hashlib.sha256(
+        json.dumps(post_qc, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    receipt_sha = hashlib.sha256(
+        json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    if embedded_sha != receipt_sha:
+        return {"accepted": False, "reason": "post_qc_receipt_job_mismatch", "artifact_sha256": current_sha}
+    verdict = str(post_qc.get("verdict") or "").lower()
+    if verdict not in {"pass", "warn"}:
+        return {"accepted": False, "reason": "post_qc_block_or_unverifiable", "artifact_sha256": current_sha}
+    packet = post_qc.get("visual_review_packet") if isinstance(post_qc.get("visual_review_packet"), dict) else {}
+    if packet.get("status") != "ready_for_human_review":
+        return {"accepted": False, "reason": "visual_review_packet_unavailable", "artifact_sha256": current_sha}
+    comparison_inputs = [item for item in packet.get("comparison_inputs") or [] if isinstance(item, dict)]
+    recorded_comparison_sha = str(packet.get("comparison_inputs_sha256") or "")
+    if not comparison_inputs or comparison_inputs_sha256(comparison_inputs) != recorded_comparison_sha:
+        return {"accepted": False, "reason": "comparison_packet_fingerprint_invalid", "artifact_sha256": current_sha}
+    current_inputs = [
+        item
+        for item in comparison_inputs
+        if str(item.get("role") or "") == "current_panel"
+        and resolve_path(root, str(item.get("path") or "")).resolve() == path.resolve()
+        and str(item.get("sha256") or "") == current_sha
+    ]
+    if len(current_inputs) != 1:
+        return {"accepted": False, "reason": "comparison_packet_current_panel_missing", "artifact_sha256": current_sha}
+    contact_sheet_raw = str(packet.get("contact_sheet_path") or "").strip()
+    contact_sheet = resolve_path(root, contact_sheet_raw) if contact_sheet_raw else root / "__missing_contact_sheet__"
+    if not contact_sheet.is_file() or file_sha256(contact_sheet) != str(packet.get("contact_sheet_sha256") or ""):
+        return {"accepted": False, "reason": "visual_review_contact_sheet_changed", "artifact_sha256": current_sha}
+    expected_machine_sha = machine_review_sha256(
+        current_sha,
+        verdict,
+        [issue for issue in post_qc.get("issues") or [] if isinstance(issue, dict)],
+        str(packet.get("comparison_inputs_sha256") or ""),
+    )
+    if str(post_qc.get("machine_review_sha256") or "") != expected_machine_sha:
+        return {"accepted": False, "reason": "machine_review_receipt_invalid", "artifact_sha256": current_sha}
+    manual = post_qc.get("manual_review") if isinstance(post_qc.get("manual_review"), dict) else {}
+    required_manual_verdict = "accepted_with_warnings" if verdict == "warn" else "accepted"
+    if str(manual.get("verdict") or "").lower() != required_manual_verdict:
+        return {"accepted": False, "reason": "human_review_pending", "artifact_sha256": current_sha}
+    if not str(manual.get("reviewed_by") or "").strip() or not str(manual.get("reason") or "").strip():
+        return {"accepted": False, "reason": "human_review_identity_or_reason_missing", "artifact_sha256": current_sha}
+    if str(manual.get("artifact_sha256") or "") != current_sha:
+        return {"accepted": False, "reason": "human_review_artifact_sha_mismatch", "artifact_sha256": current_sha}
+    comparison_sha = str(packet.get("comparison_inputs_sha256") or "")
+    if not comparison_sha or str(manual.get("comparison_inputs_sha256") or "") != comparison_sha:
+        return {"accepted": False, "reason": "human_review_comparison_packet_stale", "artifact_sha256": current_sha}
+    if str(manual.get("machine_review_sha256") or "") != expected_machine_sha:
+        return {"accepted": False, "reason": "human_review_machine_findings_stale", "artifact_sha256": current_sha}
+    if str(manual.get("contact_sheet_sha256") or "") != str(packet.get("contact_sheet_sha256") or ""):
+        return {"accepted": False, "reason": "human_review_contact_sheet_stale", "artifact_sha256": current_sha}
+    findings = warning_findings(post_qc)
+    if verdict == "warn" and manual.get("acknowledged_warnings") != findings:
+        return {"accepted": False, "reason": "warning_disposition_incomplete", "artifact_sha256": current_sha}
+    for item in comparison_inputs:
+        if not isinstance(item, dict) or not item.get("path") or not item.get("sha256"):
+            return {"accepted": False, "reason": "comparison_input_incomplete", "artifact_sha256": current_sha}
+        comparison_path = resolve_path(root, str(item["path"]))
+        if not comparison_path.is_file() or file_sha256(comparison_path) != str(item["sha256"]):
+            return {
+                "accepted": False,
+                "reason": "comparison_input_changed",
+                "changed_path": str(item["path"]),
+                "artifact_sha256": current_sha,
+            }
+    return {
+        "accepted": True,
+        "reason": (
+            "current_pixel_sha_warn_and_named_human_acceptance"
+            if verdict == "warn"
+            else "current_pixel_sha_machine_pass_and_human_acceptance"
+        ),
+        "artifact_sha256": current_sha,
+        "reviewed_by": str(manual.get("reviewed_by") or ""),
+        "disposition": required_manual_verdict,
+    }
+
+
+def accept_panel_review(
+    root: Path,
+    chapter: str,
+    data: dict[str, Any],
+    jobs_path: Path,
+    panel_id: str,
+    reviewer: str,
+    reason: str,
+) -> dict[str, Any]:
+    """Record the subjective gate for one exact pixel SHA.
+
+    Heuristic warnings require an explicit named disposition.  Deterministic
+    blocks and unverifiable/skipped results remain ineligible.
+    """
+    if not reviewer.strip() or not reason.strip():
+        raise ValueError("--reviewer and --review-notes are required for per-panel acceptance")
+    job = next(
+        (item for item in data.get("jobs") or [] if isinstance(item, dict) and str(item.get("panel_id") or "") == panel_id),
+        None,
+    )
+    if not isinstance(job, dict):
+        raise ValueError(f"unknown panel_id: {panel_id}")
+    rel = str(job.get("result_path") or "").strip()
+    path = resolve_path(root, rel) if rel else root / "__missing__"
+    if not png_valid(path):
+        raise ValueError(f"{panel_id} has no valid current PNG")
+    artifact_sha256 = file_sha256(path)
+    post_qc = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
+    if str(post_qc.get("artifact_sha256") or "") != artifact_sha256:
+        raise ValueError(f"{panel_id} post-QC is stale for the current pixel SHA; run --recheck-existing first")
+    qc_path = root / "生产数据" / "panel_qc" / chapter / f"{panel_id}.json"
+    try:
+        receipt = load_json(qc_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{panel_id} has no readable post-QC receipt; run --recheck-existing") from exc
+    if hashlib.sha256(
+        json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest() != hashlib.sha256(
+        json.dumps(post_qc, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest():
+        raise ValueError(f"{panel_id} job/receipt post-QC disagree; run --recheck-existing")
+    verdict = str(post_qc.get("verdict") or "").lower()
+    if verdict not in {"pass", "warn"}:
+        raise ValueError(f"{panel_id} machine post-QC={verdict or 'missing'}; block/unverifiable cannot be accepted")
+    packet = post_qc.get("visual_review_packet") if isinstance(post_qc.get("visual_review_packet"), dict) else {}
+    if packet.get("status") != "ready_for_human_review":
+        raise ValueError(f"{panel_id} has no complete refs/current/adjacent visual review packet")
+    comparison_inputs = [item for item in packet.get("comparison_inputs") or [] if isinstance(item, dict)]
+    if not comparison_inputs or comparison_inputs_sha256(comparison_inputs) != str(packet.get("comparison_inputs_sha256") or ""):
+        raise ValueError(f"{panel_id} comparison packet fingerprint is invalid; run --recheck-existing")
+    if len(
+        [
+            item for item in comparison_inputs
+            if str(item.get("role") or "") == "current_panel"
+            and resolve_path(root, str(item.get("path") or "")).resolve() == path.resolve()
+            and str(item.get("sha256") or "") == artifact_sha256
+        ]
+    ) != 1:
+        raise ValueError(f"{panel_id} comparison packet does not bind the current panel; run --recheck-existing")
+    contact_sheet_raw = str(packet.get("contact_sheet_path") or "").strip()
+    contact_sheet = resolve_path(root, contact_sheet_raw) if contact_sheet_raw else root / "__missing_contact_sheet__"
+    if not contact_sheet.is_file() or file_sha256(contact_sheet) != str(packet.get("contact_sheet_sha256") or ""):
+        raise ValueError(f"{panel_id} contact sheet changed or is missing; run --recheck-existing")
+    for item in comparison_inputs:
+        compare_path = resolve_path(root, str(item.get("path") or ""))
+        if not compare_path.is_file() or file_sha256(compare_path) != str(item.get("sha256") or ""):
+            raise ValueError(f"{panel_id} comparison input changed: {item.get('path')}; run --recheck-existing")
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    findings = warning_findings(post_qc)
+    machine_sha = str(post_qc.get("machine_review_sha256") or "")
+    expected_machine_sha = machine_review_sha256(
+        artifact_sha256,
+        verdict,
+        [issue for issue in post_qc.get("issues") or [] if isinstance(issue, dict)],
+        str(packet.get("comparison_inputs_sha256") or ""),
+    )
+    if not machine_sha or machine_sha != expected_machine_sha:
+        raise ValueError(f"{panel_id} machine post-QC receipt is incomplete or stale; run --recheck-existing")
+    manual = {
+        "verdict": "accepted_with_warnings" if verdict == "warn" else "accepted",
+        "artifact_sha256": artifact_sha256,
+        "comparison_inputs_sha256": str(packet.get("comparison_inputs_sha256") or ""),
+        "contact_sheet_sha256": str(packet.get("contact_sheet_sha256") or ""),
+        "machine_review_sha256": machine_sha,
+        "acknowledged_warnings": findings,
+        "reviewed_by": reviewer.strip(),
+        "reviewed_at": now,
+        "reason": reason.strip(),
+        "confirmations": {
+            axis: True for axis in packet.get("required_axes") or []
+        },
+        "policy": (
+            "heuristic warnings explicitly dispositioned by named reviewer; deterministic blocks remain non-waivable"
+            if verdict == "warn"
+            else "subjective visual gate accepted; deterministic blocks remain non-waivable"
+        ),
+    }
+    post_qc["manual_review"] = manual
+    post_qc["visual_review_packet"]["human_review_status"] = manual["verdict"]
+    job.update(
+        {
+            "status": "ready",
+            "artifact_sha256": artifact_sha256,
+            "post_qc": post_qc,
+            "accepted_at": now,
+        }
+    )
+    write_json(qc_path, post_qc)
+    status = panel_acceptance_status(root, job)
+    if not status.get("accepted"):
+        raise ValueError(f"acceptance receipt failed current-pixel validation: {status.get('reason')}")
+    write_json(jobs_path, data)
+    return status
+
+
+def status_after_post_qc(post_qc: dict[str, Any]) -> str:
+    verdict = str(post_qc.get("verdict") or "").lower()
+    if verdict == "pass":
+        return "awaiting_review"
+    if verdict == "warn":
+        return "qc_warn"
+    return "qc_block"
 
 
 def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
@@ -956,26 +1379,6 @@ def format_failure(proc: subprocess.CompletedProcess[str]) -> str:
     return f"codex exit {proc.returncode}: " + (" | ".join(parts) if parts else "no output")
 
 
-def update_progress(root: Path, chapter: str, stage: str, value: str) -> None:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return
-    lines = path.read_text(encoding="utf-8").splitlines()
-    headers: list[str] = []
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("|"):
-            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and len(cells) >= len(headers) and cells[0] == chapter and stage in headers:
-                cells[headers.index(stage)] = value
-                line = "| " + " | ".join(cells) + " |"
-        out.append(line)
-    path.write_text("\n".join(out) + "\n", encoding="utf-8")
-
-
 def append_event(root: Path, row: dict[str, Any]) -> None:
     path = root / "生产数据" / "comic_image_generation.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -994,10 +1397,31 @@ def selected_jobs(jobs: list[dict], targets: set[str], limit: int, force: bool) 
     return pending[:limit] if limit > 0 else pending
 
 
+def previous_accepted_panel_paths(root: Path, jobs: list[dict], panel_id: str) -> list[Path]:
+    previous: Path | None = None
+    for job in jobs:
+        if str(job.get("panel_id") or "") == panel_id:
+            break
+        if not panel_acceptance_status(root, job).get("accepted"):
+            continue
+        raw = str(job.get("result_path") or "").strip()
+        if raw:
+            previous = resolve_path(root, raw)
+    return [previous] if previous is not None else []
+
+
+def first_sequence_barrier(root: Path, jobs: list[dict]) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Return the first job not backed by a current two-gate acceptance."""
+    for job in jobs:
+        status = panel_acceptance_status(root, job)
+        if not status.get("accepted"):
+            return job, status
+    return None, {"accepted": True, "reason": "all_panels_accepted"}
+
+
 def all_ready(root: Path, jobs: list[dict]) -> bool:
     for job in jobs:
-        rel = job.get("result_path")
-        if job.get("status") != "ready" or not rel or not png_valid(root / rel):
+        if job.get("status") != "ready" or not panel_acceptance_status(root, job).get("accepted"):
             return False
     return True
 
@@ -1016,7 +1440,6 @@ def main() -> int:
         help="每格实际传给 Codex Image 2 的参考图上限（1-5）；多参考超时格可降到关键主体+场景三张",
     )
     parser.add_argument("--force", action="store_true", help="即使 job 已 ready 也重新生成；原图会归档到 candidates/")
-    parser.add_argument("--allow-missing-refs", action="store_true", help="允许带 references 的格子在参考图缺失时继续文生图")
     parser.add_argument("--timeout-sec", type=int, default=240)
     parser.add_argument(
         "--ignore-user-config",
@@ -1029,8 +1452,6 @@ def main() -> int:
         help="不加载用户/项目 execpolicy 规则；用于继续隔离卡在说明文档输出的 Codex 子进程",
     )
     parser.add_argument("--no-resize", action="store_true")
-    parser.add_argument("--no-post-qc", action="store_true", help="跳过每格落盘后的 deterministic QC 记录")
-    parser.add_argument("--continue-on-qc-block", action="store_true", help="调试用：遇到 post_qc=block 仍继续后续格；默认立即停下")
     parser.add_argument(
         "--recheck-existing",
         action="store_true",
@@ -1042,14 +1463,16 @@ def main() -> int:
         help="配合 --recheck-existing：把现有 PNG 登记为内置 Codex Image 2 路由降级产物并补齐 provenance",
     )
     parser.add_argument(
+        "--accept-reviewed",
+        action="store_true",
+        help="对唯一当前 panel 写入 SHA 绑定签收；pass 或启发式 warn 可用，确定性 block 不可用",
+    )
+    parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人")
+    parser.add_argument("--review-notes", default="", help="--accept-reviewed 必填：逐轴目检结论与理由")
+    parser.add_argument(
         "--skip-gate",
         action="store_true",
-        help="显式跳过内置 image_preflight gate（编排层刚跑过 gate、或人工确认误报时用；跳过会留痕）",
-    )
-    parser.add_argument(
-        "--waiver-reason",
-        default="",
-        help="--skip-gate 且没有绑定当前 panel_jobs SHA 的 pass receipt 时必填；会写持久 waiver receipt",
+        help="仅复用绑定当前完整输入与 panel_jobs SHA 的已授权非 block receipt；不能用 waiver 绕过 preflight",
     )
     args = parser.parse_args()
 
@@ -1059,47 +1482,113 @@ def main() -> int:
     if not jobs_path.is_file():
         print(f"[err] missing panel jobs: {jobs_path}", file=sys.stderr)
         return 2
-    if args.skip_gate:
-        receipt_status = validate_gate_receipt(root, args.chapter, jobs_path)
-        if receipt_status.get("status") == "current_pass":
-            print(f"[ok] --skip-gate 复用当前 pass receipt：{receipt_status['path']}", flush=True)
-        elif not args.waiver_reason.strip():
-            print(
-                "[err] --skip-gate 没有绑定当前 panel_jobs SHA 的 pass receipt；必须提供 --waiver-reason 并留下持久审计记录",
-                file=sys.stderr,
-            )
-            return 2
-        else:
-            waiver = write_gate_waiver(
-                root, args.chapter, jobs_path, args.waiver_reason, args.targets, receipt_status
-            )
-            print(f"[warn] --skip-gate 显式豁免已留痕：{rel_to_root(root, waiver)}", flush=True)
-    else:
-        rc = run_preflight_gate(root, args.chapter)
-        if rc != 0:
-            return rc
     data = load_json(jobs_path)
     data["model"] = CODEX_MODEL
     data["channel"] = recorded_channel(adopt_builtin=args.adopt_builtin)
     targets = {item.strip() for item in args.targets.split(",") if item.strip()}
+    if args.accept_reviewed:
+        if args.recheck_existing or args.force:
+            print("[err] --accept-reviewed 不能与 --recheck-existing/--force 同用", file=sys.stderr)
+            return 2
+        if len(targets) != 1:
+            print("[err] --accept-reviewed 每次必须且只能 --targets 一个 panel", file=sys.stderr)
+            return 2
+        panel_id = next(iter(targets))
+        try:
+            accepted = accept_panel_review(
+                root,
+                args.chapter,
+                data,
+                jobs_path,
+                panel_id,
+                args.reviewer,
+                args.review_notes,
+            )
+        except ValueError as exc:
+            print(f"[err] {exc}", file=sys.stderr)
+            return 3
+        if all_ready(root, data.get("jobs") or []):
+            update_stage(
+                root,
+                args.chapter,
+                "出图",
+                "✅",
+                evidence=f"生产数据/panel_qc/{args.chapter}",
+                actor="comic-image.panel_acceptance",
+            )
+        print(f"[accepted] {panel_id} sha256={accepted['artifact_sha256']}", flush=True)
+        return 0
+    if args.recheck_existing and len(targets) != 1:
+        print("[err] --recheck-existing 每次必须且只能 --targets 一个 panel", file=sys.stderr)
+        return 2
+
+    all_jobs = [job for job in data.get("jobs") or [] if isinstance(job, dict)]
+    barrier, barrier_status = first_sequence_barrier(root, all_jobs)
+    if barrier is None:
+        if not args.force:
+            print("[ok] no pending jobs")
+            return 0
+    elif not args.recheck_existing:
+        barrier_id = str(barrier.get("panel_id") or "")
+        if args.force:
+            if len(targets) != 1:
+                print("[err] --force 在逐图双闸模式下每次必须且只能 --targets 一个 panel", file=sys.stderr)
+                return 2
+            forced_id = next(iter(targets))
+            forced_index = next((i for i, row in enumerate(all_jobs) if str(row.get("panel_id") or "") == forced_id), -1)
+            if forced_index < 0:
+                print(f"[err] unknown target: {forced_id}", file=sys.stderr)
+                return 2
+            prior_unaccepted = [
+                str(row.get("panel_id") or "")
+                for row in all_jobs[:forced_index]
+                if not panel_acceptance_status(root, row).get("accepted")
+            ]
+            if prior_unaccepted:
+                print(f"[err] 不能重抽 {forced_id}：此前图片尚未 accepted：{prior_unaccepted[0]}", file=sys.stderr)
+                return 3
+        else:
+            if targets and barrier_id not in targets:
+                print(f"[err] 逐图顺序闸要求先处理 {barrier_id}，不能越过它生成后续格", file=sys.stderr)
+                return 3
+            barrier_rel = str(barrier.get("result_path") or "").strip()
+            if barrier_rel and png_valid(resolve_path(root, barrier_rel)):
+                print(
+                    f"[review-required] {barrier_id} 尚未 accepted（{barrier_status.get('reason')}）；"
+                    f"先查看 panel_qc contact sheet，再用 --accept-reviewed --targets {barrier_id}，"
+                    "启发式 warn 可具名带警告签收，确定性 block 才须修复/重抽。",
+                    file=sys.stderr,
+                )
+                return 4
+
+    if not args.recheck_existing:
+        if args.skip_gate:
+            receipt_status = validate_gate_receipt(root, args.chapter, jobs_path)
+            if receipt_status.get("status") != "current_pass":
+                print("[err] --skip-gate 只允许复用绑定当前完整输入的已授权非 block receipt；不接受 waiver", file=sys.stderr)
+                return 2
+            print(f"[ok] --skip-gate 复用当前已授权 receipt：{receipt_status['path']}", flush=True)
+        else:
+            rc = run_preflight_gate(root, args.chapter)
+            if rc != 0:
+                return rc
     max_attempts = max(1, args.max_attempts)
     reference_limit = max(1, min(CODEX_IMAGE_GENERATION_REFERENCE_LIMIT, int(args.reference_limit)))
-    jobs = selected_jobs(data.get("jobs") or [], targets, args.limit, args.force)
+    jobs = selected_jobs(data.get("jobs") or [], targets, args.limit, args.force or args.recheck_existing)
     if not jobs:
         print("[ok] no pending jobs")
         return 0
-    if not args.allow_missing_refs:
-        missing = {str(job.get("panel_id")): missing_reference_ids(root, job) for job in jobs}
-        missing = {pid: refs for pid, refs in missing.items() if refs}
-        if missing:
-            for pid, refs in missing.items():
-                print(f"[err] {pid} missing shared references: {', '.join(refs)}", file=sys.stderr)
-            print("[err] seed or place shared reference images before generating panels, or pass --allow-missing-refs for a deliberate text-only run", file=sys.stderr)
-            return 2
-    if not shutil.which("codex"):
+    missing = {str(job.get("panel_id")): missing_reference_ids(root, job) for job in jobs}
+    missing = {pid: refs for pid, refs in missing.items() if refs}
+    if missing:
+        for pid, refs in missing.items():
+            print(f"[err] {pid} missing shared references: {', '.join(refs)}", file=sys.stderr)
+        print("[err] seed or place accepted shared reference images before generating panels", file=sys.stderr)
+        return 2
+    if not args.recheck_existing and not shutil.which("codex"):
         print("[err] codex not found in PATH", file=sys.stderr)
         return 2
-    backend_version = codex_version()
+    backend_version = codex_version() if not args.recheck_existing else str(data.get("backend_version") or "")
     panel_dir = root / "出图" / args.chapter / "panels"
     candidate_root = root / "出图" / args.chapter / "candidates"
     failures = 0
@@ -1157,11 +1646,13 @@ def main() -> int:
                 final,
                 reference_records,
                 omitted_reference_records,
+                adjacent_paths=previous_accepted_panel_paths(root, all_jobs, str(pid)),
             )
             verdict = str(post_qc.get("verdict") or "block")
-            job["status"] = "qc_block" if verdict == "block" else "ready"
+            job["status"] = status_after_post_qc(post_qc)
             job["result_path"] = rel_to_root(root, final)
-            job["post_qc"] = verdict
+            job["artifact_sha256"] = file_sha256(final)
+            job["post_qc"] = post_qc
             job["reference_manifest"] = rel_to_root(root, reference_manifest)
             if args.adopt_builtin:
                 job.update({
@@ -1177,13 +1668,11 @@ def main() -> int:
                     "generated_from_execution_input_sha256": str(job.get("execution_input_sha256") or ""),
                 })
                 job.pop("error", None)
+            if panel_acceptance_status(root, job).get("accepted"):
+                job["status"] = "ready"
             write_json(jobs_path, data)
-            print(f"[recheck] {pid} -> post_qc={verdict}", flush=True)
-            if verdict == "block":
-                qc_blocked += 1
-                if not args.continue_on_qc_block:
-                    return 3
-            continue
+            print(f"[recheck] {pid} -> post_qc={verdict}, status={job['status']}", flush=True)
+            return 0 if job["status"] == "ready" else (4 if verdict in {"pass", "warn"} else 3)
         final.parent.mkdir(parents=True, exist_ok=True)
         for attempt in range(1, max_attempts + 1):
             # Temp dir under the panel dir (not $TMPDIR): keeps os.replace on one
@@ -1247,24 +1736,21 @@ def main() -> int:
                 final.parent.mkdir(parents=True, exist_ok=True)
                 os.replace(temp_path, final)
                 rel = str(final.relative_to(root))
-                post_qc = (
-                    {}
-                    if args.no_post_qc
-                    else post_qc_panel(
-                        root,
-                        args.chapter,
-                        job,
-                        final,
-                        reference_records,
-                        omitted_reference_records,
-                    )
+                post_qc = post_qc_panel(
+                    root,
+                    args.chapter,
+                    job,
+                    final,
+                    reference_records,
+                    omitted_reference_records,
+                    adjacent_paths=previous_accepted_panel_paths(root, all_jobs, str(pid)),
                 )
-                post_qc_verdict = str(post_qc.get("verdict") or "skipped")
+                post_qc_verdict = str(post_qc.get("verdict") or "block")
                 history = job.get("history") if isinstance(job.get("history"), list) else []
                 if archived_existing:
                     history.append({"kind": "archived_previous", "path": archived_existing})
                 generated_at = dt.datetime.now().isoformat(timespec="seconds")
-                status = "qc_block" if post_qc_verdict == "block" else "ready"
+                status = status_after_post_qc(post_qc)
                 job.update(
                     {
                         "status": status,
@@ -1305,14 +1791,26 @@ def main() -> int:
                     "backend_version": backend_version,
                 })
                 write_json(jobs_path, data)
-                if post_qc_verdict == "block":
-                    qc_blocked += 1
-                    print(f"[qc-block] {pid} -> {rel}; see {rel_to_root(root, root / '生产数据' / 'panel_qc' / args.chapter / f'{pid}.json')}", file=sys.stderr, flush=True)
-                    if not args.continue_on_qc_block:
-                        return 3
-                else:
-                    print(f"[ok] {pid} -> {rel} (attempt {attempt}/{max_attempts}, post_qc={post_qc_verdict})", flush=True)
-                break
+                if post_qc_verdict in {"pass", "warn"}:
+                    warning_note = (
+                        f"；须在 review notes 中处置 warning codes={','.join(item['code'] for item in warning_findings(post_qc))}"
+                        if post_qc_verdict == "warn"
+                        else ""
+                    )
+                    print(
+                        f"[review-required] {pid} -> {rel}; machine post-QC={post_qc_verdict}，"
+                        f"查看 {post_qc['visual_review_packet']['contact_sheet_path']} 后逐图签收{warning_note}；"
+                        "未签收前不会生成下一张。",
+                        file=sys.stderr,
+                        flush=True,
+                    )
+                    return 4
+                print(
+                    f"[qc-{post_qc_verdict}] {pid} -> {rel}; 确定性 block 不可人工豁免，必须修复并 --force 重抽",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                return 3
         else:
             if last_error:
                 failures += 1
@@ -1333,8 +1831,16 @@ def main() -> int:
                 })
                 print(f"[fail] {pid}: {last_error}", file=sys.stderr, flush=True)
                 write_json(jobs_path, data)
+                return 1
     if all_ready(root, data.get("jobs") or []):
-        update_progress(root, args.chapter, "出图", "✅")
+        update_stage(
+            root,
+            args.chapter,
+            "出图",
+            "✅",
+            evidence=f"出图/{args.chapter}/prompt/panel_jobs.json",
+            actor="comic-image.panel_runner",
+        )
     if qc_blocked:
         return 3
     return 1 if failures else 0

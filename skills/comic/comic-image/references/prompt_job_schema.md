@@ -97,13 +97,17 @@
 }
 ```
 
-状态建议：
+正式状态语义：
 
 - `planned`：任务已写，未执行。
 - `submitted`：已交给某个后端或人工流程。
-- `ready`：图片已落到 `result_path`。
-- `qc_block`：图片已落盘但 `post_qc.verdict=block`，不算 ready，不能进入合成。
+- `awaiting_review`：机器 QC 为 pass，但当前像素尚未具名人审。
+- `qc_warn`：机器只发现启发式 warning，尚未具名签收；不算 ready。
+- `qc_block`：确定性缺件/损坏/引用覆盖/分辨率血统或 unverifiable；永不可人工豁免。
+- `ready`：图片已落到 `result_path`，且具名人审为 `accepted` 或 `accepted_with_warnings`；验收同时绑定当前 artifact SHA、on-disk/job post-QC、机器 findings SHA、contact sheet SHA、comparison packet fingerprint 与每个比较输入 SHA。
 - `rework`：需要重出。
+
+`warn` 不能自动变 `ready`，但审核人实际查看当前 contact sheet 后，可以用明确理由签为 `accepted_with_warnings`，receipt 必须记录 warning codes。`skipped`、legacy 无 SHA 签收和 `unverifiable` 都不能授权正式状态。像素、post-QC、contact sheet 或任一比较输入变化时，旧签收立即 stale；重建 job 也不得保留该 `ready`。
 
 正文台词不要写进 `submit_prompt`。`text_language` 只记录后期嵌字/导出的文字语言；台词只作为低细节嵌字区和表演语气的上游依据。
 

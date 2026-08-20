@@ -114,6 +114,31 @@ def _declared_paths(root: Path, payload: Any, *, parent_key: str = "") -> list[P
     return out
 
 
+def _transitive_declared_paths(root: Path, contract_paths: Iterable[Path]) -> list[Path]:
+    """Follow file declarations through JSON contracts.
+
+    Review packets are contracts of their own: a panel/identity receipt names
+    its contact sheet and every comparison input.  Hashing only the receipt
+    JSON would leave an already-issued stage receipt current when one of those
+    files changed in place.  Follow only explicitly declared JSON paths, keep
+    missing files in the result, and stop cycles by resolved path.
+    """
+    out: list[Path] = []
+    queue = list(contract_paths)
+    visited: set[str] = set()
+    while queue:
+        contract_path = queue.pop(0)
+        key = str(contract_path.resolve())
+        if key in visited:
+            continue
+        visited.add(key)
+        for declared_path in _declared_paths(root, _load_json(contract_path)):
+            out.append(declared_path)
+            if declared_path.suffix.lower() == ".json":
+                queue.append(declared_path)
+    return out
+
+
 def _rendered_paths(root: Path, manifest: Path) -> list[Path]:
     payload = _load_json(manifest)
     out: list[Path] = []
@@ -168,8 +193,7 @@ def stage_input_paths(root: Path, chapter: str, stage: str) -> list[Path]:
     # Hash the bytes behind declared paths, not just the JSON that names them.
     # This closes the common hole where a source/reference/view image changes
     # in place while its registry or manifest stays byte-for-byte identical.
-    declared: list[Path] = []
-    for contract_path in (
+    declared = _transitive_declared_paths(root, (
         blueprint,
         source_semantics,
         registry,
@@ -177,8 +201,8 @@ def stage_input_paths(root: Path, chapter: str, stage: str) -> list[Path]:
         memory_anchor,
         reference_plan,
         jobs,
-    ):
-        declared.extend(_declared_paths(root, _load_json(contract_path)))
+    ))
+    panel_qc_declared = _transitive_declared_paths(root, panel_qc)
 
     development = [adaptation_strategy, season_arc, blueprint, dev_signoff]
     source_declared = _declared_paths(root, _load_json(blueprint)) + _declared_paths(root, _load_json(source_semantics))
@@ -196,7 +220,7 @@ def stage_input_paths(root: Path, chapter: str, stage: str) -> list[Path]:
         *declared,
     ]
     preflight_inputs = finishing_inputs + identity_inputs
-    image_inputs = preflight_inputs + panel_images + panel_qc
+    image_inputs = preflight_inputs + panel_images + panel_qc + panel_qc_declared
     compose_inputs = image_inputs + [lettering, manifest] + rendered
     review_evidence = [
         root / "生产数据" / f"raw_bubble_acceptance_{chapter}.json",

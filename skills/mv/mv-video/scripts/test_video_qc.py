@@ -4,11 +4,19 @@ import json
 import os
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest import mock
 
 import video_qc
 
 
 class VideoQcPureTest(unittest.TestCase):
+    def test_report_root_is_portable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report = video_qc.build_report(tmp)
+            self.assertEqual(report["root_rel"], ".")
+            self.assertNotIn("root", report)
+
     def test_sample_times_uses_start_mid_end(self):
         self.assertEqual(video_qc.sample_times(10), [("start", 0.08), ("mid", 5.0), ("end", 9.92)])
 
@@ -144,6 +152,45 @@ class VideoQcPureTest(unittest.TestCase):
                 json.dump(report, f)
             threshold, _source = video_qc.face_drift_threshold(tmp)
             self.assertEqual(threshold, 0.20)   # 下限保护：不许阈值烂到形同虚设
+
+    def test_semantic_acceptance_uses_completion_controller(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report = {
+                "kind": "mv_video_qc", "summary": {"hard_blocks": 0, "verdict": "ok"},
+                "selected_video_sha256": {}, "seams": [],
+            }
+            complete = mock.Mock()
+            with mock.patch.object(video_qc, "build_report", return_value=report), \
+                    mock.patch.object(video_qc, "write_report", return_value=os.path.join(tmp, "video_qc.json")), \
+                    mock.patch.object(
+                        video_qc, "load_completion",
+                        return_value=SimpleNamespace(mark_stage_complete=complete),
+                    ), mock.patch.object(
+                        video_qc.sys, "argv",
+                        ["video_qc.py", tmp, "--accept-semantic", "--reviewer", "Director Wang",
+                         "--notes", "逐镜与逐缝复核完成"],
+                    ):
+                self.assertEqual(video_qc.main(), 0)
+            complete.assert_called_once_with(os.path.abspath(tmp), "video")
+
+    def test_semantic_acceptance_requires_notes_before_progress(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report = {
+                "kind": "mv_video_qc", "summary": {"hard_blocks": 0, "verdict": "ok"},
+                "selected_video_sha256": {}, "seams": [],
+            }
+            complete = mock.Mock()
+            with mock.patch.object(video_qc, "build_report", return_value=report), \
+                    mock.patch.object(video_qc, "write_report"), \
+                    mock.patch.object(
+                        video_qc, "load_completion",
+                        return_value=SimpleNamespace(mark_stage_complete=complete),
+                    ), mock.patch.object(
+                        video_qc.sys, "argv",
+                        ["video_qc.py", tmp, "--accept-semantic", "--reviewer", "Director Wang"],
+                    ):
+                self.assertEqual(video_qc.main(), 2)
+            complete.assert_not_called()
 
 
 class FaceDriftVerdictTest(unittest.TestCase):

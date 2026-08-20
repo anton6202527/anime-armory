@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit skill-series and top-level standalone-skill independence.
+"""Audit skill-series and standalone-skill independence.
 
 This is a static check. It blocks active references to the removed shared layer,
 code-level coupling between skill series, and standalone-to-series executable
@@ -94,6 +94,10 @@ def owner_for_path(path: Path, root: Path) -> str | None:
     top = parts[1]
     if top in SERIES:
         return top
+    if top == "app" and len(parts) >= 3:
+        app_skill = parts[2]
+        if app_skill.startswith("app-") and (root / "skills" / "app" / app_skill / "SKILL.md").is_file():
+            return f"standalone:{app_skill}"
     if (root / "skills" / top / "SKILL.md").is_file():
         return f"standalone:{top}"
     return None

@@ -43,6 +43,7 @@ import pilot_risk_sampler  # noqa: E402
 import production_locks  # noqa: E402
 import script_supervisor_log  # noqa: E402
 import stop_loss  # noqa: E402
+import acceptance_contract  # noqa: E402
 
 try:
     from flow_telemetry import record_milestone as _record_flow_milestone  # noqa: E402
@@ -482,17 +483,34 @@ def check_generation_recipe(root: Path, episode: str) -> Dict[str, Any]:
     return component("generation_recipe", "pass", "生成配方 manifest 通过。", path=relpath(root, path))
 
 
+def check_operational_evidence(root: Path, episode: str, name: str, filename: str) -> Dict[str, Any]:
+    path = production_dir(root) / filename
+    issues, projection = acceptance_contract.validate_operational_evidence(
+        root, episode, role=name, path=path
+    )
+    if issues:
+        return component(
+            name,
+            "block",
+            f"{filename} 强契约未通过；不能证明报告来自当前源证据。",
+            path=relpath(root, path),
+            details={
+                "issues": issues[:20],
+                "projection": projection,
+                "report_sha256": sha256_file(path) if path.is_file() else "",
+            },
+        )
+    return component(
+        name,
+        "pass",
+        f"{filename} kind/version/root/source/content/current 均通过。",
+        path=relpath(root, path),
+        details={"projection": projection},
+    )
+
+
 def _final_master_files(root: Path, episode: str) -> List[Path]:
-    patterns = [
-        root / "合成" / episode / "*.mp4",
-        root / "合成" / episode / "*.mov",
-        root / "成片" / episode / "*.mp4",
-        root / "成片" / f"*{episode}*.mp4",
-    ]
-    out: List[Path] = []
-    for pattern in patterns:
-        out.extend(Path(p) for p in glob.glob(str(pattern)))
-    return sorted({p.resolve() for p in out if p.is_file()})
+    return acceptance_contract.final_master_candidates(root, episode)
 
 
 def _master_details(root: Path, masters: Sequence[Path]) -> List[Dict[str, Any]]:
@@ -513,13 +531,33 @@ def check_final_master(root: Path, episode: str) -> Dict[str, Any]:
     if not masters:
         return component("final_master", "block", "缺最终母版 mp4/mov；release verdict 不能在无母版时放行。", path=relpath(root, root / "合成" / episode))
     details = _master_details(root, masters)
-    latest = max(masters, key=lambda p: p.stat().st_mtime)
+    latest = acceptance_contract.resolve_final_master(root, episode)
+    assert latest is not None
+    duration = script_supervisor_log.ffprobe_duration(latest)
+    if duration is None or duration <= 0:
+        return component(
+            "final_master",
+            "block",
+            f"最终母版无法证明可播放或无有效时长：{relpath(root, latest)}。",
+            path=relpath(root, latest),
+            details={
+                "masters": details,
+                "selected": relpath(root, latest),
+                "selected_sha256": sha256_file(latest),
+                "duration_sec": duration,
+            },
+        )
     return component(
         "final_master",
         "pass",
         f"最终母版存在：{relpath(root, latest)}。",
         path=relpath(root, latest),
-        details={"masters": details, "selected": relpath(root, latest)},
+        details={
+            "masters": details,
+            "selected": relpath(root, latest),
+            "selected_sha256": sha256_file(latest),
+            "duration_sec": duration,
+        },
     )
 
 
@@ -527,7 +565,9 @@ def check_release_evidence_freshness(root: Path, episode: str) -> Dict[str, Any]
     masters = _final_master_files(root, episode)
     if not masters:
         return component("release_evidence_freshness", "block", "缺最终母版；无法证明 score/ledger/review-ui/配方证据新鲜。")
-    latest_master_mtime = max(p.stat().st_mtime for p in masters)
+    selected_master = acceptance_contract.resolve_final_master(root, episode)
+    assert selected_master is not None
+    latest_master_mtime = selected_master.stat().st_mtime
     prod = production_dir(root)
     evidence = [
         prod / f"score_{episode}.json",
@@ -808,6 +848,8 @@ def build_components(root: Path, episode: str, profile: str) -> List[Dict[str, A
         check_review_ui(root, episode),
         check_image_qc(root, episode, profile),
         check_generation_recipe(root, episode),
+        check_operational_evidence(root, episode, "event_ledger_audit", "production_events_audit.json"),
+        check_operational_evidence(root, episode, "artifact_validation", "artifact_validation.json"),
         check_audience_experience(root, episode, profile),
         check_stop_loss(root, episode, profile),
         check_final_master(root, episode),
@@ -895,13 +937,21 @@ def delivery_state_matrix(
     ]
     final_master = next((row for row in internal_components if row.get("name") == "final_master"), {})
     master_complete = clip_state["complete"] and final_master.get("status") == "pass" and not technical_blockers
-    master_state = {
+    master_technical_state = {
         "complete": master_complete,
         "status": "complete" if master_complete else "incomplete",
         "blockers": technical_blockers + ([] if final_master.get("status") == "pass" else [{
             "name": "final_master", "status": final_master.get("status") or "missing", "message": final_master.get("message") or "final master missing",
         }]),
         "publication_labels_required": False,
+    }
+    master_delivery_state = {
+        **master_technical_state,
+        "complete": False,
+        "status": "pending_acceptance" if master_complete else "incomplete",
+        "technical_complete": master_complete,
+        "acceptance_required": True,
+        "definition": "canonical completion is adjudicated only by release_verdict + fresh acceptance_receipt",
     }
     profile_components: Dict[str, Sequence[Mapping[str, Any]]] = {}
     normalized_requested = "commercial" if str(requested_profile).lower() == "production" else str(requested_profile).lower()
@@ -918,10 +968,11 @@ def delivery_state_matrix(
     }
     return {
         "clip_delivery_complete": clip_state,
-        "master_delivery_complete": master_state,
+        "master_technical_complete": master_technical_state,
+        "master_delivery_complete": master_delivery_state,
         "production_complete": {
-            **master_state,
-            "definition": "all logical clips covered + final master present + non-publication technical/review components have no block",
+            **master_delivery_state,
+            "definition": "technical master complete + canonical human acceptance receipt; verdict alone can never assert completion",
         },
         "publish_ready_cn": publish["cn_public"],
         "publish_ready_overseas": publish["overseas"],
@@ -937,6 +988,12 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
     components = build_components(root, episode, profile)
     status = final_status(components, root, profile)
     delivery_states = delivery_state_matrix(root, episode, profile, components)
+    # Freeze the exact evidence set adjudicated by this verdict.  The later
+    # human acceptance receipt must bind these same hashes plus this verdict's
+    # own hash; a regenerated master/score/ledger/review UI can never inherit an
+    # older approval by filename or mtime alone.
+    evidence_bindings = acceptance_contract.current_evidence_bindings(root, episode)
+    content_fingerprint = acceptance_contract.release_content_fingerprint(root, episode, profile)
     payload = {
         "kind": "n2d_release_verdict",
         "version": VERSION,
@@ -954,6 +1011,14 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         "blocking_reasons": [c for c in components if c.get("status") == "block"],
         "warnings": [c for c in components if c.get("status") == "warn"],
         "delivery_states": delivery_states,
+        "evidence_bindings": evidence_bindings,
+        "content_fingerprint": content_fingerprint,
+        "acceptance_contract": {
+            "required": True,
+            "receipt_path": relpath(root, acceptance_contract.receipt_path(root, episode)),
+            "allowed_decisions": sorted(acceptance_contract.ALLOWED_DECISIONS),
+            "completion_rule": "release verdict is acceptable AND canonical acceptance receipt is present, hash-bound and fresh",
+        },
     }
     return payload
 

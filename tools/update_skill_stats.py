@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Update and validate series and top-level standalone skill size statistics.
+"""Update and validate series and standalone skill size statistics.
 
 This keeps two surfaces in sync:
   1. skills/README.md scale table.
@@ -20,6 +20,7 @@ SKILLS = REPO / "skills"
 README = SKILLS / "README.md"
 SERIES = ("n2d", "novel", "comic", "song", "mv", "ad")
 STANDALONE = "standalone"
+APP_NAMESPACE = "app"
 GROUPS = (*SERIES, STANDALONE)
 TEXT_SUFFIXES = {".md", ".py", ".sh", ".json", ".html"}
 
@@ -35,7 +36,9 @@ README_ROW_RE = {
     for line in SERIES
 }
 README_ROW_RE[STANDALONE] = re.compile(
-    r"\| 独立 skill \| `skills/<skill-name>/SKILL\.md` \| \d+ \| \d+ \| \d+ \|"
+    r"\| 独立 skill \| `skills/<skill-name>/SKILL\.md`"
+    r"(?: \+ `skills/app/<app-skill>/SKILL\.md`)? "
+    r"\| \d+ \| \d+ \| \d+ \|"
 )
 README_TOTAL_RE = re.compile(
     r"\| \*\*合计\*\* \| `skills/(?:\*\*/SKILL|\*/SKILL|<line>/\*\*/SKILL)\.md` "
@@ -89,13 +92,23 @@ def normalized_line_count(path: Path) -> int:
 
 def skill_dirs_for(line: str) -> list[Path]:
     if line == STANDALONE:
-        return sorted(
+        top_level = [
             d
             for d in SKILLS.iterdir()
             if d.is_dir()
             and d.name not in SERIES
+            and d.name != APP_NAMESPACE
             and (d / "SKILL.md").is_file()
-        )
+        ]
+        app_dir = SKILLS / APP_NAMESPACE
+        app_skills = [
+            d
+            for d in app_dir.iterdir()
+            if d.is_dir()
+            and d.name.startswith("app-")
+            and (d / "SKILL.md").is_file()
+        ] if app_dir.is_dir() else []
+        return sorted([*top_level, *app_skills])
     line_dir = SKILLS / line
     if not (line_dir / "SKILL.md").is_file():
         return []
@@ -194,7 +207,7 @@ def render_readme(stats: dict[str, SkillStats]) -> str:
 
     standalone = stats[STANDALONE]
     content = README_ROW_RE[STANDALONE].sub(
-        f"| 独立 skill | `skills/<skill-name>/SKILL.md` | "
+        f"| 独立 skill | `skills/<skill-name>/SKILL.md` + `skills/app/<app-skill>/SKILL.md` | "
         f"{standalone.skills} | {standalone.skill_md_lines} | {standalone.total_lines} |",
         content,
     )
@@ -262,7 +275,7 @@ def validate_stats(stats: dict[str, SkillStats]) -> list[str]:
 
     standalone = stats[STANDALONE]
     expected_standalone = (
-        f"| 独立 skill | `skills/<skill-name>/SKILL.md` | "
+        f"| 独立 skill | `skills/<skill-name>/SKILL.md` + `skills/app/<app-skill>/SKILL.md` | "
         f"{standalone.skills} | {standalone.skill_md_lines} | {standalone.total_lines} |"
     )
     if expected_standalone not in readme:

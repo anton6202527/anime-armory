@@ -51,7 +51,15 @@ def test_migration_is_dry_run_by_default_and_write_is_backed_up(tmp_path):
     progress = (root / "_进度.md").read_text(encoding="utf-8")
     assert "生图模型: GPT Image 2" in settings and "生图渠道: Codex CLI" in settings
     assert brief["schema_version"] == 2
-    assert brief["measurement"] == {"primary_kpi": "待补", "conversion_event": "待补"}
+    assert brief["campaign_mode"] == "待补"
+    assert brief["commercial_content"]["creator_involved"] is None
+    assert brief["commercial_disclosure_receipts"] == []
+    assert brief["landing_page_readiness"]["status"] == ""
+    assert brief["measurement"]["primary_kpi"] == "待补"
+    assert brief["measurement"]["conversion_event"] == "待补"
+    assert brief["measurement"]["attribution_window"] == "待补"
+    assert brief["measurement"]["tracking_integrations"] == []
+    assert set(brief["measurement"]) >= {"utm", "deep_link", "consent_privacy"}
     assert "| 客户需求立项 | ✅ |" not in progress
     assert "| 创意策划 | ✅ |" not in progress
     assert report["backup"]

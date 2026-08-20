@@ -9,7 +9,7 @@ description: 制MV 卡点分析 — 用 librosa 的 HPSS/打击乐 onset 检测 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`卡点策略`、`节拍提取后处理`（是否手动干预覆盖 librosa）。
 
@@ -22,6 +22,8 @@ pip install librosa soundfile   # Mac 友好，纯 CPU 可跑
 ```bash
 python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4
 python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --downbeat-phase 2 --confirm-timing --reviewer <name>
+# 对候选网格做逐点/段落修正；编辑后必须重新完整听审才可 --accept-grid
+python3 <skill>/scripts/edit_beatgrid.py 创作区/制MV/<曲名> --patch beat_patch.json --reviewer <name> --notes "听审依据" --accept-grid
 ```
 产 `节拍/beatgrid.json`：
 - `bpm` / `tempo_candidates[]`：主 BPM + 半速/倍速候选，便于人工校正。
@@ -39,7 +41,8 @@ python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --down
 2. 跑 beat_detect.py → beatgrid.json。
 3. 校对 BPM/动态 tempo、拍号和小节第一拍相位；把真实段落起止写入 `_meta.section_timings`。
 4. 用 `--downbeat-phase N --confirm-timing --reviewer <name>` 重跑。确认不能匿名；正式项目缺完整 sections/source hash/具名 review 会被下游 gate 阻断。
-5. demo 可在候选网格生成后回写；正式项目只有 `timing_verified=true` 才回写 `_进度.md` 卡点行。字幕或演唱口型项目下一步先做 `mv-lyric-sync`；纯器乐且“无字幕+关闭口型”直接进入视觉蓝图/`mv-plan`。
+5. 自动网格局部错拍、变拍号或变速时，用 `edit_beatgrid.py` 的 patch ledger 增删/移动单个 beat/downbeat 或替换连续 sections；每次记录 patch SHA、具名 reviewer、理由和 before hash。任何编辑先使 `timing_verified=false`，完整 click-track/听审后才可 `--accept-grid`。
+6. demo 可在候选网格生成后回写；正式项目只有 `timing_verified=true` 才回写 `_进度.md` 卡点行。字幕或演唱口型项目下一步先做 `mv-lyric-sync`；纯器乐且“无字幕+关闭口型”直接进入视觉蓝图/`mv-plan`。
 
 ## 卡点原则（喂给 mv-video / mv-compose）
 - **副歌/主歌密度是创作建议，不是固定公式**：切点只能取已确认音乐网格，具体密度由歌曲能量、歌词句法、表演和视觉概念决定；机器只报告密度与重拍证据。

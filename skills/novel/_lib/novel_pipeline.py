@@ -17,6 +17,10 @@ from copy import deepcopy
 from datetime import date, datetime
 from typing import Any
 
+from authenticity_contract import evaluate_authenticity_read
+from craft_profile import resolve_craft_profile, validate_craft_contract_snapshot
+from settings import load_settings
+
 
 PIPELINE_REGISTRY_KIND = "novel_pipeline_registry"
 PIPELINE_PLAN_KIND = "novel_pipeline_dry_run_plan"
@@ -187,7 +191,7 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "owner": "novel-craft/scripts/manuscript_map.py",
         "inputs": ["设定/章纲.md", "设定/scene_cards.json"],
         "input_policy": "any",
-        "outputs": ["设定/manuscript_map.json", "设定/manuscript_map.md"],
+        "outputs": ["设定/manuscript_map.json", "设定/manuscript_map.md", "设定/manuscript_map_check.json"],
         "gate": "manuscript map completeness",
         "cost_level": "free",
         "semantic_required": False,
@@ -313,11 +317,11 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
     {
         "key": "edit",
         "label": "分层专业编辑",
-        "owner": "novel-edit/scripts/edit_plan.py",
-        "inputs": ["修订/revision_plan.json", "审稿/review_report.json", "评分/score_report.json"],
+        "owner": "novel-edit/scripts/edit_plan.py + authenticity_read.py",
+        "inputs": ["修订/revision_plan.json", "审稿/review_report.json", "评分/score_report.json", "修订/authenticity_read.json"],
         "input_policy": "any",
         "outputs": ["修订/edit_plan.json", "修订/editorial_letter.md", "修订/style_sheet.md", "修订/proof_checklist.md"],
-        "gate": "P0/P1 edit task closure",
+        "gate": "P0/P1 edit task closure + explicitly required authenticity read",
         "cost_level": "free",
         "semantic_required": False,
         "can_parallel": False,
@@ -798,9 +802,26 @@ def evaluate_stage(root: str, stage: dict[str, Any],
             gate_blockers.append("设定/author_intent.json: 未完成 " + ", ".join(missing))
     if stage.get("key") == "manuscript_map" and outputs_ok:
         check = load_json(os.path.join(root, "设定", "manuscript_map_check.json"), {}) or {}
-        if check.get("blocking"):
+        if check.get("kind") != "novel_manuscript_map_check":
             status = "blocked"
-            gate_blockers.append(f"设定/manuscript_map_check.json: {check.get('blocking')} 个结构地图阻断")
+            gate_blockers.append("设定/manuscript_map_check.json: 缺失或格式错误，必须重跑结构地图检查")
+        else:
+            craft_profile = resolve_craft_profile(load_settings(root))
+            snapshot_status = validate_craft_contract_snapshot(
+                root,
+                check.get("source_snapshot"),
+                craft_profile,
+            )
+            if not snapshot_status["fresh"]:
+                status = "blocked"
+                gate_blockers.append(
+                    "设定/manuscript_map_check.json: 来源已过期（"
+                    + ", ".join(snapshot_status["issues"])
+                    + "），必须重跑 manuscript_map.py --write"
+                )
+        if check.get("kind") == "novel_manuscript_map_check" and (check.get("blocking") or check.get("passed") is not True):
+            status = "blocked"
+            gate_blockers.append(f"设定/manuscript_map_check.json: {check.get('blocking') or 0} 个结构地图阻断或未明确通过")
     if stage.get("key") == "demo_readiness" and outputs_ok:
         readiness = load_json(os.path.join(root, "审稿", "demo_readiness.json"), {}) or {}
         if readiness.get("ready_for_batch") is not True:
@@ -825,6 +846,17 @@ def evaluate_stage(root: str, stage: dict[str, Any],
         if open_queries:
             status = "blocked"
             gate_blockers.append(f"修订/editor_queries.jsonl: {len(open_queries)} 个 editor query 未关闭")
+        authenticity = evaluate_authenticity_read(root)
+        authenticity_issues = [
+            str(item.get("message") or item.get("id"))
+            for item in authenticity.get("findings") or []
+            if item.get("severity") == "blocking"
+        ]
+        if authenticity.get("required_for_release") and authenticity_issues:
+            status = "blocked"
+            gate_blockers.append(
+                "修订/authenticity_read.json: " + "；".join(authenticity_issues)
+            )
     if stage.get("key") == "ai_compliance" and outputs_ok:
         ai_usage = load_json(os.path.join(root, "合规", "ai_usage.json"), {}) or {}
         if ai_usage.get("text_mode") in {"AI-generated", "AI-assisted"} and not ai_usage.get("chapter_usage"):

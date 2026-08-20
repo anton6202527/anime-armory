@@ -115,13 +115,22 @@ def run_next_action(root: Path, episode: str, *, skip: bool = False) -> Dict[str
 
 
 def run_artifact_validation(root: Path, *, write: bool) -> Dict[str, Any]:
-    payload = scan_artifacts(str(root), strict_unknown=False)
+    # Release readiness owns a narrow, strict boundary: canonical registry
+    # paths and manifest bodies.  Caches, views and other authoring helpers are
+    # reported as skipped; a formal artifact with an unknown kind still blocks.
+    payload = scan_artifacts(
+        str(root), strict_unknown=True, scope="release", completion_inputs_only=True
+    )
     outputs = write_validation(str(root), payload) if write else {}
     return check(
         "artifact_validation",
         "fail" if payload.get("status") == "fail" else ("warn" if payload.get("status") == "warn" else "pass"),
-        f"checked={payload.get('checked_count')} block={(payload.get('summary') or {}).get('block', 0)}",
+        f"scanned={payload.get('scanned_count')} skipped={payload.get('skipped_count')} "
+        f"block={(payload.get('summary') or {}).get('block', 0)} "
+        f"warn={(payload.get('summary') or {}).get('warn', 0)}",
         outputs=outputs,
+        scanned_count=payload.get("scanned_count"),
+        skipped_count=payload.get("skipped_count"),
     )
 
 
@@ -504,20 +513,23 @@ def build_readiness(root: Path, episode: str, *, write: bool = False, asset: Opt
     require_decision = governance_decision_required(root, scale_up=scale_up_mode)
     checks: List[Dict[str, Any]] = []
     checks.append(run_next_action(root, episode, skip=skip_next_action))
-    checks.extend(run_event_ledger(root, write=write, strict_trace=strict_trace))
+    # Run every mutating producer/check first.  The event audit, formal artifact scan and
+    # release pair are the final snapshot boundary; no report created afterwards may silently
+    # invalidate the just-verified completion hash.
     checks.append(run_generation_recipe(root, episode, write=write))
     checks.append(run_gate_policy_matrix())
     checks.append(run_gate_inventory())
     checks.append(run_gate_policy_coverage(root, episode, write=write))
-    checks.append(run_artifact_validation(root, write=write))
     checks.append(run_script_supervisor_log(root, episode, write=write))
     checks.append(run_production_locks(root, episode, write=write))
     checks.append(run_creative_governance(root, write=write, require_decision=require_decision))
     checks.extend(run_batch_checks(root, write=write))
-    checks.extend(run_release(root, episode, write=write, asset=asset))
     checks.extend(run_freshness_checks(root))
     checks.extend(run_calibration_checks(root, episode, write=write, scale_up=scale_up_mode))
     checks.append(run_genre_packs(root, episode, write=write))
+    checks.extend(run_event_ledger(root, write=write, strict_trace=strict_trace))
+    checks.append(run_artifact_validation(root, write=write))
+    checks.extend(run_release(root, episode, write=write, asset=asset))
     summary = summarize(checks)
     payload = {
         "kind": PRODUCTION_READINESS_KIND,

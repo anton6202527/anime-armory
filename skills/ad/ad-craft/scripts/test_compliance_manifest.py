@@ -18,7 +18,7 @@ def _project(tmp_path: Path) -> Path:
     (root / "合成").mkdir()
     (root / "证据").mkdir()
     (root / "需求" / "brief.json").write_text(json.dumps({
-        "brand": "山岚", "product": "咖啡", "usp": ["48小时内烘焙"], "audience": "白领",
+        "campaign_mode": "formal", "brand": "山岚", "product": "咖啡", "usp": ["48小时内烘焙"], "audience": "白领",
         "campaign_objective": "转化行动", "platforms": ["TikTok"],
         "placements": ["TikTok:auction_in_feed"],
         "platform_safe_zone_evidence": {"TikTok:auction_in_feed": "合规/tiktok-feed.png"},
@@ -65,6 +65,9 @@ def test_ai_release_requires_platform_declaration_evidence(tmp_path):
     assert done["summary"]["release_ready"] is False
     assert not any(f["code"] == "platform_declaration_pending" for f in done["findings"])
     assert any(f["code"] == "provenance_qc_not_ready" for f in done["findings"])
+    assert done["release_variant_manifest_sha256"]
+    assert done["release_chain"]["summary"]["block"] > 0
+    assert any(f["code"] == "release_variant_manifest_not_ready" for f in done["findings"])
     assert done["standards"][0]["effective_date"] == "2025-09-01"
 
 

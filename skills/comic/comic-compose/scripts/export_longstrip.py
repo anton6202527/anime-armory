@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 from pathlib import Path
@@ -17,7 +18,9 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from platform_profiles import profile_for_platform, validate_manifest
+from progress import update_checklist, update_stage
 from text_metadata import normalize_text_language, unsupported_lettering_items
+import lettering_contract
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
@@ -35,6 +38,7 @@ FORMAT_ALIASES = {
     "png": "png",
     "jpg": "jpg",
     "jpeg": "jpg",
+    "pdf": "pdf",
 }
 
 
@@ -52,6 +56,42 @@ def read_setting(root: Path, key: str, default: str = "") -> str:
         if match:
             return match.group(1).strip()
     return default
+
+
+def collect_platform_assets(root: Path, raw_items: list[str], profile: Any) -> tuple[dict[str, Any], list[str]]:
+    """Register only real, decodable thumbnail files; never synthesize claims."""
+    registered: dict[str, Any] = {}
+    for raw in raw_items:
+        if "=" not in raw:
+            continue
+        asset_name, raw_path = (part.strip() for part in raw.split("=", 1))
+        if asset_name not in profile.thumbnail_assets:
+            continue
+        path = Path(raw_path).expanduser()
+        path = path.resolve() if path.is_absolute() else (root / path).resolve()
+        try:
+            relative = path.relative_to(root)
+        except ValueError:
+            continue
+        if not path.is_file():
+            continue
+        try:
+            from PIL import Image
+            with Image.open(path) as image:
+                image.load()
+                width, height = image.width, image.height
+                fmt = str(image.format or path.suffix.lstrip(".")).lower().replace("jpeg", "jpg")
+        except (ImportError, OSError, ValueError):
+            continue
+        registered[asset_name] = {
+            "path": str(relative),
+            "sha256": sha256_file(path),
+            "size": {"width": width, "height": height},
+            "format": fmt,
+            "size_bytes": path.stat().st_size,
+        }
+    missing = sorted(set(profile.thumbnail_assets) - set(registered))
+    return registered, missing
 
 
 def parse_max_height(value: str | int | None, default: int = 0) -> int:
@@ -76,7 +116,50 @@ def parse_export_formats(value: str | None) -> list[str]:
         fmt = FORMAT_ALIASES.get(token.strip())
         if fmt and fmt not in formats:
             formats.append(fmt)
-    return formats or ["webp"]
+    # An explicit but unsupported value must not silently become WebP.  The
+    # caller records a deterministic format error and leaves a resumable
+    # manifest.  In particular, PDF is a first-class document format.
+    return formats
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def print_resolution(root: Path, chapter: str) -> tuple[int, str]:
+    contract_path = root / "排版" / chapter / "print_delivery_contract.json"
+    if not contract_path.is_file():
+        return 300, "default_unverified"
+    try:
+        payload = load_json(contract_path)
+        dpi = int(payload.get("dpi") or 300)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return 300, "contract_invalid"
+    return (dpi if dpi > 0 else 300), "print_delivery_contract"
+
+
+def pdf_structural_evidence(path: Path) -> dict[str, Any]:
+    data = path.read_bytes()
+    media_boxes = [
+        {"width": float(width), "height": float(height)}
+        for width, height in re.findall(
+            rb"/MediaBox\s*\[\s*0(?:\.0+)?\s+0(?:\.0+)?\s+([0-9.]+)\s+([0-9.]+)\s*\]",
+            data,
+        )
+    ]
+    return {
+        "header_valid": data.startswith(b"%PDF-"),
+        "eof_marker_present": b"%%EOF" in data[-1024:],
+        "page_object_count": len(re.findall(rb"/Type\s*/Page\b", data)),
+        "image_object_count": len(re.findall(rb"/Subtype\s*/Image\b", data)),
+        "font_object_count": len(re.findall(rb"/Type\s*/Font\b", data)),
+        "icc_object_present": b"/ICCBased" in data or b"/OutputIntent" in data,
+        "media_boxes_points": media_boxes,
+    }
 
 
 def choose_output_format(formats: list[str], width: int, height: int) -> str:
@@ -88,13 +171,14 @@ def choose_output_format(formats: list[str], width: int, height: int) -> str:
     return "png"
 
 
-def save_canvas(image: Any, path: Path, fmt: str) -> None:
+def save_canvas(image: Any, path: Path, fmt: str, dpi: float | None = None) -> None:
+    dpi_kwargs = {"dpi": (float(dpi), float(dpi))} if dpi else {}
     if fmt == "webp":
-        image.save(path, quality=92)
+        image.save(path, quality=92, **dpi_kwargs)
     elif fmt == "jpg":
-        image.save(path, quality=92)
+        image.save(path, quality=92, **dpi_kwargs)
     else:
-        image.save(path)
+        image.save(path, **dpi_kwargs)
 
 
 def segment_panels_in_reading_order(seg: dict) -> list[dict]:
@@ -525,7 +609,7 @@ def build_manifest(
         else:
             missing.append(pid)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "comic_export_manifest",
         "chapter": chapter,
         "layout": str(layout_path.relative_to(root)),
@@ -533,6 +617,7 @@ def build_manifest(
         "out_dir": str(out_dir.relative_to(root)),
         "page_dir": str(page_dir.relative_to(root)),
         "lettering": str(lettering_path.relative_to(root)) if lettering_path and lettering_path.is_file() else "",
+        "lettering_sha256": sha256_file(lettering_path) if lettering_path and lettering_path.is_file() else "",
         "font": font_path,
         "font_status": "system_font_draft" if font_path else "pillow_default_fallback",
         "export_formats": export_formats,
@@ -542,6 +627,15 @@ def build_manifest(
         "missing_panels": missing,
         "pages": [],
         "rendered": [],
+        "documents": [],
+        "delivery_mediums": [
+            medium
+            for medium, enabled in (
+                ("web_images", any(fmt in {"webp", "png", "jpg"} for fmt in export_formats)),
+                ("print_pdf", "pdf" in export_formats),
+            )
+            if enabled
+        ],
     }
 
 
@@ -565,6 +659,83 @@ def cleanup_outputs(out_dir: Path, page_dir: Path) -> None:
             stale.unlink()
 
 
+def render_pdf_document(
+    manifest: dict[str, Any],
+    root: Path,
+    chapter: str,
+    page_canvases: list[tuple[dict[str, Any], Any]],
+    pdf_path: Path,
+) -> dict[str, Any]:
+    """Write a rasterized multi-page PDF and register reproducible evidence.
+
+    Pillow's PDF backend is deliberately treated as an interior-page raster
+    package, not as a PDF/X substitute.  Fonts are flattened into page pixels;
+    ICC/output intent and printer-specific boxes remain print-preflight facts.
+    """
+    if not page_canvases:
+        raise RuntimeError("没有可写入 PDF 的页面图。")
+    dpi, dpi_source = print_resolution(root, chapter)
+    pages = [canvas.convert("RGB") for _meta, canvas in page_canvases]
+    pdf_path.parent.mkdir(parents=True, exist_ok=True)
+    pending = pdf_path.with_name(f".{pdf_path.name}.{os.getpid()}.pending")
+    try:
+        pages[0].save(
+            pending,
+            format="PDF",
+            save_all=True,
+            append_images=pages[1:],
+            resolution=float(dpi),
+        )
+        os.replace(pending, pdf_path)
+    finally:
+        if pending.exists():
+            pending.unlink()
+    source_pages: list[dict[str, Any]] = []
+    for (meta, _canvas), page in zip(page_canvases, pages):
+        source_path = root / str(meta.get("path") or "")
+        source_pages.append(
+            {
+                "path": str(meta.get("path") or ""),
+                "sha256": sha256_file(source_path) if source_path.is_file() else "",
+                "pixel_size": {"width": page.width, "height": page.height},
+                "mode": page.mode,
+                "has_alpha": "A" in page.getbands(),
+                "physical_size_mm": {
+                    "width": round(page.width / dpi * 25.4, 4),
+                    "height": round(page.height / dpi * 25.4, 4),
+                },
+            }
+        )
+    structural = pdf_structural_evidence(pdf_path)
+    return {
+        "path": str(pdf_path.relative_to(root)),
+        "format": "pdf",
+        "mime_type": "application/pdf",
+        "role": "print_interior_raster_pdf",
+        "sha256": sha256_file(pdf_path),
+        "size_bytes": pdf_path.stat().st_size,
+        "page_count": len(pages),
+        "page_order": [str(meta.get("path") or "") for meta, _canvas in page_canvases],
+        "dpi": dpi,
+        "dpi_source": dpi_source,
+        "color_mode": "RGB",
+        "transparency": "flattened",
+        "font_handling": {
+            "mode": "rasterized",
+            "embedded_fonts_required": False,
+            "proof": "page text flattened before PDF serialization; structural scan must show zero /Font objects",
+        },
+        "source_pages": source_pages,
+        "structural_evidence": structural,
+        "generator": "Pillow multi-page PDF",
+        "limitations": [
+            "Raster interior-page PDF; not automatically PDF/X compliant.",
+            "No automatic crop/trim/bleed box, output intent, overprint, spine or cover imposition.",
+            "Print readiness requires print_delivery_contract.json plus SHA-bound print_readiness_receipt.",
+        ],
+    }
+
+
 def merge_lettering_stats(total: dict[str, Any], stats: dict[str, Any]) -> None:
     total["drawn_items"] += stats["drawn_items"]
     total["skipped_empty_items"].extend(stats["skipped_empty_items"])
@@ -580,6 +751,7 @@ def render_layout_pages(
     lettering: dict | None,
     text_language: str,
     export_formats: list[str],
+    raster_dpi: float | None = None,
 ) -> tuple[list[tuple[dict[str, Any], Any]], dict[str, Any]]:
     from PIL import Image
 
@@ -632,13 +804,14 @@ def render_layout_pages(
 
         fmt = choose_output_format(export_formats, canvas.width, canvas.height)
         page_path = page_dir / f"page_{idx:03d}.{fmt}"
-        save_canvas(canvas, page_path, fmt)
+        save_canvas(canvas, page_path, fmt, raster_dpi)
         meta = {
             "path": str(page_path.relative_to(root)),
             "segment_id": segment.get("segment_id", f"S{idx:03d}"),
             "panel_ids": page_panel_ids,
             "size": {"width": canvas.width, "height": canvas.height},
             "format": fmt,
+            "dpi": raster_dpi,
         }
         rendered_pages.append((meta, canvas))
 
@@ -673,6 +846,9 @@ def render_longstrip(
     lettering: dict | None,
     text_language: str,
     export_formats: list[str],
+    chapter: str,
+    pdf_path: Path,
+    raster_dpi: float | None = None,
 ) -> None:
     try:
         from PIL import Image
@@ -682,25 +858,41 @@ def render_longstrip(
     language_mode = normalize_text_language(text_language)
     cleanup_outputs(out_dir, page_dir)
     page_canvases, lettering_stats = render_layout_pages(
-        manifest, root, page_dir, background, layout, lettering, language_mode, export_formats
+        manifest, root, page_dir, background, layout, lettering, language_mode, export_formats, raster_dpi
     )
     manifest["pages"] = [meta for meta, _canvas in page_canvases]
     if not page_canvases:
         return
 
+    if "pdf" in export_formats:
+        manifest["documents"] = [render_pdf_document(manifest, root, chapter, page_canvases, pdf_path)]
+
+    raster_formats = [fmt for fmt in export_formats if fmt in {"webp", "png", "jpg"}]
+    if not raster_formats:
+        manifest["rendered"] = []
+        manifest["lettering_rendered"] = lettering_stats["drawn_items"] > 0
+        manifest["text_language"] = language_mode
+        manifest["bilingual_lettering"] = bool(
+            language_mode in ("中上英下", "英上中下")
+            and any(item.get("text_en") for item in (lettering or {}).get("items", []))
+        )
+        manifest["lettering_stats"] = lettering_stats
+        return
+
     combined, panel_ids = combine_pages(page_canvases, gap, background)
     rendered = []
     if max_height <= 0:
-        fmt = choose_output_format(export_formats, combined.width, combined.height)
+        fmt = choose_output_format(raster_formats, combined.width, combined.height)
         out_name = f"longstrip.{fmt}"
         out_path = out_dir / out_name
-        save_canvas(combined, out_path, fmt)
+        save_canvas(combined, out_path, fmt, raster_dpi)
         rendered.append(
             {
                 "path": str(out_path.relative_to(root)),
                 "panel_ids": panel_ids,
                 "size": {"width": combined.width, "height": combined.height},
                 "format": fmt,
+                "dpi": raster_dpi,
             }
         )
     else:
@@ -709,9 +901,9 @@ def render_longstrip(
         while y < combined.height:
             bottom = min(combined.height, y + max_height)
             crop = combined.crop((0, y, combined.width, bottom))
-            fmt = choose_output_format(export_formats, crop.width, crop.height)
+            fmt = choose_output_format(raster_formats, crop.width, crop.height)
             out_path = out_dir / f"part_{idx:03d}.{fmt}"
-            save_canvas(crop, out_path, fmt)
+            save_canvas(crop, out_path, fmt, raster_dpi)
             rendered.append(
                 {
                     "path": str(out_path.relative_to(root)),
@@ -719,6 +911,7 @@ def render_longstrip(
                     "size": {"width": crop.width, "height": crop.height},
                     "y_range": [y, bottom],
                     "format": fmt,
+                    "dpi": raster_dpi,
                 }
             )
             y = bottom
@@ -824,84 +1017,6 @@ def save_lettering_qc_sheet(
     return {"path": str(out_path.relative_to(root)), "items": len(items), "missing_slots": missing_slots}
 
 
-def update_progress(root: Path, chapter: str, stage: str, value: str) -> bool:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return False
-    lines = path.read_text(encoding="utf-8").splitlines()
-    headers: list[str] = []
-    updated = False
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("|"):
-            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-            if cells and cells[0] == "话":
-                headers = cells
-            elif headers and len(cells) >= len(headers) and cells[0] == chapter and stage in headers:
-                cells[headers.index(stage)] = value
-                line = "| " + " | ".join(cells) + " |"
-                updated = True
-        out.append(line)
-    if updated:
-        path.write_text("\n".join(out) + "\n", encoding="utf-8")
-    return updated
-
-
-def update_export_checklist(root: Path, chapter: str, *, pages_ready: bool, longstrip_ready: bool, manifest_ready: bool) -> bool:
-    path = root / "_进度.md"
-    if not path.is_file():
-        return False
-    targets = {
-        f"{chapter} 页面图": pages_ready,
-        f"{chapter} 长图": longstrip_ready,
-        f"{chapter} export_manifest.json": manifest_ready,
-    }
-    lines = path.read_text(encoding="utf-8").splitlines()
-    changed = False
-    seen: set[str] = set()
-    out: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        match = re.match(r"^-\s+\[[ xX]\]\s+(.+?)\s*$", stripped)
-        if match and match.group(1) in targets:
-            label = match.group(1)
-            seen.add(label)
-            desired = f"- [{'x' if targets[label] else ' '}] {label}"
-            indent = line[: len(line) - len(line.lstrip())]
-            new_line = indent + desired
-            if new_line != line:
-                line = new_line
-                changed = True
-        out.append(line)
-    missing = [label for label in targets if label not in seen]
-    if missing:
-        insert_at = None
-        in_export_section = False
-        last_export_item = None
-        for idx, line in enumerate(out):
-            stripped = line.strip()
-            if stripped == "## 导出":
-                in_export_section = True
-                insert_at = idx + 1
-                continue
-            if in_export_section and stripped.startswith("## "):
-                break
-            if in_export_section and stripped.startswith("- ["):
-                last_export_item = idx
-        if last_export_item is not None:
-            insert_at = last_export_item + 1
-        if insert_at is None:
-            out.extend(["", "## 导出"])
-            insert_at = len(out)
-        additions = [f"- [{'x' if targets[label] else ' '}] {label}" for label in missing]
-        out[insert_at:insert_at] = additions
-        changed = True
-    if changed:
-        path.write_text("\n".join(out) + "\n", encoding="utf-8")
-    return changed
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="漫画长图导出 manifest/渲染")
     parser.add_argument("project_root")
@@ -913,7 +1028,9 @@ def main() -> int:
     parser.add_argument("--lettering", default=None)
     parser.add_argument("--no-lettering", action="store_true")
     parser.add_argument("--font", default=None)
-    parser.add_argument("--formats", default=None, help="导出格式，如 webp、png 或 webp+png；默认读 _设置.md 的 导出格式")
+    parser.add_argument("--formats", default=None, help="导出格式，如 webp、png、webp+png 或 pdf；默认读 _设置.md 的 导出格式")
+    parser.add_argument("--pdf-out", default=None, help="PDF 输出路径；默认 排版/<话>/print/<话>.pdf")
+    parser.add_argument("--platform-asset", action="append", default=[], metavar="NAME=PATH", help="登记真实平台缩略图，如 series_square=cover.png；可重复")
     parser.add_argument("--max-height", default=None, help="最大分段高度；0/不分段/单张 表示导出一张 longstrip.webp")
     parser.add_argument("--gap", type=int, default=24)
     parser.add_argument("--background", default="#ffffff")
@@ -928,6 +1045,7 @@ def main() -> int:
     panel_dir = Path(args.panel_dir).expanduser().resolve() if args.panel_dir else root / "出图" / args.chapter / "panels"
     out_dir = Path(args.out_dir).expanduser().resolve() if args.out_dir else root / "排版" / args.chapter / "长图"
     page_dir = Path(args.page_dir).expanduser().resolve() if args.page_dir else root / "排版" / args.chapter / "pages"
+    pdf_path = Path(args.pdf_out).expanduser().resolve() if args.pdf_out else root / "排版" / args.chapter / "print" / f"{args.chapter}.pdf"
     lettering_path = None if args.no_lettering else (Path(args.lettering).expanduser().resolve() if args.lettering else root / "排版" / args.chapter / "lettering.json")
     font_path = resolve_font_path(args.font)
     manifest_path = root / "排版" / args.chapter / "export_manifest.json"
@@ -935,6 +1053,22 @@ def main() -> int:
     if not layout_path.is_file():
         print(f"[err] layout 不存在：{layout_path}")
         return 2
+    if lettering_path is not None and not lettering_path.is_file():
+        print(f"[err] lettering 不存在：{lettering_path}；如只需无字内部预览，请显式传 --no-lettering")
+        return 2
+    if lettering_path is not None:
+        contract_report = lettering_contract.analyze(root, args.chapter, lettering_path)
+        blockers = [
+            item
+            for item in contract_report.get("findings") or []
+            if item.get("severity") == "block"
+        ]
+        if blockers:
+            print("[err] lettering 版本合同未通过，拒绝用旧文字生成新 manifest/渲染物：")
+            for item in blockers[:20]:
+                print(f"  - {item.get('code')}: {item.get('reason')}")
+            print("[hint] 重跑 build_lettering.py，处理 editorial_override/翻译表后再导出。")
+            return 2
     panel_dir.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
     page_dir.mkdir(parents=True, exist_ok=True)
@@ -954,13 +1088,26 @@ def main() -> int:
         font_path,
         export_formats,
     )
+    if not export_formats:
+        manifest["format_error"] = "导出格式没有可执行适配：请使用 webp/png/jpg/pdf 或补自定义 renderer；未静默回退。"
     text_language = normalize_text_language(read_setting(root, "文字语言", (lettering or {}).get("language_mode", "中文") if lettering else "中文"))
     target_platform = read_setting(root, "目标平台", "通用")
     usage = read_setting(root, "合规用途", "自用草稿")
     platform_profile = profile_for_platform(target_platform)
+    raster_dpi = float(platform_profile.required_dpi) if platform_profile.required_dpi else None
     manifest["text_language"] = text_language
     manifest["target_platform"] = target_platform
     manifest["platform_profile"] = platform_profile.to_manifest()
+    platform_asset_args = list(args.platform_asset)
+    previous_manifest = load_json(manifest_path) if manifest_path.is_file() else {}
+    previous_assets = previous_manifest.get("platform_assets") if isinstance(previous_manifest.get("platform_assets"), dict) else {}
+    explicit_names = {raw.split("=", 1)[0].strip() for raw in platform_asset_args if "=" in raw}
+    for asset_name, record in previous_assets.items():
+        if asset_name not in explicit_names and isinstance(record, dict) and record.get("path"):
+            platform_asset_args.append(f"{asset_name}={record['path']}")
+    manifest["platform_assets"], manifest["platform_assets_missing"] = collect_platform_assets(
+        root, platform_asset_args, platform_profile
+    )
     unsupported_text = unsupported_lettering_items(lettering, text_language)
     manifest["text_layout_qc"] = {
         "renderer": "pillow_draft",
@@ -971,7 +1118,7 @@ def main() -> int:
     if args.render and unsupported_text:
         manifest["render_error"] = "当前 Pillow 草稿嵌字不支持 RTL 或需词典分词的目标文字；请改用人工/专业排版 renderer。"
         print(f"[warn] {manifest['render_error']}")
-    elif args.render:
+    elif args.render and export_formats:
         try:
             render_longstrip(
                 manifest,
@@ -985,10 +1132,35 @@ def main() -> int:
                 lettering,
                 text_language,
                 export_formats,
+                args.chapter,
+                pdf_path,
+                raster_dpi,
             )
-        except RuntimeError as err:
+        except (RuntimeError, OSError, ValueError) as err:
             manifest["render_error"] = str(err)
             print(f"[warn] {err}")
+
+    produced_formats = {
+        str(item.get("format") or "").lower()
+        for item in (manifest.get("rendered") or []) + (manifest.get("documents") or [])
+        if isinstance(item, dict)
+    }
+    raster_requested = any(fmt in {"webp", "png", "jpg"} for fmt in export_formats)
+    raster_produced = bool(produced_formats & {"webp", "png", "jpg"})
+    missing_formats = []
+    if raster_requested and not raster_produced:
+        missing_formats.append("raster_image")
+    if "pdf" in export_formats and "pdf" not in produced_formats:
+        missing_formats.append("pdf")
+    manifest["format_fulfillment"] = {
+        "requested": export_formats,
+        "produced": sorted(produced_formats),
+        "missing": missing_formats,
+        "raster_formats_are_priority_fallbacks": True,
+        "verdict": "pass" if export_formats and not missing_formats else "block",
+    }
+    if "pdf" in export_formats and "pdf" not in produced_formats:
+        manifest["pdf_export_error"] = manifest.get("render_error") or "PDF 已请求但未生成；需要 --render 与 Pillow。"
 
     manifest["platform_findings"] = validate_manifest(root, manifest, platform_profile, usage)
 
@@ -1006,24 +1178,23 @@ def main() -> int:
     print(f"[ok] {manifest_path}")
     if manifest["missing_panels"]:
         print("[warn] 缺少面板图：" + ", ".join(manifest["missing_panels"]))
-    if manifest["rendered"]:
-        print(f"[ok] rendered {len(manifest['rendered'])} file(s)")
+    if manifest["rendered"] or manifest.get("documents"):
+        print(f"[ok] rendered {len(manifest['rendered'])} image(s), {len(manifest.get('documents') or [])} document(s)")
     if args.write_progress:
-        if not manifest["missing_panels"] and manifest["rendered"] and manifest.get("lettering"):
+        deliverables_ready = bool(manifest["rendered"] or manifest.get("documents")) and manifest["format_fulfillment"]["verdict"] == "pass"
+        if not manifest["missing_panels"] and deliverables_ready and manifest.get("lettering"):
             value = "✅"
         elif not manifest["missing_panels"]:
             value = "⏳manifest"
         else:
             value = ""
-        if value and update_progress(root, args.chapter, "嵌字合成", value):
+        if value and update_stage(root, args.chapter, "嵌字合成", value, evidence=str(manifest_path.relative_to(root)), actor="comic-compose/export_longstrip.py"):
             print(f"[ok] progress 嵌字合成={value}")
-        if update_export_checklist(
-            root,
-            args.chapter,
-            pages_ready=bool(manifest.get("pages")),
-            longstrip_ready=bool(manifest.get("rendered")),
-            manifest_ready=manifest_path.is_file(),
-        ):
+        if update_checklist(root, {
+            f"{args.chapter} 页面图": bool(manifest.get("pages")),
+            f"{args.chapter} 长图": bool(manifest.get("rendered")),
+            f"{args.chapter} export_manifest.json": manifest_path.is_file(),
+        }):
             print("[ok] progress export checklist updated")
     return 0
 

@@ -5,14 +5,45 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from datetime import date
+from pathlib import Path
 from typing import Any, Iterable
 
 
 KIND = "mv_consistency_findings"
 SEVERITIES = ("block", "warn", "info")
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
+ALIGNMENT_PATH = os.path.join(REPO, "skills", "mv", "mv-lyric-sync", "scripts", "align.py")
+IMAGE_RECEIPTS_PATH = os.path.join(REPO, "skills", "mv", "mv-image", "scripts", "image_receipts.py")
+_ALIGNMENT_MODULE = None
+_IMAGE_RECEIPTS_MODULE = None
+
+
+def _load_module(name: str, path: str):
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"无法加载模块：{path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_alignment_module():
+    global _ALIGNMENT_MODULE
+    if _ALIGNMENT_MODULE is None:
+        _ALIGNMENT_MODULE = _load_module("mv_findings_alignment_schema", ALIGNMENT_PATH)
+    return _ALIGNMENT_MODULE
+
+
+def _load_image_receipts():
+    global _IMAGE_RECEIPTS_MODULE
+    if _IMAGE_RECEIPTS_MODULE is None:
+        _IMAGE_RECEIPTS_MODULE = _load_module("mv_findings_image_receipts", IMAGE_RECEIPTS_PATH)
+    return _IMAGE_RECEIPTS_MODULE
 
 
 def load_file_hash(path: str) -> str:
@@ -78,25 +109,14 @@ def has_clip_plan(root: str) -> bool:
     return os.path.exists(os.path.join(root, "分镜", "clip_plan.json"))
 
 
-def manual_review_ok(report: dict[str, Any]) -> bool:
-    """image_qc 降级人工放行是否有效：具名 + 绑定报告 hash（与 mv-image/mv-craft gate 同算法）。"""
-    manual = report.get("manual_review") or {}
-    if not (manual.get("accepted") and str(manual.get("reviewer") or "").strip()):
-        return False
-    stripped = {k: v for k, v in report.items()
-                if k not in ("manual_review", "json_path", "markdown_path")}
-    encoded = json.dumps(stripped, ensure_ascii=False, sort_keys=True,
-                         separators=(",", ":")).encode("utf-8")
-    return manual.get("bound_report_sha256") == hashlib.sha256(encoded).hexdigest()
-
-
 def image_qc(findings: list[dict[str, Any]], root: str) -> None:
     rel = "生产数据/image_qc/image_qc.json"
+    ledger_rel = "生产数据/image_acceptance/image_acceptance.json"
     report = load_json(os.path.join(root, rel))
     if not isinstance(report, dict):
-        sev = "warn" if has_clip_plan(root) else "info"
+        sev = "block" if has_clip_plan(root) else "info"
         findings.append(finding(sev, "visual_identity", "image_qc_missing",
-                                "缺 mv-image 出图落档机检；有 clip_plan 时应先跑 image_qc 再出视频。", rel))
+                                "缺当前 mv_image_qc 聚合报告；B14 不接受降级人工替代。", rel))
         return
     summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
     hard = int(summary.get("hard_blocks") or 0)
@@ -105,20 +125,70 @@ def image_qc(findings: list[dict[str, Any]], root: str) -> None:
         findings.append(finding("block", "visual_identity", "image_qc_block", f"image_qc hard_blocks={hard}。", rel, "image_qc"))
     if advisory:
         findings.append(finding("warn", "visual_identity", "image_qc_warn", f"image_qc advisory={advisory}，需并排复核。", rel, "image_qc"))
+    version = report.get("version", report.get("schema_version"))
+    try:
+        current_version = not isinstance(version, bool) and int(version) >= 3
+    except (TypeError, ValueError):
+        current_version = False
+    if report.get("kind") != "mv_image_qc" or not current_version:
+        findings.append(finding("block", "visual_identity", "image_qc_schema",
+                                "image_qc 必须是当前 mv_image_qc v3+ 聚合报告。", rel, "image_qc"))
     env = report.get("qc_environment") if isinstance(report.get("qc_environment"), dict) else {}
     precision = str(env.get("precision_level") or "").strip()
-    manual_ok = manual_review_ok(report)
-    if precision and precision != "full" and not manual_ok:
-        legacy = " 旧式布尔留痕已不被接受，需 --accept-degraded 具名绑定放行。" if (
-            report.get("manual_review_accepted") or env.get("manual_review_accepted")
-            or report.get("manual_review")) else ""
+    if precision != "full":
         findings.append(finding("block", "visual_identity", "image_qc_precision",
-                                f"image_qc 精度为 {precision}，不能当作完整脸/主色一致性证据。{legacy}", rel))
-    elif precision and precision != "full":
-        findings.append(finding("warn", "visual_identity", "image_qc_precision_manual",
-                                f"image_qc 精度为 {precision}，已有具名人工放行（绑定当前报告）。", rel))
-    if not hard and not advisory and (not precision or precision == "full"):
-        findings.append(finding("info", "visual_identity", "image_qc_clean", "出图一致性机检没有阻断项。", rel))
+                                f"image_qc 精度为 {precision or 'missing'}；degraded/manual_review/--accept-degraded 均不能放行 B14。", rel))
+    if hard != 0 or summary.get("verdict") != "ok":
+        findings.append(finding("block", "visual_identity", "image_qc_not_ok",
+                                f"image_qc 必须 hard_blocks=0 且 verdict=ok，当前 verdict={summary.get('verdict')!r}。", rel))
+    assets_sha = report.get("assets_sha256") or {}
+    if not isinstance(assets_sha, dict) or not assets_sha:
+        findings.append(finding("block", "visual_identity", "image_qc_assets_missing",
+                                "image_qc 缺 assets_sha256，不能证明检查的是当前像素。", rel))
+        assets_sha = {}
+    stale_assets = [asset for asset, digest in assets_sha.items()
+                    if load_file_hash(os.path.join(root, str(asset))) != digest]
+    if stale_assets:
+        findings.append(finding("block", "visual_identity", "image_qc_assets_stale",
+                                f"image_qc 当前像素绑定已过期：{stale_assets[0]}。", rel))
+    provenance = report.get("generation_provenance") or {}
+    if provenance.get("complete") is not True or (provenance.get("summary") or {}).get("block") != 0:
+        findings.append(finding("block", "visual_identity", "image_generation_receipts_incomplete",
+                                "image_qc generation_provenance 必须 complete 且 block=0。", rel))
+
+    ledger = load_json(os.path.join(root, ledger_rel))
+    if not isinstance(ledger, dict) or ledger.get("kind") != "mv_image_acceptance_ledger":
+        findings.append(finding("block", "visual_identity", "image_acceptance_missing",
+                                "缺权威 image_acceptance ledger；旧 image_qc/manual_review 不能证明逐图验收。", ledger_rel))
+        return
+    try:
+        audit = _load_image_receipts().audit_ledger(Path(root), ledger=ledger)
+    except Exception as exc:
+        findings.append(finding("block", "visual_identity", "image_acceptance_invalid",
+                                f"image_acceptance ledger 无法按当前像素复算：{exc}。", ledger_rel))
+        return
+    audit_summary = audit.get("summary") or {}
+    rows = audit.get("rows") or []
+    if audit_summary.get("all_current_accepted") is not True:
+        findings.append(finding("block", "visual_identity", "image_acceptance_incomplete",
+                                f"B14 未完成：accepted={audit_summary.get('accepted', 0)}/{audit_summary.get('expected', 0)}，"
+                                f"stale={audit_summary.get('stale', 0)}。", ledger_rel, "image_acceptance"))
+    invalid_rows = [row for row in rows if row.get("status") != "accepted"]
+    if invalid_rows:
+        row = invalid_rows[0]
+        findings.append(finding("block", "visual_identity", "image_acceptance_stale",
+                                f"逐图验收失效：{row.get('asset')}（{','.join(str(x) for x in row.get('findings') or []) or 'unknown'}）。",
+                                ledger_rel, "image_acceptance"))
+    audited_assets = {str(row.get("asset")) for row in rows if row.get("asset")}
+    if set(map(str, assets_sha)) != audited_assets:
+        findings.append(finding("block", "visual_identity", "image_acceptance_scope_mismatch",
+                                "image_qc 资产全集与 image_acceptance 动态审计全集不一致。", ledger_rel))
+    if (not hard and not advisory and precision == "full" and summary.get("verdict") == "ok"
+            and audit_summary.get("all_current_accepted") is True
+            and set(map(str, assets_sha)) == audited_assets and not stale_assets):
+        findings.append(finding("info", "visual_identity", "image_qc_clean",
+                                f"B14 当前像素逐图验收有效：{audit_summary.get('accepted', 0)}/{audit_summary.get('expected', 0)}。",
+                                ledger_rel, "image_acceptance"))
 
 
 def registry_checks(findings: list[dict[str, Any]], root: str) -> None:
@@ -184,21 +254,92 @@ def video_qc_details(findings: list[dict[str, Any]], root: str) -> None:
 def timing_checks(findings: list[dict[str, Any]], root: str) -> None:
     path = os.path.join(root, "字幕", "alignment_report.json")
     report = load_json(path)
+    if not isinstance(report, dict):
+        meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+        formal = not meta.get("is_demo")
+        required = False
+        if formal:
+            try:
+                runtime = _load_alignment_module().mv_gate._runtime_state(root)
+                required = bool(
+                    runtime.get("subtitle_language") != "无字幕"
+                    or runtime.get("lip_sync_mode") != "关闭"
+                )
+            except Exception:
+                # A formal project with subtitle outputs is still fail-closed
+                # even if the shared runtime adapter itself cannot be loaded.
+                required = bool(
+                    os.path.exists(os.path.join(root, "字幕", "lyrics.lrc"))
+                    or os.path.exists(os.path.join(root, "字幕", "karaoke.ass"))
+                )
+        if required:
+            findings.append(finding(
+                "block", "lyric_timeline", "alignment_missing",
+                "正式字幕/演唱口型缺当前 schema v5 alignment_report，不能进入正式验收。",
+                "字幕/alignment_report.json", "alignment_report",
+            ))
+        return
     if isinstance(report, dict):
-        stale = [
-            rel for rel, recorded in (report.get("inputs_sha256") or {}).items()
-            if load_file_hash(os.path.join(root, rel)) != recorded
-        ]
-        if stale:
-            findings.append(finding("block", "lyric_timeline", "alignment_stale",
-                                    f"歌词对齐报告输入已变化：{stale[0]}。", "字幕/alignment_report.json"))
+        errors = []
+        if report.get("kind") != "mv_lyric_alignment_report" or report.get("schema_version") != 5:
+            errors.append("alignment_report 必须是当前 schema v5 mv_lyric_alignment_report")
+        if "alignment_confidence" in report:
+            errors.append("schema v5 禁止 alignment_confidence；character_coverage_ratio 只表示文本覆盖")
+        if report.get("coverage_metric") != "text_character_mapping_ratio_not_acoustic_confidence":
+            errors.append("schema v5 必须明确字符覆盖率不是声学置信度")
+        acceptance = report.get("acceptance") or {}
+        if acceptance.get("status") != "accepted" or acceptance.get("accepted") is not True:
+            errors.append("alignment_report 尚未正式接受；pending/旧报告不能进入正式验收")
+        try:
+            alignment = _load_alignment_module()
+            errors.extend(alignment.acceptance_errors(root, report))
+            gate = alignment.mv_gate
+            if report.get("alignment_unit") != "character":
+                errors.append("alignment_report 不是字符级强制对齐")
+            errors.extend(gate._alignment_stem_timing_errors(root, report))
+            expected_binding = gate._alignment_acceptance_binding(root, report)
+            if acceptance.get("binding") != expected_binding:
+                errors.append("alignment_report 尚未以当前 master/stem/lyrics/ASS/LRC/report binding 正式接受")
+            route = acceptance.get("route")
+            if route == "singing_acoustic_evidence":
+                lyric_lines = report.get("lyric_lines")
+                if isinstance(lyric_lines, bool) or not isinstance(lyric_lines, int):
+                    lyric_lines = 0
+                if not gate._alignment_acoustic_valid(report, expected_binding, lyric_lines):
+                    errors.append("singing acoustic evidence 未校准、非 singing-specific、不可正式验收、"
+                                  "未逐行覆盖或未绑定当前 inputs/outputs")
+            elif route == "named_listening_review":
+                manual = report.get("manual_review") or {}
+                manual_current = bool(
+                    manual.get("accepted") is True
+                    and manual.get("kind") == "named_full_listening_review"
+                    and manual.get("verdict") == "pass"
+                    and gate._valid_named_reviewer(manual.get("reviewer"))
+                    and str(manual.get("notes") or "").strip()
+                    and manual.get("bound_inputs_sha256") == report.get("inputs_sha256")
+                    and manual.get("bound_outputs_sha256") == report.get("outputs_sha256")
+                    and manual.get("binding") == expected_binding
+                    and manual.get("bound_report_preaccept_sha256")
+                    == expected_binding.get("report_preaccept_content_sha256")
+                )
+                if not manual_current:
+                    errors.append("具名逐行 listening review 未绑定当前 inputs/outputs/report 前置内容")
+        except Exception as exc:
+            errors.append(f"schema v5 验收复算失败：{exc}")
+        for index, message in enumerate(dict.fromkeys(str(item) for item in errors if str(item).strip())):
+            code = "alignment_invalid" if index else "alignment_not_accepted"
+            findings.append(finding("block", "lyric_timeline", code,
+                                    message, "字幕/alignment_report.json", "alignment_report"))
         warnings = report.get("warnings") or []
         if warnings:
             findings.append(finding("warn", "lyric_timeline", "alignment_warn",
                                     f"字幕对齐报告有 {len(warnings)} 条 warning。", "字幕/alignment_report.json",
                                     "alignment_report", {"warnings": warnings[:10]}))
-        else:
-            findings.append(finding("info", "lyric_timeline", "alignment_clean", "字幕对齐报告无 warning。", "字幕/alignment_report.json"))
+        if not warnings and not errors:
+            coverage = report.get("character_coverage_ratio")
+            findings.append(finding("info", "lyric_timeline", "alignment_clean",
+                                    f"schema v5 正式验收有效；character_coverage_ratio={coverage} 仅表示文本字符映射覆盖率。",
+                                    "字幕/alignment_report.json"))
 
 
 def shot_variety(findings: list[dict[str, Any]], root: str) -> None:
@@ -331,7 +472,8 @@ def verifier_coverage(findings: list[dict[str, Any]], root: str) -> None:
         labels = "、".join(f"{r['label']}（{r['evidence']}）" for r in dormant)
         findings.append(finding("warn", "verifier_coverage", "reality_verifier_dormant",
                                 f"{len(dormant)}/{len(applicable)} 个现实验证器适用但休眠：{labels}——"
-                                "报告看着「跑过 QC」但最强检测器没真出活；补依赖重跑，或具名降级放行。",
+                                "报告看着「跑过 QC」但最强检测器没真出活；补依赖重跑；若只能降级检测，"
+                                "须具名记录局限，且不得据此签收正式阶段。",
                                 "", "verifier_coverage", detail))
     else:
         findings.append(finding("info", "verifier_coverage", "reality_verifiers_active",
@@ -433,7 +575,7 @@ def build_report(root: str) -> dict[str, Any]:
         "schema_version": 1,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "summary": {
             **counts,
             "verdict": "block" if counts["block"] else ("review" if counts["warn"] else "ok"),
@@ -448,6 +590,7 @@ def build_report(root: str) -> dict[str, Any]:
             "生产数据/craft_audit/craft_audit.json",
             "生产数据/drift_risk/drift_risk.json",
             "生产数据/image_qc/image_qc.json",
+            "生产数据/image_acceptance/image_acceptance.json",
             "生产数据/video_inherit_contract/inherit_contract.json",
             "生产数据/video_qc/video_qc.json",
             "字幕/alignment_report.json",
@@ -498,7 +641,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     report = build_report(args.project_root)
     if args.write:
-        json_path, md_path = write_report(report["project_root"], report)
+        json_path, md_path = write_report(os.path.abspath(args.project_root), report)
         print(f"[ok] consistency findings JSON → {json_path}")
         print(f"[ok] consistency findings MD   → {md_path}")
     if args.json:

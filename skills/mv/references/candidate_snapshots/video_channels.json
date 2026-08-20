@@ -1,21 +1,52 @@
 {
   "kind": "mv_candidate_snapshot",
   "key": "video_channels",
-  "collected_at": "2026-07-08",
+  "collected_at": "2026-08-20",
   "description": "MV video generation channels and integration modes",
   "source_urls": [
+    "https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
     "https://ai.google.dev/gemini-api/docs/veo",
+    "https://ai.google.dev/gemini-api/docs/omni",
     "https://docs.dev.runwayml.com/",
     "https://klingai.kuaishou.com/",
     "https://lumalabs.ai/"
   ],
   "url_checks": [],
-  "verification_mode": "declared_sources_only",
+  "verification_mode": "official_content_review",
+  "verification_note": "2026-08-20：逐页核对官方模型/渠道正文；能力细节以 video_capabilities.py 2026-08-20.3 为执行真值，90 天后正式执行 fail-closed 等待复核。",
   "items": [
+    {
+      "name": "即梦/Dreamina",
+      "integration": "manual_web",
+      "official_api": false,
+      "models": {
+        "Seedance 2.5": "available"
+      }
+    },
+    {
+      "name": "豆包",
+      "integration": "manual_web",
+      "official_api": false,
+      "models": {
+        "Seedance 2.5": "available"
+      }
+    },
+    {
+      "name": "火山方舟/Volcengine API",
+      "integration": "api",
+      "official_api": true,
+      "models": {
+        "Seedance 2.5": "api_pending"
+      }
+    },
     {
       "name": "Google Gemini API",
       "integration": "api",
-      "official_api": true
+      "official_api": true,
+      "models": {
+        "Veo 3.1": "available",
+        "Gemini Omni Flash Preview": "adapter_required"
+      }
     },
     {
       "name": "Runway API",
@@ -31,11 +62,6 @@
       "name": "Luma Dream Machine",
       "integration": "api_or_web",
       "official_api": true
-    },
-    {
-      "name": "即梦/Dreamina",
-      "integration": "manual_web",
-      "official_api": false
     },
     {
       "name": "本地/开源",

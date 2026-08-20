@@ -1,6 +1,6 @@
 ---
 name: n2d-batch
-description: "P1 batch task queue and worker runner for n2d. Build/manage a queue from `_进度.md`, with max concurrency, failure retry, budget caps, targeted reruns for affected shots/clips/artifacts, and a runner that auto-claims tasks, executes configured stage commands, writes dashboard telemetry, and marks pass/fail. Single-machine multi-worker safety is local & backend-free: atomic flock claim + atomic-write ledger + per-task lease with heartbeat renewal + auto-reclaim of expired leases + --resume for crash recovery (multi-machine still needs a real coordination backend). Use when asked for 批量任务队列, 自动排队, batch runner, worker, 多worker, 并发, 文件锁, 原子认领, 不双认领, 租约, lease, 断点恢复, resume, reclaim, 失败重试, 预算上限, 只重跑受影响镜头, batch, queue, rerun affected n2d work."
+description: "P1 batch task queue and worker runner for n2d. Build/manage a queue from `_进度.md`, with canonical frontier checks, task-bound production authorization, output+post-gate completion commit, max concurrency, failure retry, budget caps, targeted reruns for affected shots/clips/artifacts, and a read-only dry-run. Single-machine multi-worker safety is local & backend-free: atomic flock claim + atomic-write ledger + per-task lease with heartbeat renewal + auto-reclaim of expired leases + --resume for crash recovery (multi-machine still needs a real coordination backend). Use when asked for 批量任务队列, 自动排队, batch runner, worker, 多worker, 并发, 文件锁, 原子认领, 不双认领, 租约, lease, 断点恢复, resume, reclaim, 失败重试, 预算上限, 只重跑受影响镜头, batch, queue, rerun affected n2d work."
 ---
 
 # n2d-batch — P1 批量任务队列 + Worker Runner
@@ -8,7 +8,7 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 `n2d-batch` 把 n2d 从“单集手工推进”升级成“可排队、可并发、可重试、可控预算、可最小范围重跑”的生产编排层。
 
 - `queue.py`：生成和维护队列账本。
-- `runner.py`：worker 执行器，自动 claim、执行配置好的 stage 命令、写 dashboard telemetry、mark pass/fail。
+- `runner.py`：worker 执行器，自动 claim、执行配置好的 stage 命令、验证产物与 post gate、写 dashboard telemetry，再提交 done/fail/qa_blocked。
 
 真正的生产逻辑仍归 `n2d-script` / `n2d-voice` / `n2d-image` / `n2d-video` / `n2d-compose`。runner 只调用这些阶段的 shell 命令或本地脚本，不重写阶段逻辑。
 
@@ -28,7 +28,13 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 - **认领是原子的（单机多 worker 安全）**：默认 `claim/mark/reclaim/renew` 全在 `生产数据/batch_queue.lock` 的 `flock` 互斥锁内"重读最新队列→改→原子写(temp+replace)"——**多进程同抢绝不双认领、不互相覆盖**。注意 flock 跨 NFS 不可靠，真·多机要换协调后端，别靠本锁。
 - **SQLite 协调后端（本地工业化优先）**：设置 `N2D_COORDINATION_BACKEND=sqlite`，或在 `生产数据/coordination_backend.json` 写 `{"backend":"sqlite"}` 后，`claim/mark/reclaim/heartbeat` 走 `生产数据/batch_queue.sqlite3` 的 `BEGIN IMMEDIATE` 事务；`batch_queue.json/md` 仍作为便携镜像同步写回。适合单机多 worker、共享项目盘和本地渲染农场的第一档强一致升级；还没到 Redis/Temporal/K8s 的复杂度。发布/放量前用 `queue.py sqlite-doctor <作品根> --write` 检查 schema_version、DB/JSON 镜像一致性、orphan task 和 WAL 状态。
 - **worker 也走 claim**：`runner.py` 不绕过账本；先 claim 再执行，完成后 mark。多个 runner 进程可并行跑同一队列。**runner 跑任务期间不持锁、不持 stale 队列**，认领/标记各自锁内重读；mark 必须校验 worker+attempt，防止租约过期后旧 worker 覆盖新认领；长任务靠心跳续租租约。
-- **runner mark 不依赖 telemetry 成功**：dashboard 记账失败只写入 `last_runner.telemetry_error`，不阻止按命令 exit code `mark`，避免任务已成功却因记账异常卡 `running` 后被重跑。
+- **排队不是生产授权**：`voice/image/video/compose` 执行前必须与 `run.py next` 返回的同集 `frontier.stage_key` 完全一致，且只能在 `stop_reason=needs_payment_confirm` 时消费任务绑定的 `production_authorization`。授权是 canonical JSON SHA-256 防篡改收据，必须绑定真实 approver、task/idempotency/task digest、scope、model/channel（未知可显式 `any`）、成本 ceiling+currency、带时区且未过期的 expiry；任务估算成本超过 ceiling 即拒绝。`done/prework_failed/needs_stage_execution`、frontier 缺失/错位都 fail-closed；仅有 `queued`、配置 presence 或旧任务授权均不能放行。
+- **一个执行哈希**：授权里的 `execution` 同时绑定 resolved command、producer canonical input、submit/compiled request 和完整 producer contract。image 从真实 compiler 重算每个物理 target 的 paid input fingerprint + compiled request SHA；video 从唯一 prepared manifest 重算 batch fingerprint + 每个物理 clip submit snapshot。禁止回退到 episode prework cache、task 自报 hash 或“若干输入文件”的近似摘要。voice/compose 尚无可纯重算的 prepared producer manifest，因此当前 production 授权明确 fail-closed，待各 producer 提供 canonical contract 后才开放。
+- **花钱点二次互锁**：runner 把每个物理 target 的批准 expectation 注入 producer；Codex/Dreamina image 与 video 在真正调用付费后端前现场重算 input fingerprint + submit request SHA，完全一致才执行，并原子写 paid-boundary receipt。出现任一 batch marker 却缺 expectation 必须 fatal；batch 只允许直接 producer argv 或仓库内 SHA/argv 精确识别的官方 image wrapper，shell 控制符、命令替换和任意外层 wrapper 均拒绝，不能通过清空环境绕过互锁。
+- **认领即原子预留预算**：production task 在同一个 queue lock / SQLite `BEGIN IMMEDIATE` claim 临界区按本次 attempt 预留 estimate；第二个 worker 必须看到首个 reservation，不能并发穿透 runtime cap。真正开始命令后即使 exit 非 0/output/gate fail 也按 reported actual（没有则保守按 estimate）结算；只有明确 `execution_started=false` 的 preflight/config failure 才释放。lease 崩溃状态未知也保守结算，避免回收重跑造成双花。
+- **一个完成定义**：可路由阶段只有在 runner 自身 `status=pass + exit_code=0`、命令确实越过执行边界、`output_contract + progress_columns` 校验通过、声明的 post gate 返回 `exit_code=0 && blocks=0` 后，才提交 `done`。queue 层按 stage contract 推导 hard completion，重新验证授权与 paid receipt，并在持有 queue 锁的提交瞬间逐个重算产物存在性、SHA 与解码状态；任何 verify→commit 漂移都转成 `qa_blocked + output_changed_before_commit`，已越过付费边界仍结算成本。终态 `n2d_batch_completion_commit.digest` 一次绑定 task/attempt、canonical content fingerprint、授权摘要、精确产物 SHA、`output_commit_attestation` 与 gate。review 额外只认 `_lib/acceptance_contract.py` 对当前母版/score/ledger/review-ui/release verdict 的 canonical 人工收据，并把 receipt id/evidence digest 纳入同一 commit；`needs_acceptance_signoff` 永远 human-only。缺收据时持久化已有 command/output/gate evidence，释放 lease并停在 `qa_blocked`；人工签收后再次 `mark pass` 原子 reconcile 为 done，不重跑 review 命令。gate BLOCK/异常进入非终态 `qa_blocked`，修复后显式 requeue，不计作完成。
+- **runner mark 不依赖 telemetry 成功**：dashboard 记账失败只写入 `last_runner.telemetry_error`；产物校验与 post gate 已通过时仍可提交 `done`，避免纯观测故障制造重复付费。
+- **dry-run 真只读**：`--dry-run` 只预览候选、canonical preflight 和命令；不 claim、不增加 attempts、不执行、不写 telemetry、不 mark。
 - **失败按重试上限回队列**：`mark --status fail` 后，未超过 `max_retries` 变 `retry_queued`；超过后变 `failed`，需要人工处理。
 - **失败必须可分类、可停线**：失败任务会写 `last_error_class`（preflight_block / capability / budget / timeout / output_contract / configuration / command_failed / unknown）。超过重试上限的任务会标 `dead_letter=true` 并进入 `dead_letter_queue.json/md`；死信不是“再试一次”，而是人工判定根因、修 wrapper/后端/素材/预算后再重新排队。
 - **任务带幂等键**：每个任务按作品根、集、stage、reason、scope、affected shots/artifacts 生成稳定 `idempotency_key`，runner 会注入 `N2D_IDEMPOTENCY_KEY` 并写进 dashboard trace。阶段 wrapper 能用它防重复提交、查重输出、或把同一次生产尝试串回发布/死信/账本。
@@ -67,8 +73,11 @@ python3 skills/n2d/n2d-batch/scripts/queue.py plan <作品根> \
 python3 skills/n2d/n2d-batch/scripts/queue.py claim <作品根> --limit 2
 python3 skills/n2d/n2d-batch/scripts/queue.py mark <作品根> <task_id> --status pass|fail [--note "..."]
 
-# 3) Worker 自动执行（命令配在 生产数据/batch_runner.json；--verify-outputs 用契约产物兜底 exit 0）
-python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --verify-outputs
+# 3) Worker 自动执行（命令配在 生产数据/batch_runner.json；默认验证契约产物并在 post gate 后提交 done）
+python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1
+
+# 3.0) 只读预览：不认领、不执行、不改账本
+python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --dry-run --limit 1
 
 # 3.1) 执行前消费 run.py next 动作卡；遇 source/update/gate/image_qc/能力证据/合规/环境/选择点/验收证据阻断就不跑命令
 python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --next-preflight
@@ -126,7 +135,13 @@ python3 skills/n2d/scripts/stop_loss.py <作品根> --write --json
 | 错误 | 纠正 |
 |---|---|
 | 让 runner 直接重写阶段逻辑 | 不做。runner 只调配置好的阶段命令；阶段规则仍归对应 n2d skill |
-| batch 跑过单集编排器的硬阻断 | runner 默认会在执行前消费 `run.py next` 的 stop_reason；只有确认阶段 wrapper 已自带等价 gate 时，才可在 `batch_runner.json` 写 `"next_preflight": false` 或用 `--no-next-preflight` 显式关闭。**关闭只对非花钱 stage 生效**：`image / video / compose` 这类花钱/不可逆 stage 会无视关闭配置强制跑 next-preflight（fail-closed，被拦时错误信息注明「paid stage 强制」），防止一个配置绕过 gate/image_qc/compliance/entry_check。`blocked_by_entry_check`、`capability_evidence_required`、`blocked_by_review_acceptance` 同样会阻断 |
+| batch 跑过单集编排器的硬阻断 | runner 默认消费 `run.py next`；`voice/image/video/compose` 无视关闭配置，必须匹配当前同集 frontier，且只接受 `needs_payment_confirm +` 任务绑定授权。`done/prework_failed/needs_stage_execution`、entry/gate/image_qc/compliance/choice/验收阻断一律不执行。`--no-next-preflight` 只影响非生产工具任务 |
+| 把 queued 或 batch_runner 命令当付费授权 | 在 `batch_runner.json.production_authorizations[task_id]` 写 canonical 收据：除审批、scope、model/channel、ceiling/expiry 外还必须带 `execution.command_digest/input_fingerprint/submit_request_digest/producer_contract_digest`；不得用通配、task 自报 hash 或复制旧授权 |
+| 用 episode/prework fingerprint 冒充生产请求 | 不允许。image/video 必须由 stage producer resolver 重算物理 target/clip 的 canonical contract；voice/compose 在 producer 尚无 prepared contract 时 fail-closed |
+| 命令 exit 0 就手工 mark pass | 生产任务的 `queue.py mark --status pass` 会拒绝缺少 output verification 与 post gate evidence 的提交；由 runner 完成 canonical commit |
+| gate 失败后任务却是 done | 不允许；应为 `qa_blocked`。修复门禁根因后显式 `queue.py mark ... --status queued` 再跑 |
+| review 命令/普通 gate 通过就自动验收 | 不允许。`needs_acceptance_signoff` 阻断 batch；review done 只消费 `_lib/acceptance_contract.py check` 的 canonical 人工收据，缺 progress 行/验收列也 fail-closed。缺收据时是 `qa_blocked` 等待态，签收后 `mark pass` 复用持久化 evidence，不重跑命令 |
+| 两 worker 各看 planning budget 后同时花钱 | claim 临界区按 attempt 原子 reserve；看 `batch_queue.json.budget.runtime_reserved_total/runtime_settled_total/runtime_available`，超 cap 的任务转 `blocked_budget` |
 | 直接跑队列里的 `n2d-image` slash command | slash command 不是 shell 命令；在 `batch_runner.json` 配真实 shell 命令 |
 | 多个 agent 口头分任务 | 统一 `claim`（已上 flock 原子认领），否则并发槽和状态会乱 |
 | 多 worker 不给 `--worker` id | 给稳定 id；否则 `--resume` 无法回收"自己"上次残留的 running |

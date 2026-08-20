@@ -143,6 +143,31 @@ def test_audit_acceptance_downgrades_fake_review_done(tmp_path):
     assert row.rstrip().endswith("| ⬜ |")
 
 
+def test_audit_acceptance_downgrades_done_without_canonical_receipt(tmp_path):
+    root = tmp_path / "demo"
+    root.mkdir()
+    progress = """# demo
+
+| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 第1集 | 100 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+"""
+    (root / "_进度.md").write_text(progress, encoding="utf-8")
+    script = os.path.join(os.path.dirname(__file__), "progress.py")
+
+    result = subprocess.run(
+        [sys.executable, script, "audit-acceptance", str(root), "--fix"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True,
+    )
+
+    assert "canonical acceptance receipt" in result.stdout
+    row = [ln for ln in (root / "_进度.md").read_text(encoding="utf-8").splitlines() if ln.startswith("| 第1集")][0]
+    assert row.rstrip().endswith("| ⬜ |")
+
+
 def test_audit_dag_blocks_downstream_done_with_missing_voice(tmp_path):
     root = tmp_path / "demo"
     root.mkdir()

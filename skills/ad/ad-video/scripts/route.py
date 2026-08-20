@@ -27,12 +27,13 @@ CRAFT_SCRIPTS = Path(__file__).resolve().parents[2] / "ad-craft" / "scripts"
 if str(CRAFT_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(CRAFT_SCRIPTS))
 import platform_pack as ad_platform_pack  # noqa: E402
+import render_profile as ad_render_profile  # noqa: E402
 
 VIDEO_MODEL_ROUTES_KIND = "ad_video_model_routes"
 
 # ── 能力档（单一真值源·与 platforms.md 同步） ─────────────────────────────────
 # 后端按「能力 + 单 Clip 时长上限(秒)」登记，路由按能力选后端，不对品牌字串分支。
-# 时长上限源：references/platforms.md「单 Clip 时长上限按后端」（即梦≤8 / Seedance≤15 / 可灵≈10 / Veo≈8）。
+# 时长上限源：references/platforms.md「单 Clip 时长上限按后端」（即梦≤8 / Seedance≤15 / Kling 3.0≤15 / Veo≤8）。
 CAP_SUBJECT_LOCK = "subject_consistency"   # 主体一致性强（产品/logo 不抖花、代言人脸稳）
 CAP_CINEMATIC = "cinematic"                # 电影感（表演/质感）
 CAP_REALISTIC_MOTION = "realistic_motion"  # 真实运动（拟真手持、自然动态）
@@ -48,8 +49,8 @@ BACKEND_PROFILES = {
                  "caps": [CAP_SUBJECT_LOCK, CAP_REALISTIC_MOTION, CAP_GENERAL, CAP_STILL,
                           CAP_MOTION_REF, CAP_MULTISHOT],
                  "supports_quality_tier": True, "default_quality_tier": "fast"},
-    "kling":    {"label": "可灵Kling", "max_seconds": 10.0,
-                 "caps": [CAP_SUBJECT_LOCK, CAP_CINEMATIC, CAP_GENERAL, CAP_STILL, CAP_MOTION_REF]},
+    "kling":    {"label": "可灵Kling", "max_seconds": 15.0,
+                 "caps": [CAP_SUBJECT_LOCK, CAP_CINEMATIC, CAP_GENERAL, CAP_STILL, CAP_MULTISHOT]},
     "veo":      {"label": "Veo", "max_seconds": 8.0,
                  "caps": [CAP_CINEMATIC, CAP_GENERAL, CAP_STILL]},
     "dreamina": {"label": "即梦", "max_seconds": 8.0,
@@ -277,7 +278,7 @@ def clip_length_cap_check(primary, duration):
     if duration > cap + 1e-6:
         return {"severity": "block", "code": "clip_too_long_for_backend",
                 "msg": f"镜头时长 {duration:.1f}s 超 {label} 单 Clip 上限 {cap:.0f}s——该后端拍不下，"
-                       f"改用更长后端(Seedance≤15s)或拆镜/缩时长。"}
+                       f"改用支持该时长的后端(Seedance/Kling 3.0≤15s)或拆镜/缩时长。"}
     if duration >= cap * 0.9:
         return {"severity": "warn", "code": "clip_near_backend_limit",
                 "msg": f"镜头时长 {duration:.1f}s 接近 {label} 上限 {cap:.0f}s——留余量或备拆镜方案。"}
@@ -460,10 +461,15 @@ def run(root, out_json=None):
     registry = load_asset_registry(root)
     platforms = _brief_platforms(root)
     routes, summary = build_routes(sb, default_backend, registry)
-    delivery_pack = ad_platform_pack.build_pack(Path(root))
+    delivery_pack = ad_platform_pack.write_pack(Path(root))
+    render_profile = ad_render_profile.write_profile(Path(root), pack=delivery_pack)
     platform_findings = delivery_pack.get("findings") or []
     summary["block"] += sum(1 for row in platform_findings if row.get("severity") == "block")
     summary["warn"] += sum(1 for row in platform_findings if row.get("severity") == "warn")
+    render_findings = render_profile.get("findings") or []
+    render_unique = [row for row in render_findings if row.get("source_component") != "platform_pack"]
+    summary["block"] += sum(1 for row in render_unique if row.get("severity") == "block")
+    summary["warn"] += sum(1 for row in render_unique if row.get("severity") == "warn")
     payload = {"schema_version": 1, "kind": VIDEO_MODEL_ROUTES_KIND,
                "default_backend": default_backend,
                "asset_registry_path": registry.get("_registry_path", ""),
@@ -471,6 +477,8 @@ def run(root, out_json=None):
                "platform_specs": delivery_pack.get("placement_specs") or delivery_pack.get("specs") or {},
                "placements": delivery_pack.get("placements") or [],
                "platform_findings": platform_findings,
+               "render_profile": ad_render_profile.compact_ref(render_profile),
+               "render_profile_findings": render_findings,
                "routes": routes, "summary": summary}
     if out_json is None:
         out_json = os.path.join(root, "出视频", "分镜", "prompt", "video_model_routes.json")

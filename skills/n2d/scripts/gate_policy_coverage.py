@@ -228,14 +228,19 @@ GROUP_COVERAGE: Dict[str, Dict[str, Any]] = {
     "human_review": {
         "implementation": ["skills/n2d/n2d-review-ui/scripts/review_ui.py", "skills/n2d/n2d-compose/release_manifest.py"],
         "tests": ["skills/n2d/n2d-review-ui/scripts/test_review_ui.py", "skills/n2d/n2d-compose/test_release_manifest.py"],
-        "evidence": ["生产数据/review_signoff_{ep}.json", "生产数据/acceptance_signoff_{ep}.json"],
+        # Canonical acceptance is the downstream completion output, never a prerequisite of
+        # the policy-coverage report used to build the verdict it signs.
+        "evidence": [],
         "release_required": True,
+        "completion_output": True,
     },
     "release_verdict": {
         "implementation": ["skills/n2d/scripts/release_verdict.py"],
         "tests": ["skills/n2d/scripts/test_release_verdict.py"],
-        "evidence": ["生产数据/release_verdict_{ep}.json"],
+        # The verdict cannot be required as evidence for one of its own upstream inputs.
+        "evidence": [],
         "release_required": True,
+        "completion_output": True,
     },
 }
 
@@ -494,7 +499,8 @@ def group_row(root: Path, episode: str, group: str, stages: Sequence[str]) -> Di
     if not tests:
         missing.append("tests")
     release_required = bool(spec.get("release_required"))
-    if release_required and not evidence:
+    completion_output = bool(spec.get("completion_output"))
+    if release_required and not evidence and not completion_output:
         missing.append("release_evidence")
     # P0-5：政策↔gate 代码绑定——该 group 的 check 函数必须在 gate.py 既定义又被调用（堵 data↔code 漂移）。
     gate_checks = GROUP_GATE_CHECKS.get(group, [])
@@ -504,6 +510,7 @@ def group_row(root: Path, episode: str, group: str, stages: Sequence[str]) -> Di
         "group": group,
         "stages": list(stages),
         "release_required": release_required,
+        "completion_output": completion_output,
         "enforced_outside_gate": GROUP_ENFORCED_OUTSIDE_GATE.get(group, ""),
         "implementation": impl,
         "tests": tests,

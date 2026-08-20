@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 import importlib.util
+import base64
 import json
+import os
 import sys
+import threading
+import datetime as dt
 from pathlib import Path
+
+import pytest
 
 
 SCRIPT = Path(__file__).with_name("queue.py")
@@ -32,6 +38,124 @@ def write_progress(root: Path) -> None:
         ),
         encoding="utf-8",
     )
+
+
+def production_completion(root: Path, task: dict, *, gate_required: bool) -> dict:
+    """Explicit canonical completion evidence used only by queue unit fixtures."""
+    digest = "sha256:" + "a" * 64
+    execution = {
+        "command_digest": digest,
+        "input_fingerprint": digest,
+        "submit_request_digest": digest,
+        "producer_contract_digest": digest,
+    }
+    scope = {
+        "rerun_scope": str(task.get("rerun_scope") or ""),
+        "affected_shots": sorted({str(item) for item in task.get("affected_shots", []) if str(item)}),
+        "affected_artifacts": sorted({str(item) for item in task.get("affected_artifacts", []) if str(item)}),
+    }
+    estimate = task.get("estimated_cost") or {}
+    task_binding = {
+        "task_id": str(task.get("id") or ""),
+        "idempotency_key": str(task.get("idempotency_key") or ""),
+        "episode": queue.normalize_episode(str(task.get("episode") or "")),
+        "stage_key": str(task.get("stage_key") or ""),
+        "attempt": int(task.get("attempts") or 0),
+        "scope": scope,
+        "estimated_cost": {
+            "amount": float(estimate.get("amount")),
+            "currency": str(estimate.get("unit") or ""),
+        },
+        "execution": execution,
+    }
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
+    authorization = {
+        "version": 1,
+        "approval_id": "test-approval",
+        "decision": "approved",
+        "approver": "qa-human@example.invalid",
+        "issued_at": (now - dt.timedelta(minutes=1)).isoformat(),
+        "expires_at": (now + dt.timedelta(hours=1)).isoformat(),
+        "task_id": task_binding["task_id"],
+        "idempotency_key": task_binding["idempotency_key"],
+        "task_digest": queue._canonical_sha256(task_binding),
+        "attempt": task_binding["attempt"],
+        "stage_key": task_binding["stage_key"],
+        "episode": task_binding["episode"],
+        "scope": scope,
+        "execution": execution,
+        "model": "any",
+        "channel": "any",
+        "ceiling": {
+            "amount": task_binding["estimated_cost"]["amount"],
+            "currency": task_binding["estimated_cost"]["currency"],
+        },
+    }
+    authorization["authorization_digest"] = queue._canonical_sha256(authorization)
+    output_rel = f"生产数据/test-fixtures/{task.get('id') or 'task'}-{int(task.get('attempts') or 0)}.png"
+    output_path = root / output_rel
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    ))
+    record = {
+        "shot": str(next(iter(task.get("affected_shots") or []), "fixture-target")),
+        "target": output_rel,
+        "input_fingerprint": digest,
+        "submit_request_sha256": digest,
+    }
+    expectation = queue.paid_execution_contract.build_expectation(
+        stage=str(task.get("stage_key") or ""),
+        task_id=str(task.get("id") or ""),
+        episode=queue.normalize_episode(str(task.get("episode") or "")),
+        attempt=int(task.get("attempts") or 0),
+        authorization_digest=authorization["authorization_digest"],
+        records=[record],
+    )
+    updates = {
+        **queue.paid_execution_contract.environment_for_expectation(expectation),
+        "N2D_ROOT": str(root),
+        "N2D_TASK_ID": str(task.get("id") or ""),
+    }
+    previous = {key: os.environ.get(key) for key in updates}
+    try:
+        os.environ.update(updates)
+        queue.paid_execution_contract.enforce_expected_paid_request(
+            stage=str(task.get("stage_key") or ""),
+            identity=record["shot"],
+            target=record["target"],
+            input_fingerprint=record["input_fingerprint"],
+            submit_request_sha256=record["submit_request_sha256"],
+        )
+    finally:
+        for key, value in previous.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+    receipts = queue.paid_execution_contract.verify_expected_receipts(root, expectation)
+    output_sha = queue.paid_execution_contract._sha256_file(output_path)
+    return {
+        "status": "pass",
+        "exit_code": 0,
+        "execution_started": True,
+        "finished_at": "2026-08-20T00:00:00+00:00",
+        "authorization": authorization,
+        "execution_binding": execution,
+        "completion": {
+            "output_verification": {"status": "pass", "issues": []},
+            "post_gate": {"status": "pass" if gate_required else "not_applicable"},
+            "paid_execution_expectation": expectation,
+            "paid_execution_receipts": receipts,
+            "producer_output_bindings": [{
+                "path": output_rel,
+                "exists": True,
+                "sha256": output_sha,
+                "bytes": output_path.stat().st_size,
+                "issue": "",
+            }],
+        }
+    }
 
 
 def test_route_plan_and_budget_cap(tmp_path: Path) -> None:
@@ -69,6 +193,25 @@ def test_stage_filter_and_episode_selector(tmp_path: Path) -> None:
     assert tasks[0]["owner"] == "n2d-video"
 
 
+def test_route_image_task_freezes_all_prompt_physical_shots(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    prompt = tmp_path / "出图" / "第2集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True, exist_ok=True)
+    prompt.write_text("## Clip_01 开场\n\n## 镜头 3 特写\n", encoding="utf-8")
+
+    tasks = queue.route_tasks(
+        str(tmp_path),
+        episodes={"第2集"},
+        stage_filters={"image"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+
+    assert len(tasks) == 1
+    assert tasks[0]["affected_shots"] == ["Clip_01", "Clip_03"]
+    assert "--shots Clip_01,Clip_03" in tasks[0]["command"]
+
+
 def test_route_review_after_compose(tmp_path: Path) -> None:
     (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (tmp_path / "_进度.md").write_text(
@@ -95,32 +238,8 @@ def test_route_review_after_compose(tmp_path: Path) -> None:
     assert tasks[0]["owner"] == "n2d-review"
 
 
-def test_video_done_does_not_queue_compose_by_default(tmp_path: Path) -> None:
+def test_video_done_queues_compose_by_default(tmp_path: Path) -> None:
     (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
-    (tmp_path / "_进度.md").write_text(
-        "\n".join(
-            [
-                "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
-                "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
-                "| 第1集 | 800 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ |",
-            ]
-        ),
-        encoding="utf-8",
-    )
-
-    tasks = queue.route_tasks(
-        str(tmp_path),
-        episodes=None,
-        stage_filters={"compose"},
-        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
-        max_retries=1,
-    )
-
-    assert tasks == []
-
-
-def test_video_done_queues_compose_when_opted_in(tmp_path: Path) -> None:
-    (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n- 合成阶段: 启用\n", encoding="utf-8")
     (tmp_path / "_进度.md").write_text(
         "\n".join(
             [
@@ -142,6 +261,30 @@ def test_video_done_queues_compose_when_opted_in(tmp_path: Path) -> None:
 
     assert len(tasks) == 1
     assert tasks[0]["stage_key"] == "compose"
+
+
+def test_video_done_does_not_queue_compose_when_explicitly_skipped(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n- 合成阶段: 跳过\n", encoding="utf-8")
+    (tmp_path / "_进度.md").write_text(
+        "\n".join(
+            [
+                "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
+                "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | 800 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ |",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    tasks = queue.route_tasks(
+        str(tmp_path),
+        episodes=None,
+        stage_filters={"compose"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+
+    assert tasks == []
 
 
 def test_episode_selector_accepts_chinese_and_fullwidth_numbers(tmp_path: Path) -> None:
@@ -252,11 +395,205 @@ def test_mark_pass_clears_previous_failure_metadata(tmp_path: Path) -> None:
     assert failed["last_error_class"] == "command_failed"
 
     claimed_again = queue.claim_tasks(ledger, limit=1)
-    passed = queue.mark_task(ledger, claimed_again[0]["id"], "pass", "exit_code=0")
+    passed = queue.mark_task(
+        ledger,
+        claimed_again[0]["id"],
+        "pass",
+        "exit_code=0",
+        runner=production_completion(tmp_path, claimed_again[0], gate_required=True),
+    )
     assert passed["status"] == "done"
     assert "last_error_class" not in passed
     assert "dead_letter" not in passed
     assert "dead_letter_at" not in passed
+
+
+def test_production_mark_pass_without_completion_evidence_is_rejected(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    task = queue.task_from_spec(
+        str(tmp_path),
+        "第1集",
+        queue.find_stage("image"),
+        reason="rerun",
+        priority=1,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+    ledger = queue.make_queue(str(tmp_path), [task], max_concurrency=1, max_retries=1, budget={})
+    claimed = queue.claim_tasks(ledger, limit=1)
+
+    with pytest.raises(ValueError, match="cannot be marked done"):
+        queue.mark_task(ledger, claimed[0]["id"], "pass", "exit_code=0")
+
+    assert ledger["tasks"][0]["status"] == "running"
+
+
+def test_manual_review_mark_pass_without_human_acceptance_waits_outside_running(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    task = queue.task_from_spec(
+        str(tmp_path),
+        "第1集",
+        queue.find_stage("review"),
+        reason="rerun",
+        priority=1,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+    ledger = queue.make_queue(str(tmp_path), [task], max_concurrency=1, max_retries=1, budget={})
+    claimed = queue.claim_tasks(ledger, limit=1)
+    completion_without_acceptance = {
+        "status": "pass",
+        "exit_code": 0,
+        "execution_started": False,
+        "finished_at": "2026-08-20T00:00:00+00:00",
+        "completion": {
+            "output_verification": {"status": "pass", "issues": []},
+            "post_gate": {"status": "pass"},
+        }
+    }
+
+    waiting = queue.mark_task(
+        ledger,
+        claimed[0]["id"],
+        "pass",
+        "manual CLI attempted pass",
+        runner=completion_without_acceptance,
+    )
+
+    assert waiting["status"] == "qa_blocked"
+    assert waiting["completion_block_reason"] == "needs_acceptance_signoff"
+    assert waiting["last_runner"]["completion"] == completion_without_acceptance["completion"]
+    assert "worker" not in waiting and "lease_until" not in waiting
+    assert waiting["status"] != "done"
+
+
+def test_review_acceptance_reconciles_persisted_evidence_without_rerun(
+    tmp_path: Path, monkeypatch
+) -> None:
+    write_progress(tmp_path)
+    task = queue.task_from_spec(
+        str(tmp_path),
+        "第1集",
+        queue.find_stage("review"),
+        reason="rerun",
+        priority=1,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+    ledger = queue.make_queue(str(tmp_path), [task], max_concurrency=1, max_retries=1, budget={})
+    claimed = queue.claim_tasks(ledger, limit=1, worker="review-worker")
+    completion = {
+        "command": "review-once",
+        "status": "pass",
+        "exit_code": 0,
+        "execution_started": False,
+        "finished_at": "2026-08-20T00:00:00+00:00",
+        "completion": {
+            "output_verification": {"status": "pass", "issues": []},
+            "post_gate": {"status": "pass"},
+        },
+    }
+    monkeypatch.setattr(
+        queue.acceptance_contract,
+        "check_acceptance",
+        lambda root, ep: {"status": "fail", "valid": False, "decision": "", "issues": ["missing"]},
+    )
+    waiting = queue.mark_task(ledger, claimed[0]["id"], "pass", runner=completion)
+    assert waiting["status"] == "qa_blocked"
+
+    monkeypatch.setattr(
+        queue.acceptance_contract,
+        "check_acceptance",
+        lambda root, ep: {
+            "status": "pass",
+            "valid": True,
+            "decision": "approved",
+            "receipt_id": "receipt-1",
+            "issues": [],
+        },
+    )
+    progress_path = tmp_path / "_进度.md"
+    progress_lines = progress_path.read_text(encoding="utf-8").splitlines()
+    cells = progress_lines[2].split("|")
+    cells[-2] = " ✅ "
+    progress_lines[2] = "|".join(cells)
+    progress_path.write_text("\n".join(progress_lines), encoding="utf-8")
+    done = queue.mark_task(ledger, task["id"], "pass")
+
+    assert done["status"] == "done"
+    assert done["attempts"] == 1
+    assert done["last_runner"]["command"] == "review-once"
+    assert done["completion_commit"]["acceptance"]["receipt_id"] == "receipt-1"
+    assert queue.completion_commit_issue(done) is None
+    assert "completion_block_reason" not in done
+
+
+def test_completion_commit_rejects_contradictory_runner_and_detects_tampering(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    task = queue.task_from_spec(
+        str(tmp_path),
+        "第1集",
+        queue.find_stage("image"),
+        reason="rerun",
+        priority=1,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+    ledger = queue.make_queue(str(tmp_path), [task], max_concurrency=1, max_retries=1, budget={})
+    claimed = queue.claim_tasks(ledger, limit=1)
+    contradictory = production_completion(tmp_path, claimed[0], gate_required=True)
+    contradictory["status"] = "fail"
+    contradictory["exit_code"] = 9
+
+    with pytest.raises(ValueError, match="runner status must be pass"):
+        queue.mark_task(ledger, claimed[0]["id"], "pass", runner=contradictory)
+
+    done = queue.mark_task(
+        ledger,
+        claimed[0]["id"],
+        "pass",
+        runner=production_completion(tmp_path, claimed[0], gate_required=True),
+    )
+    assert done["completion_commit"]["content_fingerprint"].startswith("sha256:")
+    assert queue.completion_commit_issue(done) is None
+
+    done["completion_commit"]["completion"]["post_gate"]["status"] = "block"
+    assert queue.completion_commit_issue(done) == "completion_commit digest mismatch"
+
+
+def test_completion_commit_rechecks_paid_output_under_lock(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    task = queue.task_from_spec(
+        str(tmp_path), "第1集", queue.find_stage("image"), reason="rerun", priority=1,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1,
+    )
+    ledger = queue.make_queue(str(tmp_path), [task], max_concurrency=1, max_retries=1, budget={})
+    claimed = queue.claim_tasks(ledger, limit=1)[0]
+    evidence = production_completion(tmp_path, claimed, gate_required=True)
+    output = tmp_path / evidence["completion"]["producer_output_bindings"][0]["path"]
+    output.unlink()
+
+    blocked = queue.mark_task(ledger, claimed["id"], "pass", runner=evidence)
+
+    assert blocked["status"] == "qa_blocked"
+    assert blocked["completion_block_reason"] == "output_changed_before_commit"
+    assert "paid outputs changed" in blocked["last_note"]
+    assert "completion_commit" not in claimed
+
+
+@pytest.mark.parametrize("case", ["missing_column", "missing_row"])
+def test_review_acceptance_missing_progress_contract_fails_closed(tmp_path: Path, case: str) -> None:
+    if case == "missing_column":
+        text = "| 集 | 视频 |\n|---|---|\n| 第1集 | ✅ |\n"
+    else:
+        text = "| 集 | 验收 |\n|---|---|\n| 第2集 | ⬜ |\n"
+    (tmp_path / "_进度.md").write_text(text, encoding="utf-8")
+    task = {"id": "001-review", "episode": "第1集", "stage_key": "review"}
+
+    issue = queue._canonical_acceptance_issue({"root": str(tmp_path)}, task)
+
+    assert issue is not None
+    assert "progress" in issue
 
 
 def test_task_idempotency_key_is_stable_for_same_scope(tmp_path: Path) -> None:
@@ -327,7 +664,14 @@ def test_sqlite_coordination_claim_mark_heartbeat(tmp_path: Path, monkeypatch) -
     task = next(t for t in loaded["tasks"] if t["id"] == tid)
     assert task["lease_until"] > old_lease
 
-    marked = queue.mark(str(tmp_path), tid, "pass", expected_worker="sqlite-worker", expected_attempt=1)
+    marked = queue.mark(
+        str(tmp_path),
+        tid,
+        "pass",
+        runner=production_completion(tmp_path, claimed[0], gate_required=False),
+        expected_worker="sqlite-worker",
+        expected_attempt=1,
+    )
     assert marked["status"] == "done"
     mirrored = json.loads((tmp_path / "生产数据" / "batch_queue.json").read_text(encoding="utf-8"))
     assert next(t for t in mirrored["tasks"] if t["id"] == tid)["status"] == "done"
@@ -393,7 +737,12 @@ def test_claim_sets_worker_and_lease_then_mark_clears(tmp_path: Path) -> None:
     claimed = queue.claim(str(tmp_path), limit=1, worker="w1", lease_seconds=60)
     assert claimed and claimed[0]["worker"] == "w1"
     assert claimed[0]["lease_until"] > queue.now_ts()
-    marked = queue.mark(str(tmp_path), claimed[0]["id"], "pass")
+    marked = queue.mark(
+        str(tmp_path),
+        claimed[0]["id"],
+        "pass",
+        runner=production_completion(tmp_path, claimed[0], gate_required=False),
+    )
     assert marked["status"] == "done"
     assert "lease_until" not in marked and "worker" not in marked
 
@@ -409,6 +758,101 @@ def test_concurrent_claims_do_not_double_claim(tmp_path: Path) -> None:
     assert ids_a.isdisjoint(ids_b)  # 绝不双认领
     # 并发上限到顶：第三次拿不到
     assert queue.claim(str(tmp_path), limit=1, worker="w3", lease_seconds=60) == []
+
+
+def test_two_workers_cannot_atomically_reserve_past_runtime_budget_cap(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    estimates = queue.load_cost_estimates(str(tmp_path))
+    tasks = [
+        queue.task_from_spec(
+            str(tmp_path),
+            "第1集",
+            queue.find_stage(stage),
+            reason="rerun",
+            priority=index,
+            cost_estimates=estimates,
+            max_retries=1,
+        )
+        for index, stage in enumerate(("image", "video"), start=1)
+    ]
+    for task in tasks:
+        task["estimated_cost"] = {"amount": 6.0, "unit": "work_units"}
+        task["status"] = "queued"  # deliberately bypass planning trim; claim must still enforce cap
+    ledger = queue.make_queue(
+        str(tmp_path),
+        tasks,
+        max_concurrency=2,
+        max_retries=1,
+        budget={"limit": 10.0, "unit": "work_units"},
+    )
+    queue.save_queue(str(tmp_path), ledger)
+
+    start = threading.Barrier(2)
+
+    def _claim(worker: str):
+        start.wait(timeout=5)
+        return queue.claim(str(tmp_path), limit=1, worker=worker, lease_seconds=60)
+
+    # Both workers cross the barrier together. Each public claim executes under queue_lock (or
+    # BEGIN IMMEDIATE), so the loser must observe the winner's just-committed reservation.
+    results = []
+    threads = [
+        threading.Thread(target=lambda worker=worker: results.append(_claim(worker)))
+        for worker in ("budget-w1", "budget-w2")
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=10)
+    assert not any(thread.is_alive() for thread in threads)
+
+    assert sum(len(rows) for rows in results) == 1
+    loaded = queue.load_queue(str(tmp_path))
+    assert sorted(task["status"] for task in loaded["tasks"]) == ["blocked_budget", "running"]
+    assert loaded["budget"]["runtime_reserved_total"] == 6.0
+    assert loaded["budget"]["runtime_available"] == 4.0
+
+
+def test_preflight_failure_releases_runtime_budget_reservation(tmp_path: Path) -> None:
+    _saved_queue(tmp_path, max_concurrency=1)
+    claimed = queue.claim(str(tmp_path), limit=1, worker="budget-worker", lease_seconds=60)
+    assert claimed and claimed[0]["budget_reservation"]["status"] == "reserved"
+
+    failed = queue.mark(
+        str(tmp_path),
+        claimed[0]["id"],
+        "fail",
+        "next_preflight blocked before command",
+        runner={"exit_code": None, "execution_started": False, "error_class": "preflight_block"},
+        expected_worker="budget-worker",
+        expected_attempt=1,
+    )
+
+    loaded = queue.load_queue(str(tmp_path))
+    assert failed["budget_reservation"]["status"] == "released"
+    assert loaded["budget"]["runtime_reserved_total"] == 0.0
+    assert loaded["budget"]["runtime_settled_total"] == 0.0
+
+
+def test_command_failure_after_paid_boundary_settles_estimate_not_release(tmp_path: Path) -> None:
+    _saved_queue(tmp_path, max_concurrency=1)
+    claimed = queue.claim(str(tmp_path), limit=1, worker="paid-worker", lease_seconds=60)
+    estimate = float(claimed[0]["estimated_cost"]["amount"])
+
+    failed = queue.mark(
+        str(tmp_path),
+        claimed[0]["id"],
+        "fail",
+        "exit_code=7",
+        runner={"exit_code": 7, "execution_started": True, "error_class": "command_failed"},
+        expected_worker="paid-worker",
+        expected_attempt=1,
+    )
+
+    loaded = queue.load_queue(str(tmp_path))
+    assert failed["budget_reservation"]["status"] == "settled"
+    assert loaded["budget"]["runtime_reserved_total"] == 0.0
+    assert loaded["budget"]["runtime_settled_total"] == estimate
 
 
 def test_reclaim_expired_lease_returns_task_to_queue(tmp_path: Path) -> None:
@@ -988,12 +1432,13 @@ def test_job_receipt_reconcile_marks_external_success(tmp_path: Path) -> None:
     })
 
     dry = queue.reconcile_jobs(str(tmp_path), apply=False)
-    assert dry["summary"]["proposed_pass"] == 1
+    assert dry["summary"]["proposed_pass"] == 0
+    assert dry["summary"]["proposed_qa_blocked"] == 1
     assert queue.load_queue(str(tmp_path))["tasks"][0]["status"] == "queued"
 
     applied = queue.reconcile_jobs(str(tmp_path), apply=True)
-    assert applied["summary"]["proposed_pass"] == 1
-    assert queue.load_queue(str(tmp_path))["tasks"][0]["status"] == "done"
+    assert applied["summary"]["proposed_qa_blocked"] == 1
+    assert queue.load_queue(str(tmp_path))["tasks"][0]["status"] == "qa_blocked"
 
 
 # ── P2-1: 协调后端 adapter 接口 + 注册表 ─────────────────────────────────────

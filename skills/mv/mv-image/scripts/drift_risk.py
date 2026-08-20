@@ -322,7 +322,7 @@ def build_report(root: str) -> dict[str, Any]:
         "schema_version": VERSION,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "engine": "mv-image/scripts/drift_risk.py",
         "inputs_sha256": {
             plan_rel: _sha256(plan_path),
@@ -390,12 +390,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--write", action="store_true", help="落盘 生产数据/drift_risk/drift_risk.{json,md}")
     ap.add_argument("--json", action="store_true", help="打印机器可读 JSON")
     args = ap.parse_args(argv)
-    if not os.path.isdir(args.project_root):
+    root = os.path.abspath(args.project_root)
+    if not os.path.isdir(root):
         print(f"[err] 找不到作品根：{args.project_root}")
         return 2
-    report = build_report(args.project_root)
+    report = build_report(root)
     if args.write:
-        json_path, md_path = write_report(report["project_root"], report)
+        json_path, md_path = write_report(root, report)
         print(f"[ok] drift risk JSON → {json_path}")
         print(f"[ok] drift risk MD   → {md_path}")
     if args.json:

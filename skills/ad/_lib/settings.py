@@ -97,7 +97,7 @@ VIDEO_MODEL_CHOICES = (
     "Veo 3.1", "Veo",
     "Kling 3.0", "Kling",
     "Hailuo 02", "Hailuo 2.3", "Hailuo",
-    "Runway Gen-4", "Runway",
+    "Runway Gen-4.5", "Runway Gen-4", "Runway",
     "Luma Ray3.2", "Luma",
     "Pika 2.5", "Pika",
     "HunyuanVideo 1.5", "HunyuanVideo",

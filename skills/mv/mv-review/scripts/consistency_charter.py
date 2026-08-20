@@ -4,8 +4,8 @@
 
 背景（参照兄弟线 consistency_charter 的教训）：为一致性建的硬闸，最容易在后续"优化"里被
 **悄悄降级**——err 挪成 warn、新增一个 `is_demo` 豁免分支、检查整段被删——而没有任何测试
-因此变红，diff 看着人畜无害。mv 线 2026-07-16/17 两轮刚补了一批 load-bearing 闸
-（脸崩 hard block、定妆 readiness、降级具名放行、版权闸、picture_lock hash 链…），
+因此变红，diff 看着人畜无害。mv 线 2026-08-20 复核并补齐了一批 load-bearing 闸
+（脸崩 hard block、B14 双闸、定妆 readiness、歌词声学证据、版权闸、picture_lock hash 链…），
 正是未来最可能被静默削弱的面。
 
 本 charter 是那份可执行记录，对每个 gate 闸声明两件事：
@@ -16,7 +16,8 @@
                     显式改一行（可见、被 review、带日期）。
 
 另有 HARD_QC_INVARIANTS：gate 之外的 QC 硬闸片段（image_qc 脸崩 HARD、禁用本地贴脸、
-video_qc HDR/缺片 block、delivery_qc 响度 block），同样以"源码必须包含"守护。
+video_qc HDR/缺片 block、delivery_qc 响度 block），以 ``tokens`` 守护必须存在的实现，
+并以 ``forbidden_tokens`` 守护已废弃、会削弱证据或可移植性的实现不得回流。
 
 配套 `test_consistency_charter.py` introspect 真实源码断言全部成立；
 CLI：python3 consistency_charter.py（退出非 0 = 有违规，供自查/CI）。
@@ -29,7 +30,7 @@ import re
 from typing import Any
 
 CHARTER_KIND = "mv_consistency_charter"
-CHARTER_VERSION = 1
+CHARTER_VERSION = 5
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILLS_DIR = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -72,23 +73,45 @@ CHARTER: dict[str, dict[str, Any]] = {
         "decided": "2026-07-17",
     },
     "_alignment_contract_errors": {
-        "dim": "歌词时间轴", "guard_tokens": ["character_coverage_ratio"], "max_is_demo_refs": 1,
-        "rationale": "口型/字幕前歌词强制对齐需完整行+90% 字符覆盖或具名逐行听审。",
-        "decided": "2026-07-17",
+        "dim": "歌词时间轴",
+        "guard_tokens": ["character_coverage_ratio", "_alignment_stem_timing_errors",
+                         "_alignment_acoustic_valid", "evidence_content_sha256"],
+        "max_is_demo_refs": 1,
+        "rationale": "文字覆盖率不得冒充声学置信度；正式接受需歌声专用校准证据或具名逐行听审，"
+                     "并验证 stem→master offset/drift、当前绑定与证据内容 hash。",
+        "decided": "2026-08-20",
+    },
+    "_alignment_acoustic_valid": {
+        "dim": "歌声声学证据",
+        "guard_tokens": ["singing_specific", "calibrated", "acceptance_eligible", "covered == set(range(lyric_lines))"],
+        "max_is_demo_refs": 0,
+        "rationale": "声学路线必须是歌声专用、已校准、明确可验收，并逐行覆盖当前歌词。",
+        "decided": "2026-08-20",
+    },
+    "_alignment_stem_timing_errors": {
+        "dim": "stem到master时基",
+        "guard_tokens": ["stem_master_timing", "offset_seconds", "drift_seconds", "minimum_correlation"],
+        "max_is_demo_refs": 0,
+        "rationale": "非 master 对齐音频必须以当前文件绑定复核 offset/drift；自动路线保留三窗口与阈值。",
+        "decided": "2026-08-20",
     },
     "_semantic_prompt_errors": {
-        "dim": "语义分镜收据", "guard_tokens": ["result_clip_plan_sha256"], "max_is_demo_refs": 1,
-        "rationale": "正式出图前语义分镜必须覆盖全部 clip 并绑定当前 clip_plan。",
-        "decided": "2026-07-17",
+        "dim": "语义分镜收据",
+        "guard_tokens": ["result_clip_plan_sha256", '_strict_int(receipt.get("schema_version")) != 3',
+                         'receipt.get("complete") is not True', "prompt_outputs_sha256"],
+        "max_is_demo_refs": 1,
+        "rationale": "付费/合成前只接受 complete schema v3，须覆盖全部 clip、绑定当前 clip_plan，"
+                     "并逐 clip 重算 image/video prompt 输出 hash。",
+        "decided": "2026-08-20",
     },
     "_image_qc_errors_warnings": {
-        "dim": "出图落档QC消费", "guard_tokens": ["hard_blocks", 'precision != "full"', "bound_report_sha256",
-                                             "assets_sha256"],
+        "dim": "出图落档QC消费",
+        "guard_tokens": ["hard_blocks", 'precision != "full"', "assets_sha256",
+                         "all_current_accepted", "generation_provenance"],
         "max_is_demo_refs": 1,
-        "rationale": "image_qc hard block=0、精度 full 或具名+hash 绑定放行才准进 mv-video；"
-                     "旧式裸布尔 manual_review_accepted 不再放行（2026-07-16 第二轮裁决）；"
-                     "新鲜度判定必须走 assets_sha256 内容收据，不得退回 mtime（2026-07-20 裁决）。",
-        "decided": "2026-07-20",
+        "rationale": "B14 承重门只接受 full+ok machine QC、完整生成来源和动态复算后全资产 current+accepted；"
+                     "degraded/manual review 永不替代机检。新鲜度只走 assets_sha256，不退回 mtime。",
+        "decided": "2026-08-20",
     },
     "_identity_readiness": {
         "dim": "主角定妆包readiness", "guard_tokens": ["len(existing) >= 3"], "max_is_demo_refs": 1,
@@ -97,9 +120,10 @@ CHARTER: dict[str, dict[str, Any]] = {
         "decided": "2026-07-17",
     },
     "_demo_flag_warnings": {
-        "dim": "demo自证护栏", "guard_tokens": ["formal_readiness"], "max_is_demo_refs": 4,
-        "rationale": "is_demo=true 但有正式生产痕迹时提醒复核标记（本函数职责就是查 demo，基线高是正常）。",
-        "decided": "2026-07-17",
+        "dim": "demo自证护栏", "guard_tokens": ["formal_readiness", "settings-first"], "max_is_demo_refs": 6,
+        "rationale": "2026-08-20 改为 settings-first 后，本函数只比较 `_meta.is_demo` 兼容镜像并发 advisory；"
+                     "6 次文本引用来自变量/说明/消息，不提供任何硬门豁免。",
+        "decided": "2026-08-20",
     },
     "_shot_variety_warnings": {
         "dim": "视觉多样性advisory", "guard_tokens": ["shot_variety"], "max_is_demo_refs": 0,
@@ -162,13 +186,166 @@ HARD_QC_INVARIANTS: list[dict[str, Any]] = [
      "tokens": ["FORMAL_HARD_LINT_CODES", '"missing_anchor_identity"'],
      "rationale": "正式项目 prompt 缺身份锚点/禁止漂移块＝身份合同未被下游消费（B12 确定性交接缺口）→ hard；"
                   "demo 与参考/视觉块保持 advisory（2026-07-20 新增）。"},
-    {"file": "mv-video/scripts/inherit_contract.py", "dim": "首尾帧登记绑定block",
-     "tokens": ['"code": "frame_changed_after_registration"', "first_frame_sha256"],
-     "rationale": "已登记 take 的首/尾帧内容 SHA 与当前 PNG 不一致＝视频不再证明来自当前首帧，必须 block"
-                  "（2026-07-20 新增：补出图→出视频像素级绑定断链）。"},
+    {"file": "mv-video/scripts/inherit_contract.py", "dim": "schema4真实提交收据block",
+     "tokens": ['"code": "missing_actual_submit_receipt"',
+                '"code": "submit_receipt_refs_mismatch"',
+                '"code": "submitted_reference_changed"',
+                'receipt.get("submitted_refs")', "video_capabilities.SHA256_RE.fullmatch(sha)"],
+     "rationale": "只有 provider 实际 submit receipt 才能证明请求绑定；逐 role/path/SHA 的 submitted_refs "
+                  "必须与编译 controls 完全相等且仍匹配当前文件。计划首帧或登记时顺手抄入的 SHA 不算证据"
+                  "（2026-08-20 schema4 裁决）。"},
+    {"file": "mv-video/scripts/video_jobs.py", "dim": "schema4提交边界fail-closed",
+     "tokens": ["def validate_submit_receipt", '"receipt_request_controls_mismatch"',
+                '"receipt_submitted_refs_do_not_match_compiled_controls"',
+                '"manual_receipt_reviewer_missing"', '"provider_job_id"'],
+     "rationale": "register 必须核验 job/model/channel/provider、完整 request_controls 与真实 refs；"
+                  "manual 渠道必须具名证明，不得用未提交的计划参数补收据。"},
+    {"file": "mv-video/scripts/inherit_contract.py", "dim": "controls与新鲜度审计block",
+     "tokens": ['"code": "manifest_project_input_changed"',
+                '"code": "manifest_compiler_or_capability_changed"',
+                '"code": "manifest_compiled_controls_hash_mismatch"',
+                '"code": "manifest_planned_controls_hash_mismatch"'],
+     "rationale": "设置、compiler/capability、prompt、image QC、引用或 planned/compiled controls 改变后，"
+                  "旧任务包不得继续作为当前提交合同。"},
+    {"file": "_lib/video_capabilities.py", "dim": "能力图时效性硬门",
+     "tokens": ["CAPABILITY_GRAPH_STALE_AFTER_DAYS = 90",
+                "def capability_graph_freshness_errors", "capability_graph_reverification_required"],
+     "rationale": "模型公开规格会变化；内置执行矩阵采集超过 90 天后必须先复核，不能只因旧 hash 自洽继续付费。"},
+    {"file": "mv-video/scripts/video_jobs.py", "dim": "任务包新鲜度完整绑定",
+     "tokens": ["def build_freshness_snapshot", '"settings_sha256"', '"compiler_sha256"',
+                '"image_qc_sha256"', '"reference_inputs_sha256"',
+                '"planned_request_controls_sha256"', '"compiled_request_controls_sha256"'],
+     "rationale": "schema4 manifest 必须持久化设置/compiler/prompt/image QC/reference 与完整 controls hash，"
+                  "使审计端能 fail-closed 判旧。"},
+    {"file": "mv-video/scripts/video_jobs.py", "dim": "多镜头真实切点复核",
+     "tokens": ["def validate_cut_map", '"cut_map_source_sha256_mismatch"',
+                '"cut_map_reviewer_missing"', '"cut_map_review_method_not_evidentiary"',
+                '"actual_boundaries_seconds"'],
+     "rationale": "多镜头 sequence 拆分必须由具名、逐帧/时间码实看生成 cut map 并绑定源视频 SHA；"
+                  "盲抄计划边界不得通过。"},
+    {"file": "mv-video/scripts/inherit_contract.py", "dim": "多镜头收据与cut map审计block",
+     "tokens": ['"code": "sequence_submit_receipt_invalid"',
+                '"code": "sequence_cut_map_invalid"', '"mv_video_sequence_cut_map"'],
+     "rationale": "sequence 已登记时，父提交收据和具名 cut map 任一缺失、篡改或换源都必须 block。"},
+    {"file": "mv-video/scripts/video_jobs.py", "dim": "任务包根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "新 jobs manifest 只记录作品内相对根；旧 manifest 的绝对 project_root 仍可由读取端忽略审计，"
+                  "但不得继续写入新产物。"},
+    {"file": "mv-video/scripts/inherit_contract.py", "dim": "继承报告根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"root": root'],
+     "rationale": "继承审计报告可随作品目录搬迁；历史报告的 root 字段不参与证据判定，保持只读兼容。"},
+    {"file": "mv-video/scripts/video_qc.py", "dim": "视频QC报告根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"root": root'],
+     "rationale": "视频 QC 报告只写 root_rel，避免将本机绝对目录写进可交付证据。"},
+    {"file": "mv-review/scripts/consistency_findings.py", "dim": "一致性汇总根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "汇总报告随作品目录移动，不落工作站绝对路径。"},
+    {"file": "mv-review/scripts/craft_audit.py", "dim": "传统手法报告根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "审美辅助报告也属于可交付生产数据，不落工作站绝对路径。"},
+    {"file": "mv-review/scripts/shot_variety_audit.py", "dim": "镜头多样性报告根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "镜头审计报告只记录作品内相对根。"},
+    {"file": "mv-plan/scripts/pilot_matrix.py", "dim": "打样矩阵根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "打样计划不泄漏生成机器目录。"},
+    {"file": "mv-score/scripts/score_pacing.py", "dim": "节奏与回流报告根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "节奏收据和回流清单均可随作品根搬迁。"},
+    {"file": "mv-update/scripts/update_plan.py", "dim": "更新计划根路径可移植",
+     "tokens": ['"root_rel": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "基线、影响计划和命令模板不得持久化工作站绝对路径。"},
+    {"file": "mv-image/scripts/image_receipts.py", "dim": "B14逐图动态验收",
+     "tokens": ['machine.get("verdict") != "ok"', 'machine.get("precision_level") != "full"',
+                '"all_current_accepted": bool(expected) and stale == 0'],
+     "rationale": "逐图账本必须动态重算当前像素/引用/生成/QC/具名签收；只有 full+ok 且全集无 stale 才完成。"},
+    {"file": "mv-image/scripts/image_receipts.py", "dim": "图片供应商原始证据",
+     "tokens": ["PROVIDER_EVIDENCE_SCHEMA_VERSION = 2", "PROVIDER_ADAPTERS",
+                "def provider_evidence_required", '"raw_capture"', '"output_selector"',
+                '"provider_authenticity": "not_proven_offline"'],
+     "rationale": "正式云端出图必须经受信 adapter 重解析独立 raw capture，精确绑定输出字节；"
+                  "离线自洽性不得冒充 provider 真实性。"},
+    {"file": "mv-image/scripts/image_qc.py", "dim": "图片QC报告根路径可移植",
+     "tokens": ['"root_rel": "."', '"event_path": "生产数据/production_events.jsonl"'],
+     "forbidden_tokens": ['"root": str(root)', '"event_path": str(_production_events_path(root))'],
+     "rationale": "新 image_qc 报告及嵌套事件引用都只写作品相对路径。"},
+    {"file": "mv-video/scripts/provider_evidence.py", "dim": "视频供应商证据fail-closed",
+     "tokens": ["EVIDENCE_SCHEMA_VERSION = 2", "TRUSTED_API_ADAPTERS = {}",
+                "provider_evidence_json_duplicate_key", "provider_evidence_path_not_in_evidence_tree",
+                '"named_human_observation"', "provider_evidence_request_controls_mismatch",
+                "provider_evidence_selected_asset_sha256_mismatch"],
+     "rationale": "原始响应只能由固定 adapter 重解析，UI 只算具名人证，local 必须绑定 controls/refs/output；"
+                  "当前公开 Veo/Runway 响应无法完整证明所需字段，API adapter 故意为空并拒绝自述。"},
+    {"file": "mv-lyric-sync/scripts/align.py", "dim": "歌声对齐证据与时基",
+     "tokens": ['"acceptance_eligible": False', 'evidence.get("acceptance_eligible") is not True',
+                '"stem_master_timing": stem_timing', '"evidence_content_sha256"'],
+     "rationale": "raw WhisperX 分数不得直接验收；正式声学证据需歌声专用+校准+eligible，且 stem 时基和证据内容均防篡改。"},
+    {"file": "mv-craft/scripts/export_otio.py", "dim": "OTIO整数帧与官方往返",
+     "tokens": ['"OTIO_SCHEMA": "RationalTime.1"', "def official_roundtrip", '"official_roundtrip"'],
+     "rationale": "编辑时间使用整数帧 RationalTime，并以官方 OpenTimelineIO adapter round-trip 证明交换件可读。"},
+    {"file": "mv-compose/color_input_manifest.py", "dim": "逐输入BT709显式变换",
+     "tokens": ['"declared_bt709_full"', 'scale=in_range=full:out_range=limited',
+                '"inputs_sha256"', '"timeline_sha256"'],
+     "rationale": "逐输入分类和当前 hash 必须完整；full-range 只能经显式 full→limited 变换进入 SDR 交付。"},
     {"file": "mv-compose/delivery_qc.py", "dim": "交付响度block",
      "tokens": ['blocks.append("true_peak_above_0dbtp")', 'blocks.append("loudness_scan_unavailable")'],
      "rationale": "true peak>0dBTP、响度扫描不可用必须 block——扫不了≠过（fail-closed）。"},
+    {"file": "mv-compose/delivery_qc.py", "dim": "最终PCM音轨同一性",
+     "tokens": ["decoded_pcm_start_middle_end_correlation", '"drift_ms"', '"min_correlation"'],
+     "rationale": "最终解码 PCM 必须在首/中/尾窗口与原歌互相关，并显式报告偏移和漂移。"},
+    {"file": "mv-compose/delivery_qc.py", "dim": "交付文件可移植绑定",
+     "tokens": ['row["path"] = mv_utils.relpath(root, output_path)',
+                'row["sha256"] = mv_utils.content_hash(output_path)'],
+     "rationale": "delivery_qc.files 逐项必须以作品相对路径和当前 SHA-256 绑定 final/master，"
+                  "不得泄漏本机目录或只信角色名。"},
+    {"file": "mv-craft/scripts/provenance.py", "dim": "C2PA信任维度分离",
+     "tokens": ['"trust_checked"', '"trusted"', '"timestamp_validated"',
+                '"timestamp_trusted"', '"timestamp_exception_allowed"', '"timestamped"',
+                '"certificate_profile": "test_untrusted" if test_certificate else "production"'],
+     "rationale": "结构/签名/信任/时间戳分别落证；内置测试证书永不冒充 production trusted。"},
+    {"file": "mv-craft/scripts/provenance.py", "dim": "来源资产全集",
+     "tokens": ['for suffix in ("png", "jpg", "jpeg", "webp")',
+                'os.path.join(root, "出视频", "视频", "**", "*.mp4")',
+                '"生产数据/provider_evidence/**/*"', '"出视频/provider_evidence/**/*"'],
+     "rationale": "provenance 不得漏掉非 PNG 图片、嵌套挑版视频或供应商原始证据。"},
+    {"file": "mv-review/scripts/mv_check.py", "dim": "具名总审收据",
+     "tokens": ['"kind": "mv_review_receipt"', '"inputs_sha256": inputs', '"human_signoff"'],
+     "rationale": "只有本次 0 BLOCK 的全量机检才可写具名 review receipt，并绑定当前交付/披露/来源链。"},
+    {"file": "mv-craft/scripts/completion.py", "dim": "完成态收据控制",
+     "tokens": ["CONTROLLED_COMPLETION_STAGES = frozenset(OUTPUT_HEALTH_STAGES)",
+                '"mv_handoff_receipt"', '"mv_release_decision"', '"合规/release_decision.json"',
+                "prompt_outputs_sha256", 'settings.get("演唱口型", "关闭") != "关闭"'],
+     "rationale": "所有产物阶段完成态都经权威 health controller；语义 prompt 与口型 alignment 不能靠"
+                  "手工进度勾选跳过，发布必须绑定当前 release decision。"},
+    {"file": "mv-craft/scripts/completion.py", "dim": "完成态严格前驱链",
+     "tokens": ['"beat", "lyric_sync", "plan", "semantic_plan", "pacing_check"',
+                "def _predecessor_completion_errors", "if actual_keys != expected_keys",
+                "if predecessor in OUTPUT_HEALTH_STAGES"],
+     "rationale": "拍点/歌词/规划/节奏/picture-lock 等收据阶段不再能手工打勾；"
+                  "完成当前阶段前必须按当前设置阶段表验证全部前驱行及 health。"},
+    {"file": "mv-craft/scripts/state_contract.py", "dim": "同步不反向宣告完成",
+     "tokens": ["never a", 'progress.state_of(status) == "done"',
+                'not completion.stage_health(root, key)["ok"]'],
+     "rationale": "sync 只迁移、保留或降级状态，绝不因健康产物把 --no-progress 的证据写入反向晋级。"},
+    {"file": "mv-craft/scripts/gate.py", "dim": "规划阶段精确输入合同",
+     "tokens": ['expected_inputs["settings_plan"]',
+                '"alignment": os.path.join(root, "字幕", "alignment_report.json")',
+                "clip_plan.inputs_sha256 含旧/未知输入键"],
+     "rationale": "gate 与 completion 必须共用 song/beatgrid/lyrics/blueprint/alignment/settings_plan 精确字典；"
+                  "旧整份 settings hash 与额外键不得导致两个权威验证器互相冲突。"},
+    {"file": "mv-craft/scripts/release_decision.py", "dim": "真实上传字节与严格发布顺序",
+     "tokens": ["UPLOAD_RECEIPT_SCHEMA_VERSION = 3", 'payload.get("uploaded_asset")',
+                "provenance.c2pa.output", "def upload_receipt_claim",
+                'for stage in ("compose", "disclosure", "provenance", "review")'],
+     "rationale": "ready/uploaded 决策前必须复算总审前的全链 health；上传回执必须绑定实际字节，"
+                  "C2PA 路线则必须精确上传 provenance 当前签名输出。"},
+    {"file": "mv-craft/scripts/formal_readiness.py", "dim": "正式升级计划可移植",
+     "tokens": ['project = "<作品根>"', "def _portable_message"],
+     "forbidden_tokens": ['f\'python3 skills/mv/mv-craft/run.py "{root}"\''],
+     "rationale": "formal readiness 的 JSON/Markdown 命令与诊断不得持久化工作站绝对路径。"},
+    {"file": "_lib/disclosure.py", "dim": "AI披露根路径可移植",
+     "tokens": ['"project_root": "."'], "forbidden_tokens": ['"project_root": root'],
+     "rationale": "基础 disclosure payload 从源头只写相对根，避免其他调用方遗漏覆写时泄漏本机路径。"},
 ]
 
 
@@ -230,7 +407,7 @@ def find_unregistered_demo_gates(source: str, charter: dict[str, dict[str, Any]]
 
 
 def audit_hard_qc(skills_dir: str | None = None) -> list[dict[str, str]]:
-    """QC 硬闸片段核对：文件缺失或片段消失都算违规。"""
+    """QC 硬闸核对：文件/必需片段缺失，或废弃片段回流，都算违规。"""
     skills_dir = skills_dir or SKILLS_DIR
     out: list[dict[str, str]] = []
     for spec in HARD_QC_INVARIANTS:
@@ -246,6 +423,11 @@ def audit_hard_qc(skills_dir: str | None = None) -> list[dict[str, str]]:
                 out.append({"gate": spec["file"], "kind": "hard_qc_token_missing",
                             "problem": f"{spec['file']} 缺硬闸片段 `{token}`（{spec['dim']}）——"
                                        "疑似硬闸被静默降级/删除；恢复或先改 charter 留痕。"})
+        for token in spec.get("forbidden_tokens") or []:
+            if token in source:
+                out.append({"gate": spec["file"], "kind": "hard_qc_forbidden_token_present",
+                            "problem": f"{spec['file']} 出现已禁止片段 `{token}`（{spec['dim']}）——"
+                                       "旧实现疑似回流；移除或先改 charter 留痕。"})
     return out
 
 

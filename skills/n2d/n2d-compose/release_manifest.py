@@ -33,6 +33,7 @@ import artifact_lineage  # noqa: E402
 N2D_LIB = SKILLS_DIR / "_lib"
 if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
+import acceptance_contract  # noqa: E402
 try:
     from skill_snapshot import fingerprint_is_fresh  # noqa: E402
 except Exception:  # pragma: no cover - 缺依赖时优雅降级为「无法校验」
@@ -360,14 +361,7 @@ def platform_release_checklist(
 
 
 def find_master_asset(root: Path, episode: str, explicit: Optional[str] = None) -> Optional[Path]:
-    if explicit:
-        path = Path(explicit)
-        return path if path.is_absolute() else root / path
-    base = root / "合成" / episode
-    if not base.is_dir():
-        return None
-    candidates = sorted(base.glob(f"成片_{episode}_*.mp4"))
-    return candidates[0] if candidates else None
+    return acceptance_contract.find_master_asset(root, episode, explicit)
 
 
 def issue_counts(issues: Iterable[str]) -> Dict[str, int]:
@@ -410,40 +404,59 @@ def score_summary(root: Path, episode: str) -> Dict[str, Any]:
 
 
 def review_signoff(root: Path, episode: str) -> Dict[str, Any]:
-    for name in (
-        f"review_signoff_{episode}.json",
-        f"acceptance_signoff_{episode}.json",
-        f"consistency_advisory_signoff_{episode}.json",
-    ):
-        path = production_dir(root) / name
-        data = load_json(path)
-        if isinstance(data, dict):
-            # 空 dict / 橡皮图章不算人审：必须同时有真实的审核人身份 + 审核结论，
-            # 否则「文件存在」只证声明不证现实（曾经空 {} 也能清掉人审 block）。
-            reviewer = ""
-            for key in ("reviewer", "signed_by", "approver", "reviewed_by", "owner", "审核人"):
-                if has_real_value(data.get(key)):
-                    reviewer = str(data.get(key)).strip()
-                    break
-            decision = ""
-            for key in ("decision", "status", "verdict", "label", "结论"):
-                if has_real_value(data.get(key)):
-                    decision = str(data.get(key)).strip()
-                    break
-            missing = []
-            if not reviewer:
-                missing.append("reviewer/signed_by")
-            if not decision:
-                missing.append("decision/status")
-            return {
-                "available": True,
-                "path": relpath(root, path),
-                "status": decision or "present",
-                "reviewer": reviewer,
-                "valid": not missing,
-                "reason": ("签收缺字段：" + ", ".join(missing)) if missing else "",
-            }
-    return {"available": False, "valid": False}
+    """Compatibility presentation for callers that used the old helper name.
+
+    Whole-episode acceptance is now exclusively the canonical hash-bound
+    receipt.  A legacy signoff is surfaced as migration input, never as a
+    release-ready approval.  Advisory signoffs are not read at all.
+    """
+    result = acceptance_contract.check_acceptance(root, episode)
+    if result.get("available"):
+        return {
+            "available": True,
+            "path": result.get("path") or "",
+            "status": result.get("decision") or "",
+            "reviewer": result.get("reviewer") or "",
+            "valid": result.get("valid") is True,
+            "reason": "；".join(str(item) for item in result.get("issues") or []),
+            "receipt_id": result.get("receipt_id") or "",
+            "canonical": True,
+        }
+    legacy = result.get("legacy_signoff") if isinstance(result.get("legacy_signoff"), dict) else {}
+    if legacy.get("available"):
+        return {
+            "available": False,
+            "valid": False,
+            "canonical": False,
+            "legacy_available": True,
+            "legacy_path": legacy.get("path") or "",
+            "legacy_valid_for_migration": legacy.get("valid") is True,
+            "reason": "legacy signoff is migration input only; issue acceptance_receipt_<集>.json",
+        }
+    return {"available": False, "valid": False, "canonical": False}
+
+
+def release_verdict_summary(root: Path, episode: str) -> Dict[str, Any]:
+    path = acceptance_contract.verdict_path(root, episode)
+    data = load_json(path)
+    valid = (
+        isinstance(data, dict)
+        and data.get("kind") == "n2d_release_verdict"
+        and str(data.get("episode") or "") == episode
+    )
+    return {
+        "available": path.is_file() and isinstance(data, dict),
+        "valid": valid,
+        "path": relpath(root, path),
+        "sha256": sha256_file(path) if path.is_file() else "",
+        "status": str(data.get("status") or "").strip().lower() if isinstance(data, dict) else "",
+        "profile": str(data.get("profile") or "") if isinstance(data, dict) else "",
+        "evidence_digest": (
+            str((data.get("evidence_bindings") or {}).get("digest") or "")
+            if isinstance(data, dict) and isinstance(data.get("evidence_bindings"), dict)
+            else ""
+        ),
+    }
 
 
 def gate_findings_freshness(root: Path, episode: str) -> Dict[str, List[str]]:
@@ -478,35 +491,57 @@ def build_manifest(root: Path, episode: str, *, asset: Optional[str] = None, sta
     issues = compliance.check_manifest(root, episode, stage=stage)
     gate_rows = gate_findings(root, episode)
     blocks = [row for row in gate_rows if str(row.get("severity") or row.get("sev") or "").lower() == "block"]
+    verdict = release_verdict_summary(root, episode)
+    acceptance = acceptance_contract.check_acceptance(root, episode)
     readiness_blocks: List[str] = []
     if master is None or not master.is_file():
         readiness_blocks.append("missing master asset")
-    readiness_blocks.extend([item for item in issues if item.startswith("BLOCK")])
-    readiness_blocks.extend([f"gate block: {row.get('dimension') or row.get('dim')}: {row.get('message') or row.get('msg')}" for row in blocks])
+    if not verdict.get("available"):
+        readiness_blocks.append("missing canonical release verdict")
+    elif not verdict.get("valid"):
+        readiness_blocks.append("canonical release verdict is invalid")
+    elif verdict.get("status") not in acceptance_contract.ACCEPTABLE_VERDICT_STATUSES:
+        readiness_blocks.append(f"canonical release verdict is not acceptable: {verdict.get('status') or 'missing'}")
     signoff = review_signoff(root, episode)
-    if not signoff.get("available"):
-        readiness_blocks.append("missing human review signoff")
-    elif not signoff.get("valid"):
-        readiness_blocks.append(
-            f"human review signoff invalid（空签收/橡皮图章不算人审）：{signoff.get('reason')}"
+    if acceptance.get("status") != "pass":
+        readiness_blocks.extend(
+            f"canonical acceptance receipt: {item}"
+            for item in (acceptance.get("issues") or ["missing or invalid"])
         )
+    receipt_bindings = acceptance.get("bindings") if isinstance(acceptance.get("bindings"), dict) else {}
+    accepted_master = receipt_bindings.get("master_asset") if isinstance(receipt_bindings.get("master_asset"), dict) else {}
+    if acceptance.get("status") == "pass" and master is not None:
+        selected_path = relpath(root, master)
+        selected_sha = sha256_file(master) if master.is_file() else ""
+        if (
+            str(accepted_master.get("path") or "") != selected_path
+            or str(accepted_master.get("sha256") or "") != selected_sha
+        ):
+            readiness_blocks.append(
+                "selected release asset does not match canonical acceptance master binding"
+            )
     findings_freshness = gate_findings_freshness(root, episode)
-    for rel in findings_freshness.get("stale", []):
-        readiness_blocks.append(
-            f"gate findings stale：{rel} 的输入指纹与当前产物不符，缓存判定不可信；请重跑该阶段 gate 后再发布"
-        )
     if lineage.get("status") == "fail":
         readiness_blocks.append("artifact lineage has missing required evidence")
     ai_labeling = compliance_data.get("ai_labeling") if isinstance(compliance_data, dict) else {}
     transparency = transparency_summary(root, episode, compliance_data, stage=stage)
-    readiness_blocks.extend(transparency.get("blocks") or [])
     platform_checklist = platform_release_checklist(root, episode, compliance_data, transparency, issues, stage=stage)
-    readiness_blocks.extend(platform_checklist.get("blocks") or [])
+    diagnostics = (
+        [item for item in issues if item.startswith(("BLOCK", "WARN", "INFO"))]
+        + [f"current gate diagnostic: {row.get('dimension') or row.get('dim')}: {row.get('message') or row.get('msg')}" for row in blocks]
+        + list(transparency.get("blocks") or [])
+        + list(transparency.get("infos") or [])
+        + list(platform_checklist.get("blocks") or [])
+        + list(platform_checklist.get("infos") or [])
+        + [f"gate findings stale after verdict/acceptance: {rel}; regenerate verdict and acceptance receipt before relying on this diagnostic" for rel in findings_freshness.get("stale", [])]
+        + [f"gate findings 无输入指纹，无法校验时效（旧报告/手写）：{rel}" for rel in findings_freshness.get("unverified", [])]
+    )
     payload: Dict[str, Any] = {
         "kind": KIND,
         "version": VERSION,
         "episode": episode,
         "root": str(root),
+        "stage": stage,
         "asset": {
             "path": relpath(root, master) if master else "",
             "exists": bool(master and master.is_file()),
@@ -522,6 +557,8 @@ def build_manifest(root: Path, episode: str, *, asset: Optional[str] = None, sta
         "review": {
             "score": score_summary(root, episode),
             "signoff": signoff,
+            "acceptance_receipt": acceptance,
+            "release_verdict": verdict,
             "gate_blocks": len(blocks),
             "gate_findings": gate_rows,
         },
@@ -535,14 +572,15 @@ def build_manifest(root: Path, episode: str, *, asset: Optional[str] = None, sta
                 "status": lineage.get("status"),
                 "lineage_id": lineage.get("lineage_id"),
             },
-            "release_manifest_hash_scope": "this JSON file + asset.sha256 + compliance/review evidence paths",
+            "release_manifest_hash_scope": "canonical release_verdict sha256 + acceptance_receipt evidence_digest + master sha256 + lineage sha256",
         },
         "transparency": transparency,
         "platform_release_checklist": platform_checklist,
         "readiness": {
             "status": "blocked" if readiness_blocks else "ready",
             "blocks": readiness_blocks,
-            "infos": [item for item in issues if item.startswith("INFO")] + list(transparency.get("infos") or []) + list(platform_checklist.get("infos") or []) + [f"gate findings 无输入指纹，无法校验时效（旧报告/手写）：{rel}" for rel in findings_freshness.get("unverified", [])],
+            "infos": list(dict.fromkeys(str(item) for item in diagnostics if str(item))),
+            "definition": "acceptable canonical release_verdict AND fresh canonical acceptance_receipt bound to the same master/score/ledger/review-ui hashes",
         },
     }
     payload["manifest_id"] = hashlib.sha256(
@@ -550,8 +588,11 @@ def build_manifest(root: Path, episode: str, *, asset: Optional[str] = None, sta
             {
                 "episode": episode,
                 "asset": payload["asset"],
-                "compliance_issue_counts": payload["compliance"]["issue_counts"],
-                "review": payload["review"],
+                "release_verdict": verdict,
+                "acceptance_receipt": {
+                    "receipt_id": acceptance.get("receipt_id"),
+                    "evidence_digest": acceptance.get("evidence_digest"),
+                },
             },
             ensure_ascii=False,
             sort_keys=True,
@@ -633,15 +674,46 @@ def check_manifest(root: Path, episode: str) -> Dict[str, Any]:
     transparency = data.get("transparency") if isinstance(data.get("transparency"), dict) else {}
     if not transparency:
         add_issue("transparency summary missing from release manifest")
-    elif transparency.get("blocks"):
-        for item in transparency.get("blocks") or []:
-            add_issue(item)
     checklist = data.get("platform_release_checklist") if isinstance(data.get("platform_release_checklist"), dict) else {}
     if not checklist:
         add_issue("platform release checklist missing from release manifest")
-    elif checklist.get("blocks"):
-        for item in checklist.get("blocks") or []:
-            add_issue(item)
+
+    # Re-evaluate the one completion definition against disk.  Do not recreate
+    # a second verdict from manifest-time gate/compliance summaries: those are
+    # diagnostics; the hash-bound release verdict + acceptance receipt is the
+    # authority.
+    current_verdict = release_verdict_summary(root, episode)
+    stored_review = data.get("review") if isinstance(data.get("review"), dict) else {}
+    stored_verdict = stored_review.get("release_verdict") if isinstance(stored_review.get("release_verdict"), dict) else {}
+    if not current_verdict.get("valid"):
+        add_issue("canonical release verdict missing or invalid")
+    elif current_verdict.get("status") not in acceptance_contract.ACCEPTABLE_VERDICT_STATUSES:
+        add_issue(f"canonical release verdict is not acceptable: {current_verdict.get('status') or 'missing'}")
+    if not stored_verdict:
+        add_issue("canonical release verdict summary missing from release manifest")
+    elif stored_verdict.get("sha256") != current_verdict.get("sha256"):
+        add_issue("canonical release verdict sha256 mismatch")
+
+    acceptance = acceptance_contract.check_acceptance(root, episode)
+    if acceptance.get("status") != "pass":
+        for item in acceptance.get("issues") or ["missing or invalid"]:
+            add_issue(f"canonical acceptance receipt: {item}")
+    stored_acceptance = stored_review.get("acceptance_receipt") if isinstance(stored_review.get("acceptance_receipt"), dict) else {}
+    if not stored_acceptance:
+        add_issue("canonical acceptance receipt summary missing from release manifest")
+    else:
+        if stored_acceptance.get("receipt_id") != acceptance.get("receipt_id"):
+            add_issue("canonical acceptance receipt_id mismatch")
+        if stored_acceptance.get("evidence_digest") != acceptance.get("evidence_digest"):
+            add_issue("canonical acceptance evidence_digest mismatch")
+    receipt_bindings = acceptance.get("bindings") if isinstance(acceptance.get("bindings"), dict) else {}
+    accepted_master = receipt_bindings.get("master_asset") if isinstance(receipt_bindings.get("master_asset"), dict) else {}
+    if acceptance.get("status") == "pass":
+        if (
+            str(asset.get("path") or "") != str(accepted_master.get("path") or "")
+            or str(asset.get("sha256") or "") != str(accepted_master.get("sha256") or "")
+        ):
+            add_issue("release manifest asset does not match canonical acceptance master binding")
     lineage = (data.get("provenance") or {}).get("artifact_lineage") if isinstance(data.get("provenance"), dict) else {}
     if not isinstance(lineage, dict) or not lineage.get("path"):
         issues.append("artifact lineage missing from release manifest")
@@ -654,9 +726,6 @@ def check_manifest(root: Path, episode: str) -> Dict[str, Any]:
         lineage_check = artifact_lineage.check_lineage(root, episode)
         if lineage_check.get("status") != "pass":
             issues.extend([f"artifact lineage: {item}" for item in lineage_check.get("issues") or []])
-    # 重新对当前盘上文件校验 gate findings 时效，不只信 manifest 落盘时的判定（manifest 可能已陈旧）。
-    for rel in gate_findings_freshness(root, episode).get("stale", []):
-        add_issue(f"gate findings stale：{rel}")
     return {"status": "fail" if issues else "pass", "issues": issues, "path": str(path)}
 
 

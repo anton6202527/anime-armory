@@ -5,7 +5,7 @@ description: 画漫画进度仪表盘与下一步建议。Use when the user asks
 
 # comic-progress — 画漫画进度扫描
 
-只读扫描 `创作区/画漫画/` 下的漫画项目，汇总每话可被当前证据证明的真实前沿。`_进度.md` 只是状态声明；合同、SHA 签收或 gate receipt 缺失/过期时，输出会回到最早阻断，不会照表格勾选误报“已完成”。它不写文件、不出图、不导出。
+只读扫描 `创作区/画漫画/` 下的漫画项目，汇总每话可被当前证据证明的真实前沿。`_进度.md` 只是状态声明；合同、SHA 签收或 gate receipt 缺失/过期时，输出会回到最早阻断，不会照表格勾选误报“已完成”。审查已完成但仍有未处置或因像素变化而失效的 review warning 时，会另列“风险处置”披露：不抹掉内部制作完成度，但明确公开/商业发布还不能据此静默放行。它不写文件、不出图、不导出。
 
 ## 怎么跑
 
@@ -60,6 +60,8 @@ python3 skills/comic/comic-progress/scripts/scan.py "创作区/画漫画/作品�
 | reference plan / `panel_jobs` 缺失、未完整覆盖或未消费当前 SHA | `comic-image` |
 | 最晚已完成阶段的 gate receipt 缺失/过期、report SHA 不匹配或未 `execution_authorized` | `comic-review` |
 | gate 存在 block | 按 finding 的 `return_to_stage` 返回对应 `comic-*` skill |
+
+`[风险处置]` 使用 `comic-review` 的 SHA 绑定处置账核对 warning。只有具名审阅人对当前 finding 与当前像素留下 `false_positive` 或 `risk_accepted` 及理由，且追加事件的 chapter/sequence/hash-chain 完整，才算当前有效；旧处置随 finding/像素变化自动失效，账本损坏也会单列披露。该披露与主流程前沿分开，避免把“内部做完”和“可以公开发布”混为一谈。
 
 `传统原稿流程=关闭` 只跳过 `原稿收尾/finishing`；缩略分镜/name 是必需的编辑阅读与页流合同，不会被该设置绕过。怪物资产按档位默认纳入多视图 report/signoff（`core_full`/`recurring_standard` 生物默认纳管，registry `model_pack_required` 可显式 true/false 覆盖；2026-07-17 起与 comic-identity model_pack 同口径）；`type=character` 仍全部纳入。
 

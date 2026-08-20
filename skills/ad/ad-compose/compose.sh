@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # 拍广告 剪辑包装：拼 clips + 混 VO/音乐床 + 字幕 + 片尾包装 → 成片_主片.mp4
 # 自包含（本机 ffmpeg 无 libass，字幕走 render_subs.py 的 PNG overlay）。
-# 用法：bash compose.sh <作品根> [输出比例 16:9] [字幕语言 zh|en|bilingual|none] [交付规格 平台默认|广电TVC]
+# 用法：bash compose.sh <作品根> [输出比例] [字幕语言 zh|en|bilingual|none] [交付规格 平台默认|广电TVC]
 set -euo pipefail
 
 ROOT="${1:?用法: compose.sh <作品根> [比例] [字幕语言] [交付规格]}"
-ASPECT="${2:-16:9}"
+ASPECT_ARG="${2:-}"
 SUBLANG="${3:-none}"      # zh|en|bilingual|none（none=不烧字幕）
 DELIVERY="${4:-平台默认}"
 WORK="$ROOT/合成/_work"
@@ -23,12 +23,15 @@ python3 "$HERE/compose_preflight.py" "$ROOT" --color-report "$ROOT/合成/color_
 command -v ffmpeg >/dev/null || { echo "[err] 需要 ffmpeg"; exit 2; }
 COLOR_ARGS=( -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv )
 
-# ASPECT → 输出分辨率（长边 1920），end card / 字幕 / 归一画幅都用它。
-SIZE="$(python3 "$HERE/reframe.py" --src 1920x1080 --target "$ASPECT" --mode pad 2>/dev/null \
-  | sed -n 's/.*输出 \([0-9]*x[0-9]*\).*/\1/p' | head -1)"
-OW="${SIZE%x*}"; OH="${SIZE#*x}"
-[ -n "$OW" ] && [ -n "$OH" ] || { echo "[err] 无法从比例 $ASPECT 推出分辨率"; exit 2; }
-echo "[i] 输出画幅 ${OW}x${OH}（比例 ${ASPECT}）  字幕=${SUBLANG}  交付规格=${DELIVERY}"
+# 单一规格源：设置选择 + placement/客户交付要求统一编译到 render_profile.json。
+# 这里不再假定长边 1920 / 30fps；若要求原生分辨率而生成源不足，compiler 会直接退出。
+profile_args=( "$ROOT" --json "$ROOT/生产数据/render_profile.json" --shell )
+if [ -n "$ASPECT_ARG" ]; then profile_args+=( --aspect "$ASPECT_ARG" ); fi
+PROFILE_LINE="$(python3 "$HERE/../ad-craft/scripts/render_profile.py" "${profile_args[@]}")"
+IFS=$'\t' read -r OW OH FPS ASPECT SOURCE_W SOURCE_H UPSCALE_POLICY QUALITY_CLAIM <<< "$PROFILE_LINE"
+[ -n "$OW" ] && [ -n "$OH" ] && [ -n "$FPS" ] && [ -n "$ASPECT" ] \
+  || { echo "[err] render_profile 未返回有效 master_render"; exit 2; }
+echo "[i] 母版 ${OW}x${OH}@${FPS}fps（比例 ${ASPECT}）  生成源=${SOURCE_W}x${SOURCE_H}  ${QUALITY_CLAIM}/${UPSCALE_POLICY}  字幕=${SUBLANG}  交付规格=${DELIVERY}"
 
 # 1) 拼接 clips。异构 clip 用 filter-concat 归一（scale/pad/fps/setsar），不用 -c copy
 #    （-c copy 拼异构 clip 会静默产出损坏；这里始终重编码归一，stderr 不吞）。
@@ -36,7 +39,7 @@ shopt -s nullglob
 clips=( "$CLIP_DIR"/*.mp4 )
 [ ${#clips[@]} -gt 0 ] || { echo "[err] $CLIP_DIR 没有 clip"; exit 2; }
 
-NORM="scale=${OW}:${OH}:force_original_aspect_ratio=decrease,pad=${OW}:${OH}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=30"
+NORM="scale=${OW}:${OH}:force_original_aspect_ratio=decrease,pad=${OW}:${OH}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=${FPS}"
 VIDEO="$WORK/_video.mp4"
 in_args=(); fc=""; n=${#clips[@]}
 for i in "${!clips[@]}"; do in_args+=( -i "${clips[$i]}" ); fc+="[$i:v]${NORM}[v$i];"; done
@@ -115,4 +118,4 @@ else
   echo "[i] 成片无音轨（无 VO），跳过响度归一"
 fi
 
-echo "下一步：多比例 reframe.py --render → 多时长 cutdown.py --render → deliver.py --mark-existing 回写交付矩阵"
+echo "下一步：placement_adaptation.py 决策逐版位模式 → 仅获准 mechanical_reframe 执行 reframe.py --render → 多时长 cutdown.py --render → deliver.py --mark-existing 回写交付矩阵"

@@ -10,7 +10,7 @@ import {
 } from './config.ts'
 import type { AiGenerationRequest, AiGenerationResponse, AiModel } from './contracts.ts'
 import { ApiError, asApiError } from './errors.ts'
-import { SkillRegistry } from './skill-registry.ts'
+import { canonicalSkillId, SkillRegistry } from './skill-registry.ts'
 import { SkillRunManager } from './skill-runs.ts'
 import { WorkFileStore } from './work-files.ts'
 import { SupabaseAuthService } from './auth.ts'
@@ -307,13 +307,13 @@ export function createBackendServer(dependencies: ServerDependencies = {}): Serv
 
         const skillSourcesMatch = routePattern(pathname, /^\/api\/v1\/skills\/([^/]+)\/sources$/)
         if (request.method === 'GET' && skillSourcesMatch?.[1]) {
-          const skillId = decodeSegment(skillSourcesMatch[1])
+          const skillId = canonicalSkillId(decodeSegment(skillSourcesMatch[1]))
           sendJson(response, 200, { skillId, sources: await registry.listSources(skillId) }, context)
           return
         }
         const skillSourceMatch = routePattern(pathname, /^\/api\/v1\/skills\/([^/]+)\/source$/)
         if (request.method === 'GET' && skillSourceMatch?.[1]) {
-          const skillId = decodeSegment(skillSourceMatch[1])
+          const skillId = canonicalSkillId(decodeSegment(skillSourceMatch[1]))
           const sourcePath = url.searchParams.get('path')
           if (!sourcePath) throw new ApiError(400, 'source_path_required', 'path 查询参数不能为空')
           sendJson(response, 200, { skillId, source: await registry.readSource(skillId, sourcePath) }, context)

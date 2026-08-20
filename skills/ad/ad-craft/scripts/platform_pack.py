@@ -18,7 +18,7 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 
 KIND = "ad_platform_pack"
 PLATFORM_SPEC_MAX_AGE_DAYS = 45
-# 平台规格采集日期：2026-07-11  来源：TikTok Ads Help、Google Ads Help、Meta for Business；国内平台发布前仍以当前后台模板为准
+# 平台规格采集日期：2026-08-20  来源：TikTok Ads Help、Google Ads Help、Meta for Business；国内平台发布前仍以当前后台模板为准
 PLATFORM_SPECS = {
     "抖音": {
         "aspect": "9:16",
@@ -26,7 +26,7 @@ PLATFORM_SPECS = {
         "safe_area": "placement_overlay_aware",
         "safe_zone_asset": "required_before_release",
         "authority": "house_snapshot_requires_publisher_confirmation",
-        "checked_at": "2026-07-11",
+        "checked_at": "2026-08-20",
         "source": "项目内部投放快照；发布前须绑定抖音广告后台当前版位模板/书面规格",
         "text_rules": ["Logo、CTA、法律声明避开右侧互动栏与底部标题区", "首帧/前三秒出现产品或品牌"],
     },
@@ -36,7 +36,7 @@ PLATFORM_SPECS = {
         "safe_area": "placement_overlay_aware",
         "safe_zone_asset": "required_before_release",
         "authority": "house_snapshot_requires_publisher_confirmation",
-        "checked_at": "2026-07-11",
+        "checked_at": "2026-08-20",
         "source": "项目内部投放快照；发布前须绑定小红书聚光当前版位模板/书面规格",
         "text_rules": ["封面/首帧要能独立说明卖点", "底部交互区不放关键法律声明"],
     },
@@ -51,8 +51,8 @@ PLATFORM_SPECS = {
         "safe_area": "placement_overlay_aware",
         "safe_zone_asset": "download_current_official_template",
         "authority": "official_platform_spec",
-        "checked_at": "2026-07-11",
-        "source": "https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads?redirected=2",
+        "checked_at": "2026-08-20",
+        "source": "https://ads.tiktok.com/resources/help/article/tiktok-auction-in-feed-ads?lang=en",
         "text_rules": ["Safe zone changes with aspect, caption length and add-ons/anchors", "Use sound and vertical creative; keep CTA/logo clear of UI"],
     },
     "YouTube": {
@@ -63,8 +63,8 @@ PLATFORM_SPECS = {
         "safe_area": "placement_overlay_aware",
         "safe_zone_asset": "download_current_official_template",
         "authority": "official_platform_spec",
-        "checked_at": "2026-07-11",
-        "source": "https://support.google.com/google-ads/answer/13547298",
+        "checked_at": "2026-08-20",
+        "source": "https://support.google.com/google-ads/answer/17091270?hl=en-GB",
         "text_rules": ["Use the current Google Ads safe-zone template for each aspect", "Choose creative treatment by marketing objective; guidance is not an outcome guarantee"],
     },
     "Instagram Reels": {
@@ -73,7 +73,7 @@ PLATFORM_SPECS = {
         "safe_area": "placement_overlay_aware",
         "safe_zone_asset": "download_current_official_template",
         "authority": "official_platform_guidance",
-        "checked_at": "2026-07-11",
+        "checked_at": "2026-08-20",
         "source": "https://www.facebook.com/business/ads/facebook-instagram-reels-ads",
         "text_rules": ["Use 9:16 video with audio", "Keep key messages inside the Reels safe zone and verify in Meta's checker"],
     },
@@ -83,7 +83,7 @@ PLATFORM_SPECS = {
         "safe_area": "placement_overlay_aware",
         "safe_zone_asset": "download_current_official_template",
         "authority": "official_platform_guidance",
-        "checked_at": "2026-07-11",
+        "checked_at": "2026-08-20",
         "source": "https://www.facebook.com/business/ads/facebook-instagram-reels-ads",
         "text_rules": ["Use 9:16 video with audio", "Keep key messages inside the Reels safe zone and verify in Meta's checker"],
     },
@@ -97,7 +97,7 @@ PLACEMENT_SPECS = {
         **PLATFORM_SPECS["TikTok"],
         "platform": "TikTok", "placement": "auction_in_feed",
         "captions_recommended": True, "audio_recommended": True,
-        "source": "https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads?redirected=2",
+        "source": "https://ads.tiktok.com/resources/help/article/tiktok-auction-in-feed-ads?lang=en",
     },
     "TikTok:out_of_phone": {
         "platform": "TikTok", "placement": "out_of_phone", "aspect": "placement_dependent",
@@ -105,17 +105,17 @@ PLACEMENT_SPECS = {
         "safe_area": "publisher_display_template", "safe_zone_asset": "required_before_release",
         "sound_mode": "sound_off", "captions_required": True,
         "recommended_duration_seconds": [10, 15],
-        "authority": "official_platform_guidance", "checked_at": "2026-07-11",
-        "source": "https://ads.tiktok.com/help/article/creative-guidelines-for-tiktok-out-of-phone",
+        "authority": "official_platform_guidance", "checked_at": "2026-08-20",
+        "source": "https://ads.tiktok.com/resources/help/article/creative-guidelines-for-tiktok-out-of-phone?lang=en",
         "text_rules": ["按实际 OOH 屏幕/合作媒体模板交付", "无声环境下用字幕/画面独立传达；billboard 版优先 10–15 秒"],
     },
     "YouTube:shorts": {
         "platform": "YouTube", "placement": "shorts", "aspect": "9:16",
-        "allowed_aspects": ["9:16"], "recommended_resolution": "1080x1920",
+        "allowed_aspects": ["9:16", "1:1", "16:9"], "recommended_resolution": "1080x1920",
         "safe_area": "placement_overlay_aware", "safe_zone_asset": "download_current_official_template",
-        "authority": "official_platform_spec", "checked_at": "2026-07-11",
-        "source": "https://support.google.com/google-ads/answer/13547298",
-        "text_rules": ["使用当前 Shorts 安全区模板", "关键品牌/CTA 避开互动覆盖层"],
+        "authority": "official_platform_spec", "checked_at": "2026-08-20",
+        "source": "https://support.google.com/google-ads/answer/17091270?hl=en-GB",
+        "text_rules": ["9:16 为 Shorts 推荐原生比例；横版/方版虽可支持但应做独立预览", "使用当前 Shorts 安全区模板，关键品牌/CTA 避开互动覆盖层"],
     },
     "YouTube:demand_gen": {
         "platform": "YouTube", "placement": "demand_gen", "aspect": "placement_dependent",
@@ -126,16 +126,16 @@ PLACEMENT_SPECS = {
         "min_duration_seconds": 5, "in_stream_eligible_min_duration_seconds": 10,
         "max_file_size_mb": 256 * 1024,
         "safe_area": "placement_overlay_aware", "safe_zone_asset": "download_current_official_template",
-        "authority": "official_platform_spec", "checked_at": "2026-07-11",
-        "source": "https://support.google.com/google-ads/answer/17141078",
+        "authority": "official_platform_spec", "checked_at": "2026-08-20",
+        "source": "https://support.google.com/google-ads/answer/17091672?hl=en",
         "text_rules": ["少于 10 秒不具备 YouTube in-stream 展示资格", "按实际 Demand Gen surface 复核安全区"],
     },
     "YouTube:in_stream": {
         "platform": "YouTube", "placement": "in_stream", "aspect": "16:9",
         "allowed_aspects": ["16:9"], "min_resolution": "1280x720", "recommended_resolution": "1920x1080",
         "safe_area": "placement_overlay_aware", "safe_zone_asset": "download_current_official_template",
-        "authority": "official_platform_spec", "checked_at": "2026-07-11",
-        "source": "https://support.google.com/google-ads/answer/13547298",
+        "authority": "official_platform_spec", "checked_at": "2026-08-20",
+        "source": "https://support.google.com/google-ads/answer/17091270?hl=en-GB",
         "text_rules": ["按具体可跳过/不可跳过格式与购买方式复核时长", "使用当前 Google Ads safe-zone 模板"],
     },
     "Instagram Reels:reels": {

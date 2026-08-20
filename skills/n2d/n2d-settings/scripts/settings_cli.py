@@ -37,6 +37,9 @@ def _load_settings_module():
 
 _settings = _load_settings_module()
 audit_settings = _settings.audit_settings
+apply_recommended_choices = _settings.apply_recommended_choices
+AUTOPILOT_CHOICE_POLICY_KEY = _settings.AUTOPILOT_CHOICE_POLICY_KEY
+ONE_CLICK_RECOMMENDED_KEYS = _settings.ONE_CLICK_RECOMMENDED_KEYS
 reset_project_setting = _settings.reset_project_setting
 set_project_setting = _settings.set_project_setting
 sync_global_settings = _settings.sync_global_settings
@@ -83,6 +86,38 @@ def cmd_audit(args: argparse.Namespace) -> int:
         return 1
     if args.fail_on_warn and data["warnings"]:
         return 1
+    return 0
+
+
+def cmd_apply_recommended(args: argparse.Namespace) -> int:
+    applied = apply_recommended_choices(
+        args.root, (AUTOPILOT_CHOICE_POLICY_KEY, *ONE_CLICK_RECOMMENDED_KEYS)
+    )
+    data = {
+        "root": os.path.abspath(args.root),
+        "setting_file": setting_file(args.root),
+        "policy": "推荐方案自动继续",
+        "applied": applied,
+        "preserved_existing": True,
+        "hard_stops_preserved": [
+            "paid_generation_or_purchase",
+            "rights_compliance_or_age_rating",
+            "voice_clone_or_biometric_authorization",
+            "public_release_or_distribution",
+            "destructive_or_irreversible_change",
+            "final_master_acceptance",
+        ],
+    }
+    if args.json:
+        dump(data, as_json=True)
+    else:
+        if applied:
+            print(f"已采用并落档 {len(applied)} 项推荐值：")
+            for row in applied:
+                print(f"- {row['key']}: {row['value']}（{row['reason']}）")
+        else:
+            print("没有缺失的普通选择；现有项目设置全部保留。")
+        print("付款、合规/授权、公开发布、破坏性变更与最终母版验收仍会停审。")
     return 0
 
 
@@ -171,6 +206,14 @@ def build_parser() -> argparse.ArgumentParser:
     audit.add_argument("--json", action="store_true")
     audit.add_argument("--fail-on-warn", action="store_true")
     audit.set_defaults(func=cmd_audit)
+
+    recommended = sub.add_parser(
+        "apply-recommended",
+        help="materialize one-click recommended reversible choices without overwriting project values",
+    )
+    recommended.add_argument("root")
+    recommended.add_argument("--json", action="store_true")
+    recommended.set_defaults(func=cmd_apply_recommended)
 
     set_cmd = sub.add_parser("set", help="set one project setting")
     set_cmd.add_argument("root")

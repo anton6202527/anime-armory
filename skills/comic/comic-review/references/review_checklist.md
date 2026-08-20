@@ -132,7 +132,11 @@
 - [ ] `[BLOCK-public]` acceptance 的 `artifacts[].path/sha256` 与当前全部导出物完全一致；任何导出变化后重新签收。
 - [ ] `[BLOCK-public]` acceptance 的 `review_receipt` 与当前 review receipt 的路径/SHA/receipt ID/report SHA 完全一致；重跑 review 后重新签收。
 - [ ] `[BLOCK-public]` 签收由真实 reviewer 显式运行 `release_verdict.py --accept --reviewer ... --reason ...`，不是脚本自我批准。
-- [ ] `[BLOCK-public]` `release_verdict.py --profile digital|print|commercial` 的对应 `publish_ready_*` 为 true。
+- [ ] `[BLOCK-public]` `release_verdict.py --medium web_images|print_pdf|epub_fxl --usage public|commercial` 的对应 `publish_ready_*` 为 true；旧 `--profile` 仅作兼容映射。
+- [ ] `[BLOCK-print]` print_pdf 有真实 PDF、trim/bleed/safe/DPI/页序装订/字体/ICC/透明度合同，及绑定当前合同/PDF SHA 的印前人审 receipt；普通图片包未冒充印刷交付。
+- [ ] `[BLOCK-platform]` profile 明确支持 viewport preview 时，PC/mobile 截图来自 `actual_platform_preview`，不是 local simulation，并绑定当前全部交付物 SHA。
+- [ ] `[BLOCK-public]` 当前 review warning 已逐条 disposition，release acceptance 绑定 disposition summary/ledger SHA；处置账变化后已重签。
+- [ ] `[BLOCK-epub]` epub_fxl 是结构有效的真实 EPUB，reading order/text alternatives/navigation/accessibility metadata 齐；结论仅为 human-attested workflow readiness，未冒充 EPUB Accessibility/WCAG 认证。
 - [ ] `[WARN]` internal 完成没有被宣传成公开发布就绪；生产完成、发行批准和实际发布动作保持分离。
 - [ ] `[WARN]` `release_verdict.py` 只生成裁决证据，没有被误认为已经上传或发布。
 

@@ -4,8 +4,29 @@
 set -e
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 [ -n "${1:-}" ] || { echo "用法: bash mv_compose.sh <MV作品根> [16:9|9:16|1:1] [--allow-fallback]"; exit 2; }
-ROOT="$1"; ASPECT="${2:-16:9}"; ALLOW_FALLBACK="${MV_COMPOSE_ALLOW_FALLBACK:-0}"
-[ "${3:-}" = "--allow-fallback" ] && ALLOW_FALLBACK=1
+ROOT="$1"; shift
+[ -d "$ROOT" ] && [ "$ROOT" != "/" ] || { echo "作品根无效：$ROOT"; exit 2; }
+CRAFT_DIR="$(cd "$(dirname "$0")/../mv-craft/scripts" && pwd)"
+ASPECT=""; ALLOW_FALLBACK="${MV_COMPOSE_ALLOW_FALLBACK:-0}"
+for arg in "$@"; do
+  case "$arg" in
+    16:9|9:16|1:1) ASPECT="$arg" ;;
+    --allow-fallback) ALLOW_FALLBACK=1 ;;
+    *) echo "未知参数：$arg"; exit 2 ;;
+  esac
+done
+SETTING_VALUES=$(python3 - "$ROOT" "$CRAFT_DIR" <<'PY'
+import sys
+root, craft = sys.argv[1:3]
+sys.path.insert(0, craft)
+import mv_utils
+settings = mv_utils.parse_settings(root)
+print(settings.get("合成画幅") or "16:9")
+print("0" if (settings.get("字幕语言") or "中文") == "无字幕" else "1")
+PY
+)
+[ -n "$ASPECT" ] || ASPECT=$(printf '%s\n' "$SETTING_VALUES" | sed -n '1p')
+SUBTITLES_ENABLED=$(printf '%s\n' "$SETTING_VALUES" | sed -n '2p')
 case "$ASPECT" in 16:9) W=1920;H=1080;; 9:16) W=1080;H=1920;; 1:1) W=1080;H=1080;; *) echo "bad aspect"; exit 1;; esac
 
 # clips：兼容 出视频/视频 与 出视频/第1集/视频 两种布局
@@ -17,7 +38,10 @@ done
 ASS="$ROOT/字幕/karaoke.ass"
 BEAT="$ROOT/节拍/beatgrid.json"
 TIMELINE="$ROOT/分镜/timeline_manifest.json"
-WK="$ROOT/_mvwork"; rm -rf "$WK"; mkdir -p "$WK"
+COLOR_MANIFEST="$ROOT/生产数据/color/color_input_manifest.json"
+WK=$(mktemp -d "$ROOT/.mvwork.XXXXXX") || { echo "无法在作品根创建临时工作目录"; exit 1; }
+cleanup_workdir() { rm -rf -- "$WK"; }
+trap cleanup_workdir EXIT HUP INT TERM
 if [ "$ALLOW_FALLBACK" = "1" ]; then
   OUT="$ROOT/预览/fallback_preview.mp4"
   MASTER="$WK/fallback_preview_master.mov"
@@ -32,22 +56,22 @@ fi
 [ -n "$SONG" ] || { echo "缺 $ROOT/歌/song.*（请先补入最终成品歌）"; exit 1; }
 [ -f "$TIMELINE" ] || [ "$ALLOW_FALLBACK" = "1" ] || { echo "缺 $TIMELINE（默认不按目录猜顺序；确认要兜底时传 --allow-fallback）"; exit 1; }
 
-CRAFT_DIR="$(cd "$(dirname "$0")/../mv-craft/scripts" && pwd)"
 if [ "$ALLOW_FALLBACK" != "1" ]; then
   python3 "$CRAFT_DIR/export_otio.py" "$ROOT"
+  python3 "$(dirname "$0")/color_input_manifest.py" "$ROOT"
   python3 "$CRAFT_DIR/gate.py" "$ROOT" compose
 fi
 
 SOURCE_LIST="$WK/source_clips.txt"
 if [ -f "$TIMELINE" ]; then
   echo "    读取 timeline：分镜/timeline_manifest.json（按已选 clip 顺序合成）"
-  python3 - "$ROOT" "$VID" "$TIMELINE" "$SOURCE_LIST" "$ALLOW_FALLBACK" <<'PY'
+  python3 - "$ROOT" "$VID" "$TIMELINE" "$COLOR_MANIFEST" "$SOURCE_LIST" "$ALLOW_FALLBACK" <<'PY'
 import glob
 import json
 import os
 import sys
 
-root, vid, timeline_path, out_path, allow_fallback = sys.argv[1:6]
+root, vid, timeline_path, color_manifest_path, out_path, allow_fallback = sys.argv[1:7]
 try:
     data = json.load(open(timeline_path, encoding="utf-8"))
 except Exception as exc:
@@ -59,6 +83,13 @@ except Exception as exc:
 
 ordered = []
 missing = []
+color_rows = {}
+if allow_fallback != "1":
+    try:
+        colour = json.load(open(color_manifest_path, encoding="utf-8"))
+        color_rows = {row.get("path"): row for row in colour.get("inputs") or []}
+    except Exception as exc:
+        raise SystemExit(f"color_input_manifest 解析失败：{exc}")
 for clip in data.get("clips") or []:
     clip_id = clip.get("clip_id")
     candidates = []
@@ -73,7 +104,11 @@ for clip in data.get("clips") or []:
     speed_mode = clip.get("speed_mode", "trim")
     
     if path:
-        ordered.append((path, dur, speed_mode))
+        rel = os.path.relpath(path, root)
+        colour_filter = (color_rows.get(rel) or {}).get("ffmpeg_input_filter") or ""
+        if allow_fallback != "1" and not colour_filter:
+            raise SystemExit(f"color_input_manifest 未提供当前输入的显式解释/变换：{rel}")
+        ordered.append((path, dur, speed_mode, colour_filter))
     elif clip_id or video_path:
         missing.append(clip_id or video_path)
 
@@ -85,9 +120,9 @@ if missing:
         raise SystemExit(msg)
 
 with open(out_path, "w", encoding="utf-8") as f:
-    for path, dur, speed_mode in ordered:
+    for path, dur, speed_mode, colour_filter in ordered:
         dur_str = str(dur) if dur is not None else ""
-        f.write(f"{path}|{dur_str}|{speed_mode}\n")
+        f.write(f"{path}|{dur_str}|{speed_mode}|{colour_filter}\n")
 PY
 fi
 
@@ -96,19 +131,16 @@ if [ ! -s "$SOURCE_LIST" ]; then
   [ -f "$TIMELINE" ] && echo "    timeline 未提供可用视频，退回 $VID 文件名顺序"
   : > "$SOURCE_LIST"
   for c in "$VID"/*.mp4; do
-    [ -e "$c" ] && printf '%s||trim\n' "$c" >> "$SOURCE_LIST"
+    [ -e "$c" ] && printf '%s||trim|\n' "$c" >> "$SOURCE_LIST"
   done
 fi
 [ -s "$SOURCE_LIST" ] || { echo "$VID 无 clip"; exit 1; }
 FPS="${MV_OUTPUT_FPS:-}"
 if [ -z "$FPS" ]; then
-  FIRST_CLIP=$(awk -F '|' 'NR==1 {print $1}' "$SOURCE_LIST")
-  RATE=$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=p=0 "$FIRST_CLIP" 2>/dev/null || true)
-  FPS=$(python3 - "$RATE" <<'PY'
-import sys
+  FPS=$(python3 - "$TIMELINE" <<'PY'
+import json, sys
 try:
-    a, b = sys.argv[1].split('/')
-    value = float(a) / float(b)
+    value = float(json.load(open(sys.argv[1], encoding="utf-8")).get("rate") or 24)
     print(round(value, 3) if value > 0 else 24)
 except Exception:
     print(24)
@@ -118,42 +150,58 @@ fi
 
 echo "=== [1/6] 时长裁切/尾帧补齐 + ProRes 422 HQ 统一画幅 ${W}x${H}/${FPS}fps + 拼接 ==="
 : > "$WK/list.txt"; i=0
-while IFS='|' read -r c dur speed_mode; do
+while IFS='|' read -r c dur speed_mode color_filter; do
   [ -f "$c" ] || continue
-  TRIM_OPT=""
+  TRIM_OPT=()
   TIMING_FILTER=""
   
   if [ -n "$dur" ] && [ "$dur" != "None" ]; then
     SRC_DUR=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$c" || echo "")
     if [ "$speed_mode" = "warp" ] || [ "$speed_mode" = "retime" ]; then
       if [ -n "$SRC_DUR" ]; then
-        FACTOR=$(python3 -c "print(round($dur / $SRC_DUR, 4))" 2>/dev/null || echo "")
+        FACTOR=$(python3 - "$dur" "$SRC_DUR" <<'PY' 2>/dev/null || true
+import math, sys
+target, source = map(float, sys.argv[1:3])
+if not all(math.isfinite(value) and value > 0 for value in (target, source)):
+    raise SystemExit(1)
+print(round(target / source, 4))
+PY
+)
         if [ -n "$FACTOR" ]; then
           TIMING_FILTER="setpts=${FACTOR}*PTS,trim=duration=${dur},setpts=PTS-STARTPTS,"
           echo "    显式重定时: $(basename "$c") ($SRC_DUR s -> ${dur}s, ${FACTOR}x)"
         else
-          TRIM_OPT="-t $dur"
+          TRIM_OPT=(-t "$dur")
           echo "    精确裁切: $(basename "$c") -> ${dur}s (重定时计算失败)"
         fi
       else
-        TRIM_OPT="-t $dur"
+        TRIM_OPT=(-t "$dur")
         echo "    精确裁切: $(basename "$c") -> ${dur}s (ffprobe失败)"
       fi
     else
       if [ -n "$SRC_DUR" ]; then
-        PAD_DUR=$(python3 -c "print(max(0, round($dur - $SRC_DUR, 4)))" 2>/dev/null || echo "0")
+        PAD_DUR=$(python3 - "$dur" "$SRC_DUR" <<'PY' 2>/dev/null || echo "0"
+import math, sys
+target, source = map(float, sys.argv[1:3])
+if not all(math.isfinite(value) and value > 0 for value in (target, source)):
+    raise SystemExit(1)
+print(max(0, round(target - source, 4)))
+PY
+)
         TIMING_FILTER="tpad=stop_mode=clone:stop_duration=${PAD_DUR},trim=duration=${dur},setpts=PTS-STARTPTS,"
         echo "    保持动作速度，精确裁切/尾帧停稳: $(basename "$c") ($SRC_DUR s -> ${dur}s)"
       else
-        TRIM_OPT="-t $dur"
+        TRIM_OPT=(-t "$dur")
         echo "    精确裁切: $(basename "$c") -> ${dur}s (ffprobe失败)"
       fi
     fi
   fi
   
+  COLOR_FILTER=""
+  [ -z "$color_filter" ] || COLOR_FILTER="${color_filter},"
   ffmpeg -y -loglevel error -i "$c" \
-    -vf "${TIMING_FILTER}scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,fps=${FPS},format=yuv422p10le" \
-    -an $TRIM_OPT -c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le \
+    -vf "${COLOR_FILTER}${TIMING_FILTER}scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,fps=${FPS},format=yuv422p10le" \
+    -an "${TRIM_OPT[@]}" -c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le \
     -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv "$WK/n$i.mov"
   echo "file 'n$i.mov'" >> "$WK/list.txt"; i=$((i+1))
 done < "$SOURCE_LIST"
@@ -192,7 +240,9 @@ mv "$WK/silent_exact.mov" "$WK/silent.mov"
 
 echo "=== [2/6] 字幕探测（mv 自包含：libass 优先 → 自带 render_lyrics.py 降级）==="
 SUB_VF=""; LRC="$ROOT/字幕/lyrics.lrc"
-if [ -f "$ASS" ] && ffmpeg -hide_banner -filters 2>/dev/null | grep -q ' subtitles '; then
+if [ "$SUBTITLES_ENABLED" = "0" ]; then
+  echo "    _设置.md 字幕语言=无字幕，按锁定交付设置输出无字幕版"
+elif [ -f "$ASS" ] && ffmpeg -hide_banner -filters 2>/dev/null | grep -q ' subtitles '; then
   cp "$ASS" "$WK/k.ass"; SUB_VF="-vf subtitles=$WK/k.ass"
   echo "    用 .ass 卡拉OK逐字烧录（libass 可用）"
 elif [ -f "$ASS" ] || [ -f "$LRC" ]; then
@@ -201,10 +251,15 @@ elif [ -f "$ASS" ] || [ -f "$LRC" ]; then
     echo "    无 libass → 自带 render_lyrics.py 逐行 PNG overlay（见 $WK/sub_filter.txt）"
     # render_lyrics.py 输出 sub_inputs.txt(每行一个 PNG) + sub_filter.txt(overlay 链)
   else
-    echo "    ⚠ render_lyrics.py 失败（缺 Pillow？见 $WK/sub.err），出无字幕版"
+    echo "    ❌ render_lyrics.py 失败；字幕模式已启用，正式合成不得静默交付无字幕版"
+    sed -n '1,80p' "$WK/sub.err" >&2
+    [ "$ALLOW_FALLBACK" = "1" ] || exit 1
+    echo "    ⚠ fallback 预览继续输出无字幕版"
   fi
 else
-  echo "    无 字幕/karaoke.ass|lyrics.lrc，出无字幕版（mv-lyric-sync 生成后重跑可加字幕）"
+  echo "    ❌ 字幕模式已启用，但缺 字幕/karaoke.ass|lyrics.lrc"
+  [ "$ALLOW_FALLBACK" = "1" ] || exit 1
+  echo "    ⚠ fallback 预览继续输出无字幕版"
 fi
 
 echo "=== [3/6] 生成 10-bit ProRes 422 HQ / 48kHz PCM 母版 ==="
@@ -232,17 +287,18 @@ ffmpeg -y -loglevel error -i "$MASTER" \
   -c:v libx264 -profile:v high -level:v 4.2 -preset slow -crf 18 -pix_fmt yuv420p \
   -g "$GOP" -keyint_min "$GOP" -sc_threshold 0 -bf 2 -flags +cgop \
   -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv \
-  -c:a aac -ar 48000 -b:a 320k -movflags +faststart "$OUT"
+  -c:a aac -ar 48000 -b:a 384k -movflags +faststart "$OUT"
 
-echo "=== [5/6] 交付 QC + provenance ==="
+echo "=== [5/6] 交付 QC ==="
 if [ "$ALLOW_FALLBACK" = "1" ]; then
   echo "=== [6/6] fallback 预览完成: $OUT ==="
-  ls -la "$OUT"
+  echo "    output: $OUT"
   exit 0
 fi
 python3 "$(dirname "$0")/delivery_qc.py" "$ROOT" "$OUT" --master "$MASTER"
-python3 "$CRAFT_DIR/provenance.py" "$ROOT" --final "$OUT" --master "$MASTER"
 
 echo "=== [6/6] 完成: $OUT (master: $MASTER) ==="
-python3 "$CRAFT_DIR/progress_set.py" "$ROOT" compose || echo "⚠ _进度.md 回写失败"
-ls -la "$MASTER" "$OUT"
+python3 "$CRAFT_DIR/progress_set.py" "$ROOT" compose
+echo "[next] 先生成 AI 使用披露，再生成最终 provenance，随后 mv-review 总审与 handoff 签收"
+echo "    master: $MASTER"
+echo "    delivery: $OUT"

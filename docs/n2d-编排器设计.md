@@ -1,11 +1,11 @@
-# n2d 编排器 `run.py next` — 接口契约设计（待评审 v0.1）
+# n2d 编排器 `run.py next` — 已实现接口契约
 
-> 目的：把 I2 铁律（"确定性步骤代理自动链式跑完，只在决策/花钱/合规点停"）从 SKILL.md 的 prose
+> 目的：把 I2 铁律（"确定性步骤和普通可逆选择自动链式跑完，只在高风险边界停"）从 SKILL.md 的 prose
 > 变成**一段可执行的确定性胶水**。当前代理每推进一集一个阶段要手工串
 > `source_check → update_plan → progress.py → model-router → dashboard gate → stage skill → progress set → dashboard record`，
 > 本设计把这串散装命令收敛成 1 个入口 + 1 个结构化"下一步动作"对象。
 >
-> **本文是接口契约，不是实现。** 评审通过后再实现 + 配 pytest。
+> **本文是已落地的接口契约。** 实现在 `skills/n2d/run.py`，回归在 `skills/n2d/test_run.py`。
 
 ---
 
@@ -18,10 +18,9 @@ stage skill **不是**"一条命令跑完即出产物"的子进程。它们混�
 
 所以编排器**不能**把 `n2d-image` 当 `subprocess` 一把梭跑完。它能做的是：
 
-> **把某阶段所有"确定性前置"自动跑完，跑到第一个"需要脑子 / 需要钱包 / 需要签字"的点就停下，
-> 交回一张结构化的「下一步动作卡」。**
+> **把确定性前置自动跑完，对普通、可逆选择落 producer-owned 推荐值，再交回结构化「下一步动作卡」给 supervisor 继续派发。只有付费、合规/授权、公开发布、破坏性操作和最终人工验收必须停。**
 
-这是诚实版：它消灭代理现在手写的全部确定性拼接，但创作/花钱那一下仍回到代理/用户。这正好就是 I2 想要的"人只做决策"。
+创作工位交给 supervisor specialist，付费与安全边界仍回到用户。这样既接近一键成片，又不把未授权支出或人工验收伪装成自动化。
 
 ---
 
@@ -38,7 +37,7 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 - 带集号 → 只推进该集。
 - `--json` → 输出机器可读的 `NextAction`（代理消费）；默认输出人话（用户可读）。
 - `--auto` → **连续推进**：每跑完一个确定性前置就看下一步，能自动就继续，**直到第一个 stop-point**；不加 `--auto` 只解析一次前沿 + 跑该阶段前置 + 停。
-- 只读 / 只跑确定性前置；**绝不**自行花钱、自行执行创作、自行改后端。
+- 确定性前置可自动回写；普通选择默认写推荐值；**绝不**自行花钱、绕过合规、公开发布或代替最终人工验收。
 
 > 不引入新子命令做回写——回写仍走既有 `progress.py set` / `dashboard record`，编排器内部调它们。
 
@@ -82,9 +81,9 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 | stop_reason | 触发条件（真值源） | 编排器动作 |
 |---|---|---|
 | `needs_agent_gen` | 前沿阶段 owner 的产出含"代理 LLM 创作"（script_stage1/2、image_prompt、video_prompt 文案） | 跑完脚手架，停，给"该生成什么 + prompt 包路径" |
-| `needs_stage_execution` | 前置已齐，但非代理创作的阶段执行仍需外部 runner/人工执行 | 停在明确工位，不假装已执行 |
+| `needs_stage_execution` | 前置已齐，非付费的阶段执行需对应 specialist/runner | supervisor 自动派发，不假装已执行 |
 | `needs_payment_confirm` | 前沿 `STAGE_GRAPH[key].gate_stage` 属花钱档（image / video / compose；voice 走云后端时） | 停，附 `生成粒度` 菜单 + 放行确认 |
-| `needs_choice` | 该阶段有**未解析**的"首跑必给"/"每次必问"选择点（制作模式·基础视觉风格·BGM来源·生成粒度；生视频模型/渠道只在 n2d-video 出视频前因固定模式、账号硬约束或 probe 缺口才问） | 停，弹对应菜单（默认预选=设置里的上次值，但不沉默沿用） |
+| `needs_choice` | 项目显式设 `普通选择策略=逐项询问`，且当前普通选择未解析 | 停，弹对应菜单；默认策略不产生此停因 |
 | `needs_compliance` | `n2d-compliance --check` 在 image/video/compose 前报缺口 | 停，列缺口，绝不放行 |
 | `needs_acceptance_signoff` | 技术检查已过，仍缺独立验收签收 | 停，等待签收，不让生成者自批 |
 | `blocked_by_entry_check` | 源文本/skill/旧资产新鲜度入口检查失败 | 停，按 repair plan 最小回流 |
@@ -95,12 +94,12 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 | `blocked_by_review_acceptance` | 审片结论/人工验收未满足发布边界 | 停，按 finding 回流或补签收 |
 | `env_missing` | `doctor.py` 报该阶段所需后端/精度档缺失 | 停（或路由占位+大声告警），不让代理跑到花钱工位才发现 |
 | `auto_ran` | 纯确定性步骤（router/gate-pass/矩阵刷新/进度回写） | **不停**，`--auto` 下继续推进 |
-| `done` | `stage_of` 返回 `col=None`（默认视频已完成；或已启用的合成/验收尾段完成） | 报完成 |
+| `done` | 路由无前沿，且 canonical release verdict + acceptance receipt 仍然新鲜；显式 clip-only 项目例外 | 报完成 |
 | `unknown_stage` | 前沿阶段不在 action registry | fail-closed，升级维护者；禁止猜测路由 |
 
 枚举唯一真值为 `skills/n2d/_lib/n2d_action_registry.py::STOP_REASONS`；本表只做人读解释。schema 与 supervisor 有穷举测试，新增值必须先改注册表再补消费者测试。
 
-> 关键不变量：**编排器只会在前置未确认、`gate_stage` 标了花钱、选择点未解析、合规/env 缺口时停。**
+> 关键不变量：**普通选择缺失会先自动落推荐值；编排器只在前置证据不成立、付费、合规/能力/env 缺口或人工验收时停。**
 > 其余（找前沿、跑 gate、写路由表、刷身份矩阵、回写进度+dashboard）一律自动，对代理透明。
 
 ---
@@ -124,7 +123,8 @@ def next(root, ep=None, auto=False):
             if g.blocked: return STOP(blocked_by_gate, gate=g)
 
         # 4.2 选择点 / 合规 / env
-        if unresolved_choice(spec): return STOP(needs_choice, menu=…)
+        if ordinary_choice_autopilot_enabled(root): apply_recommended_choices(root)
+        elif unresolved_choice(spec): return STOP(needs_choice, menu=…)
         if spec.gate_stage in PAID and compliance_gap(): return STOP(needs_compliance)
         if needs_agent_gen(spec):    return STOP(needs_agent_gen, prompt_pack=…)
         if is_paid(spec):            return STOP(needs_payment_confirm, menu=生成粒度)
@@ -141,7 +141,7 @@ def next(root, ep=None, auto=False):
 
 - **VCS-free（E1）**：编排器只读文件/内容快照，**不调任何 git**；source_check/update_plan 已是 git-free 内容快照，直接复用。
 - **契约单一真值（contract）**：阶段图、列名、gate stage、回退字段一律读 `STAGE_GRAPH`/`stage_of`/`gate.py`；编排器**不复制**任何阶段定义。改阶段仍只改 contract。
-- **选择点即适配层（C1/C2）**：菜单经 `选择点与偏好.md` 适配层，路由到设置/能力，**不 branch 菜单文字**；花钱/不可逆/合规点每次确认，不沉默沿用。
+- **选择点即适配层（C1/C2）**：菜单经 `选择点与偏好.md` 适配层，路由到设置/能力，**不 branch 菜单文字**；普通可逆选择默认用推荐值，花钱/不可逆/合规/人工验收每次确认。
 - **幂等**：重复 `next` 不产生副作用——前置都是只读机检或幂等回写；`--auto` 在任一 stop-point 必停。
 - **不抢 n2d-batch 的活**：`run.py next` 推**单集前沿一步**；多集并发/重试/预算仍走 `n2d-batch`（编排器可作为 batch runner 每个 task 的内部步进器，但本期不做）。
 - **独立性（A1/F2）**：落在 `skills/n2d/`，只 import `_lib/`，无 `skills/common`、无跨线引用。
@@ -152,15 +152,15 @@ def next(root, ep=None, auto=False):
 
 `skills/n2d/test_run.py`（cd 到 `skills/n2d/` 跑），用临时 `_进度.md` + `_设置.md` 夹具：
 1. 前沿解析对齐 `stage_of`（各制作模式：配音先行/先出视频后配音/原生音画）。
-2. stop_reason 分类：到 image 前必 `needs_payment_confirm`；缺选择点必 `needs_choice`；gate block 必透传 `return_to_stage`。
+2. stop_reason 分类：到 image 前必 `needs_payment_confirm`；默认缺普通选择会落推荐值，只有显式逐项询问才 `needs_choice`；gate block 必透传 `return_to_stage`。
 3. `--auto` 在第一个 stop-point 停、不越过花钱点。
 4. 幂等：连跑两次 `next` 状态不变、无重复回写。
 5. 合规缺口 / env 缺失短路。
 
 ---
 
-## 7. 待你拍板的开放问题
+## 7. 已确定的自动化边界
 
-1. **`--auto` 的默认边界**：仍然停在 `needs_agent_gen`（创作要代理脑子）。即 auto 只自动跑"确定性前置链"，不替代任何创作。
-2. **batch 接入边界**：`n2d-batch runner --next-preflight` 已可消费 `run.py next` 的硬阻断；默认仍兼容旧 runner，项目级可在 `batch_runner.json` 写 `"next_preflight": true`。
-3. **人话输出**目前保留中文动作卡（headline + 一句 to_user + 命令 + 菜单）；后续如要接 UI 可直接消费 `--json`。
+1. `run.py` 在 `needs_agent_gen` / `needs_stage_execution` 返回工位契约，`n2d-supervisor` 继续派发 specialist；它们不是用户选择停点。
+2. `n2d-batch runner --next-preflight` 消费同一前沿契约，多集并发/重试/预算仍归 batch；付费任务必须有与当前输入绑定的授权。
+3. `needs_payment_confirm`、`needs_compliance`、`needs_acceptance_signoff`、公开发布与破坏性操作是人工边界；其他可恢复问题优先自动修复或返回最小返工范围。

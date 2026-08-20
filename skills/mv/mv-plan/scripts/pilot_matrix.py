@@ -203,7 +203,7 @@ def build_matrix(root: str, limit: int = DEFAULT_LIMIT) -> dict[str, Any]:
         "schema_version": VERSION,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "engine": "mv-plan/scripts/pilot_matrix.py",
         "inputs_sha256": {plan_rel: _sha256(plan_path)},
         "clip_count": len(clips),
@@ -254,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     matrix = build_matrix(args.project_root, limit=args.limit)
     if args.write:
-        json_path, md_path = write_outputs(matrix["project_root"], matrix)
+        json_path, md_path = write_outputs(os.path.abspath(args.project_root), matrix)
         print(f"[ok] pilot matrix JSON → {json_path}")
         print(f"[ok] pilot matrix MD   → {md_path}")
     if args.json:

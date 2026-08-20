@@ -19,6 +19,7 @@ if NOVEL_LIB not in sys.path:
     sys.path.insert(0, NOVEL_LIB)
 
 from qa_gate import collect_gate_status  # noqa: E402
+from authenticity_contract import evaluate_authenticity_read  # noqa: E402
 from report_snapshot import snapshot_chapters, validate_snapshot  # noqa: E402
 from waivers import has_waiver, load_waivers  # noqa: E402
 try:
@@ -194,6 +195,7 @@ def build_evidence_index(
         "compliance_profile": "release jurisdiction/platform compliance profile",
         "research_sources": "research source ledger for specialist factual claims",
         "revision_plan": "editorial revision task ledger",
+        "authenticity_read": "author-controlled authenticity/cultural read and decision ledger",
         "waiver_log": "explicit waiver audit trail",
         "reader_test_plan": "reader validation plan for beta or publish decisions",
         "reader_telemetry_summary": "real reader telemetry summary and drop-off evidence",
@@ -212,6 +214,8 @@ def build_evidence_index(
         ("资料/专业资料包_*.md", "research_pack", "specialist research packet"),
         ("资料/research_sources.json", "research_sources", "research source ledger for specialist factual claims"),
         ("审稿/review_board.json", "review_board", "editorial arbitration board"),
+        ("修订/authenticity_read.md", "authenticity_read", "human-readable authenticity/cultural read"),
+        ("修订/authenticity_read_check.json", "authenticity_read", "authenticity read workflow check"),
         ("合规/platform_ai_evidence.json", "platform_ai_evidence", "platform AI policy evidence for text mode exception"),
     ]
     for pattern, source, purpose in extra_patterns:
@@ -447,6 +451,25 @@ def has_reader_telemetry_waiver(root: str, release_profile: str) -> bool:
     )
 
 
+def authenticity_read_check(root: str) -> dict[str, Any]:
+    """Validate only the opted-in workflow, never the author's portrayal."""
+    relpath = "修订/authenticity_read.json"
+    report = evaluate_authenticity_read(root)
+    issues = [str(item.get("message") or "") for item in report.get("findings") or []]
+    return {
+        "id": "authenticity_read",
+        "evidence": "authenticity_read",
+        "path": relpath,
+        "required_for_release": bool(report.get("required_for_release")),
+        "passed": not issues,
+        "gate_passed": bool(report.get("passed")),
+        "blocking": report.get("blocking", 0),
+        "warnings": report.get("warnings", 0),
+        "message": "; ".join(issues) if issues else "authenticity read workflow is complete and current",
+        "scope_note": "checks scope/version/decision closure only; it does not judge creative acceptability",
+    }
+
+
 def _is_kdp_declared(root: str, ai_usage: dict[str, Any], compliance: dict[str, Any]) -> bool:
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
     axes = compliance.get("target_axes") if isinstance(compliance, dict) else {}
@@ -572,6 +595,18 @@ def release_readiness(
         elif not check["passed"]:
             warn("RELEASE-METADATA-PACK-QUALITY", check["message"], path=check["path"])
 
+    if (evidence.get("authenticity_read") or {}).get("exists"):
+        check = authenticity_read_check(root)
+        checks.append(check)
+        if not check["passed"] and check.get("required_for_release"):
+            block("RELEASE-AUTHENTICITY-READ", check["message"], path=check["path"])
+        elif not check["passed"]:
+            warn(
+                "RELEASE-AUTHENTICITY-READ",
+                check["message"] + "; optional consultancy does not block release",
+                path=check["path"],
+            )
+
     gate_payload: dict[str, Any] = {"blocking": False, "blocker_count": 0, "warning_count": 0, "profile_skipped": True}
     if config.get("qa_gate"):
         formats = export_formats(exports) or ["txt"]
@@ -632,6 +667,7 @@ def build_manifest(root: str, *, release_name: str = "", release_profile: str = 
         "compliance_profile": optional_record(root, "合规/compliance_profile.json"),
         "research_sources": optional_record(root, "资料/research_sources.json"),
         "revision_plan": optional_record(root, "修订/revision_plan.json"),
+        "authenticity_read": optional_record(root, "修订/authenticity_read.json"),
         "waiver_log": optional_record(root, "审稿/waiver_log.jsonl"),
         "reader_test_plan": optional_record(root, "评分/reader_test_plan.json"),
         "reader_telemetry_summary": optional_record(root, "评分/reader_telemetry_summary.json"),

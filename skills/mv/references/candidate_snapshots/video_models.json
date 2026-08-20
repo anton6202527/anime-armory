@@ -1,26 +1,56 @@
 {
   "kind": "mv_candidate_snapshot",
   "key": "video_models",
-  "collected_at": "2026-07-11",
+  "collected_at": "2026-08-20",
   "description": "MV image-to-video / text-to-video model capability candidates",
   "source_urls": [
-    "https://seed.bytedance.com/en/blog/seedance-2-0-official-launch",
-    "https://developers.googleblog.com/en/introducing-veo-3-1-and-new-creative-capabilities-in-the-gemini-api/",
-    "https://runwayml.com/research/introducing-runway-gen-4.5",
+    "https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
+    "https://ai.google.dev/gemini-api/docs/video",
+    "https://ai.google.dev/gemini-api/docs/omni",
+    "https://help.runwayml.com/hc/en-us/articles/46974685288467-Creating-with-Gen-4-5",
     "https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide",
-    "https://lumalabs.ai/learning-hub/ray3-modify-user-guide"
+    "https://lumalabs.ai/news/introducing-ray-3-2"
   ],
   "url_checks": [],
-  "verification_mode": "declared_sources_only",
+  "verification_mode": "official_content_review",
+  "verification_note": "2026-08-20：逐页核对官方模型/渠道正文；能力细节以 video_capabilities.py 2026-08-20.3 为执行真值，90 天后正式执行 fail-closed 等待复核。",
   "items": [
+    {
+      "name": "Seedance 2.5",
+      "capabilities": [
+        "reference_images_up_to_30",
+        "reference_videos_up_to_10",
+        "reference_audio_up_to_10",
+        "native_audio",
+        "multi_shot_30s",
+        "timestamp_level_editing"
+      ],
+      "notes": "Jimeng/Doubao 已发布；官方公告写明 API coming soon，未实际开放的 API route 必须保持 pending。"
+    },
+    {
+      "name": "Gemini Omni Flash Preview",
+      "preview": true,
+      "route_status": "adapter_required",
+      "provider_model_id": "gemini-omni-flash-preview",
+      "capabilities": [
+        "text_image_reference_video_generation",
+        "native_generated_audio",
+        "aspect_16_9_or_9_16",
+        "synthid"
+      ],
+      "notes": "官方推荐的 Gemini API 预览入口，但未发布可安全固化的完整时长/fps/分辨率矩阵；上传音频参考不支持，视频参考当前处理受限。必须提供本账号/SDK 实测的具名 capability adapter，不能借用 Veo 参数。"
+    },
     {
       "name": "Veo 3.1",
       "capabilities": [
-        "reference_images",
+        "reference_images_up_to_3",
         "start_end_frames",
-        "native_audio"
+        "native_audio_always_on",
+        "duration_4_6_8s",
+        "24fps",
+        "720p_1080p_4k_with_constraints"
       ],
-      "notes": "适合电影感关键镜；正式使用前确认地区/API配额/价格。"
+      "notes": "reference/end-frame/1080p/4K 均有 8 秒组合限制；由 model×channel 适配层逐请求核验。"
     },
     {
       "name": "Runway Gen-4.5",
@@ -46,24 +76,31 @@
     },
     {
       "name": "Luma Ray3 / Ray3.14",
+      "legacy": true,
       "capabilities": [
-        "reference_images",
-        "keyframes",
-        "start_end_frames",
-        "hdr_export"
+        "legacy_compatibility_only"
       ],
-      "notes": "适合 keyframe/角色参考/调色链路。"
+      "notes": "旧项目原值，不静默升级或与 Ray3.2 混写。"
+    },
+    {
+      "name": "Luma Ray3.2",
+      "capabilities": [
+        "multi_keyframe_up_to_16",
+        "modify_video",
+        "up_to_20s",
+        "1080p",
+        "hdr_exr",
+        "official_api"
+      ],
+      "notes": "与 Ray3/Ray3.14 分版本记录；输入组合仍由 model×channel 能力图限制。"
     },
     {
       "name": "Seedance 2.0",
+      "legacy": true,
       "capabilities": [
-        "reference_images",
-        "reference_audio",
-        "reference_video_motion",
-        "native_audio",
-        "multi_shot_15s"
+        "legacy_compatibility_only"
       ],
-      "notes": "官方支持图/音/视频混合参考和 15 秒多镜头声画；首尾帧能力未从模型主页证实，按渠道核验。"
+      "notes": "旧项目原值；新项目主菜单使用 2.5，绝不静默改旧收据。"
     },
     {
       "name": "manual",

@@ -81,6 +81,18 @@ COMPILED_PROMPT_PACK_V2 = COMPILED_PROMPT_PACK.replace(
 )
 
 
+def canonical_manifest(root: Path, payload: dict) -> dict:
+    payload.setdefault("backend", "dreamina")
+    payload.setdefault("channel", "")
+    payload.setdefault("model_version", "")
+    payload.setdefault("video_budget_tier", "")
+    payload.setdefault("video_resolution", "")
+    payload.setdefault("ratio", "")
+    payload.setdefault("batch_id", "")
+    payload["input_fingerprint"] = video_runner.current_video_manifest_input_fingerprint(root, payload)
+    return payload
+
+
 def test_parse_prompt_pack_prefers_compiled_submit_prompt(tmp_path: Path) -> None:
     prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)
@@ -968,7 +980,7 @@ def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: 
     manifest_file = tmp_path / "manifest.json"
     video_runner.atomic_write_json(
         manifest_file,
-        {
+        canonical_manifest(tmp_path, {
             "episode": "第1集",
             "items": [
                 {
@@ -980,7 +992,7 @@ def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: 
                     "status": "prepared",
                 }
             ],
-        },
+        }),
     )
     preflight_calls = []
 
@@ -1274,10 +1286,10 @@ def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> N
     manifest_file = tmp_path / "manifest.json"
     video_runner.atomic_write_json(
         manifest_file,
-        {
+        canonical_manifest(tmp_path, {
             "episode": "第1集",
             "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}],
-        },
+        }),
     )
     calls = []
 
@@ -1341,10 +1353,10 @@ def test_accept_clip_blocks_dense_identity_without_intra_qc(monkeypatch, tmp_pat
     manifest_file = tmp_path / "manifest.json"
     video_runner.atomic_write_json(
         manifest_file,
-        {
+        canonical_manifest(tmp_path, {
             "episode": "第1集",
             "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}],
-        },
+        }),
     )
 
     qc_kwargs = {}
@@ -1385,7 +1397,7 @@ def test_accept_clip_requires_actual_visual_review_receipt(tmp_path: Path) -> No
     manifest_file = tmp_path / "manifest.json"
     video_runner.atomic_write_json(
         manifest_file,
-        {"episode": "第1集", "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}]},
+        canonical_manifest(tmp_path, {"episode": "第1集", "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}]}),
     )
 
     with pytest.raises(RuntimeError, match="actual visual inspection"):
@@ -1533,7 +1545,7 @@ def test_query_clip_accepts_valid_download_when_cli_times_out(monkeypatch, tmp_p
     assert target.exists()
 
 
-def test_query_clip_recovers_existing_target_after_manifest_race(monkeypatch, tmp_path: Path) -> None:
+def test_query_clip_rejects_unchanged_existing_target_after_provider_success(monkeypatch, tmp_path: Path) -> None:
     target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
     target.parent.mkdir(parents=True)
     target.write_bytes(b"existing-video" * 1024)
@@ -1567,8 +1579,93 @@ def test_query_clip_recovers_existing_target_after_manifest_race(monkeypatch, tm
 
     item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
 
+    assert item["status"] == "query_failed"
+    assert "unchanged pre-existing target" in item["fail_reason"]
+    assert target.read_bytes() == b"existing-video" * 1024
+
+
+def test_query_clip_accepts_target_only_when_current_query_changed_it(monkeypatch, tmp_path: Path) -> None:
+    target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    target.parent.mkdir(parents=True)
+    target.write_bytes(b"old-video" * 1024)
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "submitted", "submit_id": "sid123"}],
+        },
+    )
+
+    def fake_resolve(_manifest):
+        return "dreamina", {"query_args": lambda _sid, out_dir: ["dreamina", "query_result", str(out_dir)]}
+
+    class Proc:
+        returncode = 0
+        stdout = '{"gen_status":"success"}'
+        stderr = ""
+
+    def fake_run(*_args, **_kwargs):
+        target.write_bytes(b"current-job-video" * 1024)
+        return Proc()
+
+    monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+    monkeypatch.setattr(video_runner, "_video_has_audio_stream", lambda _path: False)
+
+    item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
+
     assert item["status"] == "downloaded_existing_target"
-    assert item["target_path"] == str(target)
+    assert item["download_submit_id"] == "sid123"
+    assert item["download_artifact_sha256"] == video_runner._sha256_file(target)
+
+
+def test_query_clip_cannot_consume_another_submit_download(monkeypatch, tmp_path: Path) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [{"clip": "Clip_A", "target": "Clip_A.mp4", "status": "submitted", "submit_id": "sidA"}],
+        },
+    )
+
+    def fake_resolve(_manifest):
+        return "dreamina", {"query_args": lambda _sid, out_dir: ["dreamina", "query_result", str(out_dir)]}
+
+    class Proc:
+        returncode = 0
+        stdout = '{"gen_status":"success"}'
+        stderr = ""
+
+    def fake_run(args, **_kwargs):
+        current_dir = Path(args[-1])
+        other_dir = current_dir.parent / "sidB"
+        other_dir.mkdir(parents=True, exist_ok=True)
+        (other_dir / "sidB.mp4").write_bytes(b"job-b-video" * 1024)
+        return Proc()
+
+    monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+
+    item = video_runner.query_clip(tmp_path, manifest_file, "Clip_A")
+
+    assert item["status"] == "query_failed"
+    assert not (tmp_path / "出视频" / "第1集" / "视频" / "Clip_A.mp4").exists()
+
+
+def test_download_validation_fails_closed_when_probe_is_unavailable(monkeypatch, tmp_path: Path) -> None:
+    media = tmp_path / "clip.mp4"
+    media.write_bytes(b"not-proven" * 1024)
+    monkeypatch.setattr(
+        video_runner.subprocess,
+        "run",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(FileNotFoundError()),
+    )
+
+    assert video_runner._valid_downloaded_mp4(media) is False
 
 
 def test_query_clip_does_not_move_stale_download_when_generation_pending(monkeypatch, tmp_path: Path) -> None:
@@ -1637,11 +1734,11 @@ def test_submit_clip_skip_preflight_records_waiver(monkeypatch, tmp_path: Path) 
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
     manifest_file = tmp_path / "manifest.json"
-    video_runner.atomic_write_json(manifest_file, {
+    video_runner.atomic_write_json(manifest_file, canonical_manifest(tmp_path, {
         "episode": "第1集",
         "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "first.png"),
                    "prompt_file": str(prompt), "submit_duration": 4, "status": "prepared"}],
-    })
+    }))
 
     class Proc:
         returncode = 0
@@ -1662,6 +1759,118 @@ def test_submit_clip_skip_preflight_records_waiver(monkeypatch, tmp_path: Path) 
 
     assert preflight_calls == []                                  # preflight 确实被跳过
     assert waiver_calls == [("第1集", "video_preflight", "skip-preflight")]  # 但留了痕
+
+
+def test_submit_clip_blocks_when_prepared_input_fingerprint_turns_stale(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼", encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    fingerprint = video_runner.build_content_fingerprint(
+        tmp_path, source_patterns=["prompt.txt"], values={"backend": "dreamina"}, scope="video_paid_submit",
+    )
+    video_runner.atomic_write_json(manifest_file, {
+        "episode": "第1集",
+        "backend": "dreamina",
+        "input_fingerprint": fingerprint,
+        "items": [{
+            "clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "first.png"),
+            "prompt_file": str(prompt), "submit_duration": 4, "status": "prepared",
+        }],
+    })
+    prompt.write_text("人物运动：改成转身", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="input_fingerprint.*stale"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
+
+
+def test_submit_clip_rejects_self_consistent_fingerprint_for_wrong_contract(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼", encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(manifest_file, {
+        "episode": "第1集",
+        "backend": "dreamina",
+        "input_fingerprint": video_runner.build_content_fingerprint(
+            tmp_path, source_patterns=[], values={}, scope="video_paid_submit",
+        ),
+        "items": [{
+            "clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "first.png"),
+            "prompt_file": str(prompt), "submit_duration": 4, "status": "prepared",
+        }],
+    })
+
+    with pytest.raises(RuntimeError, match="not_exact_video_submit_contract"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
+
+
+def test_submit_clip_blocks_when_adapter_registry_changes_after_prepare(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼", encoding="utf-8")
+    adapter = tmp_path / "生产数据" / "video_execution_adapters.json"
+    adapter.parent.mkdir(parents=True)
+    adapter.write_text('{"kind":"n2d_video_execution_adapter_registry","version":2,"adapters":{}}', encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    payload = canonical_manifest(tmp_path, {
+        "episode": "第1集", "backend": "dreamina",
+        "items": [{
+            "clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "first.png"),
+            "prompt_file": str(prompt), "submit_duration": 4, "status": "prepared",
+        }],
+    })
+    video_runner.atomic_write_json(manifest_file, payload)
+    adapter.write_text('{"kind":"n2d_video_execution_adapter_registry","version":2,"adapters":{"dreamina":{"model":"changed"}}}', encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="input_fingerprint.*stale"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
+
+
+def test_submit_clip_blocks_when_prepared_item_request_scalar_changes(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼", encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    payload = canonical_manifest(tmp_path, {
+        "episode": "第1集", "backend": "dreamina",
+        "items": [{
+            "clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "first.png"),
+            "prompt_file": str(prompt), "submit_duration": 4, "model_version": "v1",
+            "frame_strategy": "first_only", "status": "prepared",
+        }],
+    })
+    payload["items"][0]["submit_duration"] = 8
+    video_runner.atomic_write_json(manifest_file, payload)
+
+    with pytest.raises(RuntimeError, match="not_exact_video_submit_contract"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
+
+
+def test_accept_clip_rejects_old_submit_after_prompt_changes(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼", encoding="utf-8")
+    image = tmp_path / "first.png"
+    image.write_bytes(b"png")
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"mp4")
+    item = {
+        "clip": "Clip_01", "target": "Clip_01.mp4", "image": str(image),
+        "prompt_file": str(prompt), "submit_duration": 4, "status": "downloaded",
+        "submitted_at": "2026-08-20T00:00:00+00:00", "submit_id": "paid-job-1",
+    }
+    manifest = canonical_manifest(tmp_path, {"episode": "第1集", "backend": "dreamina", "items": [item]})
+    _, adapter = video_runner.resolve_video_backend({**manifest, "_root": str(tmp_path)})
+    args = video_runner._dreamina_args(item, {**manifest, "_root": str(tmp_path)})
+    item["submit_snapshot"] = video_runner.build_submit_snapshot(tmp_path, manifest, item, adapter, args, None)
+    manifest["items"] = [item]
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(manifest_file, manifest)
+
+    prompt.write_text("人物运动：改成转身", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="do not stamp old pixels"):
+        video_runner.accept_clip(
+            tmp_path, manifest_file, "Clip_01", no_record=True, no_progress=True,
+            visual_reviewer="human", visual_notes="已查看当前像素", visual_current_pixels_confirmed=True,
+        )
 
 
 def test_prepare_single_take_multishot_keeps_one_take(tmp_path: Path) -> None:

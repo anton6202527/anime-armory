@@ -516,6 +516,22 @@ def platform_pack_findings(root):
     return out
 
 
+def placement_adaptation_findings(root):
+    """Block ratio variants that have no placement-native adaptation decision/evidence."""
+    module = _load_sibling_module("placement_adaptation")
+    report = module.evaluate(Path(root))
+    out = []
+    for item in report.get("findings") or []:
+        severity = item.get("severity") if item.get("severity") in {"block", "warn"} else "warn"
+        out.append(finding(
+            severity,
+            str(item.get("code") or "placement_adaptation"),
+            str(item.get("msg") or "版位原生适配计划待闭合"),
+            os.path.join(root, "生产数据", "placement_adaptation.json"),
+        ))
+    return out
+
+
 def score_findings(root):
     """Creative heuristics stay advisory; only the separate ad-law gate can BLOCK."""
     path = os.path.join(root, "评分", "ad_score.json")
@@ -686,6 +702,10 @@ def run_gate(root, stage, allow_placeholder=False):
     if stage == "image":
         # 出图前：核验生图后端治理（白名单/不混用），此时图还没生成，不查 product_qc。
         findings.extend(image_backend_findings(root))
+        # 多比例/多版位必须在出图前决定原生重构、原生裁切或具名签核的机械裁切；
+        # 否则构图与安全区返工会在最贵的生成阶段后爆发。
+        findings.extend(platform_pack_findings(root))
+        findings.extend(placement_adaptation_findings(root))
         # 事前处方：出图前就该开好"每镜喂哪些参考"，等 product_qc 事后发现产品漂就已花钱。
         findings.extend(reference_plan_findings(root))
         # 打样矩阵（advisory·传统 PPM「先看小样再开机」）：全量出图前先出 2-5 镜代表样
@@ -713,6 +733,7 @@ def run_gate(root, stage, allow_placeholder=False):
             sources=[os.path.join("脚本", "storyboard.json")]))
     if stage in ("video", "compose"):
         findings.extend(platform_pack_findings(root))
+        findings.extend(placement_adaptation_findings(root))
         # 图已生成：查存在性 + 产品/品牌色一致性机检（最便宜的拦截点）+ 契约继承。
         findings.extend(image_backend_findings(root))
         findings.extend(image_output_backend_findings(root))

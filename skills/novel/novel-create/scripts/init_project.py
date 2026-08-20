@@ -17,6 +17,8 @@ init_project.py — 建【原创从零】小说项目骨架（无源文本·访�
         [--ingest <碎片路径>]...  [--out <根>] [--outputs txt,docx,outline]
         [--draft-mode 极速初稿|稳妥初稿|商业连载|漫剧源书]
         [--chapter-granularity 逐章|小批|全书草稿]
+        [--human-seed "<作者原始种子>" | --human-seed-file <UTF-8文件>]
+        [--human-seed-author "<作者>"] [--human-first-confirmed]
 
 无依赖（纯文本骨架；导出 docx 在后续 export 步骤再装 python-docx）。
 """
@@ -42,6 +44,7 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             normalize_novel_purpose, resolve_novel_draft_mode,
                             resolve_novel_draft_workflow)
 from settings import write_settings
+from craft_profile import normalize_craft_profile
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
@@ -211,6 +214,8 @@ def main():
                     help="目标平台；无默认，立项访谈确认后显式传入，可选跨平台")
     ap.add_argument("--purpose", required=True,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
+    ap.add_argument("--craft-profile", default=None,
+                    help="创作工艺档：commercial_serial/genre_novel/literary/experimental 或自定义；缺省继承全局默认再回落 genre_novel，不由平台推断")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
     ap.add_argument("--target-chapters", type=int, default=None)
     ap.add_argument("--ingest", action="append", default=[],
@@ -227,7 +232,37 @@ def main():
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
+    human_seed = ap.add_mutually_exclusive_group()
+    human_seed.add_argument("--human-seed", default=None,
+                            help="AI/市场建议出现前的作者原始种子；较长内容建议用 --human-seed-file")
+    human_seed.add_argument("--human-seed-file", default=None,
+                            help="AI/市场建议出现前的 UTF-8 作者原始种子文件")
+    ap.add_argument("--human-seed-author", default=None, help="原始种子的作者/确认人")
+    ap.add_argument("--human-first-confirmed", action="store_true",
+                    help="显式确认 human seed 形成于 AI/市场建议之前")
     args = ap.parse_args()
+
+    # 在创建作品根前把声明与输入校验完，避免“项目建了一半才发现不能把内容标为
+    # human-first”。真正快照由 novel-craft/exploration.py 写入，只落 探索/。
+    has_human_seed = args.human_seed is not None or args.human_seed_file is not None
+    if has_human_seed:
+        if not str(args.human_seed_author or "").strip():
+            ap.error("提供 human seed 时必须同时传 --human-seed-author")
+        if not args.human_first_confirmed:
+            ap.error("提供 human seed 时必须显式传 --human-first-confirmed")
+        if args.human_seed is not None and not args.human_seed.strip():
+            ap.error("--human-seed 不能为空")
+        if args.human_seed_file is not None:
+            seed_file = os.path.abspath(args.human_seed_file)
+            if not os.path.isfile(seed_file):
+                ap.error(f"--human-seed-file 找不到：{seed_file}")
+            try:
+                with open(seed_file, "rb") as f:
+                    seed_text = f.read().decode("utf-8")
+            except UnicodeDecodeError:
+                ap.error("--human-seed-file 必须是 UTF-8 文本")
+            if not seed_text.strip():
+                ap.error("--human-seed-file 不能为空")
 
     folder = slug(args.title) if args.title != "待定" else f"新书待定-{slug(args.genre)}"
     out_root = os.path.abspath(args.out or os.path.join("创作区", "写小说", folder))
@@ -235,7 +270,7 @@ def main():
         print(f"[err] 目标已存在：{out_root}（备份/删除后重试，或换 --title/--out）", file=sys.stderr)
         sys.exit(2)
 
-    for sub in ("设定", "章节", "素材", "审稿", "评分", "导出", "写作任务", "合规"):
+    for sub in ("设定", "章节", "素材", "审稿", "评分", "导出", "写作任务", "合规", "探索"):
         os.makedirs(os.path.join(out_root, sub), exist_ok=True)
 
     # 吃碎片：把用户给的风格样本/笔记/半成品复制进 素材/
@@ -304,6 +339,7 @@ def main():
         "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
     }, ensure_ascii=False, indent=2) + "\n")
     write_settings(out_root, {
+        **({"创作工艺档": normalize_craft_profile(args.craft_profile)} if args.craft_profile else {}),
         "目标平台": args.platform,
         "小说用途": purpose,
         "题材": args.genre,
@@ -347,6 +383,21 @@ def main():
     # ... (around line 210)
     W("_进度.md", build_progress_markdown(title, "create", n))
 
+    captured_seed = None
+    if has_human_seed:
+        craft_scripts = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel-craft", "scripts"))
+        if craft_scripts not in sys.path:
+            sys.path.insert(0, craft_scripts)
+        from exploration import capture_human_seed
+        captured_seed = capture_human_seed(
+            out_root,
+            text=args.human_seed,
+            from_file=args.human_seed_file,
+            author=args.human_seed_author,
+            label="立项初始化原始种子",
+            human_first_confirmed=True,
+        )
+
     print(f"[ok] 原创项目骨架 → {out_root}")
     print(f"     设定/创作蓝图.md ← 骨架（第 2 步填：logline/主角/核心机制或困境/阅读承诺/冲突/风格卡）★最重要")
     print(f"     设定/设定圣经.md ← 骨架（第 3 步填：事实规则/机制边界 + 一致性约束）")
@@ -355,6 +406,8 @@ def main():
         print(f"     设定/power_system_registry.json ← 力量体系骨架（{scaffolded_power_system}）：填等级体系/面板/逐章成长，"
               f"写章后自动机检等级·成长值·战力一致性（见 novel-craft/references/力量体系设计.md）")
     print(f"     写作任务/ ← draft_packets.py 生成逐章任务包；合规/ ← ai_usage.py 生成披露文件")
+    if captured_seed:
+        print(f"     探索/种子/{captured_seed['seed_id']}.md ← human-first 原始种子（非正史、不进正式 gate）")
     if ingested:
         print(f"     素材/ ← 已收碎片：{', '.join(ingested)}")
     print(f"     _meta: kind=create 题材=\"{args.genre}\" 用途={purpose} 档={scale}({n}章；{wpc[0]}-{wpc[1]}字为建议篇幅) 平台={args.platform}")

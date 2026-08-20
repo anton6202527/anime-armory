@@ -126,8 +126,12 @@ def is_started(v: str) -> bool:
 
 
 def compose_stage_enabled(root: str) -> bool:
-    """Whether the optional post-video compose/review tail participates in routing."""
-    value = get_setting(root, "合成阶段", "跳过")
+    """Whether the post-video compose/review tail participates in routing.
+
+    Final-master delivery is the default.  ``合成阶段=跳过`` remains an explicit
+    clip-only escape hatch for rough/demo projects.
+    """
+    value = get_setting(root, "合成阶段", "启用")
     normalized = re.sub(r"\s+", "", str(value or "")).lower()
     return normalized in {v.lower() for v in _COMPOSE_ENABLED_VALUES}
 
@@ -424,8 +428,8 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "note": "仍有 neutral-mouth base plate 未升级为最终说话镜：" + "、".join(pending_lipsync),
             }
         return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}
-    label = "✅已验收" if delivery_active else "✅视频已完成（默认收尾）"
-    note = "" if delivery_active else "合成/验收是可选尾段；需要母带、BGM、字幕或发布包时，先把「合成阶段」设为「启用」或直接运行 n2d-compose。"
+    label = "✅已验收" if delivery_active else "✅视频已完成（显式 clip-only 收尾）"
+    note = "" if delivery_active else "本项目显式设置了「合成阶段=跳过」；当前只完成 clip_delivery，改回「启用」即可继续母版、审查与验收。"
     return {"ep": ep, "col": None, "label": label, "skill": None, "cmd": None, "note": note}
 
 

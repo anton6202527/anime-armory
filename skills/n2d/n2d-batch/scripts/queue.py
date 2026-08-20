@@ -14,6 +14,7 @@ import datetime as dt
 import glob
 import hashlib
 import json
+import math
 import os
 import re
 import socket
@@ -21,6 +22,7 @@ import sqlite3
 import sys
 import time
 from copy import deepcopy
+from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Protocol, Sequence, Set, Tuple, runtime_checkable
 
 try:
@@ -58,6 +60,14 @@ from n2d_route import (  # noqa: E402
     parse_progress,
     stage_of,
 )
+try:  # noqa: E402  review done 只认 canonical acceptance contract；缺模块必须 fail-closed
+    import acceptance_contract
+except Exception:  # pragma: no cover - exercised via fail-closed helper
+    acceptance_contract = None
+try:  # noqa: E402  paid boundary receipts are producer-owned canonical evidence
+    import paid_execution_contract
+except Exception:  # pragma: no cover - production completion must fail closed
+    paid_execution_contract = None
 
 BATCH_KIND = BATCH_QUEUE_KIND
 VERSION = 1
@@ -86,11 +96,12 @@ DEFAULT_COST_ESTIMATES = {
     "review": {"amount": 0.5, "unit": "work_units"},
 }
 
-ACTIVE_STATUSES = {"queued", "running", "retry_queued"}
+ACTIVE_STATUSES = {"queued", "running", "retry_queued", "qa_blocked"}
 AGENT_REQUIRED_STAGES = {"script_stage1"}
-REPLACEABLE_MERGE_STATUSES = {"queued", "blocked_budget"}
+REPLACEABLE_MERGE_STATUSES = {"queued", "blocked_budget", "qa_blocked"}
 BUDGET_FLEXIBLE_STATUSES = {"queued", "blocked_budget"}
 BUDGET_IGNORED_STATUSES = {"cancelled", "blocked_agent"}
+PRODUCTION_EXECUTION_STAGES = frozenset({"voice", "image", "video", "compose"})
 COORDINATION_BACKENDS = {"local_file", "shared_fs", "sqlite", "redis", "db", "object_store"}
 # 网络文件系统：SQLite WAL 在其上锁不可靠 → 多机并发指向 NFS 上的 DB 会静默损坏。
 NETWORK_FS_TYPES = {"nfs", "nfs4", "cifs", "smbfs", "smb", "smb2", "afpfs", "ncpfs", "9p",
@@ -583,6 +594,27 @@ def task_from_spec(
     return task
 
 
+def image_physical_shots(root: str, episode: str) -> List[str]:
+    """Resolve the whole-episode image scope from the producer-owned prompt pack."""
+    prompt = Path(root) / "出图" / normalize_episode(episode) / "prompt" / "01_分镜出图.md"
+    try:
+        text = prompt.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
+        return []
+    shots: List[str] = []
+    for match in re.finditer(
+        r"^##\s+(?:(?:Clip)[_\s-]*([0-9０-９]+)|镜头\s*([0-9０-９]+))[^\n]*$",
+        text,
+        re.MULTILINE,
+    ):
+        raw = (match.group(1) or match.group(2) or "").translate(
+            str.maketrans("０１２３４５６７８９", "0123456789")
+        )
+        if raw:
+            shots.append(f"Clip_{int(raw):02d}")
+    return list(dict.fromkeys(shots))
+
+
 def route_tasks(
     root: str,
     *,
@@ -629,6 +661,7 @@ def route_tasks(
             if not ep1_image_done and episode_num(ep) > 1 and stage_key in ("image_prompt", "image", "video_prompt", "video", "compose"):
                 continue
 
+        affected_shots = image_physical_shots(root, ep) if stage_key == "image" else []
         tasks.append(
             task_from_spec(
                 root,
@@ -638,6 +671,7 @@ def route_tasks(
                 priority=len(tasks) + 1,
                 cost_estimates=cost_estimates,
                 max_retries=max_retries,
+                affected_shots=affected_shots,
             )
         )
     return dedupe_task_ids(tasks)
@@ -1374,6 +1408,223 @@ def _budget_unit(value: Any) -> Optional[str]:
     return None if not unit or unit == "mixed" else unit
 
 
+def _task_estimated_cost(task: Mapping[str, Any]) -> Tuple[Optional[float], str]:
+    estimate = task.get("estimated_cost") if isinstance(task.get("estimated_cost"), Mapping) else {}
+    try:
+        amount = float(estimate.get("amount"))
+    except (TypeError, ValueError):
+        return None, str(estimate.get("unit") or "").strip()
+    if not math.isfinite(amount) or amount < 0:
+        return None, str(estimate.get("unit") or "").strip()
+    return amount, str(estimate.get("unit") or "").strip()
+
+
+def _runtime_budget_totals(queue: Mapping[str, Any]) -> Tuple[float, float]:
+    reserved = 0.0
+    settled = 0.0
+    for task in queue.get("tasks", []):
+        if not isinstance(task, Mapping):
+            continue
+        reservation = task.get("budget_reservation")
+        if isinstance(reservation, Mapping) and reservation.get("status") == "reserved":
+            try:
+                reserved += float(reservation.get("amount") or 0.0)
+            except (TypeError, ValueError):
+                pass
+        for charge in task.get("budget_charges", []) or []:
+            if not isinstance(charge, Mapping) or charge.get("status") != "settled":
+                continue
+            try:
+                settled += float(charge.get("amount") or 0.0)
+            except (TypeError, ValueError):
+                pass
+    return round(reserved, 6), round(settled, 6)
+
+
+def refresh_runtime_budget(queue: Dict[str, Any]) -> Dict[str, Any]:
+    budget = queue.get("budget") if isinstance(queue.get("budget"), dict) else {}
+    reserved, settled = _runtime_budget_totals(queue)
+    limit = _budget_limit(budget.get("limit"))
+    unit = _budget_unit(budget.get("unit"))
+    available = None if limit is None else round(limit - reserved - settled, 6)
+    budget.update({
+        "runtime_reserved_total": reserved,
+        "runtime_settled_total": settled,
+        "runtime_available": available,
+        "runtime_unit": unit or str(budget.get("unit") or "mixed"),
+        "runtime_status": "overrun" if available is not None and available < -1e-9 else "ok",
+        "runtime_updated_at": now_iso(),
+    })
+    queue["budget"] = budget
+    return budget
+
+
+def reserve_task_budget(
+    queue: Dict[str, Any],
+    task: Dict[str, Any],
+    *,
+    worker: Optional[str],
+    attempt: int,
+) -> Optional[str]:
+    """Reserve one production attempt inside the same claim critical section/transaction."""
+    if str(task.get("stage_key") or "") not in PRODUCTION_EXECUTION_STAGES:
+        return None
+    amount, unit = _task_estimated_cost(task)
+    if amount is None or not unit:
+        return "production task estimated_cost is missing/invalid"
+    budget = queue.get("budget") if isinstance(queue.get("budget"), dict) else {}
+    limit = _budget_limit(budget.get("limit"))
+    cap_unit = _budget_unit(budget.get("unit"))
+    if limit is not None and cap_unit is None:
+        return "runtime budget has a finite limit but mixed/missing unit; cannot reserve safely"
+    if cap_unit and cap_unit != unit:
+        return f"estimate unit {unit} != runtime budget unit {cap_unit}"
+
+    # A queued task should not retain a reservation. Release a stale same-task hold before
+    # checking capacity; active running holds of other workers remain counted.
+    previous = task.get("budget_reservation")
+    if isinstance(previous, dict) and previous.get("status") == "reserved":
+        previous["status"] = "released"
+        previous["released_at"] = now_iso()
+        previous["release_reason"] = "stale_before_claim"
+    reserved, settled = _runtime_budget_totals(queue)
+    if limit is not None and settled + reserved + amount > limit + 1e-9:
+        refresh_runtime_budget(queue)
+        return (
+            f"runtime budget cap {limit} {cap_unit} exceeded: "
+            f"settled={settled} reserved={reserved} requested={amount}"
+        )
+    task["budget_reservation"] = {
+        "status": "reserved",
+        "amount": amount,
+        "unit": unit,
+        "attempt": int(attempt),
+        "worker": worker or "",
+        "reserved_at": now_iso(),
+    }
+    task.setdefault("history", []).append({
+        "ts": now_iso(),
+        "action": "budget:reserve",
+        "amount": amount,
+        "unit": unit,
+        "attempt": int(attempt),
+        "worker": worker or "",
+    })
+    refresh_runtime_budget(queue)
+    return None
+
+
+def release_task_budget(queue: Dict[str, Any], task: Dict[str, Any], reason: str) -> None:
+    reservation = task.get("budget_reservation")
+    if not isinstance(reservation, dict) or reservation.get("status") != "reserved":
+        refresh_runtime_budget(queue)
+        return
+    reservation["status"] = "released"
+    reservation["released_at"] = now_iso()
+    reservation["release_reason"] = str(reason)
+    task.setdefault("history", []).append({
+        "ts": now_iso(),
+        "action": "budget:release",
+        "amount": reservation.get("amount"),
+        "unit": reservation.get("unit"),
+        "attempt": reservation.get("attempt"),
+        "reason": str(reason),
+    })
+    refresh_runtime_budget(queue)
+
+
+def _reported_actual_cost(task: Mapping[str, Any], runner: Optional[Mapping[str, Any]]) -> Tuple[Optional[float], str, str]:
+    candidates = []
+    if isinstance(runner, Mapping):
+        candidates.extend([runner.get("actual_cost"), runner.get("cost")])
+    candidates.append(task.get("actual_cost"))
+    for candidate in candidates:
+        if not isinstance(candidate, Mapping):
+            continue
+        try:
+            amount = float(candidate.get("amount"))
+        except (TypeError, ValueError):
+            continue
+        unit = str(candidate.get("unit") or candidate.get("currency") or "").strip()
+        if math.isfinite(amount) and amount >= 0 and unit:
+            return amount, unit, "reported_actual"
+    return None, "", ""
+
+
+def settle_task_budget(
+    queue: Dict[str, Any],
+    task: Dict[str, Any],
+    runner: Optional[Mapping[str, Any]],
+) -> Optional[str]:
+    """Settle a successful production attempt, preferring reported actual cost.
+
+    The reservation is always converted into an immutable charge. If reported actual cost is
+    malformed, changes currency, exceeds the task approval ceiling, or pushes the runtime cap
+    over limit, settlement is recorded conservatively and an issue keeps the task out of done.
+    """
+    if str(task.get("stage_key") or "") not in PRODUCTION_EXECUTION_STAGES:
+        return None
+    reservation = task.get("budget_reservation")
+    if not isinstance(reservation, dict) or reservation.get("status") != "reserved":
+        return "production task missing active atomic budget reservation"
+    reserved_amount = float(reservation.get("amount") or 0.0)
+    reserved_unit = str(reservation.get("unit") or "")
+    actual_amount, actual_unit, source = _reported_actual_cost(task, runner)
+    issue = ""
+    if actual_amount is None:
+        actual_amount, actual_unit, source = reserved_amount, reserved_unit, "estimate_fallback"
+    elif actual_unit != reserved_unit:
+        issue = f"actual cost unit {actual_unit} != reserved unit {reserved_unit}"
+        actual_amount, actual_unit, source = reserved_amount, reserved_unit, "estimate_fallback_unit_mismatch"
+
+    authorization = runner.get("authorization") if isinstance(runner, Mapping) else None
+    ceiling = authorization.get("ceiling") if isinstance(authorization, Mapping) else None
+    if isinstance(ceiling, Mapping):
+        try:
+            ceiling_amount = float(ceiling.get("amount"))
+        except (TypeError, ValueError):
+            ceiling_amount = -1.0
+        ceiling_unit = str(ceiling.get("currency") or "")
+        if ceiling_unit != actual_unit or ceiling_amount < actual_amount:
+            issue = issue or (
+                f"actual cost {actual_amount} {actual_unit} exceeds/mismatches authorization ceiling "
+                f"{ceiling_amount} {ceiling_unit}"
+            )
+
+    charge_id = f"{task.get('id')}:{reservation.get('attempt')}"
+    charges = task.setdefault("budget_charges", [])
+    if not any(isinstance(row, Mapping) and row.get("charge_id") == charge_id for row in charges):
+        charges.append({
+            "charge_id": charge_id,
+            "status": "settled",
+            "amount": actual_amount,
+            "unit": actual_unit,
+            "source": source,
+            "attempt": reservation.get("attempt"),
+            "worker": reservation.get("worker"),
+            "settled_at": now_iso(),
+        })
+    reservation["status"] = "settled"
+    reservation["settled_at"] = now_iso()
+    reservation["actual_amount"] = actual_amount
+    reservation["actual_unit"] = actual_unit
+    task.setdefault("history", []).append({
+        "ts": now_iso(),
+        "action": "budget:settle",
+        "amount": actual_amount,
+        "unit": actual_unit,
+        "source": source,
+        "attempt": reservation.get("attempt"),
+    })
+    budget = refresh_runtime_budget(queue)
+    if budget.get("runtime_status") == "overrun":
+        issue = issue or (
+            f"runtime budget overrun after actual settlement: available={budget.get('runtime_available')} "
+            f"{budget.get('runtime_unit')}"
+        )
+    return issue or None
+
+
 def reapply_ledger_budget(queue: Dict[str, Any]) -> Dict[str, Any]:
     """Recompute budget against the whole queue ledger after additive planning.
 
@@ -1427,6 +1678,7 @@ def reapply_ledger_budget(queue: Dict[str, Any]) -> Dict[str, Any]:
         "recomputed_at": now_iso(),
     })
     queue["budget"] = budget
+    refresh_runtime_budget(queue)
     return budget
 
 
@@ -1446,7 +1698,7 @@ def make_queue(
     max_retries: int,
     budget: Dict[str, Any],
 ) -> Dict[str, Any]:
-    return {
+    queue = {
         "kind": BATCH_KIND,
         "version": VERSION,
         "root": root,
@@ -1460,6 +1712,8 @@ def make_queue(
         "batches": make_batches(tasks, max_concurrency),
         "tasks": tasks,
     }
+    refresh_runtime_budget(queue)
+    return queue
 
 
 def _next_available_task_id(existing_ids: Set[str], task: Dict[str, Any]) -> str:
@@ -2081,8 +2335,26 @@ def claim_tasks(
             break
         if task.get("status") not in {"queued", "retry_queued"}:
             continue
+        next_attempt = int(task.get("attempts") or 0) + 1
+        budget_issue = reserve_task_budget(
+            queue,
+            task,
+            worker=worker,
+            attempt=next_attempt,
+        )
+        if budget_issue:
+            task["status"] = "blocked_budget"
+            task["budget_note"] = budget_issue
+            task["updated_at"] = now_iso()
+            task.setdefault("history", []).append({
+                "ts": now_iso(),
+                "action": "claim:budget_block",
+                "reason": budget_issue,
+                "worker": worker or "",
+            })
+            continue
         task["status"] = "running"
-        task["attempts"] = int(task.get("attempts") or 0) + 1
+        task["attempts"] = next_attempt
         task["updated_at"] = now_iso()
         task["worker"] = worker or ""
         task["lease_until"] = now_ts() + max(1, int(lease_seconds))
@@ -2092,6 +2364,7 @@ def claim_tasks(
         )
         claimed.append(task)
         capacity -= 1
+    refresh_runtime_budget(queue)
     return claimed
 
 
@@ -2121,6 +2394,17 @@ def reclaim_expired(
             continue
         attempts = int(task.get("attempts") or 0)
         max_retries = resolve_max_retries(task, queue)
+        reservation = task.get("budget_reservation")
+        if (
+            str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES
+            and isinstance(reservation, Mapping)
+            and reservation.get("status") == "reserved"
+        ):
+            # A crashed worker leaves no trustworthy "command never started" receipt. Hold the
+            # cap conservatively by settling the estimate; otherwise reclaim+retry can double-spend.
+            settle_task_budget(queue, task, task.get("last_runner") if isinstance(task.get("last_runner"), Mapping) else None)
+        else:
+            release_task_budget(queue, task, "lease_expired" if expired else "worker_resume")
         task["status"] = "retry_queued" if attempts <= max_retries else "failed"
         task["updated_at"] = now_iso()
         reason = "lease_expired" if expired else "worker_resume"
@@ -2129,6 +2413,7 @@ def reclaim_expired(
         )
         _clear_lease(task)
         reclaimed.append(task)
+    refresh_runtime_budget(queue)
     return reclaimed
 
 
@@ -2263,6 +2548,371 @@ def classify_error(note: str = "", runner: Optional[Mapping[str, Any]] = None) -
     return "unknown"
 
 
+def _completion_policy(task: Mapping[str, Any]) -> Dict[str, Any]:
+    """Derive completion hardness from the canonical stage contract, not another stage list."""
+    stage_key = str(task.get("stage_key") or "")
+    try:
+        spec = find_stage(stage_key)
+    except Exception:
+        spec = {}
+    hard = bool(
+        spec.get("routes")
+        and (spec.get("output_contract") or spec.get("outputs") or spec.get("gate_stage"))
+    )
+    gate_stage = str(task.get("gate_stage") or spec.get("gate_stage") or "").strip()
+    return {
+        "hard": hard,
+        "gate_required": bool(gate_stage),
+        "gate_stage": gate_stage,
+        "acceptance_required": stage_key == "review",
+    }
+
+
+def _canonical_sha256(payload: Mapping[str, Any]) -> str:
+    raw = json.dumps(
+        dict(payload),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    )
+    return "sha256:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _sha256_value(value: Any) -> bool:
+    text = str(value or "").strip().lower()
+    return (
+        text.startswith("sha256:")
+        and len(text) == 71
+        and all(ch in "0123456789abcdef" for ch in text[7:])
+    )
+
+
+def _runner_completion_issue(
+    queue: Mapping[str, Any],
+    task: Mapping[str, Any],
+    runner: Optional[Mapping[str, Any]],
+    policy: Mapping[str, Any],
+) -> Optional[str]:
+    """Reject internally contradictory completion claims before queue commits ``done``.
+
+    This is a consistency contract, not an identity signature.  Human/payment authority still
+    comes from the canonical acceptance/production authorization receipts; the queue merely
+    refuses to turn a caller supplied pair of green strings into a terminal state.
+    """
+    if not isinstance(runner, Mapping):
+        return "runner completion evidence missing"
+    if runner.get("status") != "pass":
+        return f"runner status must be pass, got {runner.get('status') or 'missing'}"
+    if runner.get("exit_code") != 0:
+        return f"runner exit_code must be 0, got {runner.get('exit_code')!r}"
+    execution_started = runner.get("execution_started")
+    if execution_started is not True and not (
+        policy.get("acceptance_required") and execution_started is False
+    ):
+        return "runner execution_started must be true (review re-attestation may be false)"
+
+    if str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
+        authorization = runner.get("authorization")
+        if not isinstance(authorization, Mapping):
+            return "production completion missing authorization receipt"
+        if authorization.get("decision") != "approved":
+            return "production completion authorization decision must be approved"
+        declared_authorization_digest = str(authorization.get("authorization_digest") or "")
+        if not _sha256_value(declared_authorization_digest):
+            return "production completion authorization_digest missing or invalid"
+        calculated_authorization_digest = _canonical_sha256({
+            key: value for key, value in authorization.items() if key != "authorization_digest"
+        })
+        if declared_authorization_digest != calculated_authorization_digest:
+            return "production completion authorization_digest mismatch"
+        if authorization.get("version") != 1:
+            return "production completion authorization version invalid"
+        approval_id = str(authorization.get("approval_id") or "").strip()
+        approver = str(authorization.get("approver") or "").strip()
+        if not approval_id:
+            return "production completion approval_id missing"
+        if not approver or approver.lower() in {"unknown", "system", "agent", "auto", "any", "test"}:
+            return "production completion approver missing or placeholder"
+        try:
+            issued_at = dt.datetime.fromisoformat(str(authorization.get("issued_at") or "").replace("Z", "+00:00"))
+            expires_at = dt.datetime.fromisoformat(str(authorization.get("expires_at") or "").replace("Z", "+00:00"))
+        except ValueError:
+            return "production completion authorization timestamps invalid"
+        if issued_at.tzinfo is None or expires_at.tzinfo is None:
+            return "production completion authorization timestamps must be timezone-aware"
+        now = dt.datetime.now(dt.timezone.utc)
+        if issued_at.astimezone(dt.timezone.utc) > now + dt.timedelta(minutes=5):
+            return "production completion authorization issued_at is in the future"
+        if expires_at.astimezone(dt.timezone.utc) <= now:
+            return "production completion authorization expired"
+        if expires_at <= issued_at:
+            return "production completion authorization expires_at must be after issued_at"
+        execution = runner.get("execution_binding")
+        if not isinstance(execution, Mapping):
+            return "production completion execution_binding missing"
+        for key in (
+            "command_digest",
+            "input_fingerprint",
+            "submit_request_digest",
+            "producer_contract_digest",
+        ):
+            if not _sha256_value(execution.get(key)):
+                return f"production completion execution_binding.{key} missing or invalid"
+        approved_execution = authorization.get("execution")
+        execution_keys = (
+            "command_digest",
+            "input_fingerprint",
+            "submit_request_digest",
+            "producer_contract_digest",
+        )
+        execution_projection = {key: str(execution.get(key) or "") for key in execution_keys}
+        if not isinstance(approved_execution, Mapping):
+            return "production completion authorization execution missing"
+        mismatches = [
+            key for key in execution_keys
+            if str(approved_execution.get(key) or "") != execution_projection[key]
+        ]
+        if mismatches:
+            return "production completion differs from authorized execution: " + ", ".join(mismatches)
+        scope = {
+            "rerun_scope": str(task.get("rerun_scope") or ""),
+            "affected_shots": sorted({str(item) for item in task.get("affected_shots", []) if str(item)}),
+            "affected_artifacts": sorted({str(item) for item in task.get("affected_artifacts", []) if str(item)}),
+        }
+        estimate = task.get("estimated_cost") if isinstance(task.get("estimated_cost"), Mapping) else {}
+        try:
+            amount = float(estimate.get("amount"))
+        except (TypeError, ValueError):
+            return "production completion estimated cost invalid"
+        currency = str(estimate.get("unit") or "")
+        attempt = int(task.get("attempts") or 0)
+        task_binding = {
+            "task_id": str(task.get("id") or ""),
+            "idempotency_key": str(task.get("idempotency_key") or ""),
+            "episode": normalize_episode(str(task.get("episode") or "")),
+            "stage_key": str(task.get("stage_key") or ""),
+            "attempt": attempt,
+            "scope": scope,
+            "estimated_cost": {"amount": amount, "currency": currency},
+            "execution": execution_projection,
+        }
+        expected_identity = {
+            "task_id": task_binding["task_id"],
+            "idempotency_key": task_binding["idempotency_key"],
+            "task_digest": _canonical_sha256(task_binding),
+            "stage_key": task_binding["stage_key"],
+            "attempt": attempt,
+            "episode": task_binding["episode"],
+            "scope": scope,
+        }
+        for key, expected in expected_identity.items():
+            actual = authorization.get(key)
+            if key == "episode":
+                actual = normalize_episode(str(actual or ""))
+            if actual != expected:
+                return f"production completion authorization {key} mismatch"
+        ceiling = authorization.get("ceiling")
+        if not isinstance(ceiling, Mapping):
+            return "production completion authorization ceiling missing"
+        try:
+            ceiling_amount = float(ceiling.get("amount"))
+        except (TypeError, ValueError):
+            return "production completion authorization ceiling invalid"
+        if str(ceiling.get("currency") or "") != currency or amount > ceiling_amount:
+            return "production completion authorization ceiling mismatch"
+        approved_model = str(authorization.get("model") or "")
+        approved_channel = str(authorization.get("channel") or "")
+        if not approved_model or not approved_channel:
+            return "production completion authorization model/channel missing"
+        if approved_model.lower() != "any" and approved_model != str(execution.get("model") or ""):
+            return "production completion authorization model mismatch"
+        if approved_channel.lower() != "any" and approved_channel != str(execution.get("channel") or ""):
+            return "production completion authorization channel mismatch"
+
+        completion = runner.get("completion") if isinstance(runner.get("completion"), Mapping) else {}
+        expectation = completion.get("paid_execution_expectation")
+        receipts = completion.get("paid_execution_receipts")
+        if paid_execution_contract is None:
+            return "paid_execution_contract unavailable"
+        if not isinstance(expectation, Mapping):
+            return "production completion paid execution expectation missing"
+        if str(expectation.get("digest") or "") != paid_execution_contract.expectation_digest(expectation):
+            return "production completion paid execution expectation digest mismatch"
+        for key, expected in (
+            ("task_id", task_binding["task_id"]),
+            ("episode", task_binding["episode"]),
+            ("stage", task_binding["stage_key"]),
+            ("attempt", attempt),
+            ("authorization_digest", declared_authorization_digest),
+        ):
+            if expectation.get(key) != expected:
+                return f"production completion paid expectation {key} mismatch"
+        if not isinstance(receipts, Mapping) or receipts.get("status") != "pass":
+            return "production completion paid boundary receipts missing or failed"
+        root = str(queue.get("root") or "").strip()
+        if not root:
+            return "production completion queue root missing"
+        current_receipts = paid_execution_contract.verify_expected_receipts(Path(root), expectation)
+        if current_receipts.get("status") != "pass":
+            return "production completion paid boundary receipts invalid: " + "; ".join(
+                str(item) for item in (current_receipts.get("issues") or [])[:4]
+            )
+    return None
+
+
+def _paid_output_commit_attestation(
+    queue: Mapping[str, Any],
+    task: Mapping[str, Any],
+    runner: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Lock-held, last-moment recheck of the exact bytes produced by a paid task."""
+    if paid_execution_contract is None:
+        return {"status": "fail", "issues": ["paid_execution_contract unavailable"]}
+    completion = runner.get("completion") if isinstance(runner.get("completion"), Mapping) else {}
+    expectation = completion.get("paid_execution_expectation")
+    verified = completion.get("producer_output_bindings")
+    root = str(queue.get("root") or "").strip()
+    if not root or not isinstance(expectation, Mapping):
+        return {"status": "fail", "issues": ["queue root or paid expectation missing"]}
+    return paid_execution_contract.verify_current_output_bindings(
+        Path(root), expectation, verified
+    )
+
+
+def completion_commit_digest(commit: Mapping[str, Any]) -> str:
+    payload = {key: value for key, value in commit.items() if key != "digest"}
+    return _canonical_sha256(payload)
+
+
+def build_completion_commit(
+    task: Mapping[str, Any],
+    runner: Mapping[str, Any],
+    *,
+    acceptance: Optional[Mapping[str, Any]] = None,
+    output_attestation: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    execution = runner.get("execution_binding") if isinstance(runner.get("execution_binding"), Mapping) else {}
+    authorization = runner.get("authorization") if isinstance(runner.get("authorization"), Mapping) else {}
+    acceptance_snapshot: Dict[str, Any] = {}
+    if isinstance(acceptance, Mapping):
+        acceptance_snapshot = {
+            "path": str(acceptance.get("path") or ""),
+            "receipt_id": str(acceptance.get("receipt_id") or ""),
+            "decision": str(acceptance.get("decision") or ""),
+            "reviewer": str(acceptance.get("reviewer") or ""),
+            "evidence_digest": str(acceptance.get("evidence_digest") or ""),
+        }
+    payload: Dict[str, Any] = {
+        "kind": "n2d_batch_completion_commit",
+        "version": 1,
+        "status": "done",
+        "task": {
+            "id": str(task.get("id") or ""),
+            "idempotency_key": str(task.get("idempotency_key") or ""),
+            "episode": normalize_episode(str(task.get("episode") or "")),
+            "stage_key": str(task.get("stage_key") or ""),
+            "attempt": int(task.get("attempts") or 0),
+        },
+        "content_fingerprint": str(execution.get("input_fingerprint") or ""),
+        "execution_binding": deepcopy(dict(execution)),
+        "authorization_digest": str(authorization.get("authorization_digest") or ""),
+        "completion": deepcopy(dict(runner.get("completion") or {})),
+        "output_commit_attestation": deepcopy(dict(output_attestation or {})),
+        "runner": {
+            "status": runner.get("status"),
+            "exit_code": runner.get("exit_code"),
+            "execution_started": runner.get("execution_started"),
+            "finished_at": str(runner.get("finished_at") or ""),
+        },
+        "acceptance": acceptance_snapshot,
+        "budget_settlement": deepcopy(dict(task.get("budget_settlement") or {})),
+        "committed_at": now_iso(),
+    }
+    payload["digest"] = completion_commit_digest(payload)
+    return payload
+
+
+def completion_commit_issue(task: Mapping[str, Any]) -> Optional[str]:
+    commit = task.get("completion_commit")
+    if not isinstance(commit, Mapping):
+        return "completion_commit missing"
+    if commit.get("kind") != "n2d_batch_completion_commit" or commit.get("version") != 1:
+        return "completion_commit kind/version invalid"
+    if commit.get("status") != "done" or task.get("status") != "done":
+        return "completion_commit status contradicts task status"
+    if str(commit.get("digest") or "") != completion_commit_digest(commit):
+        return "completion_commit digest mismatch"
+    identity = commit.get("task") if isinstance(commit.get("task"), Mapping) else {}
+    for key, expected in (
+        ("id", str(task.get("id") or "")),
+        ("episode", normalize_episode(str(task.get("episode") or ""))),
+        ("stage_key", str(task.get("stage_key") or "")),
+        ("attempt", int(task.get("attempts") or 0)),
+    ):
+        if identity.get(key) != expected:
+            return f"completion_commit task.{key} mismatch"
+    if str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
+        attestation = commit.get("output_commit_attestation")
+        if not isinstance(attestation, Mapping) or attestation.get("status") != "pass":
+            return "completion_commit paid output attestation missing or failed"
+        declared = str(attestation.get("digest") or "")
+        calculated = _canonical_sha256({
+            key: value for key, value in attestation.items() if key != "digest"
+        })
+        if not _sha256_value(declared) or declared != calculated:
+            return "completion_commit paid output attestation digest mismatch"
+    return None
+
+
+def _canonical_acceptance_issue(queue: Mapping[str, Any], task: Mapping[str, Any]) -> Optional[str]:
+    """Delegate review completion to the one canonical acceptance contract."""
+    root = str(queue.get("root") or "").strip()
+    episode = normalize_episode(str(task.get("episode") or ""))
+    if not root or not episode:
+        return "queue root/episode missing; cannot check canonical acceptance"
+    try:
+        header, rows = parse_progress(root)
+    except Exception as exc:
+        return f"progress unavailable for acceptance check: {exc}"
+    if "验收" not in header:
+        return "progress acceptance column missing"
+    progress_row = next(
+        (
+            row for row in rows
+            if normalize_episode(str(row.get("_ep") or row.get("集") or "")) == episode
+        ),
+        None,
+    )
+    if progress_row is None:
+        return f"progress row missing for {episode}"
+    if acceptance_contract is None:
+        return "canonical acceptance_contract unavailable"
+    try:
+        result = acceptance_contract.check_acceptance(Path(root).resolve(), episode)
+    except Exception as exc:
+        return f"canonical acceptance check failed: {type(exc).__name__}: {exc}"
+    decision = str(result.get("decision") or "").strip().lower() if isinstance(result, Mapping) else ""
+    if not isinstance(result, Mapping) or result.get("status") != "pass" or result.get("valid") is not True:
+        issues = result.get("issues") if isinstance(result, Mapping) else None
+        detail = "; ".join(str(item) for item in (issues or [])[:4])
+        return "canonical acceptance receipt not pass" + (f": {detail}" if detail else "")
+    allowed = getattr(acceptance_contract, "ALLOWED_DECISIONS", {"approved", "accepted"})
+    if decision not in allowed:
+        return f"canonical acceptance decision invalid: {decision or 'missing'}"
+    if not is_progress_satisfied(root, progress_row, "验收"):
+        return f"progress acceptance not done for {episode}"
+    return None
+
+
+def _failed_before_paid_boundary(runner: Optional[Mapping[str, Any]]) -> bool:
+    """Only explicit preflight/config failures prove that no paid command started."""
+    if not isinstance(runner, Mapping) or runner.get("execution_started") is not False:
+        return False
+    error_class = str(runner.get("error_class") or "")
+    return error_class in {"preflight_block", "configuration"}
+
+
 def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str = "",
               *, expected_worker: Optional[str] = None,
               expected_attempt: Optional[int] = None,
@@ -2278,11 +2928,140 @@ def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str 
         raise ValueError(
             f"task {task_id_value} attempt mismatch; expected {expected_attempt}, current {task.get('attempts') or 0}"
         )
+    requested_status = status
     if status == "pass":
-        task["status"] = "done"
-        for key in ("last_error_class", "dead_letter", "dead_letter_at"):
-            task.pop(key, None)
+        # done 是 canonical commit，不是“命令返回了 0”。完成硬度直接由 stage contract
+        # 推导；review 还必须有绑定母版 SHA 的人工 acceptance receipt。
+        policy = _completion_policy(task)
+        evidence_runner: Optional[Mapping[str, Any]] = runner if isinstance(runner, Mapping) else None
+        if (
+            evidence_runner is None
+            and policy["acceptance_required"]
+            and task.get("status") == "qa_blocked"
+            and task.get("completion_block_reason") == "needs_acceptance_signoff"
+            and isinstance(task.get("last_runner"), Mapping)
+        ):
+            evidence_runner = task.get("last_runner")
+        completion = evidence_runner.get("completion") if isinstance(evidence_runner, Mapping) else None
+        acceptance_snapshot: Optional[Mapping[str, Any]] = None
+        output_commit_attestation: Optional[Mapping[str, Any]] = None
+        if policy["hard"]:
+            runner_issue = _runner_completion_issue(queue, task, evidence_runner, policy)
+            if runner_issue:
+                raise ValueError(f"task {task_id_value} cannot be marked done: {runner_issue}")
+            output_check = completion.get("output_verification") if isinstance(completion, Mapping) else None
+            post_gate = completion.get("post_gate") if isinstance(completion, Mapping) else None
+            output_ok = isinstance(output_check, Mapping) and output_check.get("status") == "pass"
+            gate_status = post_gate.get("status") if isinstance(post_gate, Mapping) else None
+            gate_ok = gate_status == "pass" if policy["gate_required"] else gate_status in {"pass", "not_applicable"}
+            if not output_ok or not gate_ok:
+                raise ValueError(
+                    f"task {task_id_value} cannot be marked done without "
+                    "output_verification=pass and post_gate=pass/not_applicable"
+                )
+            if str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
+                output_commit_attestation = _paid_output_commit_attestation(
+                    queue, task, evidence_runner
+                )
+                if output_commit_attestation.get("status") != "pass":
+                    details = "; ".join(
+                        str(item) for item in (output_commit_attestation.get("issues") or [])[:5]
+                    )
+                    note = (
+                        "paid outputs changed after runner verification"
+                        + (f": {details}" if details else "")
+                    )
+                    if isinstance(evidence_runner, Mapping):
+                        task["last_runner"] = deepcopy(dict(evidence_runner))
+                    task["last_output_commit_attestation"] = deepcopy(
+                        dict(output_commit_attestation)
+                    )
+                    task["status"] = "qa_blocked"
+                    task["completion_block_reason"] = "output_changed_before_commit"
+                    task["last_error_class"] = "preflight_block"
+                    reservation = task.get("budget_reservation")
+                    if isinstance(reservation, Mapping) and reservation.get("status") == "reserved":
+                        settlement_issue = settle_task_budget(queue, task, evidence_runner)
+                        if settlement_issue:
+                            note += f"; budget settlement issue: {settlement_issue}"
+                    status = "qa_blocked"
+            if status == "pass" and policy["acceptance_required"]:
+                acceptance_issue = _canonical_acceptance_issue(queue, task)
+                if acceptance_issue:
+                    # Review execution is complete, but human acceptance is a separate boundary.
+                    # Persist the verified command/output/gate receipt and leave running so no
+                    # worker lease is held. After the human issues the canonical receipt, a plain
+                    # mark(pass) reuses this evidence and atomically reconciles to done without
+                    # executing the review command again.
+                    if isinstance(evidence_runner, Mapping):
+                        task["last_runner"] = deepcopy(dict(evidence_runner))
+                    task["status"] = "qa_blocked"
+                    task["completion_block_reason"] = "needs_acceptance_signoff"
+                    task["acceptance_issue"] = acceptance_issue
+                    task["last_error_class"] = "preflight_block"
+                    task.pop("dead_letter", None)
+                    task.pop("dead_letter_at", None)
+                    status = "qa_blocked"
+                    note = (
+                        "needs_acceptance_signoff: canonical review evidence persisted; "
+                        f"{acceptance_issue}"
+                    )
+                else:
+                    acceptance_snapshot = acceptance_contract.check_acceptance(
+                        Path(str(queue.get("root") or "")).resolve(),
+                        normalize_episode(str(task.get("episode") or "")),
+                    )
+        if status == "qa_blocked":
+            # Do not continue into production settlement/done below. Review is non-production;
+            # this branch simply releases the worker lease at the common tail.
+            pass
+        elif str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
+            reservation = task.get("budget_reservation")
+            if not isinstance(reservation, Mapping) or reservation.get("status") != "reserved":
+                raise ValueError(
+                    f"production task {task_id_value} cannot be marked done without active atomic budget reservation"
+                )
+            settlement_issue = settle_task_budget(queue, task, evidence_runner)
+            if settlement_issue:
+                status = "qa_blocked"
+                note = f"budget settlement blocked canonical completion: {settlement_issue}"
+        if status == "pass":
+            task["status"] = "done"
+            if policy["hard"] and isinstance(evidence_runner, Mapping):
+                task["last_runner"] = deepcopy(dict(evidence_runner))
+                task["completion_commit"] = build_completion_commit(
+                    task,
+                    evidence_runner,
+                    acceptance=acceptance_snapshot,
+                    output_attestation=output_commit_attestation,
+                )
+            for key in (
+                "last_error_class",
+                "dead_letter",
+                "dead_letter_at",
+                "completion_block_reason",
+                "acceptance_issue",
+                "last_output_commit_attestation",
+            ):
+                task.pop(key, None)
+        elif status != "qa_blocked":
+            task["status"] = "qa_blocked"
+            task["last_error_class"] = "budget"
+            task.pop("dead_letter", None)
+            task.pop("dead_letter_at", None)
     elif status == "fail":
+        task.pop("completion_commit", None)
+        if str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
+            reservation = task.get("budget_reservation")
+            if isinstance(reservation, Mapping) and reservation.get("status") == "reserved":
+                if _failed_before_paid_boundary(runner):
+                    release_task_budget(queue, task, "pre_paid_boundary_failure")
+                else:
+                    settlement_issue = settle_task_budget(queue, task, runner)
+                    if settlement_issue:
+                        note = f"{note}; conservative budget settlement: {settlement_issue}" if note else settlement_issue
+        else:
+            release_task_budget(queue, task, "runner_fail_nonproduction")
         attempts = int(task.get("attempts") or 0)
         max_retries = resolve_max_retries(task, queue)
         task["last_error_class"] = classify_error(note, runner)
@@ -2290,16 +3069,52 @@ def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str 
         if task["status"] == "failed":
             task["dead_letter"] = True
             task["dead_letter_at"] = now_iso()
-    elif status in {"queued", "running", "blocked_budget", "cancelled"}:
+    elif status == "qa_blocked":
+        task.pop("completion_commit", None)
+        # 命令和产物可以已成功，但后置 gate 未通过/无法运行。保留为可人工修复后
+        # requeue 的非终态，不消耗普通 command retry，也绝不能计入 done。
+        # Gate BLOCK follows a successful command/output pass, so the paid attempt is settled
+        # even though canonical completion is withheld. External receipt reconciliation may not
+        # have a local reservation; that path simply remains qa_blocked.
+        reservation = task.get("budget_reservation")
+        if isinstance(reservation, Mapping) and reservation.get("status") == "reserved":
+            settlement_issue = settle_task_budget(queue, task, runner)
+            if settlement_issue:
+                note = f"{note}; budget settlement issue: {settlement_issue}" if note else settlement_issue
+        task["status"] = "qa_blocked"
+        task["last_error_class"] = "preflight_block"
+        task.pop("dead_letter", None)
+        task.pop("dead_letter_at", None)
+    elif status in {"queued", "blocked_budget", "cancelled"}:
+        task.pop("completion_commit", None)
+        if (
+            task.get("status") == "running"
+            and str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES
+            and not _failed_before_paid_boundary(runner)
+        ):
+            raise ValueError(
+                f"running production task {task_id_value} cannot transition to {status} without "
+                "structured execution_started=false preflight/config evidence; mark fail to settle "
+                "a possibly-spent attempt"
+            )
+        release_task_budget(queue, task, f"mark:{status}")
         task["status"] = status
+    elif status == "running":
+        raise ValueError("running is claim-only; use queue claim so lease and atomic budget reservation are created")
     else:
         raise ValueError(f"unknown mark status: {status}")
     if task["status"] != "running":  # 离开 running 即释放租约，便于回收/并发统计
         _clear_lease(task)
     task["updated_at"] = now_iso()
-    task.setdefault("history", []).append({"ts": now_iso(), "action": f"mark:{status}", "note": note})
+    task.setdefault("history", []).append({
+        "ts": now_iso(),
+        "action": f"mark:{status}",
+        "requested_status": requested_status,
+        "note": note,
+    })
     if note:
         task["last_note"] = note
+    refresh_runtime_budget(queue)
     return task
 
 
@@ -2550,9 +3365,17 @@ def reconcile_jobs(root: str, *, apply: bool = False) -> Dict[str, Any]:
                 "receipt_line": receipt.get("_line"),
             }
             if status == "succeeded" and task.get("status") in {"queued", "retry_queued", "running"}:
-                match["proposed_mark"] = "pass"
+                # 外部 job success 只证明远端命令完成，不能替代本地产物校验和后置
+                # gate。先停在 qa_blocked，随后由 runner/reconcile workflow 校验后提交 done。
+                match["proposed_mark"] = "qa_blocked"
                 if apply:
-                    mark_task(queue, str(task["id"]), "pass", "job_reconcile: external job succeeded", runner={"job_receipt": receipt})
+                    mark_task(
+                        queue,
+                        str(task["id"]),
+                        "qa_blocked",
+                        "job_reconcile: external job succeeded; awaiting output verification and post gate",
+                        runner={"job_receipt": receipt},
+                    )
             elif status in {"failed", "cancelled"} and task.get("status") in {"queued", "retry_queued", "running"}:
                 match["proposed_mark"] = "fail"
                 if apply:
@@ -2573,6 +3396,7 @@ def reconcile_jobs(root: str, *, apply: bool = False) -> Dict[str, Any]:
             "summary": {
                 "matched": len(matches),
                 "proposed_pass": sum(1 for item in matches if item.get("proposed_mark") == "pass"),
+                "proposed_qa_blocked": sum(1 for item in matches if item.get("proposed_mark") == "qa_blocked"),
                 "proposed_fail": sum(1 for item in matches if item.get("proposed_mark") == "fail"),
                 "warnings": len(actions) + sum(1 for item in matches if item.get("warning")),
             },
@@ -2696,7 +3520,7 @@ def parser() -> argparse.ArgumentParser:
     mark = sub.add_parser("mark", help="mark a task pass/fail/etc.")
     mark.add_argument("root")
     mark.add_argument("task_id")
-    mark.add_argument("--status", required=True, choices=["pass", "fail", "queued", "running", "blocked_budget", "cancelled"])
+    mark.add_argument("--status", required=True, choices=["pass", "fail", "queued", "running", "qa_blocked", "blocked_budget", "cancelled"])
     mark.add_argument("--note")
     mark.add_argument("--worker", help="optional expected worker guard; used by runners to avoid stale marks")
     mark.add_argument("--attempt", type=int, help="optional expected attempt guard; used by runners to avoid stale marks")

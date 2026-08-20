@@ -14,19 +14,24 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from text_metadata import infer_language_metadata, normalize_text_language
+from lettering_contract import (
+    apply_editorial_override,
+    binding_for_path,
+    load_translation_map as load_translation_map_contract,
+    resolve_translation,
+    script_text_entries,
+    translation_usage,
+)
 
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def load_translation_map(path: Path) -> dict[str, str]:
-    if not path.is_file():
-        return {}
-    data = load_json(path)
-    if isinstance(data.get("translations"), dict):
-        return {str(k): str(v) for k, v in data["translations"].items()}
-    return {str(k): str(v) for k, v in data.items() if isinstance(v, str)}
+def load_translation_map(path: Path) -> dict[str, object]:
+    """Compatibility wrapper around the v2 translation-map parser."""
+
+    return load_translation_map_contract(path)
 
 
 def load_finishing_plan(root: Path, chapter: str) -> dict:
@@ -68,7 +73,15 @@ def first_text(record: dict, keys: tuple[str, ...]) -> str:
     return ""
 
 
-def text_fields(text: str, translations: dict[str, str], text_language: str, source_text: str = "", zh_hint: str = "") -> dict[str, str]:
+def text_fields(
+    text: str,
+    translations: dict[str, object],
+    text_language: str,
+    source_text: str = "",
+    zh_hint: str = "",
+    *,
+    content_ref: str = "",
+) -> dict[str, object]:
     text = str(text or "").strip()
     mode = normalize_text_language(text_language)
     metadata = infer_language_metadata(text, mode)
@@ -89,7 +102,9 @@ def text_fields(text: str, translations: dict[str, str], text_language: str, sou
             out["text_zh"] = str(zh_hint).strip()
     else:
         out["text_zh"] = text
-    en = first_text({"text_en": translations.get(text, "")}, ("text_en",))
+    en, translation_binding = resolve_translation(translations, content_ref, text)
+    if translation_binding:
+        out["translation_binding"] = translation_binding
     if en:
         out["text_en"] = en
     return out
@@ -109,139 +124,119 @@ def slots_by_panel(layout: dict) -> dict[str, dict[str, list[dict]]]:
     return out
 
 
-def build_lettering(panel_script: dict, layout: dict, translations: dict[str, str], text_language: str, finishing_map: dict[str, dict] | None = None) -> dict:
+def build_lettering(
+    panel_script: dict,
+    layout: dict,
+    translations: dict[str, object],
+    text_language: str,
+    finishing_map: dict[str, dict] | None = None,
+    *,
+    source_bindings: dict[str, dict] | None = None,
+    editorial_overrides: dict[str, dict] | None = None,
+) -> dict:
     finishing_map = finishing_map or {}
+    editorial_overrides = editorial_overrides or {}
     slots = slots_by_panel(layout)
-    items = []
-    counter = 1
-    for panel in panel_script.get("panels", []):
-        pid = panel.get("panel_id")
-        if not pid:
-            continue
-        panel_slots = slots.get(pid, {})
-        narration_text = first_text(panel, ("narration_target", "target_narration", "narration"))
-        if narration_text:
-            slot = (panel_slots.get("narration") or [{}])[0]
-            items.append(
+    items: list[dict] = []
+    override_issues: list[dict[str, object]] = []
+
+    for counter, entry in enumerate(script_text_entries(panel_script), 1):
+        panel_id = str(entry["panel_id"])
+        item_type = str(entry["type"])
+        content_ref = str(entry["content_ref"])
+        panel_slots = slots.get(panel_id, {})
+        type_slots = panel_slots.get(item_type) or []
+        slot_by_ref = {
+            str(slot.get("content_ref") or "").strip(): slot
+            for slot in type_slots
+            if isinstance(slot, dict) and str(slot.get("content_ref") or "").strip()
+        }
+        if slot_by_ref:
+            slot = slot_by_ref.get(content_ref, {})
+        else:
+            ordinal = int(entry.get("ordinal") or 1)
+            slot = type_slots[ordinal - 1] if ordinal <= len(type_slots) else {}
+
+        style = {
+            "font": "project_default",
+            "size": 44,
+            "direction": "horizontal",
+            "bubble": "round",
+        }
+        if item_type == "narration":
+            style.update({"size": 42, "bubble": "caption"})
+        elif item_type == "sfx":
+            finish = finishing_map.get(panel_id, {})
+            sfx_plan = finish.get("lettering_sfx_plan") if isinstance(finish.get("lettering_sfx_plan"), dict) else {}
+            style.update(
                 {
-                    "item_id": f"L{counter:03d}",
-                    "panel_id": pid,
-                    "type": "narration",
-                    "speaker": "",
-                    **text_fields(
-                        narration_text,
-                        translations,
-                        text_language,
-                        first_text(panel, ("narration_source", "source_excerpt")),
-                        str(panel.get("meaning_zh", "") or "").strip(),
-                    ),
-                    "slot_id": slot.get("slot_id", ""),
-                    "style": {"font": "project_default", "size": 42, "direction": "horizontal", "bubble": "caption"},
+                    "size": 72,
+                    "bubble": "none",
+                    "drawn_lettering_mode": str(sfx_plan.get("mode") or "post_lettering_sfx").strip(),
+                    "integration": str(sfx_plan.get("integration") or "").strip(),
+                    "shape": str(sfx_plan.get("shape") or "").strip(),
                 }
             )
-            counter += 1
-        dialogue_slots = panel_slots.get("dialogue") or []
-        # Bind each script dialogue to its layout slot by the authoritative
-        # content_ref (panel:PID.dialogue:N, 1-based), not by array index.  The
-        # layout only creates a slot for dialogues with real target text, so a
-        # positional pairing silently mis-attributes every balloon after an
-        # empty-target line.  Positional fallback only for legacy boards whose
-        # slots carry no content_ref.
-        slot_by_ref = {
-            str(s.get("content_ref") or "").strip(): s
-            for s in dialogue_slots
-            if isinstance(s, dict) and str(s.get("content_ref") or "").strip()
+
+        item = {
+            "item_id": f"L{counter:03d}",
+            "content_ref": content_ref,
+            "panel_id": panel_id,
+            "type": item_type,
+            "speaker": str(entry.get("speaker") or ""),
+            "source_text": str(entry.get("source_text") or ""),
+            "source_text_sha256": str(entry.get("source_text_sha256") or ""),
+            **text_fields(
+                str(entry.get("source_text") or ""),
+                translations,
+                text_language,
+                str(entry.get("text_source") or ""),
+                str(entry.get("zh_hint") or ""),
+                content_ref=content_ref,
+            ),
+            "slot_id": str(slot.get("slot_id") or ""),
+            "style": style,
         }
-        use_content_ref = bool(slot_by_ref)
-        for idx, dialogue in enumerate(panel.get("dialogue") or []):
-            dialogue_text = first_text(dialogue, ("text_target", "target_text", "text"))
-            content_ref = f"panel:{pid}.dialogue:{idx + 1}"
-            if use_content_ref:
-                # Layout intentionally emitted no balloon for an empty-target line —
-                # don't invent one.  A real line with no matching slot is kept
-                # (slot_id="") so review can flag the coverage gap instead of it
-                # silently rendering as a rogue floating bubble.
-                if not dialogue_text and content_ref not in slot_by_ref:
-                    continue
-                slot = slot_by_ref.get(content_ref, {})
-            else:
-                slot = dialogue_slots[idx] if idx < len(dialogue_slots) else {}
-            items.append(
+        if item_type == "dialogue":
+            item.update(
                 {
-                    "item_id": f"L{counter:03d}",
-                    "panel_id": pid,
-                    "type": "dialogue",
-                    "speaker": dialogue.get("speaker", ""),
-                    **text_fields(
-                        dialogue_text,
-                        translations,
-                        text_language,
-                        first_text(dialogue, ("source_text", "text_source", "source_excerpt")),
-                        str(panel.get("meaning_zh", "") or "").strip(),
-                    ),
-                    "tone": dialogue.get("tone", ""),
-                    "slot_id": slot.get("slot_id", ""),
-                    "content_ref": content_ref,
+                    "tone": str(entry.get("tone") or ""),
                     "slot_speaker": str(slot.get("speaker") or ""),
                     "tail": slot.get("tail") if isinstance(slot.get("tail"), dict) else {},
-                    "style": {"font": "project_default", "size": 44, "direction": "horizontal", "bubble": "round"},
                 }
             )
-            counter += 1
-        if panel.get("sfx"):
-            sfx_slots = panel_slots.get("sfx") or []
-            sfx_targets = panel.get("sfx_target") or panel.get("target_sfx") or []
-            if isinstance(sfx_targets, str):
-                sfx_targets = [sfx_targets]
-            finish = finishing_map.get(str(pid), {})
-            sfx_plan = finish.get("lettering_sfx_plan") if isinstance(finish.get("lettering_sfx_plan"), dict) else {}
-            integration = str(sfx_plan.get("integration") or "").strip()
-            shape = str(sfx_plan.get("shape") or "").strip()
-            mode = str(sfx_plan.get("mode") or "post_lettering_sfx").strip()
-            for idx, sfx in enumerate(panel.get("sfx") or []):
-                slot = sfx_slots[idx] if idx < len(sfx_slots) else {}
-                target = sfx_targets[idx] if idx < len(sfx_targets) else ""
-                if isinstance(target, dict):
-                    target_text = first_text(target, ("text_target", "target_text", "text"))
-                else:
-                    target_text = str(target or "").strip()
-                if isinstance(sfx, dict):
-                    sfx_text = target_text or first_text(sfx, ("text_target", "target_text", "text"))
-                    source_text = first_text(sfx, ("text_source", "source_text", "source_excerpt"))
-                    sound_source = str(sfx.get("source") or "").strip()
-                else:
-                    sfx_text = target_text or str(sfx or "").strip()
-                    source_text = ""
-                    sound_source = ""
-                item = {
-                    "item_id": f"L{counter:03d}",
-                    "panel_id": pid,
-                    "type": "sfx",
-                    "speaker": "",
-                    **text_fields(sfx_text, translations, text_language, source_text),
-                    "slot_id": slot.get("slot_id", ""),
-                    "style": {
-                        "font": "project_default",
-                        "size": 72,
-                        "direction": "horizontal",
-                        "bubble": "none",
-                        "drawn_lettering_mode": mode,
-                        "integration": integration,
-                        "shape": shape,
-                    },
-                }
-                if sound_source:
-                    item["sound_source"] = sound_source
-                items.append(item)
-                counter += 1
-    return {
-        "schema_version": 1,
+        if item_type == "sfx" and entry.get("sound_source"):
+            item["sound_source"] = str(entry.get("sound_source"))
+
+        override = editorial_overrides.get(content_ref)
+        if isinstance(override, dict):
+            item["editorial_override"] = override
+            replacement, errors = apply_editorial_override(
+                {key: str(item.get(key) or "") for key in ("text", "text_zh", "text_en", "text_custom") if key in item},
+                override,
+                str(entry.get("source_text_sha256") or ""),
+                content_ref,
+            )
+            if errors:
+                override_issues.append({"content_ref": content_ref, "errors": errors})
+            else:
+                item.update(replacement)
+        items.append(item)
+
+    payload = {
+        "schema_version": 2,
         "kind": "comic_lettering",
         "chapter": panel_script.get("chapter", ""),
         "language_mode": normalize_text_language(text_language),
         "text_metadata_version": 1,
         "items": items,
     }
+    if source_bindings is not None:
+        payload["source_bindings"] = source_bindings
+    payload["translation_usage"] = translation_usage(items)
+    if override_issues:
+        payload["editorial_override_issues"] = override_issues
+    return payload
 
 
 EN_MODES = ("英文", "中上英下", "英上中下")
@@ -252,7 +247,8 @@ def write_translation_todo(root: Path, chapter: str, lettering: dict) -> Path | 
     """英文/双语模式下缺 text_en 的条目 → 翻译任务包（翻译这步的 owner 是 agent）。
 
     agent 逐条翻译后写 排版/第N话/lettering_translations.json
-    （{"translations": {"中文原文": "English"}}），重跑 build_lettering 即回填。
+    （{"translations": {"panel:P001.dialogue:1": {"text_en": "English", "source_text_sha256": "..."}}}），重跑
+    build_lettering 即回填。旧中文原文 key 仍兼容，但会被合同检查标 warn。
     """
     todo_path = root / "排版" / chapter / "lettering_translations.todo.json"
     if lettering.get("language_mode") not in EN_MODES:
@@ -262,10 +258,13 @@ def write_translation_todo(root: Path, chapter: str, lettering: dict) -> Path | 
     pending = [
         {
             "item_id": item.get("item_id"),
+            "content_ref": item.get("content_ref"),
             "panel_id": item.get("panel_id"),
             "type": item.get("type"),
             "speaker": item.get("speaker", ""),
             "tone": item.get("tone", ""),
+            "source_text": item.get("source_text") or item.get("text") or "",
+            "source_text_sha256": item.get("source_text_sha256") or "",
             "text_zh": item.get("text_zh") or item.get("text") or "",
         }
         for item in lettering.get("items") or []
@@ -278,13 +277,14 @@ def write_translation_todo(root: Path, chapter: str, lettering: dict) -> Path | 
     todo_path.write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "kind": "comic_lettering_translation_todo",
                 "chapter": chapter,
                 "instructions": (
                     "由 agent 按 speaker/tone 逐条译成自然英文台词（不是逐字直译），"
                     "写 排版/" + chapter + "/lettering_translations.json："
-                    '{"translations": {"<text_zh>": "<English>"}}，然后重跑 build_lettering.py 回填 text_en。'
+                    '{"translations": {"<content_ref>": {"text_en": "<English>", '
+                    '"source_text_sha256": "<pending.source_text_sha256>"}}}，然后重跑 build_lettering.py 回填 text_en。'
                 ),
                 "pending_count": len(pending),
                 "pending": pending,
@@ -371,25 +371,78 @@ def main() -> int:
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
-    panel_script = load_json(root / "脚本" / args.chapter / "panel_script.json")
-    layout = load_json(root / "排版" / args.chapter / "layout.json")
+    panel_script_path = root / "脚本" / args.chapter / "panel_script.json"
+    layout_path = root / "排版" / args.chapter / "layout.json"
+    finishing_path = root / "出图" / args.chapter / "finishing" / "finishing_plan.json"
+    out_path = root / "排版" / args.chapter / "lettering.json"
+    panel_script = load_json(panel_script_path)
+    layout = load_json(layout_path)
     translation_path = Path(args.translation_map).expanduser().resolve() if args.translation_map else root / "排版" / args.chapter / "lettering_translations.json"
-    translations = load_translation_map(translation_path)
+    try:
+        translations = load_translation_map(translation_path)
+    except ValueError as exc:
+        print(f"[err] {exc}")
+        return 2
     text_language = read_setting(root, "文字语言", "中文")
     finishing_map = finishing_by_panel(load_finishing_plan(root, args.chapter))
-    lettering = build_lettering(panel_script, layout, translations, text_language, finishing_map)
+    try:
+        previous = load_json(out_path) if out_path.is_file() else {}
+    except (OSError, json.JSONDecodeError):
+        previous = {}
+    if not isinstance(previous, dict):
+        previous = {}
+    editorial_overrides = {
+        str(item.get("content_ref")): item.get("editorial_override")
+        for item in previous.get("items") or []
+        if isinstance(item, dict)
+        and str(item.get("content_ref") or "").strip()
+        and isinstance(item.get("editorial_override"), dict)
+    }
+    source_bindings = {
+        "panel_script": binding_for_path(root, panel_script_path),
+        "layout": binding_for_path(root, layout_path),
+        "finishing_plan": binding_for_path(root, finishing_path),
+        "translation_map": binding_for_path(root, translation_path),
+    }
+    lettering = build_lettering(
+        panel_script,
+        layout,
+        translations,
+        text_language,
+        finishing_map,
+        source_bindings=source_bindings,
+        editorial_overrides=editorial_overrides,
+    )
     if not lettering.get("chapter"):
         lettering["chapter"] = args.chapter
-    if translations:
-        lettering["translation_map"] = str(translation_path.relative_to(root))
+    if translation_path.is_file():
+        lettering["translation_map"] = source_bindings["translation_map"]["path"]
     check_lettering_style_baseline(root, args.chapter, lettering)
-    out_path = root / "排版" / args.chapter / "lettering.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(lettering, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"[ok] {out_path}")
     todo = write_translation_todo(root, args.chapter, lettering)
     if todo:
         print(f"[warn] {lettering.get('language_mode')} 模式缺英文译文，翻译任务包已生成：{todo}；由 agent 翻译后重跑本脚本回填 text_en")
+    usage = lettering.get("translation_usage") or {}
+    if usage.get("legacy_text_key_count"):
+        print(
+            "[warn] 翻译表仍有 "
+            f"{usage.get('legacy_text_key_count')} 条按原文 key 兼容命中；请改为 content_ref key 后重跑。"
+        )
+    if usage.get("unbound_content_ref_count"):
+        print(
+            "[warn] 翻译表有 "
+            f"{usage.get('unbound_content_ref_count')} 条 content_ref 字符串值缺 source_text_sha256，已拒绝应用；"
+            "请按翻译 TODO 升级为结构化值。"
+        )
+    if usage.get("stale_content_ref_count"):
+        print(
+            "[warn] 翻译表有 "
+            f"{usage.get('stale_content_ref_count')} 条结构化译文绑定旧源文字 SHA，已拒绝应用并等待重译。"
+        )
+    for issue in lettering.get("editorial_override_issues") or []:
+        print(f"[warn] editorial_override {issue.get('content_ref')}：{'；'.join(issue.get('errors') or [])}")
     for mismatch in (lettering.get("style_consistency") or {}).get("mismatches") or []:
         print(f"[warn] 嵌字样式：{mismatch}")
     return 0

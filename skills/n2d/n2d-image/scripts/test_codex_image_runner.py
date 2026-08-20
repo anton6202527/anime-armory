@@ -611,6 +611,7 @@ def test_record_event_writes_strong_recipe_schema_meta(tmp_path: Path, monkeypat
         seed="seed-1",
         temp_path=tmp_path / "tmp.png",
         reference_inputs=[],
+        input_fingerprint="pre-spend-fingerprint",
     )
 
     meta = _meta_from_record_cmd(captured["cmd"])
@@ -632,6 +633,52 @@ def test_record_event_writes_strong_recipe_schema_meta(tmp_path: Path, monkeypat
     assert all(meta.get(key) for key in required)
     assert meta["backend_version"] == "codex 1.2.3"
     assert meta["seed_support"] == "unsupported_no_seed_api"
+    assert meta["input_fingerprint"] == "pre-spend-fingerprint"
+
+
+def test_generation_reuse_requires_exact_current_input_fingerprint() -> None:
+    previous = {
+        "status": "pass",
+        "input_fingerprint": "sha-current",
+        "artifact_sha256": "artifact-current",
+    }
+
+    assert codex_image_runner.generation_reuse_allowed(
+        previous,
+        "sha-current",
+        artifact_valid=True,
+        current_artifact_sha256="artifact-current",
+    )
+    assert not codex_image_runner.generation_reuse_allowed(
+        previous,
+        "sha-stale",
+        artifact_valid=True,
+        current_artifact_sha256="artifact-current",
+    )
+    assert not codex_image_runner.generation_reuse_allowed(
+        {"status": "pass"},
+        "sha-current",
+        artifact_valid=True,
+        current_artifact_sha256="artifact-current",
+    )
+    assert not codex_image_runner.generation_reuse_allowed(
+        previous,
+        "sha-current",
+        artifact_valid=False,
+        current_artifact_sha256="artifact-current",
+    )
+    assert not codex_image_runner.generation_reuse_allowed(
+        previous,
+        "sha-current",
+        artifact_valid=True,
+        current_artifact_sha256="artifact-replaced",
+    )
+    assert not codex_image_runner.generation_reuse_allowed(
+        {**previous, "status": "rejected"},
+        "sha-current",
+        artifact_valid=True,
+        current_artifact_sha256="artifact-current",
+    )
 
 
 def test_log_unanchored_friction_writes_signal(tmp_path):
@@ -3556,7 +3603,7 @@ def test_named_minimal_shared_interlock_only_adds_angles_when_shot_needs_them(tm
     assert back_view and "back" in back_view[0]
 
 
-def test_shared_target_skips_existing_png_without_force(tmp_path: Path, monkeypatch) -> None:
+def test_shared_target_without_hash_bound_event_is_not_trusted_as_reusable(tmp_path: Path, monkeypatch) -> None:
     final = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
     final.parent.mkdir(parents=True)
     final.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
@@ -3599,12 +3646,16 @@ def test_shared_target_skips_existing_png_without_force(tmp_path: Path, monkeypa
         section=section,
     )
 
-    def fail_if_called(*args, **kwargs):
-        raise AssertionError("existing shared PNG should not call Codex")
+    calls = []
 
-    monkeypatch.setattr(codex_image_runner, "run_codex", fail_if_called)
+    def fail_generation(*args, **kwargs):
+        calls.append((args, kwargs))
+        return subprocess.CompletedProcess(["codex"], 1, stdout="", stderr="intentional test stop")
 
-    assert codex_image_runner.process_target(
+    monkeypatch.setattr(codex_image_runner, "run_codex", fail_generation)
+    monkeypatch.setattr(codex_image_runner, "record_event", lambda *args, **kwargs: None)
+
+    assert not codex_image_runner.process_target(
         tmp_path,
         "第1集",
         target,
@@ -3613,10 +3664,10 @@ def test_shared_target_skips_existing_png_without_force(tmp_path: Path, monkeypa
         dry_run=False,
         force=False,
     )
+    assert calls, "legacy pixels without an exact input/output event must reach regeneration"
     data = json.loads(registry.read_text(encoding="utf-8"))
     front = data["characters"][0]["forms"][0]["reference_group"]["front"]
-    assert front["status"] == "review_pending"
-    assert front["human_review"]["status"] == "pending"
+    assert front["status"] == "planned"
 
 
 def test_codex_blocks_text_only_character_split_makeup(tmp_path: Path, monkeypatch) -> None:

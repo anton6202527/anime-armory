@@ -9,7 +9,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器采用安全默认并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；合规、不可逆、付费和最终验收仍每次确认。
 
 本 skill 涉及的选择点：`基础视觉风格`、`生视频模型/渠道`、`视频模型路由`、`视频备用后端`、`出视频规格`、`英雄镜多版`、`视频分辨率`、`画幅`、`视频生成音频策略`、`对口型`、`生成粒度/优先序`、`制作模式`、`视频原生音轨`、`目标平台/发行地区/合规用途`。默认 `制作模式=混合自动路由` 时，项目级音频/口型开关只是基础偏好，逐镜 `production_mode_route` 才是执行真值；后 3 项仍必须同步落合规包。
 
@@ -71,7 +71,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **导演运镜 sidecar 消费铁律（gate 强制·治"规划好没落片"）**：若 `生产数据/director_camera_plan_第N集.json/md` 存在，生成 `01_clips.md` 时必须逐 Clip 读取 `video_prompt_injection`，把 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节` 写进对应字段；若 sidecar 提供 `后端控制写法`，按该 Clip 路由后端真正消费的控制习惯落地（Kling motion brush / Seedance Shot 标号 / 其他自然语言），不要只保留通用运镜句。若 sidecar 缺失但 `storyboard.json` 已定稿，先回 n2d-script 跑 `python3 skills/n2d/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write`。人工可改写建议，但必须保持 `镜头运动` 仍命中 `CAMERA_MOVE_LEXICON` 或固定机位词，并保留速度/方向/起止点。**`gate.py --stage video_preflight/video` 跑 `check_director_camera_plan_consumption` 收据**：sidecar 在但 `01_clips.md` 里零导演运镜词汇=规划没落片，含高潮/关键镜→付费前 BLOCK，普通镜→WARN。要**逐镜精确归属**（而非整包烟雾），落结构化签收档 `生产数据/director_camera_plan_applied_第N集.json`，在 `scopes` 里加 `{scope:"出视频", prompt_path, prompt_sha256, applied_clip_ids:[...]}`（SHA 绑定 plan+本 prompt，plan/prompt 改了须重签），gate 会按 `applied_clip_ids` 逐镜判落实。
 - **打斗 motion 视觉盛宴消费（P0-2·与出图同源）**：打斗/法术/动作高潮镜的 route 会带 `motion_spectacle_guidance` 机器字段（`n2d-model-router` 按本剧 `style_contract` 风格族自动注入·与出图 runner `combat_spectacle_guidance_for_style` 同一真值源）。写该 Clip 视频 prompt 的运动/动态细节段时**必须落实这份风格自适应指导**（cinematic 体积光+motion blur / cel 赛璐璐速度线 / ink 飞白泼墨 / flat 夸张图形化），治"首帧是盛宴、运动段平淡"的图↔视频不对称；切勿给赛璐璐/水墨剧硬塞写实 motion blur。
 - **平台差异在档案里，选择由路由表执行**：单 Clip 时长 / 运镜词偏好 / 首尾帧机制 / 提示词语言 / 模型路由能力速查见 `references/platforms.md`。逐 Clip 以 `video_model_routes.json` 的 primary/fallback 为准；普通镜或兜底模型读 `_设置.md` 的 `生视频模型`，实际调用优先读路由表和 `生视频渠道`。若未显式固定，先由 router/probe 决定执行入口；只有固定模式、账号/交付约束、无可执行后端或画风兼容性冲突时再问用户。
-- **出视频规格按三档预算 + 每次调模型/渠道前告知**：调即梦（dreamina）或任何生视频模型/渠道（Kling/Veo/Seedance…）出视频前，**像出图预算提示一样，先把本次的生成规格告知用户**——规格打包成 `出视频规格` 三档预算（**预算充足（默认） / 预算一般 / 预算不够**），每档预设*分辨率·帧率 · 每 Clip 跑几条挑稳 · 平台质量档*。**首次问一次**→记入 `_设置.md`→之后**沉默沿用但每次开跑前一行告知当前档**（便于用户随时打断改）。三档表 + 告知话术见下「出视频规格」节。
+- **出视频规格按三档预算 + 每次调模型/渠道前告知**：调即梦（dreamina）或任何生视频模型/渠道（Kling/Veo/Seedance…）出视频前，规格打包成 `出视频规格` 三档预算（**预算充足（默认） / 预算一般 / 预算不够**），每档预设分辨率·帧率、每 Clip 候选数和平台质量档。未设置时自动采用 `预算充足`，并入同一次付费确认告知，不再先问一次；之后沉默沿用，用户可在花钱前覆盖。三档表 + 告知话术见下「出视频规格」节。
 - **生产数据记账铁律（P0）**：每次提交 image2video、每次重跑、每条 Clip 落档后，都要调用 `n2d-dashboard` 记录事件：`stage=video`、`asset`、`status=pass|fail`、`duration_sec`、`cost/provider`、`redraw_reason`、必要时 `meta=native_audio=yes/no`。正式/production 项目每个最终 MP4 的最新 pass 事件还必须记录 `recipe_hash`、`prompt_sha256`、`reference_bundle_sha256`、`backend_version`、`quality_tier`、`actual_image_inputs`；若视频后端不支持或未暴露 seed，必须写 `seed_effective=false` / `effective_seed=none` / `seed_support=unsupported_or_unknown`，不能把不可复现结果伪装成 seed 可复现。视频是最贵工位，不记录成本/耗时/重跑原因和生成配方证据，就无法判断批量化是否真的可控。
 - **生视频调用优先级**：本机已装的官方 CLI → Bash 直调；没装 → 一步步指导手动；大批量可并行多个独立任务。
 - **废料归档**：所有废视频片段 → `创作区/制漫剧/<剧名>/废料/出视频/第N集/`，**不留在 Downloads**。
@@ -97,7 +97,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 > **为什么预算一般采用 QC 门控重抽（2026-06·对齐可用率 90%）**：Seedance 2.0 等可用率已从 20% 跃到 **~90%**（行业基准 `n2d-dashboard/references/industry_benchmark.json`），盲目"每镜跑 2 条挑稳"在 ROI ~1.1 的现实下是浪费——预算一般先跑 1 条、过 `image_qc`/`video_qc` 就用、不过才重抽（坏的那 ~10% 才花第二次钱）。`dashboard.redraw_rate` 实时校准这个决策：重抽率显著高于基准 0.1 时再回升挑稳条数。关键镜（🔑 爽点/反转/封面/人脸特写）可在 1 条基础上**加挑 1 条**取更稳的。要稳画质优先选 `预算充足`。
 
-- **解析顺序**（按 `../skills/n2d/references/选择点与偏好.md`）：读 `<作品根>/_设置.md` 的 `出视频规格` → 缺则全局默认（`预算充足`）预填并告知一句 → 再缺则**首次问一次**→写回 `_设置.md`。**默认 `预算充足`**，但分辨率默认仍是 720p；需要更清晰时单独设 `视频分辨率=1080p`。
+- **解析顺序**（按 `../skills/n2d/references/选择点与偏好.md`）：读 `<作品根>/_设置.md` 的 `出视频规格` → 缺则全局默认 → 仍缺则自动采用并落档 **预算充足**。不为规格档单独暂停；当前档、成本上限和镜头数统一放进付费确认。分辨率默认仍是 720p，需要更清晰时可单独设 `视频分辨率=1080p`。
 - **每次开跑前必告知当前档**（沉默沿用 ≠ 闷头跑）：进真正调 AI 那一步，先念一行——
   > 「即将出视频，当前规格档 = **预算充足**（720p 默认·30fps·关键镜 2-3 条挑稳·高质量档；需要更清晰可另设 `视频分辨率=1080p`）。可改 **预算一般**（720p·24-30fps·全部 1 条 + QC 不过才重抽·标准档）或 **预算不够**（720p·24fps·全 1 条不挑稳·省积分档，最省）。要改说一声，否则按此档跑。」
 - **同一行补充锚帧成本**：若 `生产数据/anchor_plan_第N集.json/md` 存在，紧跟一句：`本集三帧锚帧计划：新增锚帧图 X 张；native multiframe 后端仍 1 次/Clip；split relay/frames2video-only 预计额外视频段 Y 段。` 若不存在，先跑 `python3 skills/n2d/n2d-script/scripts/anchor_planner.py <作品根> 第N集` dry-run 或至少说明“缺 anchor plan，当前预算只覆盖视频规格，不覆盖锚帧图片/拆段成本”，不要把默认 1 条视频误报成总成本已锁。
@@ -107,24 +107,20 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag，确切写法见 `references/cli_registry.md`），并按「跑几条」决定每 Clip 抽几条挑稳。Dreamina/即梦默认策略：普通镜 `seedance2.0fast`；`出视频规格=预算充足` 或关键镜/英雄镜/高光镜自动用 `seedance2.0_vip`，避免终版高价值镜误走速度档。若走 `multiframe2video`，当前 Dreamina CLI 不暴露 `model_version`/`video_resolution` 覆盖，以该命令的官方默认能力为准并在 manifest 记录。
 - **帧插值后期 pass（P1b·`interp_pass.py`·可选质量增强·不默认）**：流水线内的 fps 提帧/运动平滑后处理（此前 n2d-video 完全靠后端原生 multiframe，无任何 RIFE/FILM 插帧）。两个用途：① **只能首帧/首尾帧的后端**（Seedance 直连/Runway/Pika；Sora 旧项目人工片另议）出的镜运动稠度先天弱 → 事后补帧拉到接近三帧多关键帧的平滑；② **fps 提帧**（源 24fps→交付 30/48/60）。规划：`python3 skills/n2d/n2d-video/scripts/interp_pass.py <作品根> 第N集`——ffprobe 探每 clip 源 fps（无 ffprobe 标 unknown 不臆造）、按 `出视频规格` 目标 fps + `video_model_routes.json` 后端能力判定哪些镜值得插（源 fps<目标/1.2，或 first-frame-only 后端补平滑；已达标的**不插**避免「肥皂剧感」），写 `出视频/<集>/control/interp_jobs.json` + 后端探针。执行：`--apply`——后端经 env 门控（`N2D_INTERP_CMD` 命令模板 `{input}{output}{fps}` / `N2D_RIFE_CMD` / `N2D_FILM_CMD`，或带 minterpolate 的 ffmpeg 兜底；本仓不内置重型权重），都不可用则只落清单 + 手工指引、**绝不静默跳过**。铁律：只补帧不改内容/不改声音（成片音轨仍走 voice-first 配音轨）。
 
-## 生成粒度 + 优先序（选择点 · 逐单位验收；可显式授权无停顿自检）
+## 生成粒度 + 优先序（选择点 · 逐单位自动验收）
 
 视频比图贵 1-2 个数量级，**默认更不该整集闷头一次过**。真正调 AI 出视频前，处理两个选择点（与 n2d-image 同义同源）：
 
-- `生成优先序`（按 `../skills/n2d/references/选择点与偏好.md`：读 `_设置.md`→全局默认→首次问一次→沉默沿用）：**关键镜优先**（默认，故事板里对应 🔑 爽点/反转/钩子的 Clip 排队首，贵币先花在高光镜、先看运动稳不稳）｜ **分镜顺序**（Clip1→N 叙事序）｜ **先易后难**（单人/空镜/简单运镜先，复杂打斗/多人/强运镜后）
-- `生成粒度`：⚠️**每次都问，不沉默沿用**（视频更贵，token/积分敏感）——**每集进出视频前必把下面四档菜单念给用户选一次**，`_设置.md` 里的值只作默认建议/预选。**唯一例外**：用户在当前请求里明确说“中途不用问 / 一直执行 / 自动做到某集完结”等无停顿授权时，不再弹菜单，按“逐个自动自检”执行；该授权只免逐单位问答，不免付费/合规硬闸，不可跨请求沉默继承。
+- `生成优先序`：默认 **关键镜优先**，先验证高光镜的运动和身份稳定；用户已有设置优先。
+- `生成粒度`：默认推荐 **逐个**，每个物理 Clip 生成后立即机器 QC + 实际查看。粒度作为本次付费动作卡的可覆盖预选，不另发一轮问答；它不免本次付费授权、合规闸门或最终人审。
 
-**进入出视频前必做（报盘 → 必弹菜单 → 排队）**：
-1. 数清本集要出的 **Clip 总数**并告知用户：「本集共需出 **X 个 Clip**。视频较贵，先选这次的**切分颗粒度**：」
-2. **原样展示四档菜单**（标出当前默认，等用户选定才开抽）：
-   > 1. **逐个（一张/一Clip）** — 最细：每出 1 个 Clip 就停下展示，等你确认或调整再继续下一个。最易即时优化，打招呼最频繁。
-   > 2. **小批（默认每批 5 个）** — 折中：每批 ~5 个出完一起看、一停（批大小可随口改）。兼顾效率和可控。
-   > 3. **按场景/段落分批** — 同一场景/段落的连续镜头作一批一停（天然贴合故事板分段，跨镜一致性也顺带更稳）。
-   > 4. **整集一次过** — 一口气全出完最后统一看（最省打招呼，最粗，最废 token/时间/积分）。
-3. 用户选定 → 按该档执行；可写回 `_设置.md` 作下次默认建议，但**下次仍要再弹一次菜单**。
-4. 按 `生成优先序` 给本集 Clip 排出生成队列；共享视频库（空镜/转场复用）先核对，不重生成。
+**进入出视频前必做（报盘 → 付款确认 → 排队）**：
+1. 数清本集 Clip 总数并写入付款动作卡。
+2. 缺粒度值时采用 `逐个`；用户可在付款前覆盖为小批（默认 5）、按场景分批或整集。
+3. 按 `生成优先序` 排队；先核对共享视频库，避免重复付费。
+4. 付款放行后按单位执行“提交 → 下载 → QC → 实际查看 → hash-bound accept → 下一单位”，不再为普通粒度重复暂停。
 
-**逐单位循环**（每个粒度单位）：生成/下载当前物理 Clip → 对当前 manifest 跑 `video_runner qc` → 执行者实际查看当前 MP4 或本 Clip contact sheet，按 prompt 的「自检（生成后逐条过）」复核人脸时序、人体/动作、运镜、接缝、身份/资产、音轨策略和张力 → 用带当前像素确认的 `video_runner accept --visual-reviewer ... --visual-notes ... --confirm-current-pixels` 再跑最终 QC 并写视觉收据 → 通过才回写 `视频` 列分子（X/Y）→ 下一单位。`submit` 有 episode-wide 代码互锁：上一物理视频仍在生成/已下载未 accept，或旧 `accepted` 缺机器 QC + 当前 MP4 SHA 绑定的实际查看收据时，下一条付费提交直接失败；不再只靠执行者纪律。普通交互模式在每单位通过后停下给用户看并询问；**当前请求已有无停顿授权时，逐个自动自检后继续，不弹确认**。任何 `qc_blocked`、执行者目视硬伤、近脸身份 warn 未查清或正式音轨策略不符，都只允许废料归档、改 prompt/锚帧/拆 Clip 或重跑当前物理段，禁止带病推进到下一段。
+**逐单位循环**（每个粒度单位）：生成/下载当前物理 Clip → `video_runner qc` → 执行者实际查看当前 MP4/contact sheet → `video_runner accept --visual-reviewer ... --visual-notes ... --confirm-current-pixels` 写当前 SHA 收据 → 通过才回写分子并继续。默认一键策略不在每单位后重复询问；任何 `qc_blocked`、目视硬伤、近脸身份 warn 未查清或音轨策略错误都只返工当前物理段，禁止带病推进。上一段未 hash-bound accept 时，下一次付费提交仍由互锁拒绝。
 
 > **无停顿不等于批量后补 QC**：即使用户要求“一直执行到完结”，顺序仍是“一个物理 Clip 生成 → 单 Clip 机器 QC → 实际查看当前 MP4 → 带像素哈希收据 accept → 下一个”。不得先生成整集再统一跑 `qc`；不得用 `--allow-qc-block` 代替自检。`--allow-qc-block` 只处理有证据的机检误报且必须留 dashboard 事件，不能放行执行者已看到的脸漂、穿模、动作错、接缝断或音轨错误。批次/整集完成后仍要再跑一次全量 video gate。自动自检不是人工发布签收，不得伪造真人 reviewer、pilot acceptance 或 release signoff；执行者可以如实写 `codex visual inspection`，但不能冒充用户或真人导演。
 
@@ -134,7 +130,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 不要只写一个泛化 checklist；要像 n2d-image 的出图 prompt 一样，把"提交前自查"和"生成后落档闸门"分开写清楚。缺任一段都先补齐再提交视频生成。
 
-> **整集档例外**：选 `整集` 才回旧行为（>6 Clip 可 spawn 2-3 子 agent 并发、每账号 ≤4 并发，最后统一报告），不逐单位停。`小批`/`按场景` 在「批」层停审。本节与「每 Clip 默认跑 2 条挑稳的」正交：粒度/优先序定**出的顺序与停审颗粒**，跑 2 条定**单 Clip 内挑哪条**。
+> **整集档例外**：选 `整集` 才回旧行为（>6 Clip 可并发多个受控 worker、每账号 ≤4 并发，最后统一报告），不逐单位暂停。`小批`/`按场景` 在批边界汇总结果，但默认自动继续；只有 QC/gate、预算或合规边界才停。本节与“每 Clip 跑几条挑稳”正交：粒度/优先序定生成与验收顺序，规格档定单 Clip 内候选数。
 
 ## 输入前置条件
 

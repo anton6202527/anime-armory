@@ -21,6 +21,11 @@ export function onAppEvent<E extends IpcEventName>(
 
 export const isMacPlatform = bridge.platform === 'darwin'
 
+/** Write text to the OS clipboard without granting renderer clipboard read access. */
+export function writeClipboardText(text: string): void {
+  bridge.writeClipboardText(text)
+}
+
 /** Absolute path of a File dropped from the OS. */
 export function getPathForFile(file: File): string {
   return bridge.getPathForFile(file)

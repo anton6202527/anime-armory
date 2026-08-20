@@ -59,7 +59,8 @@ def test_panel_job_carries_visual_continuity_contract(tmp_path: Path) -> None:
     chapter = "第1话"
     root.mkdir()
     (root / "_设置.md").write_text(
-        "- 生图模型：GPT Image 2\n- 生图渠道：Codex CLI\n- 基础视觉风格：彩色国漫条漫\n- 文字语言：中文\n",
+        "- 生图模型：GPT Image 2\n- 生图渠道：Codex CLI\n- 基础视觉风格：彩色国漫条漫\n"
+        "- 文字语言：中文\n- 生图分辨率策略：按最终画布\n",
         encoding="utf-8",
     )
     write_identity_fixture(root)
@@ -146,7 +147,8 @@ def test_panel_job_carries_visual_continuity_contract(tmp_path: Path) -> None:
 def make_fixture(root: Path, chapter: str, *, description: str = "主角在祠堂内发现匕首反光。") -> None:
     root.mkdir(parents=True, exist_ok=True)
     (root / "_设置.md").write_text(
-        "- 生图模型：GPT Image 2\n- 生图渠道：Codex CLI\n- 基础视觉风格：彩色国漫条漫\n- 文字语言：中文\n",
+        "- 生图模型：GPT Image 2\n- 生图渠道：Codex CLI\n- 基础视觉风格：彩色国漫条漫\n"
+        "- 文字语言：中文\n- 生图分辨率策略：按最终画布\n",
         encoding="utf-8",
     )
     write_identity_fixture(root)
@@ -187,23 +189,39 @@ def make_fixture(root: Path, chapter: str, *, description: str = "主角在祠�
 
 
 def simulate_generated(root: Path, chapter: str, jobs: dict) -> None:
-    """把 build_jobs 的产物模拟成已出图并落盘。"""
+    """把 build_jobs 的产物模拟成已出图并完成当前 SHA 的逐图双闸。"""
+    from PIL import Image
+
     panel_dir = root / "出图" / chapter / "panels"
     panel_dir.mkdir(parents=True, exist_ok=True)
     for job in jobs["jobs"]:
         pid = job["panel_id"]
-        (panel_dir / f"{pid}.png").write_bytes(b"png-bytes")
+        panel = panel_dir / f"{pid}.png"
+        Image.new("RGB", (100, 80), (40, 90, 130)).save(panel)
         job.update(
             {
-                "status": "ready",
                 "result_path": f"出图/{chapter}/panels/{pid}.png",
                 "generated_at": "2026-07-10T00:00:00",
-                "artifact_sha256": "0" * 64,
+                "artifact_sha256": codex_panel_runner.file_sha256(panel),
                 "generated_from_contract_sha256": job["source_contract_sha256"],
                 "generated_from_submit_prompt_sha256": job["submit_prompt_sha256"],
             }
         )
+        declared = [ref for ref in job.get("references") or [] if isinstance(ref, dict)]
+        post_qc = codex_panel_runner.post_qc_panel(root, chapter, job, panel, [], declared)
+        job["post_qc"] = post_qc
+        job["status"] = codex_panel_runner.status_after_post_qc(post_qc)
     write_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", jobs)
+    for job in jobs["jobs"]:
+        codex_panel_runner.accept_panel_review(
+            root,
+            chapter,
+            jobs,
+            root / "出图" / chapter / "prompt" / "panel_jobs.json",
+            str(job["panel_id"]),
+            "test-reviewer",
+            "fixture comparison packet reviewed",
+        )
 
 
 def test_preserve_keeps_ready_when_contract_unchanged(tmp_path: Path) -> None:

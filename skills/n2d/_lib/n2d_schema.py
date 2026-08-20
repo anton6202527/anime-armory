@@ -58,6 +58,9 @@ BOUNDARY_PRODUCT_KINDS = {
     GATE_FINDINGS_KIND: {
         "owner": "n2d-dashboard",
         "path": f"{PRODUCTION_DIR}/gate_findings_{{stage}}_{{ep}}.json",
+        # dashboard 外发沿用 consistency findings 的通用消费契约；路径本身
+        # 仍标识这是 stage gate 的边界产物。
+        "accepted_kinds": [CONSISTENCY_FINDINGS_KIND],
         "layer": "production_data",
         "boundary": "gate_findings",
     },
@@ -127,6 +130,7 @@ BOUNDARY_PRODUCT_KINDS = {
     IDENTITY_VOICE_PRINT_REPORT_KIND: {
         "owner": "n2d-identity",
         "path": f"{PRODUCTION_DIR}/identity_voice_print_{{ep}}.json",
+        "accepted_kinds": ["n2d_identity_voice_print"],
         "layer": "production_data",
         "boundary": "voice_print_consistency",
     },
@@ -161,6 +165,18 @@ BOUNDARY_PRODUCT_KINDS = {
         "path": f"{PRODUCTION_DIR}/production_readiness_{{ep}}.json",
         "layer": "release_evidence",
         "boundary": "production_readiness_gate",
+    },
+    "n2d_acceptance_receipt": {
+        "owner": "n2d (acceptance contract)",
+        "path": f"{PRODUCTION_DIR}/acceptance_receipt_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "human_acceptance_receipt",
+    },
+    "n2d_release_manifest": {
+        "owner": "n2d-compose",
+        "path": "合规/release_manifest_{ep}.json",
+        "layer": "release_evidence",
+        "boundary": "release_manifest",
     },
     GATE_POLICY_COVERAGE_KIND: {
         "owner": "n2d",

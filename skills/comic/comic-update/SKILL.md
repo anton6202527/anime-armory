@@ -14,6 +14,7 @@ description: 画漫画(comic) skill 更新影响扫描与最小重制计划器�
   - `record` 或 `check` 自动 bootstrap 写 `生产数据/comic_skill_update_snapshot.json`
   - `check --write-plan` 写 `生产数据/comic_skill_update_plan.json`
   - `check --write-plan` 写 `生产数据/comic_skill_update_plan.md`
+- **依赖快照**：snapshot 内嵌 panel 级派生索引，记录逐格脚本、layout、该格实际使用的翻译 entry、lettering、job、正式图、角色/场景/道具参考及 registry asset 的内容指纹。它只是返工解释器，不替代任何业务真值。
 - **读写边界**：只写快照和计划；不覆盖 `panel_script.json`、`layout.json`、图片、导出物或 `_进度.md`。
 
 ## 快速使用
@@ -37,6 +38,8 @@ python3 skills/comic/comic-update/scripts/update_plan.py check "创作区/画漫
 - 单纯缺失/过期的 gate receipt 不重建上游内容：只重跑对应 `comic-review gate --stage ...`。gate 含 block 时才按 `return_to_stage` 返修。
 - name/layout 不把 draft 当完成：执行计划明确列出 `生成 draft → --submit-review → --approve --reviewed-by ... → stage gate`；签收人必须真实提供。
 - reference plan/成图/导出物变化后，用 comic 共享的 stage input fingerprint 判定 image/compose/review receipt 过期，不靠文件时间或 `_进度.md`。
+- 同一参考图、registry asset、逐格脚本、layout、lettering 或 panel 像素在 `record` 后变化时，`check` 会输出 `panel_impacts[]`、精确 `panel_targets/page_targets` 和最早回放阶段；只需重抽部分格时，执行计划直接生成 `comic-batch --targets ... --force`，不把整话重出图当默认答案。
+- 未被任何格消费的 translation entry 变化不触发返工；只改嵌字不会建议重抽画面。真实仓库的 `skills/comic/comic-*` 路径按最深子 skill 归属，避免把 compose 更新误判成顶层 comic/source 全量回放。
 - 付费出图前先停：计划覆盖 `image` 时，先确认模型、渠道、预算、保留旧图和目标格范围，再交给 `comic-image` 或 `comic-batch`。
 - 控制面变化不触发重制：`comic-progress`、`comic-settings`、`comic-update` 本身变化只提示刷新扫描/基线。
 

@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "node scripts/prepare-dev-brand.cjs && electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
+    "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "start": "node scripts/prepare-dev-brand.cjs && electron-vite preview",
     "icon:render": "electron scripts/render-app-icon.mjs",

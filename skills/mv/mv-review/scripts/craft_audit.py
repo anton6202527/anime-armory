@@ -445,7 +445,7 @@ def build_report(root: str) -> dict[str, Any]:
         "schema_version": VERSION,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "engine": "mv-review/scripts/craft_audit.py",
         "inputs_sha256": {plan_rel: _sha256(plan_path), lyrics_rel: _sha256(lyrics_path)},
         "thresholds": {
@@ -506,7 +506,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     report = build_report(args.project_root)
     if args.write:
-        json_path, md_path = write_report(report["project_root"], report)
+        json_path, md_path = write_report(os.path.abspath(args.project_root), report)
         print(f"[ok] craft audit JSON → {json_path}")
         print(f"[ok] craft audit MD   → {md_path}")
     if args.json:

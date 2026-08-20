@@ -19,6 +19,7 @@ from datetime import date
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "mv_utils.py")
+COMPLETION_PATH = os.path.join(REPO, "skills", "mv", "mv-craft", "scripts", "completion.py")
 IMAGE_QC_PATH = os.path.join(REPO, "skills", "mv", "mv-image", "scripts", "image_qc.py")
 
 
@@ -30,6 +31,13 @@ def load_mv_utils():
 
 
 mv_utils = load_mv_utils()
+
+
+def load_completion():
+    spec = importlib.util.spec_from_file_location("mv_completion_for_video_qc", COMPLETION_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def load_image_qc():
@@ -484,7 +492,7 @@ def build_report(root):
         "schema_version": 2,
         "kind": "mv_video_qc",
         "generated_at": date.today().isoformat(),
-        "root": root,
+        "root_rel": ".",
         "expected_aspect": expected_aspect,
         "inputs_sha256": {rel: mv_utils.content_hash(os.path.join(root, rel)) for rel in input_paths},
         "selected_video_sha256": selected_hashes,
@@ -601,8 +609,8 @@ def main():
         print(f"[ok] 重度脸漂具名 waiver → {ledger_path}（{len(args.accept_face_drift)} 条，绑定当前视频 hash）")
     report = build_report(root)
     if args.accept_semantic:
-        if not args.reviewer:
-            print("[err] --accept-semantic 必须同时提供 --reviewer", file=sys.stderr)
+        if not args.reviewer or not args.notes.strip():
+            print("[err] --accept-semantic 必须同时提供 --reviewer 与非空 --notes", file=sys.stderr)
             return 2
         report["semantic_review"] = {
             "accepted": True,
@@ -619,7 +627,11 @@ def main():
     path = write_report(root, report)
     print(f"[ok] video QC → {path} ({report['summary']['verdict']})")
     if args.accept_semantic and not report["summary"]["hard_blocks"]:
-        mv_utils.update_progress_stage(root, "video")
+        try:
+            load_completion().mark_stage_complete(root, "video")
+        except ValueError as exc:
+            print(f"[err] video completion health 未通过：{exc}", file=sys.stderr)
+            return 2
     if report["summary"]["hard_blocks"] and not args.no_fail:
         return 1
     return 0

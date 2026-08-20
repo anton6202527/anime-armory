@@ -10,10 +10,15 @@ import mv_utils
 
 def build_lock(root, reviewer, notes):
     reviewer = str(reviewer or "").strip()
-    if not reviewer:
-        raise RuntimeError("picture lock 必须记录 reviewer")
+    lowered = reviewer.lower()
+    if len(reviewer) < 2 or any(
+        token in lowered for token in ("codex", "chatgpt", "claude", "agent", "bot", "机器人", "自动化")
+    ) or reviewer in {"待填", "待定", "匿名"}:
+        raise RuntimeError("picture lock 必须记录真实具名人工 reviewer")
+    notes = str(notes or "").strip()
+    if not notes or notes in {"待填", "待定", "n/a"}:
+        raise RuntimeError("picture lock 必须记录非空审片说明")
     plan = mv_utils.load_json(os.path.join(root, "分镜", "clip_plan.json"), {}) or {}
-    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
     settings = mv_utils.parse_settings(root)
     required = [
         "分镜/clip_plan.json",
@@ -25,16 +30,18 @@ def build_lock(root, reviewer, notes):
         "分镜/timeline.otio",
         "生产数据/otio/otio_receipt.json",
     ]
-    if not meta.get("is_demo"):
-        required.extend(("评分/pacing_prescore.json", "分镜/semantic_prompts.json"))
-        vocal_performance = any(
-            clip.get("action_family") == "performance_vocal" or clip.get("vocal_lyrics")
-            for clip in plan.get("clips", []) if isinstance(clip, dict)
-        )
-        if settings.get("字幕语言", "中文") != "无字幕" or (
-            vocal_performance and settings.get("演唱口型", "仅正面演唱镜") != "关闭"
-        ):
-            required.append("字幕/alignment_report.json")
+    # picture lock precedes paid video generation, so preview/demo labels cannot
+    # weaken its evidence set.  Route decisions come from settings, never from
+    # the compatibility-only `_meta.is_demo` mirror.
+    required.extend(("评分/pacing_prescore.json", "分镜/semantic_prompts.json"))
+    vocal_performance = any(
+        clip.get("action_family") == "performance_vocal" or clip.get("vocal_lyrics")
+        for clip in plan.get("clips", []) if isinstance(clip, dict)
+    )
+    if settings.get("字幕语言", "中文") != "无字幕" or (
+        vocal_performance and settings.get("演唱口型", "仅正面演唱镜") != "关闭"
+    ):
+        required.append("字幕/alignment_report.json")
     missing = [rel for rel in required if not os.path.exists(os.path.join(root, rel))]
     if missing:
         raise RuntimeError(f"picture lock 缺前置：{', '.join(missing)}")

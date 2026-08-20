@@ -42,6 +42,7 @@ from image_prompt_compiler import (  # noqa: E402
     infer_task_type as infer_image_task_type,
     render_compiled_markdown as render_compiled_image_markdown,
 )
+import prompt_consumption_contract  # noqa: E402
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
@@ -5386,6 +5387,15 @@ def consumed_contract_inputs(ep: str) -> List[Tuple[str, Path]]:
     ]
 
 
+def image_prompt_fingerprint_inputs(ep: str) -> List[Path]:
+    """All direct and transitive sources that can alter a paid image prompt."""
+    prompt_paths = {
+        f"出图/{ep}/prompt/00_总览.md",
+        f"出图/{ep}/prompt/01_分镜出图.md",
+    }
+    return [Path(rel) for rel in prompt_consumption_contract.source_patterns("image_prompt", ep) if rel not in prompt_paths]
+
+
 def write_consumed_contracts_receipt(root: Path, ep: str) -> Path:
     prompt_rels = [
         Path("出图") / ep / "prompt" / "00_总览.md",
@@ -5409,6 +5419,7 @@ def write_consumed_contracts_receipt(root: Path, ep: str) -> Path:
             "sha256": sha256_file(path) if path.is_file() else "",
         })
     out = root / "生产数据" / f"consumed_contracts_image_prompt_{ep}.json"
+    input_fingerprint = prompt_consumption_contract.build_fingerprint(root, ep, "image_prompt")
     write_json(out, {
         "kind": CONSUMED_CONTRACTS_KIND,
         "version": CONSUMED_CONTRACTS_VERSION,
@@ -5418,6 +5429,7 @@ def write_consumed_contracts_receipt(root: Path, ep: str) -> Path:
         "reviewer": "Codex n2d-image prompt pack",
         "generated_by": "skills/n2d/n2d-image/scripts/image_prompt_pack.py",
         "generated_at": now_iso(),
+        "input_fingerprint": input_fingerprint,
         "contracts": contracts,
         "prompt_files": prompt_files,
     })

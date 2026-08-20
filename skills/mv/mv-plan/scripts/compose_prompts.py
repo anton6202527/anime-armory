@@ -13,6 +13,13 @@ import re
 import sys
 from datetime import date
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+CRAFT_SCRIPTS = os.path.abspath(os.path.join(HERE, "..", "..", "mv-craft", "scripts"))
+if CRAFT_SCRIPTS not in sys.path:
+    sys.path.insert(0, CRAFT_SCRIPTS)
+import mv_utils
+import completion
+
 REQUIRED_SEMANTIC_FIELDS = (
     "clip_id",
     "start_state",
@@ -100,6 +107,7 @@ def build_composer_prompt(clips, blueprint, lyrics):
 
 输出 JSON 格式，严格包含所有传入的 Clip ID，结构如下：
 {{
+  "generator": {{"model": "具体模型名", "version": "具体版本"}},
   "clips": [
     {{
       "clip_id": "Clip_001",
@@ -144,6 +152,10 @@ def validate_semantic_data(plan, semantic_data, allow_partial=False):
     sem_clips = semantic_data.get("clips") or []
     sem_ids = [c.get("clip_id") for c in sem_clips if isinstance(c, dict)]
     errors = []
+    generator = semantic_data.get("generator") if isinstance(semantic_data, dict) else None
+    if not isinstance(generator, dict) or not str(generator.get("model") or "").strip() \
+            or not str(generator.get("version") or "").strip():
+        errors.append("语义 JSON 缺 generator.model/version，不能审计由哪个具体模型生成")
     missing = [cid for cid in plan_ids if cid not in sem_ids]
     extra = [cid for cid in sem_ids if cid not in plan_ids]
     if missing and not allow_partial:
@@ -176,6 +188,13 @@ def validate_semantic_data(plan, semantic_data, allow_partial=False):
                     )
         except (TypeError, ValueError):
             errors.append(f"{cid} action_peak_relative 不是秒数：{row.get('action_peak_relative')}")
+        if row.get("action_family") == "performance_vocal":
+            expected_lyrics = str(plan_by_id[cid].get("vocal_lyrics") or "").strip()
+            actual_lyrics = str(row.get("vocal_lyrics") or "").strip()
+            if not expected_lyrics:
+                errors.append(f"{cid} 无对齐歌词区间，不得声明 performance_vocal")
+            elif actual_lyrics != expected_lyrics:
+                errors.append(f"{cid} vocal_lyrics 必须逐字继承对齐区间，不能由语义模型改写")
     return errors
 
 
@@ -185,7 +204,7 @@ def ensure_shot_design(clip):
     return clip["shot_design"]
 
 
-def apply_prompts(root, plan, semantic_data, allow_partial=False):
+def apply_prompts(root, plan, semantic_data, allow_partial=False, assessment_path=None):
     validation_errors = validate_semantic_data(plan, semantic_data, allow_partial=allow_partial)
     if validation_errors:
         raise ValueError("\n".join(validation_errors))
@@ -297,12 +316,8 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
     result_plan_sha256 = file_sha256(plan_path)
     timeline_path = os.path.join(root, "分镜", "timeline_manifest.json")
     timeline = load_json(timeline_path, {}) or {}
-    if timeline:
-        timeline["source_clip_plan_sha256"] = result_plan_sha256
-        timeline["semantic_prompts_applied"] = True
-        write_json(timeline_path, timeline)
     payload = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "mv_semantic_prompts",
         "generated_at": date.today().isoformat(),
         "updated_clips": updated_count,
@@ -311,6 +326,17 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
         "inputs_sha256": {
             "lyrics": file_sha256(os.path.join(root, "词", "lyrics.md")),
             "blueprint": file_sha256(os.path.join(root, "视觉蓝图.md")),
+            "alignment": file_sha256(os.path.join(root, "字幕", "alignment_report.json")),
+            "assessment": file_sha256(assessment_path),
+        },
+        "generator": semantic_data.get("generator"),
+        "complete": updated_count == len(plan.get("clips") or []) and not allow_partial,
+        "prompt_outputs_sha256": {
+            clip["clip_id"]: {
+                "image": file_sha256(os.path.join(root, clip.get("image_prompt_path", ""))),
+                "video": file_sha256(os.path.join(root, clip.get("video_prompt_path", ""))),
+            }
+            for clip in plan.get("clips") or []
         },
         "clips": semantic_data.get("clips", []),
     }
@@ -325,13 +351,23 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
     if not (isinstance(existing_receipt, dict) and _stable(existing_receipt) == _stable(payload)):
         write_json(receipt_path, payload)
 
+    receipt_sha256 = file_sha256(receipt_path)
+    if timeline:
+        timeline["source_clip_plan_sha256"] = result_plan_sha256
+        timeline["semantic_prompts_applied"] = bool(payload["complete"])
+        timeline["semantic_receipt_sha256"] = receipt_sha256
+        write_json(timeline_path, timeline)
+    if payload["complete"]:
+        completion.mark_stage_complete(root, "semantic_plan")
+
     return updated_count
 
 
 def main():
     ap = argparse.ArgumentParser(description="语义分镜引擎：基于歌词和蓝图自动补全画面提示词")
     ap.add_argument("project_root")
-    ap.add_argument("--mock-assessment", help="提供模拟评估 JSON 的路径，用于测试或手动注入")
+    ap.add_argument("--assessment", help="具体模型生成的语义 JSON；须含 generator.model/version")
+    ap.add_argument("--mock-assessment", help="旧别名：提供语义 JSON 路径")
     ap.add_argument("--allow-partial", action="store_true", help="允许只注入部分 clip；默认要求覆盖全部 clip")
     args = ap.parse_args()
 
@@ -349,21 +385,23 @@ def main():
     blueprint = read_text(os.path.join(root, "视觉蓝图.md"))
     lyrics = read_text(os.path.join(root, "词", "lyrics.md"))
     
-    if not args.mock_assessment:
+    assessment_path = args.assessment or args.mock_assessment
+    if not assessment_path:
         prompt = build_composer_prompt(plan.get("clips", []), blueprint, lyrics)
         print("--- LLM SEMANTIC COMPOSER PROMPT ---")
         print(prompt)
         print("--- END PROMPT ---")
         print("\n[info] 请根据上述 prompt 获取 LLM 生成的 JSON，并使用 --mock-assessment 注入结果。")
-        sys.exit(0)
+        sys.exit(3)
         
-    semantic_data = load_json(args.mock_assessment)
+    semantic_data = load_json(assessment_path)
     if not semantic_data:
-        print(f"[err] 无法读取注入的 JSON: {args.mock_assessment}", file=sys.stderr)
+        print(f"[err] 无法读取注入的 JSON: {assessment_path}", file=sys.stderr)
         sys.exit(2)
         
     try:
-        count = apply_prompts(root, plan, semantic_data, allow_partial=args.allow_partial)
+        count = apply_prompts(root, plan, semantic_data, allow_partial=args.allow_partial,
+                              assessment_path=assessment_path)
     except ValueError as exc:
         print(f"[err] 语义 JSON 校验失败：\n{exc}", file=sys.stderr)
         sys.exit(2)

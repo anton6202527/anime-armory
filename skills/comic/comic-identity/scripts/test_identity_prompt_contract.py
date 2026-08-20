@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import importlib.util
-import struct
 from pathlib import Path
 
 
@@ -14,14 +13,42 @@ spec.loader.exec_module(identity)
 
 
 def fake_png(path: Path, width: int = 768, height: int = 1024) -> None:
+    from PIL import Image
+
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(
-        identity.PNG_SIG
-        + b"\x00\x00\x00\rIHDR"
-        + struct.pack(">II", width, height)
-        + b"\x08\x02\x00\x00\x00"
-        + b"x" * 80
+    Image.new("RGB", (width, height), (70, 90, 110)).save(path)
+
+
+def accepted_source(root: Path, asset_id: str, variant: str, path: Path, *, kind: str) -> dict:
+    qc = identity.write_identity_image_qc(
+        root,
+        "第1话",
+        asset_id,
+        variant,
+        path,
+        registration_kind=kind,
+        source={"kind": "test_fixture"},
     )
+    assert qc["verdict"] == "pass"
+    qc["human_review"] = {
+        "status": "accepted",
+        "artifact_sha256": qc["artifact_sha256"],
+        "comparison_inputs_sha256": qc["comparison_inputs_sha256"],
+        "contact_sheet_sha256": qc["contact_sheet_sha256"],
+        "reviewed_by": "test-reviewer",
+        "reviewed_at": "2026-08-20T00:00:00",
+        "reason": "fixture reviewed",
+    }
+    receipt = identity.identity_qc_path(root, asset_id, variant)
+    identity.write_json(receipt, qc)
+    return {
+        "kind": "test_fixture",
+        "per_image_acceptance": {
+            "status": "accepted",
+            "artifact_sha256": qc["artifact_sha256"],
+            "receipt_path": identity.rel_to_root(root, receipt),
+        },
+    }
 
 
 def test_default_wardrobe_standard_is_compiled_into_prompt_contract() -> None:
@@ -64,7 +91,7 @@ def test_front_view_registers_as_default_outfit_reference(tmp_path: Path) -> Non
         "CHAR_A",
         "front",
         front,
-        source={"kind": "human_selected_character_front"},
+        source=accepted_source(tmp_path, "CHAR_A", "front", front, kind="character_view"),
     )
     outfit = registry["assets"]["CHAR_A"]["outfits"]["OUTFIT_BASE"]
     assert outfit["status"] == "ready"
@@ -297,6 +324,7 @@ def test_backend_probe_auto_matches_reference_attached_production_path(
 ) -> None:
     style = tmp_path / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
     fake_png(style, 1024, 1280)
+    accepted_source(tmp_path, "STYLE_A", "anchor", style, kind="asset_anchor")
     identity.write_json(
         identity.registry_path(tmp_path),
         {
@@ -304,9 +332,10 @@ def test_backend_probe_auto_matches_reference_attached_production_path(
             "kind": "comic_identity_registry",
             "assets": {
                 "STYLE_A": {
-                    "id": "STYLE_A",
-                    "type": "style",
-                    "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "status": "ready",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                 }
             },
         },
@@ -354,6 +383,7 @@ def test_backend_probe_production_character_front_profile_is_calibration_only(
 ) -> None:
     style = tmp_path / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
     fake_png(style, 1024, 1280)
+    accepted_source(tmp_path, "STYLE_A", "anchor", style, kind="asset_anchor")
     identity.write_json(
         identity.registry_path(tmp_path),
         {
@@ -361,9 +391,10 @@ def test_backend_probe_production_character_front_profile_is_calibration_only(
             "kind": "comic_identity_registry",
             "assets": {
                 "STYLE_A": {
-                    "id": "STYLE_A",
-                    "type": "style",
-                    "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "status": "ready",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
                 }
             },
         },

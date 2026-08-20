@@ -10,10 +10,10 @@ import { closeTestServer, FakeProvider, listenTestServer, testConfig } from './h
 test('runs a registered standalone skill asynchronously through the injected provider', async (context) => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'anime-armory-jobs-'))
   const skills = path.join(root, 'skills')
-  await mkdir(path.join(skills, 'n2d-character-turnaround'), { recursive: true })
+  await mkdir(path.join(skills, 'app', 'app-character-turnaround'), { recursive: true })
   await writeFile(
-    path.join(skills, 'n2d-character-turnaround', 'SKILL.md'),
-    '---\nname: n2d-character-turnaround\ndescription: standalone\n---\n# Turnaround\nUse three views.\n',
+    path.join(skills, 'app', 'app-character-turnaround', 'SKILL.md'),
+    '---\nname: app-character-turnaround\ndescription: standalone\n---\n# Turnaround\nUse three views.\n',
   )
   const provider = new FakeProvider()
   const { server, baseUrl } = await listenTestServer(testConfig(skills, path.join(root, 'runtime')), provider)
@@ -25,22 +25,23 @@ test('runs a registered standalone skill asynchronously through the injected pro
     body: JSON.stringify({
       skillId: 'n2d-character-turnaround',
       projectId: 'project-fixture',
-      line: 'n2d',
+      line: 'comic',
       prompt: 'Create a turnaround.',
       generationMode: 'auto',
       idempotencyKey: 'fixture-key-0001',
     }),
   })
   assert.equal(create.status, 202)
-  const created = await create.json() as { run: { id: string; state: string } }
+  const created = await create.json() as { run: { id: string; skillId: string; state: string } }
 
-  let run: { id: string; state: string; output?: string; model?: string; artifacts?: unknown[] } = created.run
+  let run: { id: string; skillId: string; state: string; output?: string; model?: string; artifacts?: unknown[] } = created.run
   for (let attempt = 0; attempt < 20 && run.state !== 'succeeded'; attempt += 1) {
     await new Promise((resolve) => setTimeout(resolve, 5))
     const response = await fetch(`${baseUrl}/api/v1/skill-runs/${run.id}`)
     run = (await response.json() as { run: typeof run }).run
   }
   assert.equal(run.state, 'succeeded')
+  assert.equal(run.skillId, 'app-character-turnaround')
   assert.equal(run.model, 'gpt-5.6-terra')
   assert.equal(run.output, 'fake backend result')
   assert.equal(run.artifacts?.length, 1)
@@ -51,9 +52,9 @@ test('runs a registered standalone skill asynchronously through the injected pro
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      skillId: 'n2d-character-turnaround',
+      skillId: 'app-n2d-character-turnaround',
       projectId: 'project-fixture',
-      line: 'n2d',
+      line: 'comic',
       prompt: 'Create a turnaround.',
       generationMode: 'auto',
       idempotencyKey: 'fixture-key-0001',
@@ -61,6 +62,21 @@ test('runs a registered standalone skill asynchronously through the injected pro
   })
   assert.equal(duplicate.status, 202)
   assert.equal((await duplicate.json() as { run: { id: string } }).run.id, run.id)
+
+  const canonicalDuplicate = await fetch(`${baseUrl}/api/v1/skill-runs`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      skillId: 'app-character-turnaround',
+      projectId: 'project-fixture',
+      line: 'comic',
+      prompt: 'Create a turnaround.',
+      generationMode: 'auto',
+      idempotencyKey: 'fixture-key-0001',
+    }),
+  })
+  assert.equal(canonicalDuplicate.status, 202)
+  assert.equal((await canonicalDuplicate.json() as { run: { id: string } }).run.id, run.id)
 })
 
 test('requires a complete definition for user skills', async (context) => {
@@ -89,10 +105,10 @@ test('requires a complete definition for user skills', async (context) => {
 test('loads an uploaded image into a standalone GPT vision request', async (context) => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'anime-armory-image-job-'))
   const skills = path.join(root, 'skills')
-  await mkdir(path.join(skills, 'n2d-character-turnaround'), { recursive: true })
+  await mkdir(path.join(skills, 'app', 'app-character-turnaround'), { recursive: true })
   await writeFile(
-    path.join(skills, 'n2d-character-turnaround', 'SKILL.md'),
-    '---\nname: n2d-character-turnaround\ndescription: standalone\n---\n# Turnaround\nInspect the real reference.\n',
+    path.join(skills, 'app', 'app-character-turnaround', 'SKILL.md'),
+    '---\nname: app-character-turnaround\ndescription: standalone\n---\n# Turnaround\nInspect the real reference.\n',
   )
   const provider = new FakeProvider()
   const { server, baseUrl } = await listenTestServer(testConfig(skills, path.join(root, 'runtime')), provider)
@@ -111,7 +127,7 @@ test('loads an uploaded image into a standalone GPT vision request', async (cont
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      skillId: 'n2d-character-turnaround',
+      skillId: 'app-character-turnaround',
       workId,
       line: 'n2d',
       prompt: 'Inspect this image.',
@@ -133,10 +149,10 @@ test('loads an uploaded image into a standalone GPT vision request', async (cont
 test('fails audio input explicitly instead of fabricating a media result', async (context) => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'anime-armory-audio-job-'))
   const skills = path.join(root, 'skills')
-  await mkdir(path.join(skills, 'n2d-audio-video'), { recursive: true })
+  await mkdir(path.join(skills, 'app', 'app-audio-video'), { recursive: true })
   await writeFile(
-    path.join(skills, 'n2d-audio-video', 'SKILL.md'),
-    '---\nname: n2d-audio-video\ndescription: standalone\n---\n# Audio video\nUse the real audio.\n',
+    path.join(skills, 'app', 'app-audio-video', 'SKILL.md'),
+    '---\nname: app-audio-video\ndescription: standalone\n---\n# Audio video\nUse the real audio.\n',
   )
   const provider = new FakeProvider()
   const { server, baseUrl } = await listenTestServer(testConfig(skills, path.join(root, 'runtime')), provider)
@@ -145,7 +161,7 @@ test('fails audio input explicitly instead of fabricating a media result', async
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      skillId: 'n2d-audio-video',
+      skillId: 'app-audio-video',
       workId: randomUUID(),
       line: 'n2d',
       prompt: 'Analyze this audio.',

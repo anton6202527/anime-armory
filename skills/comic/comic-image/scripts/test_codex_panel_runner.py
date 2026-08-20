@@ -10,6 +10,13 @@ runner = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(runner)
 
 
+def write_png(path: Path, size: tuple[int, int] = (100, 100), color: tuple[int, int, int] = (40, 80, 120)) -> None:
+    from PIL import Image
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", size, color).save(path)
+
+
 def test_adopt_builtin_records_builtin_channel_without_mixing_recipe() -> None:
     assert runner.recorded_channel(adopt_builtin=True) == "内置 imagegen"
     assert runner.recorded_channel(adopt_builtin=False) == "Codex CLI"
@@ -97,10 +104,9 @@ def test_reference_manifest_discloses_omitted_text_only_contract(tmp_path: Path)
 
 def test_post_qc_accepts_disclosed_tool_limit_omission(tmp_path: Path, monkeypatch) -> None:
     panel = tmp_path / "P015.png"
-    panel.write_bytes(b"png")
-    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
-    monkeypatch.setattr(runner, "image_size", lambda _path: (100, 100))
+    write_png(panel)
     monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    monkeypatch.setattr(runner, "likely_large_edge_blank_bands", lambda _path: [])
     job = {
         "panel_id": "P015",
         "size": {"width": 100, "height": 100},
@@ -113,19 +119,20 @@ def test_post_qc_accepts_disclosed_tool_limit_omission(tmp_path: Path, monkeypat
 
     assert payload["verdict"] == "pass"
     assert payload["omitted_attachment_count"] == 1
-    assert payload["manual_review_required"] is False
+    assert payload["manual_review_required"] is True
+    assert payload["artifact_sha256"] == runner.file_sha256(panel)
+    assert payload["visual_review_packet"]["status"] == "ready_for_human_review"
 
 
 def test_post_qc_counts_one_attachment_reused_for_multiple_semantic_roles(
     tmp_path: Path, monkeypatch
 ) -> None:
     panel = tmp_path / "P019.png"
-    panel.write_bytes(b"png")
+    write_png(panel)
     shared_ref = tmp_path / "hong_xin_face.png"
-    shared_ref.write_bytes(b"png")
-    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
-    monkeypatch.setattr(runner, "image_size", lambda _path: (100, 100))
+    write_png(shared_ref, color=(120, 60, 30))
     monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    monkeypatch.setattr(runner, "likely_large_edge_blank_bands", lambda _path: [])
     job = {
         "panel_id": "P019",
         "size": {"width": 100, "height": 100},
@@ -134,7 +141,7 @@ def test_post_qc_counts_one_attachment_reused_for_multiple_semantic_roles(
             {"id": "CHAR_HONG_XIN", "path": str(shared_ref), "role": "outfit"},
         ],
     }
-    used = [{"id": "CHAR_HONG_XIN", "path": str(shared_ref), "role": "face"}]
+    used = [{"id": "CHAR_HONG_XIN", "path": str(shared_ref), "abs_path": str(shared_ref), "role": "face"}]
 
     payload = runner.post_qc_panel(tmp_path, "第1话", job, panel, used, [])
 
@@ -173,10 +180,9 @@ def test_large_edge_blank_band_detector_ignores_full_frame_art(tmp_path: Path) -
 
 def test_post_qc_blocks_max_resolution_without_native_master(tmp_path: Path, monkeypatch) -> None:
     panel = tmp_path / "P020.png"
-    panel.write_bytes(b"png")
-    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
-    monkeypatch.setattr(runner, "image_size", lambda _path: (1200, 900))
+    write_png(panel, (1200, 900))
     monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    monkeypatch.setattr(runner, "likely_large_edge_blank_bands", lambda _path: [])
     job = {
         "panel_id": "P020",
         "size": {"width": 1200, "height": 900},
@@ -192,10 +198,9 @@ def test_post_qc_blocks_max_resolution_without_native_master(tmp_path: Path, mon
 
 def test_post_qc_blocks_upscaled_derivative(tmp_path: Path, monkeypatch) -> None:
     panel = tmp_path / "P021.png"
-    panel.write_bytes(b"png")
-    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
-    monkeypatch.setattr(runner, "image_size", lambda _path: (1200, 900))
+    write_png(panel, (1200, 900))
     monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    monkeypatch.setattr(runner, "likely_large_edge_blank_bands", lambda _path: [])
     job = {
         "panel_id": "P021",
         "size": {"width": 1200, "height": 900},
@@ -244,17 +249,78 @@ def test_gate_receipt_stales_when_non_job_preflight_input_changes(tmp_path: Path
     assert runner.validate_gate_receipt(tmp_path, "第1话", jobs)["status"] == "stale_or_not_passed"
 
 
-def test_skip_gate_waiver_is_persistent_and_sha_bound(tmp_path: Path) -> None:
-    jobs = tmp_path / "出图" / "第1话" / "prompt" / "panel_jobs.json"
-    jobs.parent.mkdir(parents=True)
-    jobs.write_text('{"jobs": []}\n', encoding="utf-8")
-    status = {"status": "missing", "reason": "receipt_missing"}
-    path = runner.write_gate_waiver(tmp_path, "第1话", jobs, "人工确认本次误报", "P001", status)
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    assert payload["reason"] == "人工确认本次误报"
-    assert payload["panel_jobs_sha256"] == runner.file_sha256(jobs)
-    assert payload["targets"] == ["P001"]
-    assert (path.parent / "image_preflight_第1话_latest.json").is_file()
+def _reviewable_job(tmp_path: Path, monkeypatch, *, warning: bool = False, block: bool = False) -> tuple[dict, dict, Path, Path]:
+    panel = tmp_path / "出图" / "第1话" / "panels" / "P001.png"
+    write_png(panel)
+    monkeypatch.setattr(
+        runner,
+        "likely_blank_bubble_regions",
+        (lambda _path: [{"x": 1, "y": 1, "w": 20, "h": 20}]) if warning else (lambda _path: []),
+    )
+    monkeypatch.setattr(runner, "likely_large_edge_blank_bands", lambda _path: [])
+    job = {
+        "panel_id": "P001",
+        "size": {"width": 100, "height": 100},
+        "resolution_policy": "后端最高可达" if block else "按最终画布",
+        "references": [],
+        "result_path": str(panel.relative_to(tmp_path)),
+    }
+    post_qc = runner.post_qc_panel(tmp_path, "第1话", job, panel, [], [])
+    job.update(
+        {
+            "status": runner.status_after_post_qc(post_qc),
+            "artifact_sha256": runner.file_sha256(panel),
+            "post_qc": post_qc,
+        }
+    )
+    data = {"jobs": [job]}
+    jobs_path = tmp_path / "出图" / "第1话" / "prompt" / "panel_jobs.json"
+    runner.write_json(jobs_path, data)
+    return data, job, jobs_path, panel
+
+
+def test_warn_never_auto_ready_but_named_review_can_accept(tmp_path: Path, monkeypatch) -> None:
+    data, job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch, warning=True)
+
+    assert job["status"] == "qc_warn"
+    assert not runner.panel_acceptance_status(tmp_path, job)["accepted"]
+    accepted = runner.accept_panel_review(
+        tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", "亮区是画内灯笼，不是空白气泡"
+    )
+
+    assert accepted["accepted"] is True
+    assert job["status"] == "ready"
+    assert job["post_qc"]["manual_review"]["verdict"] == "accepted_with_warnings"
+    assert job["post_qc"]["manual_review"]["acknowledged_warnings"][0]["code"] == "baked_text_container"
+
+
+def test_deterministic_block_can_never_be_signed(tmp_path: Path, monkeypatch) -> None:
+    data, job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch, block=True)
+
+    assert job["status"] == "qc_block"
+    try:
+        runner.accept_panel_review(tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", "accept")
+    except ValueError as exc:
+        assert "block/unverifiable" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("deterministic block must not be signable")
+
+
+def test_acceptance_stales_after_pixel_or_comparison_input_changes(tmp_path: Path, monkeypatch) -> None:
+    reference = tmp_path / "出图" / "共享" / "图片" / "CHAR_A__front.png"
+    write_png(reference, color=(120, 30, 20))
+    data, job, jobs_path, panel = _reviewable_job(tmp_path, monkeypatch)
+    records = [{"id": "CHAR_A", "path": str(reference), "abs_path": str(reference), "role": "front"}]
+    post_qc = runner.post_qc_panel(tmp_path, "第1话", job, panel, records, [])
+    job.update({"status": "awaiting_review", "post_qc": post_qc})
+    runner.write_json(jobs_path, data)
+    runner.accept_panel_review(tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", "逐轴复核通过")
+    assert runner.panel_acceptance_status(tmp_path, job)["accepted"]
+
+    write_png(reference, color=(20, 130, 40))
+    assert runner.panel_acceptance_status(tmp_path, job)["reason"] == "comparison_input_changed"
+    write_png(panel, color=(10, 10, 10))
+    assert runner.panel_acceptance_status(tmp_path, job)["reason"] == "job_artifact_sha_mismatch"
 
 
 def test_write_json_is_atomic_and_valid(tmp_path):

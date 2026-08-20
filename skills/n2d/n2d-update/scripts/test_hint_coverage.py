@@ -63,6 +63,12 @@ def test_every_lib_module_is_explicitly_classified():
     )
 
 
+def test_paid_execution_contract_replays_from_first_paid_stage():
+    rel = "skills/n2d/_lib/paid_execution_contract.py"
+
+    assert _lib_classified_stage(rel) == "image"
+
+
 def test_lib_hint_tokens_point_at_real_files():
     """Every enumerated `_lib` token must resolve to an existing file (rename guard)."""
     tokens = list(up.N2D_LIB_OBSERVE_ONLY_TOKENS)

@@ -142,6 +142,83 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("状态增量模板", text)
             self.assertIn("reader_contract_progress", text)
 
+    def test_literary_scene_packet_does_not_force_conventional_conflict_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 创作工艺档：literary\n")
+            with open(os.path.join(tmp, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "kind": "novel_scene_cards",
+                    "scenes": [{
+                        "id": "SC003-01",
+                        "chapter": 3,
+                        "scene_no": 1,
+                        "viewpoint": "河边老人们的合唱视角",
+                        "motif_return": "河水第三次映出无人承认的灯火",
+                    }],
+                }, f, ensure_ascii=False)
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3", "--step", "full"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(os.path.join(tmp, "写作任务", "第03章.md"), encoding="utf-8") as f:
+                text = f.read()
+
+            self.assertIn("当前创作工艺档：`literary`", text)
+            self.assertIn("目标、阻碍、冲突可按场景实际省略", text)
+            self.assertIn("叙述视点/归属：河边老人们的合唱视角", text)
+            self.assertIn("意象复现=河水第三次映出无人承认的灯火", text)
+            self.assertIn("工艺复核（B10 建议级）", text)
+            self.assertIn("允许推进、深化、质疑、延宕或有意偏离", text)
+            self.assertNotIn("每个场景必须有目标、阻碍、冲突、转折和价值变化", text)
+            self.assertNotIn("本章必须兑现章纲里的戏剧节拍", text)
+            self.assertNotIn("至少留一处微意外", text)
+            self.assertNotIn("本章必须推进 `读者契约`", text)
+
+    def test_experimental_packet_uses_open_function_review_without_placeholder_pressure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 创作工艺档：experimental\n")
+            with open(os.path.join(tmp, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "kind": "novel_scene_cards",
+                    "scenes": [{"id": "SC003-01", "chapter": 3, "scene_no": 1}],
+                }, f, ensure_ascii=False)
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3", "--step", "full"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(os.path.join(tmp, "写作任务", "第03章.md"), encoding="utf-8") as f:
+                text = f.read()
+
+            self.assertIn("当前创作工艺档：`experimental`", text)
+            self.assertIn("开放式功能复核：当前未预先登记", text)
+            self.assertIn("实验档工艺复核（B10 建议级）", text)
+            self.assertNotIn("已登记叙事功能：（待补", text)
+            self.assertNotIn("本章必须兑现章纲里的戏剧节拍", text)
+            self.assertNotIn("至少留一处微意外", text)
+
+    def test_unknown_custom_profile_fails_closed_without_writing_packet(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 创作工艺档：my_ritual_form\n")
+
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3", "--step", "full"],
+                capture_output=True, text=True,
+            )
+
+            self.assertEqual(got.returncode, 2)
+            self.assertIn("创作工艺档=my_ritual_form", got.stderr)
+            self.assertIn("尚无 draft adapter", got.stderr)
+            self.assertIn("不会静默套用其它档", got.stderr)
+            self.assertFalse(os.path.exists(os.path.join(tmp, "写作任务", "第03章.md")))
+
     def test_settings_purpose_fills_packet_when_meta_missing_purpose(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
@@ -816,7 +893,7 @@ class PredictedPlotSectionTest(unittest.TestCase):
                   open(os.path.join(tmp, "评分", f"reader_predictions_第{chapter:02d}章.json"),
                        "w", encoding="utf-8"), ensure_ascii=False)
 
-    def test_injects_prev_chapter_predictions_as_negative_constraint(self):
+    def test_injects_prev_chapter_predictions_as_context_only_questions(self):
         import draft_packets as dp
         with tempfile.TemporaryDirectory() as tmp:
             self._write_predictions(tmp, 9, [
@@ -824,9 +901,13 @@ class PredictedPlotSectionTest(unittest.TestCase):
                 {"persona": "veteran", "text": "长老出手救场"},
             ])
             sec = dp.predicted_plot_section(tmp, 10)
-            self.assertIn("已猜到的走向", sec)
+            self.assertIn("context-only·不构成写作约束", sec)
             self.assertIn("主角会当场反杀", sec)
             self.assertIn("[veteran]", sec)
+            self.assertIn("任何重合自动判成陈词滥调", sec)
+            self.assertIn("不得为了", sec)
+            self.assertNotIn("写前必读·负面约束", sec)
+            self.assertNotIn("＝读者的第一想法", sec)
 
     def test_quiet_without_predictions_or_for_stale_chapter(self):
         import draft_packets as dp
@@ -842,6 +923,24 @@ class PredictedPlotSectionTest(unittest.TestCase):
             self._write_predictions(tmp, 9, [])
             self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
             self._write_predictions(tmp, 9, [{"persona": "rookie"}, "怪东西"])
+            self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
+
+    def test_behavioral_output_never_becomes_drafting_constraint(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
+            json.dump({
+                "schema_version": 2,
+                "kind": "novel_synthetic_behavior_probe",
+                "automatic_constraint_eligible": False,
+                "questions": [{
+                    "type": "review_prediction_next_chapter_overlap",
+                    "question": "重合是合理兑现还是过度明示？",
+                    "automatic_action": None,
+                }],
+                "alerts": [],
+            }, open(os.path.join(tmp, "评分", "behavioral_signals.json"), "w", encoding="utf-8"),
+                ensure_ascii=False)
             self.assertEqual(dp.predicted_plot_section(tmp, 10), "")
 
 

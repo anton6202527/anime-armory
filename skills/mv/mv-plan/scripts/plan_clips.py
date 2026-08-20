@@ -4,6 +4,7 @@
 import argparse
 import importlib.util
 import json
+import math
 import os
 import re
 import sys
@@ -72,6 +73,29 @@ def parse_lyrics(root):
     if cur:
         sections.append({"section": cur, "lines": rows})
     return sections
+
+
+def alignment_lines(root):
+    report = mv_utils.load_json(os.path.join(root, "字幕", "alignment_report.json"), None)
+    if not isinstance(report, dict):
+        return [], None
+    rows = []
+    for row in report.get("lines") or []:
+        if not isinstance(row, dict):
+            continue
+        try:
+            start, end = float(row["start"]), float(row["end"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if end > start and str(row.get("line") or "").strip():
+            rows.append({"line": str(row["line"]).strip(), "start": start, "end": end})
+    return sorted(rows, key=lambda row: (row["start"], row["end"])), report
+
+
+def lyric_hint_for_interval(start, end, rows):
+    """Join true alignment intervals; never rotate lyrics by clip index."""
+    matched = [row for row in rows if min(end, row["end"]) - max(start, row["start"]) > 0.0]
+    return " / ".join(dict.fromkeys(row["line"] for row in matched))
 
 
 def normalize_sections(bg, meta, lyric_sections):
@@ -342,16 +366,8 @@ def seam_contract_for(current, following, key_cut):
     }
 
 
-def lyric_hint_for(section_name, lyric_sections, index):
-    candidates = [s for s in lyric_sections if s["section"] == section_name]
-    lines = candidates[0]["lines"] if candidates else []
-    if not lines:
-        return ""
-    return lines[index % len(lines)]
-
-
 def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style,
-                blueprint, identities, assets, aspect):
+                blueprint, identities, assets, aspect, aligned_lyrics=None):
     profile = contract.plan_granularity_profile(granularity)
     beats = [float(x) for x in (bg.get("beats") or [])]
     downbeats = [float(x) for x in (bg.get("downbeats") or [])]
@@ -363,16 +379,13 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         meter = 4
     energy_map = bg.get("energy_map")
     raw_clips = []
-    lyric_index_by_section = {}
+    aligned_lyrics = aligned_lyrics or []
     for sec in sections:
         pts = cut_points_for_section(sec, downbeats, beats, meter, energy_map, profile, strategy)
         for i in range(len(pts) - 1):
             start, end = pts[i], pts[i + 1]
             if end <= start:
                 continue
-            idx = lyric_index_by_section.get(sec["section"], 0)
-            lyric_index_by_section[sec["section"]] = idx + 1
-            
             energy = get_energy_at(start, energy_map)
             energy_level = int(energy * 10) + 1
             energy_level = max(1, min(10, energy_level))
@@ -383,7 +396,8 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
                 "end": round(end, 3),
                 "duration": round(end - start, 3),
                 "energy_level": energy_level,
-                "lyric_hint": lyric_hint_for(sec["section"], lyric_sections, idx),
+                "lyric_hint": lyric_hint_for_interval(start, end, aligned_lyrics),
+                "lyric_timing_source": "alignment_report" if aligned_lyrics else "none",
             })
     raw_clips = merge_to_limit(raw_clips, profile["max_clips"])
     clips = []
@@ -458,6 +472,8 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "seam_contract": seam_contract,
             "visual_motif": visual_motif,
             "lyric_hint": clip.get("lyric_hint", ""),
+            "vocal_lyrics": clip.get("lyric_hint", ""),
+            "lyric_timing_source": clip.get("lyric_timing_source", "none"),
             "shot_design": shot_design,
             "identity_contract": identity_contract,
             "reference_inputs": reference_inputs,
@@ -592,6 +608,36 @@ def build_markdown(title, clips):
     return "\n".join(lines) + "\n"
 
 
+def quantized_timeline_rows(clips, rate):
+    """Create an integer-frame edit timeline with contiguous cut boundaries."""
+    if not clips:
+        return []
+    rate = max(1, int(rate))
+    rows = []
+    cursor = int(math.floor(float(clips[0]["start"]) * rate + 0.5))
+    for index, clip in enumerate(clips):
+        target_end = int(math.floor(float(clip["end"]) * rate + 0.5))
+        if index == len(clips) - 1:
+            target_end = int(math.floor(float(clips[-1]["end"]) * rate + 0.5))
+        end_frame = max(cursor + 1, target_end)
+        rows.append({
+            "clip_id": clip["clip_id"],
+            "section": clip["section"],
+            "start": round(cursor / rate, 6),
+            "end": round(end_frame / rate, 6),
+            "duration": round((end_frame - cursor) / rate, 6),
+            "start_frame": cursor,
+            "end_frame": end_frame,
+            "duration_frames": end_frame - cursor,
+            "video_path": clip["selected_video_path"],
+            "transition": clip["transition"],
+            "speed_mode": clip["speed_mode"],
+            "seam_contract": clip.get("seam_contract") or {},
+        })
+        cursor = end_frame
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser(description="生成 MV clip_plan/timeline_manifest")
     ap.add_argument("project_root")
@@ -622,14 +668,15 @@ def main():
     granularity = args.granularity or settings.get("MV规划粒度") or "标准"
     strategy = args.strategy or settings.get("卡点策略") or "副歌强卡点"
     visual_style = args.visual_style or settings.get("MV视觉风格") or "电影叙事"
-    aspect = meta.get("aspect") or settings.get("合成画幅") or "16:9"
+    aspect = settings.get("合成画幅") or meta.get("aspect") or "16:9"
     blueprint = mv_utils.read_text(os.path.join(root, "视觉蓝图.md"))
     identities = registry.build_identity_registry(root)
     assets = registry.build_asset_registry(root)
     lyric_sections = parse_lyrics(root)
+    aligned_lyrics, alignment_report = alignment_lines(root)
     sections = normalize_sections(bg, meta, lyric_sections)
     clips = build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style,
-                        blueprint, identities, assets, aspect)
+                        blueprint, identities, assets, aspect, aligned_lyrics=aligned_lyrics)
     if not clips:
         print("[err] 未生成任何 clip，请检查 beatgrid duration/sections", file=sys.stderr)
         sys.exit(1)
@@ -640,13 +687,13 @@ def main():
         "beatgrid": bg_path,
         "lyrics": os.path.join(root, "词", "lyrics.md"),
         "blueprint": os.path.join(root, "视觉蓝图.md"),
-        "settings": os.path.join(root, "_设置.md"),
+        "alignment": os.path.join(root, "字幕", "alignment_report.json"),
     }
     plan = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "mv_clip_plan",
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "title": title,
         "granularity": granularity,
         "strategy": strategy,
@@ -672,8 +719,18 @@ def main():
             [f"max_clips={contract.plan_granularity_profile(granularity)['max_clips']} 是成本目标；为保护段落边界，实际保留 {len(clips)} clips"]
             if len(clips) > contract.plan_granularity_profile(granularity)["max_clips"] else []
         ),
-        # 全输入内容收据：歌词、蓝图或设置变化也会使昂贵下游失效。
-        "inputs_sha256": {key: mv_utils.content_hash(path) for key, path in upstream_paths.items()},
+        # Stage-scoped inputs avoid invalidating picture lock when a release-only
+        # setting or the human-readable settings history changes.
+        "inputs_sha256": {
+            **{key: mv_utils.content_hash(path) for key, path in upstream_paths.items()},
+            "settings_plan": contract.plan_settings_digest(settings),
+        },
+        "lyric_timing": {
+            "source": "alignment_report" if aligned_lyrics else "none",
+            "line_count": len(aligned_lyrics),
+            "report_kind": (alignment_report or {}).get("kind"),
+            "degraded": not bool(aligned_lyrics),
+        },
         # Legacy aliases retained for older readers.
         "beatgrid_hash": mv_utils.content_hash(bg_path),
         "song_hash": mv_utils.content_hash(song_path),
@@ -689,30 +746,18 @@ def main():
     except KeyError:
         output_rate = 24
     timeline = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "mv_timeline_manifest",
         "generated_at": date.today().isoformat(),
-        "project_root": root,
+        "root_rel": ".",
         "title": title,
         "song_path": mv_utils.relpath(root, song_path) if song_path else "",
         "rate": output_rate,
         "audio_policy": "locked_master_song_only; generated_clip_audio_discarded",
         "beatgrid_path": "节拍/beatgrid.json",
         "source_clip_plan_sha256": mv_utils.content_hash(plan_path),
-        "clips": [
-            {
-                "clip_id": c["clip_id"],
-                "section": c["section"],
-                "start": c["start"],
-                "end": c["end"],
-                "duration": c["duration"],
-                "video_path": c["selected_video_path"],
-                "transition": c["transition"],
-                "speed_mode": c["speed_mode"],
-                "seam_contract": c.get("seam_contract") or {},
-            }
-            for c in clips
-        ],
+        "timebase": {"rate": int(output_rate), "unit": "frame", "quantized": True},
+        "clips": quantized_timeline_rows(clips, output_rate),
     }
     mv_utils.write_json_stable(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
     mv_utils.write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))

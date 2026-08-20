@@ -82,7 +82,7 @@
 | `first_party_genre` | object/null | 否 | 自有投放题材战绩聚合；缺战绩库时为 null |
 | `reader_telemetry_path` | string/null | 否 | `评分/reader_telemetry_summary.json`；真实读者反馈存在时填写 |
 | `reader_telemetry_summary` | object/null | 否 | `novel-feedback` 聚合摘要：章节完读/弃读/评论/weakest_chapters |
-| `reader_panel_path` | string/null | 否 | `评分/reader_panel_signals.json`；模拟读者信号存在时填写 |
+| `reader_panel_path` | string/null | 否 | `评分/reader_panel_signals.json`；合成叙事探针存在时填写；schema v3 仅含未校准表面分量、无聚合留存分，并须由 `source_snapshot` 证明实际 scope fresh；stale/legacy 值不得作为当前信号展示 |
 | `benchmark_percentile` | object/null | 否 | 合规参考分布百分位；无 `reference_distribution*.json` 时为 null |
 | `scores` | list[object] | 是 | 八维分数（2026-07 起含 `novelty` 新颖度/想象力维度） |
 | `judge_debias` | object/null | 否 | 多判官去偏聚合结果；`method=persona_panel` 表示同模型多 persona 低信心参考，`method=judge_panel` 表示 ≥2 模型家族；推荐 ≥3 不同模型家族，高方差维度标 `abstain`/升级，不改原始分 |

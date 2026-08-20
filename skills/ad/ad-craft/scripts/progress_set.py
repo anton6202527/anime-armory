@@ -183,16 +183,7 @@ def require_stage_acceptance(root, stage, mode="formal"):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     payload = module.evaluate(Path(root), stage, mode)
-    if not payload["summary"]["block"]:
-        try:
-            module.dependency_graph.accept_stage(Path(root), stage)
-        except ValueError as exc:
-            payload["findings"].append(module.finding(
-                "block", "dependency_accept_failed", str(exc),
-                "生产数据/dependency_receipts.json", "dependency_lineage"))
-            payload["summary"]["block"] += 1
-            payload["summary"]["accepted"] = False
-    report_path = module.write_report(Path(root), payload)
+    report_path = module.record_acceptance(Path(root), payload)
     if payload["summary"]["block"]:
         top = next((f for f in payload["findings"] if f["severity"] == "block"), {})
         raise ValueError(f"stage acceptance blocked: {top.get('code', 'unknown')} {top.get('msg', '')}；见 {report_path}")

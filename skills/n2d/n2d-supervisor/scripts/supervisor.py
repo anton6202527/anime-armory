@@ -137,9 +137,14 @@ def next_action_schema_gaps(next_action: Any) -> List[str]:
     gaps: List[str] = []
     if not isinstance(next_action, dict):
         return ["next_action 不是 dict"]
-    if not isinstance(next_action.get("frontier"), dict):
+    stop_reason = str(next_action.get("stop_reason") or "").strip()
+    frontier = next_action.get("frontier")
+    # Canonical terminal state: frontier is null iff the workflow is done.
+    if stop_reason == "done" and frontier is not None:
+        gaps.append("done 状态的 frontier 必须为 null")
+    elif stop_reason != "done" and not isinstance(frontier, dict):
         gaps.append("缺 frontier")
-    if not str(next_action.get("stop_reason") or "").strip():
+    if not stop_reason:
         gaps.append("缺 stop_reason")
     if not isinstance(next_action.get("action_card"), dict):
         gaps.append("缺 action_card")
@@ -168,7 +173,7 @@ def dispatch_for(next_action: Dict[str, Any]) -> Dict[str, Any]:
     action = next_action.get("action_contract") or stage_action_spec(stage_key)
     specialist = (next_action.get("action_card") or {}).get("specialist") or specialist_for_stage(stage_key)
     human_gate = classify_human_gate(stop_reason)
-    should_call = stop_reason in {"needs_agent_gen"} or (
+    should_call = stop_reason in {"needs_agent_gen", "needs_stage_execution"} or (
         stop_reason == "needs_payment_confirm" and stage_key in {"compose", "review"}
     )
     if human_gate["required"] and stop_reason != "needs_agent_gen":
@@ -208,7 +213,7 @@ def build_plan(root: str, ep: Optional[str] = None, *, auto: bool = False,
     # 自管轮次：从持久状态推导有效轮数，不全信调用方传参（track_rounds=True 时还会写回 +1）。
     effective_round = resolve_effective_round(
         root, frontier_round_key(episode, dispatch.get("stage_key") or ""),
-        round_index, persist=track_rounds)
+        round_index, persist=track_rounds and next_action.get("stop_reason") != "done")
     guardrails = runtime_guardrails(dispatch, round_index=effective_round, max_rounds=max_rounds)
     # 无界循环护栏：自动派发轮数到顶 → 强制停止派发、升级人审，不得继续自动重试烧成本。
     if guardrails["loop_budget_exhausted"] and dispatch.get("should_call_specialist"):

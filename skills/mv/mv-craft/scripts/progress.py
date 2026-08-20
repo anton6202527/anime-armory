@@ -26,6 +26,11 @@ try:
 except Exception:  # pragma: no cover - 进度查询不能因契约导入失败直接不可用
     contract = None
 
+try:
+    import completion
+except Exception:  # pragma: no cover - 只读进度仍需能报告未安装/旧项目
+    completion = None
+
 
 PARTIAL_RE = re.compile(r"(\d+)\s*/\s*(\d+)")
 HIGH_RISK_HINTS = {
@@ -120,12 +125,26 @@ def report(root, limit):
     frontier = None
     for row in rows:
         state = state_of(row["status"])
-        marker = {"done": "✅", "partial": "⏳", "todo": "⬜"}[state]
-        print(f"- {marker} {row['label']}  ·  {row['owner']}  ·  {row['status']}")
-        if frontier is None and state != "done":
+        effective_state = state
+        stale_reason = ""
+        meta = label_map.get(clean_label(row["label"])) or owner_map.get(row["owner"].split("/")[0]) or {}
+        stage_key = meta.get("key")
+        if (
+            state == "done"
+            and completion is not None
+            and stage_key in completion.OUTPUT_HEALTH_STAGES
+        ):
+            health = completion.stage_health(root, stage_key)
+            if not health.get("ok"):
+                effective_state = "stale"
+                stale_reason = str((health.get("errors") or ["产物收据失效"])[0])
+        marker = {"done": "✅", "partial": "⏳", "todo": "⬜", "stale": "🛑"}[effective_state]
+        suffix = f"  ·  stale: {stale_reason}" if stale_reason else ""
+        print(f"- {marker} {row['label']}  ·  {row['owner']}  ·  {row['status']}{suffix}")
+        if frontier is None and effective_state != "done":
             if state == "todo" and is_optional(row["label"]):
                 continue
-            frontier = (row, state)
+            frontier = (row, effective_state)
 
     print()
     if frontier is None:

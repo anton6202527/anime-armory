@@ -322,6 +322,8 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/n2d_insert_coverage.py",
             # confirmed/哈希签收契约：最早消费者是 P-2/animatic 签收快照。
             "_lib/signoff_contract.py",
+            # 项目级自主批准决定这些签收是否有效，明确归类避免未知模块兜底到拆集。
+            "_lib/autonomy_policy.py",
         ),
     ),
     (
@@ -336,6 +338,17 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/seam_contract.py",
             # 出图生产合同→提交请求的唯一编译边界，改动即 prompt 变化。
             "_lib/image_prompt_compiler.py",
+            # 图片/视频付费复用共用的内容寻址规则；改变后从最早生成 prompt 刷新。
+            "_lib/content_fingerprint.py",
+            "_lib/prompt_consumption_contract.py",
+        ),
+    ),
+    (
+        "image",
+        (
+            # 图片/视频共享的付费点 expectation 与 boundary receipt；改变后必须从最早
+            # 付费生成阶段重新证明执行，不能只刷新 prompt 或把它当 observe-only。
+            "_lib/paid_execution_contract.py",
         ),
     ),
     (
@@ -365,6 +378,15 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/bgm_contract.py",
             # 跨集字幕/称谓/音频 register 真值合同：被 compose 侧 loudness_conform 与 review gate 消费。
             "_lib/series_consistency.py",
+        ),
+    ),
+    (
+        "review",
+        (
+            # 整集完成、进度背书与正式边界 schema 只改变验收/发布裁决，不重制媒体。
+            "_lib/acceptance_contract.py",
+            "_lib/gate_receipt.py",
+            "_lib/n2d_schema_registry.py",
         ),
     ),
 )

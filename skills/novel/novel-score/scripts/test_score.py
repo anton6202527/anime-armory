@@ -232,6 +232,99 @@ class TestNovelScore(unittest.TestCase):
         )
         self.assertEqual(adjustment["ab_take_results_summary"]["winner"], "B")
 
+    def test_reader_panel_v3_displays_components_without_aggregate_score(self):
+        payload = {
+            "schema_version": 3,
+            "kind": "novel_synthetic_reader_probe",
+            "signal_only": True,
+            "chapters_read": [1, 2, 3],
+            "freshness": {"status": "fresh", "reason": "test snapshot fresh"},
+            "surface_signals": {
+                "hook_tail_markers": {
+                    "literal_marker_hits": 4,
+                    "chapter_tails_observed": 3,
+                },
+                "lexical_4gram": {
+                    "unique_cjk_4gram_count": 80,
+                    "cjk_4gram_count": 100,
+                    "unique_cjk_4gram_ratio": 0.8,
+                },
+                "cliche_terms": {"literal_hits": 2},
+            },
+            "perspectives": {
+                "logic": {
+                    "name": "逻辑考据党",
+                    "keyword_surface": {"density_per_kchar": 1.25},
+                },
+            },
+        }
+        text = score.reader_panel_text(payload)
+        self.assertIn("章尾标记字面命中 4 次/3 个章尾", text)
+        self.assertIn("CJK 4-gram 去重 80/100", text)
+        self.assertIn("套路词字面命中 2 次", text)
+        self.assertIn("逻辑考据党关注词 1.25/千字", text)
+        self.assertNotIn("retention_proxy", text)
+        self.assertNotIn("retention_prior", text)
+
+    def test_reader_panel_legacy_schema_loads_but_aggregate_is_ignored(self):
+        path = os.path.join(self.score_dir, "reader_panel_signals.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 2,
+                "kind": "novel_synthetic_reader_probe",
+                "signal_only": True,
+                "retention_proxy": 0.91,
+                "retention_prior": 0.91,
+                "lexical_diversity": 0.72,
+                "cliche_density_per_kchar": 1.5,
+            }, f)
+        payload = score.load_reader_panel_signals(self.tmp)
+        self.assertIsNotNone(payload)
+        self.assertEqual(payload["freshness"]["status"], "unknown")
+        self.assertNotIn("retention_proxy", payload)
+        self.assertNotIn("retention_prior", payload)
+        text = score.reader_panel_text(payload)
+        self.assertIn("新鲜度未知", text)
+        self.assertIn("当前信号值已隐藏", text)
+        self.assertNotIn("0.91", text)
+
+    def test_reader_panel_stale_snapshot_is_sanitized_and_only_requests_rerun(self):
+        chapter_path = os.path.join(self.chapters_dir, "第01章.md")
+        snapshot = score.snapshot_files(
+            self.tmp, [chapter_path], mode="reader_probe:opening:3"
+        )
+        path = os.path.join(self.score_dir, "reader_panel_signals.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 3,
+                "kind": "novel_synthetic_reader_probe",
+                "scope": "opening",
+                "chapters_read": [1],
+                "signal_only": True,
+                "source_snapshot": snapshot,
+                "surface_signals": {
+                    "hook_tail_markers": {"literal_marker_hits": 99, "chapter_tails_observed": 1},
+                    "lexical_4gram": {"unique_cjk_4gram_count": 8, "cjk_4gram_count": 10},
+                    "cliche_terms": {"literal_hits": 77},
+                },
+                "perspectives": {},
+            }, f, ensure_ascii=False)
+        fresh = score.load_reader_panel_signals(self.tmp)
+        self.assertEqual(fresh["freshness"]["status"], "fresh")
+        self.assertIn("章尾标记字面命中 99 次", score.reader_panel_text(fresh))
+
+        with open(chapter_path, "a", encoding="utf-8") as f:
+            f.write("\n正文修改使探针过期。")
+        stale = score.load_reader_panel_signals(self.tmp)
+        self.assertEqual(stale["freshness"]["status"], "stale")
+        self.assertEqual(stale["surface_signals"], {})
+        self.assertEqual(stale["perspectives"], {})
+        text = score.reader_panel_text(stale)
+        self.assertIn("已过期", text)
+        self.assertIn("请重跑 novel-simulate", text)
+        self.assertNotIn("99", text)
+        self.assertNotIn("77", text)
+
     def test_repetition_prior_feeds_reader_feedback_adjustment(self):
         # 跨章重复先验（确定性机检）→ retention 负向调分 + 留痕 source/reason
         adjustment = score.compute_reader_feedback_adjustment(

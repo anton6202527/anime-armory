@@ -1,15 +1,15 @@
 ---
 name: mv-image
-description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identity/asset/reference 注册表，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。图片生成拆成具体生图模型 + 访问渠道（默认 GPT Image 2 + Codex），每张正式图记录 model/channel/prompt/reference/asset hash；MV一致性增强支持指定参考图 / 后端主体库 / +LoRA，并拦项目内模型渠道混用与未授权路径. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
+description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identity/asset/reference 注册表，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。图片生成拆成具体生图模型 + 访问渠道（默认 GPT Image 2 + Codex），每张正式 provider 图记录并复验 model/channel/prompt/reference/asset hash 与项目内 API/UI provider evidence；MV一致性增强支持指定参考图 / 后端主体库 / +LoRA，并拦项目内模型渠道混用与未授权路径. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
 ---
 
 # mv-image — 制MV 出图（mv 系列自建）
 
-按 `创作区/制MV/<曲名>/视觉蓝图.md` + `分镜/clip_plan.json`，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ Clip 层（每个 clip 的首帧/按需尾帧 PNG）。`生图模型` 与 `生图渠道` 分列（默认 GPT Image 2 + Codex；旧 `生图AI` 只兼容），`MV一致性增强` 在组图前提示指定参考图 / 后端主体库 / +LoRA。正式图必须通过 `record_generation.py` 留 model/channel/prompt/reference/asset SHA-256；image_qc 会拦收据缺失、项目内混用和资产被替换。
+按 `创作区/制MV/<曲名>/视觉蓝图.md` + `分镜/clip_plan.json`，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ Clip 层（每个 clip 的首帧/按需尾帧 PNG）。`生图模型` 与 `生图渠道` 分列（默认 GPT Image 2 + Codex；旧 `生图AI` 只兼容），`MV一致性增强` 在组图前提示指定参考图 / 后端主体库 / +LoRA。所有共享定妆/服装、Clip 首尾帧、候选、重抽和封面都执行 B14 **逐张生成前 + 生成后双闸**：`image_receipts.py preflight` 冻结计划，`record_generation.py` 对账实际提交，`image_qc.py` 机检当前像素，`image_receipts.py postflight` 绑定具名目视；上一张未 accepted 不得生成下一张，demo 不降级。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`生图模型`、`生图渠道`（旧 `生图AI` 兼容）、`MV一致性增强`、`MV视觉风格`、`重抽预算策略`。
 
@@ -22,13 +22,18 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 ├── 设定/identity_registry.json, asset_registry.json  主角/道具/场景/VFX ID
 ├── 设定/characters,locations  角色/场景卡（含锚点句）
 ├── 节拍/beatgrid.json  段落+卡点（来自 mv-beat）
-└── 出图/
+├── 出图/
     ├── common/
     │   ├── prompt/
     │   └── 图片/             共享 PNG 产物（与 prompt/ 平级）
     └── 段落/
         ├── prompt/
         └── 图片/             分段 PNG 产物（与 prompt/ 平级）
+└── 生产数据/
+    ├── image_acceptance/
+    │   ├── image_acceptance.json B14 逐资产 preflight/submission/postflight ledger
+    │   └── qc_snapshots/         每次 postflight 绑定的不可变机器 QC 快照
+    └── provider_evidence/        schema v2 manifest + 独立 API JSON/HAR raw capture
 ```
 
 ## 核心原则
@@ -43,8 +48,8 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 - **尾帧接力（仅同段落连续硬切·按需）**：MV 默认卡点硬切，接点靠"视觉身份一致 + 卡点准"。但凡 `clip_plan.json` 标 `need_end_frame=true` 的接缝（同段落·非卡点切·人物姿态连续，如副歌内一段连续动作分两 clip），**除首帧外再出一张尾帧 PNG `出图/段落/图片/Clip_XXX_end.png`，其构图/姿态 = 下一 clip 首帧**——用上一镜 end_state 派生、喂同一套定妆组锁人，供 mv-video 首尾双帧引导焊接点。换段/卡点切不出尾帧（省 credit）。尾帧也按导演视角八维出，只是构图对齐下一首帧。
 - **画风统一**：依视觉蓝图 global_style；跨段不跳风。
 - **筛选宽容铁律**：候选图**能用就用，尽量不重抽**。轻微偏差（构图小动、表情微差、目光朝向略偏、环境细节小出入）→ 直接通过落档，**不要拖节奏**。只有命中硬伤之一才重抽：① 核心人/物/场景错位 ② 主角脸/画风漂移到识别不出 ③ 违反硬性禁忌（错景别 / 出字幕 logo / 该用演出光却均匀打亮到无戏）。
-- **逐图即时 QC（mv 线自维护）**：每生成并落档 1 张共享定妆、Clip 首帧或尾帧 PNG，立刻跑 mv 自己的 `scripts/image_qc.py` 最小可用入口；当前脚本以作品根全量扫描为主，就全量跑一次并重点处理新 PNG 的 finding。`block` 先重抽/修 prompt/换参考，不继续下一张；`review/warn` 必须在 mv 线报告或人工签收中留痕。不得抽成公共实现，也不得复用其它系列的 QC 脚本。
-- **重抽预算铁律（两档全局统一）**：`重抽预算策略` 只保留两档，按 `../skills/mv/mv-craft/references/选择点与偏好.md` 读 `_设置.md`→全局默认→首次问一次，**默认=预算充足**。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限：
+- **B14 逐图双闸（mv 线自维护 · 不可降级）**：每张共享定妆/服装、Clip 首尾帧、候选、重抽、封面都先跑 `image_receipts.py preflight`；它先核对当前 clip/reference contract，再冻结 target/prompt/model/channel，逐参考保存项目内路径、当前 SHA-256、owner/use 和完整像素可解码结果，并绑定上一张当前像素 acceptance。生成后由 `record_generation.py` 核对实际提交引用集合必须与 preflight 完全一致；正式 provider 路由还必须给出非占位 job/request/task ID，并绑定项目内 `mv_image_provider_evidence` schema v2 manifest + 独立 raw capture。只有仓内受信 adapter 能按精确路径解析 API JSON，或从受信 provider origin 的 HAR 网络响应解析；最终 output base64 字节 SHA 必须与当前资产相同。裸 `provider_job_id`、内嵌自述 response、全文 token 搜索、截图/HTML/PDF 冒充来源、嵌套伪匹配、同 job/output 跨 attempt 复用都拒绝。随后跑 `image_qc.py`；最后 `image_receipts.py postflight` 把当前资产 SHA、full machine QC 快照和具名并排目视写入逐资产 ledger。机器 `block/warn/noface/unverifiable`、精度降级、目视非 `pass` 都只能记 rejected；不得生成下一张。不得抽成公共实现，也不得复用其它系列 QC。
+- **重抽预算铁律（两档全局统一）**：`重抽预算策略` 只保留两档，按 `skills/mv/mv-craft/references/选择点与偏好.md` 读 `_设置.md`→全局默认→首次问一次，**默认=预算充足**。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限：
 
   | 策略 | 主角 / 副歌高光镜（爽点·副歌·反转·封面候选）| 配角 / 普通段镜 | 终止 |
   |---|---|---|---|
@@ -61,7 +66,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 | 模式 | 何时用 | 必填资料 |
 |---|---|---|
 | `共享定妆+锚点`（默认） | 一支歌内轻量一致，MV 大多数场景足够 | 角色/场景定妆图、锚点句、global_style |
-| `指定参考图` | 用户已有主唱、服装、道具、场景参考图 | 参考图路径、用途标签、授权/来源说明；落 `设定/reference_images/` 或 `出图/共享/图片/` |
+| `指定参考图` | 用户已有主唱、服装、道具、场景参考图 | 参考图路径、用途标签、授权/来源说明；源参考只落 `设定/reference_images/`（`出图/共享/图片/` 保留给本项目生成且需逐图验收的共享资产） |
 | `后端主体库` | Seedream/可灵/Sora 等支持官方主体/角色 ID | 主体/角色 ID、绑定后端、注册素材路径；仍统一一个生图后端 |
 | `+LoRA` | 参考图和主体库仍不稳，且用户已有或明确授权 LoRA | `.safetensors` 路径、trigger、base model、许可说明、适用角色/形态 |
 
@@ -70,12 +75,39 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 ## 工作流
 1. 读 `视觉蓝图.md` + `分镜/clip_plan.json`。缺 `clip_plan.json` 时先跑 `mv-plan`，不要在出图阶段临时拆时间线。若项目是 `歌曲输入时序=后配歌曲` 且还没最终 `歌/song.*` / `节拍/beatgrid.json`，只能停在 rough 蓝图，不能正式出图。
 2. 跑/读取 `mv-craft/scripts/identity_registry.py` 产物：`设定/identity_registry.json`、`设定/asset_registry.json`、`分镜/reference_plan.json`。prompt 里的身份/道具/场景/参考输入以 registry 为准。
-3. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡，再生成第一组图。
-4. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。
+3. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡。**每一张**在调用后端前先过下面的 B14 preflight；共享定妆、服装、场景也不是批次豁免。
+4. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。候选/重抽必须用独立图片路径与独立 attempt 收据，不能覆盖 accepted 像素后沿用旧签收。
 5. 筛选（脸/画风一致优先）：每张按 `references/prompt_format.md` 自检栏过——轻微偏差放行，命中硬伤才按 `重抽预算策略` 档位重抽，废图归 `common/废料/`。
-6. **逐图生成收据 + 机检**：每张 PNG 落档后先跑 `python3 skills/mv/mv-image/scripts/record_generation.py <作品根> --asset <PNG> --model "<具体模型>" --channel "<访问渠道>" --prompt <prompt.md> [--reference <图> ...] [--subject-id <后端主体ID> ...]`，再跑 `image_qc.py`。正式项目缺 model/channel/prompt/reference/subject/asset 收据、计划要求的真实参考未提交，或图片/prompt/参考图后来被替换，或项目内混用模型渠道，都会被 gate 阻断。
-7. **批次/全曲收尾机检**：一批或全曲图出完后再跑一次同命令，确认报告时间晚于所有 PNG，按 `verdict` 决定是否要重抽（见下节）。
-8. 回写 `_进度.md` 出图行。下一步先由 `mv-craft` 渲真实 animatic、导出 V1+A1 OTIO 并完成具名 picture lock，再进入 mv-video。
+6. **逐图 B14 收据 + 机检 + 具名验收**：严格按下方四步 CLI 运行。`preflight` 中 `--reference-spec` 的语法是 `PATH::OWNER::USE`，每个真实参考重复一次；承载人物身份却无同源脸锚、参考不可解码/SHA 变更、上一张未 accepted 会在花费前退出 1。`record_generation.py` 只接受与计划完全一致的实际引用；provider 路由同时要求 `--provider-job-id` + `--provider-evidence`，证据 JSON 格式见 `references/image_acceptance_schema.md`。它把 B14 attempt/preflight/submission hash 和已复验 evidence 摘要写进生产事件。随后全量 `image_qc.py`，再对**当前这一张** postflight。postflight 只有 full machine `ok` + 具名目视 `pass` 才写 accepted；其余写 rejected 并退出 1。
+7. **批次/全曲收尾核验**：所有图完成后跑 `image_qc.py` 和 `image_receipts.py status <作品根> --json`；后者会重验当前资产、prompt、参考、QC 快照、前驱 acceptance 链，覆盖 clip 首尾帧、共享定妆/服装、候选和封面。任一像素/参考/报告被替换即 `all_current_accepted=false`，退出 1。
+8. 不直接改 `_进度.md`。运行 `python3 skills/mv/mv-craft/scripts/completion.py complete <作品根> image`，由完成态健康检查确认 ledger 全集 accepted、image_qc full/ok/current 后原子推进。下一步先由 `mv-craft` 渲真实 animatic、导出 V1+A1 OTIO 并完成具名 picture lock，再进入 mv-video。
+
+### 单张图片 B14 CLI（每张重复）
+
+```bash
+# 1) 花费前：冻结计划；第二张起会自动绑定并验证 ledger 中的直接前驱
+python3 skills/mv/mv-image/scripts/image_receipts.py preflight <作品根> \
+  --asset 出图/段落/图片/Clip_001.png --asset-kind clip_start \
+  --owner "lead:主唱" --use "Clip_001 首帧" --identity-scope contains_identity \
+  --model "GPT Image 2" --channel "Codex" --prompt 出图/段落/prompt/Clip_001.md \
+  --reference-spec "出图/共享/图片/定妆_主唱.png::lead:主唱::identity_anchor"
+
+# 2) 后端返回当前 PNG 后：先保存独立 API JSON/HAR raw capture 与 schema v2 manifest，
+#    再登记实际提交（引用集合必须与 preflight 完全相同；证据示例见 reference schema）
+python3 skills/mv/mv-image/scripts/record_generation.py <作品根> \
+  --asset 出图/段落/图片/Clip_001.png --model "GPT Image 2" --channel "Codex" \
+  --prompt 出图/段落/prompt/Clip_001.md --reference 出图/共享/图片/定妆_主唱.png \
+  --provider-job-id "<真实 provider job/request/task id>" \
+  --provider-evidence 生产数据/provider_evidence/Clip_001.json
+
+# 3) 立即跑最完整机器 QC；block 会退出 1
+python3 skills/mv/mv-image/scripts/image_qc.py <作品根>
+
+# 4) 对当前像素与全部计划参考、上一张 accepted 像素并排目视；必须具名
+python3 skills/mv/mv-image/scripts/image_receipts.py postflight <作品根> \
+  --asset 出图/段落/图片/Clip_001.png --reviewer "<审图人>" \
+  --visual-verdict pass --notes "逐图核对身份、发型、服装、状态、场景道具、光色、构图轴线与接力连续性"
+```
 
 ## 作品封面（竖版 key visual · 作品列表卡片用）
 
@@ -89,10 +121,23 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 ```bash
 # 1) 产出封面 prompt/job 包（不调用后端；纯净机也能跑）
 python3 skills/mv/mv-image/scripts/cover_pack.py pack <作品根>
-# 2) 渲染竖版 PNG → 出图/封面/图片/cover.png，然后留生成收据
+# 2) 调后端前冻结封面计划（封面是关键图片，必须引用已 accepted 的主角定妆）
+python3 skills/mv/mv-image/scripts/image_receipts.py preflight <作品根> \
+  --asset 出图/封面/图片/cover.png --asset-kind cover --owner "lead:主唱" --use "作品封面" \
+  --identity-scope contains_identity --model "GPT Image 2" --channel "Codex" \
+  --prompt 出图/封面/prompt/cover_prompt.md \
+  --reference-spec "<主角定妆相对路径>::lead:主唱::cover_identity_anchor"
+# 3) 渲染竖版 PNG → 出图/封面/图片/cover.png，然后对账实际提交
 python3 skills/mv/mv-image/scripts/record_generation.py <作品根> --asset 出图/封面/图片/cover.png \
-  --model "GPT Image 2" --channel "Codex" --prompt 出图/封面/prompt/cover_prompt.md
-# 3) 回填 _meta.cover（作品根相对路径）+ _进度.md
+  --model "GPT Image 2" --channel "Codex" --prompt 出图/封面/prompt/cover_prompt.md \
+  --reference "<主角定妆相对路径>" --provider-job-id "<真实 provider job/request/task id>" \
+  --provider-evidence 生产数据/provider_evidence/cover.json
+# 4) full machine QC + 当前封面具名目视 accepted
+python3 skills/mv/mv-image/scripts/image_qc.py <作品根>
+python3 skills/mv/mv-image/scripts/image_receipts.py postflight <作品根> \
+  --asset 出图/封面/图片/cover.png --reviewer "<审图人>" --visual-verdict pass \
+  --notes "封面与主角定妆并排核对身份、服装、画风、构图与竖版安全区"
+# 5) 验收后回填 _meta.cover（作品根相对路径）+ _进度.md
 python3 skills/mv/mv-image/scripts/cover_pack.py set-cover <作品根>
 ```
 
@@ -102,15 +147,16 @@ python3 skills/mv/mv-image/scripts/cover_pack.py set-cover <作品根>
 
 单主角跨 16-64 个 clip 是脸一致性重灾区——光靠散文规则不够。`scripts/image_qc.py` 把一致性机检**前移到出图落档**（刚出完一批、还没继续的最便宜的点），省下等 `mv-review` 审片才发现的返工。**mv 线自包含**：脸 embedding QC 使用本线独立实现的 insightface/buffalo_l 自标定余弦 flag-band。
 
-**六类检查（确定性 vs 脸栈的边界）**：
+**七类检查（确定性 vs 脸栈的边界）**：
 | 检查 | 类型 | 依赖 | 严重度 | 做法 |
 |---|---|---|---|---|
 | 主角脸漂移 `G1` | **脸栈** | insightface/cv2/onnxruntime + buffalo_l | **hard（block=崩脸必重抽）** | 主角共享定妆组内部互相余弦自标定「同人下限」floor，每个 clip 首/尾帧脸 vs 主角主参考落 ok/warn/block。风格化 MV 脸跨图余弦偏低，**不写死阈值**，用本曲定妆组做地板 |
+| 逐资产像素完整性 | **确定性** | Pillow | **坏图/缺图 hard；低清/模糊 review** | 扫所有 clip 首尾帧、共享定妆/服装/场景、候选与封面，实际解码全像素并绑定当前 SHA-256；不再只扫 clip 帧 |
 | 主色漂移 `palette` | **确定性** | 仅 Pillow（无需脸栈） | advisory（warn） | 从 `视觉蓝图.md` 抽 `palette_anchor`（`#rrggbb`/`rgb()`/中文色名），每个 clip 首帧主色 vs anchor 取最近距离，超阈值→warn。MV 段落允许加亮/变暗，故只人判不硬拦 |
 | 帧级视觉多样性 `dHash` | **确定性** | 仅 Pillow | advisory（warn） | 感知哈希跨 clip 首帧比对：两 clip 首帧 dHash≤10=构图重复（画面撞脸）；某 clip 首↔尾帧 dHash≤10 且时长≥6s=静态长镜（画面不动却拖）。补 `shot_variety_audit` 计划期机检的盲区——计划换了景别但图实际出得一样，只有像素能看出来。MV 筛选宽容+recurring hook 可能刻意，故只 warn 不硬拦 |
 | 锚点句落地 lint | **确定性** | 无（纯文本） | demo advisory；**正式项目身份/禁漂块缺失＝hard** | 按 `clip_plan.json` 逐 clip 读其 `image_prompt_path` 指向的 prompt，校验 `visual_consistency` 规定的『身份锚点 / 参考输入 / 视觉锚点 / 禁止漂移』锚点块是否真抄进了 prompt。身份锚点/禁止漂移块是身份合同进入 prompt 的唯一通道：正式项目缺这两块（或 prompt 文件不存在）＝下游未消费身份合同（B12 确定性交接缺口）→ hard；参考/视觉块与 demo 保持 advisory |
 | 禁本地贴脸修复 | **确定性** | `生产数据/production_events.jsonl`（存在时） | **hard** | 最新 image 落档事件若记录 `local_face_patch` / facefix / faceswap / alpha_blend / pasteback 等本地身份像素贴回操作，该 PNG 不得进入 mv-video；必须回 mv-image 用真实参考输入重抽 |
-| 生成来源链 | **确定性** | `record_generation.py` 事件 | 正式 **hard** | 每个计划首/尾帧绑定具体 model、channel、source prompt/asset SHA-256、真实参考图/后端主体 ID；计划要求的参考未实际提交、换文件、设置不符或 model+channel 混用即回出图 |
+| 生成来源链 | **确定性** | B14 ledger + `record_generation.py` 事件 | **所有项目 hard（demo 不降级）** | 每张共享图/clip 帧/候选/封面绑定具体 model、channel、source prompt/asset SHA-256、planned vs actual 真实参考图/后端主体 ID；漏提交、计划外提交、换文件、设置不符或 model+channel 混用即回出图 |
 
 > **出图前先跑计划期视觉多样性机检**（最便宜的点，无需出图）：`python3 skills/mv/mv-review/scripts/shot_variety_audit.py <作品根> --write`。它读 `分镜/clip_plan.json` 的 `shot_design`，在花积分前就拦「同构图反复 / 景别单调 / 副歌静镜 / 场景滞留 / 大变化镜头缺参考锚」。gate（image 阶段）会把它的 warn 抬进报告（advisory·不硬拦）。出图后 image_qc 的 `dHash` 再做像素级现实核对。
 
@@ -125,15 +171,15 @@ python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --json       # 机器
 python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --findings   # mv-review/gate 同形 findings
 python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --regen-list # 「要重抽」的 clip（只脸 block，主色/锚点 warn 不进）
 python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --strict     # 严审刷新：block/warn/降级都进候选重出清单
-python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 只跑锚点 lint（无 Pillow/insightface 时）
+python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 诊断用；B14 postflight 不接受此降级报告
 # 可调：--margin 0.08（脸 flag-band 缓冲）、--palette-threshold 110（主色最近距离阈值）
 ```
 
-**JSON schema**（落 `生产数据/image_qc/image_qc.json`(+`.md`)）：在原 face/palette/lint/local-patch 字段外，含 `generation_provenance:{expected_model,expected_channel,uniform,complete,rows[]}`（正式 gate 要求 `complete=true`）和 `assets_sha256:{<图片相对路径>: <内容 SHA-256>}`——gate 用后者做 **hash 级新鲜度核对**（图片重生成 → hash 变 → 报告过期），取代按 mtime 判过期（mtime 会被恢复旧图/跨机复制骗过）。
+**JSON schema**（落 `生产数据/image_qc/image_qc.json`(+`.md`)）：在 face/palette/lint/local-patch 字段外，含 `asset_integrity.rows[]`、`generation_provenance:{expected_model,expected_channel,uniform,complete,rows[]}`、`b14_acceptance` 和 `assets_sha256:{<图片相对路径>: <内容 SHA-256>}`。`assets_sha256` 覆盖共享定妆/服装、clip 首尾帧、候选、封面；图片一重生成旧 QC 和 postflight 立即失效，不依赖 mtime。
 
-**seed/参数留痕**：`record_generation.py` 支持 `--seed <种子>`、`--param K=V`（可重复）、`--provider-job-id`——登记时已知则必记（复现/微调/审计用）；网页入口拿不到时可缺省，不阻断。
+**provider evidence + seed/参数留痕**：正式 provider 结果必须同时传 `--provider-job-id` 与 `--provider-evidence`；后者是项目内 schema v2 manifest，按 attempt/preflight 绑定另一个 raw API JSON，或受信 origin 的 HAR provider response。`record_generation.py` 会按 adapter 的精确路径取 provider/job/time/model/status/output，并将 output 字节与当前资产 SHA 交叉核对；manifest/capture/资产一改，旧 QC/postflight/acceptance 即失效。PNG/JPEG/PDF 截图或普通 HTML 只能作视觉留痕，不能正式 accepted。离线校验只证明 capture 自落盘后未变且自洽，不证明 provider 真实签发；需更强 authenticity 时用 provider 签名或在线 job 审计回执。只有 `channel=local|offline|本地|离线` 且 model 同时带 `local:` / `offline:` / `本地:` / `离线:` 前缀才免 provider evidence；`GPT Image 2 + local` 仍阻断。另支持 `--seed <种子>`、`--param K=V`（可重复）记录后端真实返回/提交参数。
 
-**落档判定（MV 筛选宽容铁律）**：`verdict=block`（主角脸崩/图损坏/禁用本地贴脸产物）→ 必须重抽后重跑；`verdict=review`（只有主色/锚点初筛或视觉降级）→ 先处理报告建议；`verdict=ok` → 放行。`mv-craft gate --stage video_jobs` 会强制读取本报告：缺报告、hard block、`precision_level!=full`、图片晚于 QC 报告都会挡住正式出视频。若确需降级/人审放行，用 `image_qc.py <作品根> --accept-degraded --reviewer <name> --notes <复核说明>` 写**具名 + 绑定报告 hash** 的 `manual_review` 留痕（报告一重跑绑定即失效，需重新放行；旧式裸布尔 `manual_review_accepted` 不再被 gate 接受——无法证明复核对应当前报告）。脚本退出码恒 0，是否阻断由 gate 消费报告决定。
+**落档判定（B14 覆盖筛选宽容）**：`verdict=block`（主角脸崩/图损坏/来源链不完整/禁用本地贴脸）→ 命令退出 1，必须修复/重抽；`verdict=review`（含 warn/noface/unverifiable/视觉降级）→ 可留报告但本张 postflight 不得 accepted；`verdict=ok` 只表示机器层可进入具名目视，不等于最终验收。`image_receipts.py postflight` 才是逐图最终决定。`--record-degraded-visual-review --reviewer ... --notes ...`（旧名 `--accept-degraded`）只记录绑定当前报告的主观目视证据，仍退出非零、`accepted=false`，不能伪造缺失的 machine QC。
 
 **定妆组离群自检（G1 地基保护 · advisory）**：脸检 floor 由主角定妆组自标定（取组内最小相似度），一张漂了的定妆图会悄悄拉低地板、放松整套脸检。`run_face_check` 现在把每个定妆变体 vs 主参考的相似度落 `intra_by_variant`，显著低于组内最高值（差距 > 0.20）的变体报 `costume_outliers`（advisory warn）——人工确认后若真漂了，重抽该定妆再重跑，floor 随之回升。
 
@@ -143,6 +189,7 @@ python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 只跑
 - 导演视角八维 prompt 装配（画师→导演升级·MV版）：`mv/references/导演视角prompt.md`
 - prompt 两层格式 + 锚点句 + 段落映射：`references/prompt_format.md`
 - MV 单曲视觉一致性包（身份锚点/主色/母题/段落 look）：`references/visual_consistency.md`
+- B14 ledger 字段、hash 绑定和完成态实时审计：`references/image_acceptance_schema.md`
 
 ## 常见错误
 | 错误 | 纠正 |
@@ -156,7 +203,9 @@ python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 只跑
 | 跨段画风跳变 | 统一 global_style + 同一生图工具(同一集不换) |
 | 分镜不看段落/卡点 | 按视觉蓝图段落 + beatgrid 疏密出图 |
 | 跳过 mv-plan 直接按感觉出图 | 先跑 mv-plan，按 `clip_plan.json` 的 prompt/path 出首帧 |
-| 跳过逐图 image_qc 就进 mv-video | `mv-craft gate --stage video_jobs` 会挡住；每张首/尾帧落档后先跑 `mv-image/scripts/image_qc.py`，批后再收尾跑一次，并处理 hard/degraded |
+| 生成完才补一份来源事件 | 违 B14：花费前必须逐张 `image_receipts.py preflight`；`record_generation.py` 会拒绝无 preflight 或 actual refs 与 planned refs 不同 |
+| 跳过逐图 image_qc/postflight 就进 mv-video | 每张图必须 full `image_qc.py` + 具名 `image_receipts.py postflight`；status 全集 `all_current_accepted=true` 后才能用 completion 推进 |
+| 用 demo/批量模式跳过共享定妆、候选或封面签收 | B14 无 demo/profile/批处理豁免；所有真实生图资产逐张走同一双闸 |
 | 用本地贴脸/换脸修复让 embedding 过关 | 禁用。应回 mv-image 用共享定妆/参考输入/后端主体库真实重抽，不能把身份像素贴回最终帧 |
 | 后配歌曲未补最终歌就出图 | 先补成品歌、跑 mv-beat 和正式 mv-plan；rough 蓝图不生成正式图 |
 | clip_plan 标了 `need_end_frame` 却只出首帧 | 同段落连续硬切接缝补尾帧 PNG `Clip_XXX_end.png`（=下一首帧构图），供 mv-video 首尾双帧锁接点 |

@@ -40,6 +40,18 @@ def test_split_novel_builds_local_source_analysis(tmp_path):
     assert meta["line"] == "n2d" and meta["project_id"].startswith("n2d_")
     assert catalog["status"] == "bootstrap"
     assert catalog["project"]["project_id"] == meta["project_id"]
+    settings = (out / "_设置.md").read_text(encoding="utf-8")
+    assert "普通选择策略：推荐方案自动继续  # source=auto_recommended" in settings
+    assert "制作模式：混合自动路由  # source=auto_recommended" in settings
+    assert "项目规模：" in settings
+    style_text = (out / "设定库" / "global_style.md").read_text(encoding="utf-8")
+    selected_style = style_text.split("## 基础视觉风格\n", 1)[1].splitlines()[0].split("（", 1)[0]
+    assert f"基础视觉风格：{selected_style}  # source=auto_recommended" in settings
+    assert "脚本批次：小批  # source=auto_recommended" in settings
+    assert "生成优先序：关键镜优先  # source=auto_recommended" in settings
+    assert "生成粒度：逐个  # source=auto_recommended" in settings
+    assert "BGM来源：无  # source=auto_recommended" in settings
+    assert "合成阶段：启用  # source=auto_recommended" in settings
     legacy_cross_line_file = "_novel" + "_handoff.json"
     assert not (out / "设定库" / legacy_cross_line_file).exists()
 
@@ -75,6 +87,31 @@ def test_split_novel_scaffold_includes_base_visual_style_contract(tmp_path):
     cells = [c.strip() for c in row.split("|")[1:-1]]
     header = [c.strip() for c in next(line for line in progress.splitlines() if line.startswith("| 集")).split("|")[1:-1]]
     assert cells[header.index("字幕英")] == "—"
+
+
+def test_split_novel_materializes_topic_aware_style_as_the_same_project_choice(tmp_path):
+    novel = tmp_path / "novel.txt"
+    novel.write_text(
+        "第一章\n校园里的青春恋爱喜剧开始了。\n第二章\n少年和少女在社团活动后确认心意。\n",
+        encoding="utf-8",
+    )
+    out = tmp_path / "out"
+    script = os.path.join(os.path.dirname(__file__), "scripts", "split_novel.py")
+
+    subprocess.run(
+        [sys.executable, script, str(novel), "--out", str(out), "--limit", "1"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True,
+    )
+
+    style_text = (out / "设定库" / "global_style.md").read_text(encoding="utf-8")
+    settings_text = (out / "_设置.md").read_text(encoding="utf-8")
+    style_line = style_text.split("## 基础视觉风格\n", 1)[1].splitlines()[0]
+    selected_style = style_line.split("（", 1)[0]
+    assert selected_style != "冷灰写实3D国风漫剧"
+    assert f"基础视觉风格：{selected_style}  # source=auto_recommended" in settings_text
 
 
 def test_split_novel_scaffold_uses_project_base_visual_style(tmp_path):

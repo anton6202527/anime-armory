@@ -12,6 +12,7 @@ if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
 from novel_pipeline import dry_run_plan, record_human_stage_approval  # noqa: E402
+from craft_profile import build_craft_contract_snapshot  # noqa: E402
 
 
 CASES = os.path.join(HERE, "tests", "golden_pipeline_cases.json")
@@ -28,6 +29,20 @@ def _write_fixture(root: str, rel_path: str, value) -> None:
             f.write(str(value))
 
 
+def _bind_dynamic_contract_snapshots(root: str) -> None:
+    """Hydrate hashes that cannot be stored in a portable golden fixture."""
+    path = os.path.join(root, "设定", "manuscript_map_check.json")
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as f:
+        payload = json.load(f)
+    payload["project_root"] = root
+    payload["source_snapshot"] = build_craft_contract_snapshot(root, "genre_novel")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+
 def test_golden_pipeline_cases_keep_next_stage_contract():
     with open(CASES, encoding="utf-8") as f:
         cases = json.load(f)
@@ -35,6 +50,7 @@ def test_golden_pipeline_cases_keep_next_stage_contract():
         with tempfile.TemporaryDirectory() as root:
             for rel_path, value in case["files"].items():
                 _write_fixture(root, rel_path, value)
+            _bind_dynamic_contract_snapshots(root)
             for stage_key in ("blueprint", "setting"):
                 if stage_key in case["expected_done"]:
                     record_human_stage_approval(

@@ -80,10 +80,11 @@ python3 skills/ad/ad-review/scripts/verifier_coverage.py "<作品根>" --write
 6. **placement-aware 人工安全区核查**：对每个实际版位、比例、caption 与 anchor/add-on 使用当前官方/客户模板；通用中心网格不能充当发布证据。
 7. **视觉真实性人工判断**：产品尺度、演示、前后对比、效果画面是否误导必须由具名审片人结合实物/claim 依据判断，dHash/NCC 只做定位快筛。
 8. `配音/时长清单.json.has_placeholder=false`。
-9. `locale_matrix_validation`、`release_variant_manifest`、`provenance_qc` 与 `compliance_manifest.release_ready=true`；每件绑定 placement/locale/jurisdiction/claims/disclosures/rights/AI label receipt，实际文件 provenance 已探测。
-10. `delivery_qc` 0 block：每件实测时长、比例、版位约束、音轨、LUFS/true peak、BT.709 通过；`color_preflight` 0 block。
-11. `rendered_text_qc`、`asr_consistency`、`accessibility_qc` 0 block；最终文字、关键口播、完整非语言字幕、条件化音频描述/媒体替代均闭合，启发式 WARN 在具名审片处理。
-12. 依赖图所有上游节点 current；`_进度.md` 只允许把全部最终媒体 QC 通过的交付件标 ✅，review 要求 M0、人工证据与 contact sheet 哈希均当前。
+9. `locale_matrix_validation`、`release_variant_manifest`、`provenance_qc` 与 `compliance_manifest.release_ready=true`；每件绑定 placement/locale/jurisdiction/claims/disclosures/rights，并分别具备绑定当前媒体 SHA 的 AI label receipt 与 commercial/paid-partnership disclosure receipt，实际文件 provenance 已探测。
+10. `campaign_readiness.summary.release_ready=true`：formal 投放的落地页/最终 URL 与跳转证据、offer/claim/CTA/价格对账、行业×平台×辖区准入、转化事件与 tag/pixel/SDK/CAPI diagnostics、归因、UTM/deep-link、consent/privacy 全部闭合；sample/demo 永远不能当正式投放通过。
+11. `delivery_qc` 0 block：每件实测时长、比例、版位约束、音轨、LUFS/true peak、BT.709 通过；`color_preflight` 0 block。
+12. `rendered_text_qc`、`asr_consistency`、`accessibility_qc` 0 block；最终文字、关键口播、完整非语言字幕、条件化音频描述/媒体替代均闭合，启发式 WARN 在具名审片处理。
+13. 依赖图所有上游节点 current；`_进度.md` 只允许把全部最终媒体 QC 通过的交付件标 ✅，review 要求 M0、人工证据与 contact sheet 哈希均当前。
 
 ## 常见错误
 
@@ -95,4 +96,6 @@ python3 skills/ad/ad-review/scripts/verifier_coverage.py "<作品根>" --write
 | 主片存在但交付矩阵没回写 | 跑 `deliver.py --mark-existing`，让进度与文件一致 |
 | 把 Hook/视觉真实性当成可自动裁决 | 机器只给证据和快筛；用 `human_signoff.py` 逐项具名签收 |
 | 平台名/“海外”写了就算发布合规 | 必须实际 placement + 逐 jurisdiction 复核，并绑定当前脚本/主片/delivery plan SHA |
+| AI 标签回执存在就以为商业披露完成 | AI 来源标识与商业/付费合作披露是两条独立义务；逐 placement 各自留当前 SHA 回执 |
+| 样片 readiness 只有 WARN 就拿去投 | sample 永远 `release_ready=false`；正式投放须切 formal 并补齐项目内证据 |
 | 闪烁快筛没报警就声称 WCAG 通过 | 快筛只 WARN；按 WCAG 三闪阈值做具名或专业工具复核 |

@@ -1,6 +1,6 @@
 ---
 name: novel-edit
-description: Professional editing workflow for completed or in-progress novel drafts. Use after draft/review/score when the user wants editorial assessment, developmental editing, line editing, copyediting, proofreading, human-primary polishing, or a publishing-grade revision plan. It does not generate new chapters by default; it turns reports, scene cards, reader feedback, and manuscript samples into a layered edit plan and task packets. Triggers 专业编辑, 发展性编辑, 行文编辑, 文案编辑, 校对, 精修, 主编轮次, editorial assessment, developmental edit, line edit, copyedit, proofread, publishing edit.
+description: Professional editing workflow for completed or in-progress novel drafts. Use after draft/review/score when the user wants editorial assessment, developmental editing, line editing, copyediting, proofreading, authenticity or cultural reading, human-primary polishing, or a publishing-grade revision plan. It does not generate new chapters by default; it turns reports, scene cards, reader feedback, and manuscript samples into a layered edit plan and task packets. Triggers 专业编辑, 发展性编辑, 行文编辑, 文案编辑, 校对, 精修, 主编轮次, 真实性审读, 文化审读, 敏感性阅读, authenticity read, cultural consultation, editorial assessment, developmental edit, line edit, copyedit, proofread, publishing edit.
 ---
 
 # novel-edit — 分层专业编辑流程
@@ -17,6 +17,7 @@ description: Professional editing workflow for completed or in-progress novel dr
 - `修订/edit_task_closure.jsonl`：P0/P1 编辑任务关闭记录。
 - `修订/editor_queries.jsonl`：编辑/作者问答记录；未回答 query 会阻断专业编辑阶段进入发布。
 - `修订/style_sheet_check.json` / `.md`：术语、称谓、格式、章节口径终校准备度检查。
+- 可选：`修订/authenticity_read.json` / `.md` 与 `authenticity_read_check.json` / `.md`：真实性/文化审读、作者裁决和正文版本绑定。
 - 可选：`修订/第NN章_line_edit_packet.md`
 
 ## 四层编辑
@@ -44,10 +45,33 @@ description: Professional editing workflow for completed or in-progress novel dr
 孤立文本冷眼检视（Writer's Digest / ALLi 编辑实务）。AI 生产线等价物：把 `copyedit`
 批次任务按章号**降序**派发即可，零成本；`line_edit` 层不倒序（行文节奏需要顺读语境）。
 
+## 真实性 / 文化审读（按需启用）
+
+当正文重点书写作者并不熟悉的群体经验、文化/宗教实践、创伤、残障、移民、地域生活或其它高语境内容时，可在 developmental edit 后、终校前邀请匹配的真人顾问审读。它不是“身份正确性打分器”，也不要求披露真实姓名或敏感身份信息：只记录匿名 reviewer ID、与本次 scope 的匹配说明、具体文本位置和必要语境。
+
+```bash
+python3 skills/novel/novel-edit/scripts/authenticity_read.py scaffold "<作品根>" \
+  --scope "<要核对的群体/经验/场景>" --reader-id "<匿名ID>" --fit "<与本次范围的匹配说明>"
+python3 skills/novel/novel-edit/scripts/authenticity_read.py add "<作品根>" \
+  --category agency --severity major --location "<章/场>" \
+  --observation "<具体观察>" --suggestion "<可选建议>"
+python3 skills/novel/novel-edit/scripts/authenticity_read.py resolve "<作品根>" \
+  --finding AUTH-001 --decision adapted --author-note "<作者处理方式或保留理由>" \
+  --decided-by "<作者/主编>"
+python3 skills/novel/novel-edit/scripts/authenticity_read.py complete "<作品根>" \
+  --summary "<审读范围与结论摘要>"
+python3 skills/novel/novel-edit/scripts/authenticity_read.py check "<作品根>" --write
+```
+
+- 默认是咨询证据：未完成、过期或未裁决的 major 意见只给 warning，不自动判作品或人物“合格/不合格”。
+- 只有作者/项目在 `scaffold` 时显式加 `--required`，审读范围、匿名 reviewer ID、匹配说明、完成状态、正文 hash 新鲜度，以及带裁决主体与理由的 major 意见闭环才进入 edit/export/release 硬门禁。
+- 作者可 `accepted / adapted / declined / questioned / resolved`；任何裁决都要留说明与裁决主体。`questioned` 表示仍在追问，不会伪装成已关闭；审读者提供语境，作者保留最终创作权与责任。
+- 同时记录有效表达（`positive_representation`），避免审读只剩禁忌清单；不得把一个审读者当作整个群体的唯一代言人。
+
 ## 工作流
 
 1. 先跑已有证据层：`novel-review`、必要时 `novel-score`、`novel-balance`、`novel-simulate`、`novel-feedback`；多份报告已齐时先用 `novel-craft/scripts/revision_planner.py` 汇成 `修订/revision_plan.json`。
-2. `edit_plan.py` 会优先读取 `修订/revision_plan.json`，并兜底读取 `评分/pacing_signals.json`、合成且仅 P2 复核的 `评分/reader_panel_signals.json`、真实反馈、score/review 和 scene cards，避免各类证据与假设停在各自报告里。
+2. `edit_plan.py` 会优先读取 `修订/revision_plan.json`，并兜底读取 `评分/pacing_signals.json`、合成且仅 P2 复核的 `评分/reader_panel_signals.json`、真实反馈、score/review 和 scene cards，避免各类证据与假设停在各自报告里。合成探针只有 v3 `source_snapshot` 与当前实际 scope 一致时才展示分量；stale 只建“重跑”任务，v1/v2 标“新鲜度未知”，两者都不把旧值当当前编辑依据。
 3. 若已有 `设定/scene_cards.json`，优先按场景诊断；缺场景卡时先用 `novel-craft/scripts/scene_cards.py scaffold` 生成骨架。
 4. 生成分层编辑计划：
 
@@ -64,7 +88,7 @@ python3 skills/novel/novel-edit/scripts/edit_plan.py "<作品根>" --line-packet
 `第NN章_line_edit_packet.md` 会汇总本章编辑任务、scene cards、人物内驱字段、`novel-observe` 观察素材和 `novel-aesthetic` 正向审美样本。改稿时在包内记录 before/after 与改动理由，避免“润色了一遍但不知道提升了什么”。
 同一次运行也会写 `editorial_letter.md`、`style_sheet.md` 和 `proof_checklist.md`，把专业编辑的三类交付物落盘，避免只有任务 JSON 没有人类可执行的主编意见、统一表和终校表。
 
-6. 按 `修订/编辑计划.md` 从上到下处理。结构级任务先于行文级任务；结构没定稿前不要花大量精力润句子。每处理完一条 P0/P1，关闭任务并留 before/after 或接受风险原因：
+6. 按 `修订/编辑计划.md` 从上到下处理。结构级任务先于行文级任务；结构没定稿前不要花大量精力润句子。若题材需要真实性/文化审读，在结构稳定后按上一节登记并闭环。每处理完一条 P0/P1，关闭任务并留 before/after 或接受风险原因：
 
 ```bash
 python3 skills/novel/novel-edit/scripts/edit_plan.py "<作品根>" \
@@ -77,7 +101,7 @@ python3 skills/novel/novel-edit/scripts/edit_plan.py "<作品根>" \
 python3 skills/novel/novel-edit/scripts/edit_plan.py "<作品根>" \
   --query-task EDIT-001 --query "结局是否允许主角牺牲师门名誉换取真相公开？" --query-severity P0 --asker "主编"
 python3 skills/novel/novel-edit/scripts/edit_plan.py "<作品根>" \
-  --answer-query QUERY-001 --answer "允许，但必须保留主角承担后果的尾声。" --query-status answered
+  --answer-query EQ-001 --answer "允许，但必须保留主角承担后果的尾声。" --query-status answered
 ```
 
 7. 终校前跑 style sheet 检查：

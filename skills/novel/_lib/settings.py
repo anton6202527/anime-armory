@@ -13,10 +13,18 @@ import re
 import time
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from craft_profile import (
+    CRAFT_PROFILE_KEY,
+    CRAFT_PROFILE_VALUES,
+    DEFAULT_CRAFT_PROFILE,
+    normalize_craft_profile,
+)
+
 
 DEFAULTS = {
     "小说用途": "未定",
     "目标平台": "未定",
+    CRAFT_PROFILE_KEY: DEFAULT_CRAFT_PROFILE,
     "权利来源": "未声明",
     "输出格式": "txt+docx",
     "篇幅档": "medium",
@@ -83,6 +91,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
         parameterized=True,
         sensitive=True,
     ),
+    SettingSpec(CRAFT_PROFILE_KEY, ("novel",), CRAFT_PROFILE_VALUES),
     SettingSpec("权利来源", ("novel",), ("未声明", "原创", "公版", "自有", "授权"), sensitive=True),
     SettingSpec("权利辖区", ("novel",), ("US", "CN", "GLOBAL", "user-declared", "自定义"), parameterized=True, sensitive=True),
     SettingSpec("发行地区", ("novel",), ("CN", "US", "GLOBAL", "未定", "自定义"), parameterized=True, sensitive=True),
@@ -240,6 +249,14 @@ def write_settings(
     bold_keys: bool = False,
 ) -> None:
     """Rewrite `<作品根>/_设置.md` for per-work private choices."""
+    # New projects record the craft contract explicitly.  Private global
+    # defaults win; projects created before this choice point remain compatible
+    # because every runtime resolver falls back to `genre_novel`.
+    fields = dict(fields)
+    fields.setdefault(
+        CRAFT_PROFILE_KEY,
+        get_setting(work_root, CRAFT_PROFILE_KEY, DEFAULT_CRAFT_PROFILE),
+    )
     lines = ["# 设置 — 本作私有选择点（skills/novel/novel-craft/references/选择点与偏好.md）", ""]
     if note:
         lines += [f"> {note}", ""]
@@ -518,6 +535,8 @@ def global_settings_path(repo_root: str) -> str:
 def normalize_setting_value(key: str, value: str) -> str:
     """Normalize historical aliases that should not leak into novel execution."""
     normalized = (value or "").strip()
+    if key == CRAFT_PROFILE_KEY:
+        return normalize_craft_profile(normalized)
     if key == "小说用途":
         aliases = {
             "红果": "漫剧源书",

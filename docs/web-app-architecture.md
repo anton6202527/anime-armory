@@ -8,8 +8,8 @@
 
 - Browser 的模型发现、文本/图片生成、Skill source、工作文件上传和 Skill run 只调用同源 `/api/v1`。
 - `apps/backend` 已提供 loopback REST 服务（默认 `127.0.0.1:43118`），统一校验请求、读取 allowlisted Skill、维护内存任务队列，并在服务端调用 `cliproxyapi`。
-- Web 已移除 `43117` Electron bridge、Vite 模型中间件和 Skill 源码 `import.meta.glob` 打包；三个独立 n2d workflow 也不再用计时器伪造成功。
-- 文本生成和一个真实 `n2d-character-turnaround` Skill run 已完成端到端 smoke；后者实际经历 `queued -> succeeded` 并返回真实 text artifact。
+- Web 已移除 `43117` Electron bridge、Vite 模型中间件和 Skill 源码 `import.meta.glob` 打包；三个独立画布 workflow 也不再用计时器伪造成功。
+- 文本生成和一个真实的角色三视图 Skill run（现 `app-character-turnaround`）已完成端到端 smoke；后者实际经历 `queued -> succeeded` 并返回真实 text artifact。
 
 当前可直接联调的 MVP 路由是：`GET /api/v1/health/live|ready`、`GET /api/v1/ai/models`、`POST /api/v1/ai/generations`、`GET /api/v1/skills[/:id]`、`GET /api/v1/skills/:id/sources`、`GET /api/v1/skills/:id/source?path=...`、`PUT /api/v1/works/:workId/files/:fileId`、`POST /api/v1/skill-runs` 以及 `GET|DELETE /api/v1/skill-runs/:runId`。第 4 节描述的是生产目标合同，不能当成本地 MVP 已实现清单；本地请求示例见 `apps/backend/README.md`。
 
@@ -144,7 +144,7 @@ Skill run 请求同样只引用注册资源：
 
 ```json
 {
-  "skillId": "n2d-script-workbench",
+  "skillId": "app-script-workbench",
   "action": "run",
   "workId": "opaque-work-id",
   "input": {},

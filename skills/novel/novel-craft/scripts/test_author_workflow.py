@@ -5,6 +5,8 @@ import os
 import tempfile
 
 import author_workflow
+import exploration
+from craft_profile import build_craft_contract_snapshot
 from novel_pipeline import record_human_stage_approval
 
 
@@ -18,6 +20,35 @@ def touch(path, text="x\n"):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
+
+
+def read_bytes(path):
+    with open(path, "rb") as f:
+        return f.read()
+
+
+def test_manuscript_map_status_rejects_stale_profile_check(tmp_path):
+    root = str(tmp_path)
+    touch(os.path.join(root, "_设置.md"), "# 设置\n- 创作工艺档：genre_novel\n")
+    write_json(os.path.join(root, "设定", "scene_cards.json"), {
+        "kind": "novel_scene_cards",
+        "scenes": [],
+    })
+    touch(os.path.join(root, "设定", "manuscript_map.json"), "{}\n")
+    write_json(os.path.join(root, "设定", "manuscript_map_check.json"), {
+        "kind": "novel_manuscript_map_check",
+        "passed": True,
+        "blocking": 0,
+        "findings": [],
+        "source_snapshot": build_craft_contract_snapshot(root, "genre_novel"),
+    })
+    assert author_workflow.manuscript_map_status(root) == (True, [])
+
+    touch(os.path.join(root, "_设置.md"), "# 设置\n- 创作工艺档：literary\n")
+    ok, blockers = author_workflow.manuscript_map_status(root)
+
+    assert ok is False
+    assert any("已过期" in item and "craft_profile_changed" in item for item in blockers)
 
 
 def test_author_workflow_reports_next_step_and_writes_artifacts():
@@ -34,6 +65,113 @@ def test_author_workflow_reports_next_step_and_writes_artifacts():
         json_path, md_path = author_workflow.write_workflow(root, payload)
         assert os.path.exists(json_path)
         assert os.path.exists(md_path)
+
+
+def test_author_workflow_surfaces_valid_exploration_without_advancing_formal_stages():
+    with tempfile.TemporaryDirectory() as base:
+        root = os.path.join(base, "project")
+        source = os.path.join(base, "probe.md")
+        write_json(os.path.join(root, "_meta.json"), {"title": "探索中的书", "kind": "create"})
+        touch(os.path.join(root, "_设置.md"), "# 设置\n文本主创模式：AI辅助\n")
+        touch(os.path.join(root, "_进度.md"), "# 进度\n- 当前阶段：初始化\n")
+        touch(source, "# 角色试镜\n\n她在没人看见时仍然把钥匙还了回去。\n")
+        formal_before = {
+            rel: read_bytes(os.path.join(root, rel))
+            for rel in ("_meta.json", "_设置.md", "_进度.md")
+        }
+
+        seed = exploration.capture_human_seed(
+            root,
+            text="一个人真正的选择发生在无人注视时。",
+            author="作者",
+            human_first_confirmed=True,
+        )
+        draft = exploration.register_draft(
+            root,
+            source_file=source,
+            title="归还钥匙",
+            exploration_kind="character_audition",
+            creator="作者",
+            authorship="human",
+            seed_ids=[seed["seed_id"]],
+        )
+        exploration.record_decision(
+            root,
+            draft_id=draft["draft_id"],
+            decision="promote_candidate",
+            expected_sha256=draft["sha256"],
+            reviewer="作者",
+            reason="角色在无人监督时仍作出代价更高的选择",
+            target="blueprint",
+        )
+
+        payload = author_workflow.build_workflow(root)
+        exploration_step = next(step for step in payload["steps"] if step["key"] == "exploration")
+        blueprint_step = next(step for step in payload["steps"] if step["key"] == "blueprint")
+        assert exploration_step["status"] == "done"
+        assert exploration_step["summary"]["integrity_ok"] is True
+        assert exploration_step["summary"]["human_first_seed_count"] == 1
+        assert exploration_step["summary"]["draft_count"] == 1
+        assert exploration_step["summary"]["candidate_count"] == 1
+        assert any("候选不会自动完成" in item for item in exploration_step["warnings"])
+        assert blueprint_step["status"] == "pending"
+        assert payload["current_step"] == "blueprint"
+        rendered = author_workflow.render_markdown(payload)
+        assert "human-first seed=1" in rendered
+        assert "探索稿=1" in rendered
+        assert "晋升候选=1" in rendered
+
+        for rel, expected in formal_before.items():
+            assert read_bytes(os.path.join(root, rel)) == expected
+        assert not os.path.exists(os.path.join(root, "章节"))
+        assert not os.path.exists(os.path.join(root, "审稿"))
+        assert not os.path.exists(os.path.join(root, "设定"))
+
+
+def test_author_workflow_blocks_tampered_exploration_sidecar_without_formal_writes():
+    with tempfile.TemporaryDirectory() as base:
+        root = os.path.join(base, "project")
+        source = os.path.join(base, "probe.md")
+        write_json(os.path.join(root, "_meta.json"), {"title": "损坏的探索区", "kind": "create"})
+        touch(os.path.join(root, "_设置.md"), "# 设置\n")
+        touch(os.path.join(root, "_进度.md"), "# 进度\n- 当前阶段：初始化\n")
+        touch(source, "# POV 试写\n\n他只记得门关上的声音。\n")
+        seed = exploration.capture_human_seed(
+            root,
+            text="想写一次被误记的告别。",
+            author="作者",
+            human_first_confirmed=True,
+        )
+        draft = exploration.register_draft(
+            root,
+            source_file=source,
+            title="门声",
+            exploration_kind="pov_probe",
+            creator="作者",
+            authorship="human",
+            seed_ids=[seed["seed_id"]],
+        )
+        formal_before = {
+            rel: read_bytes(os.path.join(root, rel))
+            for rel in ("_meta.json", "_设置.md", "_进度.md")
+        }
+        sidecar = os.path.join(root, draft["metadata_path"].replace("/", os.sep))
+        with open(sidecar, "a", encoding="utf-8") as f:
+            f.write("\n")
+
+        payload = author_workflow.build_workflow(root)
+        exploration_step = next(step for step in payload["steps"] if step["key"] == "exploration")
+        assert exploration_step["status"] == "pending"
+        assert exploration_step["summary"]["integrity_ok"] is False
+        assert any("完整性损坏" in item for item in exploration_step["blockers"])
+        assert payload["current_step"] == "exploration"
+        assert "探索区完整性损坏" in author_workflow.render_markdown(payload)
+
+        for rel, expected in formal_before.items():
+            assert read_bytes(os.path.join(root, rel)) == expected
+        assert not os.path.exists(os.path.join(root, "章节"))
+        assert not os.path.exists(os.path.join(root, "审稿"))
+        assert not os.path.exists(os.path.join(root, "设定"))
 
 
 def test_author_workflow_does_not_treat_blueprint_scaffold_as_human_approval():
@@ -242,3 +380,32 @@ def test_author_workflow_blocks_open_editor_queries():
         edit_step = [s for s in payload["steps"] if s["key"] == "edit"][0]
         assert edit_step["status"] == "pending"
         assert "editor query" in edit_step["blockers"][0]
+
+
+def test_author_workflow_blocks_authenticity_read_only_when_explicitly_required():
+    with tempfile.TemporaryDirectory() as root:
+        write_json(os.path.join(root, "_meta.json"), {"title": "测试书"})
+        touch(os.path.join(root, "章节", "第01章.md"), "正文\n")
+        write_json(os.path.join(root, "修订", "edit_plan.json"), {"tasks": []})
+        for rel in ["修订/editorial_letter.md", "修订/style_sheet.md", "修订/proof_checklist.md"]:
+            touch(os.path.join(root, rel))
+        auth_path = os.path.join(root, "修订", "authenticity_read.json")
+        payload = {
+            "kind": "novel_authenticity_read",
+            "required_for_release": True,
+            "status": "planned",
+            "findings": [{"id": "AUTH-001", "severity": "major", "status": "open"}],
+        }
+        write_json(auth_path, payload)
+
+        edit_step = next(step for step in author_workflow.build_steps(root) if step["key"] == "edit")
+        assert edit_step["status"] == "pending"
+        assert any("真实性/文化审读" in item for item in edit_step["blockers"])
+        assert "authenticity_read.py check" in edit_step["command"]
+
+        payload["required_for_release"] = False
+        write_json(auth_path, payload)
+        edit_step = next(step for step in author_workflow.build_steps(root) if step["key"] == "edit")
+        assert edit_step["status"] == "done"
+        assert edit_step["blockers"] == []
+        assert any("可选咨询" in item for item in edit_step["warnings"])

@@ -36,12 +36,14 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    - end card/包装定格 → 静帧或极慢运镜
    - 镜头时长超 primary 后端单 Clip 上限 = 🔴 block（改用更长后端或拆镜）。
    - 语义产品/App/UI/片尾镜缺 `PROD_*` = 🔴 block；引用的 `PROD_*`/`BRAND_*` 若不在 `设定库/asset_registry.json` 或 `出图/共享/asset_registry.json` = warn。
-   - 只消费 `ad-craft/platform_pack.py` 的单一规格源（不在 route 内复制清单），优先落 `placement_specs` + 来源/采集日期/安全区证据；只有平台名时可做母版但不能发布，未知或无出处自定义 placement 直接 block。
+   - placement 约束只消费 `ad-craft/platform_pack.py`（不在 route 内复制清单），优先落 `placement_specs` + 来源/采集日期/安全区证据；只有平台名时可做母版但不能发布，未知或无出处自定义 placement 直接 block。
+   - `platform_pack.json` 是 placement 约束与证据源；`render_profile.py` 将它与 `_设置.md`、`brief.render_profile` 编译为唯一可执行的 `生产数据/render_profile.json`。route/job/runner 使用 `source_generation`，合成/交付使用 `master_render`，并绑定同一 profile SHA；把 720p 源装进 1080p/4K 容器不等于原生细节升级。
    - **三轴增量字段**，逐镜写进 `video_model_routes.json`：
      - **`quality_tier` 质量档（成本×质量）**：产品 hero/代言人特写/end card 品牌定格 → `high`（值后端 pro 档把脸·包装·logo·品牌色钉稳）；空镜/痛点/普通镜 → `fast`（量产省成本）；后端无 fast/pro 档 → `n/a`。只表达意图，落档侧把 `high→pro`、`fast→fast` 解析成实际档位，不写死 model_version。
-     - **`motion_reference` 视频运动参考**：产品环绕 hero/demo 连续动作镜 + primary 支持 `reference_video_motion`（Seedance/可灵）时 `applicable=true`，提示把同段前一条已通过 clip 作运动/风格参考喂进去锁运镜节奏（与图身份锁正交）。
+     - **`motion_reference` 视频运动参考**：产品环绕 hero/demo 连续动作镜 + primary 明确支持 `reference_video_motion`（当前 route 仅 Seedance）时 `applicable=true`，提示把同段前一条已通过 clip 作运动/风格参考喂进去锁运镜节奏（与图身份锁正交）。Kling 3.0 的 Element/多镜能力不冒充视频运动参考。
      - **`summary.multishot_groups` 多镜单次生成候选（advisory）**：连续 demo 步骤/产品多角度 + 支持多镜的后端 → 标候选组，可一次 co-generate 消缝；**只提示不合并**，逐镜仍是独立可重跑交付单元，组大小受单次输出时长上限封顶。
 2. **逐 Clip 完整合同 + 编译提交 prompt**：运行 `python3 skills/ad/ad-video/scripts/plan_prompts.py "<作品根>"` 写 `出视频/分镜/prompt/镜头N.md` 与 `video_jobs_manifest.json`。同一 Markdown 分两层：
+   - manifest 与每个 job 都保存当前 render profile 的 path/SHA/`source_generation`/`master_render` compact ref；设置或 placement 改变后旧 job 立即 stale，必须重建。
    - **完整生产合同**：输入帧、路由理由、品牌色/光位/轴线、产品资产 ID、精确 CTA/slogan/法律声明、安全区、负向和合规信息；供 gate、人工复核和溯源，必须严格完整。
    - **后端编译提交 prompt**：`skills/ad/_lib/ad_video_prompt_compiler.py` 按 primary 后端只编译产品主动作、运镜、明确的环境响应、结尾落幅、产品保持与文字处理；renderer 只提交此块。每条主运镜补速度、方向与落幅，禁止把整份合同、路由理由、资产路径或法规说明拼给模型。
    - 精确 CTA、slogan、价格、法律声明和 UI 文案由 `ad-compose` 可控叠加；视频模型只保持首帧已有文字像素，不负责重新拼写。绑定 `PROD_*` 的产品镜仍须在**完整合同**重写身份锁定句/资产引用。
@@ -57,11 +59,12 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    ```
    用首帧 PNG × 实测镜头时长 + VO 拼 `合成/animatic.mp4`（+ `生产数据/ad_animatic_manifest.json`，逐帧 SHA + VO 时长对账）。节奏塌/镜序错/VO 不贴，在预演里改是免费的，生完视频再改是重烧。缺首帧/缺实测时长直接 block（预演不能拿空画面凑）；gate video 以 advisory 侧车提示，首帧或时长变更后预演过期。
 5. **图生视频**：调生视频 CLI，标 `need_end_frame` 的用首+尾双帧引导焊接点。**付费渲染资金安全**（签核例外走 `scripts/render_dreamina.py` 时）：提交成功即**先落盘** `submit_id` 再下载，下载失败重跑凭已登记 `submit_id` 免费收集（`--submit-only`/`--collect-only` 两段式或默认同步路径均如此），绝不二次付费；job 账本原子写；下载/查询有限重试+退避、付费提交永不自动重试；`--max-credits N` 预算封顶到顶即停。
+   - runner 默认读取 `source_generation.backend_request_resolution`；兼容参数 `--video-resolution` 只有与 profile 等价时才接受，不能用 `master_render` 反向冒充模型请求规格。请求值写 `requested_*`；回收后 ffprobe 写 `observed_output` 的真实像素/FPS/SHA，二者不符即 block，不能用计划 30fps/1080p 冒充实际 24fps/720p。
 6. **出视频落档 QC（post-video gate）**：
    ```bash
    python3 skills/ad/ad-video/scripts/video_qc.py "<作品根>"
    ```
-   用 ffprobe 实测视频流/分辨率/时长，用 ffmpeg 抽 start/mid/end 三帧并生成 contact sheet；对输入首帧、镜内产品漂移、相邻镜头真实尾/首帧做启发式比较。抽帧失败会 block“无法验收”，视觉 dHash 只 WARN 交人工。报告须晚于 clips 且 full precision 才能进 compose（或显式人工签收）。
+   用 ffprobe 实测视频流/分辨率/FPS/时长，并逐 clip 对账 `render_profile.source_generation` 与 job `observed_output`；全批同为 24fps 但请求 30fps 也会 block，不只检查“批内是否混用”。再用 ffmpeg 抽 start/mid/end 三帧并生成 contact sheet；对输入首帧、镜内产品漂移、相邻镜头真实尾/首帧做启发式比较。抽帧失败会 block“无法验收”，视觉 dHash 只 WARN 交人工。报告须晚于 clips 且 full precision 才能进 compose（或显式人工签收）。
 7. 回写 `_进度.md` 视频 ✅：`python3 skills/ad/ad-craft/scripts/progress_set.py set-stage "<作品根>" video --status ✅ --artifact 出视频/分镜/视频`，提示 `ad-compose`。
 
 ## 广告专有强化
@@ -72,7 +75,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
 - **生成后也要验收**：`inherit_contract.py` 只管生成前 prompt 继承；`video_qc.py` 负责生成后的 Clip 文件、产品锁、文字可读、安全区、接缝声明，外加**批内混帧率/混分辨率**（`batch_fps_mix`/`batch_resolution_mix`·warn——合成强制统一参数会静默掩盖来源差异）与**同场景相邻镜色跳**（`seam_color_jump`·平均色距>0.12 warn，已声明转场降 info——dHash 只抓灰度结构，调色/白平衡跳变靠色距抓），不允许坏 Clip 进入剪辑。
 - **运镜服务节奏**：广告节奏紧，一镜一个主运镜，动作峰值对 VO/音乐床节奏点（`ad-script` 时间轴标）。产品 hero/demo/end card 的可用运镜见 `skills/ad/references/运镜/manifest.json`（48 条，含新增的探针穿越微距/机身固定/越肩推/一镜到底/鸟瞰俯降/仰角英雄推等），默认读本地五帧 contact sheet；只有需要检查运动节奏/轨迹时才运行 `python3 skills/ad/scripts/camera_reference.py fetch <运镜ID或名称>` 按 SHA-256 下载远端动画。断网只退回 manifest + contact sheet，不阻断广告 prompt。
 - **特效镜头库（命名招牌镜头）**：若本镜是命名招牌镜头（产品扫光/液体飞溅/悬浮缓入/微距推镜/产品分解组装/香水雾化/玻璃破碎定格/普拉达换装/移轴微缩…），查 `skills/ad/references/特效镜头/manifest.json`（48 条，中英双语可粘贴核心 prompt + negatives + 回链运镜 + 身份风险级）——`python3 skills/ad/scripts/effect_reference.py list --category product_commercial` / `show <特效名> --json`。`plan_prompts.py` 已主动接入：镜头运镜/动作里点名某特效即在"运镜与动作"段暴露核心 prompt，并对 `identity_risk=high` 的特效（换装/换脸/化妆品涂抹近脸等）自动把 negatives + 身份锁词并入 `negative_elements`。**换装/换脸类形变须有意声明、只在指定转场点发生，且不得用于假冒真实人物或明星脸。**
-- **多比例**：按主比例出视频，其它比例 `ad-compose` reframe；运镜别让主体/产品冲出 action-safe。
+- **多版位**：先跑 `ad-craft/scripts/placement_adaptation.py`，按版位明确选择 `native_master` / `native_recrop` / `native_reedit` / `native_variant` / `mechanical_reframe`。结构风险镜优先原生重剪/重做；机械裁切只在焦点计划、版位安全区证据、具名批准和必要的风险接受均闭合时使用。
 
 ## 测试
 
@@ -91,6 +94,6 @@ cd skills/ad/ad-video/scripts && python3 -m pytest
 | 让视频模型重新生成 CTA/价格/法律声明 | 首帧已有文字只做像素保持；精确文字在 `ad-compose` 可控叠加 |
 | 产品镜用普通后端抖花包装 | `route.py` 按能力把产品镜路由主体一致后端 + 首尾双帧 |
 | 生成了 MP4 就直接合成 | 先跑 `video_qc.py`；compose gate 缺 `出视频/分镜/video_qc.json` 或 block 会拦 |
-| 镜头比后端单 Clip 上限还长 | `route.py` 时长上限 block；换更长后端（Seedance≤15s）或拆镜 |
+| 镜头比后端单 Clip 上限还长 | `route.py` 时长上限 block；换支持该时长的后端（Seedance/Kling 3.0≤15s）或拆镜 |
 | 项目内混用视频后端当默认 | 路由按能力选 primary/fallback 落 `video_model_routes.json`，不是随意混 |
-| 运镜让产品/主体冲出安全框 | 留 action-safe 余量，多比例 reframe 才不裁掉主体 |
+| 运镜让产品/主体冲出安全框 | 留 action-safe 余量，并让 `placement_adaptation` 为目标版位选择原生重构或经签核的裁切方案 |

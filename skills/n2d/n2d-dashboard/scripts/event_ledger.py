@@ -72,6 +72,14 @@ def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def atomic_write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
@@ -210,6 +218,8 @@ def build_hash_chain(events: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def audit(root: str, *, write: bool = False, strict_trace: bool = False) -> Dict[str, Any]:
+    resolved_root = Path(root).resolve()
+    ledger_path = events_path(str(resolved_root)).resolve()
     events, line_errors = load_event_lines(root)
     event_errors: List[Dict[str, Any]] = []
     event_warnings: List[Dict[str, Any]] = []
@@ -249,8 +259,16 @@ def audit(root: str, *, write: bool = False, strict_trace: bool = False) -> Dict
     payload = {
         "kind": "n2d_production_event_ledger_audit",
         "version": 1,
-        "root": root,
-        "ledger": str(events_path(root)),
+        "root": str(resolved_root),
+        "ledger": str(ledger_path),
+        "source": {
+            "kind": "n2d_production_event_ledger_source",
+            "version": 1,
+            "path": str(ledger_path),
+            "exists": ledger_path.is_file(),
+            "bytes": ledger_path.stat().st_size if ledger_path.is_file() else 0,
+            "sha256": sha256_file(ledger_path) if ledger_path.is_file() else "",
+        },
         "event_count": len(events),
         "line_errors": line_errors,
         "event_errors": event_errors,
@@ -264,6 +282,7 @@ def audit(root: str, *, write: bool = False, strict_trace: bool = False) -> Dict
         "status": "fail" if (line_errors or event_errors or trace_errors or chain_tamper) else ("warn" if event_warnings else "pass"),
         "chain_path": str(production_dir(root) / CHAIN_JSONL),
     }
+    payload["content_sha256"] = sha256_text(canonical_json(payload))
     if write:
         pdir = production_dir(root)
         atomic_write(pdir / AUDIT_JSON, json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n")

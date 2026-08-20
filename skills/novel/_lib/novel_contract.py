@@ -144,6 +144,7 @@ def get_product_path(root: str, kind: str) -> str:
 NOVEL_DEFAULTS = {
     "目标平台": "跨平台",
     "小说用途": "未定",
+    "创作工艺档": "genre_novel",
     "题材": "未定",
     "权利来源": "original",
     "输出格式": "txt,docx,outline",
