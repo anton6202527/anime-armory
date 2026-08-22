@@ -1,6 +1,6 @@
 # LabuTV Web
 
-LabuTV Web is the browser UI for the Skill Hub and multimodal workflow canvas. Its AI/Skill path has one server boundary: every AI generation, Skill execution, Skill source read, and Skill work-file upload goes to the LabuTV backend REST API. It never calls cliproxy, an Electron bridge, a local Agent CLI, or a model provider API directly.
+LabuTV Web is the browser UI for the Skill Hub and multimodal production canvas. Its AI/Skill path has one server boundary: every AI generation, Skill execution, Skill source read, and Skill work-file upload goes to the LabuTV backend REST API. It never calls cliproxy, an Electron bridge, a local Agent CLI, or a model provider API directly.
 
 ```text
 Browser  ->  VITE_API_BASE_URL (/api)  ->  LabuTV backend (:43118)  ->  cliproxy (:8317)
@@ -38,6 +38,12 @@ VITE_API_BASE_URL=https://api.example.com/api
 
 The current Node service is intentionally loopback-only. A deployed backend must first add trusted proxy handling, HTTPS, product authentication, tenant authorization, and an explicit Web-origin policy.
 
+## Canvas production contract
+
+The canvas is intended to become a production workbench for secondary creation and iteration through a final master, not an intermediate-artifact viewer. Its canonical independent skill IDs are `app-script-workbench`, `app-character-turnaround`, `app-first-frame-video`, and `app-audio-video`; older IDs are explicit migration aliases only.
+
+The current Web model implements `app-script-workbench/v3` with one `state`, one canonical `content_sha256`, and one completion definition. The current UI exposes editable shots, assets, prompts, and batch-video entry, but it does not yet close result write-back, per-image acceptance, master composition/QC, or final-acceptance receipt entry. Those fields are target/runtime contracts, not a claim that today's UI can complete them. Backend task success and delegated evidence may establish `machine_complete` only; B14 current-pixel receipts and final acceptance remain human boundaries once their UI is connected.
+
 ## REST boundary
 
 The Web client currently consumes these backend routes relative to `VITE_API_BASE_URL`:
@@ -56,7 +62,7 @@ The Web client currently consumes these backend routes relative to `VITE_API_BAS
 
 Each Skill submission includes an explicit `skillId`, work identity, selected model, execution mode, Skill definition when applicable, contextual IDs, attachment IDs, and a per-submission idempotency key. Polling reads the existing run and never resubmits it.
 
-Successful runs may return normalized artifacts as `{ id, kind, name, mimeType?, size?, text?, url?, base64?, assetId? }`, where `kind` is `text`, `image`, `video`, or `audio`. The canvas converts accepted artifacts into result nodes. Large binary outputs should normally use an authenticated `assetId` or short-lived URL rather than inline base64.
+Successful runs may return normalized artifacts as `{ id, kind, name, mimeType?, size?, text?, url?, base64?, assetId? }`, where `kind` is `text`, `image`, `video`, or `audio`. The canvas converts these machine outputs into result nodes; a successful run does not make them human-accepted or complete. Large binary outputs should normally use an authenticated `assetId` or short-lived URL rather than inline base64.
 
 ## Verification
 

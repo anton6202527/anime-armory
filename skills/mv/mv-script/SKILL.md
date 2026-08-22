@@ -15,7 +15,7 @@ description: 制MV 剧本创作 — 听歌识影。从 歌词 + 节拍分析(bea
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md`；再缺则**首次问一次**。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读项目值、全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。只有核心叙事意图真实冲突或合同变化才问一个最小问题。
 
 涉及的选择点：`歌曲输入时序`、`MV视觉风格`、`MV叙事模式`（写实叙事/意识流隐喻/纯舞台/混剪）、`MV一致性增强`。
 
@@ -24,10 +24,10 @@ description: 制MV 剧本创作 — 听歌识影。从 歌词 + 节拍分析(bea
 1.  **先判定歌曲输入时序**：读 `<作品根>/_设置.md` 的 `歌曲输入时序`。
     *   `先传音乐`：确保 `歌/`、`词/` 已入库，且已运行 `mv-beat` 产出 `节拍/beatgrid.json`。
     *   `后配歌曲`：若没有 `歌/song.*`，可先读取歌名、歌词草稿、主题/风格需求做 rough 蓝图；在 `视觉蓝图.md` 顶部标 `状态：rough（待成品歌/beatgrid 复核）`。
-2.  **概念提案**：
+2.  **概念提案与推荐采用**：
     *   读取 `lyrics.md` 和 `beatgrid.json`。
     *   有 beatgrid 时分析歌曲能量起伏（Energy Profile）；后配且无音频时只做段落/情绪假设，不写死秒点。
-    *   向用户提供 2-3 个不同方向的视觉概念（Concept Sketches）。
+    *   生成 2-3 个不同方向的视觉概念（Concept Sketches），按歌曲能量、歌词主题、项目风格和实现风险排序，默认采用证据最强的推荐并继续；只有核心方向冲突且无证据优势，或显式人审策略才停。
 3.  **蓝图落地**：
     *   先用 `write_script.py --save` 保存本次创作 prompt 到 `设定/mv_script_prompt.md`。
     *   AI 生成蓝图 Markdown 后，用 `write_script.py --content-file <生成稿.md>` 写回 `视觉蓝图.md`；脚本会落 `设定/mv_script_state.json`，绑定当前歌曲、beatgrid、歌词、脚本相关设置和蓝图 SHA。只有 beatgrid 段落已完整具名签收才推进 `script_review`，不能凭“文件存在”冒充复核。

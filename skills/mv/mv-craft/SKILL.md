@@ -9,9 +9,11 @@ description: Shared machine contracts and deterministic helpers for the mv-* ski
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读项目值、全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。合规、当前像素/视频与最终验收、不可逆发布/覆盖及预算合同变化才停。
 
 本 skill 涉及的选择点：`MV用途`、`歌曲输入时序`、`MV视觉风格`、`MV规划粒度`、`卡点策略`、`生图模型`、`生图渠道`、`MV一致性增强`、`生视频模型`、`生视频渠道`、`演唱口型`、`字幕语言` 等。
+
+`mv-craft` 与 `mv/run.py next --json` 为**已初始化项目**提供合同、完成态和机器可消费前沿，不是完整 batch/provider runner。外层可自动 chain 免费确定性 helper；缺 `_进度.md` 时当前 setup card 只是不可执行 legacy 占位，须先用 `init_project.py --title ... --out ... --song-timing ...` 初始化。真实付费提交、当前像素/视频验收、picture lock 和发布仍由对应入口执行。
 
 ## 包含内容
 

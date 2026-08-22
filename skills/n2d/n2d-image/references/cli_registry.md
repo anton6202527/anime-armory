@@ -17,7 +17,7 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
 python3 skills/n2d/_lib/image_backend_adapter.py scan --json
 ```
 
-`scan --json` 的 `usable_backends` 是“当前可自动确认能落 PNG”的列表。若 **0 个可用**，停止并提示“当前无可用生图渠道，请准备好可以生图的官方/已登录渠道”；`needs_confirmation_backends` 只能列为检测到但需人工确认，不当作可用。若 **≥2 个可用**，producer-owned router 按项目需求只推荐一组 `生图模型 + 生图AI/生图渠道`（长篇/多集/核心角色/多人同框优先主体库或多参考强模型/渠道；单集 demo/快速迭代优先 Codex；文字/编辑/透明背景等能力按当天官方文档和 CLI/API help 核验），将该推荐并入同一次付费确认，不再额外暂停；用户可在花钱前覆盖。确认后写 `<作品根>/_设置.md`，整集统一一组模型+渠道。
+`scan --json` 的 `usable_backends` 是“当前可自动确认能落 PNG”的列表。若 **0 个可用**，停止并提示“当前无可用生图渠道，请准备好可以生图的官方/已登录渠道”；`needs_confirmation_backends` 只能列为检测到但需人工确认，不当作可用。若 **≥2 个可用**，producer-owned router 按项目需求只推荐一组 `生图模型 + 生图AI/生图渠道`（长篇/多集/核心角色/多人同框优先主体库或多参考强模型/渠道；单集 demo/快速迭代优先 Codex；文字/编辑/透明背景等能力按当天官方文档和 CLI/API help 核验），普通设置自动写 `<作品根>/_设置.md`，并将具体 model/channel 纳入 exact 阶段预算包；包内不额外暂停，用户可在授权前覆盖，binding 变化则旧包失效。
 
 所选渠道未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。**生成轴=具体模型（C5）**：`生图模型` 默认 **GPT Image 2 / OpenAI GPT Image 系列归一名**，访问入口 `生图AI`(渠道) 默认 **Codex CLI**；执行前必须以官方 docs/CLI/API 刷新实际 model id。全项目生图优先 Codex/OpenAI；Seedream、可灵主体库、Nano Banana、Dreamina/即梦官方图像模型等非 Codex/OpenAI 后端只能作为用户签核例外，签核写入 `<作品根>/合规/image_backend_override.json`。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 或 `同视频模型` 时改成显式后端名。
 

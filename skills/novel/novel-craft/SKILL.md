@@ -94,7 +94,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/reconcile_ledger.py` | 输出正文/Delta 核对 prompt，并登记带 `ledger_reconcile` schema 与 hash snapshot 的 `语义任务/`；仅在提供已通过核对的 `--verified` JSON 后合并入 `state_ledger.json`（`--stamp-hashes` 免手抄 sha256，供写后即时对账）；`--rollup --before N` 压缩旧章逐章明细控制账本膨胀（canonical 状态不动） | 所有 `draft` 阶段，写章后同步状态；长篇定期 rollup |
 | `scripts/semantic_job.py` | 创建/展示/领取/阻塞/拒收/重开/完成/审核批准绑定 prompt 的语义任务；任务含 schema_ref、source_snapshot、response_contract、assigned_role、attempts、provider/model、cost_estimate、human_required、review_required，完成时按 `semantic_schemas.py` 校验 JSON 并写 provenance 后复制到目标产物 | 需要 AI/人工判断但必须可追踪、可续跑的步骤 |
 | `scripts/provenance.py` | 追加写 `生产数据/provenance.jsonl`；记录输入/输出文件 sha256、工具、事件类型与元数据；支持 `lineage` / `artifact-events` / `openlineage` 查询 | runner、semantic job、后续关键 workflow 脚本 |
-| `scripts/propose_state_delta.py` | 为单章生成 `审稿/state_delta_第NN章.suggested.json` 草案，含章节 hash、候选实体和待填槽位；确认后再另存正式 delta 并 merge | 写完章节后，减少从空白 JSON 开始写 state_delta 的摩擦 |
+| `scripts/propose_state_delta.py` | 为单章生成 `审稿/state_delta_第NN章.suggested.json` 草案，含章节 hash、候选实体和待填槽位；经确定性校验与当前审阅策略对应的 reviewer 核对后另存正式 delta 并 merge | 写完章节后，减少从空白 JSON 开始写 state_delta 的摩擦 |
 | `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，分别记录文本、图片/封面、译文的 AI-generated / AI-assisted / 未使用状态，以及人工贡献、AI 介入直接程度、人类 steering、可替代性、直接纳入程度、复核步骤和逐章 `chapter_usage` | 发布、导出、交平台前 |
 | `scripts/compliance_profile.py` | 写 `合规/compliance_profile.json` + `.md`；支持 `--confirm <requirement_id>` 留痕平台侧披露/备案/权利确认 | 发布、出海、KDP/中国/欧盟/微短剧等目标 |
 | `scripts/metadata_pack.py` | 写 `导出/metadata_pack.json` + `.md`，整理标题、副标题、系列信息、短简介、长简介、关键词、分类、年龄/内容提示、平台目标、权利摘要和 AI/合规披露摘要 | 投稿、平台发布、KDP/self-pub 前；release manifest 发布 profile 会检查 |

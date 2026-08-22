@@ -7,7 +7,7 @@
 
 # Skills 跨线公共库收敛 + common 正名（四项）〔历史·已作废〕
 
-> 状态：**已实施** · 日期：2026-06-12 · 适用：novel / song / mv / ad 的 `*-craft` + `skills/common/` + `skills/n2d/_lib/`
+> 历史状态：**曾实施，随后整体作废并完成反向迁移** · 日期：2026-06-12 · 当时适用：novel / song / mv / ad 的 `*-craft` + `skills/common/` + `skills/n2d/_lib/`
 > 性质：一次架构审查的落地记录，分两类。**② 收敛**：把跨线**重复的管道代码**提到 `skills/common/` 单一真值源（disclosure / progress_md / io_utils 三项 + 前置的 settings 修复）。**③ 正名**：把 n2d 私有契约层从 `common/` 迁出，让 `common/` 名实相符。两类都**不动任何内容逻辑**、行为零变化。供团队 review。
 
 ---

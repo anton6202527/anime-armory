@@ -82,9 +82,9 @@ python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> plant --desc "
 
 **先按 `novel-craft/references/split.md` 反推精简后总章数 / 字数分档**（短读版 1.5-3× 压缩 / 漫剧友好版 5-10× / 大纲级 20×+，对应章数差极大）；然后引用 `novel-craft/references/outline.md` + `condense.md` 编织章纲。注意：漫剧友好版的章 = 戏剧节拍 ≠ 原作章节。
 
-### 第 5 步 — Demo（前 2-3 章）+ 用户审
+### 第 5 步 — Demo（前 2-3 章）+ 独立审阅
 
-引用 `novel-craft/references/chapter.md` + `condense.md`。每章独立写、独立审。
+引用 `novel-craft/references/chapter.md` + `condense.md`。每章独立写、由与 writer 分离的 reviewer 独立审；默认 specialist 在同一任务连续复核，显式逐阶段人审才停。
 Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`）；`status != passed` 不进第 6 步。
 
 ### 第 6 步 — 续 + 回扫
@@ -130,6 +130,6 @@ python3 skills/novel/novel-craft/scripts/export.py "<作品根>" --formats txt,d
 | 漫剧版仍按原章节切 | 漫剧要按戏剧节拍切，跨章合理 |
 | 大段复刻原作高潮段 | 即便高潮段也要重写，不搬文本 |
 | 均匀压缩每段砍 50% | 高潮段失去击穿；要重点保高潮 |
-| Demo 没审就续 | 第 5 步 gate 必须等用户点头 |
+| Demo 没独立审就续 | 第 5 步 gate 必须由独立 reviewer 签收；默认代理审阅可连续推进 |
 | Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，容易砍丢主线或钩子 |
 | Demo 过审但没写 `审稿/demo_gate.json` | 后续压缩缺保留风格/承诺的机器锚点 |

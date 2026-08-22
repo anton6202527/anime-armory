@@ -714,14 +714,16 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ---
 
-## Q30：从零做一部完整 AI 漫剧——推荐的一步步出脚本/出图/出视频顺序（总纲）<a id="q30"></a>
+## Q30：从零做一部完整 AI 漫剧——推荐的一键生产顺序（总纲）<a id="q30"></a>
 
-1. **剧本改编**：拆集 + 台词 + 角色/场景卡（不做分镜）。
-2. **配音（前移）**：真实音色配音，拿 **`时长清单.json`**。
-3. **分镜设计（回跑）**：读时长清单锁镜头时长，超 8s 自动拆。
-4. **出图**：建共享定妆库，逐镜派生。
-5. **出视频**：clip时长=配音驱动，图生视频。
-6. **合成**：配音 + BGM + 烧中英字幕。
+1. **剧本改编**：拆集 + 台词 + 角色/场景卡（不做分镜）。普通可逆选择采用推荐值写入 `_设置.md`，不逐项开菜单。
+2. **声音选角 + 时间基准**：默认混合路由先锁 `voice_casting.json`，用无 WAV `timing_estimate.json` 建时间基准；只有配音先行镜或已锁音色的 final 阶段才生成真实音轨。
+3. **分镜设计**：按逐镜声音路线、导演排戏与时长基准锁镜头；超后端窗口的连续 take 才拆段，明确机位/景别切换按 edit shot 拆。
+4. **出图**：建共享定妆库，逐镜派生；每个物理 target 仍即时机器 QC + 实际像素检查。
+5. **出视频**：按 prepared manifest 图生视频；每个物理 Clip 仍即时 QC + 实际查看 + hash-bound accept。
+6. **合成 + 验收**：默认继续到无 BGM 安全母版、review/release evidence 和最终人审；显式 `合成阶段=跳过` 才只交 Clip。
+
+“一键”减少的是普通选择和重复付款询问，不是审计。`run.py next --json` 只认一个当前 frontier；正式生产统一绑定 `n2d_content_fingerprint`；worker 只有“命令成功 + 产物验证 + post gate 通过”才算 done，整集只有 canonical release verdict 与同一母版的 fresh acceptance receipt 才算 `master_delivery_complete`。付费 image/video 由真实人一次签 phase envelope，包内连续执行；成本未知/超额、过期、模型/渠道/scope/input hash 改变才重授权。runner 不能自批，当前像素、版权/合规、不可逆覆盖、公开发布和最终母版签收仍是硬边界。
 
 ---
 

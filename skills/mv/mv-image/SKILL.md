@@ -9,7 +9,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读项目值、全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。当前像素验收、版权/肖像/品牌合规，以及预算授权创建、扩大、过期或合同变化才停；有效包余量内不逐图重复确认。
 
 本 skill 涉及的选择点：`生图模型`、`生图渠道`（旧 `生图AI` 兼容）、`MV一致性增强`、`MV视觉风格`、`重抽预算策略`。
 
@@ -41,7 +41,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 - **两层 + 锚点一致性**：先出主角/场景**定妆**（共享层），每张分镜 prompt 末尾拼角色卡**锚点句**锁脸锁画风（跨段不漂）。
 - **MV 单曲视觉一致性包**：只锁本曲内部的 `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger / forbidden_drift`。主角/主唱最严；段落场景可随段落换，但同段落继承光色和场景定妆；特效/转场只锁颜色和形状方向。详细做法见 `references/visual_consistency.md`。
 - **身份/资产注册优先**：若存在 `设定/identity_registry.json`、`asset_registry.json`、`分镜/reference_plan.json`，每张图必须按其中的 `lead_id / asset_ids / reference_inputs` 组装 prompt；缺 registry 时先跑 `python3 skills/mv/mv-craft/scripts/identity_registry.py <作品根>`。
-- **出图前一致性增强提示**：进入共享定妆或分段组图前，必须提示用户可选 `MV一致性增强=共享定妆+锚点 / 指定参考图 / 后端主体库 / +LoRA`。默认轻量；若用户已有主角/服装/场景参考图或已授权 LoRA，应先登记再生成，不要先批量出图再返工。
+- **出图前一致性增强选择**：进入共享定妆或分段组图前，缺省自动采用并持久化 `MV一致性增强=共享定妆+锚点`；若项目已有主角/服装/场景参考图、后端主体库或已授权 LoRA，登记相应档位再生成。只有来源权利不明或多个方向会实质改变身份合同时才停。
 - **clip_plan 驱动画面**：按 `分镜/clip_plan.json` 的 `image_prompt_path` / `image_path` / `need_end_frame` 出图；`视觉蓝图` 只提供风格和段落映射，不再让出图阶段临时猜 clip。
 - **动作首帧服务 video**：读取 `action_family/action_peak/visual_motif/transition_motif`，首帧要抓动作起幅或关键姿态，不要只做静态美图；副歌高光镜可用更强机位/演出光，但身份锚点不变。
 - **卡点意识**：分镜数量/节奏参考 `beatgrid`（副歌密、verse 疏），为 mv-video 的卡点 clip 备料。
@@ -49,7 +49,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 - **画风统一**：依视觉蓝图 global_style；跨段不跳风。
 - **筛选宽容铁律**：候选图**能用就用，尽量不重抽**。轻微偏差（构图小动、表情微差、目光朝向略偏、环境细节小出入）→ 直接通过落档，**不要拖节奏**。只有命中硬伤之一才重抽：① 核心人/物/场景错位 ② 主角脸/画风漂移到识别不出 ③ 违反硬性禁忌（错景别 / 出字幕 logo / 该用演出光却均匀打亮到无戏）。
 - **B14 逐图双闸（mv 线自维护 · 不可降级）**：每张共享定妆/服装、Clip 首尾帧、候选、重抽、封面都先跑 `image_receipts.py preflight`；它先核对当前 clip/reference contract，再冻结 target/prompt/model/channel，逐参考保存项目内路径、当前 SHA-256、owner/use 和完整像素可解码结果，并绑定上一张当前像素 acceptance。生成后由 `record_generation.py` 核对实际提交引用集合必须与 preflight 完全一致；正式 provider 路由还必须给出非占位 job/request/task ID，并绑定项目内 `mv_image_provider_evidence` schema v2 manifest + 独立 raw capture。只有仓内受信 adapter 能按精确路径解析 API JSON，或从受信 provider origin 的 HAR 网络响应解析；最终 output base64 字节 SHA 必须与当前资产相同。裸 `provider_job_id`、内嵌自述 response、全文 token 搜索、截图/HTML/PDF 冒充来源、嵌套伪匹配、同 job/output 跨 attempt 复用都拒绝。随后跑 `image_qc.py`；最后 `image_receipts.py postflight` 把当前资产 SHA、full machine QC 快照和具名并排目视写入逐资产 ledger。机器 `block/warn/noface/unverifiable`、精度降级、目视非 `pass` 都只能记 rejected；不得生成下一张。不得抽成公共实现，也不得复用其它系列 QC。
-- **重抽预算铁律（两档全局统一）**：`重抽预算策略` 只保留两档，按 `skills/mv/mv-craft/references/选择点与偏好.md` 读 `_设置.md`→全局默认→首次问一次，**默认=预算充足**。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限：
+- **重抽预算铁律（两档全局统一）**：`重抽预算策略` 只保留两档，按 `skills/mv/mv-craft/references/选择点与偏好.md` 读 `_设置.md`→全局默认→推荐值写回，**默认=预算充足**。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 当前像素制作判断为准；每次重抽都必须记录事件、保留候选或废料，并受实际调用层的阶段预算授权约束：
 
   | 策略 | 主角 / 副歌高光镜（爽点·副歌·反转·封面候选）| 配角 / 普通段镜 | 终止 |
   |---|---|---|---|
@@ -61,7 +61,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 
 ## 一致性增强菜单（出图前提示）
 
-进入共享定妆或分段组图前，必须给用户一句明确提示：**“本次 MV 默认用共享定妆+锚点；如果你有主角/服装/场景参考图、后端主体 ID，或已授权 LoRA，也可以先接入再出图。”** 若用户已有 `_设置.md`，按 `MV一致性增强` 沉默沿用；缺字段则补默认并提示一次。
+进入共享定妆或分段组图前，若已有 `_设置.md` 就沉默沿用 `MV一致性增强`；缺字段自动写入 `共享定妆+锚点` 并继续。用户已提供主角/服装/场景参考图、后端主体 ID 或已授权 LoRA 时自动登记相应档位，不额外弹菜单。
 
 | 模式 | 何时用 | 必填资料 |
 |---|---|---|
@@ -198,7 +198,7 @@ python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 诊断
 | 全程正面平视 + 均匀打亮 | 机位即能量（副歌大胆机位）、光影是 MV 灵魂（演出光/色胶/逆光） |
 | 给定妆图也打浓光/色胶 | 定妆=中性档案，戏剧光只上分镜图，否则污染下游参考 |
 | 不出定妆直接分镜 | 先共享定妆 + 锚点句，跨段才不漂 |
-| 有参考图/LoRA 却没在组图前提示用户接入 | 进入共享定妆或分段组图前提示 `MV一致性增强` 四档；用户选择后先登记资产，再批量出图 |
+| 有参考图/LoRA 却未登记就组图 | 已有合法参考资产时自动采用相应增强档并登记；没有时采用 `共享定妆+锚点`，不为展示菜单停下 |
 | 副歌为了炫直接换脸/换服装轮廓/换画风 | 违 MV 单曲一致性包；副歌只增强光效、机位、动作和特效，不换身份锚点 |
 | 跨段画风跳变 | 统一 global_style + 同一生图工具(同一集不换) |
 | 分镜不看段落/卡点 | 按视觉蓝图段落 + beatgrid 疏密出图 |
@@ -210,7 +210,7 @@ python3 skills/mv/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 诊断
 | 后配歌曲未补最终歌就出图 | 先补成品歌、跑 mv-beat 和正式 mv-plan；rough 蓝图不生成正式图 |
 | clip_plan 标了 `need_end_frame` 却只出首帧 | 同段落连续硬切接缝补尾帧 PNG `Clip_XXX_end.png`（=下一首帧构图），供 mv-video 首尾双帧锁接点 |
 | 候选图轻微偏差就喊重抽 | 违筛选宽容铁律——只对核心错位/脸·画风漂移/硬性禁忌才重抽 |
-| 一张图反复重抽烧 credit | 先确认 `重抽预算策略`：预算充足允许出到满意；预算一般只对关键图片严格抽到满意，普通图无硬伤就收 |
+| 一张图反复重抽烧 credit | 采用已持久化的 `重抽预算策略` 并受阶段预算包约束；有效余量内按档执行，扩大/过期/合同变化时结构化停止 |
 | 把"预算一般"当成所有图都随便过 | 预算一般不是不审图；关键图严格自检直到满意，普通图也必须无核心错位、无主角身份漂移、无硬性禁忌 |
 | 看到 `dreamina` 就直接用即梦逆向出图 | 违反安全 invariant——禁即梦/Dreamina 逆向 CLI/web 出图（官方 Seedream API 可用，≠ 即梦逆向）；即梦可用于出视频 |
 | 这个 clip 用 Codex、那个用 Seedream | 后端混用是跨 clip 漂移真凶——一支 MV 统一一个官方后端 |

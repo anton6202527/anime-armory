@@ -15,7 +15,7 @@
 1. 章节/弧段已过确定性闸（`novel-review` blocking=0、`logic_sentry`/`timeline_check` 无确定性阻断）——
    critic 是"好上加好"，不是用来兜底硬伤（硬伤交确定性闸，便宜可靠）。
 2. 该章是**高权重节点**（开篇黄金三章 / 弧段高潮 / 关键反转），值得多花 token。
-3. 用户/`_设置.md` 显式开启 `critic_loop=on`，或单次显式调用。成本点 → 每次确认（对标选择点纪律）。
+3. 用户/`_设置.md` 显式开启 `critic_loop=on`，或单次显式调用。若有与当前 project/stage/input/model/channel/scope/cost 精确绑定且有效的阶段预算包，余量内不逐调用确认；缺失、扩大、过期或合同变化才返回结构化停止。
 
 ## 必须 checklist-grounded（不许凭感觉）
 每个 critic agent 的判据**绑定项目已有的结构化真值**，不是开放式"你觉得好不好"：

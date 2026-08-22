@@ -1,6 +1,6 @@
 # Web App 目标架构
 
-> 状态：目标架构，供后续实现与迁移验收使用。更新时间：2026-08-17。
+> 状态：目标架构，供后续实现与迁移验收使用。更新时间：2026-08-22。
 
 ## 0. 2026-08-17 落地状态
 
@@ -8,7 +8,7 @@
 
 - Browser 的模型发现、文本/图片生成、Skill source、工作文件上传和 Skill run 只调用同源 `/api/v1`。
 - `apps/backend` 已提供 loopback REST 服务（默认 `127.0.0.1:43118`），统一校验请求、读取 allowlisted Skill、维护内存任务队列，并在服务端调用 `cliproxyapi`。
-- Web 已移除 `43117` Electron bridge、Vite 模型中间件和 Skill 源码 `import.meta.glob` 打包；三个独立画布 workflow 也不再用计时器伪造成功。
+- Web 已移除 `43117` Electron bridge、Vite 模型中间件和 Skill 源码 `import.meta.glob` 打包；四个独立画布 workflow 也不再用计时器伪造成功。它们的正式 ID 是 `app-script-workbench`、`app-character-turnaround`、`app-first-frame-video` 和 `app-audio-video`。
 - 文本生成和一个真实的角色三视图 Skill run（现 `app-character-turnaround`）已完成端到端 smoke；后者实际经历 `queued -> succeeded` 并返回真实 text artifact。
 
 当前可直接联调的 MVP 路由是：`GET /api/v1/health/live|ready`、`GET /api/v1/ai/models`、`POST /api/v1/ai/generations`、`GET /api/v1/skills[/:id]`、`GET /api/v1/skills/:id/sources`、`GET /api/v1/skills/:id/source?path=...`、`PUT /api/v1/works/:workId/files/:fileId`、`POST /api/v1/skill-runs` 以及 `GET|DELETE /api/v1/skill-runs/:runId`。第 4 节描述的是生产目标合同，不能当成本地 MVP 已实现清单；本地请求示例见 `apps/backend/README.md`。
@@ -31,6 +31,14 @@ Web App 采用单一后端边界：Browser 只访问同源或部署时明确配�
 - Browser 不得在请求里指定任意 upstream、命令、脚本路径或工作目录。
 - 所有模型生成和 Skill 执行都先创建后端资源，再通过资源状态返回结果；页面只负责提交、轮询、取消和展示。
 - 大文件上传与下载可使用后端签发的短期 URL 走数据面直传，这是唯一常规例外；权限判定、对象键生成、完成确认和元数据仍走 `/api/v1`。
+
+### 1.1 画布生产合同
+
+Web 画布的目标定位是可持续二次创作、选择性重生成、质检返修并迭代到最终母版的生产工作台，不是中间产物查看层。Web 新状态只持久化四个 `app-*` 正式 ID；改名前 ID 只允许在明确的 legacy alias / migration adapter 中读取，迁移后立即写回正式 ID。Electron 遵守相同语义原则，但当前使用自己的 v2 production-state/final-product 合同，不属于本节 Web schema。
+
+Web 的 `app-script-workbench/v3` 模型以一个生产 `state`、一个 canonical `content_sha256` 和一个完成定义作为业务真值。HTTP `202 Accepted` 只表示服务器接受请求；run 的 `succeeded`、provider 结果或 delegated-agent 回执也都只是机器证据，最多推进到 `machine_complete`，不得被映射为人审 `accepted` 或项目 `complete`。
+
+当前 Web UI 已覆盖镜头、资产、提示词编辑和批量视频入口；生成结果回写、逐图验收、母版合成/QC 与最终验收回执输入尚未闭环。下面的 current-pixel 与 final-acceptance 规则是必须实现的目标合同：每张最终保留图片由具名真人查看当前像素并绑定 artifact 字节 SHA-256，最终母版另做具名真人验收。普通可逆选择可采用推荐值并持久化，已授权阶段预算包内连续生成与机检；`waitingForUser` 只保留给不可自动推断输入、预算包创建/扩大/过期、权利合规、逐图人审、不可逆发布/覆盖和最终验收。
 
 ```mermaid
 flowchart LR
@@ -165,7 +173,7 @@ queued -> running -> succeeded
 queued/running    -> cancelled
 ```
 
-Skill run 在此基础上允许 `waitingForUser`，用于选择点、合规确认和人工 gate；用户提交确认后回到 `queued` 或 `running`。状态资源应包含 `progress`、安全的 `message`、`result`、`artifactIds`、`createdAt/startedAt/finishedAt`，不得包含上游原始响应、进程环境或绝对路径。
+Skill run 在此基础上允许 `waitingForUser`，但普通可逆选择不得用它逐项打断：优先采用本线推荐值并持久化。它只用于不可自动推断的必要输入、预算包创建/扩大/过期、权利与合规、逐图当前像素具名人审、不可逆发布/覆盖和最终成品验收；用户提交符合当前 gate schema 的确认后回到 `queued` 或 `running`。状态资源应包含 `progress`、安全的 `message`、`result`、`artifactIds`、`createdAt/startedAt/finishedAt`，不得包含上游原始响应、进程环境或绝对路径。
 
 Browser 轮询规则：
 

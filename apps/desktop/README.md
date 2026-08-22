@@ -39,11 +39,19 @@ npm run dev
 
 也兼容 `CUSTOM_OPENAI_BASE_URL` / `CUSTOM_OPENAI_API_KEY`；`CLI_PROXY_*` 同时存在时优先。URL 可省略，默认值如上。仅在 macOS 非打包开发环境且未设置任一 API Key 时，桌面端会只读解析 `/opt/homebrew/etc/cliproxyapi.conf` 中 `api-keys` 的第一项；正式包不会读取该开发配置。密钥只存在桌面主进程内存中，不能放进 `VITE_*` 变量。
 
+### 画布生产工作台
+
+Electron 画布定位为可从脚本、素材和机器结果继续二次创作、选择性重生成、质检、返修并维护最终产物的生产工作台，不是中间产物查看器。它与仓库四个 `app-*` 独立 skill 遵守相同治理语义，但当前没有持久化 `app-script-workbench/v3`，也不应把 Web 合同字段写成 Electron 已实现字段。
+
+Electron 当前权威实现是 `anime_armory_canvas_production_state` v2、`content_hash` 与 `canvas.final_product/v1`。每集 canvas workflow 实例只保留一个前沿和一个最终产物判词，当前素材/母版用内容哈希绑定；普通可逆编辑和机检可以连续推进，权利合规、不可逆发布/覆盖和最终验收仍是硬边界。当前最终回执的 reviewer 值是本地 `desktop_user` 占位身份，只能说明本机交互动作，不能认证具名真人；接入账户或可验证身份回执前，不得把它描述为强具名验收。
+
 ### 匿名 Demo 下载与本地作品
 
 公开桌面端没有账号、登录或上传能力。官方 Demo 目录和 ZIP 从 Cloudflare
 R2 匿名读取，下载完成后强制核对字节数与 SHA-256，再安全解压到作品工作区。
 用户新建或修改的作品始终只保存在本地，不会自动或手动上传。
+
+作品系列列表最多展示一个官方 Demo；n2d / 制漫剧系列固定优先展示《那妖魔是姜大人》。同系列的其他本地作品仍正常显示为用户作品，但不得再标为第二个 Demo。
 
 维护者通过仓库根目录的 `npm run demos:publish` 独立发布 Demo；R2 凭证和
 Cloudflare 登录态不会进入 Electron 包。完整边界见 `../../docs/cloud-architecture.md`。

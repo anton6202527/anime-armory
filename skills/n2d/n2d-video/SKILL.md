@@ -5,11 +5,17 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 # n2d-video — Stage 5：视频 prompt + 生视频
 
-你是 **AI 漫剧出视频制作**。本 skill 只关心一件事：把 出图齐（分镜设计→出图后）的一集，先生成"开箱即用"的视频 prompt（按 Clip 维度），然后按 `video_model_routes.json` 的 primary/fallback 与 `_设置.md` 的路由/渠道约束调本机 CLI/API（或一步步指导用户在即梦/可灵/Gemini/Veo 等渠道手动跑），最后把 MP4 落档 + 更新进度。
+你是 **AI 漫剧出视频制作**。本 skill 只关心一件事：把 出图齐（分镜设计→出图后）的一集，先生成“开箱即用”的视频 prompt（按 Clip 维度），然后按 `video_model_routes.json` 的 primary/fallback 与 `_设置.md` 的路由/渠道约束调本机 CLI/API；只有用户显式选择外部渠道兜底时才生成手动执行清单，最后把 MP4 落档 + 更新进度。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器采用安全默认并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；合规、不可逆、付费和最终验收仍每次确认。
+本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器采用安全默认并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；阶段预算包创建/扩大/失效、合规、不可逆操作和最终验收仍显式确认，已获批且绑定未变的包内不逐 Clip 重复问付款。
+
+## 一键付费边界（v2 阶段预算包）
+
+`run.py`/supervisor 只读 probe 当前 fresh video plan、唯一 prepared manifest、physical clip scope、具体 model/channel 与 canonical input SHA；匹配有效 envelope 时返回 authorized `needs_stage_execution`，由 exact `n2d-batch` runner 原子 consume。envelope 同时约束 expiry、max_calls、唯一 phase retry rounds 与 cost ceiling，并要求真实 human `approver + approval_reference + source_quote`；runner 不自行 issue/扩大。成本未知、过期、超额、换后端/模型、manifest/首尾帧/prompt/scope 变化都 fail-closed。
+
+消费账本的 `in_flight` 不是“已经可以免费重跑”：同 consumption ID 重入或任何 unresolved reservation 都禁止再次 submit。崩溃后必须先查原 provider submit/query 并取得持久 completion evidence，再 finalize；不能换 attempt 绕过不确定扣费。预算包只减少付款停顿，单 Clip 机器 QC、实际视频检查、hash-bound accept、合规与最终母版人审仍完整保留。
 
 本 skill 涉及的选择点：`基础视觉风格`、`生视频模型/渠道`、`视频模型路由`、`视频备用后端`、`出视频规格`、`英雄镜多版`、`视频分辨率`、`画幅`、`视频生成音频策略`、`对口型`、`生成粒度/优先序`、`制作模式`、`视频原生音轨`、`目标平台/发行地区/合规用途`。默认 `制作模式=混合自动路由` 时，项目级音频/口型开关只是基础偏好，逐镜 `production_mode_route` 才是执行真值；后 3 项仍必须同步落合规包。
 
@@ -44,7 +50,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **锚帧消费证据必须落 manifest（供 review-ui/score 查账）**：每个最终 MP4 的 batch/runner item 必须写清 `anchor_consumption`、`anchor_consumption_mode`、`frame_control_mode`，并保留真实喂给后端的 `image_rel`、`end_image_rel`、`multiframe_images_rel` 或 split relay 分段输入。storyboard 声明 `continuity.anchors[]` 但 manifest 只剩单 `image`、无消费模式、无锚帧列表时，review/score 只能判“锚帧未审计”，production profile 下按缺证据处理；不得用“prompt 里写了中段锚帧”替代实际后端入参记录。
 - **多镜单次生成（2026-07 起默认 `自动`·能力门控）**：支持 `multishot_native` 的直连后端会把同场景连续接力短镜标成 `multishot_groups` 候选；`原生多镜生成=自动`（默认）或 `开启` 时由 `multishot_plan.py` 激活——治「简单叙事被逐镜拆成太多付费 clip」，后端支持就一次 co-generate 整组、少出很多 clip；显式 `关闭` 才退回逐镜独立出。只有 adapter v2 同时暴露 `multishot_submit/query` 才标 `execution_ready`。`multishot_runner.py` 一次提交整组，下载一条母片，再按每镜 `edit_target_sec` 确定性拆回原 `Clip`，逐镜继续使用既有 QC、重跑、进度和生成配方合同；每镜保留独立编译 prompt/hash，血缘记录母片 SHA 与起止秒。组内接缝仍测量，但标 `model_handled`，不再误套逐镜首尾帧接力 block；组间接缝照旧严格。未登记 wrapper 时只生成自包含 job package，不假装执行成功。Dreamina `multiframe2video` 是单镜多关键帧，不等于原生多镜叙事。`自动`默认下 primary 后端 multishot-native 且候选组存在时直接激活并在 notes 报本集少出的 clip 数；后端不支持则自动降级逐镜、不强推；显式 `关闭` 可退回逐镜。与逐 Clip 的 `take_policy=single_take_multishot`（单 Clip 内部镜位一次生成）正交互补——前者跨 Clip co-generate 后按 `edit_target_sec` 拆回，后者从源头就不拆。
 - **实际粗剪代理不是规划稿**：当本集全部逻辑 Clip 验收齐，`video_runner accept` 会 best-effort 调 `n2d-compose/scripts/post_video_proxy.py`，按 `edit_target_sec` 用真实生成像素裁尾、标准化并按 storyboard 顺序拼出 `合成/<集>/_proxy/actual_rough_cut.mp4`，血缘落 `生产数据/post_video_proxy_<集>.json`。它不含正式配音/BGM/字幕/调色，不等于母版；ffmpeg 不可用时只写可恢复计划，绝不声称已有可播放粗剪。
-- **跨后端英雄镜多版（hero_multi_version·选择点 `英雄镜多版`·默认关闭·costly·2026-06-26）**：开启后 `n2d-model-router` 给**英雄镜**（名场面/爽点兑现、开场钩第1镜、高潮/真相揭示/对质/关系转折/动作高潮 shot_type）写 `route.hero_multi_version = {enabled, primary_backend, secondary_backend, candidate_pool, select_by:"video_qc"}`，plan 顶层汇总 `hero_multi_version.hero_clips`。**执行契约**：对这些镜用 `primary_backend` 和 `secondary_backend` **各出一版**，两版都落 `出视频/<集>/候选/<clip>/`，再由 `video_qc`（跨后端无关·评 mp4）选优入正片——高价值镜不赌单后端发挥，2026 共识"赢在能一处调全部后端"。secondary 取该镜 `fallback_backends` 第一个异于 primary 的后端；选不出异后端的镜跳过并记 `skipped_no_secondary`。**只对英雄镜加版、普通镜不受影响（成本有界）**；`固定生视频模型` 路由模式下整条线单后端、不做跨后端多版。与「出视频规格」的关键镜挑稳正交叠加（同镜可既多 take 又跨后端）。**costly·花钱前每次告知当前是否开启**。signature_scene 词表与 n2d-image `keyshot_candidates` 同义（图侧封面级 6 候选 ↔ 视频侧跨后端多版，两端协同把名场面做到位）。
+- **跨后端英雄镜多版（hero_multi_version·选择点 `英雄镜多版`·默认关闭·costly·2026-06-26）**：开启后 `n2d-model-router` 给**英雄镜**（名场面/爽点兑现、开场钩第1镜、高潮/真相揭示/对质/关系转折/动作高潮 shot_type）写 `route.hero_multi_version = {enabled, primary_backend, secondary_backend, candidate_pool, select_by:"video_qc"}`，plan 顶层汇总 `hero_multi_version.hero_clips`。**执行契约**：对这些镜用 `primary_backend` 和 `secondary_backend` **各出一版**，两版都落 `出视频/<集>/候选/<clip>/`，再由 `video_qc`（跨后端无关·评 mp4）选优入正片——高价值镜不赌单后端发挥，2026 共识"赢在能一处调全部后端"。secondary 取该镜 `fallback_backends` 第一个异于 primary 的后端；选不出异后端的镜跳过并记 `skipped_no_secondary`。**只对英雄镜加版、普通镜不受影响（成本有界）**；`固定生视频模型` 路由模式下整条线单后端、不做跨后端多版。与「出视频规格」的关键镜挑稳正交叠加（同镜可既多 take 又跨后端）。**costly·是否开启、两后端 calls 与成本上界必须在阶段预算包创建时一次告知并绑定**，包内不逐英雄镜重复问。signature_scene 词表与 n2d-image `keyshot_candidates` 同义（图侧封面级 6 候选 ↔ 视频侧跨后端多版，两端协同把名场面做到位）。
 - **共享视频库（空镜/转场跨集复用）**：反复出现的纯空镜/转场/氛围 clip（宫门推、烛火空镜、妖气扩散转场）= 共享资产，出一次落 `出视频/共享/视频/`，跨集直接复用，别每集重生成（与出图的场景库同理，省视频积分）。带角色的镜头不进共享库（各集表演不同）。
   - **接入 compose 的方式**：storyboard Clip 写 `shared_video` / `shared_video_path` / `reuse_video` / 指向 `出视频/共享/视频/` 的 `video_out` 后，标准 wrapper 与 `compose.sh` 会先跑 `python3 skills/n2d/n2d-video/scripts/materialize_shared_clips.py <作品根> 第N集`，把共享 clip 软链/复制进 `出视频/<集>/视频/` 并写 `生产数据/shared_video_materialized_第N集.json`。缺源文件或 hash 不符会阻断，不再靠人工搬运。
 - **产物归集铁律**：所有 prompt md 进 `出视频/第N集/prompt/`；**生成的 clip MP4 全部落 `出视频/第N集/视频/`**（供 n2d-compose 归集合成）。废片去 `废料/出视频/第N集/`。
@@ -71,9 +77,9 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **导演运镜 sidecar 消费铁律（gate 强制·治"规划好没落片"）**：若 `生产数据/director_camera_plan_第N集.json/md` 存在，生成 `01_clips.md` 时必须逐 Clip 读取 `video_prompt_injection`，把 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节` 写进对应字段；若 sidecar 提供 `后端控制写法`，按该 Clip 路由后端真正消费的控制习惯落地（Kling motion brush / Seedance Shot 标号 / 其他自然语言），不要只保留通用运镜句。若 sidecar 缺失但 `storyboard.json` 已定稿，先回 n2d-script 跑 `python3 skills/n2d/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write`。人工可改写建议，但必须保持 `镜头运动` 仍命中 `CAMERA_MOVE_LEXICON` 或固定机位词，并保留速度/方向/起止点。**`gate.py --stage video_preflight/video` 跑 `check_director_camera_plan_consumption` 收据**：sidecar 在但 `01_clips.md` 里零导演运镜词汇=规划没落片，含高潮/关键镜→付费前 BLOCK，普通镜→WARN。要**逐镜精确归属**（而非整包烟雾），落结构化签收档 `生产数据/director_camera_plan_applied_第N集.json`，在 `scopes` 里加 `{scope:"出视频", prompt_path, prompt_sha256, applied_clip_ids:[...]}`（SHA 绑定 plan+本 prompt，plan/prompt 改了须重签），gate 会按 `applied_clip_ids` 逐镜判落实。
 - **打斗 motion 视觉盛宴消费（P0-2·与出图同源）**：打斗/法术/动作高潮镜的 route 会带 `motion_spectacle_guidance` 机器字段（`n2d-model-router` 按本剧 `style_contract` 风格族自动注入·与出图 runner `combat_spectacle_guidance_for_style` 同一真值源）。写该 Clip 视频 prompt 的运动/动态细节段时**必须落实这份风格自适应指导**（cinematic 体积光+motion blur / cel 赛璐璐速度线 / ink 飞白泼墨 / flat 夸张图形化），治"首帧是盛宴、运动段平淡"的图↔视频不对称；切勿给赛璐璐/水墨剧硬塞写实 motion blur。
 - **平台差异在档案里，选择由路由表执行**：单 Clip 时长 / 运镜词偏好 / 首尾帧机制 / 提示词语言 / 模型路由能力速查见 `references/platforms.md`。逐 Clip 以 `video_model_routes.json` 的 primary/fallback 为准；普通镜或兜底模型读 `_设置.md` 的 `生视频模型`，实际调用优先读路由表和 `生视频渠道`。若未显式固定，先由 router/probe 决定执行入口；只有固定模式、账号/交付约束、无可执行后端或画风兼容性冲突时再问用户。
-- **出视频规格按三档预算 + 每次调模型/渠道前告知**：调即梦（dreamina）或任何生视频模型/渠道（Kling/Veo/Seedance…）出视频前，规格打包成 `出视频规格` 三档预算（**预算充足（默认） / 预算一般 / 预算不够**），每档预设分辨率·帧率、每 Clip 候选数和平台质量档。未设置时自动采用 `预算充足`，并入同一次付费确认告知，不再先问一次；之后沉默沿用，用户可在花钱前覆盖。三档表 + 告知话术见下「出视频规格」节。
+- **出视频规格按三档预算 + 阶段预算包一次告知**：调即梦（dreamina）或任何生视频模型/渠道（Kling/Veo/Seedance…）出视频前，规格打包成 `出视频规格` 三档预算（**预算充足（默认） / 预算一般 / 预算不够**），每档预设分辨率·帧率、每 Clip 候选数和平台质量档。未设置时自动采用 `预算充足`，并入阶段预算包一次告知；包内沉默沿用，用户可在授权前覆盖，绑定变化则旧包失效。三档表 + 告知话术见下「出视频规格」节。
 - **生产数据记账铁律（P0）**：每次提交 image2video、每次重跑、每条 Clip 落档后，都要调用 `n2d-dashboard` 记录事件：`stage=video`、`asset`、`status=pass|fail`、`duration_sec`、`cost/provider`、`redraw_reason`、必要时 `meta=native_audio=yes/no`。正式/production 项目每个最终 MP4 的最新 pass 事件还必须记录 `recipe_hash`、`prompt_sha256`、`reference_bundle_sha256`、`backend_version`、`quality_tier`、`actual_image_inputs`；若视频后端不支持或未暴露 seed，必须写 `seed_effective=false` / `effective_seed=none` / `seed_support=unsupported_or_unknown`，不能把不可复现结果伪装成 seed 可复现。视频是最贵工位，不记录成本/耗时/重跑原因和生成配方证据，就无法判断批量化是否真的可控。
-- **生视频调用优先级**：本机已装的官方 CLI → Bash 直调；没装 → 一步步指导手动；大批量可并行多个独立任务。
+- **生视频调用优先级**：本机已装的官方 CLI → Bash 直调；缺 adapter/账号能力时一次聚合报告缺口，只有用户显式选择才转外部手动渠道；大批量可并行多个有独立 manifest 与唯一消费 ID 的任务。
 - **废料归档**：所有废视频片段 → `创作区/制漫剧/<剧名>/废料/出视频/第N集/`，**不留在 Downloads**。
 - **视频生成贵**：单条 5-10s 视频从几毛到几块不等，**比图贵 1-2 个数量级**。提示词写不好就废一条——所以**先在图阶段把所有视觉变量锁死**，视频阶段只调动作/运镜。
 
@@ -85,7 +91,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **基础视频后置口型（独立必做 pass）**：route 标 `base_video_then_post_lipsync` 时，先生成 neutral-mouth base plate。运行 `python3 skills/n2d/n2d-video/scripts/lipsync_pass.py <作品根> 第N集 [--apply]`，它按 route 配对 guide 或 final line WAV，写 `control/lipsync_jobs.json`，产物落 `视频_lipsync/Clip_XX_lipsync.mp4`。本地工具不可用只会落待执行清单，不会伪装通过。工具优先序仍为 LatentSync / MuseTalk / Wav2Lip，以能力档案为准。
 - **项目级 `对口型` 仍保留**：`配音对齐` 可强制所有适用说话镜直接音频驱动；`后期pass` 可强制后置；`关闭` 只关闭额外全片处理，不会覆盖混合 route 对正面说话镜的硬合同。若确实不做口型，必须在分镜层改成侧脸/背身/反应镜/画外音。
 
-## 出视频规格（选择点 `出视频规格` · 三档预算 · 每次调 AI 前告知）
+## 出视频规格（选择点 `出视频规格` · 三档预算 · 纳入阶段预算包）
 
 和出图阶段的预算提示同一套思路：**真正调生视频模型/渠道前，把本次的生成规格告知用户**，避免默默用了贵档或抠档。规格不是单点，而是打包成三档预算，每档预设四件事——**分辨率 · 帧率 · 每个 Clip 跑几条挑稳 · 平台质量/模型档**。注意：这四件事只描述**视频调用规格**，不覆盖风险分层锚帧策略；首/中/尾锚帧带来的新增图片数、native multiframe 是否仍 1 次/Clip、split relay 预计新增视频段数必须从 `生产数据/anchor_plan_第N集.json/md` 读出后一并告知。
 
@@ -98,8 +104,8 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 > **为什么预算一般采用 QC 门控重抽（2026-06·对齐可用率 90%）**：Seedance 2.0 等可用率已从 20% 跃到 **~90%**（行业基准 `n2d-dashboard/references/industry_benchmark.json`），盲目"每镜跑 2 条挑稳"在 ROI ~1.1 的现实下是浪费——预算一般先跑 1 条、过 `image_qc`/`video_qc` 就用、不过才重抽（坏的那 ~10% 才花第二次钱）。`dashboard.redraw_rate` 实时校准这个决策：重抽率显著高于基准 0.1 时再回升挑稳条数。关键镜（🔑 爽点/反转/封面/人脸特写）可在 1 条基础上**加挑 1 条**取更稳的。要稳画质优先选 `预算充足`。
 
 - **解析顺序**（按 `../skills/n2d/references/选择点与偏好.md`）：读 `<作品根>/_设置.md` 的 `出视频规格` → 缺则全局默认 → 仍缺则自动采用并落档 **预算充足**。不为规格档单独暂停；当前档、成本上限和镜头数统一放进付费确认。分辨率默认仍是 720p，需要更清晰时可单独设 `视频分辨率=1080p`。
-- **每次开跑前必告知当前档**（沉默沿用 ≠ 闷头跑）：进真正调 AI 那一步，先念一行——
-  > 「即将出视频，当前规格档 = **预算充足**（720p 默认·30fps·关键镜 2-3 条挑稳·高质量档；需要更清晰可另设 `视频分辨率=1080p`）。可改 **预算一般**（720p·24-30fps·全部 1 条 + QC 不过才重抽·标准档）或 **预算不够**（720p·24fps·全 1 条不挑稳·省积分档，最省）。要改说一声，否则按此档跑。」
+- **预算包创建时一次告知当前档**（沉默沿用 ≠ 无审计）：在真正调 AI 前，把当前档、总调用数和成本上界写入付款动作卡及 envelope；包内后续调用不重复念。告知一行——
+  > 「即将出视频，当前规格档 = **预算充足**（720p 默认·30fps·关键镜 2-3 条挑稳·高质量档；需要更清晰可另设 `视频分辨率=1080p`）。可改 **预算一般**（720p·24-30fps·全部 1 条 + QC 不过才重抽·标准档）或 **预算不够**（720p·24fps·全 1 条不挑稳·省积分档，最省）。此档作为可覆盖推荐写入动作卡；只有真实人审记录才能 issue 预算包，沉默不构成授权。」
 - **同一行补充锚帧成本**：若 `生产数据/anchor_plan_第N集.json/md` 存在，紧跟一句：`本集三帧锚帧计划：新增锚帧图 X 张；native multiframe 后端仍 1 次/Clip；split relay/frames2video-only 预计额外视频段 Y 段。` 若不存在，先跑 `python3 skills/n2d/n2d-script/scripts/anchor_planner.py <作品根> 第N集` dry-run 或至少说明“缺 anchor plan，当前预算只覆盖视频规格，不覆盖锚帧图片/拆段成本”，不要把默认 1 条视频误报成总成本已锁。
 - **再补一行集级生成次数（clip 经济性·2026-07-22）**：若 `生产数据/clip_economy_plan_第N集.json` 存在（`run.py` 在 image_prompt/video_prompt 前置都会刷新），报盘时念一句：`本集预计生成 X 次（Y/min）；采纳 merge/take_policy 候选可降到 Z 次。` 有未采纳候选且用户未明确拒绝过时提醒一句可回 n2d-script 精修采纳；用户说继续就按当前 storyboard 跑，不阻断。
 - **关键镜 = 故事板里 🔑 爽点/反转/钩子/封面候选 / 人脸特写**；其余为普通镜。「跑几条挑稳」就是下文「为什么大多数视频跑两遍才稳」的预算开关——本档统一决定，不再每 Clip 临时拍脑袋。
@@ -114,11 +120,11 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - `生成优先序`：默认 **关键镜优先**，先验证高光镜的运动和身份稳定；用户已有设置优先。
 - `生成粒度`：默认推荐 **逐个**，每个物理 Clip 生成后立即机器 QC + 实际查看。粒度作为本次付费动作卡的可覆盖预选，不另发一轮问答；它不免本次付费授权、合规闸门或最终人审。
 
-**进入出视频前必做（报盘 → 付款确认 → 排队）**：
+**进入出视频前必做（报盘 → 阶段预算包授权 → 排队）**：
 1. 数清本集 Clip 总数并写入付款动作卡。
 2. 缺粒度值时采用 `逐个`；用户可在付款前覆盖为小批（默认 5）、按场景分批或整集。
 3. 按 `生成优先序` 排队；先核对共享视频库，避免重复付费。
-4. 付款放行后按单位执行“提交 → 下载 → QC → 实际查看 → hash-bound accept → 下一单位”，不再为普通粒度重复暂停。
+4. envelope 放行后按单位执行“提交 → 下载 → QC → 实际查看 → hash-bound accept → 下一单位”，不再为普通粒度或同一包内调用重复暂停。
 
 **逐单位循环**（每个粒度单位）：生成/下载当前物理 Clip → `video_runner qc` → 执行者实际查看当前 MP4/contact sheet → `video_runner accept --visual-reviewer ... --visual-notes ... --confirm-current-pixels` 写当前 SHA 收据 → 通过才回写分子并继续。默认一键策略不在每单位后重复询问；任何 `qc_blocked`、目视硬伤、近脸身份 warn 未查清或音轨策略错误都只返工当前物理段，禁止带病推进。上一段未 hash-bound accept 时，下一次付费提交仍由互锁拒绝。
 
@@ -388,15 +394,15 @@ python3 skills/n2d/n2d-video/scripts/multishot_runner.py accept <作品根> <mul
 
 ### 阶段 C — 分支决策
 **分支 1：找到匹配 CLI**
-- 选定后**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节），用户确认/沉默即按当前档；规格的分辨率/帧率/跑几条/质量档据此落实到调用
-- 再告知用户："找到 X，将用它出视频。如不同意请打断。"
-- 按 `生成粒度` + `生成优先序`（见上节）逐单位出视频；普通模式逐单位停审，当前请求有无停顿授权时逐单位自动自检后继续；每单位调用见"调用规范"
-- **批量加速可选（仅 `生成粒度: 整集` 档）**：整集档下 >6 个 Clip 时，可并行 2-3 个独立任务调用 CLI；**逐个/小批/按场景档按单位串行停审，不并发**
+- 选定后把「出视频规格」告知内容（当前规格档 + 可改档位）连同 exact model/channel、scope、调用数、retry rounds、成本上界、expiry 和 input SHA 写入同一阶段预算包；只有真实 human 审批记录可 issue，不能用“沉默”或代理字符串代替
+- envelope 已有效时直接按已绑定的 X 执行；若探测结果改变模型/渠道或能力合同，旧包失效并合并报告一次缺口
+- 按 `生成粒度` + `生成优先序`（见上节）逐单位出视频；有效阶段预算包内，每单位完成机器 QC、实际查看和当前 MP4 hash 验收后自动继续，只有付费范围越界、当前输入/合同变化、合规失败或当前像素未通过才停；每单位调用见“调用规范”
+- **批量加速可选（仅 `生成粒度: 整集` 档）**：整集档下 >6 个 Clip 时，可并行 2-3 个彼此独立、各自有唯一消费 ID 的任务调用 CLI；**逐个/小批/按场景档按单位串行执行，不并发，但不为同一有效预算包重复索要付款确认**
 - 中间筛选 → 废视频 `废料/出视频/第N集/`，定稿 MP4 → `出视频/第N集/视频/Clip<K>_<描述>.mp4`
 
 **分支 2：本机无合适 CLI**
-- 告知用户："本机未检测到合适的视频生成 CLI/API（已扫 dreamina/kling/veo/seedance）。可由我一步步指导你在 `_设置.md` 选择的生视频渠道网页或你指定的外部工具上跑 image2video，每跑一段回传，我帮你筛选 + 落档。"
-- 进入"手动指导模式"：
+- 一次聚合报告未检测到的 adapter/账号能力/任务回收缺口，不静默换后端；若项目已有可验证任务 ID，优先按同一任务查询恢复，不能确定是否已提交则 fail closed，避免二次扣费。
+- 只有用户明确选择外部渠道兜底时才进入“手动指导模式”：
   - 一次一 Clip，列出 prompt + 首帧路径 + 平台参数
   - 用户上传首帧 + 粘贴 prompt → 平台跑 → MP4 下载
   - 用户回传 MP4（或路径）→ 执行者评判 → 通过则用户 mv 到 `出视频/第N集/视频/`，不通过则建议调整 prompt（多数情况是动作过复杂，需简化）
@@ -509,6 +515,6 @@ python3 skills/n2d/n2d-video/scripts/multishot_runner.py accept <作品根> <mul
 | Split Relay 的 part1/part2 在同一 manifest 上并行 query/accept | 不要并行写同一 manifest。按 `submit → query → accept → qc` 串行处理，或给不同重出范围拆独立 manifest；否则容易串下载路径、覆盖状态或把 part 证据写乱 |
 | 废视频留在 Downloads | 全部归档 `废料/出视频/第N集/`，Downloads 清空 |
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |
-| 不报 Clip 总数就闷头整集出视频 | 违反 `生成粒度` 选择点——进出视频前先报本集 Clip 总数 + 按优先序排队，默认逐个停审 |
-| 逐个/小批档还 spawn 子 agent 并发 | 并发只在 `整集` 档；逐个/小批/按场景档按单位串行，每单位停下让用户审 |
+| 不报 Clip 总数就闷头整集出视频 | 违反 `生成粒度` 选择点——进出视频前把 Clip 总数、scope、成本上界与优先序写入阶段预算包；包获批后逐个自动执行，遇视频检查/QC 硬闸才停 |
+| 逐个/小批档还 spawn 子 agent 并发 | 并发只在 `整集` 档；逐个/小批/按场景档按单位串行，每单位完成 QC + 实际查看 + hash-bound accept 后自动继续，不重复询问付款 |
 | 整集档全串行生 12 条 Clip | 仅整集档：可 spawn 子 agent 并发，但每账号 ≤4 并发避免限速 |

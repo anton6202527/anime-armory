@@ -29,7 +29,7 @@ description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客�
 - 先写 **Objective → Audience → Promise → Proof → Action**：目标/KPI 不同，品牌露出、产品演示和 CTA 比重也不同。
 - **big idea**：一句能统领整片的核心创意（不是卖点罗列，是"用什么角度让人记住"）。
 - **一句话主张 key message**：观众看完该记住的一句话（常与 slogan 呼应，但不等于 slogan）。
-- 给 2–3 个候选，按 brief 的受众/调性/平台推荐一个，让用户选。
+- 给 2–3 个候选，按 brief 的受众/调性/平台证据推荐并默认采用最高优先级方案，把候选与取舍理由留档后继续；只有并列方案会实质改变客户已明示的核心主张且无证据优势时才请用户选择。
 
 ### 第2步：定创意路线 + mood & reference
 - `创意路线`：功能卖点 / 情感共鸣 / 幽默 / 悬念反转 / 名人代言 / 场景种草（见 `references/creative_frameworks.md`）。

@@ -1,11 +1,11 @@
 # n2d 声音工程化方案：把 BGM/SFX 提到和配音同等地位
 
-> 状态：第一阶段已实施，2026-07-11 严格化。本文后半保留最初提案作为演进记录；当前机器真值以 `bgm_contract.json`、compose/review gate 和各脚本为准。
-> 日期：2026-06-05；实施复核：2026-07-11
+> 状态：第一阶段已实施，2026-07-11 严格化，2026-08-22 复核。当前机器真值以 `bgm_contract.json`、compose/review gate、`gen_bgm.py` 与对应测试为准。
+> **阅读边界**：`## 0` 之后保留的是 2026-06-05 原始提案，里面的旧路径、行号、跨线复用设想和“尚无测试”描述只用于解释演进，不是现行执行说明；n2d 当前保持本线自包含，正式用法见 `skills/n2d/n2d-compose/SKILL.md` 与 `references/usage.md`。
 
 ## 当前落地状态
 
-- BGM 已有 `n2d_bgm_contract`：来源分为 `licensed_file/generated/none/placeholder`，真实文件记录版权或模型+渠道，直调 compose 也不能绕过。`gen_bgm.py` 以厂商无关 `N2D_BGM_CMD` 执行或登记已有生成文件，并落合同/音频双哈希收据。
+- BGM 已有 `n2d_bgm_contract`：来源分为 `licensed_file/generated/none/placeholder`，真实文件记录版权或模型+渠道，直调 compose 也不能绕过。`gen_bgm.py` 以厂商无关 `N2D_BGM_CMD` 执行或登记已有生成文件，并落合同/音频双哈希收据；外部付费生成只消费当前有效阶段预算包，本地 `none` 首次安全合成不制造付款停点。
 - 程序化占位只允许显式签收的 `internal_rough_only`；review/发布母版硬阻断，不再一路冒充正式配乐。
 - 默认混合路由的后配镜已接 `fit_voice_to_clips.py`，并以镜头时长、final voice manifest、逐镜 route、拟合轨 SHA 做新鲜度闸门。
 - 剧级 `series_consistency.json` 已锁字幕样式、中文正名/禁用变体、角色语域和响度基线；多集/发布项目缺失即阻断。

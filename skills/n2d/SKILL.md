@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked to turn a novel into a final AI comic-drama / short-drama master. Inspects `_进度.md`, automatically applies auditable recommendations for ordinary reversible choices, and routes through `n2d-script`, `n2d-voice`, `n2d-image`, `n2d-video`, `n2d-compose`, and `n2d-review`; paid generation, compliance/rights, destructive changes, public release, and final master acceptance remain explicit gates. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 一键成片, 自动推进, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4796 | 目录文本总行数 317990
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4810 | 目录文本总行数 318083
 
 # n2d — 主状态机调度器
 
@@ -30,7 +30,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在阶段实现里**。按 `references/选择点与偏好.md` 读用户私有选择：项目值优先，其次全局默认；仍缺失的普通、可逆选择默认由 `普通选择策略=推荐方案自动继续` 采用推荐值，写回 `_设置.md` 并标 `source=auto_recommended`。用户显式设置永远优先，也可把策略改成 `逐项询问`。付款、合规/授权、公开发布、破坏性操作与最终母版验收不属于普通选择，仍显式停审。
+本 skill 的可选项**不写死在阶段实现里**。按 `references/选择点与偏好.md` 读用户私有选择：项目值优先，其次全局默认；仍缺失的普通、可逆选择默认由 `普通选择策略=推荐方案自动继续` 采用推荐值，写回 `_设置.md` 并标 `source=auto_recommended`。用户显式设置永远优先，也可把策略改成 `逐项询问`。阶段预算包的创建/扩大、合规/授权、公开发布、破坏性操作与最终母版验收不属于普通选择，仍显式停审；已获批且仍精确匹配的预算包内不逐次重复问。
 
 本 skill 涉及的选择点：`普通选择策略`、`制作模式`、`人工批准策略`、`合成阶段`、`项目规模`、`基础视觉风格`、`视频模型路由`（只记录用户主动固定约束；具体生视频后端到 n2d-video 阶段再定）、`生视频模型`、`生视频渠道`、`生图模型`、`生图AI`（旧称，实为 `生图渠道`/访问入口）、`配音后端`、`视频分辨率`、`画幅`、`对口型`、`BGM来源`、`一致性增强`、`目标平台`、`发行地区`、`合规用途`。
 
@@ -38,9 +38,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > **自主批准模式（少打断、可审计）**：默认仍是 `人工批准策略=逐节点人工批准`。用户明确授权普通节点自行决策时，用 `n2d-settings` 写为 `仅高风险停审`，再运行 `python3 skills/n2d/n2d-script/scripts/autonomy.py authorize <作品根> --authorized-by <明确用户身份> --source-quote '<授权原话>'`。此后 `run.py next/enter` 会在 P-1、围读、P-2、animatic、P-3 的内容已 `confirmed/ready` 时自动写 delegated signoff；代理不是人类 reviewer，manifest 会明确记录项目负责人豁免独立人审、当前授权 SHA 与产物 SHA。普通的构图、措辞、节奏、锚帧、母题和内部可逆 prompt 决策也由 agent 选最优项并写理由，不再逐节点暂停。**付费预算包创建/扩大、权利与内容合规/分级、声音克隆授权、公开发布/投放、删除覆盖或边界移动等不可逆变更仍必须停审**；已批准预算包内的调用连续执行，最终 `master_delivery_complete`/发布验收不自动签。
 
-> **一键请求的落地规则**：用户说“一键成片 / 自动跑完 / 尽量别问”本身就是启用低风险自主推进的明确意图。能取得当前用户的明确身份时，调度器应在开局一次性写入 `仅高风险停审` 并用该句原话创建项目授权；身份不可得时只在开局合并询问一次，不能在 P-1/P-2/P-3 反复询问。付费动作改为**阶段预算包一次授权**：把 scope、模型、渠道、最大调用/重抽次数、费用上限和输入哈希绑定为一个 envelope；同 envelope 内连续执行，只有超上限、改模型/渠道、扩大范围或输入哈希变化才再次确认。逐图实际像素验收、权利/合规、公开发布与最终母版验收不在预算包授权范围内。
+> **一键请求的落地规则**：用户说“一键成片 / 自动跑完 / 尽量别问”本身就是启用低风险自主推进的明确意图。能取得当前用户的明确身份时，调度器应在开局一次性写入 `仅高风险停审` 并用该句原话创建项目授权；身份不可得时只在开局合并询问一次，不能在 P-1/P-2/P-3 反复询问。付费动作改为**阶段预算包一次授权**：把 scope、具体模型/渠道、最大调用数、唯一 phase retry rounds、费用上限、expiry 和 canonical input SHA 绑定为一个 envelope；同 envelope 内连续执行。只有成本未知/超上限、授权过期、改模型/渠道、扩大范围或输入哈希变化时才停下重授权。`run.py`/supervisor 只读 probe，不能凭代理身份 issue、扩大或消费授权；真实 human `approver + approval_reference + source_quote` 缺一不可，只有 `n2d-batch` runner 能在执行边界原子 consume。逐图实际像素验收、权利/合规、公开发布与最终母版验收不在预算包授权范围内。
 
-> 作为生产线入口：开新作品时，拆集器自动落一键推荐包：`制作模式=混合自动路由`、按集数推断的 `项目规模`、推荐 `基础视觉风格`、`脚本批次=小批`、`生成优先序=关键镜优先`、`生成粒度=逐个`、`BGM来源=无`（未知授权/后端时的安全可交付回退）与 `合成阶段=启用`。只有项目显式设 `普通选择策略=逐项询问` 才恢复菜单。付费前重新扫描可用模型/渠道：多个可执行解时按能力、身份一致性、成本与项目约束给一个推荐，付款确认即采用；无可执行解才停在环境缺口。用户已有值与本轮明确指定永远优先。
+> 作为生产线入口：开新作品时，拆集器自动落一键推荐包：`制作模式=混合自动路由`、按集数推断的 `项目规模`、推荐 `基础视觉风格`、`脚本批次=小批`、`生成优先序=关键镜优先`、`生成粒度=逐个`、`BGM来源=无`（未知授权/后端时的安全可交付回退）与 `合成阶段=启用`。只有项目显式设 `普通选择策略=逐项询问` 才恢复菜单。付费前重新扫描可用模型/渠道：多个可执行解时按能力、身份一致性、成本与项目约束给一个推荐，并把最终具体值纳入阶段预算包；无可执行解或无法给出可信成本上界时才停在环境缺口。用户已有值与本轮明确指定永远优先。
 
 ## 主状态机全景（模式感知·同一套进度表）
 
@@ -81,7 +81,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > **2026 市场现实 → 两条运营铁律（联网基准·见 `n2d-dashboard/references/industry_benchmark.json`）**：
 > 1. **速度即生死（R3·爆款新鲜期缩至 ~3 周·ROI 中位 ~1.1）**：抢新鲜趋势窗口比打磨更值钱。打样与抢先**并行**（第 1 集打样的同时，用 `n2d-batch` 把后续集的文字/出图 prompt 先备好），不串行等。成本侧守 dashboard 的 `cost_per_finished_min`（全链行业带 400-1000 元/分）与 `recoup_ratio`，红线先治。
-> 2. **Agent 自动串接，人只守高风险边界（I2·行业 Agent 取代工具链）**：确定性步骤（机检/规划/记账/gate）与普通可逆选择由代理**自动链式跑完**；只在**付费 + 合规/授权 + 公开发布 + 破坏性操作 + 最终人工验收**等高风险边界停下。不要把割裂的 CLI 命令甩给用户手敲；能从 producer-owned 推荐确定的选择直接落档继续，用户显式指定始终优先。
+> 2. **Agent 自动串接，人只守高风险边界（I2·行业 Agent 取代工具链）**：确定性步骤（机检/规划/记账/gate）与普通可逆选择由代理**自动链式跑完**；只在**阶段预算包创建/扩大/失效 + 合规/授权 + 公开发布 + 破坏性操作 + 最终人工验收**等高风险边界停下。不要把割裂的 CLI 命令甩给用户手敲；能从 producer-owned 推荐确定的选择直接落档继续，用户显式指定始终优先。
 
 ### 横切 skill 速查（非必经 · 全文见 [`references/横切skill地图.md`](references/横切skill地图.md)）
 
@@ -97,7 +97,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 | 多集批跑 / 排队 / 并发 / 重试 / 只重跑受影响镜头 / 死信停线 | `n2d-batch` | 按 `_进度.md` 生成队列；幂等键、错误分类、SLO、dead-letter 支撑放量治理 |
 | 模型路由 / 按镜头选视频后端 / primary·fallback | `n2d-model-router` | 出视频前置；默认按镜头路由 |
 | 机器分 / 自动审片评分 / 低分回流 | `n2d-score` | 七维分，默认阈值 85，低分入 batch |
-| 人审 UI / 无限画布 / 可视化审片 / 人审校准 | `n2d-review-ui` | 静态画布 + 金标 case 校准，统一人工 block/warn/pass 口径 |
+| 人审 UI / 静态证据审阅 / 可视化审片 / 人审校准（兼容“无限画布”旧说法） | `n2d-review-ui` | 本 skill 自带的只读静态审片 HTML + 金标 case 校准；不是产品可编辑制作画布，也不持有第二套业务状态 |
 | 投放回灌 / 留存追更 / 同集 A/B / 更新导演节奏 / 实验登记 | `n2d-feedback` | 平台指标反哺，A/B 先登记实验再审计样本和变体 |
 
 > 完整职责、输入/产物、命令示例见 [`references/横切skill地图.md`](references/横切skill地图.md)；底部「子 skill 速查」表含各自产物路径。
@@ -207,8 +207,8 @@ python3 skills/n2d/n2d-score/scripts/score.py <作品根> 第1集 --run-checks -
 python3 skills/n2d/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85 --enqueue-low --max-concurrency 1 --max-retries 1
 ```
 
-**情境 G — 用户要人审 UI / 无限画布 / 可视化审片**：
-→ 推荐 `n2d-review-ui`。先跑 `n2d-score --run-checks` 确保机器分、visual checks 和 QA flag 齐，再生成静态画布：
+**情境 G — 用户要人审 UI / 静态证据审阅 / 可视化审片（含“无限画布”旧触发词）**：
+→ 推荐 `n2d-review-ui`。先跑 `n2d-score --run-checks` 确保机器分、visual checks 和 QA flag 齐，再生成本 skill 自带的只读静态审片 HTML；它只负责证据审看，不等同于产品里的可编辑制作画布：
 ```bash
 python3 skills/n2d/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85
 python3 skills/n2d/n2d-review-ui/scripts/review_ui.py <作品根> 第1集 --write --markdown
@@ -308,7 +308,7 @@ python3 skills/n2d/n2d-update/scripts/update_plan.py check <作品根> 第N集 -
 
 ### 跨阶段并行的 OK 信号
 
-阶段不必严格串行——第 K 集出图时，第 K+1 集物料可以并行精修，第 K-1 集视频可以并行生成。**调度规则**：只要 `_进度.md` 该集对应列还是 ⬜ 就可以开干；不需要等前面集全部跑完。以后给用户“下一步”建议时，若存在安全的跨集/次要缺口，固定多写一条 `可并行：...`；优先推荐低成本前期，若并行项也会花钱/不可逆/触发合规，则必须单独确认。
+阶段不必严格串行——第 K 集出图时，第 K+1 集物料可以并行精修，第 K-1 集视频可以并行生成。**调度规则**：只要 `_进度.md` 该集对应列还是 ⬜ 就可以开干；不需要等前面集全部跑完。以后给用户“下一步”建议时，若存在安全的跨集/次要缺口，固定多写一条 `可并行：...`；优先推荐低成本前期。并行付费项必须各自命中 exact 阶段预算包，不能跨集/跨阶段借用；不可逆与合规项仍单独 human gate。
 
 ## 作品目录约定
 
@@ -380,7 +380,7 @@ python3 skills/n2d/n2d-update/scripts/update_plan.py check <作品根> 第N集 -
 | `n2d-compose` | 默认交付尾段：视频齐后合成母版；只有显式跳过才不进入 | 作品根 + 集号 | `合成/第N集/成片_第N集_{mode}.mp4` + 成片列 ✅ |
 | `n2d-review` | 任意阶段闸门 / 出成片后质检；或流程自审找优化 | 作品根 (+集号) | 质检报告 `_质检_第N集.md` / 流程自审建议（跨阶段 QA，非必经） |
 | `n2d-score` | 成片或阶段审查后给每集打机器分；含 visual checks；低分自动回流 | 作品根 + 集号 | `生产数据/score_第N集.json/md` + `score_inputs/第N集_visual.json` + `auto_return_tasks` / 可选 batch 队列 |
-| `n2d-review-ui` | 机检/评分后生成人审无限画布，看首帧、尾帧、clip、接缝、定妆参考、QA flag、机器分 | 作品根 + 集号 | `生产数据/review_ui_第N集.html/json` |
+| `n2d-review-ui` | 机检/评分后生成只读静态证据审阅页，看首帧、尾帧、clip、接缝、定妆参考、QA flag、机器分 | 作品根 + 集号 | `生产数据/review_ui_第N集.html/json` |
 | `n2d-feedback` | 上线一批后把平台留存/追更/跳出数据反哺导演节奏；同集 A/B 比较开场/封面/集尾断点/标题文案 | 作品根 + 平台指标 + 自动/手工导演标签 + 可选 A/B 变体字段 | `生产数据/platform_feedback.json/md` + 可选更新 `导演节奏.md` |
 
 ## 常见错误

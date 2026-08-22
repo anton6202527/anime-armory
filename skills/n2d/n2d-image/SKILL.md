@@ -10,7 +10,13 @@ description: >-
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器选一个安全默认、以 `source=auto_recommended` 落档并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；合规、不可逆、付费和最终验收仍每次确认。
+本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器选一个安全默认、以 `source=auto_recommended` 落档并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；阶段预算包创建/扩大/失效、合规、不可逆操作和最终验收仍显式确认，已获批且绑定未变的包内不逐图重复问付款。
+
+## 一键付费边界（v2 阶段预算包）
+
+一键生产只通过 `run.py`/supervisor 的**只读** probe 判断当前 image frontier 是否已有有效余量；实际 consume 只发生在 exact `n2d-batch` runner 执行边界。envelope 精确绑定 line/project/stage/scope、具体 model/channel、canonical producer input SHA、expiry、max_calls、唯一 phase retry rounds 与 cost ceiling，并要求真实 human `approver + approval_reference + source_quote`。runner 不 issue、不扩大授权；成本未知、过期、超额或 prompt/参考图/registry/模型/渠道/scope 任一变化都 fail-closed。
+
+预算包只消除**重复付款询问**，不取消当前像素闸门：每个物理 target 仍须现场重算 compiled request 与真实附件 SHA，落 paid-boundary receipt，生成后立即做机器 QC + 实际像素检查 + hash-bound accept，才允许下一 target。首次 consume 原子写 `in_flight`；同 consumption ID 重入或任何未完成 reservation 都禁止再次 submit，须先依据 provider submit/query completion evidence 恢复并 finalize，不能借重跑免费双花。
 
 本 skill 涉及的选择点：`基础视觉风格`（只继承，不在本阶段重选）、`生图模型`、`生图AI`（旧称，实为 `生图渠道`/访问入口）、`一致性增强(LoRA)`、`重抽预算策略`、`生成粒度`、`生成优先序`、`合规用途`。涉及版权、改编权、角色肖像/形象授权的判断不走普通偏好，必须写入 `合规/compliance_manifest.json`；其中源文本和同源改编权按设计宪法 D4 默认用户为原著作者 / 权利人，写 `original` 留痕，明确第三方来源时才要求 evidence/ref。出图阶段只需保证合规包已声明、不漏未授权形象。`distribution_intent=internal_only` 只免**平台审核/出海本地化**，**角色授权照常 BLOCK**，不因内部 demo 豁免（详见 `n2d-compliance`）。AI 生图内容的 **AI 标识/AI 披露/水印** 只做非阻断发布待办，不影响出图主流程。
 
@@ -231,18 +237,18 @@ python3 skills/n2d/n2d-image/scripts/reference_planner.py <作品根> 第N集
 - **怎么做**：把这组镜头的 `01_分镜出图.md` 块按场景聚成「故事板批次」，统一喂同一套定妆 / 场景参考图，按 `references/platforms.md` 各平台多镜语法**一次请求出一组帧**；产出仍按一镜一图落档到 `出图/第N集/图片/`，进度照常按张计。
 - **回退铁律**：后端不支持多镜时**自动回退到一镜一图**（现有流程），绝不阻塞出图。它是加速 / 增稳层，不是新的必经步骤。
 
-## 生成粒度 + 优先序（选择点 · 逐单位验收；可显式授权无停顿自检）
+## 生成粒度 + 优先序（选择点 · 阶段预算包内逐单位验收）
 
 出图**默认不再整集闷头一次过**。真正调 AI 生图前，处理两个选择点：
 
 - `生成优先序`：默认 **关键镜优先**（爽点/反转/钩子/封面候选先出，先定基调和主角脸）；用户已有设置优先。普通选择策略下直接落推荐值，不另停一次。
 - `生成粒度`：默认推荐 **逐个**，每张生成后立即 full 机器 QC + 执行者实际像素检查；粒度作为本次付费动作卡的可覆盖预选，不另发一轮问答。它不免本次付费授权、合规闸门或最终人审。
 
-**进入生图前必做（报盘 → 付款确认 → 排队）**：
+**进入生图前必做（报盘 → 阶段预算包授权 → 排队）**：
 1. 数清本集分镜图和共享定妆总量，在付款动作卡中报告。
 2. 按当前设置选择粒度；缺值时采用 `逐个`。用户可在付款前覆盖为小批（默认 5）、按场景分批或整集。
 3. 按 `生成优先序` 排队；共享定妆库永远在前，定妆没全 ✅ 不许出分镜。
-4. 付款放行后按单位执行“生成 → 落档 → QC → 实际查看 → 通过后下一单位”，不再为普通粒度重复暂停。
+4. envelope 放行后按单位执行“生成 → 落档 → QC → 实际查看 → hash-bound accept → 下一单位”，不再为普通粒度或同一包内调用重复暂停。
 
 **逐单位循环**（每个粒度单位 = 1 张 / N 张 / 一场景）：
 1. 生成这一单位。
@@ -256,7 +262,7 @@ python3 skills/n2d/n2d-image/scripts/reference_planner.py <作品根> 第N集
 
 > **无停顿不等于批量后补 QC**：即使用户要求“一直执行到完结”，顺序仍是“一张生成 → 一张落档 → 一张 QC → 一张实际查看 → 通过后下一张”。runner 默认的逐 target `run_target_image_qc` 不得用 `--skip-image-qc` 绕过；该 flag 只允许调试/迁移并必须留下 waiver，不能用于正式生成。批次/整集完成后仍要再跑一次全量 image gate。执行者实际像素目视只有在 `_设置.md` 明确记录用户授权时，才能按 `review_kind=executor_visual`、`reviewer_role=ai_visual_executor`、`human_signoff=false` 写独立收据；它绝不是人工签收，也不得伪造 `identity_eval_pack` 的人工 reviewer。遇到必须由真人签收的发布合同仍只能保留待签状态。
 
-> **整集档例外**：选 `整集` 才回到旧行为（>10 张可 spawn 子 agent 并发、最后统一报告），不逐单位停审。`小批`/`按场景` 在「批」层停审。
+> **整集档例外**：选 `整集` 才回到旧行为（>10 张可 spawn 子 agent 并发、最后统一报告）。`小批`/`按场景` 可在批边界汇总，但默认继续执行；只有当前像素/QC、预算、合规或 envelope binding 变化才停。
 
 ## 输入前置条件
 
@@ -309,10 +315,10 @@ python3 skills/n2d/n2d-image/scripts/reference_planner.py <作品根> 第N集
 - `生产数据/consumed_contracts_image_prompt_第N集.json`（绑定 storyboard / continuity_chain / script_quality_contract / director_camera_plan / reference_plan 与两个出图 prompt 文件 SHA；任一上游或 prompt 改动后必须重跑 prompt pack）
 - `image_prompt_pack.py` 必须给每个可执行的共享资产块和逐镜块追加 `后端编译提交 image prompt`：从 `_设置.md` 读取实际画幅、模型与渠道，从 `storyboard.style_contract` 读取所选风格，经 task/backend profile 编译；禁止模板默认 `9:16` 或“写实国漫”。完整合同仍原样保留，gate 用 source text SHA 检查编译块是否随合同同步更新。
 
-**⑥ 【可选】视觉状态账本同步（World State Modeling）**
-建完 prompt 文件夹后，默认只做轻量判断：若本集存在伤痕/战损/换装/获得法宝等会跨镜或跨集持续的状态，先提示用户“本集有持续视觉状态，我建议跑一次视觉状态账本 `--audit`；确认后再写入/注入。”状态简单时直接沿用 `00_总览.md` 的角色状态演进表，不跑账本。
+**⑥ 【条件自动】视觉状态账本同步（World State Modeling）**
+建完 prompt 文件夹后，默认先做轻量判断：若本集存在伤痕/战损/换装/获得法宝等会跨镜或跨集持续的状态，在同一任务自动跑视觉状态账本 `--audit`，读取结果生成 Visual Modifiers JSON 并注入；状态简单时直接沿用 `00_总览.md` 的角色状态演进表，不另跑账本。该免费、可逆步骤不升级为用户停点。
 - 可选只读审计：`python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --audit`。
-- 只有用户确认或状态复杂度高时，AI 才读取审计输出生成 Visual Modifiers JSON。
+- 命中持续状态或状态复杂度高时，AI 直接读取审计输出生成 Visual Modifiers JSON；没有持续状态则保持轻量路径。
 - 注入项目：`python3 skills/n2d/n2d-image/scripts/visual_state_manager.py <作品根> --apply-mock <JSON路径>`，再执行 `--inject N` 回写入 `01_分镜出图.md`。
 
 **完成后**：
@@ -368,9 +374,9 @@ python3 skills/n2d/_lib/image_backend_adapter.py scan --json
 **分支 1：所选官方后端能落 PNG**
 - 按 `_设置.md` 的 `生图模型 + 生图AI/生图渠道`（默认 OpenAI GPT Image 系列 via Codex）选定**单一模型+渠道**。非 Codex/OpenAI 后端必须先有 `<作品根>/合规/image_backend_override.json` 签核；扫描到 `同视频AI` / `同视频模型`、第三方逆向或 web 自动化出图口径必须忽略并改回显式官方后端；**全集统一一组模型+渠道，不混用**。
 - runner 必须用具体 target、实际附件、模型、渠道和请求参数重新运行 image prompt compiler，并只把编译请求交给后端；Codex 外层只保留“必须调用真实生图工具/输出 PNG”的执行指令，Dreamina 的 `--prompt` 直接等于 compiler 文本。每次调用先写 immutable compiled request 回执，后端不得自行拼另一套创作 Prompt。
-- 选定后告知用户："本项目生图模型/渠道 = X（官方入口），将用它出图。如不同意请打断。"
-- 按 `生成粒度` + `生成优先序`（见上节）逐单位出图；普通模式逐单位停审，当前请求有无停顿授权时逐单位自动自检后继续；每单位调用见"调用规范"
-- **批量加速可选（仅 `生成粒度: 整集` 档）**：整集档下 >10 张时，可并行多个独立任务调用 CLI（每个负责一段镜头），主流程收集结果；**逐个/小批/按场景档按单位串行停审，不并发**
+- 将选定的模型/渠道、精确 scope、调用数、重试轮、成本上界、expiry 与 canonical input SHA 写入阶段预算动作卡。缺包时必须由真实 human 审批记录 issue；已有 exact、未过期且有余量的 v2 包时不重复报盘或索要付款确认。
+- 按 `生成粒度` + `生成优先序`（见上节）逐单位出图；有效阶段预算包内，每张完成机器 QC、实际查看和当前 PNG hash 验收后自动继续，只有范围/成本越界、输入或合同变化、合规失败、当前像素未通过才停；每单位调用见“调用规范”
+- **批量加速可选（仅 `生成粒度: 整集` 档）**：整集档下 >10 张时，可并行多个彼此独立、各自有唯一消费 ID 的任务调用 CLI（每个负责一段镜头），主流程收集结果；**逐个/小批/按场景档按单位串行执行，不并发，但不为同一有效预算包重复索要付款确认**
 - 中间筛选废料 → `废料/出图/{共享,第N集}/图片/`，定稿 PNG → `出图/共享/图片/` 或 `出图/第N集/图片/`
 
 **分支 2：所选后端无可落 PNG 的入口**
@@ -556,8 +562,8 @@ python3 skills/n2d/n2d-batch/scripts/queue.py plan <作品根> \
 | 负向 prompt 写成整段“不要/禁止/不得”说明 | 人读禁忌保留在文档里；实际提交后端前归一成短负面词/短语，硬性动作约束放正向 prompt 或本镜约束 |
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |
 | 废图留在 Downloads | 全部归档 `废料/出图/{共享,第N集}/图片/`，Downloads 清空 |
-| 不报总量就闷头整集出图 | 违反 `生成粒度` 选择点——进生图前先报本集总张数 + 按优先序排队，默认逐个停审 |
-| 逐个/小批档还 spawn 子 agent 并发 | 并发只在 `整集` 档；逐个/小批/按场景档按单位串行，每单位停下让用户审 |
+| 不报总量就闷头整集出图 | 违反 `生成粒度` 选择点——进生图前把本集总张数、scope、成本上界与优先序写入阶段预算包；包获批后按单位自动推进，遇当前像素/QC 硬闸才停 |
+| 逐个/小批档还 spawn 子 agent 并发 | 并发只在 `整集` 档；逐个/小批/按场景档按单位串行，每单位完成机器 QC + 实际像素检查 + hash-bound accept 后自动继续，不重复询问付款 |
 | 整集档大量分镜全串行生 100 张 | 仅整集档：可 spawn 子 agent 并发调 CLI 提速 |
 | 候选图轻微偏差就喊重抽 | 违反**筛选宽容铁律**——只对核心错位/定妆漂移/硬性禁忌违反 才重抽，小动小偏直接放行 |
 | 人物多出一只手 / 两只右手 / 手从道具光效里长出来 | 违反**手部/肢体归属铁律**——不是小瑕疵，按 `hands` / `anatomy_continuity` block 归档重抽；prompt 必须写清可见手数、左右手、手臂连接和道具/武器接触点 |

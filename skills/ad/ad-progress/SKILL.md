@@ -29,7 +29,7 @@ python3 skills/ad/ad-progress/scan.py --root <仓库根>      # 从其它目录�
 
 ## 输出怎么转述
 
-优先转述当前前沿和阻断。扫描会做「✅ 阶段行 ↔ `生产数据/stage_acceptance/<stage>.json` 凭证」对账：标 ✅ 却无凭证/凭证仍有 block → 报「✅ 无验收凭证」（疑似手改 `_进度.md`；这里只报不拦，硬拦在 `ad-review` M0）。若 `producer_pack` / `ad_score` / `product_qc` / `video_qc` 有 block，先转述这些横切门禁；若下一步是 `ad-image`、`ad-video`、`ad-compose`，提醒这是高风险阶段：会花钱/不可逆，进入前要确认后端、交付规格，并先过广告线 gate；brief 的必填项缺失时，先回 `ad-concept` 访谈补齐。
+优先转述当前前沿和阻断。扫描会做「✅ 阶段行 ↔ `生产数据/stage_acceptance/<stage>.json` 凭证」对账：标 ✅ 却无凭证/凭证仍有 block → 报「✅ 无验收凭证」（疑似手改 `_进度.md`；这里只报不拦，硬拦在 `ad-review` M0）。若 `producer_pack` / `ad_score` / `product_qc` / `video_qc` 有 block，先转述这些横切门禁；下一步是 `ad-image`/`ad-video` 时，交实际 runner 核验 exact 阶段预算包，已有有效余量不重复确认，缺包、过期、超额、未知成本或 binding 变化才停；`ad-compose` 的不可逆覆盖仍是硬边界。三者进入前都先过广告线 gate；brief 的必填项缺失时，先回 `ad-concept` 访谈补齐。
 
 ## 不做什么
 

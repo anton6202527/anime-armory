@@ -180,17 +180,49 @@ Shape:
       },
       "authorization_digest": "sha256:<canonical-authorization-digest>"
     }
+  },
+  "phase_spend_envelopes": {
+    "image": "生产数据/spend_envelopes/image.json",
+    "video": {
+      "kind": "n2d_phase_spend_envelope",
+      "version": 2,
+      "envelope_id": "n2d-video-...",
+      "line": "n2d",
+      "project_id": "sha256:<resolved-project-id>",
+      "stage": "video",
+      "scope": {"episode": "第2集", "physical_clips": ["Clip_01"]},
+      "model": "<concrete-model-version>",
+      "channel": "<concrete-access-channel>",
+      "input_sha256": "sha256:<canonical-producer-input>",
+      "issued_at": "2026-08-20T10:00:00+08:00",
+      "expires_at": "2026-08-20T18:00:00+08:00",
+      "decision": "approved",
+      "attempt_id_semantics": "phase_retry_round",
+      "approver": "producer@example.com",
+      "approval_reference": "approval-ticket-123",
+      "source_quote": "批准本范围在费用上限内连续执行",
+      "limits": {
+        "max_calls": 8,
+        "max_attempts": 2,
+        "cost_ceiling": {"amount": 40, "currency": "work_units"}
+      },
+      "authorization_digest": "sha256:<canonical-authorization-digest>"
+    }
   }
 }
 ```
 
-`production_authorizations` 是任务级生产授权收据，不支持 task 通配。示例里的 `<...>` 只是 schema 占位，不能直接执行；受信任的审批面应调用 `runner.make_production_authorization(task, root=..., resolved_command=..., config=..., ...)`（或完全相同的 canonical JSON 算法）生成真实摘要。`task_digest` 绑定 task id、idempotency key、集/阶段、scope、估算成本与 `execution`；`authorization_digest` 是去掉自身字段后，对完整收据做 `sort_keys + compact separators + UTF-8` 的 SHA-256。任一字段被改写都会摘要不匹配。
+`production_authorizations` 是 v1 任务级兼容收据，不支持 task 通配。示例里的 `<...>` 只是 schema 占位，不能直接执行；受信任的审批面应调用 `runner.make_production_authorization(task, root=..., resolved_command=..., config=..., ...)`（或完全相同的 canonical JSON 算法）生成真实摘要。`task_digest` 绑定 task id、idempotency key、集/阶段、scope、估算成本与 `execution`；`authorization_digest` 是去掉自身字段后，对完整收据做 `sort_keys + compact separators + UTF-8` 的 SHA-256。任一字段被改写都会摘要不匹配。
 
-`execution` 四个摘要均必填：最终 resolved command；producer 的 canonical input；物理 submit/compiled request；完整 producer contract。image/video 由实际 producer API 重算，不能用 task 自报字段或 episode/prework fingerprint 代替。`attempt` 是一次性消费边界，retry 必须重新审批。voice/compose 在各自 producer 尚未提供 prepared canonical manifest 前 fail-closed。收据还必须有真实 `approver`、带时区且未过期的 `issued_at/expires_at`、显式 `model/channel`（无法预知时可以声明 `any`，但不能缺省）、以及 `ceiling.amount/currency`。估算成本必须与 currency 同单位且不超过 ceiling。重新规划、改变 scope/model/channel/成本、命令、producer 输入/请求或产生新 task/idempotency 后必须重新授权。也可由受信任上游把同结构收据写入 task 的 `production_authorization`。仅有 `queued`、runner 命令、配置项存在或旧任务授权均不放行。
+v1 `execution` 四个摘要均必填：最终 resolved command；producer 的 canonical input；物理 submit/compiled request；完整 producer contract。image/video 由实际 producer API 重算，不能用 task 自报字段或 episode/prework fingerprint 代替。`attempt` 是一次性消费边界，retry 必须重新审批。voice/paid compose 在各自 producer 尚未提供 prepared canonical manifest 前 fail-closed。收据还必须有真实 `approver`、带时区且未过期的 `issued_at/expires_at`、显式 `model/channel`（无法预知时可以声明 `any`，但不能缺省）、以及 `ceiling.amount/currency`。估算成本必须与 currency 同单位且不超过 ceiling。重新规划、改变 scope/model/channel/成本、命令、producer 输入/请求或产生新 task/idempotency 后必须重新授权。也可由受信任上游把同结构收据写入 task 的 `production_authorization`。仅有 `queued`、runner 命令、配置项存在或旧任务授权均不放行。
+
+`phase_spend_envelopes` 是 v2 阶段授权，可按 `task_id`、`stage_key` 或 `*` 查找，也可直接嵌入 task 的 `phase_spend_envelope`。路径相对作品根解析。必须由受信任的人审面用 `_lib/spend_envelope.py issue` 生成，runner/supervisor 不能 issue 或扩大；`approver + approval_reference + source_quote` 缺一不可，且拒绝 `agent:/delegate:/auto:/system:` 冒充真人。`scope/model/channel/input_sha256/expiry/max_calls/max_attempts/cost ceiling` 任一不匹配都 fail-closed。
+
+v2 的 `attempt_id_semantics` 固定为 `phase_retry_round`：同一阶段重试轮里的多个 calls 共享 attempt ID，`max_attempts` 只统计唯一轮次；每个物理消费仍有唯一 `consumption_id`。当前 batch runner 用 `task_id:attempt`，因此同一个 task/round 只允许一次 consumption，任务内多调用须把总数写进 `calls`，不同物理任务使用不同 task ID。消费账本固定在 `生产数据/spend_envelope_usage.json`，首次 consume 原子写 `state=in_flight`；同 ID 重入或任一未完成 reservation 都阻断 provider 重提。只有绑定原 submit/query 的持久 completion evidence 才能 `finalize` 为 completed，不能换 attempt 绕过崩溃窗口。
 
 `done` 同样不是普通状态赋值。queue 从 canonical stage contract 推导 hard completion；hard stage 的 `queue.py mark --status pass` 只接受 runner 自身 `status=pass / exit_code=0 / execution_started=true`（review 纯重验可为 false）、`completion.output_verification.status=pass`，以及声明了 gate 时的 `completion.post_gate.status=pass`。production 还必须让 authorization、execution binding 和每个 paid-boundary receipt 的摘要完全一致；无 gate 阶段必须显式为 `not_applicable`。提交锁内会按当前项目根重新检查每个 output binding 的路径、SHA 和媒体/图片解码，只有与 runner 验证值完全一致才写 `completion_commit={kind:n2d_batch_completion_commit, version:1, status:done, content_fingerprint, execution_binding, authorization_digest, completion, output_commit_attestation, acceptance, budget_settlement, digest}`；产物在验证后被删、替换或损坏会停在 `qa_blocked + completion_block_reason=output_changed_before_commit`。`digest` 是去掉自身后对完整 commit 做 canonical JSON SHA-256，`completion_commit_issue()` 可检查篡改和 task/attempt 串线。review 还必须通过 `_lib/acceptance_contract.py check_acceptance`，并把 receipt id + evidence digest 写入 commit：普通 gate、waiver、旧 signoff、缺失 `_进度.md` 行或 `验收` 列均不能替代 canonical acceptance receipt。若 receipt 尚未签，runner 保存 completion evidence、清除 worker/lease，并停在 `qa_blocked + completion_block_reason=needs_acceptance_signoff`；签收后 `mark pass` 原子复用 evidence 提交 done，无需重跑 review。外部 job receipt 的 `succeeded` 也只会停在 `qa_blocked`，不会直接提交完成。
 
-runtime budget 与 planning budget 是两层不同口径。production claim 在认领临界区先 reserve；成功、命令启动后的失败、output/post-gate 阻断都 settle actual（没有则 estimate）。只有 runner 明确证明 `execution_started=false` 且属于 preflight/config failure 才 release；lease 崩溃无法证明未花费时也保守 settle。这样第二个 worker 会看到第一个 worker 的 reservation，不能在并发窗口穿过 cap。
+runtime budget 与 planning budget 是两层不同口径。queue 的 production claim reservation 管本地 runtime cap；v2 spend ledger 另管真实人审 phase envelope 的调用/轮次/费用边界和 provider 重放风险。二者都必须通过，任何一层未知或超限都不提交。命令成功、产物/gate 阻断都按实际付费边界结算；只有 runner 明确证明 `execution_started=false` 且属于 preflight/config failure 才释放 queue reservation。这样并发 worker 既不能穿透 queue cap，也不能重复消费同一付费授权。
 
 Command lookup order:
 

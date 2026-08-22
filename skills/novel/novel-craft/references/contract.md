@@ -14,7 +14,7 @@
 |---|---|---|---|
 | `schema_version` | int | 是 | 当前为 `1` |
 | `kind` | string | 是 | `create/spinoff/rewrite/expand/condense/continue` |
-| `title` | string/null | 是 | 用户选定书名；未定为 null |
+| `title` | string/null | 是 | 当前已采用书名（默认最高分且通过撞名检查的推荐；未定为 null） |
 | `source_title` | string | 派生类必填 | 原作名；`create` 可无 |
 | `rights_status` | string | 是 | `original/public-domain/user-declared/...` |
 | `rights_jurisdiction` | string | 推荐 | 权利/公版依据适用辖区，如 `US/CN/GLOBAL/user-declared` |
@@ -133,7 +133,7 @@
 | `setup` | 建项目骨架、写 `_meta/_设置/_进度` | `novel-create/scripts/init_project.py` | 重跑 init 或换 `--out` |
 | `blueprint` | 把想法补成创作蓝图：premise/主角/金手指/爽点/冲突/风格卡 | `novel-create` | 回立项访谈补缺口 |
 | `setting_bible` | 建设定圣经、角色卡、世界观和一致性约束 | `novel-create` + `setting-bible.md` | 回创作蓝图或重建设定约束 |
-| `title` | 书名候选、评分、用户选择 | `novel-title` | 重跑 `novel-title` |
+| `title` | 书名候选、评分、当前推荐决定 | `novel-title` | 重跑 `novel-title` |
 | `outline` | 按 scale、平台节奏和三幕/钩子编章纲 | `novel-craft/references/outline.md` | 回蓝图/设定调整主线 |
 | `demo` | 前 1-3 章验证文风、爽点、钩子、设定自洽 | `novel-create` | 回蓝图/设定/章纲/风格卡，不批量写 |
 | `draft` | 批量写余下章节：先出章节任务包，再由 agent/子代理逐章写，写完填状态增量 | `novel-craft/scripts/draft_packets.py` + `novel-create/agent` | 就地修章、重出任务包，或回 `demo` |
@@ -148,7 +148,7 @@
 | `setup` | 建项目骨架、抽原作、写 `_meta/_设置/_进度` | `init_project.py` | 重跑 init 或换 `--out` |
 | `source_model` | 吸收原作，建锚点/骨架/末章状态/新设定底稿 | 当前派生 skill | 回本阶段补设定/骨架 |
 | `direction_spec` | 明确变换目标：外传时间线、改动方向、扩缩策略、续写方向 | 当前派生 skill | 回 `source_model` 或改变换目标 |
-| `title` | 书名候选、评分、用户选择 | `novel-title` | 重跑 `novel-title` |
+| `title` | 书名候选、评分、当前推荐决定 | `novel-title` | 重跑 `novel-title` |
 | `outline` | 按 scale 和节拍编章纲 | `novel-craft/references/outline.md` | 回 `direction_spec` |
 | `demo` | 前 1-3 章验证文风/方向/设定 | 当前派生 skill | 回设定/章纲/口吻卡，不批量写 |
 | `draft` | 批量写余下章节：先出章节任务包，再由 agent/子代理逐章写，写完填状态增量 | `novel-craft/scripts/draft_packets.py` + 当前派生 skill/agent | 就地修章、重出任务包，或回 `demo` |

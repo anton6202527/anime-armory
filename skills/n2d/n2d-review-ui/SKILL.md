@@ -3,15 +3,15 @@ name: n2d-review-ui
 description: "Build local visual UI for n2d. Zero-build HTML + JSON views: (1) per-episode 人审画布 `review_ui.py`; (2) work-level 生产看板 `board.py`; (3) per-episode 工作台 `episode_app.py` that aggregates dashboard/board/review/score/gate data for desktop app display. Use when asked for 人审UI, 审片UI, 无限画布, 可视化审片, 生产看板, 单集工作台, 按集显示生产数据, 制作过程可视化, 首帧尾帧接缝可视化, QA flag 看板, 机器分看板, review canvas, production board, visual review UI."
 ---
 
-# n2d-review-ui — 人审无限画布 + 生产看板
+# n2d-review-ui — 静态证据审阅页 + 生产看板
 
-`n2d-review-ui` 把文本质检报告升级成可视化入口。它不替代 `n2d-review` / `n2d-score`，只读它们和产线的产物（`_进度.md` / `storyboard.json` / `score_*.json` / `dashboard.json` / gate findings / 帧/clip），**单一真值源，绝不 fork 逻辑**。三个零构建（自带 HTML + vanilla JS，无 npm）视图，颗粒度不同：
+`n2d-review-ui` 把文本质检报告升级成可视化入口。它不替代 `n2d-review` / `n2d-score`，只读它们和产线的产物（`_进度.md` / `storyboard.json` / `score_*.json` / `dashboard.json` / gate findings / 帧/clip），**单一真值源，绝不 fork 逻辑**。这里的“只读画布”只限定本 skill 自带的零构建 HTML 审片/看板表面：它用于看证据、筛 QA flag 和派生返工建议，不代表产品里的可编辑制作画布定位，也不阻止用户在其它制作表面二次创作并迭代最终产物。三个零构建（自带 HTML + vanilla JS，无 npm）视图，颗粒度不同：
 
 **① 单集人审画布 `review_ui.py`**（细看一集，挑穿帮）：
 - 分镜首帧、中段锚帧、尾帧、后端实际入参、clip MP4；clip 接缝（上尾帧 vs 下首帧）；定妆 / reference group 参考图；
 - QA flag / 机器分 / 自动回流任务；缺素材、缺尾帧、缺视频的可视标记。
 
-**② 整部生产看板 `board.py`**（看全局，一眼到哪了）—— PC端+无限画布愿景的 MVP（见 `n2d` Q&A Q36）：
+**② 整部生产看板 `board.py`**（看全局，一眼到哪了）—— n2d 自带静态生产看板的 MVP（见 `n2d` Q&A Q36）；它不是 Electron/Web 可编辑制作画布：
 - 读 `_进度.md` 状态机，渲染 **作品 → 集（泳道）→ 阶段（stage chips，按进度上色 done/进行中/未开始）→ Clip（接力链边 + QA 状态色）** 的可缩放/平移画布；
 - 每集显示完成度条 + 下一步该跑哪个 skill（前沿，与 `n2d-progress` 同源）+ dashboard 里的成本/通过率/重抽率/QA 数；有 `storyboard.json` 的集进一步铺开 Clip 卡 + 接力链；
 - `--serve` 在 `127.0.0.1` 起本地服务（复用 `n2d-dashboard` 的本地服务先例），媒体相对路径直接解析。
@@ -133,5 +133,5 @@ CAL_FACE_001,bob,warn
 | 错误 | 纠正 |
 |---|---|
 | 忘了跑机检/评分直接生成画布 | 这会导致画布里完全没有机器分数、QA 阻断和一致性标注 |
-| 把画布当成剪辑工具 | 画布只读、不修改任何生产状态。重修画面应由对应的 skill 和 batch 完成 |
+| 把本 skill 自带的审片 HTML 当成剪辑工具 | 这个 HTML 表面只读、不修改生产状态；它与产品中的可编辑制作画布不是同一表面。由这里发现的问题仍回对应 skill/batch，或在可编辑制作表面形成带当前哈希的新版本后重新过 gate |
 | 将本地 HTML 里的文件跨设备发人审阅 | HTML 里使用的是相对路径（本地或本地服务）。若要共享审查，需走在线服务部署 |

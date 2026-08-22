@@ -45,6 +45,10 @@
 
 进入项目后，App 会把左侧文件树、分镜画布 / 生产看板、右侧下一步提示和 AI agent 终端放在同一个工作台里。用户可以一边查看脚本、定妆图、分镜图、质检报告和生产数据，一边按右侧建议直接进入 Claude Code / Codex CLI / Gemini CLI 继续执行 `n2d-image`、`n2d-video`、`n2d-compose` 等阶段任务。
 
+画布的产品方向是生产工作台，而不是只读的中间产物查看器。当前 Electron 已支持在原生画布继续编辑、生成、返修和维护最终产物状态；Web 已有镜头、资产、提示词与批量视频入口，以及 `app-script-workbench/v3` 状态模型，但生成结果回写、逐图验收、母版合成/QC 与最终验收界面尚未闭环。因此“在同一 Web 画布一键迭代到最终母版”仍是目标合同，不应当作当前 UI 已全部具备的能力。
+
+两端遵守“每集/每 workflow 实例一个权威生产状态、每个权威对象一个 canonical SHA-256、每个交付单元一个完成定义”的共同语义，但不是同一存储格式：Electron 当前使用 `anime_armory_canvas_production_state` v2、`content_hash` 与 `canvas.final_product/v1`；Web 使用 `app-script-workbench/v3` 与 `content_sha256`。仓库内独立画布 skill 的正式名称是 `app-script-workbench`、`app-character-turnaround`、`app-first-frame-video` 和 `app-audio-video`，改名前名称只作迁移 alias。Web 的任务成功最多是 `machine_complete`；逐图与最终母版仍要求绑定当前字节的真人验收。Electron 当前本地回执使用 `desktop_user` 占位身份，不等同经过认证的具名真人；在接入真实身份前不得宣称满足强具名验收。
+
 <table>
   <tr>
     <td width="50%">
@@ -90,11 +94,11 @@ cd anime-armory
 
 ## 先看 Demo
 
-仓库里现有作品就是端到端样例，可以直接看目录结构、进度文件和产物组织方式。
+桌面端每个系列最多展示一个官方 Demo，以免把普通本地作品误标为样例；n2d / 制漫剧系列优先展示《那妖魔是姜大人》。仓库中的对应工程可直接用于查看目录结构、进度文件和产物组织方式。
 
 | 类型 | 示例 | 说明 |
 |---|---|---|
-| 漫剧工程 | `创作区/制漫剧/本宫才是这皇宫最大的妖/` | 小说源、脚本、设定库、出图、合规、生产数据等工程结构 |
+| 漫剧工程 | `创作区/制漫剧/那妖魔是姜大人/` | n2d 系列唯一展示 Demo；含脚本、设定库、出图、合规、生产数据等工程结构 |
 
 这些 demo 默认按作者本人 / 公版 / 已授权素材展示。复用本工具时请自备合法素材。
 
@@ -108,6 +112,8 @@ skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`n2d-progre
 |---|---|
 | 写小说 / 导入源书 / 观察素材 / 审美样本 / 审稿评分 | `novel <想法、源书或 创作区/写小说/项目>` |
 | 把小说做成 AI 漫剧 | `n2d <小说路径或 创作区/制漫剧/项目>` |
+| 使用画布最终母版的目标合同/状态文件工作流（Web UI 尚未闭环） | `app-script-workbench <故事或画布状态>` |
+| 在画布做角色三视图 / 首帧视频 / 音频卡点视频 | `app-character-turnaround` / `app-first-frame-video` / `app-audio-video` |
 | 画漫画 / 条漫页漫 / 分格脚本 / 长图导出 | `comic <想法、源本或 创作区/画漫画/项目>` |
 | 写歌 / 改词 / 作曲 / 多版挑版 / 审歌 | `song <想法、歌词或 创作区/写歌/项目>` |
 | 给歌曲做 MV / 卡点 / 出 MV 成片 | `mv <歌曲或 创作区/制MV/项目>` |
@@ -240,7 +246,7 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 ## 关键约定
 
 - **先读 `_进度.md`**：每个作品的当前状态、下一步和已完成产物都以它为准；做完要回写。
-- **选择写进 `_设置.md`**：平台、后端、分辨率、音色、制作模式等选择点首次问一次，用 `n2d-settings` 落档，之后同项目沉默沿用。
+- **普通选择写进 `_设置.md`**：平台、后端、分辨率、音色、制作模式等普通可逆选择缺失时采用推荐值并落档，之后同项目沉默沿用；已授权阶段预算包内连续执行。逐图机器 QC 与实际像素检查不可跳过；作品设置已有明确 executor-visual 授权时，可用 `human_signoff=false` 的 hash-bound 收据接力可逆中间生产，否则停给具名真人。预算包创建/扩大/过期、权利合规、不可逆发布/覆盖和最终成品验收仍显式暂停，最终/发布验收始终不能由执行者代签。
 - **skill 保持通用**：不要把个人偏好、平台账号、唯一后端写死进 skill。
 - **合规前置**：仿声、改编权不要等成片后补救。
 - **改 skill 集合要同步索引**：新增、删除或改变职责时，同步更新 [skills/README.md](skills/README.md)。
@@ -327,6 +333,12 @@ Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制�
 > For AI agents or humans entering the repo, read [AGENTS.md](AGENTS.md) first.
 > For the full skill index and responsibility boundaries, read [skills/README.md](skills/README.md).
 
+## Canvas Production Workbench
+
+The canvas product direction is a production workbench for secondary creation, selective regeneration, review, and iteration through a final master—not an intermediate-artifact viewer. Electron currently implements its native production-state and final-product flow. Web implements editable shots, assets, prompts, batch-video entry, and the `app-script-workbench/v3` model; result write-back, per-image acceptance, master composition/QC, and final-acceptance UI are not yet a closed loop.
+
+Both clients follow the semantic rule of one authoritative production state per episode/workflow instance, one canonical SHA-256 per authoritative object, and one completion definition per delivery unit, but they do not share one persisted schema. Electron uses `anime_armory_canvas_production_state` v2, `content_hash`, and `canvas.final_product/v1`; Web uses `app-script-workbench/v3` and `content_sha256`. The repository's canonical independent skill IDs are `app-script-workbench`, `app-character-turnaround`, `app-first-frame-video`, and `app-audio-video`; pre-`app-` IDs are migration aliases only. Web task success can establish `machine_complete`, never human acceptance. Electron's current `desktop_user` reviewer is a local placeholder rather than an authenticated named identity, so strong named-human completion must not be claimed until identity-backed receipts are implemented.
+
 ## Download And Install
 
 Ready-to-use packages are available from the latest release:
@@ -355,11 +367,11 @@ Then open the folder with a local AI agent such as Claude Code or Codex. Read [A
 
 ## Demo
 
-The repository contains an end-to-end example project:
+The desktop catalog shows at most one official Demo per production line so ordinary local works are never mislabelled. The preferred n2d / 制漫剧 Demo is `那妖魔是姜大人`:
 
 | Type | Example | Notes |
 |---|---|---|
-| Comic-drama project | `创作区/制漫剧/本宫才是这皇宫最大的妖/` | Novel source, scripts, settings, references, images, compliance data, and production records |
+| Comic-drama project | `创作区/制漫剧/那妖魔是姜大人/` | The single displayed n2d Demo; scripts, settings, references, images, compliance data, and production records |
 
 The demo is provided with author-owned, public-domain, or authorized materials. Use your own lawful source materials when producing new work.
 
@@ -373,6 +385,8 @@ Skill names are shown in cross-tool compatible form: use bare names like `n2d-im
 |---|---|
 | Write a novel, import a source book, build observation notes or aesthetic samples, review/score | `novel <idea, source book, or 创作区/写小说/project>` |
 | Turn a novel into an AI comic-drama | `n2d <novel path or 创作区/制漫剧/project>` |
+| Use the target final-master contract/state-file workflow (Web UI not yet closed-loop) | `app-script-workbench <story or canvas state>` |
+| Create a character turnaround, first-frame video, or audio-driven video on canvas | `app-character-turnaround` / `app-first-frame-video` / `app-audio-video` |
 | Draw comics, webtoons, panel scripts, layouts, or long-scroll exports | `comic <idea, source, or 创作区/画漫画/project>` |
 | Write lyrics, compose, select versions, or review songs | `song <idea, lyrics, or 创作区/写歌/project>` |
 | Make an MV for a song | `mv <song or 创作区/制MV/project>` |
@@ -501,7 +515,7 @@ Voice cloning and celebrity voice imitation are high-risk capabilities and requi
 ## Key Conventions
 
 - **Read `_进度.md` first**: it is the source of truth for project state and next steps.
-- **Persist choices in `_设置.md`**: platform, backend, resolution, voice, and production mode should be asked once and reused within the same project.
+- **Persist ordinary choices in `_设置.md`**: use recommended values for missing ordinary reversible choices, record them, and reuse them silently; continue inside an authorized stage budget. Per-image machine QC and actual-pixel inspection are mandatory. A project may use a hash-bound `human_signoff=false` executor-visual receipt for reversible intermediate continuation only when that delegation was explicitly authorized; otherwise named review is required. Budget creation/expansion/renewal, rights/compliance, irreversible publish/overwrite, and final-product acceptance still pause, and final/release acceptance is always human-only.
 - **Keep skills generic**: do not hardcode personal preferences, platform accounts, or one mandatory backend.
 - **Move compliance forward**: adaptation rights and voice authorization should be checked before final production.
 - **Sync the index when skill responsibilities change**: update [skills/README.md](skills/README.md).

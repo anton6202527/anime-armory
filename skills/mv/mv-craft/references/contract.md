@@ -93,7 +93,7 @@
 
 ## 闸门与进度回写
 
-- **编排入口**：`python3 skills/mv/run.py next <作品根> [--json]` 先从 `_设置.md` 派生流程，再审计 `_meta.json` / `_进度.md`；不一致时返回 `state_inconsistent` 和显式 sync 命令，不猜哪份旧状态是真的。它对已完成阶段逐项跑 output-health，缺失/过期收据返回 `stale_receipts`。`run.py impact --clip Clip_00N --change image|prompt|edit` 输出 clip 级返工级联清单。
+- **编排入口**：已初始化项目用 `python3 skills/mv/run.py next <作品根> [--json]` 从 `_设置.md` 派生流程，再审计 `_meta.json` / `_进度.md`；不一致时返回 `state_inconsistent` 和显式 sync 命令，不猜哪份旧状态是真的。它对已完成阶段逐项跑 output-health，缺失/过期收据返回 `stale_receipts`。缺 `_进度.md` 时当前 setup card 是不可执行 legacy 占位，必须先用 `init_project.py --title ... --out ... --song-timing ...` 初始化。`run.py impact --clip Clip_00N --change image|prompt|edit` 输出 clip 级返工级联清单。
 - 统一歌轨探测走 `scripts/mv_utils.py find_song()`：支持 `歌/song.wav`、`song.mp3`、`song.m4a`、`song.flac`；下游不得只写死 `song.wav`。
 - 正式阶段入口用 `scripts/gate.py <作品根> <stage>` 做确定性前置检查。除文件存在外还校验完整 SHA-256 输入收据、beat 段落签收、plan/timeline/OTIO 编辑合同、语义 prompt、节奏报告、出图生成收据、picture lock、视频签收与字幕对齐新鲜度。
 - 产物阶段写出核心文件后统一调用 `completion.mark_stage_complete()` 或 `progress_set.py`；控制器先复算 health，成功后才回写 `_进度.md`。仅不产收据的早期文本/分析阶段可由本阶段 owner 直接更新进度。

@@ -37,7 +37,7 @@ Demo gate 通过后必须留下一个机器可读文件，供批量写章、revi
     "delight_engine": ["这本书持续好看的机制"],
     "banned_drift": ["禁止偏成的题材/口吻/支线"]
   },
-  "user_feedback": ["用户审 Demo 后留下的具体修改意见"],
+  "user_feedback": ["用户或当前审阅策略对应 reviewer 留下的具体修改意见"],
   "score_report_path": "评分/score_report.json",
   "review_report_path": "审稿/review_report.json"
 }

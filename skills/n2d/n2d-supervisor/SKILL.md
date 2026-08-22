@@ -10,7 +10,7 @@ description: Supervisor agent layer for n2d. Use when asked to run/coordinate th
 1. 调 `python3 skills/n2d/run.py next <作品根> [第N集] --json` 取得 NextAction。
 2. 自动使用 NextAction 里的 `context_pack` / `creative_loop` / `action_contract`。
 3. 按 stage 派发少量 specialist：`n2d-script-agent`、`n2d-visual-agent`、`n2d-qc-agent`、`n2d-producer-agent`。
-4. 普通、可逆选择默认消费 `run.py` 已落档的推荐值；`needs_stage_execution` 直接派发对应 specialist。只在项目显式设为逐项询问才对 `needs_choice` 停下，而 `needs_payment_confirm` / `needs_compliance` / `needs_acceptance_signoff` / gate block 始终交给用户或原 stage skill。
+4. 普通、可逆选择默认消费 `run.py` 已落档的推荐值；`needs_stage_execution` 直接派发对应 specialist。付费阶段若当前 fresh plan、producer binding、模型/渠道、scope 与 canonical input SHA 都命中尚有余量的 v2 envelope，`run.py` 会把原付款停点收敛为 authorized `needs_stage_execution`，supervisor 继续派发 exact `n2d-batch` runner 路径；只有缺包、过期、超额、成本未知或合同/哈希变化时才保留 `needs_payment_confirm`。项目显式设为逐项询问时才对普通 `needs_choice` 停下；`needs_compliance`、`needs_acceptance_signoff` 与 gate block 始终交给用户或原 stage skill。
 5. 绝不自行花钱、绝不绕过 gate、绝不直接改 `_进度.md`、绝不自作主张换后端。
 6. 读取 `episode_graph_<集>.json` 追踪 storyboard→route→job→media→粗剪→母版→发布裁决，并读取 `blocking_bundles/latest_<集>.json` 判断当前停因；两者都是派生视图，不能覆盖状态机或 gate。
 
@@ -20,7 +20,7 @@ description: Supervisor agent layer for n2d. Use when asked to run/coordinate th
 - `run.py` 仍是确定性前置和 stop-point 真值。
 - `n2d-batch` 仍是多集队列/重试/预算真值。
 - `n2d-dashboard` / `production_events.jsonl` 仍是生产事件和成本真值。
-- supervisor 只输出/写入 `生产数据/supervisor/` 下的计划，不代替阶段产物。
+- supervisor 只输出/写入 `生产数据/supervisor/` 下的计划，不代替阶段产物；预算包只读 probe，不 issue、不扩大、不 consume，agent/delegate/auto 身份也不能冒充 human approver。
 - context pack 对 `_设置.md` 只投影 `settings` helper 认定的当前设置区（`## 记录` 之前）及其 source；完整审计历史仍留在原文件但不进入 preview。最多附 3 条显式“校正/更正”记录且一律标为非权威 provenance，不能覆盖当前设置；解析失败时留空并报错，不得回退为全文 preview。
 - `生产数据/flow_events.jsonl` / `flow_telemetry.json` 只记控制面阶段、停因、缓存命中、adapter 里程碑与耗时；不记 prompt、密钥或供应商原始响应。它与 dashboard 的成本/QA 账本互补，不取代 `production_events.jsonl`。
 - `run.py next --preview` 不写 episode graph、blocking bundle 或 flow telemetry；正式 `next` 才原子落盘。

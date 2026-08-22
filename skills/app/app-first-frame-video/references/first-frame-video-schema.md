@@ -1,8 +1,8 @@
 # First-frame video schema
 
 `app-first-frame-video/v2` 完全由该独立 skill 维护。旧 `app-first-frame-video/v1` 与改名前的
-`n2d-first-frame-video/v1` 与中间命名 `app-n2d-first-frame-video/v1`
-只作为兼容输入读取；旧 accepted 降为 `machine_complete` 并保留旧证据。
+`n2d-first-frame-video/v1`、中间命名 `app-n2d-first-frame-video/v1`
+均为 legacy alias，仅用于迁移兼容读取，不是正式 skill 名称；旧 accepted 降为 `machine_complete` 并保留旧证据。
 
 ## 核心字段
 

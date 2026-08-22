@@ -1,13 +1,15 @@
 # n2d adapter v2、多镜执行与交付状态
 
-本轮把“模型能做”“本机能跑”“视频做完”“可以发布”四件事正式拆开。目标不是增加更多平行状态，而是让现有 `_进度.md`、gate、runner 和 release verdict 互相可追溯。
+> 当前实施口径，更新时间：2026-08-22。
+
+本轮把“模型能做”“本机能跑”“视频做完”“可以发布”四件事正式拆开。目标不是增加更多平行状态，而是让现有 `_进度.md`、gate、runner 和 release verdict 互相可追溯。人读/调度只认一条业务前沿，产物新鲜度只认当前内容 SHA，完成只认一个 canonical release verdict；telemetry、episode graph、blocking bundle 和 dashboard 都是派生证据，不得各自发明第二套完成状态。
 
 ## 1. 执行边界
 
 - `n2d-model-router` 负责能力与创作路线，逐 route 输出 `execution_adapter` 与 `route_executable`。
 - `video_execution_adapter.py` 负责本机执行合同。状态固定为 `automated_ready / registered_missing_command / registered_incomplete / manual_required / unregistered`。
 - Dreamina 使用 embedded adapter；其它渠道以作品内 `生产数据/video_execution_adapters.json` 注册 wrapper。wrapper 接收稳定 request JSON，不把 SDK、账号或密钥写进仓库。
-- `video_runner.py` 统一 submit/query/cancel、幂等键、失败分类和未知付费状态保护。没有 adapter 不等于换一个后端；只能修环境、显式人工交付或导出 job package。
+- `video_runner.py` 统一 submit/query/cancel、幂等键、失败分类和未知付费状态保护。真实付费提交还必须消费与当前项目/阶段/输入 SHA/scope/模型/渠道/调用次数/成本/期限绑定的阶段预算包；包内连续执行不逐调用确认，未知成本、超额、过期、绑定变化或 provider `in_flight` 状态不明时 fail closed。没有 adapter 不等于换一个后端；只能修环境、显式人工交付或导出 job package。
 
 ## 2. 实际粗剪
 
@@ -34,7 +36,7 @@ router 只发现候选；`原生多镜生成=开启` 后 `multishot_plan.py` 才
 
 - `flow_events.jsonl` / `flow_telemetry.json`：控制面阶段、停因、缓存命中、编排耗时、adapter/验收/粗剪里程碑；不含 prompt、密钥或供应商原始响应。
 - `episode_graph_<集>.json`：从现有产物派生 storyboard→route→job→media→粗剪→master→release 图；不替代 `_进度.md`。
-- `blocking_bundles/latest_<集>.json`：把当前停因归一为选择、付费、合规、环境/adapter、合同/gate、创作/执行或 QC/人审，并带修复命令和 graph hash；不建立新 gate。
+- `blocking_bundles/latest_<集>.json`：把当前停因归一为预算授权、合规、环境/adapter、合同/gate、创作/执行或 QC/人审，并带修复命令和 graph hash；普通可逆选择自动落推荐值，不单列成人工停点；blocking bundle 不建立新 gate。
 - report-only 前置缓存扩到各阶段；指纹覆盖脚本、合同、路由、prompt 与媒体变化。block/异常不缓存。
 
 ## 5. QC 与实验可信度
@@ -53,7 +55,7 @@ router 只发现候选；`原生多镜生成=开启` 后 `multishot_plan.py` 才
 - `publish_ready_overseas`：海外发行与本地化 profile 完成。
 - `publish_ready_commercial`：商业权利 profile 完成。
 
-AI 标识、备案、本地化、平台审核可以阻断相应 `publish_ready_*`，但不能把已经完成的技术交付改写成不存在；版权、肖像和真人声音授权仍按对应边界执行。
+`master_delivery_complete` 只有在 canonical master、当前内容 SHA、全部强制 gate 与最终具名验收收据一致时成立；旧收据或内容变化会自动失效。AI 标识、备案、本地化、平台审核可以形成相应发布 profile 的待办或外部发布阻断，但不能把已经完成的技术交付改写成不存在，也不得反向阻断 n2d 主生产流程；版权、肖像和真人声音授权仍按对应边界执行。
 
 ## 7. 运维命令
 

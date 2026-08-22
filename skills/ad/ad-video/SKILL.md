@@ -11,7 +11,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
 
 ## 偏好（私有）
 
-按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。出视频是**花钱/高风险**阶段，正式跑前确认规格；若未显式固定后端，先按模型路由、CLI/API 探测与账号约束决定入口，探测不到可执行后端时再问用户选渠道或 `manual`。写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `gate.py --stage video`；正式 runner 同时自动跑 `stage_acceptance.py --stage image`，只有全部 image job、真实输出/参考输入 provenance 与 full product_qc 通过才花视频额度。
+按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。普通可逆项缺失时采用推荐值写回；具体 route/model/channel、exact job scope、保守成本上界和 input SHA 在阶段预算包创建时一次确认，包内不逐 Clip 重复问付款。若未显式固定后端，先按模型路由、CLI/API 探测与账号约束决定入口，探测不到可执行后端时再合并询问渠道或 `manual`。写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `gate.py --stage video`；正式 runner 同时自动跑 `stage_acceptance.py --stage image`，只有全部 image job、真实输出/参考输入 provenance 与 full product_qc 通过才花视频额度。
 
 ## 阶段预算信封（真实提交闸）
 

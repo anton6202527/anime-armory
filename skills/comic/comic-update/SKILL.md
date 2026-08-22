@@ -40,7 +40,7 @@ python3 skills/comic/comic-update/scripts/update_plan.py check "创作区/画漫
 - reference plan/成图/导出物变化后，用 comic 共享的 stage input fingerprint 判定 image/compose/review receipt 过期，不靠文件时间或 `_进度.md`。
 - 同一参考图、registry asset、逐格脚本、layout、lettering 或 panel 像素在 `record` 后变化时，`check` 会输出 `panel_impacts[]`、精确 `panel_targets/page_targets` 和最早回放阶段；只需重抽部分格时，执行计划直接生成 `comic-batch --targets ... --force`，不把整话重出图当默认答案。
 - 未被任何格消费的 translation entry 变化不触发返工；只改嵌字不会建议重抽画面。真实仓库的 `skills/comic/comic-*` 路径按最深子 skill 归属，避免把 compose 更新误判成顶层 comic/source 全量回放。
-- 付费出图前先停：计划覆盖 `image` 时，先确认模型、渠道、预算、保留旧图和目标格范围，再交给 `comic-image` 或 `comic-batch`。
+- 计划覆盖 `image` 时，先核对当前阶段预算包是否仍精确绑定项目/stage/input/model/channel/scope/expiry/max_calls/max_attempts/cost。有效余量内保留旧图并连续交给 `comic-image` / `comic-batch`；缺失、过期、扩大或合同变化才结构化停止。
 - 控制面变化不触发重制：`comic-progress`、`comic-settings`、`comic-update` 本身变化只提示刷新扫描/基线。
 
 ## 收尾

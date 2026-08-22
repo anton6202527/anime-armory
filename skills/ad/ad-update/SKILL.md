@@ -39,9 +39,8 @@ python3 skills/ad/ad-update/scripts/update_plan.py check "<广告项目根>" --j
 
 ## 收尾
 
-跑完 `check` 后，把计划摘要告诉用户：变更 skill、是否建议返工、从哪个阶段到哪个阶段、下一步要进哪个 `ad-*` skill。用户确认后再执行；验收通过后跑：
+跑完 `check` 后，把计划摘要写入下一动作卡：变更 skill、是否建议返工、从哪个阶段到哪个阶段、下一步要进哪个 `ad-*` skill。若目标 image/video 阶段已有精确匹配且有效的阶段预算包、输出版本化可恢复且不改变 brief/claim 核心合同，调度 agent 可同任务继续；预算包缺失/扩大/过期/绑定变化，或会不可逆覆盖/发布时才请求确认。验收通过后跑：
 
 ```bash
 python3 skills/ad/ad-update/scripts/update_plan.py record "<广告项目根>"
 ```
-

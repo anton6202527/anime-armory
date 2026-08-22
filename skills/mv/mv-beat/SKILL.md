@@ -9,7 +9,7 @@ description: 制MV 卡点分析 — 用 librosa 的 HPSS/打击乐 onset 检测 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读项目值、全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。当前音频 timing 的具名听审仍是正式 beatgrid 硬边界。
 
 本 skill 涉及的选择点：`卡点策略`、`节拍提取后处理`（是否手动干预覆盖 librosa）。
 

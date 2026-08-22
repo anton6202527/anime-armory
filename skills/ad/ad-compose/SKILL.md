@@ -11,7 +11,7 @@ ffmpeg 无 libass 时，字幕走 Pillow PNG overlay。
 
 ## 偏好（私有）
 
-按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`品牌包装模板`、`字幕语言`、`音乐来源`、`cutdown版本`、`交付比例`、`交付规格`。合成是**花钱/不可逆**阶段，正式跑前确认；开跑前先跑 `python3 skills/ad/ad-craft/scripts/gate.py "<作品根>" --stage compose`。
+按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`品牌包装模板`、`字幕语言`、`音乐来源`、`cutdown版本`、`交付比例`、`交付规格`。普通可逆项缺失时采用推荐值写回，确定性计划/预检可自动继续；正式合成前仍跑 `python3 skills/ad/ad-craft/scripts/gate.py "<作品根>" --stage compose`。当前 compose 不由 image/video provider runner 的阶段预算包自动授权：真实外部付费、覆盖既有交付件、机械裁切风险接受、公开发布或其它不可逆 effect 仍须显式停审，不能拿 `SPEND_ENVELOPE_CHOICE_POINTS` 常量冒充授权。
 
 > compose 不替平台烙统一 AI 水印；但合成后必须进入 `ad-craft` 发布合规 manifest，再由 `ad-review` 验收平台声明/标识责任和证据，不能把“平台外操作”当作无须留痕。
 

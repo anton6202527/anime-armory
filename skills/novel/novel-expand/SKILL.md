@@ -67,9 +67,9 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 
 **先按 `novel-craft/references/split.md` 反推扩写后总章数 / 字数分档**（按 target_platform；漫剧友好 vs 网文长篇 章数差一个量级）；然后引用 `novel-craft/references/outline.md` + `expand.md` 编织章纲。每章一行 outline，标注本章主要加什么类型的细节（环境 / 内心 / 对话 / 次要互动 / 支线）。
 
-### 第 5 步 — Demo（前 2-3 章）+ 用户审
+### 第 5 步 — Demo（前 2-3 章）+ 独立审阅
 
-引用 `novel-craft/references/chapter.md` + `expand.md`。逐章独立写，**每章审过才进下一章**。
+引用 `novel-craft/references/chapter.md` + `expand.md`。逐章独立写，**每章由与 writer 分离的 reviewer 审过才进下一章**；默认 specialist 在同一任务连续复核，显式逐阶段人审才停。
 Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`）；`status != passed` 不进第 6 步。
 
 ### 第 6 步 — 续扩 + 回扫
@@ -112,6 +112,6 @@ python3 skills/novel/novel-craft/scripts/export.py "<作品根>" --formats txt,d
 | 加新设定 / 新规则 | 不加；只用原作已有 |
 | 大段复刻原作 | 用事件骨架对齐，不搬文本 |
 | 加支线把节奏打散 | 支线密度 ≤ 1 段 / 章；超过先精简 |
-| 一次性扩完不让用户审 | 第 5 步 Demo gate 必须等用户点头 |
+| 一次性扩完且跳过独立审阅 | 第 5 步 Demo gate 必须由独立 reviewer 逐章签收；默认代理审阅可连续推进 |
 | Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，容易注水漂移 |
 | Demo 过审但没写 `审稿/demo_gate.json` | 后续扩写缺风格和承诺锚点，容易注水漂移 |

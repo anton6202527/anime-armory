@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / exploratory draft / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实性文化审读 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/项目名/ when no action is specified, or resumes an in-progress 创作区/写小说/项目名/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 探索型写作, 角色试镜, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 真实性审读, 文化审读, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3309 | 目录文本总行数 83444
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3308 | 目录文本总行数 83453
 
 # novel — 小说工坊调度入口
 
@@ -96,11 +96,11 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 - 专业事实串用：先 `novel-research` 建资料包 → `novel-craft` 写章任务包自动引用 → `novel-review` 检查专业事实是否有证据支持；证据缺口回 `novel-research`，不要靠 prompt 记忆硬写。
 - 生活质感串用：先 `novel-observe` 建观察素材库 → 写章/编辑时选素材注入任务包 → `novel-review`/`novel-edit` 检查人物是否仍悬浮。事实归 `novel-research`，生活细节归 `novel-observe`。
 - 审美标尺串用：Demo 或授权/公版样本进 `novel-aesthetic` → `novel-style` 抽统计/语义风格 → `novel-edit` line packet 引用 transfer_rule → `novel-score` 品质向维度引用正向样本，避免只会扣分不会判断“好在哪里”。
-- **score→rewrite 串法**：若 score 判 `小改/大改`（非 `弃稿重立`）且用户要据评分开改写，把报告喂给 `novel-rewrite --score-source 评分/score_report.json`——弱项/扣分雷点会预填进新项目 `设定/改动spec.md` 的②栏，作为**建议待对账**（与用户要求冲突时以用户要求为准）。评分判 `弃稿重立` 时改写未必合适，先确认是否走 `novel-create` 另起。改写后可回跑 score 做 before/after 对照。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（可预测性/中断假设）是常被漏掉的三项，建议一并提示用户。
+- **score→rewrite 串法**：若 score 判 `小改/大改`（非 `弃稿重立`）且用户要据评分开改写，把报告喂给 `novel-rewrite --score-source 评分/score_report.json`——不与作者要求冲突的诊断按推荐方案并入新项目 `设定/改动spec.md` 的②栏；冲突时以作者要求为准。评分判 `弃稿重立` 会改变作品合同和主线方向，才停下确认是否走 `novel-create` 另起。改写后可回跑 score 做 before/after 对照。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（可预测性/中断假设）是常被漏掉的三项，可自动串跑免费确定性检查。
 
 ⚠️ **"文风漂移"双触发仲裁**：提取/分析文风指纹、查笔力一致 → `novel-style`（文风是它的主责）；只有当诉求是"**作为质检项**报告某章偏离全书文风"且同时要查别的硬伤时，才并入 `novel-review`。单看文风一律走 style。
 
-每条路由**简短确认输入后调起对应 skill**，让那个 skill 自走流程。不要在本 skill 里硬写小说。
+每条路由在输入足以区分动作时**直接调起对应 skill 并继续**；普通可逆歧义采用推荐路由。只有不同答案会改变作者意图、权利边界或作品合同时，才合并成一个最小澄清问题。不要在本 skill 里硬写小说。
 
 ## 决策树
 
@@ -198,6 +198,6 @@ novel 同时承担 novel-* 家族的**经验累积**职责。在跑任何 novel-
 
 | 错误 | 纠正 |
 |---|---|
-| 拿到模糊请求就硬路由 | 先问澄清问题，2-3 句话搞清楚动作再路由 |
+| 任意模糊都停下来问 | 可逆歧义采用最有证据的推荐路由；只有会改变作者意图、权利边界或作品合同的真歧义才问一个最小问题 |
 | 跳过合法性筛查 | 路由前必须查；本 skill 的最大职责就是把铁律前置 |
 | 在本 skill 里直接开始写 | 不写；路由出去 |

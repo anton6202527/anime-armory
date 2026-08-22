@@ -1,8 +1,8 @@
 # Character turnaround schema
 
 `app-character-turnaround/v2` 是该独立 skill 的状态格式。旧 `app-character-turnaround/v1` 与改名前的
-`n2d-character-turnaround/v1` 与中间命名 `app-n2d-character-turnaround/v1`
-只作为兼容输入读取；旧 accepted 降为 `machine_complete` 并保留旧证据，绝不自动完成。
+`n2d-character-turnaround/v1`、中间命名 `app-n2d-character-turnaround/v1`
+均为 legacy alias，仅用于迁移兼容读取，不是正式 skill 名称；旧 accepted 降为 `machine_complete` 并保留旧证据，绝不自动完成。
 
 ## 顶层
 

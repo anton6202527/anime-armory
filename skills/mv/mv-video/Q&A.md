@@ -24,3 +24,11 @@ MV 版落地规则：
 
 - `skills/mv/mv-video/SKILL.md`
 - `skills/mv/mv-video/references/prompt_format.md`
+
+## Q2: 一键式流程怎样处理选择、预算和人审？
+
+A: mv 当前没有完整 `mv-batch` / supervisor。项目初始化后，外层 agent 消费 `mv/run.py next --json`，可自动串联免费确定性 helper 并路由到已有 `mv-*` skill；导航层不代替 provider 提交或人审。缺 `_进度.md` 时，当前 setup card 是 legacy 占位且命令不完整，必须先显式运行 `init_project.py --title ... --out ... --song-timing ...`，不能直接执行该 card。
+
+- 外层 agent 看到最终音频时应显式传入并写回 `先传音乐`，只有企划/歌词草稿时显式传入 `后配歌曲`；底层 init CLI 不自行推断，未传参数仍采用兼容默认 `先传音乐`。其它普通缺项采用推荐值、写回 `_设置.md` 后继续。
+- 实际调用层若已有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算包，余量内不逐图、逐 clip 重复确认；缺失、扩大、过期或合同变化才结构化停止。
+- 当前像素、当前视频 take、timing/picture lock、最终母版验收，以及版权/肖像/品牌合规和不可逆发布/覆盖仍是硬边界，不能用代理推荐冒充。

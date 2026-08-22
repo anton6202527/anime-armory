@@ -15,6 +15,11 @@ Command:
 bash skills/n2d/n2d-compose/compose.sh <作品根> 第N集 zh
 ```
 
+Automatic local boundary:
+- With `BGM来源=无`, a passing compose gate and no existing canonical master, the first local ffmpeg compose can run without a payment prompt or spend-envelope consumption.
+- If any working/unaccepted/accepted canonical master already exists, the acceptance receipt is corrupt, or the canonical resolver cannot prove the target, stop before overwrite. “Not finally accepted yet” is not permission to replace a master.
+- A newly rendered file is still not final delivery until review/release evidence and the canonical human acceptance receipt pass.
+
 With real BGM:
 ```bash
 BGMFILE=/path/to/music.mp3 bash skills/n2d/n2d-compose/compose.sh <作品根> 第N集 zh

@@ -7,6 +7,8 @@ description: Shared machine contracts and deterministic helpers for the song-* s
 
 `song-craft` 是 `song-*` 家族的机器单一真值源，不直接写歌、不直接生成音频。它只沉淀可复用的字段、选择点、状态表和合规留痕脚本，避免每个 skill 各自硬写一套。
 
+**连续执行边界**：`song_workflow.py` 只检查证据并给下一步命令，不是完整 batch/provider runner。编排 agent 可自动 chain 本 skill 的免费确定性 helper 并继续路由现有 `song-*` skill；真实音乐生成、当前音频听审、最终成品验收与发布仍由对应阶段完成。实际调用层若持有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算授权，包内不逐调用打断；本线不得自行签发预算授权。
+
 ## 包含内容
 
 | 主题 | 参考 / 脚本 | 何时用 |

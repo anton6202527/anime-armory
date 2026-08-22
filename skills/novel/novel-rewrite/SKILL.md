@@ -33,7 +33,7 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 ## 合法性铁律
 原作须 **公版 / 用户自有 / 用户声明授权（`--i-have-rights`）**。派生作品是原作版权人专有权利；当代受版权网文/出版物未声明授权 → 拒做。同 novel-spinoff，详见 `novel/SKILL.md` 合法性继承。
 
-## 工作流（七步，每步末用户审 gate）
+## 工作流（七步，按当前审阅策略过 gate）
 
 > **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 原作内核/旧设定吸收，`direction_spec` = 改动spec / 新设定确认。
 
@@ -41,11 +41,11 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" [--score-source 评分/score_report.json] ...` → `创作区/写小说/<原作名>-改写/`。
    > **源语言/文体体检（init 自动·最上游）**：默认假设原作是现代中文白话文。init 会确定性体检 `原作.txt` 的文体——遇**文言文/古文或外文**会**停下提示**并自动建 `设定/source_comprehension.md` 源理解层脚手架（并把 `_meta.source_register` 标为 classical_zh/non_chinese、`source_comprehension_status=draft`）。**这种情况先做「1.5 加强源理解」再继续**；现代白话无感放行。手动复检：`python3 skills/novel/_lib/source_language.py <项目根>`。
 1.5. **加强源理解（仅文言文/外文原作·改写成白话文前必做）**：补全 `设定/source_comprehension.md`——文言文写「现代白话理解层(parse+gloss 逐章释义) + 古今词/典故/称谓对照 + 文化/制度注释 + 改写边界(白话化 vs 保留古意·语体倾向)」；外文写「现代中文理解层(译文/释义) + 专名/术语本地化表 + 习语/双关 transcreation + 改写边界(本地化 vs 异域感)」。补全后把 `设定/source_comprehension.json` 的 `status` 置 `confirmed`。**未确认前 qa_gate（demo/导出）会硬阻断 `SOURCE-LANG-COMPREHENSION`**。之后第 2 步起的改动spec/章纲/Demo **从源理解层（现代白话理解）改写成白话文**，保留 curated 的古语/术语/意象作文风与设定锚点，不照搬文言原句或外文。
-2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。**若传了 `--score-source`，②栏已预填评分诊断（弱项/扣分雷点，标记「建议·待对账」）——逐条与用户要求对账：采纳的并入对应栏，保留的显式标注；冲突时以用户要求为准。评分判 `弃稿重立` 时先确认是否该走 `novel-create` 另起。** → 用户审。
-3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 用户审。
-4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。
-5. **章纲**：自由编织（不受原作章节束缚，可大改顺序/结局），三幕 + 反转 + 钩子；用 `novel-craft/references/{outline,split}.md`。→ 用户审。
-6. **Demo（前几章）+ 用户审【最重要 gate】**：验文风 / 改动方向是否到位 / 新设定是否自洽 / 没丢内核 / 没照搬原文。每章独立审。Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`），`status != passed` 不批量写。
+2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。**若传了 `--score-source`，不与用户要求冲突的评分诊断按推荐方案并入②栏；冲突时以用户要求为准。评分判 `弃稿重立` 会改变作品合同，才停下确认是否走 `novel-create` 另起。** 默认交独立 specialist 审阅，显式逐阶段人审才停。
+3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 默认 independent specialist 审阅后继续；显式逐阶段人审才停。
+4. **书名**：委托 `novel-title`（同人改写/魔改类型），自动采用最高分且通过撞名检查的推荐，保留备选供覆盖。
+5. **章纲**：自由编织（不受原作章节束缚，可大改顺序/结局），三幕 + 反转 + 钩子；用 `novel-craft/references/{outline,split}.md`。→ 默认 independent specialist 审阅后继续；核心改写方向冲突或显式人审才停。
+6. **Demo（前几章）+ 独立审阅【最重要 gate】**：验文风 / 改动方向是否到位 / 新设定是否自洽 / 没丢内核 / 没照搬原文。每章由与 writer 分离的 reviewer 独立审；默认 specialist 审阅可连续推进，显式逐阶段人审才停。Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`），`status != passed` 不批量写。
 7. **续写余下 + 回扫 + 导出**：先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包，再拆给子任务/子代理写（喂 改动spec + 新设定圣经 + `设定/读者契约.md` + `审稿/demo_gate.json` + Demo 文风样本 + 状态账本）；写完填 `审稿/state_delta_第NN章.json`。用 `novel-review` 回扫（重点：**新设定一致性**、没跑回原作旧设定、内核没丢、读者契约没偏、没照搬）；发布前用 `novel-craft/scripts/ai_usage.py` 留 AI 使用披露；`novel-craft/scripts/export.py`（家族通用导出器，默认执行 QA gate）导出 txt/docx/outline。
 
 ## 详细参考

@@ -58,7 +58,7 @@ continuity:
 ### 平台参数：模型/时长/帧率/画幅/**分辨率·帧率·质量档(由 出视频规格 档定)**/image2video 强度
 ```
 
-> **分辨率/帧率/质量档/跑几版由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足=1080p·30fps·高质量档·多跑挑稳，预算一般（默认）=720p·24-30fps·标准档·关键镜2版/普通镜1版，预算不够=720p·24fps·省积分档·全1版。**每次开跑前念一行告知当前规格档**（首次问一次记入 `_设置.md`，之后沉默沿用但仍告知，用户随时可改）。CLI 调用据此加 `--resolution`/`--fps`（flag 名以平台为准）。
+> **分辨率/帧率/质量档/跑几版由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足=1080p·30fps·高质量档·多跑挑稳，预算一般（默认）=720p·24-30fps·标准档·关键镜2版/普通镜1版，预算不够=720p·24fps·省积分档·全1版。缺失时自动写回推荐档；当前档记录进任务包，不逐调用询问。实际 submit 由调用层核对精确绑定且有效的阶段预算包。CLI 调用据此加 `--resolution`/`--fps`（flag 名以平台为准）。
 
 `video_jobs.py` 写 schema v4 manifest：每个 take 除 `prompt_path` 外还持有具体 model×channel/provider route、`prompt_source_kind=compiled_submit_prompt`、compiler/profile 元数据、`submit_prompt`、独立负向字段、完整 `planned_request_controls` / `compiled_request_controls`、双 controls SHA、`source_contract_sha256` 与 `submit_prompt_sha256`。manifest 的 freshness snapshot 同时绑定 `_设置.md`、plan、image QC、compiler/capability graph、逐 take prompt 和真实参考文件 SHA。提交端只读 compiled 结构化字段；人工网页操作也必须按 receipt 逐 role 确认实际所用控制和参考。
 

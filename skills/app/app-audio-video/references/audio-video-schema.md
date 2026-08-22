@@ -1,7 +1,7 @@
 # Audio video schema
 
 `app-audio-video/v2` 完全由该独立 skill 维护。旧 `app-audio-video/v1` 与改名前的
-`n2d-audio-video/v1` 与中间命名 `app-n2d-audio-video/v1` 只作为兼容输入读取，
+`n2d-audio-video/v1`、中间命名 `app-n2d-audio-video/v1` 均为 legacy alias，仅用于迁移兼容读取，不是正式 skill 名称，
 迁移时旧 accepted 降为 `machine_complete` 并保留旧证据。
 
 ## 核心字段

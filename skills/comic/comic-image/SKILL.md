@@ -226,7 +226,7 @@ python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画
 ## 不做什么
 
 - 不嵌最终台词，也不画最终气泡；那是 `comic-compose`。旧项目已有空白气泡时，合成或重出图阶段要清理，不能留下无字气泡。
-- 不静默选择付费后端；出图前必须确认模型、渠道、成本和覆盖范围。
+- runner 不得自行创建付费授权；出图前核对与当前项目/stage/input/model/channel/scope/cost 精确绑定的阶段预算包。有效余量内连续执行，不逐格重复确认；缺失、过期、扩大、未知成本或合同变化时 fail closed 并结构化停止。
 - 不跳过 `comic-identity` 的共享参考检查直接生产核心角色高风险面板。
 
 ## 跨话记忆锚消费（2026-07 落地）

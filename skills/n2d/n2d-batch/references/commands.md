@@ -85,7 +85,7 @@ python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --limit 1
 python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --timeout-sec 3600
 ```
 
-runner 默认会在执行前消费 `n2d/run.py next`。`voice/image/video/compose` 始终强制 canonical preflight：任务集与 `frontier.ep/stage_key` 必须完全一致，动作卡必须是 `needs_payment_confirm`，并有任务绑定授权；`next_preflight=false` / `--no-next-preflight` 只影响非生产工具任务。授权检查前还会解析最终命令并从实际 producer 重算请求，不接受 task/config 自报的输入 hash。
+runner 默认会在执行前消费 `n2d/run.py next`。`voice/image/video/compose` 始终强制 canonical preflight：任务集与 `frontier.ep/stage_key` 必须完全一致。v1 兼容路径要求 `needs_payment_confirm` + task-bound authorization；v2 当前绑定与余量 probe 通过时，动作卡必须是 authorized `needs_stage_execution` + 同一 phase envelope；首次安全本地 compose 则必须是 `needs_stage_execution + execution_effect.safe_local_execution=true`，不带付费授权。其它 stop reason 一律不执行。`next_preflight=false` / `--no-next-preflight` 只影响非生产工具任务。授权检查前还会解析最终命令并从实际 producer 重算请求，不接受 task/config 自报的输入 hash。
 
 产物与 `_进度.md` 后置条件默认验证；保留下面的参数用于强调：
 
@@ -105,7 +105,7 @@ python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --dry-run --limit 1
 
 runner 行为：
 
-1. 生产任务先解析最终命令，从 stage producer 重算 canonical input/submit contract，再核对 canonical frontier 并消费与两者绑定的授权；仅 queued 不算授权。
+1. 生产任务先解析最终命令，从 stage producer 重算 canonical input/submit contract，再核对 canonical frontier：v2 先验证 `run.py` 的只读 probe 与 runner 取得的是同一 envelope，随后只由 runner 原子 consume；v1 继续校验 task-bound receipt。仅 queued、配置存在或 supervisor 派发均不算授权。
 2. `claim` 可执行任务，尊重 `max_concurrency`；production task 在同一锁/事务内原子 reserve estimate，超 runtime cap 则转 `blocked_budget`。
 3. 执行 `batch_runner.json.commands[stage_key]` 或 `commands[owner]`。
 4. exit code `0` 后强制验证 output contract/progress，再运行声明的 post gate。
@@ -118,7 +118,7 @@ runner 行为：
 
 - `skills/n2d/n2d-batch/scripts/run_n2d_script_stage2.sh`：刷新分镜定稿、字幕/镜头时长、逐镜意图、导演运镜、锚帧、伏笔/剧情/节拍/前因/奇观/风险审计、事实合同；只跑确定性文本/账本步骤，不出图、不出视频、不消耗积分。
 - `skills/n2d/n2d-batch/scripts/run_n2d_image.sh`：先跑 image_preflight gate；实际生图命令必须由 `N2D_IMAGE_COMMAND` 显式配置，避免 wrapper 猜后端或误花钱。
-- `skills/n2d/n2d-batch/scripts/run_n2d_video.sh`：只用于先跑 identity/router、共享视频物化、video_preflight 与 `prepare`，生成稳定 manifest。不要在同一条获批命令里再设 `N2D_VIDEO_SUBMIT_ONE/AUTO_SUBMIT`：prepare 会在授权 hash 后改变输入，batch 将 fail-closed。应先 prepare，再为精确 manifest + physical clip 的 `video_runner.py submit` 命令单独审批。
+- `skills/n2d/n2d-batch/scripts/run_n2d_video.sh`：只用于先跑 identity/router、共享视频物化、video_preflight 与 `prepare`，生成稳定 manifest。不要在同一条已绑定命令里再设 `N2D_VIDEO_SUBMIT_ONE/AUTO_SUBMIT`：prepare 会改变 canonical input，旧 envelope/授权立即 fail-closed。应先 prepare，再把精确 manifest + physical scope + model/channel + 成本上界写入 v2 阶段预算包；包内 calls 可连续执行，无需逐 Clip 新审批。
 - `skills/n2d/n2d-batch/scripts/run_n2d_compose.sh`：先刷新 `mouth_visible` sidecar、物化共享视频，再跑 compose gate，最后调用 `n2d-compose/compose.sh`。
 - `skills/n2d/n2d-batch/scripts/run_n2d_review.sh`：刷新高动态成片证据、motion reference、review gate、score、consistency ledger 和 review-ui；通过后仍只生成验收证据，不自动回写 `验收=✅`。
 
@@ -142,9 +142,35 @@ N2D_IDEMPOTENCY_KEY
 
 失败会写 `last_error_class`：`preflight_block / capability / budget / timeout / output_contract / configuration / command_failed / unknown`。超过重试上限后任务标 `dead_letter=true`，等待人工处理根因。
 
-### 4.2 Canonical production authorization
+### 4.2 Canonical production authorization（v2 优先，v1 兼容）
 
-`voice/image/video/compose` 每个 task 都要有独立授权收据，放在 `batch_runner.json.production_authorizations[task_id]` 或 task 的 `production_authorization`。收据至少包含：
+v2 phase envelope 是一键付费阶段的默认说明口径：由受信任的人审面调用 `skills/n2d/_lib/spend_envelope.py issue`，默认写 `<作品根>/生产数据/spend_envelopes/<stage>.json`，再由 `batch_runner.json.phase_spend_envelopes[stage|task_id]` 或 task 的 `phase_spend_envelope` 指向/携带。runner 与 supervisor 不能 issue 或扩大。envelope 至少绑定：
+
+```text
+kind=n2d_phase_spend_envelope / version=2 / line=n2d / project_id
+stage / scope / model / channel / input_sha256 / issued_at / expires_at
+attempt_id_semantics=phase_retry_round
+limits.max_calls / limits.max_attempts / limits.cost_ceiling.amount+currency
+approver / approval_reference / source_quote / authorization_digest
+```
+
+```bash
+# 受信任的人审面创建；runner/supervisor 不调用 issue
+python3 skills/n2d/_lib/spend_envelope.py issue <作品根> --stage image \
+  --model '<具体模型版本>' --channel '<具体渠道>' --input-sha256 <canonical-sha256> \
+  --scope-json '<exact-scope-json>' --max-calls 8 --max-attempts 2 \
+  --cost-ceiling 40 --currency work_units --approver '<责任人>' \
+  --approval-reference '<审批记录ID/URL>' --source-quote '<人的原始批准语句>'
+
+# 只读预检，不写消费账；实际 consume 由 runner 完成
+python3 skills/n2d/n2d-batch/scripts/spend_probe.py <作品根> 第1集 image --json
+```
+
+`approver + approval_reference + source_quote` 都必须来自真实 human approval evidence 并进入摘要；`agent:` / `delegate:` / `auto:` / `system:` 不能冒充。`attempt_id` 是**阶段重试轮**，同一轮多个 calls 共享，`max_attempts` 按唯一 round 计数；每个物理调用仍须唯一 `consumption_id`。当前实现以 `task_id:attempt` 作为消费 ID，所以同一 task/round 只能消费一次，多个物理调用应拆成不同 task 或让 task 的 `calls` 一次声明总调用数。
+
+probe/verify 只读；runner consume 后先原子写 `in_flight`。同 consumption ID 重入或任何未完成 reservation 都 fail-closed，不能把账本幂等当 provider 可重放。崩溃后只有原 submit/query 的持久 completion evidence 能 `finalize`；不得换 attempt 免费重提。越 scope/model/channel/input SHA、过期、调用/轮次/费用超限或成本无法给出有限非负上界时，必须停在重新授权前。
+
+v1 `production_authorization` 保持兼容：每个 task/attempt 有独立收据，放在 `batch_runner.json.production_authorizations[task_id]` 或 task 的 `production_authorization`。收据至少包含：
 
 ```text
 version / approval_id / decision / approver / issued_at / expires_at
@@ -154,15 +180,15 @@ execution.command_digest / execution.input_fingerprint
 execution.submit_request_digest / execution.producer_contract_digest
 ```
 
-审批面应调用 `runner.make_production_authorization(task, root=..., resolved_command=..., config=..., ...)` 或实现完全相同的 canonical JSON 摘要算法，不要手填 digest。`task_digest` 绑定 task 内容、估算成本与 `execution`；`attempt` 让收据只能消费一次，付费失败后的 retry 必须重新审批；`authorization_digest` 绑定整张收据并提供 canonical tamper-evident checksum。`approver` 必须能追责；expiry 必须带时区且未过期；model/channel 必须显式声明，无法预知时可用 `any`；estimate 必须与 ceiling 同币种/单位且不超过上限。task、scope、idempotency、最终命令、producer 输入/请求、model/channel 或成本变化后，旧收据立即失配，必须重新审批。
+v1 审批面应调用 `runner.make_production_authorization(task, root=..., resolved_command=..., config=..., ...)` 或实现完全相同的 canonical JSON 摘要算法，不要手填 digest。`task_digest` 绑定 task 内容、估算成本与 `execution`；`attempt` 让收据只能消费一次，retry 仍须新 v1 收据。`authorization_digest` 绑定整张收据并提供 canonical tamper-evident checksum。`approver` 必须能追责；expiry 必须带时区且未过期；model/channel 必须显式声明，无法预知时可用 `any`；estimate 必须与 ceiling 同币种/单位且不超过上限。task、scope、idempotency、最终命令、producer 输入/请求、model/channel 或成本变化后，旧收据立即失配。
 
-这张 SHA-256 收据提供 canonical 防篡改绑定，不把配置 presence 当审批人身份，也不等价于远端数字签名；真实 approver 仍是必填审计主体。
+两版 SHA-256 收据都只提供 canonical 防篡改绑定，不把配置 presence 当审批人身份，也不等价于远端数字签名；v2 还强制保存 approval reference 与人的原话证据。
 
 producer contract 的当前支持边界：
 
 - image：只接受真实 `codex_image_runner.py` / `dreamina_image_runner.py`，按物理 target 重算 compiler paid input fingerprint 与 compiled request SHA；prompt、引用图、registry、设置或实际 model/channel 改动都会让旧授权失效。
 - video：只接受唯一且未过期的 prepared manifest，以及显式 physical clip；按 manifest fingerprint 与 submit snapshot 重算。prompt、首尾帧、duration、adapter registry 或 manifest/clip 改动都会失效。显式 range 对应 manifest 缺失时不回退到别的批。
-- voice / compose：producer 目前没有可纯重算、可在执行边界消费的 prepared request manifest；batch 不会拿 episode prework cache 或泛化文件摘要代替，production 授权暂时 fail-closed。
+- voice / paid compose：producer 目前没有可纯重算、可在执行边界消费的 prepared request manifest；batch 不会拿 episode prework cache 或泛化文件摘要代替，production 授权暂时 fail-closed。唯一例外是 `BGM来源=无`、canonical master 不存在且 resolver 明确判定为 safe local execution 的首次本地 compose：它不花 provider 成本、不消费 envelope，但仍过 output/gate/final signoff；已有任何 canonical master 时不得走该例外。
 
 ### 4.5 单机多 worker 安全（原子认领 + 租约回收 + 断点恢复）
 

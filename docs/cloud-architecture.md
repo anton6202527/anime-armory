@@ -17,7 +17,7 @@
 ```
 
 - 桌面端没有 Supabase Auth、账号状态、上传按钮或上传 IPC。
-- 用户只会看到官方 Demo 的下载入口。
+- 用户只会看到官方 Demo 的下载入口；每个生产系列最多展示一个 Demo，n2d / 制漫剧系列优先展示《那妖魔是姜大人》，同系列其他本地作品不得标成第二个 Demo。
 - R2 Access Key、Secret 和 Cloudflare 登录态只存在于维护者环境，不进入
   Electron renderer、preload、安装包或 Git。
 - 安装包、VSIX 和校验和仍通过 `tools/e2a` 发布到 GitHub Release；Demo ZIP
@@ -58,8 +58,7 @@ https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev
 
 ## 发布 Demo
 
-配置文件：`infrastructure/r2/demos.json`。默认从 `~/LabuTV`（或已存在的旧版 `~/AnimeArmory`）读取配置的
-六个作品。
+配置文件：`infrastructure/r2/demos.json`。默认从 `~/LabuTV`（或已存在的旧版 `~/AnimeArmory`）读取已配置的官方 Demo 包。为兼容已经发布的历史对象，远端 catalog 可以暂时包含同系列多个候选；Electron 在读取后通过 `demoPolicy` 每系列最多选择一个，n2d / 制漫剧优先选择《那妖魔是姜大人》。
 
 ```bash
 # 只构建、安全扫描、压缩和生成 catalog，不操作云端
@@ -73,7 +72,7 @@ node scripts/publish_demos_r2.mjs --only comic
 node scripts/publish_demos_r2.mjs --publish --only '创作区/画漫画/仙界闭关小能手'
 ```
 
-发布器会：
+发布器会执行安全扫描、压缩与不可变发布：
 
 - 通过 `tools/release-safety/demo_safety.cjs` 排除密钥、账号配置、缓存和生成垃圾；
 - 对漫剧 Demo 使用 `first-episode` profile，控制公开包体积；
@@ -113,9 +112,7 @@ npm run typecheck:desktop
 npm run build:desktop
 ```
 
-远端验证至少检查：catalog 与发布产物一致、六个对象 `Content-Length` 与 catalog
-一致、抽取一个对象重新计算 SHA-256，以及空工作区中出现 Demo 下载卡片但不存在
-登录/上传入口。
+现有 `npm run test:demos` 只覆盖本地命名、key、URL、metadata、路径、UTF-8 ZIP 等契约；发布脚本负责上传，不包含完整远端复验。发布后还须按人工验收清单检查：catalog 与发布对象一致、逐对象 `Content-Length` 与 catalog 一致、抽取至少一个远端对象重新计算 SHA-256，并在空工作区做客户端 smoke，确认每系列最多一个 Demo 下载卡片、n2d 优先项为《那妖魔是姜大人》且不存在登录/上传入口。在新增可运行 remote verifier 前，不得把这些人工项目写成自动测试已覆盖。
 
 ## 迁移到腾讯云
 

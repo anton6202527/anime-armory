@@ -37,14 +37,14 @@ description: Given an existing novel (.txt/.docx) — finished or in-progress �
 
 | 场景 | 触发 | 续写策略 |
 |---|---|---|
-| **续编** (sequel) | 原作已完结，在结局后继续 | 自由度大；新故事核心由当前 agent 提议、用户拍板；要给原作结局接一个能延续的钩子 |
+| **续编** (sequel) | 原作已完结，在结局后继续 | 自由度大；agent 生成候选并按伏笔覆盖/末章契合/风险排序；无证据优势或冲突作者意图才停 |
 | **接更** (continuation) | 原作未完结（卡更 / 烂尾 / 太监），从末章继续 | 自由度小；尽量延续原作既定主线轨迹与作者口吻；尊重作者已埋伏笔 |
 
-第 0 步必须问清楚哪种。
+第 0 步先按原作是否完结推导并写回；证据冲突或状态无法判断时才问。
 
 ## 工作流（八步）
 
-> **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 末章状态/伏笔/作者口吻，`direction_spec` = 续写方向候选与用户选定。
+> **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 末章状态/伏笔/作者口吻，`direction_spec` = 续写方向候选与证据化推荐决定。
 
 ### 第 0 步 — 输入
 
@@ -98,23 +98,22 @@ python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> plant --desc "
 
 ### 第 3 步 — 续写方向（最重要 gate）
 
-当前 agent 基于第 2 步给用户 **2–3 个续写方向**，每个方向附：
+当前 agent 基于第 2 步生成 **2–3 个续写方向**，每个方向附：
 - 主线一句话（要解决什么 / 走到哪）
 - **用上的未回收伏笔列表**（必须覆盖 ≥ 50% 的伏笔）
 - 风险点（会不会偏离原作设定 / 文风 / 既定走向）
 
-用户选定一个方向。**不许凭空续编全新故事线——必须根植于原作伏笔**。
-选定方向后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：续写核心题旨、新章节必须回答的问题、读者承诺、要回收/延迟的伏笔、文学质感和禁偏清单。尤其写清“哪些新故事可以开，哪些会脱离原作末章状态”。
+默认采用伏笔覆盖率、末章状态契合度和风险证据最强的方向并落档；无证据优势或与作者意图冲突时才停。**不许凭空续编全新故事线——必须根植于原作伏笔**。随后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：续写核心题旨、新章节必须回答的问题、读者承诺、要回收/延迟的伏笔、文学质感和禁偏清单。尤其写清“哪些新故事可以开，哪些会脱离原作末章状态”。
 
 ### 第 4 步 — 新章纲
 
 **先按 `novel-craft/references/split.md` 反推总章数 / 字数分档**（按 target_platform；漫剧友好 ≠ 网文长篇）；然后引用 `novel-craft/references/outline.md` + `continue.md` 编织章纲。每章一行 outline，含：本章主要伏笔回收 / 新冲突 / 新角色（如有，不可主导主角线）/ 钩子。
 
-### 第 5 步 — Demo（前 2–3 章）+ 用户审
+### 第 5 步 — Demo（前 2–3 章）+ 独立审阅
 
 引用 `novel-craft/references/chapter.md` + `continue.md`。
 
-**续写 Demo 比扩写 / spinoff Demo 都敏感**——第一章直接决定读者是否相信"这是同一本书的下一章"。文风 / 口吻 / 人物状态必须严丝合缝。每章独立审，过了才进下一章。
+**续写 Demo 比扩写 / spinoff Demo 都敏感**——第一章直接决定读者是否相信"这是同一本书的下一章"。文风 / 口吻 / 人物状态必须严丝合缝。每章由与 writer 分离的 reviewer 独立审，默认 specialist 审阅通过后连续推进；显式逐阶段人审才停。
 Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`）；`status != passed` 不继续写余下章节。后续子任务必须喂 `style_anchor` / `reader_promises` / `setting_constraints`。
 
 ### 第 6 步 — 续余下新章节
@@ -176,7 +175,7 @@ python3 skills/novel/novel-craft/scripts/export.py "<作品根>" --formats txt,d
 | 续编时凭空开新故事线 | 必须根植原作未回收伏笔 ≥ 50% |
 | 接更时改了作者已埋的伏笔走向 | 接更要尊重作者既定轨迹；要改就用续编模式 |
 | 文风漂移 | 子代理 prompt 必塞原作末 1-2 章作锚点 + 作者口吻卡 |
-| 续写 Demo 没逐章审 | 续写比 spinoff 更敏感；Demo 必逐章独立审 |
+| 续写 Demo 没逐章独立审 | 续写比 spinoff 更敏感；Demo 必由独立 reviewer 逐章签收，默认代理审阅可连续推进 |
 | Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，未回收伏笔和人物状态会漂 |
 | 大段复刻原作 | 仅可在续写章里**简短回顾**（一两句），不大段引 |
 | 把新角色推到主角位 | 续写不是改写主角；原主角必须仍是主角 |

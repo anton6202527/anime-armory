@@ -63,6 +63,12 @@ curl http://127.0.0.1:43118/api/v1/ai/models
 
 skill run 当前用内存队列并通过 cliproxy GPT 文本模型返回 text artifact；进程重启后任务不会保留。后续接入持久 job worker 时，REST 契约可保持不变。
 
+## 画布产物语义
+
+后端任务的 `succeeded` 只表示本次 runner 或 provider 正常产出机器结果，不等于当前像素已被真人接受，也不等于最终成品完成。画布生产合同由正式 skill ID `app-script-workbench`、`app-character-turnaround`、`app-first-frame-video` 和 `app-audio-video` 定义；旧 ID 仅供 legacy migration 读取，新任务必须使用正式名称。
+
+生产工作台的目标合同以每个 episode/workflow 实例一个生产状态、每个权威对象一个 canonical 内容 SHA-256、每个交付单元一个完成定义为准。当前内存队列后端尚不持久化逐图/最终回执，也不负责把 Web 工作台推进到 complete；它只能返回机器产物，后续接入时最多写入绑定当前真实字节的 `machine_complete` 证据。逐图验收必须由具名真人查看当前像素，以带时区回执绑定当前 artifact 精确 SHA-256，最终母版另需一份显式真人最终验收；服务端不得合成或代签这些回执。
+
 ## 验证
 
 AI provider 在测试中注入 fake，不会真实调用或消耗模型：

@@ -17,7 +17,9 @@ description: Default final-delivery stage of n2d — maintain an OpenTimelineIO 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则由 producer-owned 推荐器选一个安全默认并以 `source=auto_recommended` 写回，同项目之后沉默沿用；仅 `普通选择策略=逐项询问` 时才展示菜单。合规、不可逆、付费与最终验收仍每次确认。
+本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则由 producer-owned 推荐器选一个安全默认并以 `source=auto_recommended` 写回，同项目之后沉默沿用；仅 `普通选择策略=逐项询问` 时才展示菜单。阶段预算包创建/扩大/失效、合规、不可逆覆盖与最终验收仍显式确认。
+
+**首次安全本地合成自动继续**：`BGM来源=无`、compose gate 已过且 canonical master 尚不存在时，本地 ffmpeg 合成不产生 provider 花费，也不消费 spend envelope，`run.py` 可直接返回 `needs_stage_execution`。这不是覆盖授权：只要 working/未验收/已验收 canonical master 已存在、acceptance receipt 损坏，或 canonical resolver 无法证明目标，均 fail-closed 停在人审；不能仅因“尚未最终验收”就覆盖已有母版。新母版产出后仍必须走 compose/review gate、canonical release verdict 与最终具名签收。
 
 本 skill涉及的选择点：`合成阶段`、`合成缓存保留`、`BGM来源`、`画幅`、`制作模式`、`视频原生音轨`、`后期拟音策略`、`目标平台`、`发行地区`、`合规用途`。混合模式还必须消费逐镜 `audio_strategy/final_voice_stage/post_lipsync_required`，不能只凭项目级模式决定音轨。平台与合规仍以 `合规/compliance_manifest.json` 为准。
 

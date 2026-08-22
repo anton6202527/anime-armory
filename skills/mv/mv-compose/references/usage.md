@@ -47,3 +47,7 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 
 ## 进度回写
 正式母版、交付 MP4、逐输入色彩清单与 delivery QC 全部通过后，`completion.py` 才回写 `_进度.md` 的「合成成片」行。之后按独立阶段依次生成 AI 使用披露与 provenance；它们各有自己的完成收据，不能反向冒充 compose 证据。fallback 预览永不推进任何正式阶段。
+
+## 连续执行边界
+
+正式输入、timeline/OTIO、picture lock 和当前视频选择收据齐备时，外层可自动调用本确定性 compose 与 delivery QC，不在每个免费步骤之间询问是否继续。`mv_compose.sh` 只负责合成和交付检查，不是完整 MV batch，也不替人签最终成品或执行发布；当前母版验收、不可逆覆盖/发布仍必须停。

@@ -1,7 +1,8 @@
 # Script workbench v3 schema
 
 `app-script-workbench/v3` 是画布故事制作的独立真值格式，不是任何系列的 storyboard。
-旧 `app-script-workbench/v1/v2` 与改名前的 v1 可读；迁移保留路径、SHA、job 和旧回执作
+旧 `app-script-workbench/v1/v2`、`n2d-script-workbench/v1` 与中间命名
+`app-n2d-script-workbench/v1` 均为 legacy schema alias，仅用于迁移兼容读取，不是正式 skill 名称或新状态格式；迁移保留路径、SHA、job 和旧回执作
 可恢复证据，但旧 `accepted/complete` 一律 fail closed：最多降级为 `machine_complete`，
 必须重新取得符合 v3 的真人回执。
 

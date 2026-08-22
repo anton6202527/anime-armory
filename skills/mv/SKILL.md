@@ -1,12 +1,12 @@
 ---
 name: mv
-description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续补入定稿歌，再重跑卡点与正式 timeline）。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
+description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频；外层 agent 在已有最终音频时应显式传入并持久化先传音乐路线（按真实 beatgrid 卡点），只有企划/歌词草稿时应显式传入后配歌曲路线（先做 rough 视觉蓝图，补入定稿歌后重跑卡点与正式 timeline）。底层 init CLI 不自行推断该选择，未传时仍采用兼容默认“先传音乐”。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1302 | 目录文本总行数 47076
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1306 | 目录文本总行数 47088
 
 # mv — 制MV 生产线 · 总调度
 
-把**一首歌或歌曲企划**做成 AI 音乐 MV 视频。**产物 = `创作区/制MV/<曲名>/成片_MV.mp4`**。开跑先确认 `歌曲输入时序`：
+把**一首歌或歌曲企划**做成 AI 音乐 MV 视频。**产物 = `创作区/制MV/<曲名>/成片_MV.mp4`**。外层 agent 应按现有输入确定 `歌曲输入时序`，并在调用 `init_project.py` 时显式传 `--song-timing` 使其持久化；底层 CLI 本身不检查“有没有音频”来自动改默认：
 - **先传音乐**：用户已有成品歌/音频，先入 `歌/song.*`，再用真实 beatgrid 卡点，这是正式 MV 推荐路径。
 - **后配歌曲**：用户还没最终音频，先做视觉蓝图 rough；等用户补入成品歌后，必须再跑 `mv-beat`，用真实节拍重算 `mv-plan`，再出图/视频/合成。
 
@@ -16,11 +16,15 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读项目值、全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。版权/肖像/品牌合规、当前像素或当前 take、picture lock、最终成品验收、不可逆发布/覆盖，以及阶段预算包创建、扩大、过期或合同变化才停。
 
 本 skill 涉及的选择点：`MV用途`、`歌曲输入时序`、`MV视觉风格`、`MV规划粒度`、`卡点策略`、`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`生图模型`、`生图渠道`（旧 `生图AI` 仅兼容）、`MV一致性增强`、`出视频规格`、`演唱口型`、`字幕语言`、`合成画幅`、`AI视觉使用披露`、`发行目标平台`。
 
-> 作为生产线入口：开新曲（`创作区/制MV/<曲名>/`）时先问 `歌曲输入时序`（先传音乐 / 后配歌曲）和 `MV视觉风格` 等影响创作顺序/视觉方向的选择，再初始化 `<作品根>/_设置.md`。若用户已经给音频，可默认建议“先传音乐”；若用户只有歌名/歌词/视觉想法，可建议“后配歌曲”。视频后端不在立项时强问：`生视频模型` / `生视频渠道` 只在用户明确固定、账号/交付只能单后端、或 mv-video 探测不到可执行入口时再问并覆盖落档。旧 `生视频AI` 只作兼容 fallback。
+> 作为生产线入口：外层 agent 开新曲（`创作区/制MV/<曲名>/`）时，若已有最终音频，调用 init 时显式传 `--song <文件> --song-timing 先传音乐`；只有歌名/歌词/视觉想法时显式传 `--song-timing 后配歌曲`。直接调用 CLI 而不传该参数会沿用兼容默认 `先传音乐`，不能把它描述为自动识别。`MV视觉风格` 等普通缺项采用推荐值并写回。视频后端不在立项时强问：`生视频模型` / `生视频渠道` 由可用 adapter/渠道偏好解析；只有探测不到可执行入口或输入证据冲突、会改变作品合同时才问一个最小问题。旧 `生视频AI` 只作兼容 fallback。
+
+> **当前 setup 导航限制**：`mv/run.py next --json` 只可作为**已初始化项目**的前沿导航。缺 `_进度.md` 时它当前返回的 setup `exact_command` 是 legacy 占位，既缺 `--title`，也把作品根误放成位置参数，不能直接执行。新项目必须由外层 agent 先运行 `python3 skills/mv/scripts/init_project.py --title "<曲名>" --out "<作品根>" [--song "<音频>"] --song-timing 先传音乐|后配歌曲`；初始化成功后才交回 `run.py next`。在 runtime 修正前，文档不得把 missing-project setup card 描述成可自动 chain。
+
+**连续执行边界**：本线没有完整 `mv-batch` / supervisor。项目初始化后，调度 agent 可消费 `mv/run.py next --json`，在同一任务自动串联免费确定性脚本和现有 `mv-*` 阶段；缺项目时先按上方完整 init 命令初始化，不消费 legacy setup card。不得把 next-action 导航冒充会自动提交 provider、替人审当前像素/视频、签 picture lock 或发布。若实际调用层已有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算授权，余量内不逐图、逐 clip 重复确认；缺失、扩大、过期或合同变化才结构化停止。
 
 ## 作品根约定
 ```
@@ -71,7 +75,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 要卡拉OK字幕 | `mv-lyric-sync` |
 | 素材齐了要合成成片 | `mv-compose` |
 | 审 MV / 卡点对账 / 字幕检查 / 成片体检 / 流程自审 | `mv-review`（成品后审，出定位报告） |
-| 给了 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | `mv-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步）；要机器可消费的下一步卡（前沿+gate+停因+收据健康度）跑 `python3 skills/mv/run.py next <作品根> --json` |
+| 给了已初始化的 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | `mv-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步）；要机器可消费的下一步卡（前沿+gate+停因+收据健康度）跑 `python3 skills/mv/run.py next <作品根> --json`。缺 `_进度.md` 时不用其 legacy setup command，先按上方完整 init 命令初始化 |
 | 改了某个 clip 的图/prompt/剪辑决定，问下游要重做什么 | `python3 skills/mv/run.py impact <作品根> --clip Clip_00N --change image\|prompt\|edit`（确定性返工级联清单，只读） |
 | 问 skill 更新是否影响本 MV / 要返工计划 / 重审重评前先看范围 | `mv-update`（只写更新影响计划和基线，不改素材/视频/进度） |
 
@@ -81,12 +85,12 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 > 每阶段“凭什么通过、谁签、失败回哪一级”的单一说明见 `mv-craft/references/production-standards.md`。导演视角负责创意与镜头，但剪辑、音乐时间、连续性和交付 QC 是独立责任维度，不能合并成一句“专业导演已看过”。
 
-> **编排入口**：agent 跑流程时优先消费 `python3 skills/mv/run.py next <作品根> --json` 的结构化 NextAction（frontier + 登记制 stop_reason + gate 结果 + 已 done 付费阶段的收据健康度巡检），而不是仅凭 `_进度.md` 文本自觉选下一步；`_进度.md` 标 done 但 hash 链已失效的“假 done”会被 `stale_receipts` 主动揪出。run.py 只读不写、不代跑付费阶段。
+> **编排入口**：已初始化项目优先消费 `python3 skills/mv/run.py next <作品根> --json` 的结构化 NextAction（frontier + 登记制 stop_reason + gate 结果 + 已 done 付费阶段的收据健康度巡检），而不是仅凭 `_进度.md` 文本自觉选下一步；`_进度.md` 标 done 但 hash 链已失效的“假 done”会被 `stale_receipts` 主动揪出。run.py 只读不写、不代跑付费阶段；缺项目时的 setup card 当前不是可执行真值，必须先显式调用 `init_project.py --title ... --out ... --song-timing ...`。
 
 > **mv-image/mv-video 是 mv 自己的视觉 skill**。两层定妆、尾帧接力、出图前一致性包和视频动作模板化都在 mv 家族内自持。
 
 > **MV 版一致性边界**：除身份、主色、画风和母题外，还锁状态变体、服装/道具状态、场景拓扑、屏幕方向/视线、动作速度/相位、光线方向、字幕安全区、色彩管理、主歌轨 hash 与交付来源链。主角/主唱最严，段落场景中等，特效转场最宽松。
-> **MV 出图一致性增强**：组图前 `mv-image` 必须提示 `MV一致性增强` 四档：共享定妆+锚点（默认）、指定参考图、后端主体库、+LoRA。MV 不默认训练 LoRA；只有用户已有或明确授权的 LoRA 资产才接入。
+> **MV 出图一致性增强**：组图默认采用并持久化 `共享定妆+锚点`；用户已提供参考图、主体库或明确授权的 LoRA 时登记相应档位。MV 不默认训练 LoRA，普通缺项不为展示四档菜单而停。
 
 > **MV 动作/运镜知识库**：炫酷动作优先从 `mv-video/references/action_knowledge.md` 选动作家族，运镜优先从 `mv/references/运镜/manifest.json`（48 条，含新增的探针穿越微距/机身固定/越肩推/一镜到底/鸟瞰俯降/仰角英雄推等）选结构化词并查看本地五帧 contact sheet，再写进 `clip_plan.json` 的 `action_family/action_peak/visual_motif/transition_motif/shot_design.camera_movement`。只有需要判断运动节奏/轨迹时才运行 `python3 skills/mv/scripts/camera_reference.py fetch <运镜ID或名称>`，按 SHA-256 下载远端动画；断网不阻断规划。原则是“一 clip 一个主动作 + 一个主运镜，动作峰值踩 beat/downbeat”，避免空泛写“炫酷运镜”。
 >

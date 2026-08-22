@@ -39,7 +39,7 @@ description: 拍广告 第2阶段·脚本 + 第4阶段·分镜（配音后回跑
    python3 skills/ad/ad-script/finalize_storyboard.py "<作品根>" --master 30s --json "<作品根>/脚本/镜头时长.json"
    ```
    对账总时长/单镜 VO/强制项/接缝/占位 VO；另用 `claim_presentation_check` 验 claim→镜头→披露关系、来源文字、同屏/紧邻、计划字高/停留、对比与版位复核字段。结构缺失 block；内部 12 字符/秒与 3% 字高只发 WARN，不冒充法定数值。完整依据见 ad-craft `production-standards.md`。
-4. 0 block 后回写 `_进度.md` 分镜 ✅，提示下一步 `ad-image`（⚠️ 花钱 gate：确认具体 `生图模型`+`生图渠道`/一致性增强，并补齐 brief 可延后合规项）。
+4. 0 block 后回写 `_进度.md` 分镜 ✅，提示下一步 `ad-image`（⚠️ 花钱 gate：由 provider runner 核验具体 `生图模型`+`生图渠道`、一致性增强和 exact 阶段预算包；已有有效余量不重复确认，brief 合规缺口仍必须先补齐）。
 
 ## 编剧轴 advisory 机检（"审"不是"门"·全部只提示不阻断）
 

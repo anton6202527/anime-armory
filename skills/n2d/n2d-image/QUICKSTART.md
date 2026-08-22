@@ -10,6 +10,11 @@ Gate:
 python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight
 ```
 
+One-click authorization:
+- `run.py`/supervisor only probes the current phase envelope; the exact `n2d-batch` runner is the only consumer.
+- The v2 envelope binds the current image scope, concrete model/channel, canonical input SHA, expiry, call/retry-round limits and cost ceiling. Unknown cost, expiry, exhaustion or any binding change blocks before provider submit.
+- One envelope removes repeated payment prompts, not per-target QC: each generated image still needs current-pixel inspection and a hash-bound accept before the next target.
+
 Required outputs:
 - `出图/共享/prompt/00_索引.md`
 - shared reference PNGs in `出图/共享/图片/`
@@ -33,3 +38,4 @@ Notes:
 - Full Markdown is the production contract, not the model request. Codex and Dreamina runners only consume `image_prompt_compiler.py` output; the gate blocks stale hashes, wrong backend/task profiles, aspect conflicts, internal-path leakage and dangling reference indexes. See `references/image_prompt_compiler.md`.
 - To calibrate profiles from real outcomes, register an explicit fixed-horizon A/B and run `python3 skills/n2d/n2d-image/scripts/image_prompt_metrics.py report <作品根> --write`; untagged version cohorts are observational only.
 - After PNGs are landed, run `dashboard.py gate <作品根> 第N集 --stage image` for the post-generation image gate.
+- After an ambiguous crash window, do not rerun submit: recover the original provider job and finalize the existing `in_flight` consumption with durable query/completion evidence.

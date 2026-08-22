@@ -13,7 +13,7 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器采用安全默认并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；声音克隆/参考音授权、付费、合规与最终验收仍每次确认。
+本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`；缺失的普通可逆项由 producer-owned 推荐器采用安全默认并继续，用户已有值永不覆盖。仅 `普通选择策略=逐项询问` 时才展示菜单；声音克隆/参考音授权、阶段预算包创建/扩大/失效、合规与最终验收仍显式确认。当前 voice producer 尚无可纯重算的 prepared canonical manifest 时，production runner 会 fail-closed，不拿自动推荐冒充付费授权。
 
 本 skill 涉及的选择点：`配音后端`、`制作模式`、`合规用途`。默认 `制作模式=混合自动路由`：制作先后顺序由每个镜头的声音策略决定，不再给整个项目强制套同一种顺序。声音克隆/参考音授权不是普通偏好，必须同时写入 `合规/compliance_manifest.json`。
 

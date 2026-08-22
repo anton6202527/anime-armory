@@ -13,7 +13,7 @@ description: 写小说(novel) skill 更新影响扫描与最小文本返工计�
 2. 读取上次记录的 novel skill 内容快照；快照是文件内容 SHA256 表，不依赖版本控制。
 3. 对比当前 `skills/novel*` 相关文件，找出变化属于正文生产、审稿、评分、导出，还是只影响控制台/进度/调度。
 4. 生成最小返工计划：从最早受影响阶段回放，最多只到项目已到达的阶段；尚未开始的未来阶段不要求返工。
-5. 把计划写到 `生产数据/novel_skill_update_plan.json` 和 `.md`，等用户确认后再交给对应 novel skill 或 `novel-batch` 执行。
+5. 把计划写到 `生产数据/novel_skill_update_plan.json` 和 `.md`，供外层自动派发免费、可逆且不覆盖已验收文本的步骤；本 skill 自身仍只写计划。
 
 ## 输入 / 输出 / 读写边界
 
@@ -68,7 +68,7 @@ python3 skills/novel/novel-update/scripts/update_plan.py check "<作品根>" --j
 - 是否有 QA gate 阻断；
 - 下一步是否先备份正文、重跑 review/score/export，或只 `record` 接受当前基线。
 
-用户确认返工后再调用对应 skill 或 `novel-batch`。返工验收通过后，必须跑：
+外层可直接调用对应 skill 或 `novel-batch` 执行免费、可逆且已有备份/新版本路径的计划；若会改变核心作者意图、覆盖已验收文本、触及权利/合规、不可逆发布、最终验收或预算合同变化，才结构化停止。返工验收通过后，必须跑：
 
 ```bash
 python3 skills/novel/novel-update/scripts/update_plan.py record "<作品根>"
@@ -78,6 +78,6 @@ python3 skills/novel/novel-update/scripts/update_plan.py record "<作品根>"
 
 | 错误 | 纠正 |
 |---|---|
-| `check` 发现变化就直接改稿 | 本 skill 只产计划；改稿前必须确认范围并保留当前文本 |
+| `check` 发现变化就直接覆盖改稿 | 本 skill 只产计划；外层默认保留当前文本，覆盖已验收内容或改变作品合同才停 |
 | 把未来阶段变化当成立刻返工 | 未来阶段尚未产物化，只提示后续使用新 skill，不要求现在重跑 |
 | 无基线时认为没有风险 | 普通 `check` 会提示 `needs_record=true`；只有显式 `--bootstrap` 才建立临时基线，确认现状后应立即 `record` |

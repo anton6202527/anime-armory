@@ -19,8 +19,8 @@
 | `script` | concept 当前有效 | 脚本、VO、时间轴可解析；广告法报告当前且 0 block | 三文件非空；`广告法机检报告.summary.block=0` | `ad-script` 删改/补法务依据 |
 | `voice` | voiceover 锁定 | 每句真实音频、voice key、实测秒数和整轨一致 | formal 无占位；`voice_qc` full precision、0 block | `ad-voice` 重录/重导 |
 | `storyboard` | 真 VO 时长可用 | 唯一镜号、正时长、总时长、VO、强制项、接缝和 claim 披露通过 | `镜头时长.json` 0 block；claim_id 与披露呈现合同闭合 | `ad-script` 重排分镜/披露 |
-| `image` | storyboard 已验；付费确认 | 逐 job 串行完成 preflight→真实提交/收集→full product QC→绑定当前输出 SHA 的六项具名人审 | 每个非取消 job `image_job_receipt.status=accepted`；下一 job 不得越过未签收前序 | `ad-image` 补参考/QC/人审或重出当前图 |
-| `video` | image 已验；付费确认 | prompt、输入帧、模型路由与实际请求绑定当前 render profile；回收媒体实测；clip 技术/接缝通过 | job/profile SHA 当前；requested 与 ffprobe `observed_output` 均符合 `source_generation`；`contract_inheritance`、`video_qc` full、0 block | `ad-video` 修规格、clip/接缝 |
+| `image` | storyboard 已验；exact 阶段预算包有效 | 逐 job 串行完成 preflight→真实提交/收集→full product QC→绑定当前输出 SHA 的六项具名人审；包内不重复付费确认 | 每个非取消 job `image_job_receipt.status=accepted`；下一 job 不得越过未签收前序（B14） | `ad-image` 补参考/QC/人审或重出当前图 |
+| `video` | image 已验；exact 阶段预算包有效 | prompt、输入帧、模型路由与实际请求绑定当前 render profile；回收媒体实测；clip 技术/接缝通过；未知保守成本上界不提交 | job/profile SHA 当前；requested 与 ffprobe `observed_output` 均符合 `source_generation`；`contract_inheritance`、`video_qc` full、0 block | `ad-video` 修规格、clip/接缝 |
 | `compose` | video 已验 | adaptation approved 且 actual execution receipt 当前；每件符合 `master_render` 并通过技术、色彩、最终像素文字、ASR、无障碍和 provenance | adaptation plan/item + actual mode + 输入/输出/profile SHA 对账；delivery QC 绑定当前 plan/media/profile/adaptation；容器放大只能写 `container_upscale_only`，原生要求不足则 block | 原生重剪/重做、获准机械裁切或对应版本重导 |
 | `handoff` | 全部交付件已定 | locale 与逐变体链闭合；AI 标识/商业披露双收据和 formal campaign readiness 均当前 | locale/provenance/release variant/readiness 0 block；`compliance_manifest.release_ready=true` 且全部证据 SHA 当前 | 发布方/法务/本地化/measurement 负责人补证 |
 | `review` | handoff 已验 | M0 当前；最终 clip/交付件逐镜首中尾帧 contact sheet 与机器不可判项由具名人员逐项签收 | M0 0 block；全部媒体、逐资产 contact sheet、人工证据 SHA 当前；上游依赖收据 current | 只回 stale 节点或补审片 |

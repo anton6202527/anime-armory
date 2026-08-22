@@ -15,7 +15,7 @@ description: 制漫剧(n2d) skill 更新影响扫描与重制计划器（含少�
 3. 重算当前 `skills/` 相关文件内容 SHA 并与基线 `files` 表逐项比对，hash 不同即变更，找出改过的 skill。（旧版 git 派生基线只有 `git_commit`、无内容表，读到时提示用户重新 `record` 建立内容基线。）
 4. 生成“从哪一阶段回放、最多重制到哪一阶段、哪些产物需要 diff/复核”的计划。
    - 同时单独写出**当前生产缺口**：即便更新影响上界因已有视频产物算到 `video`，也要从 `_进度.md` 首个未完成项补出“当下该做什么”（如 `出图 69/85 → n2d-image`），避免 update 计划把真实生产前沿藏掉。
-5. 付费/不可逆步骤只给计划和队列建议，必须等用户确认后再交给对应 stage skill 或 `n2d-batch`。
+5. 本 skill 只给计划和队列建议，不亲自执行；若目标阶段已有精确匹配且有效的阶段预算包、输出走版本化/可恢复路径且不改变核心合同，调度 agent 可在同一任务直接交给对应 stage skill 或 `n2d-batch`。预算包缺失/扩大/过期/绑定变化，或会不可逆覆盖/发布时才等用户确认。
 
 除了 skill 变更，`check` 还跑**四项产物健康检测**（写进计划 `source_drift`/`three_frame_compliance`/`image_consistency`/`contract_inheritance`，CLI 打 `health:` 行）：
 
@@ -121,7 +121,7 @@ python3 skills/n2d/n2d-update/scripts/update_plan.py check <作品根> <集号> 
 
 > 相关 n2d skills 已变化。当前第N集走到 `<target_stage>`，建议只重制到这个阶段；我已生成计划，是否按计划执行？
 
-用户确认后，再按计划调 `n2d-batch` 或对应 stage skill。
+计划生成后，由调度 agent 核验目标阶段预算包和覆盖策略：授权仍精确有效且返工可恢复时直接按计划调 `n2d-batch` 或对应 stage skill；否则合并说明缺失/扩大/过期的预算与不可逆影响，取得确认后再执行。
 
 ## 输出解读
 
@@ -150,7 +150,7 @@ python3 skills/n2d/n2d-update/scripts/update_plan.py check <作品根> <集号> 
 
 ## 完成后 · 详列下一步（收尾必做 · 只提示不自动跑）
 
-`check`/`media` 跑完后，**把计划念给用户**——重制要花钱/覆盖产物，必须等用户确认再交 `n2d-batch` 或对应 stage skill 执行（见 `n2d` SKILL 情境 D）：
+`check`/`media` 跑完后，**把计划摘要纳入下一动作卡**——重制若已有精确匹配的阶段预算包且旧产物版本化归档，可在同一任务交 `n2d-batch` 或对应 stage skill 执行；缺授权、扩大范围、合同变化或不可逆覆盖时，才把合并后的影响交用户确认（见 `n2d` SKILL 情境 D）：
 
 ```
 第K集 skill 更新影响检查完成：
@@ -171,6 +171,6 @@ python3 skills/n2d/n2d-update/scripts/update_plan.py check <作品根> <集号> 
 
 | 错误 | 纠正 |
 |---|---|
-| 不等用户确认直接开跑重制 | 本 skill 仅提供最小范围的“重制计划”。实际运行必须先跟用户沟通，再交由 `n2d-batch` 执行 |
+| 生成计划后无条件停下来问“是否继续” | 本 skill 仅提供最小范围计划；调度 agent 应先核验精确阶段预算包与版本化覆盖策略，有效则同任务交 `n2d-batch`，只有授权或不可逆边界不满足才停 |
 | 把更新提醒当成生产故障 | `rebuild_needed=true` 只是提示 skill 有新逻辑升级，并不意味着旧产物已经坏掉 |
 | 重制前没有先清理原产物 | 要提醒执行方先移除或归档将被替换的“废料”，以防发生重叠或残留 |

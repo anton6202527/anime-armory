@@ -1,6 +1,6 @@
 ---
 name: n2d-progress
-description: 制漫剧(n2d)「当前进度仪表盘 + 下一步建议」（只读 QA，不生产内容）。只扫描制漫剧作品根的 `_进度.md` 逐集流程矩阵，压缩汇总每部剧的完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，并给出可一键继续的建议；出图/出视频/合成/配音等花钱·不可逆·合规步骤会先提醒确认。不改任何文件。Use when the user wants an n2d/漫剧 status overview or asks "what's next" for a 漫剧 project. Triggers progress, checklist, check, status, 当前进度, 进度, 进展, 漫剧进度, 到哪了, 到哪一步, 下一步, 下一步做什么, 还差什么, 还差啥, 卡在哪, 看进度, 查进度, 进度查询, 接着做, n2d-progress.
+description: 制漫剧(n2d)「当前进度仪表盘 + 下一步建议」（只读 QA，不生产内容）。只扫描制漫剧作品根的 `_进度.md` 逐集流程矩阵，压缩汇总每部剧的完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，并给出可一键继续的建议；付费步骤交给 run/batch 核验现有阶段预算包，硬边界仍提醒确认。不改任何文件。Use when the user wants an n2d/漫剧 status overview or asks "what's next" for a 漫剧 project. Triggers progress, checklist, check, status, 当前进度, 进度, 进展, 漫剧进度, 到哪了, 到哪一步, 下一步, 下一步做什么, 还差什么, 还差啥, 卡在哪, 看进度, 查进度, 进度查询, 接着做, n2d-progress.
 ---
 
 # n2d-progress — 漫剧进度仪表盘 + 下一步建议
@@ -83,12 +83,12 @@ n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → `n2d-voic
 ## 给建议时的闸门提醒（必带）
 
 下一步若落在这些列，转述时**务必带上提醒**（脚本对 出图/视频/成片/配音/验收 已自动加 ⚠️）：
-- **出图**：先过「共享先行硬闸门」——分镜 PNG 前 `出图/共享/图片/` 的定妆库必须全部 ✅（看 `出图/共享/prompt/00_索引.md`）。并建议先跑 `python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight`（正式生图前入口，底层调 `n2d-review/scripts/gate.py --json` 并记 QA 遥测）：它会拦「storyboard.json 缺 visual_contract 视觉契约种子 / 本集总览缺契约（色调·光位·轴线·状态·景别）」——跨镜一致性的源头，缺了花钱出图也会漂。会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位。
-- **出视频 / 成片**：消耗额度 / 耗时 → 开跑前确认后端（正式出视频前先跑 `dashboard.py gate <作品根> 第N集 --stage video_preflight`；合成前跑 `--stage compose`。video_preflight 查导演一致性契约、模型路由、尾帧/PNG、动作控制；compose 查时长对账）。
+- **出图**：先过「共享先行硬闸门」——分镜 PNG 前 `出图/共享/图片/` 的定妆库必须全部 ✅（看 `出图/共享/prompt/00_索引.md`）。并建议先跑 `python3 skills/n2d/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight`（正式生图前入口，底层调 `n2d-review/scripts/gate.py --json` 并记 QA 遥测）：它会拦「storyboard.json 缺 visual_contract 视觉契约种子 / 本集总览缺契约（色调·光位·轴线·状态·景别）」——跨镜一致性的源头。会真出图、消耗额度时交 `run.py`/`n2d-batch` 核验 exact 阶段预算包；已有有效余量就直接执行，缺包或 binding 变化才一次报盘。
+- **出视频 / 成片**：正式出视频前先跑 `dashboard.py gate <作品根> 第N集 --stage video_preflight`，付费调用同样先核验阶段预算包；合成前跑 `--stage compose`。无 BGM 且 canonical master 不存在的首次本地合成可自动执行；已有任一 working/未验收/已验收母版时仍按不可逆覆盖硬停。
 - **验收**：不生产新内容，但会刷新 review gate、score、consistency ledger、review-ui。`needs_acceptance_signoff` 只表示机器证据已通过，仍需人工确认后回写 `_进度.md`「验收」列。
 - **配音**：合规闸门（音色授权），每次都要确认，绝不绕过。
 
-这些是**花钱/不可逆/合规**点，按 `skills/n2d/references/选择点与偏好.md` 属于「每次都重新确认」类——即便 `_设置.md` 记过也要再确认一次。
+这些边界分两类：付费 image/video 在 exact v2 阶段预算包内连续执行，不逐调用确认；包缺失、过期、超额、成本未知或 input/model/channel/scope 变化才重新授权。声音授权、当前像素、最终母版验收、不可逆覆盖与公开发布仍是 human-only 硬边界，不能由设置或预算包替代。
 
 ## 可并行事项（有就带一条）
 
@@ -96,14 +96,14 @@ n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → `n2d-voic
 
 - 优先选择其它已开工集的次要缺口；没有时，选择下一集 raw 已就绪但未开工的第一个阶段，通常是 `n2d-script` 剧本改编/物料前期。
 - 优先推荐低成本前期（`n2d-script`、检查、计划类），可和当前集的出图/出视频/合成等待时间重叠。
-- 若可并行项本身也是出图/视频/配音/成片等花钱、不可逆或合规步骤，只能说“可并行但需单独确认”，不要自动开跑。
+- 若可并行项本身也是出图/视频等付费步骤，交 runner 核验该阶段自己的 exact envelope；已有有效余量可继续，不能拿另一阶段/另一集的包通用。配音授权、不可逆母版覆盖或最终验收仍需单独 human gate。
 - 不为了“并行”破坏依赖：同一集内部仍按 stage gate 和 `_进度.md` 前沿走；跨集共享定妆/身份/资产库变化会影响下游时，先提示可能触发重制。
 
 ## 输出给用户的格式
 
 简洁、可执行。每部有进展的剧给一行结论 + 下一步；多部剧时把"最该推进的"排前面。结尾给**一个最具体的下一步**并问要不要现在跑，例如：
 
-> 下一步：**看花胖子 第1集 出图**（共享定妆库还差 13 张未生）。要现在进 `n2d-image` 先生定妆库吗？这步会真出图、消耗额度，开跑前我会确认生图后端和重抽档位。
+> 下一步：**看花胖子 第1集 出图**（共享定妆库还差 13 张未生）。进入 `n2d-image` 后先核验共享定妆 gate 与本阶段 exact 预算包；已有有效余量就连续生成，缺包或 binding 变化才汇总一次授权缺口。
 > 可并行：**看花胖子 第2集 剧本改编/物料前期**，低成本，不影响第1集出图。
 
 确认要跑后，调用对应 stage skill（或总调度 `n2d`）接手；本 skill 到此结束。
