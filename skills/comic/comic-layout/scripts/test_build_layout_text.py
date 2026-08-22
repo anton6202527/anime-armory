@@ -6,11 +6,14 @@ import sys
 from pathlib import Path
 import json
 
+import pytest
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import build_layout
+from editorial_authorization import AUTHORIZATION_RELATIVE_PATH, authorization_payload_sha256
 
 
 def write_json(path: Path, data: dict) -> None:
@@ -298,6 +301,59 @@ def test_name_and_layout_approvals_require_reviewer_and_time(tmp_path: Path) -> 
         malformed["approval"].pop(field)
         assert build_layout.approval_subject_sha256(malformed) == subject_sha
         assert any(field in error for error in build_layout.verify_layout_approval(malformed))
+
+
+def test_delegated_layout_approval_requires_explicit_current_authorization(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    settings = root / "_设置.md"
+    base_settings = "- 漫画形态：条漫\n- 阅读方向：从上到下\n"
+    settings.write_text(base_settings, encoding="utf-8")
+    panels = [{"panel_id": "P001"}]
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": panels})
+    write_approved_name(root, chapter, panels, comic_format="条漫", reading_direction="从上到下")
+    write_json(root / "排版" / chapter / "layout.json", build_layout.build_layout(root, chapter, 0, 28))
+    build_layout.transition_existing(root, chapter, "review")
+
+    with pytest.raises(build_layout.LayoutError, match="未显式设置"):
+        build_layout.transition_existing(
+            root,
+            chapter,
+            "approved",
+            reviewed_by="delegate:comic-production-agent",
+        )
+
+    envelope_path = root / AUTHORIZATION_RELATIVE_PATH
+    envelope_path.parent.mkdir(parents=True)
+    envelope = {
+        "schema": "comic-editorial-authorization/v1",
+        "status": "authorized",
+        "authorized_by": "project-owner@example.test",
+        "source_quote": "允许制作代理审阅当前 layout",
+        "scope": ["layout"],
+        "delegate": "comic-production-agent",
+        "issued_at": "2026-08-21T00:00:00+00:00",
+        "expires_at": "2099-01-01T00:00:00+00:00",
+    }
+    envelope["authorization_sha256"] = authorization_payload_sha256(envelope)
+    envelope_path.write_text(json.dumps(envelope, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    approved = build_layout.transition_existing(
+        root,
+        chapter,
+        "approved",
+        reviewed_by="delegate:comic-production-agent",
+    )
+    assert approved["approval"]["authorization"]["source"] == "authorization_envelope"
+    assert approved["approval"]["review_kind"] == "delegated_policy_auto_review"
+    assert build_layout.verify_layout_approval(approved, root) == []
+
+    envelope["scope"] = ["name_board"]
+    envelope_path.write_text(json.dumps(envelope, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    assert any(
+        "授权" in item or "authorization" in item
+        for item in build_layout.verify_layout_approval(approved, root)
+    )
 
 
 def test_layout_cli_only_marks_complete_after_validation_and_approval(tmp_path: Path, monkeypatch) -> None:

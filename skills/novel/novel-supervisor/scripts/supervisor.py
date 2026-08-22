@@ -50,6 +50,8 @@ except Exception:  # pragma: no cover - settings 缺失时 critic 触发面静�
 SUPERVISOR_KIND = "novel_supervisor_next_action"
 SUPERVISOR_LEDGER_KIND = "novel_supervisor_circuit_ledger"
 HUMAN_STAGES = {"blueprint", "setting", "demo"}
+DELEGATED_REVIEW_POLICY_KEY = "审阅策略"
+DELEGATED_REVIEW_POLICY_VALUE = "用户授权制作代理"
 CIRCUIT_FAILURE_THRESHOLD = 3
 CIRCUIT_COOLDOWN_MINUTES = 60
 
@@ -456,6 +458,17 @@ def command_for_stage(root: str, stage: dict[str, Any]) -> list[str]:
     return []
 
 
+def delegated_review_enabled(root: str) -> bool:
+    """Whether ordinary semantic review should continue via a specialist agent."""
+    if load_project_settings is None:
+        return False
+    try:
+        settings = load_project_settings(root) or {}
+    except Exception:
+        return False
+    return str(settings.get(DELEGATED_REVIEW_POLICY_KEY) or DELEGATED_REVIEW_POLICY_VALUE) == DELEGATED_REVIEW_POLICY_VALUE
+
+
 def critic_loop_signal(root: str) -> dict[str, Any]:
     """critic_loop 选择点的**触发面**（references/critic-loop.md 的 spec 此前只是纸面：
     `_设置.md` 开了 critic_loop 也没有任何机器提示，spec 永远不会在正确时机被想起）。
@@ -600,6 +613,41 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
             "action": "none",
             "reason": "pipeline dry-run reports all stages done",
             "recommended_commands": [f'python3 skills/novel/novel-dashboard/scripts/dashboard.py "{root}" --write --html'],
+        })
+        return action
+
+    if next_stage in HUMAN_STAGES and delegated_review_enabled(root):
+        commands = [f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --handoff {next_stage}']
+        approval_state = stage.get("human_approval") if isinstance(stage.get("human_approval"), dict) else {}
+        approval_pending = (
+            next_stage in {"blueprint", "setting"}
+            and approval_state.get("required") is True
+            and approval_state.get("approved") is not True
+        )
+        if approval_pending:
+            commands.append(
+                f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --approve-stage {next_stage} '
+                '--delegated --agent "delegate:novel-specialist-reviewer" '
+                '--reason "按当前输入、产物与审阅清单完成独立代理复核"'
+            )
+        action.update({
+            "status": "dispatch",
+            "action": (
+                f"delegated_review_{next_stage}"
+                if approval_pending else f"execute_{next_stage}"
+            ),
+            "agent_role": (
+                "specialist_reviewer"
+                if approval_pending else (stage.get("agent_role") or "specialist_reviewer")
+            ),
+            "reason": (
+                f"stage {next_stage} outputs are ready and require an independent delegated review"
+                if approval_pending
+                else f"stage {next_stage} is reversible internal work covered by delegated execution policy"
+            ),
+            "recommended_commands": commands,
+            "handoff": handoff_contract(root, next_stage),
+            "review_mode": "delegated_autonomy" if approval_pending else "pending_specialist_output",
         })
         return action
 

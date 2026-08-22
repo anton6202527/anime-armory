@@ -174,7 +174,7 @@ def test_author_workflow_blocks_tampered_exploration_sidecar_without_formal_writ
         assert not os.path.exists(os.path.join(root, "设定"))
 
 
-def test_author_workflow_does_not_treat_blueprint_scaffold_as_human_approval():
+def test_author_workflow_does_not_treat_blueprint_scaffold_as_stage_approval():
     with tempfile.TemporaryDirectory() as root:
         write_json(os.path.join(root, "_meta.json"), {"title": "测试书", "kind": "create"})
         for rel in ["_设置.md", "_进度.md", "设定/创作蓝图.md", "设定/读者契约.md"]:
@@ -189,7 +189,8 @@ def test_author_workflow_does_not_treat_blueprint_scaffold_as_human_approval():
         blueprint = next(step for step in payload["steps"] if step["key"] == "blueprint")
         assert blueprint["status"] == "pending"
         assert "--approve-stage blueprint" in blueprint["command"]
-        assert any("尚未记录人工批准" in item for item in blueprint["blockers"])
+        assert "--delegated" in blueprint["command"]
+        assert any("尚未记录阶段批准" in item for item in blueprint["blockers"])
 
         record_human_stage_approval(
             root, "blueprint", approved_by="author", note="确认人物、主题与方向"

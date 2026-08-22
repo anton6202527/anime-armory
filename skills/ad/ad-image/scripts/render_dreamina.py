@@ -10,7 +10,9 @@ CLI path; reverse/third-party paths remain forbidden by ad-craft contract.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import math
 import subprocess
 import sys
 import time
@@ -24,6 +26,7 @@ AD_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(AD_LIB) not in sys.path:
     sys.path.insert(0, str(AD_LIB))
 import io_utils  # noqa: E402  本线 _lib 原子写（账本落盘不可半写）
+import spend_envelope  # noqa: E402  阶段预算包：真实付费提交前原子/幂等消费
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -43,6 +46,12 @@ KEY_SECTIONS = (
 SIGNOFF_REL = Path("合规") / "image_backend_override.json"
 RETRY_ATTEMPTS = 3
 RETRY_BASE_DELAY = 1.0
+SPEND_MODEL_PREFIX = "Dreamina Image"
+SPEND_CHANNEL = "Dreamina/即梦官方 CLI/API"
+
+
+class SpendSettlementBlocked(RuntimeError):
+    """A paid call happened, but its actual-cost reconciliation blocks further spend."""
 
 
 def now_iso() -> str:
@@ -199,14 +208,18 @@ def collect_existing_image(job: Dict[str, Any], out_path: Path) -> Dict[str, Any
         image = first_image(payload)
         retry_call(lambda: download(str(image["image_url"]), out_path),
                    describe=f"download submit_id={submit_id}")
-        return {"image": image, "retrieved_via": "query_result"}
+        return {"image": image, "payload": payload, "retrieved_via": "query_result"}
     except Exception as exc:
         query_error = exc
     result_url = str(job.get("result_url") or "")
     if result_url:
         retry_call(lambda: download(result_url, out_path),
                    describe=f"download result_url submit_id={submit_id}")
-        return {"image": {"image_url": result_url}, "retrieved_via": "result_url"}
+        return {
+            "image": {"image_url": result_url},
+            "payload": {"credit_count": job.get("credit_count")},
+            "retrieved_via": "result_url",
+        }
     raise RuntimeError(
         f"已付费任务免费取回失败（query_result: {query_error}；无 result_url 记录）。"
         f"保留 submit_id={submit_id}，不会重新提交付费任务；请稍后重跑或人工用 "
@@ -231,14 +244,188 @@ def job_matches(job: Mapping[str, Any], only: set[str]) -> bool:
 
 
 def spent_credits(jobs: Sequence[Any]) -> float:
-    """累计本 manifest 已付费消耗：有 submit_id 即已扣费；credit_count 缺失按 1 计。"""
+    """累计已付费消耗；实际值缺失时只允许使用显式保守预留值。"""
     total = 0.0
     for job in jobs:
         if not isinstance(job, dict) or not job.get("submit_id"):
             continue
         credit = job.get("credit_count")
-        total += float(credit) if isinstance(credit, (int, float)) and not isinstance(credit, bool) else 1.0
+        if isinstance(credit, (int, float)) and not isinstance(credit, bool) and math.isfinite(float(credit)):
+            total += float(credit)
+        else:
+            total += conservative_credit_upper_bound(job)
     return total
+
+
+def conservative_credit_upper_bound(job: Mapping[str, Any]) -> float:
+    value = job.get("estimated_credit_count")
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(float(value))
+        or float(value) < 0
+    ):
+        raise RuntimeError("manifest 缺有限非负 estimated_credit_count；未知 cost 禁止付费提交")
+    if job.get("estimated_credit_count_is_upper_bound") is not True:
+        raise RuntimeError("estimated_credit_count 必须显式标记为保守上界")
+    if not str(job.get("estimated_credit_count_source") or "").strip():
+        raise RuntimeError("estimated_credit_count_source 缺失；无法审计保守积分上界")
+    return float(value)
+
+
+def image_phase_spend_binding(
+    root: Path,
+    manifest: Mapping[str, Any],
+    *,
+    ratio: str,
+    resolution_type: str,
+    model_version: str,
+) -> tuple[str, Dict[str, Any]]:
+    """Hash immutable planned requests; runtime status/submit ids never change this binding."""
+    rows = []
+    for job in manifest.get("jobs") or []:
+        if not isinstance(job, Mapping):
+            continue
+        prompt_rel = str(job.get("prompt") or "")
+        prompt_path = root / prompt_rel
+        prompt = build_prompt(prompt_path) if prompt_path.is_file() else ""
+        refs = []
+        for rel_value in job.get("reference_inputs") or []:
+            rel = str(rel_value)
+            path = root / rel
+            refs.append({
+                "path": rel,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else "",
+            })
+        rows.append({
+            "job_id": str(job.get("job_id") or ""),
+            "shot": str(job.get("shot") or ""),
+            "expected_output": str(job.get("expected_output") or ""),
+            "prompt": prompt_rel,
+            "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+            "reference_inputs": refs,
+            "estimated_credit_count": job.get("estimated_credit_count"),
+            "estimated_credit_count_is_upper_bound": job.get(
+                "estimated_credit_count_is_upper_bound"
+            ),
+            "estimated_credit_count_source": str(job.get("estimated_credit_count_source") or ""),
+        })
+    rows.sort(key=lambda row: (row["job_id"], row["expected_output"]))
+    scope = {
+        "manifest": "出图/分镜/image_jobs_manifest.json",
+        "jobs": [row["job_id"] for row in rows],
+    }
+    digest = spend_envelope.canonical_digest({
+        "line": "ad", "stage": "image", "scope": scope, "jobs": rows,
+        "model": f"{SPEND_MODEL_PREFIX} {model_version}", "channel": SPEND_CHANNEL,
+        "ratio": ratio, "resolution_type": resolution_type,
+    })
+    return digest, scope
+
+
+def consume_image_spend(
+    root: Path,
+    manifest: Mapping[str, Any],
+    job: Dict[str, Any],
+    *,
+    ratio: str,
+    resolution_type: str,
+    model_version: str,
+    envelope_path: Optional[Path],
+) -> Dict[str, Any]:
+    cost = conservative_credit_upper_bound(job)
+    path = envelope_path or spend_envelope.default_envelope_path(root, "image")
+    approved = spend_envelope.load_envelope(path)
+    input_sha256, scope = image_phase_spend_binding(
+        root, manifest, ratio=ratio, resolution_type=resolution_type, model_version=model_version,
+    )
+    attempt = int(job.get("spend_attempts") or 0) + 1
+    receipt = spend_envelope.consume(
+        root,
+        approved,
+        stage="image",
+        model=f"{SPEND_MODEL_PREFIX} {model_version}",
+        channel=SPEND_CHANNEL,
+        input_sha256=input_sha256,
+        scope=scope,
+        consumption_id=f"image:{job.get('job_id') or job.get('shot') or 'job'}:{attempt}",
+        attempt_id=str(attempt),
+        calls=1,
+        cost=cost,
+        currency="credit",
+    )
+    job["spend_attempts"] = attempt
+    job["spend_authorization"] = {
+        "envelope_id": receipt["envelope_id"],
+        "authorization_digest": receipt["authorization_digest"],
+        "consumption_id": receipt["consumption"]["consumption_id"],
+        "input_sha256": input_sha256,
+        "consumed_at": receipt["consumption"].get("consumed_at"),
+        "attempt_id": str(attempt),
+        "reserved_credit_count": cost,
+    }
+    return receipt
+
+
+def settle_image_spend(
+    root: Path,
+    job: Dict[str, Any],
+    payload: Mapping[str, Any],
+    *,
+    envelope_path: Optional[Path],
+) -> Dict[str, Any]:
+    actual = payload.get("credit_count")
+    if (
+        isinstance(actual, bool)
+        or not isinstance(actual, (int, float))
+        or not math.isfinite(float(actual))
+        or float(actual) < 0
+    ):
+        job["spend_settlement"] = {
+            "status": "blocked",
+            "issue": "provider did not return a finite non-negative credit_count",
+        }
+        raise SpendSettlementBlocked("provider 未返回可核验 actual credit_count；拒绝后续付费提交")
+    authorization = job.get("spend_authorization")
+    if not isinstance(authorization, Mapping) or not authorization.get("consumption_id"):
+        raise SpendSettlementBlocked("spend reservation receipt missing before actual-cost settlement")
+    path = envelope_path or spend_envelope.default_envelope_path(root, "image")
+    approved = spend_envelope.load_envelope(path)
+    result = spend_envelope.settle(
+        root,
+        approved,
+        consumption_id=str(authorization["consumption_id"]),
+        actual_cost=float(actual),
+        currency="credit",
+    )
+    job["spend_settlement"] = result
+    if result.get("status") != "pass":
+        raise SpendSettlementBlocked("provider actual credit_count 超过阶段预算上限；已记账并阻断后续提交")
+    return result
+
+
+def reconcile_existing_image_spend(
+    root: Path,
+    job: Dict[str, Any],
+    payload: Mapping[str, Any],
+    *,
+    envelope_path: Optional[Path],
+) -> Dict[str, Any]:
+    """Settle a persisted submit during free query/download recovery.
+
+    Old manifests created before v2 carry no reservation and remain readable.  Once a v2
+    ``spend_authorization`` exists, however, an output cannot be called fully recovered until the
+    query payload supplies actual cost and atomically reconciles that exact reservation.
+    """
+    if not isinstance(job.get("spend_authorization"), Mapping):
+        return {"status": "legacy_untracked"}
+    current = job.get("spend_settlement")
+    if isinstance(current, Mapping) and current.get("status") == "pass":
+        return dict(current)
+    actual = payload.get("credit_count")
+    if isinstance(actual, (int, float)) and not isinstance(actual, bool) and math.isfinite(float(actual)):
+        job["credit_count"] = float(actual)
+    return settle_image_spend(root, job, payload, envelope_path=envelope_path)
 
 
 def enforce_gate(root: Path) -> None:
@@ -280,6 +467,7 @@ def render_jobs(
     model_version: str,
     poll: int,
     max_credits: Optional[float] = None,
+    spend_envelope_path: Optional[Path] = None,
 ) -> Dict[str, Any]:
     root = root.resolve()
     require_dreamina_image_signoff(root)
@@ -306,7 +494,14 @@ def render_jobs(
             continue
         out_path = root / out_rel
         prompt_path = root / prompt_rel
-        if out_path.exists() and not force:
+        spend_ready = (
+            not isinstance(job.get("spend_authorization"), Mapping)
+            or (
+                isinstance(job.get("spend_settlement"), Mapping)
+                and job["spend_settlement"].get("status") == "pass"
+            )
+        )
+        if out_path.exists() and not force and spend_ready:
             accepted, _ = accepted_image_receipt(root, job)
             if accepted:
                 job["status"] = "done"
@@ -342,6 +537,12 @@ def render_jobs(
             try:
                 collected = collect_existing_image(job, out_path)
                 image = collected.get("image") or {}
+                reconcile_existing_image_spend(
+                    root,
+                    job,
+                    collected.get("payload") if isinstance(collected.get("payload"), Mapping) else {},
+                    envelope_path=spend_envelope_path,
+                )
                 job.update({
                     "status": "output_ready",
                     "backend": "Dreamina/即梦官方 CLI",
@@ -395,6 +596,17 @@ def render_jobs(
             missing_refs = [str(p) for p in refs if not p.is_file()]
             if not refs or missing_refs:
                 raise RuntimeError(f"逐图生成缺真实参考图输入：{missing_refs or 'reference_inputs=[]'}")
+            consume_image_spend(
+                root,
+                manifest,
+                job,
+                ratio=ratio,
+                resolution_type=resolution_type,
+                model_version=model_version,
+                envelope_path=spend_envelope_path,
+            )
+            # Consumption must survive a crash between local authorization and provider return.
+            write_json(manifest_path, manifest)
             payload = run_dreamina_image(
                 prompt,
                 [str(p) for p in refs],
@@ -403,8 +615,8 @@ def render_jobs(
                 model_version=model_version,
                 poll=poll,
             )
-            image = first_image(payload)
-            # 提交已扣费：先原子落盘 submit_id/result_url 再下载，下载失败也不丢取回凭据
+            # 提交已扣费：先原子落 submit_id/actual cost，再核销预留。实际成本未知或
+            # 超 ceiling 时账本保持 fail-closed，绝不继续下一笔付费调用。
             job.update({
                 "status": "collect_pending",
                 "backend": "Dreamina/即梦官方 CLI",
@@ -414,9 +626,18 @@ def render_jobs(
                 "actual_reference_inputs": [str(p.relative_to(root)) for p in refs],
                 "submit_id": payload.get("submit_id"),
                 "credit_count": payload.get("credit_count"),
-                "result_url": image.get("image_url"),
                 "submitted_at": now_iso(),
             })
+            write_json(manifest_path, manifest)
+            settle_image_spend(
+                root,
+                job,
+                payload,
+                envelope_path=spend_envelope_path,
+            )
+            write_json(manifest_path, manifest)
+            image = first_image(payload)
+            job["result_url"] = image.get("image_url")
             write_json(manifest_path, manifest)
             retry_call(lambda: download(str(image["image_url"]), out_path),
                        describe=f"download {job.get('job_id')}")
@@ -467,7 +688,7 @@ def render_jobs(
             job["status"] = "collect_pending" if job.get("submit_id") else "failed"
             job["error"] = str(exc)
             print(f"[block] {job.get('job_id')} {exc}", file=sys.stderr, flush=True)
-            if not force:
+            if isinstance(exc, SpendSettlementBlocked) or not force:
                 break
         finally:
             write_json(manifest_path, manifest)
@@ -513,6 +734,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--poll", type=int, default=180)
     ap.add_argument("--max-credits", type=float, default=None,
                     help="本 manifest 累计 credit 封顶；付费提交前检查，超限停止（默认不设限）")
+    ap.add_argument("--spend-envelope", type=Path,
+                    help="v2 阶段预算包；默认 生产数据/spend_envelopes/image.json")
     ns = ap.parse_args(argv)
     try:
         summary = render_jobs(
@@ -525,6 +748,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             model_version=ns.model_version,
             poll=ns.poll,
             max_credits=ns.max_credits,
+            spend_envelope_path=ns.spend_envelope,
         )
     except Exception as exc:
         print(f"[block] {exc}", file=sys.stderr, flush=True)

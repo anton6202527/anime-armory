@@ -739,6 +739,85 @@ def test_production_task_must_match_current_frontier_stage(tmp_path: Path, monke
     assert issue["stop_reason"] == "frontier_mismatch"
 
 
+def test_canonical_preflight_accepts_safe_local_compose_without_payment_receipt(
+    tmp_path: Path, monkeypatch
+) -> None:
+    task = canonical_authorization_task(
+        id="001-compose-progress",
+        idempotency_key="n2d:test:001-compose-progress",
+        stage_key="compose",
+    )
+    monkeypatch.setattr(
+        runner.run_mod,
+        "next_action",
+        lambda root, ep, **kwargs: {
+            "frontier": {"ep": "第1集", "stage_key": "compose"},
+            "stop_reason": "needs_stage_execution",
+            "action_card": {
+                "execution_effect": {
+                    "safe_local_execution": True,
+                    "local_only": True,
+                    "paid": False,
+                },
+            },
+            "gate": None,
+        },
+    )
+
+    assert runner._canonical_next_preflight_issue(str(tmp_path), task, preview=True) is None
+
+
+def test_canonical_preflight_rechecks_v2_envelope_behind_authorized_probe(
+    tmp_path: Path, monkeypatch
+) -> None:
+    task = canonical_authorization_task(
+        model="GPT Image 2", channel="Codex CLI", status="running", attempts=1,
+    )
+    runner.bind_production_execution_context(str(tmp_path), task, {}, str(task["command"]))
+    receipt = runner.spend_envelope_mod.make_envelope(
+        tmp_path,
+        envelope_id="phase-image-preflight",
+        approver="producer@example.invalid",
+        approval_reference="approval-ui:phase-image-preflight",
+        source_quote="我确认按该阶段预算包继续执行付费出图。",
+        stage="image",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        input_sha256=runner.phase_envelope_input_digest(task),
+        scope=runner.production_task_scope(task),
+        max_calls=1,
+        max_attempts=1,
+        cost_ceiling=3,
+        currency="work_units",
+    )
+    task["_runner_production_authorization"] = receipt
+    monkeypatch.setattr(
+        runner.run_mod,
+        "next_action",
+        lambda root, ep, **kwargs: {
+            "frontier": {"ep": "第1集", "stage_key": "image"},
+            "stop_reason": "needs_stage_execution",
+            "action_card": {
+                "phase_spend_envelope": {
+                    "status": "authorized",
+                    "read_only": True,
+                    "consumed": False,
+                    "envelope_id": receipt["envelope_id"],
+                },
+            },
+            "gate": None,
+        },
+    )
+
+    assert runner._canonical_next_preflight_issue(str(tmp_path), task, preview=True) is None
+    # A read-only card is only a hint.  Exact current runtime binding is checked again here.
+    task["_runner_submit_request_digest"] = "sha256:" + "f" * 64
+    issue = runner._canonical_next_preflight_issue(str(tmp_path), task, preview=True)
+    assert issue is not None
+    assert issue["stop_reason"] == "production_authorization_required"
+    assert "input_sha256 mismatch" in issue["headline"]
+
+
 def test_dry_run_does_not_claim_mark_increment_attempt_or_execute(
     tmp_path: Path, authorized_image_frontier
 ) -> None:
@@ -795,6 +874,208 @@ def test_production_authorization_digest_detects_tampering() -> None:
     issue = runner._authorization_issue(task)
 
     assert issue and "authorization_digest mismatch" in issue
+
+
+def test_v2_phase_envelope_authorizes_bounded_idempotent_retries(tmp_path: Path) -> None:
+    task = canonical_authorization_task(
+        model="GPT Image 2",
+        channel="Codex CLI",
+        status="running",
+        attempts=1,
+    )
+    runner.bind_production_execution_context(str(tmp_path), task, {}, str(task["command"]))
+    receipt = runner.spend_envelope_mod.make_envelope(
+        tmp_path,
+        envelope_id="phase-image-bounded",
+        approver="producer@example.invalid",
+        approval_reference="approval-ui:phase-image-bounded",
+        source_quote="我确认按该阶段预算包继续执行付费出图。",
+        stage="image",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        input_sha256=runner.phase_envelope_input_digest(task),
+        scope=runner.production_task_scope(task),
+        max_calls=2,
+        max_attempts=2,
+        cost_ceiling=6,
+        currency="work_units",
+    )
+    task["_runner_production_authorization"] = receipt
+    assert runner._authorization_issue(task, str(tmp_path)) is None
+
+    first = runner.spend_envelope_mod.consume(
+        tmp_path, receipt, **runner._phase_consumption_kwargs(task)
+    )
+    assert first["idempotent"] is False
+    with pytest.raises(runner.spend_envelope_mod.SpendEnvelopeError, match="provider replay blocked"):
+        runner.spend_envelope_mod.consume(
+            tmp_path, receipt, **runner._phase_consumption_kwargs(task)
+        )
+    runner.spend_envelope_mod.finalize(
+        tmp_path,
+        receipt,
+        consumption_id=first["consumption"]["consumption_id"],
+        evidence={
+            "kind": "n2d_provider_recovery_evidence",
+            "provider_submit_id": "test-receipt-attempt-1",
+            "provider_status": "success",
+            "query_receipt_reference": "provider-query:test-receipt-attempt-1",
+            "query_response_sha256": "sha256:" + "c" * 64,
+        },
+    )
+
+    task["attempts"] = 2
+    assert runner._authorization_issue(task, str(tmp_path)) is None
+    runner.spend_envelope_mod.consume(
+        tmp_path, receipt, **runner._phase_consumption_kwargs(task)
+    )
+    task["attempts"] = 3
+    issue = runner._authorization_issue(task, str(tmp_path))
+    assert issue and "max_attempts exceeded" in issue
+
+
+def test_crash_after_v2_reservation_cannot_reinvoke_provider_for_same_attempt(
+    tmp_path: Path, monkeypatch
+) -> None:
+    task = canonical_authorization_task(
+        model="GPT Image 2", channel="Codex CLI", status="running", attempts=1,
+    )
+    config = {"commands": {"image": str(task["command"])}}
+    runner.bind_production_execution_context(str(tmp_path), task, config, str(task["command"]))
+    receipt = runner.spend_envelope_mod.make_envelope(
+        tmp_path,
+        envelope_id="phase-image-crash-window",
+        approver="producer@example.invalid",
+        approval_reference="approval-ui:phase-image-crash-window",
+        source_quote="我确认按该阶段预算包继续执行付费出图。",
+        stage="image",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        input_sha256=runner.phase_envelope_input_digest(task),
+        scope=runner.production_task_scope(task),
+        max_calls=2,
+        max_attempts=2,
+        cost_ceiling=6,
+        currency="work_units",
+    )
+    task["phase_spend_envelope"] = receipt
+    monkeypatch.setattr(
+        runner.run_mod,
+        "next_action",
+        lambda root, ep, **kwargs: {
+            "frontier": {"ep": "第1集", "stage_key": "image"},
+            "stop_reason": "needs_stage_execution",
+            "action_card": {
+                "phase_spend_envelope": {
+                    "status": "authorized", "read_only": True, "consumed": False,
+                },
+            },
+            "gate": None,
+        },
+    )
+    calls = {"provider": 0}
+
+    def crash_after_submit(*args, **kwargs):
+        calls["provider"] += 1
+        raise subprocess.TimeoutExpired(cmd="producer", timeout=1)
+
+    monkeypatch.setattr(runner, "run_process", crash_after_submit)
+    first = runner.execute_task(
+        str(tmp_path), task, config, command_override=None, shell=False, timeout_sec=1,
+        dry_run=False, no_dashboard=True, verify_outputs=False, next_preflight=True,
+        build_dashboard=False,
+    )
+    second = runner.execute_task(
+        str(tmp_path), task, config, command_override=None, shell=False, timeout_sec=1,
+        dry_run=False, no_dashboard=True, verify_outputs=False, next_preflight=True,
+        build_dashboard=False,
+    )
+
+    assert first["status"] == "fail" and second["status"] == "fail"
+    assert calls["provider"] == 1
+    assert "provider replay blocked" in second["note"]
+    ledger = json.loads((tmp_path / runner.spend_envelope_mod.LEDGER_REL).read_text(encoding="utf-8"))
+    assert len(ledger["envelopes"]["phase-image-crash-window"]["consumptions"]) == 1
+
+
+def test_successful_v2_execution_passes_queue_completion_validator(
+    tmp_path: Path, monkeypatch
+) -> None:
+    task = canonical_authorization_task(
+        model="GPT Image 2", channel="Codex CLI", status="running", attempts=1,
+    )
+    config = {"commands": {"image": str(task["command"])}}
+    runner.bind_production_execution_context(str(tmp_path), task, config, str(task["command"]))
+    receipt = runner.spend_envelope_mod.make_envelope(
+        tmp_path,
+        envelope_id="phase-image-completion",
+        approver="producer@example.invalid",
+        approval_reference="approval-ui:phase-image-completion",
+        source_quote="我确认按该阶段预算包继续执行付费出图。",
+        stage="image", model="GPT Image 2", channel="Codex CLI",
+        input_sha256=runner.phase_envelope_input_digest(task),
+        scope=runner.production_task_scope(task), max_calls=1, max_attempts=1,
+        cost_ceiling=3, currency="work_units",
+    )
+    task["phase_spend_envelope"] = receipt
+    monkeypatch.setattr(
+        runner.run_mod,
+        "next_action",
+        lambda root, ep, **kwargs: {
+            "frontier": {"ep": "第1集", "stage_key": "image"},
+            "stop_reason": "needs_stage_execution",
+            "action_card": {"phase_spend_envelope": {
+                "status": "authorized", "read_only": True, "consumed": False,
+            }},
+            "gate": None,
+        },
+    )
+    monkeypatch.setattr(runner, "run_process", lambda *args, **kwargs: (0, "ok", ""))
+    monkeypatch.setattr(runner, "verify_task_completion", lambda root, task: [])
+
+    result = runner.execute_task(
+        str(tmp_path), task, config, command_override=None, shell=False, timeout_sec=1,
+        dry_run=False, no_dashboard=True, verify_outputs=True, next_preflight=True,
+        build_dashboard=False,
+    )
+
+    assert result["status"] == "pass"
+    completion_issue = runner.queue_mod._runner_completion_issue(
+        {"root": str(tmp_path)},
+        task,
+        task["last_runner"],
+        {"acceptance_required": False},
+    )
+    assert completion_issue is None
+    assert task["last_runner"]["completion"]["phase_spend_completion"]["status"] == "pass"
+
+
+def test_v2_phase_envelope_rejects_current_execution_hash_change(tmp_path: Path) -> None:
+    task = canonical_authorization_task(
+        model="GPT Image 2", channel="Codex CLI", status="running", attempts=1,
+    )
+    runner.bind_production_execution_context(str(tmp_path), task, {}, str(task["command"]))
+    receipt = runner.spend_envelope_mod.make_envelope(
+        tmp_path,
+        envelope_id="phase-image-input-change",
+        approver="producer@example.invalid",
+        approval_reference="approval-ui:phase-image-input-change",
+        source_quote="我确认按该阶段预算包继续执行付费出图。",
+        stage="image",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        input_sha256=runner.phase_envelope_input_digest(task),
+        scope=runner.production_task_scope(task),
+        max_calls=2,
+        max_attempts=2,
+        cost_ceiling=6,
+        currency="work_units",
+    )
+    task["_runner_production_authorization"] = receipt
+    assert runner._authorization_issue(task, str(tmp_path)) is None
+    task["_runner_submit_request_digest"] = "sha256:" + "f" * 64
+    issue = runner._authorization_issue(task, str(tmp_path))
+    assert issue and "input_sha256 mismatch" in issue
 
 
 def test_expired_production_authorization_is_rejected() -> None:

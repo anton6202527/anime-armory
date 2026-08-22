@@ -65,6 +65,71 @@ def test_unpaid_stage_execution_is_dispatched_without_human_choice():
     assert dispatch["specialist"]["name"] == "n2d-producer-agent"
 
 
+def test_authorized_phase_envelope_dispatches_only_exact_batch_runner_path():
+    next_action = {
+        "frontier": {"ep": "第1集", "stage_key": "image"},
+        "stop_reason": "needs_stage_execution",
+        "action_card": {
+            "command": "python3 skills/n2d/n2d-batch/scripts/runner.py run /work/project --limit 1",
+            "phase_spend_envelope": {
+                "status": "authorized",
+                "read_only": True,
+                "consumed": False,
+                "envelope_id": "phase-image-1",
+            },
+        },
+    }
+
+    dispatch = supervisor.dispatch_for(next_action)
+
+    assert dispatch["human_gate"]["required"] is False
+    assert dispatch["should_call_specialist"] is True
+    assert dispatch["authorized_batch_execution"] is True
+    assert any("runner alone consumes" in row for row in dispatch["allowed_operations"])
+    assert "execute paid generation" not in dispatch["forbidden_operations"]
+    assert any("outside the exact n2d-batch" in row for row in dispatch["forbidden_operations"])
+
+
+def test_spoofed_or_consumed_phase_probe_does_not_authorize_paid_dispatch():
+    base = {
+        "frontier": {"ep": "第1集", "stage_key": "image"},
+        "stop_reason": "needs_stage_execution",
+        "action_card": {"phase_spend_envelope": {}},
+    }
+    for probe in (
+        {"status": "authorized", "read_only": False, "consumed": False},
+        {"status": "authorized", "read_only": True, "consumed": True},
+        {"status": "blocked", "read_only": True, "consumed": False},
+    ):
+        next_action = dict(base)
+        next_action["action_card"] = {"phase_spend_envelope": probe}
+        dispatch = supervisor.dispatch_for(next_action)
+        assert dispatch["authorized_batch_execution"] is False
+        assert "execute paid generation" in dispatch["forbidden_operations"]
+
+
+def test_safe_local_compose_dispatch_still_forbids_provider_calls():
+    next_action = {
+        "frontier": {"ep": "第1集", "stage_key": "compose"},
+        "stop_reason": "needs_stage_execution",
+        "action_card": {
+            "execution_effect": {
+                "safe_local_execution": True,
+                "local_only": True,
+                "paid": False,
+            },
+        },
+    }
+
+    dispatch = supervisor.dispatch_for(next_action)
+
+    assert dispatch["human_gate"]["required"] is False
+    assert dispatch["should_call_specialist"] is True
+    assert dispatch["safe_local_execution"] is True
+    assert any("local no-cost" in row for row in dispatch["allowed_operations"])
+    assert any("paid provider" in row for row in dispatch["forbidden_operations"])
+
+
 def test_build_plan_wraps_run_next(tmp_path: Path):
     _progress(tmp_path)
     plan = supervisor.build_plan(str(tmp_path), "第1集")

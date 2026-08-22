@@ -110,7 +110,7 @@ python3 skills/ad/ad-craft/scripts/stage_acceptance.py "<作品根>" --stage rev
 
 `广告类型` `广告目标` `漏斗阶段` `创意路线` `基础视觉风格` `主片时长` `交付比例` `cutdown版本` `生图模型` `生图渠道` `一致性增强` `生视频模型` `生视频渠道` `视频模型路由` `出视频规格` `视频分辨率` `配音后端` `音乐来源` `品牌包装模板` `字幕语言` `AI视觉使用披露` `广告法地区` `交付规格` `生成粒度` `目标平台` `发行地区`。
 
-合规/不可逆/花钱多的点（`广告法地区`、`音乐来源`）即便记录过每次仍确认。
+`广告法地区`、`音乐来源` 等合规/权利口径在使用时确认。付费出图/出视频/合成把 line/project/stage、scope、具体模型/渠道、max_calls、max_attempts、费用上限、expiry 和 canonical input SHA 绑定成一次 v2 阶段预算包；`approver + approval_reference + source_quote` 必须来自真实人审记录并纳入 authorization digest，agent/delegate/auto 不能冒充。`attempt_id` 固定解释为 **phase retry round**（同轮多个 job/call 共享，max_attempts 按唯一 round 计数），每个 job/call 另用唯一 consumption_id。包内只有 exact binding 和余量均通过才连续执行；越界、过期、输入/模型/渠道/范围变化 fail-closed。消费账本先原子写 in-flight reservation，重复/崩溃不允许 provider 免费重放；existing submit 必须 query/resume 并 settle actual cost，actual 超上限也如实记账后阻断。授权到期只禁止新 consume，不得阻止已存在 reservation 结算 provider 后返的真实成本。
 
 > 产线不替发布者点击平台声明，也不对所有地区硬烙同一种水印；但发布声明证据、显式标识责任和元数据状态必须进入 compliance manifest，最终 review 消费它。
 

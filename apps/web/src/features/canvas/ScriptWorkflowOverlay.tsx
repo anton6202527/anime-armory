@@ -34,7 +34,6 @@ import {
   deriveScriptWorkbenchSteps,
   hasRealScriptWorkbenchAssetSource,
   isScriptWorkbenchReadyForBatchVideo,
-  lockScriptWorkbenchStyle,
   removeScriptWorkbenchAsset,
   removeScriptWorkbenchShot,
   reorderScriptWorkbenchShot,
@@ -545,13 +544,12 @@ export function ScriptWorkflowOverlay({
   }
 
   const steps = deriveScriptWorkbenchSteps(workbench);
-  const readyAssets = workbench.assets.filter((asset) => asset.status === "ready" && hasRealScriptWorkbenchAssetSource(asset));
+  const readyAssets = workbench.assets.filter((asset) => ["machine_complete", "accepted"].includes(asset.status) && hasRealScriptWorkbenchAssetSource(asset));
   const generatedCount = readyAssets.length;
   const composedCount = workbench.shots.filter((shot) => shot.final_prompt.trim()).length;
   const completedStages = [steps.shots, steps.assets, steps.prompts].filter((state) => state === "done").length;
   const allAssetsReady = steps.assets === "done";
   const allPromptsReady = steps.prompts === "done";
-  const styleLocked = workbench.style_locked;
   const activePromptShot = workbench.shots.find((shot) => shot.id === promptShotId) ?? null;
   const activeAsset = workbench.assets.find((asset) => asset.id === assetDialogId) ?? null;
   const deletingAsset = workbench.assets.find((asset) => asset.id === deleteAssetId) ?? null;
@@ -779,7 +777,7 @@ export function ScriptWorkflowOverlay({
   };
 
   const openBatch = () => {
-    setBatchSelection(workbench.assets.filter((asset) => asset.status !== "ready" || !hasRealScriptWorkbenchAssetSource(asset)).map((asset) => asset.id));
+    setBatchSelection(workbench.assets.filter((asset) => !["machine_complete", "accepted"].includes(asset.status) || !hasRealScriptWorkbenchAssetSource(asset)).map((asset) => asset.id));
     setBatchOpen(true);
   };
 
@@ -816,7 +814,7 @@ export function ScriptWorkflowOverlay({
       });
       if (signal.aborted) return;
       if (result?.finalPrompt && documentRef.current) {
-        onChange(lockScriptWorkbenchStyle(updateScriptWorkbenchShot(documentRef.current, shot.id, { final_prompt: result.finalPrompt })));
+        onChange(updateScriptWorkbenchShot(documentRef.current, shot.id, { final_prompt: result.finalPrompt }));
       }
     });
   };
@@ -840,7 +838,7 @@ export function ScriptWorkflowOverlay({
       });
       if (signal.aborted) return;
       if (result?.prompts && documentRef.current) {
-        onChange(lockScriptWorkbenchStyle(applyPromptUpdates(documentRef.current, result.prompts)));
+        onChange(applyPromptUpdates(documentRef.current, result.prompts));
       }
       setPromptBatchOpen(false);
     });
@@ -899,7 +897,7 @@ export function ScriptWorkflowOverlay({
           <button type="button" disabled={steps.shots !== "done" || steps.assets !== "done"} title={steps.shots !== "done" ? "请先补齐并确认全部镜头" : steps.assets !== "done" ? "请先准备全部真实资产" : undefined} className={`script-wb-step${step === 3 ? " is-active" : ""}${steps.prompts === "done" ? " is-done" : ""}`} aria-current={step === 3 ? "step" : undefined} onClick={() => setStep(3)}><i>{steps.prompts === "done" ? <Check size={13} /> : 3}</i><span><b>合成提示词</b><small>{composedCount}/{workbench.shots.length} 已合成</small></span></button>
         </nav>
         <div className="script-wb-top-actions">
-          <span className="script-wb-view-label">{step === 1 ? "脚本视图" : step === 2 ? "资产视图" : "提示词视图"}<ChevronDown size={13} /></span>
+          <span className="script-wb-view-label" title={`唯一状态 ${workbench.state} · 内容哈希 ${workbench.content_sha256}`}>{workbench.state} · {workbench.content_sha256.slice(0, 12)} · {step === 1 ? "脚本视图" : step === 2 ? "资产视图" : "提示词视图"}<ChevronDown size={13} /></span>
           <button type="button" className="script-wb-stage-status" disabled={!isScriptWorkbenchReadyForBatchVideo(workbench) || !onBatchVideo || Boolean(pending)} title={!onBatchVideo ? "未接入批量视频生成能力" : !isScriptWorkbenchReadyForBatchVideo(workbench) ? "镜头、资产和提示词完成后可用" : undefined} onClick={() => setVideoBatchOpen(true)}>{completedStages}/3 {completedStages === 3 ? "批量生视频" : "完成后可批量生视频"}</button>
           <button type="button" className="script-wb-close" aria-label="关闭故事脚本工作台" title="关闭 (ESC)" onClick={closeOverlay}><X size={18} /></button>
         </div>
@@ -918,14 +916,14 @@ export function ScriptWorkflowOverlay({
 
         {step === 2 && <>
           <div className="script-wb-assets-scroll">
-            <button type="button" className="script-wb-style-card" disabled={styleLocked} title={styleLocked ? "全局美术风格首次合成后已锁定" : "编辑全局美术风格"} onClick={() => { setStyleDraft(workbench.global_style); setStyleOpen(true); }}><span>全局风格</span><p>{workbench.global_style}</p><i>{styleLocked ? "已锁定" : <PencilLine size={13} />}</i></button>
+            <button type="button" className="script-wb-style-card" title="编辑全局美术风格；修改后旧任务与成片证据自动失效" onClick={() => { setStyleDraft(workbench.global_style); setStyleOpen(true); }}><span>全局风格</span><p>{workbench.global_style}</p><i><PencilLine size={13} /></i></button>
             {ASSET_KINDS.map((kind) => {
               const assets = workbench.assets.filter((asset) => asset.kind === kind);
               return <section className="script-wb-asset-section" key={kind} aria-labelledby={`script-assets-${kind}`}>
                 <h3 id={`script-assets-${kind}`}>{ASSET_LABELS[kind].title}</h3>
                 <div className="script-wb-asset-grid">
                   {assets.map((asset) => {
-                    const isReady = asset.status === "ready" && hasRealScriptWorkbenchAssetSource(asset);
+                    const isReady = ["machine_complete", "accepted"].includes(asset.status) && hasRealScriptWorkbenchAssetSource(asset);
                     const isPendingGeneration = (pending?.type === "generate-asset" && pending.id === asset.id) || (pending?.type === "generate-assets" && pending.ids.includes(asset.id));
                     const status = isPendingGeneration ? "generating" : isReady ? "ready" : asset.status;
                     return <article className={`script-wb-asset-card is-${status}`} key={asset.id}>
@@ -968,13 +966,13 @@ export function ScriptWorkflowOverlay({
         </>}
       </main>
 
-      {styleOpen && !styleLocked && <ModalShell className="script-wb-style-modal" label="编辑全局风格" title="编辑全局风格" onClose={() => setStyleOpen(false)}>
-        <div><textarea autoFocus value={styleDraft} aria-label="全局美术风格" onChange={(event) => setStyleDraft(event.target.value)} onCompositionStart={() => { composingRef.current = true; }} onCompositionEnd={() => { composingRef.current = false; }} /><p>全局美术风格首次合成后即锁定，后续不可再修改；修改风格会清空已有提示词。</p><div className="script-wb-modal-actions"><button type="button" className="script-wb-button" onClick={() => setStyleOpen(false)}>取消</button><button type="button" className="script-wb-button primary" disabled={!styleDraft.trim()} onClick={() => { onChange(setScriptWorkbenchGlobalStyle(workbench, styleDraft)); setStyleOpen(false); }}>确认</button></div></div>
+      {styleOpen && <ModalShell className="script-wb-style-modal" label="编辑全局风格" title="编辑全局风格" onClose={() => setStyleOpen(false)}>
+        <div><textarea autoFocus value={styleDraft} aria-label="全局美术风格" onChange={(event) => setStyleDraft(event.target.value)} onCompositionStart={() => { composingRef.current = true; }} onCompositionEnd={() => { composingRef.current = false; }} /><p>修改风格会创建新的内容哈希、清空相关提示词，并把旧任务、结果、母版与 QC 证据标为过期。</p><div className="script-wb-modal-actions"><button type="button" className="script-wb-button" onClick={() => setStyleOpen(false)}>取消</button><button type="button" className="script-wb-button primary" disabled={!styleDraft.trim()} onClick={() => { onChange(setScriptWorkbenchGlobalStyle(workbench, styleDraft)); setStyleOpen(false); }}>确认</button></div></div>
       </ModalShell>}
 
       {activePromptShot && <ModalShell className="script-wb-prompt-modal" label={`第 ${workbench.shots.findIndex((shot) => shot.id === activePromptShot.id) + 1} 镜最终提示词`} title={<span>第 {workbench.shots.findIndex((shot) => shot.id === activePromptShot.id) + 1} 镜：最终提示词 <Info size={13} aria-label="提示词由镜头信息、全局风格和所选合成方式生成" /></span>} onClose={() => { cancelPending(); setPromptShotId(null); }}>
         <div className="script-wb-prompt-body">
-          <section className="script-wb-prompt-output"><header><strong>分镜提示词</strong><small>{activePromptShot.final_prompt ? "已生成 · 自动保存" : "未生成"}</small></header><textarea aria-label="分镜提示词" value={activePromptShot.final_prompt} disabled={Boolean(pending)} placeholder="点击立即合成提示词，重新点击会覆盖生成。" onChange={(event) => { const next = updateScriptWorkbenchShot(workbench, activePromptShot.id, { final_prompt: event.target.value }); onChange(event.target.value.trim() ? lockScriptWorkbenchStyle(next) : next); }} onCompositionStart={() => { composingRef.current = true; }} onCompositionEnd={() => { composingRef.current = false; }} /></section>
+          <section className="script-wb-prompt-output"><header><strong>分镜提示词</strong><small>{activePromptShot.final_prompt ? "已生成 · 自动保存" : "未生成"}</small></header><textarea aria-label="分镜提示词" value={activePromptShot.final_prompt} disabled={Boolean(pending)} placeholder="点击立即合成提示词，重新点击会覆盖生成。" onChange={(event) => onChange(updateScriptWorkbenchShot(workbench, activePromptShot.id, { final_prompt: event.target.value }))} onCompositionStart={() => { composingRef.current = true; }} onCompositionEnd={() => { composingRef.current = false; }} /></section>
           <section className="script-wb-prompt-output"><header><strong>视频运动提示词</strong><small>{activePromptShot.final_prompt ? "已生成" : "未生成"}</small></header><div className={`script-wb-prompt-preview${activePromptShot.final_prompt ? "" : " is-empty"}`}>{composeScriptWorkbenchVideoPrompt(workbench.global_style, activePromptShot) || "点击立即合成提示词，重新点击会覆盖生成。"}</div></section>
         </div>
         <footer className="script-wb-prompt-footer">

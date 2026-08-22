@@ -58,7 +58,7 @@ python3 skills/novel/novel-craft/scripts/author_workflow.py "<作品根>" --writ
 
 通过标准：
 - `author_intent.json` 写明 `core_theme`、`target_emotional_aftertaste`、`non_negotiables`、`aesthetic_boundaries`、`forbidden_tropes`、`ethical_boundaries` 和 `misreading_risks`。
-- 若探索稿影响正式设计，先用当前 SHA 登记 `promote_candidate`，再把“发现”转写进蓝图/设定并重新执行相应人审；不得把候选直接复制成正式章。
+- 若探索稿影响正式设计，先用当前 SHA 登记 `promote_candidate`，再把“发现”转写进蓝图/设定并重新执行相应阶段复核；默认派发独立 specialist reviewer，显式逐阶段人审项目才停用户；不得把候选直接复制成正式章。
 - 蓝图回答 logline、目标读者、主角、核心欲望、金手指/能力代价、主线冲突、承诺与禁偏。
 - 商业/平台项目的市场判断带日期、来源和证据质量。
 

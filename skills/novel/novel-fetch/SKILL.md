@@ -11,7 +11,7 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/novel/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `../skills/novel/novel-craft/references/选择点与偏好.md` 读用户私有选择：项目值优先，其次全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。权利/合规、不可逆发布和最终验收仍确认；模型费用绑定阶段预算包，包内不逐章重复问。
 
 本 skill 涉及的选择点：`网络代理策略`、`首选公版源站`、`优先抓取格式` 等（如有扩展时适用）。
 

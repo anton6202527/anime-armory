@@ -28,7 +28,9 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 - **认领是原子的（单机多 worker 安全）**：默认 `claim/mark/reclaim/renew` 全在 `生产数据/batch_queue.lock` 的 `flock` 互斥锁内"重读最新队列→改→原子写(temp+replace)"——**多进程同抢绝不双认领、不互相覆盖**。注意 flock 跨 NFS 不可靠，真·多机要换协调后端，别靠本锁。
 - **SQLite 协调后端（本地工业化优先）**：设置 `N2D_COORDINATION_BACKEND=sqlite`，或在 `生产数据/coordination_backend.json` 写 `{"backend":"sqlite"}` 后，`claim/mark/reclaim/heartbeat` 走 `生产数据/batch_queue.sqlite3` 的 `BEGIN IMMEDIATE` 事务；`batch_queue.json/md` 仍作为便携镜像同步写回。适合单机多 worker、共享项目盘和本地渲染农场的第一档强一致升级；还没到 Redis/Temporal/K8s 的复杂度。发布/放量前用 `queue.py sqlite-doctor <作品根> --write` 检查 schema_version、DB/JSON 镜像一致性、orphan task 和 WAL 状态。
 - **worker 也走 claim**：`runner.py` 不绕过账本；先 claim 再执行，完成后 mark。多个 runner 进程可并行跑同一队列。**runner 跑任务期间不持锁、不持 stale 队列**，认领/标记各自锁内重读；mark 必须校验 worker+attempt，防止租约过期后旧 worker 覆盖新认领；长任务靠心跳续租租约。
-- **排队不是生产授权**：`voice/image/video/compose` 执行前必须与 `run.py next` 返回的同集 `frontier.stage_key` 完全一致，且只能在 `stop_reason=needs_payment_confirm` 时消费任务绑定的 `production_authorization`。授权是 canonical JSON SHA-256 防篡改收据，必须绑定真实 approver、task/idempotency/task digest、scope、model/channel（未知可显式 `any`）、成本 ceiling+currency、带时区且未过期的 expiry；任务估算成本超过 ceiling 即拒绝。`done/prework_failed/needs_stage_execution`、frontier 缺失/错位都 fail-closed；仅有 `queued`、配置 presence 或旧任务授权均不能放行。
+- **排队不是生产授权**：`voice/image/video/compose` 执行前必须与 `run.py next` 返回的同集 `frontier.stage_key` 完全一致。v1 继续兼容单 task/attempt 的 `production_authorization`；v2 `phase_spend_envelope` 必须精确绑定 line/project/stage/scope、canonical producer input SHA、具体 model/channel、expiry、max_calls/max_attempts/cost ceiling，并同时保存真实 human approver、不可伪造为空的 `approval_reference` 与 `source_quote`（三者均进 authorization digest；`agent:/delegate:/auto:` 身份/证据拒绝）。`attempt_id=phase_retry_round`：同一阶段重试轮内多个 calls 共享 attempt_id，max_attempts 统计唯一轮次；每个物理调用仍须唯一 consumption_id。`run.py`/supervisor 只做当前 fresh plan + producer binding 的只读 probe；只有 probe 返回 authorized 时才给 `needs_stage_execution`，且只允许 exact batch runner 路径。runner 是唯一 consume 边界，不能 issue/扩大授权。
+- **消费幂等不等于 provider 可重放**：`消费ID=task_id:attempt` 在项目账本中只允许一行。首次 consume 原子写 `in_flight`；同 ID 重入或存在未完成 reservation 时一律 fail-closed，不会把账本 no-op 当成免费二次 submit。只有 provider 查询/恢复取得持久 completion evidence 后才能 `finalize`；runner 在 provider command、paid-boundary receipts、产物校验都通过后自动 finalize。崩溃在 consume 与 provider receipt 之间时必须先查原 submit/恢复，不能自动新建 attempt 绕过不确定扣费。
+- **compose 按真实 effect 分流**：`BGM来源=无` 且 canonical master 尚不存在时，首次本地 ffmpeg 合成可 `needs_stage_execution` 自动继续；任何 working/未验收/已验收 canonical master 已存在、acceptance receipt 损坏或 canonical resolver 不可用，都视为不可逆覆盖风险并保留人工硬停。安全本地分支不创建 paid expectation、不消费 spend envelope，但产物、compose/review gate 与最终签收仍完整执行。
 - **一个执行哈希**：授权里的 `execution` 同时绑定 resolved command、producer canonical input、submit/compiled request 和完整 producer contract。image 从真实 compiler 重算每个物理 target 的 paid input fingerprint + compiled request SHA；video 从唯一 prepared manifest 重算 batch fingerprint + 每个物理 clip submit snapshot。禁止回退到 episode prework cache、task 自报 hash 或“若干输入文件”的近似摘要。voice/compose 尚无可纯重算的 prepared producer manifest，因此当前 production 授权明确 fail-closed，待各 producer 提供 canonical contract 后才开放。
 - **花钱点二次互锁**：runner 把每个物理 target 的批准 expectation 注入 producer；Codex/Dreamina image 与 video 在真正调用付费后端前现场重算 input fingerprint + submit request SHA，完全一致才执行，并原子写 paid-boundary receipt。出现任一 batch marker 却缺 expectation 必须 fatal；batch 只允许直接 producer argv 或仓库内 SHA/argv 精确识别的官方 image wrapper，shell 控制符、命令替换和任意外层 wrapper 均拒绝，不能通过清空环境绕过互锁。
 - **认领即原子预留预算**：production task 在同一个 queue lock / SQLite `BEGIN IMMEDIATE` claim 临界区按本次 attempt 预留 estimate；第二个 worker 必须看到首个 reservation，不能并发穿透 runtime cap。真正开始命令后即使 exit 非 0/output/gate fail 也按 reported actual（没有则保守按 estimate）结算；只有明确 `execution_started=false` 的 preflight/config failure 才释放。lease 崩溃状态未知也保守结算，避免回收重跑造成双花。
@@ -81,6 +83,19 @@ python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --dry-run --limit 1
 
 # 3.1) 执行前消费 run.py next 动作卡；遇 source/update/gate/image_qc/能力证据/合规/环境/选择点/验收证据阻断就不跑命令
 python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --next-preflight
+
+# 3.2) v2 阶段预算包：issue 只能来自可审计的人审记录；probe/verify 不消费，runner 才 consume
+python3 skills/n2d/_lib/spend_envelope.py issue <作品根> --stage image \
+  --model "GPT Image 2" --channel "Codex CLI" --input-sha256 <当前canonical-sha256> \
+  --scope-json '<精确scope-json>' --max-calls 8 --max-attempts 2 \
+  --cost-ceiling 40 --currency work_units --approver '<责任人>' \
+  --approval-reference '<审批记录ID/URL>' --source-quote '<人的原始批准语句>'
+python3 skills/n2d/n2d-batch/scripts/spend_probe.py <作品根> 第1集 image --json
+
+# 崩溃恢复后，仅在已有 provider completion receipt/query evidence 时关闭 in_flight；不会新增调用
+python3 skills/n2d/_lib/spend_envelope.py finalize <作品根> \
+  --envelope <预算包.json> --consumption-id <task:attempt> \
+  --evidence-json '{"kind":"n2d_provider_recovery_evidence","provider_submit_id":"...","provider_status":"success","query_receipt_reference":"...","query_response_sha256":"sha256:..."}'
 
 # 4) 单机多 worker 安全：稳定 worker id + 租约 + 断点恢复（多机/私有算力池需换协调后端，非本锁）
 python3 skills/n2d/n2d-batch/scripts/runner.py <作品根> --until-empty --worker w1 --lease-seconds 1800

@@ -13,6 +13,12 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
 
 按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。出视频是**花钱/高风险**阶段，正式跑前确认规格；若未显式固定后端，先按模型路由、CLI/API 探测与账号约束决定入口，探测不到可执行后端时再问用户选渠道或 `manual`。写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `gate.py --stage video`；正式 runner 同时自动跑 `stage_acceptance.py --stage image`，只有全部 image job、真实输出/参考输入 provenance 与 full product_qc 通过才花视频额度。
 
+## 阶段预算信封（真实提交闸）
+
+`scripts/render_dreamina.py` 的 submit 路径实际调用本线 `_lib/spend_envelope.py consume/settle`。默认 envelope 为 `<作品根>/生产数据/spend_envelopes/video.json`，精确绑定 project/stage、全 job scope、具体 model/channel、compiled prompt/输入帧/render profile/保守成本字段的 input SHA、expiry、max_calls、唯一 retry rounds 与 credit ceiling；human `approver + approval_reference + source_quote` 必填且摘要绑定。runner 不能自行 issue 或扩大包。
+
+每个 job 必须提供有限非负的 `estimated_credit_count` 保守上界、`estimated_credit_count_is_upper_bound=true` 和来源；未知成本在 provider 前 fail-closed。`attempt_id=phase_retry_round`，同轮多个 job 共享；每个 job/round 使用唯一 consumption_id。reservation 先持久化，provider actual credit 随后原子 settle；actual 超 ceiling 仍记真实差额并阻断后续。consume 后无回执的同 ID/新 ID 都不能自动重提。existing submit_id 只 query/collect；query 后出现 actual 必须补 settle，即使 envelope 此时已过期（expiry 只禁止新 submit，不禁止真实成本入账）。终态仍拿不到 actual 时保留 reservation、禁止标成完整交付并继续挡住后续付费。
+
 ## 上游契约单一真值源
 
 品牌色 HEX / 光位锚 / 轴线在**出图阶段**烤进首帧像素，所以契约继承的上游真值源是：

@@ -70,6 +70,10 @@ run_mod = load_module(
     "n2d_run_for_batch_runner",
     os.path.join(REPO_SKILLS, "run.py"),
 )
+spend_envelope_mod = load_module(
+    "n2d_spend_envelope_for_batch_runner",
+    os.path.join(REPO_SKILLS, "_lib", "spend_envelope.py"),
+)
 import paid_execution_contract  # noqa: E402  producer-owned final paid-boundary interlock
 
 
@@ -684,16 +688,37 @@ NEXT_PREFLIGHT_BLOCK_REASONS = {
 }
 
 
-def _authorization_from_config(task: Dict[str, Any], config: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def _authorization_from_config(
+    task: Dict[str, Any], config: Dict[str, Any], root: str = ""
+) -> Optional[Dict[str, Any]]:
     """Resolve an explicit task-bound production approval; queue presence is never approval."""
     embedded = task.get("production_authorization")
     if isinstance(embedded, dict):
         return dict(embedded)
+    phase_embedded = task.get("phase_spend_envelope")
+    if isinstance(phase_embedded, dict):
+        return dict(phase_embedded)
     authorizations = config.get("production_authorizations")
-    if not isinstance(authorizations, dict):
+    if isinstance(authorizations, dict):
+        receipt = authorizations.get(str(task.get("id") or ""))
+        if isinstance(receipt, dict):
+            return dict(receipt)
+    envelopes = config.get("phase_spend_envelopes")
+    if not isinstance(envelopes, dict):
         return None
-    receipt = authorizations.get(str(task.get("id") or ""))
-    return dict(receipt) if isinstance(receipt, dict) else None
+    candidate = (
+        envelopes.get(str(task.get("id") or ""))
+        or envelopes.get(str(task.get("stage_key") or ""))
+        or envelopes.get("*")
+    )
+    if isinstance(candidate, dict):
+        return dict(candidate)
+    if isinstance(candidate, str) and candidate.strip():
+        path = Path(candidate).expanduser()
+        if not path.is_absolute():
+            path = Path(root or ".").expanduser().resolve() / path
+        return spend_envelope_mod.load_envelope(path)
+    return None
 
 
 def _canonical_json_digest(payload: Dict[str, Any]) -> str:
@@ -1502,6 +1527,50 @@ def make_production_authorization(
     return receipt
 
 
+def phase_envelope_input_digest(task: Dict[str, Any]) -> str:
+    """Bind the v2 phase envelope to the full current executable input, not a label."""
+    return _binding_digest({
+        "execution": production_execution_binding(task),
+        "scope": production_task_scope(task),
+    })
+
+
+def _phase_call_count(task: Mapping[str, Any]) -> int:
+    contract = task.get("_runner_producer_contract")
+    rows = contract.get("records") if isinstance(contract, Mapping) else None
+    return max(1, len(rows)) if isinstance(rows, list) else 1
+
+
+def _phase_cost(task: Mapping[str, Any]) -> Tuple[float, str]:
+    estimate = task.get("estimated_cost") if isinstance(task.get("estimated_cost"), Mapping) else {}
+    try:
+        amount = float(estimate.get("amount"))
+    except (TypeError, ValueError) as exc:
+        raise ValueError("production task estimated_cost.amount missing/invalid") from exc
+    currency = str(estimate.get("unit") or "").strip()
+    if not math.isfinite(amount) or amount < 0 or not currency:
+        raise ValueError("production task estimated_cost must be finite, non-negative, and have a unit")
+    return amount, currency
+
+
+def _phase_consumption_kwargs(task: Dict[str, Any]) -> Dict[str, Any]:
+    model, channel = _execution_model_channel(task)
+    amount, currency = _phase_cost(task)
+    attempt = production_authorized_attempt(task)
+    return {
+        "stage": str(task.get("stage_key") or ""),
+        "model": model,
+        "channel": channel,
+        "input_sha256": phase_envelope_input_digest(task),
+        "scope": production_task_scope(task),
+        "consumption_id": f"{task.get('id') or 'missing-task'}:{attempt}",
+        "attempt_id": str(attempt),
+        "calls": _phase_call_count(task),
+        "cost": amount,
+        "currency": currency,
+    }
+
+
 def _parse_aware_datetime(value: Any) -> Optional[dt.datetime]:
     text = str(value or "").strip()
     if not text:
@@ -1555,7 +1624,7 @@ def _bind_execution_context(task: Dict[str, Any], config: Dict[str, Any]) -> Non
             task[internal] = str(value)
 
 
-def _authorization_issue(task: Dict[str, Any]) -> Optional[str]:
+def _authorization_issue(task: Dict[str, Any], root: str = "") -> Optional[str]:
     if (
         ALLOW_TEST_FIXTURE_AUTHORIZATION
         and task.get("input_fingerprint")
@@ -1566,8 +1635,20 @@ def _authorization_issue(task: Dict[str, Any]) -> Optional[str]:
     receipt = task.get("_runner_production_authorization")
     if not isinstance(receipt, dict):
         return "missing task-bound production_authorization"
+    if receipt.get("version") == spend_envelope_mod.VERSION:
+        if not root:
+            return "phase production authorization requires project root binding"
+        try:
+            result = spend_envelope_mod.verify(root, receipt, **_phase_consumption_kwargs(task))
+        except (ValueError, spend_envelope_mod.SpendEnvelopeError) as exc:
+            return f"phase production authorization invalid: {exc}"
+        if result.get("status") != "pass":
+            return "phase production authorization blocked: " + "; ".join(
+                str(item) for item in (result.get("issues") or [])
+            )
+        return None
     if receipt.get("version") != 1:
-        return "production_authorization.version must be 1"
+        return "production_authorization.version must be 1 or phase envelope version 2"
     declared_digest = str(receipt.get("authorization_digest") or "")
     if not declared_digest.startswith("sha256:") or not hmac.compare_digest(
         declared_digest,
@@ -1684,9 +1765,10 @@ def _canonical_next_preflight_issue(
 ) -> Optional[Dict[str, Any]]:
     """Validate the queue task against run.py's canonical current frontier.
 
-    For production stages the only executable action is the exact same episode/stage frontier
-    with stop_reason=needs_payment_confirm plus a structured, task-bound approval receipt.
-    `queued`, a configured command, or a previous approval for another task is not authority.
+    Production accepts either the legacy payment stop plus a valid receipt, or an exact
+    ``needs_stage_execution`` card whose current v2 envelope probe is authorized.  Local no-BGM
+    compose may also use ``needs_stage_execution`` without a payment receipt.  In every paid case
+    this runner remains the only component allowed to consume authorization.
     """
     ep = str(task.get("episode") or "")
     try:
@@ -1718,12 +1800,31 @@ def _canonical_next_preflight_issue(
             f"queued task {task_ep}/{task_stage} != current frontier {frontier_ep}/{frontier_stage}",
         )
     if task_stage in PRODUCTION_STAGE_KEYS:
-        if stop != "needs_payment_confirm":
+        phase_probe = card.get("phase_spend_envelope") if isinstance(
+            card.get("phase_spend_envelope"), Mapping
+        ) else {}
+        execution_effect = card.get("execution_effect") if isinstance(
+            card.get("execution_effect"), Mapping
+        ) else {}
+        authorized_execution = (
+            stop == "needs_stage_execution" and phase_probe.get("status") == "authorized"
+        )
+        safe_local_compose = (
+            task_stage == "compose"
+            and stop == "needs_stage_execution"
+            and execution_effect.get("safe_local_execution") is True
+            and execution_effect.get("local_only") is True
+            and execution_effect.get("paid") is False
+        )
+        if stop != "needs_payment_confirm" and not authorized_execution and not safe_local_compose:
             return issue(
                 stop or "production_frontier_not_authorized",
                 f"production frontier is not executable from batch (stop_reason={stop or 'missing'})",
             )
-        auth_issue = _authorization_issue(task)
+        if safe_local_compose:
+            task["_runner_safe_local_execution"] = True
+            return None
+        auth_issue = _authorization_issue(task, root)
         if auth_issue:
             return issue("production_authorization_required", auth_issue)
         return None
@@ -1764,13 +1865,14 @@ def execute_task(
     output_verification: Dict[str, Any] = {"status": "not_run", "issues": []}
     try:
         stage_key = str(task.get("stage_key") or "")
+        task.pop("_runner_safe_local_execution", None)
         _bind_execution_context(task, config)
         # Resolve and hash the exact command before authorization. A configured command is part
         # of the paid request; changing it invalidates the old receipt even when task_id is stable.
         command = resolve_command(root, task, config, command_override)
         bind_production_execution_context(root, task, config, command)
         task["_runner_output_baseline"] = producer_output_bindings(root, task)
-        authorization = _authorization_from_config(task, config)
+        authorization = _authorization_from_config(task, config, root)
         if authorization is not None:
             task["_runner_production_authorization"] = authorization
         # Payment authorization and human acceptance are canonical boundaries, not optional
@@ -1822,7 +1924,11 @@ def execute_task(
             exit_code = 0
         else:
             child_env = env_for_task(root, task, config)
-            if stage_key in PRODUCTION_STAGE_KEYS:
+            paid_stage_execution = (
+                stage_key in PRODUCTION_STAGE_KEYS
+                and task.get("_runner_safe_local_execution") is not True
+            )
+            if paid_stage_execution:
                 expectation = paid_execution_expectation(task)
                 if not expectation:
                     raise ProducerContractError(
@@ -1832,6 +1938,18 @@ def execute_task(
                     paid_execution_contract.environment_for_expectation(expectation)
                 )
                 task["_runner_paid_expectation"] = expectation
+                authorization = task.get("_runner_production_authorization")
+                if (
+                    isinstance(authorization, Mapping)
+                    and authorization.get("version") == spend_envelope_mod.VERSION
+                ):
+                    # Last local boundary before the provider subprocess.  A reservation is
+                    # intentionally *not* executable-idempotent: if this process dies after a
+                    # provider may have charged, the same id and every later call fail closed
+                    # until durable provider completion evidence finalizes the reservation.
+                    task["_runner_spend_consumption"] = spend_envelope_mod.consume(
+                        root, authorization, **_phase_consumption_kwargs(task)
+                    )
             execution_started = True
             exit_code, stdout, stderr = run_process(
                 command,
@@ -1841,7 +1959,7 @@ def execute_task(
             )
             status = "pass" if exit_code == 0 else "fail"
             note = f"exit_code={exit_code}"
-            if stage_key in PRODUCTION_STAGE_KEYS:
+            if paid_stage_execution:
                 producer_contract = task.get("_runner_producer_contract")
                 if (
                     ALLOW_TEST_FIXTURE_AUTHORIZATION
@@ -1893,6 +2011,24 @@ def execute_task(
                     output_verification = {"status": "pass", "issues": []}
             elif status == "pass":
                 output_verification = {"status": "not_applicable", "issues": []}
+            if (
+                status == "pass"
+                and paid_stage_execution
+                and isinstance(task.get("_runner_spend_consumption"), Mapping)
+            ):
+                authorization = task.get("_runner_production_authorization")
+                consumption = task["_runner_spend_consumption"].get("consumption") or {}
+                completion_evidence = {
+                    "kind": "n2d_provider_completion_evidence",
+                    "paid_execution_receipts": dict(task.get("_runner_paid_receipts") or {}),
+                    "producer_output_bindings": list(task.get("_runner_verified_outputs") or []),
+                }
+                task["_runner_spend_completion"] = spend_envelope_mod.finalize(
+                    root,
+                    authorization,
+                    consumption_id=str(consumption.get("consumption_id") or ""),
+                    evidence=completion_evidence,
+                )
     except subprocess.TimeoutExpired as exc:
         status = "fail"
         exit_code = None
@@ -1933,6 +2069,9 @@ def execute_task(
     producer_contract_issue = task.pop("_runner_producer_contract_issue", None)
     paid_expectation = task.pop("_runner_paid_expectation", None)
     paid_receipts = task.pop("_runner_paid_receipts", None)
+    spend_consumption = task.pop("_runner_spend_consumption", None)
+    spend_completion = task.pop("_runner_spend_completion", None)
+    safe_local_execution = bool(task.pop("_runner_safe_local_execution", False))
     output_baseline = task.pop("_runner_output_baseline", None)
     verified_outputs = task.pop("_runner_verified_outputs", None)
     if isinstance(authorization, dict):
@@ -1957,6 +2096,13 @@ def execute_task(
     task["last_runner"]["completion"]["paid_execution_expectation"] = (
         dict(paid_expectation) if isinstance(paid_expectation, Mapping) else {}
     )
+    task["last_runner"]["completion"]["phase_spend_consumption"] = (
+        dict(spend_consumption) if isinstance(spend_consumption, Mapping) else {}
+    )
+    task["last_runner"]["completion"]["phase_spend_completion"] = (
+        dict(spend_completion) if isinstance(spend_completion, Mapping) else {}
+    )
+    task["last_runner"]["completion"]["safe_local_execution"] = safe_local_execution
     task.setdefault("history", []).append({
         "ts": queue_mod.now_iso(),
         "action": f"runner:{status}",
@@ -2206,7 +2352,7 @@ def _preview_once(
         except Exception as exc:
             command = ""
             issue = {"stop_reason": "configuration", "headline": str(exc)}
-        authorization = _authorization_from_config(task, config)
+        authorization = _authorization_from_config(task, config, root)
         if authorization is not None:
             task["_runner_production_authorization"] = authorization
         stage_key = str(task.get("stage_key") or "")

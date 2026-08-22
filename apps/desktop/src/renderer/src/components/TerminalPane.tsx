@@ -16,6 +16,7 @@ import "@xterm/xterm/css/xterm.css";
 import { pickDefaultAgent, ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
 import { scheduleWindowResizeEvent } from "../paneLayout";
 import { copySelectedTerminalText } from "../terminalClipboard";
+import { terminalLaunchCommand } from "../terminalJobLifecycle";
 import { useI18n } from "../i18n";
 import type { AgentInfo } from "../types";
 import { AgentBar } from "./AgentBar";
@@ -35,11 +36,19 @@ export interface AgentRuntimeStatus {
 
 /** Imperative handle so parents can drive the live shell (e.g. "进入" an agent). */
 export interface TerminalHandle {
-  runCommand: (cmd: string) => void;
+  /** Resolves true only after the main process wrote to a live PTY. */
+  runCommand: (cmd: string) => Promise<boolean>;
+  activeSessionId: () => string;
   switchCommand: (cmd: string, agentId?: string | null) => void;
   newSession: () => void;
   focus: () => void;
 }
+
+export type TerminalSessionEndReason =
+  | "process_exit"
+  | "command_replaced"
+  | "session_closed"
+  | "component_unmounted";
 
 type TerminalPaneProps = {
   cwd: string;
@@ -50,6 +59,8 @@ type TerminalPaneProps = {
   onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
   onPermissionNotice?: (notice: string) => void;
   onActiveAgentChange?: (agent: AgentInfo | null) => void;
+  /** A logical executor lifetime ended; callers must tolerate duplicate lifecycle notifications. */
+  onSessionEnd?: (sessionId: string, reason: TerminalSessionEndReason) => void;
 };
 
 type TerminalSessionState = {
@@ -60,8 +71,8 @@ type TerminalSessionState = {
 };
 
 type TerminalSessionHandle = {
-  runCommand: (cmd: string) => void;
-  switchCommand: (cmd: string) => void;
+  runCommand: (cmd: string) => Promise<boolean>;
+  switchCommand: (cmd: string, agentOwned: boolean) => void;
   focus: () => void;
 };
 
@@ -159,6 +170,7 @@ function TerminalSessionView({
   onReady,
   onRuntimeStatus,
   onPermissionNotice,
+  onSessionEnd,
   toolbar,
 }: {
   cwd: string;
@@ -168,16 +180,19 @@ function TerminalSessionView({
   onReady?: () => void;
   onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
   onPermissionNotice?: (notice: string) => void;
+  onSessionEnd?: (reason: TerminalSessionEndReason) => void;
   toolbar?: ReactNode;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const ptyIdRef = useRef<number | null>(null);
+  const commandReadyRef = useRef(false);
   const termRef = useRef<Terminal | null>(null);
   const activeRef = useRef(active);
   const onReadyRef = useRef(onReady);
   const onRuntimeStatusRef = useRef(onRuntimeStatus);
   const onPermissionNoticeRef = useRef(onPermissionNotice);
-  const switchCommandRef = useRef<(cmd: string) => void>(() => {});
+  const onSessionEndRef = useRef(onSessionEnd);
+  const switchCommandRef = useRef<(cmd: string, agentOwned: boolean) => void>(() => {});
   const scheduleRefitRef = useRef<() => void>(() => {});
   const decoderRef = useRef(new TextDecoder());
   const statusBufferRef = useRef("");
@@ -187,15 +202,22 @@ function TerminalSessionView({
   onReadyRef.current = onReady;
   onRuntimeStatusRef.current = onRuntimeStatus;
   onPermissionNoticeRef.current = onPermissionNotice;
+  onSessionEndRef.current = onSessionEnd;
 
   useEffect(() => {
     register(session.id, {
-      runCommand: (cmd: string) => {
-        if (ptyIdRef.current != null) ptyWrite(ptyIdRef.current, cmd + "\r").catch(() => {});
-        termRef.current?.focus();
+      runCommand: async (cmd: string) => {
+        if (ptyIdRef.current == null || !commandReadyRef.current) return false;
+        try {
+          const written = await ptyWrite(ptyIdRef.current, cmd + "\r");
+          termRef.current?.focus();
+          return written;
+        } catch {
+          return false;
+        }
       },
-      switchCommand: (cmd: string) => {
-        switchCommandRef.current(cmd);
+      switchCommand: (cmd: string, agentOwned: boolean) => {
+        switchCommandRef.current(cmd, agentOwned);
         termRef.current?.focus();
       },
       focus: () => termRef.current?.focus(),
@@ -262,6 +284,13 @@ function TerminalSessionView({
     const fitTimers: number[] = [];
     const unlisten: Array<() => void> = [];
     const disposables: Array<{ dispose: () => void }> = [];
+    const endedPtyIds = new Set<number>();
+
+    const notifyPtyEnded = (id: number, reason: TerminalSessionEndReason) => {
+      if (endedPtyIds.has(id)) return;
+      endedPtyIds.add(id);
+      onSessionEndRef.current?.(reason);
+    };
 
     const fitToHost = () => {
       if (disposed || !activeRef.current || !hostRef.current) return;
@@ -349,14 +378,21 @@ function TerminalSessionView({
       }
     }
 
-    async function startSession(command?: string, clear = false) {
+    async function startSession(command = "", clear = false, agentOwned = false) {
       const seq = ++runSeq;
       const previous = ptyIdRef.current;
       ptyIdRef.current = null;
+      commandReadyRef.current = false;
       statusBufferRef.current = "";
       lastPermissionNoticeRef.current = "";
       if (activeRef.current) onRuntimeStatusRef.current?.({});
-      if (previous != null) await ptyKill(previous).catch(() => {});
+      if (previous != null) {
+        // Replacing an agent/native process ends the executor that owns any
+        // jobs dispatched to this logical terminal session. Notify before the
+        // asynchronous kill so a fast pty-exit cannot race past settlement.
+        notifyPtyEnded(previous, "command_replaced");
+        await ptyKill(previous).catch(() => {});
+      }
       if (disposed || seq !== runSeq) return;
 
       if (clear) {
@@ -377,15 +413,22 @@ function TerminalSessionView({
         }
         ptyIdRef.current = id;
         scheduleRefit();
+        const launchCommand = terminalLaunchCommand(command, agentOwned);
+        if (launchCommand) await ptyWrite(id, launchCommand + "\r");
+        if (disposed || seq !== runSeq || ptyIdRef.current !== id) return;
+        commandReadyRef.current = true;
         if (activeRef.current) onReadyRef.current?.();
-        if (command) ptyWrite(id, command + "\r").catch(() => {});
       } catch (e) {
+        const failedId = ptyIdRef.current;
+        ptyIdRef.current = null;
+        commandReadyRef.current = false;
+        if (failedId != null) ptyKill(failedId).catch(() => {});
         if (!disposed) term.write(`\r\n\x1b[31m[terminal error] ${String(e)}\x1b[0m\r\n`);
       }
     }
 
-    switchCommandRef.current = (cmd: string) => {
-      startSession(cmd, true).catch(() => {});
+    switchCommandRef.current = (cmd: string, agentOwned: boolean) => {
+      startSession(cmd, true, agentOwned).catch(() => {});
     };
 
     unlisten.push(
@@ -400,7 +443,9 @@ function TerminalSessionView({
       onAppEvent("pty-exit", (payload) => {
         if (payload.id !== ptyIdRef.current) return;
         ptyIdRef.current = null;
+        commandReadyRef.current = false;
         term.write("\r\n\x1b[90m[process exited]\x1b[0m\r\n");
+        notifyPtyEnded(payload.id, "process_exit");
       }),
     );
 
@@ -424,7 +469,7 @@ function TerminalSessionView({
       }),
     );
 
-    startSession(session.command).catch(() => {});
+    startSession(session.command, false, Boolean(session.agentId && session.agentId !== "native")).catch(() => {});
     scheduleRefit();
 
     const refit = () => scheduleRefit();
@@ -435,6 +480,10 @@ function TerminalSessionView({
     return () => {
       disposed = true;
       runSeq++;
+      const livePty = ptyIdRef.current;
+      ptyIdRef.current = null;
+      commandReadyRef.current = false;
+      if (livePty != null) notifyPtyEnded(livePty, "component_unmounted");
       switchCommandRef.current = () => {};
       scheduleRefitRef.current = () => {};
       window.removeEventListener("resize", refit);
@@ -448,8 +497,7 @@ function TerminalSessionView({
       ro.disconnect();
       unlisten.forEach((fn) => fn());
       disposables.forEach((d) => d.dispose());
-      if (ptyIdRef.current != null) ptyKill(ptyIdRef.current).catch(() => {});
-      ptyIdRef.current = null;
+      if (livePty != null) ptyKill(livePty).catch(() => {});
       termRef.current = null;
       term.dispose();
     };
@@ -475,6 +523,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     onRuntimeStatus,
     onPermissionNotice,
     onActiveAgentChange,
+    onSessionEnd,
   }, ref) {
     const { t } = useI18n();
     const [sessions, setSessions] = useState<TerminalSessionState[]>(() => [makeSession()]);
@@ -560,10 +609,12 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     }
 
     useImperativeHandle(ref, () => ({
-      runCommand: (cmd: string) => {
-        sessionRefs.current.get(activeIdRef.current)?.runCommand(cmd);
+      runCommand: async (cmd: string) => {
+        const written = await (sessionRefs.current.get(activeIdRef.current)?.runCommand(cmd) ?? Promise.resolve(false));
         sessionRefs.current.get(activeIdRef.current)?.focus();
+        return written;
       },
+      activeSessionId: () => activeIdRef.current,
       switchCommand: (cmd: string, agentId: string | null = "native") => {
         const id = activeIdRef.current;
         setSessions((prev) =>
@@ -571,7 +622,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             session.id === id ? { ...session, title: commandTitle(cmd), command: cmd, agentId } : session,
           ),
         );
-        sessionRefs.current.get(id)?.switchCommand(cmd);
+        sessionRefs.current.get(id)?.switchCommand(cmd, Boolean(agentId && agentId !== "native"));
         sessionRefs.current.get(id)?.focus();
       },
       newSession: () => addSession(),
@@ -579,6 +630,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     }));
 
     function closeSession(id: string) {
+      onSessionEnd?.(id, "session_closed");
       setSessions((prev) => {
         const index = prev.findIndex((session) => session.id === id);
         const remaining = prev.filter((session) => session.id !== id);
@@ -603,7 +655,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
           session.id === id ? { ...session, title: commandTitle(""), command: "", agentId: "native" } : session,
         ),
       );
-      sessionRefs.current.get(id)?.switchCommand("");
+      sessionRefs.current.get(id)?.switchCommand("", false);
       sessionRefs.current.get(id)?.focus();
       if (activeIdRef.current === id) {
         onRuntimeStatus?.({});
@@ -619,7 +671,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             : session,
         ),
       );
-      sessionRefs.current.get(id)?.switchCommand(agent.command);
+      sessionRefs.current.get(id)?.switchCommand(agent.command, true);
       sessionRefs.current.get(id)?.focus();
       if (activeIdRef.current === id) {
         onRuntimeStatus?.({});
@@ -642,6 +694,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
               onReady={onReady}
               onRuntimeStatus={(status) => publishRuntimeStatus(session.id, status)}
               onPermissionNotice={onPermissionNotice}
+              onSessionEnd={(reason) => onSessionEnd?.(session.id, reason)}
               toolbar={
                 <AgentBar
                   className="terminal-agent-bar"

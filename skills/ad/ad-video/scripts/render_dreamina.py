@@ -37,6 +37,7 @@ if str(AD_LIB) not in sys.path:
 from ad_video_prompt_compiler import parse_markdown  # noqa: E402
 from ad_video_prompt_compiler import normalize_backend  # noqa: E402
 import io_utils  # noqa: E402  本线 _lib 原子写（账本落盘不可半写）
+import spend_envelope  # noqa: E402  阶段预算包：真实付费提交前原子/幂等消费
 
 CRAFT_SCRIPTS = Path(__file__).resolve().parents[2] / "ad-craft" / "scripts"
 if str(CRAFT_SCRIPTS) not in sys.path:
@@ -46,6 +47,11 @@ SUCCESS_STATUSES = {"success", "succeeded", "completed", "done"}
 PENDING_STATUSES = {"querying", "queueing", "queued", "processing", "running", "pending", "submitted", "created"}
 RETRY_ATTEMPTS = 3
 RETRY_BASE_DELAY = 1.0
+SPEND_CHANNEL = "Dreamina/即梦官方 CLI/API"
+
+
+class SpendSettlementBlocked(RuntimeError):
+    """A paid call happened, but actual-cost reconciliation blocks further spend."""
 
 
 def now_iso() -> str:
@@ -367,14 +373,201 @@ def job_matches(job: Mapping[str, Any], only: set[str]) -> bool:
 
 
 def spent_credits(jobs: Sequence[Any]) -> float:
-    """累计本 manifest 已付费消耗：有 submit_id 即已扣费；credit_count 缺失按 1 计。"""
+    """累计已付费消耗；actual 缺失时只能回退到显式保守上界。"""
     total = 0.0
     for job in jobs:
         if not isinstance(job, dict) or not job.get("submit_id"):
             continue
         credit = job.get("credit_count")
-        total += float(credit) if isinstance(credit, (int, float)) and not isinstance(credit, bool) else 1.0
+        if isinstance(credit, (int, float)) and not isinstance(credit, bool) and math.isfinite(float(credit)):
+            total += float(credit)
+        else:
+            total += conservative_credit_upper_bound(job)
     return total
+
+
+def conservative_credit_upper_bound(job: Mapping[str, Any]) -> float:
+    value = job.get("estimated_credit_count")
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(float(value))
+        or float(value) < 0
+    ):
+        raise RuntimeError("manifest 缺有限非负 estimated_credit_count；未知 cost 禁止付费提交")
+    if job.get("estimated_credit_count_is_upper_bound") is not True:
+        raise RuntimeError("estimated_credit_count 必须显式标记为保守上界")
+    if not str(job.get("estimated_credit_count_source") or "").strip():
+        raise RuntimeError("estimated_credit_count_source 缺失；无法审计保守积分上界")
+    return float(value)
+
+
+def video_phase_spend_binding(
+    root: Path,
+    manifest: Mapping[str, Any],
+    *,
+    model_version: str,
+    video_resolution: str,
+) -> tuple[str, Dict[str, Any]]:
+    """Hash the immutable full stage request plan, excluding mutable submit/output status."""
+    rows = []
+    for job in manifest.get("jobs") or []:
+        if not isinstance(job, Mapping):
+            continue
+        prompt_rel = str(job.get("prompt") or "")
+        prompt_path = root / prompt_rel
+        prompt = build_prompt(prompt_path) if prompt_path.is_file() else ""
+        frames = {}
+        for label, key in (("first", "first_frame"), ("end", "end_frame")):
+            rel = str(job.get(key) or "")
+            frames[label] = {"path": rel, "sha256": sha256_file(root / rel) if rel else None}
+        rows.append({
+            "job_id": str(job.get("job_id") or ""),
+            "clip": str(job.get("clip") or ""),
+            "mode": str(job.get("mode") or "image2video"),
+            "duration": float(job.get("duration") or 4.0),
+            "expected_output": str(job.get("expected_output") or ""),
+            "prompt": prompt_rel,
+            "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+            "frames": frames,
+            "route_primary": str(((job.get("route") or {}).get("primary")) or ""),
+            "estimated_credit_count": job.get("estimated_credit_count"),
+            "estimated_credit_count_is_upper_bound": job.get(
+                "estimated_credit_count_is_upper_bound"
+            ),
+            "estimated_credit_count_source": str(job.get("estimated_credit_count_source") or ""),
+        })
+    rows.sort(key=lambda row: (row["job_id"], row["expected_output"]))
+    scope = {
+        "manifest": "出视频/分镜/video_jobs_manifest.json",
+        "jobs": [row["job_id"] for row in rows],
+    }
+    digest = spend_envelope.canonical_digest({
+        "line": "ad", "stage": "video", "scope": scope, "jobs": rows,
+        "model": model_version, "channel": SPEND_CHANNEL,
+        "video_resolution": video_resolution,
+    })
+    return digest, scope
+
+
+def consume_video_spend(
+    root: Path,
+    manifest: Mapping[str, Any],
+    job: Dict[str, Any],
+    *,
+    model_version: str,
+    video_resolution: str,
+    envelope_path: Optional[Path],
+) -> Dict[str, Any]:
+    cost = conservative_credit_upper_bound(job)
+    path = envelope_path or spend_envelope.default_envelope_path(root, "video")
+    approved = spend_envelope.load_envelope(path)
+    input_sha256, scope = video_phase_spend_binding(
+        root, manifest, model_version=model_version, video_resolution=video_resolution,
+    )
+    attempt = int(job.get("spend_attempts") or 0) + 1
+    receipt = spend_envelope.consume(
+        root,
+        approved,
+        stage="video",
+        model=model_version,
+        channel=SPEND_CHANNEL,
+        input_sha256=input_sha256,
+        scope=scope,
+        consumption_id=f"video:{job.get('job_id') or job.get('clip') or 'job'}:{attempt}",
+        attempt_id=str(attempt),
+        calls=1,
+        cost=cost,
+        currency="credit",
+    )
+    job["spend_attempts"] = attempt
+    job["spend_authorization"] = {
+        "envelope_id": receipt["envelope_id"],
+        "authorization_digest": receipt["authorization_digest"],
+        "consumption_id": receipt["consumption"]["consumption_id"],
+        "input_sha256": input_sha256,
+        "consumed_at": receipt["consumption"].get("consumed_at"),
+        "attempt_id": str(attempt),
+        "reserved_credit_count": cost,
+    }
+    return receipt
+
+
+def settle_video_spend(
+    root: Path,
+    job: Dict[str, Any],
+    payload: Mapping[str, Any],
+    *,
+    envelope_path: Optional[Path],
+) -> Dict[str, Any]:
+    actual = payload.get("credit_count")
+    if (
+        isinstance(actual, bool)
+        or not isinstance(actual, (int, float))
+        or not math.isfinite(float(actual))
+        or float(actual) < 0
+    ):
+        job["spend_settlement"] = {
+            "status": "blocked",
+            "issue": "provider did not return a finite non-negative credit_count",
+        }
+        raise SpendSettlementBlocked("provider 未返回可核验 actual credit_count；拒绝后续付费提交")
+    authorization = job.get("spend_authorization")
+    if not isinstance(authorization, Mapping) or not authorization.get("consumption_id"):
+        raise SpendSettlementBlocked("spend reservation receipt missing before actual-cost settlement")
+    path = envelope_path or spend_envelope.default_envelope_path(root, "video")
+    approved = spend_envelope.load_envelope(path)
+    result = spend_envelope.settle(
+        root,
+        approved,
+        consumption_id=str(authorization["consumption_id"]),
+        actual_cost=float(actual),
+        currency="credit",
+    )
+    job["spend_settlement"] = result
+    if result.get("status") != "pass":
+        raise SpendSettlementBlocked("provider actual credit_count 超过阶段预算上限；已记账并阻断后续提交")
+    return result
+
+
+def reconcile_existing_video_spend(
+    root: Path,
+    job: Dict[str, Any],
+    payload: Mapping[str, Any],
+    *,
+    envelope_path: Optional[Path],
+    terminal: bool,
+) -> Dict[str, Any]:
+    """Reconcile actual credits returned by a free query of an existing submit id.
+
+    A pending provider response may omit actual cost; the reservation then stays visibly
+    unsettled and blocks every later paid call.  A terminal response may not be promoted to a
+    completed deliverable until actual cost is known and settled (including over-cap recording).
+    """
+    if not isinstance(job.get("spend_authorization"), Mapping):
+        return {"status": "legacy_untracked"}
+    current = job.get("spend_settlement")
+    if isinstance(current, Mapping) and current.get("status") == "pass":
+        return dict(current)
+    actual = payload.get("credit_count")
+    valid_actual = (
+        not isinstance(actual, bool)
+        and isinstance(actual, (int, float))
+        and math.isfinite(float(actual))
+        and float(actual) >= 0
+    )
+    if not valid_actual:
+        job["spend_settlement"] = {
+            "status": "blocked",
+            "issue": "provider query has not returned a finite non-negative credit_count",
+        }
+        if terminal:
+            raise SpendSettlementBlocked(
+                "existing submit 已完成但 actual credit_count 仍未知；保留 reservation，拒绝标记完整交付"
+            )
+        return dict(job["spend_settlement"])
+    job["credit_count"] = float(actual)
+    return settle_video_spend(root, job, payload, envelope_path=envelope_path)
 
 
 def enforce_gate(root: Path) -> None:
@@ -402,6 +595,7 @@ def render_jobs(
     submit_only: bool = False,
     collect_only: bool = False,
     max_credits: Optional[float] = None,
+    spend_envelope_path: Optional[Path] = None,
 ) -> Dict[str, Any]:
     root = root.resolve()
     if not collect_only:
@@ -449,7 +643,14 @@ def render_jobs(
         existing_submit_id = str(job.get("submit_id") or "")
         currentness = (existing_job_staleness(job, root, target, render_ref, planned_source)
                        if target.exists() or existing_submit_id else [])
-        if target.exists() and not force:
+        spend_ready = (
+            not isinstance(job.get("spend_authorization"), Mapping)
+            or (
+                isinstance(job.get("spend_settlement"), Mapping)
+                and job["spend_settlement"].get("status") == "pass"
+            )
+        )
+        if target.exists() and not force and spend_ready:
             if currentness:
                 job["status"] = collected_status(currentness)
                 job["stale_reasons"] = currentness
@@ -464,6 +665,13 @@ def render_jobs(
                 payload = retry_call(lambda: query_dreamina_result(existing_submit_id),
                                      describe=f"query_result submit_id={existing_submit_id}")
                 if payload.get("_pending_status"):
+                    reconcile_existing_video_spend(
+                        root,
+                        job,
+                        payload,
+                        envelope_path=spend_envelope_path,
+                        terminal=False,
+                    )
                     job["status"] = "submitted_stale_profile" if currentness else "submitted"
                     if currentness:
                         job["stale_reasons"] = currentness
@@ -471,6 +679,13 @@ def render_jobs(
                     pending += 1
                     print(f"[pending] {job.get('job_id')} submit_id={existing_submit_id} status={payload.get('_pending_status')}", flush=True)
                     continue
+                reconcile_existing_video_spend(
+                    root,
+                    job,
+                    payload,
+                    envelope_path=spend_envelope_path,
+                    terminal=True,
+                )
                 retry_call(lambda: download_result(payload, target),
                            describe=f"download submit_id={existing_submit_id}")
                 job.update({
@@ -544,6 +759,16 @@ def render_jobs(
                 for label, key in (("first", "first_frame"), ("end", "end_frame"))
                 if job.get(key)
             }
+            consume_video_spend(
+                root,
+                manifest,
+                job,
+                model_version=model_version,
+                video_resolution=video_resolution,
+                envelope_path=spend_envelope_path,
+            )
+            # Persist the authorization reservation before crossing the provider boundary.
+            write_json(manifest_path, manifest)
             payload = run_dreamina_video(
                 job,
                 root,
@@ -551,6 +776,22 @@ def render_jobs(
                 video_resolution=video_resolution,
                 poll=0 if submit_only else poll,
             )
+            # Provider boundary crossed: persist the recovery handle and actual charge before
+            # any download/QC work, then atomically reconcile the conservative reservation.
+            job.update({
+                "status": "collect_pending",
+                "submit_id": payload.get("submit_id"),
+                "credit_count": payload.get("credit_count"),
+                "submitted_at": now_iso(),
+            })
+            write_json(manifest_path, manifest)
+            settle_video_spend(
+                root,
+                job,
+                payload,
+                envelope_path=spend_envelope_path,
+            )
+            write_json(manifest_path, manifest)
             if payload.get("_pending_status"):
                 job.update({
                     "status": "submitted",
@@ -653,7 +894,7 @@ def render_jobs(
             job["status"] = "collect_pending" if job.get("submit_id") else "failed"
             job["error"] = str(exc)
             print(f"[block] {job.get('job_id')} {exc}", file=sys.stderr, flush=True)
-            if not force:
+            if isinstance(exc, SpendSettlementBlocked) or not force:
                 break
         finally:
             write_json(manifest_path, manifest)
@@ -703,6 +944,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--collect-only", action="store_true", help="只查询已登记 submit_id 并下载完成结果，不提交新任务")
     ap.add_argument("--max-credits", type=float, default=None,
                     help="本 manifest 累计 credit 封顶；付费提交前检查，超限停止（默认不设限）")
+    ap.add_argument("--spend-envelope", type=Path,
+                    help="v2 阶段预算包；默认 生产数据/spend_envelopes/video.json")
     ns = ap.parse_args(argv)
     try:
         summary = render_jobs(
@@ -716,6 +959,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             submit_only=ns.submit_only,
             collect_only=ns.collect_only,
             max_credits=ns.max_credits,
+            spend_envelope_path=ns.spend_envelope,
         )
     except Exception as exc:
         print(f"[block] {exc}", file=sys.stderr, flush=True)

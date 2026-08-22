@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """漫画线流程推进脚本：推进已签收阶段，出图阶段带 gate 批跑。
 
-- 缩略分镜/name board 与 layout 默认只产 draft，批跑必须停下等待人工或用户授权制作代理签收；
+- 缩略分镜/name board 与 layout 先产 draft；项目显式授权 delegated review 时在同一次 run 内提交、批准、复核并继续；
 - 已签收后才继续原稿收尾/出图包/嵌字合成等确定性阶段；
 - 出图阶段先跑 image_preflight gate，通过才调 runner，之后跑 image gate；
 - 审查阶段只跑 review gate 产报告，不代替人工把 审查 标 ✅；
@@ -23,6 +23,12 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from progress import update_stage as update_progress
+from editorial_authorization import (
+    DELEGATED_REVIEW_POLICY,
+    EditorialAuthorizationError,
+    delegated_review_authorization,
+    project_review_policy,
+)
 
 
 STAGES = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
@@ -177,19 +183,96 @@ def editorial_status(root: Path, chapter: str, stage: str) -> str:
     return str(load_json_file(path).get("workflow_status") or "")
 
 
-def print_editorial_wait(root: Path, chapter: str, stage: str, status: str) -> None:
+def advance_editorial_review(
+    repo: Path,
+    root: Path,
+    chapter: str,
+    stage: str,
+    status: str,
+) -> tuple[int, bool]:
+    """Advance an explicitly authorized delegated review in this process.
+
+    The boolean says whether the stage reached an approved/current state.  A
+    project that explicitly selected human review returns cleanly without an
+    approval; missing/invalid authority is a blocking configuration error.
+    """
     if stage == "缩略分镜":
         script = "skills/comic/comic-name/scripts/build_name_board.py"
         label = "name_board"
+        authorization_stage = "name_board"
     else:
         script = "skills/comic/comic-layout/scripts/build_layout.py"
         label = "layout"
+        authorization_stage = "layout"
+
+    policy = project_review_policy(root)
+    if policy == "逐阶段用户确认":
+        print(
+            f"[comic-batch] {label} status={status or 'missing'}；项目显式设置逐阶段用户确认，"
+            "保留在当前编辑签收点，不执行 delegated approval。",
+            flush=True,
+        )
+        return 0, False
+
+    reviewer = "delegate:comic-production-agent"
+    try:
+        authorization = delegated_review_authorization(root, reviewer, authorization_stage)
+    except EditorialAuthorizationError as exc:
+        print(
+            f"[block] {label} delegated review 未获项目授权：{exc}。"
+            f"请在 _设置.md 显式写入 审阅策略: {DELEGATED_REVIEW_POLICY}，"
+            "或提供当前有效的 生产数据/authorizations/editorial_review.json。",
+            flush=True,
+        )
+        return 2, False
+    assert authorization is not None
+
     print(
-        f"[comic-batch] {label} status={status or 'missing'}；已停在人工签收点，不会自动越过。\n"
-        f"  1) python3 {script} \"{root}\" --chapter {chapter} --submit-review\n"
-        f"  2) python3 {script} \"{root}\" --chapter {chapter} --approve --reviewed-by <签收人>",
+        f"[comic-batch] {label} status={status or 'missing'}；authorization={authorization['source']}；"
+        "在本次 run 内执行 delegated draft → review → approved → check。",
         flush=True,
     )
+    if status == "draft":
+        rc = run_cmd(
+            [sys.executable, script, str(root), "--chapter", chapter, "--submit-review", "--no-progress"],
+            repo,
+        )
+        if rc != 0:
+            return rc, False
+    elif status != "review":
+        print(f"[block] {label} workflow_status={status or 'missing'}，不能代理签收", flush=True)
+        return 2, False
+
+    note = (
+        f"review_kind=delegated_policy_auto_review；由项目 {authorization['source']} 授权；"
+        "仅完成机器结构复核（schema、当前 subject SHA 与上游 SHA 绑定），"
+        "未声明视觉/语义人审；批准范围仅限当前可逆内部编辑阶段"
+    )
+    rc = run_cmd(
+        [
+            sys.executable,
+            script,
+            str(root),
+            "--chapter",
+            chapter,
+            "--approve",
+            "--reviewed-by",
+            reviewer,
+            "--approval-note",
+            note,
+            "--no-progress",
+        ],
+        repo,
+    )
+    if rc != 0:
+        return rc, False
+    rc = check_approved_editorial_stage(repo, root, chapter, stage)
+    if rc != 0:
+        print(f"[block] {label} delegated approval 写入后未通过当前 SHA/check，停止推进", flush=True)
+        return rc, False
+    update_progress_stage(root, chapter, stage, "✅")
+    print(f"[comic-batch] {label} delegated approval/current；继续下一阶段", flush=True)
+    return 0, True
 
 
 def update_progress_stage(root: Path, chapter: str, stage: str, value: str) -> None:
@@ -251,6 +334,10 @@ def run_image_stage(repo: Path, root: Path, args: argparse.Namespace) -> int:
         cmd.extend(["--limit", str(args.limit)])
     if args.force:
         cmd.append("--force")
+    if args.spend_envelope:
+        cmd.extend(["--spend-envelope", args.spend_envelope])
+    if args.actual_cost_per_call:
+        cmd.extend(["--actual-cost-per-call", args.actual_cost_per_call])
     rc = run_cmd(cmd, repo)
     if rc != 0:
         return rc
@@ -292,8 +379,8 @@ def run_compose_stage(repo: Path, root: Path, chapter: str) -> int:
 STAGE_STOP_NOTE = {
     "源本/企划": "创作阶段：改编策略/分话/分格由 comic-script 完成，不自动跑",
     "漫画脚本": "创作阶段：source trace/分格由 comic-script 完成，不自动跑",
-    "缩略分镜": "⏸ 人工签收停点：draft → --submit-review → --approve --reviewed-by <签收人>",
-    "页面排版": "⏸ 人工签收停点：draft → --submit-review → --approve --reviewed-by <签收人>",
+    "缩略分镜": "代理审阅节点：项目显式授权时做机器 schema/SHA 复核并签当前 SHA；显式逐阶段人审才停用户",
+    "页面排版": "代理审阅节点：项目显式授权时做机器 schema/SHA 复核并签当前 SHA；显式逐阶段人审才停用户",
     "原稿收尾": "确定性阶段：build_finishing_plan（免费，只写计划）",
     "出图包": "确定性阶段：build_panel_jobs（免费，编译出图包）",
     "出图": "⏸ 付费生成停点：需项目授权后才跑 panel runner（会花钱）",
@@ -331,7 +418,7 @@ def plan_chapter(root: Path, chapter: str) -> int:
         hint = stage_hint_command(root, chapter, stage)
         if hint:
             print(f"       运行: {hint}", flush=True)
-    print("  说明：批跑会在每个 ⏸ 停点停下等人工/授权，不会自动越过签收或付费生成。", flush=True)
+    print("  说明：普通可逆审阅默认派发当前 agent 连续处理；付费预算、逐格像素、合规、发布与最终验收仍停。", flush=True)
     return 0
 
 
@@ -345,6 +432,16 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="重抽已 ready 的目标格")
     parser.add_argument("--image-max-attempts", type=int, default=1)
     parser.add_argument("--timeout-sec", type=int, default=240)
+    parser.add_argument(
+        "--spend-envelope",
+        default="",
+        help="人工签发的出图阶段预算 envelope；缺省使用项目标准路径",
+    )
+    parser.add_argument(
+        "--actual-cost-per-call",
+        default="",
+        help="已知的供应商单次实际成本；缺省由 runner 按 envelope 单次上限保守结算",
+    )
     parser.add_argument("--max-steps", type=int, default=12, help="单次调用最多推进多少个阶段（防循环）")
     parser.add_argument("--dry-run", action="store_true", help="只打印从当前前沿起的阶段计划与停点，不执行任何阶段")
     args = parser.parse_args()
@@ -375,7 +472,11 @@ def main() -> int:
         if stage in {"缩略分镜", "页面排版"}:
             status = editorial_status(root, args.chapter, stage)
             if status in {"draft", "review"}:
-                print_editorial_wait(root, args.chapter, stage, status)
+                rc, advanced = advance_editorial_review(repo, root, args.chapter, stage, status)
+                if rc != 0:
+                    return rc
+                if advanced:
+                    continue
                 return 0
             if status == "approved":
                 rc = check_approved_editorial_stage(repo, root, args.chapter, stage)
@@ -409,13 +510,17 @@ def main() -> int:
         if stage in {"缩略分镜", "页面排版"}:
             status = editorial_status(root, args.chapter, stage)
             if status != "approved":
-                print_editorial_wait(root, args.chapter, stage, status)
+                rc, advanced = advance_editorial_review(repo, root, args.chapter, stage, status)
+                if rc != 0:
+                    return rc
+                if advanced:
+                    continue
                 return 0
         new_stage = read_stage(root, args.chapter)
         if new_stage == stage:
             print(
                 f"[comic-batch] stage {stage} 已运行但前沿未推进"
-                "（多为该阶段只产出 draft/需人工签收，或产物未过 --check，不是自动失败）。",
+                "（多为该阶段只产出 draft/需代理或人工审阅，或产物未过 --check，不是自动失败）。",
                 flush=True,
             )
             hint = stage_hint_command(root, args.chapter, stage)

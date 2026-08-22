@@ -12,6 +12,8 @@ import {
 import { onAppEvent } from "../platform/bridge";
 import {
   detectAgents,
+  failCanvasTask,
+  markCanvasTaskRunning,
   pickDefaultAgent,
   readCanvas,
   ensureMedia,
@@ -22,14 +24,36 @@ import {
   workIsEmpty as checkWorkIsEmpty,
   workSnapshot,
 } from "../api";
-import type { AgentInfo, CanvasData, LineInfo, WorkChangeSummary, WorkRoot } from "../types";
-import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
+import type {
+  AgentInfo,
+  CanvasAgentDispatchContext,
+  CanvasAgentDispatchResult,
+  CanvasData,
+  LineInfo,
+  WorkChangeSummary,
+  WorkRoot,
+} from "../types";
+import {
+  TerminalPane,
+  type TerminalHandle,
+  type TerminalSessionEndReason,
+} from "../components/TerminalPane";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { Codicon } from "../components/Codicon";
 import { BreadcrumbHomeIcon } from "../components/BreadcrumbHomeIcon";
 import { RailIcon } from "../components/RailIcon";
 import { LoadingHint } from "../components/LoadingHint";
 import { plainLineLabel, useI18n, useLineLabel } from "../i18n";
+import {
+  classifyCanvasDispatchReservation,
+  decideCanvasJobWatchdog,
+  settleEndedCanvasJob,
+  shouldRehydrateCanvasJobWatchdog,
+  shouldRetryCanvasPromptWrite,
+  shouldSettleCanvasJobOnOwnerTeardown,
+  takeJobsForEndedSession,
+  type CanvasPromptWriteAttempt,
+} from "../terminalJobLifecycle";
 import {
   COLLAPSE_LEFT_SIDEBAR_EVENT,
   FILES_SIDE_COLLAPSE_WIDTH,
@@ -75,6 +99,13 @@ const TERMINAL_SIDE_COLLAPSE_WIDTH = OP_RIGHT_MIN_WIDTH;
 const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = OP_BOTTOM_MIN_HEIGHT;
 type LeftTab = "files" | "search" | "changes" | "canvas" | "review";
 type TerminalDock = "side" | "bottom";
+type PendingCanvasAgentJob = CanvasAgentDispatchContext & {
+  sessionId: string;
+  line: LineInfo["line"];
+  dispatchedAt: number;
+};
+type CanvasJobSettlementReason = TerminalSessionEndReason | "turn_deadline";
+const CANVAS_JOB_WATCHDOG_POLL_MS = 30_000;
 
 function isMacPlatform(): boolean {
   return /Mac|iPhone|iPad|iPod/.test(window.navigator.platform);
@@ -119,7 +150,7 @@ export function Operation(props: {
   const [err, setErr] = useState<string>("");
   // left-pane sub-tabs: 文件/搜索/技能/变动 for every line, plus visual 画布 and all-line 质检.
   const isCanvasLine = line.view === "canvas";
-  const [tab, setTab] = useState<LeftTab>("files");
+  const [tab, setTab] = useState<LeftTab>(() => line.view === "canvas" ? "canvas" : "files");
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [sidePanelOpen, setSidePanelOpen] = useState(true);
   // 画布 is a per-episode view driven by canvas data; 质检 is available to every line.
@@ -148,6 +179,10 @@ export function Operation(props: {
   const toastTimer = useRef<number | null>(null);
   const autoEnteredAgentRootRef = useRef<string | null>(null);
   const initialPromptSentRef = useRef<string | null>(null);
+  const pendingCanvasJobsRef = useRef(new Map<string, PendingCanvasAgentJob>());
+  const settlingCanvasJobsRef = useRef(new Set<string>());
+  const canvasJobWatchdogTimersRef = useRef(new Map<string, number>());
+  const operationMountedRef = useRef(true);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [rightWidth, setRightWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.op.rightWidth"));
@@ -218,35 +253,301 @@ export function Operation(props: {
     showToast(command ? t("operation.nativeOpenedWithCd") : t("operation.nativeEntered"));
   }
 
-  function runPromptInAgent(prompt: string) {
+  async function runPromptInAgent(
+    prompt: string,
+    task?: CanvasAgentDispatchContext,
+  ): Promise<CanvasAgentDispatchResult> {
+    let dispatchReserved = false;
     const nudgeRefresh = () => {
       setRefreshKey((k) => k + 1);
       setChangeScanKey((k) => k + 1);
     };
+    const waitForHandle = async (timeoutMs: number) => {
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        if (termRef.current) return termRef.current;
+        await new Promise((resolve) => window.setTimeout(resolve, 80));
+      }
+      return null;
+    };
+    const bindTaskToActiveSession = () => {
+      if (!task) return null;
+      const sessionId = termRef.current?.activeSessionId();
+      if (!sessionId) return null;
+      const current = pendingCanvasJobsRef.current.get(task.job_id);
+      pendingCanvasJobsRef.current.set(task.job_id, {
+        ...task,
+        sessionId,
+        line: line.line,
+        dispatchedAt: current?.dispatchedAt ?? Date.now(),
+      });
+      return sessionId;
+    };
+    const releaseFailedDispatch = (sessionId: string | null) => {
+      if (!task || !sessionId) return;
+      const pending = pendingCanvasJobsRef.current.get(task.job_id);
+      if (pending?.sessionId === sessionId) {
+        pendingCanvasJobsRef.current.delete(task.job_id);
+        const timer = canvasJobWatchdogTimersRef.current.get(task.job_id);
+        if (timer != null) window.clearTimeout(timer);
+        canvasJobWatchdogTimersRef.current.delete(task.job_id);
+      }
+    };
+    const reserveDispatch = async (): Promise<"active" | "succeeded" | "rejected"> => {
+      if (!task || dispatchReserved) return "active";
+      try {
+        // Reserve the durable task before sending bytes to the executor. If
+        // Electron dies between these operations, recovery keeps the committed
+        // inputs and the bounded lease makes the job retryable; an old prompt
+        // can never continue after its inputs were rolled back.
+        const state = await markCanvasTaskRunning(task.root, task.episode, task.job_id);
+        const status = state.tasks.find((item) => item.job_id === task.job_id)?.status;
+        const reservation = classifyCanvasDispatchReservation(status);
+        if (reservation !== "active") return reservation;
+        dispatchReserved = true;
+        return "active";
+      } catch {
+        return "rejected";
+      }
+    };
+    const writeToActiveSession = async (value: string): Promise<CanvasPromptWriteAttempt> => {
+      // Bind before awaiting the IPC write. A very short-lived executor can
+      // otherwise exit between the acknowledged write and rememberTask(),
+      // leaving its production job permanently running.
+      const sessionId = bindTaskToActiveSession();
+      if (task && sessionId) {
+        const reservation = await reserveDispatch();
+        if (reservation !== "active") {
+          releaseFailedDispatch(sessionId);
+          return reservation;
+        }
+      }
+      const written = await termRef.current?.runCommand(value) ?? false;
+      if (!written) releaseFailedDispatch(sessionId);
+      else if (task) scheduleCanvasJobWatchdog(task.job_id);
+      return written ? "written" : "retry";
+    };
+    const writeWhenReady = async (value: string, timeoutMs: number): Promise<CanvasPromptWriteAttempt> => {
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        const attempt = await writeToActiveSession(value);
+        if (!shouldRetryCanvasPromptWrite(attempt)) return attempt;
+        await new Promise((resolve) => window.setTimeout(resolve, 100));
+      }
+      return "retry";
+    };
+    const finishWithoutWrite = (attempt: CanvasPromptWriteAttempt): CanvasAgentDispatchResult | null => {
+      if (attempt === "succeeded") {
+        showToast(t("operation.canvasTaskAlreadyComplete"));
+        nudgeRefresh();
+        return "succeeded";
+      }
+      if (attempt === "rejected") {
+        showToast(t("operation.canvasTaskRefreshRequired"));
+        nudgeRefresh();
+        return "rejected";
+      }
+      return null;
+    };
+    const rejectUnsentTask = async (): Promise<CanvasAgentDispatchResult> => {
+      if (task) {
+        await failCanvasTask(
+          task.root,
+          task.episode,
+          task.job_id,
+          "agent dispatch was not acknowledged",
+        ).catch(() => undefined);
+      }
+      showToast(t("operation.agentDispatchFailed"));
+      nudgeRefresh();
+      return "rejected";
+    };
     const current = activeAgentRef.current;
     if (current) {
-      termRef.current?.runCommand(prompt);
-      showToast(t("operation.sentToAgent", { name: current.name }));
-      nudgeRefresh();
-      window.setTimeout(nudgeRefresh, 3000);
-      return;
+      const wasVisible = terminalVisible;
+      if (!wasVisible) onToggleTerminal();
+      const handle = await waitForHandle(4_000);
+      if (!handle) {
+        return rejectUnsentTask();
+      }
+      if (wasVisible) {
+        const attempt = await writeToActiveSession(prompt);
+        if (attempt === "written") {
+          showToast(t("operation.sentToAgent", { name: current.name }));
+          nudgeRefresh();
+          window.setTimeout(nudgeRefresh, 3000);
+          return "dispatched";
+        }
+        const terminal = finishWithoutWrite(attempt);
+        if (terminal) return terminal;
+      }
+      handle.switchCommand(current.command, current.id);
+      const attempt = await writeWhenReady(prompt, 8_000);
+      if (attempt === "written") {
+        showToast(t("operation.sentToAgent", { name: current.name }));
+        nudgeRefresh();
+        window.setTimeout(nudgeRefresh, 3000);
+        return "dispatched";
+      }
+      const terminal = finishWithoutWrite(attempt);
+      if (terminal) return terminal;
+      return rejectUnsentTask();
     }
 
     const def = pickDefaultAgent(agents ?? []);
     if (def) {
+      if (!terminalVisible) onToggleTerminal();
+      const handle = await waitForHandle(4_000);
+      if (!handle) {
+        return rejectUnsentTask();
+      }
       activeAgentRef.current = def;
       setTerminalMode("agent");
-      termRef.current?.switchCommand(def.command, def.id);
-      window.setTimeout(() => termRef.current?.runCommand(prompt), 700);
-      showToast(t("operation.startedAgentAndSent", { name: def.name }));
-      nudgeRefresh();
-      window.setTimeout(nudgeRefresh, 3800);
-      return;
+      handle.switchCommand(def.command, def.id);
+      const attempt = await writeWhenReady(prompt, 8_000);
+      if (attempt === "written") {
+        showToast(t("operation.startedAgentAndSent", { name: def.name }));
+        nudgeRefresh();
+        window.setTimeout(nudgeRefresh, 3800);
+        return "dispatched";
+      }
+      const terminal = finishWithoutWrite(attempt);
+      if (terminal) return terminal;
+      return rejectUnsentTask();
     }
 
     termRef.current?.focus();
     showToast(t("operation.noAgent"));
+    if (task) {
+      await failCanvasTask(task.root, task.episode, task.job_id, "no available agent executor").catch(() => undefined);
+      nudgeRefresh();
+    }
+    return "rejected";
   }
+
+  const scheduleCanvasJobSettlement = useCallback((task: PendingCanvasAgentJob, reason: CanvasJobSettlementReason) => {
+    if (settlingCanvasJobsRef.current.has(task.job_id)) return;
+    settlingCanvasJobsRef.current.add(task.job_id);
+    // A successful agent commonly writes its receipt immediately before a
+    // normal exit. Let the filesystem flush, then force a receipt-aware canvas
+    // read before deciding whether this lifecycle end is a failure.
+    void settleEndedCanvasJob({
+      // Forced teardown must reconcile immediately; only a normal process exit
+      // needs a short receipt-flush grace period.
+      graceMs: reason === "process_exit" ? 2500 : 0,
+      wait: (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds)),
+      readStatus: async () => {
+        const result = await readCanvas(task.root, task.episode, task.line);
+        return result.canvas?.production?.tasks.find((item) => item.job_id === task.job_id)?.status;
+      },
+      failActiveTask: () => failCanvasTask(
+        task.root,
+        task.episode,
+        task.job_id,
+        `agent PTY ended (${reason}) without a verified receipt`,
+      ),
+    })
+      .catch(() => "unresolved" as const)
+      .finally(() => {
+        settlingCanvasJobsRef.current.delete(task.job_id);
+        if (!operationMountedRef.current) return;
+        canvasSigRef.current = null;
+        setRefreshKey((key) => key + 1);
+      });
+  }, []);
+
+  const scheduleCanvasJobWatchdog = useCallback((jobId: string, delayMs = CANVAS_JOB_WATCHDOG_POLL_MS): void => {
+    const previousTimer = canvasJobWatchdogTimersRef.current.get(jobId);
+    if (previousTimer != null) window.clearTimeout(previousTimer);
+    if (!pendingCanvasJobsRef.current.has(jobId)) {
+      canvasJobWatchdogTimersRef.current.delete(jobId);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      canvasJobWatchdogTimersRef.current.delete(jobId);
+      const pending = pendingCanvasJobsRef.current.get(jobId);
+      if (!pending) return;
+      void readCanvas(pending.root, pending.episode, pending.line)
+        .then((result) => {
+          const snapshot = result.canvas?.production?.tasks.find((item) => item.job_id === jobId);
+          const decision = decideCanvasJobWatchdog(snapshot ? {
+            status: snapshot.status,
+            kind: snapshot.kind,
+            submittedAt: snapshot.submitted_at,
+          } : undefined, Date.now(), pending.dispatchedAt);
+          if (decision.action === "unbind") {
+            pendingCanvasJobsRef.current.delete(jobId);
+            if (operationMountedRef.current) {
+              canvasSigRef.current = null;
+              setRefreshKey((key) => key + 1);
+            }
+            return;
+          }
+          if (decision.action === "fail") {
+            pendingCanvasJobsRef.current.delete(jobId);
+            scheduleCanvasJobSettlement(pending, "turn_deadline");
+            return;
+          }
+          scheduleCanvasJobWatchdog(jobId, Math.min(CANVAS_JOB_WATCHDOG_POLL_MS, decision.remainingMs));
+        })
+        .catch(() => scheduleCanvasJobWatchdog(jobId));
+    }, Math.max(0, delayMs));
+    canvasJobWatchdogTimersRef.current.set(jobId, timer);
+  }, [scheduleCanvasJobSettlement]);
+
+  const settleJobsForEndedSession = useCallback((sessionId: string, reason: TerminalSessionEndReason) => {
+    for (const task of takeJobsForEndedSession(pendingCanvasJobsRef.current, sessionId)) {
+      const timer = canvasJobWatchdogTimersRef.current.get(task.job_id);
+      if (timer != null) window.clearTimeout(timer);
+      canvasJobWatchdogTimersRef.current.delete(task.job_id);
+      scheduleCanvasJobSettlement(task, reason);
+    }
+  }, [scheduleCanvasJobSettlement]);
+
+  useEffect(() => {
+    const production = canvas?.production;
+    if (!production) return;
+    for (const task of production.tasks) {
+      if (!shouldRehydrateCanvasJobWatchdog(
+        task.status,
+        pendingCanvasJobsRef.current.has(task.job_id),
+        settlingCanvasJobsRef.current.has(task.job_id),
+      )) continue;
+      const durableStartedAt = Date.parse(task.submitted_at);
+      pendingCanvasJobsRef.current.set(task.job_id, {
+        root: root.path,
+        episode: production.episode,
+        job_id: task.job_id,
+        line: line.line,
+        // No renderer session survives a restart. The sentinel keeps this
+        // recovered lease out of unrelated live PTY lifecycle claims.
+        sessionId: `recovered:${task.job_id}`,
+        dispatchedAt: Number.isFinite(durableStartedAt) ? durableStartedAt : Date.now(),
+      });
+      // Deliberately bypass known-sig reads: the watchdog must force main-side
+      // receipt reconciliation and lease expiry even without filesystem events.
+      scheduleCanvasJobWatchdog(task.job_id, 0);
+    }
+  }, [canvas?.production, line.line, root.path, scheduleCanvasJobWatchdog]);
+
+  useEffect(() => {
+    operationMountedRef.current = true;
+    return () => {
+      operationMountedRef.current = false;
+      // React may tear Operation down before child cleanup reaches us. Drain
+      // every outstanding binding here as a second, idempotent safety net.
+      for (const task of pendingCanvasJobsRef.current.values()) {
+        // A recovered binding has no PTY owned by this renderer. Navigating
+        // away must not turn a still-valid durable job into a false failure;
+        // main-side leases and the next mount's watchdog remain authoritative.
+        if (!shouldSettleCanvasJobOnOwnerTeardown(task.sessionId)) continue;
+        scheduleCanvasJobSettlement(task, "component_unmounted");
+      }
+      pendingCanvasJobsRef.current.clear();
+      for (const timer of canvasJobWatchdogTimersRef.current.values()) window.clearTimeout(timer);
+      canvasJobWatchdogTimersRef.current.clear();
+    };
+  }, [scheduleCanvasJobSettlement]);
 
   useEffect(() => {
     return () => {
@@ -394,7 +695,7 @@ export function Operation(props: {
     if (launchPrompt && initialPromptSentRef.current !== promptKey) {
       initialPromptSentRef.current = promptKey;
       window.setTimeout(() => {
-        termRef.current?.runCommand(launchPrompt);
+        void termRef.current?.runCommand(launchPrompt);
         setRefreshKey((key) => key + 1);
         setChangeScanKey((key) => key + 1);
       }, 720);
@@ -445,7 +746,7 @@ export function Operation(props: {
     // unchanged reads come back as a tiny `{ sig, unchanged }` envelope——no full
     // CanvasData structured-clone over IPC, no renderer-side JSON.stringify of a
     // large payload (both used to run on every fs event and janked the canvas).
-    readCanvas(root.path, ep, canvasSigRef.current || undefined)
+    readCanvas(root.path, ep, line.line, canvasSigRef.current || undefined)
       .then((d) => {
         if (!alive) return;
         if (d.unchanged || !d.canvas) {
@@ -1055,9 +1356,13 @@ export function Operation(props: {
                               line={line.line}
                               repoRoot={repoRoot}
                               refreshKey={refreshKey}
-                              onGeneratePrompt={(prompt) => {
-                                if (!terminalVisible) onToggleTerminal();
-                                runPromptInAgent(prompt);
+                              onGeneratePrompt={(prompt, task) => {
+                                return runPromptInAgent(prompt, task);
+                              }}
+                              onCanvasChanged={() => {
+                                canvasSigRef.current = null;
+                                setRefreshKey((key) => key + 1);
+                                setChangeScanKey((key) => key + 1);
                               }}
                             />
                           </Suspense>
@@ -1154,6 +1459,7 @@ export function Operation(props: {
             agents={agents}
             probeEnabled={active && secondaryReady}
             onActiveAgentChange={handleActiveAgentChange}
+            onSessionEnd={settleJobsForEndedSession}
             onPermissionNotice={(notice) => showToast(t("operation.agentPermissionNotice", { notice }))}
           />
         </div>

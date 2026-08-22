@@ -155,6 +155,40 @@ def test_name_approval_requires_named_reviewer_and_review_time(tmp_path: Path) -
         assert any(field in error for error in build_name_board.verify_approval(root, chapter, malformed))
 
 
+def test_delegated_name_approval_requires_explicit_current_project_authorization(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    settings = root / "_设置.md"
+    base_settings = "- 漫画形态：条漫\n- 阅读方向：从上到下\n"
+    settings.write_text(base_settings, encoding="utf-8")
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+    write_json(root / "排版" / chapter / "name_board.json", build_name_board.build_name_board(root, chapter))
+    build_name_board.transition_existing(root, chapter, "review")
+
+    with pytest.raises(build_name_board.NameBoardError, match="未显式设置"):
+        build_name_board.transition_existing(
+            root,
+            chapter,
+            "approved",
+            reviewed_by="delegate:comic-production-agent",
+        )
+
+    settings.write_text(base_settings + "- 审阅策略：用户授权制作代理\n", encoding="utf-8")
+    approved = build_name_board.transition_existing(
+        root,
+        chapter,
+        "approved",
+        reviewed_by="delegate:comic-production-agent",
+    )
+    assert approved["approval"]["authorization"]["source"] == "project_setting"
+    assert approved["approval"]["review_kind"] == "delegated_policy_auto_review"
+    assert build_name_board.verify_approval(root, chapter, approved) == []
+
+    settings.write_text(base_settings + "- 审阅策略：逐阶段用户确认\n", encoding="utf-8")
+    assert any("授权" in item or "authorization" in item for item in build_name_board.verify_approval(root, chapter, approved))
+
+
 def test_default_cli_writes_waiting_not_complete_until_explicit_approval(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "comic"
     chapter = "第1话"

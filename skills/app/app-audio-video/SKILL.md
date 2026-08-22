@@ -31,7 +31,7 @@ description: 独立的画布音频生视频工作台，读取上传或画布引�
 1. 分列视频模型与访问渠道，设置比例、分辨率、时长策略和生成数量。
 2. `prepare` 生成绑定音频 SHA 和时间线 SHA 的 job。
 3. 真实付费生成前确认；无后端时保留 job。
-4. 结果必须记录文件与 SHA，核对节拍命中、段落变化、画面连续和音轨完整；人工接受后完成。
+4. 机器结果只到 `machine_complete`；读取当前视频文件并核 SHA，核对节拍、段落、连续性和音轨后，由具名真人以带时区、精确绑定当前字节的显式回执接受才完成。
 
 ## AI 代理交互节点
 
@@ -50,6 +50,13 @@ python3 skills/app/app-audio-video/scripts/audio_video.py prepare \
 
 python3 skills/app/app-audio-video/scripts/audio_video.py validate \
   track.audio-video.json
+
+python3 skills/app/app-audio-video/scripts/audio_video.py accept-output \
+  track.audio-video.json --reviewer "具名审核人" \
+  --statement "我已查看当前视频并接受这些确切字节" \
+  --confirm-current-artifact --write
 ```
+
+`accept-output` 必须由真人触发；runner/agent 不得代填 reviewer 或 confirmation。
 
 字段与完成条件见 [audio-video-schema.md](references/audio-video-schema.md)。

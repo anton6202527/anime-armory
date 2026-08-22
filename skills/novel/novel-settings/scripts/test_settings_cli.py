@@ -42,6 +42,7 @@ def test_new_project_settings_record_default_profile(tmp_path):
     parsed = settings.load_settings(root)
 
     assert parsed["创作工艺档"] == "genre_novel"
+    assert parsed["审阅策略"] == "用户授权制作代理"
 
 
 def test_private_global_profile_prefills_new_project(tmp_path):

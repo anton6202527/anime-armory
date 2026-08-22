@@ -32,7 +32,7 @@ description: 独立的画布角色三视图工作台，从单张角色参考图�
 2. 把具体生成模型与访问渠道分列；无后端时仍保存 job 包，不宣称已生成。
 3. 真实付费提交前再次确认。
 4. 生成后逐视图登记文件与 SHA-256，并人工核对脸、发型、服装、体型、配饰和比例。
-5. 三张均有真实像素且 `review=accepted` 后才能完成。
+5. 机器生成只到 `machine_complete`；三张分别读取当前文件并核 SHA，且都有具名真人、带时区、精确绑定当前图片字节的 current-pixel receipt 后才能完成。
 
 ## AI 代理交互节点
 
@@ -51,6 +51,13 @@ python3 skills/app/app-character-turnaround/scripts/turnaround.py prepare \
 
 python3 skills/app/app-character-turnaround/scripts/turnaround.py validate \
   role.character-turnaround.json
+
+python3 skills/app/app-character-turnaround/scripts/turnaround.py accept \
+  role.character-turnaround.json --reviewer "具名审核人" \
+  --statement "我已逐张查看三张当前图片并接受这些确切字节" \
+  --confirm-current-pixels --write
 ```
+
+`accept` 是一次显式真人动作，但会为正面、侧面、背面分别写三张独立回执；runner/agent 不得代填 reviewer 或 confirmation。
 
 字段与完成条件见 [turnaround-schema.md](references/turnaround-schema.md)。验证失败时保留原文件并报告字段路径；不得用空文件、占位图或 `accepted` 文案伪装完成。

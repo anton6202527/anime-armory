@@ -2,8 +2,16 @@ import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProper
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { getMediaPort, mediaUrl, saveCanvasCapture, subscribeMediaPort } from "../api";
 import { useI18n } from "../i18n";
-import type { CanvasClip, CanvasFrame, CanvasGenerationProfile, LineKey } from "../types";
+import type {
+  CanvasAgentDispatchContext,
+  CanvasAgentDispatchResult,
+  CanvasClip,
+  CanvasFrame,
+  CanvasGenerationProfile,
+  LineKey,
+} from "../types";
 import { DecodedImage } from "../mediaPreview/DecodedImage";
+import { canvasFrameTargetSlot, canvasImageTargetRel, canvasVideoTargetRel, stableCanvasSlotToken } from "../../../shared/canvasTargets";
 import {
   CanvasMediaDetailDialog,
   type CanvasMediaDetailReference,
@@ -36,7 +44,9 @@ type EditableCanvasClip = CanvasClip & {
   episode?: string;
   line?: LineKey;
   generationProfile?: CanvasGenerationProfile;
-  onGeneratePrompt?: (prompt: string) => void;
+  contentHash?: string;
+  targetFrameIndex?: number;
+  onGeneratePrompt?: (prompt: string, task?: CanvasAgentDispatchContext) => Promise<CanvasAgentDispatchResult>;
   onEdit?: () => void;
 };
 
@@ -60,6 +70,16 @@ function fmtScore(score?: number): string {
 function isReferenceInputFrame(frame: CanvasFrame): boolean {
   const text = `${frame.role || ""} ${frame.label || ""} ${frame.abs || ""}`;
   return /出图[\\/]共享|shared_asset|入参|参考|引用|reference|ref|asset|input|consumed|style/i.test(text);
+}
+
+function targetSlotForFrame(frame: CanvasFrame, allFrames: CanvasFrame[], stableIndex?: number): string {
+  const index = stableIndex == null ? Math.max(0, allFrames.indexOf(frame)) : stableIndex;
+  return canvasFrameTargetSlot(frame, index);
+}
+
+function joinWorkPath(root: string, rel: string): string {
+  const separator = root.includes("\\") && !root.includes("/") ? "\\" : "/";
+  return `${root.replace(/[\\/]+$/, "")}${separator}${rel.replace(/[\\/]+/g, separator).replace(/^[\\/]+/, "")}`;
 }
 
 function formatVideoTime(value: number): string {
@@ -496,14 +516,24 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
   }
 
   function openFrameDetail(frame: CanvasFrame, event: ReactMouseEvent<HTMLElement>) {
-    if (!frame.exists || !frame.abs) return;
-    const referenceSource = referenceFrames.length ? [frame, ...referenceFrames] : [frame, ...shownFrames];
+    const targetSlot = targetSlotForFrame(frame, shownFrames, clip.targetFrameIndex);
+    const fallbackRel = clip.line === "comic" && targetSlot === "panel"
+      ? `出图/${clip.episode}/panels/${clip.id}.png`
+      : canvasImageTargetRel(clip.episode || "", clip.id, targetSlot);
+    const targetOutputPath = frame.abs || joinWorkPath(clip.rootPath || "", fallbackRel);
+    const referenceSource = (referenceFrames.length ? referenceFrames : shownFrames)
+      .filter((candidate) => !targetOutputPath || candidate.abs !== targetOutputPath);
+    const currentMediaUrl = frame.exists && frame.abs
+      ? withRevision(mediaUrl(frame.abs), frame.revision)
+      : "";
     setMediaDetail({
       kind: "image",
+      targetSlot,
+      targetOutputPath,
       title: frame.label || clip.label,
       subtitle: clip.number != null ? `${clip.number}. ${clip.label}` : clip.label,
       prompt: detailPrompt(frame),
-      mediaUrl: withRevision(mediaUrl(frame.abs), frame.revision),
+      mediaUrl: currentMediaUrl,
       references: mediaRefsFromFrames(referenceSource),
       anchor: detailAnchor(event),
     });
@@ -513,6 +543,8 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
     if (!asset.exists || !asset.abs) return;
     setMediaDetail({
       kind: "image",
+      targetSlot: `asset:${stableCanvasSlotToken(asset.id)}`,
+      targetOutputPath: asset.abs,
       title: asset.label,
       subtitle: asset.roles.join(" / ") || t("canvas.characterLane"),
       prompt: [
@@ -530,6 +562,8 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
     if (!refImageUrl || !clip.refImageAbs) return;
     setMediaDetail({
       kind: "image",
+      targetSlot: "reference",
+      targetOutputPath: clip.refImageAbs,
       title: clip.label,
       subtitle: t("canvas.characterLane"),
       prompt: detailPrompt(),
@@ -549,6 +583,11 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
     const referenceSource = posterFrame ? [posterFrame, ...referenceFrames] : referenceFrames;
     setMediaDetail({
       kind: "video",
+      targetSlot: "video",
+      targetOutputPath: clip.video_abs || joinWorkPath(
+        clip.rootPath || "",
+        canvasVideoTargetRel(clip.episode || "", clip.id),
+      ),
       title: clip.label,
       subtitle: clip.number != null ? `${clip.number}. ${clip.label}` : clip.label,
       prompt: [
@@ -572,8 +611,8 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
         rootPath={clip.rootPath}
         episode={clip.episode}
         profile={clip.generationProfile}
+        expectedContentHash={clip.contentHash}
         onClose={() => setMediaDetail(null)}
-        onToggleExpanded={() => setMediaDetail((current) => current ? { ...current, expanded: !current.expanded } : current)}
         onGeneratePrompt={clip.onGeneratePrompt}
       />
     );

@@ -29,6 +29,8 @@ HANDOFF_CONTRACT_KIND = "novel_specialist_handoff_contract"
 PIPELINE_REGISTRY_VERSION = 2
 HUMAN_APPROVAL_STAGE_KEYS = {"blueprint", "setting"}
 STAGE_APPROVAL_REL_PATH = os.path.join("审稿", "stage_approvals.json")
+DELEGATED_REVIEW_POLICY_KEY = "审阅策略"
+DELEGATED_REVIEW_POLICY_VALUE = "用户授权制作代理"
 
 
 PIPELINE_REGISTRY: list[dict[str, Any]] = [
@@ -595,7 +597,7 @@ def _stage_artifact_snapshot(
 
 
 def human_stage_approval_status(root: str, stage: dict[str, Any]) -> tuple[bool, str, dict[str, Any]]:
-    """Validate an explicit human approval against current stage inputs and outputs."""
+    """Validate a human or explicitly delegated review against current hashes."""
     stage_key = str(stage.get("key") or "")
     if stage_key not in HUMAN_APPROVAL_STAGE_KEYS:
         return True, "not_required", {}
@@ -604,17 +606,23 @@ def human_stage_approval_status(root: str, stage: dict[str, Any]) -> tuple[bool,
     approvals = payload.get("approvals") if isinstance(payload, dict) else {}
     record = approvals.get(stage_key) if isinstance(approvals, dict) else None
     if not isinstance(record, dict) or record.get("approved") is not True:
-        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 尚未记录人工批准", {}
+        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 尚未记录阶段批准", {}
+    review_mode = str(record.get("review_mode") or "human")
+    if review_mode == "delegated_autonomy":
+        policy = str(load_settings(root).get(DELEGATED_REVIEW_POLICY_KEY) or DELEGATED_REVIEW_POLICY_VALUE)
+        if policy != DELEGATED_REVIEW_POLICY_VALUE:
+            return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 的代理审阅授权已失效", record
+    recheck_label = "重新代理复核" if review_mode == "delegated_autonomy" else "重新人工复核"
     input_matches = _matches(root, list(stage.get("inputs") or []))
     inputs_ok = _satisfied(input_matches, str(stage.get("input_policy") or "all"))
     current_inputs = _stage_artifact_snapshot(root, stage, "inputs")
     recorded_inputs = record.get("input_snapshot") if isinstance(record.get("input_snapshot"), list) else []
     if not inputs_ok or current_inputs != recorded_inputs:
-        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 批准后输入已变化，需重新人工复核", record
+        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 批准后输入已变化，需{recheck_label}", record
     current_outputs = _stage_artifact_snapshot(root, stage, "outputs")
     recorded_outputs = record.get("output_snapshot") if isinstance(record.get("output_snapshot"), list) else []
     if not current_outputs or current_outputs != recorded_outputs:
-        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 批准后产物已变化，需重新人工复核", record
+        return False, f"{STAGE_APPROVAL_REL_PATH}: {stage_key} 批准后产物已变化，需{recheck_label}", record
     return True, "approved", record
 
 
@@ -626,11 +634,55 @@ def record_human_stage_approval(
     note: str,
 ) -> tuple[str, dict[str, Any]]:
     """Record a human review decision bound to current input and output hashes."""
+    return _record_stage_approval(
+        root,
+        stage_key,
+        approved_by=approved_by,
+        note=note,
+        review_mode="human",
+    )
+
+
+def record_delegated_stage_approval(
+    root: str,
+    stage_key: str,
+    *,
+    approved_by: str,
+    note: str,
+) -> tuple[str, dict[str, Any]]:
+    """Record a specialist-agent review without presenting it as human review."""
+    settings = load_settings(os.path.abspath(root))
+    policy = str(settings.get(DELEGATED_REVIEW_POLICY_KEY) or DELEGATED_REVIEW_POLICY_VALUE)
+    if policy != DELEGATED_REVIEW_POLICY_VALUE:
+        raise ValueError(
+            f"delegated approval requires {DELEGATED_REVIEW_POLICY_KEY}={DELEGATED_REVIEW_POLICY_VALUE}"
+        )
+    if not approved_by.strip().startswith("delegate:"):
+        raise ValueError("delegated approval approved_by 必须使用 delegate: 前缀，不能冒充人审")
+    return _record_stage_approval(
+        root,
+        stage_key,
+        approved_by=approved_by,
+        note=note,
+        review_mode="delegated_autonomy",
+    )
+
+
+def _record_stage_approval(
+    root: str,
+    stage_key: str,
+    *,
+    approved_by: str,
+    note: str,
+    review_mode: str,
+) -> tuple[str, dict[str, Any]]:
+    """Write a hash-bound stage review receipt for an allowed review mode."""
     root = os.path.abspath(root)
     if stage_key not in HUMAN_APPROVAL_STAGE_KEYS:
         raise ValueError(f"stage {stage_key} does not use stage approvals; allowed={sorted(HUMAN_APPROVAL_STAGE_KEYS)}")
     if not approved_by.strip() or not note.strip():
-        raise ValueError("human approval requires non-empty approved_by and note")
+        label = "human approval" if review_mode == "human" else "delegated approval"
+        raise ValueError(f"{label} requires non-empty approved_by and note")
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
     stage = stage_by_key(stage_key, meta=meta, root=root)
     if not stage:
@@ -656,12 +708,19 @@ def record_human_stage_approval(
         "approved_by": approved_by.strip(),
         "approved_at": datetime.now().isoformat(timespec="seconds"),
         "note": note.strip(),
+        "review_mode": review_mode,
+        "independent_human_review": review_mode == "human",
+        "review_policy": (
+            "explicit_human_review"
+            if review_mode == "human"
+            else f"{DELEGATED_REVIEW_POLICY_KEY}={DELEGATED_REVIEW_POLICY_VALUE}"
+        ),
         "input_snapshot": input_snapshot,
         "output_snapshot": output_snapshot,
     }
     approvals[stage_key] = record
     payload.update({
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "novel_stage_approvals",
         "project_root": root,
         "approvals": approvals,

@@ -2588,6 +2588,101 @@ def _sha256_value(value: Any) -> bool:
     )
 
 
+def _v2_phase_completion_issue(
+    queue: Mapping[str, Any],
+    task: Mapping[str, Any],
+    runner: Mapping[str, Any],
+    authorization: Mapping[str, Any],
+) -> Optional[str]:
+    """Validate a completed v2 phase-envelope execution without reapplying expiry.
+
+    Expiry was enforced at consume.  Completion/final accounting may happen later and is proved
+    by the exact reservation plus its provider completion record.
+    """
+    root = str(queue.get("root") or "").strip()
+    expected_project = "sha256:" + hashlib.sha256(
+        str(Path(root).expanduser().resolve()).encode("utf-8")
+    ).hexdigest()
+    if (
+        authorization.get("kind") != "n2d_phase_spend_envelope"
+        or authorization.get("line") != "n2d"
+        or authorization.get("project_id") != expected_project
+        or authorization.get("attempt_id_semantics") != "phase_retry_round"
+    ):
+        return "production completion v2 envelope identity/project/attempt semantics mismatch"
+    approver = str(authorization.get("approver") or "").strip().lower()
+    if (
+        not approver
+        or approver in {"unknown", "system", "agent", "auto", "any", "test"}
+        or approver.startswith(("agent:", "auto:", "delegate:", "system:"))
+        or not str(authorization.get("approval_reference") or "").strip()
+        or not str(authorization.get("source_quote") or "").strip()
+    ):
+        return "production completion v2 envelope human approval evidence invalid"
+    try:
+        issued = dt.datetime.fromisoformat(str(authorization.get("issued_at") or "").replace("Z", "+00:00"))
+        expires = dt.datetime.fromisoformat(str(authorization.get("expires_at") or "").replace("Z", "+00:00"))
+    except ValueError:
+        return "production completion v2 envelope timestamps invalid"
+    if issued.tzinfo is None or expires.tzinfo is None or expires <= issued:
+        return "production completion v2 envelope timestamps invalid"
+    execution = runner.get("execution_binding")
+    if not isinstance(execution, Mapping):
+        return "production completion execution_binding missing"
+    execution_keys = ("command_digest", "input_fingerprint", "submit_request_digest", "producer_contract_digest")
+    projection = {key: str(execution.get(key) or "") for key in execution_keys}
+    if any(not _sha256_value(value) for value in projection.values()):
+        return "production completion v2 execution binding missing or invalid"
+    scope = {
+        "rerun_scope": str(task.get("rerun_scope") or ""),
+        "affected_shots": sorted({str(item) for item in task.get("affected_shots", []) if str(item)}),
+        "affected_artifacts": sorted({str(item) for item in task.get("affected_artifacts", []) if str(item)}),
+    }
+    # runner._binding_digest(structured_value) hashes a canonical {"value": ...} wrapper.
+    expected_input = _canonical_sha256({"value": {"execution": projection, "scope": scope}})
+    for key, expected in (
+        ("stage", str(task.get("stage_key") or "")),
+        ("scope", scope),
+        ("model", str(execution.get("model") or "")),
+        ("channel", str(execution.get("channel") or "")),
+        ("input_sha256", expected_input),
+    ):
+        if authorization.get(key) != expected:
+            return f"production completion v2 envelope {key} mismatch"
+    estimate = task.get("estimated_cost") if isinstance(task.get("estimated_cost"), Mapping) else {}
+    try:
+        amount = float(estimate.get("amount"))
+        ceiling = authorization.get("limits", {}).get("cost_ceiling", {})
+        ceiling_amount = float(ceiling.get("amount"))
+    except (TypeError, ValueError):
+        return "production completion v2 envelope cost invalid"
+    currency = str(estimate.get("unit") or "")
+    if not math.isfinite(amount) or amount < 0 or currency != str(ceiling.get("currency") or "") or amount > ceiling_amount:
+        return "production completion v2 envelope cost ceiling mismatch"
+    completion = runner.get("completion") if isinstance(runner.get("completion"), Mapping) else {}
+    consumption = completion.get("phase_spend_consumption")
+    finalized = completion.get("phase_spend_completion")
+    if not isinstance(consumption, Mapping) or consumption.get("status") != "pass":
+        return "production completion v2 spend reservation missing"
+    row = consumption.get("consumption") if isinstance(consumption.get("consumption"), Mapping) else {}
+    attempt = int(task.get("attempts") or 0)
+    if (
+        consumption.get("authorization_digest") != authorization.get("authorization_digest")
+        or row.get("consumption_id") != f"{task.get('id') or 'missing-task'}:{attempt}"
+        or str(row.get("attempt_id") or "") != str(attempt)
+        or row.get("input_sha256") != expected_input
+    ):
+        return "production completion v2 spend reservation binding mismatch"
+    if (
+        not isinstance(finalized, Mapping)
+        or finalized.get("status") != "pass"
+        or finalized.get("authorization_digest") != authorization.get("authorization_digest")
+        or finalized.get("consumption_id") != row.get("consumption_id")
+    ):
+        return "production completion v2 provider completion finalization missing"
+    return None
+
+
 def _runner_completion_issue(
     queue: Mapping[str, Any],
     task: Mapping[str, Any],
@@ -2613,6 +2708,15 @@ def _runner_completion_issue(
         return "runner execution_started must be true (review re-attestation may be false)"
 
     if str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
+        completion = runner.get("completion") if isinstance(runner.get("completion"), Mapping) else {}
+        safe_local = (
+            str(task.get("stage_key") or "") == "compose"
+            and completion.get("safe_local_execution") is True
+        )
+        if safe_local:
+            if runner.get("authorization") or completion.get("paid_execution_expectation"):
+                return "safe local compose must not carry paid authorization/expectation"
+            return None
         authorization = runner.get("authorization")
         if not isinstance(authorization, Mapping):
             return "production completion missing authorization receipt"
@@ -2626,6 +2730,37 @@ def _runner_completion_issue(
         })
         if declared_authorization_digest != calculated_authorization_digest:
             return "production completion authorization_digest mismatch"
+        if authorization.get("version") == 2:
+            v2_issue = _v2_phase_completion_issue(queue, task, runner, authorization)
+            if v2_issue:
+                return v2_issue
+            # The producer receipt checks below are common to v1/v2, but all intervening fields
+            # are v1-specific.  Validate the common receipt boundary here and return.
+            expectation = completion.get("paid_execution_expectation")
+            receipts = completion.get("paid_execution_receipts")
+            if paid_execution_contract is None or not isinstance(expectation, Mapping):
+                return "production completion paid execution expectation missing"
+            if str(expectation.get("digest") or "") != paid_execution_contract.expectation_digest(expectation):
+                return "production completion paid execution expectation digest mismatch"
+            for key, expected in (
+                ("task_id", str(task.get("id") or "")),
+                ("episode", normalize_episode(str(task.get("episode") or ""))),
+                ("stage", str(task.get("stage_key") or "")),
+                ("attempt", int(task.get("attempts") or 0)),
+                ("authorization_digest", declared_authorization_digest),
+            ):
+                if expectation.get(key) != expected:
+                    return f"production completion paid expectation {key} mismatch"
+            if not isinstance(receipts, Mapping) or receipts.get("status") != "pass":
+                return "production completion paid boundary receipts missing or failed"
+            current_receipts = paid_execution_contract.verify_expected_receipts(
+                Path(str(queue.get("root") or "")), expectation
+            )
+            if current_receipts.get("status") != "pass":
+                return "production completion paid boundary receipts invalid: " + "; ".join(
+                    str(item) for item in (current_receipts.get("issues") or [])[:4]
+                )
+            return None
         if authorization.get("version") != 1:
             return "production completion authorization version invalid"
         approval_id = str(authorization.get("approval_id") or "").strip()
@@ -2960,9 +3095,24 @@ def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str 
                     "output_verification=pass and post_gate=pass/not_applicable"
                 )
             if str(task.get("stage_key") or "") in PRODUCTION_EXECUTION_STAGES:
-                output_commit_attestation = _paid_output_commit_attestation(
-                    queue, task, evidence_runner
+                safe_local = (
+                    str(task.get("stage_key") or "") == "compose"
+                    and isinstance(completion, Mapping)
+                    and completion.get("safe_local_execution") is True
                 )
+                if safe_local:
+                    output_commit_attestation = {
+                        "status": "pass",
+                        "mode": "safe_local_compose",
+                        "output_verification": deepcopy(dict(completion.get("output_verification") or {})),
+                    }
+                    output_commit_attestation["digest"] = _canonical_sha256(
+                        output_commit_attestation
+                    )
+                else:
+                    output_commit_attestation = _paid_output_commit_attestation(
+                        queue, task, evidence_runner
+                    )
                 if output_commit_attestation.get("status") != "pass":
                     details = "; ".join(
                         str(item) for item in (output_commit_attestation.get("issues") or [])[:5]

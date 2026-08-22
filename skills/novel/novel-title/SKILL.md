@@ -11,7 +11,7 @@ description: Brainstorm 5–8 book title candidates for a novel project, ranked 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../skills/novel/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `../skills/novel/novel-craft/references/选择点与偏好.md` 读用户私有选择：项目值优先，其次全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。权利/合规、不可逆发布和最终验收仍确认；模型费用绑定阶段预算包，包内不逐章重复问。
 
 本 skill 涉及的选择点：`目标平台`。
 

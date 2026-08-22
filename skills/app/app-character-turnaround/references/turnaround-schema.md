@@ -1,8 +1,8 @@
 # Character turnaround schema
 
-`app-character-turnaround/v1` 是该独立 skill 的状态格式。改名前的
+`app-character-turnaround/v2` 是该独立 skill 的状态格式。旧 `app-character-turnaround/v1` 与改名前的
 `n2d-character-turnaround/v1` 与中间命名 `app-n2d-character-turnaround/v1`
-只作为兼容输入读取，下次 `prepare --write` 时迁移为新命名空间。
+只作为兼容输入读取；旧 accepted 降为 `machine_complete` 并保留旧证据，绝不自动完成。
 
 ## 顶层
 
@@ -20,6 +20,8 @@
 
 - `source=done`：存在真实参考路径与 SHA-256，或明确使用纯描述模式且角色身份字段齐全。
 - `identity=done`：`name`、`face`、`hair`、`body`、`outfit` 非空。
-- `generation=done`：三个视图都有真实输出路径与 SHA-256，且 `review=accepted`。
+- `generation=done`：脚本真实读取 front / left_profile / back 三个当前文件并核 SHA；三张各自
+  有具名真人、带时区、绑定 source/view/output SHA 的 `current_artifact_bytes` 回执。
 
-视图状态为 `pending | ready | accepted | rejected`；步骤状态为 `pending | active | done`。`prepare` 只创建 job，不改变真实输出状态。
+视图状态为 `pending | ready | machine_complete | accepted | rejected | stale`；步骤状态为
+`pending | active | done`。`prepare` 只创建 job；`accept` 一次真人动作会逐张核字节并写三张独立回执。

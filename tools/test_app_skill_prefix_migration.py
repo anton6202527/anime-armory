@@ -18,25 +18,25 @@ REPO = Path(__file__).resolve().parent.parent
     (
         (
             "skills/app/app-script-workbench/scripts/workbench.py",
-            "app-script-workbench/v1",
+            "app-script-workbench/v3",
             "app-script-workbench",
             (("n2d-script-workbench/v1", "n2d-script-workbench"), ("app-n2d-script-workbench/v1", "app-n2d-script-workbench")),
         ),
         (
             "skills/app/app-character-turnaround/scripts/turnaround.py",
-            "app-character-turnaround/v1",
+            "app-character-turnaround/v2",
             "app-character-turnaround",
             (("n2d-character-turnaround/v1", "n2d-character-turnaround"), ("app-n2d-character-turnaround/v1", "app-n2d-character-turnaround")),
         ),
         (
             "skills/app/app-first-frame-video/scripts/first_frame_video.py",
-            "app-first-frame-video/v1",
+            "app-first-frame-video/v2",
             "app-first-frame-video",
             (("n2d-first-frame-video/v1", "n2d-first-frame-video"), ("app-n2d-first-frame-video/v1", "app-n2d-first-frame-video")),
         ),
         (
             "skills/app/app-audio-video/scripts/audio_video.py",
-            "app-audio-video/v1",
+            "app-audio-video/v2",
             "app-audio-video",
             (("n2d-audio-video/v1", "n2d-audio-video"), ("app-n2d-audio-video/v1", "app-n2d-audio-video")),
         ),
@@ -62,7 +62,16 @@ def test_legacy_json_is_normalized_and_rewritten(
             encoding="utf-8",
         )
 
-        payload = module.read_json(payload_path)
+        # The workbench has a schema migration in addition to the prefix
+        # migration. Exercise its public loader so legacy input is rebuilt as
+        # the current complete contract rather than merely relabelled. The
+        # other app-* skills still use read_json as their migration boundary.
+        if hasattr(module, "load_document"):
+            payload, migrated, refreshed = module.load_document(payload_path)
+            assert migrated is True
+            assert refreshed is True
+        else:
+            payload = module.read_json(payload_path)
         assert payload["schema"] == schema
         assert payload["skill"] == skill
 

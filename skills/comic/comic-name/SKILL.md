@@ -51,7 +51,7 @@ python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画
 5. 记录原稿口径：`trim_box`、`safe_area`、`bleed`、`inner_frame`。
 6. 每个翻页记录最后一格 setup 与下一页首格 payoff，不能把页中间的重格误记成翻页钩子。
 7. 输出 draft JSON/SVG；若页流或文字密度不顺，回 `comic-script` 改分格。
-8. 由人工或项目内已授权制作代理提交 review 并签收；签收收据绑定 board 内容、`panel_script` 与 `_设置.md` SHA，之后再跑 `comic-layout`。代理不得越过确定性阻断或授权边界。
+8. 由人工或项目内已授权制作代理提交 review 并签收；`delegate:` 签收只接受 `_设置.md` 显式的 `审阅策略=用户授权制作代理`，或当前有效、摘要匹配的 `生产数据/authorizations/editorial_review.json`，缺 key 不继承默认。batch 的机器结构签收明确记为 `review_kind=delegated_policy_auto_review`，不冒充视觉/语义人审；收据绑定授权来源、board 内容、`panel_script` 与 `_设置.md` SHA，之后再跑 `comic-layout`，授权撤销或变化会使签收失效。
 
 ## 原则
 

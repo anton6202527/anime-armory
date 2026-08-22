@@ -19,6 +19,11 @@ if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from text_metadata import estimated_line_count
 from progress import update_stage as update_progress_stage
+from editorial_authorization import (
+    EditorialAuthorizationError,
+    delegated_authorization_errors,
+    delegated_review_authorization,
+)
 
 
 HEAVY_FUNCTIONS = {
@@ -262,6 +267,14 @@ def verify_name_board(
             errors.append("name_board approval 缺 reviewed_at")
         if approval.get("subject_sha256") != approval_subject_sha256(name_board):
             errors.append("name_board approval subject SHA 不匹配")
+        if str(approval.get("reviewed_by") or "").strip().startswith("delegate:") and approval.get("review_kind") != "delegated_policy_auto_review":
+            errors.append("name_board delegate approval review_kind 必须为 delegated_policy_auto_review")
+        errors += delegated_authorization_errors(
+            root,
+            str(approval.get("reviewed_by") or ""),
+            "name_board",
+            approval.get("authorization"),
+        )
     return errors
 
 
@@ -814,11 +827,16 @@ def transition_existing(
             raise LayoutError("layout 必须先 --submit-review，再执行 --approve")
         if not reviewed_by.strip():
             raise LayoutError("--approve 必须提供 --reviewed-by")
+        try:
+            authorization = delegated_review_authorization(root, reviewed_by, "layout")
+        except EditorialAuthorizationError as exc:
+            raise LayoutError(str(exc)) from exc
         layout["workflow_status"] = "approved"
         layout["approval"] = {
             "kind": "comic_layout_approval",
             "status": "approved",
             "reviewed_by": reviewed_by.strip(),
+            "review_kind": "delegated_policy_auto_review" if authorization is not None else "human_editorial_review",
             "reviewed_at": datetime.now(timezone.utc).isoformat(),
             "note": note.strip(),
             "subject_sha256": approval_subject_sha256(layout),
@@ -827,6 +845,8 @@ def transition_existing(
             "settings_sha256": (layout.get("upstream_receipt") or {}).get("settings_sha256", ""),
             "settings_geometry_sha256": (layout.get("upstream_receipt") or {}).get("settings_geometry_sha256", ""),
         }
+        if authorization is not None:
+            layout["approval"]["authorization"] = authorization
     else:
         raise LayoutError(f"未知状态：{target}")
     layout["validation"] = {"status": "pass", "errors": []}
@@ -834,7 +854,7 @@ def transition_existing(
     return layout
 
 
-def verify_layout_approval(layout: dict[str, Any]) -> list[str]:
+def verify_layout_approval(layout: dict[str, Any], root: Path | None = None) -> list[str]:
     approval = layout.get("approval") if isinstance(layout.get("approval"), dict) else {}
     if layout.get("workflow_status") != "approved" or approval.get("status") != "approved":
         return ["layout 尚未 approved"]
@@ -845,6 +865,15 @@ def verify_layout_approval(layout: dict[str, Any]) -> list[str]:
         errors.append("layout approval 缺 reviewed_at")
     if approval.get("subject_sha256") != approval_subject_sha256(layout):
         errors.append("layout approval subject SHA 不匹配")
+    if str(approval.get("reviewed_by") or "").strip().startswith("delegate:") and approval.get("review_kind") != "delegated_policy_auto_review":
+        errors.append("layout delegate approval review_kind 必须为 delegated_policy_auto_review")
+    if root is not None:
+        errors += delegated_authorization_errors(
+            root,
+            str(approval.get("reviewed_by") or ""),
+            "layout",
+            approval.get("authorization"),
+        )
     return errors
 
 
@@ -897,7 +926,7 @@ def main() -> int:
             panel_script = load_json(root / "脚本" / args.chapter / "panel_script.json")
             errors = verify_layout_upstream(root, args.chapter, layout, name_board, allow_legacy_name=args.allow_legacy_name)
             errors += validate_layout(layout, panel_script, name_board)
-            errors += verify_layout_approval(layout)
+            errors += verify_layout_approval(layout, root)
             if errors:
                 for error in errors:
                     print(f"[block] {error}")

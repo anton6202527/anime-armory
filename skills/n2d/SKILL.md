@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked to turn a novel into a final AI comic-drama / short-drama master. Inspects `_进度.md`, automatically applies auditable recommendations for ordinary reversible choices, and routes through `n2d-script`, `n2d-voice`, `n2d-image`, `n2d-video`, `n2d-compose`, and `n2d-review`; paid generation, compliance/rights, destructive changes, public release, and final master acceptance remain explicit gates. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 一键成片, 自动推进, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4779 | 目录文本总行数 315680
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4796 | 目录文本总行数 317990
 
 # n2d — 主状态机调度器
 
@@ -36,7 +36,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > **普通选择自动决策（默认）**：`split_novel.py` 在开发包签收前自动补齐 `制作模式=混合自动路由`、按 split/progress 推断的 `项目规模`、有效的视觉风格默认，以及 `合成阶段=启用`；`run.py next` 接手旧项目时也会补缺，但不覆盖任何已有项目值。付款动作卡中的生成粒度/后端/BGM 菜单仍保留为可覆盖项；默认策略下直接采用预选推荐值，不再为同一个付款动作额外停一次。可手动运行 `python3 skills/n2d/n2d-settings/scripts/settings_cli.py apply-recommended <作品根>` 查看并落档这组推荐。
 
-> **自主批准模式（少打断、可审计）**：默认仍是 `人工批准策略=逐节点人工批准`。用户明确授权普通节点自行决策时，用 `n2d-settings` 写为 `仅高风险停审`，再运行 `python3 skills/n2d/n2d-script/scripts/autonomy.py authorize <作品根> --authorized-by <明确用户身份> --source-quote '<授权原话>'`。此后 `run.py next/enter` 会在 P-1、围读、P-2、animatic、P-3 的内容已 `confirmed/ready` 时自动写 delegated signoff；代理不是人类 reviewer，manifest 会明确记录项目负责人豁免独立人审、当前授权 SHA 与产物 SHA。普通的构图、措辞、节奏、锚帧、母题和内部可逆 prompt 决策也由 agent 选最优项并写理由，不再逐节点暂停。**付费生成/购买、权利与内容合规/分级、声音克隆授权、公开发布/投放、删除覆盖或边界移动等不可逆变更仍必须停审**；最终 `master_delivery_complete`/发布验收不自动签。
+> **自主批准模式（少打断、可审计）**：默认仍是 `人工批准策略=逐节点人工批准`。用户明确授权普通节点自行决策时，用 `n2d-settings` 写为 `仅高风险停审`，再运行 `python3 skills/n2d/n2d-script/scripts/autonomy.py authorize <作品根> --authorized-by <明确用户身份> --source-quote '<授权原话>'`。此后 `run.py next/enter` 会在 P-1、围读、P-2、animatic、P-3 的内容已 `confirmed/ready` 时自动写 delegated signoff；代理不是人类 reviewer，manifest 会明确记录项目负责人豁免独立人审、当前授权 SHA 与产物 SHA。普通的构图、措辞、节奏、锚帧、母题和内部可逆 prompt 决策也由 agent 选最优项并写理由，不再逐节点暂停。**付费预算包创建/扩大、权利与内容合规/分级、声音克隆授权、公开发布/投放、删除覆盖或边界移动等不可逆变更仍必须停审**；已批准预算包内的调用连续执行，最终 `master_delivery_complete`/发布验收不自动签。
+
+> **一键请求的落地规则**：用户说“一键成片 / 自动跑完 / 尽量别问”本身就是启用低风险自主推进的明确意图。能取得当前用户的明确身份时，调度器应在开局一次性写入 `仅高风险停审` 并用该句原话创建项目授权；身份不可得时只在开局合并询问一次，不能在 P-1/P-2/P-3 反复询问。付费动作改为**阶段预算包一次授权**：把 scope、模型、渠道、最大调用/重抽次数、费用上限和输入哈希绑定为一个 envelope；同 envelope 内连续执行，只有超上限、改模型/渠道、扩大范围或输入哈希变化才再次确认。逐图实际像素验收、权利/合规、公开发布与最终母版验收不在预算包授权范围内。
 
 > 作为生产线入口：开新作品时，拆集器自动落一键推荐包：`制作模式=混合自动路由`、按集数推断的 `项目规模`、推荐 `基础视觉风格`、`脚本批次=小批`、`生成优先序=关键镜优先`、`生成粒度=逐个`、`BGM来源=无`（未知授权/后端时的安全可交付回退）与 `合成阶段=启用`。只有项目显式设 `普通选择策略=逐项询问` 才恢复菜单。付费前重新扫描可用模型/渠道：多个可执行解时按能力、身份一致性、成本与项目约束给一个推荐，付款确认即采用；无可执行解才停在环境缺口。用户已有值与本轮明确指定永远优先。
 

@@ -19,6 +19,16 @@ import render_dreamina as rd  # noqa: E402
 assert Path(rd.__file__).resolve().parent == _HERE
 from ad_video_prompt_compiler import compile_prompt, render_markdown  # noqa: E402
 
+REAL_CONSUME_VIDEO_SPEND = rd.consume_video_spend
+REAL_SETTLE_VIDEO_SPEND = rd.settle_video_spend
+
+
+@pytest.fixture(autouse=True)
+def stub_paid_spend_for_legacy_runner_tests(monkeypatch):
+    """Existing media tests isolate rendering; dedicated tests below exercise real spend gates."""
+    monkeypatch.setattr(rd, "consume_video_spend", lambda *args, **kwargs: {"status": "pass"})
+    monkeypatch.setattr(rd, "settle_video_spend", lambda *args, **kwargs: {"status": "pass"})
+
 
 def test_submit_duration_seedance_clamps_and_ceil():
     assert rd.submit_duration(3.1, "seedance2.0fast") == 4
@@ -494,3 +504,187 @@ def test_max_credits_halts_before_next_paid_submission(tmp_path, monkeypatch):
     assert summary["budget"]["spent_credits"] == 5.0
     assert summary["budget"]["unrun_jobs"] == ["镜头02"]
     assert manifest["jobs"][1].get("submit_id") is None
+
+
+def test_unknown_reserved_cost_never_submits_or_consumes(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01",
+        "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png",
+        "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+    }])
+    _quiet_video_env(monkeypatch)
+    monkeypatch.setattr(rd, "consume_video_spend", REAL_CONSUME_VIDEO_SPEND)
+    calls = []
+    monkeypatch.setattr(
+        rd,
+        "run_dreamina_video",
+        lambda *args, **kwargs: calls.append("submitted"),
+    )
+
+    summary = _render(root)
+    job = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"
+    ))["jobs"][0]
+
+    assert summary["failed"] == 1
+    assert calls == []
+    assert not (root / rd.spend_envelope.LEDGER_REL).exists()
+    assert "未知 cost" in job["error"]
+
+
+def test_real_video_spend_envelope_reserves_and_settles_actual(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01",
+        "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png",
+        "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+        "estimated_credit_count": 2,
+        "estimated_credit_count_is_upper_bound": True,
+        "estimated_credit_count_source": "provider-pricing-snapshot:2026-08-21",
+    }])
+    _quiet_video_env(monkeypatch)
+    monkeypatch.setattr(rd, "consume_video_spend", REAL_CONSUME_VIDEO_SPEND)
+    monkeypatch.setattr(rd, "settle_video_spend", REAL_SETTLE_VIDEO_SPEND)
+    manifest = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"
+    ))
+    digest, scope = rd.video_phase_spend_binding(
+        root, manifest, model_version="seedance2.0fast", video_resolution="720p"
+    )
+    approved = rd.spend_envelope.make_envelope(
+        root,
+        stage="video",
+        model="seedance2.0fast",
+        channel=rd.SPEND_CHANNEL,
+        input_sha256=digest,
+        scope=scope,
+        max_calls=1,
+        max_attempts=1,
+        cost_ceiling=2,
+        currency="credit",
+        approver="client-producer@example.invalid",
+        approval_reference="approval-ui:video-phase",
+        source_quote="我确认该视频阶段最多使用 2 credit。",
+        envelope_id="video-real-integration",
+    )
+    rd.spend_envelope.write_envelope(
+        rd.spend_envelope.default_envelope_path(root, "video"), approved
+    )
+    monkeypatch.setattr(rd, "run_dreamina_video", lambda *args, **kwargs: {
+        "gen_status": "success",
+        "submit_id": "sub-real",
+        "credit_count": 1,
+        "_submitted_duration": 4,
+        "_mode": "image2video",
+    })
+
+    def fake_download(payload, target):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0" * 100001)
+
+    monkeypatch.setattr(rd, "download_result", fake_download)
+    summary = _render(root)
+    job = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"
+    ))["jobs"][0]
+
+    assert summary["rendered"] == 1
+    assert job["spend_settlement"]["status"] == "pass"
+    assert job["spend_settlement"]["usage"]["cost"] == 1.0
+
+
+def test_existing_video_query_reconciles_pending_reservation_actual(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01", "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+        "estimated_credit_count": 2,
+        "estimated_credit_count_is_upper_bound": True,
+        "estimated_credit_count_source": "provider-pricing-snapshot:2026-08-21",
+    }])
+    _quiet_video_env(monkeypatch)
+    monkeypatch.setattr(rd, "settle_video_spend", REAL_SETTLE_VIDEO_SPEND)
+    manifest = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"
+    ))
+    digest, scope = rd.video_phase_spend_binding(
+        root, manifest, model_version="seedance2.0fast", video_resolution="720p"
+    )
+    approved = rd.spend_envelope.make_envelope(
+        root, stage="video", model="seedance2.0fast", channel=rd.SPEND_CHANNEL,
+        input_sha256=digest, scope=scope, max_calls=1, max_attempts=1,
+        cost_ceiling=2, currency="credit", approver="client-producer@example.invalid",
+        approval_reference="approval-ui:video-recovery",
+        source_quote="我确认该视频恢复路径最多使用 2 credit。",
+        envelope_id="video-recovery",
+    )
+    rd.spend_envelope.write_envelope(
+        rd.spend_envelope.default_envelope_path(root, "video"), approved
+    )
+    job = manifest["jobs"][0]
+    REAL_CONSUME_VIDEO_SPEND(
+        root, manifest, job, model_version="seedance2.0fast", video_resolution="720p",
+        envelope_path=None,
+    )
+    job["submit_id"] = "sub-recovery"
+
+    result = rd.reconcile_existing_video_spend(
+        root,
+        job,
+        {"submit_id": "sub-recovery", "credit_count": 1},
+        envelope_path=None,
+        terminal=True,
+    )
+
+    assert result["status"] == "pass"
+    assert job["credit_count"] == 1.0
+    assert job["spend_settlement"]["usage"]["cost"] == 1.0
+
+
+def test_terminal_existing_video_without_actual_cost_is_not_fully_recovered(
+    tmp_path, monkeypatch
+):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01", "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+        "estimated_credit_count": 2,
+        "estimated_credit_count_is_upper_bound": True,
+        "estimated_credit_count_source": "provider-pricing-snapshot:2026-08-21",
+    }])
+    _quiet_video_env(monkeypatch)
+    manifest = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(
+        encoding="utf-8"
+    ))
+    digest, scope = rd.video_phase_spend_binding(
+        root, manifest, model_version="seedance2.0fast", video_resolution="720p"
+    )
+    approved = rd.spend_envelope.make_envelope(
+        root, stage="video", model="seedance2.0fast", channel=rd.SPEND_CHANNEL,
+        input_sha256=digest, scope=scope, max_calls=1, max_attempts=1,
+        cost_ceiling=2, currency="credit", approver="client-producer@example.invalid",
+        approval_reference="approval-ui:video-unknown-actual",
+        source_quote="我确认该视频阶段最多使用 2 credit。", envelope_id="video-unknown-actual",
+    )
+    rd.spend_envelope.write_envelope(
+        rd.spend_envelope.default_envelope_path(root, "video"), approved
+    )
+    job = manifest["jobs"][0]
+    REAL_CONSUME_VIDEO_SPEND(
+        root, manifest, job, model_version="seedance2.0fast", video_resolution="720p",
+        envelope_path=None,
+    )
+    job["submit_id"] = "sub-unknown"
+
+    with pytest.raises(rd.SpendSettlementBlocked, match="actual credit_count"):
+        rd.reconcile_existing_video_spend(
+            root, job, {"submit_id": "sub-unknown"}, envelope_path=None, terminal=True
+        )
+    assert job["spend_settlement"]["status"] == "blocked"

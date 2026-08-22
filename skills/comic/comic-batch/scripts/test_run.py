@@ -65,7 +65,7 @@ def test_image_runner_script_follows_project_channel(tmp_path: Path) -> None:
     assert batch.image_runner_script(tmp_path).endswith("codex_panel_runner.py")
 
 
-def test_batch_stops_cleanly_at_name_draft_without_running_next_stage(tmp_path: Path, monkeypatch) -> None:
+def test_batch_fails_closed_at_name_draft_when_review_policy_is_missing(tmp_path: Path, monkeypatch) -> None:
     chapter = "第1话"
     (tmp_path / "_设置.md").write_text("- 传统原稿流程：启用\n", encoding="utf-8")
     (tmp_path / "_进度.md").write_text(
@@ -81,8 +81,66 @@ def test_batch_stops_cleanly_at_name_draft_without_running_next_stage(tmp_path: 
     monkeypatch.setattr(batch, "run_cmd", lambda cmd, cwd: calls.append(cmd) or 0)
     monkeypatch.setattr(sys, "argv", ["comic-batch", str(tmp_path), "--chapter", chapter])
 
+    assert batch.main() == 2
+    assert calls == []
+
+
+def test_batch_honors_explicit_human_review_without_delegating(tmp_path: Path, monkeypatch) -> None:
+    chapter = "第1话"
+    (tmp_path / "_设置.md").write_text(
+        "- 传统原稿流程：启用\n- 审阅策略：逐阶段用户确认\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "_进度.md").write_text(
+        "| 话 | 源本/企划 | 漫画脚本 | 缩略分镜 | 页面排版 |\n"
+        "|---|---|---|---|---|\n"
+        f"| {chapter} | ✅ | ✅ | 🟡待签收 | ⬜ |\n",
+        encoding="utf-8",
+    )
+    name_path = tmp_path / "排版" / chapter / "name_board.json"
+    name_path.parent.mkdir(parents=True)
+    name_path.write_text(json.dumps({"workflow_status": "draft"}), encoding="utf-8")
+    calls: list[list[str]] = []
+    monkeypatch.setattr(batch, "run_cmd", lambda cmd, cwd: calls.append(cmd) or 0)
+    monkeypatch.setattr(sys, "argv", ["comic-batch", str(tmp_path), "--chapter", chapter])
+
     assert batch.main() == 0
     assert calls == []
+
+
+def test_batch_delegated_review_submits_approves_checks_and_continues_in_one_run(tmp_path: Path, monkeypatch) -> None:
+    chapter = "第1话"
+    (tmp_path / "_设置.md").write_text(
+        "- 传统原稿流程：启用\n- 审阅策略：用户授权制作代理\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "_进度.md").write_text(
+        "| 话 | 源本/企划 | 漫画脚本 | 缩略分镜 | 页面排版 |\n"
+        "|---|---|---|---|---|\n"
+        f"| {chapter} | ✅ | ✅ | 🟡待签收 | ⬜ |\n",
+        encoding="utf-8",
+    )
+    name_path = tmp_path / "排版" / chapter / "name_board.json"
+    name_path.parent.mkdir(parents=True)
+    name_path.write_text(json.dumps({"workflow_status": "draft"}), encoding="utf-8")
+    calls: list[list[str]] = []
+    monkeypatch.setattr(batch, "run_cmd", lambda cmd, cwd: calls.append(cmd) or 0)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["comic-batch", str(tmp_path), "--chapter", chapter, "--max-steps", "1"],
+    )
+
+    assert batch.main() == 0
+    assert len(calls) == 3
+    assert "--submit-review" in calls[0]
+    assert "--approve" in calls[1]
+    assert calls[1][calls[1].index("--reviewed-by") + 1] == "delegate:comic-production-agent"
+    note = calls[1][calls[1].index("--approval-note") + 1]
+    assert "review_kind=delegated_policy_auto_review" in note
+    assert "未声明视觉/语义人审" in note
+    assert "--check" in calls[2]
+    assert f"| {chapter} | ✅ | ✅ | ✅ | ⬜ |" in (tmp_path / "_进度.md").read_text(encoding="utf-8")
 
 
 def test_batch_checks_approved_artifact_before_syncing_stale_progress(tmp_path: Path, monkeypatch) -> None:
@@ -122,7 +180,7 @@ def test_plan_chapter_is_read_only_and_lists_stop_points(tmp_path: Path, capsys)
     out = capsys.readouterr().out
     assert rc == 0
     assert "当前前沿=缩略分镜" in out
-    assert "⏸ 人工签收停点" in out  # name/layout signoff
+    assert "代理审阅节点" in out  # name/layout 默认派发当前 agent，不升级成用户停点
     assert "⏸ 付费生成停点" in out  # image generation
     assert "build_name_board.py" in out
     # dry-run must not mutate the progress table

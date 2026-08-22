@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1620 | 目录文本总行数 56532
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1638 | 目录文本总行数 58450
 
 # comic — 画漫画生产线总调度
 
@@ -11,6 +11,8 @@ description: 画漫画生产线总调度。Use when the user wants to create a c
 comic 负责定位作品根、先读 `_进度.md` / `_设置.md`、解释当前前沿并路由；创作和生产动作仍由 `comic-script`、`comic-name`、`comic-layout`、`comic-finishing`、`comic-identity`、`comic-image`、`comic-batch`、`comic-compose`、`comic-review` 执行。
 
 详细依赖和失效传播见 `references/architecture.md`；选择点见 `references/选择点与偏好.md`。
+
+> **一键推进默认**：新项目默认 `审阅策略=用户授权制作代理`。普通、可逆的分话/分格取舍、原稿收尾、参考处方和内部技术检查由当前制作代理采用有证据优势的推荐方案并留痕；name board/layout 的 batch 自动签收明确记为 `review_kind=delegated_policy_auto_review`，只证明 schema、当前 subject SHA、上游 SHA 与项目授权均有效，不冒充视觉/语义人审。流程在同一任务内继续，后续真实 review 再读取 JSON 并查看 SVG/contact sheet/手机窗口预览，最终验收仍由人完成。不得把命令甩给用户等待确认。只有逐格当前像素验收、预算范围扩大、权利/敏感合规、核心故事/角色/美术方向存在无证据冲突、不可逆发布和最终成品验收停下。付费生成按绑定 scope/模型/渠道/最大尝试/费用上限/输入哈希的阶段预算包确认一次，包内连续执行。
 
 ## 必走生产顺序
 
@@ -115,7 +117,7 @@ python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/�
 python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --check
 ```
 
-首次运行只生成 draft。由人工或用户明确授权的制作代理审阅页流、翻页钩子、格子轻重、阅读方向、气泡占位、关键动作和安全框后才能提交并批准；批准收据绑定产物主体及上游 SHA。代理审阅必须有项目内授权文件，且不得跳过确定性阻断。任何主体或上游变化都会使批准失效，必须重建或重新签收。
+首次进入编辑阶段先生成 draft。显式逐阶段人审项目由人工审阅页流、翻页钩子、格子轻重、阅读方向、气泡占位、关键动作和安全框后签收；delegated 项目允许 batch 先做机器结构签收以继续可逆内部流程，但收据必须标记 `delegated_policy_auto_review`，不得声称已经完成视觉/语义人审。代理授权必须由项目 `_设置.md` **显式**写入 `审阅策略=用户授权制作代理`，或持有当前有效、摘要匹配的 `生产数据/authorizations/editorial_review.json`；缺文件/缺 key 不得继承 permissive 默认。授权有效时 `comic-batch` 在同一次 run 内完成 submit/approve/check 并继续，后续真实 review/最终验收仍检查视觉与成品质量。任何主体、上游或授权变化都会使批准失效，必须重建或重新签收。
 
 ### 6. 原稿收尾、逐格参考处方和出图 job
 
@@ -152,7 +154,7 @@ python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名
 
 逐格 runner 是严格 B14 顺序闸：一次只生成当前格，机器 pass/warn 都先停在待审；只有绑定当前像素、post-QC、contact sheet、比较包及每个输入 SHA 的具名 `accepted` / `accepted_with_warnings` 才允许下一格。确定性 block、unverifiable、skipped、legacy 无 SHA 签收和手改 `ready` 都不能放行。Codex 与 Dreamina 共用这一验收判定；重抽或比较参考变化后旧签收自动失效。
 
-`comic-batch` 可编排可复算步骤，但会在 name/layout draft 或 review 状态正常停下等人工或用户授权制作代理签收，也不能绕过 stale 合同和 image preflight。
+`comic-batch` 可编排可复算步骤；若项目为 `逐阶段用户确认`，会在 name/layout draft 或 review 状态等待人工；默认 `用户授权制作代理` 下，当前 agent 必须接管实际审阅、证据化签收并在同一任务继续，不能把这个内部代理节点升级成用户停点。两种模式都不能绕过 stale 合同、image preflight 与逐格当前像素验收。
 
 ### 8. 生产完成与发布就绪分离
 

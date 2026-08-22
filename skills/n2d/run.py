@@ -21,6 +21,7 @@ import glob
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -211,7 +212,7 @@ def _identity_exit_is_planned_asset_gap(root: str) -> tuple[bool, str]:
 # ── 阶段分类（key 来自 STAGE_GRAPH，不另立并行表，只贴标签）──────────────────
 AGENT_GEN_STAGES = {"script_stage1", "script_stage2", "image_prompt", "video_prompt"}
 GENERATION_STAGES = {"voice", "image", "video", "compose"}
-PAID_STAGES = {"voice", "image", "video", "compose"}  # 真正执行生成前必过合规闸门；混合模式 voice preflight 例外
+PAID_STAGES = {"voice", "image", "video"}  # compose 是否付费/不可逆必须按本次 effect 判断
 ENTRY_GATED_STAGES = AGENT_GEN_STAGES | GENERATION_STAGES | {"review"}
 ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写模型路由表
 IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
@@ -244,7 +245,70 @@ def _stage_requires_paid_compliance(root: str, route: Dict[str, Any], stage_key:
     therefore not paid. Every other voice execution may invoke cloud TTS or a
     clone backend and must pass the same compliance stop as image/video/compose.
     """
+    if stage_key == "compose":
+        return not _compose_execution_effect(root, str(route.get("ep") or "")).get(
+            "safe_local_execution", False
+        )
     return stage_key in PAID_STAGES and not _is_video_first_rough_voice(root, route, stage_key)
+
+
+def _compose_execution_effect(root: str, episode: str) -> Dict[str, Any]:
+    """Classify the concrete compose effect instead of treating the stage label as paid.
+
+    ``BGM来源=无`` uses the repository's local ffmpeg pipeline.  It may proceed without a
+    payment prompt only for a first render whose canonical target does not exist.  Any existing
+    working or accepted master makes overwrite an irreversible boundary; lack of a sign-off
+    receipt is not evidence that overwriting somebody's work is safe.
+    """
+    bgm_source = str(get_setting(root, "BGM来源", "无") or "").strip()
+    no_bgm = bgm_source.lower() in {"", "无", "none", "no", "off", "关闭"}
+    ep = normalize_episode(episode) if episode else ""
+    receipt_path = Path(root) / "生产数据" / f"acceptance_receipt_{ep}.json"
+    accepted_master_protected = False
+    if receipt_path.is_file():
+        try:
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            decision = str((receipt or {}).get("decision") or "").strip().lower()
+            accepted_master_protected = decision in {"approved", "accepted", "authorized"}
+        except Exception:
+            # A damaged canonical receipt is not proof that overwrite is safe.
+            accepted_master_protected = True
+    canonical_master = None
+    resolver_unavailable = _acceptance_contract is None
+    if _acceptance_contract is not None:
+        try:
+            canonical_master = _acceptance_contract.resolve_final_master(
+                Path(root).resolve(), ep
+            )
+        except Exception:
+            # Resolver damage/ambiguity must never be converted into overwrite authority.
+            resolver_unavailable = True
+    existing_master_protected = canonical_master is not None or resolver_unavailable
+    safe_local = no_bgm and not accepted_master_protected and not existing_master_protected
+    return {
+        "effect": "local_ffmpeg_compose" if no_bgm else "compose_with_external_or_rights_bearing_bgm",
+        "bgm_source": bgm_source or "无",
+        "paid": not no_bgm,
+        "local_only": no_bgm,
+        "accepted_master_protected": accepted_master_protected,
+        "existing_master_protected": existing_master_protected,
+        "canonical_master": (
+            canonical_master.relative_to(Path(root).resolve()).as_posix()
+            if canonical_master is not None
+            else ""
+        ),
+        "canonical_resolver_available": not resolver_unavailable,
+        "safe_local_execution": safe_local,
+        "reason": (
+            "BGM来源=无，使用本地 ffmpeg，且 canonical master 尚不存在"
+            if safe_local
+            else (
+                "存在 working/已验收 canonical master（或 resolver 不可用），重合成可能覆盖受保护成品"
+                if existing_master_protected or accepted_master_protected
+                else "BGM 来源可能触发付费、授权或不可逆边界"
+            )
+        ),
+    }
 
 
 # ── 探针结果（decide() 的纯输入，便于测试注入）────────────────────────────────
@@ -263,6 +327,8 @@ class Probes:
     entry_checks: List[Dict[str, Any]] = field(default_factory=list)
     prework: List[Dict[str, Any]] = field(default_factory=list)  # 本轮自动跑掉的确定性步骤记录
     prework_blocks: List[Dict[str, str]] = field(default_factory=list)  # 同轮收集到的全部前置硬阻断
+    spend_envelope: Optional[Dict[str, Any]] = None  # read-only current binding/capacity probe
+    execution_effect: Optional[Dict[str, Any]] = None  # dynamic stage effect (not label-based)
 
 
 def _record_prework_block(p: Probes, step: str, message: str) -> None:
@@ -369,10 +435,32 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             raise ValueError(f"unregistered n2d stop_reason: {stop_reason}")
         trace = new_trace_context(root, ep, stage_key, action=stop_reason)
         action_contract = stage_action_spec(stage_key)
-        if stage_key == "voice" and stop_reason == "needs_stage_execution":
+        authorized_phase = (
+            card.get("phase_spend_envelope")
+            if isinstance(card.get("phase_spend_envelope"), dict)
+            else {}
+        )
+        local_effect = (
+            card.get("execution_effect")
+            if isinstance(card.get("execution_effect"), dict)
+            else {}
+        )
+        if stop_reason == "needs_stage_execution" and (
+            stage_key == "voice"
+            or authorized_phase.get("status") == "authorized"
+            or local_effect.get("safe_local_execution") is True
+        ):
             action_contract["stop_policy"] = stop_reason
             action_contract["requires_human_approval"] = False
-            action_contract["paid_or_irreversible"] = False
+            action_contract["paid_or_irreversible"] = authorized_phase.get("status") == "authorized"
+            if authorized_phase.get("status") == "authorized":
+                action_contract["authorization_mode"] = "v2_phase_spend_envelope"
+                action_contract["authorization_digest"] = authorized_phase.get(
+                    "authorization_digest"
+                )
+                supervisor_contract = action_contract.setdefault("supervisor_contract", {})
+                supervisor_contract["may_dispatch_authorized_batch_runner"] = True
+                supervisor_contract["may_execute_paid_work"] = False
         card = dict(card)
         if "block_reason" not in card:
             block_reason = _default_block_reason(stop_reason, card, probes.gate)
@@ -522,9 +610,47 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "recommended_backend": "纯文本估时（不调用 TTS）",
         })
 
+    # 5.6 compose 是 effect-sensitive：无 BGM 的本地 ffmpeg 首次合成不是付费调用；
+    # 已验收母版覆盖、外部/生成 BGM 仍保留人工硬边界。
+    execution_effect = probes.execution_effect or (
+        _compose_execution_effect(root, ep) if stage_key == "compose" else None
+    )
+    if stage_key == "compose" and execution_effect and execution_effect.get(
+        "safe_local_execution"
+    ):
+        return na("needs_stage_execution", {
+            "headline": f"{ep} {frontier['label']}：本地无付费合成可继续",
+            "to_user": (
+                "本次 effect 已核验为 BGM来源=无 + 本地 ffmpeg，且 canonical master 尚不存在；"
+                "可直接执行合成，输出后仍必须经过 compose/review gate 与最终人工签收。"
+            ),
+            "exact_command": cmd,
+            "writeback_after": _writeback_hint(root, ep, spec),
+            "execution_effect": execution_effect,
+            "post_qc_bundle": _post_qc_bundle(root, ep, "pre_compose_review"),
+        })
+
     # 6. 花钱/重活生成 —— 只为付款/不可逆边界停下；普通选择附在同一张卡里。
     #    （G9 轻量闭环：alerts 是观测面不是闸门，但 critical 告警必须在花钱决策点被看到）
     if stage_key in GENERATION_STAGES:
+        phase_authorization = probes.spend_envelope or {}
+        if phase_authorization.get("status") == "authorized":
+            runner_command = (
+                "python3 skills/n2d/n2d-batch/scripts/runner.py "
+                f"{shlex.quote(str(root))} --limit 1 --stop-on-fail"
+            )
+            return na("needs_stage_execution", {
+                "headline": f"{ep} {frontier['label']}：阶段预算包仍有效，可继续执行",
+                "to_user": (
+                    "当前 stage/input/model/channel 与 v2 阶段预算包完全匹配且仍有调用、"
+                    "重试轮次和费用余量；无需重复询问。只允许由 batch runner 在 provider 前"
+                    "原子消费，supervisor/探针本身不消费也不得扩大授权。"
+                ),
+                "exact_command": runner_command,
+                "stage_command": cmd,
+                "writeback_after": _writeback_hint(root, ep, spec),
+                "phase_spend_envelope": phase_authorization,
+            })
         cp, _every = STAGE_MENU.get(stage_key, (None, False))
         strict_image_review = (
             stage_key == "image"
@@ -610,6 +736,49 @@ def _active_critical_alerts(root: str) -> List[Dict[str, Any]]:
                 "message": str(item.get("message") or ""),
             })
     return out
+
+
+def _phase_spend_envelope_probe(root: str, episode: str, stage_key: str) -> Dict[str, Any]:
+    """Run the exact batch binding probe in a separate process to avoid import cycles.
+
+    The subprocess is read-only by contract.  Any parse/tool/binding failure degrades to the
+    normal payment card; it can never manufacture authority or consume ledger capacity.
+    """
+    script = Path(SKILLS_DIR) / "n2d-batch" / "scripts" / "spend_probe.py"
+    if not script.is_file():
+        return {
+            "status": "unavailable",
+            "read_only": True,
+            "consumed": False,
+            "issue": f"read-only spend probe missing: {script}",
+        }
+    try:
+        result = subprocess.run(
+            [sys.executable, str(script), root, episode, stage_key, "--json"],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=30,
+        )
+        payload = _parse_trailing_json(result.stdout)
+        if not isinstance(payload, dict) or not payload:
+            raise ValueError((result.stderr or result.stdout or "empty probe output")[-300:])
+        if payload.get("read_only") is not True or payload.get("consumed") is not False:
+            return {
+                "status": "blocked",
+                "read_only": True,
+                "consumed": False,
+                "issue": "spend probe violated read-only result contract",
+            }
+        return payload
+    except Exception as exc:
+        return {
+            "status": "unavailable",
+            "read_only": True,
+            "consumed": False,
+            "issue": f"{type(exc).__name__}: {exc}",
+        }
 
 
 def _menu(root: str, choice_point: str) -> Dict[str, Any]:
@@ -1861,6 +2030,8 @@ def gather_preview_probes(root: str, route: Dict[str, Any], stage_key: str) -> P
     spec = stage_for_key(stage_key) or {}
     p = Probes()
     ep = route.get("ep")
+    if stage_key == "compose" and ep:
+        p.execution_effect = _compose_execution_effect(root, str(ep))
     if ep:
         p.entry_checks = entry_checks(root, ep, stage_key=stage_key, preview=True)
         p.entry_check_block = _entry_check_block(p.entry_checks, stage_key, root)
@@ -1908,6 +2079,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     spec = stage_for_key(stage_key) or {}
     p = Probes()
     ep = route.get("ep")
+    if stage_key == "compose" and ep:
+        p.execution_effect = _compose_execution_effect(root, str(ep))
     unresolved_ordinary_choices: List[str] = []
     try:
         if ordinary_choice_autopilot_enabled(root):
@@ -2784,6 +2957,21 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             p.compliance_gap = True
             p.prework.append({"step": "compliance", "status": "gap",
                               "detail": "缺 skills/n2d/n2d-compliance/scripts/compliance.py，合规前置无法核验（fail-closed）"})
+
+    # v2 授权余量探针：只读重建 runner 的当前 producer binding；只有完全匹配才把
+    # needs_payment_confirm 降成 authorized needs_stage_execution。任何异常回到原人审卡。
+    if ep and stage_key in GENERATION_STAGES and _stage_requires_paid_compliance(
+        root, route, stage_key
+    ):
+        p.spend_envelope = _phase_spend_envelope_probe(root, str(ep), stage_key)
+        p.prework.append({
+            "step": "phase_spend_envelope_probe",
+            "status": "pass" if p.spend_envelope.get("status") == "authorized" else "skip",
+            "detail": (
+                f"status={p.spend_envelope.get('status')} "
+                f"envelope={p.spend_envelope.get('envelope_id') or '-'}"
+            ),
+        })
 
     if stage_key == "review" and ep and not (p.gate and p.gate.get("blocked")) and not p.prework_block:
         _run_review_acceptance_outputs(root, ep, p)

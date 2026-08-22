@@ -527,6 +527,14 @@ def done(condition: bool, *, warning: bool = False) -> str:
 def build_steps(root: str) -> list[dict[str, Any]]:
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
     settings_exists = rel_exists(root, "_设置.md")
+    project_settings = load_project_settings(root) or {}
+    delegated_review = str(project_settings.get("审阅策略") or "用户授权制作代理") == "用户授权制作代理"
+    approval_args = (
+        '--delegated --agent "delegate:novel-specialist-reviewer" '
+        '--reason "按当前输入、产物与审阅清单完成独立代理复核"'
+        if delegated_review
+        else '--agent "<复核人>" --reason "<批准说明>"'
+    )
     commercial_text = " ".join([
         str(meta.get("purpose") or ""),
         str(meta.get("target_platform") or ""),
@@ -580,7 +588,7 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     blueprint_contract_ready = blueprint_ready and rel_exists(root, "设定/读者契约.md") and intent_ok
     blueprint_command = (
         f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --approve-stage blueprint '
-        '--agent "<复核人>" --reason "<批准说明>"'
+        + approval_args
         if blueprint_contract_ready and not blueprint_approved
         else f'python3 skills/novel/novel-craft/scripts/author_intent.py scaffold "{root}"'
     )
@@ -589,7 +597,7 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     )
     setting_command = (
         f'python3 skills/novel/scripts/pipeline_runner.py "{root}" --approve-stage setting '
-        '--agent "<复核人>" --reason "<批准说明>"'
+        + approval_args
         if setting_outputs_ready and not setting_approved
         else f'python3 skills/novel/novel-craft/scripts/manuscript_map.py "{root}" --write'
     )

@@ -7,6 +7,7 @@ import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 import extractZip from 'extract-zip'
 import type { DemoDownloadInfo, DemoInstallResult, LineKey } from '@shared/types'
+import { selectCatalogDemos } from '@shared/demoPolicy'
 
 const DOWNLOAD_TIMEOUT = 600_000
 const CATALOG_DOWNLOAD_TIMEOUT = 10_000
@@ -229,7 +230,7 @@ function workTarget(workspaceRoot: string, rel: string): string {
 
 export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDownloadInfo[]> {
   const catalog = await readCatalog()
-  return catalog.map((entry) => {
+  const demos = catalog.map((entry) => {
     const key = entry.line_key ?? entry.line ?? ''
     const rel = entry.rel ?? ''
     const abs = rel ? workTarget(workspaceRoot, rel) : ''
@@ -247,6 +248,7 @@ export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDown
       path: abs || null,
     }
   })
+  return selectCatalogDemos(demos)
 }
 
 async function download(url: string, dest: string): Promise<void> {

@@ -45,6 +45,89 @@ def test_supervisor_dispatches_next_stage_with_handoff_shape():
         assert action["handoff"]["kind"] == "novel_specialist_handoff_contract"
 
 
+def test_supervisor_dispatches_reversible_review_to_agent_by_default():
+    with tempfile.TemporaryDirectory() as root:
+        write_minimal_project(root)
+        original_dry_run = supervisor.dry_run_plan
+        try:
+            supervisor.dry_run_plan = lambda _root: {
+                "title": "测试书",
+                "next_stage": "blueprint",
+                "stages": [{
+                    "key": "blueprint",
+                    "status": "ready",
+                    "gate": "human-choice",
+                    "agent_role": "specialist_writer",
+                    "inputs": [],
+                    "outputs": [],
+                    "human_approval": {"required": True, "approved": False},
+                }],
+            }
+            action = supervisor.decide_next_action(root)
+        finally:
+            supervisor.dry_run_plan = original_dry_run
+
+        assert action["status"] == "dispatch"
+        assert action["action"] == "delegated_review_blueprint"
+        assert action["agent_role"] == "specialist_reviewer"
+        assert action["review_mode"] == "delegated_autonomy"
+        assert "--delegated" in action["recommended_commands"][1]
+
+
+def test_supervisor_dispatches_blueprint_creation_before_independent_review():
+    with tempfile.TemporaryDirectory() as root:
+        write_minimal_project(root)
+        original_dry_run = supervisor.dry_run_plan
+        try:
+            supervisor.dry_run_plan = lambda _root: {
+                "title": "测试书",
+                "next_stage": "blueprint",
+                "stages": [{
+                    "key": "blueprint",
+                    "status": "ready",
+                    "gate": "human-choice",
+                    "agent_role": "specialist_writer",
+                    "inputs": [],
+                    "outputs": [],
+                }],
+            }
+            action = supervisor.decide_next_action(root)
+        finally:
+            supervisor.dry_run_plan = original_dry_run
+
+        assert action["status"] == "dispatch"
+        assert action["action"] == "execute_blueprint"
+        assert action["agent_role"] == "specialist_writer"
+        assert len(action["recommended_commands"]) == 1
+
+
+def test_supervisor_honors_explicit_per_stage_human_review_policy():
+    with tempfile.TemporaryDirectory() as root:
+        write_minimal_project(root)
+        with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+            f.write("# 设置\n- 审阅策略：逐阶段用户确认\n")
+        original_dry_run = supervisor.dry_run_plan
+        try:
+            supervisor.dry_run_plan = lambda _root: {
+                "title": "测试书",
+                "next_stage": "demo",
+                "stages": [{
+                    "key": "demo",
+                    "status": "ready",
+                    "gate": "semantic review",
+                    "agent_role": "specialist_reviewer",
+                    "inputs": [],
+                    "outputs": [],
+                }],
+            }
+            action = supervisor.decide_next_action(root)
+        finally:
+            supervisor.dry_run_plan = original_dry_run
+
+        assert action["status"] == "needs_human"
+        assert action["action"] == "human_review_or_creation"
+
+
 def test_outline_command_uses_existing_scaffold_subcommand():
     commands = supervisor.command_for_stage("/tmp/book", {"key": "outline"})
     assert commands == [

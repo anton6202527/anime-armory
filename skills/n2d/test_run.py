@@ -657,7 +657,7 @@ def test_all_returned_stop_reasons_are_registered():
 
 
 def test_decide_compose_payment_menu_is_bgm():
-    root = make_work(ALL_DONE_TO["compose"])
+    root = make_work(ALL_DONE_TO["compose"], settings="- BGM来源: Suno\n")
     na = run.decide(root, _route("compose"), "compose", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "BGM来源"
@@ -665,6 +665,84 @@ def test_decide_compose_payment_menu_is_bgm():
     assert bundle["scope"] == "pre_compose_review"
     assert any("review_ui.py" in cmd and "--export-findings" in cmd for cmd in bundle["commands"])
     assert not any("release_verdict.py" in cmd for cmd in bundle["commands"])
+
+
+def test_decide_no_bgm_local_compose_auto_routes_stage_execution():
+    root = make_work(ALL_DONE_TO["compose"], settings="- BGM来源: 无\n")
+
+    na = run.decide(root, _route("compose"), "compose", run.Probes())
+
+    assert na["stop_reason"] == "needs_stage_execution"
+    assert na["action_card"]["execution_effect"]["safe_local_execution"] is True
+    assert na["action_contract"]["requires_human_approval"] is False
+    assert na["action_contract"]["paid_or_irreversible"] is False
+    assert "本地 ffmpeg" in na["action_card"]["to_user"]
+
+
+def test_decide_local_compose_still_stops_before_overwriting_accepted_master():
+    root = make_work(ALL_DONE_TO["compose"], settings="- BGM来源: 无\n")
+    prod = Path(root) / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "acceptance_receipt_第1集.json").write_text(
+        json.dumps({"decision": "accepted"}, ensure_ascii=False), encoding="utf-8"
+    )
+
+    na = run.decide(root, _route("compose"), "compose", run.Probes())
+
+    assert na["stop_reason"] == "needs_payment_confirm"
+
+
+def test_decide_local_compose_stops_before_overwriting_unaccepted_working_master():
+    root = make_work(ALL_DONE_TO["compose"], settings="- BGM来源: 无\n")
+    master = Path(root) / "合成" / "第1集" / "成片_第1集_zh.mp4"
+    master.parent.mkdir(parents=True, exist_ok=True)
+    master.write_bytes(b"working-master-not-yet-accepted")
+
+    na = run.decide(root, _route("compose"), "compose", run.Probes())
+
+    assert na["stop_reason"] == "needs_payment_confirm"
+    effect = run._compose_execution_effect(root, "第1集")
+    assert effect["existing_master_protected"] is True
+    assert effect["safe_local_execution"] is False
+    assert effect["canonical_master"] == "合成/第1集/成片_第1集_zh.mp4"
+
+
+def test_decide_valid_v2_phase_envelope_skips_repeat_payment_prompt():
+    root = make_work(ALL_DONE_TO["image"])
+    authorization = {
+        "status": "authorized",
+        "read_only": True,
+        "consumed": False,
+        "envelope_id": "image-phase",
+        "authorization_digest": "sha256:" + "a" * 64,
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "input_sha256": "sha256:" + "b" * 64,
+    }
+
+    na = run.decide(
+        root,
+        _route("image"),
+        "image",
+        run.Probes(spend_envelope=authorization),
+    )
+
+    assert na["stop_reason"] == "needs_stage_execution"
+    assert na["action_card"]["phase_spend_envelope"]["envelope_id"] == "image-phase"
+    assert "n2d-batch/scripts/runner.py" in na["action_card"]["exact_command"]
+    assert na["action_contract"]["requires_human_approval"] is False
+    assert na["action_contract"]["paid_or_irreversible"] is True
+
+
+def test_decide_invalid_or_stale_v2_envelope_keeps_payment_prompt():
+    root = make_work(ALL_DONE_TO["image"])
+    na = run.decide(
+        root,
+        _route("image"),
+        "image",
+        run.Probes(spend_envelope={"status": "blocked", "issues": ["input mismatch"]}),
+    )
+    assert na["stop_reason"] == "needs_payment_confirm"
 
 
 def test_decide_review_requires_signoff_after_evidence_passes():

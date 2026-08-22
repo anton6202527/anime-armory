@@ -21,6 +21,7 @@ from novel_pipeline import (  # noqa: E402
     dry_run_plan,
     evaluate_stage,
     handoff_contract,
+    record_delegated_stage_approval,
     record_human_stage_approval,
     registry_payload,
 )
@@ -189,6 +190,36 @@ def test_blueprint_requires_hash_bound_human_approval_and_reapproval_after_edit(
         stale = evaluate_stage(root, stage)
         assert stale["status"] == "ready"
         assert "重新人工复核" in stale["human_approval"]["message"]
+
+
+def test_blueprint_accepts_explicit_delegated_review_without_claiming_human_review():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+        with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+            json.dump({"title": "一键测试", "kind": "create"}, f, ensure_ascii=False)
+        with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+            f.write("# 设置\n- 审阅策略：用户授权制作代理\n")
+        with open(os.path.join(root, "设定", "author_intent.json"), "w", encoding="utf-8") as f:
+            json.dump({"core_theme": "选择", "non_negotiables": ["不改核心主题"]}, f, ensure_ascii=False)
+        with open(os.path.join(root, "设定", "创作蓝图.md"), "w", encoding="utf-8") as f:
+            f.write("# 创作蓝图\n完整蓝图。\n")
+
+        _path, record = record_delegated_stage_approval(
+            root,
+            "blueprint",
+            approved_by="delegate:novel-specialist-reviewer",
+            note="已按蓝图清单核对主题、人物目标和不可妥协项",
+        )
+        assert record["review_mode"] == "delegated_autonomy"
+        assert record["independent_human_review"] is False
+        stage = next(s for s in applicable_stages({"kind": "create"}) if s["key"] == "blueprint")
+        assert evaluate_stage(root, stage)["status"] == "done"
+
+        with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+            f.write("# 设置\n- 审阅策略：逐阶段用户确认\n")
+        stale = evaluate_stage(root, stage)
+        assert stale["status"] == "ready"
+        assert "代理审阅授权已失效" in stale["human_approval"]["message"]
 
 
 def test_human_approval_requires_complete_inputs_and_expires_when_input_changes():

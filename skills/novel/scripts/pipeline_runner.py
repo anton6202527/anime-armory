@@ -28,6 +28,7 @@ from novel_pipeline import (  # noqa: E402
     artifact_graph,
     dry_run_plan,
     handoff_contract,
+    record_delegated_stage_approval,
     record_human_stage_approval,
     registry_payload,
 )
@@ -335,7 +336,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--registry-only", action="store_true", help="只打印 pipeline registry")
     parser.add_argument("--artifact-graph", action="store_true", help="打印 artifact graph 与 stale 检测")
     parser.add_argument("--handoff", metavar="STAGE", help="打印指定阶段的 specialist handoff contract")
-    parser.add_argument("--approve-stage", metavar="STAGE", help="人工复核后批准 blueprint/setting；需 --agent 与 --reason")
+    parser.add_argument("--approve-stage", metavar="STAGE", help="复核后批准 blueprint/setting；需 --agent 与 --reason")
+    parser.add_argument("--delegated", action="store_true", help="把 --approve-stage 记录为授权制作代理审阅，不冒充人审")
     parser.add_argument("--json", action="store_true", help="打印 JSON")
     parser.add_argument("--write-plan", action="store_true", help="写 生产数据/novel_pipeline_plan.{json,md}")
     parser.add_argument("--start-run", action="store_true", help="创建可恢复 pipeline run 状态文件")
@@ -375,16 +377,18 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.approve_stage:
         try:
-            approval_path, record = record_human_stage_approval(
-                root, args.approve_stage, approved_by=args.agent, note=args.reason
-            )
+            recorder = record_delegated_stage_approval if args.delegated else record_human_stage_approval
+            approval_path, record = recorder(root, args.approve_stage, approved_by=args.agent, note=args.reason)
         except (OSError, ValueError, KeyError) as exc:
             print(f"[err] {exc}", file=sys.stderr)
             return 2
         if append_event:
             append_event(
                 root,
-                event_type="pipeline_stage_human_approved",
+                event_type=(
+                    "pipeline_stage_delegated_approved"
+                    if args.delegated else "pipeline_stage_human_approved"
+                ),
                 tool="novel/scripts/pipeline_runner.py",
                 outputs=[approval_path],
                 metadata={
@@ -395,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         print(
             json.dumps(record, ensure_ascii=False, indent=2)
-            if args.json else f"[ok] {args.approve_stage} 人工批准 → {approval_path}"
+            if args.json else f"[ok] {args.approve_stage} {record.get('review_mode')} 批准 → {approval_path}"
         )
         return 0
     if args.start_run:

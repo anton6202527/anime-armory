@@ -1,6 +1,7 @@
 from pathlib import Path
 import importlib.util
 import json
+import pytest
 
 
 MODULE_PATH = Path(__file__).with_name("codex_panel_runner.py")
@@ -20,6 +21,87 @@ def write_png(path: Path, size: tuple[int, int] = (100, 100), color: tuple[int, 
 def test_adopt_builtin_records_builtin_channel_without_mixing_recipe() -> None:
     assert runner.recorded_channel(adopt_builtin=True) == "内置 imagegen"
     assert runner.recorded_channel(adopt_builtin=False) == "Codex CLI"
+
+
+def _spend_fixture(tmp_path: Path) -> tuple[dict, dict, Path]:
+    data = {
+        "jobs": [{
+            "panel_id": "P001",
+            "execution_input_sha256": "1" * 64,
+            "source_contract_sha256": "2" * 64,
+            "submit_prompt_sha256": "3" * 64,
+        }]
+    }
+    envelope = runner.spend_envelope.issue_envelope(
+        tmp_path,
+        chapter="第1话",
+        data=data,
+        model=runner.CODEX_MODEL,
+        channel=runner.CODEX_CHANNEL,
+        scope=runner.spend_envelope.requested_scope("第1话", ["P001"], force=False),
+        expires_at="2099-01-01T00:00:00Z",
+        max_calls=2,
+        max_attempts=1,
+        currency="CNY",
+        max_total="20",
+        max_cost_per_call="10",
+        approver="Wesley Chen",
+        approval_reference="chat://budget/42",
+        source_quote="我批准此范围和总额内的出图提交。",
+    )
+    path = runner.spend_envelope.default_envelope_path(tmp_path, "第1话")
+    runner.spend_envelope.save_envelope(path, envelope)
+    context = runner.prepare_spend_context(
+        tmp_path,
+        "第1话",
+        data,
+        data["jobs"],
+        force=False,
+        model=runner.CODEX_MODEL,
+        channel=runner.CODEX_CHANNEL,
+    )
+    return data, context, path
+
+
+def test_paid_wrapper_reserves_once_for_submit_plus_provider_polling(tmp_path: Path) -> None:
+    _data, context, _path = _spend_fixture(tmp_path)
+    provider_operations: list[str] = []
+
+    def submit_and_poll() -> str:
+        provider_operations.extend(["image2image", "query_result", "query_result", "download"])
+        return "done"
+
+    result, _reservation, _settlement = runner.run_paid_submission(
+        context, panel_id="P001", retry_round=1, submit=submit_and_poll
+    )
+    ledger = runner.load_json(runner.spend_envelope.ledger_path(tmp_path))
+    entry = next(iter(ledger["envelopes"].values()))
+    assert result == "done"
+    assert provider_operations.count("image2image") == 1
+    assert len(entry["reservations"]) == 1
+
+
+def test_unknown_cost_blocks_before_submit_and_does_not_consume(tmp_path: Path) -> None:
+    data, context, path = _spend_fixture(tmp_path)
+    # No call has been reserved yet.  Corrupting cost while recomputing the
+    # digest models a human-issued but incomplete/unknown cost envelope.
+    envelope = runner.load_json(path)
+    envelope["cost"].pop("max_cost_per_call")
+    envelope["authorization_sha256"] = runner.spend_envelope.sha256_json(
+        runner.spend_envelope._authorization_material(envelope)
+    )
+    runner.spend_envelope.save_envelope(path, envelope)
+    submitted = False
+
+    def submit() -> None:
+        nonlocal submitted
+        submitted = True
+
+    with pytest.raises(runner.spend_envelope.SpendAuthorizationError) as exc:
+        runner.run_paid_submission(context, panel_id="P001", retry_round=1, submit=submit)
+    assert exc.value.code == "unknown_cost"
+    assert submitted is False
+    assert not runner.spend_envelope.ledger_path(tmp_path).exists()
 
 
 def write_current_gate_receipt(root: Path, jobs: Path, *, verdict: str = "pass") -> Path:

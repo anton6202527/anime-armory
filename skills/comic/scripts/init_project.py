@@ -374,7 +374,7 @@ def main() -> int:
     parser.add_argument("--render-stage", default=None)
     parser.add_argument("--manuscript-spec", default="数字条漫")
     parser.add_argument("--name-strategy", default="自动缩略分镜")
-    parser.add_argument("--review-strategy", default="逐阶段用户确认")
+    parser.add_argument("--review-strategy", default="用户授权制作代理")
     parser.add_argument("--tone-strategy", default="风格驱动")
     parser.add_argument("--effects-strategy", default="剧情驱动")
     parser.add_argument("--visual-style", default="彩色国漫条漫")

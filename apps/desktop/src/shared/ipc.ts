@@ -2,15 +2,19 @@ import type {
   AgentInfo,
   CanvasLayout,
   CanvasGenerationConfig,
+  CanvasGenerationCommitResult,
   CanvasGenerationKind,
   CanvasNodePosition,
   CanvasReadResult,
+  CanvasProductionState,
+  CanvasTaskSubmitResult,
   ClipEditData,
   ClipEditPatch,
   DemoDownloadInfo,
   DemoInstallResult,
   EpisodeWorkspace,
   ImportWorkSourcesResult,
+  LineKey,
   LineInfo,
   QualityInsights,
   SkillInfo,
@@ -99,7 +103,7 @@ export interface IpcCommands {
   'changes.deleted': (a: { root: string }) => string[]
 
   // canvas / pipeline
-  'canvas.read': (a: { root: string; ep: string; knownSig?: string }) => CanvasReadResult
+  'canvas.read': (a: { root: string; ep: string; line: LineKey; knownSig?: string }) => CanvasReadResult
   'canvas.readLayout': (a: { root: string; ep: string }) => CanvasLayout
   'canvas.writeLayout': (a: { root: string; ep: string; nodes: CanvasNodePosition[] }) => void
   'canvas.readClipEdit': (a: {
@@ -111,22 +115,63 @@ export interface IpcCommands {
   'canvas.writeClipEdit': (a: {
     root: string
     ep: string
+    line: LineKey
     clipId: string
     number?: number | null
     patch: Partial<ClipEditPatch>
+    expectedContentHash?: string
   }) => ClipEditData
   'canvas.readGenerationConfig': (a: {
     root: string
     ep: string
     clipId: string
     kind: CanvasGenerationKind
+    targetSlot: string
+    targetOutputPath: string
   }) => CanvasGenerationConfig | null
-  'canvas.writeGenerationConfig': (a: {
+  'canvas.submitGeneration': (a: {
     root: string
     ep: string
+    line: LineKey
+    clipId: string
+    kind: CanvasGenerationKind
+    targetSlot: string
+    targetOutputPath: string
+    expectedContentHash: string
+  }) => CanvasTaskSubmitResult
+  'canvas.commitGeneration': (a: {
+    root: string
+    ep: string
+    line: LineKey
     clipId: string
     config: CanvasGenerationConfig
-  }) => CanvasGenerationConfig
+    targetSlot: string
+    targetOutputPath: string
+    expectedContentHash: string
+  }) => CanvasGenerationCommitResult
+  'canvas.startProduction': (a: {
+    root: string
+    ep: string
+    line: LineKey
+    expectedContentHash: string
+  }) => CanvasTaskSubmitResult
+  'canvas.acceptFinal': (a: {
+    root: string
+    ep: string
+    line: LineKey
+    expectedContentHash: string
+  }) => CanvasProductionState
+  'canvas.failTask': (a: {
+    root: string
+    ep: string
+    jobId: string
+    detail: string
+  }) => CanvasProductionState
+  'canvas.markTaskRunning': (a: {
+    root: string
+    ep: string
+    jobId: string
+  }) => CanvasProductionState
   'canvas.readEpisodeWorkspace': (a: { root: string; ep: string }) => EpisodeWorkspace | null
   'quality.read': (a: { root: string; line: string; ep?: string | null }) => QualityInsights
   'pipeline.nextAction': (a: { repoRoot: string; root: string; ep: string }) => string
@@ -136,7 +181,7 @@ export interface IpcCommands {
 
   // pty
   'pty.spawn': (a: { cwd: string; rows: number; cols: number }) => number
-  'pty.write': (a: { id: number; data: string }) => void
+  'pty.write': (a: { id: number; data: string }) => boolean
   'pty.resize': (a: { id: number; rows: number; cols: number }) => void
   'pty.kill': (a: { id: number }) => void
 

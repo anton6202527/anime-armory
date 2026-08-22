@@ -62,7 +62,7 @@ python3 skills/comic/comic-layout/scripts/render_storyboard_svg.py "创作区/�
 5. 给台词、旁白、拟声词预留 `bubble_slots`，避免遮挡脸、手、关键道具和动作接触点。
 6. 运行确定性 validator：panel ID 唯一且同序覆盖，矩形不重叠/不越界，阅读顺序一致，每段正文/SFX 都有界内 bubble slot。
 7. 输出 draft `layout.json`。如果文字过多，回 `comic-script`；如果页流不顺，回 `comic-name`，不要靠缩小字号硬塞。
-8. 人工或项目内已授权制作代理签收后写 SHA-bound approval receipt，才回写 `_进度.md` 的 `页面排版=✅`；代理不得越过确定性阻断或授权边界。
+8. 人工或项目内已授权制作代理签收后写 SHA-bound approval receipt，才回写 `_进度.md` 的 `页面排版=✅`。`delegate:` 签收只接受 `_设置.md` 显式的 `审阅策略=用户授权制作代理`，或当前有效、摘要匹配的 `生产数据/authorizations/editorial_review.json`；batch 的机器结构签收明确记为 `review_kind=delegated_policy_auto_review`，不冒充视觉/语义人审。缺 key 不继承默认，授权撤销或变化会使签收失效。
 
 ## 排版原则
 

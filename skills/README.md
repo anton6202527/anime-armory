@@ -12,35 +12,35 @@
 > - **脚本是通用的**：纯 Python/bash，只调通用工具（ffmpeg / librosa / whisper / yt-dlp / 生图生视频 CLI 等），**无任何 Claude 专有 API**，谁都能执行。引用一律走中立路径 `skills/...`（旧 `.claude/skills/...` 经软链仍兼容）。
 > - **skill 名写法**：下一步建议、路由表和用户提示里一律写裸名（如 `n2d-image`、`n2d-compose`），不要加 `/`。`/n2d-image` 这类写法会被部分 AI agent 当成斜杠命令，导致 `Unrecognized command`。
 
-> **偏好约定（通用化原则）**：所有 skill 保持**通用**，不把平台/后端/分辨率写死成唯一路径。凡「让用户选」的点都是**选择点**，用户的实际选择是**私有的**，存在用户自己的空间——每作品 `<作品根>/_设置.md`（权威）+ 私有全局默认（memory 区 `创作偏好-默认.md`，开新项目预填），**不进共享 skill 代码 / 不外发**。行为：选择点首次问一次→写 `_设置.md`→同项目沉默沿用；合规/不可逆/花钱多的点每次仍确认。机制与全部选择点目录见各线自己的 `references/选择点与偏好.md`；每个 skill 有「## 偏好（私有）」段引用它。**新增选择点**→加进本线选择点目录，别在正文写死。
+> **偏好约定（通用化原则）**：所有 skill 保持**通用**，不把平台/后端/分辨率写死成唯一路径。凡「让用户选」的点都是**选择点**，用户的实际选择是**私有的**，存在用户自己的空间——每作品 `<作品根>/_设置.md`（权威）+ 私有全局默认（memory 区 `创作偏好-默认.md`，开新项目预填），**不进共享 skill 代码 / 不外发**。普通、可逆项缺失时采用本线有证据优势的推荐值并写入 `_设置.md`，同项目之后沉默沿用；付费生成把 scope、模型、渠道、最大调用/重抽次数、费用上限和输入哈希绑定成一个阶段预算包，只在创建/扩大/过期或合同变化时确认，包内连续执行。权利/合规、逐图当前像素验收、不可逆发布/覆盖和最终成品验收仍是硬停点。机制与全部选择点目录见各线自己的 `references/选择点与偏好.md`；每个 skill 有「## 偏好（私有）」段引用它。**新增选择点**→加进本线选择点目录，别在正文写死。
 
 > **候选项刷新 + 适配层原则**：选择点里的菜单只是**候选快照**，不是永久真值。模型、平台、规格、价格、法规、榜单等高变化信息，执行前或流程自审/更新时应按需要用项目 references、官方文档、实时搜索或自有投放/生成战绩刷新，并在引用处写清来源日期；不能核验时要明说“未核验”。用户永远可以手输 `自定义`/`manual`，由 skill 写入 `_设置.md` 并进入适配层。执行逻辑不要直接绑菜单文案，而要经适配层归一成能力标签、实际 CLI/API/网页入口、参数包、fallback/degrade plan、合规 gate 和产物 schema；适配层缺失时先补适配或停下提示，不静默换后端、不把旧菜单当权威。
 
-> **AI 交互节点（Interactive Flow）约定**：凡遇到**「机器可自动计算，但需要结合文学/语义理解才能高质量完成」**的连贯流程（如算好卡点时间线后，需要给每个镜头写包含动作和运镜的 Prompt），**不要让用户手动去复制粘贴脚本命令**。应该在工作流 SKILL.md 中设置明确的**【AI 代理交互节点】**：让 AI 主动用人类语言向用户提问提供选项（如：“是否需要我启动语义引擎为你补全提示词？”），在用户做出「决定」后，由 AI 代理在后台全自动完成「跑脚本 → 读提示 → 调 LLM 生成 → JSON 落档并回写」的脏活累活。**原则：把枯燥的脚本命令藏在背后，让用户只做决策。**
+> **AI 代理交互节点（Agentic Flow）约定**：凡遇到**「机器可自动计算，但需要结合文学/语义理解才能高质量完成」**的连贯流程（如算好卡点时间线后，为每个镜头补全动作与运镜 Prompt），由 AI 代理在同一任务内直接完成「跑脚本 → 读中间结果 → 语义补全 → JSON 落档并回写」，不得把脚本命令或普通可逆选择甩给用户，也不得先问“要不要继续”。只有缺少无法安全推断的必要输入、当前授权/阶段预算包失效，或触及权利合规、超预算、不可逆操作、公开发布和最终验收时才暂停；暂停时一次性合并说明全部阻断项。
 
 ## 独立 skills
 
 | Skill | 职责 |
 |---|---|
-| `app-script-workbench` | 画布故事脚本的独立三步工作流：确认镜头 → 准备角色/场景/道具资产 → 合成最终提示词并创建视频任务；使用自己的 `*.script-workbench.json`、脚本与 schema，可参考 n2d 的设计经验，但不经过 `n2d` 分诊，也不 import、调用或依赖 `n2d-script`。 |
-| `app-character-turnaround` | 画布角色三视图的独立三步工作流：选择真实角色参考 → 锁定可见身份事实 → 生成并验收正面/侧面/背面设定图；使用自己的 `*.character-turnaround.json` 与脚本，不经过任何系列分诊。 |
-| `app-first-frame-video` | 画布首帧图生视频的独立三步工作流：绑定真实首帧及 SHA → 分层设计主体/镜头/环境运动 → 生成并验收视频；使用自己的 `*.first-frame-video.json` 与 job，不调用系列视频 runner。 |
-| `app-audio-video` | 画布音频生视频的独立三步工作流：导入并绑定音频 → 建立节拍/段落/视觉连续性计划 → 生成并验收卡点视频；使用自己的 `*.audio-video.json`、时间线与 job，不调用 MV 或歌曲生产线。 |
+| `app-script-workbench` | 画布故事制作工作台：用单一 state、canonical SHA-256 与唯一完成谓词管理镜头/资产二次创作、批量生成、选择性返修、逐镜验收、母版合成和最终 QC；delegated 自动化只到 `machine_complete`，逐图当前像素与最终母版由具名真人绑定当前字节验收。使用独立 v3 schema，不经过系列分诊，也不 import、调用或依赖系列实现。 |
+| `app-character-turnaround` | 画布角色三视图的独立三步工作流：选择真实角色参考 → 锁定可见身份事实 → 生成正面/侧面/背面 → 一次真人动作逐张核当前文件 SHA 并写三张具名时区回执；使用自己的 v2 JSON 与脚本，不经过任何系列分诊。 |
+| `app-first-frame-video` | 画布首帧图生视频的独立三步工作流：绑定真实首帧及 SHA → 分层设计主体/镜头/环境运动 → 机器生成 → 具名真人核当前视频字节后验收；使用自己的 v2 JSON 与 job，不调用系列视频 runner。 |
+| `app-audio-video` | 画布音频生视频的独立三步工作流：导入并绑定音频 → 建立节拍/段落/视觉连续性计划 → 机器生成 → 具名真人核当前视频字节后验收；使用自己的 v2 JSON、时间线与 job，不调用 MV 或歌曲生产线。 |
 
 ## Skills 规模统计
 
-> 统计时间：2026-08-20。`SKILL.md 总行数` 统计六个系列、普通独立 skill 与 `skills/app/` 独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-08-22。`SKILL.md 总行数` 统计六个系列、普通独立 skill 与 `skills/app/` 独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `skills/n2d/**/SKILL.md` | 21 | 4779 | 315680 |
-| novel | `skills/novel/**/SKILL.md` | 29 | 3307 | 83191 |
-| comic | `skills/comic/**/SKILL.md` | 13 | 1620 | 56532 |
+| n2d | `skills/n2d/**/SKILL.md` | 21 | 4796 | 317990 |
+| novel | `skills/novel/**/SKILL.md` | 29 | 3309 | 83444 |
+| comic | `skills/comic/**/SKILL.md` | 13 | 1638 | 58450 |
 | song | `skills/song/**/SKILL.md` | 11 | 660 | 9911 |
 | mv | `skills/mv/**/SKILL.md` | 14 | 1302 | 47076 |
-| ad | `skills/ad/**/SKILL.md` | 14 | 1244 | 57286 |
-| 独立 skill | `skills/<skill-name>/SKILL.md` + `skills/app/<app-skill>/SKILL.md` | 4 | 232 | 1173 |
-| **合计** | `skills/**/SKILL.md` | **106** | 13144 | 570849 |
+| ad | `skills/ad/**/SKILL.md` | 14 | 1258 | 59078 |
+| 独立 skill | `skills/<skill-name>/SKILL.md` + `skills/app/<app-skill>/SKILL.md` | 4 | 233 | 3110 |
+| **合计** | `skills/**/SKILL.md` | **106** | 13196 | 579059 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -56,7 +56,7 @@
 
 ## 一、n2d ——「小说 → AI 漫剧/短剧」生产管线
 
-`n2d` 是总调度，按 `_进度.md` 把用户路由到对应阶段 skill。默认 `制作模式=混合自动路由`：声音选角与无 WAV 时间基准先行，逐镜选择表演轨先行、后期口型、后配音、画面先行或原生音画；最终音色锁定后才批量生成 final voice。项目级 `配音先行` / `原生音画` / `先出视频后配音` 仅作用户显式兼容模式。逐集 `production_mode_route` 是机器执行合同，不靠中文 label 隐式跳转。`视频` 列完成表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览），不是可发布母版；接受镜头会持续刷新 `生产数据/timelines/第N集/editorial_timeline.otio`，供专业剪辑软件接手。`合成/验收` 是用户可选尾段；发布/母版还要过 compose、release/readiness、production locks、creative governance 和人工签收，才算 `master_delivery_complete`。新项目视频默认口径：`出视频规格=预算充足`、`视频分辨率=720p`、`视频生成音频策略=无声视频流`、`视频原生音轨=丢弃`、`对口型=关闭`、`合成阶段=跳过`。
+`n2d` 是总调度，按 `_进度.md` 把用户路由到对应阶段 skill。默认 `制作模式=混合自动路由`：声音选角与无 WAV 时间基准先行，逐镜选择表演轨先行、后期口型、后配音、画面先行或原生音画；最终音色锁定后才批量生成 final voice。项目级 `配音先行` / `原生音画` / `先出视频后配音` 仅作用户显式兼容模式。逐集 `production_mode_route` 是机器执行合同，不靠中文 label 隐式跳转。`视频` 列完成表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览），不是最终成品；接受镜头会持续刷新 `生产数据/timelines/第N集/editorial_timeline.otio`。新项目默认继续进入 `合成/验收`，通过 compose、release/readiness、production locks、creative governance 和最终人工签收后才算 `master_delivery_complete`；只有项目显式设置 `合成阶段=跳过` 时才停在镜头交付。新项目视频默认口径：`出视频规格=预算充足`、`视频分辨率=720p`、`视频生成音频策略=无声视频流`、`视频原生音轨=丢弃`、`对口型=关闭`、`合成阶段=启用`。
 
 > **n2d 运行时 v2（2026-07）**：模型能力路由与本机执行已拆开——每条视频 route 带 adapter v2 状态，只有 `automated_ready` 才自动 submit；其它渠道用作品内 wrapper 注册，不静默换厂。视频齐片后用真实 Clip + `edit_target_sec` 产 `actual_rough_cut.mp4`；支持用户 opt-in 的原生多镜单次生成，母片会确定性拆回原 Clip 继续逐镜 QC/重跑。`run.py next` 物化 episode graph、归一化 blocking bundle 和隐私最小化 flow telemetry，但不新增状态机。QA 对 VLM verdict 封顶 WARN，数值检测器须生产规模金标校准才可自动 BLOCK；A/B 按每变体样本量 + Wilson 区间 + 显著性/多重比较给结论。`release_verdict` 分开报告 clip/master/production 完成与 CN/海外/商业发布就绪。完整合同见 `docs/n2d-adapter-v2-多镜执行与交付状态.md`。
 
@@ -74,9 +74,9 @@
 | 制漫剧系列资产库（横切） | `n2d-asset-market` | P1 成本摊薄层：把角色原型/定妆组/`identity_registry` 片段、场景 `LOC_`、道具 `PROP_`、武器 `WEAPON_`、独立服装 `OUTFIT_`、特效 `VFX_`、路由经验、母题与打斗套路导出到 `创作区/制漫剧/_资产库/` 的自包含单包。开新剧/新增资产前先查本系列库；角色导入即 fork 新身份并重置账号/项目绑定的 Character ID / Face Lock / LoRA ready。跨系列/机器只传经 `verify-pack` 的单个包，目标侧复制适配，不回指来源目录。项目内内容哈希账本仍用于发布追溯，不等同模板 export |
 | LoRA 生命周期（横切） | `n2d-lora` | P2/P1 一致性重武器：只给核心长线角色管理 LoRA 数据集、训练任务、验证报告和 registry ready 回写；运行时先检测本机 SDXL/ComfyUI/LoRA 训练链，完整则优先本机 LoRA 训练，不完整则回落项目主/云端生图后端；先把 `.safetensors` 从散文件变成可审计资产；提供本机 SDXL/ComfyUI sidechain 的安装、doctor、route、workflow、production event 记录入口；`suggest` 子命令读 identity 漂移报表打印升档建议（升档触发已工程化）；少量 hero 镜使用非主生图链路 LoRA 时必须写 `生产数据/lora_exception_scope_第N集.json`，声明 clips/reason/style_bridge/QC，避免和项目内生图模型统一规则互相打架 |
 | 合规与版权前置（横切） | `n2d-compliance` | P0 合规包：生成/检查 `合规/compliance_manifest.json`，把源文本/改编权、角色肖像授权、声音克隆授权、平台审核、出海本地化和广电备案前置到 gate；`distribution_intent=internal_only` 时平台投放/出海/备案域降 INFO 免检（授权照常 BLOCK）。AI 标识/披露/水印只做非阻断发布待办，compose 可 best-effort 辅助 |
-| 6 合成（可选） | `n2d-compose` | 用户启用 `合成阶段` 后，拼视频、配音、环境/拟音、BGM、字幕为成片；从 animatic 起持续维护 `editorial_timeline.otio`，实际镜头接受后刷新媒体引用，粗剪/终剪探针再刷新阶段与哈希 sidecar。接缝按 `seam_mode` 执行：relay 才复用同一边界帧，dissolve 写 OTIO transition，其余保留类型证据并按剪辑意图切接 |
+| 6 合成/验收 | `n2d-compose` | 默认在镜头齐片后继续拼视频、配音、环境/拟音、BGM、字幕并生成母版；项目显式设置 `合成阶段=跳过` 才停在 clip delivery。从 animatic 起持续维护 `editorial_timeline.otio`，实际镜头接受后刷新媒体引用，粗剪/终剪探针再刷新阶段与哈希 sidecar。接缝按 `seam_mode` 执行：relay 才复用同一边界帧，dissolve 写 OTIO transition，其余保留类型证据并按剪辑意图切接 |
 | 质检·自审（横切） | `n2d-review` | 双模 QA：①作品质检（崩脸/字幕错位/音画/节奏/合规，机检+人判，出定位报告）②流程自审（本地静态治理 + 联网对标）。核心人物每形态的五角/turnaround/expression 由 `identity_eval_pack.py --record-current-view --accept-current-pixels` 逐图签当前像素，producer、出图 runner 与 review consumer 分别复核真实 PNG、SHA/绑定、decoded-pixel fingerprint、view contract、criteria、人工声明 reviewer、带时区时间和精确 confirmation 对象；同图换角、复制同字节或同像素重编码换 SHA、软链别名、项目根外或非规范路径、跨形态复用、PNG 空壳或伪人工元数据均阻断，同源不同裁切像素允许通过。本地 reviewer 字符串与 current-pixels confirmation 不认证真实身份或独立性，强保证需外部认证/签名审批。流程自审把 `self-checked / adversarial-test-coverage / adversarially-tested / externally-grounded / externally-calibrated` 分开报告；grounded 只覆盖已登记 `external_required` claims，官方/论文链接绝不冒充独立留出校准或整个 review 的外部验证；实施包见 `n2d-review/references/production_acceptance_v2.md`。机检含片内时序、跨集画风、角色/道具状态演进、景别阶梯和分类接缝；接缝正式真值以 P-3 `continuity_chain.seam_mode/seam_evidence` 为准，storyboard 仅作 legacy fallback。只有 continuous relay 的 dHash/色距/脸/边缘质心跨帧差异可阻断；动作匹配、视线、反应、插入、J/L、叠化、硬切和有意不连续按各自证据与人审判断。`consistency_audit` 明示本机机检能力，补充 motion/audio/expression/discontinuity/dependency 报告；整集完成只由可接受 `release_verdict` + 绑定母版/score/ledger/review-ui 当前 SHA 的 canonical `acceptance_receipt` 证明，legacy/advisory/rejected signoff 只作迁移或诊断，不能签成完成 |
-| 进度·下一步（横切·只读）| `n2d-progress` | 扫 `创作区/制漫剧/<剧名>/_进度.md` 逐集矩阵 → 压缩出每部剧完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，按 `制作模式` 解释 `配音=⏳rough`、原生音画跳过配音硬依赖，以及 `合成/验收` 默认跳过；出图/视频/可选成片/配音等花钱·不可逆·合规步骤先提醒确认。**只读·不改文件**。脚本 `scan.py` 纯标准库。触发词：进度 / 当前进度 / 下一步 / 还差什么 / progress / check |
+| 进度·下一步（横切·只读）| `n2d-progress` | 扫 `创作区/制漫剧/<剧名>/_进度.md` 逐集矩阵 → 压缩出每部剧完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，按 `制作模式` 解释 `配音=⏳rough`、原生音画跳过配音硬依赖，以及默认继续到 `合成/验收`；付费动作只在阶段预算包创建/扩大/失效时提示确认，权利合规、不可逆发布和最终验收仍单独标出。**只读·不改文件**。脚本 `scan.py` 纯标准库。触发词：进度 / 当前进度 / 下一步 / 还差什么 / progress / check |
 | 项目设置（横切·设置） | `n2d-settings` | `_设置.md` 选择点的唯一 CLI 入口：`audit` 审计非法/过期值，`set` 包住 `set_project_setting` 写入并记录，`reset` 包住 `reset_project_setting` 删除项目覆盖，`sync-global` 包住 `sync_global_settings` 同步私有全局默认；读写/校验仍以 `skills/n2d/_lib/settings.py` 为单一实现，旧别名（如 `保图刷新`）写入时归一到当前值 |
 | skill 更新重制（横切·计划） | `n2d-update` | 检测 n2d 相关 `skills/` 文件相对上次快照是否变化，读 `_进度.md` 判断每集当前阶段，生成“从最早受影响阶段回放、最多只重制到当前阶段”的最小重制计划（`生产数据/skill_update_plan_第N集.{json,md}`）；用户说 更新/重制update/rebuild 某作品某集时触发。只生成计划和建议命令，不直接烧图/视频/配音；确认后交 `n2d-batch` 或对应 stage skill 执行。**重制策略选择点 `更新重制策略`**（`--regen-mode` / `_设置.md`）：`最小`（默认）/ `严审刷新`——后者按最新 skill 刷新文字阶段与出图 prompt，再用最新 prompt/QC/review 标准严审旧图，block/warn/降级或人工判定不符合预期的镜都应舍弃重出；旧名 `保图刷新` 仅作兼容 alias，不再表示“尽量保住图片”。**`media` 子命令**（原 `update` 分发器并入）：`update_plan.py media <作品根> 第N集 --image/--video/--target` 为指定集的少量图片/视频生成证据驱动的选择性刷新计划（写 `生产数据/media_refresh_plan_第N集.{json,md}` + `skill_update_runs.jsonl`），只生成计划、不审片，保留/重制结论必须来自已有 gate/QC/review findings 或显式人工输入 |
 | 生产数据仪表盘（横切） | `n2d-dashboard` | P0 工业化 + ROI 指标层：每集记录成本、耗时、生成次数、重抽原因、QA 阻断项、最终通过率，并派生每分钟成本、一次通过率、重抽率、投放净回收、回收/生产成本；重抽原因按契约 `REDRAW_REASON_CATEGORIES` 九类维度归类（显式传或按关键词自动归类，存量读时归类），`dashboard.md` 出分维度表 + **一致性小计**；生成 `production_events.jsonl`、`dashboard.json/md`。**实时监控 + 阈值告警(纯本地·跨AI通用)**：record/gate 每次写事件即评估阈值(预算上限/通过率下限/重抽率/QA阻断/回收比)写 `alerts.json/md`；内置 `watch` 轮询 + 本机 `http.server` 自刷新 `dashboard.html`；可选本机弹窗(osascript/notify-send)与 webhook(`N2D_ALERT_WEBHOOK`)；`build --fail-on-critical` 退出码停线。**事件账本审计/重放**：`event_ledger.py audit|doctor|replay` 校验 JSONL、生成 hash chain、只从事件重放 dashboard，产 `production_events_audit.*` / `production_events_chain.jsonl` / `dashboard_replay.json` |
@@ -92,7 +92,7 @@
 > **高动态/大场景工业化前置（2026-06）**：`n2d/run.py next` 到 `image_prompt` 前自动跑 `n2d-script/scripts/spectacle_contract_audit.py`、`shot_risk_audit.py`、`spectacle_plan.py --write`、`spectacle_sequence_plan.py --write`、`scene_layer_pack.py --write`、`spectacle_probe_pack.py --write`；到 `video_prompt/video` 前自动写 `motion_control_manifest.json` 骨架与 `trajectory_controller_plan_第N集.*`；到 `compose` 前自动写 `action_edit_cues_第N集.json/md`；审查后可写 `spectacle_video_qc_第N集.json` 与 `motion_reference_library.json`。核心产物：`生产数据/spectacle_plan_第N集.*`、`spectacle_sequence_plan_第N集.*`、`scene_layer_pack_plan_第N集.*`、`spectacle_probe_pack_第N集.*`、`spectacle_backend_benchmark.json`、`action_edit_cues_第N集.*`、`spectacle_video_qc_第N集.json`、`motion_reference_library.json`。动作/奇观模板统一要求 `keyframe_plan`、`post_cue_points`、`physics_guard`；`magic_burst`（法术/武技/剑气/斗法撞点）已进入奇观计划、Motion Control、路由、合成 cue 和 SPECV。router 会读取 benchmark，把打斗/追逐/飞行/武技爆发/大场景小样结果回灌到 primary/fallback（固定后端模式除外），并在 `execution_recipe` 中暴露 motion reference 调用口。
 
 > **选择点 `制作模式`（出片顺序）**：默认 `混合自动路由`，真正先行的是“声音选角 + 时间基准”，不是整集 final voice。对白近景按表演轨/后期口型处理，旁白和口外音可后配，动作/空镜/蒙太奇画面先行，已核验镜头可走原生音画；项目级 `配音先行` / `先出视频后配音` / `原生音画` 仅在用户明确要求全项目统一策略时选择。定义见 `n2d/SKILL.md` 与 n2d 线 `references/选择点与偏好.md`。
-> **选择点 `合成阶段`（可选尾段）**：默认 `跳过`，即 `_进度.md` 的 `视频` 列完成只算 `clip_delivery_complete`。用户需要母带、BGM、烧字幕、屏幕文案 overlay、交付矩阵或发布证据包时，设为 `启用` 或直接调用 `n2d-compose`；从那一刻起 `成片/验收` 才参与路由，最终以 `master_delivery_complete` 口径交付。
+> **选择点 `合成阶段`**：新项目默认 `启用`。`视频` 列完成只算 `clip_delivery_complete`，调度继续进入 `n2d-compose` 生成母带、音轨、字幕/屏幕文案、交付矩阵和发布证据包，最终以 `master_delivery_complete` 口径交付。只有项目显式选择 `跳过` 时，`成片/验收` 才不参与路由；这属于保留给专业剪辑接手的兼容模式，不是默认成品定义。
 > **三轨音字执行铁律**：`n2d-script` 把每个物理 Clip 拆成 `dialogue / narration / screen_text` 三轨并写入 `dialogue_fact_contract_第N集.json`。`n2d-video` 只生成画面和必要的画内角色对白口型；旁白不交视频模型生成，屏幕文案/花字/字幕不让视频模型烤字。默认视频完成不做后期音字叠加；需要旁白混入、字幕/花字/系统面板数值或屏幕文案 overlay 时启用 `n2d-compose`，它是唯一执行这些后期层的阶段。
 > **机器契约层**：n2d 的阶段图、`_进度.md` schema、gate stage、manifest 与结构化回滚字段集中在 `skills/n2d/_lib/n2d_contract.py`，人读版见 `n2d/references/contract.md`。`skills/n2d/_lib/n2d_route.py`、`n2d/progress.py`、`n2d-progress/scan.py` 和 `n2d-review/scripts/gate.py` 复用同一契约；阶段职责变更时先改 contract，再同步本索引与各 SKILL.md。**横切口径分两层**（判据=「在位与否是否影响生产推进」，不是「有没有输出文件」）：① 影响生产推进的就绪信号（合规[硬前置]/身份/LoRA/资产库/仪表盘/投放回灌）登记在 `n2d_contract.CROSS_CUTTING_READINESS`（旧别名 `CROSS_CUTTING` 兼容），`n2d-progress` 据此输出「横切就绪」；② 无稳定就绪标志、或本身是调度/观察/计划工具的（model-router/batch/progress/review + **评分/审片UI/skill 更新重制**这类可选观察产物）登记在 `n2d_contract.CROSS_CUTTING_TOOLS`，不进「就绪」行（`n2d-progress` 把有 per-work 产物的工具单列为「横切观察·非前置」），不污染 `_进度.md` 流程表。新增横切能力时按这两个边界登记 + 同步本索引。每次 `progress.py set` 会自动刷新 `脚本/第N集/manifest.json` 快照，也可用 `python3 skills/n2d/manifest.py <作品根> 第N集 [--stage stage_key]` 手动重建。
 
@@ -245,13 +245,13 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 | 进度·下一步（只读） | `comic-progress` | 以合同/SHA/gate receipt 校正 `_进度.md` 声明并汇总每话真实前沿；另披露未处置、stale/reopened warning 与处置账完整性错误，区分内部完成和公开/商业就绪；只读不改文件 |
 | 更新影响（只写计划） | `comic-update` | 本线 skill 内容快照 + 项目逐格依赖索引比对；按脚本/layout/lettering/job/正式图/真实参考与 registry 指纹输出精确 `panel_targets/page_targets` 和最早回放阶段，只写计划/基线，不改脚本、媒体或 `_进度.md` |
 | 设置管理 | `comic-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/comic/_lib/settings.py` |
-| 流程批跑 | `comic-batch` | 从当前前沿自动 chain 免费确定性阶段（ネーム/排版/收尾/出图包/嵌字导出），出图前后自动跑 comic gate；出图阶段可按确认预算多抽、重抽指定格并归档候选；审查只产 gate 报告不代替人工签收 |
+| 流程批跑 | `comic-batch` | 从当前前沿自动 chain 免费确定性阶段（ネーム/排版/收尾/出图包/嵌字导出），出图前后自动跑 comic gate；付费 submit 只消费真实人类签发且绑定项目/输入/模型/渠道/scope/期限/call/attempt/cost 的阶段 envelope，原子 ledger 有余量即连续，缺失/扩大/未知成本才结构化停；审查不代替人工签收 |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
 | 缩略分镜/ネーム | `comic-name` | `panel_script.json` → `name_board.json` 与 SVG 草图，含页流、格子轻重、翻页钩子、气泡优先级和原稿安全框 |
 | 页面排版 | `comic-layout` | `panel_script.json` + 可选 `name_board.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位和原稿安全区 |
 | 原稿收尾 | `comic-finishing` | `layout.json` + `panel_script.json` → `finishing_plan.json`，含墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划 |
 | 一致性资产 | `comic-identity` | 共享定妆、多视图、角色 DNA 与形态继承、`identity_registry.json`；每张 anchor/view/outfit/expression/seed 都先做技术 QC，再由具名审核人按当前像素 + comparison/contact-sheet/派生输入 SHA 签收，未签不得登记 ready 或派生下一张 |
-| 出图 | `comic-image` | schema v2 逐格合同、真实参考入参和后端编译；每格机器 post-QC 后强制逐图视觉签收，pass/warn 都不自动 ready，warn 仅可 `accepted_with_warnings`，确定性 block 永不可签；像素或比较输入变化立即 stale |
+| 出图 | `comic-image` | schema v2 逐格合同、真实参考入参和后端编译；Codex/Dreamina 在真实付费 submit 前原子消费 comic 本线 spend ledger，Dreamina query/download 不重复消费，unknown/over-cap 持久 fail closed；每格机器 post-QC 后仍强制逐图视觉签收 |
 | 嵌字/导出 | `comic-compose` | lettering v2 绑定脚本/layout/finishing/翻译表及逐条 `content_ref + source_text_sha256`；渲染页面/长图/真实多页 PDF，登记平台缩略图，输出 export/印刷/accessible EPUB 交付合同与收据 |
 | 质检/自审 | `comic-review` | 全阶段 gate、视觉/文字/一致性复核和返修清单；统一 warning 追加式处置账逐事件哈希链，公开/商业必须全结案；发布裁决以 `medium + usage` 验真实产物、权利、平台实际预览、有序交付、印前/EPUB 合同及总签收 SHA |
 

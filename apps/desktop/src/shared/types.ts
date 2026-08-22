@@ -246,6 +246,10 @@ export interface CanvasGenerationProfile {
 /** Per-node controls persisted under 生产数据/canvas_generation_controls_<集>.json. */
 export interface CanvasGenerationConfig {
   kind: CanvasGenerationKind;
+  /** Stable media target inside one clip (panel/video/first/end/anchor:*). */
+  target_slot: string;
+  /** Work-root relative path that this target is allowed to replace. */
+  target_output_path: string;
   model: string;
   mode: string;
   aspect_ratio: string;
@@ -338,6 +342,10 @@ export interface CanvasQualitySummary {
 
 export interface CanvasData {
   source: "review_ui" | "storyboard" | "panel_script" | "none";
+  /** SHA-256 of the exact source-file bytes parsed for this projection. */
+  source_file_sha256?: string;
+  /** SHA-256 of the exact _设置.md bytes used for generation_profile. */
+  settings_file_sha256?: string;
   episode: string;
   title?: string;
   total_duration?: number;
@@ -347,6 +355,8 @@ export interface CanvasData {
   seams: CanvasSeam[];
   quality?: CanvasQualitySummary;
   generation_profile?: CanvasGenerationProfile;
+  /** Derived production ledger. Editable content remains owned by source_rel. */
+  production?: CanvasProductionState;
 }
 
 /** canvas.read 的增量应答：fs 事件多数与画布无关，renderer 带上一次的 sig 来读，
@@ -355,6 +365,256 @@ export interface CanvasReadResult {
   sig: string;
   unchanged?: boolean;
   canvas?: CanvasData;
+}
+
+/** One authoritative production state for an episode. Task execution is kept
+ *  separate from the creative node lifecycle so a retry never masquerades as
+ *  accepted creative work. */
+export type CanvasProductionStatus =
+  | "draft"
+  | "ready"
+  | "running"
+  | "needs_revision"
+  | "blocked"
+  | "complete";
+
+export type CanvasNodeLifecycle = "draft" | "ready" | "generated" | "accepted";
+
+export type CanvasProductionTaskStatus =
+  | "submitted"
+  | "running"
+  | "succeeded"
+  | "failed"
+  | "cancelled"
+  | "stale";
+
+/** Editable, production-relevant input. `editable` deliberately stays
+ *  adapter-neutral: n2d/comic/ad/mv may retain their own schema without the
+ *  persistence layer inventing a second normalized truth. */
+export interface CanvasAuthoringClipInput {
+  id: string;
+  editable: unknown;
+  /** Canonical final media slot consumed by episode compose/export. */
+  final_target: { slot: string; output_path: string };
+  /** Generated/selected upstream media: excluded from the root authoring hash,
+   *  included in this node's input hash for selective downstream invalidation. */
+  runtime_inputs?: unknown;
+  /** Upstream reference bytes for image generation; excludes the image slot
+   * that this stage itself produces. */
+  image_runtime_inputs?: unknown;
+  ready?: boolean;
+  /** Undefined is conservative and binds every asset; [] explicitly binds none. */
+  asset_ids?: string[];
+  /** Undefined is conservative and binds every config; [] explicitly binds none. */
+  generation_config_keys?: string[];
+}
+
+export interface CanvasAuthoringAssetSummary {
+  id: string;
+  role?: string;
+  /** SHA/revision/digest supplied by the owning adapter. */
+  content_digest: string;
+  summary?: unknown;
+}
+
+export interface CanvasAuthoringInput {
+  authority: string;
+  source_rel: string;
+  /** Canonical JSON SHA-256 of the complete editable source, not a lossy UI projection. */
+  source_sha256: string;
+  /** SHA-256 of the effective project settings file; empty settings use SHA-256(""). */
+  settings_sha256: string;
+  episode: string;
+  /** The selected output type consumed by episode compose/export. */
+  final_stage: CanvasGenerationKind;
+  /** Array order is editorial order and therefore hash-significant. */
+  clips: CanvasAuthoringClipInput[];
+  /** Asset order is not significant; ids and content are. */
+  assets: CanvasAuthoringAssetSummary[];
+  delivery_spec: unknown;
+  generation_configs: Record<string, unknown>;
+}
+
+export interface CanvasProductionNodeState {
+  id: string;
+  /** Final selected-output dependency hash used by acceptance/completion. */
+  input_hash: string;
+  /** Per-stage execution hashes keep an image job current when its new image
+   * becomes the downstream video stage's runtime input. */
+  stage_input_hashes: Record<CanvasGenerationKind, string>;
+  lifecycle: CanvasNodeLifecycle;
+  media_fingerprint?: string;
+  qa_blocks: number;
+  qa_warnings: number;
+  invalidation_reason?: string;
+  invalidated_at_revision?: number;
+  acceptance?: CanvasNodeAcceptanceEvidence;
+  updated_at: string;
+}
+
+export interface CanvasNodeAcceptanceEvidence {
+  content_hash: string;
+  input_hash: string;
+  output_path: string;
+  output_sha256: string;
+  qa_receipt_path: string;
+  qa_receipt_sha256: string;
+  qa_blocks: 0;
+  reviewer_kind: "delegated" | "human";
+  verdict: "accepted";
+  job_id: string;
+  accepted_at: string;
+}
+
+export interface CanvasProductionTask {
+  job_id: string;
+  /** A clip id, or the reserved `__episode__` target for a whole-episode run. */
+  node_id: string;
+  kind: string;
+  /** Optional on legacy/episode tasks; required by new per-media generation jobs. */
+  target_slot?: string;
+  target_output_path?: string;
+  /** New jobs write only this job-scoped sibling candidate. Electron main
+   * validates and atomically promotes it to target_output_path. */
+  candidate_output_path?: string;
+  /** Absent on legacy tasks. True forbids agent-authored stable-path receipts. */
+  promotion_required?: boolean;
+  status: CanvasProductionTaskStatus;
+  input_hash: string;
+  content_hash: string;
+  submitted_revision: number;
+  submitted_at: string;
+  updated_at: string;
+  detail?: string;
+}
+
+export interface CanvasFinalArtifactEvidence {
+  path: string;
+  exists: boolean;
+  sha256: string;
+  /** Canonical episode hash used to render this exact artifact. */
+  content_hash: string;
+  /** SHA-256 of the ordered accepted-node output manifest used by compose/export. */
+  inputs_sha256: string;
+  qa_blocks: number;
+  qa_receipt_path: string;
+  qa_receipt_sha256: string;
+  probe_passed: boolean;
+  revision?: string;
+}
+
+export interface CanvasProductionCompletion {
+  definition: "canvas.final_product/v1";
+  complete: boolean;
+  bound_content_hash?: string;
+  artifact?: CanvasFinalArtifactEvidence;
+  blockers: string[];
+  accepted_at?: string;
+}
+
+export interface CanvasProductionHistoryEntry {
+  revision: number;
+  content_hash: string;
+  status: CanvasProductionStatus;
+  reason: string;
+  changed_node_ids: string[];
+  invalidated_node_ids: string[];
+  created_at: string;
+}
+
+export interface CanvasProductionState {
+  kind: "anime_armory_canvas_production_state";
+  version: 2;
+  episode: string;
+  revision: number;
+  content_hash: string;
+  status: CanvasProductionStatus;
+  authoring: CanvasAuthoringInput;
+  node_fingerprints: Record<string, CanvasProductionNodeState>;
+  tasks: CanvasProductionTask[];
+  completion: CanvasProductionCompletion;
+  history: CanvasProductionHistoryEntry[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CanvasProductionSyncRequest {
+  authoring: CanvasAuthoringInput;
+  canvas: CanvasData;
+  /** Explicit null means no current final-product evidence exists. */
+  final_artifact: CanvasFinalArtifactEvidence | null;
+  /** Cryptographically verified acceptances imported by the owning adapter. */
+  accepted_nodes?: Record<string, CanvasNodeAcceptanceEvidence>;
+  /** Adapter snapshot revision. When set, stale filesystem snapshots may not
+   * overwrite a newer task/config/state commit. Null/0 means no prior state. */
+  observed_revision?: number | null;
+  reason?: string;
+}
+
+export interface CanvasTaskSubmitRequest {
+  episode: string;
+  /** Clip id, or `__episode__` for an episode-wide one-click run. */
+  node_id: string;
+  kind: string;
+  target_slot?: string;
+  target_output_path?: string;
+  /** Main-owned staging contract; renderer IPC callers never disable it. */
+  promotion_required?: boolean;
+  expected_content_hash: string;
+  detail?: string;
+}
+
+export interface CanvasTaskSubmitResult {
+  state: CanvasProductionState;
+  job_id: string;
+  input_hash: string;
+  /** Final selected-node dependency hash; differs from a target task hash. */
+  node_input_hash?: string;
+  content_hash: string;
+  target_slot?: string;
+  target_output_path?: string;
+  candidate_output_path?: string;
+  final_target_output_path?: string;
+  final_candidate_output_path?: string;
+  promotion_required: boolean;
+  /** Snapshot status of the created/reused task for renderer dispatch policy. */
+  task_status: CanvasProductionTaskStatus;
+  /** False means an identical submitted/running job was reused. */
+  created: boolean;
+}
+
+export interface CanvasAgentDispatchContext {
+  root: string;
+  episode: string;
+  job_id: string;
+}
+
+export type CanvasAgentDispatchResult = "dispatched" | "succeeded" | "rejected";
+
+export interface CanvasGenerationCommitResult {
+  config: CanvasGenerationConfig;
+  task: CanvasTaskSubmitResult;
+}
+
+export interface CanvasTaskStatusRequest {
+  episode: string;
+  job_id: string;
+  status: Exclude<CanvasProductionTaskStatus, "submitted" | "stale">;
+  detail?: string;
+}
+
+export interface CanvasNodeAcceptRequest {
+  episode: string;
+  node_id: string;
+  expected_content_hash: string;
+  expected_input_hash: string;
+  evidence: CanvasNodeAcceptanceEvidence;
+}
+
+export interface CanvasFinalAcceptRequest {
+  episode: string;
+  expected_content_hash: string;
+  artifact: CanvasFinalArtifactEvidence;
 }
 
 export interface QualityInsightMetric {

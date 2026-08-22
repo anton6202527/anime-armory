@@ -128,6 +128,9 @@ class AdContractTest(unittest.TestCase):
         md = contract.settings_markdown("测试广告", {"交付比例": "9:16"})
         self.assertIn("# _设置 · 测试广告", md)
         self.assertIn("- 交付比例: 9:16", md)
+        self.assertIn("- 普通选择策略: 推荐方案自动继续", md)
+        self.assertIn("- 审阅策略: 用户授权制作代理", md)
+        self.assertIn("- 付费授权策略: 按阶段预算包一次确认", md)
         self.assertIn("## 记录", md)
 
     def test_progress_markdown(self):

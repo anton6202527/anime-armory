@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -38,6 +39,7 @@ from comic_image_prompt_compiler import (  # noqa: E402
 from contracts import stage_inputs_fingerprint  # noqa: E402
 from image_backend_adapter import resolve_capabilities  # noqa: E402
 from progress import update_stage  # noqa: E402
+import spend_envelope  # noqa: E402
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
@@ -1368,6 +1370,126 @@ def run_codex(
         return subprocess.CompletedProcess(cmd, 124, stdout=stdout, stderr=stderr)
 
 
+def prepare_spend_context(
+    root: Path,
+    chapter: str,
+    data: dict[str, Any],
+    jobs: list[dict[str, Any]],
+    *,
+    force: bool,
+    model: str,
+    channel: str,
+    envelope_raw: str = "",
+    actual_cost_raw: str = "",
+) -> dict[str, Any]:
+    """Verify the whole requested paid scope without consuming it."""
+    raw_path = Path(envelope_raw).expanduser() if envelope_raw.strip() else spend_envelope.default_envelope_path(root, chapter)
+    envelope_path = raw_path if raw_path.is_absolute() else root / raw_path
+    input_sha = spend_envelope.panel_jobs_input_sha256(data, chapter)
+    panel_ids = [str(job.get("panel_id") or "") for job in jobs]
+    scope = spend_envelope.requested_scope(chapter, panel_ids, force=force)
+    status = spend_envelope.inspect_authorization(
+        envelope_path,
+        root,
+        stage=spend_envelope.STAGE,
+        input_sha256=input_sha,
+        model=model,
+        channel=channel,
+        scope=scope,
+        next_attempt_id=f"{chapter}:{spend_envelope.STAGE}:retry-round:1",
+    )
+    if status.get("status") != "authorized":
+        raise spend_envelope.SpendAuthorizationError(
+            "envelope_exhausted",
+            "the human-approved spend envelope has no room for another worst-case paid call",
+            authorization=status,
+        )
+    # A provider-reported actual may be supplied.  Validate it before the paid
+    # boundary; otherwise settle conservatively at the approved per-call max.
+    actual = (
+        spend_envelope.money(actual_cost_raw, field="actual_cost_per_call", allow_zero=True)
+        if actual_cost_raw.strip()
+        else spend_envelope.money(status["max_cost_per_call"], field="max_cost_per_call")
+    )
+    maximum = spend_envelope.money(status["max_cost_per_call"], field="max_cost_per_call")
+    if actual > maximum:
+        raise spend_envelope.SpendAuthorizationError(
+            "actual_cost_exceeded_authorization",
+            "declared actual cost exceeds the approved per-call maximum",
+            actual_cost=spend_envelope.money_text(actual),
+            max_cost_per_call=spend_envelope.money_text(maximum),
+        )
+    return {
+        "root": root,
+        "chapter": chapter,
+        "data_input_sha256": input_sha,
+        "force": force,
+        "model": model,
+        "channel": channel,
+        "envelope_path": envelope_path,
+        "actual_cost": spend_envelope.money_text(actual),
+        "authorization": status,
+    }
+
+
+def run_paid_submission(
+    context: dict[str, Any],
+    *,
+    panel_id: str,
+    retry_round: int,
+    submit: Any,
+) -> tuple[Any, dict[str, Any], dict[str, Any]]:
+    """Reserve once, call the provider once, then settle once.
+
+    The random consumption ID is intentionally *not* a provider idempotency
+    key.  If the process crashes after reserve, that in-flight ID remains
+    ambiguous/fail-closed and is never reused for another submit.
+    """
+    scope = spend_envelope.requested_scope(
+        str(context["chapter"]), [panel_id], force=bool(context["force"])
+    )
+    consumption_id = f"comic-image-{uuid.uuid4().hex}"
+    attempt_id = f"{context['chapter']}:{spend_envelope.STAGE}:retry-round:{int(retry_round)}"
+    reservation = spend_envelope.reserve_submission(
+        Path(context["envelope_path"]),
+        Path(context["root"]),
+        stage=spend_envelope.STAGE,
+        input_sha256=str(context["data_input_sha256"]),
+        model=str(context["model"]),
+        channel=str(context["channel"]),
+        scope=scope,
+        consumption_id=consumption_id,
+        attempt_id=attempt_id,
+    )
+    try:
+        result = submit()
+    except BaseException:
+        # The paid boundary may already have been crossed; charge the approved
+        # conservative amount before propagating the unexpected local failure.
+        spend_envelope.settle_submission(
+            Path(context["envelope_path"]),
+            Path(context["root"]),
+            consumption_id=consumption_id,
+            actual_cost=context["actual_cost"],
+        )
+        raise
+    settlement = spend_envelope.settle_submission(
+        Path(context["envelope_path"]),
+        Path(context["root"]),
+        consumption_id=consumption_id,
+        actual_cost=context["actual_cost"],
+    )
+    return result, reservation, settlement
+
+
+def print_spend_stop(exc: spend_envelope.SpendAuthorizationError, envelope_path: Path | None = None) -> None:
+    print(
+        spend_envelope.structured_stop(exc, envelope_path=envelope_path),
+        file=sys.stderr,
+        flush=True,
+    )
+
+
 def format_failure(proc: subprocess.CompletedProcess[str]) -> str:
     stderr = (proc.stderr or "").strip()
     stdout = (proc.stdout or "").strip()
@@ -1469,6 +1591,16 @@ def main() -> int:
     )
     parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人")
     parser.add_argument("--review-notes", default="", help="--accept-reviewed 必填：逐轴目检结论与理由")
+    parser.add_argument(
+        "--spend-envelope",
+        default="",
+        help="人工签发的阶段预算 envelope；默认 生产数据/spend_envelopes/image_<chapter>.json",
+    )
+    parser.add_argument(
+        "--actual-cost-per-call",
+        default="",
+        help="已知的供应商单次实际成本；缺省按 envelope 单次上限保守结算，非法/越界值在提交前阻断",
+    )
     parser.add_argument(
         "--skip-gate",
         action="store_true",
@@ -1585,6 +1717,32 @@ def main() -> int:
             print(f"[err] {pid} missing shared references: {', '.join(refs)}", file=sys.stderr)
         print("[err] seed or place accepted shared reference images before generating panels", file=sys.stderr)
         return 2
+    spend_context: dict[str, Any] | None = None
+    if not args.recheck_existing:
+        try:
+            spend_context = prepare_spend_context(
+                root,
+                args.chapter,
+                data,
+                jobs,
+                force=args.force,
+                model=CODEX_MODEL,
+                channel=CODEX_CHANNEL,
+                envelope_raw=args.spend_envelope,
+                actual_cost_raw=args.actual_cost_per_call,
+            )
+        except spend_envelope.SpendAuthorizationError as exc:
+            raw = Path(args.spend_envelope).expanduser() if args.spend_envelope else spend_envelope.default_envelope_path(root, args.chapter)
+            print_spend_stop(exc, raw if raw.is_absolute() else root / raw)
+            return 5
+        print(
+            "[spend-authorized] "
+            f"envelope={spend_context['authorization']['envelope_id']} "
+            f"remaining_calls={spend_context['authorization']['remaining_calls']} "
+            f"remaining_cost={spend_context['authorization']['remaining_cost']} "
+            f"{spend_context['authorization']['currency']}",
+            flush=True,
+        )
     if not args.recheck_existing and not shutil.which("codex"):
         print("[err] codex not found in PATH", file=sys.stderr)
         return 2
@@ -1681,14 +1839,24 @@ def main() -> int:
             with tempfile.TemporaryDirectory(prefix=f".comic-codex-{pid}-", dir=str(final.parent)) as tmp:
                 temp_path = Path(tmp) / f"{pid}.png"
                 prompt = build_prompt(job, root.name, args.chapter, reference_records)
-                proc = run_codex(
-                    prompt,
-                    repo,
-                    args.timeout_sec,
-                    reference_paths,
-                    ignore_user_config=args.ignore_user_config,
-                    ignore_rules=args.ignore_rules,
-                )
+                assert spend_context is not None
+                try:
+                    proc, spend_reservation, spend_settlement = run_paid_submission(
+                        spend_context,
+                        panel_id=str(pid),
+                        retry_round=attempt,
+                        submit=lambda: run_codex(
+                            prompt,
+                            repo,
+                            args.timeout_sec,
+                            reference_paths,
+                            ignore_user_config=args.ignore_user_config,
+                            ignore_rules=args.ignore_rules,
+                        ),
+                    )
+                except spend_envelope.SpendAuthorizationError as exc:
+                    print_spend_stop(exc, Path(spend_context["envelope_path"]))
+                    return 5
                 error = ""
                 if proc.returncode != 0:
                     error = format_failure(proc)
@@ -1707,6 +1875,9 @@ def main() -> int:
                         "reference_manifest": rel_to_root(root, reference_manifest),
                         "reference_input_count": len(reference_records),
                         "reference_input_paths": [record["path"] for record in reference_records],
+                        "spend_consumption_id": spend_reservation["consumption_id"],
+                        "spend_actual_cost": spend_settlement["actual_cost"],
+                        "spend_currency": spend_reservation["currency"],
                         "error": error,
                         "duration_sec": round(time.monotonic() - started, 2),
                     })
@@ -1786,6 +1957,9 @@ def main() -> int:
                     "reference_manifest": rel_to_root(root, reference_manifest),
                     "reference_input_count": len(reference_records),
                     "reference_input_paths": [record["path"] for record in reference_records],
+                    "spend_consumption_id": spend_reservation["consumption_id"],
+                    "spend_actual_cost": spend_settlement["actual_cost"],
+                    "spend_currency": spend_reservation["currency"],
                     "post_qc_verdict": post_qc_verdict,
                     "duration_sec": round(time.monotonic() - started, 2),
                     "backend_version": backend_version,

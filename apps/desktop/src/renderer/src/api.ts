@@ -8,14 +8,18 @@ import type {
   CanvasReadResult,
   CanvasLayout,
   CanvasGenerationConfig,
+  CanvasGenerationCommitResult,
   CanvasGenerationKind,
   CanvasNodePosition,
+  CanvasProductionState,
+  CanvasTaskSubmitResult,
   ClipEditData,
   ClipEditPatch,
   DemoDownloadInfo,
   DemoInstallResult,
   EpisodeWorkspace,
   ImportWorkSourcesResult,
+  LineKey,
   LineInfo,
   NextAction,
   QualityInsights,
@@ -358,8 +362,13 @@ export function pickDefaultAgent(agents: AgentInfo[], preferredId?: string | nul
   );
 }
 
-export async function readCanvas(root: string, ep: string, knownSig?: string): Promise<CanvasReadResult> {
-  return invoke("canvas.read", { root, ep, knownSig });
+export async function readCanvas(
+  root: string,
+  ep: string,
+  line: LineKey,
+  knownSig?: string,
+): Promise<CanvasReadResult> {
+  return invoke("canvas.read", { root, ep, line, knownSig });
 }
 
 export async function readEpisodeWorkspace(root: string, ep: string): Promise<EpisodeWorkspace | null> {
@@ -398,11 +407,21 @@ export async function readClipEdit(
 export async function writeClipEdit(
   root: string,
   ep: string,
+  line: LineKey,
   clipId: string,
   number: number | undefined,
   patch: ClipEditPatch,
+  expectedContentHash?: string,
 ): Promise<ClipEditData> {
-  return invoke("canvas.writeClipEdit", { root, ep, clipId, number, patch });
+  return invoke("canvas.writeClipEdit", {
+    root,
+    ep,
+    line,
+    clipId,
+    number,
+    patch,
+    expectedContentHash,
+  });
 }
 
 export async function readCanvasGenerationConfig(
@@ -410,17 +429,75 @@ export async function readCanvasGenerationConfig(
   ep: string,
   clipId: string,
   kind: CanvasGenerationKind,
+  targetSlot: string,
+  targetOutputPath: string,
 ): Promise<CanvasGenerationConfig | null> {
-  return invoke("canvas.readGenerationConfig", { root, ep, clipId, kind });
+  return invoke("canvas.readGenerationConfig", { root, ep, clipId, kind, targetSlot, targetOutputPath });
 }
 
-export async function writeCanvasGenerationConfig(
+export async function submitCanvasGeneration(
   root: string,
   ep: string,
+  line: LineKey,
   clipId: string,
+  kind: CanvasGenerationKind,
+  targetSlot: string,
+  targetOutputPath: string,
+  expectedContentHash: string,
+): Promise<CanvasTaskSubmitResult> {
+  return invoke("canvas.submitGeneration", {
+    root, ep, line, clipId, kind, targetSlot, targetOutputPath, expectedContentHash,
+  });
+}
+
+export async function commitCanvasGeneration(
+  root: string,
+  ep: string,
+  line: LineKey,
+  clipId: string,
+  targetSlot: string,
+  targetOutputPath: string,
   config: CanvasGenerationConfig,
-): Promise<CanvasGenerationConfig> {
-  return invoke("canvas.writeGenerationConfig", { root, ep, clipId, config });
+  expectedContentHash: string,
+): Promise<CanvasGenerationCommitResult> {
+  return invoke("canvas.commitGeneration", {
+    root, ep, line, clipId, targetSlot, targetOutputPath, config, expectedContentHash,
+  });
+}
+
+export async function startCanvasProduction(
+  root: string,
+  ep: string,
+  line: LineKey,
+  expectedContentHash: string,
+): Promise<CanvasTaskSubmitResult> {
+  return invoke("canvas.startProduction", { root, ep, line, expectedContentHash });
+}
+
+export async function acceptCanvasFinal(
+  root: string,
+  ep: string,
+  line: LineKey,
+  expectedContentHash: string,
+): Promise<CanvasProductionState> {
+  return invoke("canvas.acceptFinal", { root, ep, line, expectedContentHash });
+}
+
+export async function failCanvasTask(
+  root: string,
+  ep: string,
+  jobId: string,
+  detail: string,
+): Promise<CanvasProductionState> {
+  return invoke("canvas.failTask", { root, ep, jobId, detail });
+}
+
+export async function markCanvasTaskRunning(
+  root: string,
+  ep: string,
+  jobId: string,
+): Promise<CanvasProductionState> {
+  return invoke("canvas.markTaskRunning", { root, ep, jobId });
 }
 
 export async function readNextAction(
@@ -448,7 +525,7 @@ export async function unwatchRoot(root: string): Promise<void> {
 export async function ptySpawn(cwd: string, rows: number, cols: number): Promise<number> {
   return invoke("pty.spawn", { cwd, rows, cols });
 }
-export async function ptyWrite(id: number, data: string): Promise<void> {
+export async function ptyWrite(id: number, data: string): Promise<boolean> {
   return invoke("pty.write", { id, data });
 }
 export async function ptyResize(id: number, rows: number, cols: number): Promise<void> {

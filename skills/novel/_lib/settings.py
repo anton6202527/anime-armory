@@ -32,6 +32,9 @@ DEFAULTS = {
     "小说生成工作流": "默认单步",
     "小批回扫间隔": "5章",
     "章节生成粒度": "逐章",
+    # 普通、可逆的蓝图/设定/Demo 审阅交给独立 specialist reviewer；审批记录
+    # 明示 delegated_autonomy，不伪装成人审。高风险边界仍停下。
+    "审阅策略": "用户授权制作代理",
     "发行地区": "未定",
     "文本主创模式": "AI辅助",
     "AI使用披露": "AI-assisted",
@@ -101,6 +104,13 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("小说生成工作流", ("novel",), ("默认单步", "三步迭代", "边写边自检")),
     SettingSpec("小批回扫间隔", ("novel",), ("3章", "5章", "关闭", "自定义"), parameterized=True),
     SettingSpec("章节生成粒度", ("novel",), ("逐章", "小批", "全书草稿"), parameterized=True),
+    SettingSpec(
+        "审阅策略",
+        ("novel",),
+        ("用户授权制作代理", "逐阶段用户确认", "自定义"),
+        parameterized=True,
+        sensitive=True,
+    ),
     SettingSpec("文本主创模式", ("novel",), ("人类主创", "AI辅助", "AI生成"), sensitive=True),
     SettingSpec("AI使用披露", ("novel",), ("AI-generated", "AI-assisted", "未使用AI文本"), sensitive=True),
     SettingSpec("目标语言", ("novel",), ("en", "id", "th", "es", "pt", "ja", "自定义"), composite=True, parameterized=True),
@@ -256,6 +266,10 @@ def write_settings(
     fields.setdefault(
         CRAFT_PROFILE_KEY,
         get_setting(work_root, CRAFT_PROFILE_KEY, DEFAULT_CRAFT_PROFILE),
+    )
+    fields.setdefault(
+        "审阅策略",
+        get_setting(work_root, "审阅策略", DEFAULTS["审阅策略"]),
     )
     lines = ["# 设置 — 本作私有选择点（skills/novel/novel-craft/references/选择点与偏好.md）", ""]
     if note:

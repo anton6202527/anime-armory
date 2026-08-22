@@ -19,6 +19,11 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from progress import update_stage as update_progress_stage
+from editorial_authorization import (
+    EditorialAuthorizationError,
+    delegated_authorization_errors,
+    delegated_review_authorization,
+)
 
 
 HEAVY_TOKENS = ("hook", "cliff", "reveal", "peak", "turn", "breakthrough", "冲击", "揭示", "钩子", "高潮", "动作")
@@ -633,11 +638,16 @@ def transition_existing(
             raise NameBoardError("缩略分镜/name board 必须先 --submit-review，再执行 --approve")
         if not reviewed_by.strip():
             raise NameBoardError("--approve 必须提供 --reviewed-by")
+        try:
+            authorization = delegated_review_authorization(root, reviewed_by, "name_board")
+        except EditorialAuthorizationError as exc:
+            raise NameBoardError(str(exc)) from exc
         board["workflow_status"] = "approved"
         board["approval"] = {
             "kind": "comic_name_board_approval",
             "status": "approved",
             "reviewed_by": reviewed_by.strip(),
+            "review_kind": "delegated_policy_auto_review" if authorization is not None else "human_editorial_review",
             "reviewed_at": datetime.now(timezone.utc).isoformat(),
             "note": note.strip(),
             "subject_sha256": approval_subject_sha256(board),
@@ -645,6 +655,8 @@ def transition_existing(
             "settings_sha256": (board.get("upstream_receipt") or {}).get("settings_sha256", ""),
             "settings_geometry_sha256": (board.get("upstream_receipt") or {}).get("settings_geometry_sha256", ""),
         }
+        if authorization is not None:
+            board["approval"]["authorization"] = authorization
     else:
         raise NameBoardError(f"未知状态：{target}")
     board["validation"] = {"status": "pass", "errors": []}
@@ -664,6 +676,14 @@ def verify_approval(root: Path, chapter: str, board: dict[str, Any]) -> list[str
             errors.append("name_board 审批缺 reviewed_at")
         if approval.get("subject_sha256") != approval_subject_sha256(board):
             errors.append("name_board 审批内容 SHA 不匹配")
+        if str(approval.get("reviewed_by") or "").strip().startswith("delegate:") and approval.get("review_kind") != "delegated_policy_auto_review":
+            errors.append("name_board delegate 审批 review_kind 必须为 delegated_policy_auto_review")
+        errors += delegated_authorization_errors(
+            root,
+            str(approval.get("reviewed_by") or ""),
+            "name_board",
+            approval.get("authorization"),
+        )
     return errors
 
 

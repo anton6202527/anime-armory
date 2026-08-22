@@ -130,16 +130,22 @@ import {
   composeScriptWorkbenchPrompt,
   composeScriptWorkbenchVideoPrompt,
   deriveScriptWorkbenchSteps,
+  hasDurableScriptWorkbenchByteVerification,
   hasRealScriptWorkbenchAssetSource,
   isScriptWorkbenchReadyForBatchVideo,
   normalizeScriptWorkbench,
+  prepareScriptWorkbenchVideoJobs,
   parseScriptWorkbenchModelOutput,
+  scriptWorkbenchSha256Bytes,
+  scriptWorkbenchShotVideoJobId,
   serializeScriptWorkbench,
   extractScriptWorkbenchJson,
   updateScriptWorkbenchAsset,
+  updateScriptWorkbenchJobStatus,
   validateScriptWorkbench,
   type ScriptWorkbenchAsset,
   type ScriptWorkbenchAssetPatch,
+  type ScriptWorkbenchByteVerification,
   type ScriptWorkbenchDocument,
   type ScriptWorkbenchShot,
 } from "./scriptWorkbenchModel";
@@ -1399,6 +1405,7 @@ function WorkflowNodeCard({ id, data, selected }: NodeProps<WorkflowNode>) {
       </div>
       <strong>{workbench.title}</strong>
       <small>{workbench.shots.length} 个镜头 · {workbench.assets.length} 个资产</small>
+      <small title={workbench.content_sha256}>唯一状态 {workbench.state} · {workbench.content_sha256.slice(0, 12)}</small>
       <div className="workflow-script-result-steps">
         {["确认镜头", "准备资产", "合成提示词"].map((label, index) => <span key={label} className={stepStates[index] === "done" ? "is-done" : stepStates[index] === "active" ? "is-active" : ""}><i>{stepStates[index] === "done" ? <Check size={11} /> : index + 1}</i><b>{label}</b></span>)}
       </div>
@@ -1716,6 +1723,24 @@ async function generatedScriptAssetFile(
   } finally {
     bitmap.close();
   }
+}
+
+async function scriptWorkbenchBlobSha256(blob: Blob): Promise<string> {
+  return scriptWorkbenchSha256Bytes(new Uint8Array(await blob.arrayBuffer()));
+}
+
+function scriptWorkbenchAttachmentVerification(
+  attachmentId: string,
+  sha256: string,
+): ScriptWorkbenchByteVerification {
+  return {
+    status: "verified",
+    verifier_kind: "web_attachment",
+    method: "sha256",
+    durable_ref: `attachment:${attachmentId}`,
+    sha256,
+    verified_at: new Date().toISOString(),
+  };
 }
 
 async function generatedPanoramaFile(base64: string, mimeType: string, title: string): Promise<File> {
@@ -2322,6 +2347,47 @@ export function CanvasPage({
     if (local) return local;
     return undefined;
   }, []);
+
+  useEffect(() => {
+    if (!activeScriptNode || !activeScriptWorkbench) return undefined;
+    const candidates = activeScriptWorkbench.assets.flatMap((asset) => {
+      if (asset.source === "none" || hasDurableScriptWorkbenchByteVerification(asset.byte_verification, asset.sha256)) return [];
+      const linkedAttachment = asset.attachmentId
+        ?? (asset.nodeId ? nodes.find((node) => node.id === asset.nodeId)?.data.resultAttachmentId : undefined);
+      return typeof linkedAttachment === "string" && linkedAttachment ? [{ assetId: asset.id, attachmentId: linkedAttachment, source: asset.source }] : [];
+    });
+    if (!candidates.length) return undefined;
+    let cancelled = false;
+    void Promise.all(candidates.map(async ({ assetId, attachmentId, source }) => {
+      const file = await resolveCanvasAttachment(attachmentId);
+      return file ? { assetId, attachmentId, source, sha256: await scriptWorkbenchBlobSha256(file) } : null;
+    })).then((items) => {
+      if (cancelled) return;
+      const latestRaw = nodesRef.current.find((node) => node.id === activeScriptNode.id)?.data.scriptWorkbench;
+      if (!latestRaw) return;
+      let next = normalizeScriptWorkbench(latestRaw);
+      let changed = false;
+      for (const item of items) {
+        if (!item) continue;
+        const asset = next.assets.find((candidate) => candidate.id === item.assetId);
+        if (
+          !asset
+          || asset.source !== item.source
+          || (asset.attachmentId && asset.attachmentId !== item.attachmentId)
+          || hasDurableScriptWorkbenchByteVerification(asset.byte_verification, asset.sha256)
+        ) continue;
+        next = updateScriptWorkbenchAsset(next, item.assetId, {
+          attachmentId: item.attachmentId,
+          sha256: item.sha256,
+          status: "machine_complete",
+          byte_verification: scriptWorkbenchAttachmentVerification(item.attachmentId, item.sha256),
+        });
+        changed = true;
+      }
+      if (changed) commitScriptWorkbench(activeScriptNode.id, next);
+    });
+    return () => { cancelled = true; };
+  }, [activeScriptNode, activeScriptWorkbench, nodes, resolveCanvasAttachment]);
 
   useEffect(() => {
     if (!scriptWorkflowNodeId) {
@@ -3561,16 +3627,38 @@ export function CanvasPage({
 
   function commitScriptWorkbench(nodeId: string, nextWorkbench: ScriptWorkbenchDocument, writeCloud = false) {
     const normalized = normalizeScriptWorkbench(nextWorkbench);
+    const previousRaw = nodesRef.current.find((node) => node.id === nodeId)?.data.scriptWorkbench;
+    const previousHash = previousRaw ? normalizeScriptWorkbench(previousRaw).content_sha256 : "";
+    const authoringChanged = Boolean(previousHash && previousHash !== normalized.content_sha256);
     const patch: Partial<WorkflowNodeData> = {
       scriptWorkbench: normalized,
       title: normalized.title,
-      description: `${normalized.shots.length}个镜头 · ${normalized.assets.length}个资产 · 三步脚本工作台`,
+      description: `${normalized.shots.length}个镜头 · ${normalized.assets.length}个资产 · 状态 ${normalized.state}`,
       assetName: `${normalized.shots.length}个镜头`,
       status: "done",
     };
-    const nextNodes = nodesRef.current.map((node) => node.id === nodeId
-      ? { ...node, data: { ...node.data, ...patch } }
-      : node);
+    const nextNodes = nodesRef.current.map((node) => {
+      if (node.id === nodeId) return { ...node, data: { ...node.data, ...patch } };
+      const linked = node.data.scriptSourceNodeId === nodeId || node.data.storyboardSourceNodeId === nodeId;
+      const isRetainedAssetSource = normalized.assets.some((asset) => asset.nodeId === node.id && asset.sha256);
+      if (!authoringChanged || !linked || isRetainedAssetSource) return node;
+      cancelGenerationRequest(node.id);
+      return {
+        ...node,
+        data: {
+          ...node.data,
+          status: node.data.kind === "video" ? "ready" as const : "idle" as const,
+          generationProgress: 0,
+          generationRequestId: undefined,
+          resultAttachmentId: undefined,
+          resultMimeType: undefined,
+          resultText: undefined,
+          generatedFromPrompt: undefined,
+          assetName: undefined,
+          generationError: "上游制作内容已更新，请按新内容哈希同步后重新生成。",
+        },
+      };
+    });
     nodesRef.current = nextNodes;
     setNodes(nextNodes);
     void persistGeneratorNodeSnapshot(
@@ -3662,7 +3750,7 @@ export function CanvasPage({
       const generation = await runBackendSkillText(
         APP_CANVAS_SKILL_IDS.scriptWorkbench,
         [
-          "你是专业漫剧故事脚本与分镜导演。把用户故事拆成可直接编辑、可生图、可生视频的三步工作台数据。",
+          "你是专业漫剧故事脚本与分镜导演。把用户故事拆成可持续编辑、生成、返修与质检的制作工作台 authoring 数据。",
           "要求：通常生成 8–20 个镜头；每镜 5–15 秒；镜头描述具体可视；资产去重并覆盖主要角色、场景、关键道具；不要复制不在原故事中的受版权保护内容。",
           "final_prompt 先留空，资产必须是 status=pending、source=none。",
           SCRIPT_WORKBENCH_MODEL_JSON_INSTRUCTIONS,
@@ -3683,7 +3771,7 @@ export function CanvasPage({
         ...latestSource.data,
         kind: "script",
         title: workbench.title,
-        description: `${workbench.shots.length}个镜头 · ${workbench.assets.length}个资产 · 三步脚本工作台`,
+        description: `${workbench.shots.length}个镜头 · ${workbench.assets.length}个资产 · 状态 ${workbench.state}`,
         status: "done",
         eyebrow: "脚本",
         variant: "script-workflow",
@@ -4000,6 +4088,22 @@ export function CanvasPage({
         status: "failed",
         generationError: "当前本地共享模型只提供文本和图片能力；视频生成后端尚未接入，任务未提交。",
       };
+      const scriptSourceNodeId = typeof node.data.scriptSourceNodeId === "string" ? node.data.scriptSourceNodeId : "";
+      const scriptJobId = typeof node.data.scriptJobId === "string" ? node.data.scriptJobId : "";
+      const sourceWorkbench = scriptSourceNodeId
+        ? nodesRef.current.find((item) => item.id === scriptSourceNodeId)?.data.scriptWorkbench
+        : undefined;
+      if (sourceWorkbench && scriptJobId) {
+        commitScriptWorkbench(
+          scriptSourceNodeId,
+          updateScriptWorkbenchJobStatus(
+            normalizeScriptWorkbench(sourceWorkbench),
+            scriptJobId,
+            "failed",
+            "视频生成后端尚未接入，任务未提交。",
+          ),
+        );
+      }
       const nextNodes = nodesRef.current.map((item) => item.id === nodeId
         ? { ...item, data: { ...item.data, ...failedPatch } }
         : item);
@@ -4047,13 +4151,17 @@ export function CanvasPage({
     setNotice("已取消生成");
   }
 
-  function createBatchVideoNodes(scriptNodeId: string, shots: ScriptWorkbenchShot[]) {
+  function createBatchVideoNodes(scriptNodeId: string) {
+    const sourceNode = nodesRef.current.find((node) => node.id === scriptNodeId);
+    if (!sourceNode) return;
+    const workbench = prepareScriptWorkbenchVideoJobs(normalizeScriptWorkbench(sourceNode.data.scriptWorkbench));
+    commitScriptWorkbench(scriptNodeId, workbench);
     const scriptNode = nodesRef.current.find((node) => node.id === scriptNodeId);
     if (!scriptNode) return;
+    const shots = workbench.shots;
     const existingByShot = new Map(nodesRef.current
       .filter((node) => node.data.kind === "video" && node.data.scriptSourceNodeId === scriptNodeId && typeof node.data.scriptShotId === "string")
       .map((node) => [String(node.data.scriptShotId), node]));
-    const workbench = normalizeScriptWorkbench(scriptNode.data.scriptWorkbench);
     const updatedNodes = nodesRef.current.map((node) => {
       if (node.data.kind !== "video" || node.data.scriptSourceNodeId !== scriptNodeId) return { ...node, selected: false };
       const shot = shots.find((candidate) => candidate.id === node.data.scriptShotId);
@@ -4062,6 +4170,7 @@ export function CanvasPage({
       const prompt = composeScriptWorkbenchVideoPrompt(workbench.global_style, shot) || shot.final_prompt || shot.visual;
       const changed = node.data.prompt !== prompt
         || Number(node.data.duration) !== shot.duration
+        || node.data.scriptContentSha256 !== workbench.content_sha256
         || !sameStringList(node.data.referenceAttachmentIds, references.attachmentIds)
         || !sameStringList(node.data.referenceNodeIds, references.nodeIds)
         || !sameStringList(node.data.referenceImageUrls, references.imageUrls)
@@ -4080,6 +4189,8 @@ export function CanvasPage({
           referenceNodeIds: references.nodeIds,
           referenceImageUrls: references.imageUrls,
           scriptAssetIds: references.assetIds,
+          scriptJobId: scriptWorkbenchShotVideoJobId(workbench, shot.id),
+          scriptContentSha256: workbench.content_sha256,
           ...(changed ? {
             status: "ready" as const,
             generationProgress: 0,
@@ -4113,6 +4224,8 @@ export function CanvasPage({
         referenceNodeIds: references.nodeIds,
         referenceImageUrls: references.imageUrls,
         scriptAssetIds: references.assetIds,
+        scriptJobId: scriptWorkbenchShotVideoJobId(workbench, shot.id),
+        scriptContentSha256: workbench.content_sha256,
         skillId: APP_CANVAS_SKILL_IDS.firstFrameVideo,
         skillPath: `skills/app/${APP_CANVAS_SKILL_IDS.firstFrameVideo}/SKILL.md`,
         scriptSourceNodeId: scriptNodeId,
@@ -4222,6 +4335,8 @@ export function CanvasPage({
       request.signal,
     );
     if (request.signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
+    const sha256 = await scriptWorkbenchBlobSha256(file);
+    if (request.signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
     const [attachmentId] = await importAssetFiles([file], false, { awaitCloud: false, signal: request.signal });
     if (request.signal.aborted) throw new DOMException("资产生成已取消", "AbortError");
     if (!attachmentId) throw new Error("资产图片保存失败");
@@ -4235,11 +4350,13 @@ export function CanvasPage({
       request.options,
     );
     return {
-      status: "ready",
+      status: "machine_complete",
       source: "ai",
+      sha256,
       attachmentId,
       nodeId,
       mimeType: file.type,
+      byte_verification: scriptWorkbenchAttachmentVerification(attachmentId, sha256),
       error: null,
     };
   }
@@ -4303,13 +4420,19 @@ export function CanvasPage({
     const attachmentId = request.image.attachmentId
       ?? (request.image.nodeId ? String(nodesRef.current.find((node) => node.id === request.image.nodeId)?.data.resultAttachmentId ?? "") : "");
     if (!attachmentId) throw new Error("所选画布图片没有可持久化的素材引用");
+    const sourceFile = await resolveCanvasAttachment(attachmentId);
+    if (!sourceFile) throw new Error("所选画布图片的真实字节不可读取，不能建立内容 SHA");
+    const sha256 = await scriptWorkbenchBlobSha256(sourceFile);
+    if (request.signal.aborted) throw new DOMException("选择已取消", "AbortError");
     return {
       patch: {
-        status: "ready",
+        status: "machine_complete",
         source: "canvas",
+        sha256,
         attachmentId,
         ...(request.image.nodeId ? { nodeId: request.image.nodeId } : {}),
         ...(request.image.mimeType ? { mimeType: request.image.mimeType } : {}),
+        byte_verification: scriptWorkbenchAttachmentVerification(attachmentId, sha256),
         error: null,
       },
     };
@@ -4324,6 +4447,8 @@ export function CanvasPage({
     });
     if (request.signal.aborted) throw new DOMException("上传已取消", "AbortError");
     if (!attachmentId) throw new Error("本地图片保存失败");
+    const sha256 = await scriptWorkbenchBlobSha256(request.file);
+    if (request.signal.aborted) throw new DOMException("上传已取消", "AbortError");
     const nodeId = createScriptAssetImageNode(
       request.nodeId,
       request.asset,
@@ -4333,11 +4458,13 @@ export function CanvasPage({
       "本地上传",
     );
     const patch: ScriptWorkbenchAssetPatch = {
-      status: "ready",
+      status: "machine_complete",
       source: "upload",
+      sha256,
       attachmentId,
       nodeId,
       mimeType: request.file.type,
+      byte_verification: scriptWorkbenchAttachmentVerification(attachmentId, sha256),
       error: null,
     };
     const latest = nodesRef.current.find((node) => node.id === request.nodeId)?.data.scriptWorkbench;
@@ -4458,7 +4585,7 @@ export function CanvasPage({
 
   function scriptAssetReferences(workbench: ScriptWorkbenchDocument, shot: ScriptWorkbenchShot) {
     const searchable = [shot.visual, shot.dialogue, shot.final_prompt].join("\n");
-    const ready = workbench.assets.filter((asset) => asset.status === "ready" && hasRealScriptWorkbenchAssetSource(asset));
+    const ready = workbench.assets.filter((asset) => ["machine_complete", "accepted"].includes(asset.status) && hasRealScriptWorkbenchAssetSource(asset));
     const explicitlyReferenced = ready.filter((asset) => {
       const escapedName = asset.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       return new RegExp(`@${escapedName}(?![\\p{L}\\p{N}_-])`, "u").test(searchable);
@@ -4496,6 +4623,7 @@ export function CanvasPage({
       if (!shot?.final_prompt.trim()) return { ...node, selected: false };
       const references = scriptAssetReferences(workbench, shot);
       const changed = node.data.prompt !== shot.final_prompt
+        || node.data.scriptContentSha256 !== workbench.content_sha256
         || !sameStringList(node.data.referenceAttachmentIds, references.attachmentIds)
         || !sameStringList(node.data.referenceNodeIds, references.nodeIds)
         || !sameStringList(node.data.referenceImageUrls, references.imageUrls)
@@ -4514,6 +4642,7 @@ export function CanvasPage({
           referenceNodeIds: references.nodeIds,
           referenceImageUrls: references.imageUrls,
           scriptAssetIds: references.assetIds,
+          scriptContentSha256: workbench.content_sha256,
           ...(changed ? {
             status: "idle" as const,
             generationProgress: 0,
@@ -4549,6 +4678,7 @@ export function CanvasPage({
         referenceNodeIds: references.nodeIds,
         referenceImageUrls: references.imageUrls,
         scriptAssetIds: references.assetIds,
+        scriptContentSha256: workbench.content_sha256,
         storyboardSourceNodeId: scriptNodeId,
         scriptShotId: shot.id,
       },
@@ -4607,7 +4737,7 @@ export function CanvasPage({
 
   function batchVideoFromWorkbench(request: ScriptBatchVideoRequest) {
     if (request.signal.aborted) return;
-    createBatchVideoNodes(request.nodeId, request.workbench.shots);
+    createBatchVideoNodes(request.nodeId);
   }
 
   async function runStandaloneWorkflow(request: StandaloneSkillRunRequest) {
@@ -4627,8 +4757,10 @@ export function CanvasPage({
     setGateway(submissionGateway);
     setPanelOpen(true);
     setPanelTab("history");
+    const standaloneSkillPath = canonicalAppSkillPath(request.skillId)
+      ?? `skills/${canonicalAppSkillId(request.skillId) ?? request.skillId}/SKILL.md`;
     setNodes((items) => items.map((node) => node.id === request.nodeId
-      ? { ...node, data: { ...node.data, status: "running", generationError: undefined, skillId: request.skillId, skillPath: `skills/${request.skillId}/SKILL.md` } }
+      ? { ...node, data: { ...node.data, status: "running", generationError: undefined, skillId: canonicalAppSkillId(request.skillId) ?? request.skillId, skillPath: standaloneSkillPath } }
       : node));
 
     const effectiveWork = {

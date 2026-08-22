@@ -11,9 +11,9 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**，按 `../skills/novel/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../skills/novel/novel-craft/references/选择点与偏好.md` 解析：`<作品根>/_设置.md` → 全局默认 → 普通可逆项采用本线推荐值写回并继续。权利/合规、不可逆发布和最终验收仍确认；模型费用绑定阶段预算包，包内不逐章重复问。
 
-本 skill 涉及的选择点：`小说用途`、`目标平台`、`创作工艺档`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。`创作工艺档` 在 human-first seed 冻结后首次问一次；直接跑 CLI 可传 `--craft-profile`，未传则继承 novel 全局默认或回退 `genre_novel`，不得根据目标平台推断。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`创作工艺档`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`审阅策略`、`文本主创模式`、`AI使用披露`。`创作工艺档` 在 human-first seed 冻结后读取项目/全局值，仍缺失则推荐回退 `genre_novel` 并继续；用户可传 `--craft-profile` 覆盖，不得根据目标平台推断。
 
 ## 核心原则
 
@@ -75,21 +75,21 @@ python3 <skill>/scripts/init_project.py \
 > `_meta.json` 会固化作品卡片字段：`synopsis` 由 `--premise`（logline）映射并裁剪 ≤240 字（premise 留空时 synopsis 也留空待回填，不阻断立项）；写小说是纯文本线、无图片产物，`cover` 恒为 `null`，桌面卡片自动用产线图标占位（不新增出图步骤）。
 
 ### 2. 填创作蓝图.md + 读者契约.md（最重要 · 这部的宪法）
-**允许先试写再锁蓝图**：人物驱动、文学向、实验性或作者仍在寻找声音时，可先按 `novel-craft/references/exploration-workflow.md` 做 2-3 个角色/场景/POV 试镜。每稿只回答一个问题；登记到 `探索/` 后由作者以 hash-bound 决策挑出值得吸收的发现。探索候选只能改变“我们对故事的理解”，不能自动改正式蓝图；吸收后仍须执行本步 blueprint 人审批准。
+**允许先试写再锁蓝图**：人物驱动、文学向、实验性或作者仍在寻找声音时，可先按 `novel-craft/references/exploration-workflow.md` 做 2-3 个角色/场景/POV 试镜。每稿只回答一个问题；登记到 `探索/` 后，默认由与 writer 分离的 reviewer 按作者意图、读者契约和证据评分形成 hash-bound 决策。探索候选只能改变“我们对故事的理解”，不能自动改正式蓝图；吸收后仍须执行本步 blueprint 代理或人工批准。
 
-**先发散再收敛（创意闸 · 蓝图三方案）**：锁定蓝图前必须先给出 **3 个差异化方向**（不是同一方案的三种措辞），每个方向从不同切口发散——如题材/类型混搭、非常规主角视角、结构性玩法（时间线/叙事框架）、金手指的反向设计（代价先行/限制即爽点）。**发散不靠灵感碰运气**：`novel-craft/references/premise-divergence.md` 给了六个撬棍（金手指反向/视角错位/类型杂交/场域平移/前提取反/约束逼创意）+「生成≥5→三项打分→挑或杂交」的可操作步骤；命中高频套路时，`novel-review/scripts/trope_cliche.py` 会在开写前提示，按 premise-divergence 的"命中之后怎么真差异化"处理。每个方向写三行：① 一句话 logline；② **差异化记忆点**（读者能一句话转述传播的"别人没有的东西"）；③ 最像的既有爆款 + 与它的关键差异。然后做**套路自查**：老读者能否从 logline 直接预测前 10 章走向和结局？能 → 该方向回炉或杂交。把选定方向（或杂交结果）与被否方向的一句话理由一起写进蓝图的「差异化决策」小节——留下否稿理由，score 的 novelty 维度与后续 spinoff 选题都会回读。**候选须结构化落盘**：三方向写入 `设定/premise_candidates.json`（`{candidates:[{id,logline,memory_point,closest_hit,key_diff}],chosen}`），随后跑 `python3 skills/novel/novel-create/scripts/premise_divergence_audit.py "<作品根>"` 做"真差异化"机检——候选 <3、两方向字面近似（同一方案换措辞）、共享同一套路锚（措辞不同骨架相同）都会被点名（advisory 不阻断；此前"不是三种措辞"只是 prose 指令，LLM 交三条换汤不换药的 logline 无人拦）。**发散采样口径（对抗 mode collapse）**：生成候选时用 Verbalized Sampling——让模型一次给 ≥5 个候选并各自标注"这个方向的典型度/概率"，**刻意从低典型度尾部取 2-3 个**进入三方向池；直接连问三次"再来一个"只会掉进同一个高概率模式（arXiv 2510.01171 实证：典型性偏差是套路化根因，VS 纯提示词即可提升发散 1.6-2 倍）。→ **用户选一或杂交**。
-把访谈结论写实写细：logline / 主角 / 核心机制或困境 / 阅读承诺 / 主线冲突 / 基调 / 风格卡（若有样本）。商业/平台项目把 `评分/market_baseline_<日期>.json` 或人工证据的“热度、拥挤度、差异化缺口”写进“市场假设/差异化”小节，并标明采集日期；没证据的判断只写“待验证假设”。→ **用户审**。审过后记录与当前文件 hash 绑定的批准：
+**先发散再收敛（创意闸 · 蓝图三方案）**：锁定蓝图前必须先给出 **3 个差异化方向**（不是同一方案的三种措辞），每个方向从不同切口发散——如题材/类型混搭、非常规主角视角、结构性玩法（时间线/叙事框架）、金手指的反向设计（代价先行/限制即爽点）。**发散不靠灵感碰运气**：`novel-craft/references/premise-divergence.md` 给了六个撬棍（金手指反向/视角错位/类型杂交/场域平移/前提取反/约束逼创意）+「生成≥5→三项打分→挑或杂交」的可操作步骤；命中高频套路时，`novel-review/scripts/trope_cliche.py` 会在开写前提示，按 premise-divergence 的"命中之后怎么真差异化"处理。每个方向写三行：① 一句话 logline；② **差异化记忆点**（读者能一句话转述传播的"别人没有的东西"）；③ 最像的既有爆款 + 与它的关键差异。然后做**套路自查**：老读者能否从 logline 直接预测前 10 章走向和结局？能 → 该方向回炉或杂交。把选定方向（或杂交结果）与被否方向的一句话理由一起写进蓝图的「差异化决策」小节——留下否稿理由，score 的 novelty 维度与后续 spinoff 选题都会回读。**候选须结构化落盘**：三方向写入 `设定/premise_candidates.json`（`{candidates:[{id,logline,memory_point,closest_hit,key_diff}],chosen}`），随后跑 `python3 skills/novel/novel-create/scripts/premise_divergence_audit.py "<作品根>"` 做"真差异化"机检。默认由 specialist reviewer 按作者意图、差异度、可持续性和平台目标选择总分最高方案或有证据优势的杂交，并记录否稿理由；只有两案影响显著且无证据优势、或会改变用户明示的核心意图时才请用户选择。
+把访谈结论写实写细：logline / 主角 / 核心机制或困境 / 阅读承诺 / 主线冲突 / 基调 / 风格卡（若有样本）。商业/平台项目把 `评分/market_baseline_<日期>.json` 或人工证据的“热度、拥挤度、差异化缺口”写进“市场假设/差异化”小节，并标明采集日期；没证据的判断只写“待验证假设”。默认交独立 specialist reviewer 审阅并记录与当前文件 hash 绑定的代理批准；显式逐阶段用户确认项目改由真人复核：
 ```bash
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage blueprint \
-  --agent "<复核人>" --reason "<确认了哪些方向与边界>"
+  --delegated --agent "delegate:novel-specialist-reviewer" --reason "确认了方向、作者意图与边界"
 ```
-用户审过后，按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：一句话题旨、核心戏剧问题、开篇/中段/终局读者承诺、好看机制、文学质感、禁偏清单。这个文件后续被 `draft_packets.py` 每章读取，防止成稿偏题、只刷事件或文笔变薄。
+审阅通过后，按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：一句话题旨、核心戏剧问题、开篇/中段/终局读者承诺、好看机制、文学质感、禁偏清单。这个文件后续被 `draft_packets.py` 每章读取，防止成稿偏题、只刷事件或文笔变薄。
 
 ### 3. 建设定圣经 + 角色卡 + 世界观
-把蓝图展开成可一致性追踪的设定：人物/关系、社会与自然规则、势力、地理、术语；若有高杠杆能力或机制，登记其**代价/边界/后果**。**严格按家族统一 schema `novel-craft/references/setting-bible.md`**（设定圣经字段 + 角色卡字段 + 首现章/复用范围/边界列），这样 spinoff/rewrite/review 读的是同一套字段、不漂。长篇/商业项目同步建 `设定/character_guardrails.json`：把主要角色的 `hard_limits` / `forbidden_actions` / `allow_if_context` 结构化，供 `logic_sentry.py` 机检底线违背。→ **用户审**。审过后同样记录批准；任一受审文件变化会自动失效并要求重审：
+把蓝图展开成可一致性追踪的设定：人物/关系、社会与自然规则、势力、地理、术语；若有高杠杆能力或机制，登记其**代价/边界/后果**。**严格按家族统一 schema `novel-craft/references/setting-bible.md`**（设定圣经字段 + 角色卡字段 + 首现章/复用范围/边界列），这样 spinoff/rewrite/review 读的是同一套字段、不漂。长篇/商业项目同步建 `设定/character_guardrails.json`。默认交独立 specialist reviewer 审阅；显式逐阶段用户确认项目改由真人复核。任一受审文件变化都会使当前批准失效并重派审阅：
 ```bash
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage setting \
-  --agent "<复核人>" --reason "<确认了哪些规则与人物边界>"
+  --delegated --agent "delegate:novel-specialist-reviewer" --reason "确认了规则、人物边界与读者契约"
 ```
 
 长篇/商业连载/系统流/修仙/群像/复杂世界观项目，设定完成后、章纲批量展开前先跑 storyworld 写前压力测试：
@@ -101,7 +101,7 @@ python3 skills/novel/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>
 若 `verdict=block_pre_draft`，表示必要结构文件缺失，先补齐再进 Demo；关键词/阈值得到的 `revise_setting` 只是低置信表层提示，由作者复核，不硬挡。
 
 ### 4. 书名
-委托 `novel-title`（原创类型，按目标平台 5 维打分）。蓝图/设定齐了再起，名字才贴。→ **用户审**，选定写回 `_meta.title` + 各文件标题。
+委托 `novel-title`（原创类型，按目标平台 5 维打分）。蓝图/设定齐了再起，名字才贴。默认采用五维评分最高且无禁忌冲突的标题并写回 `_meta.title` + 各文件标题；并列且影响显著时才请用户选。
 
 ### 5. 章纲
 选择与题材相配的宏观结构，并让每章产生可辨认的叙事变化；**节拍优先、字数兜底**，按用途/平台档定章数与建议带宽 —— 用 `novel-craft/references/{outline,split}.md`。商业连载/改编源书在开篇尽快证明阅读承诺并布追读钩；文学/传统小说可用人物选择、意象或主题推进，不强制爽点。每个弧段（3-5 章）按 outline.md「意外性设计位」登记至少一处预期违背：先写读者此刻的预期线，再写违背方式与回看合理性的伏笔位；twist 型伏笔同步进 `设定/foreshadowing_ledger.json`（`payoff_is_twist=true`），让 wiki 台账能对账"惊喜是否兑现"。→ **用户审**（章纲未敲定不进 Demo）。

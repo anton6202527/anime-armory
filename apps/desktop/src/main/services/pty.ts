@@ -78,8 +78,11 @@ export class PtyService {
     return id
   }
 
-  write(id: number, data: string) {
-    this.sessions.get(id)?.proc.write(data)
+  write(id: number, data: string): true {
+    const session = this.sessions.get(id)
+    if (!session) throw new Error(`PTY session is not live: ${id}`)
+    session.proc.write(data)
+    return true
   }
 
   resize(id: number, rows: number, cols: number) {

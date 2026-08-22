@@ -25,6 +25,9 @@ _PRODUCTION_MODE_KEYS = ("配音先行", "先出视频后配音", "原生音画"
 
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
+    "普通选择策略": "推荐方案自动继续",
+    "审阅策略": "用户授权制作代理",
+    "付费授权策略": "按阶段预算包一次确认",
     "基础视觉风格": "写实电影感",
     "生图模型": "GPT Image 2",
     "生图渠道": "Codex CLI",
@@ -132,6 +135,21 @@ IMAGE_CHANNEL_CHOICES = (
 
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
+    SettingSpec("普通选择策略", ("ad",), ("推荐方案自动继续", "逐项询问")),
+    SettingSpec(
+        "审阅策略",
+        ("ad",),
+        ("用户授权制作代理", "逐阶段用户确认", "自定义"),
+        parameterized=True,
+        sensitive=True,
+    ),
+    SettingSpec(
+        "付费授权策略",
+        ("ad",),
+        ("按阶段预算包一次确认", "每次调用确认", "自定义"),
+        parameterized=True,
+        sensitive=True,
+    ),
     SettingSpec("基础视觉风格", ("ad",), ("写实电影感", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "极简产品", "国风写意", "自定义"), parameterized=True),
     SettingSpec("生图模型", ("ad",), IMAGE_MODEL_CHOICES, key_aliases=("图片模型",), parameterized=True),
     SettingSpec("生图渠道", ("ad",), IMAGE_CHANNEL_CHOICES, key_aliases=("图片渠道",), parameterized=True),

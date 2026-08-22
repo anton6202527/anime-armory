@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from unittest import mock
 
+import pytest
+
 _HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(_HERE))
 # 同名模块防串：另一 render_dreamina（同线其它 skill）先被导入时，按本目录重新加载
@@ -18,6 +20,9 @@ if _cached is not None and Path(getattr(_cached, "__file__", "")).resolve().pare
     importlib.invalidate_caches()
 import render_dreamina as rd  # noqa: E402
 assert Path(rd.__file__).resolve().parent == _HERE
+
+REAL_CONSUME_IMAGE_SPEND = rd.consume_image_spend
+REAL_SETTLE_IMAGE_SPEND = rd.settle_image_spend
 
 
 def test_extract_sections_and_build_prompt(tmp_path):
@@ -123,6 +128,8 @@ def _quiet_render_env(monkeypatch):
     monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
     monkeypatch.setattr(rd, "prepare_image_receipt", lambda root, manifest, job, index: {"status": "preflight_passed"})
     monkeypatch.setattr(rd, "finish_image_receipt", lambda root, job: {"status": "accepted"})
+    monkeypatch.setattr(rd, "consume_image_spend", lambda *args, **kwargs: {"status": "pass"})
+    monkeypatch.setattr(rd, "settle_image_spend", lambda *args, **kwargs: {"status": "pass"})
     monkeypatch.setattr(rd.time, "sleep", lambda s: None)
 
 
@@ -279,3 +286,154 @@ def test_runner_stops_after_one_output_until_current_pixel_is_signed(tmp_path, m
     assert summary["awaiting_human_signoff"] == 1
     assert manifest["jobs"][0]["status"] == "awaiting_human_signoff"
     assert manifest["jobs"][1].get("submit_id") is None
+
+
+def test_unknown_reserved_cost_never_submits_or_consumes(tmp_path, monkeypatch):
+    root = _image_project(tmp_path, [{
+        "job_id": "镜头01",
+        "prompt": "出图/分镜/prompt/镜头01.md",
+        "expected_output": "出图/分镜/图片/镜头01.png",
+    }])
+    _quiet_render_env(monkeypatch)
+    monkeypatch.setattr(rd, "consume_image_spend", REAL_CONSUME_IMAGE_SPEND)
+    submit = mock.Mock(side_effect=AssertionError("unknown cost must not reach provider"))
+    monkeypatch.setattr(rd, "run_dreamina_image", submit)
+
+    summary = _render(root)
+
+    assert summary["failed"] == 1
+    assert not submit.called
+    assert not (root / rd.spend_envelope.LEDGER_REL).exists()
+    assert "未知 cost" in _read_manifest(root)["jobs"][0]["error"]
+
+
+def test_real_spend_envelope_reserves_then_settles_provider_actual(tmp_path, monkeypatch):
+    root = _image_project(tmp_path, [{
+        "job_id": "镜头01",
+        "prompt": "出图/分镜/prompt/镜头01.md",
+        "expected_output": "出图/分镜/图片/镜头01.png",
+        "estimated_credit_count": 2,
+        "estimated_credit_count_is_upper_bound": True,
+        "estimated_credit_count_source": "provider-pricing-snapshot:2026-08-21",
+    }])
+    _quiet_render_env(monkeypatch)
+    monkeypatch.setattr(rd, "consume_image_spend", REAL_CONSUME_IMAGE_SPEND)
+    monkeypatch.setattr(rd, "settle_image_spend", REAL_SETTLE_IMAGE_SPEND)
+    manifest = _read_manifest(root)
+    digest, scope = rd.image_phase_spend_binding(
+        root, manifest, ratio="9:16", resolution_type="2k", model_version="5.0"
+    )
+    approved = rd.spend_envelope.make_envelope(
+        root,
+        stage="image",
+        model="Dreamina Image 5.0",
+        channel=rd.SPEND_CHANNEL,
+        input_sha256=digest,
+        scope=scope,
+        max_calls=1,
+        max_attempts=1,
+        cost_ceiling=2,
+        currency="credit",
+        approver="client-producer@example.invalid",
+        approval_reference="approval-ui:image-phase",
+        source_quote="我确认该出图阶段最多使用 2 credit。",
+        envelope_id="image-real-integration",
+    )
+    rd.spend_envelope.write_envelope(
+        rd.spend_envelope.default_envelope_path(root, "image"), approved
+    )
+    monkeypatch.setattr(rd, "run_dreamina_image", lambda *args, **kwargs: {
+        "submit_id": "sid-real",
+        "credit_count": 1,
+        "gen_status": "success",
+        "result_json": {"images": [{"image_url": "https://example.test/a.png"}]},
+    })
+
+    def fake_download(url, target):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0" * 2048)
+
+    monkeypatch.setattr(rd, "download", fake_download)
+    summary = _render(root)
+    job = _read_manifest(root)["jobs"][0]
+
+    assert summary["rendered"] == 1
+    assert job["spend_settlement"]["status"] == "pass"
+    assert job["spend_settlement"]["usage"]["cost"] == 1.0
+
+
+def test_existing_submit_query_reconciles_pending_reservation_actual(tmp_path, monkeypatch):
+    root = _image_project(tmp_path, [{
+        "job_id": "镜头01",
+        "prompt": "出图/分镜/prompt/镜头01.md",
+        "expected_output": "出图/分镜/图片/镜头01.png",
+        "estimated_credit_count": 2,
+        "estimated_credit_count_is_upper_bound": True,
+        "estimated_credit_count_source": "provider-pricing-snapshot:2026-08-21",
+    }])
+    manifest = _read_manifest(root)
+    digest, scope = rd.image_phase_spend_binding(
+        root, manifest, ratio="9:16", resolution_type="2k", model_version="5.0"
+    )
+    approved = rd.spend_envelope.make_envelope(
+        root, stage="image", model="Dreamina Image 5.0", channel=rd.SPEND_CHANNEL,
+        input_sha256=digest, scope=scope, max_calls=1, max_attempts=1,
+        cost_ceiling=2, currency="credit", approver="client-producer@example.invalid",
+        approval_reference="approval-ui:image-recovery",
+        source_quote="我确认该出图恢复路径最多使用 2 credit。",
+        envelope_id="image-recovery",
+    )
+    rd.spend_envelope.write_envelope(
+        rd.spend_envelope.default_envelope_path(root, "image"), approved
+    )
+    job = manifest["jobs"][0]
+    REAL_CONSUME_IMAGE_SPEND(
+        root, manifest, job, ratio="9:16", resolution_type="2k", model_version="5.0",
+        envelope_path=None,
+    )
+    job["submit_id"] = "sid-recovery"
+
+    result = rd.reconcile_existing_image_spend(
+        root, job, {"submit_id": "sid-recovery", "credit_count": 1}, envelope_path=None
+    )
+
+    assert result["status"] == "pass"
+    assert job["credit_count"] == 1.0
+    assert job["spend_settlement"]["usage"]["cost"] == 1.0
+
+
+def test_provider_crash_after_reservation_cannot_submit_again(tmp_path, monkeypatch):
+    root = _image_project(tmp_path, [{
+        "job_id": "镜头01",
+        "prompt": "出图/分镜/prompt/镜头01.md",
+        "expected_output": "出图/分镜/图片/镜头01.png",
+        "estimated_credit_count": 2,
+        "estimated_credit_count_is_upper_bound": True,
+        "estimated_credit_count_source": "provider-pricing-snapshot:2026-08-21",
+    }])
+    _quiet_render_env(monkeypatch)
+    monkeypatch.setattr(rd, "consume_image_spend", REAL_CONSUME_IMAGE_SPEND)
+    manifest = _read_manifest(root)
+    digest, scope = rd.image_phase_spend_binding(
+        root, manifest, ratio="9:16", resolution_type="2k", model_version="5.0"
+    )
+    approved = rd.spend_envelope.make_envelope(
+        root, stage="image", model="Dreamina Image 5.0", channel=rd.SPEND_CHANNEL,
+        input_sha256=digest, scope=scope, max_calls=2, max_attempts=2,
+        cost_ceiling=4, currency="credit", approver="client-producer@example.invalid",
+        approval_reference="approval-ui:image-crash",
+        source_quote="我确认该出图阶段至多两轮、4 credit。", envelope_id="image-crash",
+    )
+    rd.spend_envelope.write_envelope(
+        rd.spend_envelope.default_envelope_path(root, "image"), approved
+    )
+    submit = mock.Mock(side_effect=RuntimeError("connection lost after submit"))
+    monkeypatch.setattr(rd, "run_dreamina_image", submit)
+
+    first = _render(root)
+    second = _render(root)
+
+    assert first["failed"] == 1 and second["failed"] == 1
+    assert submit.call_count == 1
+    job = _read_manifest(root)["jobs"][0]
+    assert "recovery" in job["error"] or "settlement" in job["error"]

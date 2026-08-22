@@ -433,6 +433,16 @@ def main() -> int:
     parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人")
     parser.add_argument("--review-notes", default="", help="--accept-reviewed 必填：逐轴目检结论与理由")
     parser.add_argument(
+        "--spend-envelope",
+        default="",
+        help="人工签发的阶段预算 envelope；默认 生产数据/spend_envelopes/image_<chapter>.json",
+    )
+    parser.add_argument(
+        "--actual-cost-per-call",
+        default="",
+        help="已知的供应商单次实际成本；缺省按 envelope 单次上限保守结算，非法/越界值在提交前阻断",
+    )
+    parser.add_argument(
         "--skip-gate",
         action="store_true",
         help="仅复用绑定当前完整输入与 panel_jobs SHA 的已授权非 block receipt；不能用 waiver 绕过 preflight",
@@ -559,6 +569,33 @@ def main() -> int:
         for panel_id, refs in missing.items():
             print(f"[err] {panel_id} missing accepted shared references: {', '.join(refs)}", file=sys.stderr)
         return 2
+
+    spend_context: dict[str, Any] | None = None
+    if not args.recheck_existing:
+        try:
+            spend_context = shared.prepare_spend_context(
+                root,
+                args.chapter,
+                data,
+                jobs,
+                force=args.force,
+                model=DREAMINA_MODEL,
+                channel=DREAMINA_CHANNEL,
+                envelope_raw=args.spend_envelope,
+                actual_cost_raw=args.actual_cost_per_call,
+            )
+        except shared.spend_envelope.SpendAuthorizationError as exc:
+            raw = Path(args.spend_envelope).expanduser() if args.spend_envelope else shared.spend_envelope.default_envelope_path(root, args.chapter)
+            shared.print_spend_stop(exc, raw if raw.is_absolute() else root / raw)
+            return 5
+        print(
+            "[spend-authorized] "
+            f"envelope={spend_context['authorization']['envelope_id']} "
+            f"remaining_calls={spend_context['authorization']['remaining_calls']} "
+            f"remaining_cost={spend_context['authorization']['remaining_cost']} "
+            f"{spend_context['authorization']['currency']}",
+            flush=True,
+        )
 
     max_attempts = max(1, int(args.max_attempts))
     reference_limit = max(1, min(DREAMINA_REFERENCE_LIMIT, int(args.reference_limit)))
@@ -704,16 +741,27 @@ def main() -> int:
         for attempt in range(1, max_attempts + 1):
             stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S")
             raw_path = candidate_root / panel_id / f"{stamp}_attempt{attempt}_dreamina_raw.png"
-            success, submit_id, error = run_dreamina(
-                prompt,
-                image_paths,
-                raw_path,
-                ratio=ratio,
-                model_version=args.model_version,
-                resolution_type=args.resolution_type,
-                timeout_sec=max(60, int(args.timeout_sec)),
-                poll_sec=max(0, int(args.poll_sec)),
-            )
+            assert spend_context is not None
+            try:
+                paid_result, spend_reservation, spend_settlement = shared.run_paid_submission(
+                    spend_context,
+                    panel_id=panel_id,
+                    retry_round=attempt,
+                    submit=lambda: run_dreamina(
+                        prompt,
+                        image_paths,
+                        raw_path,
+                        ratio=ratio,
+                        model_version=args.model_version,
+                        resolution_type=args.resolution_type,
+                        timeout_sec=max(60, int(args.timeout_sec)),
+                        poll_sec=max(0, int(args.poll_sec)),
+                    ),
+                )
+            except shared.spend_envelope.SpendAuthorizationError as exc:
+                shared.print_spend_stop(exc, Path(spend_context["envelope_path"]))
+                return 5
+            success, submit_id, error = paid_result
             if not success:
                 last_error = error
                 shared.append_event(
@@ -729,6 +777,9 @@ def main() -> int:
                         "submit_id": submit_id,
                         "reference_manifest": shared.rel_to_root(root, reference_manifest),
                         "reference_input_count": len(records),
+                        "spend_consumption_id": spend_reservation["consumption_id"],
+                        "spend_actual_cost": spend_settlement["actual_cost"],
+                        "spend_currency": spend_reservation["currency"],
                         "error": error,
                         "duration_sec": round(time.monotonic() - started, 2),
                     },
@@ -784,6 +835,9 @@ def main() -> int:
                     "resolution_type": args.resolution_type,
                     "reference_input_mode": "dreamina_image2image_images",
                     "reference_input_count": len(records),
+                    "spend_consumption_id": spend_reservation["consumption_id"],
+                    "spend_actual_cost": spend_settlement["actual_cost"],
+                    "spend_currency": spend_reservation["currency"],
                     "reference_manifest": shared.rel_to_root(root, reference_manifest),
                     "prompt_snapshot": shared.rel_to_root(root, prompt_path),
                     "prompt_snapshot_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),

@@ -13,6 +13,7 @@ import {
 } from "../api";
 import { useI18n } from "../i18n";
 import type { DemoDownloadInfo, LineInfo, WorkRoot } from "../types";
+import { selectVisibleLineDemos } from "@shared/demoPolicy";
 
 /** Placeholder cover glyph per line, shown when a work has no cover image yet
  *  (mirrors the Home line grid so covers read consistently). */
@@ -66,6 +67,7 @@ export function Line(props: {
   const [installingDemoRel, setInstallingDemoRel] = useState<string | null>(null);
   const [toast, setToast] = useState<string>("");
   const toastTimer = useRef<number | null>(null);
+  const visible = selectVisibleLineDemos(line.line, roots, availableDemos);
   // Local media server powers work-cover thumbnails; re-render once its port is up.
   const mediaPort = useSyncExternalStore(subscribeMediaPort, getMediaPort);
 
@@ -164,7 +166,7 @@ export function Line(props: {
       {err && <div className="empty">{err}</div>}
 
       <div className="roots">
-        {roots.map((root) => {
+        {visible.roots.map((root) => {
           return (
             <div
               className={"root-card" + (root.is_demo ? " demo-card" : "")}
@@ -213,7 +215,7 @@ export function Line(props: {
           );
         })}
 
-        {availableDemos.map((demo) => {
+        {visible.downloads.map((demo) => {
           const installing = installingDemoRel === demo.rel;
           const disabled = installingDemoRel !== null;
           return (

@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import { existsSync, realpathSync, statSync, type Dirent } from 'node:fs'
+import { createHash, randomUUID } from 'node:crypto'
 import path from 'node:path'
 import type {
   CanvasReadResult,
@@ -20,18 +21,34 @@ import type {
   ClipEditData,
   ClipEditPatch,
   EpisodeWorkspace,
+  LineKey,
   QaFlag,
 } from '@shared/types'
 import { isIgnoredName, resolveWithin } from '../util/paths'
 import { fnv1a64 } from '../util/hash'
+import { canvasFrameTargetSlot, canvasImageTargetRel, canvasVideoTargetRel } from '../../shared/canvasTargets'
+import {
+  CANVAS_EPISODE_TASK_NODE_ID,
+  acceptCanvasFinalProduct,
+  buildCanvasAuthoringInput,
+  submitCanvasProductionTask,
+  synchronizeCanvasProduction,
+} from './canvasProductionAdapter'
+import {
+  readCanvasProductionState,
+  updateCanvasTaskStatus,
+  withCanvasProductionStateLock,
+} from './canvasProduction'
 
 /**
  * Canvas service — TypeScript port of the Tauri canvas commands
  * (desktop/src-tauri/src/commands.rs): read_canvas, read_canvas_layout,
  * write_canvas_layout, read_clip_edit, write_clip_edit, read_episode_workspace.
  *
- * Source-of-truth fallback order for the canvas:
- *   生产数据/review_ui_<ep>.json → 脚本/<ep>/storyboard.json → 脚本/<ep>/panel_script.json
+ * Editable source-of-truth order for the canvas:
+ *   脚本/<ep>/storyboard.json → 脚本/<ep>/panel_script.json
+ * review_ui_<ep>.json is a derived overlay for media and quality only. It is
+ * used as the full fallback solely when neither editable source exists.
  */
 
 const CANVAS_PROMPT_PREVIEW_LIMIT = 4096
@@ -85,6 +102,28 @@ async function readJson(file: string): Promise<Json | undefined> {
     return JSON.parse(await fs.readFile(file, 'utf8')) as Json
   } catch {
     return undefined
+  }
+}
+
+interface JsonFileSnapshot {
+  value: Json
+  sha256: string
+}
+
+/** Read an editable source exactly once so its projection and raw digest can
+ * never describe different file versions. Only absence permits fallback;
+ * unreadable or invalid canonical input must fail closed instead of silently
+ * switching the episode to a lower-priority authority. */
+async function readJsonFileSnapshot(file: string): Promise<JsonFileSnapshot | undefined> {
+  try {
+    const bytes = await fs.readFile(file)
+    return {
+      value: JSON.parse(bytes.toString('utf8')) as Json,
+      sha256: createHash('sha256').update(bytes).digest('hex'),
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined
+    throw error
   }
 }
 
@@ -223,13 +262,19 @@ function panelScriptPath(root: string, ep: string): string | null {
 
 // ------------------------------------------------ canvas generation profile
 
-async function readProjectSettings(root: string): Promise<Map<string, string>> {
-  let text = ''
+interface ProjectSettingsSnapshot {
+  values: Map<string, string>
+  sha256: string
+}
+
+async function readProjectSettings(root: string): Promise<ProjectSettingsSnapshot> {
+  let bytes = Buffer.alloc(0)
   try {
-    text = await fs.readFile(path.join(root, '_设置.md'), 'utf8')
-  } catch {
-    return new Map()
+    bytes = await fs.readFile(path.join(root, '_设置.md'))
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
   }
+  const text = bytes.toString('utf8')
   const settings = new Map<string, string>()
   for (const line of text.split(/\r?\n/)) {
     const match = /^\s*-\s*([^：:#]+?)\s*[：:]\s*(.*?)\s*(?:#.*)?$/.exec(line)
@@ -238,7 +283,10 @@ async function readProjectSettings(root: string): Promise<Map<string, string>> {
     const value = match[2].trim()
     if (key && value) settings.set(key, value)
   }
-  return settings
+  return {
+    values: settings,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+  }
 }
 
 function assertionValue(data: Json, key: string): Json {
@@ -407,8 +455,12 @@ function promoteProjectModel(
   return preferred.id
 }
 
-async function generationProfile(root: string, ep: string): Promise<CanvasGenerationProfile> {
-  const settings = await readProjectSettings(root)
+async function generationProfile(
+  root: string,
+  ep: string,
+): Promise<{ profile: CanvasGenerationProfile; settingsSha256: string }> {
+  const settingsSnapshot = await readProjectSettings(root)
+  const settings = settingsSnapshot.values
   const [imageModels, videoModels, routes, imageBaseline] = await Promise.all([
     capabilityModels(root, 'image'),
     capabilityModels(root, 'video'),
@@ -431,14 +483,17 @@ async function generationProfile(root: string, ep: string): Promise<CanvasGenera
     s(routes, 'default_backend')
   )
   return {
-    default_aspect_ratio: settings.get('画幅') ?? settings.get('画面比例') ?? 'Auto',
-    default_resolution: settings.get('视频分辨率') ?? '720p',
-    default_image_model: defaultImageModel,
-    default_video_model: defaultVideoModel,
-    default_video_duration: 10,
-    audio_policy: settings.get('视频生成音频策略') ?? s(routes, 'video_generation_audio_policy'),
-    image_models: imageModels,
-    video_models: videoModels,
+    settingsSha256: settingsSnapshot.sha256,
+    profile: {
+      default_aspect_ratio: settings.get('画幅') ?? settings.get('画面比例') ?? 'Auto',
+      default_resolution: settings.get('视频分辨率') ?? '720p',
+      default_image_model: defaultImageModel,
+      default_video_model: defaultVideoModel,
+      default_video_duration: 10,
+      audio_policy: settings.get('视频生成音频策略') ?? s(routes, 'video_generation_audio_policy'),
+      image_models: imageModels,
+      video_models: videoModels,
+    },
   }
 }
 
@@ -662,9 +717,17 @@ function pushFrame(
   })
 }
 
-function storyboardFrames(root: string, c: Json): CanvasFrame[] {
+function storyboardFrames(root: string, ep: string, clipId: string, c: Json): CanvasFrame[] {
   const frames: CanvasFrame[] = []
-  pushFrame(frames, root, 'first', '首帧', s(c, 'firstframe_png'), 0.0, undefined)
+  pushFrame(
+    frames,
+    root,
+    'first',
+    '首帧',
+    s(c, 'firstframe_png') ?? canvasImageTargetRel(ep, clipId, 'first'),
+    0.0,
+    undefined,
+  )
   const continuity = get(c, 'continuity')
   const anchors = asArray(get(continuity, 'anchors'))
   if (anchors) {
@@ -675,14 +738,42 @@ function storyboardFrames(root: string, c: Json): CanvasFrame[] {
       const reason = s(raw, 'reason')
       const framePrompt =
         reason !== undefined && reason.trim() !== '' ? `reason: ${reason}` : undefined
-      pushFrame(frames, root, 'anchor', `中帧${idx + 1}`, rel, at, framePrompt)
+      const label = `中帧${idx + 1}`
+      const slot = canvasFrameTargetSlot({ role: 'anchor', label, abs: rel, exists: false, at_sec: at }, frames.length)
+      pushFrame(frames, root, 'anchor', label, rel ?? canvasImageTargetRel(ep, clipId, slot), at, framePrompt)
     })
   } else {
-    const mid = s(continuity, 'midframe') ?? s(c, 'midframe')
-    if (mid !== undefined) pushFrame(frames, root, 'anchor', '中帧', mid, undefined, undefined)
+    const midRaw = get(continuity, 'midframe') ?? get(c, 'midframe')
+    if (isObj(midRaw)) {
+      const rel = s(midRaw, 'midframe_png') ?? s(midRaw, 'anchor_png') ?? s(midRaw, 'png') ?? s(midRaw, 'path') ??
+        s(midRaw, 'image') ?? s(midRaw, 'image_path')
+      const at = nF64(midRaw, 'at_sec') ?? nF64(midRaw, 'split_at_sec')
+      const reason = s(midRaw, 'reason') ?? s(midRaw, 'use')
+      const slot = canvasFrameTargetSlot({ role: 'anchor', label: '中帧', abs: rel, exists: false, at_sec: at }, frames.length)
+      pushFrame(
+        frames,
+        root,
+        'anchor',
+        '中帧',
+        rel ?? canvasImageTargetRel(ep, clipId, slot),
+        at,
+        reason ? `reason: ${reason}` : undefined,
+      )
+    } else {
+      const mid = typeof midRaw === 'string' ? midRaw : undefined
+      if (mid !== undefined) pushFrame(frames, root, 'anchor', '中帧', mid, undefined, undefined)
+    }
   }
   const endRel = s(continuity, 'endframe_png') ?? s(c, 'endframe_png')
-  pushFrame(frames, root, 'end', '尾帧', endRel, nF64(c, 'duration'), undefined)
+  pushFrame(
+    frames,
+    root,
+    'end',
+    '尾帧',
+    endRel ?? canvasImageTargetRel(ep, clipId, 'end'),
+    nF64(c, 'duration'),
+    undefined,
+  )
 
   const seen = new Set<string>()
   return frames.filter((f) => {
@@ -738,12 +829,15 @@ function reviewFrames(root: string, c: Json): CanvasFrame[] {
 function fromStoryboard(root: string, ep: string, data: Json): CanvasClip[] {
   const clips = asArray(get(data, 'clips')) ?? []
   return clips.map((c, i) => {
+    const id = s(c, 'id') ?? `${ep}_CLIP${pad2(i + 1)}`
     const prompt = clipPrompt(c)
-    const frames = storyboardFrames(root, c)
-    const { abs: ffAbs, exists: ffExists } = relAbs(root, s(c, 'firstframe_png'))
-    const { abs: vidAbs, exists: vidExists } = relAbs(root, s(c, 'video_out'))
+    const firstRel = s(c, 'firstframe_png') ?? canvasImageTargetRel(ep, id, 'first')
+    const videoRel = s(c, 'video_out') ?? canvasVideoTargetRel(ep, id)
+    const frames = storyboardFrames(root, ep, id, c)
+    const { abs: ffAbs, exists: ffExists } = relAbs(root, firstRel)
+    const { abs: vidAbs, exists: vidExists } = relAbs(root, videoRel)
     return {
-      id: s(c, 'id') ?? `${ep}_CLIP${pad2(i + 1)}`,
+      id,
       number: iVal(c, 'number') ?? i + 1,
       label: s(c, 'label') ?? '',
       duration: nF64(c, 'duration'),
@@ -1291,6 +1385,69 @@ function fromReviewUi(root: string, data: Json): { clips: CanvasClip[]; seams: C
   return { clips, seams: reviewSeamsFromClips(clips, data) }
 }
 
+function uniqueReviewClipLookup(clips: CanvasClip[]): Map<string, number> {
+  const lookup = new Map<string, number>()
+  const duplicates = new Set<string>()
+  const add = (key: string, index: number): void => {
+    if (duplicates.has(key)) return
+    if (lookup.has(key)) {
+      lookup.delete(key)
+      duplicates.add(key)
+      return
+    }
+    lookup.set(key, index)
+  }
+  clips.forEach((clip, index) => {
+    const id = clip.id.trim()
+    if (id) add(`id:${id}`, index)
+    if (clip.number !== undefined) add(`number:${clip.number}`, index)
+  })
+  return lookup
+}
+
+/**
+ * Merge the derived review projection into canonical editable clips.
+ *
+ * The canonical array owns identity, order, and every editable field. Review
+ * data may only contribute generated media and quality. Matching is limited to
+ * unique stable id/number keys; positional matching would attach stale media to
+ * the wrong shot after a reorder.
+ */
+export function mergeCanonicalClipsWithReview(
+  canonicalClips: CanvasClip[],
+  reviewClips: CanvasClip[]
+): CanvasClip[] {
+  const lookup = uniqueReviewClipLookup(reviewClips)
+  const used = new Set<number>()
+  return canonicalClips.map((canonical) => {
+    const id = canonical.id.trim()
+    const candidates = [
+      id ? lookup.get(`id:${id}`) : undefined,
+      canonical.number !== undefined ? lookup.get(`number:${canonical.number}`) : undefined,
+    ]
+    const reviewIndex = candidates.find((index): index is number => index !== undefined && !used.has(index))
+    if (reviewIndex === undefined) return canonical
+    used.add(reviewIndex)
+    const review = reviewClips[reviewIndex]
+    const reviewHasFirstFrame = review.first_frame_abs !== undefined
+    const reviewHasVideo = review.video_abs !== undefined
+    return {
+      ...canonical,
+      first_frame_abs: reviewHasFirstFrame ? review.first_frame_abs : canonical.first_frame_abs,
+      first_frame_exists: reviewHasFirstFrame ? review.first_frame_exists : canonical.first_frame_exists,
+      video_abs: reviewHasVideo ? review.video_abs : canonical.video_abs,
+      video_exists: reviewHasVideo ? review.video_exists : canonical.video_exists,
+      video_revision: reviewHasVideo ? review.video_revision : canonical.video_revision,
+      frames: review.frames.length > 0 ? review.frames : canonical.frames,
+      qa: review.qa,
+      score: review.score,
+      qa_blocks: review.qa_blocks,
+      qa_warnings: review.qa_warnings,
+      qa_infos: review.qa_infos,
+    }
+  })
+}
+
 // ------------------------------------------------------------ quality (n2d)
 
 function scoreDimension(raw: Json): CanvasScoreDimension {
@@ -1592,73 +1749,118 @@ async function comicQualitySummary(
 
 // ------------------------------------------------------------ canvas assembly
 
-async function buildCanvas(root: string, ep: string): Promise<CanvasData> {
+async function buildCanvasProjection(root: string, ep: string): Promise<CanvasData> {
+  const generation = await generationProfile(root, ep)
   const out: CanvasData = {
     source: 'none',
+    settings_file_sha256: generation.settingsSha256,
     episode: ep,
     episodes: await listEpisodes(root),
     shared_assets: await sharedAssetFrames(root),
-    generation_profile: await generationProfile(root, ep),
+    generation_profile: generation.profile,
     clips: [],
     seams: [],
   }
 
-  // 1) review_ui_第N集.json (preferred — has QA + score)
-  const review = await readJson(path.join(root, '生产数据', `review_ui_${ep}.json`))
-  if (review !== undefined) {
-    const { clips, seams } = fromReviewUi(root, review)
-    out.source = 'review_ui'
-    out.title = s(get(review, 'storyboard'), 'title')
-    out.total_duration = nF64(get(review, 'storyboard'), 'total_duration')
-    out.quality = await qualitySummary(root, ep, review)
-    out.clips = clips
-    out.seams = seams
-    return out
-  }
+  // review_ui is derived. When an editable source exists below, merge only its
+  // media/QA projection by stable clip identity; never let it replace edited
+  // content or canonical shot order.
+  // review_ui is derived cache/evidence. A torn or unreadable copy must not
+  // suppress a healthy canonical storyboard/panel source; it is safe to omit
+  // and will be regenerated by its owning pipeline.
+  const reviewSnapshot = await readJsonFileSnapshot(
+    path.join(root, '生产数据', `review_ui_${ep}.json`),
+  ).catch(() => undefined)
+  const review = reviewSnapshot?.value
+  const reviewProjection = review !== undefined ? fromReviewUi(root, review) : undefined
 
-  // 2) storyboard.json fallback
-  const sb = await readJson(path.join(root, '脚本', ep, 'storyboard.json'))
-  if (sb !== undefined) {
-    const clips = fromStoryboard(root, ep, sb)
+  // 1) storyboard.json (canonical editable source)
+  const storyboardSnapshot = await readJsonFileSnapshot(path.join(root, '脚本', ep, 'storyboard.json'))
+  if (storyboardSnapshot !== undefined) {
+    const sb = storyboardSnapshot.value
+    const canonicalClips = fromStoryboard(root, ep, sb)
+    const clips = reviewProjection
+      ? mergeCanonicalClipsWithReview(canonicalClips, reviewProjection.clips)
+      : canonicalClips
     out.seams = seamsFromClips(clips, sb)
     out.title = s(sb, 'title')
     out.total_duration = nF64(sb, 'total_duration')
     out.source = 'storyboard'
+    out.source_file_sha256 = storyboardSnapshot.sha256
     out.clips = clips
-    out.quality = await qualitySummary(root, ep, undefined)
+    out.quality = await qualitySummary(root, ep, review)
     return out
   }
 
-  // 3) comic panel_script.json fallback (画漫画: panels + optional panel jobs/QC)
-  const panelScript = await readJson(path.join(root, '脚本', ep, 'panel_script.json'))
-  if (panelScript !== undefined) {
-    const clips = await fromComicPanelScript(root, ep, panelScript)
+  // 2) comic panel_script.json (canonical editable source)
+  const panelScriptSnapshot = await readJsonFileSnapshot(path.join(root, '脚本', ep, 'panel_script.json'))
+  if (panelScriptSnapshot !== undefined) {
+    const panelScript = panelScriptSnapshot.value
+    const canonicalClips = await fromComicPanelScript(root, ep, panelScript)
+    const clips = reviewProjection
+      ? mergeCanonicalClipsWithReview(canonicalClips, reviewProjection.clips)
+      : canonicalClips
     out.seams = sequentialSeams(clips, '下一格')
     out.title = s(panelScript, 'title')
     out.source = 'panel_script'
-    out.quality = await comicQualitySummary(root, ep, clips)
+    out.source_file_sha256 = panelScriptSnapshot.sha256
+    out.quality = (review !== undefined ? await qualitySummary(root, ep, review) : undefined)
+      ?? await comicQualitySummary(root, ep, clips)
     out.clips = clips
+    return out
+  }
+
+  // 3) No canonical source: preserve the historical full review_ui fallback.
+  if (review !== undefined && reviewProjection !== undefined) {
+    out.source = 'review_ui'
+    out.source_file_sha256 = reviewSnapshot?.sha256
+    out.title = s(get(review, 'storyboard'), 'title')
+    out.total_duration = nF64(get(review, 'storyboard'), 'total_duration')
+    out.quality = await qualitySummary(root, ep, review)
+    out.clips = reviewProjection.clips
+    out.seams = reviewProjection.seams
     return out
   }
 
   return out
 }
 
+async function buildCanvas(
+  root: string,
+  ep: string,
+  line: LineKey = 'n2d',
+  recoverIntent = true,
+): Promise<CanvasData> {
+  if (recoverIntent) await recoverCanvasGenerationIntent(root, ep)
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const out = await buildCanvasProjection(root, ep)
+    if (out.clips.length > 0 && out.source !== 'none') {
+      try {
+        out.production = await synchronizeCanvasProduction(root, line, out)
+      } catch (error) {
+        // The source changed between projection and production hashing. Rebuild
+        // both from a fresh snapshot; never pair projection A with digest B.
+        const message = String(error)
+        if (attempt < 2 && (message.includes('canvas_projection_source_snapshot_stale') ||
+            message.includes('canvas_projection_settings_snapshot_stale'))) continue
+        throw error
+      }
+    }
+    return out
+  }
+  throw new Error('权威创作源持续变化，无法取得一致画布快照')
+}
+
 // Single-flight：生成高峰期 fs watcher 每 300ms 一批事件，上一趟 buildCanvas 的目录
 // 扫描还没跑完下一趟又进来会重叠烧 I/O；同 (root, ep) 的并发读合并到同一次构建。
 const buildInflight = new Map<string, Promise<{ data: CanvasData; sig: string }>>()
 
-function buildCanvasWithSig(root: string, ep: string): Promise<{ data: CanvasData; sig: string }> {
-  const key = `${root}\0${ep}`
+function buildCanvasWithSig(root: string, ep: string, line: LineKey): Promise<{ data: CanvasData; sig: string }> {
+  const key = `${root}\0${ep}\0${line}`
   const existing = buildInflight.get(key)
   if (existing) return existing
   const task = (async () => {
-    let data: CanvasData
-    try {
-      data = await buildCanvas(root, ep)
-    } catch {
-      data = { source: 'none', episode: ep, episodes: [], shared_assets: [], clips: [], seams: [] }
-    }
+    const data = await buildCanvas(root, ep, line)
     const sig = fnv1a64(Buffer.from(JSON.stringify(data), 'utf8'))
     return { data, sig }
   })().finally(() => {
@@ -1672,10 +1874,195 @@ function buildCanvasWithSig(root: string, ep: string): Promise<{ data: CanvasDat
  *  省掉整棵 CanvasData 的 IPC 结构化克隆与 renderer 侧反序列化——fs watcher 的多数事件
  *  （终端输出/临时文件）与画布无关，这条短路是画布不卡的主保障。签名在主进程算
  *  （fnv1a64 over JSON），renderer 不再自己 stringify 大 payload。 */
-export async function readCanvas(root: string, ep: string, knownSig?: string): Promise<CanvasReadResult> {
-  const { data, sig } = await buildCanvasWithSig(root, ep)
+export async function readCanvas(root: string, ep: string, knownSig?: string, line: LineKey = 'n2d'): Promise<CanvasReadResult> {
+  const { data, sig } = await buildCanvasWithSig(root, ep, line)
   if (knownSig && knownSig === sig) return { sig, unchanged: true }
   return { sig, canvas: data }
+}
+
+export async function submitCanvasGenerationTask(
+  root: string,
+  ep: string,
+  line: LineKey,
+  clipId: string,
+  kind: CanvasGenerationKind,
+  targetSlot: string,
+  targetOutputPath: string,
+  expectedContentHash: string,
+) {
+  const data = await buildCanvasProjection(root, ep)
+  if (!data.clips.some((clip) => clip.id === clipId)) throw new Error('找不到对应画布节点')
+  return submitCanvasProductionTask(root, line, data, clipId, kind, expectedContentHash, targetSlot, targetOutputPath)
+}
+
+export async function commitCanvasGenerationTask(
+  root: string,
+  ep: string,
+  line: LineKey,
+  clipId: string,
+  config: CanvasGenerationConfig,
+  targetSlot: string,
+  targetOutputPath: string,
+  expectedContentHash: string,
+) {
+  const file = generationControlsPath(root, ep)
+  return withGenerationWriteLock(file, async () => {
+    const before = await buildCanvas(root, ep, line, false)
+    if (!before.production || before.production.content_hash !== expectedContentHash) {
+      throw new Error('画布内容或生成参数已变化，请刷新后重试')
+    }
+    const oldControls = (await readJson(file)) ?? null
+    const clean = sanitizeGenerationConfig(root, {
+      ...config,
+      target_slot: targetSlot,
+      target_output_path: targetOutputPath,
+    })
+    const configKey = `${clean.kind}:${clipId}:${clean.target_slot}`
+    for (const pendingFile of await generationIntentFiles(root, ep)) {
+      const pending = parseGenerationIntent(await readJson(pendingFile))
+      if (pending?.episode === ep && pending.phase === 'task_committed' && pending.config_key === configKey) {
+        throw new Error('同一媒体目标仍在等待 dispatch ACK，请稍后重试')
+      }
+    }
+    const oldConfigs = isObj(get(oldControls, 'configs'))
+      ? get(oldControls, 'configs') as Record<string, Json>
+      : {}
+    const intentFile = generationIntentPath(root, ep, randomUUID())
+    const intent: CanvasGenerationIntent = {
+      kind: 'anime_armory_canvas_generation_intent',
+      version: 1,
+      episode: ep,
+      line,
+      clip_id: clipId,
+      generation_kind: clean.kind,
+      target_slot: clean.target_slot,
+      target_output_path: clean.target_output_path,
+      base_content_hash: before.production.content_hash,
+      base_source_sha256: before.production.authoring.source_sha256,
+      base_settings_sha256: before.production.authoring.settings_sha256,
+      config: clean,
+      old_controls: oldControls,
+      config_key: configKey,
+      old_config_present: Object.hasOwn(oldConfigs, configKey),
+      old_config: oldConfigs[configKey],
+      created_at: new Date().toISOString(),
+      owner_pid: process.pid,
+      phase: 'prepared',
+    }
+    await atomicCanvasJson(intentFile, intent)
+    try {
+      const saved = await withCanvasProductionStateLock(root, ep, async (lockedState) => {
+        if (!lockedState || lockedState.content_hash !== before.production!.content_hash ||
+            lockedState.authoring.source_sha256 !== intent.base_source_sha256 ||
+            lockedState.authoring.settings_sha256 !== intent.base_settings_sha256) {
+          throw new Error('制作状态在生成参数提交期间已变化，请刷新后重试')
+        }
+        return writeCanvasGenerationConfig(
+          root, ep, clipId, clean, clean.target_slot, clean.target_output_path,
+        )
+      })
+      const updated = await buildCanvasProjection(root, ep)
+      if (!updated.clips.some((clip) => clip.id === clipId)) throw new Error('找不到对应画布节点')
+      const authoring = await buildCanvasAuthoringInput(root, line, updated)
+      if (!authoring || authoring.source_sha256 !== intent.base_source_sha256 ||
+          authoring.settings_sha256 !== intent.base_settings_sha256) {
+        throw new Error('权威脚本或设置在提交期间已变化，请刷新后重试')
+      }
+      const state = await synchronizeCanvasProduction(root, line, updated, 'generation_config_commit')
+      if (!state || state.authoring.source_sha256 !== intent.base_source_sha256 ||
+          state.authoring.settings_sha256 !== intent.base_settings_sha256) {
+        throw new Error('当前画布没有一致的制作状态')
+      }
+      const task = await submitCanvasProductionTask(
+        root,
+        line,
+        updated,
+        clipId,
+        clean.kind,
+        state.content_hash,
+        saved.target_slot,
+        saved.target_output_path,
+      )
+      if (task.created) {
+        await atomicCanvasJson(intentFile, {
+          ...intent,
+          phase: 'task_committed',
+          job_id: task.job_id,
+        })
+      } else {
+        // The identical active task already owns its dispatch lifecycle.
+        await fs.unlink(intentFile).catch(() => undefined)
+      }
+      return { config: saved, task }
+    } catch (error) {
+      await withCanvasProductionStateLock(root, ep, async () => restoreGenerationControls(root, ep, intent))
+      await fs.unlink(intentFile).catch(() => undefined)
+      const restored = await buildCanvasProjection(root, ep).catch(() => null)
+      if (restored) await synchronizeCanvasProduction(root, line, restored, 'generation_config_rollback').catch(() => undefined)
+      throw error
+    }
+  })
+}
+
+export async function startCanvasProduction(
+  root: string,
+  ep: string,
+  line: LineKey,
+  expectedContentHash: string,
+) {
+  const data = await buildCanvas(root, ep, line)
+  const state = data.production
+  if (!state) throw new Error('当前画布没有可执行的制作状态')
+  if (state.content_hash !== expectedContentHash) throw new Error('画布内容已变化，请刷新后重试')
+  return submitCanvasProductionTask(
+    root,
+    line,
+    data,
+    CANVAS_EPISODE_TASK_NODE_ID,
+    'production',
+    expectedContentHash,
+  )
+}
+
+export async function acceptCanvasProductionFinal(
+  root: string,
+  ep: string,
+  line: LineKey,
+  expectedContentHash: string,
+) {
+  const data = await buildCanvasProjection(root, ep)
+  return acceptCanvasFinalProduct(root, line, data, expectedContentHash)
+}
+
+export async function failCanvasProductionTask(
+  root: string,
+  ep: string,
+  jobId: string,
+  detail: string,
+) {
+  const state = await updateCanvasTaskStatus(root, {
+    episode: ep,
+    job_id: jobId,
+    status: 'failed',
+    detail: detail.trim() || 'agent dispatch failed',
+  })
+  await clearCanvasGenerationIntentForJob(root, ep, jobId)
+  return state
+}
+
+export async function markCanvasProductionTaskRunning(
+  root: string,
+  ep: string,
+  jobId: string,
+) {
+  const state = await updateCanvasTaskStatus(root, {
+    episode: ep,
+    job_id: jobId,
+    status: 'running',
+    detail: 'agent prompt written to live PTY',
+  })
+  await clearCanvasGenerationIntentForJob(root, ep, jobId)
+  return state
 }
 
 export async function readEpisodeWorkspace(
@@ -1779,6 +2166,172 @@ function generationControlsPath(root: string, ep: string): string {
   return path.join(realWorkRoot(root), '生产数据', `canvas_generation_controls_${ep}.json`)
 }
 
+function generationIntentPath(root: string, ep: string, commitId?: string): string {
+  validateEpisodeName(ep)
+  const suffix = commitId ? `_${commitId}` : ''
+  return path.join(realWorkRoot(root), '生产数据', `canvas_generation_intent_${ep}${suffix}.json`)
+}
+
+async function generationIntentFiles(root: string, ep: string): Promise<string[]> {
+  const dir = path.join(realWorkRoot(root), '生产数据')
+  const legacy = `canvas_generation_intent_${ep}.json`
+  const prefix = `canvas_generation_intent_${ep}_`
+  const commitId = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.json$/i
+  const names = await fs.readdir(dir).catch(() => [])
+  return names.filter((name) => name === legacy ||
+      (name.startsWith(prefix) && commitId.test(name.slice(prefix.length))))
+    .sort()
+    .map((name) => path.join(dir, name))
+}
+
+interface CanvasGenerationIntent {
+  kind: 'anime_armory_canvas_generation_intent'
+  version: 1
+  episode: string
+  line: LineKey
+  clip_id: string
+  generation_kind: CanvasGenerationKind
+  target_slot: string
+  target_output_path: string
+  base_content_hash: string
+  base_source_sha256: string
+  base_settings_sha256: string
+  config: CanvasGenerationConfig
+  old_controls: Json
+  config_key?: string
+  old_config_present?: boolean
+  old_config?: Json
+  created_at: string
+  owner_pid?: number
+  phase?: 'prepared' | 'task_committed'
+  job_id?: string
+}
+
+async function atomicCanvasJson(file: string, value: Json): Promise<void> {
+  await fs.mkdir(path.dirname(file), { recursive: true })
+  const temp = `${file}.${process.pid}.${randomUUID()}.tmp`
+  try {
+    await fs.writeFile(temp, `${JSON.stringify(value, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 })
+    await fs.rename(temp, file)
+  } finally {
+    await fs.unlink(temp).catch(() => undefined)
+  }
+}
+
+function parseGenerationIntent(value: Json): CanvasGenerationIntent | null {
+  if (!isObj(value) || value.kind !== 'anime_armory_canvas_generation_intent' || value.version !== 1 ||
+      typeof value.episode !== 'string' || typeof value.line !== 'string' || typeof value.clip_id !== 'string' ||
+      (value.generation_kind !== 'image' && value.generation_kind !== 'video') ||
+      typeof value.target_slot !== 'string' || typeof value.target_output_path !== 'string' ||
+      typeof value.base_content_hash !== 'string' || typeof value.base_source_sha256 !== 'string' ||
+      typeof value.base_settings_sha256 !== 'string' || !isObj(value.config)) return null
+  return value as unknown as CanvasGenerationIntent
+}
+
+async function restoreGenerationControls(root: string, ep: string, intent: CanvasGenerationIntent): Promise<void> {
+  const file = generationControlsPath(root, ep)
+  if (!intent.config_key) {
+    if (intent.old_controls == null) await fs.unlink(file).catch(() => undefined)
+    else await atomicCanvasJson(file, intent.old_controls)
+    return
+  }
+  const current = await readJson(file)
+  const configs = isObj(get(current, 'configs')) ? { ...(get(current, 'configs') as Record<string, Json>) } : {}
+  if (intent.old_config_present) configs[intent.config_key] = intent.old_config
+  else delete configs[intent.config_key]
+  await atomicCanvasJson(file, {
+    ...(isObj(current) ? current : {}),
+    kind: 'anime_armory_canvas_generation_controls',
+    version: 2,
+    episode: ep,
+    updated_at: new Date().toISOString(),
+    configs,
+  })
+}
+
+/** Crash recovery for config+state+task commit. The renderer never received a
+ * dispatch token while an intent remains, so recovery is deliberately
+ * all-or-none rollback; rolling forward would strand an undispatched active
+ * task that a later click is forbidden to dispatch twice. */
+async function recoverCanvasGenerationIntent(root: string, ep: string): Promise<void> {
+  const controlsFile = generationControlsPath(root, ep)
+  await withGenerationWriteLock(controlsFile, async () => {
+    for (const intentFile of await generationIntentFiles(root, ep)) {
+      const intent = parseGenerationIntent(await readJson(intentFile))
+      // A longer episode name can share this filename prefix (and can even
+      // look like a UUID). A valid envelope owned by another episode is never
+      // corrupt data for this recovery pass and must remain untouched.
+      if (intent !== null && intent.episode !== ep) continue
+      if (!intent) {
+        await fs.unlink(intentFile).catch(() => undefined)
+        continue
+      }
+      const ageMs = Date.now() - Date.parse(intent.created_at)
+      if (intent.phase === 'task_committed' && intent.owner_pid === process.pid &&
+          Number.isFinite(ageMs) && ageMs < 60_000) {
+        // Same live main process is between commit response and renderer ACK.
+        continue
+      }
+      const state = await readCanvasProductionState(root, ep).catch(() => null)
+      const committedTask = intent.job_id
+        ? state?.tasks.find((task) => task.job_id === intent.job_id)
+        : undefined
+      if (committedTask && (committedTask.status === 'running' ||
+          ['succeeded', 'failed', 'cancelled', 'stale'].includes(committedTask.status))) {
+        await fs.unlink(intentFile).catch(() => undefined)
+        continue
+      }
+      await withCanvasProductionStateLock(root, ep, async () => restoreGenerationControls(root, ep, intent))
+      const abandoned = state?.tasks.filter((task) => {
+        const jobMatches = intent.job_id ? task.job_id === intent.job_id : task.submitted_at >= intent.created_at
+        return jobMatches && task.status === 'submitted' && task.node_id === intent.clip_id &&
+          task.kind === intent.generation_kind && task.target_slot === intent.target_slot &&
+          task.target_output_path === intent.target_output_path
+      }) || []
+      for (const task of abandoned) {
+        await updateCanvasTaskStatus(root, {
+          episode: ep,
+          job_id: task.job_id,
+          status: 'failed',
+          detail: 'generation commit crashed before renderer dispatch acknowledgement',
+        }).catch(() => undefined)
+      }
+      const restored = await buildCanvasProjection(root, ep).catch(() => null)
+      if (restored) {
+        await synchronizeCanvasProduction(root, intent.line, restored, 'generation_intent_rollback').catch(() => undefined)
+      }
+      await fs.unlink(intentFile).catch(() => undefined)
+    }
+  })
+}
+
+async function clearCanvasGenerationIntentForJob(root: string, ep: string, jobId: string): Promise<void> {
+  const controlsFile = generationControlsPath(root, ep)
+  await withGenerationWriteLock(controlsFile, async () => {
+    for (const intentFile of await generationIntentFiles(root, ep)) {
+      const intent = parseGenerationIntent(await readJson(intentFile))
+      if (intent?.episode === ep && intent.job_id === jobId) await fs.unlink(intentFile).catch(() => undefined)
+    }
+  })
+}
+
+const generationWriteTails = new Map<string, Promise<void>>()
+
+async function withGenerationWriteLock<T>(file: string, action: () => Promise<T>): Promise<T> {
+  const previous = generationWriteTails.get(file) ?? Promise.resolve()
+  let release!: () => void
+  const gate = new Promise<void>((resolve) => { release = resolve })
+  const tail = previous.catch(() => undefined).then(() => gate)
+  generationWriteTails.set(file, tail)
+  await previous.catch(() => undefined)
+  try {
+    return await action()
+  } finally {
+    release()
+    if (generationWriteTails.get(file) === tail) generationWriteTails.delete(file)
+  }
+}
+
 function cleanGenerationString(value: Json, fallback: string, max = 120): string {
   return typeof value === 'string' && value.trim()
     ? Array.from(value.trim()).slice(0, max).join('')
@@ -1813,17 +2366,45 @@ function cleanGenerationReference(root: string, value: string): string | null {
   }
 }
 
+function cleanGenerationTargetSlot(value: Json, fallback: string): string {
+  const slot = cleanGenerationString(value, fallback, 180)
+  if (!slot || /[\\/\0-\x1f]/.test(slot)) throw new Error('非法媒体 target_slot')
+  return slot
+}
+
+function cleanGenerationOutputPath(root: string, value: Json): string {
+  const raw = typeof value === 'string' ? value.trim() : ''
+  if (!raw) return ''
+  const base = realWorkRoot(root)
+  const candidate = path.isAbsolute(raw) ? path.resolve(raw) : resolveWithin(base, raw)
+  const rel = path.relative(base, candidate)
+  if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) throw new Error('目标输出必须位于作品目录内')
+  return rel.replaceAll('\\', '/')
+}
+
 function sanitizeGenerationConfig(root: string, raw: Json): CanvasGenerationConfig {
   const kind: CanvasGenerationKind = get(raw, 'kind') === 'video' ? 'video' : 'image'
+  const targetSlot = cleanGenerationTargetSlot(get(raw, 'target_slot'), kind)
+  const targetOutputPath = cleanGenerationOutputPath(root, get(raw, 'target_output_path'))
   const rawCount = nI64(raw, 'count')
   const count: 1 | 2 | 4 = rawCount === 2 || rawCount === 4 ? rawCount : 1
   const rawDuration = nF64(raw, 'duration') ?? 10
   const referencePaths = cleanGenerationList(get(raw, 'reference_paths'), 24)
+    .filter((item) => {
+      if (!targetOutputPath) return true
+      try {
+        return cleanGenerationOutputPath(root, item) !== targetOutputPath
+      } catch {
+        return true
+      }
+    })
     .map((item) => cleanGenerationReference(root, item))
     .filter((item): item is string => item !== null)
   const promptLanguage = get(raw, 'prompt_language')
   return {
     kind,
+    target_slot: targetSlot,
+    target_output_path: targetOutputPath,
     model: cleanGenerationString(get(raw, 'model'), 'project-default'),
     mode: cleanGenerationString(get(raw, 'mode'), kind === 'video' ? 'project_route' : 'text2image'),
     aspect_ratio: cleanGenerationString(get(raw, 'aspect_ratio'), 'Auto', 20),
@@ -1844,34 +2425,49 @@ export async function readCanvasGenerationConfig(
   root: string,
   ep: string,
   clipId: string,
-  kind: CanvasGenerationKind
+  kind: CanvasGenerationKind,
+  targetSlot: string = kind,
+  targetOutputPath: string = '',
 ): Promise<CanvasGenerationConfig | null> {
   if (!clipId.trim() || clipId.length > 240) throw new Error('非法节点 ID')
   const data = await readJson(generationControlsPath(root, ep))
-  const raw = get(get(data, 'configs'), `${kind}:${clipId}`)
+  const slot = cleanGenerationTargetSlot(targetSlot, kind)
+  const configs = get(data, 'configs')
+  const raw = get(configs, `${kind}:${clipId}:${slot}`) ?? get(configs, `${kind}:${clipId}`)
   if (!isObj(raw)) return null
-  return sanitizeGenerationConfig(root, { ...raw, kind })
+  return sanitizeGenerationConfig(root, {
+    ...raw,
+    kind,
+    target_slot: slot,
+    target_output_path: targetOutputPath || get(raw, 'target_output_path'),
+  })
 }
 
-export async function writeCanvasGenerationConfig(
+async function writeCanvasGenerationConfig(
   root: string,
   ep: string,
   clipId: string,
-  config: CanvasGenerationConfig
+  config: CanvasGenerationConfig,
+  targetSlot = config.target_slot,
+  targetOutputPath = config.target_output_path,
 ): Promise<CanvasGenerationConfig> {
   if (!clipId.trim() || clipId.length > 240) throw new Error('非法节点 ID')
-  const clean = sanitizeGenerationConfig(root, config)
+  const clean = sanitizeGenerationConfig(root, {
+    ...config,
+    target_slot: targetSlot,
+    target_output_path: targetOutputPath,
+  })
   await productionDirForWrite(root)
   const file = generationControlsPath(root, ep)
   const current = await readJson(file)
   const configs = isObj(get(current, 'configs')) ? { ...(get(current, 'configs') as Record<string, Json>) } : {}
-  configs[`${clean.kind}:${clipId}`] = {
+  configs[`${clean.kind}:${clipId}:${clean.target_slot}`] = {
     ...clean,
     updated_at: new Date().toISOString(),
   }
   const payload = {
     kind: 'anime_armory_canvas_generation_controls',
-    version: 1,
+    version: 2,
     episode: ep,
     updated_at: new Date().toISOString(),
     configs,
@@ -1933,6 +2529,54 @@ function setStringArrayField(obj: Record<string, Json>, key: string, input: stri
 const IMAGE_PACK_REL = (ep: string): string[] => ['出图', ep, 'prompt', '01_分镜出图.md']
 const VIDEO_PACK_REL = (ep: string): string[] => ['出视频', ep, 'prompt', '01_clips.md']
 
+const sourceWriteTails = new Map<string, Promise<void>>()
+
+async function withSourceWriteLock<T>(file: string, action: () => Promise<T>): Promise<T> {
+  const previous = sourceWriteTails.get(file) ?? Promise.resolve()
+  let release!: () => void
+  const gate = new Promise<void>((resolve) => { release = resolve })
+  const tail = previous.catch(() => undefined).then(() => gate)
+  sourceWriteTails.set(file, tail)
+  await previous.catch(() => undefined)
+  try {
+    return await action()
+  } finally {
+    release()
+    if (sourceWriteTails.get(file) === tail) sourceWriteTails.delete(file)
+  }
+}
+
+function sha256Text(value: string): string {
+  return createHash('sha256').update(value, 'utf8').digest('hex')
+}
+
+async function atomicWriteEditedSource(
+  root: string,
+  ep: string,
+  file: string,
+  originalText: string,
+  payload: Json,
+): Promise<void> {
+  const currentText = await fs.readFile(file, 'utf8')
+  const originalHash = sha256Text(originalText)
+  if (sha256Text(currentText) !== originalHash) {
+    throw new Error('权威创作源已被其它进程更新，请刷新后再保存；当前修改未覆盖新版本')
+  }
+  const historyDir = path.join(await productionDirForWrite(root), 'canvas_history', ep)
+  await fs.mkdir(historyDir, { recursive: true })
+  const snapshot = path.join(historyDir, `${Date.now()}_${originalHash.slice(0, 16)}.json`)
+  await fs.writeFile(snapshot, originalText, { encoding: 'utf8', flag: 'wx', mode: 0o600 }).catch((error) => {
+    if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error
+  })
+  const temp = `${file}.${process.pid}.${randomUUID()}.tmp`
+  try {
+    await fs.writeFile(temp, `${JSON.stringify(payload, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 })
+    await fs.rename(temp, file)
+  } finally {
+    await fs.unlink(temp).catch(() => undefined)
+  }
+}
+
 async function readStoryboardClipEdit(
   root: string,
   file: string,
@@ -1940,7 +2584,8 @@ async function readStoryboardClipEdit(
   clipId: string,
   number: number | undefined
 ): Promise<ClipEditData> {
-  const data = JSON.parse(await fs.readFile(file, 'utf8')) as Json
+  const originalText = await fs.readFile(file, 'utf8')
+  const data = JSON.parse(originalText) as Json
   const clips = asArray(get(data, 'clips'))
   if (!clips) throw new Error('storyboard.json 缺 clips 数组')
   const idx = findClipIndex(clips, clipId, number)
@@ -2024,18 +2669,18 @@ export async function readClipEdit(
   throw new Error('找不到 storyboard.json 或 panel_script.json')
 }
 
-function normalizePatch(patch: Partial<ClipEditPatch>): ClipEditPatch {
+function normalizePatch(current: ClipEditData, patch: Partial<ClipEditPatch>): ClipEditPatch {
   return {
-    label: patch.label ?? '',
-    duration: patch.duration ?? null,
-    scene: patch.scene ?? '',
-    rhythm: patch.rhythm ?? '',
-    template: patch.template ?? '',
-    prompt: patch.prompt ?? '',
-    image_prompt: patch.image_prompt ?? '',
-    video_prompt: patch.video_prompt ?? '',
-    positive_prompt: patch.positive_prompt ?? '',
-    negative_prompt: patch.negative_prompt ?? '',
+    label: patch.label ?? current.label,
+    duration: patch.duration === undefined ? (current.duration ?? null) : patch.duration,
+    scene: patch.scene ?? current.scene,
+    rhythm: patch.rhythm ?? current.rhythm,
+    template: patch.template ?? current.template,
+    prompt: patch.prompt ?? current.prompt,
+    image_prompt: patch.image_prompt ?? current.image_prompt,
+    video_prompt: patch.video_prompt ?? current.video_prompt,
+    positive_prompt: patch.positive_prompt ?? current.positive_prompt,
+    negative_prompt: patch.negative_prompt ?? current.negative_prompt,
   }
 }
 
@@ -2047,7 +2692,8 @@ async function writeStoryboardClipEdit(
   number: number | undefined,
   patch: ClipEditPatch
 ): Promise<ClipEditData> {
-  const data = JSON.parse(await fs.readFile(file, 'utf8')) as Json
+  const originalText = await fs.readFile(file, 'utf8')
+  const data = JSON.parse(originalText) as Json
   const clips = asArray(get(data, 'clips'))
   if (!clips) throw new Error('storyboard.json 缺 clips 数组')
   const idx = findClipIndex(clips, clipId, number)
@@ -2072,7 +2718,7 @@ async function writeStoryboardClipEdit(
   setStringField(clip, 'positive_prompt', patch.positive_prompt.trim(), true)
   setStringField(clip, 'negative_prompt', patch.negative_prompt.trim(), true)
 
-  await fs.writeFile(file, `${JSON.stringify(data, null, 2)}\n`, 'utf8')
+  await atomicWriteEditedSource(root, ep, file, originalText, data)
   return readClipEdit(root, ep, clipId, number)
 }
 
@@ -2084,7 +2730,8 @@ async function writePanelClipEdit(
   number: number | undefined,
   patch: ClipEditPatch
 ): Promise<ClipEditData> {
-  const data = JSON.parse(await fs.readFile(file, 'utf8')) as Json
+  const originalText = await fs.readFile(file, 'utf8')
+  const data = JSON.parse(originalText) as Json
   const panels = asArray(get(data, 'panels'))
   if (!panels) throw new Error('panel_script.json 缺 panels 数组')
   const idx = findClipIndex(panels, clipId, number)
@@ -2103,7 +2750,7 @@ async function writePanelClipEdit(
   setDialogueField(panel, patch.positive_prompt.trim())
   setStringArrayField(panel, 'sfx', patch.negative_prompt.trim())
 
-  await fs.writeFile(file, `${JSON.stringify(data, null, 2)}\n`, 'utf8')
+  await atomicWriteEditedSource(root, ep, file, originalText, data)
   return readClipEdit(root, ep, clipId, number)
 }
 
@@ -2112,13 +2759,30 @@ export async function writeClipEdit(
   ep: string,
   clipId: string,
   num: number | null | undefined,
-  patch: Partial<ClipEditPatch>
+  patch: Partial<ClipEditPatch>,
+  line: LineKey = 'n2d',
+  expectedContentHash?: string,
 ): Promise<ClipEditData> {
   const number = num ?? undefined
-  const full = normalizePatch(patch)
   const sb = storyboardPath(root, ep)
-  if (sb !== null) return writeStoryboardClipEdit(sb, root, ep, clipId, number, full)
   const ps = panelScriptPath(root, ep)
-  if (ps !== null) return writePanelClipEdit(ps, root, ep, clipId, number, full)
-  throw new Error('找不到 storyboard.json 或 panel_script.json')
+  const source = sb ?? ps
+  if (source === null) throw new Error('找不到 storyboard.json 或 panel_script.json')
+  return withSourceWriteLock(source, async () => {
+    if (expectedContentHash) {
+      const current = await buildCanvas(root, ep, line)
+      if (current.production?.content_hash !== expectedContentHash) {
+        throw new Error('画布内容已被更新，请刷新后再保存；当前修改未覆盖新版本')
+      }
+    }
+    return withCanvasProductionStateLock(root, ep, async (state) => {
+      if (expectedContentHash && state?.content_hash !== expectedContentHash) {
+        throw new Error('制作状态已被更新，请刷新后再保存；当前修改未覆盖新版本')
+      }
+      const currentEdit = await readClipEdit(root, ep, clipId, number)
+      const full = normalizePatch(currentEdit, patch)
+      if (sb !== null) return writeStoryboardClipEdit(sb, root, ep, clipId, number, full)
+      return writePanelClipEdit(ps!, root, ep, clipId, number, full)
+    })
+  })
 }

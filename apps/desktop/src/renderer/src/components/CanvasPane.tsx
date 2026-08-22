@@ -26,11 +26,28 @@ import {
   useNodesState,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { readCanvasLayout, readClipEdit, writeCanvasLayout, writeClipEdit } from "../api";
+import {
+  acceptCanvasFinal,
+  readCanvasLayout,
+  readClipEdit,
+  startCanvasProduction,
+  writeCanvasLayout,
+  writeClipEdit,
+} from "../api";
+import { buildCanvasProductionPrompt } from "../canvasProductionPrompt";
 import { ClipNode } from "./ClipNode";
 import { Codicon } from "./Codicon";
+import { CanvasProductionBar } from "./CanvasProductionBar";
 import { useI18n } from "../i18n";
-import type { CanvasClip, CanvasFrame, ClipEditData, ClipEditPatch, LineKey } from "../types";
+import type {
+  CanvasAgentDispatchContext,
+  CanvasAgentDispatchResult,
+  CanvasClip,
+  CanvasFrame,
+  ClipEditData,
+  ClipEditPatch,
+  LineKey,
+} from "../types";
 import type { ViewProps } from "../views/registry";
 
 const nodeTypes = { clip: ClipNode };
@@ -63,8 +80,9 @@ type EditableCanvasClip = CanvasClip & {
   repoRoot?: string;
   episode?: string;
   line?: LineKey;
-  onGeneratePrompt?: (prompt: string) => void;
+  onGeneratePrompt?: (prompt: string, task?: CanvasAgentDispatchContext) => Promise<CanvasAgentDispatchResult>;
   onEdit?: () => void;
+  contentHash?: string;
 };
 interface CanvasAssetImage {
   id: string;
@@ -293,11 +311,13 @@ function editablePrompt(saved: ClipEditData): string {
 function ClipEditDialog(props: {
   rootPath: string;
   ep: string;
+  line: LineKey;
+  expectedContentHash?: string;
   clip: CanvasClip;
   onClose: () => void;
   onSaved: (data: ClipEditData) => void;
 }) {
-  const { rootPath, ep, clip, onClose, onSaved } = props;
+  const { rootPath, ep, line, expectedContentHash, clip, onClose, onSaved } = props;
   const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -354,11 +374,11 @@ function ClipEditDialog(props: {
     setSaving(true);
     setError("");
     try {
-      const saved = await writeClipEdit(rootPath, ep, clip.id, clip.number, {
+      const saved = await writeClipEdit(rootPath, ep, line, clip.id, clip.number, {
         ...draft,
         label: draft.label.trim(),
         duration: draft.duration && draft.duration > 0 ? draft.duration : null,
-      });
+      }, expectedContentHash);
       onSaved(saved);
       onClose();
     } catch (e) {
@@ -617,10 +637,19 @@ export function CanvasPane({
   line,
   repoRoot,
   onGeneratePrompt,
-}: ViewProps & { line: LineKey; repoRoot: string; onGeneratePrompt?: (prompt: string) => void }) {
+  onCanvasChanged,
+}: ViewProps & {
+  line: LineKey;
+  repoRoot: string;
+  onGeneratePrompt?: (prompt: string, task?: CanvasAgentDispatchContext) => Promise<CanvasAgentDispatchResult>;
+  onCanvasChanged?: () => void;
+}) {
   const { t } = useI18n();
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<Node>([]);
   const [editing, setEditing] = useState<CanvasClip | null>(null);
+  const [production, setProduction] = useState(canvas?.production);
+  const [productionBusy, setProductionBusy] = useState(false);
+  const [productionError, setProductionError] = useState("");
   const [miniMapOpen, setMiniMapOpen] = useState(false);
   const [layoutLoaded, setLayoutLoaded] = useState(false);
   const [layout, setLayout] = useState<Map<string, { x: number; y: number }>>(new Map());
@@ -634,6 +663,73 @@ export function CanvasPane({
   useEffect(() => {
     nodesRef.current = nodes;
   }, [nodes]);
+
+  useEffect(() => {
+    setProduction(canvas?.production);
+    setProductionError("");
+  }, [canvas?.production]);
+
+  const runProduction = useCallback(async () => {
+    if (!canvas || !production || !onGeneratePrompt || productionBusy) return;
+    setProductionBusy(true);
+    setProductionError("");
+    try {
+      const submitted = await startCanvasProduction(
+        root.path,
+        canvas.episode,
+        line,
+        production.content_hash,
+      );
+      setProduction(submitted.state);
+      // A previous renderer may have crashed after the durable submit but
+      // before writing the prompt. Re-dispatch that same submitted job; a
+      // running/succeeded task is already owned and must never be duplicated.
+      if (!submitted.created && submitted.task_status !== "submitted") {
+        onCanvasChanged?.();
+        return;
+      }
+      const dispatch = await onGeneratePrompt(buildCanvasProductionPrompt(
+        line,
+        root.path,
+        canvas.episode,
+        submitted.state,
+        submitted.job_id,
+      ), { root: root.path, episode: canvas.episode, job_id: submitted.job_id });
+      if (dispatch === "rejected") {
+        throw new Error(t("operation.agentDispatchFailed"));
+      }
+      // Operation reserves `running` before any PTY bytes. A verified receipt
+      // may win that race; in that case no prompt was written and refresh is
+      // the whole success path.
+      onCanvasChanged?.();
+    } catch (error) {
+      setProductionError(String(error));
+      onCanvasChanged?.();
+    } finally {
+      setProductionBusy(false);
+    }
+  }, [canvas, line, onCanvasChanged, onGeneratePrompt, production, productionBusy, root.path, t]);
+
+  const acceptFinal = useCallback(async () => {
+    if (!canvas || !production || productionBusy) return;
+    setProductionBusy(true);
+    setProductionError("");
+    try {
+      const accepted = await acceptCanvasFinal(
+        root.path,
+        canvas.episode,
+        line,
+        production.content_hash,
+      );
+      setProduction(accepted);
+      onCanvasChanged?.();
+    } catch (error) {
+      setProductionError(String(error));
+      onCanvasChanged?.();
+    } finally {
+      setProductionBusy(false);
+    }
+  }, [canvas, line, onCanvasChanged, production, productionBusy, root.path]);
 
   const assetImages = useMemo(
     () => (canvas ? collectSharedAssetImages(canvas.shared_assets || [], canvas.clips) : []),
@@ -703,7 +799,11 @@ export function CanvasPane({
     // displayed frames are a pure function of the clip, so hashing every frame
     // node's {clip, frame} would re-serialize each clip's full prompt text
     // once per frame for no extra information.
-    const clipSig = new Map(canvas.clips.map((clip) => [clip.id, hashString(JSON.stringify(clip))]));
+    const productionHash = canvas.production?.content_hash ?? "";
+    const clipSig = new Map(canvas.clips.map((clip) => [
+      clip.id,
+      hashString(`${productionHash}\0${JSON.stringify(clip)}`),
+    ]));
     const frameNodes = canvas.clips.flatMap((clip, clipIndex) =>
       displayFramesForClip(clip).map((frame, frameIndex) => {
         const id = FLOW_NODE.frame(clip.id, frameIndex);
@@ -726,6 +826,8 @@ export function CanvasPane({
             episode: canvas.episode,
             line,
             generationProfile: canvas.generation_profile,
+            contentHash: canvas.production?.content_hash,
+            targetFrameIndex: frameIndex,
             onGeneratePrompt,
             onEdit: () => setEditing(clip),
           } as unknown as Record<string, unknown>,
@@ -749,6 +851,7 @@ export function CanvasPane({
               episode: canvas.episode,
               line,
               generationProfile: canvas.generation_profile,
+              contentHash: canvas.production?.content_hash,
               onGeneratePrompt,
               onEdit: () => setEditing(clip),
             } as unknown as Record<string, unknown>,
@@ -931,6 +1034,21 @@ export function CanvasPane({
         proOptions={{ hideAttribution: true }}
       >
         <Background variant={BackgroundVariant.Dots} gap={32} size={1.25} color="rgba(112, 112, 112, .52)" />
+        {production && (
+          <Panel position="top-center" className="canvas-production-panel">
+            <CanvasProductionBar
+              state={production}
+              busy={productionBusy}
+              onRun={runProduction}
+              onAccept={acceptFinal}
+            />
+            {productionError && (
+              <div className="canvas-production-error" role="alert">
+                {t("canvas.production.failed", { error: productionError })}
+              </div>
+            )}
+          </Panel>
+        )}
         {miniMapOpen && (
           <MiniMapViewportHostContext.Provider value={nodes.at(-1)?.id ?? null}>
             <MiniMap
@@ -962,6 +1080,8 @@ export function CanvasPane({
         <ClipEditDialog
           rootPath={root.path}
           ep={canvas.episode}
+          line={line}
+          expectedContentHash={canvas.production?.content_hash}
           clip={editing}
           onClose={() => setEditing(null)}
           onSaved={onSavedClip}

@@ -23,7 +23,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **正向审美样本库** | `novel-aesthetic` + `设定/aesthetic_bank.json` | Demo 高光、授权/公版样本、项目审美标尺；写章包、line edit 和 score 可引用“为什么有效/可迁移规则” |
 | **专业资料包注入** | `novel-research` + `资料/research_sources.json` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景；`draft_packets.py` 自动把适用章节的 `资料/专业资料包_<主题>.md` 加进必读源文件 |
 | **合规 profile / 平台辖区清单** | `scripts/compliance_profile.py` | KDP/中国公开发布/欧盟/出海/微短剧等目标命中时，生成 `合规/compliance_profile.json` 并在 QA gate 中提示/阻断 |
-| **Workflow registry / runner** | `../novel/_lib/novel_pipeline.py` + `../novel/scripts/pipeline_runner.py` | 长流程恢复、薄 agent 编排、dry-run 下一阶段、创建 `pipeline_runs/<run_id>.json`、阶段 claim/complete/fail/block/skip、生成 handoff contract；blueprint/setting 另用 `--approve-stage` 记录与阶段输入、产物 hash 同时绑定的人工批准，输入不全或任一侧变更都不能越过 human gate；runner 不直接写正文或调用模型 |
+| **Workflow registry / runner** | `../novel/_lib/novel_pipeline.py` + `../novel/scripts/pipeline_runner.py` | 长流程恢复、薄 agent 编排、dry-run 下一阶段、创建 `pipeline_runs/<run_id>.json`、阶段 claim/complete/fail/block/skip、生成 handoff contract；blueprint/setting 用 `--approve-stage` 记录与阶段输入、产物 hash 同时绑定的复核批准，默认 `--delegated` 明示代理审阅，显式逐阶段人审时不加；输入不全或任一侧变化都不能越过 gate |
 | **生产控制台** | `novel-dashboard` + `../novel-dashboard/scripts/dashboard.py` | 汇总 pipeline、stale artifacts、语义任务、review/score blockers、revision、batch、release readiness、review board、prompt cache metrics，写 `生产数据/novel_dashboard.*` |
 | **批量任务队列** | `novel-batch` + `../novel-batch/scripts/queue.py` | 多章节审稿/评分/dashboard 刷新等任务的本地 flock 队列；支持 claim/lease/renew/reclaim/dead-letter，不直接执行模型 |
 | **统一修订计划** | `scripts/revision_planner.py` | review/score/balance/feedback/simulate 都跑过后，合并成 `修订/revision_plan.json` + `修订/修订计划.md` |
@@ -77,7 +77,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/exploration.py` | 只在作品 `探索/` 内冻结 human-first seed、登记不可变探索稿、检查 hash，并记录 `promote_candidate/hold/reject` 决策；晋升只产非正史候选，不复制到 `章节/` 或改状态账本 | 蓝图锁定前的角色/场景/POV/声音/结构实验；已有项目也可独立使用 |
 | `scripts/waivers.py` | 统一生成 / 读取 `审稿/waiver_log.jsonl`，所有 gate 绕过都要留同构痕迹 | export / draft_packets / score / report_gate |
 | `scripts/report_snapshot.py` | 给 review/score 报告记录正文文件 hash 与 aggregate hash；QA gate 用它判断报告是否仍绑定当前正文 | novel-review / novel-score / qa_gate |
-| `../novel/scripts/pipeline_runner.py` | 读取 `novel_pipeline.py` registry，生成 `生产数据/novel_pipeline_plan.{json,md}`，声明每阶段 owner/input/output/gate/cost/semantic/parallel/agent_role；可创建 `pipeline_runs/<run_id>.json` 并对阶段 claim/complete/fail/block/skip；`--artifact-graph` 查产物依赖和 stale，`--handoff <stage>` 生成 specialist agent 边界契约，`--approve-stage blueprint|setting --agent ... --reason ...` 记录 hash-bound 人工批准 | 长流程 dry-run、恢复、agent 编排前置 |
+| `../novel/scripts/pipeline_runner.py` | 读取 `novel_pipeline.py` registry，生成 `生产数据/novel_pipeline_plan.{json,md}`，声明每阶段 owner/input/output/gate/cost/semantic/parallel/agent_role；可创建 `pipeline_runs/<run_id>.json` 并对阶段 claim/complete/fail/block/skip；`--artifact-graph` 查产物依赖和 stale，`--handoff <stage>` 生成 specialist agent 边界契约，`--approve-stage blueprint|setting --delegated --agent delegate:... --reason ...` 记录非人审的 hash-bound 代理批准；不加 `--delegated` 才是具名人工批准 | 长流程 dry-run、恢复、agent 编排前置 |
 | `scripts/qa_gate.py`（薄转发，真值源在 `novel/_lib/qa_gate.py`）/ `scripts/report_gate.py` | 读取 rights / research / review / score / **arc 弧段** / state closure / AI usage / compliance profile / simulate signal-only；缺 review、报告 schema 不合规、报告 hash 过期、阻断 finding、阻断 score verdict、baseline freshness、required 专业资料包缺失、**已跑的 arc_gate 仍含阻断**、写后状态未合并、商业/平台导出缺 AI 披露或平台/辖区合规缺口都会进入 gate；长篇从未跑 arc_gate 会 warning；`drafting` 不因缺 score 阻断，`--waive-missing-score` 只豁免带作用域的缺评分 | progress / export / novel 续跑 |
 | `scripts/export.py` | 章节/第NN章.md 合并 → txt / docx / 大纲；默认执行 export QA gate，缺 review 或阻断未清不能导出；`--ignore-qa-gate` 会写带章节 hash / blocker ids / formats 的 waiver log；`--combine` 走续写合本 | create / spinoff / rewrite / expand / condense / continue **共用同一份** |
 | `scripts/progress.py` | 扫描 `<作品根>/_进度.md`，输出第一条未完成项 + stage owner/gate/on_fail + QA 阻断；`set <stage> done|todo` 通过 `_进度.lock` 加锁原子更新机器阶段 | 所有会写 `_进度.md` 的 novel-* 项目 |
@@ -164,7 +164,7 @@ python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan
 python3 skills/novel/scripts/pipeline_runner.py --registry-only
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --artifact-graph --json
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --handoff blueprint
-python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage blueprint --agent "<复核人>" --reason "<批准说明>"
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --approve-stage blueprint --delegated --agent "delegate:novel-specialist-reviewer" --reason "<代理复核结论>"
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --start-run --agent orchestrator
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --run-id run_YYYYMMDD_HHMMSS --claim-stage blueprint --agent writer-agent
 python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --run-id run_YYYYMMDD_HHMMSS --complete-stage blueprint

@@ -18,6 +18,12 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 建角色/场�
 
 按 `../skills/ad/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生图模型`、`生图渠道`、`一致性增强`、`基础视觉风格`、`交付比例`、`生成粒度`、`重抽预算策略`。出图是**花钱/高风险**阶段，正式跑前确认具体模型+渠道；旧 `生图AI` 必须迁移。brief 的 claim 分型依据/rights/legal_lines 及分镜 claim 披露此时必须闭合。
 
+## 阶段预算信封（真实提交闸）
+
+`scripts/render_dreamina.py` 在每个 provider submit 前实际调用本线 `_lib/spend_envelope.py consume`，不再把阶段预算包只停在常量/文档。v2 envelope 精确绑定 project/stage= image、全 manifest job scope、具体 model/channel、prompt+参考图+保守成本字段的输入 SHA、expiry、max_calls、唯一 phase retry rounds 与 credit ceiling；真实 human `approver + approval_reference + source_quote` 全部进摘要。默认文件是 `<作品根>/生产数据/spend_envelopes/image.json`。
+
+每个 job 必须在提交前给出有限非负 `estimated_credit_count`、`estimated_credit_count_is_upper_bound=true` 与可审计 `estimated_credit_count_source`；缺任一项时不消费、不调用 provider。reservation 先原子落盘，provider 返回 actual `credit_count` 后原子 settle；actual 超 ceiling 仍如实记账并阻断后续。`attempt_id` 表示本 phase 的 retry round，同轮多个 job 可共享；`consumption_id` 每 job/round 唯一。consume 后无 submit receipt 的崩溃窗口保持 `in_flight`：同 ID 与后续调用都禁止重放。已有 submit_id 的免费 query/download 路径若拿到 actual 会补 settle；actual 仍未知时不声称完整结算/交付，reservation 继续锁住后续付费。
+
 ## 产品落档机检 product_qc（**gate spend 的硬闸**）
 
 出完一批图、还没继续出视频时跑 `scripts/product_qc.py`——把产品/logo/品牌色漂移（广告线的"脸漂"）在最便宜的点机检拦下，避免漂着出视频再返工烧钱：

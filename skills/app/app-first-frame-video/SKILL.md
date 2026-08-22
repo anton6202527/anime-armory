@@ -29,7 +29,7 @@ description: 独立的画布首帧图生视频工作台，从上传、画布选�
 1. 选择具体视频模型、渠道、比例、分辨率、时长和数量。
 2. `prepare` 生成绑定首帧 SHA 的 job；真实付费提交前确认。
 3. 输出视频后记录文件与 SHA，并核对开头与首帧连续、身份稳定、动作合理、无突变。
-4. 只有真实输出且 `review=accepted` 才完成。
+4. 机器输出只到 `machine_complete`；读取当前视频文件并核 SHA 后，具名真人以带时区、精确绑定当前字节的显式回执接受，才完成。
 
 ## AI 代理交互节点
 
@@ -48,6 +48,13 @@ python3 skills/app/app-first-frame-video/scripts/first_frame_video.py prepare \
 
 python3 skills/app/app-first-frame-video/scripts/first_frame_video.py validate \
   shot.first-frame-video.json
+
+python3 skills/app/app-first-frame-video/scripts/first_frame_video.py accept-output \
+  shot.first-frame-video.json --reviewer "具名审核人" \
+  --statement "我已查看当前视频并接受这些确切字节" \
+  --confirm-current-artifact --write
 ```
+
+`accept-output` 必须由真人触发；runner/agent 不得代填 reviewer 或 confirmation。
 
 字段与完成条件见 [first-frame-video-schema.md](references/first-frame-video-schema.md)。

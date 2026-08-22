@@ -171,35 +171,67 @@ def dispatch_for(next_action: Dict[str, Any]) -> Dict[str, Any]:
     stage_key = str(frontier.get("stage_key") or "")
     stop_reason = str(next_action.get("stop_reason") or "")
     action = next_action.get("action_contract") or stage_action_spec(stage_key)
-    specialist = (next_action.get("action_card") or {}).get("specialist") or specialist_for_stage(stage_key)
+    card = next_action.get("action_card") or {}
+    specialist = card.get("specialist") or specialist_for_stage(stage_key)
     human_gate = classify_human_gate(stop_reason)
     should_call = stop_reason in {"needs_agent_gen", "needs_stage_execution"} or (
         stop_reason == "needs_payment_confirm" and stage_key in {"compose", "review"}
     )
     if human_gate["required"] and stop_reason != "needs_agent_gen":
         should_call = False
+    phase_envelope = card.get("phase_spend_envelope") if isinstance(
+        card.get("phase_spend_envelope"), dict
+    ) else {}
+    execution_effect = card.get("execution_effect") if isinstance(
+        card.get("execution_effect"), dict
+    ) else {}
+    authorized_batch = (
+        stop_reason == "needs_stage_execution"
+        and phase_envelope.get("status") == "authorized"
+        and phase_envelope.get("read_only") is True
+        and phase_envelope.get("consumed") is False
+    )
+    safe_local_execution = (
+        stop_reason == "needs_stage_execution"
+        and execution_effect.get("safe_local_execution") is True
+        and execution_effect.get("paid") is False
+    )
+    allowed_operations = [
+        "run deterministic prework already declared by run.py",
+        "read context_pack before opening full references",
+        "call the selected specialist for draft/evaluation when should_call_specialist=true",
+        "write supervisor plan under 生产数据/supervisor",
+    ]
+    forbidden_operations = [
+        "execute paid generation",
+        "override compliance or gate blocks",
+        "change backend without adapter evidence",
+        "write _进度.md directly",
+        "replace stage skill contracts",
+    ]
+    if authorized_batch:
+        allowed_operations.append(
+            "dispatch the exact action_card batch runner command; that runner alone consumes the v2 envelope"
+        )
+        forbidden_operations[0] = (
+            "execute paid generation outside the exact n2d-batch runner authorization-consumption path"
+        )
+    elif safe_local_execution:
+        allowed_operations.append("execute the declared local no-cost stage effect and re-run its gates")
+        forbidden_operations[0] = "execute any paid provider call from this local-only stage execution"
     return {
         "stage_key": stage_key,
         "stop_reason": stop_reason,
         "specialist": specialist,
         "should_call_specialist": should_call,
         "human_gate": human_gate,
-        "context_pack": (next_action.get("action_card") or {}).get("context_pack"),
-        "creative_loop": (next_action.get("action_card") or {}).get("creative_loop"),
+        "context_pack": card.get("context_pack"),
+        "creative_loop": card.get("creative_loop"),
         "action_contract": action,
-        "allowed_operations": [
-            "run deterministic prework already declared by run.py",
-            "read context_pack before opening full references",
-            "call the selected specialist for draft/evaluation when should_call_specialist=true",
-            "write supervisor plan under 生产数据/supervisor",
-        ],
-        "forbidden_operations": [
-            "execute paid generation",
-            "override compliance or gate blocks",
-            "change backend without adapter evidence",
-            "write _进度.md directly",
-            "replace stage skill contracts",
-        ],
+        "authorized_batch_execution": authorized_batch,
+        "safe_local_execution": safe_local_execution,
+        "allowed_operations": allowed_operations,
+        "forbidden_operations": forbidden_operations,
     }
 
 

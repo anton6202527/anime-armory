@@ -351,9 +351,11 @@ class ContractDeliverableTest(unittest.TestCase):
         rows = contract.default_deliverables("30s", "16:9", "主片+15s")
         self.assertFalse(any(r["kind"] == "reframe" for r in rows))
 
-    def test_reconfirm_includes_costly_points(self):
+    def test_costly_points_are_bound_to_one_spend_envelope(self):
         for cp in ("生图模型", "生图渠道", "生视频模型", "生视频渠道", "出视频规格"):
-            self.assertIn(cp, contract.RECONFIRM_CHOICE_POINTS)
+            self.assertIn(cp, contract.SPEND_ENVELOPE_CHOICE_POINTS)
+            self.assertNotIn(cp, contract.RECONFIRM_CHOICE_POINTS)
+        self.assertEqual(set(contract.RECONFIRM_CHOICE_POINTS), {"广告法地区", "音乐来源"})
 
     def test_channel_menu_has_no_alias_dupes(self):
         menu = contract.VIDEO_CHANNELS_MENU

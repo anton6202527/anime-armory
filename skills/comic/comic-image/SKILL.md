@@ -81,6 +81,8 @@ python3 skills/comic/comic-identity/scripts/identity.py "创作区/画漫画/作
 
 若报告显示 `missing_refs`，先补定妆或用已采纳面板种临时锚点，再出图。
 
+正式 runner 还必须消费 comic 本线阶段预算 envelope；`image_preflight.execution_authorized` 只证明质量闸允许执行，不是费用授权。真实人类在当前 `panel_jobs.json` 生成后用 `python3 skills/comic/_lib/spend_envelope.py issue ...` 签发，完整参数与账本语义见 `comic-batch` 的「费用与覆盖」。runner 不签发、不补造 approver/原话；默认读取 `生产数据/spend_envelopes/image_第N话.json`，也可用 `--spend-envelope` 指定。缺失、过期、输入/模型/渠道/scope 改变、额度耗尽或未知成本均在 provider submit 前结构化阻断。Codex 每次 `codex exec ... image_generation` 和 Dreamina 每次 `image2image` 各消费一次；Dreamina 后续 `query_result` 与下载不消费。供应商没有精确成本回执时按批准的单次上限保守入账。
+
 若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出。`--skip-gate` 只可复用 `生产数据/gate_receipts/image_preflight_第N话.json` 中同时绑定当前完整 preflight 输入指纹、当前 `panel_jobs` SHA、真实 gate report SHA 且 `execution_authorized=true` 的 pass/明确授权 warn receipt；不存在 waiver 路径，任何陈旧、block 或缺证据 receipt 都不能启动正式生成：
 
 ```bash
