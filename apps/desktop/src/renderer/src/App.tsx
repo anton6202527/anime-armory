@@ -18,6 +18,16 @@ import {
 import { plainLineLabel, useI18n, useLineLabel, type Language } from "./i18n";
 import { installSkinPlugin } from "./skins";
 import type { LineInfo, WorkRoot } from "./types";
+import {
+  MAX_RETAINED_WORK_SESSIONS,
+  removeWorkSession,
+  touchWorkSession,
+} from "./workSessionLru";
+import {
+  consumeInitialPromptFromWork,
+  createInitialPromptRequest,
+  type InitialPromptRequest,
+} from "./initialPromptDelivery";
 
 // The non-tab "home" area: the line picker, or one line's works list.
 type HomeRoute = { kind: "home" } | { kind: "line"; line: LineInfo };
@@ -154,7 +164,7 @@ type OpenWork = {
   id: string;
   line: LineInfo;
   root: WorkRoot;
-  initialPrompt?: string;
+  initialPrompt?: InitialPromptRequest;
 };
 
 export function App() {
@@ -168,9 +178,12 @@ export function App() {
   const [workspaceRoot, setWorkspaceRoot] = useState<string>("");
   // non-tab navigation (line picker ↔ a line's works list)
   const [homeRoute, setHomeRoute] = useState<HomeRoute>({ kind: "home" });
-  // One active work at a time. Previously opened works live in the native
-  // File > Recent Projects menu instead of remaining mounted as top tabs.
+  // Only one work is visible, while up to three workbenches remain mounted so
+  // their PTY-owned production tasks survive navigation. The retained array is
+  // ordered LRU → MRU and is intentionally renderer-session-local.
   const [activeWork, setActiveWork] = useState<OpenWork | null>(null);
+  const [retainedWorks, setRetainedWorks] = useState<OpenWork[]>([]);
+  const [backgroundNotice, setBackgroundNotice] = useState<string>("");
   const [recentWorks, setRecentWorks] = useState<RecentWork[]>(readRecentWorks);
   const activeId = activeWork?.id ?? null;
   const [skillsLine, setSkillsLine] = useState<LineInfo | null>(null);
@@ -179,12 +192,20 @@ export function App() {
   });
   const [newTerminalRequest, setNewTerminalRequest] = useState({ seq: 0, targetId: null as string | null });
   const activeIdRef = useRef<string | null>(null);
+  const retainedWorksRef = useRef(retainedWorks);
   const recentWorksRef = useRef(recentWorks);
+  const backgroundNoticeTimerRef = useRef<number | null>(null);
   activeIdRef.current = activeId;
+  retainedWorksRef.current = retainedWorks;
   recentWorksRef.current = recentWorks;
 
   useEffect(() => {
     installSkinPlugin();
+    return () => {
+      if (backgroundNoticeTimerRef.current != null) {
+        window.clearTimeout(backgroundNoticeTimerRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -279,6 +300,8 @@ export function App() {
       setWorkspaceRoot(picked);
       setHomeRoute({ kind: "home" });
       setActiveWork(null);
+      retainedWorksRef.current = [];
+      setRetainedWorks([]);
     }
   }, [repoRoot, t]);
 
@@ -288,12 +311,49 @@ export function App() {
     });
   }, [pickWorkspace]);
 
-  // Opening another work replaces the current work. The previous one remains
-  // available from the native recent-projects menu.
-  function openWork(line: LineInfo, root: WorkRoot, initialPrompt?: string) {
-    setActiveWork({ id: root.path, line, root, initialPrompt });
+  function showBackgroundEviction(work: OpenWork) {
+    if (backgroundNoticeTimerRef.current != null) {
+      window.clearTimeout(backgroundNoticeTimerRef.current);
+    }
+    setBackgroundNotice(t("app.backgroundTaskEvicted", {
+      name: work.root.name,
+      max: MAX_RETAINED_WORK_SESSIONS,
+    }));
+    backgroundNoticeTimerRef.current = window.setTimeout(() => {
+      setBackgroundNotice("");
+      backgroundNoticeTimerRef.current = null;
+    }, 4200);
+  }
+
+  function commitRetainedWorks(next: OpenWork[]) {
+    retainedWorksRef.current = next;
+    setRetainedWorks(next);
+  }
+
+  // Opening another work hides the current workbench without unmounting it.
+  // The fourth distinct work evicts the least recently visited retained one.
+  function openWork(line: LineInfo, root: WorkRoot, initialPrompt?: InitialPromptRequest) {
+    const retained = retainedWorksRef.current.find((work) => work.id === root.path);
+    const next = {
+      id: root.path,
+      line,
+      root,
+      initialPrompt: initialPrompt ?? retained?.initialPrompt,
+    };
+    const touched = touchWorkSession(retainedWorksRef.current, next);
+    commitRetainedWorks(touched.sessions);
+    if (touched.evicted[0]) showBackgroundEviction(touched.evicted[0]);
+    setActiveWork(next);
     rememberWork(line, root);
   }
+
+  const consumeInitialPrompt = useCallback((requestId: string) => {
+    const consume = (work: OpenWork): OpenWork => consumeInitialPromptFromWork(work, requestId);
+    const next = retainedWorksRef.current.map(consume);
+    retainedWorksRef.current = next;
+    setRetainedWorks(next);
+    setActiveWork((current) => current ? consume(current) : current);
+  }, []);
 
   async function startFromHub(line: LineInfo, prompt: string, attachments: string[]) {
     const cleanPrompt = prompt.trim();
@@ -332,17 +392,20 @@ export function App() {
     ].join("\n");
     window.localStorage.setItem("aa.terminalVisible", "true");
     setTerminalVisible(true);
-    openWork(line, root, routedPrompt);
+    openWork(line, root, createInitialPromptRequest(routedPrompt));
   }
 
   function closeWork(id: string) {
     setActiveWork((current) => (current?.id === id ? null : current));
+    commitRetainedWorks(removeWorkSession(retainedWorksRef.current, id));
   }
 
   function replaceWorkRoot(oldId: string, line: LineInfo, root: WorkRoot) {
-    setActiveWork((current) =>
-      current?.id === oldId ? { id: root.path, line, root } : current,
-    );
+    const previous = retainedWorksRef.current.find((work) => work.id === oldId);
+    const next = { id: root.path, line, root, initialPrompt: previous?.initialPrompt };
+    const withoutOld = removeWorkSession(retainedWorksRef.current, oldId);
+    commitRetainedWorks(touchWorkSession(withoutOld, next).sessions);
+    setActiveWork((current) => current?.id === oldId ? next : current);
     setRecentWorks((prev) => [
       makeRecentWork(line, root),
       ...prev.filter((work) => work.root.path !== oldId && work.root.path !== root.path),
@@ -353,6 +416,9 @@ export function App() {
     return <div className="home"><h1>{t("app.name")}</h1><div className="empty">{t("app.initWorkspace")}</div></div>;
   }
 
+  const backgroundTaskCount = activeId === null
+    ? retainedWorks.length
+    : retainedWorks.filter((work) => work.id !== activeId).length;
 
   return (
     <div className="app-shell">
@@ -372,6 +438,14 @@ export function App() {
               <span className="crumb-sep">/</span>
               <span className="crumb current"><b>{plainLineLabel(lineLabel(homeRoute.line))}</b></span>
             </>
+          )}
+          {backgroundTaskCount > 0 && (
+            <span className="background-task-count" title={t("app.backgroundTasksTitle")}>
+              {t("app.backgroundTasks", {
+                count: backgroundTaskCount,
+                max: MAX_RETAINED_WORK_SESSIONS,
+              })}
+            </span>
           )}
         </div>
       )}
@@ -401,42 +475,57 @@ export function App() {
           )}
         </div>
 
-        {activeWork && (
-          <div className="layer" key={activeWork.id}>
-            <Operation
-              repoRoot={repoRoot}
-              line={activeWork.line}
-              root={activeWork.root}
-              active
-              terminalVisible={terminalVisible}
-              newTerminalRequestSeq={newTerminalRequest.seq}
-              newTerminalRequestTargetId={newTerminalRequest.targetId}
-              initialPrompt={activeWork.initialPrompt}
-              onRootChanged={(root) => replaceWorkRoot(activeWork.id, activeWork.line, root)}
-              onCloseTerminal={() => {
-                window.localStorage.setItem("aa.terminalVisible", "false");
-                setTerminalVisible(false);
-              }}
-              onToggleTerminal={() => {
-                setTerminalVisible((visible) => {
-                  const next = !visible;
-                  window.localStorage.setItem("aa.terminalVisible", String(next));
-                  return next;
-                });
-              }}
-              onShowSkills={(line) => setSkillsLine(line)}
-              onHome={() => {
-                setActiveWork(null);
-                setHomeRoute({ kind: "home" });
-              }}
-              onBack={() => {
-                setActiveWork(null);
-                setHomeRoute({ kind: "line", line: activeWork.line });
-              }}
-            />
-          </div>
-        )}
+        {retainedWorks.map((work) => {
+          const isActive = activeId === work.id;
+          return (
+            <div
+              className="layer work-session-layer"
+              key={work.id}
+              style={{ display: isActive ? "block" : "none" }}
+              aria-hidden={!isActive}
+            >
+              <Operation
+                repoRoot={repoRoot}
+                line={work.line}
+                root={work.root}
+                active={isActive}
+                terminalVisible={terminalVisible}
+                newTerminalRequestSeq={newTerminalRequest.seq}
+                newTerminalRequestTargetId={newTerminalRequest.targetId}
+                initialPrompt={work.initialPrompt}
+                onInitialPromptConsumed={consumeInitialPrompt}
+                onRootChanged={(root) => replaceWorkRoot(work.id, work.line, root)}
+                onCloseTerminal={() => {
+                  window.localStorage.setItem("aa.terminalVisible", "false");
+                  setTerminalVisible(false);
+                }}
+                onToggleTerminal={() => {
+                  setTerminalVisible((visible) => {
+                    const next = !visible;
+                    window.localStorage.setItem("aa.terminalVisible", String(next));
+                    return next;
+                  });
+                }}
+                onShowSkills={(line) => setSkillsLine(line)}
+                onHome={() => {
+                  setActiveWork(null);
+                  setHomeRoute({ kind: "home" });
+                }}
+                onBack={() => {
+                  setActiveWork(null);
+                  setHomeRoute({ kind: "line", line: work.line });
+                }}
+              />
+            </div>
+          );
+        })}
       </div>
+
+      {backgroundNotice && (
+        <div className="background-task-notice" role="status" aria-live="polite">
+          {backgroundNotice}
+        </div>
+      )}
 
       {skillsLine && (
         <Suspense fallback={null}>

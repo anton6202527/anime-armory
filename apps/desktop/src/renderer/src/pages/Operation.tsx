@@ -55,6 +55,10 @@ import {
   type CanvasPromptWriteAttempt,
 } from "../terminalJobLifecycle";
 import {
+  deliverInitialPrompt,
+  type InitialPromptRequest,
+} from "../initialPromptDelivery";
+import {
   COLLAPSE_LEFT_SIDEBAR_EVENT,
   FILES_SIDE_COLLAPSE_WIDTH,
   FILES_SIDE_WIDTH_CHANGED_EVENT,
@@ -106,6 +110,8 @@ type PendingCanvasAgentJob = CanvasAgentDispatchContext & {
 };
 type CanvasJobSettlementReason = TerminalSessionEndReason | "turn_deadline";
 const CANVAS_JOB_WATCHDOG_POLL_MS = 30_000;
+const INITIAL_PROMPT_MAX_LAUNCH_ATTEMPTS = 3;
+const INITIAL_PROMPT_RETRY_DELAY_MS = 900;
 
 function isMacPlatform(): boolean {
   return /Mac|iPhone|iPad|iPod/.test(window.navigator.platform);
@@ -119,7 +125,8 @@ export function Operation(props: {
   terminalVisible: boolean;
   newTerminalRequestSeq: number;
   newTerminalRequestTargetId: string | null;
-  initialPrompt?: string;
+  initialPrompt?: InitialPromptRequest;
+  onInitialPromptConsumed: (requestId: string) => void;
   onRootChanged: (root: WorkRoot) => void;
   onCloseTerminal: () => void;
   onToggleTerminal: () => void;
@@ -136,6 +143,7 @@ export function Operation(props: {
     newTerminalRequestSeq,
     newTerminalRequestTargetId,
     initialPrompt,
+    onInitialPromptConsumed,
     onRootChanged,
     onCloseTerminal,
     onToggleTerminal,
@@ -179,6 +187,10 @@ export function Operation(props: {
   const toastTimer = useRef<number | null>(null);
   const autoEnteredAgentRootRef = useRef<string | null>(null);
   const initialPromptSentRef = useRef<string | null>(null);
+  const initialPromptInFlightRef = useRef<string | null>(null);
+  const initialPromptAttemptsRef = useRef<{ requestId: string; count: number } | null>(null);
+  const initialPromptRetryTimerRef = useRef<number | null>(null);
+  const [initialPromptRetryEpoch, setInitialPromptRetryEpoch] = useState(0);
   const pendingCanvasJobsRef = useRef(new Map<string, PendingCanvasAgentJob>());
   const settlingCanvasJobsRef = useRef(new Set<string>());
   const canvasJobWatchdogTimersRef = useRef(new Map<string, number>());
@@ -552,6 +564,9 @@ export function Operation(props: {
   useEffect(() => {
     return () => {
       if (toastTimer.current) window.clearTimeout(toastTimer.current);
+      if (initialPromptRetryTimerRef.current != null) {
+        window.clearTimeout(initialPromptRetryTimerRef.current);
+      }
     };
   }, []);
 
@@ -560,8 +575,17 @@ export function Operation(props: {
     activeAgentRef.current = null;
     setTerminalMode("native");
     autoEnteredAgentRootRef.current = null;
-    initialPromptSentRef.current = null;
   }, [root.path]);
+
+  useEffect(() => {
+    initialPromptSentRef.current = null;
+    initialPromptInFlightRef.current = null;
+    initialPromptAttemptsRef.current = null;
+    if (initialPromptRetryTimerRef.current != null) {
+      window.clearTimeout(initialPromptRetryTimerRef.current);
+      initialPromptRetryTimerRef.current = null;
+    }
+  }, [initialPrompt?.id]);
 
   useEffect(() => {
     setSecondaryReady(false);
@@ -679,6 +703,64 @@ export function Operation(props: {
 
   useEffect(() => {
     if (!active || !secondaryReady || !termReady || agents === null) return;
+    const launchRequest = initialPrompt;
+    if (launchRequest) {
+      const requestId = launchRequest.id;
+      if (
+        initialPromptSentRef.current === requestId ||
+        initialPromptInFlightRef.current === requestId
+      ) {
+        return;
+      }
+      const attempts = initialPromptAttemptsRef.current?.requestId === requestId
+        ? initialPromptAttemptsRef.current.count
+        : 0;
+      if (attempts >= INITIAL_PROMPT_MAX_LAUNCH_ATTEMPTS) return;
+      const def = pickDefaultAgent(agents);
+      const handle = termRef.current;
+      if (!def || !handle) return;
+
+      initialPromptInFlightRef.current = requestId;
+      initialPromptAttemptsRef.current = { requestId, count: attempts + 1 };
+      autoEnteredAgentRootRef.current = root.path;
+      activeAgentRef.current = def;
+      setTerminalMode("agent");
+
+      void deliverInitialPrompt(
+        launchRequest,
+        (prompt) => handle.switchCommand(def.command, def.id, prompt),
+      ).then((result) => {
+        if (!operationMountedRef.current || initialPromptInFlightRef.current !== requestId) return;
+        initialPromptInFlightRef.current = null;
+        if (result === "delivered") {
+          initialPromptSentRef.current = requestId;
+          if (initialPromptRetryTimerRef.current != null) {
+            window.clearTimeout(initialPromptRetryTimerRef.current);
+            initialPromptRetryTimerRef.current = null;
+          }
+          showToast(t("operation.startedAgentAndSent", { name: def.name }));
+          setRefreshKey((key) => key + 1);
+          setChangeScanKey((key) => key + 1);
+          onInitialPromptConsumed(requestId);
+          return;
+        }
+
+        const nextAttempt = attempts + 1;
+        if (nextAttempt >= INITIAL_PROMPT_MAX_LAUNCH_ATTEMPTS) {
+          showToast(t("operation.agentDispatchFailed"));
+          return;
+        }
+        if (initialPromptRetryTimerRef.current != null) {
+          window.clearTimeout(initialPromptRetryTimerRef.current);
+        }
+        initialPromptRetryTimerRef.current = window.setTimeout(() => {
+          initialPromptRetryTimerRef.current = null;
+          setInitialPromptRetryEpoch((epoch) => epoch + 1);
+        }, INITIAL_PROMPT_RETRY_DELAY_MS * nextAttempt);
+      });
+      return;
+    }
+
     if (autoEnteredAgentRootRef.current === root.path) return;
     if (activeAgentRef.current || terminalMode !== "native") {
       autoEnteredAgentRootRef.current = root.path;
@@ -689,18 +771,19 @@ export function Operation(props: {
     autoEnteredAgentRootRef.current = root.path;
     activeAgentRef.current = def;
     setTerminalMode("agent");
-    termRef.current?.switchCommand(def.command, def.id);
-    const launchPrompt = initialPrompt?.trim();
-    const promptKey = launchPrompt ? `${root.path}\0${launchPrompt}` : "";
-    if (launchPrompt && initialPromptSentRef.current !== promptKey) {
-      initialPromptSentRef.current = promptKey;
-      window.setTimeout(() => {
-        void termRef.current?.runCommand(launchPrompt);
-        setRefreshKey((key) => key + 1);
-        setChangeScanKey((key) => key + 1);
-      }, 720);
-    }
-  }, [active, secondaryReady, termReady, agents, initialPrompt, root.path, terminalMode]);
+    void termRef.current?.switchCommand(def.command, def.id);
+  }, [
+    active,
+    secondaryReady,
+    termReady,
+    agents,
+    initialPrompt,
+    root.path,
+    terminalMode,
+    initialPromptRetryEpoch,
+    onInitialPromptConsumed,
+    t,
+  ]);
 
   useEffect(() => {
     let alive = true;

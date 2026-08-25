@@ -35,6 +35,7 @@ import {
   writeClipEdit,
 } from "../api";
 import { buildCanvasProductionPrompt } from "../canvasProductionPrompt";
+import { buildCanvasGraphEdgePlan } from "../canvasGraphEdges";
 import { ClipNode } from "./ClipNode";
 import { Codicon } from "./Codicon";
 import { CanvasProductionBar } from "./CanvasProductionBar";
@@ -65,13 +66,12 @@ const LANE_X = {
   shot: 410,
   video: 840,
 };
-const ASSET_ANCHOR_X = LANE_X.shot - 140;
 const ROW_H = 490;
 const FRAME_NODE_H = 138;
 const FRAME_NODE_GAP = 14;
 const FRAME_NODE_STEP = FRAME_NODE_H + FRAME_NODE_GAP;
 const MiniMapViewportHostContext = createContext<string | null>(null);
-type CanvasNodeVariant = "asset-anchor" | "frame" | "shot" | "video";
+type CanvasNodeVariant = "frame" | "shot" | "video";
 type EditableCanvasClip = CanvasClip & {
   variant?: CanvasNodeVariant;
   laneMeta?: string[];
@@ -178,17 +178,6 @@ function autoShotPosition(i: number) {
 
 function autoVideoPosition(rowY: number) {
   return { x: LANE_X.video, y: rowY };
-}
-
-function autoAssetAnchorPosition(ref: CanvasAssetImage, clips: CanvasClip[], rowOffsets: number[], assetIndex: number) {
-  const targetRows = ref.clipIds
-    .map((clipId) => clips.findIndex((clip) => clip.id === clipId))
-    .filter((index) => index >= 0)
-    .map((index) => rowOffsets[index] + FRAME_NODE_H / 2);
-  const baseY = targetRows.length
-    ? targetRows.reduce((sum, y) => sum + y, 0) / targetRows.length
-    : assetIndex * 26;
-  return { x: ASSET_ANCHOR_X, y: baseY + ((assetIndex % 7) - 3) * 10 };
 }
 
 function positionForNode(id: string, i: number) {
@@ -737,64 +726,9 @@ export function CanvasPane({
   );
   const hasVideoLane = canvas?.source !== "panel_script";
 
-  const edges = useMemo(() => {
-    if (!canvas) return [] as Edge[];
-    const firstFrameId = (clipId: string) => FLOW_NODE.frame(clipId, 0);
-    const assetEdges = assetImages.flatMap((ref) =>
-      ref.clipIds
-        .filter((clipId) => canvas.clips.some((clip) => clip.id === clipId))
-        .map((clipId) => ({
-          id: `${FLOW_NODE.asset(ref.id)}->${firstFrameId(clipId)}`,
-          source: FLOW_NODE.asset(ref.id),
-          target: firstFrameId(clipId),
-          className: "asset-edge",
-          type: "default",
-          zIndex: 0,
-          interactionWidth: 14,
-          style: EDGE_STYLE,
-        } satisfies Edge)),
-    );
-    const clipVideoEdges = hasVideoLane
-      ? canvas.clips.flatMap((clip) => {
-          const videoId = FLOW_NODE.video(clip.id);
-          return displayFramesForClip(clip).map((_, frameIndex) => ({
-            id: `${FLOW_NODE.frame(clip.id, frameIndex)}->${videoId}`,
-            source: FLOW_NODE.frame(clip.id, frameIndex),
-            target: videoId,
-            className: clip.video_exists ? "video-edge video-edge-done" : "video-edge video-edge-pending",
-            type: "default",
-            zIndex: 1,
-            interactionWidth: 14,
-            style: EDGE_STYLE,
-          } satisfies Edge));
-        })
-      : [];
-    return [...assetEdges, ...clipVideoEdges];
-  }, [assetImages, canvas, hasVideoLane]);
-
   const flowNodes = useMemo(() => {
     if (!canvas) return [] as Node[];
     const rowOffsets = clipRowOffsets(canvas.clips);
-    const assetAnchorNodes = assetImages.map((asset, index) => ({
-      id: FLOW_NODE.asset(asset.id),
-      type: "clip",
-      position: autoAssetAnchorPosition(asset, canvas.clips, rowOffsets, index),
-      selectable: false,
-      draggable: false,
-      data: {
-        id: FLOW_NODE.asset(asset.id),
-        label: asset.label,
-        first_frame_exists: false,
-        video_exists: false,
-        frames: [],
-        qa: [],
-        qa_blocks: 0,
-        qa_warnings: 0,
-        qa_infos: 0,
-        variant: "asset-anchor",
-        __renderKey: hashString(`${asset.id}:${asset.label}:${asset.revision ?? ""}`),
-      } as unknown as Record<string, unknown>,
-    } satisfies Node));
     // One content hash per clip: node ids already encode the frame index, and
     // displayed frames are a pure function of the clip, so hashing every frame
     // node's {clip, frame} would re-serialize each clip's full prompt text
@@ -858,8 +792,35 @@ export function CanvasPane({
           } satisfies Node;
         })
       : [];
-    return [...assetAnchorNodes, ...frameNodes, ...videoNodes];
-  }, [assetImages, canvas, hasVideoLane, layout, line, onGeneratePrompt, repoRoot, root.path]);
+    return [...frameNodes, ...videoNodes];
+  }, [canvas, hasVideoLane, layout, line, onGeneratePrompt, repoRoot, root.path]);
+
+  const edges = useMemo(() => {
+    if (!canvas) return [] as Edge[];
+    const visibleNodeIds = new Set(flowNodes.map((node) => node.id));
+    return buildCanvasGraphEdgePlan({
+      // Shared-asset records remain useful metadata, but today their former
+      // source anchors are intentionally not renderable nodes. The graph model
+      // therefore rejects those wires. When real image/text source cards are
+      // added, putting their ids in flowNodes is enough to enable valid fanout.
+      assetSources: assetImages.map((asset) => ({
+        nodeId: FLOW_NODE.asset(asset.id),
+        targetNodeIds: asset.clipIds.map((clipId) => FLOW_NODE.frame(clipId, 0)),
+      })),
+      clipSources: canvas.clips.map((clip) => ({
+        videoNodeId: FLOW_NODE.video(clip.id),
+        frameNodeIds: displayFramesForClip(clip).map((_, frameIndex) => FLOW_NODE.frame(clip.id, frameIndex)),
+        videoExists: clip.video_exists,
+      })),
+      visibleNodeIds,
+      hasVideoLane,
+    }).map((edge) => ({
+      ...edge,
+      type: "default",
+      interactionWidth: 14,
+      style: EDGE_STYLE,
+    } satisfies Edge));
+  }, [assetImages, canvas, flowNodes, hasVideoLane]);
 
   useEffect(() => {
     let alive = true;

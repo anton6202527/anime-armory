@@ -2,10 +2,13 @@ import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import test from 'node:test'
 import {
+  agentCommandWithInitialPrompt,
   canvasJobHardDeadlineMs,
+  classifyInitialPromptProcessExit,
   classifyCanvasDispatchReservation,
   decideCanvasJobWatchdog,
   settleEndedCanvasJob,
+  shellQuoteTerminalArgument,
   shouldRehydrateCanvasJobWatchdog,
   shouldRetryCanvasPromptWrite,
   shouldSettleCanvasJobOnOwnerTeardown,
@@ -48,6 +51,61 @@ test('agent launch replaces the shell so agent exit is an observable process exi
   const native = spawnSync('/bin/sh', ['-c', `${nativeLaunch}; printf SHELL_ALIVE`], { encoding: 'utf8' })
   assert.equal(native.status, 0)
   assert.equal(native.stdout, 'SHELL_ALIVE')
+})
+
+test('agent launch adapters bind the initial prompt to the corresponding CLI', () => {
+  const prompt = "第一行\n第二行 '$HOME' `whoami` $(touch /tmp/never-run)"
+
+  assert.equal(
+    agentCommandWithInitialPrompt('codex', { agentId: 'codex', prompt }),
+    `codex -- ${shellQuoteTerminalArgument(prompt)}`,
+  )
+  assert.equal(
+    terminalLaunchCommand('codex', true, { agentId: 'codex', prompt }),
+    `exec codex -- ${shellQuoteTerminalArgument(prompt)}`,
+  )
+  assert.equal(
+    agentCommandWithInitialPrompt('claude', { agentId: 'claude', prompt }),
+    `claude -- ${shellQuoteTerminalArgument(prompt)}`,
+  )
+  assert.equal(
+    agentCommandWithInitialPrompt('opencode', { agentId: 'opencode', prompt }),
+    `opencode --prompt ${shellQuoteTerminalArgument(prompt)}`,
+  )
+  assert.equal(
+    agentCommandWithInitialPrompt('gemini', { agentId: 'gemini', prompt }),
+    `gemini --prompt-interactive ${shellQuoteTerminalArgument(prompt)}`,
+  )
+  assert.equal(
+    agentCommandWithInitialPrompt('kimi', { agentId: 'kimi', prompt }),
+    `kimi --prompt ${shellQuoteTerminalArgument(prompt)}`,
+  )
+})
+
+test('shell quoting preserves multiline prompt text without executing substitutions', () => {
+  const prompt = "中文\nquote ' and $HOME and `printf BAD` and $(printf WORSE)"
+  const result = spawnSync(
+    '/bin/sh',
+    ['-c', `printf %s ${shellQuoteTerminalArgument(prompt)}`],
+    { encoding: 'utf8' },
+  )
+
+  assert.equal(result.status, 0)
+  assert.equal(result.stdout, prompt)
+  assert.equal(result.stderr, '')
+})
+
+test('unknown agent launch adapter fails instead of silently dropping the prompt', () => {
+  assert.throws(
+    () => agentCommandWithInitialPrompt('mystery', { agentId: 'mystery', prompt: 'do work' }),
+    /not supported/,
+  )
+})
+
+test('an immediate CLI exit consumes a prompt only when the process succeeded', () => {
+  assert.equal(classifyInitialPromptProcessExit(0), 'completed')
+  assert.equal(classifyInitialPromptProcessExit(1), 'failed')
+  assert.equal(classifyInitialPromptProcessExit(0, 15), 'failed')
 })
 
 test('claims an ended session exactly once', () => {

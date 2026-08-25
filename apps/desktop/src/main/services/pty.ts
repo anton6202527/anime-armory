@@ -70,8 +70,8 @@ export class PtyService {
     const dataSub = proc.onData((data) => {
       this.emit('pty-data', { id, data: Buffer.from(data, 'utf8').toString('base64') })
     })
-    const exitSub = proc.onExit(() => {
-      this.emit('pty-exit', { id })
+    const exitSub = proc.onExit(({ exitCode, signal }) => {
+      this.emit('pty-exit', { id, exitCode, signal })
       this.sessions.delete(id)
     })
     this.sessions.set(id, { proc, dataSub, exitSub })

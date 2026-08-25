@@ -16,7 +16,10 @@ import "@xterm/xterm/css/xterm.css";
 import { pickDefaultAgent, ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
 import { scheduleWindowResizeEvent } from "../paneLayout";
 import { copySelectedTerminalText } from "../terminalClipboard";
-import { terminalLaunchCommand } from "../terminalJobLifecycle";
+import {
+  classifyInitialPromptProcessExit,
+  terminalLaunchCommand,
+} from "../terminalJobLifecycle";
 import { useI18n } from "../i18n";
 import type { AgentInfo } from "../types";
 import { AgentBar } from "./AgentBar";
@@ -39,7 +42,12 @@ export interface TerminalHandle {
   /** Resolves true only after the main process wrote to a live PTY. */
   runCommand: (cmd: string) => Promise<boolean>;
   activeSessionId: () => string;
-  switchCommand: (cmd: string, agentId?: string | null) => void;
+  /**
+   * Replaces the active PTY command. When supplied, initialPrompt is bound to
+   * that CLI launch and the promise resolves true only after the process stays
+   * live through the startup window or exits successfully.
+   */
+  switchCommand: (cmd: string, agentId?: string | null, initialPrompt?: string) => Promise<boolean>;
   newSession: () => void;
   focus: () => void;
 }
@@ -72,7 +80,7 @@ type TerminalSessionState = {
 
 type TerminalSessionHandle = {
   runCommand: (cmd: string) => Promise<boolean>;
-  switchCommand: (cmd: string, agentOwned: boolean) => void;
+  switchCommand: (cmd: string, agentId: string | null, initialPrompt?: string) => Promise<boolean>;
   focus: () => void;
 };
 
@@ -81,6 +89,7 @@ const MIN_RAIL_WIDTH = 30;
 const COMPACT_RAIL_WIDTH = 54;
 const DEFAULT_RAIL_WIDTH = MIN_RAIL_WIDTH;
 const MAX_RAIL_WIDTH = 260;
+const INITIAL_PROMPT_LAUNCH_STABILITY_MS = 1_200;
 
 function terminalSessionId(): string {
   terminalSessionSeq += 1;
@@ -192,7 +201,11 @@ function TerminalSessionView({
   const onRuntimeStatusRef = useRef(onRuntimeStatus);
   const onPermissionNoticeRef = useRef(onPermissionNotice);
   const onSessionEndRef = useRef(onSessionEnd);
-  const switchCommandRef = useRef<(cmd: string, agentOwned: boolean) => void>(() => {});
+  const switchCommandRef = useRef<(
+    cmd: string,
+    agentId: string | null,
+    initialPrompt?: string,
+  ) => Promise<boolean>>(async () => false);
   const scheduleRefitRef = useRef<() => void>(() => {});
   const decoderRef = useRef(new TextDecoder());
   const statusBufferRef = useRef("");
@@ -216,9 +229,10 @@ function TerminalSessionView({
           return false;
         }
       },
-      switchCommand: (cmd: string, agentOwned: boolean) => {
-        switchCommandRef.current(cmd, agentOwned);
+      switchCommand: async (cmd: string, agentId: string | null, initialPrompt?: string) => {
+        const launched = await switchCommandRef.current(cmd, agentId, initialPrompt);
         termRef.current?.focus();
+        return launched;
       },
       focus: () => termRef.current?.focus(),
     });
@@ -285,6 +299,43 @@ function TerminalSessionView({
     const unlisten: Array<() => void> = [];
     const disposables: Array<{ dispose: () => void }> = [];
     const endedPtyIds = new Set<number>();
+    type InitialPromptLaunchOutcome = "live" | "completed" | "failed";
+    const initialPromptPtyIds = new Set<number>();
+    const earlyInitialPromptExitCodes = new Map<number, { exitCode: number; signal?: number }>();
+    const initialPromptLaunchChecks = new Map<number, {
+      timer: number;
+      resolve: (outcome: InitialPromptLaunchOutcome) => void;
+    }>();
+
+    const settleInitialPromptLaunch = (id: number, outcome: InitialPromptLaunchOutcome) => {
+      const check = initialPromptLaunchChecks.get(id);
+      if (!check) return false;
+      initialPromptLaunchChecks.delete(id);
+      window.clearTimeout(check.timer);
+      check.resolve(outcome);
+      return true;
+    };
+
+    const verifyInitialPromptLaunch = (id: number, seq: number): Promise<InitialPromptLaunchOutcome> => {
+      const earlyExit = earlyInitialPromptExitCodes.get(id);
+      if (earlyExit) {
+        earlyInitialPromptExitCodes.delete(id);
+        initialPromptPtyIds.delete(id);
+        return Promise.resolve(
+          classifyInitialPromptProcessExit(earlyExit.exitCode, earlyExit.signal),
+        );
+      }
+      return new Promise((resolve) => {
+        const timer = window.setTimeout(() => {
+          initialPromptLaunchChecks.delete(id);
+          initialPromptPtyIds.delete(id);
+          resolve(
+            !disposed && seq === runSeq && ptyIdRef.current === id ? "live" : "failed",
+          );
+        }, INITIAL_PROMPT_LAUNCH_STABILITY_MS);
+        initialPromptLaunchChecks.set(id, { timer, resolve });
+      });
+    };
 
     const notifyPtyEnded = (id: number, reason: TerminalSessionEndReason) => {
       if (endedPtyIds.has(id)) return;
@@ -378,8 +429,14 @@ function TerminalSessionView({
       }
     }
 
-    async function startSession(command = "", clear = false, agentOwned = false) {
+    async function startSession(
+      command = "",
+      clear = false,
+      agentId: string | null = "native",
+      initialPrompt?: string,
+    ): Promise<boolean> {
       const seq = ++runSeq;
+      const agentOwned = Boolean(agentId && agentId !== "native");
       const previous = ptyIdRef.current;
       ptyIdRef.current = null;
       commandReadyRef.current = false;
@@ -391,9 +448,12 @@ function TerminalSessionView({
         // jobs dispatched to this logical terminal session. Notify before the
         // asynchronous kill so a fast pty-exit cannot race past settlement.
         notifyPtyEnded(previous, "command_replaced");
+        settleInitialPromptLaunch(previous, "failed");
+        initialPromptPtyIds.delete(previous);
+        earlyInitialPromptExitCodes.delete(previous);
         await ptyKill(previous).catch(() => {});
       }
-      if (disposed || seq !== runSeq) return;
+      if (disposed || seq !== runSeq) return false;
 
       if (clear) {
         try {
@@ -409,26 +469,49 @@ function TerminalSessionView({
         const id = await ptySpawn(cwd, Math.max(1, term.rows), Math.max(1, term.cols));
         if (disposed || seq !== runSeq) {
           ptyKill(id).catch(() => {});
-          return;
+          return false;
         }
         ptyIdRef.current = id;
         scheduleRefit();
-        const launchCommand = terminalLaunchCommand(command, agentOwned);
-        if (launchCommand) await ptyWrite(id, launchCommand + "\r");
-        if (disposed || seq !== runSeq || ptyIdRef.current !== id) return;
+        const launchCommand = terminalLaunchCommand(
+          command,
+          agentOwned,
+          initialPrompt && agentId ? { agentId, prompt: initialPrompt } : undefined,
+        );
+        if (initialPrompt) initialPromptPtyIds.add(id);
+        if (launchCommand && !await ptyWrite(id, launchCommand + "\r")) {
+          throw new Error("PTY rejected terminal launch command");
+        }
+        if (initialPrompt) {
+          const outcome = await verifyInitialPromptLaunch(id, seq);
+          if (outcome === "completed") return true;
+          if (outcome === "failed") return false;
+        }
+        if (disposed || seq !== runSeq || ptyIdRef.current !== id) return false;
         commandReadyRef.current = true;
         if (activeRef.current) onReadyRef.current?.();
+        return true;
       } catch (e) {
         const failedId = ptyIdRef.current;
         ptyIdRef.current = null;
         commandReadyRef.current = false;
-        if (failedId != null) ptyKill(failedId).catch(() => {});
+        if (failedId != null) {
+          settleInitialPromptLaunch(failedId, "failed");
+          initialPromptPtyIds.delete(failedId);
+          earlyInitialPromptExitCodes.delete(failedId);
+          ptyKill(failedId).catch(() => {});
+        }
         if (!disposed) term.write(`\r\n\x1b[31m[terminal error] ${String(e)}\x1b[0m\r\n`);
+        return false;
       }
     }
 
-    switchCommandRef.current = (cmd: string, agentOwned: boolean) => {
-      startSession(cmd, true, agentOwned).catch(() => {});
+    switchCommandRef.current = (
+      cmd: string,
+      agentId: string | null,
+      initialPrompt?: string,
+    ) => {
+      return startSession(cmd, true, agentId, initialPrompt).catch(() => false);
     };
 
     unlisten.push(
@@ -442,6 +525,16 @@ function TerminalSessionView({
     unlisten.push(
       onAppEvent("pty-exit", (payload) => {
         if (payload.id !== ptyIdRef.current) return;
+        if (initialPromptPtyIds.has(payload.id)) {
+          const outcome = classifyInitialPromptProcessExit(payload.exitCode, payload.signal);
+          if (!settleInitialPromptLaunch(payload.id, outcome)) {
+            earlyInitialPromptExitCodes.set(payload.id, {
+              exitCode: payload.exitCode,
+              signal: payload.signal,
+            });
+          }
+          initialPromptPtyIds.delete(payload.id);
+        }
         ptyIdRef.current = null;
         commandReadyRef.current = false;
         term.write("\r\n\x1b[90m[process exited]\x1b[0m\r\n");
@@ -469,7 +562,7 @@ function TerminalSessionView({
       }),
     );
 
-    startSession(session.command, false, Boolean(session.agentId && session.agentId !== "native")).catch(() => {});
+    startSession(session.command, false, session.agentId).catch(() => false);
     scheduleRefit();
 
     const refit = () => scheduleRefit();
@@ -483,8 +576,15 @@ function TerminalSessionView({
       const livePty = ptyIdRef.current;
       ptyIdRef.current = null;
       commandReadyRef.current = false;
+      for (const [id, check] of initialPromptLaunchChecks) {
+        window.clearTimeout(check.timer);
+        check.resolve("failed");
+        initialPromptLaunchChecks.delete(id);
+      }
+      initialPromptPtyIds.clear();
+      earlyInitialPromptExitCodes.clear();
       if (livePty != null) notifyPtyEnded(livePty, "component_unmounted");
-      switchCommandRef.current = () => {};
+      switchCommandRef.current = async () => false;
       scheduleRefitRef.current = () => {};
       window.removeEventListener("resize", refit);
       hostRef.current?.removeEventListener("focusin", handleTerminalFocus);
@@ -615,15 +715,18 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
         return written;
       },
       activeSessionId: () => activeIdRef.current,
-      switchCommand: (cmd: string, agentId: string | null = "native") => {
+      switchCommand: async (cmd: string, agentId: string | null = "native", initialPrompt?: string) => {
         const id = activeIdRef.current;
         setSessions((prev) =>
           prev.map((session) =>
             session.id === id ? { ...session, title: commandTitle(cmd), command: cmd, agentId } : session,
           ),
         );
-        sessionRefs.current.get(id)?.switchCommand(cmd, Boolean(agentId && agentId !== "native"));
-        sessionRefs.current.get(id)?.focus();
+        const session = sessionRefs.current.get(id);
+        if (!session) return false;
+        const launched = await session.switchCommand(cmd, agentId, initialPrompt);
+        session.focus();
+        return launched;
       },
       newSession: () => addSession(),
       focus: () => sessionRefs.current.get(activeIdRef.current)?.focus(),
@@ -655,7 +758,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
           session.id === id ? { ...session, title: commandTitle(""), command: "", agentId: "native" } : session,
         ),
       );
-      sessionRefs.current.get(id)?.switchCommand("", false);
+      void sessionRefs.current.get(id)?.switchCommand("", "native");
       sessionRefs.current.get(id)?.focus();
       if (activeIdRef.current === id) {
         onRuntimeStatus?.({});
@@ -671,7 +774,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             : session,
         ),
       );
-      sessionRefs.current.get(id)?.switchCommand(agent.command, true);
+      void sessionRefs.current.get(id)?.switchCommand(agent.command, agent.id);
       sessionRefs.current.get(id)?.focus();
       if (activeIdRef.current === id) {
         onRuntimeStatus?.({});

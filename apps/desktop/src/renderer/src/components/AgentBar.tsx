@@ -61,7 +61,14 @@ export function AgentBar({
               return;
             }
             const agent = (agents ?? []).find((item) => item.id === value);
-            if (agent?.found) onEnter(agent);
+            if (agent?.found) {
+              try {
+                window.localStorage.setItem("aa.preferredAgentId", agent.id);
+              } catch {
+                /* preference storage is optional; entering the agent is not */
+              }
+              onEnter(agent);
+            }
           }}
         >
           <option value="native">{t("agent.nativeTerminal")}</option>

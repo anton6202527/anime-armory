@@ -208,7 +208,7 @@ export type IpcResult<C extends IpcChannel> = ReturnType<IpcCommands[C]>
 /** Push events, main → renderer. */
 export interface IpcEvents {
   'pty-data': { id: number; data: string }
-  'pty-exit': { id: number }
+  'pty-exit': { id: number; exitCode: number; signal?: number }
   // `dirs`: rel parent-dirs touched since the last emit ('' = root-level).
   // Absent = broad/unknown change → refresh the whole open tree.
   'fs-changed': { root: string; dirs?: string[] }

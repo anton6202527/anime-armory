@@ -56,6 +56,20 @@ export interface CanvasJobWatchdogSnapshot {
   submittedAt?: string;
 }
 
+export type TerminalAgentLaunchPrompt = Readonly<{
+  agentId: string;
+  prompt: string;
+}>;
+
+export type InitialPromptProcessExitOutcome = "completed" | "failed";
+
+export function classifyInitialPromptProcessExit(
+  exitCode: number,
+  signal?: number,
+): InitialPromptProcessExitOutcome {
+  return exitCode === 0 && !signal ? "completed" : "failed";
+}
+
 export function canvasJobHardDeadlineMs(kind: string | undefined): number {
   if (kind === "video") return VIDEO_JOB_DEADLINE_MS;
   if (kind === "production") return PRODUCTION_JOB_DEADLINE_MS;
@@ -77,14 +91,50 @@ export function decideCanvasJobWatchdog(
   return remainingMs <= 0 ? { action: "fail" } : { action: "poll", remainingMs };
 }
 
+/** Quote one argument for the POSIX login shell used by the PTY. */
+export function shellQuoteTerminalArgument(value: string): string {
+  return `'${value.replace(/'/g, `'"'"'`)}'`;
+}
+
 /**
- * An agent owns its PTY process lifetime. `exec` replaces the login shell so
- * an agent returning cannot silently fall back to a live shell without an
- * observable pty-exit. Native terminal commands intentionally keep the shell.
+ * Bind the first prompt to the CLI process launch. This avoids racing a TUI's
+ * startup and preserves a multi-line prompt as one argument. Keep the adapter
+ * explicit: silently sending the wrong flags to an unknown CLI would make a
+ * successful PTY write look like successful prompt delivery.
  */
-export function terminalLaunchCommand(command: string, agentOwned: boolean): string {
+export function agentCommandWithInitialPrompt(
+  command: string,
+  request: TerminalAgentLaunchPrompt,
+): string {
   const clean = command.trim();
-  return clean && agentOwned ? `exec ${clean}` : clean;
+  const prompt = shellQuoteTerminalArgument(request.prompt);
+  switch (request.agentId) {
+    case "codex":
+    case "claude":
+      return `${clean} -- ${prompt}`;
+    case "opencode":
+      return `${clean} --prompt ${prompt}`;
+    case "gemini":
+      return `${clean} --prompt-interactive ${prompt}`;
+    case "kimi":
+      return `${clean} --prompt ${prompt}`;
+    default:
+      throw new Error(`Initial prompt launch is not supported for agent: ${request.agentId}`);
+  }
+}
+
+export function terminalLaunchCommand(
+  command: string,
+  agentOwned: boolean,
+  initialPrompt?: TerminalAgentLaunchPrompt,
+): string {
+  const clean = command.trim();
+  if (!clean || !agentOwned) return clean;
+  const launch = initialPrompt ? agentCommandWithInitialPrompt(clean, initialPrompt) : clean;
+  // An agent owns its PTY process lifetime. `exec` replaces the login shell so
+  // an agent returning cannot silently fall back to a live shell without an
+  // observable pty-exit. Native terminal commands intentionally keep the shell.
+  return `exec ${launch}`;
 }
 
 /**
