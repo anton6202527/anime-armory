@@ -1,0 +1,121 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第1集",
+  "reviewer": "Codex delegated executor (not human final acceptance)",
+  "basis": "用户已确认按最新 skill 执行最小重制；项目设置为仅高风险停审，本收据仅解除可解释的中间生产 advisory，不等于导演或最终人工验收。",
+  "accepted": [
+    {
+      "accepted": true,
+      "finding_hash": "9477f3aefd25",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "Clip08→09 的情绪变化有明确事件触发：潘金莲把半杯酒越过桌面中线，武松挡杯、酒泼炭边后起身警告；不是无过渡的 OOC 跳变。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "ff50f685763a",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "Clip08→09 的潘金莲情绪变化由试探被拒、酒杯被打翻和武松明确警告直接触发，storyboard 已写明“由惊转羞怒”的过渡。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "8ff00690254d",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "Clip15 中武松已成出城远景背影，不展示可读面部情绪；该告警是把上一镜标签错投到远景主体的启发式误报。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "07749aa2fd1a",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "Clip15 已明确设计潘金莲“隔帘目送，余怒沉成空缺”，是由武松离城触发的可见过渡，非无事件依据的情绪硬跳。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "4b0a014fd90b",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "机检把 story clip 当成单镜长镜头；Clip02–11 内部已按 shots[] 拆成动作、器物插入、正反打和反应链，Clip09 更有 4.2/7.0/10.0s 明确切点，实际剪辑节奏并非连续十个长镜。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "7a12f8043531",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "当前权威设置为 BGM来源=无且合成阶段=跳过，MOTIF_WUSONG 不会被本次出图消费；若启用 BGM/合成须先补真实音频。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "bb63aaa5c68e",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "当前权威设置为 BGM来源=无且合成阶段=跳过，MOTIF_JINLIAN 不会被本次出图消费；若启用 BGM/合成须先补真实音频。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "280d2b70c58f",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "当前权威设置为 BGM来源=无且合成阶段=跳过，MOTIF_THRESHOLD 不会被本次出图消费；若启用 BGM/合成须先补真实音频。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "a2b10a5a1d34",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "当前权威设置为 BGM来源=无且合成阶段=跳过，MOTIF_EVIDENCE 不会被本次出图消费；若启用 BGM/合成须先补真实音频。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "12e6ac717039",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "MOTIF_WUSONG 当前仅是未启用的文本登记，项目不生成 BGM 也不进入合成，因而本次出图不需要 audio_sha256；后续改设置时本收据失去依据。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "b9f7144f3482",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "MOTIF_JINLIAN 当前仅是未启用的文本登记，项目不生成 BGM 也不进入合成，因而本次出图不需要 audio_sha256；后续改设置时本收据失去依据。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "8eca202612d8",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "MOTIF_THRESHOLD 当前仅是未启用的文本登记，项目不生成 BGM 也不进入合成，因而本次出图不需要 audio_sha256；后续改设置时本收据失去依据。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "469523a3e727",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex delegated executor (not human)",
+      "reason": "MOTIF_EVIDENCE 当前仅是未启用的文本登记，项目不生成 BGM 也不进入合成，因而本次出图不需要 audio_sha256；后续改设置时本收据失去依据。",
+      "expires_at": "2027-08-24"
+    },
+    {
+      "accepted": true,
+      "dimension": "糊/低质(N4)",
+      "loc_contains": "Clip03_first.png",
+      "reviewer": "Codex视觉执行者 (not human final acceptance)",
+      "reason": "已实际以原始分辨率查看当前像素：武松脸部、衣纹、拳头、虎纹、地面碎石和前景梢棒边缘均清晰可辨；Laplacian 方差偏低来自月夜大面积暗色天空与雾气，不是失焦或低质像素。本签收仅解除该启发式误报，不等于最终具名人验收。",
+      "expires_at": "2027-08-24"
+    }
+  ]
+}

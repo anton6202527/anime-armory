@@ -199,6 +199,28 @@ def test_release_manifest_ready_when_required_evidence_is_current():
         assert manifest["release_profile"] == "platform_publish"
         assert manifest["release_readiness"]["blocker_count"] == 0
         assert manifest["chapter_source_snapshot"]["aggregate_hash"] == manifest["chapter_aggregate_hash"]
+        assert len(manifest["release_digest"]) == 64
+
+        release_manifest.write_manifest(root, manifest)
+        with open(os.path.join(root, "导出", "completion_verdict.json"), encoding="utf-8") as f:
+            verdict = json.load(f)
+        assert verdict["status"] == "machine_ready"
+
+
+def test_platform_release_blocks_opening_only_score_scope():
+    with tempfile.TemporaryDirectory() as root:
+        make_project(root)
+        write_ready_evidence(root)
+        path = os.path.join(root, "评分", "score_report.json")
+        with open(path, encoding="utf-8") as f:
+            report = json.load(f)
+        report["scope"] = {"mode": "opening", "chapter_count": 1}
+        write_json(path, report)
+
+        manifest = release_manifest.build_manifest(root, release_name="v1")
+        blocker_ids = [item["id"] for item in manifest["release_readiness"]["blockers"]]
+        assert "RELEASE-SCORE-SCOPE-NOT-FULL" in blocker_ids
+        assert manifest["release_ready"] is False
 
 
 def test_reader_telemetry_is_optional_for_publish_and_required_only_for_data_validated_launch():

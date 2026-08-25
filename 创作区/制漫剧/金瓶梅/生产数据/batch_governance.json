@@ -1,0 +1,83 @@
+{
+  "dead_letters": [
+    {
+      "attempts": 5,
+      "episode": "第1集",
+      "error_class": "command_failed",
+      "id": "001-image-rerun",
+      "idempotency_key": "01a031a5b284fece",
+      "note": "exit_code=1",
+      "stage_key": "image"
+    }
+  ],
+  "kind": "n2d_batch_governance",
+  "root": "创作区/制漫剧/金瓶梅",
+  "status": "critical",
+  "stop_loss": {
+    "episode": "",
+    "generated_at": "2026-08-24T07:58:30+00:00",
+    "kind": "n2d_stop_loss",
+    "metrics": {
+      "cost_per_finished_min": null,
+      "events": 647,
+      "evidence_files": 7,
+      "face_drift_rate": 0.0,
+      "finding_rows": 384,
+      "generation_events": 173,
+      "lipsync_failure_rate": 0.0,
+      "qc_block_rate": 0.0,
+      "qc_blocks": 0,
+      "redraw_events": 1,
+      "redraw_rate": 0.0058,
+      "seam_failure_rate": 0.0
+    },
+    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+    "status": "pass",
+    "thresholds": {
+      "max_cost_per_finished_min": 1000.0,
+      "max_face_drift_rate": 0.08,
+      "max_lipsync_failure_rate": 0.08,
+      "max_qc_block_rate": 0.15,
+      "max_redraw_rate": 0.35,
+      "max_seam_failure_rate": 0.05
+    },
+    "version": 1,
+    "violations": [
+      {
+        "action": "run_dashboard_build_to_restore_cost_stop_loss",
+        "level": "warn",
+        "metric": "cost_per_finished_min",
+        "threshold": 1000.0,
+        "value": null
+      }
+    ]
+  },
+  "summary": {
+    "dead_letters": 1,
+    "retried": 1,
+    "retry_rate": 0.5,
+    "total": 2
+  },
+  "version": 1,
+  "violations": [
+    {
+      "kind": "dead_letters",
+      "level": "critical",
+      "threshold": 0,
+      "value": 1
+    },
+    {
+      "kind": "retry_rate",
+      "level": "warn",
+      "threshold": 0.35,
+      "value": 0.5
+    },
+    {
+      "kind": "attempts",
+      "level": "warn",
+      "task_id": "001-image-rerun",
+      "threshold": 3,
+      "value": 5
+    }
+  ]
+}

@@ -28,3 +28,13 @@ def test_deterministic_contract_keeps_load_bearing_block() -> None:
     assert governed["verdict"] == "block"
     assert governed["auto_block_eligible"] is True
 
+
+def test_value_report_can_demote_calibrated_numeric_detector() -> None:
+    enforcement = dr.registry_enforcement({
+        "detector_kind": "numeric",
+        "evidence_status": "production_calibrated",
+        "auto_block_eligible": True,
+        "value_enforcement": "retire_candidate",
+    })
+    assert enforcement["auto_block_eligible"] is False
+    assert enforcement["unconfirmed_block_action"] == "warn_and_human_review"

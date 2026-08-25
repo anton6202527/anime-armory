@@ -24,7 +24,14 @@ COMIC_LIB = Path(__file__).resolve().parents[1] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from contracts import sha256_file, stable_sha256, stage_inputs_fingerprint  # noqa: E402
+from completion_contract import (  # noqa: E402
+    accept_final,
+    build_completion_verdict,
+    canonical_release_digest,
+    write_completion_verdict,
+)
 from platform_profiles import profile_for_platform, validate_manifest  # noqa: E402
+from provenance import binding as provenance_binding_for_artifacts  # noqa: E402
 from settings import get_setting  # noqa: E402
 
 REVIEW_SCRIPTS = Path(__file__).resolve().parents[1] / "comic-review" / "scripts"
@@ -1588,6 +1595,24 @@ def build(
                 )
             )
 
+    provenance = provenance_binding_for_artifacts(root, artifacts)
+    production_method = str(meta.get("production_method") or meta.get("制作方式") or "").lower() if isinstance(meta, Mapping) else ""
+    ai_generated = bool(isinstance(meta, Mapping) and (meta.get("ai_generated") is True or "ai" in production_method or "生成式" in production_method))
+    if ai_generated and (not provenance.get("chain_valid") or provenance.get("artifacts_without_current_event")):
+        issues.append(issue(
+            "ai_asset_provenance_missing_or_stale",
+            "项目声明含 AI 生成资产，但公开/商用导出物缺当前 SHA 的 append-only provenance 事件，或 ledger hash chain 无效。",
+            domain="provenance", blocking_profiles=PUBLIC_PROFILES, blocking_usages=("public", "commercial"),
+        ))
+    if ai_generated and not provenance.get("human_authorship_summary_present"):
+        issues.append(issue(
+            "human_authorship_summary_missing",
+            "AI-assisted 公开/商用交付缺人类在脚本、分镜、选择、修订、嵌字等方面的具体贡献摘要。",
+            domain="provenance", blocking_profiles=PUBLIC_PROFILES, blocking_usages=("public", "commercial"),
+        ))
+
+    for item in issues:
+        item["blocks_active_delivery"] = issue_blocks(item, resolved_medium, resolved_usage)
     technical_blocks = [item for item in issues if item["domain"] == "technical"]
     production_blocks = [item for item in issues if item["domain"] in {"technical", "production"}]
     profile_blocks = [item for item in issues if issue_blocks(item, resolved_medium, resolved_usage)]
@@ -1608,7 +1633,12 @@ def build(
         "publish_ready_epub_fxl_public": ready("epub_fxl", "public"),
         "publish_ready_epub_fxl_commercial": ready("epub_fxl", "commercial"),
     }
-    return {
+    rights_binding = {
+        "meta_path": "_meta.json",
+        "meta_sha256": sha256_file(root / "_meta.json"),
+        "rights": dict(rights),
+    }
+    report = {
         "schema_version": 2,
         "kind": "comic_release_verdict",
         "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -1625,12 +1655,18 @@ def build(
         "vlm_adjudication": adjudication,
         "finding_dispositions": dispositions,
         "finding_disposition_binding": disposition_receipt_binding,
+        "review_receipt_binding": review_receipt_binding(root, chapter),
         "platform_preview_binding": preview_receipt_binding,
         "medium_specific_binding": current_medium_binding,
+        "rights_binding": rights_binding,
+        "provenance_binding": provenance,
         "delivery_states": delivery_states,
         "artifacts": artifacts,
         "issues": issues,
     }
+    report["release_digest"] = canonical_release_digest(report)
+    report["business_status"] = build_completion_verdict(root, report)["status"]
+    return report
 
 
 def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[Path, Path]:
@@ -1638,6 +1674,25 @@ def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[
     md_path = root / "生产数据" / f"release_verdict_{chapter}.md"
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    axis = str(report.get("delivery_axis") or "unknown").replace("+", "__")
+    archive_path = root / "生产数据" / "release_verdicts" / chapter / f"{axis}.json"
+    archive_path.parent.mkdir(parents=True, exist_ok=True)
+    archive_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    contract_path = root / "生产数据" / f"release_contract_{chapter}.json"
+    contract = {
+        "schema_version": 1,
+        "kind": "comic_active_release_contract",
+        "chapter": chapter,
+        "medium": report.get("medium"),
+        "usage": report.get("usage"),
+        "target_platform": report.get("target_platform"),
+        "release_digest": report.get("release_digest"),
+        "verdict_path": str(json_path.relative_to(root)),
+        "axis_archive_path": str(archive_path.relative_to(root)),
+        "definition": "this is the single active delivery contract; other axis reports are historical evidence",
+    }
+    contract_path.write_text(json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_completion_verdict(root, report)
     gate_summary = report.get("review_gate_summary") or {}
     counts = gate_summary.get("counts") or {}
     lines = [
@@ -1647,6 +1702,8 @@ def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[
         f"- medium: {report.get('medium')}",
         f"- usage: {report.get('usage')}",
         f"- verdict: {report.get('verdict')}",
+        f"- release_digest: {report.get('release_digest')}",
+        f"- business_status: {report.get('business_status')}",
         "",
         "## 机检结论（review gate 真相区块——任何「验收通过」叙事必须引用本区块，不得只写 pass）",
         "",
@@ -1690,6 +1747,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--usage", choices=USAGES, default=None, help="internal/public/commercial；commercial 不再是技术介质")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--accept", action="store_true", help="为当前导出物和 review receipt 写 SHA 绑定的人工发布签收")
+    parser.add_argument("--accept-final", action="store_true", help="为当前 machine-ready 交付写具名最终验收；delegate 不可执行")
     parser.add_argument("--accept-platform-preview", action="store_true", help="写 PC/mobile 当前平台预览 SHA 签收")
     parser.add_argument("--desktop-screenshot", default="")
     parser.add_argument("--mobile-screenshot", default="")
@@ -1726,6 +1784,13 @@ def main(argv: list[str] | None = None) -> int:
             print(f"[block] {exc}", file=sys.stderr)
             return 2
     report = build(root, args.chapter, args.profile, medium=args.medium, usage=args.usage)
+    if args.accept_final:
+        try:
+            accept_final(root, report, accepted_by=args.reviewer, note=args.reason)
+        except ValueError as exc:
+            print(f"[block] {exc}", file=sys.stderr)
+            return 2
+        report = build(root, args.chapter, args.profile, medium=args.medium, usage=args.usage)
     if args.write:
         write_outputs(root, args.chapter, report)
     if args.json:

@@ -1,10 +1,13 @@
 {
   "characters": {
+    "CHAR_PANJINLIAN__25岁武大家常态": {
+      "第1集": 0.5025
+    },
     "CHAR_WUDA__日常卖饼态": {
-      "第1集": 0.7867
+      "第1集": 0.5889
     },
     "CHAR_WUSONG__28岁打虎态": {
-      "第1集": 0.5288
+      "第1集": 0.5305
     }
   },
   "kind": "n2d_face_drift_history",

@@ -352,7 +352,23 @@ def dedupe(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def _resolve_conflicts(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """处理跨来源信号冲突：
 
-    主观 score 信号不得覆盖或降级可复核的审稿 P0；这里只检测跨源对立，交给编辑裁决。"""
+    证据强弱明确时自动保留优势路径并 supersede 劣势路径；证据同级才交编辑。
+    这样不会为了所有可解冲突停顿，也不会拿主观 score 覆盖可复核 P0。"""
+
+    def evidence_rank(task: dict[str, Any]) -> tuple[int, str]:
+        priority = {"P0": 300, "P1": 200, "P2": 100, "P3": 0}.get(task.get("priority"), 0)
+        source = str(task.get("source") or "")
+        if source == "reader_telemetry_summary":
+            source_rank, basis = 100, "real reader telemetry"
+        elif source == "review_report" or source == "pacing_signals" or "balance" in source:
+            source_rank, basis = 80, "reproducible review/deterministic diagnosis"
+        elif source == "score_report":
+            source_rank, basis = 50, "scoped editorial score"
+        elif source == "reader_panel_signals":
+            source_rank, basis = 10, "synthetic signal only"
+        else:
+            source_rank, basis = 30, "declared project evidence"
+        return priority + source_rank, f"priority={task.get('priority')} + {basis}"
 
     # 跨源对立检测：review 和 balance 对同一章的建议是否指向相反方向
     review_tasks = [t for t in tasks if t.get("source") == "review_report"]
@@ -375,6 +391,30 @@ def _resolve_conflicts(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
             # 同一章 + 路由到不同阶段 → 标记
             if rt.get("return_to_stage") != bt.get("return_to_stage"):
                 conflict_label = f"跨源冲突：review→{rt.get('return_to_stage')} vs balance→{bt.get('return_to_stage')}"
+                r_rank, r_basis = evidence_rank(rt)
+                b_rank, b_basis = evidence_rank(bt)
+                if r_rank != b_rank:
+                    winner, loser = (rt, bt) if r_rank > b_rank else (bt, rt)
+                    resolution = {
+                        "type": "cross_source_stage_conflict",
+                        "winner": winner["id"],
+                        "decision": "auto_evidence_advantage",
+                        "explanation": (
+                            f"证据优先级明确：{rt['id']}={r_rank} ({r_basis})；"
+                            f"{bt['id']}={b_rank} ({b_basis})。保留高证据路径，低证据任务可恢复地标记 superseded。"
+                        ),
+                        "candidates": [
+                            {"task_id": rt["id"], "source": rt.get("source"), "stage": rt.get("return_to_stage"), "skill": rt.get("recommended_skill"), "evidence_rank": r_rank},
+                            {"task_id": bt["id"], "source": bt.get("source"), "stage": bt.get("return_to_stage"), "skill": bt.get("recommended_skill"), "evidence_rank": b_rank},
+                        ],
+                    }
+                    winner["auto_resolution"] = resolution
+                    winner["evidence_advantage"] = True
+                    loser["status"] = "superseded"
+                    loser["superseded_by"] = winner["id"]
+                    loser["auto_resolution"] = resolution
+                    loser["reason"] = (loser.get("reason") or "") + f"；[auto-arbitration] 被 {winner['id']} 的更高证据路径替代"
+                    continue
                 resolution = {
                     "type": "cross_source_stage_conflict",
                     "winner": "manual_editor_review",
@@ -412,7 +452,7 @@ def conflict_summary(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
     for task in tasks:
-        resolution = task.get("conflict_resolution") or task.get("resolution")
+        resolution = task.get("conflict_resolution") or task.get("auto_resolution") or task.get("resolution")
         if not isinstance(resolution, dict):
             continue
         key = (str(task.get("id") or ""), str(resolution.get("type") or ""))

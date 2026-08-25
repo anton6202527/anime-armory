@@ -376,6 +376,31 @@ def test_warn_never_auto_ready_but_named_review_can_accept(tmp_path: Path, monke
     assert job["post_qc"]["manual_review"]["acknowledged_warnings"][0]["code"] == "baked_text_container"
 
 
+def test_authorized_delegate_can_accept_reversible_current_pixels(tmp_path: Path, monkeypatch) -> None:
+    (tmp_path / "_设置.md").write_text(
+        f"- 视觉审阅策略：{runner.delegated_visual_authorization.__globals__['POLICY']}\n",
+        encoding="utf-8",
+    )
+    data, job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch)
+    status = runner.accept_panel_review(
+        tmp_path, "第1话", data, jobs_path, "P001", "delegate:visual-agent",
+        "已实际检查 contact sheet 的全部必检轴；仅批准可逆内部制作",
+    )
+    manual = job["post_qc"]["manual_review"]
+    assert status["accepted"] is True
+    assert status["human_signoff"] is False
+    assert manual["review_kind"] == "delegated_current_pixel_review"
+    assert manual["authorization"]["stage"] == "panel_pixels"
+
+
+def test_unapproved_delegate_cannot_accept_pixels(tmp_path: Path, monkeypatch) -> None:
+    data, _job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="not authorized"):
+        runner.accept_panel_review(
+            tmp_path, "第1话", data, jobs_path, "P001", "delegate:visual-agent", "reviewed"
+        )
+
+
 def test_deterministic_block_can_never_be_signed(tmp_path: Path, monkeypatch) -> None:
     data, job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch, block=True)
 

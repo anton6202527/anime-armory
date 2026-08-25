@@ -226,6 +226,26 @@ def build_registry(root: str) -> Dict[str, Any]:
             if rows[key].get("evidence_status") == "default_policy_only":
                 rows[key]["evidence_status"] = "recommendation_pending_calibration"
 
+    value_path = root_path / "生产数据" / "detector_value_report.json"
+    value_report = _load_json(value_path)
+    for value in value_report.get("rows") or []:
+        if not isinstance(value, dict):
+            continue
+        dim = str(value.get("dimension") or "").strip()
+        if not dim:
+            continue
+        backend = str(value.get("backend") or "any")
+        style = str(value.get("style") or "any")
+        matching = [
+            key for key in rows
+            if key[0] == dim and key[2] in {backend, "any"} and key[3] in {style, "any"}
+        ]
+        for key in matching:
+            rows[key]["detector_value"] = dict(value)
+            rows[key]["value_enforcement"] = str(value.get("recommendation") or "insufficient_evidence")
+            if rows[key]["value_enforcement"] != "auto_block_eligible":
+                rows[key]["auto_block_eligible"] = False
+
     row_list = sorted(rows.values(), key=lambda r: _row_key(r))
     for row in row_list:
         row.setdefault("detector_kind", "numeric")
@@ -239,6 +259,7 @@ def build_registry(root: str) -> Dict[str, Any]:
         "inputs": {
             "calibration": _source_rel(root_path, cal_path) if cal_path.is_file() else "",
             "recommendations": _source_rel(root_path, rec_path) if rec_path.is_file() else "",
+            "detector_value_report": _source_rel(root_path, value_path) if value_path.is_file() else "",
         },
         "rows": row_list,
         "coherence_issues": coherence_issues(row_list),

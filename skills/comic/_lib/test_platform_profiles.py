@@ -143,3 +143,17 @@ def test_webtoon_episode_thumbnail_dimensions_are_recommended_not_block(tmp_path
     )
     episode = [item for item in findings if item["code"] == "platform_thumbnail_dimensions_mismatch" and "episode" in item["reason"]]
     assert episode and episode[0]["severity"] == "warn"
+
+
+def test_webtoon_requires_content_rating_and_ascii_episode_filename(tmp_path: Path) -> None:
+    from PIL import Image
+    for name, size in (("square.png", (1080, 1080)), ("vertical.png", (1080, 1920)), ("第1话.png", (202, 142))):
+        Image.new("RGB", size).save(tmp_path / name)
+    manifest = {"platform_assets": {
+        "series_square": {"path": "square.png", "size": {"width": 1080, "height": 1080}},
+        "series_vertical": {"path": "vertical.png", "size": {"width": 1080, "height": 1920}},
+        "episode": {"path": "第1话.png", "size": {"width": 202, "height": 142}},
+    }}
+    codes = {row["code"] for row in platform_profiles.validate_manifest(tmp_path, manifest, platform_profiles.profile_for_platform("WEBTOON"), "发布候选")}
+    assert "platform_content_rating_missing" in codes
+    assert "platform_thumbnail_filename_invalid" in codes

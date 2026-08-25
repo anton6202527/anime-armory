@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 5,
+    "block": 2,
     "high": 0,
-    "medium": 34
+    "medium": 37
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 5,
+      "block": 2,
       "high": 0
     },
     "required_domains": [
@@ -28,21 +28,21 @@
     "path": "创作区/制漫剧/金瓶梅/生产数据/consistency_dependency_graph_第1集.json",
     "summary": {
       "clips": 15,
-      "edges": 192,
-      "images": 13,
-      "nodes": 64,
+      "edges": 194,
+      "images": 15,
+      "nodes": 66,
       "videos": 0
     }
   },
   "domain_counts": {
-    "block": 5,
+    "block": 2,
     "high": 0,
-    "medium": 3
+    "medium": 6
   },
   "domains": [
     {
       "counts": {
-        "block": 1,
+        "block": 0,
         "high": 0,
         "medium": 5
       },
@@ -81,18 +81,11 @@
           "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
           "severity": "warn",
           "source": "gate:image"
-        },
-        {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "节奏密度(Rhythm) [production一致性升级:关键场景] 连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确",
-          "severity": "block",
-          "source": "gate:image"
         }
       ],
       "key": "story",
       "label": "剧情",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -101,15 +94,43 @@
     },
     {
       "counts": {
-        "block": 4,
+        "block": 0,
         "high": 0,
-        "medium": 87
+        "medium": 92
       },
       "findings": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_WUDA__日常卖饼态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "服装配色(N1)",
           "loc": "",
           "message": "CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_PANJINLIAN__25岁武大家常态 服装配色(N1)    ",
           "severity": "warn",
           "source": "detect"
         },
@@ -133,39 +154,11 @@
           "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": "",
-          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": "",
-          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "真值源(TRUTH)",
-          "loc": "",
-          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip01_end.png",
-          "message": "character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
-          "severity": "warn",
-          "source": "detect"
         }
       ],
       "key": "character",
       "label": "角色",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -177,7 +170,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 84
+        "medium": 82
       },
       "findings": [
         {
@@ -249,9 +242,9 @@
     },
     {
       "counts": {
-        "block": 8,
+        "block": 1,
         "high": 0,
-        "medium": 90
+        "medium": 98
       },
       "findings": [
         {
@@ -323,9 +316,9 @@
     },
     {
       "counts": {
-        "block": 8,
+        "block": 0,
         "high": 0,
-        "medium": 16
+        "medium": 14
       },
       "findings": [
         {
@@ -387,7 +380,7 @@
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -480,15 +473,43 @@
     },
     {
       "counts": {
-        "block": 1,
+        "block": 3,
         "high": 0,
-        "medium": 33
+        "medium": 37
       },
       "findings": [
         {
-          "dimension": "风格(S1)",
+          "dimension": "锚点门(N3)",
           "loc": "",
-          "message": " 风格(S1)    ",
+          "message": "CHAR_MAGISTRATE__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_WUDA__日常卖饼态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_WUSONG__28岁打虎态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_XIMENQING__常态 锚点门(N3)    ",
           "severity": "warn",
           "source": "detect"
         },
@@ -503,41 +524,13 @@
           "dimension": "糊/低质(N4)",
           "loc": "",
           "message": " 糊/低质(N4)    ",
-          "severity": "warn",
+          "severity": "block",
           "source": "detect"
         },
         {
           "dimension": "糊/低质(N4)",
           "loc": "",
           "message": " 糊/低质(N4)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "物理事件图(PHY)",
-          "loc": "",
-          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/风格锚_北宋市井写实电影感.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -574,81 +567,88 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "leitmotif_registry.json",
+      "anchor": "ops",
       "dimensions": [
-        "音乐母题(LM1)"
+        "锚点门(N3)",
+        "风格(S1)",
+        "糊/低质(N4)",
+        "物理事件图(PHY)",
+        "成本路由(K1)",
+        "人审校准集(CAL)",
+        "一致性探针包(PROBE)"
       ],
-      "domain": "audio",
+      "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_WUSONG 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7a12f8",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_MAGISTRATE__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_WUSONG 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_has",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_JINLIAN 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=bb63a",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_WUDA__日常卖饼态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_JINLIAN 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_ha",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_WUSONG__28岁打虎态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_THRESHOLD 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=280",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_XIMENQING__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_THRESHOLD 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_EVIDENCE 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=a2b1",
+          "dimension": "糊/低质(N4)",
+          "loc": null,
+          "message": " 糊/低质(N4)    ",
           "severity": "block",
-          "source": "gate:image"
+          "source": "detect"
         },
         {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_EVIDENCE 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_h",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "糊/低质(N4)",
+          "loc": null,
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
     {
-      "anchor": "storyboard.json",
+      "anchor": "production_events.jsonl:line 504",
       "dimensions": [
-        "表情连续(EXP1)"
+        "固定 Seed",
+        "生成配方证据"
       ],
-      "domain": "character",
+      "domain": "ops",
       "severity": "block",
       "sources": [
         "gate:image"
@@ -656,30 +656,16 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "表情连续(EXP1)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
-          "severity": "block",
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 504",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "severity": "warn",
           "source": "gate:image"
         },
         {
-          "dimension": "表情连续(EXP1)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；f",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_h",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "表情连续(EXP1) [production一致性升级:重复同维度] Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 504",
+          "message": "生成配方证据 出图/第1集/图片/Clip05_first.png 生成事件缺必填配方证据：route_hash。每个最终媒体必须记录 provider/model/channel/route_hash/capability_evidence_id/recipe_hash/prompt_sha256/reference_bundle_sha256/backe",
           "severity": "block",
           "source": "gate:image"
         }
@@ -707,9 +693,9 @@
       ]
     },
     {
-      "anchor": "location_spatial_memory.json",
+      "anchor": "图片",
       "dimensions": [
-        "场景平面(FP1)"
+        "糊/低质(N4)"
       ],
       "domain": "shot",
       "severity": "block",
@@ -719,130 +705,9 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "场景平面(FP1)",
-          "loc": "设定库/location_spatial_memory.json",
-          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 LOC_JINGYANGGANG 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 acc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": "设定库/location_spatial_memory.json",
-          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 LOC_YANGGU_STREET 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 ac",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": "设定库/location_spatial_memory.json",
-          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 LOC_WUDA_HOME 本集复用 7 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accept",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json",
-      "dimensions": [
-        "结构化交互图谱(I2)"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json",
-      "dimensions": [
-        "语义谱系(P0)",
-        "节奏密度(Rhythm)"
-      ],
-      "domain": "story",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "节奏密度(Rhythm) [production一致性升级:关键场景] 连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确",
+          "dimension": "糊/低质(N4)",
+          "loc": "出图/第1集/图片",
+          "message": "糊/低质(N4) 一致性审计发现问题",
           "severity": "block",
           "source": "gate:image"
         }
@@ -919,34 +784,6 @@
           "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json",
-      "dimensions": [
-        "打斗撞点(SPEC-APEX)"
-      ],
-      "domain": "asset",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "打斗撞点(SPEC-APEX)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "打斗撞点(SPEC-APEX) Clip_01（fight_exchange）：impact 剪辑峰值（hit_stop/screen_shake/impact_sfx/闪白…）的 when 取不到秒数——template_contract.impact_frame/collision_or_apex_frame 需写成带 `<秒>s` 的命中帧（如「命中 ",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "打斗撞点(SPEC-APEX)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "打斗撞点(SPEC-APEX) Clip_02（fight_exchange）：impact 剪辑峰值（hit_stop/screen_shake/impact_sfx/闪白…）的 when 取不到秒数——template_contract.impact_frame/collision_or_apex_frame 需写成带 `<秒>s` 的命中帧（如「命中 ",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -1719,34 +1556,6 @@
       ]
     },
     {
-      "anchor": "voiceover.txt",
-      "dimensions": [
-        "配音情绪弧(VEA)"
-      ],
-      "domain": "audio",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "配音情绪弧(VEA)",
-          "loc": "脚本/第1集/voiceover.txt",
-          "message": "配音情绪弧(VEA) 镜头1·旁白：台词含强情绪但配音标注「紧张」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "配音情绪弧(VEA)",
-          "loc": "脚本/第1集/voiceover.txt",
-          "message": "配音情绪弧(VEA) 镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
       "anchor": "第1集",
       "dimensions": [
         "时间基准"
@@ -2080,7 +1889,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2090,6 +1900,13 @@
           "message": "character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2101,7 +1918,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2111,6 +1929,13 @@
           "message": "character_consistency  图片/Clip02_end.png 疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_end.png",
+          "message": "character_consistency 疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2145,6 +1970,7 @@
     {
       "anchor": "character",
       "dimensions": [
+        "脸(G1)",
         "服装配色(N1)",
         "发型(H1)",
         "表情连续(EXP1)",
@@ -2160,9 +1986,37 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_WUDA__日常卖饼态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
           "dimension": "服装配色(N1)",
           "loc": null,
           "message": "CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_PANJINLIAN__25岁武大家常态 服装配色(N1)    ",
           "severity": "warn",
           "source": "detect"
         },
@@ -2186,137 +2040,117 @@
           "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
           "severity": "warn",
           "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "表情连续(EXP1)"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。",
+          "severity": "warn",
+          "source": "gate:image"
         },
         {
           "dimension": "表情连续(EXP1)",
-          "loc": null,
-          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "表情连续(EXP1)",
-          "loc": null,
-          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
-          "dimension": "真值源(TRUTH)",
-          "loc": null,
-          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
+          "dimension": "表情连续(EXP1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "表情连续(EXP1) Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "脸(G1)",
+        "锚点门(N3)"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
         },
         {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_WUDA/日常卖饼态「克制」（出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png）：脸占画面仅 4%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "consistency_findings_第1集.json",
-      "dimensions": [
-        "一致性总审"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "一致性总审",
-          "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 一致性审计精度为 degraded；机检通过不等于脸部/像素一致性已完整验证，正式定稿前应在 full 环境复跑。（已通过项目设置 internal_only + demo放行）",
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_BEAST_TIGER__常态_45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+        },
         {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_BEAST_TIGER__常态_侧.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+        },
         {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_BEAST_TIGER__常态_后45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+        },
         {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_BEAST_TIGER__常态_背.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+        },
         {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_BEAST_TIGER__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2352,90 +2186,6 @@
       ]
     },
     {
-      "anchor": "定妆_CHAR_MAGISTRATE__常态_45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_MAGISTRATE__常态_侧.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_MAGISTRATE__常态_后45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_MAGISTRATE__常态_背.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
       "anchor": "定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
       "dimensions": [
         "定妆对账"
@@ -2459,153 +2209,6 @@
           "dimension": "定妆对账",
           "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_CHAR_MAGISTRATE__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_WUDA__日常卖饼态_侧.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_WUDA__日常卖饼态_背.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_XIMENQING__常态_45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_XIMENQING__常态_侧.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_XIMENQING__常态_后45度.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "定妆_CHAR_XIMENQING__常态_背.png",
-      "dimensions": [
-        "定妆对账"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3016,16 +2619,16 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 15 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 47 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         }
       ]
     },
     {
-      "anchor": "consistency_truth_map.json",
+      "anchor": "production_events.jsonl:line 662",
       "dimensions": [
-        "真值源(TRUTH)"
+        "固定 Seed"
       ],
       "domain": "ops",
       "severity": "warn",
@@ -3035,86 +2638,11 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "真值源(TRUTH)",
-          "loc": "设定库/consistency_truth_map.json",
-          "message": "真值源(TRUTH) 项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 662",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "ops",
-      "dimensions": [
-        "风格(S1)",
-        "糊/低质(N4)",
-        "物理事件图(PHY)",
-        "成本路由(K1)",
-        "人审校准集(CAL)",
-        "一致性探针包(PROBE)"
-      ],
-      "domain": "ops",
-      "severity": "warn",
-      "sources": [
-        "detect"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "风格(S1)",
-          "loc": null,
-          "message": " 风格(S1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "风格(S1)",
-          "loc": null,
-          "message": " 风格(S1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "糊/低质(N4)",
-          "loc": null,
-          "message": " 糊/低质(N4)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "糊/低质(N4)",
-          "loc": null,
-          "message": " 糊/低质(N4)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "物理事件图(PHY)",
-          "loc": null,
-          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/风格锚_北宋市井写实电影感.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ]
     },
@@ -3134,27 +2662,6 @@
           "dimension": "fidelity-gate",
           "loc": "创作区/制漫剧/金瓶梅/生产数据/vlm_canonical_第1集.json",
           "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "第1集",
-      "dimensions": [
-        "一致性满档账"
-      ],
-      "domain": "ops",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "一致性满档账",
-          "loc": "第1集",
-          "message": "一致性满档账 本集本次 gate 凭 1 条降级 QC waiver 放行：维度 一致性总审。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3756,7 +3263,8 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3766,46 +3274,11 @@
           "message": "scene_consistency  图片/EP01_CLIP03_a2.png 场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断） ",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "entity_memory_bank.json",
-      "dimensions": [
-        "实体记忆(EMB)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+        },
         {
-          "dimension": "实体记忆(EMB)",
-          "loc": "生产数据/entity_memory_bank.json",
-          "message": "实体记忆(EMB) 本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINLIAN, CHAR_PANJINLIAN__, CHAR_PANJINLIAN__25岁武大家常态, CHAR_WUDA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "possession_ledger_第1集.json",
-      "dimensions": [
-        "持有账本(POS)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "持有账本(POS)",
-          "loc": "生产数据/possession_ledger_第1集.json",
-          "message": "持有账本(POS) PROP_BADGE 在 Clip_02 有持有状态，但 possession_ledger 未登记本镜状态。",
+          "dimension": "scene_consistency",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "scene_consistency 场景 O2 初筛：图片/EP01_CLIP03_a2.png 光色（非阻断）",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3820,8 +3293,7 @@
         "视频证据完整性(EVID)",
         "成本路由(K1)",
         "multimodal_continuity",
-        "style_consistency",
-        "scene_consistency"
+        "style_consistency"
       ],
       "domain": "shot",
       "severity": "warn",
@@ -3886,27 +3358,6 @@
           "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "world_consistency_score_第1集.json",
-      "dimensions": [
-        "世界一致性(WCS)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "世界一致性(WCS)",
-          "loc": "生产数据/world_consistency_score_第1集.json",
-          "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -3985,6 +3436,35 @@
       ]
     },
     {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "语义谱系(P0)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "subtitle",
       "dimensions": [
         "系列包装(PKG)",
@@ -4026,9 +3506,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  配音情绪弧(VEA)   镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 ",
-        "[warn]  表情连续(EXP1)   Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演",
-        "[warn]  表情连续(EXP1)   Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC"
+        "[warn] CHAR_WUSONG__28岁打虎态 锚点门(N3)    ",
+        "[warn] CHAR_WUSONG__28岁打虎态 脸(G1)    ",
+        "[warn] CHAR_WUSONG__28岁打虎态 脸(G1)    "
       ],
       "id": "CHAR_WUSONG",
       "kind": "character",
@@ -4066,9 +3546,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
-        "[warn] CHAR_WUDA__日常卖饼态 发型(H1)    ",
-        "[warn]  实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINL"
+        "[warn] CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
+        "[warn] CHAR_WUDA__日常卖饼态 锚点门(N3)    ",
+        "[warn] CHAR_WUDA__日常卖饼态 脸(G1)    "
       ],
       "id": "CHAR_WUDA",
       "kind": "character",
@@ -4080,9 +3560,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，",
-        "[warn]  表情连续(EXP1)   Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演",
-        "[warn]  实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINL"
+        "[warn] CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
+        "[warn] CHAR_PANJINLIAN__25岁武大家常态 服装配色(N1)    ",
+        "[warn]  表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，"
       ],
       "id": "CHAR_PANJINLIAN",
       "kind": "character",
@@ -4094,8 +3574,8 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn] CHAR_MAGISTRATE__常态 锚点门(N3)    ",
         "[warn]  实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINL",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png 生成事件缺 cost/provider 记账",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png 生成事件缺 cost/provider 记账"
       ],
       "id": "CHAR_MAGISTRATE",
@@ -4108,9 +3588,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn] CHAR_XIMENQING__常态 锚点门(N3)    ",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 生成事件缺 cost/provider 记账；",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 生成事件缺 cost/provider 记账；",
-        "[warn] character_consistency  CHAR_XIMENQING__常态 锚点门 N3：CHAR_XIMENQING__常态 主参"
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 生成事件缺 cost/provider 记账；"
       ],
       "id": "CHAR_XIMENQING",
       "kind": "character",
@@ -4414,11 +3894,11 @@
     "[warn]  打斗撞点(SPEC-APEX)    Clip_01（fight_exchange）：impact 剪辑峰值（hit_stop/scree",
     "[warn]  打斗撞点(SPEC-APEX)    Clip_02（fight_exchange）：impact 剪辑峰值（hit_stop/scree",
     "[warn]  风格(S1)    ",
-    "[warn]  风格(S1)    ",
     "[warn]  色温调色(GRADE1)   图片/Clip01_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.015 v",
     "[warn]  色温调色(GRADE1)   图片/Clip01_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.00",
     "[warn]  色温调色(GRADE1)   图片/Clip02_end.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.389 v",
     "[warn]  色温调色(GRADE1)   图片/EP01_CLIP02_a3.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.3",
+    "[block]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  配音情绪弧(VEA)   镜头1·旁白：台词含强情绪但配音标注「紧张」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒",
@@ -4462,7 +3942,7 @@
     "[warn]  环境声(AMB)   本集涉 7 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境",
     "[warn]  文字渲染(OCR1)   Clip_04 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
     "[warn]  文字渲染(OCR1)   Clip_11 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
-    "[warn] style_consistency  None 风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥",
+    "[warn] style_consistency  None 风格归属佐证：本集 15 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.02 ≥",
     "[warn] character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出",
     "[warn] character_consistency  图片/Clip02_end.png 疑似漏分类角色镜：图片/Clip02_end.png 检出",
     "[warn] scene_consistency  图片/EP01_CLIP03_a2.png 场景 O2 初筛：图片/EP01_CLIP03_a2.pn",

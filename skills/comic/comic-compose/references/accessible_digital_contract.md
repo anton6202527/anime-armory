@@ -1,6 +1,13 @@
 # accessible digital / EPUB FXL readiness 合同
 
-comic 当前**没有自动 EPUB renderer**。`epub_fxl` 只提供可选的交付验收轴：外部专业工具生成真实 `.epub` 后，把它登记进 `export_manifest.json.documents[]`，再写 `排版/<话>/accessible_digital_contract.json`。普通 PNG/WebP/PDF 图片包不能冒充 EPUB 或 accessible digital。
+comic 现在可由 `scripts/build_epub_fxl.py` 生成真实 EPUB 3 fixed-layout 并登记 `export_manifest.json.documents[]`；也接受外部专业工具生成的 EPUB。普通 PNG/WebP/PDF 图片包不能冒充 EPUB 或 accessible digital。
+
+```bash
+python3 skills/comic/comic-compose/scripts/build_epub_fxl.py "$ROOT" --chapter 第1话 \
+  --alt-json page_alts.json --reviewer "无障碍编辑" --reason "逐页对照实际画面复核"
+```
+
+脚本会把 `mimetype` 作为未压缩 ZIP 首项，生成 container、OPF、spine、nav、逐页 XHTML/alt 和 discoverability metadata，并在本机有 `epubcheck` / `ace` 时执行外部验证；工具缺失会明确记为 unavailable。它不评判替代文本语义质量，也不签发 conformance certification。
 
 裁决会用标准库验证 `mimetype` 是 ZIP 首项且未压缩、container rootfile 指向真实 OPF、manifest/spine/nav/XHTML、实际 `rendition:layout=pre-paginated`、包内 accessibility metadata，以及每个 XHTML `img` 是否显式带 `alt` 属性。它不会判断 `alt=""` 是否真为装饰图、替代文本是否准确充分，也不做辅助技术实测。因此结论只能是：
 

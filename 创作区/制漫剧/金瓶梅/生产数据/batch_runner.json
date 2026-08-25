@@ -1,0 +1,14 @@
+{
+  "commands": {
+    "image": "bash skills/n2d/n2d-batch/scripts/run_n2d_image.sh \"{root}\" \"{episode}\""
+  },
+  "env": {
+    "NO_PROXY": "127.0.0.1,localhost",
+    "no_proxy": "127.0.0.1,localhost",
+    "N2D_IMAGE_COMMAND": "python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"$N2D_ROOT\" \"$N2D_EPISODE\" --shots \"$N2D_AFFECTED_SHOTS\" --max-shots 1 --stop-on-fail"
+  },
+  "production_authorizations": {},
+  "phase_spend_envelopes": {},
+  "auto_gate": true,
+  "next_preflight": true
+}

@@ -785,6 +785,8 @@ def build_workflow(root: str) -> dict[str, Any]:
         "kind": WORKFLOW_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": root,
+        "business_state_source": "_进度.md",
+        "state_scope": "derived_author_view",
         "reference": "skills/novel/novel-craft/references/author-workflow.md",
         "current_step": next_step["key"] if next_step else "complete",
         "next_action": next_step["command"] if next_step else "",

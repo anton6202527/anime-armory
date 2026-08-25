@@ -1,0 +1,99 @@
+{
+  "actual_submit_request": {
+    "prompt_path": "生产数据/imagegen_prompts/第1集/Clip_05_first.txt",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/第1集/图片/Clip04_first.png",
+        "role": "source_frame",
+        "sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "出图/第1集/图片/EP01_CLIP03_a2.png",
+        "role": "character",
+        "sha256": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067"
+      },
+      {
+        "index": 5,
+        "owner": "PROP_CAKE_POLE",
+        "path": "出图/共享/图片/定妆_道具_炊饼担.png",
+        "role": "asset",
+        "sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "artifact_sha256": "5fb7657cfda296f9d52cc560c3354572afaa011748fa977d255ca0af70319d32",
+  "compiler": {
+    "backend": "codex",
+    "channel": "built-in image_gen",
+    "mode": "firstframe",
+    "model": "GPT Image 2",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/第1集/图片/Clip04_first.png",
+        "role": "source_frame",
+        "sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "出图/第1集/图片/EP01_CLIP03_a2.png",
+        "role": "character",
+        "sha256": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_WUSONG/28岁打虎态",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_WUDA/日常卖饼态",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067"
+      },
+      {
+        "index": 5,
+        "owner": "PROP_CAKE_POLE",
+        "path": "出图/共享/图片/定妆_道具_炊饼担.png",
+        "role": "asset",
+        "sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea"
+      }
+    ],
+    "task_type": "multi_subject"
+  },
+  "created_at": "2026-08-24T09:14:04Z",
+  "episode": "第1集",
+  "generation_source": "/Users/wesley/.codex/generated_images/01a0329f-1515-7e41-9cdd-2c2bc477d1d4/exec-a84f7b75-feb9-4823-b2cb-dcc17fa5d4fe.png",
+  "kind": "n2d_compiled_image_request_receipt",
+  "shot": "Clip_05_first",
+  "target": "出图/第1集/图片/Clip05_first.png",
+  "tool": "image_gen.imagegen",
+  "version": 1
+}

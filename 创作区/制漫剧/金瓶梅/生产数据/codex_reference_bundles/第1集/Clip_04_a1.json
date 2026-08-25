@@ -1,0 +1,244 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 5,
+  "cli_image_input_limit": 5,
+  "cli_image_input_truncated": true,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip04_first.png",
+      "bytes": 2639991,
+      "owner": "Clip_04",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/reference_enhanced/第1集/Clip04_first__c3bf9b0eba92_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3367935,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/Clip04_first__c3bf9b0eba92_941x1672_to_1024x1819.png",
+      "prepared_sha256": "0130dbee24beae6e74e65edbc3c47e120b60702a88b59d5f53c6cd4cd53d1187",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/第1集/图片/Clip04_first.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
+      "source": "same_clip_firstframe",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip04_first.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+      "bytes": 910893,
+      "owner": "CHAR_WUDA/日常卖饼态",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+      "bytes": 468410,
+      "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 12,
+      "sha256": "c8cc45c2514f160643d0186388341639a1404b86f3a1dee3e47197e7488a1c8a",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+      "bytes": 2758053,
+      "owner": "LOC_YANGGU_STREET",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/reference_enhanced/第1集/定妆_场景_阳谷街面与武大家楼窗__1f5805cad324_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3604446,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_场景_阳谷街面与武大家楼窗__1f5805cad324_941x1672_to_1024x1819.png",
+      "prepared_sha256": "1cfd0cb3d775cf9dc3b6a3e0d1de8aeb8e2fbc2af4a8920b74c13237d030347b",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+      "role": "asset",
+      "sequence": 19,
+      "sha256": "1f5805cad3244eea50f90fbaf9bdbf9b69c35af4f7d5448863c84c5b010a1315",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+      "bytes": 2365754,
+      "owner": "LOC_WUDA_HOME",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/reference_enhanced/第1集/定妆_场景_武大家楼屋雪夜__ff9b146e47b8_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2987292,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_场景_武大家楼屋雪夜__ff9b146e47b8_941x1672_to_1024x1819.png",
+      "prepared_sha256": "8240b095358da329ccaaa9fbf69c0f8e937111658e1fbf1c03b377fce2d2c7ca",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+      "role": "asset",
+      "sequence": 28,
+      "sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_场景_武大家楼屋雪夜.png"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_北宋市井写实电影感.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "日常卖饼态",
+      "id": "CHAR_WUDA",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+        "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png"
+      ]
+    },
+    {
+      "form": "25岁武大家常态",
+      "id": "CHAR_PANJINLIAN",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png",
+        "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png"
+      ]
+    },
+    {
+      "id": "LOC_YANGGU_STREET",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+        "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
+        "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "PROP_CAKE_POLE",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_炊饼担.png",
+        "出图/共享/图片/定妆_道具_炊饼担_比例.png",
+        "出图/共享/图片/定妆_道具_炊饼担_手持.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "PROP_WINDOW_LATTICE",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+        "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
+        "出图/共享/图片/定妆_道具_WINDOW_LATTICE_反面.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "LOC_WUDA_HOME",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+        "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
+        "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_04_a1",
+  "target": "出图/第1集/图片/EP01_CLIP04_a1.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

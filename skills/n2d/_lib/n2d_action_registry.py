@@ -182,7 +182,7 @@ STAGE_ACTIONS: Dict[str, Dict[str, Any]] = {
         "n2d-compose",
         specialist="n2d-qc-agent",
         stop="needs_payment_confirm",
-        prework=["audio_timing_gate", "mouth_visible_audit", "shared_video_materialize", "action_edit_cues", "identity", "image_qc", "compose_gate", "compliance"],
+        prework=["audio_timing_gate", "mouth_visible_audit", "shared_video_materialize", "action_edit_cues", "color_pipeline", "identity", "image_qc", "compose_gate", "compliance"],
     ),
     "review": _base(
         "review",
@@ -199,6 +199,8 @@ STAGE_ACTIONS: Dict[str, Dict[str, Any]] = {
             "consistency_ledger",
             "review_ui",
             "failure_taxonomy",
+            "detector_value_report",
+            "color_pipeline",
             "pilot_release_gate",
             "release_verdict",
         ],

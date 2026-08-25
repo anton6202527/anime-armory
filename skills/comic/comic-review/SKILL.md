@@ -5,7 +5,7 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, name boar
 
 # comic-review — 漫画审查、阶段 Gate 与发布裁决
 
-comic-review 负责证明“当前版本是否可以继续”，不负责代写脚本、改图或代替人签收。审查分三层：确定性合同 gate、启发式视觉/叙事告警、人工责任签收。最终再由 `release_verdict.py` 把技术完成、生产完成和公开发布就绪分开。
+comic-review 负责证明“当前版本是否可以继续”，不负责代写脚本、改图或代替人签收。审查分三层：确定性合同 gate、启发式视觉/叙事告警、人工责任签收。最终由 `release_verdict.py` 聚合唯一 active delivery，写一个 canonical `release_digest` 和一个 `completion_verdict`；其它 readiness 仅作诊断视图。
 
 ## 证据规则
 
@@ -189,7 +189,8 @@ python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --medium epub_fx
 - `production_complete`：technical complete，且当前 review gate receipt 非 block。
 - `medium=web_images|print_pdf|epub_fxl` 是技术交付轴，`usage=internal|public|commercial` 是用途轴；旧 `--profile internal|digital|print|commercial` 仍映射到兼容组合，`commercial` 不再被当成与 PDF 并列的文件格式。
 - `print_pdf` 还要求真实 PDF、trim/bleed/safe/DPI/页序装订/字体/ICC/透明度合同，以及绑定当前合同/PDF SHA 的印前人审 receipt；普通图片包不能通过。
-- `epub_fxl` 当前没有自动 renderer；会解析外部 EPUB 的 mimetype/container/OPF/manifest/spine/nav/XHTML、`rendition:layout`、包内 accessibility metadata 与 img alt 属性，再核对具名 human-attested 合同。机器不判断 alt 文案质量，不能宣称 EPUB Accessibility/WCAG 认证。
+- `epub_fxl` 可由 `comic-compose/scripts/build_epub_fxl.py` 生成真实固定版式 EPUB；release 仍会独立解析包结构与 alt 属性。机器不判断 alt 文案质量，不能宣称 EPUB Accessibility/WCAG 认证。
+- `detector_value_report.py` 按 detector × genre × craft_profile 统计 precision/recall、repair yield 和成本效用；证据不足或修复收益差的 detector 只降为 advisory，不自动删除。`finding_triage.py` 把确定性修复、目标复核、当前收据 noop 与硬边界分流。
 - WEBTOON/Tapas 等 profile 明确有双端预览证据时，公开交付还要绑定 `preview_source=actual_platform_preview` 的 PC/mobile 截图，以及当前 manifest SHA 和有序 page/segment/role；local simulation 或交换页面顺序都不能沿用旧预览。
 
 `usage=public|commercial` 必须由真实签收人显式执行 `--accept --reviewer ... --reason ...`。命令先排除 acceptance 自身之外的发布阻断，再写 `生产数据/release_acceptance_第N话.json`；其 `medium+usage`、全部导出物 SHA、可重算 review receipt、平台有序 preview、finding disposition summary/ledger，以及 print/accessibility 介质合同与 readiness receipt 都精确绑定当前证据。任一项变化都使旧 acceptance 失效。它只记录明确的人审决定，不自动决定、不发布、不回写进度。

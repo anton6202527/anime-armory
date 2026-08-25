@@ -31,6 +31,20 @@ def test_print_contract_refuses_sub_300_dpi(tmp_path: Path) -> None:
         )
 
 
+def test_kdp_profile_records_current_vendor_constraints(tmp_path: Path) -> None:
+    path = print_delivery.init_contract(
+        tmp_path, "第1话", trim_width_mm=176, trim_height_mm=250,
+        bleed_mm=3.2, safe_mm=6.4, dpi=300, binding_edge="left",
+        reading_direction="ltr", color_mode="RGB",
+        icc_policy="printer_managed_srgb", icc_profile_name="sRGB",
+        vendor_profile="kdp", vendor_requirement_evidence="",
+    )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["vendor_rules"]["single_pages_not_spreads"] is True
+    assert payload["vendor_rules"]["crop_marks"] is False
+    assert "G201857950" in payload["vendor_requirement_evidence"]
+
+
 def test_print_receipt_binds_current_contract_and_pdf_sha(tmp_path: Path) -> None:
     page = tmp_path / "排版" / "第1话" / "pages" / "page_001.png"
     page.parent.mkdir(parents=True, exist_ok=True)

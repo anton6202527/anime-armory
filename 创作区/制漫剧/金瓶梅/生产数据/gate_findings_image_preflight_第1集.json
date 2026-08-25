@@ -3344,7 +3344,7 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-08-18T09:01:39+00:00",
+  "generated_at": "2026-08-24T07:36:05+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811",
@@ -3495,6 +3495,7 @@
       "出图/第1集/图片/Clip02_end.png": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
       "出图/第1集/图片/Clip02_first.png": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
       "出图/第1集/图片/Clip03_first.png": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
+      "出图/第1集/图片/Clip04_first.png": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
       "出图/第1集/图片/EP01_CLIP01_a1.png": "d3d8fb1d2a0e1fd872d92c2d325120fe06aa510314bc6f67bd2d7adf040c6645",
       "出图/第1集/图片/EP01_CLIP02_a1.png": "116401263082ce8ae1be0d3af054d26eac4554c647046eb3e6cb95e75177cfdd",
       "出图/第1集/图片/EP01_CLIP02_a2.png": "e9db4b83a9b1a39d1d4cf9309de92e8298fb24b1635b12e495ae3b4bafd52bfd",
@@ -3509,7 +3510,7 @@
       "设定库/characters/武松.md": "f0eab70626f87ef268c3a4ac6e7081ebc60d6c9249854200db0388774fc70e56",
       "设定库/characters/潘金莲.md": "604cf0a24aecdb28d9a986dafd94b06fc57b55b7d6624d24d89e53383ea68ae8"
     },
-    "sha": "080b2890b2f4f15f3e6293e79f29ed8ec1f7f9576f2416343f3892a370f20e37"
+    "sha": "bcdd9c43d1c2667591037c2bb3c8b98bae22059d6f1dc1c54e179d0d451808bb"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",

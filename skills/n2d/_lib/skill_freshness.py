@@ -75,6 +75,8 @@ N2D_LIB_OBSERVE_ONLY_TOKENS = (
     "_lib/n2d_trace.py",
     "_lib/n2d_friction.py",
     "_lib/prework_cache.py",
+    # 预算信封只改变未来付费调用的授权/消费控制，不改变已生成媒体或 prompt 内容。
+    "_lib/spend_envelope.py",
     "_lib/n2d_cross_episode.py",
     "_lib/n2d_maintenance.py",
     # 血缘索引：只从既有产物派生节点/边，从不改变阶段状态或替代 _进度.md/gate。

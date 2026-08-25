@@ -50,6 +50,7 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
    - `审稿/审稿报告.md`：给人读，按严重度排序，每条 = 位置（第N章·第X段）+ 维度 + 问题 + **建议修法** + 证据引文。附"健康度概览"表（各维度通过/问题数）。
    - `审稿/review_report.json`：给调度器读，遵守 `novel-craft/references/qa-report-schema.md`，必须带 `source_snapshot` 绑定当前 `章节/` 全量 hash；每条问题必须带 `recommended_skill`、`return_to_stage`、`affected_files`、`blocking`；所有显式豁免必须进 `waivers[]`。
 4. **（可选 `--fix`）**：只就地做**润色级**小改；**阻断/建议级只报不自动改**，交作者定夺。
+5. **检测器价值校准**：把真实复核标签与修复结果追加到 `生产数据/review_calibration.jsonl`，再跑 `python3 skills/novel/novel-review/scripts/detector_value_report.py <作品根> --write`。报告按 detector/dimension/craft_profile/genre 计算 precision、recall、false-positive/negative rate、accepted repair yield 与成本效用；样本不足或修复收益不够只保持 advisory。`retire_candidate_advisory_only` 只是维护建议，脚本绝不自动删检测器或改 gate。
 
 ## 严重度（定级 + 容错铁律）
 

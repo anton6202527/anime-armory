@@ -1,6 +1,23 @@
 {
   "confirmations": [
     {
+      "char": "CHAR_PANJINLIAN__25岁武大家常态",
+      "confirmed_at": "2026-08-24T08:17:24+00:00",
+      "floor": 0.85,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP01_CLIP04_a1.png",
+      "png_sha256": "5774994f998472908b18ccd3c80b6aa5ff3e0ebeae2d0c5076bcc1bf16257ca0",
+      "reason": "已实际查看当前像素：潘金莲青黛窄袖上衣、灰色交领与枣红裙、低髻木簪均与定妆主色和轮廓一致；色差来自窗边冷光与场景阴影，不是换装。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.7747,
+      "shot": "Clip_04",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_WUDA__日常卖饼态",
       "confirmed_at": "2026-08-18T09:43:52+00:00",
       "floor": 0.9907,
@@ -87,6 +104,6 @@
     }
   ],
   "kind": "n2d_outfit_confirmations",
-  "updated_at": "2026-08-18T09:43:52+00:00",
+  "updated_at": "2026-08-24T08:17:24+00:00",
   "version": 1
 }

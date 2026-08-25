@@ -41,6 +41,7 @@ python3 skills/comic/comic-update/scripts/update_plan.py check "创作区/画漫
 - 同一参考图、registry asset、逐格脚本、layout、lettering 或 panel 像素在 `record` 后变化时，`check` 会输出 `panel_impacts[]`、精确 `panel_targets/page_targets` 和最早回放阶段；只需重抽部分格时，执行计划直接生成 `comic-batch --targets ... --force`，不把整话重出图当默认答案。
 - 未被任何格消费的 translation entry 变化不触发返工；只改嵌字不会建议重抽画面。真实仓库的 `skills/comic/comic-*` 路径按最深子 skill 归属，避免把 compose 更新误判成顶层 comic/source 全量回放。
 - 计划覆盖 `image` 时，先核对当前阶段预算包是否仍精确绑定项目/stage/input/model/channel/scope/expiry/max_calls/max_attempts/cost。有效余量内保留旧图并连续交给 `comic-image` / `comic-batch`；缺失、过期、扩大或合同变化才结构化停止。
+- 实际返修用 `revision_transaction.py start → verify → promote`：候选与 backup 都绑定 base SHA，promote 前检查并发变化，提升后自动跑固定 Comic gate；失败立即恢复 backup。成功后重建逐格 dependency index，只派发真实受影响格/页。显式 `rollback` 可恢复。
 - 控制面变化不触发重制：`comic-progress`、`comic-settings`、`comic-update` 本身变化只提示刷新扫描/基线。
 
 ## 收尾

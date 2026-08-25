@@ -342,6 +342,8 @@ python3 skills/n2d/progress.py set <作品根> 第N集 视频prompt ✅
 
 1. **能力报盘**：运行 `python3 skills/n2d/n2d-video/scripts/backend_status.py <作品根>` 查看后端多帧能力与拆段策略。
 2. **自动化准备**：用 `scripts/video_runner.py` 写稳定 manifest。若后端不支持原生多帧，将自动执行 **Split Relay (拆段接力)**。
+3. **优先局部返修**：当前后端 adapter v2 若暴露 `edit / extend / replace_range / remix`，对局部穿帮先生成 hash-bound correction variant，不默认整镜重抽；后端不支持时再按最小范围回退 regen。
+4. **持久等待**：异步 provider 用 `video_runner.py wait` 指数退避查询，避免固定频率空轮询或每次把“继续查询”交给用户。
 
 > **长镜/多关键帧**：不走拼贴板 segment 流程（已退役）。`video_runner prepare` 会自动从 `storyboard.json` 的 `continuity.anchors` 和后端能力档决定执行：Dreamina 原生 `multiframe2video` 一次吃首/中锚/尾；首尾帧后端拆段接力；first-frame-only 后端标记为未消费并要求 reroute/人工处理——见「中段锚帧」节。
 
@@ -355,6 +357,16 @@ python3 skills/n2d/n2d-video/scripts/video_runner.py submit <作品根> <manifes
 
 # 3) 查询并下载到 出视频/第N集/视频/ 原片
 python3 skills/n2d/n2d-video/scripts/video_runner.py query <作品根> <manifest.json> --clip Clip_06
+
+# 3a) 长任务持续查询：2s 起步、指数退避至 60s 并带 jitter；timeout 后保留原 task id 供恢复，不重提
+python3 skills/n2d/n2d-video/scripts/video_runner.py wait <作品根> <manifest.json> --clip Clip_06 --timeout 1800
+
+# 3b) 局部返修：只创建 correction variant，不覆盖已验收源片；adapter 必须显式暴露对应 operation
+python3 skills/n2d/n2d-video/scripts/video_runner.py repair-plan <作品根> <manifest.json> --clip Clip_06 \
+  --operation replace_range --start-sec 2.4 --end-sec 3.1 \
+  --instruction "只修复右手穿模；保持人物身份、服装、镜头轨迹、光色和区间外像素语义不变" \
+  --preserve-region "face" --preserve-region "background"
+# repair-plan 输出新 clip id 后，仍用同一 submit → wait/query → qc → 当前像素 accept 流程
 
 # adapter 暴露 cancel 时才可取消；不支持时不得伪造取消状态
 python3 skills/n2d/n2d-video/scripts/video_runner.py cancel <作品根> <manifest.json> --clip Clip_06
@@ -372,7 +384,7 @@ python3 skills/n2d/n2d-video/scripts/video_runner.py accept <作品根> <manifes
 # 批次抽帧 QC（无声策略下会先确保正式 MP4 无音轨；显式原生音画/环境声才只读原片）
 python3 skills/n2d/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
 
-# 原生多镜 opt-in：先生成计划，再按组准备/提交/查询/验收（验收会拆回逐 Clip）
+# 原生多镜自动计划：默认 原生多镜生成=自动，能力满足即激活；以下命令用于单独检查/手动执行某组
 python3 skills/n2d/n2d-video/scripts/multishot_plan.py <作品根> 第N集 --write --json
 python3 skills/n2d/n2d-video/scripts/multishot_runner.py prepare <作品根> 第N集 --group MSG_01
 python3 skills/n2d/n2d-video/scripts/multishot_runner.py submit <作品根> <multishot-manifest.json>
@@ -384,6 +396,10 @@ python3 skills/n2d/n2d-video/scripts/multishot_runner.py accept <作品根> <mul
 ```
 
 `video_runner.py submit --dry-run` 可先检查将要调用的后端参数；若一次命令被打断，先跑 `video_runner.py status <manifest.json>`，必要时用平台任务列表核对最近任务，再决定是否重提。`--skip-preflight` 仅供调试完整 dashboard gate；`video_runner.py submit` 仍会强制执行身份同源 guard，不能绕过首/中/尾同源与大表情锁脸规则。
+
+**局部编辑返修合同**：`repair-plan` 把源视频路径与 SHA、operation、修改区间、mask（若有）、preserve regions、修复指令和原 manifest fingerprint 一并绑定；同一合同重复运行幂等返回同一 variant。源片、区间或指令变化会生成新 variant，不会覆盖原 accepted MP4。编辑结果必须重新过机器 QC 与当前像素验收；只有显式升级到时间线/canonical 选择后才替代源片。adapter 没有声明 correction operation、源片已漂移或 mask 不存在时 fail-closed，绝不偷偷改走全量重抽。
+
+**provider 等待/重试合同**：`wait` 只重复 query，同一 task id 上按指数退避 + jitter 轮询；`failed/cancelled` 立即返回，timeout 保留 `submitted/running` 和恢复证据。它绝不在 provider 状态不明时自动 submit 第二个任务，因此不会因网络抖动双扣费。
 
 **Split Relay 付费执行纪律（拆段接力）**：
 

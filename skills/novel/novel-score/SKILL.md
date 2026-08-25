@@ -95,6 +95,7 @@ python3 skills/novel/novel-score/scripts/build_reference_distribution.py \
   2. 能直接处理语义任务的 agent 先用 `python3 skills/novel/novel-craft/scripts/semantic_job.py claim "<job.json>" --claimed-by <agent>` 领取，再读 `语义任务/*.prompt.md`，产出评估 JSON 后用 `python3 skills/novel/novel-craft/scripts/semantic_job.py complete "<job.json>" --response "<评估JSON>"` 回填；阻塞/拒收用 `block` / `reject` 留痕。兼容路径仍可用 `python3 skills/novel/novel-score/scripts/score.py <作品根> --mock-assessment <评估JSON> [--task 评分/score_task.json]`。评估 JSON 必须回显同一个 `score_task_id`；正文、baseline 或 scope 变化会阻断，必须重出 task。
 - **单 Take 评估**：针对多版生成中的某一版进行独立打分，分数会自动同步至 `章节/takes/第NN章/takes_manifest.json`。
 - **批量/全本评估**：默认 opening 取前 3 章；`--scope full` 读取 `章节/` 全量定稿文件，并会在新增/删除章节后使旧 full score task 失效。
+- **最终发布合同**：opening/arc score 只服务早期 go/revise 与弧段诊断；`platform_publish` / `data_validated_launch` 的 release manifest 强制要求当前 `score_report.scope.mode=full`、声明章数与 snapshot files 都覆盖当前全部章节。opening score 不得冒充终稿全书评分。
 
 ### 3. 逐维打分(对照 `references/rubric.md`)
 八维,每维 1-10 分 → 按权重档换算加权;每维**给分 + 证据引文 + 一句短评**。

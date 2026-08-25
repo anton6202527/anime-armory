@@ -21,6 +21,7 @@ def _registry(root: Path, command: str = "seedance-wrapper") -> None:
                 "operations": [
                     "submit", "query", "cancel",
                     "multishot_submit", "multishot_query", "multishot_cancel",
+                    "edit", "extend", "replace_range", "remix",
                 ],
                 "capabilities": {"idempotency": "provider", "multishot": True},
                 "result_contract": {
@@ -52,6 +53,7 @@ def test_project_wrapper_is_ready_only_when_command_exists(tmp_path: Path) -> No
     assert ready["state"] == "automated_ready"
     assert ready["supports_cancel"] is True
     assert ready["supports_multishot"] is True
+    assert ready["supports_corrections"] == ["edit", "extend", "remix", "replace_range"]
 
 
 def test_multishot_only_wrapper_can_be_ready_for_multishot_operation_set(tmp_path: Path) -> None:
@@ -105,3 +107,31 @@ def test_result_contract_and_failure_classification(tmp_path: Path) -> None:
     assert vea.classify_failure(1, {}, "HTTP 429 rate limit")["retryable"] is True
     assert vea.classify_failure(1, {}, "401 unauthorized")["class"] == "auth"
     assert vea.classify_failure(1, {}, "unexpected disconnect after submit")["paid_state_uncertain"] is True
+
+
+def test_edit_request_binds_source_range_and_preserved_regions(tmp_path: Path) -> None:
+    _registry(tmp_path)
+    adapter = vea.adapter_for(tmp_path, "seedance")
+    assert adapter is not None
+    item = {
+        "clip": "Clip_01__repair_a1",
+        "requested_operation": "replace_range",
+        "repair_contract": {
+            "source_video": "出视频/第1集/视频/Clip_01.mp4",
+            "source_sha256": "a" * 64,
+            "instruction": "只修复 2-3 秒的手部，不改变脸和机位。",
+            "start_sec": 2.0,
+            "end_sec": 3.0,
+            "preserve_regions": ["face", "background", "camera_path"],
+            "mask": "生产数据/masks/hand.png",
+        },
+    }
+    request = vea.build_request(
+        operation="replace_range", root=tmp_path,
+        manifest={"episode": "第1集"}, item=item, adapter=adapter,
+    )
+    assert request["operation"] == "replace_range"
+    assert request["inputs"]["source_video"].endswith("Clip_01.mp4")
+    assert request["edit"]["start_sec"] == 2.0
+    assert request["edit"]["preserve_regions"] == ["face", "background", "camera_path"]
+    assert len(request["request_sha256"]) == 64

@@ -251,7 +251,7 @@
       "path": "出图/第1集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 3
+      "file_count": 15
     },
     {
       "stage": "video_prompt",
@@ -294,7 +294,7 @@
       "path": "生产数据/consistency_ledger_第1集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "f109197cbff6fa7bbde58db3c34d24800912184d772b7122b9e7a0414ba8fa0b"
+      "sha256": "9f9e4cd5a8027d09de4752c052ecfac6de4485b4ad129c4171df358b1464728c"
     },
     {
       "stage": "review",
@@ -322,6 +322,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "127/179",
+  "last_progress_value": "139/179",
   "last_progress_state": "partial"
 }

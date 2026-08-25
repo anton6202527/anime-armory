@@ -1,0 +1,39 @@
+{
+  "episode": "",
+  "generated_at": "2026-08-24T07:58:30+00:00",
+  "kind": "n2d_stop_loss",
+  "metrics": {
+    "cost_per_finished_min": null,
+    "events": 647,
+    "evidence_files": 7,
+    "face_drift_rate": 0.0,
+    "finding_rows": 384,
+    "generation_events": 173,
+    "lipsync_failure_rate": 0.0,
+    "qc_block_rate": 0.0,
+    "qc_blocks": 0,
+    "redraw_events": 1,
+    "redraw_rate": 0.0058,
+    "seam_failure_rate": 0.0
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "status": "pass",
+  "thresholds": {
+    "max_cost_per_finished_min": 1000.0,
+    "max_face_drift_rate": 0.08,
+    "max_lipsync_failure_rate": 0.08,
+    "max_qc_block_rate": 0.15,
+    "max_redraw_rate": 0.35,
+    "max_seam_failure_rate": 0.05
+  },
+  "version": 1,
+  "violations": [
+    {
+      "action": "run_dashboard_build_to_restore_cost_stop_loss",
+      "level": "warn",
+      "metric": "cost_per_finished_min",
+      "threshold": 1000.0,
+      "value": null
+    }
+  ]
+}

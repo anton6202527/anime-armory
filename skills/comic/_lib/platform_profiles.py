@@ -52,6 +52,7 @@ class PlatformProfile:
     color_mode: str | None = None
     thumbnail: dict[str, Any] | None = None
     thumbnail_assets: dict[str, dict[str, Any]] = field(default_factory=dict)
+    publishing_requirements: dict[str, Any] = field(default_factory=dict)
     min_panels: int | None = None
     recommended_min_pages: int | None = None
     max_pages: int | None = None
@@ -71,8 +72,9 @@ class PlatformProfile:
 
 TAPAS_SOURCE = "https://help.tapas.io/hc/en-us/articles/1260802028970-Series-Basics-How-to-publish-a-comic-episode-on-Tapas"
 TAPAS_THUMB_SOURCE = "https://help.tapas.io/hc/en-us/articles/360018625314-A-Quick-Guide-to-Thumbnailing"
-WEBTOON_THUMB_SOURCE = "https://webtooncanvas.zendesk.com/hc/en-us/articles/32913712749588-Designing-Your-Series-Episode-Thumbnails-Sizes-Guidelines-and-Help"
+WEBTOON_THUMB_SOURCE = "https://webtooncanvas.zendesk.com/hc/en-us/articles/32913712749588-File-Size-Overview-What-to-Know-before-Publishing-your-Comic-on-WEBTOON-CANVAS"
 WEBTOON_PREVIEW_SOURCE = "https://webtooncanvas.zendesk.com/hc/en-us/articles/42850360989076-Preview-Episodes-Before-Publishing"
+WEBTOON_RATING_SOURCE = "https://webtooncanvas.zendesk.com/hc/en-us/articles/29275038924052-Why-can-t-I-upload-a-new-episode"
 KUAIKAN_SOURCE = "https://mini.kkmh.com/webs/send/letter"
 MANGA_PLUS_SOURCE = "https://mangaplus-creators.jp/help"
 
@@ -125,12 +127,17 @@ PROFILES = {
         display_name="WEBTOON",
         verified=True,
         collected_at="2026-08-20",
-        source_urls=(WEBTOON_THUMB_SOURCE, WEBTOON_PREVIEW_SOURCE),
+        source_urls=(WEBTOON_THUMB_SOURCE, WEBTOON_PREVIEW_SOURCE, WEBTOON_RATING_SOURCE),
         allowed_formats=(),
         thumbnail_assets={
             "series_square": {"width": 1080, "height": 1080, "formats": ["jpg", "png"], "max_file_bytes": 500 * KiB, "constraint_level": "required"},
             "series_vertical": {"width": 1080, "height": 1920, "formats": ["jpg", "png"], "max_file_bytes": 700 * KiB, "constraint_level": "required"},
             "episode": {"width": 202, "height": 142, "formats": ["jpg", "png"], "max_file_bytes": 500 * KiB, "constraint_level": "recommended"},
+        },
+        publishing_requirements={
+            "content_rating_required": True,
+            "episode_thumbnail_ascii_alphanumeric_filename": True,
+            "policy_checked_at": "2026-08-25",
         },
         field_provenance={
             "thumbnail_assets.series_square": evidence(WEBTOON_THUMB_SOURCE, "2026-08-20"),
@@ -142,6 +149,8 @@ PROFILES = {
                 for field_name in ("width", "height", "formats", "max_file_bytes", "constraint_level")
             },
             "preview_viewports": evidence(WEBTOON_PREVIEW_SOURCE, "2026-08-20"),
+            "publishing_requirements.content_rating_required": evidence(WEBTOON_RATING_SOURCE, "2026-08-25"),
+            "publishing_requirements.episode_thumbnail_ascii_alphanumeric_filename": evidence(WEBTOON_THUMB_SOURCE, "2026-08-25"),
         },
         preview_viewports=("desktop", "mobile"),
         notes=(
@@ -277,6 +286,7 @@ def _active_constraint_fields(profile: PlatformProfile) -> list[str]:
         for fmt, constraints in profile.format_specific_constraints.items()
         for constraint in constraints
     )
+    names.extend(f"publishing_requirements.{name}" for name, value in profile.publishing_requirements.items() if value is True)
     return names
 
 
@@ -376,6 +386,12 @@ def validate_manifest(root: Path, manifest: dict[str, Any], profile: PlatformPro
             )
             continue
         path = root / str(item.get("path") or "")
+        if asset_name == "episode" and profile.publishing_requirements.get("episode_thumbnail_ascii_alphanumeric_filename") and not re.fullmatch(r"[A-Za-z0-9]+", path.stem):
+            add(
+                "block" if publish_like else "warn", "platform_thumbnail_filename_invalid", _display_path(root, path),
+                "WEBTOON episode thumbnail 文件名应只用英文字母和数字。",
+                "重命名文件并重新登记 manifest SHA；不要只改登记路径。",
+            )
         if not path.is_file():
             add("block" if publish_like else "warn", "platform_thumbnail_file_missing", _display_path(root, path), f"{asset_name} 只有登记字段，没有真实文件。", "生成真实缩略图并重新登记路径/SHA。")
             continue
@@ -400,4 +416,11 @@ def validate_manifest(root: Path, manifest: dict[str, Any], profile: PlatformPro
             add("block" if publish_like else "warn", "platform_thumbnail_format_mismatch", _display_path(root, path), f"{asset_name} 格式 {fmt or 'missing'} 不在 {spec['formats']}。", "按官方缩略图格式重新导出。")
         if path.is_file() and spec.get("max_file_bytes") and path.stat().st_size >= int(spec["max_file_bytes"]):
             add("block" if publish_like else "warn", "platform_thumbnail_file_too_large", _display_path(root, path), f"{asset_name} 达到或超过必须低于的 {spec['max_file_bytes']} bytes。", "压缩缩略图并保持官方尺寸。")
+    compliance = manifest.get("platform_compliance") if isinstance(manifest.get("platform_compliance"), dict) else {}
+    if profile.publishing_requirements.get("content_rating_required") and not str(compliance.get("content_rating") or "").strip():
+        add(
+            "block" if publish_like else "warn", "platform_content_rating_missing", "排版/export_manifest.json",
+            f"{profile.display_name} 发布前必须选择内容分级；当前 manifest 未登记 content_rating。",
+            "在平台规则当前版本下完成内容分级，并写入 platform_compliance.content_rating/policy_checked_at。",
+        )
     return findings

@@ -17,6 +17,7 @@ import json
 import math
 import os
 import re
+import random
 import shutil
 import subprocess
 import sys
@@ -216,6 +217,7 @@ _VIDEO_ITEM_REQUEST_KEYS = (
     "prepared_prompt_sha256", "prompt_source_kind", "prompt_compiler", "force_multimodal",
     "require_audio", "mode_backend", "mode", "negative_prompt", "route_clip_id",
     "route_hash", "route_execution_recipe_hash", "post_video_qc",
+    "requested_operation", "repair_contract", "repair_of",
 )
 
 
@@ -1386,6 +1388,83 @@ def find_item(manifest: Dict[str, Any], clip: str) -> Dict[str, Any]:
     raise KeyError(f"clip not in manifest: {target}")
 
 
+_REPAIR_RUNTIME_FIELDS = {
+    "submit_id", "submitted_at", "accepted_at", "artifact_sha256", "downloaded_path",
+    "target_path", "submit_snapshot", "submit_request_sha256", "last_submit_returncode",
+    "last_submit_elapsed_sec", "last_submit_failure", "last_query", "last_query_adapter",
+    "last_query_at", "last_query_returncode", "qc_machine", "qc_json", "qc_markdown",
+    "visual_review", "fail_reason", "query_warning", "execution_request",
+}
+
+
+def prepare_repair_item(
+    root: Path,
+    manifest_file: Path,
+    clip: str,
+    *,
+    operation: str,
+    instruction: str,
+    start_sec: Optional[float] = None,
+    end_sec: Optional[float] = None,
+    mask: str = "",
+    preserve_regions: Sequence[str] = (),
+) -> Dict[str, Any]:
+    """Append a non-destructive edit variant bound to the current source pixels."""
+    operation = str(operation or "").strip().lower()
+    if operation not in set(execution_adapter_v2.CORRECTION_OPERATIONS):
+        raise ValueError(f"unsupported repair operation: {operation}")
+    if len(str(instruction or "").strip()) < 4:
+        raise ValueError("repair instruction is too short")
+    if start_sec is not None and end_sec is not None and float(end_sec) <= float(start_sec):
+        raise ValueError("repair end_sec must be greater than start_sec")
+    manifest = load_json(manifest_file)
+    episode = str(manifest.get("episode") or "")
+    source = find_item(manifest, clip)
+    source_path = _item_target_path(root, episode, source)
+    if not source_path.is_file():
+        raise FileNotFoundError(f"repair source video missing: {source_path}")
+    _backend, adapter = resolve_video_backend({**manifest, "_root": str(root)})
+    if operation not in set(adapter.get("operations") or []):
+        raise RuntimeError(
+            f"adapter {adapter.get('adapter_id') or adapter.get('provider')} does not expose {operation}; "
+            "register a correction-capable wrapper or use full regeneration"
+        )
+    repair_contract = {
+        "kind": "n2d_video_repair_contract",
+        "version": 1,
+        "operation": operation,
+        "source_clip": str(source.get("clip") or clip),
+        "source_video": _rel_path(root, source_path),
+        "source_sha256": _sha256_file(source_path),
+        "instruction": str(instruction).strip(),
+        "start_sec": float(start_sec) if start_sec is not None else None,
+        "end_sec": float(end_sec) if end_sec is not None else None,
+        "mask": str(mask or ""),
+        "preserve_regions": [str(value) for value in preserve_regions if str(value).strip()],
+        "promotion_policy": "variant_only_until_current_pixel_qc_and_explicit_promotion",
+    }
+    digest = canonical_sha256(repair_contract)[:10]
+    repair_clip = f"{source.get('clip') or clip}__repair_{digest}"
+    for row in manifest.get("items") or []:
+        if isinstance(row, Mapping) and str(row.get("clip") or "") == repair_clip:
+            return dict(row)
+    target_name = f"{source_path.stem}_repair_{digest}{source_path.suffix or '.mp4'}"
+    variant = {key: value for key, value in source.items() if key not in _REPAIR_RUNTIME_FIELDS}
+    variant.update({
+        "clip": repair_clip,
+        "story_clip": str(source.get("story_clip") or _base_clip_id(clip)),
+        "repair_of": str(source.get("clip") or clip),
+        "requested_operation": operation,
+        "repair_contract": repair_contract,
+        "target": target_name,
+        "status": "prepared",
+    })
+    manifest.setdefault("items", []).append(variant)
+    manifest["input_fingerprint"] = current_video_manifest_input_fingerprint(root, manifest)
+    update_manifest(manifest_file, manifest)
+    return variant
+
+
 def update_manifest(path: Path, manifest: Dict[str, Any]) -> None:
     manifest["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
     atomic_write_json(path, manifest)
@@ -2142,6 +2221,11 @@ def _submit_input_paths(item: Mapping[str, Any]) -> List[str]:
             text = str(candidate or "").strip()
             if text and text not in values:
                 values.append(text)
+    repair = item.get("repair_contract") if isinstance(item.get("repair_contract"), Mapping) else {}
+    for key in ("source_video", "mask"):
+        text = str(repair.get(key) or "").strip()
+        if text and text not in values:
+            values.append(text)
     return values
 
 
@@ -2276,7 +2360,10 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
         )
     backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
     item["cost_provider"] = adapter["provider"]
-    args, request_path = _adapter_invocation(root, manifest, item, adapter, "submit")
+    requested_operation = str(item.get("requested_operation") or "submit").strip().lower()
+    if requested_operation not in {"submit", *execution_adapter_v2.CORRECTION_OPERATIONS}:
+        raise RuntimeError(f"unsupported requested_operation={requested_operation}")
+    args, request_path = _adapter_invocation(root, manifest, item, adapter, requested_operation)
     command = args[1] if len(args) > 1 else "submit"
     safe_args = (
         [args[0], command, "--request", str(request_path)]
@@ -2754,6 +2841,45 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
         returncode=proc.returncode,
     )
     return item
+
+
+def wait_for_clip(
+    root: Path,
+    manifest_file: Path,
+    clip: str,
+    *,
+    timeout_sec: float = 1800.0,
+    initial_delay_sec: float = 3.0,
+    max_delay_sec: float = 30.0,
+    jitter_ratio: float = 0.20,
+    download: bool = True,
+    sleep_fn=time.sleep,
+    query_fn=query_clip,
+) -> Dict[str, Any]:
+    """Wait with exponential backoff instead of high-frequency busy polling."""
+    started = time.monotonic()
+    delay = max(0.1, float(initial_delay_sec))
+    polls = 0
+    last: Dict[str, Any] = {}
+    while True:
+        last = query_fn(root, manifest_file, clip, download=download)
+        polls += 1
+        status = str(last.get("status") or "").lower()
+        if status in {"downloaded", "downloaded_existing_target", "accepted", "failed", "cancelled", "canceled"}:
+            last["wait_receipt"] = {"polls": polls, "elapsed_sec": round(time.monotonic() - started, 3)}
+            return last
+        if status == "query_failed":
+            failure = ((last.get("last_query_adapter") or {}).get("failure") or {})
+            if not failure.get("retryable"):
+                last["wait_receipt"] = {"polls": polls, "elapsed_sec": round(time.monotonic() - started, 3)}
+                return last
+        elapsed = time.monotonic() - started
+        if elapsed >= timeout_sec:
+            raise TimeoutError(f"video wait timed out after {elapsed:.1f}s: {clip}")
+        bounded = min(delay, max_delay_sec, max(0.1, timeout_sec - elapsed))
+        jitter = bounded * max(0.0, float(jitter_ratio)) * ((random.random() * 2.0) - 1.0)
+        sleep_fn(max(0.1, bounded + jitter))
+        delay = min(max_delay_sec, delay * 2.0)
 
 
 def cancel_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False) -> Dict[str, Any]:
@@ -3567,6 +3693,26 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             p.add_argument("--confirm-current-pixels", action="store_true",
                            help="确认查看的是当前磁盘 MP4，而非旧预览/缩略图")
 
+    p = sub.add_parser("repair-plan")
+    p.add_argument("root")
+    p.add_argument("manifest")
+    p.add_argument("--clip", required=True)
+    p.add_argument("--operation", required=True, choices=execution_adapter_v2.CORRECTION_OPERATIONS)
+    p.add_argument("--instruction", required=True)
+    p.add_argument("--start-sec", type=float)
+    p.add_argument("--end-sec", type=float)
+    p.add_argument("--mask", default="")
+    p.add_argument("--preserve-region", action="append", default=[])
+
+    p = sub.add_parser("wait")
+    p.add_argument("root")
+    p.add_argument("manifest")
+    p.add_argument("--clip", required=True)
+    p.add_argument("--timeout", type=float, default=1800.0)
+    p.add_argument("--initial-delay", type=float, default=3.0)
+    p.add_argument("--max-delay", type=float, default=30.0)
+    p.add_argument("--no-download", action="store_true")
+
     p = sub.add_parser("qc")
     p.add_argument("root")
     p.add_argument("manifest")
@@ -3596,6 +3742,26 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     root = Path(ns.root).expanduser().resolve()
     manifest_file = Path(ns.manifest).expanduser().resolve()
+    if ns.cmd == "repair-plan":
+        print(json.dumps(prepare_repair_item(
+            root, manifest_file, ns.clip,
+            operation=ns.operation,
+            instruction=ns.instruction,
+            start_sec=ns.start_sec,
+            end_sec=ns.end_sec,
+            mask=ns.mask,
+            preserve_regions=ns.preserve_region,
+        ), ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.cmd == "wait":
+        print(json.dumps(wait_for_clip(
+            root, manifest_file, ns.clip,
+            timeout_sec=ns.timeout,
+            initial_delay_sec=ns.initial_delay,
+            max_delay_sec=ns.max_delay,
+            download=not ns.no_download,
+        ), ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
     if ns.cmd == "submit":
         print(json.dumps(submit_clip(root, manifest_file, ns.clip, dry_run=ns.dry_run,
                                      skip_preflight=ns.skip_preflight), ensure_ascii=False, indent=2, sort_keys=True))

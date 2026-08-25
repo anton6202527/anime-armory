@@ -229,6 +229,51 @@ def authorization_ready(compliance_issues: Sequence[str]) -> bool:
     return not any(any(key in item for key in sensitive) for item in blocking)
 
 
+def c2pa_validation_summary(root: Path, raw_path: Any) -> Dict[str, Any]:
+    """Distinguish file presence from a current C2PA validation receipt.
+
+    n2d does not implement cryptographic C2PA verification itself.  A validator
+    wrapper records its result in the referenced JSON; a crJSON derived view is
+    explicitly not treated as independently verifiable proof.
+    """
+    rel = _rel_if_exists(root, raw_path)
+    if not rel:
+        return {"c2pa_manifest": "", "status": "missing", "spec_version": "", "valid": False, "well_formed": False, "trusted": False}
+    path = root / rel
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data = data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        data = {}
+    validation = data.get("validation") if isinstance(data.get("validation"), dict) else data
+    spec_version = str(validation.get("spec_version") or data.get("spec_version") or "")
+    well_formed = validation.get("well_formed") is True
+    valid = validation.get("valid") is True
+    trusted = validation.get("trusted") is True
+    fmt = str(validation.get("format") or data.get("format") or "").lower()
+    asset_sha = str(validation.get("asset_sha256") or data.get("asset_sha256") or "")
+    if fmt == "crjson" and not str(validation.get("source_manifest") or data.get("source_manifest") or ""):
+        status = "derived_view_unverified"
+        valid = False
+    elif well_formed and valid and len(asset_sha) == 64:
+        status = "trusted" if trusted else "valid_untrusted"
+    elif validation.get("valid") is False or validation.get("well_formed") is False:
+        status = "invalid"
+    else:
+        status = "present_unverified"
+    return {
+        "c2pa_manifest": rel,
+        "status": status,
+        "spec_version": spec_version,
+        "well_formed": well_formed,
+        "valid": valid,
+        "trusted": trusted,
+        "asset_sha256": asset_sha,
+        "format": fmt,
+        "profile_target": "C2PA 2.4 (April 2026)",
+    }
+
+
 def transparency_summary(root: Path, episode: str, compliance_data: Optional[Dict[str, Any]], *, stage: str) -> Dict[str, Any]:
     data = compliance_data if isinstance(compliance_data, dict) else {}
     ai = data.get("ai_labeling") if isinstance(data.get("ai_labeling"), dict) else {}
@@ -243,8 +288,12 @@ def transparency_summary(root: Path, episode: str, compliance_data: Optional[Dic
         or ai.get("content_credentials_manifest")
         or watermark.get("c2pa_manifest")
     )
-    c2pa_rel = _rel_if_exists(root, c2pa_manifest)
-    machine_readable = bool(meta.get("applied") is True or c2pa_rel or any(r.get("status") == "present" for r in provider_rows))
+    c2pa = c2pa_validation_summary(root, c2pa_manifest)
+    machine_readable = bool(
+        meta.get("applied") is True
+        or c2pa.get("status") in {"trusted", "valid_untrusted"}
+        or any(r.get("status") == "present" for r in provider_rows)
+    )
     internal = compliance.is_internal_distribution(data) if hasattr(compliance, "is_internal_distribution") else False
     intent = str(data.get("distribution_intent") or "").strip().lower()
     strict = (not internal) and (stage in {"review", "release"} or intent == "paid_distribution")
@@ -259,6 +308,11 @@ def transparency_summary(root: Path, episode: str, compliance_data: Optional[Dic
         if not machine_readable:
             msg = "缺机器可读 AI 标识/来源信号：implicit_metadata.applied=true、C2PA/Content Credentials manifest 或已验证 provider watermark 至少一项"
             (blocks if strict else infos).append(msg)
+        if c2pa.get("status") in {"present_unverified", "derived_view_unverified", "invalid"}:
+            infos.append(
+                f"C2PA 文件状态={c2pa.get('status')}，不能仅凭存在或 crJSON 派生视图当作有效 Content Credentials；"
+                "请用 C2PA 2.4 验证器写 valid/well_formed/trusted 与 asset_sha256 收据"
+            )
         if provider_rows and any(r.get("status") == "expected_unverified" for r in provider_rows):
             infos.append("Veo/Google 视频预计含 SynthID，但 production_events 未记录已验证 provider_watermark=SynthID；发布前建议补验证记录")
     if not has_real_value(platform.get("status")):
@@ -279,10 +333,7 @@ def transparency_summary(root: Path, episode: str, compliance_data: Optional[Dic
             "service_provider_code_present": has_real_value(meta.get("service_provider_code")),
             "content_id_present": has_real_value(meta.get("content_id")),
         },
-        "content_credentials": {
-            "c2pa_manifest": c2pa_rel,
-            "status": "present" if c2pa_rel else "missing",
-        },
+        "content_credentials": c2pa,
         "digital_watermark": {
             "status": watermark.get("status") or "",
             "provider_watermarks": provider_rows,

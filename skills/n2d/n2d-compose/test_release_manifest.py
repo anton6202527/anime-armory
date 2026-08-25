@@ -252,14 +252,38 @@ def test_transparency_accepts_label_and_c2pa_manifest(tmp_path: Path) -> None:
     data["ai_labeling"]["implicit_metadata"]["applied"] = False
     c2pa = tmp_path / "合规" / "c2pa_manifest.json"
     c2pa.parent.mkdir(parents=True)
-    c2pa.write_text('{"kind":"c2pa"}', encoding="utf-8")
+    c2pa.write_text(json.dumps({
+        "kind": "n2d_c2pa_validation_receipt",
+        "spec_version": "2.4",
+        "well_formed": True,
+        "valid": True,
+        "trusted": False,
+        "asset_sha256": "a" * 64,
+    }), encoding="utf-8")
     data["ai_labeling"]["implicit_metadata"]["c2pa_manifest"] = "合规/c2pa_manifest.json"
 
     summary = release_manifest.transparency_summary(tmp_path, episode, data, stage="release")
 
     assert summary["machine_readable_present"] is True
-    assert summary["content_credentials"]["status"] == "present"
+    assert summary["content_credentials"]["status"] == "valid_untrusted"
     assert summary["blocks"] == []
+
+
+def test_c2pa_presence_or_crjson_alone_is_not_treated_as_verified(tmp_path: Path) -> None:
+    episode = "第1集"
+    data = compliance.default_manifest(tmp_path, episode)
+    data["distribution_intent"] = "paid_distribution"
+    data["ai_labeling"]["explicit_label"]["status"] = "done"
+    path = tmp_path / "合规" / "c2pa_manifest.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"format": "crJSON", "kind": "c2pa-derived-view"}), encoding="utf-8")
+    data["ai_labeling"]["implicit_metadata"]["c2pa_manifest"] = "合规/c2pa_manifest.json"
+
+    summary = release_manifest.transparency_summary(tmp_path, episode, data, stage="release")
+
+    assert summary["machine_readable_present"] is False
+    assert summary["content_credentials"]["status"] == "derived_view_unverified"
+    assert any("机器可读" in item for item in summary["blocks"])
 
 
 def test_platform_checklist_blocks_paid_target_missing_delivery_assets(tmp_path: Path) -> None:

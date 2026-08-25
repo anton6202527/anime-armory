@@ -294,6 +294,10 @@ def split_long_token(draw, token: str, font, max_width: int) -> list[str]:
     return parts
 
 
+KINSOKU_LINE_START_FORBIDDEN = set("、。，．？！：；)]}〉》」』】〕〗〙〛’”ー々ぁぃぅぇぉっゃゅょァィゥェォッャュョヵヶ")
+KINSOKU_LINE_END_FORBIDDEN = set("([{〈《「『【〔〖〘〚‘“")
+
+
 def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
     text = str(text).strip()
     if not text:
@@ -329,8 +333,16 @@ def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
             continue
         test = current + char
         if current and text_size(draw, test, font)[0] > max_width:
-            lines.append(current)
-            current = char
+            if char in KINSOKU_LINE_START_FORBIDDEN:
+                current += char
+                continue
+            if current[-1] in KINSOKU_LINE_END_FORBIDDEN and len(current) > 1:
+                opener = current[-1]
+                lines.append(current[:-1])
+                current = opener + char
+            else:
+                lines.append(current)
+                current = char
         else:
             current = test
     if current:

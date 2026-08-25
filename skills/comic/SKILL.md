@@ -1,18 +1,26 @@
 ---
 name: comic
-description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
+description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, one-click production, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-supervisor, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 一键漫画, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1638 | 目录文本总行数 58450
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1711 | 目录文本总行数 60673
 
 # comic — 画漫画生产线总调度
 
 把故事源、点子或已有脚本推进为可审计的漫画成品。正式闭环不是“图片生成完”，而是：生产合同当前有效、编辑签收有效、逐格引用闭合、阶段 gate 无确定性阻断、导出物可复核；公开发布再单独完成权利和最终成品 SHA 签收。
 
-comic 负责定位作品根、先读 `_进度.md` / `_设置.md`、解释当前前沿并路由；创作和生产动作仍由 `comic-script`、`comic-name`、`comic-layout`、`comic-finishing`、`comic-identity`、`comic-image`、`comic-batch`、`comic-compose`、`comic-review` 执行。
+comic 负责定位作品根、先读 `_进度.md` / `_设置.md`、解释当前前沿并路由；一键持续推进由 `comic-supervisor` 持有 durable loop，其余动作由各阶段 skill 执行。
 
 详细依赖和失效传播见 `references/architecture.md`；选择点见 `references/选择点与偏好.md`。
 
-> **一键推进默认**：新项目默认 `审阅策略=用户授权制作代理`。普通、可逆的分话/分格取舍、原稿收尾、参考处方和内部技术检查由当前制作代理采用有证据优势的推荐方案并留痕；name board/layout 的 batch 自动签收明确记为 `review_kind=delegated_policy_auto_review`，只证明 schema、当前 subject SHA、上游 SHA 与项目授权均有效，不冒充视觉/语义人审。流程在同一任务内继续，后续真实 review 再读取 JSON 并查看 SVG/contact sheet/手机窗口预览，最终验收仍由人完成。不得把命令甩给用户等待确认。只有逐格当前像素验收、预算范围扩大、权利/敏感合规、核心故事/角色/美术方向存在无证据冲突、不可逆发布和最终成品验收停下。付费生成按绑定 scope/模型/渠道/最大尝试/费用上限/输入哈希的阶段预算包确认一次，包内连续执行。
+> **一键推进默认**：新项目默认 `审阅策略=用户授权制作代理`。普通、可逆的分话/分格取舍、原稿收尾、参考处方和内部技术检查由当前制作代理采用有证据优势的推荐方案并留痕。实际当前像素权限单列为 `视觉审阅策略`，默认仍是 `逐图具名人工`；只有项目显式改成 `用户授权制作代理实际查看当前像素` 或提供当前授权 envelope 后，真正看过 contact sheet 的视觉代理才可写 `human_signoff=false` 收据并继续可逆内部生产。权利/敏感合规、预算包创建或扩大、不可逆发布/覆盖和最终成品验收始终是硬边界。
+
+一键总控入口：
+
+```bash
+python3 skills/comic/comic-supervisor/scripts/producer.py "创作区/画漫画/作品名" --chapter 第1话
+```
+
+producer 消费 `comic-batch --next-json`、连续执行安全步骤，并经项目 adapter 派发 `story_editor/comic_writer/visual_qc_agent/quality_editor`；没有 adapter 时结构化报告缺口，不把语义创作假装成脚本命令。
 
 ## 必走生产顺序
 
@@ -112,6 +120,7 @@ python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画
 python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话 --check
 
 python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic/comic-layout/scripts/layout_candidates.py "创作区/画漫画/作品名" --chapter 第1话 --apply-best
 python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --submit-review
 python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --approve --reviewed-by "责任编辑"
 python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --check
@@ -152,11 +161,11 @@ python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名
 
 每次 gate 都会写 `生产数据/gate_receipts/<stage>_第N话.json`，其中有 `inputs_fingerprint_sha256`、verdict、报告 SHA 和当前 `panel_jobs` SHA。receipt 只能证明“这次判定对应这些输入”；上游或产物变化后必须重跑，不能复制旧 receipt。
 
-逐格 runner 是严格 B14 顺序闸：一次只生成当前格，机器 pass/warn 都先停在待审；只有绑定当前像素、post-QC、contact sheet、比较包及每个输入 SHA 的具名 `accepted` / `accepted_with_warnings` 才允许下一格。确定性 block、unverifiable、skipped、legacy 无 SHA 签收和手改 `ready` 都不能放行。Codex 与 Dreamina 共用这一验收判定；重抽或比较参考变化后旧签收自动失效。
+逐格 runner 是严格顺序闸：一次只生成当前格，机器 pass/warn 都先停在待审；只有绑定当前像素、post-QC、contact sheet、比较包及每个输入 SHA 的具名人审，或当前授权的视觉代理实际目检收据，才允许下一格。代理收据必须写 `human_signoff=false + authorization`；授权撤销、像素或比较输入变化后自动失效，确定性 block 永不可签。
 
 `comic-batch` 可编排可复算步骤；若项目为 `逐阶段用户确认`，会在 name/layout draft 或 review 状态等待人工；默认 `用户授权制作代理` 下，当前 agent 必须接管实际审阅、证据化签收并在同一任务继续，不能把这个内部代理节点升级成用户停点。两种模式都不能绕过 stale 合同、image preflight 与逐格当前像素验收。
 
-### 8. 生产完成与发布就绪分离
+### 8. 一个状态、一个哈希、一个完成定义
 
 ```bash
 python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --profile internal --write --json
@@ -164,13 +173,16 @@ python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 
   --accept --reviewer "责任编辑" --reason "最终导出物与审查证据复核通过" --write --json
 python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --profile digital --write --json
 python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --medium print_pdf --usage commercial --write --json
+python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 第1话 --profile internal \
+  --accept-final --reviewer "责任编辑" --reason "最终成品实际复核通过" --write --json
 ```
 
-- `technical_complete`：导出 manifest 有真实渲染物、文件存在且 SHA 可计算、无缺图或渲染错误。
-- `production_complete`：技术完成，且 `review` gate receipt 当前有效、verdict 不是 `block`。
-- 新 schema 把 `medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦；旧 `--profile` 继续兼容。`print_pdf` 必须有真实 PDF + 印刷合同/readiness receipt；`epub_fxl` 当前无自动 renderer，但会解析外部 EPUB 的 mimetype/container/OPF/spine/nav/XHTML、固定版式、包内 metadata/alt 属性，再核对具名 human-attested 合同，普通图片包不能冒充。
+- `生产数据/release_contract_第N话.json` 是唯一 active delivery contract；其它轴报告归档到 `release_verdicts/`，只是历史证据。
+- 当前有序导出物、review receipt、warning dispositions、平台 preview、介质合同、权利与 provenance 聚合成唯一 `release_digest`。任一字节/合同变化使旧最终签收失效。
+- `生产数据/completion_verdict_第N话.json` 只有 `blocked | machine_ready | accepted`；只有 `accepted` 是最终完成。`_进度.md`、dashboard、provider succeeded、旧 `delivery_states` 都是派生视图。
+- `medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦。`build_epub_fxl.py` 可生成真实 EPUB 3 FXL、OPF/spine/nav/XHTML/alt 并登记 manifest；替代文本质量和无障碍体验仍需具名复核，不能冒充认证。
 - 公开/商用还要求 `_meta.json.rights` 明确清权、目标平台实际缩略图/后台预览（profile 有一手证据时）、当前 warning disposition ledger 全结案且哈希链完整。`release_acceptance_第N话.json` 精确绑定全部导出物、review receipt、有序平台 preview、处置账，以及当前印刷/EPUB 介质合同和收据；任一项变化均需重签。
-- `--accept` 必须显式提供 reviewer/reason；它在其它发布预检通过后替人留存 SHA 收据，但不替代人的实际复核。脚本不发布、不改 `_进度.md`。
+- `--accept` 记录公开/商用发布签收；`--accept-final` 记录内部交付的具名最终验收。二者都不能由 `delegate:` 执行，也不自动发布。
 
 ## 失效传播与返工边界
 
@@ -206,6 +218,7 @@ python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 
 | 定妆、多视图、角色/场景/道具参考、脸漂 | `comic-identity` |
 | reference plan、prompt/job、逐格出图、重抽 | `comic-image` |
 | 继续推进或批量出图 | `comic-batch` |
+| 一键持续推进、专家派发、断点续跑 | `comic-supervisor` |
 | 嵌字、页面/长图导出 | `comic-compose` |
 | gate、质量审查、发布前裁决 | `comic-review` |
 | 只读进度 | `comic-progress` |

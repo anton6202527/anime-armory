@@ -247,6 +247,35 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_CAKE_POLE",
+      "asset_name": "炊饼担",
+      "confirmed_at": "2026-08-24T09:42:53+00:00",
+      "contract_fingerprint": "206f1920fea0711992fe15a947e92eadf9ecce17f826d6556dbbbcf2f8e7c729",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip05_first.png",
+      "png_sha256": "5fb7657cfda296f9d52cc560c3354572afaa011748fa977d255ca0af70319d32",
+      "reason": "已实际查看当前像素：一根旧木扁担连接两只编织筐，均有布盖并带蒸汽，无现代物件、无数量漂移，结构与炊饼担参考一致。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "担杆",
+        "双筐",
+        "布盖与蒸汽结构固定"
+      ],
+      "shot": "Clip_05",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_05_Clip05_first_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_CURTAIN_FORK",
       "asset_name": "叉竿",
       "confirmed_at": "2026-08-13T08:21:24+00:00",
@@ -1141,6 +1170,43 @@
       "verdict": "ok"
     },
     {
+      "asset": "PROP_WINDOW_LATTICE",
+      "asset_name": "WINDOW LATTICE",
+      "confirmed_at": "2026-08-24T08:17:24+00:00",
+      "contract_fingerprint": "1b38dd14482b4156fa950801a2d99d6d79eb881d2f521ff0a229c238000cfb6d",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP04_a1.png",
+      "png_sha256": "5774994f998472908b18ccd3c80b6aa5ff3e0ebeae2d0c5076bcc1bf16257ca0",
+      "reason": "已实际查看当前像素及并排参考：暗褐老木固定建筑窗框、细密正方格棂、素色窗纸与单手扶窗关系成立；无现代玻璃/铝合金/西式或清式繁复花格，无文字水印、数量或结构硬漂。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。",
+      "shape_contract": [
+        "北宋县城民宅二层木制格窗：单扇窄高长方形窗框",
+        "暗褐老木",
+        "细密正方格棂",
+        "内侧糊素色无纹窗纸",
+        "侧轴向内开合",
+        "是墙上固定建筑构件",
+        "不是手持小物",
+        "窗框约高 110–130 厘米",
+        "宽 55–70 厘米",
+        "窗台约在成年人腰至胸下",
+        "人站立可单手推开窗扇"
+      ],
+      "shot": "Clip_04",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_Clip_04_EP01_CLIP04_a1_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "PROP_WINE_CUP",
       "asset_name": "半杯酒",
       "confirmed_at": "2026-08-13T04:13:26+00:00",
@@ -1172,6 +1238,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-08-18T09:43:14+00:00",
+  "updated_at": "2026-08-24T09:42:53+00:00",
   "version": 1
 }

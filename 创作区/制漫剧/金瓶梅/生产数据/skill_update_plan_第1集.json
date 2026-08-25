@@ -4,7 +4,7 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-08-18T09:55:55+00:00",
+  "created_at": "2026-08-24T09:54:15+00:00",
   "current_stage": "image",
   "current_todo": {
     "column": "出图",
@@ -13,14 +13,14 @@
     "note": "",
     "skill": "n2d-image",
     "stage_key": "image",
-    "status": "137/179"
+    "status": "139/179"
   },
   "episode": "第1集",
   "execution_steps": [],
   "gate_refresh_needed": false,
   "gate_refresh_stages": [],
   "image_consistency": {
-    "advisory": 24,
+    "advisory": 25,
     "consistent": true,
     "degraded": false,
     "freshness": "fresh",
@@ -28,18 +28,18 @@
     "precision_level": "full",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md",
     "samples": [
-      "[production一致性升级:重复同维度] Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9477f3aefd25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "[production一致性升级:重复同维度] Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=ff50f685763a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+      "糊/低质(N4): Clip03_first.png",
+      "服装配色(N1): 图片/Clip04_first.png"
     ],
     "status": "ok",
     "verdict": "review"
   },
   "image_qc_environment": {
-    "advisory": 24,
+    "advisory": 25,
     "degraded": false,
     "finding_samples": [
-      "[production一致性升级:重复同维度] Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9477f3aefd25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "[production一致性升级:重复同维度] Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=ff50f685763a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+      "糊/低质(N4): Clip03_first.png",
+      "服装配色(N1): 图片/Clip04_first.png"
     ],
     "freshness": "fresh",
     "hard_blocks": 0,
@@ -58,7 +58,7 @@
   "needs_record": false,
   "newly_relevant_skills": [],
   "notes": [
-    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 21 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP04_a1.png, 出图/第1集/图片/EP01_CLIP05_a1.png, 出图/第1集/图片/EP01_CLIP05_a2.png, 出图/第1集/图片/EP01_CLIP06_a1.png"
+    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 20 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP05_a1.png, 出图/第1集/图片/EP01_CLIP05_a2.png, 出图/第1集/图片/EP01_CLIP06_a1.png, 出图/第1集/图片/EP01_CLIP06_a2.png"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/skill_update_plan_第1集.md",
@@ -93,11 +93,6 @@
     "exempt_clips": 0,
     "missing_endframe_clips": [],
     "missing_frame_files": [
-      {
-        "clip_id": "EP01_CLIP04",
-        "path": "出图/第1集/图片/EP01_CLIP04_a1.png",
-        "role": "midframe"
-      },
       {
         "clip_id": "EP01_CLIP05",
         "path": "出图/第1集/图片/EP01_CLIP05_a1.png",

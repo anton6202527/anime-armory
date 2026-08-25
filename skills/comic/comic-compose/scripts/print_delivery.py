@@ -76,6 +76,13 @@ def init_contract(
         raise ValueError("reading_direction 与 binding_edge 不一致（rtl→right，ltr→left）")
     manifest = load_json(root / "排版" / chapter / "export_manifest.json", {})
     page_order = [str(item.get("path") or "") for item in manifest.get("pages") or [] if isinstance(item, Mapping)]
+    vendor_key = str(vendor_profile or "custom").strip().lower()
+    if vendor_key == "kdp" and abs(bleed_mm - 3.2) > 0.05:
+        raise ValueError("KDP bleed profile requires 3.2 mm (0.125 in) bleed")
+    if vendor_key == "kdp" and dpi < 300:
+        raise ValueError("KDP interior images require at least 300 dpi")
+    if vendor_key == "kdp" and not vendor_requirement_evidence:
+        vendor_requirement_evidence = "https://kdp.amazon.com/en_US/help/topic/G201857950 (checked 2026-08-25)"
     payload = {
         "schema_version": 1,
         "kind": "comic_print_delivery_contract",
@@ -108,6 +115,17 @@ def init_contract(
             "icc_profile_path": "",
         },
         "transparency_policy": "flattened",
+        "vendor_rules": ({
+            "single_pages_not_spreads": True,
+            "crop_marks": False,
+            "minimum_dpi": 300,
+            "minimum_font_pt": 7,
+            "bleed_mm": 3.2,
+            "gutter_depends_on_page_count_and_trim": True,
+            "gutter_must_be_confirmed_against_current_kdp_calculator": True,
+            "font_mode": "rasterized_or_embedded",
+            "transparency": "flattened",
+        } if vendor_key == "kdp" else {}),
         "required_human_checks": [
             "safe_area_content_clear",
             "page_order_and_binding_correct",
@@ -174,7 +192,7 @@ def main(argv: list[str] | None = None) -> int:
     init.add_argument("--color-mode", choices=("RGB", "CMYK", "L", "1"), default="RGB")
     init.add_argument("--icc-policy", choices=("embedded", "printer_managed_srgb", "printer_managed_gray"), default="printer_managed_srgb")
     init.add_argument("--icc-profile-name", default="sRGB IEC61966-2.1")
-    init.add_argument("--vendor-profile", default="custom")
+    init.add_argument("--vendor-profile", choices=("custom", "kdp"), default="custom")
     init.add_argument("--vendor-requirement-evidence", default="")
 
     accept = sub.add_parser("accept", help="绑定当前合同/PDF SHA，签收不能自动证明的人审项")

@@ -1,0 +1,99 @@
+{
+  "actual_submit_request": {
+    "prompt_summary": "楼上潘金莲单主体窗后中近景；武大及街上行人在画外；侧向视线、扶木窗格、冬日冷光；锁定潘金莲脸、低髻木簪、青黛上衣和枣红裙。",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "Clip_04",
+        "path": "出图/第1集/图片/Clip04_first.png",
+        "role": "source_frame",
+        "sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
+        "role": "character",
+        "sha256": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "c8cc45c2514f160643d0186388341639a1404b86f3a1dee3e47197e7488a1c8a"
+      },
+      {
+        "index": 4,
+        "owner": "LOC_WUDA_HOME",
+        "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+        "role": "asset",
+        "sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9"
+      },
+      {
+        "index": 5,
+        "owner": "PROP_WINDOW_LATTICE",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+        "role": "asset",
+        "sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "artifact_sha256": "5774994f998472908b18ccd3c80b6aa5ff3e0ebeae2d0c5076bcc1bf16257ca0",
+  "compiler": {
+    "backend": "codex",
+    "channel": "built-in image_gen",
+    "mode": "midframe",
+    "model": "GPT Image 2",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "Clip_04",
+        "path": "出图/第1集/图片/Clip04_first.png",
+        "role": "source_frame",
+        "sha256": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
+        "role": "character",
+        "sha256": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_PANJINLIAN/25岁武大家常态",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "c8cc45c2514f160643d0186388341639a1404b86f3a1dee3e47197e7488a1c8a"
+      },
+      {
+        "index": 4,
+        "owner": "LOC_WUDA_HOME",
+        "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+        "role": "asset",
+        "sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9"
+      },
+      {
+        "index": 5,
+        "owner": "PROP_WINDOW_LATTICE",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+        "role": "asset",
+        "sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e"
+      }
+    ],
+    "task_type": "relay_edit"
+  },
+  "created_at": "2026-08-24T08:14:10Z",
+  "episode": "第1集",
+  "generation_source": "/Users/wesley/.codex/generated_images/01a0329f-1515-7e41-9cdd-2c2bc477d1d4/exec-dd69e159-9dcb-4a01-b06e-735becd844e6.png",
+  "kind": "n2d_compiled_image_request_receipt",
+  "shot": "Clip_04_a1",
+  "target": "出图/第1集/图片/EP01_CLIP04_a1.png",
+  "tool": "image_gen.imagegen",
+  "version": 1
+}

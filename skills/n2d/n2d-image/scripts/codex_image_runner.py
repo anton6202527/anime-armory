@@ -2524,7 +2524,11 @@ def prepare_reference_inputs(
         try:
             if write and not dst.is_file():
                 _enhance_reference_image(src, dst, (out_w, out_h))
-            if write and dst.is_file():
+            # Read-only authorization probes must reuse an already materialized,
+            # deterministic enhanced copy.  Otherwise the control plane can never
+            # approve a request after the preparation pass: write=False would keep
+            # reporting would_enhance even though the exact file is on disk.
+            if dst.is_file():
                 out["source_abs_path"] = str(src)
                 out["prepared_abs_path"] = str(dst)
                 out["prepared_rel_path"] = _rel_from_root(root, dst)

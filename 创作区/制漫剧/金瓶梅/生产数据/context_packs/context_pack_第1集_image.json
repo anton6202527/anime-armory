@@ -31,19 +31,19 @@
   "episode": "第1集",
   "files": [
     {
-      "bytes": 1145,
+      "bytes": 1744,
       "exists": true,
-      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 写实电影感  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 人工批准策略: 仅高风险停审  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n\nraw audit history omitted: records_seen=7, corrections_included=0/3",
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 写实电影感  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 人工批准策略: 仅高风险停审  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 普通选择策略: 推荐方案自动继续  # source=auto_recommended\n- 脚本批次: 小批  # source=auto_recommended\n- 生成优先序: 关键镜优先  # source=auto_recommended\n- 生成粒度: 逐个  # source=auto_recommended\n- BGM来源: 无  # source=auto_recommended\n- 合成阶段: 跳过  # source=auto_recommended\n\nraw audit history omitted: records_seen=8, corrections_included=0/3",
       "preview_policy": "settings_region_plus_bounded_corrections",
       "relpath": "_设置.md",
-      "sha256": "cdd056bc67af799591f5cd5e8f0e497eefe29b76d73925eb2b5f4494e39243d6"
+      "sha256": "c65cadb643f06794e2818e6dd8abed2333231aa56e635079644c2269cef756a6"
     },
     {
-      "bytes": 4681,
+      "bytes": 6334,
       "exists": true,
-      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 137/179 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 最近进展\n- 2026-08-18：已修正 S04A 编译合同，使 `Clip04_first.png` 仅消费街下武大、炊饼担与阳谷街景，排除潘金莲、楼窗特写和室内状态。第 177 次调用已生成并按精确 SHA 验收；武大脸部余弦 0.8316（地板 0.5052），full QC 硬阻断 0。当前出图 **137/179**。\n- 2026-08-18：第 175–176 次调用对 `Clip04_first.png` 做两次有界尝试；武大脸部余弦分别仅 0.2076 / 0.2245，第二抽还将应在 S04B 才切入的潘金莲提前画进 S04A 街下起幅。两张均已按当前 SHA 拒收并归档废料；首帧 2 次重抽预算用尽，触发止损，当前出图仍为 **136/179**。\n- 2026-08-18：第 163–174 次调用完成并验收镜头 2 余下三帧与镜头 3 全部四帧。实际像素复核拒收并重抽了三项硬错：赏银布袋改为北宋粗铸银锭，以及 `EP01_CLIP03_a2` / `EP01_CLIP03_a3` 两张阳谷街帧中误回流的死虎均移除。已接受帧全部通过 full QC、实际像素目视及当前 SHA 验收；当前出图 **136/179**。\n- 2026-08-17：第 158–159 次调用完成并验收 `Clip02_first.png`、`EP01_CLIP02_a1.png`；武松、猛虎、梢棒、动作相位、手部人体与景阳冈冷月夜景通过 full QC、实际像素目视及当前 SHA 验收。第 160–162 次尝试生成 `EP01_CLIP02_a2.png`，三次均因 Codex timeout 失败且未落 PNG，触发同目标基础设施止损；当前出图 **129/179**。\n- 2026-08-17：用户进一步明确付费生图按**集数**授权；第1集剩余分镜图不再逐张询问授权。执行仍保持“一次一张 → full QC → 实际像素目视 → 当前 SHA 验收”，自动连续推进至本集完成或触发硬阻断/止损条件。\n- 2026-08-17：用户将第1集付费生图调用授权明确追加为**无上限**。第 141–154 次调用补齐共享参考库至 **124/124**；第 155–157 次完成并验收镜头 1 的 `Clip01_first`、`EP01_CLIP01_a1`、`Clip01_end`。全部经过 full QC、实际像素目视与精确 SHA 仪表盘验收，当前出图 **127/179**。\n- 2026-08-17：刷新身份适配矩阵、漂移报告、记忆锚点计划、身份评估包和参考规划消费收据，修复身份登记更新带来的派生证据陈旧；当前 `image_preflight` 通过，可继续逐张生成第1集镜头帧。\n- 2026-08-17：第1集补齐 EP01_CLIP02/05/09/11/14 的结构化交互/接触图，新建 `设定库/location_spatial_memory.json`，I1 交互连续、I2 结构化交互、FP1 场景空间定向均为 0 阻塞。\n- 2026-08-17：已重建剧级 B\n...",
+      "preview": "# 金瓶梅 — 生产进度\n已粗切 **10** 集（全本约估 100 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 11497 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 139/179 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 6468 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 7363 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4103 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5443 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4209 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 7447 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 7142 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 5912 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4703 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 最近进展\n- 2026-08-24：用户确认后，仅恢复重试 `EP01_CLIP04_a1.png`。按真实 timed sub-shot 将旧编译冲突收敛为楼上潘金莲单主体窗后心声镜，使用 Codex 内置 `image_gen` / GPT Image 2 与 5 张本地参考生成；落档 SHA-256=`5774994f998472908b18ccd3c80b6aa5ff3e0ebeae2d0c5076bcc1bf16257ca0`。已补写本次真实参考血缘，纠正旧失败收据把该帧误拿去和武大比脸的问题。`facefusion` full QC：潘金莲脸部 0.5122（门槛 0.5000）、发型 0.6839（门槛 0.55）；服装和木窗格已按当前像素并排复核，hard block=0；实际像素目视确认单主体、侧向视线、扶窗手部、北宋木格窗与雪天光位成立，并已写精确 SHA 的 `executor_visual` accepted 收据。当前出图 **138/179**，镜头 4 封板。\n- 2026-08-24：已按确认执行最新 skill 的第1集最小重制：源文未变，剧情/分镜无需改写；已刷新出图 prompt、统一 input fingerprint、无成本参考包、生产锁、skill 基线和 Codex/OpenAI 官方能力证据，image/image_preflight gate 均为 0 硬阻断。修复了 batch 只读授权预检无法识别已物化增强参考图、以及 image wrapper 仓库根少退一层的问题，回归测试通过。`EP01_CLIP04_a1.png` 精确任务已越过付费边界：第一次 Codex 调用 900s 超时，同 runner 有界重试随后结束但无有效 PNG / `image_generation_end` 载荷；目标文件仍不存在，未冒充验收，出图仍为 **137/179**。batch governance 因死信 1 项为 critical，已停止重提，等待后端恢复或变更正式渠道后再从该目标继续。\n- 2026-08-18：已修正 S04A 编译合同，使 `Clip04_first.png` 仅消费街下武大、炊饼担与阳谷街景，排除潘金莲、楼窗特写和室内状态。第 177 次调用已生成并按精确 SHA 验收；武大脸部余弦 0.8316（地板 0.5052），full QC 硬阻断 0。当前出图 **137/179**。\n- 2026-08-18：第 175–176 次调用对 `Clip04_first.png` 做两次有界尝试；武大脸部余弦分别仅 0.2076 / 0.2245，第二抽还将应在 S04B 才切入的潘金莲提前画进 S04A 街下起幅。两张均已按当前 SHA 拒收并归档废料；首帧 2 次重抽预算用尽，触发止损，当前出图仍为 **136/179**。\n- 2026-08-18：第 163–174 次调用完成并验收镜头 2 余下三帧与镜头 3 全部四帧。实际像素复核拒收并重抽了三项硬错：赏银布袋改为北宋粗铸银锭，以及 `EP01_CLIP03_a\n...",
       "relpath": "_进度.md",
-      "sha256": "bb7ef31ddf4be5e17c6af71a6d8b744eaccf938f4119d7515bb995ff8d2d97f2"
+      "sha256": "db04127b9b7b1c485d40583e874e73f6d19d69a824ff6b63c5717971308ed625"
     },
     {
       "bytes": 507403,
@@ -91,14 +91,15 @@
       "relpath": "生产数据/reference_pack_第1集.json"
     },
     {
-      "bytes": 5125,
+      "bytes": 9834,
       "exists": true,
       "preview": {
         "episode": "第1集",
-        "graph_hash": "1dfdb592558157c6463b596e1ecd87d45f3a2d4fa431299559642a6443e65057",
+        "graph_hash": "2bf3a00d2475ec817b5f956dfba5391ac6253fcdfde670fad873e2d8bc97f6f4",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
+          "clip_roots": 15,
           "edges": 15,
           "lineage_gaps": 0,
           "masters": 0,
@@ -108,7 +109,10 @@
           "video_media": 0
         },
         "top_level_keys": [
+          "artifact_root_sha256",
           "authority",
+          "change_set",
+          "clip_roots",
           "edges",
           "episode",
           "generated_at",
@@ -117,15 +121,16 @@
           "lineage_gaps",
           "nodes",
           "root",
+          "root_sha256",
           "source_files",
           "status",
           "summary",
           "version"
         ],
-        "version": 1
+        "version": 2
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "3906dd10495521cd3966afe3b8d470397a1074ed4f8258308928f0fb820c32ff"
+      "sha256": "4319de8e3c484706f8d796c293fd4199f412493462fbb4204f9b1774adab6e5b"
     }
   ],
   "genre_pack_context": {
@@ -139,7 +144,7 @@
     },
     "active_scene_archetypes": [],
     "episode": "第1集",
-    "generated_at": "2026-08-18T09:55:14+00:00",
+    "generated_at": "2026-08-24T09:54:15+00:00",
     "genre": {
       "genre_key": "",
       "label": "",
@@ -187,6 +192,10 @@
       "records_can_override_effective_settings": false
     },
     "effective_settings": {
+      "BGM来源": {
+        "source": "auto_recommended",
+        "value": "无"
+      },
       "人工批准策略": {
         "source": "explicit_user",
         "value": "仅高风险停审"
@@ -195,6 +204,10 @@
         "source": "explicit_user",
         "value": "混合自动路由"
       },
+      "合成阶段": {
+        "source": "auto_recommended",
+        "value": "跳过"
+      },
       "图片验收模式": {
         "source": "explicit_user",
         "value": "逐张机器QC+实际目视"
@@ -202,6 +215,22 @@
       "基础视觉风格": {
         "source": "explicit_user",
         "value": "写实电影感"
+      },
+      "普通选择策略": {
+        "source": "auto_recommended",
+        "value": "推荐方案自动继续"
+      },
+      "生成优先序": {
+        "source": "auto_recommended",
+        "value": "关键镜优先"
+      },
+      "生成粒度": {
+        "source": "auto_recommended",
+        "value": "逐个"
+      },
+      "脚本批次": {
+        "source": "auto_recommended",
+        "value": "小批"
       },
       "项目规模": {
         "source": "explicit_user",
@@ -220,10 +249,10 @@
       "format": "record_section",
       "full_history_omitted": true,
       "limit": 3,
-      "records_seen": 7
+      "records_seen": 8
     },
     "source_path": "_设置.md",
-    "source_sha256": "cdd056bc67af799591f5cd5e8f0e497eefe29b76d73925eb2b5f4494e39243d6",
+    "source_sha256": "c65cadb643f06794e2818e6dd8abed2333231aa56e635079644c2269cef756a6",
     "status": "ok",
     "version": 1
   },

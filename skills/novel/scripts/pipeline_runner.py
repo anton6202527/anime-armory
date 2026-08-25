@@ -185,6 +185,8 @@ def create_run(root: str, *, run_id: str | None = None, actor: str = "") -> dict
         "updated_at": now(),
         "created_by": actor,
         "project_root": root,
+        "business_state_source": "_进度.md",
+        "state_scope": "execution_run_only",
         "plan_path": "",
         "stages": stages,
         "next_stage": next((stage["key"] for stage in stages if stage["status"] == "pending"), None),

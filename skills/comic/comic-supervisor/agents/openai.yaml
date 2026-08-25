@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Supervisor"
+  short_description: "一键持续推进 Comic 到最终成品或真正硬边界"
+  default_prompt: "Use comic-supervisor to continuously advance the current Comic delivery, preserving all hard boundaries and the single completion verdict."

@@ -298,7 +298,9 @@ def render_cutdown(root, ep, kept, target_label, out_path=None, aspect="9:16"):
     concat_in = "".join(f"[v{k}]" for k in range(n))
     fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=0[outv]"
     args += ["-filter_complex", fc, "-map", "[outv]",
-             "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
+             "-c:v", "libx264", "-pix_fmt", "yuv420p",
+             "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv",
+             out_path]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
         return False, f"cutdown 渲染失败：{rc.stderr[-600:]}", None

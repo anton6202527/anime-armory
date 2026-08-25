@@ -315,6 +315,36 @@ def audit_contract():
     return out
 
 
+def audit_one_click_contracts():
+    """Guard the one-state/one-digest/one-completion and durable-loop wiring."""
+    required = {
+        "skills/novel/_lib/completion_contract.py": ("canonical_release_digest", "manifest_integrity_issues", "accepted"),
+        "skills/novel/novel-craft/scripts/release_manifest.py": ("release_digest", "write_completion_verdict", "score_scope_check"),
+        "skills/novel/novel-supervisor/scripts/producer.py": ("run_loop", "record_execution_event", "HARD_ACTIONS"),
+        "skills/novel/novel-craft/scripts/dynamic_outline.py": ("future_from_chapter", "base_files", "auto_apply"),
+        "skills/novel/novel-craft/scripts/revision_transaction.py": ("handle_branch", "verified_by", "handle_rollback"),
+        "skills/novel/_lib/content_dependency.py": ("story_contract", "continuity", "minimality_note"),
+        "skills/novel/_lib/context_budget.py": ("over_budget_due_to_required", "obligation_coverage"),
+        "skills/novel/novel-review/scripts/detector_value_report.py": ("repair_yield", "auto_block_eligible"),
+    }
+    out = []
+    for relpath, tokens in required.items():
+        path = os.path.join(REPO, relpath)
+        if not os.path.isfile(path):
+            out.append(finding("block", "ONE-CLICK-FILE-MISSING", "一键成书关键合同缺失", relpath))
+            continue
+        text = open(path, encoding="utf-8").read()
+        missing = [token for token in tokens if token not in text]
+        if missing:
+            out.append(finding("block", "ONE-CLICK-CONTRACT-DRIFT", "一键成书关键合同接线漂移", f"{relpath} missing={missing}"))
+    if not out:
+        out.append(finding(
+            "info", "ONE-CLICK-CONTRACTS-OK", "一键成书关键合同已接线",
+            "durable producer + release digest/completion + full score + dynamic outline + revision transaction + content/context/detector evidence",
+        ))
+    return out
+
+
 # mock/占位实现的招牌特征：声称"待实现"却被当真接进流程，或返回伪造常量让 gate 误信。
 # 治本病灶——本批审查里 graph_sentry 恒 clean、research_rag 恒 score:0.95 就是这类。
 _MOCK_MARKERS = re.compile(
@@ -362,6 +392,7 @@ def run_audit(project_root=None):
     findings.extend(audit_batch_queue_and_docs())
     findings.extend(audit_self_audit_docs())
     findings.extend(audit_contract())
+    findings.extend(audit_one_click_contracts())
     findings.extend(audit_mock_stubs())
     findings.extend(audit_market_baseline(project_root))
     findings.extend(audit_optimization_signals(project_root))

@@ -12,6 +12,7 @@ import argparse
 import importlib.util
 import json
 import os
+import re
 import sys
 from datetime import datetime, timedelta
 from typing import Any
@@ -28,6 +29,8 @@ for path in (NOVEL_LIB, NOVEL_SCRIPTS, NOVEL_CRAFT):
         sys.path.insert(0, path)
 
 from novel_pipeline import dry_run_plan, handoff_contract, semantic_job_is_open  # noqa: E402
+from completion_contract import build_completion_verdict  # noqa: E402
+from dynamic_outline import workflow_status as dynamic_outline_workflow_status  # noqa: E402
 
 SEMANTIC_AGENT_ROLES = {"specialist_writer", "specialist_reviewer", "specialist_score"}
 
@@ -117,13 +120,27 @@ def revision_plan_status(root: str) -> dict[str, Any]:
         tasks = []
     p0 = [task for task in tasks if isinstance(task, dict) and task.get("priority") == "P0"]
     conflicts = [task for task in tasks if isinstance(task, dict) and task.get("conflict")]
+    closed = {"completed", "fixed", "accepted", "waived", "closed", "done", "resolved", "superseded"}
+    open_tasks = [
+        task for task in tasks
+        if isinstance(task, dict) and str(task.get("status") or "open").lower() not in closed
+    ]
     return {
         "path": rel(root, path),
         "exists": os.path.exists(path),
         "task_count": len(tasks),
         "p0_count": len(p0),
         "conflict_count": len(conflicts),
+        "open_count": len(open_tasks),
+        "open_tasks": open_tasks[:20],
     }
+
+
+def revision_transaction_status(root: str, task_id: str) -> dict[str, Any]:
+    safe = re.sub(r"[^0-9A-Za-z_.\-\u4e00-\u9fff]+", "_", str(task_id or "")).strip("._")
+    path = os.path.join(root, "生产数据", "revision_transactions", f"{safe}.json")
+    payload = load_json(path, {}) or {}
+    return {"exists": os.path.exists(path), "path": rel(root, path), "payload": payload}
 
 
 def batch_status(root: str) -> dict[str, Any]:
@@ -431,12 +448,13 @@ def command_for_stage(root: str, stage: dict[str, Any]) -> list[str]:
     if key == "score":
         return [
             f'python3 skills/novel/novel-score/scripts/collect_market_baseline.py "{root}/评分" --target-platform "<目标平台>" --allow-fetch-errors',
-            f'python3 skills/novel/novel-score/scripts/score.py "{root}" --scope opening',
+            f'python3 skills/novel/novel-score/scripts/score.py "{root}" --scope full',
         ]
     if key == "review":
         return [
             f'python3 skills/novel/novel-review/scripts/consistency_audit.py "{root}"',
             f'python3 skills/novel/novel-review/scripts/build_review_report.py "{root}"',
+            f'python3 skills/novel/novel-review/scripts/detector_value_report.py "{root}" --write',
         ]
     if key == "export":
         return [
@@ -500,6 +518,7 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
     batch = batch_status(root)
     next_stage = plan.get("next_stage")
     stage = stage_by_key(plan, next_stage)
+    dynamic_outline = dynamic_outline_workflow_status(root) if next_stage == "draft" else {"phase": "not_due"}
     active_run_id = ""
     if latest_run_id is not None:
         try:
@@ -513,6 +532,8 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
         "kind": SUPERVISOR_KIND,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "project_root": root,
+        "business_state_source": "_进度.md",
+        "state_scope": "orchestration_advice",
         "status": "ready",
         "next_stage": next_stage,
         "stage": stage,
@@ -524,6 +545,7 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
             "retry_count": breaker["failure_count"],
             "circuit_breaker": breaker,
             "critic_loop": critic_loop_signal(root),
+            "dynamic_outline": dynamic_outline,
         },
         "recommended_commands": [],
         "handoff": None,
@@ -563,6 +585,117 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
             "reason": "revision_plan contains cross-source conflicts",
             "recommended_commands": [f'sed -n "1,220p" "{root}/修订/修订计划.md"'],
         })
+        return action
+
+    if next_stage == "revision" and revision.get("open_tasks"):
+        task = revision["open_tasks"][0]
+        task_id = str(task.get("id") or "")
+        transaction = revision_transaction_status(root, task_id)
+        tx = transaction.get("payload") or {}
+        tx_status = str(tx.get("status") or "")
+        action["signals"]["revision_transaction"] = transaction
+        if not transaction.get("exists"):
+            action.update({
+                "status": "self_healing",
+                "action": "start_revision_transaction",
+                "agent_role": "workflow_orchestrator",
+                "reason": f"revision task {task_id} needs a hash-safe Story-VCS branch",
+                "context": [task],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/revision_transaction.py start "{root}" "{task_id}"'
+                ],
+            })
+        elif tx_status == "editing":
+            action.update({
+                "status": "dispatch",
+                "action": "edit_revision_candidate",
+                "agent_role": "specialist_writer",
+                "reason": f"edit the branch copies for revision task {task_id}; main remains untouched",
+                "context": [task, tx],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/revision_transaction.py verify "{root}" "{task_id}" --json'
+                ],
+            })
+        elif tx_status == "needs_specialist_review":
+            action.update({
+                "status": "dispatch",
+                "action": "verify_revision_candidate",
+                "agent_role": "specialist_reviewer",
+                "reason": f"candidate hashes are ready for independent specialist verification: {task_id}",
+                "context": [task, tx],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/revision_transaction.py verify "{root}" "{task_id}" --verified-by "specialist_reviewer"'
+                ],
+            })
+        elif tx_status == "verified":
+            action.update({
+                "status": "self_healing",
+                "action": "promote_revision_candidate",
+                "agent_role": "workflow_orchestrator",
+                "reason": f"verified candidate {task_id} can be merged with automatic mechanical rollback",
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/revision_transaction.py promote "{root}" "{task_id}"'
+                ],
+            })
+        else:
+            action.update({
+                "status": "dispatch",
+                "action": "repair_revision_transaction",
+                "agent_role": "specialist_reviewer",
+                "reason": f"revision transaction {task_id} is {tx_status or 'unknown'} and needs evidence-based repair",
+                "context": [task, tx],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/revision_transaction.py status "{root}" "{task_id}" --json'
+                ],
+            })
+        return action
+
+    if next_stage == "draft" and dynamic_outline.get("phase") != "current":
+        phase = dynamic_outline.get("phase")
+        delta = dynamic_outline.get("delta_path") or ""
+        if phase == "create_delta":
+            action.update({
+                "status": "self_healing",
+                "action": "scaffold_dynamic_outline_delta",
+                "agent_role": "workflow_orchestrator",
+                "reason": "a periodic long-form outline checkpoint is due before drafting more chapters",
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/dynamic_outline.py scaffold "{root}" '
+                    f'--checkpoint {dynamic_outline.get("checkpoint")}'
+                ],
+            })
+        elif phase == "needs_specialist":
+            action.update({
+                "status": "dispatch",
+                "action": "complete_dynamic_outline_delta",
+                "agent_role": "specialist_writer",
+                "reason": "outline checkpoint needs an evidence-grounded future-chapter delta",
+                "context": [dynamic_outline],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/dynamic_outline.py evaluate "{root}" --delta "{delta}" --json'
+                ],
+            })
+        elif phase == "apply_auto":
+            action.update({
+                "status": "self_healing",
+                "action": "apply_dynamic_outline_delta",
+                "agent_role": "workflow_orchestrator",
+                "reason": "the delta affects only unwritten chapters and has no tied evidence conflict",
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/dynamic_outline.py apply "{root}" --delta "{delta}"'
+                ],
+            })
+        else:
+            action.update({
+                "status": "needs_human",
+                "action": "approve_dynamic_outline_contract_change",
+                "agent_role": "human",
+                "reason": "; ".join((dynamic_outline.get("evaluation") or {}).get("human_reasons") or ["dynamic outline changes a protected story contract"]),
+                "context": [dynamic_outline],
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/dynamic_outline.py apply "{root}" --delta "{delta}" --human-approved-by "<作者或主编>"'
+                ],
+            })
         return action
 
     if semantic_jobs:
@@ -608,12 +741,32 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
         return action
 
     if not next_stage:
-        action.update({
-            "status": "complete",
-            "action": "none",
-            "reason": "pipeline dry-run reports all stages done",
-            "recommended_commands": [f'python3 skills/novel/novel-dashboard/scripts/dashboard.py "{root}" --write --html'],
-        })
+        completion = build_completion_verdict(root)
+        action["signals"]["completion_verdict"] = completion
+        if completion.get("status") == "accepted":
+            action.update({
+                "status": "complete",
+                "action": "none",
+                "reason": "current release digest has a named final-acceptance receipt",
+                "recommended_commands": [f'python3 skills/novel/novel-dashboard/scripts/dashboard.py "{root}" --write --html'],
+            })
+        elif completion.get("status") == "machine_ready":
+            action.update({
+                "status": "needs_human",
+                "action": "final_acceptance",
+                "agent_role": "human",
+                "reason": "machine production is ready; final completion requires one named receipt bound to the current release_digest",
+                "recommended_commands": [
+                    f'python3 skills/novel/novel-craft/scripts/completion.py accept "{root}" --accepted-by "<作者或主编>"'
+                ],
+            })
+        else:
+            action.update({
+                "status": "self_healing",
+                "action": "rebuild_release_manifest",
+                "reason": "pipeline stages are done but the canonical completion verdict is blocked",
+                "recommended_commands": [f'python3 skills/novel/novel-craft/scripts/release_manifest.py "{root}"'],
+            })
         return action
 
     if next_stage in HUMAN_STAGES and delegated_review_enabled(root):

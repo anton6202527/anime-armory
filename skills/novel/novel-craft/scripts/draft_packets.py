@@ -12,6 +12,7 @@ Usage:
     python3 skills/novel/novel-craft/scripts/draft_packets.py <作品根> --next
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -24,6 +25,7 @@ _COMMON = os.path.join(_SKILLS, "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
+from context_budget import allocate_sections, sha256_text  # noqa: E402
 import sweep_schedule  # noqa: E402  小批回扫 due 点单一真值源（含中段防守加密）
 from project_io import load_project_settings  # noqa: E402
 from craft_profile import (  # noqa: E402
@@ -384,6 +386,14 @@ def read_text(path, default=""):
         return default
     with open(path, encoding="utf-8", errors="replace") as f:
         return f.read()
+
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def clip(text, limit=2200):
@@ -1545,7 +1555,8 @@ def cast_arc_section(root, chapter, title, beat_text, char_voices):
     return "\n".join(lines) + "\n"
 
 
-def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reader_contract=False, step="full"):
+def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reader_contract=False,
+                 step="full", max_context_chars=None, return_receipt=False):
     meta = load_json(os.path.join(root, "_meta.json"), {})
     if not meta:
         raise RuntimeError("缺少 _meta.json")
@@ -1920,8 +1931,52 @@ python3 skills/novel/novel-review/scripts/mechanical_check.py "{root}" --range {
 {female_section}
 </static_context>
 """
+    total_budget = int(max_context_chars or os.environ.get("NOVEL_CONTEXT_MAX_CHARS") or 48000)
+    optional_sections = [
+        {"id": "revision", "text": revision_section, "priority": 100, "required": True, "obligations": ["revision_tasks"]},
+        {"id": "foreshadow", "text": foreshadow_section, "priority": 100, "required": True, "obligations": ["foreshadow_due"]},
+        {"id": "knowledge", "text": knowledge_section, "priority": 100, "required": True, "obligations": ["knowledge_state"]},
+        {"id": "loops", "text": loop_section, "priority": 95, "required": True, "obligations": ["open_story_threads"]},
+        {"id": "scene_card", "text": scene_card_section, "priority": 95, "required": True, "obligations": ["scene_contract"]},
+        {"id": "retrieval", "text": retrieval_section, "priority": 90, "obligations": ["long_range_recall"]},
+        {"id": "research", "text": research_section, "priority": 85, "obligations": ["factual_evidence"]},
+        {"id": "live_check", "text": live_check_section, "priority": 85},
+        {"id": "batch", "text": batch_section, "priority": 80},
+        {"id": "voice", "text": voice_section, "priority": 80},
+        {"id": "cast", "text": cast_section, "priority": 78},
+        {"id": "arc_memory", "text": arc_mem_section, "priority": 76},
+        {"id": "special_scene", "text": special_scene_sections, "priority": 72},
+        {"id": "event_cooling", "text": event_cooling_section, "priority": 68},
+        {"id": "observation", "text": observation_section_text, "priority": 58},
+        {"id": "aesthetic", "text": aesthetic_section_text, "priority": 56},
+        {"id": "ai_tic", "text": ai_tic, "priority": 45},
+        {"id": "prediction", "text": predicted_section, "priority": 10},
+    ]
+    allocated, context_receipt = allocate_sections(
+        optional_sections,
+        max_chars=total_budget,
+        reserved_chars=len(static_context) + 12000,
+    )
+    revision_section = allocated["revision"]
+    foreshadow_section = allocated["foreshadow"]
+    knowledge_section = allocated["knowledge"]
+    loop_section = allocated["loops"]
+    scene_card_section = allocated["scene_card"]
+    retrieval_section = allocated["retrieval"]
+    research_section = allocated["research"]
+    live_check_section = allocated["live_check"]
+    batch_section = allocated["batch"]
+    voice_section = allocated["voice"]
+    cast_section = allocated["cast"]
+    arc_mem_section = allocated["arc_memory"]
+    special_scene_sections = allocated["special_scene"]
+    event_cooling_section = allocated["event_cooling"]
+    observation_section_text = allocated["observation"]
+    aesthetic_section_text = allocated["aesthetic"]
+    ai_tic = allocated["ai_tic"]
+    predicted_section = allocated["prediction"]
 
-    return static_context + f"""<dynamic_context>
+    packet = static_context + f"""<dynamic_context>
 # 第 {chapter:02d} 章写作任务包 ({step if step != "full" else "完整稿"})
 
 ## 本章任务
@@ -1984,6 +2039,21 @@ python3 skills/novel/novel-review/scripts/mechanical_check.py "{root}" --range {
 > 只写自由文本 change 不带 event，「已死角色后文再动作」的硬矛盾抓不住。复活桥段补 `event:"revival"` 解闸。
 </dynamic_context>
 """
+    context_receipt.update({
+        "chapter": chapter,
+        "step": step,
+        "packet_chars": len(packet),
+        "packet_sha256": sha256_text(packet),
+        "source_paths": [
+            {
+                "path": path,
+                "exists": os.path.isfile(os.path.join(root, path)),
+                "sha256": sha256_file(os.path.join(root, path)) if os.path.isfile(os.path.join(root, path)) else "",
+            }
+            for path in source_paths
+        ],
+    })
+    return (packet, context_receipt) if return_receipt else packet
 
 
 def resolve_chapters(args, root):
@@ -2022,6 +2092,8 @@ def main():
     ap.add_argument("--allow-missing-demo", action="store_true", help="Demo gate 未通过时也允许生成准备包")
     ap.add_argument("--allow-missing-reader-contract", action="store_true",
                     help="设定/读者契约.md 缺失时也允许生成任务包（记 waiver）")
+    ap.add_argument("--max-context-chars", type=int, default=None,
+                    help="单个写作包总上下文字符预算；默认 NOVEL_CONTEXT_MAX_CHARS 或 48000")
     ap.add_argument(
         "--step",
         default="auto",
@@ -2037,18 +2109,21 @@ def main():
     try:
         chapters = resolve_chapters(args, root)
         steps = packet_steps_for_request(root, args.step)
-        packets = [
-            (chapter, step, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo,
-                                         allow_missing_reader_contract=args.allow_missing_reader_contract, step=step))
-            for chapter in chapters
-            for step in steps
-        ]
+        packets = []
+        for chapter in chapters:
+            for step in steps:
+                packet, receipt = build_packet(
+                    root, chapter, allow_missing_demo=args.allow_missing_demo,
+                    allow_missing_reader_contract=args.allow_missing_reader_contract, step=step,
+                    max_context_chars=args.max_context_chars, return_receipt=True,
+                )
+                packets.append((chapter, step, packet, receipt))
     except Exception as e:
         print(f"[err] {e}", file=sys.stderr)
         sys.exit(2)
 
     if args.stdout:
-        for idx, (chapter, step, packet) in enumerate(packets):
+        for idx, (chapter, step, packet, _receipt) in enumerate(packets):
             if idx:
                 print("\n\n" + "=" * 60 + "\n")
             print(packet)
@@ -2057,12 +2132,16 @@ def main():
     out_dir = os.path.abspath(args.out_dir or os.path.join(root, "写作任务"))
     os.makedirs(out_dir, exist_ok=True)
     wrote_steps = []
-    for chapter, step, packet in packets:
+    receipt_dir = os.path.join(root, "生产数据", "context_receipts")
+    for chapter, step, packet, receipt in packets:
         suffix = f"_{step}" if step != "full" else ""
         path = os.path.join(out_dir, f"第{chapter:02d}章{suffix}.md")
         atomic_write_text(path, packet)
+        receipt_path = os.path.join(receipt_dir, f"第{chapter:02d}章{suffix}.json")
+        atomic_write_json(receipt_path, receipt)
         wrote_steps.append(step)
         print(f"[ok] 写作任务包：{path}")
+        print(f"[ok] 上下文预算收据：{receipt_path}")
     if any(step in TRIO_STEPS for step in wrote_steps):
         print("[next] 三步迭代顺序：先按 _architect 产 beats，再按 _ghostwriter 产 draft，最后按 _editor 写入 章节/第NN章.md；完成后填写 state_delta 并跑 novel-review。")
     else:

@@ -105,6 +105,14 @@ ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英
 W="$ROOT/合成/$EP/_work"; rm -rf "$W"; mkdir -p "$W"
 OUT="$ROOT/合成/$EP/成片_${EP}_${MODE}.mp4"
 
+# Formal mastering color contract.  New projects default to deterministic
+# Rec.709 SDR tags; custom/HDR delivery must explicitly version the contract.
+python3 "$SKILL_DIR/color_pipeline.py" "$ROOT" "$EP" --write-missing --json >/dev/null
+read -r COLOR_PRIMARIES COLOR_TRANSFER COLOR_MATRIX COLOR_RANGE COLOR_PIXFMT < <(
+  python3 "$SKILL_DIR/color_pipeline.py" "$ROOT" "$EP" --print-tags
+)
+COLOR_ARGS=(-color_primaries "$COLOR_PRIMARIES" -color_trc "$COLOR_TRANSFER" -colorspace "$COLOR_MATRIX" -color_range "$COLOR_RANGE" -pix_fmt "$COLOR_PIXFMT")
+
 [ -d "$VID" ] || { echo "缺 $VID（先 n2d-video）"; exit 1; }
 CLIPS=("$VID"/*.mp4)
 [ -e "${CLIPS[0]}" ] || { echo "$VID 无 clip"; exit 1; }
@@ -500,7 +508,7 @@ if [ -f "$VOICE" ]; then
       [3:a]volume=1.0[foley];
       [clip_a][foley][bgmduck][vox]amix=inputs=4:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
-    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
+    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 "${COLOR_ARGS[@]}" -c:a aac -b:a 192k -movflags +faststart "$OUT"
 elif [ "$NATIVE_AV_MODE" = "1" ] && [ "$NATIVE_AUDIO_MODE" != "discard" ]; then
   echo "（原生音画模式：使用 clip 原生音频作为侧链 ducking 源）"
   ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" -i "$FOLEY_WAV" "${PNG_INPUTS[@]}" \
@@ -511,7 +519,7 @@ elif [ "$NATIVE_AV_MODE" = "1" ] && [ "$NATIVE_AUDIO_MODE" != "discard" ]; then
       [3:a]volume=1.0[foley];
       [sfx][foley][bgmduck]amix=inputs=3:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
-    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
+    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 "${COLOR_ARGS[@]}" -c:a aac -b:a 192k -movflags +faststart "$OUT"
 else
   echo "（无配音轨，纯 BGM+音效底+字幕）"
   ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" -i "$FOLEY_WAV" "${PNG_INPUTS[@]}" \
@@ -521,7 +529,7 @@ else
       [1:a]${BGM_VOL_NOVOICE}[bgm];
       [clip_a][foley][bgm]amix=inputs=3:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
-    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
+    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 "${COLOR_ARGS[@]}" -c:a aac -b:a 192k -movflags +faststart "$OUT"
 fi
 
 

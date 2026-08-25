@@ -48,3 +48,7 @@ python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 \
 ```
 
 不能自动证明的任一项缺收据时，`print_pdf` readiness 必须 blocked；不得拿普通 PNG/WebP 包冒充印刷交付。
+
+## 3. KDP vendor profile
+
+`print_delivery.py ... init --vendor-profile kdp` 会固化当前官方约束：内页为单页而非 spread、300dpi、0.125in/3.2mm bleed、无 crop marks、字体至少 7pt、字体嵌入或栅格化、透明度扁平化。gutter 随 trim 与页数变化，合同只记录“必须用当前 KDP calculator/官方表再次确认”，不会编造一个固定 gutter。未传 evidence 时自动记录 [KDP Manuscript Formatting Guide](https://kdp.amazon.com/en_US/help/topic/G201857950) 与核验日 2026-08-25；这仍不代表 KDP 已接收或 PDF/X 合规。

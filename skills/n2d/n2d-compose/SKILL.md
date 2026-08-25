@@ -15,6 +15,8 @@ description: Default final-delivery stage of n2d — maintain an OpenTimelineIO 
 
 **跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。调色采用层级裁决：`series_grade` 是默认基线，场景光位/剧情天气可局部收紧，情绪/梦境/回忆等有意变调必须在 `grade_applied.json` 写 `grade_override.reason/source_clip`，否则按漂色处理。n2d-review 的 `系列调色(GRD)` / `调色层级(COLORH)` / `环境声(AMB)` 据此对账。
 
+> **一个母版色彩合同**：首次 compose 自动写安全默认 `设定库/color_pipeline.json`（SDR Rec.709、BT.709 primaries/transfer/matrix、limited range、`yuv420p`），`compose.sh` 和 `deliver.py` 派生链显式写这些 ffmpeg 标签，不再依赖播放器猜测。`color_pipeline.py <作品根> 第N集 --write-missing --json` 在 compose 阶段允许“母版尚未生成”返回 pending；进入 review 后会 ffprobe 当前 canonical master，标签缺失或与合同不符即 BLOCK。HDR/ACES/自定义 OCIO 不是偷偷自动转换：先显式修改同一合同与实际变换链，再重新输出母版；`series_grade` 管创作调色，`color_pipeline` 管可交付编码色彩语义，两者不能互相冒充。
+
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在执行脚本里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则由 producer-owned 推荐器选一个安全默认并以 `source=auto_recommended` 写回，同项目之后沉默沿用；仅 `普通选择策略=逐项询问` 时才展示菜单。阶段预算包创建/扩大/失效、合规、不可逆覆盖与最终验收仍显式确认。
@@ -124,6 +126,8 @@ python3 skills/n2d/n2d-compose/release_manifest.py check <作品根> 第N集
 ```
 
 `readiness.status=ready` 的最小条件：母带存在且 SHA256 可验、`compliance.py --check` 无 BLOCK、gate findings 无 block、production locks 未漂移、crew RACI 可追责、存在人审签收。AI 标识/水印/C2PA 仍按本线铁律只进发布待办，不阻断 compose；但 release manifest 会把这些待办集中列出来，避免“主流程已合成”被误当成“可以投放”。
+
+**C2PA 2.4 证据边界**：`release_manifest.py` 不再因目录里“有一个 `.c2pa` / `.json` 文件”就宣称 provenance 已验证。只有 `c2pa_validation.json`（或兼容 receipt）明确 `well_formed=true`、`valid=true`，并绑定当前母版 `asset_sha256`，才计 `valid_trusted` 或 `valid_untrusted`；只有 Content Credentials/crJSON 的派生视图、缺源 manifest、哈希不一致或解析失败均记 `derived_view_unverified/invalid`。签名链可信度与内容是否 AI 生成是不同命题；机器可读 AI 标识也可由显式元数据/平台水印证明，不能拿未验证 C2PA 占位文件代替。
 
 ## 输入前置
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物，必须是 AI 平台原片，不应出现 `.noaudio.mp4`、`*_noaudio.mp4` 或 `_raw_with_audio/` 这类提前剥音轨中间件）。否则报错建议先 n2d-video。

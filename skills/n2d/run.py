@@ -18,6 +18,7 @@
 from __future__ import annotations
 
 import glob
+import hashlib
 import json
 import os
 import re
@@ -27,7 +28,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Mapping, Optional
 
 _N2D_DIR = os.path.abspath(os.path.dirname(__file__))
 if _N2D_DIR not in sys.path:
@@ -139,6 +140,23 @@ def _make_prework_cache(root, ep, stage_key, script_paths, extra_paths=()):
         return _PreworkCache(root, ep, stage_key, fp)
     except Exception:  # pragma: no cover - never let caching break the orchestrator
         return None
+
+
+def _step_cache_key(step: str, script_path: str, args: Any) -> str:
+    """Version one cached step without invalidating unrelated stage siblings."""
+    h = hashlib.sha256()
+    h.update(str(step).encode("utf-8"))
+    h.update(b"\0")
+    try:
+        stat = os.stat(script_path)
+        h.update(f"{os.path.realpath(script_path)}:{stat.st_size}:{stat.st_mtime_ns}".encode("utf-8"))
+    except OSError:
+        h.update(f"{script_path}:missing".encode("utf-8"))
+    normalized_args = list(args or [])
+    if normalized_args:
+        normalized_args[0] = "<project-root>"
+    h.update(json.dumps(normalized_args, ensure_ascii=False, sort_keys=True, default=str).encode("utf-8"))
+    return f"{step}:{h.hexdigest()[:20]}"
 
 
 def _identity_matrix_path(root: str) -> str:
@@ -466,6 +484,8 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             block_reason = _default_block_reason(stop_reason, card, probes.gate)
             if block_reason:
                 card["block_reason"] = block_reason
+        if stop_reason.startswith("blocked_by_") or stop_reason == "prework_failed":
+            card.setdefault("repair_recipe", _repair_recipe(stop_reason, card, probes.gate, probes))
         if probes.prework:
             card.setdefault("prework_status_summary", _prework_status_summary(probes.prework))
         if probes.auto_decisions:
@@ -1172,6 +1192,44 @@ def _default_block_reason(stop_reason: str, card: Dict[str, Any], gate: Optional
     return reason
 
 
+def _repair_recipe(
+    stop_reason: str,
+    card: Mapping[str, Any],
+    gate: Optional[Mapping[str, Any]],
+    probes: Probes,
+) -> Dict[str, Any]:
+    """Normalize repair evidence without inventing another workflow state."""
+    affected = list((gate or {}).get("affected_artifacts") or [])
+    auto_attempted = any(
+        str(row.get("step") or "") == "repair_preflight"
+        for row in probes.prework
+        if isinstance(row, Mapping)
+    )
+    safe_commands: list[str] = []
+    # gather_probes already invokes the unified deterministic repair once.  Do
+    # not ask a durable producer to repeat a non-convergent repair forever.
+    if stop_reason == "blocked_by_entry_check" and not auto_attempted:
+        recovery = str(card.get("recovery_command") or "").strip()
+        if recovery and "<" not in recovery:
+            safe_commands.append(recovery)
+    requires_creation = stop_reason in {
+        "blocked_by_gate", "blocked_by_image_qc", "blocked_by_review_acceptance",
+        "prework_failed", "blocked_by_entry_check",
+    }
+    return {
+        "kind": "n2d_repair_recipe",
+        "version": 1,
+        "return_to_stage": str((gate or {}).get("return_to_stage") or ""),
+        "affected_artifacts": affected,
+        "rerun_scope": str((gate or {}).get("rerun_scope") or card.get("to_user") or ""),
+        "safe_auto_commands": safe_commands,
+        "auto_attempted": auto_attempted,
+        "requires_creative_or_asset_change": requires_creation and not safe_commands,
+        "max_auto_attempts": 1,
+        "findings_path": str((gate or {}).get("findings_path") or ""),
+    }
+
+
 def _review_acceptance_issue(root: str, ep: str) -> Optional[str]:
     prod = os.path.join(root, "生产数据")
     score_path = os.path.join(prod, f"score_{ep}.json")
@@ -1495,7 +1553,7 @@ def _run_report_only_prework(
         if not os.path.exists(script_path):
             placeholders[step] = {"step": step, "status": "skip", "detail": "script missing"}
         else:
-            steps.append((step, (step, script_path, args)))
+            steps.append((_step_cache_key(step, script_path, args), (step, script_path, args)))
 
     def run_one(obj):
         step, script_path, args = obj
@@ -2106,7 +2164,10 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     if ep:
         # Cache every safe report-only planner, not only image_prompt.  The key
         # includes stage contracts, route/prompt files and media stat changes.
-        cache_scripts = sorted(glob.glob(os.path.join(SKILLS_DIR, "n2d*", "scripts", "*.py")))
+        # The base cache binds canonical inputs and shared contracts.  Each
+        # independent step versions its own script/argv in `_step_cache_key`,
+        # so editing one detector no longer invalidates every stage sibling.
+        cache_scripts = [__file__]
         _stage_prework_cache = _make_prework_cache(
             root, ep, stage_key, cache_scripts, _stage_cache_inputs(root, ep)
         )
@@ -2472,7 +2533,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 return {"step": step, "status": "block", "detail": detail,
                         "block_msg": f"{step} 无法运行：{detail}"}
 
-        _audit_steps = [(step, (step, sp, args, block_msg))
+        _audit_steps = [(_step_cache_key(step, sp, args), (step, sp, args, block_msg))
                         for step, sp, args, block_msg in audits if os.path.exists(sp)]
         for o in _prework_run(_audit_steps, _run_audit, cache=_prework_cache_obj,
                               should_cache=lambda o: o.get("status") == "pass"):
@@ -2907,6 +2968,43 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 detail = str(e)[:160]
                 _record_prework_block(p, "series_consistency", f"series_consistency 无法运行：{detail}")
                 p.prework.append({"step": "series_consistency", "status": "block", "detail": detail})
+
+    # One explicit mastering color contract.  Compose may create the safe
+    # Rec.709 default before a master exists; review requires the current master
+    # to carry matching ffprobe tags.
+    if ep and stage_key in {"compose", "review"}:
+        color_script = os.path.join(SKILLS_DIR, "n2d-compose", "color_pipeline.py")
+        if os.path.exists(color_script):
+            try:
+                r = _run([sys.executable, color_script, root, ep, "--write-missing", "--json"])
+                status = _script_result_status(r.returncode, r.stdout)
+                p.prework.append({"step": "color_pipeline", "status": status, "detail": _finding_detail(r.stdout, r.stderr)})
+                if status == "block":
+                    _record_prework_block(p, "color_pipeline", "母版色彩空间/标签与设定库 color_pipeline 合同不一致；先重新输出或修正交付 profile。")
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                p.prework.append({"step": "color_pipeline", "status": "block", "detail": detail})
+                _record_prework_block(p, "color_pipeline", f"color_pipeline 无法运行：{detail}")
+        else:
+            p.prework.append({"step": "color_pipeline", "status": "block", "detail": "script missing"})
+            _record_prework_block(p, "color_pipeline", "缺 n2d-compose/color_pipeline.py，无法证明母版色彩合同。")
+
+    # Convert production review labels into detector value/pruning evidence.
+    # This report itself is advisory; detector_reliability consumes it to remove
+    # auto-block authority from noisy or under-sampled numeric checks.
+    if ep and stage_key == "review":
+        value_script = os.path.join(SKILLS_DIR, "n2d-review", "scripts", "detector_value_report.py")
+        registry_script = os.path.join(SKILLS_DIR, "n2d-review", "scripts", "consistency_threshold_registry.py")
+        _run_report_only_prework(p, [
+            ("detector_value_report", value_script, [root, "--write", "--json"]),
+        ], cache=_stage_prework_cache, expected_outputs={
+            "detector_value_report": [os.path.join("生产数据", "detector_value_report.json")],
+        })
+        _run_report_only_prework(p, [
+            ("consistency_threshold_registry", registry_script, [root]),
+        ], cache=_stage_prework_cache, expected_outputs={
+            "consistency_threshold_registry": [os.path.join("生产数据", "consistency_threshold_registry.json")],
+        })
 
     # gate：有 gate_stage 的阶段先过 dashboard gate（退出码 1=block）
     gate_stage = _gate_stage_for_frontier(root, ep, stage_key, spec)

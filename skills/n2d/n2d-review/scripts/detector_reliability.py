@@ -77,6 +77,14 @@ def registry_enforcement(row: Mapping[str, Any]) -> Dict[str, Any]:
         "auto_block_eligible": row.get("auto_block_eligible"),
     }
     governed = govern_verdict("block", detector_kind=detector_kind, calibration=calibration)
+    value_enforcement = str(row.get("value_enforcement") or "")
+    if value_enforcement in {"advisory_only", "retire_candidate", "insufficient_evidence"}:
+        return {
+            "detector_kind": detector_kind,
+            "auto_block_eligible": False,
+            "unconfirmed_block_action": "warn_and_human_review",
+            "reason": f"production value report recommendation={value_enforcement}",
+        }
     return {
         "detector_kind": detector_kind,
         "auto_block_eligible": governed["verdict"] == "block",
@@ -86,4 +94,3 @@ def registry_enforcement(row: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 __all__ = ["KIND", "VERSION", "govern_verdict", "registry_enforcement"]
-

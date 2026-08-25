@@ -63,6 +63,7 @@ python3 skills/comic/comic-layout/scripts/render_storyboard_svg.py "创作区/�
 6. 运行确定性 validator：panel ID 唯一且同序覆盖，矩形不重叠/不越界，阅读顺序一致，每段正文/SFX 都有界内 bubble slot。
 7. 输出 draft `layout.json`。如果文字过多，回 `comic-script`；如果页流不顺，回 `comic-name`，不要靠缩小字号硬塞。
 8. 人工或项目内已授权制作代理签收后写 SHA-bound approval receipt，才回写 `_进度.md` 的 `页面排版=✅`。`delegate:` 签收只接受 `_设置.md` 显式的 `审阅策略=用户授权制作代理`，或当前有效、摘要匹配的 `生产数据/authorizations/editorial_review.json`；batch 的机器结构签收明确记为 `review_kind=delegated_policy_auto_review`，不冒充视觉/语义人审。缺 key 不继承默认，授权撤销或变化会使签收失效。
+9. `layout_candidates.py` 以 balanced / fast_read / dramatic_pause 三套参数生成候选，按眼动合同、气泡负载、安全区、翻页钩子与重复构图排序。无 spread 的普通版式可 `--apply-best` 写 hash-bound selection；跨页/复杂版式强制保护，不自动套版。
 
 ## 排版原则
 

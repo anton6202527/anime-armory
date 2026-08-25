@@ -5,7 +5,7 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 # comic-batch — 漫画流程推进与批跑
 
-`comic-batch` 是漫画线的流程层：读取 `_进度.md`，自动运行可复算阶段，把缩略分镜/name board 和 layout 当作显式编辑签收点。首次推进到这两步先生成 `draft`；`审阅策略=逐阶段用户确认` 时等待人工，项目 `_设置.md` 显式采用 `用户授权制作代理`（或存在当前有效的 `生产数据/authorizations/editorial_review.json`）时，batch 会在同一次进程内完成 `draft → review → approved → check` 并继续收尾、出图包、出图与合成，不再只打印命令后退出。代理签收写 `delegate:` 身份、授权来源、证据和当前 SHA，不能伪装成人审。创作阶段由 agent 路由到 `comic-script`，不是让用户手敲下一条命令；审查阶段也不跳过证据化验收。
+`comic-batch` 是漫画线的流程层：读取 `_进度.md`，自动运行可复算阶段，把缩略分镜/name board 和 layout 当作显式编辑签收点。首次推进到这两步先生成 `draft`；`审阅策略=逐阶段用户确认` 时等待人工，项目 `_设置.md` 显式采用 `用户授权制作代理`（或存在当前有效的 `生产数据/authorizations/editorial_review.json`）时，batch 会在同一次进程内完成 `draft → review → approved → check` 并继续收尾、出图包、出图与合成，不再只打印命令后退出。代理签收写 `delegate:` 身份、授权来源、证据和当前 SHA，不能伪装成人审。`--next-json` 提供单动作机器协议，供 `comic-supervisor` 持有 durable loop；创作阶段由 supervisor 派给项目注册的 `story_editor/comic_writer` adapter，审查阶段也不跳过证据化验收。
 
 `传统原稿流程=关闭` 只跳过原稿收尾，不再跳过缩略分镜/name board；已签收 name board 是所有 layout adapter 的强制编辑合同。出图前编排器先运行 layout `--check`，传统收尾开启时再运行 finishing `--check`，然后才进入 `image_preflight`。因此即使手动指定 `--stage image`，也不能绕过 draft、失效审批或 stale 上游。
 
@@ -30,6 +30,7 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 ```bash
 python3 skills/comic/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chapter 第1话 --image-max-attempts 3
+python3 skills/comic/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chapter 第1话 --next-json
 ```
 
 只跑部分格：
@@ -68,7 +69,7 @@ envelope 精确绑定项目路径摘要、`stage=image`、稳定的逐格执行�
 - `comic-batch` 调用出图 runner 前先跑 `skills/comic/comic-review/scripts/gate.py --stage image_preflight`；被 gate block 时不启动付费/批量出图。
 - `comic-image` runner 会在所有 job `ready` 且 PNG 有效时把 `_进度.md` 的 `出图` 标为 `✅`；`post_qc=block` 的格子标 `qc_block`，不算 ready。
 - runner 每张落盘后先做目标格 post-QC。指定 `--targets` / `--limit` 的验样批次若尚未补齐整话，只报告该批通过并延后整话 gate；全部 panel 都是 `ready` 且文件存在后，`comic-batch` 才跑 `skills/comic/comic-review/scripts/gate.py --stage image` 刷新整话风格与角色一致性报告。禁止用“未生成的其它格”把已通过的小批验样误报成失败。
-- `comic-batch` 只在阶段脚本成功时继续，不吞掉失败。
+- `comic-batch` 只在阶段脚本成功时继续，不吞掉失败。review gate pass 后只把派生进度记为 `✅（machine_ready）`；最终完成只由 `completion_verdict=accepted` 定义。
 - 出图完成后下一步通常是 `comic-compose`；正式发布前仍要跑 `comic-review`。
 
 ## 不做什么

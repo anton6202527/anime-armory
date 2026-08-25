@@ -102,6 +102,7 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
 - 原稿规格: {args.manuscript_spec}
 - 版式模板策略: {args.name_strategy}
 - 审阅策略: {args.review_strategy}
+- 视觉审阅策略: {args.visual_review_strategy}
 - 网点策略: {args.tone_strategy}
 - 效果线策略: {args.effects_strategy}
 - 基础视觉风格: {args.visual_style}
@@ -375,6 +376,7 @@ def main() -> int:
     parser.add_argument("--manuscript-spec", default="数字条漫")
     parser.add_argument("--name-strategy", default="自动缩略分镜")
     parser.add_argument("--review-strategy", default="用户授权制作代理")
+    parser.add_argument("--visual-review-strategy", default="逐图具名人工")
     parser.add_argument("--tone-strategy", default="风格驱动")
     parser.add_argument("--effects-strategy", default="剧情驱动")
     parser.add_argument("--visual-style", default="彩色国漫条漫")

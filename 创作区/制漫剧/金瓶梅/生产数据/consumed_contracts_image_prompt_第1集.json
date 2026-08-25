@@ -6,7 +6,1211 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-08-17T04:24:25+00:00",
+  "generated_at": "2026-08-24T07:20:39+00:00",
+  "input_fingerprint": {
+    "kind": "n2d_content_fingerprint",
+    "version": 1,
+    "scope": "image_prompt_consumption",
+    "source_patterns": [
+      "脚本/第1集/storyboard.json",
+      "脚本/第1集/continuity_chain.json",
+      "脚本/第1集/shot_reverse_contract.json",
+      "生产数据/script_quality_contract_第1集.json",
+      "生产数据/director_camera_plan_第1集.json",
+      "生产数据/reference_plan_第1集.json",
+      "_设置.md",
+      "脚本/第1集/素材清单.md",
+      "生产数据/production_mode_route_第1集.json",
+      "设定库/global_style.md",
+      "设定库/source_comprehension.json",
+      "设定库/characters/**/*",
+      "设定库/locations/**/*",
+      "设定库/参考资料/视觉参考/**/*",
+      "角色库/**/*",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json",
+      "出图/共享/style_anchor_registry.json",
+      "出图/共享/图片/*",
+      "出图/第1集/prompt/00_总览.md",
+      "出图/第1集/prompt/01_分镜出图.md"
+    ],
+    "values": {
+      "episode": "第1集",
+      "scope": "image_prompt"
+    },
+    "files": [
+      {
+        "pattern": "脚本/第1集/storyboard.json",
+        "path": "脚本/第1集/storyboard.json",
+        "exists": true,
+        "sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0",
+        "size": 126496
+      },
+      {
+        "pattern": "脚本/第1集/continuity_chain.json",
+        "path": "脚本/第1集/continuity_chain.json",
+        "exists": true,
+        "sha256": "8b193878a03d628b4e62a207e3bcbbf74a6020ac787ad9950e65704ddc1c25f9",
+        "size": 63071
+      },
+      {
+        "pattern": "脚本/第1集/shot_reverse_contract.json",
+        "path": "脚本/第1集/shot_reverse_contract.json",
+        "exists": true,
+        "sha256": "1a49512df2e5a5d4269f48f13f67e9f234deb089705b81beb2cf302334d8806d",
+        "size": 67306
+      },
+      {
+        "pattern": "生产数据/script_quality_contract_第1集.json",
+        "path": "生产数据/script_quality_contract_第1集.json",
+        "exists": true,
+        "sha256": "39c474ab131401325658a0368d82a44ae2ec6d0c99c87f2e89aff88f4247976d",
+        "size": 23882
+      },
+      {
+        "pattern": "生产数据/director_camera_plan_第1集.json",
+        "path": "生产数据/director_camera_plan_第1集.json",
+        "exists": true,
+        "sha256": "9542405870a447e1975fab74d0979d34ff9515e8ce08624f3282a3da571e15de",
+        "size": 54582
+      },
+      {
+        "pattern": "生产数据/reference_plan_第1集.json",
+        "path": "生产数据/reference_plan_第1集.json",
+        "exists": true,
+        "sha256": "22fe29c0ee2c6009352b3fc1c7a45ae6aa1b6c6b7364820470b448920d5fc9c4",
+        "size": 236357
+      },
+      {
+        "pattern": "_设置.md",
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "c65cadb643f06794e2818e6dd8abed2333231aa56e635079644c2269cef756a6",
+        "size": 1744
+      },
+      {
+        "pattern": "脚本/第1集/素材清单.md",
+        "path": "脚本/第1集/素材清单.md",
+        "exists": true,
+        "sha256": "b446f14c4728552dc1bafccab45762d9632697fc6e46af77d5e5756e0f978810",
+        "size": 8854
+      },
+      {
+        "pattern": "生产数据/production_mode_route_第1集.json",
+        "path": "生产数据/production_mode_route_第1集.json",
+        "exists": true,
+        "sha256": "ae1dfcc58337030247a9471a69315fcc2e9475559e405090227fd7d5f7bcc678",
+        "size": 21263
+      },
+      {
+        "pattern": "设定库/global_style.md",
+        "path": "设定库/global_style.md",
+        "exists": true,
+        "sha256": "b874e6b80ac314d6407d9c278346d20ce1a0b12e653d1ad9952e01099a28b6b0",
+        "size": 4028
+      },
+      {
+        "pattern": "设定库/source_comprehension.json",
+        "path": "设定库/source_comprehension.json",
+        "exists": true,
+        "sha256": "8a050aa52bb61c76c8ba1e16eff9b861f5e218b9212667a061d9597d0b369f0a",
+        "size": 46903
+      },
+      {
+        "pattern": "设定库/characters/**/*",
+        "path": "设定库/characters/_生命周期.md",
+        "exists": true,
+        "sha256": "fcbbe4247d0beb41b1db570d1b4131e7bacb731c8abfe0dc79e2787753e77ee7",
+        "size": 2112
+      },
+      {
+        "pattern": "设定库/characters/**/*",
+        "path": "设定库/characters/_角色总表.md",
+        "exists": true,
+        "sha256": "ded36fbbb7c83dd8d4ecbf6d6968928dfcca93e343f0edb5324dfb5cae247e9c",
+        "size": 1543
+      },
+      {
+        "pattern": "设定库/characters/**/*",
+        "path": "设定库/characters/武大.md",
+        "exists": true,
+        "sha256": "569cdc56c0dcca87b8f56462b64384368724a545a5274430acee78bd44258f5b",
+        "size": 5694
+      },
+      {
+        "pattern": "设定库/characters/**/*",
+        "path": "设定库/characters/武松.md",
+        "exists": true,
+        "sha256": "f0eab70626f87ef268c3a4ac6e7081ebc60d6c9249854200db0388774fc70e56",
+        "size": 5548
+      },
+      {
+        "pattern": "设定库/characters/**/*",
+        "path": "设定库/characters/潘金莲.md",
+        "exists": true,
+        "sha256": "604cf0a24aecdb28d9a986dafd94b06fc57b55b7d6624d24d89e53383ea68ae8",
+        "size": 5813
+      },
+      {
+        "pattern": "设定库/locations/**/*",
+        "path": "设定库/locations/_场景总表.md",
+        "exists": true,
+        "sha256": "6758c95e6b1d02c50a572516d4c31f2afd9cdd3a4c5d86582aaa29e87720ed84",
+        "size": 1062
+      },
+      {
+        "pattern": "设定库/locations/**/*",
+        "path": "设定库/locations/景阳冈.md",
+        "exists": true,
+        "sha256": "d68a0e91a5a1899857ed43815f462e5c6f10ae42d395376af3f7bcad825dbc98",
+        "size": 2036
+      },
+      {
+        "pattern": "设定库/locations/**/*",
+        "path": "设定库/locations/武大家楼屋与街面.md",
+        "exists": true,
+        "sha256": "1c8b09ab334d0ca2a38eeccf1c1da7768b150cbe757f595e244efd6e59918e2e",
+        "size": 3004
+      },
+      {
+        "pattern": "设定库/参考资料/视觉参考/**/*",
+        "path": "",
+        "exists": false,
+        "sha256": "",
+        "size": 0
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/BEAST_TIGER__BEAST_TIGER/manifest.json",
+        "exists": true,
+        "sha256": "a963d86bebe105c2e3610a74ae0984bbf8ac0ea39efd264ec08a047a5751c937",
+        "size": 844
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_MAGISTRATE__知县/manifest.json",
+        "exists": true,
+        "sha256": "852f9131b7cbb968e4220e4551050b729567daddca9424c1d907a4fbcdd6fc45",
+        "size": 973
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_PANJINLIAN__潘金莲/manifest.json",
+        "exists": true,
+        "sha256": "a9667b6289ddc75de125f47277fa6397f0fc94445efb082697c2103830bb722a",
+        "size": 946
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_PAN_JINLIAN__潘金莲/manifest.json",
+        "exists": true,
+        "sha256": "b904ac1973d9f471819658b67a64d1964c562fd7b929da5deaa80156764f84a6",
+        "size": 953
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_WUDA__武大/manifest.json",
+        "exists": true,
+        "sha256": "94b035e0e22e0d4c86592d5a92731bd24f2f706aad7b12018046607070e420f7",
+        "size": 846
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_WUSONG__武松/manifest.json",
+        "exists": true,
+        "sha256": "3905e25f656465a1927e2480bd4c2a7f5ca438b9cfc0115e128837f143298ce7",
+        "size": 858
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_WU_DA__武大/manifest.json",
+        "exists": true,
+        "sha256": "f865225360b47365d7831ae79d091b9bf453a21446fb2a90c2444009da20f0f4",
+        "size": 853
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_WU_SONG__武松/manifest.json",
+        "exists": true,
+        "sha256": "ff23e09fb9905eedfa873d7b4e3bec2b54fbae078d55afca02f74670456df2a2",
+        "size": 865
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CHAR_XIMENQING__西门庆/manifest.json",
+        "exists": true,
+        "sha256": "81ce83e9d8b7dac84db8a8e01f00a53f67a4fb291061a52b8f3ed34f9298481f",
+        "size": 1014
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CROWD_HUNTERS__Hunters/manifest.json",
+        "exists": true,
+        "sha256": "cb83b7f9d8b9e9ae9483bf9688cb6450ee840916f223c77b67650396ed9abbcb",
+        "size": 831
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/README.md",
+        "exists": true,
+        "sha256": "4e38df9e0577ceb16e26c5927880c5cfa22aa144e68126fff468723b4b4df072",
+        "size": 494
+      },
+      {
+        "pattern": "出图/共享/identity_registry.json",
+        "path": "出图/共享/identity_registry.json",
+        "exists": true,
+        "sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
+        "size": 418379
+      },
+      {
+        "pattern": "出图/共享/asset_registry.json",
+        "path": "出图/共享/asset_registry.json",
+        "exists": true,
+        "sha256": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811",
+        "size": 127476
+      },
+      {
+        "pattern": "出图/共享/style_anchor_registry.json",
+        "path": "出图/共享/style_anchor_registry.json",
+        "exists": true,
+        "sha256": "7d3966e143ebd40fd55f16215b3df6832b38569c21a3ee5f2637886d1bc8a3df",
+        "size": 3436
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态.png",
+        "exists": true,
+        "sha256": "1ad793c294a1ff13a1caea6c0374baefb39954fd2d834ff8e1862856ea9271c7",
+        "size": 1982090
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_45度.png",
+        "exists": true,
+        "sha256": "692454f1fea1ea7ef71cdbea48ae1278533fc4a517869e9d7e638e99549e1144",
+        "size": 1766901
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_侧.png",
+        "exists": true,
+        "sha256": "c221d241c11308885f581b0289252817595912bbbaaefb5cfba5193e8647455c",
+        "size": 1915563
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_半身.png",
+        "exists": true,
+        "sha256": "ba6ca0ddb7c7843aa884f9fbb96b844ff94f949b6aa596cbb6916fb933a2ce4f",
+        "size": 1276894
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_后45度.png",
+        "exists": true,
+        "sha256": "b5e3fccdcf6188f4022dae1fa9175282d9a3aaafbac837e2cff55cc010f2b72b",
+        "size": 1778486
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_背.png",
+        "exists": true,
+        "sha256": "d305b0f738ef162c2f7c6b49f46dad9e082972e1619b9d3ea1f6f02489a7b51d",
+        "size": 1621897
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+        "exists": true,
+        "sha256": "19ae3f729f0e0d1d4e3fc70b86696ae9cb16cf1c160c067314ab37fdd1f08e83",
+        "size": 1258036
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写_脸锚裁切.png",
+        "exists": true,
+        "sha256": "bf3aace9938be9e0cfac8869498fde67e64683a979cead140fc0b84d61298093",
+        "size": 1218212
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png",
+        "exists": true,
+        "sha256": "fdc55058dee24383396d78b2435373aa523372b356c57085484625c93ac74db5",
+        "size": 1638557
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_45度.png",
+        "exists": true,
+        "sha256": "745c401b726291afa5183498988f51e251a7d566bac9465acd0c9b9667f4deb4",
+        "size": 1576760
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_侧.png",
+        "exists": true,
+        "sha256": "ce5c95a7cbff9a2ae8c882d94bed0004ad539f737fd0c9ac26cd7a791bbe204a",
+        "size": 1540046
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_半身.png",
+        "exists": true,
+        "sha256": "01bfa2b0b6b28fdf275869f83ee15c00d5df7d7254a419188cb7e16ff953aa9f",
+        "size": 1271005
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_后45度.png",
+        "exists": true,
+        "sha256": "62985d76bb7848772ecb3d04ae9cb4073314a5260af096615147d7dfe88e8e38",
+        "size": 1567511
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_背.png",
+        "exists": true,
+        "sha256": "243f10b3a1dad7a3ffdeff4d27fc2d0b7ec747a796a03f73e7f3c8f2895249f7",
+        "size": 1623753
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+        "exists": true,
+        "sha256": "7e7126b263f2d01677073d87c58cc23a84dac57f09e2b64f97352c478c0178f4",
+        "size": 614622
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写_脸锚裁切.png",
+        "exists": true,
+        "sha256": "a15d474b9770b7a204fe446e57c05c0101808a7334a26b2f61416f6a01f3f4d0",
+        "size": 871551
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态.png",
+        "exists": true,
+        "sha256": "384fba505331545ddff390a85bd7fad3aa9c4bf2f35e9deea8b6e343d44ba30c",
+        "size": 422026
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_45度.png",
+        "exists": true,
+        "sha256": "7dfcc34d9f0799bee5d3ef1265df2ba80f160f66f91002c9f5efc8e65bf7a815",
+        "size": 425853
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_三视图.png",
+        "exists": true,
+        "sha256": "245e027373b685add4569055bb99c1625b6eb503258d44d22d80ac1dee359b0d",
+        "size": 1979675
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_侧.png",
+        "exists": true,
+        "sha256": "e38a213b565d3589f9acb98900a47a5a687be163030544e414ca20142d6fdae2",
+        "size": 398222
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_半身.png",
+        "exists": true,
+        "sha256": "b9953dec4b2d8dbc1d808832484a1dcb4100add051d176571bf7b3219986597a",
+        "size": 495242
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_后45度.png",
+        "exists": true,
+        "sha256": "1a1b6b82f46c6879d8b929b8cbd190cf5dc6163ec90e939aeb393a0723861be8",
+        "size": 416918
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_背.png",
+        "exists": true,
+        "sha256": "5c3104a291502cd8932096b50bf00a609d8fa9126c93107c0a956931e5b27df4",
+        "size": 412868
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+        "exists": true,
+        "sha256": "c8cc45c2514f160643d0186388341639a1404b86f3a1dee3e47197e7488a1c8a",
+        "size": 468410
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_表情_六联表.png",
+        "exists": true,
+        "sha256": "07663bbb3120bfe97c2eb573514382071565b211e40036429878dcb39b0db96a",
+        "size": 2174278
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_PANJINLIAN__常态.png",
+        "exists": true,
+        "sha256": "bd523606c43e3c9c38726e7400098409caaafa82b31c7b96efdc16edbb601bce",
+        "size": 1606232
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__常态.png",
+        "exists": true,
+        "sha256": "4ef84e19e0a66de565647a2bba6b31b0df836c3a5923786b26f4e1689d46e5a2",
+        "size": 2117756
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态.png",
+        "exists": true,
+        "sha256": "775cced667b86b480251f8d07741b8e8922110d0d788abd724c90d3958813723",
+        "size": 2098797
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_45度.png",
+        "exists": true,
+        "sha256": "b16fc72a8d8c52350207bd481aba87203c524f0961742d98c0b6d6ae9a57ab3a",
+        "size": 2137131
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_侧.png",
+        "exists": true,
+        "sha256": "58f40d6e6e96a78ba2940be2217f6a32d74cc0ec236312575fb21d2a5c83ef6a",
+        "size": 2096056
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_半身.png",
+        "exists": true,
+        "sha256": "1bd58a5fb5c03083ce8de4428b1486db1de4ff1a7fc5f2cf1596b2f5b1f31b20",
+        "size": 1814873
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_后45度.png",
+        "exists": true,
+        "sha256": "43f07d2704c5ca283a6a4fa157f378260a0fa045d3ab5ab3b7723fa4ab68d5f4",
+        "size": 1986836
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_背.png",
+        "exists": true,
+        "sha256": "5aa96a58d26ccd90e49a395e13d80fffde9d708e75f9a685d0712ad1495758dd",
+        "size": 2019158
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+        "exists": true,
+        "sha256": "905847ca3da4410544b2224aefc3e869fab3af2fc041d319639c7d632f7b7067",
+        "size": 910893
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_表情_克制.png",
+        "exists": true,
+        "sha256": "2f45e59147f29dd83169f6ee0587c67a5040532d8a09dc6c23e220abaf70052d",
+        "size": 1191186
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png",
+        "exists": true,
+        "sha256": "a6702a565e0c69efb3d6814bb98a7b59b7e0294bc8e29261c09e443711ac0be9",
+        "size": 451940
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_45度.png",
+        "exists": true,
+        "sha256": "6ceb10f64c6367fa4cb7f20fbe9c70ab08c968c086dd7551f19ee6b8fb5006cd",
+        "size": 455817
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_三视图.png",
+        "exists": true,
+        "sha256": "fa433f838911751f4a9ba21207f0e602436617b202d72344bc328afbbd946673",
+        "size": 2148212
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_侧.png",
+        "exists": true,
+        "sha256": "db2e72c943839dfe28319f967772fc39ca26bb999184af828502caa004235926",
+        "size": 412438
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_半身.png",
+        "exists": true,
+        "sha256": "5fef4c56eb8e2628cd2bbb91b9bdea7ace90bd73f5de0b4dd55f9b903c965aca",
+        "size": 519359
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_后45度.png",
+        "exists": true,
+        "sha256": "998fa54e88d9ddeeb971f565a903b8cebc2408b852cab171a48d951c2ca219ba",
+        "size": 449825
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_背.png",
+        "exists": true,
+        "sha256": "a4b9ab57e089544897fbe17f0cca361e89f99df79404845d84fa75b53545bb6a",
+        "size": 448249
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_脸部特写_脸锚裁切.png",
+        "exists": true,
+        "sha256": "6d09870990228104ed98c7db7eb7bc05529879eb121311979e68e27485004d01",
+        "size": 629284
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态_表情_六联表.png",
+        "exists": true,
+        "sha256": "6fae69a5bca80460db286b573d1db9a710cbbce0a6d80eb51a966138dcc03a1d",
+        "size": 2238062
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_WUSONG__常态.png",
+        "exists": true,
+        "sha256": "27665ccb40f8b46b5ef4b3b9eebe87dbe32fedb70a982e6806693576674fe17b",
+        "size": 1623715
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态.png",
+        "exists": true,
+        "sha256": "990656733bd0642f2746afbff5641f9776323e00029481c78e10d0fdfdaf2d67",
+        "size": 1556631
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_45度.png",
+        "exists": true,
+        "sha256": "553932a766215ca2f68d193147d84be8fe342cb1826d5a673c997688b497a21a",
+        "size": 1536683
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_侧.png",
+        "exists": true,
+        "sha256": "444ce22eef6e81752cef30641c7a928d359957ca35feaa72ed88e5b937be3554",
+        "size": 1461361
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_半身.png",
+        "exists": true,
+        "sha256": "9356b14bcd05868a92f014f6bd2a660109755c0cca77336c86d75a96419276e3",
+        "size": 1222578
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_后45度.png",
+        "exists": true,
+        "sha256": "2ee9b70961d5901f7e886a2a13ae5bf2d8739bad3c710043dc7fe54b5d297450",
+        "size": 1485873
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_背.png",
+        "exists": true,
+        "sha256": "16907bc469c95ea5faed0859c6f8016d725eb49b101d55bc79c8068f0cd9d4c5",
+        "size": 1600447
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+        "exists": true,
+        "sha256": "e6ed90aed2f78eb99a4f14b4639f31d717864706469b307c00c731be14ca3f67",
+        "size": 585393
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写_脸锚裁切.png",
+        "exists": true,
+        "sha256": "332b879081a261d239227847847fef8e2168fe0a86acae581befffddb243d072",
+        "size": 872604
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_CROWD_HUNTERS__常态.png",
+        "exists": true,
+        "sha256": "ac559def295416b0fd499defc30edb0927486c9da49ba1813e13937cf7d621a4",
+        "size": 2528484
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_县衙案厅.png",
+        "exists": true,
+        "sha256": "9cd78fefcaf906db2c594d5577ca62823fb1b2a9fcfc198924efd50f0e579220",
+        "size": 2296501
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_县衙案厅_反打.png",
+        "exists": true,
+        "sha256": "914ea5d5977557f89569158707eb783c0d078470e66e8a8101eff09e38bc02c0",
+        "size": 2006106
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_县衙案厅_平面图.png",
+        "exists": true,
+        "sha256": "e8f7989ebc3a7cde824ff115c2416f994facb99bb14baaa5496851728d225c33",
+        "size": 2706692
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地.png",
+        "exists": true,
+        "sha256": "be4f71b6df2b6db8ca4524fd5145fa6da5cdac5ad35f48c1f099863cebe88229",
+        "size": 2830753
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png",
+        "exists": true,
+        "sha256": "03957706e173d09b4560d63e6a7e1284c31ad3ec7b8369372f15b47d621fa754",
+        "size": 2959576
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_景阳冈夜间空地_平面图.png",
+        "exists": true,
+        "sha256": "96466d629dbdb901cf44fa382706c8f5f10e1d63214e7b240917d862fbb4a137",
+        "size": 3328438
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜.png",
+        "exists": true,
+        "sha256": "ff9b146e47b8379fdabf29b5001ca889de70be60101a317abd0dbec2d555ddf9",
+        "size": 2365754
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_反打.png",
+        "exists": true,
+        "sha256": "b048662d527f9ff79aea7bb3794fac69a316a0642ab248c73e3ced2fbb89396d",
+        "size": 2421042
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_武大家楼屋雪夜_平面图.png",
+        "exists": true,
+        "sha256": "2df7a56e436ea12ea278b4b12189c555d7c9b5d75d6030a52b09ef2733b5c9f7",
+        "size": 2656270
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_阳谷城门清晨.png",
+        "exists": true,
+        "sha256": "9f5fe49faf93bab685c65b90e9572d04beb1cd93b5bc66b6941eb6fbebb434bb",
+        "size": 2558898
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_反打.png",
+        "exists": true,
+        "sha256": "e12d83c21d474c6140fd17a1cbc77d852339e11ca46ff86e17f650602ce0e2aa",
+        "size": 2745360
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_阳谷城门清晨_平面图.png",
+        "exists": true,
+        "sha256": "f28a2db5334c5c346b2f75076865b570ccc0e02b1cd32d279d3e0fe8ba156671",
+        "size": 3337138
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png",
+        "exists": true,
+        "sha256": "1f5805cad3244eea50f90fbaf9bdbf9b69c35af4f7d5448863c84c5b010a1315",
+        "size": 2758053
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png",
+        "exists": true,
+        "sha256": "c9d895367254a9a27d4917967c5b8c4cd4c8160abe53073c55df8edd18132a49",
+        "size": 2877107
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_平面图.png",
+        "exists": true,
+        "sha256": "77727cc46ee350d3667e0a3bb1750192eeda7545164e79d522bcd054609f4a55",
+        "size": 3382466
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DINING_TABLE.png",
+        "exists": true,
+        "sha256": "b781bb7c58b36883707e0539f9fae1ae185c998cace879b8f17ea84fbfaeca93",
+        "size": 1701435
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DINING_TABLE_反面.png",
+        "exists": true,
+        "sha256": "22fc20b54214d1a73671f3e2266afca126ee4e8c847a818a5f9d876b112f7476",
+        "size": 1710410
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DINING_TABLE_手持.png",
+        "exists": true,
+        "sha256": "caeb61c0b289e86cfef85e6c6fa832f5eb2f7d5d373a54f114f29706e7a1d6d7",
+        "size": 1895048
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DINING_TABLE_比例.png",
+        "exists": true,
+        "sha256": "2ae3976ab6bcba0bd0c143c539a04576a731a3b4f25703260c8267b10b6ad3f3",
+        "size": 2015955
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DOORFRAME.png",
+        "exists": true,
+        "sha256": "ea91f08c672f6201a01ad842afe422106bbc457b28e8a0acd9bc5371b11d008f",
+        "size": 2055475
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DOORFRAME_反面.png",
+        "exists": true,
+        "sha256": "38a1997f37fee5a458ad9e966fcd47234bc7e9e6b0feffa6fb34fafaf74ce3b6",
+        "size": 2059005
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DOORFRAME_手持.png",
+        "exists": true,
+        "sha256": "b734cfaf2e2dd1da3031b5f253a5a0e2f404b7fa0580ec66f6cdbb5d9f8b41d7",
+        "size": 3060277
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_DOORFRAME_比例.png",
+        "exists": true,
+        "sha256": "8290ad629c772bf735b33821651bd7d6e6ea5dd9b220c327d32915ad57e21117",
+        "size": 2373754
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_REWARD_SILVER.png",
+        "exists": true,
+        "sha256": "9c2278de6a639ffb153f4a10fbce0097ca73d5d39d30e36df52a419b0c0fac8b",
+        "size": 1563835
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_反面.png",
+        "exists": true,
+        "sha256": "b45a9d0eb044fab99afa40af7479972318d7f763462a7ef84187acd86fc55242",
+        "size": 1811045
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_手持.png",
+        "exists": true,
+        "sha256": "11a513e1986f46428892ef2f7d5fc0da9bba193c9c2fb635d8d07b08a19bfdef",
+        "size": 1688581
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_REWARD_SILVER_比例.png",
+        "exists": true,
+        "sha256": "4f22295f10e1216f448ba567185ce0555b78cc88cf3efbd372afc42e5836104e",
+        "size": 2002729
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_SPILLED_WINE.png",
+        "exists": true,
+        "sha256": "e554296ef79a3874ead671c0d89112527bae9eb3c1e77d1d3e0603a58b4848c7",
+        "size": 1506062
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_手持.png",
+        "exists": true,
+        "sha256": "c095aa2bfad3fef3113dfa893e5b124a61ec23b6e308a38591feeef64dcf8220",
+        "size": 2556986
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_SPILLED_WINE_比例.png",
+        "exists": true,
+        "sha256": "9a622aefc969037427b113dccf816082b39c4f76bc182581e9579b42c5f76d50",
+        "size": 2060351
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_STAIR_RAIL.png",
+        "exists": true,
+        "sha256": "c229403a2916837aeae3457c1e36683bf65d3cceddbbddb54542ec92b6a2b890",
+        "size": 1511842
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_手持.png",
+        "exists": true,
+        "sha256": "823506c8006f63e4df890e0b0a7f9725967814f4f069a92f6ac7eafb5ba87be3",
+        "size": 2280487
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_STAIR_RAIL_比例.png",
+        "exists": true,
+        "sha256": "5e544bb8a712f0c3dddb39ed8d6d60ef164d29602a5e076624c5dcea2c671de0",
+        "size": 1671392
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_TEA_CUP.png",
+        "exists": true,
+        "sha256": "f99bcf1d571339560915fab8f144b7371d4e89ef44a070ed463759bd6f26211a",
+        "size": 1521979
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_TEA_CUP_手持.png",
+        "exists": true,
+        "sha256": "2c8fa21ebf4fd31413c5fc349d78fd2e0f2df8d76ef18c2a66e8a681703d6a3e",
+        "size": 1584399
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_TEA_CUP_比例.png",
+        "exists": true,
+        "sha256": "4aef11fb2d5ac69aee18a45374aec8340a27719e59d429d16a83dee32f02670c",
+        "size": 1778792
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN.png",
+        "exists": true,
+        "sha256": "20b77b9553c83ca9276bcc4f122d2f5681ff3522dd2a5359b5553e95376d1a86",
+        "size": 2619721
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_手持.png",
+        "exists": true,
+        "sha256": "5b088c719d4554d7e107c2f60da21fe0541ce2dc636692ad4ea3c3e619b57fa3",
+        "size": 2700132
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_CURTAIN_比例.png",
+        "exists": true,
+        "sha256": "4992acf8a6806df78d3838a141918d2257b05efaf2b0a2025dabcd579d62000d",
+        "size": 2428127
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+        "exists": true,
+        "sha256": "016a8f0c3f742e456e78ce5d346bdc0edc96aa5bf22bb698541d5eaa77fcc39e",
+        "size": 2564368
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_反面.png",
+        "exists": true,
+        "sha256": "43f849df2210018e096d7f9e70f5576c76882dfa1c79a28ea82a9daa66e48c9a",
+        "size": 2834220
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_手持.png",
+        "exists": true,
+        "sha256": "9bbc762e8d74c4dc3d3502ae869fa11fa2d2a7bfdd19d2d240f954b8ef066fb9",
+        "size": 2618009
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_WINDOW_LATTICE_比例.png",
+        "exists": true,
+        "sha256": "027669b1ea3c7a19c5db97f53beda679788b567595fbf87af195741c4d19ea8a",
+        "size": 2179139
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_东京礼担.png",
+        "exists": true,
+        "sha256": "47d374cc47a4d7f07fb7c675b51b8b2340691b3e87641be89dc5bcbc75dbfe29",
+        "size": 1645355
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_东京礼担_手持.png",
+        "exists": true,
+        "sha256": "18c72ba0f5707c686fd98e242b20d159373fe2be035860bd5d3798c1fe96d8f5",
+        "size": 2310331
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_东京礼担_比例.png",
+        "exists": true,
+        "sha256": "b5f97aeffc6e7cd76c78ff1b7904cf7088070e3cdf6c431d11f1208b4ee3cdeb",
+        "size": 2043252
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_公文.png",
+        "exists": true,
+        "sha256": "5cf63c225aed32779ed5b5b27275451402f3fc4a50affd337c87afade8af983b",
+        "size": 2553827
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_公文_手持.png",
+        "exists": true,
+        "sha256": "cc591175342ff9664f5694cd22695d02fc70eea3f009dd95ea2cb3f5b2b7cdf0",
+        "size": 2666108
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_公文_比例.png",
+        "exists": true,
+        "sha256": "e6fe90f78f495b3770b21b21e94bba69302fc5b9e675a6f918e2242c78a41bfb",
+        "size": 2127120
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_半杯酒.png",
+        "exists": true,
+        "sha256": "cc638e6decb4b9f433557853206f23d82d1311e15fbfea43891071b172f1b3da",
+        "size": 1653718
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_半杯酒_手持.png",
+        "exists": true,
+        "sha256": "f5c4553c729d08181aa877f4a24341e4bc951bf780176811323143e178cc6154",
+        "size": 1818043
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_半杯酒_比例.png",
+        "exists": true,
+        "sha256": "9fd31196fb3963de405b8cf37682e17bdecabed76e78a228285c2c7506418701",
+        "size": 1947340
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_叉竿.png",
+        "exists": true,
+        "sha256": "00f9c0181eb896797e7e8c57f080f2341b968dfeb8ebc77672850cfe8ffb773c",
+        "size": 1286503
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_叉竿_手持.png",
+        "exists": true,
+        "sha256": "04b742b13eef3e1e88fc0312b3182013c0017878e2175e4b455aa7967050d579",
+        "size": 2069069
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_叉竿_比例.png",
+        "exists": true,
+        "sha256": "8db688921c59d308a68a4423f161c94cf7e3d2e350242e9a25f85ac27f49bac6",
+        "size": 2058734
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_场景木门.png",
+        "exists": true,
+        "sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
+        "size": 2047286
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_场景木门_反面.png",
+        "exists": true,
+        "sha256": "71ac6742fa9f833a3006f2921ad2feec03230d587635491daf123a21bd007438",
+        "size": 2328523
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_场景木门_比例.png",
+        "exists": true,
+        "sha256": "75830ae39f242d64bab7c0086566d868cfbafe48823872e29c2c139b8541feae",
+        "size": 2265614
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_梢棒.png",
+        "exists": true,
+        "sha256": "717c7446a91190f96f5e2bfd3d0b155c2c154fd1275ee18a2f57d788268156e7",
+        "size": 1689248
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_梢棒_手持.png",
+        "exists": true,
+        "sha256": "5d1a9d74577273f7130355e4d035831abe3323d950da374ae397260db952a8fa",
+        "size": 2311805
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_梢棒_比例.png",
+        "exists": true,
+        "sha256": "578fd6c7aac6b33133bc6ca78c6b12165febee49f44a7c00ca9cf74b3c2035e5",
+        "size": 1622486
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_炊饼担.png",
+        "exists": true,
+        "sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
+        "size": 1693500
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_炊饼担_手持.png",
+        "exists": true,
+        "sha256": "77cfa5f73568c023fc7c6b71107b388f1ba35b99936fab01aaf55c425eacb3e9",
+        "size": 2051860
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_炊饼担_比例.png",
+        "exists": true,
+        "sha256": "0a66e4f0b733c070cd56d7fbcd8194a6ce011b3099c84feeabc9ea289ecf129a",
+        "size": 1974300
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_炭盆.png",
+        "exists": true,
+        "sha256": "8713d47e4b976b2db312bdf917596df8bdbc8c390e553e6d597337d136222c8c",
+        "size": 2102171
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_炭盆_手持.png",
+        "exists": true,
+        "sha256": "3adf378b7ed5aa32d1e69a5c143bde4a843e0ab095617fbd35f015b4c123bf6b",
+        "size": 2293398
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_炭盆_比例.png",
+        "exists": true,
+        "sha256": "bb1bc8397ca0f4fbdc2acec341945badbb8888a697fcbdc25c4139e6d28334f7",
+        "size": 1982729
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_素布行李.png",
+        "exists": true,
+        "sha256": "e3cdc5344ecf1a1d9966f0b19db560a7dd0e3c82be4fea4280d8ff01be6de805",
+        "size": 2071983
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_素布行李_手持.png",
+        "exists": true,
+        "sha256": "00b76b1317d75288ae35893b24c3a4057e945e807cf94831e5d2fe4118a73afc",
+        "size": 2330547
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_素布行李_比例.png",
+        "exists": true,
+        "sha256": "be00952e5d60b2bf21be9e02f9b7519080cb9817c34b860b1b952e18ea167f24",
+        "size": 1560818
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_都头腰牌.png",
+        "exists": true,
+        "sha256": "298d5bed6b5122f7576e80fb5d2722c4fd58b6880b2ffe9d0d7ed47c23c831a2",
+        "size": 2175575
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_都头腰牌_手持.png",
+        "exists": true,
+        "sha256": "c974d0b0326936b3c9ddf6349cce2dea056b97455323c8854200770cddaddb83",
+        "size": 2328456
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_都头腰牌_比例.png",
+        "exists": true,
+        "sha256": "29ad17409907c84e92dd08590c33d8413038a1f09c1b024fedd8ba4ebbbe7185",
+        "size": 2280713
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_门闩.png",
+        "exists": true,
+        "sha256": "f69ec4b45f3b9f6d05988a044658760a4a7e700bcede727f58094dea7e7bc9bf",
+        "size": 1473616
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_门闩_反面.png",
+        "exists": true,
+        "sha256": "10dcc21b57f66afe54a4318b45052fa98ba2e7eb49e9a63abb5259ecb1ad6df9",
+        "size": 1493386
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_门闩_比例.png",
+        "exists": true,
+        "sha256": "4865f8ad535c8778bc6e299703e4b70d51ccd444910b0094b97ccf4d82a498ad",
+        "size": 2198483
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/风格锚_北宋市井写实电影感.png",
+        "exists": true,
+        "sha256": "d9dd40df7bfee8c907184c9a7a1eb567cbff25cf002051ed9a9464be7675becc",
+        "size": 2142868
+      },
+      {
+        "pattern": "出图/第1集/prompt/00_总览.md",
+        "path": "出图/第1集/prompt/00_总览.md",
+        "exists": true,
+        "sha256": "30107c542631447917fa38bdfe0592dcfa648f24714100adbab6ac55673ecad4",
+        "size": 13519
+      },
+      {
+        "pattern": "出图/第1集/prompt/01_分镜出图.md",
+        "path": "出图/第1集/prompt/01_分镜出图.md",
+        "exists": true,
+        "sha256": "ece602994247f74a4f10f6caa0b2f470ebb4a98f99a91f9c025543183e86ef37",
+        "size": 507403
+      }
+    ],
+    "sha256": "084625664962cd05092ffb3c18f17a4e1f46a67368faf4423995c48a41052dc0"
+  },
   "contracts": [
     {
       "name": "storyboard",

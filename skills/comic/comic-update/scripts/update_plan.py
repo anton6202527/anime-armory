@@ -108,7 +108,7 @@ LABEL_TO_STAGE = {
     "审查": "review",
     "质检": "review",
 }
-OBSERVE_ONLY_SKILLS = {"comic-progress", "comic-settings", "comic-update"}
+OBSERVE_ONLY_SKILLS = {"comic-progress", "comic-settings", "comic-update", "comic-supervisor"}
 ALWAYS_RELEVANT_SKILLS = {"comic"} | OBSERVE_ONLY_SKILLS
 SKILL_DEFAULT_STAGE = {
     "comic": "source",
@@ -119,6 +119,7 @@ SKILL_DEFAULT_STAGE = {
     "comic-identity": "image_jobs",
     "comic-image": "image_jobs",
     "comic-batch": "image",
+    "comic-supervisor": "review",
     "comic-compose": "compose",
     "comic-review": "review",
     "comic-progress": "source",

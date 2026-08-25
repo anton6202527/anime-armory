@@ -154,6 +154,12 @@ receipt 至少记录 `verdict`、`inputs_fingerprint_sha256`、报告路径/SHA 
 
 ## 生产完成与发布状态
 
+Comic 的业务收敛只认三件事：`release_contract_<chapter>.json` 是一个 active delivery，`release_digest` 是该交付的一个 canonical SHA-256，`completion_verdict_<chapter>.json` 是一个完成定义（`blocked | machine_ready | accepted`）。`_进度.md`、gate、dashboard、队列和 provider 成功均为证据，不能声明第二套完成状态。
+
+`comic-supervisor` 持有 durable loop，消费 `comic-batch --next-json`。确定性可逆动作直接运行；故事/脚本/视觉/质量语义任务只派给项目注册 adapter。普通执行失败进入事件日志和熔断，不反复向用户询问；权利合规、预算包创建/扩大/过期、不可逆发布/覆盖和具名最终验收才是硬边界。
+
+当前像素代理授权与 name/layout 编辑授权分离。代理必须实际查看 SHA-bound contact sheet，写 `human_signoff=false` 和当前授权 receipt；撤权、重抽、比较输入变化即失效，且永不能替代最终具名签收。
+
 `release_verdict.py` 保持三种状态分离：
 
 | 状态 | 必须满足 |

@@ -1,5 +1,30 @@
 {
+  "artifact_root_sha256": "6ae1f12de677c1daaf9328e64eca45312d91fdd9afad59a74e8977ea52349ef3",
   "authority": "derived index only; _进度.md and existing gates remain authoritative",
+  "change_set": {
+    "affected_clips": [],
+    "affected_nodes": [],
+    "current_root_sha256": "0f0c685b8edd524694c6220975b36a1a454e48a724c03cf64291b68ed02674f1",
+    "direct_changed_nodes": [],
+    "previous_root_sha256": "0f0c685b8edd524694c6220975b36a1a454e48a724c03cf64291b68ed02674f1"
+  },
+  "clip_roots": {
+    "Clip_01": "c85bbb763722e9beee73acf9256c9edb0ea6f0aa784020f05be1471d19aec150",
+    "Clip_02": "1d9e8b916616de6790c25ce93f1674312ae572d5ebf78a35a400e0a1110cf277",
+    "Clip_03": "e9a3bb3159c9f829b8a27be28793ebb2530867f31ac4dd498522e94ac528ea7a",
+    "Clip_04": "fe64fd79e533ee2dfef7547746c4365370bfa586280d064cc1c68fbe61f238ab",
+    "Clip_05": "a065a4850782d6a9082717dd1458dbe1ecdb9d750dca1b79eed73cc58826e3f8",
+    "Clip_06": "cdb9b8b84b07fb0a8f5ca4985954c8ff2da28fee69dd48acc67f641921751306",
+    "Clip_07": "a893934386f4bd15c0801ca77d1e7bb3d73887f64a390874e769819b0d9e1bae",
+    "Clip_08": "6479c337abe5250415b964213cdc05105bf3298b96f9db3d6de456f2a73a9442",
+    "Clip_09": "dd823eab0939e35723c1bd87830c9b99dedaac8d3b0380f08af2794b7571521a",
+    "Clip_10": "d299ad6903bf17318909e590e559ac4f6851788847218e824cdf1a14f74ed641",
+    "Clip_11": "6c8aaea1bc55766cf32a1932349494c926081c56f198b8fd1076503cae46e75a",
+    "Clip_12": "9c139bb2a0f30ec2236eb0cb8c6bb019d1a03201061e467f73577952c2070ec1",
+    "Clip_13": "3b3c89f0374a92a70fc5ddf818f9e74d1e12d314a0dda23106d22b8788b921e8",
+    "Clip_14": "0bd3d5449e3f609b71efdb6206766b1dffee3b6a9abde136e2268d669a258e4c",
+    "Clip_15": "70a46482ceec9812142188c544f97a8a4929e9578e85049ef00c16343cafb33c"
+  },
   "edges": [
     {
       "relation": "contains",
@@ -78,123 +103,156 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-08-18T17:55:48+0800",
-  "graph_hash": "1dfdb592558157c6463b596e1ecd87d45f3a2d4fa431299559642a6443e65057",
+  "generated_at": "2026-08-24T17:54:53+0800",
+  "graph_hash": "2bf3a00d2475ec817b5f956dfba5391ac6253fcdfde670fad873e2d8bc97f6f4",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
     {
       "clip": "Clip_01",
+      "content_sha256": "42fcddfd9906230795f124a63bc1af9970bedc167ada62cc3064065477b9a51e",
       "duration_sec": 4.893,
       "id": "clip:Clip_01",
+      "lineage_sha256": "4991b725ec1a4dc2aaf196a8fb494d98535954547c650ee865be30b2a96957e0",
       "scene": "LOC_JINGYANGGANG/夜/外",
       "type": "story_clip"
     },
     {
       "clip": "Clip_02",
+      "content_sha256": "dd7bffcd2dbda4c518cc4d990878f81143e8a483b33cf4e03f3ab096cbf6e861",
       "duration_sec": 10.229,
       "id": "clip:Clip_02",
+      "lineage_sha256": "83e59ec9254fc9015612bd8a55b14f3309b8991cbdd824fa9149e01a5d47965c",
       "scene": "LOC_JINGYANGGANG/夜/外",
       "type": "story_clip"
     },
     {
       "clip": "Clip_03",
+      "content_sha256": "409182454002277294d0bf381acadbed07f77747b4e7733e7bc0a5cce8471634",
       "duration_sec": 13.02,
       "id": "clip:Clip_03",
+      "lineage_sha256": "b70aabd6d7290b9e6415f82ef444794927d1dcc1dc58978cfd5b632eeac8a2a8",
       "scene": "LOC_JINGYANGGANG→LOC_YANGGU_STREET/蒙太奇",
       "type": "story_clip"
     },
     {
       "clip": "Clip_04",
+      "content_sha256": "c48cd18b973d7e6550642a46ef784f13a896d35177c25ccd778434506bd8a6e4",
       "duration_sec": 10.145,
       "id": "clip:Clip_04",
+      "lineage_sha256": "cb9e7b6891fb4ef852943b5932e1907ff63b745fc883834aefa0c616ac4ea968",
       "scene": "LOC_YANGGU_STREET/日/外内并置",
       "type": "story_clip"
     },
     {
       "clip": "Clip_05",
+      "content_sha256": "7c92fc41bfb4d59dc6d17ed37dfa5d11a9677500350cb13ee6f64956a614f625",
       "duration_sec": 8.67,
       "id": "clip:Clip_05",
+      "lineage_sha256": "8b46a5e59978569d88d919ca12291c3888edc92d90df37f95971a51d9531a1a5",
       "scene": "LOC_YANGGU_STREET→LOC_WUDA_HOME/日",
       "type": "story_clip"
     },
     {
       "clip": "Clip_06",
+      "content_sha256": "de4b6c0b41170e6696efbb5895ba2b0629ed193f697eae50d7dc6f17203e8a55",
       "duration_sec": 14.692,
       "id": "clip:Clip_06",
+      "lineage_sha256": "f9e6580cdeb322d5f934e9ff9230504ee6552ba81439f46868afe16497c0aae8",
       "scene": "LOC_WUDA_HOME/日→月余蒙太奇",
       "type": "story_clip"
     },
     {
       "clip": "Clip_07",
+      "content_sha256": "53c6a765cc04a26768fb95b27868782b85ad6a0166560fb16ae35e3057d42ec6",
       "duration_sec": 12.677,
       "id": "clip:Clip_07",
+      "lineage_sha256": "9e612ca32c8a5f43ddff90c552959afc020c15ca23f92a663fdd054f87d77278",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_08",
+      "content_sha256": "d3e2f445cba3e140e2ae9e0ed175a8b551428fb3c5fbc9b2885dbb4bfccb8cef",
       "duration_sec": 10.228,
       "id": "clip:Clip_08",
+      "lineage_sha256": "08a88c57ab78f839aee96b73e3e9f594639bd73069875a9d9dff838d02ec0057",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_09",
+      "content_sha256": "aa5b27590b364d43e17002a4b9d2e79453106d6794bcbe483d1df28491aeeed8",
       "duration_sec": 14.281,
       "id": "clip:Clip_09",
+      "lineage_sha256": "6c823adfafd57058d48ef4410911eec15ae51dca9fb78bf12d178f2c75d01b36",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_10",
+      "content_sha256": "ba44140fb11b8caf28b6e8fb1adddcd9fc7942c9975ae7a9fe988c23cd1ee541",
       "duration_sec": 10.699,
       "id": "clip:Clip_10",
+      "lineage_sha256": "000949c380e321ffeccf759943a9c73f1937e38c988da724c62447fca8550683",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_11",
+      "content_sha256": "81b83474f6850055fb0f86a6079209b32e0180964269c9eda28378b8083fde78",
       "duration_sec": 10.129,
       "id": "clip:Clip_11",
+      "lineage_sha256": "9693e81fa54ebde0a7207f5ee9590a7d976c671fa71bb0d9c668a33d6fb64c32",
       "scene": "LOC_WUDA_HOME/雪夜/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_12",
+      "content_sha256": "d7e479c980f2083ee12f748a567188375eb0763e6339953fc2b1f06ed34bf166",
       "duration_sec": 5.766,
       "id": "clip:Clip_12",
+      "lineage_sha256": "f177787c3873cc0856809178d0f4620ee854f672c833cc6aad0714eb660c0e88",
       "scene": "LOC_YANGGU_STREET/雪夜/外",
       "type": "story_clip"
     },
     {
       "clip": "Clip_13",
+      "content_sha256": "ea3ff243f9897f5ad732d494fce2cce7cc6db51d7ab88c8d37518d3a70bfff22",
       "duration_sec": 7.946,
       "id": "clip:Clip_13",
+      "lineage_sha256": "13467066555b3647c6237b74c2ca63011dc3e5f04910545ae6572cf15b281d87",
       "scene": "LOC_COUNTY_YAMEN/日/内",
       "type": "story_clip"
     },
     {
       "clip": "Clip_14",
+      "content_sha256": "ab258cf9b767a2bb6ff675069b0d2ec63059000cf7d93e4495a82126b9c5e15d",
       "duration_sec": 6.569,
       "id": "clip:Clip_14",
+      "lineage_sha256": "f3bb8261b6849af036e5cfdc51fff97d0006500a263e121e5974b0f886da983a",
       "scene": "LOC_WUDA_HOME/清晨/门外",
       "type": "story_clip"
     },
     {
       "clip": "Clip_15",
+      "content_sha256": "2cd9ebc680ff5f8b270902b914de1474a2eebc45bddc87b9392d82d1ead99723",
       "duration_sec": 5.786,
       "id": "clip:Clip_15",
+      "lineage_sha256": "95d6959d351ac26910b437914f2412250f939a7457354459fc6013a96138d487",
       "scene": "LOC_CITY_GATE↔LOC_YANGGU_STREET/清晨/外内并置",
       "type": "story_clip"
     },
     {
+      "content_sha256": "11ae09f8d1402af41d1114454815ab3673f02dbcce5b7c02516288c36e66e9b2",
       "episode": "第1集",
       "id": "episode:第1集",
+      "lineage_sha256": "d5dac5c262593283e83f86ee984f53cbee80cb7984d1968b8375c75d07da8a1f",
       "type": "episode"
     }
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "root_sha256": "0f0c685b8edd524694c6220975b36a1a454e48a724c03cf64291b68ed02674f1",
   "source_files": [
     {
       "bytes": 126496,
@@ -205,6 +263,7 @@
   ],
   "status": "pass",
   "summary": {
+    "clip_roots": 15,
     "edges": 15,
     "lineage_gaps": 0,
     "masters": 0,
@@ -213,5 +272,5 @@
     "story_clips": 15,
     "video_media": 0
   },
-  "version": 1
+  "version": 2
 }

@@ -916,6 +916,16 @@ def evaluate_stage(root: str, stage: dict[str, Any],
             gate_blockers.append(
                 "修订/authenticity_read.json: " + "；".join(authenticity_issues)
             )
+    if stage.get("key") == "revision" and outputs_ok:
+        revision_plan = load_json(os.path.join(root, "修订", "revision_plan.json"), {}) or {}
+        closed = {"completed", "fixed", "accepted", "waived", "closed", "done", "resolved", "superseded"}
+        open_tasks = [
+            task for task in revision_plan.get("tasks") or []
+            if isinstance(task, dict) and str(task.get("status") or "open").lower() not in closed
+        ] if isinstance(revision_plan, dict) else []
+        if open_tasks:
+            status = "ready"
+            gate_blockers.append(f"修订/revision_plan.json: {len(open_tasks)} 个修订事务尚未完成")
     if stage.get("key") == "ai_compliance" and outputs_ok:
         ai_usage = load_json(os.path.join(root, "合规", "ai_usage.json"), {}) or {}
         if ai_usage.get("text_mode") in {"AI-generated", "AI-assisted"} and not ai_usage.get("chapter_usage"):
@@ -992,6 +1002,8 @@ def artifact_graph(root: str) -> dict[str, Any]:
         "kind": ARTIFACT_GRAPH_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": root,
+        "business_state_source": "_进度.md",
+        "state_scope": "derived_dry_run",
         "title": meta.get("title") or meta.get("source_title") or os.path.basename(root),
         "artifacts": artifacts,
         "stale_artifacts": stale_artifacts,

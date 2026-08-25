@@ -26,7 +26,8 @@
 | 在画布中把单张角色参考做成正面、侧面、背面一致的设定图 | **`app-character-turnaround`**（`skills/app/` 独立 skill；不经过 `comic` / `n2d` 分诊） |
 | 在画布中从真实首帧设计动作和运镜并生成视频任务 | **`app-first-frame-video`**（`skills/app/` 独立 skill；不经过 `n2d-video` / `mv-video` 分诊） |
 | 在画布中分析音频段落与节拍并生成卡点视频任务 | **`app-audio-video`**（`skills/app/` 独立 skill；不经过 `mv` / `song` 分诊） |
-| 用 agent 方式总控 n2d、自动跑前置、生成 context pack/creative loop、派发少量专家 | **`n2d-supervisor`**（消费 `n2d/run.py next --json`；不替代 n2d 状态机/gate/skill） |
+| 用 agent 方式一键总控 n2d、持续跑安全/已授权动作、生成 context pack/creative loop、派发少量专家 | **`n2d-supervisor`**（`producer.py` 持有 durable loop，消费 `n2d/run.py next --json`；不替代 n2d 状态机/gate/skill） |
+| 用 agent 方式一键总控漫画、持续推进安全/已授权动作、派发故事/脚本/实际像素/质量专家 | **`comic-supervisor`**（`producer.py` 持有 durable loop，消费 `comic-batch --next-json`；只认 active release digest + completion verdict，不替代 Comic gate/预算/权利/最终验收） |
 | 画漫画、条漫/页漫、写分格脚本、页面排版、漫画出图、嵌字和长图导出 | **`comic`**（分诊到 comic-script/layout/image/compose/review） |
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌、发布交付和真实反馈回灌 | **`song`**（分诊到 song-craft/lyrics/compose/cover/review/feedback 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |

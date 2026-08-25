@@ -202,7 +202,7 @@ def test_kill_verdict_does_not_demote_non_p0():
 
 
 def test_conflict_detection_review_vs_balance():
-    """review 和 balance 对同一章给出不同 return_to_stage 时应标记冲突。"""
+    """证据优先级明确时自动保留 P0 review，不再无谓等待人工。"""
     with tempfile.TemporaryDirectory() as root:
         os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
         os.makedirs(os.path.join(root, "评分"), exist_ok=True)
@@ -228,10 +228,11 @@ def test_conflict_detection_review_vs_balance():
         by_id = {task["id"]: task for task in plan["tasks"]}
         rev = by_id["REV-001"]
         bal = by_id["BALANCE-balance_findings.json-001"]
-        assert rev.get("conflict"), "review 任务应标记冲突"
-        assert bal.get("conflict"), "balance 任务应标记冲突"
-        assert bal["id"] in rev.get("conflict_with", []), "应交叉引用对方 ID"
-        assert rev["conflict_resolution"]["decision"] == "hold_for_editor_arbitration"
+        assert not rev.get("conflict")
+        assert not bal.get("conflict")
+        assert bal["status"] == "superseded"
+        assert bal["superseded_by"] == rev["id"]
+        assert rev["auto_resolution"]["decision"] == "auto_evidence_advantage"
         assert any(
             item["resolution"]["type"] == "cross_source_stage_conflict"
             and item["task_id"] == "REV-001"
@@ -263,10 +264,10 @@ def test_conflict_detection_review_vs_pacing():
         by_id = {task["id"]: task for task in plan["tasks"]}
         rev = by_id["REV-001"]
         pacing = by_id["PACING-CH07"]
-        assert rev.get("conflict"), "review 任务应与 pacing 标记冲突"
-        assert pacing.get("conflict"), "pacing 任务应标记冲突"
-        assert pacing["id"] in rev.get("conflict_with", []), "应交叉引用 pacing 任务 ID"
-        assert pacing["conflict_resolution"]["winner"] == "manual_editor_review"
+        assert not rev.get("conflict")
+        assert pacing["status"] == "superseded"
+        assert pacing["superseded_by"] == rev["id"]
+        assert pacing["auto_resolution"]["winner"] == rev["id"]
 
 
 def test_tier_classification_and_macro_first_discipline():

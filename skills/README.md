@@ -33,18 +33,18 @@
 
 ## Skills 规模统计
 
-> 统计时间：2026-08-22。`SKILL.md 总行数` 统计六个系列、普通独立 skill 与 `skills/app/` 独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-08-25。`SKILL.md 总行数` 统计六个系列、普通独立 skill 与 `skills/app/` 独立 skill 的物理行数；`目录文本总行数` 按 skill 归属统计 `.md/.py/.sh/.json/.html`，总入口不会重复计入嵌套子 skill，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `skills/n2d/**/SKILL.md` | 21 | 4810 | 318083 |
-| novel | `skills/novel/**/SKILL.md` | 29 | 3308 | 83453 |
-| comic | `skills/comic/**/SKILL.md` | 13 | 1638 | 58450 |
+| n2d | `skills/n2d/**/SKILL.md` | 21 | 4858 | 319824 |
+| novel | `skills/novel/**/SKILL.md` | 29 | 3331 | 85852 |
+| comic | `skills/comic/**/SKILL.md` | 14 | 1711 | 60673 |
 | song | `skills/song/**/SKILL.md` | 11 | 663 | 9910 |
 | mv | `skills/mv/**/SKILL.md` | 14 | 1306 | 47088 |
 | ad | `skills/ad/**/SKILL.md` | 14 | 1273 | 59095 |
 | 独立 skill | `skills/<skill-name>/SKILL.md` + `skills/app/<app-skill>/SKILL.md` | 4 | 233 | 3111 |
-| **合计** | `skills/**/SKILL.md` | **106** | 13231 | 579190 |
+| **合计** | `skills/**/SKILL.md` | **107** | 13375 | 585553 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -67,7 +67,7 @@
 | 阶段 | Skill | 职责 |
 |---|---|---|
 | 调度 | `n2d` | 检查 作品 根目录，**入口先跑源新鲜度自检**（`source_check.py`：比对 `小说/<剧>.txt` 与 `小说/_源指纹.json`，源小说更新→列出变动章/受影响集/是否触及已生产集，提示同步+重切，重切每次确认不自动），读 `_进度.md`，按 `skills/n2d/_lib/n2d_contract.py` 的阶段契约路由到下面的阶段 |
-| Agent 总控（上层） | `n2d-supervisor` | 消费 `n2d/run.py next --json` 的 NextAction，把确定性前置、context pack、creative loop、trace 和 specialist handoff 串成 agentic runtime；只派发 `n2d-script-agent` / `n2d-visual-agent` / `n2d-qc-agent` / `n2d-producer-agent`，不替代 stage skill、不直接花钱、不绕过 gate、不直接改 `_进度.md` |
+| Agent 总控（上层） | `n2d-supervisor` | 消费 `n2d/run.py next --json` 的 NextAction；`producer.py` 持续重算前沿并自动执行安全修复、项目 specialist adapter、无付费本地阶段和已授权 exact batch runner，直到 canonical done 或真实预算/合规/能力/发布/验收边界。不替代 stage skill/状态/gate，不签发预算、不直接改 `_进度.md` |
 | 1 剧本改编 | `n2d-script` | 编剧室 + 导演预演 + 制片交接合同的上游入口：拆集前先过 **source comprehension gate**（源理解合同：现代白话理解、承诺账、人物动机、因果链、伏笔账、改编边界、设定/战力规则 confirmed），再做中段开工前情资产包 + 精修前 5-10 集窗口复核边界 + **改编取舍 triage（成戏/旁白/后文带出/并入/删除 + 有账短剧化改写）** + 配音台词/BGM/封面/角色场景卡/global_style；阶段1 后用 `table_read_packet` 做低成本围读验收 |
 | 2 配音/时长 | `n2d-voice` | 默认先做声音选角 + `timing_estimate.json`，不制造整集次品 WAV；音色定妆后才批量 final。逐镜按 route 使用表演/guide、后配、画面先行或原生音画；实际云 TTS/克隆在 voice 工位即进入付费与合规停点。后配镜在合成前须产新鲜 `voice_fit_*.json` + 拟合轨，输入或输出哈希变化即失效 |
 | 3 分镜设计 | `n2d-script` | 默认配音后回跑，按实测时长定稿；显式后配音才用占位时长。table read、P-2、animatic、P-3 均把内容 confirmed 与哈希签收分开；animatic 生成可变 working OTIO + 不可变签收快照。`continuity_chain` 对每个接缝记录 `seam_mode + seam_evidence`，只有 continuous relay 要边界帧 SHA，其余按自身证据验收 |
@@ -87,7 +87,7 @@
 | 批量任务队列（横切） | `n2d-batch` | P1 批量编排 + worker 层：按 `_进度.md` 自动排队，支持并发 claim、失败重试、预算上限、按受影响镜头/Clip/产物最小范围重跑，并可直接承接 `n2d_consistency_ledger` root causes（验收总账，优先）和 `n2d_consistency_findings`（一致性审查 / 人审 UI 导出）生成返工队列；生产任务必须精确匹配 `run.py next` 当前 frontier，并携带绑定 scope/model/channel/ceiling/expiry 的付费授权。worker 只有命令成功、产物验证和 post gate 通过后才提交 `done`，gate 阻断落 `qa_blocked`；`--dry-run` 只读，不 claim、不消费任务。生成 `生产数据/batch_queue.json`、`batch_queue.md`。**单机多 worker 安全（纯本地·零后端）**：`flock` 原子认领 + 原子写账本 + 任务租约(心跳续租) + 过期租约自动回收 + `--resume` 崩溃自愈；多机/私有算力池仍需真正的协调后端（flock 跨 NFS 不可靠）。**放量治理**：任务带 `idempotency_key`，失败写 `last_error_class`，超重试进 dead-letter；`governance.py init-slo/check/dead-letter` 产 `production_slo.json`、`batch_governance.*`、`dead_letter_queue.*` |
 
 > **导演运镜 sidecar（script→image→video）**：`n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write` 在分镜定稿后输出 `生产数据/director_camera_plan_第N集.json/md`，把故事节奏、景别和结构化运镜建议落成两份注入：`n2d-image` 消费 `image_prompt_injection` 写首帧起幅/运动余量，`n2d-video` 消费 `video_prompt_injection` 写导演调度七字段和 `镜头运动`，让生图与生视频 prompt 都带导演镜头语言。
-> **n2d agentic runtime（新增）**：`n2d-supervisor` 是上层总控，`n2d/_lib/n2d_action_registry.py` 是 action schema/registry，`n2d/scripts/context_pack.py` 产阶段最小上下文，`n2d/scripts/creative_loop.py` 产创作阶段 evaluator-optimizer 包，`n2d/_lib/n2d_trace.py` 给 dashboard/batch/agent 串 trace/span/idempotency。原则：skill 保持领域知识与确定性工具，supervisor 只派发少量 specialist，不把每个 `n2d-*` 变成自治 agent。
+> **n2d agentic runtime**：`n2d-supervisor` 是上层总控，`n2d-supervisor/scripts/producer.py` 是一键请求的 durable owner，`n2d/_lib/n2d_action_registry.py` 是 action schema/registry，`n2d/scripts/context_pack.py` 产阶段最小上下文，`n2d/scripts/creative_loop.py` 产创作阶段 evaluator-optimizer 包，`n2d/_lib/n2d_trace.py` 给 dashboard/batch/agent 串 trace/span/idempotency。episode graph v2 只负责局部 hash/血缘/change set，step cache 只让变化的 report-only 检查失效；它们都不另立状态。原则：skill 保持领域知识与确定性工具，supervisor 只派发少量 specialist，不把每个 `n2d-*` 变成自治 agent。
 > **n2d-batch 协调后端状态 + adapter 注册表（P2-1）**：`queue.py coordination-status <作品根>` 会报告 `local_file` / `shared_fs` / `sqlite`（内置事务后端·active）/ `redis|db|object_store`，并把当前 `coordination` 写进 `batch_queue.json/md`。内置执行是 local/shared-FS 文件锁 + lease + SQLite。**外部协调后端不再是死路**：`queue.py` 定义了正式的 `CoordinationBackend` 协议（`load_queue/sync_from_queue/claim/mark/reclaim/renew` 六法）+ 注册表——ops 侧实现该协议的类后 `import queue; queue.register_coordination_backend("redis", RedisBackend)`，再设 `N2D_COORDINATION_BACKEND=redis`，`claim/mark/reclaim/renew/load_queue/save_queue` 会经统一分发口 `active_coordination_backend(root)` 真走它，`coordination-status` 也从 `declared_not_active` 转报 `ok·external_adapter`。`sqlite` 是内置参考实现，JSON 账本始终是可移植真值镜像。未注册工厂时仍如实报 `declared_not_active`，不假装多机安全。
 | 自动审片评分（横切） | `n2d-score` | P2 机器评分层：每集输出语义继承/状态百科/多模态漂移 + 角色/服装/场景/字幕/音画/节奏/风格维度分，并接入图像相似度、字幕 OCR、音画时长对账、口型风险/检测报告、成片节奏密度；脸 G1 无 insightface 时按 `pillow_fallback` 降权分消费（不再整维度缺数据）；低于阈值生成 `auto_return_tasks`，可写入 `n2d-batch` 定向返工队列 |
 | 人审可视化 UI（横切） | `n2d-review-ui` | n2d 自带的零构建 HTML/JSON **静态证据审阅界面**：① `review_ui.py` 汇集单集首帧/尾帧/clip/接缝/定妆/QA flag/机器分，`--export-findings` 可把结论回流给 batch；② `board.py` 只读展示整部生产前沿；③ `calibration.py init/score` 校准审片口径。这里的“只读”只描述该诊断工具自身，不代表 Electron/Web 产品画布只读；可编辑、重生成、返修并迭代到最终母版的生产工作台由独立 `app-script-workbench` 承担。 |
@@ -159,7 +159,7 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 原创新书 | `novel-create` | 访谈 → 创作蓝图 → 设定圣经 → 章纲 → Demo gate → 逐章写作 → 导出 |
 | 书名 | `novel-title` | 标题候选、平台适配、撞名风险初判 |
 | 公版/源书 | `novel-fetch` | 获取公版或授权源书（如红楼梦、西游记、三国演义、金瓶梅等，默认可走 generic 加 --i-have-rights 兜底解析维基文库繁体回目）并落 manifest |
-| 写作 primitives | `novel-craft` | 作者成书通用流程、作者意图档案、结构地图、发布元数据包、contract、draft packets、arc packets、queue、progress、QA gate、export、AI 使用披露、compliance profile、统一修订计划、state_delta 草案等家族共享工具 |
+| 写作 primitives | `novel-craft` | 作者成书流程、动态章纲、带总预算/覆盖收据的 draft packets、语义内容依赖 DAG、Story-VCS 修订事务、release digest/最终完成判词、export/QA/AI/合规等共享工具 |
 | 生活观察 | `novel-observe` | 生活观察、采访纪要、人物行为、五感和场景烟火气素材库；产 `素材/观察札记.jsonl` + `素材/观察素材库.md`，可按章节落 `写作任务/观察素材_第NN章.md` |
 | 正向审美 | `novel-aesthetic` | 授权/自有/公版/项目 Demo 的高光样本拆解，沉淀“为什么有效”和可迁移规则；产 `设定/aesthetic_bank.json` |
 | 扩写 | `novel-expand` | 把短文本扩成章节内细节，时间不推进 |
@@ -167,7 +167,7 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 续写 | `novel-continue` | 从已有末章继续往后写新章节 |
 | 改写 | `novel-rewrite` | 改主线、换设定、重构派生作品 |
 | 外传/视角 | `novel-spinoff` | 锁定原事件，换角色 POV 或写配角外传 |
-| 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、逐章读者契约与弧段 gate、流程自审 |
+| 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、逐章读者契约与弧段 gate、流程自审；以生产复核标签校准 detector precision/recall/repair yield |
 | 专业编辑 | `novel-edit` | 发展性编辑、行文编辑、拷贝编辑、校样四层编辑计划；把 review/score/balance/feedback/scene cards 汇总成投稿前修订轮次，并产 editorial letter / style sheet / proof checklist |
 | 市场评分 | `novel-score` | 当前市场基准 + 证据质量 + 第一方投放战绩 + 真实读者反馈 + 模拟读者信号 + 参考分布百分位，八维评分（含新颖度/想象力正向维度），输出 go/revise/kill 决策 |
 | 专业资料包 | `novel-research` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景的证据层：产 `research_needs` / `research_jobs`、`资料/专业资料包_<主题>.md` + `research_sources.json` + `research_scene_usage.json`，来源含五轴评估并把事实映射到章节/场景，支持 `research_required_domains` 必需领域，刷新审计产 `research_refresh_plan.md`，写章包自动引用，review/export 阻断缺失或过期高风险资料包 |
@@ -182,10 +182,10 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 设置管理 | `novel-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/novel/_lib/settings.py` |
 | 进度·下一步（只读）| `novel-progress` | 扫 `创作区/写小说/<项目>/_进度.md` 章节矩阵 → 汇总完成度 + 创作前沿（下一步该跑哪个 novel skill）+ 可并行事项；只读不改文件 |
 | 生产控制台（只读） | `novel-dashboard` | 聚合 pipeline plan、stale artifacts、语义任务、review/score blockers、revision tasks、batch 队列、release readiness，写 `生产数据/novel_dashboard.{json,md,html}`；不改正文/进度 |
-| Agent 总控（上层） | `novel-supervisor` | novel 线只读编排导航器：消费 pipeline runner 计划、语义任务、revision plan 与 batch 状态，输出 next action / dispatch / 推荐命令；它本身不调用模型、不派发 specialist、也不写正文或批准回执。外层 orchestration agent 按 dispatch 派给与 writer 分离的 specialist，再调用 `pipeline_runner --approve-stage ... --delegated` 写 hash-bound receipt 并继续；显式 `human_required`、权利合规、跨来源冲突、同因连续失败、不可逆发布和最终验收才停。 |
+| Agent 总控（上层） | `novel-supervisor` | `supervisor.py` 给唯一 next action，`producer.py` 持续执行安全命令、经项目 adapter 派发 writer/reviewer/score specialist 并自动喂熔断遥测；每 5 章动态重规划未来章纲，修订走 Story-VCS 事务。显式 human_required、权利合规、同级证据互斥、同因连续失败、不可逆发布与最终具名验收才停。 |
 | 并发调度（横切）| `novel-batch` | 纯本地单机多 worker 原子锁排队，支持 claim、lease、renew、reclaim、retry、dead-letter 和幂等 plan，提供多章节审稿/评分/dashboard 刷新任务队列 |
 
-**默认产品路径**：先跑 `novel-craft/scripts/author_workflow.py "<作品根>" --write` 得到作者视角成书流程、真实 blocker/warning 与下一步 → `author_intent.py scaffold/check` 固化主题、余味、不可妥协项和审美/伦理边界 → `novel-create` / 派生 skill 产文本 → `novel-research jobs` 反推资料缺口并转成深搜任务（`job-update` 领取/关闭），资料包补好后跑 `research_pack.py scene-usage` 把事实绑定章节/场景；`novel-observe` 补生活观察素材，`novel-aesthetic` 建正向审美样本 → `scene_cards.py` + `manuscript_map.py --write` 建场景卡和全稿结构地图 → Demo gate → `demo_readiness.py --write` 做商业放量 + 文学/审美锚点双闸门 → 逐章写作/小批回扫（写章包会自动注入专业资料包、逐章观察素材和审美迁移规则）→ `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-feedback` 建含 cohort/A-B/隐私说明的读者测试计划并在有数据时回灌，缺 take/variant/experiment 归因只能当观察 → `novel-edit` 生成分层编辑计划、editorial letter、style sheet、proof checklist 与 line edit packet，用 `--query/--answer-query` 关闭 editor query，用 `--close-task` 关闭 P0/P1，并用 `style_sheet_check.py` 终校 → `novel-craft` 用 `revision_planner.py` 合并修订任务，补带逐章 `chapter_usage` 的 `ai_usage.py`、`compliance_profile.py`、`metadata_pack.py --write` 后导出 txt/docx/outline → `release_manifest.py` 固化交付版本；platform/KDP 发布缺真实读者数据或发布元数据包会阻断，除非有 scoped reader-data waiver。`novel_pipeline.py` registry 已把 `author_workflow / author_intent / evidence_prep / manuscript_map / demo_readiness / reader_validation / edit / ai_compliance / metadata_pack` 纳入默认阶段；运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action；skill 升级后用 `novel-update` 做内容快照比对与最小文本返工计划。项目设置入口走 `novel-settings`，底层仍是本线 `skills/novel/_lib/settings.py`。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
+**默认产品路径**：先跑 `novel-craft/scripts/author_workflow.py "<作品根>" --write` 得到作者视角成书流程，随后由 `novel-supervisor/scripts/producer.py "<作品根>"` 连续推进。作者意图、资料/观察/审美、场景卡/结构地图与 Demo specialist gate 完成后逐章写作；任务包实行一个总上下文预算并写 obligation/hash 收据，每 5 章以 `dynamic_outline.py` 只重规划未写章。score/review/feedback 汇入统一 revision plan；证据优势明确的冲突自动仲裁，实际改稿由 `revision_transaction.py` 在 Story-VCS branch 上编辑、独立验证、合并和失败回滚。改动影响用 `content_dependency_graph.py --changed ... --change-kind ...` 计算最小重审/重导范围。最终发布 score 必须覆盖 `full` 全书，`release_manifest.py` 生成唯一 release digest 与 machine-ready 结论；作者/主编用 `completion.py accept --accepted-by ...` 绑定当前 digest 后才是最终完成。业务前沿始终只认 `_进度.md`，其它 plan/run/dashboard/producer status 都是派生证据。
 
 > **力量体系自检（穿越/系统流/修仙·等级·成长值·战力严丝合缝·实时监控）**：网文力量体系是命门——等级跳变、战力前后矛盾、属性突变、升级节奏崩（数值膨胀/越级无代价）是高发穿帮，人脑记不住几百章。落地：① `novel-create` 立项按题材自动脚手架 `设定/power_system_registry.json`（研究落地的等级体系模板 + 系统面板字段[属性≤7] + 升级节奏[每章小奖/每5章中奖/每20章大奖] + 逐章成长 progression），见 `novel-craft/references/力量体系设计.md`；② 引擎 `novel-wiki/scripts/power_system.py` 确定性机检：等级/境界/战力**只增不减**（退档=阻断·除非标跌境/废修豁免）、未知境界=阻断、越级过快/面板属性超7/系统流久无升级桥段=建议；③ **实时监控**：`novel/scripts/post_write.py` 每章写后自动跑（受 `力量体系自检` 选择点控制），`context_loader` 写章前把"主角现状(Lv/境界/属性/战力)"喂给上下文让 AI 按现状推进；④ 审稿 `novel-review/consistency_audit.py` 含 `power_system` 子runner。真值/默认在 `novel/_lib/power_system_defs.py`。
 
@@ -249,17 +249,18 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 | 进度·下一步（只读） | `comic-progress` | 以合同/SHA/gate receipt 校正 `_进度.md` 声明并汇总每话真实前沿；另披露未处置、stale/reopened warning 与处置账完整性错误，区分内部完成和公开/商业就绪；只读不改文件 |
 | 更新影响（只写计划） | `comic-update` | 本线 skill 内容快照 + 项目逐格依赖索引比对；按脚本/layout/lettering/job/正式图/真实参考与 registry 指纹输出精确 `panel_targets/page_targets` 和最早回放阶段，只写计划/基线，不改脚本、媒体或 `_进度.md` |
 | 设置管理 | `comic-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/comic/_lib/settings.py` |
-| 流程批跑 | `comic-batch` | 从当前前沿自动 chain 免费确定性阶段（ネーム/排版/收尾/出图包/嵌字导出），出图前后自动跑 comic gate；付费 submit 只消费真实人类签发且绑定项目/输入/模型/渠道/scope/期限/call/attempt/cost 的阶段 envelope，原子 ledger 有余量即连续，缺失/扩大/未知成本才结构化停；审查不代替人工签收 |
+| 流程批跑 | `comic-batch` | 从当前前沿自动 chain 免费确定性阶段（ネーム/排版/收尾/出图包/嵌字导出），出图前后自动跑 comic gate；付费 submit 只消费真实人类签发且绑定项目/输入/模型/渠道/scope/期限/call/attempt/cost 的阶段 envelope，原子 ledger 有余量即连续，缺失/扩大/未知成本才结构化停；逐图审阅可在项目显式授权后由制作代理连续完成，最终成品接受仍只认 completion verdict |
+| Agent 总控（上层） | `comic-supervisor` | 消费 `comic-batch --next-json` 持续执行安全动作，经项目 adapter 派发故事/脚本/实际像素/质量专家，写 durable 日志并熔断；只在权利合规、预算扩大、不可逆发布/覆盖和最终具名验收等硬边界停，最终只认 completion verdict 的 `accepted` |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
 | 缩略分镜/ネーム | `comic-name` | `panel_script.json` → `name_board.json` 与 SVG 草图，含页流、格子轻重、翻页钩子、气泡优先级和原稿安全框 |
-| 页面排版 | `comic-layout` | `panel_script.json` + 可选 `name_board.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位和原稿安全区 |
+| 页面排版 | `comic-layout` | `panel_script.json` + `name_board.json` → 页漫/条漫 `layout.json`；三候选评分覆盖眼动、气泡负载、安全区、翻页与重复构图，普通版式可 hash-bound 自动选优，spread/复杂版式保护 |
 | 原稿收尾 | `comic-finishing` | `layout.json` + `panel_script.json` → `finishing_plan.json`，含墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划 |
 | 一致性资产 | `comic-identity` | 共享定妆、多视图、角色 DNA 与形态继承、`identity_registry.json`；每张 anchor/view/outfit/expression/seed 都先做技术 QC，再由具名审核人按当前像素 + comparison/contact-sheet/派生输入 SHA 签收，未签不得登记 ready 或派生下一张 |
 | 出图 | `comic-image` | schema v2 逐格合同、真实参考入参和后端编译；Codex/Dreamina 在真实付费 submit 前原子消费 comic 本线 spend ledger，Dreamina query/download 不重复消费，unknown/over-cap 持久 fail closed；每格机器 post-QC 后仍强制逐图视觉签收 |
-| 嵌字/导出 | `comic-compose` | lettering v2 绑定脚本/layout/finishing/翻译表及逐条 `content_ref + source_text_sha256`；渲染页面/长图/真实多页 PDF，登记平台缩略图，输出 export/印刷/accessible EPUB 交付合同与收据 |
-| 质检/自审 | `comic-review` | 全阶段 gate、视觉/文字/一致性复核和返修清单；统一 warning 追加式处置账逐事件哈希链，公开/商业必须全结案；发布裁决以 `medium + usage` 验真实产物、权利、平台实际预览、有序交付、印前/EPUB 合同及总签收 SHA |
+| 嵌字/导出 | `comic-compose` | lettering v2 + CJK 禁则、speaker/tail/遮挡 QC；渲染页面/长图/真实多页 PDF，生成真实 EPUB 3 FXL 与 accessibility contract，含 KDP 印刷 profile |
+| 质检/自审 | `comic-review` | 全阶段 gate、视觉/文字/一致性复核和返修清单；detector 按 genre/craft 的 precision/recall/repair yield/成本校准；active delivery 只写一个 release digest 与 completion verdict |
 
-**默认产品路径**：`comic` 立项 → `comic-script` 分话大纲/分格 → `comic-name` 缩略分镜/ネーム → `comic-layout` 排版 → `comic-finishing` 原稿收尾计划 → `comic-identity` 逐张定妆签收 → `comic-image` 逐格生成/签收 → `comic-compose` 版本绑定嵌字与介质导出 → `comic-review` gate/告警处置/发布裁决。`comic-batch` 只编排可复算步骤，遇到逐图人审屏障会正常停下。人物/资产漂移先回 `comic-identity`，画面问题回 `comic-image`，文字源或翻译变化回 `comic-compose`；`comic-update` 按内容依赖只派发受影响格，不默认整话重做。
+**默认产品路径**：`comic` 立项后优先交 `comic-supervisor` 持续推进；它按 `comic-script → comic-name → comic-layout → comic-finishing → comic-identity → comic-image → comic-compose → comic-review` 派发。项目显式授权实际像素代理后，visual adapter 可看当前 contact sheet 并连续逐格推进；没有授权就停在真实像素边界。修订走 SHA-safe transaction + gate + 自动 rollback，交付只认 active release contract、canonical release digest 与 completion verdict `accepted`。
 
 ---
 

@@ -17,7 +17,7 @@ from typing import Any, Dict, Iterable, Mapping, Optional
 
 
 KIND = "n2d_episode_graph"
-VERSION = 1
+VERSION = 2
 CLIP_RE = re.compile(r"Clip[_-]?(\d+)", re.IGNORECASE)
 
 
@@ -47,6 +47,111 @@ def _sha(path: Path) -> str:
 def _json_sha(payload: Mapping[str, Any]) -> str:
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _node_content_sha(row: Mapping[str, Any]) -> str:
+    """Hash one node's own canonical facts, excluding derived graph hashes."""
+    return _json_sha({
+        str(key): value
+        for key, value in row.items()
+        if key not in {"content_sha256", "lineage_sha256"}
+    })
+
+
+def _attach_merkle_hashes(
+    node_rows: list[Dict[str, Any]],
+    edge_rows: list[Dict[str, str]],
+) -> tuple[list[Dict[str, Any]], Dict[str, str]]:
+    """Attach local content hashes and upstream lineage hashes to a DAG.
+
+    The graph remains a derived index.  These hashes exist to localize cache
+    invalidation and rework: changing Clip_07 must not make Clip_03 look dirty.
+    Cycles fail safely by falling back to the node's content hash plus a cycle
+    marker; a lineage gap remains visible instead of recursing forever.
+    """
+    by_id = {str(row["id"]): dict(row) for row in node_rows}
+    incoming: Dict[str, list[tuple[str, str]]] = {}
+    for edge in edge_rows:
+        incoming.setdefault(str(edge["target"]), []).append(
+            (str(edge["relation"]), str(edge["source"]))
+        )
+    content = {node_id: _node_content_sha(row) for node_id, row in by_id.items()}
+    lineage: Dict[str, str] = {}
+    visiting: set[str] = set()
+
+    def resolve(node_id: str) -> str:
+        if node_id in lineage:
+            return lineage[node_id]
+        if node_id in visiting:
+            return _json_sha({"content_sha256": content.get(node_id, ""), "cycle": True})
+        visiting.add(node_id)
+        parents = [
+            {"relation": relation, "source": source, "lineage_sha256": resolve(source)}
+            for relation, source in sorted(incoming.get(node_id, []))
+            if source in by_id
+        ]
+        visiting.discard(node_id)
+        lineage[node_id] = _json_sha({
+            "node_id": node_id,
+            "content_sha256": content[node_id],
+            "dependencies": parents,
+        })
+        return lineage[node_id]
+
+    out: list[Dict[str, Any]] = []
+    for node_id in sorted(by_id):
+        row = by_id[node_id]
+        row["content_sha256"] = content[node_id]
+        row["lineage_sha256"] = resolve(node_id)
+        out.append(row)
+    return out, lineage
+
+
+def diff_graphs(previous: Mapping[str, Any], current: Mapping[str, Any]) -> Dict[str, Any]:
+    """Return direct and downstream changes between two materialized graphs."""
+    old_nodes = {
+        str(row.get("id")): row
+        for row in previous.get("nodes") or []
+        if isinstance(row, Mapping) and row.get("id")
+    }
+    new_nodes = {
+        str(row.get("id")): row
+        for row in current.get("nodes") or []
+        if isinstance(row, Mapping) and row.get("id")
+    }
+    direct = {
+        node_id
+        for node_id in set(old_nodes) | set(new_nodes)
+        if str((old_nodes.get(node_id) or {}).get("content_sha256") or "")
+        != str((new_nodes.get(node_id) or {}).get("content_sha256") or "")
+    }
+    outgoing: Dict[str, set[str]] = {}
+    for graph in (previous, current):
+        for edge in graph.get("edges") or []:
+            if not isinstance(edge, Mapping):
+                continue
+            outgoing.setdefault(str(edge.get("source") or ""), set()).add(
+                str(edge.get("target") or "")
+            )
+    affected = set(direct)
+    frontier = list(direct)
+    while frontier:
+        source = frontier.pop()
+        for target in outgoing.get(source, set()):
+            if target and target not in affected:
+                affected.add(target)
+                frontier.append(target)
+    clips = {
+        str((new_nodes.get(node_id) or old_nodes.get(node_id) or {}).get("clip") or "")
+        for node_id in affected
+    }
+    return {
+        "direct_changed_nodes": sorted(direct),
+        "affected_nodes": sorted(affected),
+        "affected_clips": sorted(value for value in clips if value),
+        "previous_root_sha256": str(previous.get("root_sha256") or ""),
+        "current_root_sha256": str(current.get("root_sha256") or ""),
+    }
 
 
 def _rel(root: Path, path: Path) -> str:
@@ -212,23 +317,60 @@ def build(root: str | Path, episode: str) -> Dict[str, Any]:
         {"source": source, "relation": relation, "target": target}
         for source, relation, target in sorted(edges)
     ]
+    node_rows, lineage_hashes = _attach_merkle_hashes(node_rows, edge_rows)
+    outgoing_ids = {str(row["source"]) for row in edge_rows}
+    delivery_terminals = [
+        row for row in node_rows
+        if row["id"] not in outgoing_ids and row.get("type") != "release_verdict"
+    ]
+    if not delivery_terminals:
+        delivery_terminals = [
+            row for row in node_rows
+            if row.get("type") in {"delivery_master", "rough_cut", "video_media", "story_clip"}
+        ]
+    artifact_root_sha256 = _json_sha({
+        "episode": episode,
+        "terminals": [
+            {"id": row["id"], "lineage_sha256": row["lineage_sha256"]}
+            for row in sorted(delivery_terminals, key=lambda item: str(item["id"]))
+        ],
+    })
+    clip_roots: Dict[str, str] = {}
+    for cid in sorted(story_clips | routed_clips):
+        members = [
+            {"id": row["id"], "lineage_sha256": row["lineage_sha256"]}
+            for row in node_rows if str(row.get("clip") or "") == cid
+        ]
+        clip_roots[cid] = _json_sha({"clip": cid, "members": members})
     stable = {
         "kind": KIND, "version": VERSION, "root": str(root_path), "episode": episode,
         "nodes": node_rows, "edges": edge_rows, "source_files": sorted(sources, key=lambda row: row["path"]),
-        "lineage_gaps": gaps,
+        "lineage_gaps": gaps, "artifact_root_sha256": artifact_root_sha256,
+        "clip_roots": clip_roots,
     }
     # The project may be copied to another machine.  Absolute root is useful
     # for local diagnostics but must not make an otherwise identical lineage
     # graph look different after a portable handoff.
     graph_hash = _json_sha({key: value for key, value in stable.items() if key != "root"})
+    release_hashes = sorted(
+        lineage_hashes[str(row["id"])] for row in node_rows if row.get("type") == "release_verdict"
+    )
+    root_sha256 = _json_sha({
+        "episode": episode,
+        "artifact_root_sha256": artifact_root_sha256,
+        "release_lineage_sha256": release_hashes,
+        "lineage_gaps": gaps,
+    })
     return {
         **stable,
         "generated_at": _now(),
         "graph_hash": graph_hash,
+        "root_sha256": root_sha256,
         "summary": {
             "nodes": len(node_rows), "edges": len(edge_rows), "story_clips": len(story_clips),
             "routes": len(routed_clips), "video_media": len(set(media_nodes)), "masters": len(master_nodes),
             "lineage_gaps": len(gaps),
+            "clip_roots": len(clip_roots),
         },
         "status": "warn" if gaps else "pass",
         "authority": "derived index only; _进度.md and existing gates remain authoritative",
@@ -241,6 +383,8 @@ def render_markdown(payload: Mapping[str, Any]) -> str:
         f"# Episode Graph · {payload.get('episode')}", "",
         f"- 状态：{payload.get('status')}",
         f"- graph hash：`{str(payload.get('graph_hash') or '')[:16]}`",
+        f"- artifact root：`{str(payload.get('artifact_root_sha256') or '')[:16]}`",
+        f"- derived episode root：`{str(payload.get('root_sha256') or '')[:16]}`",
         f"- nodes / edges：{summary.get('nodes', 0)} / {summary.get('edges', 0)}",
         f"- story / routes / media / masters：{summary.get('story_clips', 0)} / {summary.get('routes', 0)} / {summary.get('video_media', 0)} / {summary.get('masters', 0)}",
         "", "## Lineage gaps", "",
@@ -255,6 +399,9 @@ def write(root: str | Path, episode: str, payload: Optional[Mapping[str, Any]] =
     data = dict(payload or build(root, episode))
     path = graph_path(root, episode)
     path.parent.mkdir(parents=True, exist_ok=True)
+    previous = _load(path)
+    if previous:
+        data["change_set"] = diff_graphs(previous, data)
     tmp = path.with_name(f".{path.name}.tmp.{os.getpid()}")
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     os.replace(tmp, path)
@@ -263,4 +410,7 @@ def write(root: str | Path, episode: str, payload: Optional[Mapping[str, Any]] =
     return {"json": str(path), "markdown": str(md)}
 
 
-__all__ = ["KIND", "VERSION", "build", "clip_id", "graph_path", "render_markdown", "write"]
+__all__ = [
+    "KIND", "VERSION", "build", "clip_id", "diff_graphs", "graph_path",
+    "render_markdown", "write",
+]

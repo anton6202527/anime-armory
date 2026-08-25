@@ -2,7 +2,7 @@
 
 平台 profile 使用 `field_provenance`：每个宽度、格式、文件上限、缩略图或 preview viewport 都各自记录一手 URL、采集日、confidence 和 freshness；没有证据的字段不靠平台整体 `verified=true` 猜测。
 
-## WEBTOON（官方资料核验至 2026-08-20）
+## WEBTOON（官方资料核验至 2026-08-25）
 
 - series square：1080×1080，JPG/PNG，低于 500KB（required）。
 - series vertical：1080×1920，JPG/PNG，低于 700KB（required）。
@@ -10,6 +10,8 @@
 - 官方发布预览有 PC/Mobile 两个 viewport。
 
 来源写在 `_lib/platform_profiles.py` 的字段级 provenance。episode 主内容上传尺寸没有当前一手字段时不编造。
+
+公开候选还必须在 manifest 的 `platform_compliance.content_rating` 登记当前内容分级；episode thumbnail 文件名只使用英文字母和数字。来源分别是 WEBTOON 官方 2026-04-22 内容分级上传说明和 2026-03-18 文件规格说明，URL/采集日在 profile 字段级 provenance 内。
 
 ## Tapas
 

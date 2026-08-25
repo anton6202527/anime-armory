@@ -101,6 +101,8 @@
           "raw_intra_floor": 0.4558
         },
         "CHAR_PANJINLIAN__25岁武大家常态": {
+          "ep_mean_score": 0.5025,
+          "ep_n_shots": 1,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -109,8 +111,8 @@
           "raw_intra_floor": 0.3325
         },
         "CHAR_WUDA__日常卖饼态": {
-          "ep_mean_score": 0.7867,
-          "ep_n_shots": 1,
+          "ep_mean_score": 0.5889,
+          "ep_n_shots": 2,
           "floor": 0.5052,
           "floor_calibrated": true,
           "floor_guard_applied": false,
@@ -119,8 +121,8 @@
           "raw_intra_floor": 0.5052
         },
         "CHAR_WUSONG__28岁打虎态": {
-          "ep_mean_score": 0.5288,
-          "ep_n_shots": 12,
+          "ep_mean_score": 0.5305,
+          "ep_n_shots": 13,
           "floor": 0.5,
           "floor_calibrated": true,
           "floor_guard_applied": true,
@@ -226,6 +228,23 @@
           "verdict": "ok"
         },
         {
+          "anchor": "best_of_variants",
+          "char": "CHAR_WUDA__日常卖饼态",
+          "face_idx": 1,
+          "floor": 0.5052,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-08-24T09:42:23+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已实际查看当前像素：武大保持同一矮小圆润身份特征、宽鼻与棕色头巾；本镜头为侧向拥抱和动态表情，造成自动相似度略低于校准阈值，但人物身份清楚且无串脸。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/Clip05_first.png",
+          "score": 0.4936,
+          "score_vs_main": 0.391,
+          "verdict": "ok"
+        },
+        {
           "char": "CHAR_WUSONG__28岁打虎态",
           "face_idx": 0,
           "floor": 0.5,
@@ -304,6 +323,17 @@
           "png": "图片/EP01_CLIP03_a3.png",
           "score": 0.4889,
           "score_vs_main": 0.4845,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "face_idx": 0,
+          "floor": 0.5,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP04_a1.png",
+          "score": 0.5122,
+          "score_vs_main": 0.5025,
           "verdict": "ok"
         }
       ]
@@ -409,6 +439,14 @@
           "abs_verdict": "block",
           "char": "CHAR_WUSONG__28岁打虎态",
           "floor": 0.9754,
+          "png": "图片/Clip05_first.png",
+          "score": 0.6745,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.9754,
           "png": "图片/EP01_CLIP01_a1.png",
           "score": 0.4942,
           "verdict": "ok"
@@ -469,6 +507,13 @@
           "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
           "png": "图片/EP01_CLIP03_a3.png",
           "score": 0.2059,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "floor": 0.55,
+          "png": "图片/EP01_CLIP04_a1.png",
+          "score": 0.6839,
           "verdict": "ok"
         }
       ]
@@ -684,46 +729,50 @@
       "episode": "第1集",
       "groups": {
         "LOC_CITY_GATE": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "LOC_COUNTY_YAMEN": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "LOC_JINGYANGGANG": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "LOC_WUDA_HOME": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "LOC_YANGGU_STREET": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "PROP_BADGE": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "PROP_BRAZIER": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "PROP_CAKE_POLE": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "PROP_DOOR_LATCH": {
-          "median_dist": 0.412,
-          "shots": 4
+          "median_dist": 0.462,
+          "shots": 5
         },
         "PROP_QUARTERSTAFF": {
           "median_dist": 0.45,
           "shots": 3
         },
         "PROP_REWARD_SILVER": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_STAIR_RAIL": {
           "shots": 1,
           "skipped": "组<3镜"
         },
@@ -834,6 +883,14 @@
           "abs_verdict": "block",
           "char": "CHAR_WUSONG__28岁打虎态",
           "floor": 0.85,
+          "png": "图片/Clip05_first.png",
+          "score": 0.7185,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_WUSONG__28岁打虎态",
+          "floor": 0.85,
           "png": "图片/EP01_CLIP01_a1.png",
           "score": 0.4262,
           "verdict": "ok"
@@ -885,6 +942,19 @@
           "png": "图片/EP01_CLIP03_a3.png",
           "score": 0.1773,
           "verdict": "ok"
+        },
+        {
+          "char": "CHAR_PANJINLIAN__25岁武大家常态",
+          "floor": 0.85,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-08-24T08:17:24+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "已实际查看当前像素：潘金莲青黛窄袖上衣、灰色交领与枣红裙、低髻木簪均与定妆主色和轮廓一致；色差来自窗边冷光与场景阴影，不是换装。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/EP01_CLIP04_a1.png",
+          "score": 0.7747,
+          "verdict": "ok"
         }
       ]
     },
@@ -935,9 +1005,9 @@
               "空间轴线随机跳变"
             ]
           },
+          "median_dist": 29.0,
           "registered_id": "LOC_YANGGU_STREET",
-          "shots": 1,
-          "skipped": "组<3镜"
+          "shots": 3
         }
       },
       "impact_physics": [],
@@ -1012,7 +1082,7 @@
   "cross_episode_face_drift": {
     "available": true,
     "entries": [],
-    "history_chars": 2
+    "history_chars": 3
   },
   "episode": "第1集",
   "face_anchor_lighting": {
@@ -1046,9 +1116,9 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 2,
+    "applied": 3,
     "available": true,
-    "configured": 2,
+    "configured": 3,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
     "rows": [
       {
@@ -1058,6 +1128,14 @@
         "reason": "已查看当前原像素并与武松脸锚、a2、a3 并排核对：方颌、浓直眉、深目、短髭、鼻口比例与高束发髻同源；三分之二侧脸、湿发和冷夜低照造成分数略低，不是换脸。",
         "reviewer": "Codex视觉执行者",
         "score": 0.456
+      },
+      {
+        "char": "CHAR_WUDA__日常卖饼态",
+        "original_verdict": "warn",
+        "png": "图片/Clip05_first.png",
+        "reason": "已实际查看当前像素：武大保持同一矮小圆润身份特征、宽鼻与棕色头巾；本镜头为侧向拥抱和动态表情，造成自动相似度略低于校准阈值，但人物身份清楚且无串脸。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.4936
       },
       {
         "char": "CHAR_WUSONG__28岁打虎态",
@@ -1071,7 +1149,7 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 5,
+    "covered": 7,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
@@ -1083,28 +1161,8 @@
           "CHAR_WUDA/日常卖饼态"
         ],
         "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
-        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_PANJINLIAN/25岁武大家常态",
-          "CHAR_WUDA/日常卖饼态"
-        ],
-        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
         "png": "出图/第1集/图片/Clip04_end.png",
         "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_PANJINLIAN/25岁武大家常态",
-          "CHAR_WUSONG/28岁打虎态"
-        ],
-        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
-        "png": "出图/第1集/图片/Clip05_first.png",
-        "shot": "Clip_05"
       },
       {
         "face_coverage_required": true,
@@ -1498,7 +1556,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 5,
+    "required": 7,
     "skipped": [
       {
         "label": "镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
@@ -1622,6 +1680,7 @@
       "出图/第1集/图片/Clip02_first.png": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
       "出图/第1集/图片/Clip03_first.png": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
       "出图/第1集/图片/Clip04_first.png": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
+      "出图/第1集/图片/Clip05_first.png": "5fb7657cfda296f9d52cc560c3354572afaa011748fa977d255ca0af70319d32",
       "出图/第1集/图片/EP01_CLIP01_a1.png": "d3d8fb1d2a0e1fd872d92c2d325120fe06aa510314bc6f67bd2d7adf040c6645",
       "出图/第1集/图片/EP01_CLIP02_a1.png": "116401263082ce8ae1be0d3af054d26eac4554c647046eb3e6cb95e75177cfdd",
       "出图/第1集/图片/EP01_CLIP02_a2.png": "e9db4b83a9b1a39d1d4cf9309de92e8298fb24b1635b12e495ae3b4bafd52bfd",
@@ -1629,14 +1688,15 @@
       "出图/第1集/图片/EP01_CLIP03_a1.png": "bb7d5b5bc3041c37454712e08d66607b118cd450c6ca37714918f7cd1bbf2a82",
       "出图/第1集/图片/EP01_CLIP03_a2.png": "60d08149fa177cd765858a4140d1364b3f6bc01d78aec5b2911ee6e2f21f39dc",
       "出图/第1集/图片/EP01_CLIP03_a3.png": "b752f05eb8c707add9583b07cb536107a1f44cd7500de5803487dd512913cca3",
-      "生产数据/image_qc/第1集/face_confirmations.json": "c18cc99f3cc2a8cd7b9df525ca945f495c98b3fe09a600e612e56b50353bd70d",
+      "出图/第1集/图片/EP01_CLIP04_a1.png": "5774994f998472908b18ccd3c80b6aa5ff3e0ebeae2d0c5076bcc1bf16257ca0",
+      "生产数据/image_qc/第1集/face_confirmations.json": "3d7b3979c6038409d27c8f21775f4a23cc4f5e80c0c8e94cddd4f3b3ce6abe59",
       "生产数据/image_qc/第1集/hair_confirmations.json": "618f2709d10e9301eb97f5e71a9c4a02aecf891f70809ba3e9c5aec80ee8652f",
       "生产数据/image_qc/第1集/human_image_review.json": null,
-      "生产数据/image_qc/第1集/outfit_confirmations.json": "8ecaa58c0ccb90a8a0622aaa0066adbe5be9cfa8e294e5447731281f3d55aeeb",
-      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "ed1d972c9dac3f237ee707652d34a668fa998d25c41907c1c53294b54471844f",
+      "生产数据/image_qc/第1集/outfit_confirmations.json": "c2930a2757f8785df13cc3640bb2df710229d03b472fdac5138e19bf17c14d53",
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "0cb4d51e403f89ce0ac182870ad2dc2a5cd06df17b990e31390890945167a396",
       "脚本/第1集/storyboard.json": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
     },
-    "sha": "291ae73cb7e400dfbedfb2d9d86fd6f9c39dd6bbd77a0161dc332dab11cd7e86"
+    "sha": "d87094e8af44c9c6de41fea1982f8f475f485b7a265892997e8ee62af2d9c2c3"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2247,9 +2307,9 @@
     "shots_linted": 15
   },
   "outfit_manual_confirmations": {
-    "applied": 1,
+    "applied": 2,
     "available": true,
-    "configured": 5,
+    "configured": 6,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
     "rows": [
       {
@@ -2259,6 +2319,14 @@
         "reason": "已并排查看当前像素与武大定妆：赭褐旧外袄、灰褐围巾、深灰交领内衫、腰带裤靴均一致",
         "reviewer": "Codex视觉执行者",
         "score": 0.534
+      },
+      {
+        "char": "CHAR_PANJINLIAN__25岁武大家常态",
+        "original_verdict": "warn",
+        "png": "图片/EP01_CLIP04_a1.png",
+        "reason": "已实际查看当前像素：潘金莲青黛窄袖上衣、灰色交领与枣红裙、低髻木簪均与定妆主色和轮廓一致；色差来自窗边冷光与场景阴影，不是换装。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.7747
       }
     ]
   },
@@ -2273,7 +2341,7 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 30,
+    "confirmed": 32,
     "pending": 0,
     "targets": [
       {
@@ -3215,9 +3283,75 @@
         "shot": "Clip_04",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_04_Clip04_first_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_WINDOW_LATTICE",
+        "asset_name": "WINDOW LATTICE",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "1b38dd14482b4156fa950801a2d99d6d79eb881d2f521ff0a229c238000cfb6d",
+        "label": "镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP04_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/EP01_CLIP04_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_WINDOW_LATTICE.png",
+        "scale": "窗框约高 110–130 厘米、宽 55–70 厘米；窗台约在成年人腰至胸下，人站立可单手推开窗扇。",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "北宋县城民宅二层木制格窗：单扇窄高长方形窗框",
+          "暗褐老木",
+          "细密正方格棂",
+          "内侧糊素色无纹窗纸",
+          "侧轴向内开合",
+          "是墙上固定建筑构件",
+          "不是手持小物",
+          "窗框约高 110–130 厘米",
+          "宽 55–70 厘米",
+          "窗台约在成年人腰至胸下",
+          "人站立可单手推开窗扇"
+        ],
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_WINDOW_LATTICE_Clip_04_EP01_CLIP04_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CAKE_POLE",
+        "asset_name": "炊饼担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "206f1920fea0711992fe15a947e92eadf9ecce17f826d6556dbbbcf2f8e7c729",
+        "label": "镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/图片/Clip05_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_炊饼担.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "担杆",
+          "双筐",
+          "布盖与蒸汽结构固定"
+        ],
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/prop_shape_review/PROP_CAKE_POLE_Clip_05_Clip05_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 30
+    "total": 32
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -3232,7 +3366,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
   "semantic_drift": {
     "available": true,
-    "compared": 14,
+    "compared": 16,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -3258,6 +3392,11 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUSONG__28岁打虎态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -3330,18 +3469,18 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 13,
-    "distance": 2.031,
+    "checked": 15,
+    "distance": 2.015,
     "episode_fingerprint": {
-      "contrast": 46.0,
-      "edge": 18.7,
-      "sat": 60.5
+      "contrast": 47.0,
+      "edge": 23.4,
+      "sat": 58.0
     },
     "findings": [
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 13 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.03 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和60.5/对比46.0/边缘18.7]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 15 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.02 ≥ 1.00）——渲染可能漂出「写实电影感·北宋市井国风漫剧」。锚[饱和11.0/对比178.0/边缘51.1] vs 本集[饱和58.0/对比47.0/边缘23.4]；最偏离镜：EP01_CLIP02_a3.png（偏离 2.17）。人判：是否踩 风格禁忌（仙侠化光效、艳情媚俗打光、现代妆容与塑料皮肤、清宫服饰、网红脸、猎奇血浆、随机霓虹、烤字、水印Logo）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -3363,7 +3502,7 @@
     }
   },
   "summary": {
-    "advisory": 24,
+    "advisory": 25,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -3374,7 +3513,7 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 13,
+        "ok": 15,
         "warn": 0
       },
       "face_reference_coverage_unclassified": {
@@ -3386,7 +3525,7 @@
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 13,
+        "ok": 15,
         "warn": 0
       },
       "human_anatomy": {
@@ -3410,7 +3549,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 13,
+        "ok": 15,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -3435,7 +3574,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 12
+        "warn": 13
       },
       "style_attribution": {
         "block": 0,
@@ -3451,15 +3590,15 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 13,
+    "checked": 15,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "景阳冈冷青月色与土褐；阳谷街市灰暖；武大家室内由灶火暖橙逐步被雪夜冷蓝侵入；衙门与城门回到冷灰。",
       "warmth": "cool"
     },
-    "luma_median": 31.0,
-    "warmth_median": -0.2
+    "luma_median": 32.6,
+    "warmth_median": -0.1
   },
   "turnaround_alignment": {
     "available": true,

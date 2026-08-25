@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked to turn a novel into a final AI comic-drama / short-drama master. Inspects `_进度.md`, automatically applies auditable recommendations for ordinary reversible choices, and routes through `n2d-script`, `n2d-voice`, `n2d-image`, `n2d-video`, `n2d-compose`, and `n2d-review`; paid generation, compliance/rights, destructive changes, public release, and final master acceptance remain explicit gates. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 一键成片, 自动推进, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4810 | 目录文本总行数 318083
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4858 | 目录文本总行数 319824
 
 # n2d — 主状态机调度器
 
@@ -69,7 +69,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。`合成阶段` 默认 `启用`，所以视频完成后继续生成母版、审查和验收证据；只有显式设为 `跳过` 才在 `clip_delivery_complete` 停下。无论采用哪条路线，单个进度 `✅` 都不能冒充交付完成；只有合成、技术 QA、锁版和人工验收通过，才叫 `master_delivery_complete`。发行再按 `publish_ready_cn / publish_ready_overseas / publish_ready_commercial` 分别判。
 
-> **运行时收敛层**：正式 `run.py next` 会物化 `生产数据/episode_graph_第N集.json`（storyboard→route→job→media→粗剪→母版→release 的派生索引）和 `生产数据/blocking_bundles/latest_第N集.json`（选择/付费/合规/adapter/合同/QC 分类修复包），并追加隐私最小化 `flow_events.jsonl`。这些都不另立状态机：`_进度.md`、现有 gate 与 release verdict 仍是权威。安全的 report-only 前置按 stage 缓存，指纹覆盖脚本、合同、路由、prompt 与媒体变化；**只有 status=pass 且登记的输出 sidecar/artifact 当前仍存在才允许缓存命中**，输出被删除或不存在必须重跑重建，warn/block/异常及“无输出的 pass”都不缓存。
+> **运行时收敛层**：正式 `run.py next` 会物化 `生产数据/episode_graph_第N集.json`（v2 内容寻址 DAG：每节点 `content_sha256` + 上游传播的 `lineage_sha256`，逐 Clip root、整集 artifact root 与本轮 `change_set`）和 `生产数据/blocking_bundles/latest_第N集.json`（选择/付费/合规/adapter/合同/QC 分类修复包，阻断时附最小 `repair_recipe`），并追加隐私最小化 `flow_events.jsonl`。这些都不另立状态机：`_进度.md`、现有 gate 与 release verdict 仍是权威。安全的 report-only 前置采用“canonical stage 输入 + 单步骤脚本/参数”两层缓存键；改一个检测器只失效自身，不拖着整阶段重跑。**只有 status=pass 且登记的输出 sidecar/artifact 当前仍存在才允许缓存命中**，输出被删除或不存在必须重跑重建，warn/block/异常及“无输出的 pass”都不缓存。
+
+> **一键 producer**：用户要求“一键成片/自动跑完”时，入口优先持续运行 `python3 skills/n2d/n2d-supervisor/scripts/producer.py <作品根> [第N集] --json`，而不是每次 NextAction 都把命令交回用户。producer 自动执行安全修复、已登记 specialist adapter、无付费本地阶段和已获预算包授权的 exact runner；只有预算包创建/扩大/过期、合规/权利、能力或环境真实缺口、公开发布/破坏性覆盖、当前像素硬伤和最终具名验收才停。它的收据只是派生执行证据；canonical 完成仍只认本节的 release verdict + acceptance receipt。
 
 > **一个状态、一个哈希、一个完成定义**：`run.py next --json` 的当前 `frontier.stage_key` 是生产任务能否执行的唯一状态裁决；`frontier=null` 只表示 `stop_reason=done`，batch queue 只是租约/重试视图，任务与当前 frontier 不相等时必须 fail-closed，不能把“已排队”当作付费授权。所有正式 prompt 消费、图片/视频提交与旧产物复用统一绑定 `n2d_content_fingerprint`，其 SHA 覆盖全部直接输入、路由、模型/渠道、能力档与参考素材；任一输入变化即失效。worker 的 `done` 只表示“命令成功 + 产物验证 + post gate 通过”三者都成立；整集 `master_delivery_complete` 只由可接受的 canonical `release_verdict` 与仍新鲜的 `acceptance_receipt_<集>.json` 共同证明，且二者必须指向同一份可探测播放的 canonical 母版。旧 signoff、advisory、进度表里的单个 `✅` 和 manifest 自算的 ready 都只是迁移诊断或展示信息，不能继承旧审批或单独证明完成。
 
@@ -89,7 +91,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 | 触发意图 | 调 | 一句话 |
 |---|---|---|
-| Agentic 总控 / 自动前置 / 专家派发 / context pack / creative loop | `n2d-supervisor` | 消费 `run.py next --json`，只在选择/花钱/合规/验收点停人；少量 specialist 只产建议与草稿，不替代 stage skill |
+| Agentic 总控 / 一键持续推进 / 自动前置 / 专家派发 / context pack / creative loop | `n2d-supervisor` | `producer.py` 持续消费 `run.py next --json`，自动跑安全修复、已登记工位和已授权 exact runner；只在真实预算/合规/能力/发布/验收边界停，不替代 canonical 状态与 gate |
 | 生产数据 / ROI / 成本 / 通过率 / 重抽率 / 监控告警 / 事件账本审计 | `n2d-dashboard` | 阶段完成必入账；`event_ledger.py` 审计/重放账本，回答可追溯和工业级成本/回收 |
 | 身份闭环 / identity_registry / Face Lock / Character ID / 跨集漂移报表 | `n2d-identity` | 出图/出视频/审片的身份 binding 真值源 |
 | LoRA 训练 / 部署 / 第三代一致性 / safetensors 注册 | `n2d-lora` | 仅核心长线角色；验证未过不写 `ready` |

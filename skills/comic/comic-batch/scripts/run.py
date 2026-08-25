@@ -5,7 +5,7 @@
 - 缩略分镜/name board 与 layout 先产 draft；项目显式授权 delegated review 时在同一次 run 内提交、批准、复核并继续；
 - 已签收后才继续原稿收尾/出图包/嵌字合成等确定性阶段；
 - 出图阶段先跑 image_preflight gate，通过才调 runner，之后跑 image gate；
-- 审查阶段只跑 review gate 产报告，不代替人工把 审查 标 ✅；
+- 审查阶段跑 review gate；pass 只把派生进度标为 machine_ready，最终完成仍由 completion verdict + 具名最终签收定义；
 - 创作阶段（源本/企划、漫画脚本）不自动化，停下提示用对应 skill。
 """
 from __future__ import annotations
@@ -23,6 +23,7 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from progress import update_stage as update_progress
+from image_execution_adapter import resolve_execution_adapter
 from editorial_authorization import (
     DELEGATED_REVIEW_POLICY,
     EditorialAuthorizationError,
@@ -155,12 +156,25 @@ def chapter_images_ready(root: Path, chapter: str) -> bool:
     return True
 
 
+def image_execution(root: Path, repo: Path | None = None) -> dict:
+    return resolve_execution_adapter(
+        root,
+        read_setting(root, "生图模型", ""),
+        read_setting(root, "生图渠道", ""),
+        repo_root=repo or repo_root(),
+    )
+
+
 def image_runner_script(root: Path) -> str:
-    channel = read_setting(root, "生图渠道", "").lower()
-    model = read_setting(root, "生图模型", "").lower()
-    if "dreamina" in channel or "即梦" in channel or "dreamina" in model or "即梦" in model:
-        return "skills/comic/comic-image/scripts/dreamina_panel_runner.py"
-    return "skills/comic/comic-image/scripts/codex_panel_runner.py"
+    """Compatibility view used by tests/docs; unknown routes now fail closed."""
+    adapter = image_execution(root)
+    if adapter.get("status") != "executable" or len(adapter.get("command") or []) < 2:
+        raise RuntimeError(str(adapter.get("reason") or "image execution adapter unavailable"))
+    path = str(adapter["command"][1])
+    try:
+        return str(Path(path).resolve().relative_to(repo_root().resolve()))
+    except ValueError:
+        return path
 
 
 def load_json_file(path: Path) -> dict:
@@ -315,9 +329,14 @@ def run_image_stage(repo: Path, root: Path, args: argparse.Namespace) -> int:
     if rc != 0:
         print("[comic-batch] image_preflight gate blocked; fix findings before paid/batch image generation", flush=True)
         return rc
+    adapter = image_execution(root, repo)
+    if adapter.get("status") != "executable":
+        print(f"[block] image backend adapter={adapter.get('status')}: {adapter.get('reason')}", flush=True)
+        return 2
     cmd = [
-        sys.executable,
-        image_runner_script(root),
+        sys.executable if token == "{python}" else token
+        for token in adapter.get("command") or []
+    ] + [
         str(root),
         "--chapter",
         args.chapter,
@@ -385,7 +404,7 @@ STAGE_STOP_NOTE = {
     "出图包": "确定性阶段：build_panel_jobs（免费，编译出图包）",
     "出图": "⏸ 付费生成停点：需项目授权后才跑 panel runner（会花钱）",
     "嵌字合成": "确定性阶段：export_longstrip 渲染 + compose gate",
-    "审查": "⏸ 人工验收停点：review gate pass 后仍需人工确认 审查 列",
+    "审查": "机器审查节点：pass 后写派生进度，唯一最终验收留给 completion verdict",
 }
 
 
@@ -422,6 +441,70 @@ def plan_chapter(root: Path, chapter: str) -> int:
     return 0
 
 
+def next_action(root: Path, chapter: str) -> dict:
+    """Stable machine protocol consumed by ``comic-supervisor``.
+
+    It describes exactly one current business-front action.  The protocol does
+    not execute, approve spend, inspect pixels or claim completion.
+    """
+    stage = read_stage(root, chapter)
+    base = {
+        "schema_version": 1,
+        "kind": "comic_next_action",
+        "project_root": str(root),
+        "chapter": chapter,
+        "next_stage": stage,
+    }
+    if stage == "完成":
+        return {**base, "status": "machine_frontier_complete", "action": "build_completion_verdict", "agent_role": "workflow_orchestrator"}
+    if stage in CREATIVE_STAGES:
+        return {
+            **base, "status": "specialist_required",
+            "action": "create_or_revise_source_contract" if stage == "源本/企划" else "write_or_revise_panel_script",
+            "agent_role": "story_editor" if stage == "源本/企划" else "comic_writer",
+            "hard_boundary": False,
+            "reason": "semantic creation continues through a registered specialist adapter",
+            "recommended_commands": [stage_hint_command(root, chapter, stage)],
+        }
+    if stage == "出图":
+        jobs = load_json_file(root / "出图" / chapter / "prompt" / "panel_jobs.json")
+        pending_review = next((
+            row for row in jobs.get("jobs") or []
+            if isinstance(row, dict) and row.get("status") in {"awaiting_review", "qc_warn"}
+        ), None)
+        if pending_review:
+            panel_id = str(pending_review.get("panel_id") or "")
+            qc = pending_review.get("post_qc") if isinstance(pending_review.get("post_qc"), dict) else {}
+            packet = qc.get("visual_review_packet") if isinstance(qc.get("visual_review_packet"), dict) else {}
+            try:
+                review_runner = image_runner_script(root)
+            except RuntimeError:
+                review_runner = "skills/comic/comic-image/scripts/codex_panel_runner.py"
+            return {
+                **base, "status": "specialist_required", "action": "review_current_panel_pixels",
+                "agent_role": "visual_qc_agent", "hard_boundary": False, "panel_id": panel_id,
+                "visual_review_packet": {
+                    "contact_sheet_path": packet.get("contact_sheet_path"),
+                    "contact_sheet_sha256": packet.get("contact_sheet_sha256"),
+                    "required_axes": packet.get("required_axes") or [],
+                },
+                "completion_command": (
+                    f'python3 {review_runner} "{root}" '
+                    f'--chapter {chapter} --accept-reviewed --targets {panel_id} '
+                    '--reviewer delegate:visual-qc-agent --review-notes "<actual pixel review notes>"'
+                ),
+                "reason": "an authorized specialist must actually inspect the current SHA-bound contact sheet",
+            }
+    return {
+        **base, "status": "runnable", "action": "run_comic_batch_frontier",
+        "agent_role": "deterministic_runner", "hard_boundary": stage in {"出图"},
+        "recommended_commands": [
+            f'python3 skills/comic/comic-batch/scripts/run.py "{root}" --chapter {chapter} --max-steps 1'
+        ],
+        "reason": STAGE_STOP_NOTE.get(stage, "advance current Comic stage"),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="漫画线流程推进与批跑")
     parser.add_argument("project_root")
@@ -444,6 +527,7 @@ def main() -> int:
     )
     parser.add_argument("--max-steps", type=int, default=12, help="单次调用最多推进多少个阶段（防循环）")
     parser.add_argument("--dry-run", action="store_true", help="只打印从当前前沿起的阶段计划与停点，不执行任何阶段")
+    parser.add_argument("--next-json", action="store_true", help="只输出一个稳定 next-action JSON，供 comic-supervisor 消费")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
@@ -451,6 +535,9 @@ def main() -> int:
 
     if args.dry_run:
         return plan_chapter(root, args.chapter)
+    if args.next_json:
+        print(json.dumps(next_action(root, args.chapter), ensure_ascii=False, indent=2))
+        return 0
 
     if args.stage == "image":
         print(f"[comic-batch] project={root.name} chapter={args.chapter} stage=出图(手动指定)", flush=True)
@@ -497,7 +584,8 @@ def main() -> int:
         elif stage == "审查":
             rc = run_gate(repo, root, args.chapter, "review")
             if rc == 0:
-                print("[comic-batch] review gate pass；审查 列请人工确认后标 ✅（批跑不代替人工验收）", flush=True)
+                update_progress_stage(root, args.chapter, "审查", "✅（machine_ready）")
+                print("[comic-batch] review gate pass；派生进度已写 machine_ready，最终完成仍需 completion verdict 的具名验收", flush=True)
             return rc
         else:
             print(f"[comic-batch] next stage is {stage}; use the matching comic-* skill first", flush=True)

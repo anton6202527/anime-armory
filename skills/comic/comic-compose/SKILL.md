@@ -94,7 +94,8 @@ python3 skills/comic/comic-compose/scripts/print_delivery.py "$ROOT" --chapter �
 - 默认导出单张 `longstrip.webp`，便于 App 内审阅和直接交付；若单张高度超过 WebP 能力上限，则按 `导出格式` 自动改用 `longstrip.png`。
 - 只有显式设置 `单话分段高度` 为正数或传 `--max-height` 时，才切成多个 part，避免目标平台不接受超高图片；发布候选/商用导出还会按 `目标平台` profile 检查宽度、格式、文件大小和规格证据新鲜度。
 - 平台 profile 是逐字段 provenance；WEBTOON/Tapas 缩略图必须是实际文件并用 `--platform-asset NAME=PATH` 登记，缺件不会靠规格声明冒充已生成。实际平台后台 preview receipt 见 `references/platform_delivery.md`。
-- `epub_fxl` 目前只有可选 readiness 合同和 release gate，**没有自动 EPUB renderer**；外部生成的真实 EPUB、reading order、text alternatives、navigation 与 accessibility metadata 合同见 `references/accessible_digital_contract.md`，普通图片包不能冒充 accessible digital。
+- `epub_fxl` 可用 `scripts/build_epub_fxl.py` 从真实页面图生成 EPUB 3 fixed-layout：mimetype 首项未压缩、container/OPF/manifest/spine/nav/XHTML、包内 accessibility metadata 与逐页 `img alt` 都实际落包，并回填 `export_manifest.json.documents[]`。命令要求 `--alt-json --reviewer --reason`；机器只验结构，具名编辑复核替代文本语义，结论不冒充 WCAG/EPUB Accessibility 认证。
+- CJK 草稿渲染加入禁则换行；`lettering_qc.py` 另检查 speaker/slot/tail 归属、主体/避让区遮挡。`text_renderer_adapter.py` 真实探测 Pango/HarfBuzz，缺失时 Pillow 只标 `draft_only`，RTL/复杂 shaping 不可冒充正式排版。
 - 每个导出物都要在 `export_manifest.json` 登记 panel 顺序和尺寸。
 - 缺 panel 图时也要写 manifest，并列出 `missing_panels`，方便继续生产。
 

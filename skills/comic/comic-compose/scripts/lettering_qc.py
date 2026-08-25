@@ -168,6 +168,38 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
                             "调整槽位坐标或放大格高，保持气泡归属清晰。",
                         ))
                 item = items_by_slot.get(sid) or {}
+                if str(item.get("type") or "") == "dialogue":
+                    speaker = str(item.get("speaker") or "").strip()
+                    slot_speaker = str(item.get("slot_speaker") or "").strip()
+                    tail = item.get("tail") if isinstance(item.get("tail"), dict) else {}
+                    tail_owner = str(tail.get("speaker") or tail.get("owner") or tail.get("target") or "").strip()
+                    if not speaker and (slot_speaker or tail_owner):
+                        findings.append(finding(
+                            "warn", "lettering_speaker_missing", pid,
+                            f"{pid} 槽位 {sid} 是对白但缺 speaker，气泡尾归属无法验证。",
+                            "回 panel_script 补 speaker，并让 name/layout 的 slot_speaker 与之绑定。",
+                        ))
+                    if slot_speaker and speaker and slot_speaker != speaker:
+                        findings.append(finding(
+                            "block", "lettering_speaker_slot_mismatch", pid,
+                            f"{pid} 槽位 {sid} speaker={speaker}，slot_speaker={slot_speaker}，气泡归属冲突。",
+                            "修正 name_board/layout 的气泡槽位归属后重建 lettering。",
+                        ))
+                    if tail_owner and speaker and tail_owner != speaker:
+                        findings.append(finding(
+                            "block", "lettering_tail_owner_mismatch", pid,
+                            f"{pid} 槽位 {sid} 气泡尾指向 {tail_owner}，正文 speaker 是 {speaker}。",
+                            "把 tail owner/target 改为真实说话人，或修正脚本 speaker。",
+                        ))
+                if panel_rect is not None:
+                    protected = [region for key in ("subject_regions", "avoid_regions") for region in panel.get(key) or [] if isinstance(region, dict)]
+                    collisions = sum(1 for region in protected if rect(region) and rects_overlap(r, rect(region)))
+                    if collisions:
+                        findings.append(finding(
+                            "warn", "lettering_subject_saliency_overlap", pid,
+                            f"{pid} 槽位 {sid} 与 {collisions} 个主体/避让区域相交，可能遮脸、手势或关键道具。",
+                            "移动气泡并重新查看实际像素；自动几何检查不替代显著性目检。",
+                        ))
                 style = item.get("style") if isinstance(item.get("style"), dict) else {}
                 if str(style.get("direction") or "").strip() in {"vertical", "竖排", "縦書き", "縦書"}:
                     findings.append(finding(

@@ -30,6 +30,7 @@
 - [Q12：2026-07 第四轮传统工艺调研沉淀——伏笔养护/信息策略/场景极性/开场与支线的机检化依据？](#q12)
 - [Q13：2026-07 第五轮传统工艺调研沉淀——对白归属/场景落地/命名工艺/巧合纪律/正犯法的机检化依据？](#q13)
 - [Q14：一键成书时哪些步骤自动继续，哪些必须停？](#q14)
+- [Q15：怎样把很多检查收敛成一个状态、一个哈希、一个完成定义？](#q15)
 
 ---
 
@@ -450,3 +451,19 @@ novel-edit；阈值全部 env 可标定（见各脚本头部）。
 **来源**：2026-08 一键式流程统一审计。
 
 **适用范围**：`novel` / `novel-supervisor` / `novel-batch` / `novel-craft` / 派生写作 skill / `novel-update`。
+
+## Q15：怎样把很多检查收敛成一个状态、一个哈希、一个完成定义？<a id="q15"></a>
+
+**A**：已落成三层单一权威：
+
+- **一个状态**：作品业务前沿只认 `_进度.md`；pipeline run、author workflow、dashboard、producer run 都显式标为 execution/derived view，不能宣布第二套作品完成状态。
+- **一个哈希**：`release_manifest.py` 对当前章节、导出、设置、元数据与 release evidence 生成 canonical `release_digest`；终稿任何受约束字节变化都必须重建 manifest，并使旧验收收据失效。
+- **一个完成定义**：`completion_verdict.json` 只在 release machine-ready 且具名 `final_acceptance.json` 精确绑定当前 digest 时返回 `accepted`。provider success、queue empty、pipeline completed、dashboard 绿灯和 `release_ready` 都不是最终完成。
+
+围绕它的一键化增强也已接线：`producer.py` 持有 durable loop 并自动回报熔断遥测；最终发布评分强制 `scope=full`；每 5 章产生 future-only 动态章纲 delta；修订用 Story-VCS transaction + 独立 hash review + post-merge rollback；内容依赖 DAG 计算最小返工；写章包实行总 context budget 并留 obligation coverage receipt；detector 用 production labels + accepted repair yield 校准，未校准 detector 不自动升阻断。
+
+仍会停的是真边界：author intent/权利缺失、显式 human-required、同级证据互斥、同因连续失败、不可逆发布，以及最终具名验收。这里的“停”是完成定义的一部分，不是流程摩擦。
+
+**来源**：2026-08 novel 制作专业审计与“一键式生成”全量优化。
+
+**适用范围**：`novel` / `novel-supervisor` / `novel-craft` / `novel-review` / `novel-edit` / `novel-score`。

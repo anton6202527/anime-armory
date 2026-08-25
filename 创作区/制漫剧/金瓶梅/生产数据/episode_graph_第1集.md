@@ -1,7 +1,9 @@
 # Episode Graph · 第1集
 
 - 状态：pass
-- graph hash：`1dfdb592558157c6`
+- graph hash：`2bf3a00d2475ec81`
+- artifact root：`6ae1f12de677c1da`
+- derived episode root：`0f0c685b8edd5246`
 - nodes / edges：16 / 15
 - story / routes / media / masters：15 / 0 / 0 / 0
 

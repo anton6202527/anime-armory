@@ -20,6 +20,7 @@ if NOVEL_LIB not in sys.path:
 
 from qa_gate import collect_gate_status  # noqa: E402
 from authenticity_contract import evaluate_authenticity_read  # noqa: E402
+from completion_contract import canonical_release_digest, write_completion_verdict  # noqa: E402
 from report_snapshot import snapshot_chapters, validate_snapshot  # noqa: E402
 from waivers import has_waiver, load_waivers  # noqa: E402
 try:
@@ -53,6 +54,7 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "ignore",
         "reader_plan_required": False,
         "reader_telemetry_missing": "ignore",
+        "score_scope": "ignore",
     },
     "beta_read": {
         "label": "Beta reader package",
@@ -66,6 +68,7 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "warn",
         "reader_plan_required": True,
         "reader_telemetry_missing": "warn",
+        "score_scope": "warn",
     },
     "platform_publish": {
         "label": "Platform publish",
@@ -79,6 +82,7 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "warn",
         "reader_plan_required": False,
         "reader_telemetry_missing": "warn",
+        "score_scope": "block",
     },
     "kdp_publish": {
         "label": "Amazon KDP publish",
@@ -92,6 +96,7 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "warn",
         "reader_plan_required": False,
         "reader_telemetry_missing": "warn",
+        "score_scope": "warn",
         "kdp": True,
     },
     "data_validated_launch": {
@@ -106,6 +111,7 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "warn",
         "reader_plan_required": True,
         "reader_telemetry_missing": "block",
+        "score_scope": "block",
     },
     "archive": {
         "label": "Archive snapshot",
@@ -119,6 +125,7 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "research_missing": "ignore",
         "reader_plan_required": False,
         "reader_telemetry_missing": "ignore",
+        "score_scope": "ignore",
     },
 }
 
@@ -259,6 +266,30 @@ def check_snapshot(root: str, evidence_key: str, relpath: str) -> dict[str, Any]
         "passed": ok,
         "message": message,
         "aggregate_hash": (payload.get("source_snapshot") or {}).get("aggregate_hash") if isinstance(payload, dict) else "",
+    }
+
+
+def score_scope_check(root: str, chapter_count: int) -> dict[str, Any]:
+    """Require final-release scoring to cover the complete current manuscript."""
+    relpath = "评分/score_report.json"
+    payload = load_json(os.path.join(root, relpath), {}) or {}
+    scope = payload.get("scope") if isinstance(payload.get("scope"), dict) else {}
+    snapshot = payload.get("source_snapshot") if isinstance(payload.get("source_snapshot"), dict) else {}
+    files = snapshot.get("files") if isinstance(snapshot.get("files"), list) else []
+    declared_count = int(scope.get("chapter_count") or 0)
+    issues = []
+    if scope.get("mode") != "full":
+        issues.append("final release score must use scope.mode=full")
+    if declared_count != chapter_count:
+        issues.append(f"score scope chapter_count={declared_count} != release chapter_count={chapter_count}")
+    if len(files) != chapter_count:
+        issues.append(f"score snapshot files={len(files)} != release chapter_count={chapter_count}")
+    return {
+        "id": "score_full_manuscript_scope",
+        "evidence": "score_report",
+        "path": relpath,
+        "passed": not issues,
+        "message": "; ".join(issues) if issues else "score covers the complete current manuscript",
     }
 
 
@@ -534,6 +565,14 @@ def release_readiness(
             elif not check["passed"] and key in config.get("snapshot_warn", ()):
                 warn(f"RELEASE-{key.upper()}-STALE", check["message"], path=relpath)
 
+    if (evidence.get("score_report") or {}).get("exists") and config.get("score_scope") != "ignore":
+        check = score_scope_check(root, len(chapters))
+        checks.append(check)
+        if not check["passed"] and config.get("score_scope") == "block":
+            block("RELEASE-SCORE-SCOPE-NOT-FULL", check["message"], path=check["path"])
+        elif not check["passed"]:
+            warn("RELEASE-SCORE-SCOPE-NOT-FULL", check["message"], path=check["path"])
+
     if (evidence.get("ai_usage") or {}).get("exists"):
         check = ai_usage_check(root)
         checks.append(check)
@@ -658,7 +697,9 @@ def build_manifest(root: str, *, release_name: str = "", release_profile: str = 
     exports = [
         file_record(root, path)
         for path in sorted(glob.glob(os.path.join(root, "导出", "*")))
-        if os.path.isfile(path) and not path.endswith(("release_manifest.json", "release_manifest.md"))
+        if os.path.isfile(path) and os.path.basename(path) not in {
+            "release_manifest.json", "release_manifest.md", "completion_verdict.json", "final_acceptance.json",
+        }
     ]
     evidence = {
         "review_report": optional_record(root, "审稿/review_report.json"),
@@ -677,7 +718,7 @@ def build_manifest(root: str, *, release_name: str = "", release_profile: str = 
     chapter_snapshot = snapshot_chapters(root, mode="release:chapters")
     readiness = release_readiness(root, evidence, chapters, exports, release_profile=release_profile)
     evidence_index = build_evidence_index(root, chapters=chapters, exports=exports, evidence=evidence)
-    return {
+    manifest = {
         "schema_version": 1,
         "kind": MANIFEST_KIND,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -699,6 +740,8 @@ def build_manifest(root: str, *, release_name: str = "", release_profile: str = 
         "chapter_aggregate_hash": chapter_snapshot.get("aggregate_hash") or aggregate_hash(chapters),
         "export_aggregate_hash": aggregate_hash(exports),
     }
+    manifest["release_digest"] = canonical_release_digest(manifest)
+    return manifest
 
 
 def render_markdown(manifest: dict[str, Any]) -> str:
@@ -712,6 +755,7 @@ def render_markdown(manifest: dict[str, Any]) -> str:
         f"- chapters：{len(manifest.get('chapters') or [])}",
         f"- exports：{len(manifest.get('exports') or [])}",
         f"- release_ready：{manifest.get('release_ready')}",
+        f"- release_digest：`{manifest.get('release_digest')}`",
         f"- chapter_aggregate_hash：`{manifest.get('chapter_aggregate_hash')}`",
         f"- export_aggregate_hash：`{manifest.get('export_aggregate_hash')}`",
         "",
@@ -759,6 +803,7 @@ def write_manifest(root: str, manifest: dict[str, Any]) -> tuple[str, str]:
         f.write("\n")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(render_markdown(manifest))
+    verdict_path = write_completion_verdict(root, manifest)
     if append_event:
         append_event(
             root,
@@ -776,11 +821,12 @@ def write_manifest(root: str, manifest: dict[str, Any]) -> tuple[str, str]:
                     *(record.get("path") for record in manifest.get("evidence_index") or []),
                 }),
             ],
-            outputs=[json_path, md_path],
+            outputs=[json_path, md_path, verdict_path],
             metadata={
                 "release_name": manifest.get("release_name"),
                 "release_profile": manifest.get("release_profile"),
                 "release_ready": manifest.get("release_ready"),
+                "release_digest": manifest.get("release_digest"),
                 "blocker_count": (manifest.get("release_readiness") or {}).get("blocker_count"),
             },
         )

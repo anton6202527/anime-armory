@@ -646,6 +646,17 @@ def build_layout(
         raise LayoutError(f"缺少输入：{name_path}")
     panel_script = load_json(panel_path)
     name_board = load_json(name_path)
+    selection_path = root / "排版" / chapter / "layout_candidate_selection.json"
+    selection = load_optional_json(selection_path)
+    bindings = selection.get("input_bindings") if isinstance(selection.get("input_bindings"), dict) else {}
+    if (
+        selection.get("kind") == "comic_layout_candidate_selection"
+        and bindings.get("panel_script_sha256") == sha256_file(panel_path)
+        and bindings.get("name_board_sha256") == sha256_file(name_path)
+        and bindings.get("settings_sha256") == sha256_file(root / "_设置.md")
+    ):
+        max_segment_height = int(selection.get("max_segment_height") or max_segment_height)
+        gutter = int(selection.get("gutter") or gutter)
     name_errors = verify_name_board(root, chapter, name_board, allow_legacy_name=allow_legacy_name)
     if name_errors:
         raise LayoutError("；".join(name_errors))
@@ -692,6 +703,8 @@ def build_layout(
             "settings_sha256": sha256_file(root / "_设置.md"),
             "settings_geometry_sha256": settings_geometry_sha256(root),
             "legacy_name_waiver": bool(allow_legacy_name and name_board.get("schema_version") != 2),
+            "layout_candidate_selection": str(selection_path.relative_to(root)) if selection else "",
+            "layout_candidate_selection_sha256": sha256_file(selection_path),
         },
         "approval": {},
     }

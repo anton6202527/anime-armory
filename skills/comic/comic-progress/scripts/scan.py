@@ -99,6 +99,7 @@ SKILL_NEXT_COMMAND = {
     "comic-image": 'python3 skills/comic/comic-image/scripts/build_panel_jobs.py "{root}" --chapter {ch} --check',
     "comic-compose": 'python3 skills/comic/comic-compose/scripts/export_longstrip.py "{root}" --chapter {ch} --render --qc-slots',
     "comic-review": 'python3 skills/comic/comic-review/scripts/review.py "{root}" --chapter {ch}',
+    "comic-supervisor": 'python3 skills/comic/comic-supervisor/scripts/producer.py "{root}" --chapter {ch}',
 }
 
 
@@ -1079,12 +1080,18 @@ def summarize_project(root: Path) -> dict:
                     }
                 )
                 continue
+        completion = load_json(root / "生产数据" / f"completion_verdict_{chapter}.json") or {}
+        stage_front_complete = next_stage is None
+        accepted = stage_front_complete and completion.get("status") == "accepted"
         fronts.append(
             {
                 "chapter": chapter,
-                "next_stage": next_stage or "完成",
-                "next_skill": next_skill or "comic-review",
-                "complete": next_stage is None,
+                "next_stage": next_stage or ("完成" if accepted else "最终完成裁决"),
+                "next_skill": next_skill or ("comic-review" if accepted else "comic-supervisor"),
+                "complete": accepted,
+                "stage_front_complete": stage_front_complete,
+                "business_status": completion.get("status") or "unverified",
+                "completion_verdict": f"生产数据/completion_verdict_{chapter}.json",
                 "blockers": [],
             }
         )
@@ -1232,7 +1239,9 @@ def main() -> int:
         print(f"{summary['project']} — {summary['root']}")
         for front in summary["fronts"]:
             if front["complete"]:
-                print(f"  {front['chapter']}: 主流程完成，建议 comic-review 做发布前复核")
+                print(f"  {front['chapter']}: 最终完成（completion verdict=accepted）")
+            elif front.get("stage_front_complete"):
+                print(f"  {front['chapter']}: 制作前沿已走完，最终状态={front.get('business_status')} → comic-supervisor")
             else:
                 suffix = f"（{front['reason']}）" if front.get("reason") else ""
                 print(f"  {front['chapter']}: 下一步 {front['next_stage']} → {front['next_skill']}{suffix}")

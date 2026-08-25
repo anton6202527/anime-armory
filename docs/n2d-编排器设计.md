@@ -29,6 +29,9 @@ stage skill **不是**"一条命令跑完即出产物"的子进程。它们混�
 ```bash
 python3 skills/n2d/run.py enter <作品根> [第N集] [--json] [--auto]
 python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
+
+# 面向“一键成片”的持久 owner：不断重算 NextAction 并执行安全/已授权动作
+python3 skills/n2d/n2d-supervisor/scripts/producer.py <作品根> [第N集] --json
 ```
 
 - `enter` → 进入作品时先跑一次入口检查（`source_check` + `update_plan check --write-plan`），再返回同一张 `NextAction`；适合 agent 接手项目第一步。
@@ -38,6 +41,7 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 - `--json` → 输出机器可读的 `NextAction`（代理消费）；默认输出人话（用户可读）。
 - `--auto` → **连续推进**：每跑完一个确定性前置就看下一步，能自动就继续，**直到第一个真实 stop-point**；不加 `--auto` 只解析一次前沿并跑该阶段前置。
 - 确定性前置可自动回写；普通选择默认写推荐值；授权范围内的付费任务转交唯一消费边界执行。编排器与 supervisor **绝不**签发/扩大预算、绕过合规、公开发布或代替最终人工验收。
+- `run.py --auto` 仍只负责单次进入后的确定性收敛；`producer.py` 才是跨多次 NextAction 的 durable owner。它执行 `repair_recipe.safe_auto_commands`、项目 specialist adapter、无付费本地命令与已授权 exact batch command，成功后立即重算前沿，直到 `done` 或硬边界。同一前沿两轮不变化则 `non_convergent`，防止无意义空转。
 
 > 不引入新子命令做回写——回写仍走既有 `progress.py set` / `dashboard record`，编排器内部调它们。
 
@@ -167,3 +171,5 @@ def next(root, ep=None, auto=False):
 1. `run.py` 在 `needs_agent_gen` / `needs_stage_execution` 返回工位契约，`n2d-supervisor` 继续派发 specialist；它们不是用户选择停点。
 2. `n2d-batch runner --next-preflight` 消费同一前沿契约，多集并发/重试/预算仍归 batch；付费任务必须有与当前输入绑定的授权，provider 状态不明时先恢复/结算，绝不靠新 attempt id 重放。
 3. `needs_payment_confirm` 只代表预算包缺失/失效/越界或不可逆风险，不代表每次 provider 调用都要问；`needs_compliance`、`needs_acceptance_signoff`、公开发布与破坏性操作仍是人工边界。其他可恢复问题优先自动修复或返回最小返工范围。
+4. 视频异步任务的等待由同一 task id 上的指数退避 query 持有；局部穿帮优先用 adapter v2 的 `edit/extend/replace_range/remix` 生成 hash-bound correction variant。provider 状态不明不重提，返修 variant 未重新 QC/验收前不替代源片。
+5. episode graph v2 的局部/血缘 hash 和 change set 只做最小失效与诊断；正式复用仍绑定 canonical `n2d_content_fingerprint`，完成仍只认 release verdict + acceptance receipt。

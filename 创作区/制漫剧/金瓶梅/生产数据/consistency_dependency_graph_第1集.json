@@ -906,6 +906,11 @@
       "to": "image:出图/第1集/图片/Clip04_first.png"
     },
     {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_first.png"
+    },
+    {
       "from": "clip:Clip_01",
       "relation": "renders_image",
       "to": "image:出图/第1集/图片/EP01_CLIP01_a1.png"
@@ -939,6 +944,11 @@
       "from": "clip:Clip_03",
       "relation": "renders_image",
       "to": "image:出图/第1集/图片/EP01_CLIP03_a3.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP04_a1.png"
     },
     {
       "from": "episode:第1集",
@@ -1337,6 +1347,12 @@
       "path": "出图/第1集/图片/Clip04_first.png"
     },
     {
+      "id": "image:出图/第1集/图片/Clip05_first.png",
+      "kind": "image",
+      "label": "Clip05_first.png",
+      "path": "出图/第1集/图片/Clip05_first.png"
+    },
+    {
       "id": "image:出图/第1集/图片/EP01_CLIP01_a1.png",
       "kind": "image",
       "label": "EP01_CLIP01_a1.png",
@@ -1377,14 +1393,20 @@
       "kind": "image",
       "label": "EP01_CLIP03_a3.png",
       "path": "出图/第1集/图片/EP01_CLIP03_a3.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP04_a1.png",
+      "kind": "image",
+      "label": "EP01_CLIP04_a1.png",
+      "path": "出图/第1集/图片/EP01_CLIP04_a1.png"
     }
   ],
   "root": "创作区/制漫剧/金瓶梅",
   "summary": {
     "clips": 15,
-    "edges": 192,
-    "images": 13,
-    "nodes": 64,
+    "edges": 194,
+    "images": 15,
+    "nodes": 66,
     "videos": 0
   },
   "version": 1

@@ -194,6 +194,13 @@ def test_standard_batch_wrappers_and_example_config_exist() -> None:
     assert "run_n2d_review.sh" in data["commands"]["review"]
 
 
+def test_image_wrapper_resolves_repository_root_not_skills_directory() -> None:
+    wrapper = (SKILL_ROOT / "scripts" / "run_n2d_image.sh").read_text(encoding="utf-8")
+
+    assert 'REPO_DIR="$(cd "$SCRIPT_DIR/../../../.." && pwd)"' in wrapper
+    assert 'REPO_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"' not in wrapper
+
+
 def test_paid_image_outer_launcher_cannot_strip_authorized_environment(tmp_path: Path) -> None:
     inner = (
         "python3 skills/n2d/n2d-image/scripts/codex_image_runner.py "

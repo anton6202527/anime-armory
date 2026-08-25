@@ -35,6 +35,7 @@ REGISTRY_REL = Path("生产数据") / "video_execution_adapters.json"
 MANUAL_VALUES = {"", "manual", "人工", "手动", "手工", "none", "off", "关闭", "无"}
 STANDARD_OPERATIONS = ("submit", "query", "cancel")
 MULTISHOT_OPERATIONS = ("multishot_submit", "multishot_query", "multishot_cancel")
+CORRECTION_OPERATIONS = ("edit", "extend", "replace_range", "remix")
 
 # Built-ins describe only the executable surface.  Creative/model capability
 # remains in n2d_platform_profiles and current-evidence files.
@@ -227,6 +228,7 @@ def execution_status(
         "missing_operations": missing,
         "supports_cancel": "cancel" in operations,
         "supports_multishot": all(op in operations for op in ("multishot_submit", "multishot_query")),
+        "supports_corrections": sorted(set(operations) & set(CORRECTION_OPERATIONS)),
         "capabilities": dict(adapter.get("capabilities") or {}),
         "message": (
             "local automation is ready" if automated
@@ -277,6 +279,16 @@ def build_request(
             "references": list(item.get("reference_inputs") or []),
             "controls": list(item.get("control_inputs") or []),
             "audio": list(item.get("audio_inputs") or []),
+            "source_video": str((item.get("repair_contract") or {}).get("source_video") or ""),
+            "mask": str((item.get("repair_contract") or {}).get("mask") or ""),
+        },
+        "edit": {
+            "operation": operation if operation in CORRECTION_OPERATIONS else "",
+            "instruction": str((item.get("repair_contract") or {}).get("instruction") or ""),
+            "start_sec": (item.get("repair_contract") or {}).get("start_sec"),
+            "end_sec": (item.get("repair_contract") or {}).get("end_sec"),
+            "preserve_regions": list((item.get("repair_contract") or {}).get("preserve_regions") or []),
+            "source_sha256": str((item.get("repair_contract") or {}).get("source_sha256") or ""),
         },
         "output": {
             "directory": str((root_path / "出视频" / str(manifest.get("episode") or "") / "视频" / "_downloads").resolve()),
@@ -378,7 +390,7 @@ def classify_failure(returncode: int, payload: Mapping[str, Any], stderr: str = 
 
 
 __all__ = [
-    "ADAPTER_KIND", "ADAPTER_VERSION", "REGISTRY_KIND", "REQUEST_KIND",
+    "ADAPTER_KIND", "ADAPTER_VERSION", "REGISTRY_KIND", "REQUEST_KIND", "CORRECTION_OPERATIONS",
     "adapter_for", "build_request", "classify_failure", "execution_status",
     "load_registry", "normalize_adapter", "normalize_result", "registry_path",
     "wrapper_args", "write_request",

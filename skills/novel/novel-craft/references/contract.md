@@ -92,6 +92,12 @@
 
 对齐关系：A 是 C 的 `draft→review→score→export` 段的**逐章展开**；B 是 C 在派生线上的**文档投影**。A/C 分歧由 `novel_pipeline._reconcile_progress` 做 report-only 对账提示（advisory，不自动改写彼此）。**改 C 的 registry 阶段时**：若涉及逐章列（draft/review/score/export 语义），同步查 A 的 `NOVEL_STAGES`；若涉及派生流程叙述，同步查本文 B 表与 `derive-pipeline.md`。
 
+### 一个状态、一个 release digest、一个完成定义
+
+- `_进度.md` 是作品业务前沿的唯一权威状态；A/B/C 中其它 run、plan、workflow、dashboard、queue、provider 与 producer status 都是 execution/derived evidence，不能另立“作品已完成”。
+- 一次交付只认 `导出/release_manifest.json.release_digest`。它由当前章节、导出、meta、settings 与 release evidence 的 canonical SHA-256 口径生成；内容变化必须重建 manifest。
+- `release_ready=true` 只表示 machine-ready。最终完成只由 `导出/completion_verdict.json` 聚合判定：machine-ready 且 `导出/final_acceptance.json` 有具名主体、decision=accepted、精确绑定当前 release digest，才是 `accepted`。旧收据遇新 digest 自动失效。
+
 阶段清单型样例 —— 原创 `create`：
 
 ```markdown

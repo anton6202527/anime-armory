@@ -934,6 +934,32 @@ def test_prepare_reference_inputs_upscales_low_resolution_reference(tmp_path: Pa
     assert out["prepared_sha256"] == codex_image_runner.file_sha256(Path(out["prepared_abs_path"]))
 
 
+def test_prepare_reference_inputs_read_only_reuses_materialized_enhancement(tmp_path: Path) -> None:
+    pytest.importorskip("PIL.Image")
+    rel = "出图/共享/用户参考/CHAR_TEST_lowres.png"
+    source = tmp_path / rel
+    write_tiny_png(source)
+    item = {
+        "role": "character",
+        "owner": "CHAR_TEST/常态",
+        "source": "reference_bundle",
+        "rel_path": rel,
+        "abs_path": str(source),
+        "sha256": codex_image_runner.file_sha256(source),
+        "bytes": source.stat().st_size,
+        "priority": 10,
+        "sequence": 0,
+    }
+
+    written = codex_image_runner.prepare_reference_inputs(tmp_path, "第1集", [item], write=True)[0]
+    probed = codex_image_runner.prepare_reference_inputs(tmp_path, "第1集", [item], write=False)[0]
+
+    assert written["reference_quality"]["status"] == "enhanced"
+    assert probed["reference_quality"]["status"] == "enhanced"
+    assert probed["prepared_abs_path"] == written["prepared_abs_path"]
+    assert probed["prepared_sha256"] == written["prepared_sha256"]
+
+
 def test_build_codex_command_uses_prepared_reference_attachment(tmp_path: Path) -> None:
     original = tmp_path / "orig.png"
     enhanced = tmp_path / "enhanced.png"

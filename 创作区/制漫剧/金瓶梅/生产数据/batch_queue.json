@@ -1,0 +1,504 @@
+{
+  "batches": [],
+  "budget": {
+    "accepted_total": 3.0,
+    "blocked_tasks": 0,
+    "estimated_total": 3.0,
+    "limit": null,
+    "recomputed_at": "2026-08-24T07:26:12+00:00",
+    "runtime_available": null,
+    "runtime_reserved_total": 0.0,
+    "runtime_settled_total": 6.0,
+    "runtime_status": "ok",
+    "runtime_unit": "mixed",
+    "runtime_updated_at": "2026-08-24T07:57:54+00:00",
+    "scope": "ledger",
+    "unit": "mixed"
+  },
+  "coordination": {
+    "backend": "local_file",
+    "config_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/coordination_backend.json",
+    "external_adapter": false,
+    "lock_mode": "flock",
+    "lock_ttl_sec": 120.0,
+    "note": "local queue coordination; leases and reclaim provide crash recovery",
+    "status": "ok"
+  },
+  "generated_at": "2026-08-24T07:19:50+00:00",
+  "kind": "n2d_batch_queue",
+  "last_plan_at": "2026-08-24T07:26:12+00:00",
+  "max_concurrency": 1,
+  "max_retries": 1,
+  "root": "创作区/制漫剧/金瓶梅",
+  "summary": {
+    "by_stage": {
+      "image": 1,
+      "script_stage1": 1
+    },
+    "by_status": {
+      "blocked_agent": 1,
+      "failed": 1
+    },
+    "total": 2
+  },
+  "tasks": [
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "agent_command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集",
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集",
+      "created_at": "2026-08-24T07:19:50+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 0.2,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": null,
+      "history": [
+        {
+          "action": "blocked_agent",
+          "note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集` manually, then re-plan deterministic downstream stages.",
+          "ts": "2026-08-24T07:19:50+00:00"
+        }
+      ],
+      "id": "001-script_stage1-rerun",
+      "idempotency_key": "44dcde048da44823",
+      "last_note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集` manually, then re-plan deterministic downstream stages.",
+      "max_retries": 1,
+      "owner": "n2d-script",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 image",
+      "runner_mode": "agent_required",
+      "stage_key": "script_stage1",
+      "stage_label": "阶段1·剧本改编",
+      "status": "blocked_agent",
+      "updated_at": "2026-08-24T07:19:50+00:00"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片/EP01_CLIP04_a1.png"
+      ],
+      "affected_shots": [
+        "Clip04_a1"
+      ],
+      "attempts": 5,
+      "budget_charges": [
+        {
+          "amount": 3.0,
+          "attempt": 4,
+          "charge_id": "001-image-rerun:4",
+          "settled_at": "2026-08-24T07:32:01+00:00",
+          "source": "estimate_fallback",
+          "status": "settled",
+          "unit": "work_units",
+          "worker": "codex-main"
+        },
+        {
+          "amount": 3.0,
+          "attempt": 5,
+          "charge_id": "001-image-rerun:5",
+          "settled_at": "2026-08-24T07:57:54+00:00",
+          "source": "estimate_fallback",
+          "status": "settled",
+          "unit": "work_units",
+          "worker": "codex-main"
+        }
+      ],
+      "budget_reservation": {
+        "actual_amount": 3.0,
+        "actual_unit": "work_units",
+        "amount": 3.0,
+        "attempt": 5,
+        "reserved_at": "2026-08-24T07:35:12+00:00",
+        "settled_at": "2026-08-24T07:57:54+00:00",
+        "status": "settled",
+        "unit": "work_units",
+        "worker": "codex-main"
+      },
+      "coarse_fingerprints": [],
+      "command": "n2d-image 创作区/制漫剧/金瓶梅 第1集 --shots Clip04_a1",
+      "created_at": "2026-08-24T07:26:12+00:00",
+      "dead_letter": true,
+      "dead_letter_at": "2026-08-24T07:57:54+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 3.0,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": "image",
+      "history": [
+        {
+          "action": "budget:reserve",
+          "amount": 3.0,
+          "attempt": 1,
+          "ts": "2026-08-24T07:27:16+00:00",
+          "unit": "work_units",
+          "worker": "codex-main"
+        },
+        {
+          "action": "claim",
+          "attempt": 1,
+          "ts": "2026-08-24T07:27:16+00:00",
+          "worker": "codex-main"
+        },
+        {
+          "action": "budget:release",
+          "amount": 3.0,
+          "attempt": 1,
+          "reason": "pre_paid_boundary_failure",
+          "ts": "2026-08-24T07:27:46+00:00",
+          "unit": "work_units"
+        },
+        {
+          "action": "mark:fail",
+          "note": "next_preflight blocked: production_authorization_required · missing task-bound production_authorization",
+          "requested_status": "fail",
+          "ts": "2026-08-24T07:27:46+00:00"
+        },
+        {
+          "action": "budget:reserve",
+          "amount": 3.0,
+          "attempt": 2,
+          "ts": "2026-08-24T07:27:46+00:00",
+          "unit": "work_units",
+          "worker": "codex-main"
+        },
+        {
+          "action": "claim",
+          "attempt": 2,
+          "ts": "2026-08-24T07:27:46+00:00",
+          "worker": "codex-main"
+        },
+        {
+          "action": "budget:release",
+          "amount": 3.0,
+          "attempt": 2,
+          "reason": "pre_paid_boundary_failure",
+          "ts": "2026-08-24T07:28:16+00:00",
+          "unit": "work_units"
+        },
+        {
+          "action": "mark:fail",
+          "note": "next_preflight blocked: production_authorization_required · missing task-bound production_authorization",
+          "requested_status": "fail",
+          "ts": "2026-08-24T07:28:16+00:00"
+        },
+        {
+          "action": "mark:queued",
+          "note": "runner只读增强参考识别缺陷已修复并通过回归测试；重新排队执行同一已确认目标",
+          "requested_status": "queued",
+          "ts": "2026-08-24T07:29:56+00:00"
+        },
+        {
+          "action": "budget:reserve",
+          "amount": 3.0,
+          "attempt": 3,
+          "ts": "2026-08-24T07:29:56+00:00",
+          "unit": "work_units",
+          "worker": "codex-main"
+        },
+        {
+          "action": "claim",
+          "attempt": 3,
+          "ts": "2026-08-24T07:29:56+00:00",
+          "worker": "codex-main"
+        },
+        {
+          "action": "budget:release",
+          "amount": 3.0,
+          "attempt": 3,
+          "reason": "pre_paid_boundary_failure",
+          "ts": "2026-08-24T07:30:26+00:00",
+          "unit": "work_units"
+        },
+        {
+          "action": "mark:fail",
+          "note": "next_preflight blocked: production_authorization_required · production_authorization scope mismatch: task_digest, execution",
+          "requested_status": "fail",
+          "ts": "2026-08-24T07:30:26+00:00"
+        },
+        {
+          "action": "mark:queued",
+          "note": "refresh exact authorization after canonical preflight changed task execution binding",
+          "requested_status": "queued",
+          "ts": "2026-08-24T07:30:55+00:00"
+        },
+        {
+          "action": "budget:reserve",
+          "amount": 3.0,
+          "attempt": 4,
+          "ts": "2026-08-24T07:31:19+00:00",
+          "unit": "work_units",
+          "worker": "codex-main"
+        },
+        {
+          "action": "claim",
+          "attempt": 4,
+          "ts": "2026-08-24T07:31:19+00:00",
+          "worker": "codex-main"
+        },
+        {
+          "action": "budget:settle",
+          "amount": 3.0,
+          "attempt": 4,
+          "source": "estimate_fallback",
+          "ts": "2026-08-24T07:32:01+00:00",
+          "unit": "work_units"
+        },
+        {
+          "action": "mark:fail",
+          "note": "exit_code=1",
+          "requested_status": "fail",
+          "ts": "2026-08-24T07:32:01+00:00"
+        },
+        {
+          "action": "mark:queued",
+          "note": "官方能力证据已刷新，image_preflight=pass；batch wrapper 仓库根路径已修复并通过回归测试",
+          "requested_status": "queued",
+          "ts": "2026-08-24T07:35:05+00:00"
+        },
+        {
+          "action": "budget:reserve",
+          "amount": 3.0,
+          "attempt": 5,
+          "ts": "2026-08-24T07:35:12+00:00",
+          "unit": "work_units",
+          "worker": "codex-main"
+        },
+        {
+          "action": "claim",
+          "attempt": 5,
+          "ts": "2026-08-24T07:35:12+00:00",
+          "worker": "codex-main"
+        },
+        {
+          "action": "budget:settle",
+          "amount": 3.0,
+          "attempt": 5,
+          "source": "estimate_fallback",
+          "ts": "2026-08-24T07:57:54+00:00",
+          "unit": "work_units"
+        },
+        {
+          "action": "mark:fail",
+          "note": "exit_code=1",
+          "requested_status": "fail",
+          "ts": "2026-08-24T07:57:54+00:00"
+        }
+      ],
+      "id": "001-image-rerun",
+      "idempotency_key": "01a031a5b284fece",
+      "last_error_class": "command_failed",
+      "last_note": "exit_code=1",
+      "last_runner": {
+        "authorization": {
+          "approval_id": "conversation-20260824-user-confirmed-latest-skill-rebuild-and-continue-image",
+          "approver": "workspace_user",
+          "attempt": 5,
+          "authorization_digest": "sha256:76ef7f0bc4c3179e690d308332bf24c70303288f5d457c408dc843358859ab56",
+          "ceiling": {
+            "amount": 3.0,
+            "currency": "work_units"
+          },
+          "channel": "Codex CLI",
+          "decision": "approved",
+          "episode": "第1集",
+          "execution": {
+            "command_digest": "sha256:de1de51ef54bcc4290c6b4c660e1f5dcf20ee6cddb92063df58ef714b766664c",
+            "input_fingerprint": "sha256:509ecf4400a9670b46895d88786ecddae54c19c2bf37a95f48444c5bc12722f4",
+            "producer_contract_digest": "sha256:9de5f6249483891f72ebae105526a8ed3ae62e101ef69d7981b8c319bde47352",
+            "submit_request_digest": "sha256:95ebab1d4573d096628feeac0d8bd6d8ec3cdcf6159ff6e8edd497ed6b38ed37"
+          },
+          "expires_at": "2026-08-24T08:35:05+00:00",
+          "idempotency_key": "01a031a5b284fece",
+          "issued_at": "2026-08-24T07:35:05+00:00",
+          "model": "GPT Image 2",
+          "scope": {
+            "affected_artifacts": [
+              "出图/第1集/图片/EP01_CLIP04_a1.png"
+            ],
+            "affected_shots": [
+              "Clip04_a1"
+            ],
+            "rerun_scope": "继续第1集出图：生成并验收 EP01_CLIP04_a1.png"
+          },
+          "stage_key": "image",
+          "task_digest": "sha256:c05d3186eb902ab13f9db03e47ed209fd474baba0d70bf74f7631638227ef4b4",
+          "task_id": "001-image-rerun",
+          "version": 1
+        },
+        "command": "bash skills/n2d/n2d-batch/scripts/run_n2d_image.sh \"创作区/制漫剧/金瓶梅\" \"第1集\"",
+        "completion": {
+          "output_verification": {
+            "issues": [],
+            "status": "not_run"
+          },
+          "paid_execution_expectation": {
+            "attempt": 5,
+            "authorization_digest": "sha256:76ef7f0bc4c3179e690d308332bf24c70303288f5d457c408dc843358859ab56",
+            "digest": "sha256:d7994ee2dd5c30e888e48f5b9a12b00a16b5b797a936f5025a9c0f5d94d365b0",
+            "episode": "第1集",
+            "kind": "n2d_paid_execution_expectation",
+            "records": [
+              {
+                "input_fingerprint": "1fbf5bf8a45d9baa69389323590a2aba8c82ef386a814584d8bd74aede2d0091",
+                "shot": "Clip_04_a1",
+                "submit_request_sha256": "sha256:d4cd5246c42b3c456b980f31cc7812d5f8c046410ec97ea0308275e1bf09862d",
+                "target": "出图/第1集/图片/EP01_CLIP04_a1.png"
+              }
+            ],
+            "stage": "image",
+            "task_id": "001-image-rerun",
+            "version": 1
+          },
+          "paid_execution_receipts": {
+            "issues": [],
+            "records": [
+              {
+                "authorization_digest": "sha256:76ef7f0bc4c3179e690d308332bf24c70303288f5d457c408dc843358859ab56",
+                "digest": "sha256:3d9cf832976e22b4aeec9b5b3cddbe71af5b7fd5b2e6cf41541e53df2ccbf152",
+                "expectation_digest": "sha256:d7994ee2dd5c30e888e48f5b9a12b00a16b5b797a936f5025a9c0f5d94d365b0",
+                "path": "生产数据/paid_execution_receipts/001-image-rerun/Clip_04_a1_d06477ad21ba.json",
+                "record": {
+                  "input_fingerprint": "1fbf5bf8a45d9baa69389323590a2aba8c82ef386a814584d8bd74aede2d0091",
+                  "shot": "Clip_04_a1",
+                  "submit_request_sha256": "sha256:d4cd5246c42b3c456b980f31cc7812d5f8c046410ec97ea0308275e1bf09862d",
+                  "target": "出图/第1集/图片/EP01_CLIP04_a1.png"
+                }
+              }
+            ],
+            "status": "pass"
+          },
+          "phase_spend_completion": {},
+          "phase_spend_consumption": {},
+          "post_gate": {
+            "status": "pending"
+          },
+          "producer_output_baseline": [
+            {
+              "bytes": 0,
+              "exists": false,
+              "issue": "missing",
+              "path": "出图/第1集/图片/EP01_CLIP04_a1.png",
+              "sha256": ""
+            }
+          ],
+          "producer_output_bindings": [],
+          "safe_local_execution": false
+        },
+        "duration_sec": 1361.675,
+        "error_class": "command_failed",
+        "execution_binding": {
+          "channel": "Codex CLI",
+          "command_digest": "sha256:de1de51ef54bcc4290c6b4c660e1f5dcf20ee6cddb92063df58ef714b766664c",
+          "input_fingerprint": "sha256:509ecf4400a9670b46895d88786ecddae54c19c2bf37a95f48444c5bc12722f4",
+          "model": "GPT Image 2",
+          "paid_expectation_digest": "sha256:d7994ee2dd5c30e888e48f5b9a12b00a16b5b797a936f5025a9c0f5d94d365b0",
+          "producer_contract": {
+            "backend": "codex",
+            "channel": "Codex CLI",
+            "episode": "第1集",
+            "execution_environment": {
+              "digest": "sha256:32fa005f6faad08f7ce1e3b8283c790e528b0f51b48c5b551cd5c1b82e673cdc",
+              "keys": [
+                "N2D_AFFECTED_ARTIFACTS",
+                "N2D_AFFECTED_SHOTS",
+                "N2D_EPISODE",
+                "N2D_IDEMPOTENCY_KEY",
+                "N2D_IMAGE_COMMAND",
+                "N2D_OWNER",
+                "N2D_REASON",
+                "N2D_RERUN_SCOPE",
+                "N2D_ROOT",
+                "N2D_STAGE",
+                "N2D_TASK_ID",
+                "NO_PROXY",
+                "PATH",
+                "no_proxy"
+              ],
+              "kind": "n2d_producer_execution_environment",
+              "version": 1
+            },
+            "kind": "n2d_image_paid_submit_binding",
+            "model": "GPT Image 2",
+            "producer_script_sha256": "7d1327956bd8e0833dec6900576e54a2d9d731a880017b85090d1de89be16bb9",
+            "records": [
+              {
+                "channel": "Codex CLI",
+                "compiled_request_sha256": "6d36b0d0d835c4fce0d03d3c29e030bda937bdf52a3df5e87eafdbb1179d12be",
+                "input_fingerprint": "1fbf5bf8a45d9baa69389323590a2aba8c82ef386a814584d8bd74aede2d0091",
+                "model": "GPT Image 2",
+                "shot": "Clip_04_a1",
+                "submit_request_sha256": "sha256:d4cd5246c42b3c456b980f31cc7812d5f8c046410ec97ea0308275e1bf09862d",
+                "target": "出图/第1集/图片/EP01_CLIP04_a1.png"
+              }
+            ],
+            "version": 1
+          },
+          "producer_contract_digest": "sha256:9de5f6249483891f72ebae105526a8ed3ae62e101ef69d7981b8c319bde47352",
+          "producer_contract_issue": "",
+          "submit_request_digest": "sha256:95ebab1d4573d096628feeac0d8bd6d8ec3cdcf6159ff6e8edd497ed6b38ed37"
+        },
+        "execution_started": true,
+        "exit_code": 1,
+        "finished_at": "2026-08-24T07:57:54+00:00",
+        "note": "exit_code=1",
+        "status": "fail",
+        "stderr": "[retry] Codex image generation timed out on attempt 1/3; retrying same target\n[fail] Clip_04_a1: codex completed but no valid PNG file or image_generation_end payload was available for /var/folders/96/97ws5q4d6rgb1nq9z7b6ctph0000gn/T/n2d_codex_image_runner/001-image-rerun/第1集_Clip_04_a1_EP01_CLIP04_a1.png\n",
+        "stdout": "{\n  \"gate_exit_code\": 0,\n  \"recorded_events\": 107,\n  \"findings_path\": \"创作区/制漫剧/金瓶梅/生产数据/gate_findings_image_preflight_第1集.json\"\n}\n[gate] image_preflight gate passed for 第1集\n[start] Clip_04_a1 -> 出图/第1集/图片/EP01_CLIP04_a1.png\n"
+      },
+      "max_retries": 1,
+      "owner": "n2d-image",
+      "priority": 1,
+      "production_authorization": {
+        "approval_id": "conversation-20260824-user-confirmed-latest-skill-rebuild-and-continue-image",
+        "approver": "workspace_user",
+        "attempt": 5,
+        "authorization_digest": "sha256:76ef7f0bc4c3179e690d308332bf24c70303288f5d457c408dc843358859ab56",
+        "ceiling": {
+          "amount": 3.0,
+          "currency": "work_units"
+        },
+        "channel": "Codex CLI",
+        "decision": "approved",
+        "episode": "第1集",
+        "execution": {
+          "command_digest": "sha256:de1de51ef54bcc4290c6b4c660e1f5dcf20ee6cddb92063df58ef714b766664c",
+          "input_fingerprint": "sha256:509ecf4400a9670b46895d88786ecddae54c19c2bf37a95f48444c5bc12722f4",
+          "producer_contract_digest": "sha256:9de5f6249483891f72ebae105526a8ed3ae62e101ef69d7981b8c319bde47352",
+          "submit_request_digest": "sha256:95ebab1d4573d096628feeac0d8bd6d8ec3cdcf6159ff6e8edd497ed6b38ed37"
+        },
+        "expires_at": "2026-08-24T08:35:05+00:00",
+        "idempotency_key": "01a031a5b284fece",
+        "issued_at": "2026-08-24T07:35:05+00:00",
+        "model": "GPT Image 2",
+        "scope": {
+          "affected_artifacts": [
+            "出图/第1集/图片/EP01_CLIP04_a1.png"
+          ],
+          "affected_shots": [
+            "Clip04_a1"
+          ],
+          "rerun_scope": "继续第1集出图：生成并验收 EP01_CLIP04_a1.png"
+        },
+        "stage_key": "image",
+        "task_digest": "sha256:c05d3186eb902ab13f9db03e47ed209fd474baba0d70bf74f7631638227ef4b4",
+        "task_id": "001-image-rerun",
+        "version": 1
+      },
+      "reason": "rerun",
+      "rerun_scope": "继续第1集出图：生成并验收 EP01_CLIP04_a1.png",
+      "stage_key": "image",
+      "stage_label": "出图",
+      "status": "failed",
+      "updated_at": "2026-08-24T07:57:54+00:00"
+    }
+  ],
+  "updated_at": "2026-08-24T07:57:54+00:00",
+  "version": 1
+}

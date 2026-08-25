@@ -1,6 +1,24 @@
 {
   "confirmations": [
     {
+      "char": "CHAR_WUDA__日常卖饼态",
+      "confirmed_at": "2026-08-24T09:42:23+00:00",
+      "floor": 0.5052,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/Clip05_first.png",
+      "png_sha256": "5fb7657cfda296f9d52cc560c3354572afaa011748fa977d255ca0af70319d32",
+      "reason": "已实际查看当前像素：武大保持同一矮小圆润身份特征、宽鼻与棕色头巾；本镜头为侧向拥抱和动态表情，造成自动相似度略低于校准阈值，但人物身份清楚且无串脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.4936,
+      "score_vs_main": 0.391,
+      "shot": "Clip_05",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_WUSONG__28岁打虎态",
       "confirmed_at": "2026-08-18T02:11:52+00:00",
       "floor": 0.5,
@@ -38,6 +56,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-08-18T03:25:40+00:00",
+  "updated_at": "2026-08-24T09:42:23+00:00",
   "version": 1
 }

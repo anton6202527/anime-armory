@@ -39,6 +39,11 @@ from comic_image_prompt_compiler import (  # noqa: E402
 from contracts import stage_inputs_fingerprint  # noqa: E402
 from image_backend_adapter import resolve_capabilities  # noqa: E402
 from progress import update_stage  # noqa: E402
+from visual_authorization import (  # noqa: E402
+    VisualAuthorizationError,
+    authorization_errors as visual_authorization_errors,
+    delegated_visual_authorization,
+)
 import spend_envelope  # noqa: E402
 
 
@@ -1048,8 +1053,21 @@ def panel_acceptance_status(root: Path, job: dict[str, Any]) -> dict[str, Any]:
     required_manual_verdict = "accepted_with_warnings" if verdict == "warn" else "accepted"
     if str(manual.get("verdict") or "").lower() != required_manual_verdict:
         return {"accepted": False, "reason": "human_review_pending", "artifact_sha256": current_sha}
-    if not str(manual.get("reviewed_by") or "").strip() or not str(manual.get("reason") or "").strip():
+    reviewer = str(manual.get("reviewed_by") or "").strip()
+    if not reviewer or not str(manual.get("reason") or "").strip():
         return {"accepted": False, "reason": "human_review_identity_or_reason_missing", "artifact_sha256": current_sha}
+    delegated_errors = visual_authorization_errors(
+        root, reviewer, "panel_pixels", manual.get("authorization")
+    )
+    if delegated_errors:
+        return {
+            "accepted": False, "reason": "delegated_visual_authorization_stale",
+            "authorization_errors": delegated_errors, "artifact_sha256": current_sha,
+        }
+    if reviewer.startswith("delegate:") and manual.get("human_signoff") is not False:
+        return {"accepted": False, "reason": "delegated_review_mislabelled_as_human", "artifact_sha256": current_sha}
+    if not reviewer.startswith("delegate:") and manual.get("human_signoff") is False:
+        return {"accepted": False, "reason": "human_review_mislabelled_as_delegate", "artifact_sha256": current_sha}
     if str(manual.get("artifact_sha256") or "") != current_sha:
         return {"accepted": False, "reason": "human_review_artifact_sha_mismatch", "artifact_sha256": current_sha}
     comparison_sha = str(packet.get("comparison_inputs_sha256") or "")
@@ -1081,7 +1099,8 @@ def panel_acceptance_status(root: Path, job: dict[str, Any]) -> dict[str, Any]:
             else "current_pixel_sha_machine_pass_and_human_acceptance"
         ),
         "artifact_sha256": current_sha,
-        "reviewed_by": str(manual.get("reviewed_by") or ""),
+        "reviewed_by": reviewer,
+        "human_signoff": bool(manual.get("human_signoff", True)),
         "disposition": required_manual_verdict,
     }
 
@@ -1164,6 +1183,11 @@ def accept_panel_review(
     )
     if not machine_sha or machine_sha != expected_machine_sha:
         raise ValueError(f"{panel_id} machine post-QC receipt is incomplete or stale; run --recheck-existing")
+    try:
+        authorization = delegated_visual_authorization(root, reviewer, "panel_pixels")
+    except VisualAuthorizationError as exc:
+        raise ValueError(f"{panel_id} delegated visual review is not authorized: {exc}") from exc
+    is_delegate = reviewer.strip().startswith("delegate:")
     manual = {
         "verdict": "accepted_with_warnings" if verdict == "warn" else "accepted",
         "artifact_sha256": artifact_sha256,
@@ -1172,6 +1196,8 @@ def accept_panel_review(
         "machine_review_sha256": machine_sha,
         "acknowledged_warnings": findings,
         "reviewed_by": reviewer.strip(),
+        "human_signoff": not is_delegate,
+        "review_kind": "delegated_current_pixel_review" if is_delegate else "named_human_current_pixel_review",
         "reviewed_at": now,
         "reason": reason.strip(),
         "confirmations": {
@@ -1183,6 +1209,8 @@ def accept_panel_review(
             else "subjective visual gate accepted; deterministic blocks remain non-waivable"
         ),
     }
+    if authorization is not None:
+        manual["authorization"] = authorization
     post_qc["manual_review"] = manual
     post_qc["visual_review_packet"]["human_review_status"] = manual["verdict"]
     job.update(
@@ -1589,7 +1617,7 @@ def main() -> int:
         action="store_true",
         help="对唯一当前 panel 写入 SHA 绑定签收；pass 或启发式 warn 可用，确定性 block 不可用",
     )
-    parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人")
+    parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人；delegate:* 还需项目当前视觉授权")
     parser.add_argument("--review-notes", default="", help="--accept-reviewed 必填：逐轴目检结论与理由")
     parser.add_argument(
         "--spend-envelope",

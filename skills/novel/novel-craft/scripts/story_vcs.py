@@ -287,11 +287,23 @@ def handle_health(root: str) -> dict[str, Any]:
     }
 
 
-def handle_branch(root: str, branch_name: str) -> dict[str, Any]:
+def _safe_rel_paths(paths: list[str]) -> list[str]:
+    out = []
+    for value in paths:
+        rel_path = str(value or "").replace("\\", "/").lstrip("./")
+        if not rel_path or os.path.isabs(str(value)) or rel_path == ".." or rel_path.startswith("../"):
+            raise ValueError(f"branch file must be a project-relative path: {value}")
+        if rel_path not in out:
+            out.append(rel_path)
+    return out
+
+
+def handle_branch(root: str, branch_name: str, *, selected_files: list[str] | None = None) -> dict[str, Any]:
     root = os.path.abspath(root)
     branch_name = safe_name(branch_name)
     files = []
-    for rel_path in CORE_FILES:
+    requested = _safe_rel_paths(selected_files) if selected_files is not None else list(CORE_FILES)
+    for rel_path in requested:
         src = os.path.join(root, rel_path)
         if not os.path.exists(src):
             continue
@@ -308,6 +320,7 @@ def handle_branch(root: str, branch_name: str) -> dict[str, Any]:
         "kind": BRANCH_KIND,
         "branch": branch_name,
         "created_at": now(),
+        "selection": "explicit" if selected_files is not None else "core_default",
         "files": files,
         "merge_history": [],
     }
@@ -632,6 +645,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--force", action="store_true", help="merge despite base hash conflict")
     parser.add_argument("--overwrite", action="store_true", help="migrate: overwrite an existing branch manifest")
     parser.add_argument("--trust-current-main", action="store_true", help="migrate: treat current main files as trusted branch base hashes")
+    parser.add_argument("--file", action="append", default=None, help="branch: explicit project-relative file; repeatable")
     parser.add_argument(
         "--accept-legacy-no-base",
         action="store_true",
@@ -648,7 +662,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "branch":
             if not args.name:
                 raise ValueError("branch name is required")
-            payload = handle_branch(root, args.name)
+            payload = handle_branch(root, args.name, selected_files=args.file)
         elif args.cmd == "checkout":
             if not args.name:
                 raise ValueError("branch name is required")

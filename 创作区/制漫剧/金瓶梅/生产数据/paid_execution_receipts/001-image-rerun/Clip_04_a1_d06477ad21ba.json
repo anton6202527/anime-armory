@@ -1,0 +1,18 @@
+{
+  "attempt": 5,
+  "authorization_digest": "sha256:76ef7f0bc4c3179e690d308332bf24c70303288f5d457c408dc843358859ab56",
+  "crossed_at": "2026-08-24T07:36:05+00:00",
+  "digest": "sha256:3d9cf832976e22b4aeec9b5b3cddbe71af5b7fd5b2e6cf41541e53df2ccbf152",
+  "episode": "第1集",
+  "expectation_digest": "sha256:d7994ee2dd5c30e888e48f5b9a12b00a16b5b797a936f5025a9c0f5d94d365b0",
+  "kind": "n2d_paid_boundary_receipt",
+  "record": {
+    "input_fingerprint": "1fbf5bf8a45d9baa69389323590a2aba8c82ef386a814584d8bd74aede2d0091",
+    "shot": "Clip_04_a1",
+    "submit_request_sha256": "sha256:d4cd5246c42b3c456b980f31cc7812d5f8c046410ec97ea0308275e1bf09862d",
+    "target": "出图/第1集/图片/EP01_CLIP04_a1.png"
+  },
+  "stage": "image",
+  "task_id": "001-image-rerun",
+  "version": 1
+}

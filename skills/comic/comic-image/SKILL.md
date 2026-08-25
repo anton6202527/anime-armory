@@ -130,6 +130,10 @@ python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫
 
 Dreamina 使用完全相同的 `--accept-reviewed` 合同。签收绑定当前像素 SHA、on-disk/job post-QC、机器 findings、contact sheet、比较包及每个比较输入 SHA；任一项变化都会使签收 stale，并阻断 `comic-review gate --stage image`。只有全部格逐张签收后才把本话 `出图` 标为 `✅`。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要被其它系列 import。
 
+若项目 `_设置.md` 显式写 `视觉审阅策略: 用户授权制作代理实际查看当前像素`，或存在当前有效的 `生产数据/authorizations/visual_review.json`，实际看过 contact sheet 的视觉代理可用 `--reviewer delegate:visual-qc-agent` 签收可逆内部生产。收据固定写 `review_kind=delegated_current_pixel_review`、`human_signoff=false` 和当前授权摘要；授权撤销/过期/哈希变化立刻 stale。它绝不授权预算、权利、公开发布或最终验收。
+
+模型能力与本机执行能力分离：`_lib/image_execution_adapter.py` 对 Codex/Dreamina 返回 executable，未知 Gemini/Flux/自定义路线默认 `planning_only`；只有项目 `生产数据/image_execution_adapters.json` 注册安全 argv adapter 后才可执行，不再静默回退到 Codex。
+
 带 `references` 的正式格要求每个 reference path 存在且实际进入附件/比较证据。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；缺引用必须先回 `comic-identity` 修复。纯文生图试验只能写入隔离候选目录，不得通过正式 runner 改 job、进度或 `ready`。
 
 换装格在该角色自己的 `character_bindings[].outfit_id` 与相符 `state_id` 中声明：build_panel_jobs 从 registry 的 `assets[角色].outfits[该ID]` 取服装描述、禁漂移项和真实服装参考图；未登记或 state 与 outfit 冲突时直接拒绝建立正式 job。
